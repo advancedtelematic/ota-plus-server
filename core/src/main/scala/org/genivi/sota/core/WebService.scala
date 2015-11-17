@@ -5,166 +5,179 @@
 package org.genivi.sota.core
 
 import java.io.File
-import java.security.MessageDigest
 
 import akka.actor.ActorSystem
 import akka.event.Logging
 import akka.http.scaladsl.common.StrictForm
-import akka.http.scaladsl.model.{StatusCodes, Uri, HttpResponse}
 import akka.http.scaladsl.model.StatusCodes._
+import akka.http.scaladsl.model.{StatusCodes, Uri, HttpResponse}
+import akka.http.scaladsl.server.{Directive1, PathMatchers, ExceptionHandler, Directives}
 import akka.http.scaladsl.server.PathMatchers.Slash
-import akka.http.scaladsl.server.{PathMatchers, ExceptionHandler, Directives}
+import Directives._
 import akka.parboiled2.util.Base64
 import akka.stream.ActorMaterializer
 import akka.stream.io.SynchronousFileSink
 import akka.util.ByteString
+import cats.data.Xor
+import eu.timepit.refined._
+import eu.timepit.refined.string._
+import io.circe.generic.auto._
+import org.genivi.sota.marshalling.CirceMarshallingSupport
 import org.genivi.sota.core.data._
-import org.genivi.sota.core.db.{Packages, Vehicles, InstallRequests, InstallCampaigns}
-import org.genivi.sota.rest.{ErrorCode, ErrorRepresentation}
+import org.genivi.sota.core.db.{UpdateSpecs, Packages, Vehicles, InstallHistories}
+import org.genivi.sota.core.rvi.{ServerServices, RviClient}
 import org.genivi.sota.rest.Validation._
-import spray.json.{JsString, JsObject}
-import slick.driver.MySQLDriver.api.Database
+import org.genivi.sota.rest.{ErrorCode, ErrorRepresentation}
+import org.joda.time.DateTime
 import scala.concurrent.Future
-import Directives._
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import spray.json.DefaultJsonProtocol._
+import slick.driver.MySQLDriver.api.Database
+import slick.dbio.DBIO
+import scala.util.Failure
 
 object ErrorCodes {
   val ExternalResolverError = ErrorCode( "external_resolver_error" )
 }
 
-class VehiclesResource(db: Database)
+class VehiclesResource(db: Database, rviClient: RviClient)
                       (implicit system: ActorSystem, mat: ActorMaterializer) {
 
   import system.dispatcher
+  import CirceMarshallingSupport._
+
+  import scala.concurrent.{ExecutionContext, Future}
+
+  case object MissingVehicle extends Throwable
+
+  def exists
+    (vehicle: Vehicle)
+    (implicit ec: ExecutionContext): Future[Vehicle] =
+    db.run(Vehicles.exists(vehicle.vin))
+      .flatMap(_
+        .fold[Future[Vehicle]]
+          (Future.failed(MissingVehicle))(Future.successful(_)))
+
+  def deleteVin (vehicle: Vehicle)
+  (implicit ec: ExecutionContext): Future[Unit] =
+    for {
+      _ <- exists(vehicle)
+      _ <- db.run(UpdateSpecs.deleteRequiredPackageByVin(vehicle))
+      _ <- db.run(UpdateSpecs.deleteUpdateSpecByVin(vehicle))
+      _ <- db.run(Vehicles.deleteById(vehicle))
+    } yield ()
+
+
+  val extractVin : Directive1[Vehicle.Vin] = refined[Vehicle.ValidVin](Slash ~ Segment)
+
+  def ttl() : DateTime = {
+    import com.github.nscala_time.time.Implicits._
+    DateTime.now + 5.minutes
+  }
 
   val route = pathPrefix("vehicles") {
-    (put & refined[Vehicle.Vin](PathMatchers.Slash ~ PathMatchers.Segment ~ PathMatchers.PathEnd)) { vin =>
-          complete(db.run( Vehicles.create(Vehicle(vin)) ).map(_ => NoContent))
+    extractVin { vin =>
+      pathEnd {
+        get {
+          completeOrRecoverWith(exists(Vehicle(vin))) {
+            case MissingVehicle =>
+              complete(StatusCodes.NotFound ->
+                ErrorRepresentation(Vehicle.MissingVehicle, "Vehicle doesn't exist"))
+          }
+        } ~
+        put {
+          complete(db.run(Vehicles.create(Vehicle(vin))).map(_ => NoContent))
+        } ~
+        delete {
+          completeOrRecoverWith(deleteVin(Vehicle(vin))) {
+            case MissingVehicle =>
+              complete(StatusCodes.NotFound ->
+                ErrorRepresentation(Vehicle.MissingVehicle, "Vehicle doesn't exist"))
+          }
         }
+      } ~
+      // TODO: Check that vin exists
+      (path("queued") & get) {
+        complete(db.run(UpdateSpecs.getPackagesQueuedForVin(vin)))
+      } ~
+      (path("history") & get) {
+        complete(db.run(InstallHistories.list(vin)))
+      } ~
+      (path("sync") & put) {
+        // TODO: Config RVI destination path (or ClientServices.getpackages)
+        rviClient.sendMessage(s"genivi.org/vin/${vin}/sota/getpackages", io.circe.Json.Empty, ttl())
+        // TODO: Confirm getpackages in progress to vehicle?
+        complete(NoContent)
+      }
     } ~
-    path("vehicles") {
+    pathEnd {
       get {
         parameters('regex.?) { (regex) =>
           val query = regex match {
             case Some(r) => Vehicles.searchByRegex(r)
             case _ => Vehicles.list()
           }
-          complete{ db.run(query) }
+          complete(db.run(query))
         }
       }
     }
-}
-
-class CampaignsResource(resolver: ExternalResolverClient, db: Database)
-                       (implicit system: ActorSystem, mat: ActorMaterializer) {
-  import system.dispatcher
-
-  def createCampaign(campaign: InstallCampaign): Future[InstallCampaign] = {
-    def persistCampaign(dependencies: Map[Vehicle, Set[PackageId]]) = for {
-      persistedCampaign <- InstallCampaigns.create(campaign)
-      _ <- InstallRequests.createRequests(InstallRequest.from(dependencies, persistedCampaign.id.head).toSeq)
-    } yield persistedCampaign
-
-    for {
-      dependencyMap <- resolver.resolve(campaign.packageId)
-      persistedCampaign <- db.run(persistCampaign(dependencyMap))
-    } yield persistedCampaign
-  }
-
-  val route = path("install_campaigns") {
-    (post & entity(as[InstallCampaign])) { campaign =>
-      complete( createCampaign( campaign ) )
-    }
   }
 }
 
-class PackagesResource(resolver: ExternalResolverClient, db : Database)
-                      (implicit system: ActorSystem, mat: ActorMaterializer) {
-
-  import akka.stream.stage._
+class UpdateRequestsResource(db: Database, resolver: ExternalResolverClient, updateService: UpdateService)
+                            (implicit system: ActorSystem, mat: ActorMaterializer) {
   import system.dispatcher
+  import eu.timepit.refined.string.uuidValidate
+  import org.genivi.sota.core.db.UpdateSpecs
+  import UpdateSpec._
+  import CirceMarshallingSupport._
 
-  private[this] val log = Logging.getLogger( system, "packagesResource" )
-
-  def digestCalculator(algorithm: String) : PushPullStage[ByteString, String] = new PushPullStage[ByteString, String] {
-    val digest = MessageDigest.getInstance(algorithm)
-
-    override def onPush(chunk: ByteString, ctx: Context[String]): SyncDirective = {
-      digest.update(chunk.toArray)
-      ctx.pull()
+  implicit val _db = db
+  val route = pathPrefix("updates") {
+    (get & refined[Uuid](Slash ~ Segment ~ PathEnd)) { uuid =>
+      complete(db.run(UpdateSpecs.listUpdatesById(uuid)))
     }
-
-    override def onPull(ctx: Context[String]): SyncDirective = {
-      if (ctx.isFinishing) ctx.pushAndFinish(Base64.rfc2045().encodeToString(digest.digest(), false))
-      else ctx.pull()
-    }
-
-    override def onUpstreamFinish(ctx: Context[String]): TerminationDirective = {
-      // If the stream is finished, we need to emit the last element in the onPull block.
-      // It is not allowed to directly emit elements from a termination block
-      // (onUpstreamFinish or onUpstreamFailure)
-      ctx.absorbTermination()
-    }
-  }
-
-  def savePackage( packageId: PackageId, fileData: StrictForm.FileData )(implicit system: ActorSystem, mat: ActorMaterializer) : Future[(Uri, Long, String)] = {
-    val fileName = fileData.filename.getOrElse(s"${packageId.name.get}-${packageId.version.get}")
-    val file = new File(fileName)
-    val data = fileData.entity.dataBytes
-    for {
-      size <- data.runWith( SynchronousFileSink( file ) )
-      digest <- data.transform(() => digestCalculator("SHA-1")).runFold("")( (acc, data) => acc ++ data)
-    } yield (file.toURI().toString(), size, digest)
-  }
-
-  val route = pathPrefix("packages") {
+  } ~
+  path("updates") {
     get {
-      complete {
-        NoContent
-        //Packages.list
-      }
+      complete(updateService.all(db, system.dispatcher))
     } ~
-    (put & refined[Package.ValidName]( Slash ~ Segment) & refined[Package.ValidVersion](Slash ~ Segment ~ PathEnd)).as(PackageId.apply _) { packageId =>
-      formFields('description.?, 'vendor.?, 'file.as[StrictForm.FileData]) { (description, vendor, fileData) =>
-        completeOrRecoverWith(
-          for {
-            _                   <- resolver.putPackage(packageId, description, vendor)
-            (uri, size, digest) <- savePackage(packageId, fileData)
-            _                   <- db.run(Packages.create( Package(packageId, uri, size, digest, description, vendor) ))
-          } yield NoContent
-        ) {
-          case ExternalResolverRequestFailed(msg, cause) =>
-            log.error( cause, s"Unable to create/update package: $msg" )
-            complete( StatusCodes.ServiceUnavailable -> ErrorRepresentation( ErrorCodes.ExternalResolverError, msg ) )
-          case e => failWith(e)
-        }
+    post {
+      entity(as[UpdateRequest]) { req =>
+        complete(
+          updateService.queueUpdate(
+            req,
+            pkg => resolver.resolve(pkg.id).map {
+              m => m.map { case (v, p) => (v.vin, p) }
+            }
+          )
+        )
       }
     }
   }
-
 }
 
-class WebService(resolver: ExternalResolverClient, db : Database)
-                (implicit system: ActorSystem, mat: ActorMaterializer) extends Directives {
-  val log = Logging(system, "webservice")
+
+class WebService(registeredServices: ServerServices, resolver: ExternalResolverClient, db : Database)
+                (implicit system: ActorSystem, mat: ActorMaterializer, rviClient: RviClient) extends Directives {
+  implicit val log = Logging(system, "webservice")
+
+  import io.circe.Json
+  import Json.{obj, string}
 
   val exceptionHandler = ExceptionHandler {
     case e: Throwable =>
       extractUri { uri =>
         log.error(s"Request to $uri errored: $e")
-        val entity = JsObject("error" -> JsString(e.getMessage()))
+        val entity = obj("error" -> string(e.getMessage()))
         complete(HttpResponse(InternalServerError, entity = entity.toString()))
       }
   }
-
-  val vehicles = new VehiclesResource( db )
-  val campaigns = new CampaignsResource(resolver, db)
+  val vehicles = new VehiclesResource(db, rviClient)
   val packages = new PackagesResource(resolver, db)
+  val updateRequests = new UpdateRequestsResource(db, resolver, new UpdateService(registeredServices))
 
   val route = pathPrefix("api" / "v1") {
     handleExceptions(exceptionHandler) {
-       vehicles.route ~ campaigns.route ~ packages.route
+       vehicles.route ~ packages.route ~ updateRequests.route
     }
   }
 

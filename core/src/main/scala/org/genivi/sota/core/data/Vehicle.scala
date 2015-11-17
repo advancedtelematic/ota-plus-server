@@ -4,25 +4,44 @@
  */
 package org.genivi.sota.core.data
 
-import eu.timepit.refined._
+import org.genivi.sota.datatype.VehicleCommon
+import org.genivi.sota.rest.ErrorCode
+import org.scalacheck.{Arbitrary, Gen}
 
-case class Vehicle(vin: Vehicle.IdentificationNumber)
+/**
+ * Domain object for a vehicle.
+ * Vehicles in SOTA are known by a VIN. It is assumed that the VIN is constant
+ * over the life of a system that receives updates from SOTA.
+ *
+ * @param vin The VIN that uniquely identifies the vehicle
+ */
+case class Vehicle(
+  vin: Vehicle.Vin
+)
 
-object Vehicle {
+/**
+ * Utility functions for creating VINs
+ */
+object Vehicle extends VehicleCommon {
 
-  trait Vin
-  implicit val validVin : Predicate[Vin, String] = Predicate.instance(
-    vin => vin.length == 17 && vin.forall(c => c.isLetter || c.isDigit),
-    vin => s"(${vin} isn't 17 letters or digits long)"
-  )
+  /**
+   * An invalid vehicle
+   */
+  val MissingVehicle = new ErrorCode("missing_vehicle")
 
-  type IdentificationNumber = String Refined Vin
+  /**
+   * A random VIN, for scalacheck
+   */
+  val genVehicle: Gen[Vehicle] =
+    genVin.map(Vehicle(_))
 
-  implicit val VinOrdering : Ordering[IdentificationNumber] = new Ordering[IdentificationNumber] {
-    override def compare( a: IdentificationNumber, b: IdentificationNumber ) : Int = a.get compare b.get
-  }
+  implicit lazy val arbVehicle: Arbitrary[Vehicle] =
+    Arbitrary(genVehicle)
 
-  import spray.json.DefaultJsonProtocol._
-  import org.genivi.sota.refined.SprayJsonRefined._
-  implicit val vehicleFormat = jsonFormat1(Vehicle.apply)
+  /**
+   * A VIN that is invalid
+   */
+  val genInvalidVehicle: Gen[Vehicle] =
+    genInvalidVin.map(Vehicle(_))
+
 }

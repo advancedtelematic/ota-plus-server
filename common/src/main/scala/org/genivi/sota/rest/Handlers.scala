@@ -4,22 +4,30 @@
  */
 package org.genivi.sota.rest
 
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import akka.http.scaladsl.model._
+import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives.complete
 import akka.http.scaladsl.server._
-import org.genivi.sota.refined.SprayJsonRefined
+import io.circe.generic.auto._
+import org.genivi.sota.marshalling.{RefinementError, CirceMarshallingSupport}
+import CirceMarshallingSupport._
 
+/**
+  * When validation, JSON deserialisation fail or a duplicate entry
+  * occures in the database, we complete the request by returning the
+  * correct status code and JSON error message (see Errors.scala).
+  */
 
 object Handlers {
 
-  import SprayJsonRefined.RefinmentError
+  case class InvalidEntity(msg: String) extends Throwable(msg)
+
+  case object DuplicateEntry extends Throwable("Entry already exists")
 
   def rejectionHandler : RejectionHandler = RejectionHandler.newBuilder().handle {
     case ValidationRejection(msg, None) =>
       complete( StatusCodes.BadRequest -> ErrorRepresentation(ErrorCodes.InvalidEntity, msg) )
   }.handle{
-    case MalformedRequestContentRejection(_, Some(RefinmentError(_, msg))) =>
+    case MalformedRequestContentRejection(_, Some(RefinementError(_, msg))) =>
       complete(StatusCodes.BadRequest -> ErrorRepresentation(ErrorCodes.InvalidEntity, msg))
   }.result().withFallback(RejectionHandler.default)
 

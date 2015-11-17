@@ -5,18 +5,21 @@
 package org.genivi.sota.core.data
 
 import akka.http.scaladsl.model.Uri
+import org.genivi.sota.datatype.PackageCommon
 
-case class PackageId( name: Package.Name, version: Package.Version )
-
-object PackageId {
-  import spray.json.DefaultJsonProtocol._
-  import org.genivi.sota.refined.SprayJsonRefined._
-
-  implicit val protocol = jsonFormat2(PackageId.apply)
-}
-
+/**
+ * Domain object for a software package.
+ * Packages are the atomic unit of software installation in SOTA.
+ * @param id The name and version number of the package. This pair uniquely
+ *           identifies a package in SOTA
+ * @param uri The location of the binary data for this package
+ * @param size The size of the package in bytes
+ * @param checkSum The SHA1 checksum of the package's contents
+ * @param description A free-form description of the package
+ * @param vendor A free-form description of the vendor who provided the package
+ */
 case class Package(
-  id: PackageId,
+  id: Package.Id,
   uri: Uri,
   size: Long,
   checkSum: String,
@@ -24,20 +27,4 @@ case class Package(
   vendor: Option[String]
 )
 
-object Package {
-  import eu.timepit.refined._
-
-  trait ValidName
-  trait ValidVersion
-
-  type Name    = String Refined ValidName
-  type Version = String Refined ValidVersion
-
-  implicit val validPackageName: Predicate[ValidName, String] =
-    Predicate.instance( _.nonEmpty, _ => "Package name required" )
-
-  implicit val validPackageVersion: Predicate[ValidVersion, String] =
-    Predicate.instance( _.matches( """^\d+\.\d+\.\d+$""" ), _ => "Invalid version format")
-
-
-}
+object Package extends PackageCommon

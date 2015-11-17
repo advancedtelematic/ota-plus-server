@@ -4,30 +4,37 @@
  */
 package org.genivi.sota.resolver.test
 
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.model.StatusCodes
-import eu.timepit.refined.Refined
-import org.genivi.sota.resolver.types.Filter
-import org.genivi.sota.rest.{ErrorRepresentation, ErrorCodes}
-import spray.json.DefaultJsonProtocol._
+import akka.http.scaladsl.unmarshalling._
+import eu.timepit.refined.api.Refined
+import io.circe._
+import io.circe.generic.auto._
+import org.genivi.sota.rest.ErrorCodes
+import org.genivi.sota.marshalling.CirceMarshallingSupport._
+import org.genivi.sota.resolver.filters.Filter
+import org.genivi.sota.resolver.filters.FilterAST._
+import org.genivi.sota.resolver.packages.PackageFilter
+import org.genivi.sota.rest.{ErrorRepresentation, ErrorCode}
 
-
+/**
+ * Spec for Filter REST actions
+ */
 class FiltersResourceWordSpec extends ResourceWordSpec {
 
   "Filters resource" should {
 
     val filterName = "myfilter"
-    val filterExpr = s"""vin_matches "SAJNX5745SC??????""""
-    val filter     = Filter(Refined(filterName), Refined(filterExpr))
+    val filterExpr = s"""vin_matches "SAJNX5745SC......""""
+    val filter     = Filter(Refined.unsafeApply(filterName), Refined.unsafeApply(filterExpr))
 
     "create a new resource on POST request" in {
       addFilterOK(filterName, filterExpr)
     }
 
     "not accept empty filter names" in {
-      addFilter("", filterExpr) ~> route ~> check {
+       addFilter("", filterExpr) ~> route ~> check {
         status shouldBe StatusCodes.BadRequest
-        responseAs[ErrorRepresentation].code shouldBe ErrorCodes.InvalidEntity
+          responseAs[ErrorRepresentation].code shouldBe ErrorCodes.InvalidEntity
       }
     }
 
@@ -39,8 +46,8 @@ class FiltersResourceWordSpec extends ResourceWordSpec {
     }
 
     val filterName2 = "myfilter2"
-    val filterExpr2 = s"""vin_matches "TAJNX5745SC??????""""
-    val filter2     = Filter(Refined(filterName2), Refined(filterExpr2))
+    val filterExpr2 = s"""vin_matches "TAJNX5745SC......""""
+    val filter2     = Filter(Refined.unsafeApply(filterName2), Refined.unsafeApply(filterExpr2))
 
     "list available filters on a GET request" in {
       addFilterOK(filterName2, filterExpr2)
@@ -49,38 +56,79 @@ class FiltersResourceWordSpec extends ResourceWordSpec {
       }
     }
 
-    "not accept duplicate filter names" in {
+    "allow regex search on listing filters" in {
+      listFiltersRegex("^.*2$") ~> route ~> check {
+        responseAs[Seq[Filter]] shouldBe List(filter2)
+      }
+    }
+
+    "fail if the same filter is posted twice" in {
       addFilter(filterName, filterExpr) ~> route ~> check {
         status shouldBe StatusCodes.Conflict
         responseAs[ErrorRepresentation].code shouldBe ErrorCodes.DuplicateEntry
       }
     }
 
+    "update the expression of existing filter on PUT request" in {
+      updateFilter(filterName, filterExpr) ~> route ~> check {
+        status shouldBe StatusCodes.OK
+      }
+    }
+
+    "fail on trying to update non-existing filters" in {
+      updateFilter("nonexistant", filterExpr) ~> route ~> check {
+        status shouldBe StatusCodes.NotFound
+        responseAs[ErrorRepresentation].code shouldBe ErrorCode("filter_not_found")
+      }
+    }
+
+    "delete filters on DELETE requests" in {
+      deleteFilterOK(filterName)
+
+      listFilters ~> route ~> check {
+        status shouldBe StatusCodes.OK
+        responseAs[Seq[Filter]] shouldBe List(filter2)
+      }
+    }
+
+    "fail on trying to delete non-existing filters" in {
+      deleteFilter("nonexistant") ~> route ~> check {
+        status shouldBe StatusCodes.NotFound
+        responseAs[ErrorRepresentation].code shouldBe ErrorCode("filter_not_found")
+      }
+    }
+
   }
 }
 
+/**
+ * Arbitrary filter object
+ * Used in property-based testing
+ */
 object ArbitraryFilter {
 
   import ArbitraryFilterAST.arbFilterAST
-  import org.genivi.sota.resolver.types.{Filter, FilterPrinter}
   import org.scalacheck._
 
-    val genName: Gen[String] =
-      for {
-        // We don't want name clashes so keep the names long.
-        n  <- Gen.choose(50, 100)
-        cs <- Gen.listOfN(n, Gen.alphaNumChar)
-      } yield cs.mkString
+  val genName: Gen[String] =
+    for {
+      // We don't want name clashes so keep the names long.
+      n  <- Gen.choose(20, 50)
+      cs <- Gen.listOfN(n, Gen.alphaNumChar)
+    } yield cs.mkString
 
-    val genFilter: Gen[Filter] =
-      for {
-        name <- genName
-        expr <- ArbitraryFilterAST.genFilter
-      } yield Filter(Refined(name), Refined(FilterPrinter.ppFilter(expr)))
+  val genFilter: Gen[Filter] =
+    for {
+      name <- genName
+      expr <- ArbitraryFilterAST.genFilter
+    } yield Filter(Refined.unsafeApply(name), Refined.unsafeApply(ppFilter(expr)))
 
   implicit lazy val arbFilter = Arbitrary(genFilter)
 }
 
+/**
+ * Filter resource property spec
+ */
 class FiltersResourcePropSpec extends ResourcePropSpec {
 
   import ArbitraryFilter.arbFilter

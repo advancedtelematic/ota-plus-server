@@ -1,21 +1,24 @@
 package org.genivi.sota.core
 
-import akka.http.scaladsl.model._
 import akka.http.scaladsl.model.Multipart.FormData.BodyPart
+import akka.http.scaladsl.model.Uri.Path
+import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.PathMatchers
 import akka.http.scaladsl.testkit.ScalatestRouteTest
+import akka.http.scaladsl.unmarshalling._
+import io.circe.generic.auto._
 import java.io.File
-import org.genivi.sota.core.data.{Vehicle, PackageId, Package}
+import org.genivi.sota.marshalling.CirceMarshallingSupport
+import org.genivi.sota.core.data.{Vehicle, Package}
 import org.genivi.sota.rest.ErrorRepresentation
-import org.scalatest.{ PropSpec, Matchers }
 import org.scalatest.prop.PropertyChecks
-import akka.http.scaladsl.model.Uri.Path
+import org.scalatest.{ PropSpec, Matchers }
+import scala.concurrent.Future
 import slick.jdbc.JdbcBackend.Database
 
-import scala.concurrent.Future
 
 /**
- * Created by vladimir on 14/08/15.
+ * Spec tests for package upload to Core
  */
 class PackageUploadSpec extends PropSpec with PropertyChecks with Matchers with Generators with ScalatestRouteTest {
 
@@ -31,9 +34,11 @@ class PackageUploadSpec extends PropSpec with PropertyChecks with Matchers with 
 
   class Service(resolverResult: Future[Unit] ) {
     val resolver = new ExternalResolverClient {
-      override def putPackage(packageId: PackageId, description: Option[String], vendor: Option[String]): Future[Unit] = resolverResult
+      override def putPackage(packageId: Package.Id, description: Option[String], vendor: Option[String]): Future[Unit] = resolverResult
 
-      override def resolve(packageId: PackageId): Future[Map[Vehicle, Set[PackageId]]] = ???
+      override def resolve(packageId: Package.Id): Future[Map[Vehicle, Set[Package.Id]]] = ???
+
+      override def setInstalledPackages( vin: Vehicle.Vin, json: io.circe.Json) : Future[Unit] = ???
     }
 
     val resource = new PackagesResource(resolver, db)
@@ -49,7 +54,7 @@ class PackageUploadSpec extends PropSpec with PropertyChecks with Matchers with 
     Put( Uri( path = PackagesPath / pckg.id.name.get / pckg.id.version.get ), form )
   }
 
-  property("Package can be uploaded using POST request")  {
+  property("Package can be uploaded using PUT request")  {
     new Service( Future.successful(())) {
       forAll { (pckg: Package) =>
         mkRequest(pckg) ~> resource.route ~> check {
@@ -59,9 +64,8 @@ class PackageUploadSpec extends PropSpec with PropertyChecks with Matchers with 
     }
   }
 
-  import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-
   property("Returns service unavailable if request to external resolver fails") {
+    import CirceMarshallingSupport._
     new Service( Future.failed( ExternalResolverRequestFailed( StatusCodes.InternalServerError ) ) ) {
       forAll { (pckg: Package) =>
         mkRequest( pckg ) ~> resource.route ~> check {
@@ -86,8 +90,8 @@ class PackageUploadSpec extends PropSpec with PropertyChecks with Matchers with 
     }
   }
 
-  override def afterAll() {
-    system.shutdown()
+  override def afterAll() : Unit = {
+    system.terminate()
     db.close()
   }
 }

@@ -4,16 +4,18 @@
  */
 package org.genivi.sota.resolver.test
 
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.model.StatusCodes
-import eu.timepit.refined.Refined
-import org.genivi.sota.refined.SprayJsonRefined._
-import org.genivi.sota.resolver.types.Package.Metadata
-import org.genivi.sota.resolver.types.{Package, Filter, PackageFilter}
-import org.genivi.sota.rest.{ErrorCodes, ErrorRepresentation}
-import spray.json.DefaultJsonProtocol._
+import eu.timepit.refined.api.Refined
+import io.circe.generic.auto._
+import org.genivi.sota.marshalling.CirceMarshallingSupport._
+import org.genivi.sota.resolver.common.Errors.Codes
+import org.genivi.sota.resolver.filters.Filter
+import org.genivi.sota.resolver.packages.{Package, PackageFilter}
+import org.genivi.sota.rest.{ErrorRepresentation, ErrorCode}
 
-
+/**
+ * Spec for Package Filter REST actions
+ */
 class PackageFilterResourceWordSpec extends ResourceWordSpec {
 
   "Package filter resource" should {
@@ -22,25 +24,32 @@ class PackageFilterResourceWordSpec extends ResourceWordSpec {
     val pkgVersion = "1.0.0"
     val filterName = "filter"
     val filterExpr = s"""vin_matches "^X.*""""
-    val pkgFilter  =  PackageFilter(Refined(pkgName), Refined(pkgVersion), Refined(filterName))
+    val pkgFilter  =  PackageFilter(Refined.unsafeApply(pkgName), Refined.unsafeApply(pkgVersion), Refined.unsafeApply(filterName))
 
     "be able to assign exisiting filters to existing packages" in {
       addPackageOK(pkgName, pkgVersion, None, None)
       addFilterOK(filterName, filterExpr)
-      addPackageFilterOK("package", "1.0.0", "filter")
+      addPackageFilterOK(pkgName, pkgVersion, filterName)
     }
 
-    "not allow assignment of filters to non-existing packages " in {
+    "not allow assignment of filters to non-existing package names" in {
       addPackageFilter("nonexistant", pkgVersion, filterName) ~> route ~> check {
-        status shouldBe StatusCodes.BadRequest
-        responseAs[ErrorRepresentation].code shouldBe PackageFilter.MissingPackage
+        status shouldBe StatusCodes.NotFound
+        responseAs[ErrorRepresentation].code shouldBe Codes.PackageNotFound
+      }
+    }
+
+    "not allow assignment of filters to non-existing package versions" in {
+      addPackageFilter(pkgName, "0.0.9", filterName) ~> route ~> check {
+        status shouldBe StatusCodes.NotFound
+        responseAs[ErrorRepresentation].code shouldBe Codes.PackageNotFound
       }
     }
 
     "not allow assignment of non-existing filters to existing packages " in {
       addPackageFilter(pkgName, pkgVersion, "nonexistant") ~> route ~> check {
-        status shouldBe StatusCodes.BadRequest
-        responseAs[ErrorRepresentation].code shouldBe PackageFilter.MissingFilter
+        status shouldBe StatusCodes.NotFound
+        responseAs[ErrorRepresentation].code shouldBe Codes.FilterNotFound
       }
     }
 
@@ -51,19 +60,83 @@ class PackageFilterResourceWordSpec extends ResourceWordSpec {
       }
     }
 
-    "list packages associated to a filter on GET requests to /packagesFor/:filterName" in {
+    "list packages associated to a filter on GET requests to /packageFilters?filter=:filterName" in {
       listPackagesForFilter(filterName) ~> route ~> check {
         status shouldBe StatusCodes.OK
-        responseAs[Seq[Package.Name]] shouldBe List(Refined(pkgName))
+        responseAs[List[Package]] shouldBe List(Package(Package.Id(Refined.unsafeApply(pkgName), Refined.unsafeApply(pkgVersion)), None, None))
       }
     }
 
-    "list filters associated to a package on GET requests to /filtersFor/:packageName" in {
-      listFiltersForPackage(pkgName, pkgVersion) ~> route ~> check {
-        status shouldBe StatusCodes.OK
-        responseAs[Seq[Filter]] shouldBe List(Filter(Refined(filterName), Refined(filterExpr)))
+    "fail to list packages associated to empty filter names" in {
+      listPackagesForFilter("") ~> route ~> check {
+        status shouldBe StatusCodes.BadRequest
       }
     }
+
+    "fail to list packages associated to non-existant filters" in {
+      listPackagesForFilter("nonexistant") ~> route ~> check {
+        status shouldBe StatusCodes.NotFound
+        responseAs[ErrorRepresentation].code shouldBe Codes.FilterNotFound
+      }
+    }
+
+    "list filters associated to a package on GET requests to /packageFilters?packageName=:packageName&packageVersion=:packageVersion" in {
+      listFiltersForPackage(pkgName, pkgVersion) ~> route ~> check {
+        status shouldBe StatusCodes.OK
+        responseAs[Seq[Filter]] shouldBe List(Filter(Refined.unsafeApply(filterName), Refined.unsafeApply(filterExpr)))
+      }
+    }
+
+    "fail to list filters associated to a package if no package name is given" in {
+      listFiltersForPackage("", pkgVersion) ~> route ~> check {
+        status shouldBe StatusCodes.BadRequest
+      }
+    }
+
+    "fail to list filters associated to a package if a non-existant package name is given" in {
+      listFiltersForPackage("nonexistant", pkgVersion) ~> route ~> check {
+        status shouldBe StatusCodes.NotFound
+      }
+    }
+
+    "fail to list filters associated to a package if no package version is given" in {
+      listFiltersForPackage(pkgName, "") ~> route ~> check {
+        status shouldBe StatusCodes.BadRequest
+      }
+    }
+
+    "fail to list filters associated to a package if a non-existant package version is given" in {
+      listFiltersForPackage(pkgName, "6.6.6") ~> route ~> check {
+        status shouldBe StatusCodes.NotFound
+      }
+    }
+
+    "delete package filters on DELETE requests" in {
+      deletePackageFilter(pkgName, pkgVersion, filterName) ~> route ~> check {
+        status shouldBe StatusCodes.OK
+        listPackageFilters ~> route ~> check {
+          status shouldBe StatusCodes.OK
+          responseAs[Seq[PackageFilter]] shouldBe List()
+        }
+      }
+    }
+
+    "fail if package filter does not exist" in {
+      deletePackageFilter("nonexistant", pkgVersion, filterName) ~> route ~> check {
+        status shouldBe StatusCodes.NotFound
+        responseAs[ErrorRepresentation].code shouldBe Codes.FilterNotFound
+      }
+    }
+
+    "delete all package filters when a filter is deleted" in {
+      addPackageFilterOK(pkgName, pkgVersion, filterName)
+      deleteFilterOK(filterName)
+      listPackageFilters ~> route ~> check {
+        status shouldBe StatusCodes.OK
+        responseAs[Seq[PackageFilter]] shouldBe List()
+      }
+    }
+
 
   }
 }

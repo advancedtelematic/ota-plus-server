@@ -4,44 +4,24 @@
  */
 package org.genivi.sota.resolver.test
 
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.ValidationRejection
-import eu.timepit.refined.Refined
-import org.genivi.sota.resolver.types.Package
-import org.genivi.sota.resolver.types.Package._
+import cats.data.Xor
+import eu.timepit.refined.api.Refined
+import io.circe.Json
+import io.circe.generic.auto._
+import org.genivi.sota.marshalling.CirceMarshallingSupport._
+import org.genivi.sota.resolver.common.Errors.Codes
+import org.genivi.sota.resolver.packages.Package
+import org.genivi.sota.resolver.packages.Package._
 import org.genivi.sota.rest.{ErrorRepresentation, ErrorCodes}
 import org.scalacheck._
 
 
-object ArbitraryPackage {
-
-  val genVersion: Gen[Version] =
-    Gen.listOfN(3, Gen.choose(0, 999)).map(_.mkString(".")).map(Refined(_))
-
-  val genPackageName: Gen[Package.Name] =
-    Gen.identifier.map(Refined(_))
-
-  val genPackage: Gen[Package] = for {
-    name    <- genPackageName
-    version <- genVersion
-
-    // XXX: This should be changed back to arbitrary strings once we
-    // figured out where this encoding bug happens (see
-    // PackageResourceWordSpec at the bottom of this file).
-
-    // desc    <- Gen.option(Arbitrary.arbitrary[String])
-
-    desc    <- Gen.option(Gen.alphaStr)
-    vendor  <- Gen.option(Gen.alphaStr)
-  } yield Package(Package.Id(name, version), desc, vendor)
-
-  implicit lazy val arbPackage = Arbitrary(genPackage)
-}
-
+/**
+ * Spec for Packages REST actions
+ */
 class PackagesResourcePropSpec extends ResourcePropSpec {
-
-  import ArbitraryPackage.arbPackage
 
   property("create a new resource on PUT request") {
     forAll { (p : Package) =>
@@ -70,12 +50,14 @@ class PackagesResourcePropSpec extends ResourcePropSpec {
   }
 
   property("not accept bad package versions") {
+
     forAll { (p: Package, version: String) =>
       addPackage(p.id.name.get, version + ".0", p.description, p.vendor) ~> route ~> check {
         status shouldBe StatusCodes.BadRequest
-        val error = responseAs[ErrorRepresentation]
-        error.code shouldBe ErrorCodes.InvalidEntity
-        error.description shouldBe "Predicate failed: Invalid version format."
+        responseAs[ErrorRepresentation].code shouldBe ErrorCodes.InvalidEntity
+
+        // XXX: Fix
+        // error.description shouldBe "Predicate failed: Invalid version format."
       }
     }
   }
@@ -93,23 +75,35 @@ class PackagesResourcePropSpec extends ResourcePropSpec {
 
 }
 
-
-// This test currently fails, because somewhere the unicode character
-// gets mangled...
-
-/*
+/**
+ * Spec for Packages REST action word processing
+ */
 class PackagesResourceWordSpec extends ResourceWordSpec {
 
   "Packages resource" should {
 
     "be able to handle unicode descriptions" in {
-      Put( PackagesUri("name", "1.0.0"), Metadata(Some("嚢"), None) ) ~> route ~> check {
+      addPackage("name", "1.0.0", Some("嚢"), None) ~> route ~> check {
         status shouldBe StatusCodes.OK
         responseAs[Package] shouldBe
-          Package(None, Refined("name"), Refined("1.0.0"), Some("嚢"), None)
+          Package(Package.Id(Refined.unsafeApply("name"), Refined.unsafeApply("1.0.0")), Some("嚢"), None)
+      }
+    }
+
+    val pkg = Package(Package.Id(Refined.unsafeApply("apa"), Refined.unsafeApply("1.0.0")), None, None)
+
+    "GET /packages/:pkgName/:pkgVersion should return the package or fail" in {
+      addPackage(pkg.id.name.get, pkg.id.version.get, None, None) ~> route ~> check {
+        status shouldBe StatusCodes.OK
+      }
+      Get(Resource.uri("packages", pkg.id.name.get, pkg.id.version.get)) ~> route ~> check {
+        status shouldBe StatusCodes.OK
+        responseAs[Package] shouldBe pkg
+      }
+      Get(Resource.uri("packages", "bepa", "1.0.0")) ~> route ~> check {
+        status shouldBe StatusCodes.NotFound
+        responseAs[ErrorRepresentation].code shouldBe Codes.PackageNotFound
       }
     }
   }
-
 }
-*/

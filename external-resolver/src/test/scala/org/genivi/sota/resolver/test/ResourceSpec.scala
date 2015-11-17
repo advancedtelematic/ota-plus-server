@@ -13,9 +13,15 @@ import org.scalatest.{BeforeAndAfterAll, Suite, WordSpec, PropSpec, Matchers}
 import slick.jdbc.JdbcBackend.Database
 
 
-trait ResourceSpec extends Matchers
-    with VehicleRequests
+/**
+ * Generic trait for REST specs
+ * Includes helpers for Packages, Components, Filters, PackageFilters and
+ * Resolver
+ */
+trait ResourceSpec extends
+         VehicleRequests
     with PackageRequests
+    with ComponentRequests
     with FilterRequests
     with PackageFilterRequests
     with ResolveRequests
@@ -23,9 +29,8 @@ trait ResourceSpec extends Matchers
     with BeforeAndAfterAll { self: Suite =>
 
   // Database
-  val name = "test-database"
-  val db = Database.forConfig(name)
-
+  val name        = "test-database"
+  implicit val db = Database.forConfig(name)
 
   override def beforeAll() = {
     val dbConfig = system.settings.config.getConfig(name)
@@ -41,14 +46,25 @@ trait ResourceSpec extends Matchers
   }
 
   override def afterAll() = {
-    system.shutdown()
+    system.terminate()
     db.close()
   }
 
   // Route
-  lazy implicit val route: Route = new org.genivi.sota.resolver.Routing(db).route
+  lazy implicit val route: Route = new Routing().route
 
 }
 
+/**
+ * Generic trait for REST Word Specs
+ * Includes helpers for Packages, Components, Filters, PackageFilters and
+ * Resolver
+ */
 trait ResourceWordSpec extends WordSpec with ResourceSpec
+
+/**
+ * Generic trait for REST Property specs
+ * Includes helpers for Packages, Components, Filters, PackageFilters and
+ * Resolver
+ */
 trait ResourcePropSpec extends PropSpec with ResourceSpec with PropertyChecks

@@ -7,111 +7,34 @@ package org.genivi.sota.resolver
 import akka.actor.ActorSystem
 import akka.event.Logging
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.model.StatusCodes.NoContent
-import akka.http.scaladsl.server.{Directives, ExceptionHandler, Route, PathMatchers}
+import akka.http.scaladsl.server.{Directives, Route}
 import akka.stream.ActorMaterializer
-import org.genivi.sota.refined.SprayJsonRefined._
-import org.genivi.sota.resolver.db._
-import org.genivi.sota.resolver.types.Vehicle
-import org.genivi.sota.rest.{ErrorCode, ErrorRepresentation}
-import org.genivi.sota.rest.Validation._
+import org.genivi.sota.resolver.filters.FilterDirectives
+import org.genivi.sota.resolver.packages.PackageDirectives
+import org.genivi.sota.resolver.resolve.ResolveDirectives
+import org.genivi.sota.resolver.vehicles.VehicleDirectives
+import org.genivi.sota.resolver.components.ComponentDirectives
+import org.genivi.sota.rest.Handlers.{rejectionHandler, exceptionHandler}
 import scala.concurrent.ExecutionContext
 import scala.util.Try
 import slick.jdbc.JdbcBackend.Database
 
-
-class Routing(db: Database)
-  (implicit system: ActorSystem, mat: ActorMaterializer, exec: ExecutionContext) extends Directives {
-
-  import org.genivi.sota.resolver.types.{Vehicle$, Package, Filter, PackageFilter}
-  import spray.json.DefaultJsonProtocol._
-  import org.genivi.sota.rest.Handlers._
-
-  def vehiclesRoute: Route =
-    pathPrefix("vehicles") {
-      get {
-        complete(db.run(Vehicles.list))
-      } ~
-      (put & refined[Vehicle.ValidVin](PathMatchers.Slash ~ PathMatchers.Segment ~ PathMatchers.PathEnd)) { vin =>
-        complete(db.run( Vehicles.add(Vehicle(vin)) ).map(_ => NoContent))
-      }
-    }
-
-  def refinedPackageId =
-    refined[Package.ValidName](PathMatchers.Slash ~ PathMatchers.Segment) &
-      refined[Package.ValidVersion](PathMatchers.Slash ~ PathMatchers.Segment ~ PathMatchers.PathEnd)
-
-  def packagesRoute: Route =
-    pathPrefix("packages") {
-      get {
-        complete {
-          NoContent
-        }
-      } ~
-      (put & refinedPackageId & entity(as[Package.Metadata])) { (name, version, metadata) =>
-        complete(db.run(Packages.add(Package(Package.Id(name, version), metadata.description, metadata.vendor))))
-      }
-    }
-
-  def resolveRoute: Route =
-    pathPrefix("resolve") {
-      (get & refinedPackageId) { (name, version) =>
-        complete(db.run(Resolve.resolve(name, version)))
-      }
-    }
-
-  def filterRoute: Route =
-    path("filters") {
-      get {
-        complete(db.run(Filters.list))
-      } ~
-      (post & entity(as[Filter])) { filter => complete(db.run(Filters.add(filter))) }
-    }
-
-  def validateRoute: Route =
-    pathPrefix("validate") {
-      path("filter") ((post & entity(as[Filter])) (_ => complete("OK")))
-    }
-
-  def packageFiltersRoute: Route = {
-
-    def packageFiltersHandler: ExceptionHandler = ExceptionHandler {
-      case err: PackageFilters.MissingPackageException =>
-        complete(StatusCodes.BadRequest ->
-          ErrorRepresentation(PackageFilter.MissingPackage, "Package doesn't exist"))
-      case err: PackageFilters.MissingFilterException  =>
-        complete(StatusCodes.BadRequest ->
-          ErrorRepresentation(PackageFilter.MissingFilter, "Filter doesn't exist"))
-    }
-
-    path("packageFilters") {
-      get {
-        complete(db.run(PackageFilters.list))
-      } ~
-      (post & entity(as[PackageFilter])) { pf =>
-        handleExceptions(packageFiltersHandler) {
-          complete(db.run(PackageFilters.add(pf)))
-        }
-      }
-    } ~
-    pathPrefix("packageFilters" / "packagesFor") {
-      (get & refined[Filter.ValidName](PathMatchers.Slash ~ PathMatchers.Segment ~ PathMatchers.PathEnd)) { fname =>
-        complete(db.run(PackageFilters.listPackagesForFilter(fname)))
-      }
-    } ~
-    pathPrefix("packageFilters" / "filtersFor") {
-      (get & refinedPackageId) { (pname, pversion) =>
-        complete(db.run(PackageFilters.listFiltersForPackage(pname, pversion)))
-      }
-    }
-  }
+/**
+ * Base API routing class.
+ * @see {@linktourl http://pdxostc.github.io/rvi_sota_server/dev/api.html}
+ */
+class Routing
+  (implicit db: Database, system: ActorSystem, mat: ActorMaterializer, exec: ExecutionContext)
+    extends Directives {
 
   val route: Route = pathPrefix("api" / "v1") {
     handleRejections(rejectionHandler) {
       handleExceptions(exceptionHandler) {
-        vehiclesRoute ~ packagesRoute ~ resolveRoute ~ filterRoute ~ validateRoute ~ packageFiltersRoute
+        new VehicleDirectives().route ~
+        new PackageDirectives().route ~
+        new FilterDirectives().route ~
+        new ResolveDirectives().route ~
+        new ComponentDirectives().route
       }
     }
   }
@@ -123,12 +46,11 @@ object Boot extends App {
   implicit val materializer = ActorMaterializer()
   implicit val exec         = system.dispatcher
   implicit val log          = Logging(system, "boot")
+  implicit val db           = Database.forConfig("database")
 
   log.info(org.genivi.sota.resolver.BuildInfo.toString)
 
-  val db = Database.forConfig("database")
-
-  val route         = new Routing(db)
+  val route         = new Routing
   val host          = system.settings.config.getString("server.host")
   val port          = system.settings.config.getInt("server.port")
   val bindingFuture = Http().bindAndHandle(route.route, host, port)
@@ -137,6 +59,6 @@ object Boot extends App {
 
   sys.addShutdownHook {
     Try( db.close()  )
-    Try( system.shutdown() )
+    Try( system.terminate() )
   }
 }

@@ -1,12 +1,9 @@
-TARGETS = architecture/Data-Model.pdf architecture/System-Architecture-Diagram.pdf \
-					security/dfds/context.pdf security/dfds/server_level1.pdf
+all: 
+	mkdir -p output
+	docker build -t sota_docs_site .
+	docker run -t -i -v $(PWD)/output:/data/output sota_docs_site jekyll build -d output
 
-all: $(TARGETS)
-
-%.pdf: %.svg
-	inkscape --export-pdf=$@ $<
-
-clean: $(TARGETS)
-	rm -f $^
+clean:
+	rm -rf output
 
 .PHONY: all clean

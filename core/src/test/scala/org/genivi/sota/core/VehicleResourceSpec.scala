@@ -8,23 +8,34 @@ import akka.http.scaladsl.model.Uri.Path
 import akka.http.scaladsl.model.{StatusCodes, Uri}
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import eu.timepit.refined.Refined
+import eu.timepit.refined.api.Refined
+import io.circe.generic.auto._
+import org.genivi.sota.marshalling.CirceMarshallingSupport
+import CirceMarshallingSupport._
 import org.genivi.sota.core.data.Vehicle
+import org.genivi.sota.core.rvi.JsonRpcRviClient
+import org.genivi.sota.core.jsonrpc.HttpTransport
 import org.scalacheck.Gen
 import org.scalatest.prop.PropertyChecks
 import org.scalatest.{BeforeAndAfterAll, Matchers, PropSpec}
 import slick.driver.MySQLDriver.api._
 
+/**
+ * Spec tests for vehicle REST actions
+ */
 class VehicleResourceSpec extends PropSpec with PropertyChecks
     with Matchers
     with ScalatestRouteTest
     with BeforeAndAfterAll {
 
-  import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
   val databaseName = "test-database"
-
   val db = Database.forConfig(databaseName)
-  lazy val service = new VehiclesResource(db)
+
+  val rviUri = Uri(system.settings.config.getString( "rvi.endpoint" ))
+  val serverTransport = HttpTransport( rviUri )
+  implicit val rviClient = new JsonRpcRviClient( serverTransport.requestTransport, system.dispatcher)
+
+  lazy val service = new VehiclesResource(db, rviClient)
 
   override def beforeAll {
     TestDatabase.resetDatabase( databaseName )
@@ -36,7 +47,7 @@ class VehicleResourceSpec extends PropSpec with PropertyChecks
     Uri.Empty.withPath(BasePath / pathSuffix)
   }
 
-  def vehicleUri(vin: Vehicle.IdentificationNumber)  = Uri.Empty.withPath( BasePath / vin.get )
+  def vehicleUri(vin: Vehicle.Vin)  = Uri.Empty.withPath( BasePath / vin.get )
 
   import Generators._
 
@@ -59,7 +70,7 @@ class VehicleResourceSpec extends PropSpec with PropertyChecks
   } yield vin.mkString
 
 
-  val VehicleWithIllegalVin : Gen[Vehicle] = Gen.oneOf( tooLongVin, tooShortVin ).map( x => Vehicle( Refined(x) ) )
+  val VehicleWithIllegalVin : Gen[Vehicle] = Gen.oneOf( tooLongVin, tooShortVin ).map( x => Vehicle( Refined.unsafeApply(x) ) )
 
   property( "reject illegal vins" ) {
     forAll( VehicleWithIllegalVin ) { vehicle =>
@@ -82,7 +93,7 @@ class VehicleResourceSpec extends PropSpec with PropertyChecks
   }
 
   override def afterAll() {
-    system.shutdown()
+    system.terminate()
     db.close()
   }
 

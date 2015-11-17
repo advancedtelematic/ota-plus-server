@@ -3,20 +3,19 @@ define(['react', 'underscore', 'sota-dispatcher'], function(React, _, SotaDispat
   var SearchBar = React.createClass({
     handleChange: function() {
       SotaDispatcher.dispatch({
-        actionType: 'vehicles-filter',
+        actionType: this.props.event,
         regex: this.refs.filterTextInput.getDOMNode().value
       });
       return false;
     },
     render: function() {
       return (
-        <form>
+        <form className="form-inline pull-right search-bar">
           <div className="form-group">
-            <label htmlFor="regex">Vehicle Vin Regex</label>
+            <label htmlFor="regex">{this.props.label}</label>
             <input
               type="text"
               name="regex"
-              placeholder="Search..."
               value={this.props.filterText}
               ref="filterTextInput"
               className="form-control"
