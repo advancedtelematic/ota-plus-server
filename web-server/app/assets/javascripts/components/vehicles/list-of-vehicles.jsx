@@ -23,6 +23,18 @@ define(function(require) {
               { vehicle.vin }
               </Router.Link>
             </td>
+            <td>
+              debian ( &nbsp;
+                <a href={`#/client/${vehicle.vin}/debian/32`}> 32 </a> &nbsp;
+                <a href={`#/client/${vehicle.vin}/debian/64`}> 64 </a> &nbsp;
+              )
+            </td>
+            <td>
+              rpm ( &nbsp;
+                <a href={`#/client/${vehicle.vin}/rpm/32`}> 32 </a> &nbsp;
+                <a href={`#/client/${vehicle.vin}/rpm/64`}> 64 </a> &nbsp;
+              )
+            </td>
           </tr>
         );
       });
