@@ -161,4 +161,17 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
       user => gotoLoginSucceeded(user.get.email)
     )
   }
+
+  /**
+   * Send a pre-configured client for the requested package-format (deb or rpm) and architecture (32 or 64 bit).
+   *
+   * @param vin
+   */
+  def preconfClient(vin: String, packfmt: String, arch: String) : Action[RawBuffer] =
+    AsyncStack(parse.raw, AuthorityKey -> Role.USER) { implicit req =>
+      { // Mitigation for C04: Log transactions to and from SOTA Server
+        auditLogger.info(s"Request: $req from user ${loggedIn.name}")
+      }
+      Future(NotImplemented("TODO")) // TODO proxyTo(clientApiUri, reques)
+    }
 }
