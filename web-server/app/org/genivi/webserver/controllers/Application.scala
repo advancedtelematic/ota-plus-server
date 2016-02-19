@@ -8,6 +8,7 @@ package org.genivi.webserver.controllers
 import javax.inject.Inject
 
 import jp.t2v.lab.play2.auth.{AuthElement, LoginLogout}
+import org.genivi.sota.core.data.Vehicle
 import org.genivi.webserver.Authentication.{AccountManager, Role}
 import org.slf4j.LoggerFactory
 import play.api.Play.current
@@ -21,6 +22,8 @@ import play.api.mvc._
 import views.html
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
+import scala.util.control.NonFatal
 
 /**
  * The main application controller. Handles authentication and request proxying.
@@ -161,4 +164,63 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
       user => gotoLoginSucceeded(user.get.email)
     )
   }
+
+  /**
+   * Send a pre-configured client for the requested package-format (deb or rpm) and architecture (32 or 64 bit).
+   *
+   * @param vin
+   * @param packfmt either "deb" or "rpm"
+   * @param arch either "32" or "64"
+   */
+  def preconfClient(vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture) : Action[AnyContent] =
+    Action.async { implicit request =>
+    { // Mitigation for C04: Log transactions to and from SOTA Server
+      auditLogger.info(s"preconfClient - Request: $request ") // TODO from user ${loggedIn.name}
+    }
+    Play.application.configuration.getString("buildservice.api.uri") match {
+      case None =>
+        auditLogger.error(s"preconfClient - The buildservice URI is missing in configuration. Request: $request ")
+        Future.successful(ServiceUnavailable)
+      case Some(url0) =>
+        val url = (
+          url0.replace("[vin]", vin.get).replace("[packagetype]", packfmt.toString()).replace("[arch]", arch.toString())
+        )
+        Try( com.ning.http.client.uri.Uri.create(url)) match {
+          case scala.util.Success(_) =>
+            preconfClientHelper(url, vin, packfmt, arch)
+          case scala.util.Failure(_) =>
+            auditLogger.error(s"preconfClient - The buildservice URI is non-wellformed: $url ")
+            Future.successful(InternalServerError)
+        }
+    }
+  }
+
+
+  /**
+    * Helper method that actually downloads the preconfigured client (after caller took care of some error handling).
+    */
+  private def preconfClientHelper(
+    url: String, vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture
+  ) : Future[Result] = {
+    val futureResponse: Future[(WSResponseHeaders, Enumerator[Array[Byte]])] = ws.url(url).getStream()
+    futureResponse.map {
+      case (response, body) if (response.status == 200) =>
+        // If there's a content length, send that, otherwise return the body chunked
+        val ourResponse = response.headers.get("Content-Length") match {
+          case Some(Seq(length)) =>
+            Ok.feed(body).as(packfmt.contentType).withHeaders("Content-Length" -> length)
+          case _ =>
+            Ok.chunked(body).as(packfmt.contentType)
+        }
+        val suggestedFilename = s"preconf-client-for-${vin.get}-$packfmt-$arch.${packfmt.fileExtension}"
+        ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
+      case _ =>
+        BadGateway
+    }.recoverWith {
+      case _ =>
+        auditLogger.error(s"preconfClient - Unexpected reply from: $url ")
+        Future.successful(BadGateway)
+    }
+  }
+
 }

@@ -90,6 +90,12 @@ object SotaBuild extends Build {
   import play.sbt.Play.autoImport._
   lazy val webServer = Project(id = "webserver", base = file("web-server"),
     settings = commonSettings ++ PlaySettings.defaultScalaSettings ++ Seq(
+      play.sbt.routes.RoutesKeys.routesImport ++= Seq(
+        "org.genivi.webserver.controllers.PathBinders._",
+        "org.genivi.webserver.controllers.PackageType",
+        "org.genivi.webserver.controllers.Architecture",
+        "org.genivi.sota.core.data.Vehicle"
+      ),
       RoutesKeys.routesGenerator := InjectedRoutesGenerator,
       testOptions in UnitTests += Tests.Argument(TestFrameworks.ScalaTest, "-l", "APITests BrowserTests"),
       testOptions in IntegrationTests += Tests.Argument(TestFrameworks.ScalaTest, "-n", "APITests"),
@@ -113,6 +119,7 @@ object SotaBuild extends Build {
         play.sbt.Play.autoImport.cache
       ) ++ Dependencies.Database
     ))
+    .dependsOn(core)
     .enablePlugins(PlayScala, SbtWeb)
     .settings(inConfig(UnitTests)(Defaults.testTasks): _*)
     .settings(inConfig(IntegrationTests)(Defaults.testTasks): _*)
