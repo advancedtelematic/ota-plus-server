@@ -174,6 +174,7 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
     { // Mitigation for C04: Log transactions to and from SOTA Server
       auditLogger.info(s"Request: $request ") // TODO from user ${loggedIn.name}
     }
+    val suggestedFilename = s"preconf-client-for-$vin-$packfmt-$arch.zip"
     // TODO replace with real URL once service becomes available
     val url = "http://download.geonames.org/export/dump/AR.zip"
     val futureResponse: Future[(WSResponseHeaders, Enumerator[Array[Byte]])] = ws.url(url).getStream()
@@ -184,12 +185,13 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
           val contentType = response.headers.get("Content-Type").flatMap(_.headOption)
             .getOrElse("application/octet-stream")
           // If there's a content length, send that, otherwise return the body chunked
-          response.headers.get("Content-Length") match {
+          val ourResponse = response.headers.get("Content-Length") match {
             case Some(Seq(length)) =>
               Ok.feed(body).as(contentType).withHeaders("Content-Length" -> length)
             case _ =>
               Ok.chunked(body).as(contentType)
           }
+          ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
         } else {
           BadGateway
         }
