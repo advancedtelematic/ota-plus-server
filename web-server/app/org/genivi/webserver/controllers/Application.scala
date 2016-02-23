@@ -166,12 +166,34 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
    * Send a pre-configured client for the requested package-format (deb or rpm) and architecture (32 or 64 bit).
    *
    * @param vin
+   * @param packfmt either "debian" or "rpm"
+   * @param arch either "32" or "64"
    */
-  def preconfClient(vin: String, packfmt: String, arch: String) : Action[RawBuffer] =
-    AsyncStack(parse.raw, AuthorityKey -> Role.USER) { implicit req =>
-      { // Mitigation for C04: Log transactions to and from SOTA Server
-        auditLogger.info(s"Request: $req from user ${loggedIn.name}")
-      }
-      Future(NotImplemented("TODO")) // TODO proxyTo(clientApiUri, reques)
+  def preconfClient(vin: String, packfmt: String, arch: String) : Action[AnyContent] =
+    Action.async { implicit request =>
+    { // Mitigation for C04: Log transactions to and from SOTA Server
+      auditLogger.info(s"Request: $request ") // TODO from user ${loggedIn.name}
     }
+    // TODO replace with real URL once service becomes available
+    val url = "http://download.geonames.org/export/dump/AR.zip"
+    val futureResponse: Future[(WSResponseHeaders, Enumerator[Array[Byte]])] = ws.url(url).getStream()
+    // recipe to stream (a file obtained from a WS) https://www.playframework.com/documentation/2.4.x/ScalaWS
+    futureResponse.map {
+      case (response, body) =>
+        if (response.status == 200) {
+          val contentType = response.headers.get("Content-Type").flatMap(_.headOption)
+            .getOrElse("application/octet-stream")
+          // If there's a content length, send that, otherwise return the body chunked
+          response.headers.get("Content-Length") match {
+            case Some(Seq(length)) =>
+              Ok.feed(body).as(contentType).withHeaders("Content-Length" -> length)
+            case _ =>
+              Ok.chunked(body).as(contentType)
+          }
+        } else {
+          BadGateway
+        }
+    }
+  }
+
 }
