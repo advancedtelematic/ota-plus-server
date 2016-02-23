@@ -31,8 +31,8 @@ define(function(require) {
             </td>
             <td>
               rpm ( &nbsp;
-                <a href={`#/client/${vehicle.vin}/rpm/32`}> 32 </a> &nbsp;
-                <a href={`#/client/${vehicle.vin}/rpm/64`}> 64 </a> &nbsp;
+                <a href={`/api/v1/client/${vehicle.vin}/rpm/32`}> 32 </a> &nbsp;
+                <a href={`/api/v1/client/${vehicle.vin}/rpm/64`}> 64 </a> &nbsp;
               )
             </td>
           </tr>
