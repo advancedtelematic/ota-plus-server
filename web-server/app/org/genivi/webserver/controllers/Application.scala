@@ -175,22 +175,27 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
     { // Mitigation for C04: Log transactions to and from SOTA Server
       auditLogger.info(s"Request: $request ") // TODO from user ${loggedIn.name}
     }
-    val url = Play.application.configuration.getString("buildservice.api.uri").get
-    val futureResponse: Future[(WSResponseHeaders, Enumerator[Array[Byte]])] = ws.url(url).getStream()
-    // recipe to stream (a file obtained from a WS) https://www.playframework.com/documentation/2.4.x/ScalaWS
-    futureResponse.map {
-      case (response, body) if (response.status == 200) =>
-        // If there's a content length, send that, otherwise return the body chunked
-        val ourResponse = response.headers.get("Content-Length") match {
-          case Some(Seq(length)) =>
-            Ok.feed(body).as(packfmt.contentType).withHeaders("Content-Length" -> length)
+    Play.application.configuration.getString("buildservice.api.uri") match {
+      case None =>
+        auditLogger.error(s"The buildservice URI is missing in configuration. Request: $request ")
+        Future(ServiceUnavailable)
+      case Some(url) =>
+        val futureResponse: Future[(WSResponseHeaders, Enumerator[Array[Byte]])] = ws.url(url).getStream()
+        // recipe to stream (a file obtained from a WS) https://www.playframework.com/documentation/2.4.x/ScalaWS
+        futureResponse.map {
+          case (response, body) if (response.status == 200) =>
+            // If there's a content length, send that, otherwise return the body chunked
+            val ourResponse = response.headers.get("Content-Length") match {
+              case Some(Seq(length)) =>
+                Ok.feed(body).as(packfmt.contentType).withHeaders("Content-Length" -> length)
+              case _ =>
+                Ok.chunked(body).as(packfmt.contentType)
+            }
+            val suggestedFilename = s"preconf-client-for-${vin.get}-$packfmt-$arch.${packfmt.fileExtension}"
+            ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
           case _ =>
-            Ok.chunked(body).as(packfmt.contentType)
+            BadGateway
         }
-        val suggestedFilename = s"preconf-client-for-${vin.get}-$packfmt-$arch.${packfmt.fileExtension}"
-        ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
-      case _ =>
-        BadGateway
     }
   }
 
