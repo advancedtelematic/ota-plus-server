@@ -8,6 +8,7 @@ package org.genivi.webserver.controllers
 import javax.inject.Inject
 
 import jp.t2v.lab.play2.auth.{AuthElement, LoginLogout}
+import org.genivi.sota.core.data.Vehicle
 import org.genivi.webserver.Authentication.{AccountManager, Role}
 import org.slf4j.LoggerFactory
 import play.api.Play.current
@@ -169,11 +170,12 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
    * @param packfmt either "debian" or "rpm"
    * @param arch either "32" or "64"
    */
-  def preconfClient(vin: String, packfmt: String, arch: String) : Action[AnyContent] =
+  def preconfClient(vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture) : Action[AnyContent] =
     Action.async { implicit request =>
     { // Mitigation for C04: Log transactions to and from SOTA Server
       auditLogger.info(s"Request: $request ") // TODO from user ${loggedIn.name}
     }
+
     // TODO replace with real URL once service becomes available
     val url = "http://download.geonames.org/export/dump/AR.zip"
     val futureResponse: Future[(WSResponseHeaders, Enumerator[Array[Byte]])] = ws.url(url).getStream()
@@ -189,7 +191,7 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
           case _ =>
             Ok.chunked(body).as(contentType)
         }
-        val suggestedFilename = s"preconf-client-for-$vin-$packfmt-$arch.zip"
+        val suggestedFilename = s"preconf-client-for-${vin.get}-$packfmt-$arch.zip"
         ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
       case _ =>
         BadGateway
