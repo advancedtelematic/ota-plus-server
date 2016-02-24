@@ -35,9 +35,9 @@ object PathBinders {
   implicit object bindablePackageType extends play.api.mvc.PathBindable[PackageType] {
     def bind(key: String, value: String): Either[String, PackageType] = {
       value match {
-        case "deb" => Right(Debian)
-        case "rpm" => Right(RPM)
-        case _ => Left("Expected deb or rpm, found " + value)
+        case Debian.fileExtension => Right(Debian)
+        case RPM.fileExtension => Right(RPM)
+        case _ => Left(s"Expected ${Debian.fileExtension} or ${RPM.fileExtension}, found " + value)
       }
     }
     def unbind(key: String, value: PackageType): String = value.toString
@@ -69,11 +69,11 @@ object PackageType {
   val genPackageType: Gen[PackageType] = Gen.oneOf(Debian, RPM)
 }
 object Debian extends PackageType {
-  def fileExtension: String = "deb"
+  val fileExtension: String = "deb"
   def contentType: String = "application/vnd.debian.binary-package"
 }
 object RPM extends PackageType {
-  def fileExtension: String = "rpm"
+  val fileExtension: String = "rpm"
   def contentType: String = "application/x-redhat-package-manager"
 }
 
