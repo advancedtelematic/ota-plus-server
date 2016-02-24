@@ -146,6 +146,24 @@ class APIFunTests extends PlaySpec with OneServerPerSuite {
     componentResponse.json mustEqual data
   }
 
+  def downloadPreconfiguredClient(): Unit = {
+    import org.genivi.webserver.controllers.{Architecture, PackageType}
+    val cookie = getLoginCookie
+    val inputs =
+      for (
+        vin <- org.genivi.sota.core.data.Vehicle.genVin;
+        packfmt <- PackageType.genPackageType;
+        arch <- Architecture.genArchitecture
+      ) yield (vin, packfmt, arch);
+    val result = inputs map { case (vin, packfmt, arch) =>
+      val fileResponse = makeRequest(s"client/${vin.get}/${packfmt.fileExtension}/${arch.toString}", cookie, GET);
+      fileResponse.status mustBe OK
+
+      OK
+    }
+    result suchThat (_ == OK)
+  }
+
   "test adding vins" taggedAs APITests in {
     addVin(testVin)
     //add second vin to aid in testing filtering later on
@@ -366,4 +384,9 @@ class APIFunTests extends PlaySpec with OneServerPerSuite {
     //TODO: parse this properly. The issue is the root key for each list in the response is a vin, not a static string.
     listResponse.body.contains(testVin) && !listResponse.body.contains(testVinAlt) mustBe true
   }
+
+  "test download a preconfigured client" taggedAs APITests in {
+    downloadPreconfiguredClient()
+  }
+
 }

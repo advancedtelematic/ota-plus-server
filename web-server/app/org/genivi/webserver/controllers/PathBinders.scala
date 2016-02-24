@@ -5,6 +5,8 @@
 
 package org.genivi.webserver.controllers
 
+import org.scalacheck.Gen
+
 /**
   * Implicits that allow giving custom param-types in the method signatures in the routes file.
   *
@@ -63,6 +65,9 @@ trait PackageType {
   def contentType: String
   override final def toString(): String = fileExtension
 }
+object PackageType {
+  val genPackageType: Gen[PackageType] = Gen.oneOf(Debian, RPM)
+}
 object Debian extends PackageType {
   def fileExtension: String = "deb"
   def contentType: String = "application/vnd.debian.binary-package"
@@ -78,4 +83,7 @@ case class Architecture(bits: Int) {
     case _ => throw new IllegalArgumentException
   }
   override def toString(): String = bits.toString
+}
+object Architecture {
+  val genArchitecture: Gen[Architecture] = Gen.oneOf(Architecture(32), Architecture(64))
 }
