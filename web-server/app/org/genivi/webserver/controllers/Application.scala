@@ -175,9 +175,7 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
     { // Mitigation for C04: Log transactions to and from SOTA Server
       auditLogger.info(s"Request: $request ") // TODO from user ${loggedIn.name}
     }
-
-    // TODO replace with real URL once service becomes available
-    val url = "http://download.geonames.org/export/dump/AR.zip"
+    val url = Play.application.configuration.getString("preconfclient.api.uri").get
     val futureResponse: Future[(WSResponseHeaders, Enumerator[Array[Byte]])] = ws.url(url).getStream()
     // recipe to stream (a file obtained from a WS) https://www.playframework.com/documentation/2.4.x/ScalaWS
     futureResponse.map {
