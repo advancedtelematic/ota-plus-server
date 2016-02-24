@@ -1,3 +1,7 @@
+/**
+  * Copyright: Copyright (C) 2015, Jaguar Land Rover
+  * License: MPL-2.0
+  */
 package org.genivi.webserver.controllers
 
 /**
@@ -28,9 +32,9 @@ object PathBinders {
   implicit object bindablePackageType extends play.api.mvc.PathBindable[PackageType] {
     def bind(key: String, value: String): Either[String, PackageType] = {
       value match {
-        case "debian" => Right(Debian)
+        case "deb" => Right(Debian)
         case "rpm" => Right(RPM)
-        case _ => Left("Expected debian or rpm, found " + value)
+        case _ => Left("Expected deb or rpm, found " + value)
       }
     }
     def unbind(key: String, value: PackageType): String = value.toString
@@ -53,9 +57,19 @@ object PathBinders {
 
 }
 
-trait PackageType
-object Debian extends PackageType { override def toString(): String = "debian" }
-object RPM extends PackageType { override def toString(): String = "rpm" }
+trait PackageType {
+  def fileExtension: String
+  def contentType: String
+  override final def toString(): String = fileExtension
+}
+object Debian extends PackageType {
+  def fileExtension: String = "deb"
+  def contentType: String = "application/vnd.debian.binary-package"
+}
+object RPM extends PackageType {
+  def fileExtension: String = "rpm"
+  def contentType: String = "application/x-redhat-package-manager"
+}
 
 case class Architecture(bits: Int) {
   bits match {

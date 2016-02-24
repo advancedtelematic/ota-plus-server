@@ -25,8 +25,8 @@ define(function(require) {
             </td>
             <td>
               debian ( &nbsp;
-                <a href={`/api/v1/client/${vehicle.vin}/debian/32`}> 32 </a> &nbsp;
-                <a href={`/api/v1/client/${vehicle.vin}/debian/64`}> 64 </a> &nbsp;
+                <a href={`/api/v1/client/${vehicle.vin}/deb/32`}> 32 </a> &nbsp;
+                <a href={`/api/v1/client/${vehicle.vin}/deb/64`}> 64 </a> &nbsp;
               )
             </td>
             <td>

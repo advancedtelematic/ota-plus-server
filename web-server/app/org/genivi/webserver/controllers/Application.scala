@@ -182,16 +182,14 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
     // recipe to stream (a file obtained from a WS) https://www.playframework.com/documentation/2.4.x/ScalaWS
     futureResponse.map {
       case (response, body) if (response.status == 200) =>
-        val contentType = response.headers.get("Content-Type").flatMap(_.headOption)
-          .getOrElse("application/octet-stream")
         // If there's a content length, send that, otherwise return the body chunked
         val ourResponse = response.headers.get("Content-Length") match {
           case Some(Seq(length)) =>
-            Ok.feed(body).as(contentType).withHeaders("Content-Length" -> length)
+            Ok.feed(body).as(packfmt.contentType).withHeaders("Content-Length" -> length)
           case _ =>
-            Ok.chunked(body).as(contentType)
+            Ok.chunked(body).as(packfmt.contentType)
         }
-        val suggestedFilename = s"preconf-client-for-${vin.get}-$packfmt-$arch.zip"
+        val suggestedFilename = s"preconf-client-for-${vin.get}-$packfmt-$arch.${packfmt.fileExtension}"
         ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
       case _ =>
         BadGateway
