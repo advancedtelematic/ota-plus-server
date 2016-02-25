@@ -179,22 +179,31 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
       case None =>
         auditLogger.error(s"The buildservice URI is missing in configuration. Request: $request ")
         Future(ServiceUnavailable)
-      case Some(url) =>
-        val futureResponse: Future[(WSResponseHeaders, Enumerator[Array[Byte]])] = ws.url(url).getStream()
-        // recipe to stream (a file obtained from a WS) https://www.playframework.com/documentation/2.4.x/ScalaWS
-        futureResponse.map {
-          case (response, body) if (response.status == 200) =>
-            // If there's a content length, send that, otherwise return the body chunked
-            val ourResponse = response.headers.get("Content-Length") match {
-              case Some(Seq(length)) =>
-                Ok.feed(body).as(packfmt.contentType).withHeaders("Content-Length" -> length)
-              case _ =>
-                Ok.chunked(body).as(packfmt.contentType)
-            }
-            val suggestedFilename = s"preconf-client-for-${vin.get}-$packfmt-$arch.${packfmt.fileExtension}"
-            ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
-          case _ =>
-            BadGateway
+      case Some(url0) =>
+        val url = (
+          url0.replace("[vin]", vin.get).replace("[packagetype]", packfmt.toString()).replace("[arch]", arch.toString())
+        )
+        try {
+          val futureResponse: Future[(WSResponseHeaders, Enumerator[Array[Byte]])] = ws.url(url).getStream()
+          // recipe to stream (a file obtained from a WS) https://www.playframework.com/documentation/2.4.x/ScalaWS
+          futureResponse.map {
+            case (response, body) if (response.status == 200) =>
+              // If there's a content length, send that, otherwise return the body chunked
+              val ourResponse = response.headers.get("Content-Length") match {
+                case Some(Seq(length)) =>
+                  Ok.feed(body).as(packfmt.contentType).withHeaders("Content-Length" -> length)
+                case _ =>
+                  Ok.chunked(body).as(packfmt.contentType)
+              }
+              val suggestedFilename = s"preconf-client-for-${vin.get}-$packfmt-$arch.${packfmt.fileExtension}"
+              ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
+            case _ =>
+              BadGateway
+          }
+        } catch {
+          case exc =>
+            auditLogger.error(s"The buildservice URI is invalid: $url ")
+            Future(BadGateway)
         }
     }
   }
