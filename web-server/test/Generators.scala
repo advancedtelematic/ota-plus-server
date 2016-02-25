@@ -4,12 +4,14 @@
  */
 
 import org.genivi.webserver.controllers.{RPM, Debian, PackageType, Architecture}
-import org.scalacheck.Gen
+import org.scalacheck.{Arbitrary, Gen}
 
 object Generators {
 
-  val genPackageType: Gen[PackageType] = Gen.oneOf(Debian, RPM)
+  implicit val genPackageType: Gen[PackageType] = Gen.oneOf(Debian, RPM)
+  implicit val arbPackageType: Arbitrary[PackageType] = Arbitrary(genPackageType)
 
-  val genArchitecture: Gen[Architecture] = Gen.oneOf(Architecture(32), Architecture(64))
+  implicit val genArchitecture: Gen[Architecture] = Gen.oneOf(Architecture(32), Architecture(64))
+  implicit val arbArchitecture: Arbitrary[Architecture] = Arbitrary(genArchitecture)
 
 }
