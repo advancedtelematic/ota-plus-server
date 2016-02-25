@@ -61,8 +61,8 @@ object PathBinders {
 }
 
 trait PackageType {
-  def fileExtension: String
-  def contentType: String
+  val fileExtension: String
+  val contentType: String
   override final def toString(): String = fileExtension
 }
 object PackageType {
@@ -70,11 +70,11 @@ object PackageType {
 }
 object Debian extends PackageType {
   val fileExtension: String = "deb"
-  def contentType: String = "application/vnd.debian.binary-package"
+  val contentType: String = "application/vnd.debian.binary-package"
 }
 object RPM extends PackageType {
   val fileExtension: String = "rpm"
-  def contentType: String = "application/x-redhat-package-manager"
+  val contentType: String = "application/x-redhat-package-manager"
 }
 
 case class Architecture(bits: Int) {
