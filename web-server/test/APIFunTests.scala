@@ -152,8 +152,8 @@ class APIFunTests extends PlaySpec with OneServerPerSuite {
     val inputs =
       for (
         vin <- org.genivi.sota.core.data.Vehicle.genVin;
-        packfmt <- PackageType.genPackageType;
-        arch <- Architecture.genArchitecture
+        packfmt <- Generators.genPackageType;
+        arch <- Generators.genArchitecture
       ) yield (vin, packfmt, arch);
     val result = inputs map { case (vin, packfmt, arch) =>
       val fileResponse = makeRequest(s"client/${vin.get}/${packfmt.fileExtension}/${arch.toString}", cookie, GET);
