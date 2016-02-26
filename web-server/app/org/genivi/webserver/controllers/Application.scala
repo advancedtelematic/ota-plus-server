@@ -22,6 +22,7 @@ import play.api.mvc._
 import views.html
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
 
 /**
  * The main application controller. Handles authentication and request proxying.
@@ -183,28 +184,29 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
         val url = (
           url0.replace("[vin]", vin.get).replace("[packagetype]", packfmt.toString()).replace("[arch]", arch.toString())
         )
-        try {
-          val futureResponse: Future[(WSResponseHeaders, Enumerator[Array[Byte]])] = ws.url(url).getStream()
-          // recipe to stream (a file obtained from a WS) https://www.playframework.com/documentation/2.4.x/ScalaWS
-          futureResponse.map {
-            case (response, body) if (response.status == 200) =>
-              // If there's a content length, send that, otherwise return the body chunked
-              val ourResponse = response.headers.get("Content-Length") match {
-                case Some(Seq(length)) =>
-                  Ok.feed(body).as(packfmt.contentType).withHeaders("Content-Length" -> length)
-                case _ =>
-                  Ok.chunked(body).as(packfmt.contentType)
-              }
-              val suggestedFilename = s"preconf-client-for-${vin.get}-$packfmt-$arch.${packfmt.fileExtension}"
-              ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
-            case _ =>
-              BadGateway
+        val futureResponse: Future[(WSResponseHeaders, Enumerator[Array[Byte]])] =
+          try {
+            ws.url(url).getStream()
+          } catch {
+            case NonFatal(exc) =>
+              auditLogger.error(s"The buildservice URI is invalid: $url ")
+              Future.failed(exc)
           }
-        } catch {
-          case exc =>
-            auditLogger.error(s"The buildservice URI is invalid: $url ")
-            Future.successful(BadGateway)
-        }
+        // recipe to stream (a file obtained from a WS) https://www.playframework.com/documentation/2.4.x/ScalaWS
+        futureResponse.map {
+          case (response, body) if (response.status == 200) =>
+            // If there's a content length, send that, otherwise return the body chunked
+            val ourResponse = response.headers.get("Content-Length") match {
+              case Some(Seq(length)) =>
+                Ok.feed(body).as(packfmt.contentType).withHeaders("Content-Length" -> length)
+              case _ =>
+                Ok.chunked(body).as(packfmt.contentType)
+            }
+            val suggestedFilename = s"preconf-client-for-${vin.get}-$packfmt-$arch.${packfmt.fileExtension}"
+            ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
+          case _ =>
+            BadGateway
+        }.recoverWith { case _ => Future.successful(BadGateway) }
     }
   }
 
