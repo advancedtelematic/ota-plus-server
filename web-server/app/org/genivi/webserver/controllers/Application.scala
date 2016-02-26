@@ -178,7 +178,7 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
     Play.application.configuration.getString("buildservice.api.uri") match {
       case None =>
         auditLogger.error(s"The buildservice URI is missing in configuration. Request: $request ")
-        Future(ServiceUnavailable)
+        Future.successful(ServiceUnavailable)
       case Some(url0) =>
         val url = (
           url0.replace("[vin]", vin.get).replace("[packagetype]", packfmt.toString()).replace("[arch]", arch.toString())
@@ -203,7 +203,7 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
         } catch {
           case exc =>
             auditLogger.error(s"The buildservice URI is invalid: $url ")
-            Future(BadGateway)
+            Future.successful(BadGateway)
         }
     }
   }
