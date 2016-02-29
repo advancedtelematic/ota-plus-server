@@ -22,6 +22,7 @@ import play.api.mvc._
 import views.html
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 import scala.util.control.NonFatal
 
 /**
@@ -168,7 +169,7 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
    * Send a pre-configured client for the requested package-format (deb or rpm) and architecture (32 or 64 bit).
    *
    * @param vin
-   * @param packfmt either "debian" or "rpm"
+   * @param packfmt either "deb" or "rpm"
    * @param arch either "32" or "64"
    */
   def preconfClient(vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture) : Action[AnyContent] =
@@ -184,30 +185,38 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
         val url = (
           url0.replace("[vin]", vin.get).replace("[packagetype]", packfmt.toString()).replace("[arch]", arch.toString())
         )
-        val futureResponse: Future[(WSResponseHeaders, Enumerator[Array[Byte]])] =
-          try {
-            ws.url(url).getStream()
-          } catch {
-            case NonFatal(exc) =>
-              auditLogger.error(s"The buildservice URI is invalid: $url ")
-              Future.failed(exc)
-          }
-        // recipe to stream (a file obtained from a WS) https://www.playframework.com/documentation/2.4.x/ScalaWS
-        futureResponse.map {
-          case (response, body) if (response.status == 200) =>
-            // If there's a content length, send that, otherwise return the body chunked
-            val ourResponse = response.headers.get("Content-Length") match {
-              case Some(Seq(length)) =>
-                Ok.feed(body).as(packfmt.contentType).withHeaders("Content-Length" -> length)
-              case _ =>
-                Ok.chunked(body).as(packfmt.contentType)
-            }
-            val suggestedFilename = s"preconf-client-for-${vin.get}-$packfmt-$arch.${packfmt.fileExtension}"
-            ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
-          case _ =>
-            BadGateway
-        }.recoverWith { case _ => Future.successful(BadGateway) }
+        Try( com.ning.http.client.uri.Uri.create(url)) match {
+          case scala.util.Success(_) =>
+            preconfClientHelper(url, vin, packfmt, arch)
+          case scala.util.Failure(_) =>
+            auditLogger.error(s"The buildservice URI is non-wellformed: $url ")
+            Future.successful(InternalServerError)
+        }
     }
+  }
+
+
+  /**
+    * Helper method that actually downloads the preconfigured client (after caller took care of some error handling).
+    */
+  private def preconfClientHelper(
+    url: String, vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture
+  ) : Future[Result] = {
+    val futureResponse: Future[(WSResponseHeaders, Enumerator[Array[Byte]])] = ws.url(url).getStream()
+    futureResponse.map {
+      case (response, body) if (response.status == 200) =>
+        // If there's a content length, send that, otherwise return the body chunked
+        val ourResponse = response.headers.get("Content-Length") match {
+          case Some(Seq(length)) =>
+            Ok.feed(body).as(packfmt.contentType).withHeaders("Content-Length" -> length)
+          case _ =>
+            Ok.chunked(body).as(packfmt.contentType)
+        }
+        val suggestedFilename = s"preconf-client-for-${vin.get}-$packfmt-$arch.${packfmt.fileExtension}"
+        ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
+      case _ =>
+        BadGateway
+    }.recoverWith { case _ => Future.successful(BadGateway) }
   }
 
 }
