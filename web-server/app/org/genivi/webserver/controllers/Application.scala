@@ -175,11 +175,11 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
   def preconfClient(vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture) : Action[AnyContent] =
     Action.async { implicit request =>
     { // Mitigation for C04: Log transactions to and from SOTA Server
-      auditLogger.info(s"Request: $request ") // TODO from user ${loggedIn.name}
+      auditLogger.info(s"preconfClient - Request: $request ") // TODO from user ${loggedIn.name}
     }
     Play.application.configuration.getString("buildservice.api.uri") match {
       case None =>
-        auditLogger.error(s"The buildservice URI is missing in configuration. Request: $request ")
+        auditLogger.error(s"preconfClient - The buildservice URI is missing in configuration. Request: $request ")
         Future.successful(ServiceUnavailable)
       case Some(url0) =>
         val url = (
@@ -189,7 +189,7 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
           case scala.util.Success(_) =>
             preconfClientHelper(url, vin, packfmt, arch)
           case scala.util.Failure(_) =>
-            auditLogger.error(s"The buildservice URI is non-wellformed: $url ")
+            auditLogger.error(s"preconfClient - The buildservice URI is non-wellformed: $url ")
             Future.successful(InternalServerError)
         }
     }
@@ -216,7 +216,11 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
         ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
       case _ =>
         BadGateway
-    }.recoverWith { case _ => Future.successful(BadGateway) }
+    }.recoverWith {
+      case _ =>
+        auditLogger.error(s"preconfClient - Unexpected reply from: $url ")
+        Future.successful(BadGateway)
+    }
   }
 
 }
