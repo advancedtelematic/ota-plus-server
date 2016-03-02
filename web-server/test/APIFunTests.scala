@@ -12,6 +12,7 @@ import com.ning.http.client.multipart.FilePart
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.Tag
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatestplus.play._
 import play.api.Play
 import play.api.libs.json._
@@ -28,7 +29,7 @@ object APITests extends Tag("APITests")
  *
  * These tests assume a blank, migrated database, as well as a webserver running on port 80
  */
-class APIFunTests extends PlaySpec with OneServerPerSuite {
+class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPropertyChecks {
 
   val testVin = "TESTSTR0123456789"
   val testVinAlt = "TESTALT0123456789"
@@ -144,6 +145,19 @@ class APIFunTests extends PlaySpec with OneServerPerSuite {
     val componentResponse = makeJsonRequest("components/" + partNumber, cookie, PUT, data)
     componentResponse.status mustBe OK
     componentResponse.json mustEqual data
+  }
+
+  def downloadPreconfiguredClient(): Unit = {
+    import org.genivi.webserver.controllers.{Architecture, PackageType}
+    import Generators._
+    val cookie = getLoginCookie
+    val attempts = 5
+    forAll (minSuccessful(attempts)) {
+      (vin: org.genivi.sota.core.data.Vehicle.Vin, packfmt: PackageType, arch: Architecture) =>
+      val webappLink = s"client/${vin.get}/${packfmt.fileExtension}/${arch.toString}"
+      val fileResponse = makeRequest(webappLink, cookie, GET);
+      fileResponse.status mustBe OK
+    }
   }
 
   "test adding vins" taggedAs APITests in {
@@ -366,4 +380,9 @@ class APIFunTests extends PlaySpec with OneServerPerSuite {
     //TODO: parse this properly. The issue is the root key for each list in the response is a vin, not a static string.
     listResponse.body.contains(testVin) && !listResponse.body.contains(testVinAlt) mustBe true
   }
+
+  "test download a preconfigured client" taggedAs APITests in {
+    downloadPreconfiguredClient()
+  }
+
 }

@@ -161,4 +161,5 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
       user => gotoLoginSucceeded(user.get.email)
     )
   }
+
 }

@@ -48,7 +48,7 @@ trait VehicleCommon {
   val genVinChar: Gen[Char] =
     Gen.oneOf('A' to 'Z' diff List('I', 'O', 'Q'))
 
-  val genVin: Gen[Vin] =
+  implicit val genVin: Gen[Vin] =
     Gen.listOfN(17, genVinChar).map(cs => Refined.unsafeApply(cs.mkString))
 
   implicit lazy val arbVin: Arbitrary[Vin] =
