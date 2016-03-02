@@ -16,7 +16,7 @@ POST    /authenticate                           org.genivi.webserver.controllers
 PUT     /api/v1/vehicles/:vin                   org.genivi.webserver.controllers.Application.apiProxyBroadcast(vin: String)
 DELETE  /api/v1/vehicles/:vin                   org.genivi.webserver.controllers.Application.apiProxyBroadcast(vin: String)
 
-GET     /api/v1/client/:vin/:packfmt/:arch      org.genivi.webserver.controllers.Application.preconfClient(vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture)
+GET     /api/v1/client/:vin/:packfmt/:arch      org.genivi.webserver.controllers.ClientSdkController.downloadClientSdk(vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture)
 
 GET     /api/v1/*path                           org.genivi.webserver.controllers.Application.apiProxy(path: String)
 PUT     /api/v1/*path                           org.genivi.webserver.controllers.Application.apiProxy(path: String)
