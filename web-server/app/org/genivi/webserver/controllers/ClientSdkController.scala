@@ -54,7 +54,8 @@ class ClientSdkController @Inject() (wsClient: WSClient) extends Controller {
     */
   private def streamPackageFromBuildService(vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture)
                                            (url: Uri): Future[Result] = {
-    val futureResponse: Future[(WSResponseHeaders, Enumerator[Array[Byte]])] = wsClient.url(url.toUrl).getStream()
+    val futureResponse: Future[(WSResponseHeaders, Enumerator[Array[Byte]])] =
+      wsClient.url(url.toUrl).withMethod("POST").stream()
     futureResponse.map {
       case (response, body) if response.status == 200 =>
         // If there's a content length, send that, otherwise return the body chunked
