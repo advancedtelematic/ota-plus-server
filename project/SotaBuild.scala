@@ -88,7 +88,7 @@ object SotaBuild extends Build {
     .enablePlugins(Packaging.plugins: _*)
 
   import play.sbt.Play.autoImport._
-  lazy val webServer = Project(id = "webserver", base = file("web-server"),
+  lazy val webServer = Project(id = "webserver", base = file("ota-plus-web"),
     settings = commonSettings ++ PlaySettings.defaultScalaSettings ++ Seq(
       play.sbt.routes.RoutesKeys.routesImport ++= Seq(
         "org.genivi.webserver.controllers.PathBinders._",
