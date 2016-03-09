@@ -54,7 +54,7 @@ object Boot extends App with DatabaseConfig {
   implicit val rviClient = new JsonRpcRviClient( requestTransport, system.dispatcher )
 
   val sotaServicesFuture = for {
-    sotaServices <- SotaServices.register( Uri(config.getString("rvi.sotaServicesUri")) )
+    sotaServices <- FastFuture.successful(ServerServices("", "", "", ""))
     binding      <- Http().bindAndHandle(routes(sotaServices), host, port)
   } yield sotaServices
 
