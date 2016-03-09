@@ -8,6 +8,7 @@ import akka.http.scaladsl.model.StatusCodes
 import eu.timepit.refined.refineMV
 import eu.timepit.refined.api.Refined
 import io.circe.generic.auto._
+import org.genivi.sota.datatype.PackageCommon
 import org.genivi.sota.marshalling.CirceMarshallingSupport._
 import org.genivi.sota.resolver.common.Errors.Codes
 import org.genivi.sota.resolver.packages.{Package, PackageFilter}
@@ -217,7 +218,8 @@ class VehiclesResourceWordSpec extends ResourceWordSpec {
     "list installed packages on a VIN on GET request to /vehicles/:vin/package" in {
       Get(Resource.uri(vehicles, vin.get, "package")) ~> route ~> check {
         status shouldBe StatusCodes.OK
-        responseAs[Seq[Package.Id]] shouldBe List(Package.Id(refineMV("apa"), refineMV("1.0.1")))
+        responseAs[Seq[Package.Id]] shouldBe List(Package.Id(refineMV[PackageCommon.ValidName]("apa"),
+                                                             refineMV[PackageCommon.ValidVersion]("1.0.1")))
       }
     }
 
