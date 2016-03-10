@@ -3,6 +3,8 @@ object Version {
   val Circe = "0.2.0"
 
   val Refined = "0.3.1"
+
+  val Akka = "2.4.2"
 }
 
 object Dependencies {
@@ -15,6 +17,10 @@ object Dependencies {
   )
 
   lazy val Refined = "eu.timepit" %% "refined" % Version.Refined
+
+  lazy val AkkaPersistence = "com.typesafe.akka" %% "akka-persistence" % Version.Akka
+
+  val AkkaTestKit = "com.typesafe.akka" %% "akka-testkit" % Version.Akka % "test"
 
 //  lazy val Scalaz = "org.scalaz" %% "scalaz-core" % "7.1.3"
 

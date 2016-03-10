@@ -25,6 +25,8 @@ testOptions in BrowserTests += Tests.Argument(TestFrameworks.ScalaTest, "-n", "B
 dockerExposedPorts := Seq(9000)
 
 libraryDependencies ++= Seq (
+    Dependencies.AkkaPersistence,
+    Dependencies.AkkaTestKit,
     "org.scalatestplus" %% "play" % "1.4.0-M3" % "test",
     "org.webjars" %% "webjars-play" % "2.4.0-1",
     "org.webjars" % "webjars-locator" % "0.27",
