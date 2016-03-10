@@ -153,7 +153,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     val cookie = getLoginCookie
     val attempts = 5
     forAll (minSuccessful(attempts)) {
-      (vin: org.genivi.sota.core.data.Vehicle.Vin, packfmt: PackageType, arch: Architecture) =>
+      (vin: com.advancedtelematic.ota.vehicle.Vehicle.Vin, packfmt: PackageType, arch: Architecture) =>
       val webappLink = s"client/${vin.get}/${packfmt.fileExtension}/${arch.toString}"
       val fileResponse = makeRequest(webappLink, cookie, GET);
       fileResponse.status mustBe OK

@@ -2,15 +2,15 @@ package org.genivi.webserver.controllers
 
 import javax.inject.Inject
 
+import com.advancedtelematic.ota.vehicle.Vehicle
 import com.ning.http.client.uri.Uri
-import org.genivi.sota.core.data.Vehicle
 import play.api.{Logger, Play}
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.ws.{WSClient, WSResponseHeaders}
-import play.api.mvc.{Result, AnyContent, Action, Controller}
+import play.api.mvc.{Action, AnyContent, Controller, Result}
 
 import scala.concurrent.Future
-import scala.util.control.{NonFatal, NoStackTrace}
+import scala.util.control.{NoStackTrace, NonFatal}
 import scala.util.{Failure, Try}
 
 class ClientSdkController @Inject() (wsClient: WSClient) extends Controller {
