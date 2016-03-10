@@ -14,6 +14,7 @@ import play.api.Play.current
 import play.api._
 import play.api.data.Forms._
 import play.api.data._
+import play.api.http.HttpEntity
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.ws._
@@ -60,7 +61,7 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
     def toWsHeaders(hdrs: Headers) = hdrs.toMap.map {
       case(name, value) => name -> value.mkString }
 
-    val w = WS.url(apiUri + req.path)
+    val w = ws.url(apiUri + req.path)
       .withFollowRedirects(false)
       .withMethod(req.method)
       .withHeaders(toWsHeaders(req.headers).toSeq :_*)
@@ -73,7 +74,8 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val acc
     wreq.execute.map { resp =>
       Result(
         header = ResponseHeader(resp.status, resp.allHeaders.mapValues(x => x.head)),
-        body = Enumerator(resp.bodyAsBytes))
+        body = HttpEntity.Strict(resp.bodyAsBytes, None)
+      )
     }
   }
 

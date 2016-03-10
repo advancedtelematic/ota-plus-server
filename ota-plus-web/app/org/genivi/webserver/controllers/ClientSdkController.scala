@@ -3,7 +3,7 @@ package org.genivi.webserver.controllers
 import javax.inject.Inject
 
 import com.advancedtelematic.ota.vehicle.Vehicle
-import com.ning.http.client.uri.Uri
+import org.asynchttpclient.uri.Uri
 import play.api.{Logger, Play}
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.ws.{WSClient, WSResponseHeaders}
