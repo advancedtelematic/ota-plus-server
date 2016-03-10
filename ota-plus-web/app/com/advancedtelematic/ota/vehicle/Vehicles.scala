@@ -1,16 +1,16 @@
 package com.advancedtelematic.ota.vehicle
 
-import java.util.concurrent.TimeUnit
+import javax.inject.Named
 
 import akka.actor.{Actor, ActorRef, Props}
 import akka.persistence.PersistentActor
 import akka.util.Timeout
-
+import com.google.inject.Provides
 import scala.concurrent.{ExecutionContext, Future}
 
 object Commands {
 
-  final case class RegisterVehicle(vehicle: Vehicle)
+  final case class RegisterVehicle(vehicle: VehicleMetadata)
 
   final case class GetVehicleState(vin: Vehicle.Vin)
 
@@ -22,7 +22,7 @@ class VehicleEntity(vin: Vehicle.Vin) extends PersistentActor {
 
   override def persistenceId: String = vin.get
 
-  var state: Option[Vehicle] = None
+  var state: Option[VehicleMetadata] = None
 
   def updateState(event: Event): Unit = event match {
     case VehicleRegistered(vehicle) =>
@@ -48,7 +48,7 @@ class VehicleEntity(vin: Vehicle.Vin) extends PersistentActor {
 object VehicleEntity {
   sealed trait Event
 
-  final case class VehicleRegistered(vehicle: Vehicle) extends Event
+  final case class VehicleRegistered(vehicle: VehicleMetadata) extends Event
 
   def props(vin: Vehicle.Vin): Props = Props( new VehicleEntity(vin) )
 }
@@ -78,13 +78,21 @@ class Vehicles(registry: ActorRef)
   import akka.pattern.ask
   import com.advancedtelematic.ota.vehicle.Commands._
 
-  def registerVehicle(vehicle: Vehicle)
+  /**
+    * Persists the given vehicle metadata which in turn was obtained from Auth+ during first-time registration of a VIN.
+    */
+  def registerVehicle(vehicle: VehicleMetadata)
                      (implicit ec: ExecutionContext): Future[Unit] =
     registry.ask( RegisterVehicle(vehicle) ).map(_ => ())
 
+  /**
+    * Gets from the persistent store the vehicle metadata for a VIN that's been already registered with Auth+.
+    * Of particular interest is the clientId, a UUID in one-to-one association with the VIN.
+    * Note: the `client_secret` is not contained in the result. It has to be obtained from Auth+.
+    */
   def getVehicle(vin: Vehicle.Vin)
-                (implicit ec: ExecutionContext): Future[Option[Vehicle]] =
-    registry.ask( GetVehicleState(vin) ).mapTo[Option[Vehicle]]
+                (implicit ec: ExecutionContext): Future[Option[VehicleMetadata]] =
+    registry.ask( GetVehicleState(vin) ).mapTo[Option[VehicleMetadata]]
 
 }
 
@@ -94,3 +102,23 @@ object Vehicles {
 
 }
 
+import com.google.inject.AbstractModule
+import play.api.libs.concurrent.AkkaGuiceSupport
+
+/**
+  * The persistent store will be available via injection to (singleton) controllers.
+  */
+class VehiclesModule extends AbstractModule with AkkaGuiceSupport {
+
+  def configure: Unit = {
+    bindActor[VehicleRegistry]("vehicle-registry", _ => VehicleRegistry.props())
+  }
+
+  @Provides
+  @Named("vehicles-store")
+  def getVehicles(@Named("vehicle-registry") registryActor: ActorRef): Vehicles = {
+    import scala.concurrent.duration._
+    Vehicles(registryActor)(1.seconds)
+  }
+
+}
