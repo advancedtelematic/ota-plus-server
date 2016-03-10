@@ -12,7 +12,7 @@ package org.genivi.webserver.controllers
   */
 object PathBinders {
 
-  import org.genivi.sota.core.data.Vehicle
+  import com.advancedtelematic.ota.vehicle.Vehicle
 
   /**
     * Path binder to convert a String (eg, from a route path)

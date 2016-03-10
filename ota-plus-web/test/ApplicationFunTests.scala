@@ -9,7 +9,6 @@ import java.sql.SQLSyntaxErrorException
 import org.openqa.selenium.By
 import org.scalatest.{Tag, BeforeAndAfterAll}
 import org.scalatestplus.play._
-import slick.jdbc.JdbcBackend.Database
 
 import scala.collection.JavaConversions._
 
@@ -19,8 +18,6 @@ class ApplicationFunTests extends PlaySpec with OneServerPerSuite with AllBrowse
   with BeforeAndAfterAll {
 
   override lazy val browsers = Vector(FirefoxInfo(firefoxProfile), ChromeInfo)
-  val coreDb = Database.forConfig("core.database").createSession()
-  val resolverDb = Database.forConfig("resolver.database").createSession()
   val testVinName = "TESTVIN0123456789"
   val testFilterName = "TestFilter"
   val testFilterExpression = "vin_matches '.*'"
@@ -30,46 +27,11 @@ class ApplicationFunTests extends PlaySpec with OneServerPerSuite with AllBrowse
   val password = "genivirocks!"
 
   override def beforeAll() {
-    clearTables()
   }
 
   override def afterAll() {
-    clearTables()
-    coreDb.close()
-    resolverDb.close()
   }
 
-  def clearTables() {
-    try {
-      resolverDb.createStatement().executeQuery("delete from PackageFilter where filterName ='" + testFilterName + "'")
-      resolverDb.createStatement().executeQuery("delete from Filter where name ='" + testFilterName + "'")
-      resolverDb.createStatement().executeQuery("delete from Filter where name ='" + testDeleteFilterName + "'")
-      resolverDb.createStatement().executeQuery("delete from Vehicle where vin = '" + testVinName + "'")
-      coreDb.createStatement().executeQuery("delete from RequiredPackage where vin = '" + testVinName + "'")
-      coreDb.createStatement().executeQuery("delete from RequiredPackage where package_name = '" + testPackageName
-        + "'")
-
-      val rowCountResult = coreDb.createStatement().executeQuery(
-        "select count(*) as update_count from UpdateRequest where package_name = '" + testPackageName + "'")
-      rowCountResult.next()
-      val updateCount = rowCountResult.getInt("update_count")
-      if(updateCount > 0) {
-        val result = coreDb.createStatement().executeQuery(
-          "select * from UpdateRequest where package_name = '" + testPackageName + "'")
-        while(result.next()) {
-          val reqId = result.getString("update_request_id")
-          coreDb.createStatement().executeQuery("delete from UpdateSpec where update_request_id = '" + reqId + "'")
-        }
-      }
-      coreDb.createStatement().executeQuery("delete from UpdateRequest where package_name = '" + testPackageName + "'")
-      coreDb.createStatement().executeQuery("delete from Vehicle where vin = '" + testVinName + "'")
-      coreDb.createStatement().executeQuery("delete from Package where name = '" + testPackageName + "'")
-    } catch {
-      //Teamcity handles clearing the database for us. Thus, ignoring this exception is generally
-      //fine, unless you are attempting to run the integration tests locally.
-      case e:SQLSyntaxErrorException => println("Clearing database failed!\nException msg:" + e.getMessage)
-    }
-  }
 
   def findElementWithText(text: String, selector: String): Boolean = {
     val elems = webDriver.findElements(By.cssSelector(selector))
