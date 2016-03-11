@@ -7,8 +7,8 @@ import java.io.File
 import java.security.InvalidParameterException
 import java.util.UUID
 
-import org.asynchttpclient.AsyncHttpClient
-import org.asynchttpclient.request.body.multipart.FilePart
+import com.ning.http.client.AsyncHttpClient
+import com.ning.http.client.multipart.FilePart
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.Tag
@@ -18,7 +18,7 @@ import play.api.Play
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
-import play.api.libs.ws.{WS, WSResponse}
+import play.api.libs.ws.{WSResponse, WS}
 import play.api.mvc.{Cookie, Cookies}
 import play.api.test.Helpers._
 
