@@ -33,6 +33,7 @@ def otaPlusProject(name: String): Project = Project(name, file(name))
         Tests.Argument(TestFrameworks.ScalaTest, "-oDF"))
     )
     .settings(testFrameworks := Seq(sbt.TestFrameworks.ScalaTest))
+    .settings(Packaging.settings)
 
 lazy val sotaCommon = otaPlusProject("common")
     .settings(libraryDependencies ++= Seq(

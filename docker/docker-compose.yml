@@ -43,15 +43,14 @@ services:
       - db
     environment:
       HOST: '0.0.0.0'
-      SOTA_SERVICES_URI: 'http://core:8080/rvi'
       CORE_DB_URL: 'jdbc:mariadb://db:3306/sota_core'
       RESOLVER_API_URI: 'http://resolver:8081'
       CORE_INTERACTION_PROTOCOL: 'none'
 
   web:
-    image: advancedtelematic/sota-webserver
+    image: advancedtelematic/ota-plus-web
     ports:
-      - '9000:9000'
+      - '8000:9000'
     depends_on:
       - core
       - resolver
