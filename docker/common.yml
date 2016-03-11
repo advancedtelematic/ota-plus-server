@@ -1,0 +1,57 @@
+version: '2'
+services:
+  db:
+    image: advancedtelematic/mariadb:$DEFAULT_VERSION
+    expose:
+      - '3306'
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: 'sota_test'
+      MYSQL_USER: 'sota'
+      MYSQL_PASSWORD: 's0ta'
+      MYSQL_DATABASES: 'sota_resolver sota_resolver_test sota_core sota_core_test'
+
+  resolver:
+    image: advancedtelematic/sota-resolver:$DEFAULT_VERSION
+    expose:
+      - '8081'
+    ports:
+      - '8081:8081'
+    depends_on:
+      - db
+    environment:
+      HOST: '0.0.0.0'
+      RESOLVER_DB_URL: 'jdbc:mariadb://db:3306/sota_resolver'
+      RESOLVER_DB_MIGRATE: 'true'
+
+  core:
+    image: advancedtelematic/sota-core:$DEFAULT_VERSION
+    expose:
+      - '8080'
+    ports:
+      - '8080:8080'
+    depends_on:
+      - resolver
+      - db
+    environment:
+      HOST: '0.0.0.0'
+      CORE_DB_URL: 'jdbc:mariadb://db:3306/sota_core'
+      CORE_DB_MIGRATE: 'true'
+      RESOLVER_API_URI: 'http://resolver:8081'
+      CORE_INTERACTION_PROTOCOL: 'none'
+
+  web:
+    image: advancedtelematic/ota-plus-web:$DEFAULT_VERSION
+    ports:
+      - '8000:9000'
+    depends_on:
+      - core
+      - resolver
+    environment:
+      CORE_API_URI: 'http://core:8080'
+      RESOLVER_API_URI: 'http://resolver:8081'
+      PLAY_CRYPTO_SECRET: 'secret' # only for local dev!
+
+  auth-plus:
+    image: advancedtelematic/auth-plus:$DEFAULT_VERSION
