@@ -1,9 +1,11 @@
+package com.advancedtelematic.ota
+
 /**
  * Copyright: Copyright (C) 2015, Jaguar Land Rover
  * License: MPL-2.0
  */
 
-import org.genivi.webserver.controllers.{RPM, Debian, PackageType, Architecture}
+import org.genivi.webserver.controllers.{Architecture, Debian, PackageType, RPM}
 import org.scalacheck.{Arbitrary, Gen}
 
 object Generators {
