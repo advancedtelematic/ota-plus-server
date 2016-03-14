@@ -6,8 +6,11 @@ package org.genivi.sota.marshalling
 
 import akka.http.scaladsl.unmarshalling._
 import akka.http.scaladsl.util.FastFuture
+import akka.stream.Materializer
 import eu.timepit.refined.refineV
-import eu.timepit.refined.api.{Validate, Refined}
+import eu.timepit.refined.api.{Refined, Validate}
+
+import scala.concurrent.ExecutionContext
 
 /**
   * Add Akka HTTP request unmarshalling support for refined types.
@@ -27,9 +30,10 @@ object RefinedMarshallingSupport {
       }
     }
 
-  implicit def refinedFromRequestUnmarshaller[T, P]
-  (implicit um: FromEntityUnmarshaller[T], p: Validate.Plain[T, P])
-  : FromRequestUnmarshaller[Refined[T, P]]
+  implicit def refinedFromRequestUnmarshaller[T, P](implicit um: FromEntityUnmarshaller[T],
+                                                    p: Validate.Plain[T, P],
+                                                    ec: ExecutionContext,
+                                                    mat: Materializer): FromRequestUnmarshaller[Refined[T, P]]
   = Unmarshaller { implicit ec => request =>
     um(request.entity).flatMap { (t: T) =>
       refineV[P](t) match {

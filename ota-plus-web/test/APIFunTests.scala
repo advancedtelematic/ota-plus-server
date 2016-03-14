@@ -7,6 +7,7 @@ import java.io.File
 import java.security.InvalidParameterException
 import java.util.UUID
 
+import com.advancedtelematic.ota.Generators
 import org.asynchttpclient.AsyncHttpClient
 import org.asynchttpclient.request.body.multipart.FilePart
 import org.joda.time.DateTime
@@ -14,7 +15,8 @@ import org.joda.time.format.DateTimeFormat
 import org.scalatest.Tag
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatestplus.play._
-import play.api.Play
+import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.{Application, Mode, Play}
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
@@ -48,8 +50,8 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     "partNumber" -> testComponentName,
     "description" -> testComponentDescription
   )
-  val webserverHost = Play.application.configuration.getString("test.webserver.host").get
-  val webserverPort = 80 //this isn't likely to change so hardcode it instead of using an env var
+
+  val webserverHost = "localhost"
 
   object Method extends Enumeration {
     type Method = Value
@@ -66,18 +68,9 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   )(PackageId.apply _)
 
 
-  def getLoginCookie : Seq[Cookie] = {
-    val loginResponse = await(WS.url("http://" + webserverHost + s":$webserverPort/authenticate")
-      .withHeaders("Content-Type" -> "application/x-www-form-urlencoded")
-      .post(Map("email" -> Seq("admin@genivi.org"), "password" -> Seq("genivirocks!"))))
-    loginResponse.status mustBe OK
-    Cookies.decodeCookieHeader(loginResponse.cookies.head.toString)
-  }
-
   import Method._
-  def makeRequest(path: String, cookie: Seq[Cookie], method: Method) : WSResponse = {
-    val req = WS.url("http://" + webserverHost + s":$webserverPort/api/v1/" + path)
-      .withHeaders("Cookie" -> Cookies.encodeCookieHeader(cookie))
+  def makeRequest(path: String, method: Method) : WSResponse = {
+    val req = WS.url("http://" + webserverHost + s":$port/api/v1/" + path)
     method match {
       case PUT => await(req.put(""))
       case GET => await(req.get())
@@ -86,9 +79,8 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     }
   }
 
-  def makeJsonRequest(path: String, cookie: Seq[Cookie], method: Method, data: JsObject) : WSResponse = {
-    val req = WS.url("http://" + webserverHost + s":$webserverPort/api/v1/" + path)
-      .withHeaders("Cookie" -> Cookies.encodeCookieHeader(cookie))
+  def makeJsonRequest(path: String,  method: Method, data: JsObject) : WSResponse = {
+    val req = WS.url("http://" + webserverHost + s":$port/api/v1/" + path)
     method match {
       case PUT => await(req.put(data))
       case POST => await(req.post(data))
@@ -97,52 +89,47 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   def addVin(vin: String): Unit = {
-    val cookie = getLoginCookie
-    val vehiclesResponse = makeRequest("vehicles/" + vin, cookie, PUT)
+    val vehiclesResponse = makeRequest("vehicles/" + vin, PUT)
     vehiclesResponse.status mustBe NO_CONTENT
   }
 
   def addPackage(packageName: String, packageVersion: String): Unit = {
-    val cookie = getLoginCookie
     val asyncHttpClient:AsyncHttpClient = WS.client.underlying
-    val putBuilder = asyncHttpClient.preparePut("http://" + webserverHost + s":$webserverPort/api/v1/packages/" + packageName + "/" +
-      packageVersion + "?description=test&vendor=ACME")
+    val putBuilder = asyncHttpClient
+        .preparePut("http://" + webserverHost + s":$port/api/v1/packages/" + packageName + "/" +
+          packageVersion + "?description=test&vendor=ACME")
     val builder = putBuilder.addBodyPart(new FilePart("file", new File("../packages/ghc-7.6.3-18.3.el7.x86_64.rpm")))
-      .addHeader("Cookie", Cookies.encodeCookieHeader(cookie))
     val response = asyncHttpClient.executeRequest(builder.build()).get()
     response.getStatusCode mustBe NO_CONTENT
   }
 
   def addFilter(filterName : String): Unit = {
-    val cookie = getLoginCookie
     val data = Json.obj(
       "name" -> filterName,
       "expression" -> testFilterExpression
     )
-    val filtersResponse = makeJsonRequest("filters", cookie, POST, data)
+    val filtersResponse = makeJsonRequest("filters", POST, data)
     filtersResponse.status mustBe OK
     filtersResponse.json.mustEqual(data)
   }
 
   def addFilterToPackage(packageName : String): Unit = {
-    val cookie = getLoginCookie
     val data = Json.obj(
       "filterName" -> testFilterName,
       "packageName" -> packageName,
       "packageVersion" -> testPackageVersion
     )
-    val packageFiltersResponse = makeJsonRequest("packageFilters", cookie, POST, data)
+    val packageFiltersResponse = makeJsonRequest("packageFilters", POST, data)
     packageFiltersResponse.status mustBe OK
     packageFiltersResponse.json.equals(data) mustBe true
   }
 
   def addComponent(partNumber : String, description : String): Unit = {
-    val cookie = getLoginCookie
     val data = Json.obj(
       "partNumber" -> partNumber,
       "description" -> description
     )
-    val componentResponse = makeJsonRequest("components/" + partNumber, cookie, PUT, data)
+    val componentResponse = makeJsonRequest("components/" + partNumber, PUT, data)
     componentResponse.status mustBe OK
     componentResponse.json mustEqual data
   }
@@ -150,12 +137,11 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   def downloadPreconfiguredClient(): Unit = {
     import org.genivi.webserver.controllers.{Architecture, PackageType}
     import Generators._
-    val cookie = getLoginCookie
     val attempts = 5
     forAll (minSuccessful(attempts)) {
       (vin: com.advancedtelematic.ota.vehicle.Vehicle.Vin, packfmt: PackageType, arch: Architecture) =>
       val webappLink = s"client/${vin.get}/${packfmt.fileExtension}/${arch.toString}"
-      val fileResponse = makeRequest(webappLink, cookie, GET);
+      val fileResponse = makeRequest(webappLink, GET);
       fileResponse.status mustBe OK
     }
   }
@@ -167,8 +153,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test searching vins" taggedAs APITests in {
-    val cookie = getLoginCookie
-    val searchResponse = makeRequest("vehicles?regex=" + testVin, cookie, GET)
+    val searchResponse = makeRequest("vehicles?regex=" + testVin, GET)
     searchResponse.status mustBe OK
     searchResponse.json.toString() mustEqual "[{\"vin\":\"" + testVin + "\"}]"
   }
@@ -180,15 +165,13 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test adding manually installed packages" taggedAs APITests in {
-    val cookie = getLoginCookie
     val packageResponse = makeRequest("vehicles/" + testVinAlt + "/package/" + testPackageNameAlt +
-      "/" + testPackageVersion, cookie, PUT)
+      "/" + testPackageVersion, PUT)
     packageResponse.status mustBe OK
   }
 
   "test viewing manually installed packages" taggedAs APITests in {
-    val cookie = getLoginCookie
-    val searchResponse = makeRequest("vehicles/" + testVinAlt + "/package", cookie, GET)
+    val searchResponse = makeRequest("vehicles/" + testVinAlt + "/package", GET)
     searchResponse.status mustBe OK
     val json = Json.parse(searchResponse.body)
     json.validate[Iterable[PackageId]] match {
@@ -201,17 +184,15 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test viewing vehicles with a given package installed" taggedAs APITests in {
-    val cookie = getLoginCookie
     val viewResponse = makeRequest("vehicles?packageName=" + testPackageNameAlt + "&packageVersion=" +
-      testPackageVersion, cookie, GET)
+      testPackageVersion, GET)
     viewResponse.status mustBe OK
     //TODO: need to make sure we only get a single vin back
     (viewResponse.json \\ "vin").head.toString() mustEqual "\"" + testVinAlt + "\""
   }
 
   "test searching packages" taggedAs APITests in {
-    val cookie = getLoginCookie
-    val searchResponse = makeRequest("packages?regex=^" + testPackageName + "$", cookie, GET)
+    val searchResponse = makeRequest("packages?regex=^" + testPackageName + "$", GET)
     searchResponse.status mustBe OK
   }
 
@@ -221,29 +202,25 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
 
   "test deleting filters" taggedAs APITests in {
     addFilter(testFilterNameDelete)
-    val cookie = getLoginCookie
-    val deleteResponse = makeRequest("filters/" + testFilterNameDelete, cookie, DELETE)
+    val deleteResponse = makeRequest("filters/" + testFilterNameDelete, DELETE)
     println(deleteResponse.body)
     deleteResponse.status mustBe OK
-    val secondCookie = getLoginCookie
-    val searchResponse = makeRequest("filters?regex=" + testFilterNameDelete, secondCookie, GET)
+    val searchResponse = makeRequest("filters?regex=" + testFilterNameDelete, GET)
     searchResponse.status mustBe OK
     searchResponse.body.toString mustEqual "[]"
   }
 
   "test searching filters" taggedAs APITests in {
-    val cookie = getLoginCookie
-    val searchResponse = makeRequest("filters?regex=" + testFilterName, cookie, GET)
+    val searchResponse = makeRequest("filters?regex=" + testFilterName, GET)
     searchResponse.status mustBe OK
   }
 
   "test changing filter expressions" taggedAs APITests in {
-    val cookie = getLoginCookie
     val data = Json.obj(
       "name" -> testFilterName,
       "expression" -> testFilterAlternateExpression
     )
-    val filtersChangeResponse = makeJsonRequest("filters/" + testFilterName, cookie, PUT, data)
+    val filtersChangeResponse = makeJsonRequest("filters/" + testFilterName, PUT, data)
     filtersChangeResponse.status mustBe OK
   }
 
@@ -252,9 +229,8 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test removing filters from a package" taggedAs APITests in {
-    val cookie = getLoginCookie
     val removeResponse = makeRequest("packageFilters/" + testPackageName + "/" + testPackageVersion + "/" +
-      testFilterName, cookie, DELETE)
+      testFilterName, DELETE)
     removeResponse.status mustBe OK
   }
 
@@ -264,15 +240,13 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test removing package from a filter" taggedAs APITests in {
-    val cookie = getLoginCookie
     val deleteResponse = makeRequest("packageFilters/" + testPackageName + "/" + testPackageVersion + "/" +
-      testFilterName, cookie, DELETE)
+      testFilterName, DELETE)
     deleteResponse.status mustBe OK
   }
 
   "test viewing packages with a given filter" taggedAs APITests in {
-    val cookie = getLoginCookie
-    val searchResponse = makeRequest("packageFilters?filter=" + testFilterName, cookie, GET)
+    val searchResponse = makeRequest("packageFilters?filter=" + testFilterName, GET)
     searchResponse.status mustBe OK
     searchResponse.body.toString mustEqual "[]"
   }
@@ -286,48 +260,41 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test searching components" taggedAs APITests in {
-    val cookie = getLoginCookie
-    val searchResponse = makeRequest("components/regex=" + testComponentName, cookie, GET)
+    val searchResponse = makeRequest("components/regex=" + testComponentName, GET)
     searchResponse.status mustBe OK
     searchResponse.json.equals(componentJson)
   }
 
   "test deleting components" taggedAs APITests in {
     addComponent(testComponentNameAlt, testComponentDescriptionAlt)
-    val cookie = getLoginCookie
-    val deleteResponse = makeRequest("components/" + testComponentNameAlt, cookie, DELETE)
+    val deleteResponse = makeRequest("components/" + testComponentNameAlt, DELETE)
     deleteResponse.status mustBe OK
-    val secondCookie = getLoginCookie
-    val searchResponse = makeRequest("components?regex=" + testComponentNameAlt, secondCookie, GET)
+    val searchResponse = makeRequest("components?regex=" + testComponentNameAlt, GET)
     searchResponse.status mustBe OK
     searchResponse.body.toString mustEqual "[]"
   }
 
   "test adding component to vin" taggedAs APITests in {
     addComponent(testComponentName, testComponentDescription)
-    val cookie = getLoginCookie
-    val addResponse = makeRequest("vehicles/" + testVin + "/component/" + testComponentName, cookie, PUT)
+    val addResponse = makeRequest("vehicles/" + testVin + "/component/" + testComponentName, PUT)
     addResponse.status mustBe OK
   }
 
   "test viewing components installed on vin" taggedAs APITests in {
-    val cookie = getLoginCookie
-    val listResponse = makeRequest("vehicles/" + testVin + "/component", cookie, GET)
+    val listResponse = makeRequest("vehicles/" + testVin + "/component", GET)
     listResponse.status mustBe OK
     //TODO: parse this body as json
     listResponse.body.toString mustEqual "[\"" + testComponentName + "\"]"
   }
 
   "test listing vins with component installed" taggedAs APITests in {
-    val cookie = getLoginCookie
-    val listResponse = makeRequest("vehicles?component=" + testComponentName, cookie, GET)
+    val listResponse = makeRequest("vehicles?component=" + testComponentName, GET)
     listResponse.status mustBe OK
     //TODO: need to make sure we only get a single vin back
     (listResponse.json \\ "vin").head.toString mustEqual "\"" + testVin + "\""
   }
 
   "test creating install campaigns" taggedAs APITests in {
-    val cookie = getLoginCookie
     val pattern = "yyyy-MM-dd'T'HH:mm:ssZZ"
     val currentTimestamp = DateTimeFormat.forPattern(pattern).print(new DateTime())
     val tomorrowTimestamp = DateTimeFormat.forPattern(pattern).print(new DateTime().plusDays(1))
@@ -339,15 +306,13 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
       "periodOfValidity" -> (currentTimestamp + "/" + tomorrowTimestamp),
       "priority" -> 1 //this could be anything from 1-10; picked at random in this case
     )
-    val response = await(WS.url("http://" + webserverHost + s":$webserverPort/api/v1/updates")
-      .withHeaders("Cookie" -> Cookies.encodeCookieHeader(cookie))
+    val response = await(WS.url("http://" + webserverHost + s":$port/api/v1/updates")
       .post(data))
     response.status mustBe OK
   }
 
   "test install queue for a vin" taggedAs APITests in {
-    val cookie = getLoginCookie
-    val queueResponse = makeRequest("vehicles/" + testVin + "/queued", cookie, GET)
+    val queueResponse = makeRequest("vehicles/" + testVin + "/queued", GET)
     queueResponse.status mustBe OK
     val json = Json.parse(queueResponse.body)
     json.validate[Iterable[PackageId]] match {
@@ -360,8 +325,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test getting package queue for vin" taggedAs APITests in {
-    val cookie = getLoginCookie
-    val packageQueueResponse = makeRequest("vehicles/" + testVin + "/queued", cookie, GET)
+    val packageQueueResponse = makeRequest("vehicles/" + testVin + "/queued", GET)
     packageQueueResponse.status mustBe OK
     val json = Json.parse(packageQueueResponse.body)
     json.validate[Iterable[PackageId]] match {
@@ -374,8 +338,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test list of vins affected by update" taggedAs APITests in {
-    val cookie = getLoginCookie
-    val listResponse = makeRequest("resolve/" + testPackageName + "/" + testPackageVersion, cookie, GET)
+    val listResponse = makeRequest("resolve/" + testPackageName + "/" + testPackageVersion, GET)
     listResponse.status mustBe OK
     //TODO: parse this properly. The issue is the root key for each list in the response is a vin, not a static string.
     listResponse.body.contains(testVin) && !listResponse.body.contains(testVinAlt) mustBe true

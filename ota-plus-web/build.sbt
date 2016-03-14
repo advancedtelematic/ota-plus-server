@@ -27,7 +27,7 @@ dockerExposedPorts := Seq(9000)
 libraryDependencies ++= Seq (
     Dependencies.AkkaPersistence,
     Dependencies.AkkaTestKit,
-    "org.scalatestplus" %% "play" % "1.4.0-M3" % "test",
+    "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.0",
     "org.webjars" %% "webjars-play" % "2.4.0-1",
     "org.webjars" % "webjars-locator" % "0.27",
     "org.webjars.bower" % "react" % "0.13.3",
@@ -35,10 +35,6 @@ libraryDependencies ++= Seq (
     "org.webjars.bower" % "flux" % "2.0.2",
     "org.webjars.bower" % "backbone" % "1.2.1",
     "org.webjars" % "bootstrap" % "3.3.4",
-    "jp.t2v" %% "play2-auth"        % "0.14.0",
-    "jp.t2v" %% "play2-auth-test"   % "0.14.0" % "test",
-    "org.scala-lang.modules" %% "scala-pickling" % "0.10.1",
-    "org.mindrot" % "jbcrypt" % "0.3m",
     ws,
     play.sbt.Play.autoImport.cache
   )

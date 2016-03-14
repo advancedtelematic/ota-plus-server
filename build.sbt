@@ -38,8 +38,8 @@ lazy val sotaCommon = otaPlusProject("common")
     .settings(libraryDependencies ++= Seq(
       Dependencies.Refined,
       Dependencies.NscalaTime,
-      "com.typesafe.akka" % "akka-http-core-experimental_2.11" % "1.0",
-      "com.typesafe.akka" % "akka-http-experimental_2.11" % "1.0"
+      "com.typesafe.akka" %% "akka-http-experimental" % "2.4.2",
+      "de.heikoseeberger" %% "akka-http-circe" % "1.5.2"
     ) ++ Dependencies.Circe)
 
 lazy val otaPlusWeb = otaPlusProject("ota-plus-web").dependsOn(sotaCommon)
