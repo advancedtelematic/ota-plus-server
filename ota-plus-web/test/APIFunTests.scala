@@ -6,6 +6,7 @@
 import java.io.File
 import java.security.InvalidParameterException
 import java.util.UUID
+import javax.inject.Inject
 
 import com.advancedtelematic.ota.Generators
 import org.asynchttpclient.AsyncHttpClient
@@ -15,13 +16,10 @@ import org.joda.time.format.DateTimeFormat
 import org.scalatest.Tag
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatestplus.play._
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.{Application, Mode, Play}
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
-import play.api.libs.ws.{WS, WSResponse}
-import play.api.mvc.{Cookie, Cookies}
+import play.api.libs.ws.{WSClient, WS, WSResponse}
 import play.api.test.Helpers._
 
 object APITests extends Tag("APITests")
@@ -31,7 +29,8 @@ object APITests extends Tag("APITests")
  *
  * These tests assume a blank, migrated database, as well as a webserver running on port 80
  */
-class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPropertyChecks {
+class APIFunTests @Inject() (wsClient: WSClient)
+  extends PlaySpec with OneServerPerSuite with GeneratorDrivenPropertyChecks {
 
   val testVin = "TESTSTR0123456789"
   val testVinAlt = "TESTALT0123456789"
@@ -70,7 +69,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
 
   import Method._
   def makeRequest(path: String, method: Method) : WSResponse = {
-    val req = WS.url("http://" + webserverHost + s":$port/api/v1/" + path)
+    val req = wsClient.url("http://" + webserverHost + s":$port/api/v1/" + path)
     method match {
       case PUT => await(req.put(""))
       case GET => await(req.get())
@@ -80,7 +79,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   def makeJsonRequest(path: String,  method: Method, data: JsObject) : WSResponse = {
-    val req = WS.url("http://" + webserverHost + s":$port/api/v1/" + path)
+    val req = wsClient.url("http://" + webserverHost + s":$port/api/v1/" + path)
     method match {
       case PUT => await(req.put(data))
       case POST => await(req.post(data))
@@ -94,7 +93,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   def addPackage(packageName: String, packageVersion: String): Unit = {
-    val asyncHttpClient:AsyncHttpClient = WS.client.underlying
+    val asyncHttpClient:AsyncHttpClient = wsClient.underlying
     val putBuilder = asyncHttpClient
         .preparePut("http://" + webserverHost + s":$port/api/v1/packages/" + packageName + "/" +
           packageVersion + "?description=test&vendor=ACME")
@@ -132,18 +131,6 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     val componentResponse = makeJsonRequest("components/" + partNumber, PUT, data)
     componentResponse.status mustBe OK
     componentResponse.json mustEqual data
-  }
-
-  def downloadPreconfiguredClient(): Unit = {
-    import org.genivi.webserver.controllers.{Architecture, PackageType}
-    import Generators._
-    val attempts = 5
-    forAll (minSuccessful(attempts)) {
-      (vin: com.advancedtelematic.ota.vehicle.Vehicle.Vin, packfmt: PackageType, arch: Architecture) =>
-      val webappLink = s"client/${vin.get}/${packfmt.fileExtension}/${arch.toString}"
-      val fileResponse = makeRequest(webappLink, GET);
-      fileResponse.status mustBe OK
-    }
   }
 
   "test adding vins" taggedAs APITests in {
@@ -306,7 +293,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
       "periodOfValidity" -> (currentTimestamp + "/" + tomorrowTimestamp),
       "priority" -> 1 //this could be anything from 1-10; picked at random in this case
     )
-    val response = await(WS.url("http://" + webserverHost + s":$port/api/v1/updates")
+    val response = await(wsClient.url("http://" + webserverHost + s":$port/api/v1/updates")
       .post(data))
     response.status mustBe OK
   }
@@ -342,10 +329,6 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     listResponse.status mustBe OK
     //TODO: parse this properly. The issue is the root key for each list in the response is a vin, not a static string.
     listResponse.body.contains(testVin) && !listResponse.body.contains(testVinAlt) mustBe true
-  }
-
-  "test download a preconfigured client" taggedAs APITests in {
-    downloadPreconfiguredClient()
   }
 
 }

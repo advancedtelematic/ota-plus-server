@@ -23,6 +23,10 @@ class ClientSdkController @Inject() (system: ActorSystem,
   import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
   val logger = Logger(this.getClass)
+  private def logDebug(caller: String, msg: String) {
+    // Useful to debug instances running in the cloud.
+    logger.debug(s"[ClientSdkController.$caller()] $msg")
+  }
 
   private[this] object ConfigParameterNotFound extends Throwable with NoStackTrace
   private[this] object ConfigAuthPlusHostNotFound extends Throwable with NoStackTrace
@@ -37,6 +41,7 @@ class ClientSdkController @Inject() (system: ActorSystem,
     */
   def downloadClientSdk(vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture) : Action[AnyContent] =
     Action.async { implicit request =>
+      logDebug("downloadClientSdk", s"Params: ${vin.get}-$packfmt-$arch.${packfmt.fileExtension}")
       for (
         vMetadataOpt <- vehiclesStore.getVehicle(vin);
         vMetadata <- vMetadataOpt match {

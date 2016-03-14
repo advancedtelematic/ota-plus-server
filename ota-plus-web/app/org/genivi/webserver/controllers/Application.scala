@@ -30,6 +30,11 @@ class Application @Inject() (ws: WSClient,
   extends Controller with I18nSupport {
 
   val auditLogger = LoggerFactory.getLogger("audit")
+  private def logToAudit(caller: String, msg: String) {
+    // Useful to debug instances running in the cloud.
+    auditLogger.info(s"[Application.$caller()] $msg")
+  }
+
   implicit val context = play.api.libs.concurrent.Execution.Implicits.defaultContext
 
   val coreApiUri = conf.getString("core.api.uri").get
@@ -79,12 +84,15 @@ class Application @Inject() (ws: WSClient,
   }
 
   /**
-   * Proxies the given path
+   * Controller method delegating to the Core and to the Resolver APIs,
+   * provided the path does not denote the route to create or delete a VIN
+   * (see [[apiProxyBroadcast]] for that).
    *
    * @param path Path of the request
    * @return
    */
   def apiProxy(path: String) : Action[RawBuffer] = Action.async(parse.raw) { implicit req =>
+    logToAudit("apiProxy", s"Request: $req")
     proxyTo(apiByPath(path), req)
   }
 
@@ -95,9 +103,8 @@ class Application @Inject() (ws: WSClient,
    * @param path The path of the request
    * @return
    */
-  def apiProxyBroadcast(path: String) : Action[RawBuffer] = Action.async(parse.raw) {
-    implicit req =>
-
+  def apiProxyBroadcast(path: String) : Action[RawBuffer] = Action.async(parse.raw) { implicit req =>
+    logToAudit("apiProxyBroadcast", s"Request: $req")
     val vinStr = path.split("/").toList.last
     import eu.timepit.refined.api.Refined
     // compile-time refinement only works with literals or constant predicates
