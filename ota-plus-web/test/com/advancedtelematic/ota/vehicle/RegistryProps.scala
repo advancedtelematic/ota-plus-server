@@ -25,10 +25,10 @@ class RegistryProps extends TestKit(ActorSystem("vehicle-registry"))
     token <- alphaStr.map( RegistrationAccessToken.apply )
   } yield ClientInfo(id, Uri(s"http://ota.plus/clients/$uuid"), token)
 
-  val VehicleGen: Gen[Vehicle] = for {
+  val VehicleGen: Gen[VehicleMetadata] = for {
     vin        <- Vehicle.genVin
     clientInfo <- ClientInfoGen
-  } yield Vehicle(vin, clientInfo)
+  } yield VehicleMetadata(vin, clientInfo)
 
   val vehicles = Vehicles( system.actorOf( VehicleRegistry.props() ) )(Timeout(1, TimeUnit.SECONDS))
 
