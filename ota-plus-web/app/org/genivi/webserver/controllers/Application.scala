@@ -5,27 +5,28 @@
 
 package org.genivi.webserver.controllers
 
-import javax.inject.Inject
+import javax.inject.{Inject, Named, Singleton}
 
+import com.advancedtelematic.ota.vehicle.{ClientInfo, Vehicle, VehicleMetadata, Vehicles}
 import org.slf4j.LoggerFactory
-import play.api.Play.current
 import play.api._
-import play.api.data.Forms._
-import play.api.data._
 import play.api.http.HttpEntity
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.iteratee.Enumerator
 import play.api.libs.ws._
 import play.api.mvc._
-import views.html
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
+import scala.util.control.NoStackTrace
 
 /**
  * The main application controller. Handles authentication and request proxying.
  *
  */
-class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val conf: Configuration)
+@Singleton
+class Application @Inject() (ws: WSClient,
+                             val messagesApi: MessagesApi,
+                             val conf: Configuration,
+                             @Named("vehicles-store") vehiclesStore: Vehicles)
   extends Controller with I18nSupport {
 
   val auditLogger = LoggerFactory.getLogger("audit")
@@ -88,6 +89,7 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val con
   }
 
   /**
+   * Controller method to create (PUT) or delete (DELETE) a VIN.
    * Proxies request to both core and resolver
    *
    * @param path The path of the request
@@ -96,12 +98,54 @@ class Application @Inject() (ws: WSClient, val messagesApi: MessagesApi, val con
   def apiProxyBroadcast(path: String) : Action[RawBuffer] = Action.async(parse.raw) {
     implicit req =>
 
+    val vinStr = path.split("/").toList.last
+    import eu.timepit.refined.api.Refined
+    // compile-time refinement only works with literals or constant predicates
+    val vin: Vehicle.Vin = Refined.unsafeApply(vinStr) // TODO (mg) the predicate, has been checked already?
+
+    val futAuthPlus: Future[VehicleMetadata] = (req.method) match {
+      case "PUT" => getVehicleMetadata(vin)
+      case "DELETE" => Future.failed(throw ???) // TODO (mg) There's no endpoint to delete a VIN in Auth+. What to do?
+      case _ => Future.failed(throw ???) // TODO (mg) dedicated exception
+    }
+
     // Must PUT "vehicles" on both core and resolver
     // TODO: Retry until both responses are success
     for {
       respCore <- proxyTo(coreApiUri, req)
       respResult <- proxyTo(resolverApiUri, req)
-    } yield respCore
+      vMetadata <- futAuthPlus
+    } yield {
+      vehiclesStore.registerVehicle(vMetadata)
+      respCore
+    }
+  }
+
+  private[this] object ConfigAuthPlusHostNotFound extends Throwable with NoStackTrace
+  private[this] object ClientInfoUnparseable extends Throwable with NoStackTrace
+
+  /**
+    * Contact Auth+ to register for the first time the given VIN, obtaining [[VehicleMetadata]]
+    */
+  private def getVehicleMetadata(vin: Vehicle.Vin): Future[VehicleMetadata] = {
+    conf.getString("authplus.host") match {
+      case None =>
+        Future.failed(ConfigAuthPlusHostNotFound)
+      case Some(authplusHost) =>
+        val clientUrl = authplusHost + "/clients"
+        import play.api.libs.json._
+        val w =
+          ws.url(clientUrl).withFollowRedirects(false)
+          .withMethod("POST")
+          .withBody(Json.parse("{}"))
+
+        w.execute flatMap { wresp =>
+          wresp.json.asOpt[ClientInfo] match {
+            case None => Future.failed(ClientInfoUnparseable)
+            case Some(clientInfo) => Future.successful(VehicleMetadata(vin, clientInfo))
+          }
+        }
+    }
   }
 
   /**
