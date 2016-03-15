@@ -33,7 +33,7 @@ services:
       CORE_DB_URL: 'jdbc:mariadb://db:3306/sota_core'
 
   core:
-    image: advancedtelematic/sota-core
+    image: advancedtelematic/sota-core # a working image is sota-core:dev
     expose:
       - '8080'
     ports:
@@ -48,7 +48,7 @@ services:
       CORE_INTERACTION_PROTOCOL: 'none'
 
   web:
-    image: advancedtelematic/ota-plus-web
+    image: advancedtelematic/ota-plus-web # a working image is ota-plus-web:14-d07dd6ba0a45c52ab9ec853028cf26b60f8d1a7e
     ports:
       - '8000:9000'
     depends_on:
