@@ -1,6 +1,7 @@
 define(function(require) {
 
   var React = require('react'),
+      HomePage = require('components/home-page'),
       VehiclesPageComponent = require('components/vehicles/vehicles-page-component'),
       PackagesPageComponent = require('components/packages/packages-page-component'),
       FiltersPageComponent = require('components/filters/filters-page-component'),
@@ -32,10 +33,10 @@ define(function(require) {
  	    <nav className="navbar navbar-default navbar-fixed-top top-nav">
 	      <div className="navbar-header">
             <div className="top-logo">
-              <a href="#/" className="top-logo"></a>
+              <Link to="/" className="top-logo"/>
             </div>
             <div className="top-icon">
-              <h2 className="nav-label">SOTA</h2>
+              <Link to="/" className="page-title"><h2 className="nav-label">SOTA</h2></Link>
             </div>
 	        <div className="navbar-collapse collapse">
               <ul className="nav side-nav">
@@ -75,6 +76,7 @@ define(function(require) {
 
   var routes = (
     <Route handler={App} path="/">
+      <DefaultRoute handler={HomePage}/>
       <Route name="vehicles" handler={VehiclesPageComponent}/>
       <Route name="vehicle" path="vehicles/:vin" handler={VehiclePageComponent}/>
       <Route name="packages">
