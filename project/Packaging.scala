@@ -1,3 +1,5 @@
+import sbt._
+
 object Packaging {
   import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
   import com.typesafe.sbt.packager.docker.DockerPlugin
@@ -8,7 +10,7 @@ object Packaging {
 
   lazy val settings = Seq(
     dockerRepository in Docker := Some("advancedtelematic"),
-    packageName in Docker := "sota-" + packageName.value,
+    packageName in Docker := "ota-plus-web",
     dockerBaseImage := "advancedtelematic/java:openjdk-8-jre",
     version in Docker := git.gitDescribedVersion.value.get,
     dockerUpdateLatest in Docker := true

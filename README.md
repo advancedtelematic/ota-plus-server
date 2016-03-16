@@ -1,5 +1,15 @@
-# GENIVI SOTA Project
+# OTA Plus
 
-This project is the top-level git repository for the GENIVI SOTA project.
+To quickly get a dev system up and running, use docker-compose:
 
-Please refer to [the documentation](http://advancedtelematic.github.io/rvi_sota_server/) for more information.
+```
+cd docker 
+docker-compose up
+```
+
+You can edit `docker-compose.yml` with the particular image tags you want.
+Wait until the migrations have finished running before you actually use the
+server.
+
+Once everything is loaded, the OTA Plus admin gui will be available at
+`{docker-host}:8000`.
