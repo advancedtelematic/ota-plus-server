@@ -4,12 +4,12 @@ define(function(require) {
       React = require('react'),
       _ = require('underscore'),
       serializeForm = require('../../mixins/serialize-form'),
-      toggleForm = require('../../mixins/toggle-form'),
+      modalForm = require('../../mixins/modal-form'),
       SotaDispatcher = require('sota-dispatcher');
 
   var AddPackageComponent = React.createClass({
     mixins: [
-      toggleForm
+      modalForm
     ],
     handleSubmit: function(e) {
       e.preventDefault();
@@ -32,31 +32,46 @@ define(function(require) {
     form: function() {
       return (
         <div>
-          <form ref='form' onSubmit={this.handleSubmit} encType="multipart/form-data">
-            <div className="form-group">
-              <label htmlFor="name">Package Name</label>
-              <input type="text" className="form-control" name="name" ref="name" placeholder="Package Name"/>
+          <div className="myModal">
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <button type="button" className="close" data-dismiss="modal" onClick={this.modalForm}>&times;</button>
+                  <h4 className="modal-title">New package</h4>
+                </div>
+                <div className="modal-body">
+                    <form ref='form' onSubmit={this.handleSubmit} encType="multipart/form-data">
+                      <div className="form-group">
+                        <label htmlFor="name">Package Name</label>
+                        <input type="text" className="form-control" name="name" ref="name" placeholder="Package Name"/>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="version">Version</label>
+                        <input type="text" className="form-control" name="version" ref="version" placeholder="1.0.0"/>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="description">Description</label>
+                        <input type="text" className="form-control" name="description" ref="description" placeholder="Description text"/>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="vendor">Vendor</label>
+                        <input type="text" className="form-control" name="vendor" ref="vendor" placeholder="Vendor name"/>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="binary">Package Binary</label>
+                        <input type="file" className="file-upload" name="file" />
+                      </div>
+                      <div className="form-group">
+                        <button type="submit" className="btn btn-primary">Add PACKAGE</button>
+                      </div>
+                    </form>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-default" onClick={this.modalForm}>Close</button>
+                </div>
+              </div>
             </div>
-            <div className="form-group">
-              <label htmlFor="version">Version</label>
-              <input type="text" className="form-control" name="version" ref="version" placeholder="1.0.0"/>
-            </div>
-            <div className="form-group">
-              <label htmlFor="description">Description</label>
-              <input type="text" className="form-control" name="description" ref="description" placeholder="Description text"/>
-            </div>
-            <div className="form-group">
-              <label htmlFor="vendor">Vendor</label>
-              <input type="text" className="form-control" name="vendor" ref="vendor" placeholder="Vendor name"/>
-            </div>
-            <div className="form-group">
-              <label htmlFor="binary">Package Binary</label>
-              <input type="file" className="file-upload" name="file" />
-            </div>
-            <div className="form-group">
-              <button type="submit" className="btn btn-primary">Add PACKAGE</button>
-            </div>
-          </form>
+          </div>       
         </div>
       );
     }
