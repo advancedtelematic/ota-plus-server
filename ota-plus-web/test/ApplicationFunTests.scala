@@ -26,6 +26,8 @@ class ApplicationFunTests extends PlaySpec with OneServerPerSuite with AllBrowse
   val userName = "admin@genivi.org"
   val password = "genivirocks!"
 
+  override lazy val port = app.configuration.getString("test.webserver.port").map(_.toInt).getOrElse(9000)
+
   override def beforeAll() {
   }
 
@@ -53,10 +55,7 @@ class ApplicationFunTests extends PlaySpec with OneServerPerSuite with AllBrowse
     "All browsers" must {
 
       "allow users to add and search for vins " + browser.name taggedAs BrowserTests in {
-        go to s"http://$webHost:$webPort/login"
-        emailField("email").value = userName
-        pwdField("password").value = password
-        submit()
+        go to s"http://$webHost:$webPort/"
         eventually {
           click on linkText("Vehicles")
           click on cssSelector("button")
@@ -70,10 +69,7 @@ class ApplicationFunTests extends PlaySpec with OneServerPerSuite with AllBrowse
       }
 
       "allow users to add packages " + browser.name taggedAs BrowserTests in {
-        go to s"http://$webHost:$webPort/login"
-        emailField("email").value = userName
-        pwdField("password").value = password
-        submit()
+        go to s"http://$webHost:$webPort/"
         eventually {
           click on linkText("Packages")
           click on cssSelector("button")
@@ -93,10 +89,7 @@ class ApplicationFunTests extends PlaySpec with OneServerPerSuite with AllBrowse
       }
 
       "allow users to add filters " + browser.name taggedAs BrowserTests in {
-        go to s"http://$webHost:$webPort/login"
-        emailField("email").value = userName
-        pwdField("password").value = password
-        submit()
+        go to s"http://$webHost:$webPort/"
         eventually {
           click on linkText("Filters")
           click on cssSelector("button")
@@ -111,10 +104,7 @@ class ApplicationFunTests extends PlaySpec with OneServerPerSuite with AllBrowse
       }
 
       "allow users to create install campaigns " + browser.name taggedAs BrowserTests in {
-        go to s"http://$webHost:$webPort/login"
-        emailField("email").value = userName
-        pwdField("password").value = password
-        submit()
+        go to s"http://$webHost:$webPort/"
         eventually {
           click on linkText("Packages")
           click on linkText(testPackageName)
@@ -130,10 +120,7 @@ class ApplicationFunTests extends PlaySpec with OneServerPerSuite with AllBrowse
 
       "allow users to change filter expressions " + browser.name taggedAs BrowserTests in {
         val alternateFilterExpression = "vin_matches 'TEST'"
-        go to s"http://$webHost:$webPort/login"
-        emailField("email").value = userName
-        pwdField("password").value = password
-        submit()
+        go to s"http://$webHost:$webPort/"
         eventually {
           click on linkText("Filters")
           textField("regex").value = "^" + testFilterName + "$"
@@ -148,10 +135,7 @@ class ApplicationFunTests extends PlaySpec with OneServerPerSuite with AllBrowse
 
       "reject invalid filter expressions " + browser.name taggedAs BrowserTests in {
         val alternateFilterExpression = "invalid"
-        go to s"http://$webHost:$webPort/login"
-        emailField("email").value = userName
-        pwdField("password").value = password
-        submit()
+        go to s"http://$webHost:$webPort/"
         eventually {
           click on linkText("Filters")
           textField("regex").value = "^" + testFilterName + "$"
@@ -165,10 +149,7 @@ class ApplicationFunTests extends PlaySpec with OneServerPerSuite with AllBrowse
       }
 
       "allow users to delete filters " + browser.name taggedAs BrowserTests in {
-        go to s"http://$webHost:$webPort/login"
-        emailField("email").value = userName
-        pwdField("password").value = password
-        submit()
+        go to s"http://$webHost:$webPort/"
         eventually {
           click on linkText("Filters")
           click on cssSelector("button")
