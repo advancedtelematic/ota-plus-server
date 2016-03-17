@@ -4,6 +4,7 @@ define(function(require) {
       _ = require('underscore'),
       Router = require('react-router'),
       Fluxbone = require('../../mixins/fluxbone'),
+      ShowPackagesForDevices = require('../packages/show-packages-for-devices'),
       SotaDispatcher = require('sota-dispatcher');
 
   var ListOfVehicles = React.createClass({
@@ -15,6 +16,7 @@ define(function(require) {
       this.props.Vehicles.addWatch("poll-vehicles", _.bind(this.forceUpdate, this, null));
     },
     render: function() {
+      var _DisplayAssociatedPackagesLink = this.props.DisplayAssociatedPackagesLink;
       var vehicles = _.map(this.props.Vehicles.deref(), function(vehicle) {
         return (
           <tr key={vehicle.vin}>
@@ -35,6 +37,11 @@ define(function(require) {
                 <a href={`/api/v1/client/${vehicle.vin}/rpm/64`}> 64 </a> &nbsp;
               )
             </td>
+            {_DisplayAssociatedPackagesLink ?
+              <td>
+                <ShowPackagesForDevices vin={vehicle.vin}/>
+              </td>
+            : ''}
           </tr>
         );
       });
@@ -45,6 +52,9 @@ define(function(require) {
               <td>
                 VIN
               </td>
+              <td />
+              <td />
+              {this.props.DisplayAssociatedPackagesLink ? <td /> : ''}
             </tr>
           </thead>
           <tbody>

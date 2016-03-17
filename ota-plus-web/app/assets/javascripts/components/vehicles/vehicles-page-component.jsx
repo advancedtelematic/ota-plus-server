@@ -18,7 +18,9 @@ define(function(require) {
           <div className="col-md-12">
             <Errors />
             <SearchBar label="Filter" event="search-vehicles-by-regex"/>
-            <ListOfVehicles Vehicles={db.searchableVehicles}/>
+            <ListOfVehicles 
+              Vehicles={db.searchableVehicles}
+              DisplayAssociatedPackagesLink={true}/>
           </div>
         </div>
       </div>

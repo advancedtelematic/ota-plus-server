@@ -24,7 +24,9 @@ define(function(require) {
         <div className="row">
           <div className="col-md-6">
             <VehiclesHeader/>
-            <ListOfVehicles Vehicles={db.searchableVehicles}/>
+            <ListOfVehicles 
+              Vehicles={db.searchableVehicles}
+              DisplayAssociatedPackagesLink={true}/>
           </div>
           <div className="col-md-6">
             <PackagesHeader/>
