@@ -9,11 +9,11 @@ define(function(require) {
 
   var ListOfVehicles = React.createClass({
     componentWillUnmount: function(){
-      this.props.Vehicles.removeWatch("poll-vehicles");
+      this.props.Vehicles.removeWatch(this.props.PollEventName);
     },
     componentWillMount: function(){
-      SotaDispatcher.dispatch({actionType: 'search-vehicles-by-regex', regex: "."});
-      this.props.Vehicles.addWatch("poll-vehicles", _.bind(this.forceUpdate, this, null));
+      SotaDispatcher.dispatch(this.props.DispatchObject);
+      this.props.Vehicles.addWatch(this.props.PollEventName, _.bind(this.forceUpdate, this, null));
     },
     render: function() {
       var _DisplayAssociatedPackagesLink = this.props.DisplayAssociatedPackagesLink;

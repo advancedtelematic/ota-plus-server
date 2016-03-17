@@ -18,7 +18,8 @@ define(function(require) {
           Packages={db.searchablePackages}
           PollEventName="poll-packages"
           DispatchObject={{actionType: 'search-packages-by-regex', regex: "."}}
-          DisplayCampaignLink={true}/>
+          DisplayCampaignLink={true}
+          DisplayAssociatedDevicesLink={true}/>
       </div>
     );}
   });
