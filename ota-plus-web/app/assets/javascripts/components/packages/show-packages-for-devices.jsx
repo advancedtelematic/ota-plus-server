@@ -5,17 +5,13 @@ define(function(require) {
       _ = require('underscore'),
       modalPanel = require('../../mixins/modal-panel'),
       db = require('stores/db'),
-      ListOfAssociatedDevices = require('./list-of-packages'),
+      ListOfAssociatedPackages = require('./list-of-packages'),
       SotaDispatcher = require('sota-dispatcher');
 
   var ShowPackagesForDevices = React.createClass({
     mixins: [
       modalPanel
     ],
-    getInitialState: function() {
-      return {associatedPackages: "aaa"};
-    },
- 
     buttonLabel: "Show associated packages",
     modal: function() {
       return (
@@ -28,7 +24,7 @@ define(function(require) {
                   <h4 className="modal-title">Packages for {this.props.vin}</h4>
                 </div>
                 <div className="modal-body">                    
-                  <ListOfAssociatedDevices
+                  <ListOfAssociatedPackages
                     Packages={db.packagesForVin}
                     PollEventName="poll-packages"
                     DispatchObject={{actionType: 'get-packages-for-vin', vin: this.props.vin}}
