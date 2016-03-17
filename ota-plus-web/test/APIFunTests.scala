@@ -51,6 +51,7 @@ class APIFunTests @Inject() (wsClient: WSClient)
   )
 
   val webserverHost = "localhost"
+  override lazy val port = app.configuration.getString("test.webserver.port").map(_.toInt).getOrElse(9000)
 
   object Method extends Enumeration {
     type Method = Value

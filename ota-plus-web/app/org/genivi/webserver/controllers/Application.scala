@@ -40,13 +40,18 @@ class Application @Inject() (ws: WSClient,
   val coreApiUri = conf.getString("core.api.uri").get
   val resolverApiUri = conf.getString("resolver.api.uri").get
 
+  logToAudit("ENVVAR for core.api.uri", coreApiUri)
+  logToAudit("ENVVAR for resolver.api.uri", resolverApiUri)
+  logToAudit("ENVVAR for authplus.host", conf.getString("authplus.host").get)
+  logToAudit("ENVVAR for buildservice.api.uri", conf.getString("buildservice.api.uri").get)
+
   /**
    * Returns an Option[String] of the uri of the service to proxy to
    *
    * @param path The path of the request
    * @return The service to proxy to
    */
-  def apiByPath(path: String) : String = path.split("/").toList match {
+  private def apiByPath(path: String) : String = path.split("/").toList match {
     case "packages" :: _ => coreApiUri
     case "updates" :: _ => coreApiUri
     case "vehicles" :: vin :: part :: _
@@ -61,7 +66,7 @@ class Application @Inject() (ws: WSClient,
    * @param req request to proxy
    * @return The proxied request
    */
-  def proxyTo(apiUri: String, req: Request[RawBuffer]) : Future[Result] = {
+  private def proxyTo(apiUri: String, req: Request[RawBuffer]) : Future[Result] = {
     def toWsHeaders(hdrs: Headers) = hdrs.toMap.map {
       case(name, value) => name -> value.mkString }
 
@@ -92,7 +97,6 @@ class Application @Inject() (ws: WSClient,
    * @return
    */
   def apiProxy(path: String) : Action[RawBuffer] = Action.async(parse.raw) { implicit req =>
-    logToAudit("apiProxy", s"Request: $req")
     proxyTo(apiByPath(path), req)
   }
 
@@ -104,7 +108,6 @@ class Application @Inject() (ws: WSClient,
    * @return
    */
   def apiProxyBroadcast(path: String) : Action[RawBuffer] = Action.async(parse.raw) { implicit req =>
-    logToAudit("apiProxyBroadcast", s"Request: $req")
     val vinStr = path.split("/").toList.last
     import eu.timepit.refined.api.Refined
     // compile-time refinement only works with literals or constant predicates
