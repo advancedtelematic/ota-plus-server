@@ -29,34 +29,47 @@ define(function(require) {
           break;
           case 'search-vehicles-by-regex':
             var query = payload.regex ? '?regex=' + payload.regex : '';
-
-            sendRequest.doGet('/api/v1/vehicles' + query)
-              .success(function(vehicles) {
-                db.searchableVehicles.reset(vehicles);
-              });
+            db.searchableVehicles.reset([{"vin": "AAAAAAA1234567890"},{"vin": "BBBBBBB1234567890"},{"vin": "BBBBBBB1234567890"},{"vin": "CCCCCCC1234567890"},{"vin": "DDDDDDD1234567890"}]);
+//            sendRequest.doGet('/api/v1/vehicles' + query)
+//              .success(function(vehicles) {
+//                db.searchableVehicles.reset(vehicles);
+//              });
           break;
           case 'fetch-affected-vins':
             var affectedVinsUrl = '/api/v1/resolve/' + payload.name + "/" + payload.version;
 
-            sendRequest.doGet(affectedVinsUrl)
-              .success(function(vehicles) {
-                db.affectedVins.reset(vehicles);
-              });
+//            sendRequest.doGet(affectedVinsUrl)
+//              .success(function(vehicles) {
+//                db.affectedVins.reset(vehicles);
+//              });
+            db.affectedVins.reset([{"vin": "AAAAAAA1234567890"},{"vin": "BBBBBBB1234567890"},{"vin": "BBBBBBB1234567890"},{"vin": "CCCCCCC1234567890"},{"vin": "DDDDDDD1234567890"}]);            
           break;
           case 'get-vehicles-for-package':
-            sendRequest.doGet('/api/v1/vehicles?packageName=' + payload.name + '&packageVersion=' + payload.version)
-              .success(function(vehicles) {
-                var list = _.map(vehicles, function(vehicle) {
-                  return vehicle.vin;
-                });
-                db.vehiclesForPackage.reset(list);
-              });
+//            sendRequest.doGet('/api/v1/vehicles?packageName=' + payload.name + '&packageVersion=' + payload.version)
+//              .success(function(vehicles) {
+//                var list = _.map(vehicles, function(vehicle) {
+//                  return vehicle.vin;
+//                });
+//                db.vehiclesForPackage.reset(list);
+//              });
+            var list = _.map([{"vin": "AAAAAAA1234567890"},{"vin": "BBBBBBB1234567890"},{"vin": "BBBBBBB1234567890"},{"vin": "CCCCCCC1234567890"},{"vin": "DDDDDDD1234567890"}], function(vehicle) {
+              return vehicle.vin;               
+            });
+            console.log(list);
+
+            db.vehiclesForPackage.reset(list);          
           break;
           case 'get-vehicles-wholedata-for-package':
-              sendRequest.doGet('/api/v1/vehicles?packageName=' + payload.name + '&packageVersion=' + payload.version)
-              .success(function(vehicles) {
-                db.vehiclesWholeDataForPackage.reset(vehicles);
-              });
+//            sendRequest.doGet('/api/v1/vehicles?packageName=' + payload.name + '&packageVersion=' + payload.version)
+//              .success(function(vehicles) {
+//                var list = _.map(vehicles, function(vehicle) {
+//                  return vehicle.vin;
+//                });
+//                db.vehiclesForPackage.reset(list);
+//              });
+    
+            db.vehiclesWholeDataForPackage.reset([{"vin": "AAAAAAA1234567890"},{"vin": "BBBBBBB1234567890"},{"vin": "BBBBBBB1234567890"},{"vin": "CCCCCCC1234567890"},{"vin": "DDDDDDD1234567890"}]);            
+            //db.vehiclesWholeDataForPackage.reset([{"vin": "AAAAAAA1234567890"},{"vin": "BBBBBBB1234567890"},{"vin": "CCCCCCC1234567890"}]);            
           break;
           case 'get-package-queue-for-vin':
             sendRequest.doGet('/api/v1/vehicles/' + payload.vin + '/queued')

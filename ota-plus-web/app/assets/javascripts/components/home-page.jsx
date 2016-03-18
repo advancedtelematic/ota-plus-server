@@ -5,7 +5,6 @@ define(function(require) {
       _ = require('underscore'),
       SotaDispatcher = require('sota-dispatcher'),
       ListOfPackages = require('./packages/list-of-packages'),
-      PackagesHeader = require('./packages/packages-header-component'),
       ListOfVehicles = require('./vehicles/list-of-vehicles'),
       VehiclesHeader = require('./vehicles/vehicles-header-component'),
       db = require('stores/db');
@@ -31,7 +30,13 @@ define(function(require) {
               DispatchObject={{actionType: "search-vehicles-by-regex", regex: ""}}/>
           </div>
           <div className="col-md-6">
-            <PackagesHeader/>
+            <div className="row">
+              <div className="col-md-12">
+                <h1>
+                  Packages
+                </h1>
+              </div>
+            </div>
             <ListOfPackages
               Packages={db.searchablePackages}
               PollEventName="poll-packages"
