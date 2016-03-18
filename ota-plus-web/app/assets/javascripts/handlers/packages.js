@@ -42,7 +42,7 @@ define(function(require) {
           break;
           case 'search-packages-by-regex':
             var query = payload.regex ? '?regex=' + payload.regex : '';
-            db.searchablePackages.reset([{"size": 35768,"description": "testing","uri": {"uri": "http://path/to/file"},"checkSum": "5tsJvSyE22ZTQQfaTvAOat3Muo4=","id": {"version": "1.2.3","name": "myPackage"},"vendor": "AcmeSoftware"},{"size": 23423,"description": "testing","uri": {"uri": "http://path/to/file"},"checkSum": "5tsJvSyE22ZTQQfaTvAOat3Muo4=","id": {"version": "4.2.4","name": "The new one"},"vendor": "AcmeSoftware"},{"size": 35768,"description": "testing","uri": {"uri": "http://path/to/file"},"checkSum": "5tsJvSyE22ZTQQfaTvAOat3Muo4=","id": {"version": "2.3.4","name": "myPackage"},"vendor": "AcmeSoftware"}]);
+
             sendRequest.doGet('/api/v1/packages' + query)
               .success(function(packages) {
                 db.searchablePackages.reset(packages);
@@ -56,7 +56,6 @@ define(function(require) {
                 });
                 db.packagesForVin.reset(list);
               });
-              db.packagesForVin.reset([{"size": 35768,"description": "testing","uri": {"uri": "http://path/to/file"},"checkSum": "5tsJvSyE22ZTQQfaTvAOat3Muo4=","id": {"version": "1.2.3","name": "myPackage"},"vendor": "AcmeSoftware"},{"size": 23423,"description": "testing","uri": {"uri": "http://path/to/file"},"checkSum": "5tsJvSyE22ZTQQfaTvAOat3Muo4=","id": {"version": "4.2.4","name": "The new one"},"vendor": "AcmeSoftware"},{"size": 35768,"description": "testing","uri": {"uri": "http://path/to/file"},"checkSum": "5tsJvSyE22ZTQQfaTvAOat3Muo4=","id": {"version": "2.3.4","name": "myPackage"},"vendor": "AcmeSoftware"}]);
           break;
           case 'get-vehicles-queued-for-package':
             sendRequest.doGet('/api/v1/packages/' + payload.name + "/" + payload.version + "/queued")
