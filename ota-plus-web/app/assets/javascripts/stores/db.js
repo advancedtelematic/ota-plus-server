@@ -15,6 +15,7 @@ define(function(require) {
       this.componentsOnVin = atom.createAtom([]);
       this.filtersForPackage = atom.createAtom([]);
       this.vehiclesForPackage = atom.createAtom([]);
+      this.vehiclesWholeDataForPackage = atom.createAtom([]);
       this.vehiclesQueuedForPackage = atom.createAtom([]);
 
       this.packages = atom.createAtom([]);

@@ -30,7 +30,8 @@ define(function(require) {
               Packages={db.packagesForVin}
               PollEventName="poll-packages"
               DispatchObject={{actionType: 'get-packages-for-vin', vin: params.vin}}
-              DisplayCampaignLink={false}/>
+              DisplayCampaignLink={false}
+              DisplayAssociatedDevicesLink={true}/>
             <AddPackageManually Vin={params.vin}/>
             <SyncPackages Vin={params.vin}/>
             <h2>Installed Components</h2>

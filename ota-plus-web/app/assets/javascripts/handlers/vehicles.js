@@ -52,6 +52,12 @@ define(function(require) {
                 db.vehiclesForPackage.reset(list);
               });
           break;
+          case 'get-vehicles-wholedata-for-package':
+              sendRequest.doGet('/api/v1/vehicles?packageName=' + payload.name + '&packageVersion=' + payload.version)
+              .success(function(vehicles) {
+                db.vehiclesWholeDataForPackage.reset(vehicles);
+              });
+          break;
           case 'get-package-queue-for-vin':
             sendRequest.doGet('/api/v1/vehicles/' + payload.vin + '/queued')
               .success(function(packages) {

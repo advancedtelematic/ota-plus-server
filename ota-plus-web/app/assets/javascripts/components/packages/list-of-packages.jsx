@@ -3,6 +3,7 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       _ = require('underscore'),
+      ShowDevicesForPackages = require('../vehicles/show-devices-for-packages'),
       SotaDispatcher = require('sota-dispatcher');
 
   var Packages = React.createClass({
@@ -28,6 +29,11 @@ define(function(require) {
             <td>
               { package.id.version }
             </td>
+            {this.props.DisplayAssociatedDevicesLink ?
+              <td>
+                <ShowDevicesForPackages name={package.id.name} version={package.id.version} />
+              </td>
+            : ''}
             {this.props.DisplayCampaignLink ?
               <td>
                 <Router.Link to='new-campaign' params={{name: package.id.name, version: package.id.version}}>
@@ -48,6 +54,7 @@ define(function(require) {
               <td>
                 Version
               </td>
+              {this.props.DisplayAssociatedDevicesLink ? <td/> : ''}
               {this.props.DisplayCampaignLink ? <td/> : ''}
             </tr>
           </thead>

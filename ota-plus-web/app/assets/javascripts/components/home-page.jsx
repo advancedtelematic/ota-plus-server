@@ -26,7 +26,9 @@ define(function(require) {
             <VehiclesHeader/>
             <ListOfVehicles 
               Vehicles={db.searchableVehicles}
-              DisplayAssociatedPackagesLink={true}/>
+              DisplayAssociatedPackagesLink={true}
+              PollEventName="poll-vehicles"
+              DispatchObject={{actionType: "search-vehicles-by-regex", regex: ""}}/>
           </div>
           <div className="col-md-6">
             <PackagesHeader/>
@@ -34,7 +36,8 @@ define(function(require) {
               Packages={db.searchablePackages}
               PollEventName="poll-packages"
               DispatchObject={{actionType: 'search-packages-by-regex', regex: ""}}
-              DisplayCampaignLink={false}/>
+              DisplayCampaignLink={false}
+              DisplayAssociatedDevicesLink={true}/>
           </div>
         </div>
       );
