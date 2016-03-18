@@ -5,7 +5,7 @@ define(function(require) {
       _ = require('underscore'),
       modalPanel = require('../../mixins/modal-panel'),
       db = require('stores/db'),
-      ListOfAssociatedPackages = require('./list-of-packages'),
+      ListOfAssociatedPackages = require('./list-of-associated-packages'),
       SotaDispatcher = require('sota-dispatcher');
 
   var ShowPackagesForDevices = React.createClass({
