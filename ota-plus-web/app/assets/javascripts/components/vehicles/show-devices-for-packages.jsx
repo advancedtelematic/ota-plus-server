@@ -5,7 +5,7 @@ define(function(require) {
       _ = require('underscore'),
       modalPanel = require('../../mixins/modal-panel'),
       db = require('stores/db'),
-      ListOfAssociatedDevices = require('./list-of-vehicles'),
+      ListOfAssociatedDevices = require('./list-of-associated-vehicles'),
       SotaDispatcher = require('sota-dispatcher');
 
   var ShowDevicesForPackages = React.createClass({
@@ -27,8 +27,7 @@ define(function(require) {
                   <ListOfAssociatedDevices
                     Vehicles={db.vehiclesWholeDataForPackage}
                     PollEventName="poll-vehicles-wholedata-for-package"
-                    DispatchObject={{actionType: "get-vehicles-wholedata-for-package", name: this.props.name, version: this.props.version}}
-                    DisplayAssociatedPackagesLink={false}/>
+                    DispatchObject={{actionType: "get-vehicles-wholedata-for-package", name: this.props.name, version: this.props.version}}/>
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-default" onClick={this.modalPanel}>Close</button>
