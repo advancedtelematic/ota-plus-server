@@ -26,6 +26,7 @@ define(function(require) {
             <VehiclesHeader/>
             <ListOfVehicles 
               Vehicles={db.searchableVehicles}
+              DisplayAssociatedPackagesLink={true}
               PollEventName="poll-vehicles"
               DispatchObject={{actionType: "search-vehicles-by-regex", regex: ""}}/>
           </div>
