@@ -101,10 +101,16 @@ define(function(require) {
         </div>
       );
     },
+    onClick: function(name, version, t) {
+      this.props.onClick(t, name, version);
+    },
     render: function() {
+      var _click = this.onClick;
+      var _SelectedName = this.props.SelectedName;
+      var _SelectedVersion = this.props.SelectedVersion;
       var rows = _.map(this.props.Packages.deref(), function(package) {
         return (
-          <tr key={package.id.name + '-' + package.id.version}>
+          <tr key={package.id.name + '-' + package.id.version} className={(_SelectedName == package.id.name && _SelectedVersion == package.id.version) ? 'selected' : ''}>
             <td>
               <Router.Link to='package' params={{name: package.id.name, version: package.id.version}}>
                 { package.id.name }
@@ -115,7 +121,7 @@ define(function(require) {
             </td>
             {this.props.DisplayAssociatedDevicesLink ?
               <td>
-                <ShowDevicesForPackages name={package.id.name} version={package.id.version} />
+                <button type="button" className="btn btn-default" onClick={_click.bind(null, package.id.name, package.id.version)}>{(_SelectedName == package.id.name && _SelectedVersion == package.id.version) ? 'Hide' : 'Show'} associated vehicles</button>
               </td>
             : ''}
             {this.props.DisplayCampaignLink ?
