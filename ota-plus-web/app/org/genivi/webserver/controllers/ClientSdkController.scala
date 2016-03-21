@@ -73,8 +73,12 @@ class ClientSdkController @Inject() (system: ActorSystem,
       replacements.foldLeft(uri) { case (res: String, fromTo: (String, String)) => res.replace(fromTo._1, fromTo._2) }
     }
 
-    conf.getString("buildservice.api.uri")
-      .map( placedholderFiller )
+    val buildserviceEndpoint = for (
+      host <- conf.getString("buildservice.api.host");
+      query <- conf.getString("buildservice.api.query").map( placedholderFiller )
+    ) yield host + query;
+
+    buildserviceEndpoint
       .map( url => Try(Uri.create(url)) )
       .getOrElse( Failure(ConfigParameterNotFound) )
   }
