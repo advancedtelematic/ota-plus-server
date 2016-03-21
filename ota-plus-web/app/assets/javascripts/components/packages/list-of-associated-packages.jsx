@@ -16,10 +16,15 @@ define(function(require) {
       SotaDispatcher.dispatch(this.props.DispatchObject);
       this.props.Packages.addWatch(this.props.PollEventName, _.bind(this.forceUpdate, this, null));
     },
+    componentWillUpdate: function(nextProps, nextState) {
+      this.props.Packages.removeWatch(this.props.PollEventName);
+      SotaDispatcher.dispatch(nextProps.DispatchObject);
+      this.props.Packages.addWatch(nextProps.PollEventName, _.bind(this.forceUpdate, this, null));
+    },
     render: function() {
       var rows = _.map(this.props.Packages.deref(), function(package) {
         return (
-          <tr key={package.id.name + '-' + package.id.version}>
+          <tr key={'associated-package-' + package.id.name + '-' + package.id.version}>
             <td>
               <Router.Link to='package' params={{name: package.id.name, version: package.id.version}}>
                 { package.id.name }

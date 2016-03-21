@@ -14,10 +14,15 @@ define(function(require) {
       SotaDispatcher.dispatch(this.props.DispatchObject);
       this.props.Vehicles.addWatch(this.props.PollEventName, _.bind(this.forceUpdate, this, null));
     },
+    componentWillUpdate: function(nextProps, nextState) {
+      this.props.Vehicles.removeWatch(this.props.PollEventName);
+      SotaDispatcher.dispatch(nextProps.DispatchObject);
+      this.props.Vehicles.addWatch(nextProps.PollEventName, _.bind(this.forceUpdate, this, null));
+    },
     render: function() {
       var vehicles = _.map(this.props.Vehicles.deref(), function(vehicle) {
         return (
-          <tr key={vehicle.vin}>
+          <tr key={'associated-vehicle-' + vehicle.vin}>
             <td>
               <Router.Link to='vehicle' params={{vin: vehicle.vin}}>
               { vehicle.vin }

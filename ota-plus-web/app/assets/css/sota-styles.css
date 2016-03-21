@@ -63,3 +63,7 @@ a.page-title, a.page-title:hover {
     color: #fff;
     text-decoration: none;
 }
+
+table tr.selected {
+    background: #FFB393 !important;
+}

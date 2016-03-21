@@ -15,11 +15,18 @@ define(function(require) {
       SotaDispatcher.dispatch(this.props.DispatchObject);
       this.props.Vehicles.addWatch(this.props.PollEventName, _.bind(this.forceUpdate, this, null));
     },
+
+    onClick: function(vin, t) {
+      this.props.onClick(t, vin);
+    },
     render: function() {
       var _DisplayAssociatedPackagesLink = this.props.DisplayAssociatedPackagesLink;
-      var vehicles = _.map(this.props.Vehicles.deref(), function(vehicle) {
+      var _click = this.onClick;
+      var _SelectedVin = this.props.SelectedVin;
+      var vehicles = _.map(this.props.Vehicles.deref(), function(vehicle, i) {
         return (
-          <tr key={vehicle.vin}>
+          
+          <tr key={vehicle.vin} className={_SelectedVin == vehicle.vin ? 'selected' : ''}>
             <td>
               <Router.Link to='vehicle' params={{vin: vehicle.vin}}>
               { vehicle.vin }
@@ -39,7 +46,7 @@ define(function(require) {
             </td>
             {_DisplayAssociatedPackagesLink ?
               <td>
-                <ShowPackagesForDevices vin={vehicle.vin}/>
+                <button type="button" className="btn btn-default" onClick={_click.bind(null, vehicle.vin)}>{_SelectedVin == vehicle.vin ? 'Hide' : 'Show'} associated packages</button>
               </td>
             : ''}
           </tr>
