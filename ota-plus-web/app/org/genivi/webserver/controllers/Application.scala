@@ -67,14 +67,18 @@ class Application @Inject() (ws: WSClient,
    * @return The proxied request
    */
   private def proxyTo(apiUri: String, req: Request[RawBuffer]) : Future[Result] = {
-    def toWsHeaders(hdrs: Headers) = hdrs.toMap.map {
-      case(name, value) => name -> value.mkString }
+    def toWsHeaders(hdrs: Headers): Map[String, String] = {
+      // PRO-186. Temporary fix: remove "Host" header, whose value is "localhost:9000".
+      hdrs.remove("Host").toMap.map {
+        case(name, values) => name -> values.head
+      }
+    }
 
     val w = ws.url(apiUri + req.path)
       .withFollowRedirects(false)
       .withMethod(req.method)
-      .withHeaders(toWsHeaders(req.headers).toSeq :_*)
       .withQueryString(req.queryString.mapValues(_.head).toSeq :_*)
+      .withHeaders(toWsHeaders(req.headers).toSeq :_*)
 
     val wreq = req.body.asBytes() match {
       case Some(b) => w.withBody(b)
