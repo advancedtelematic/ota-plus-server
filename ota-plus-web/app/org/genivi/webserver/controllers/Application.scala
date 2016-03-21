@@ -40,11 +40,6 @@ class Application @Inject() (ws: WSClient,
   val coreApiUri = conf.getString("core.api.uri").get
   val resolverApiUri = conf.getString("resolver.api.uri").get
 
-  logToAudit("ENVVAR for core.api.uri", coreApiUri)
-  logToAudit("ENVVAR for resolver.api.uri", resolverApiUri)
-  logToAudit("ENVVAR for authplus.host", conf.getString("authplus.host").get)
-  logToAudit("ENVVAR for buildservice.api.uri", conf.getString("buildservice.api.uri").get)
-
   /**
    * Returns an Option[String] of the uri of the service to proxy to
    *
