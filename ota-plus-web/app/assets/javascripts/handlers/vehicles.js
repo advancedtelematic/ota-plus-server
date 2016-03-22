@@ -85,6 +85,11 @@ define(function(require) {
           case 'sync-packages-for-vin':
             sendRequest.doPut('/api/v1/vehicles/' + payload.vin + '/sync');
           break;
+          case 'add-packages-to-vin':
+            sendRequest.doPut('/api/v1/vehicles/' + payload.vin + '/packages', payload.packages)
+              .success(function() {
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));
