@@ -29,7 +29,6 @@ define(function(require) {
     componentWillMount: function(){
     },
     showAssociatedPackagesClick: function (event, vin) {
-      
       {this.state.selectedVin == vin ?
         this.setState({
           searchAssociatedPackages: false,
@@ -84,7 +83,6 @@ define(function(require) {
                   DisplayAssociatedPackagesLink={true}
                   PollEventName="poll-vehicles"
                   DispatchObject={{actionType: "search-vehicles-by-regex", regex: ""}}
-                  IsHomePage={true}
                   onClick={this.showAssociatedPackagesClick}
                   SelectedVin={this.state.selectedVin}/>
               </div>
@@ -102,9 +100,13 @@ define(function(require) {
                   </div>
                 </div>
                 <ListOfAssociatedPackages
-                  Packages={db.packagesForVin}
-                  PollEventName="poll-associated-packages"
-                  DispatchObject={{actionType: 'get-packages-for-vin', vin: this.state.selectedVin}}
+                  AllPackages={db.searchablePackages}
+                  AllPackagesPollEventName="poll-packages"
+                  AllPackagesDispatchObject={{actionType: 'search-packages-by-regex', regex: "."}}
+                  AssociatedPackages={db.packagesForVin}
+                  AssociatedPackagesPollEventName="poll-associated-packages"
+                  AssociatedPackagesDispatchObject={{actionType: 'get-packages-for-vin', vin: this.state.selectedVin}}
+                  SelectedVin={this.state.selectedVin}
                   DisplayCampaignLink={false}/>
               </div>
             : 
