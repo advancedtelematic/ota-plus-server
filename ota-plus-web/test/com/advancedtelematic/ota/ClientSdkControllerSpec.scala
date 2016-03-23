@@ -35,6 +35,7 @@ class ClientSdkControllerSpec extends PlaySpec
         // Step 1: Register Vin
         val webappRegistrationLink = s"vehicles/${vin.get}"
         val registrationResponse = await(fullUri(webappRegistrationLink).put(""))
+        registrationResponse.status mustBe Status.NO_CONTENT
         // Step 2: Request preconf client
         val webappDownloadLink = s"client/${vin.get}/${packfmt.fileExtension}/${arch.toString}"
         val fileResponse = await(fullUri(webappDownloadLink).get)

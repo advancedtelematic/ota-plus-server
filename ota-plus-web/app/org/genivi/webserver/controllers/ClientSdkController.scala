@@ -3,9 +3,10 @@ package org.genivi.webserver.controllers
 import javax.inject.{Inject, Named, Singleton}
 
 import akka.actor.{ActorRef, ActorSystem}
-import com.advancedtelematic.ota.vehicle.{Vehicles, Vehicle, VehicleMetadata}
+import com.advancedtelematic.ota.vehicle.{Vehicle, VehicleMetadata, Vehicles}
 import org.asynchttpclient.uri.Uri
 import play.api.http.HttpEntity
+import play.api.libs.json.JsString
 import play.api.{Configuration, Logger}
 import play.api.libs.ws.WSClient
 import play.api.mvc._
@@ -96,8 +97,8 @@ class ClientSdkController @Inject() (system: ActorSystem,
         w.execute flatMap { wresp =>
           val t2: Try[String] = for (
             parsed <- Try( wresp.json );
-            secret <- Try( (parsed \ "client_secret").get )
-          ) yield secret.toString()
+            secret <- Try( (parsed \ "client_secret").validate[String].get )
+          ) yield secret
           Future.fromTry(t2)
         }
     }
