@@ -27,7 +27,8 @@ object APITests extends Tag("APITests")
 /**
  * Integration tests for the API
  *
- * These tests assume a blank, migrated database, as well as a webserver running on port 80
+ * These tests assume a blank, migrated database, as well as a local webserver running on the port
+ * given by test.webserver.port
  */
 class APIFunTests @Inject() (wsClient: WSClient)
   extends PlaySpec with OneServerPerSuite with GeneratorDrivenPropertyChecks {
