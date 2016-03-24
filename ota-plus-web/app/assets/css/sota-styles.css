@@ -68,6 +68,18 @@ table tr.selected {
     background: #FFB393 !important;
 }
 
-.label-package {
+.label-package, .label-vehicle {
     font-size: 13px;
+}
+
+#table-packages tbody tr:hover, #table-vehicles tbody tr:hover {
+    cursor: pointer;
+}
+
+table tbody tr {
+    height: 50px;
+}
+
+.btn-add-new-vin {
+    margin-top: 25px;
 }

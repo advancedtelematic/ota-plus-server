@@ -20,7 +20,7 @@ define(function(require) {
             <SearchBar label="Filter" event="search-vehicles-by-regex"/>
             <ListOfVehicles 
               Vehicles={db.searchableVehicles}
-              DisplayAssociatedPackagesLink={false}
+              AllowAssociatedPackagesAction={false}
               PollEventName="poll-vehicles"
               DispatchObject={{actionType: "search-vehicles-by-regex", regex: ""}}/>
           </div>

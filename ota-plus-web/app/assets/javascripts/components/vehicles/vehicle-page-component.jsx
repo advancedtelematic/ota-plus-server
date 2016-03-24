@@ -31,7 +31,7 @@ define(function(require) {
               PollEventName="poll-packages"
               DispatchObject={{actionType: 'get-packages-for-vin', vin: params.vin}}
               DisplayCampaignLink={false}
-              DisplayAssociatedDevicesLink={true}/>
+              AllowAssociatedDevicesAction={false}/>
             <AddPackageManually Vin={params.vin}/>
             <SyncPackages Vin={params.vin}/>
             <h2>Installed Components</h2>

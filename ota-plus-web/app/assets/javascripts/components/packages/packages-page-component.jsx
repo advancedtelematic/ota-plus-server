@@ -19,7 +19,7 @@ define(function(require) {
           PollEventName="poll-packages"
           DispatchObject={{actionType: 'search-packages-by-regex', regex: "."}}
           DisplayCampaignLink={true}
-          DisplayAssociatedDevicesLink={false}/>
+          AllowAssociatedDevicesAction={false}/>
       </div>
     );}
   });

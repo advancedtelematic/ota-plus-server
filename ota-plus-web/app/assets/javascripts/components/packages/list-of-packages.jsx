@@ -110,23 +110,18 @@ define(function(require) {
       var _SelectedVersion = this.props.SelectedVersion;
       var rows = _.map(this.props.Packages.deref(), function(package) {
         return (
-          <tr key={package.id.name + '-' + package.id.version} className={(_SelectedName == package.id.name && _SelectedVersion == package.id.version) ? 'selected' : ''}>
+          <tr key={package.id.name + '-' + package.id.version} className={(_SelectedName == package.id.name && _SelectedVersion == package.id.version) ? 'selected' : ''} onClick={this.props.AllowAssociatedDevicesAction ? _click.bind(null, package.id.name, package.id.version) : ''}>
             <td>
-              <Router.Link to='package' params={{name: package.id.name, version: package.id.version}}>
+              <Router.Link to='package' params={{name: package.id.name, version: package.id.version}} onClick={e => e.stopPropagation()}>
                 { package.id.name }
               </Router.Link>
             </td>
             <td>
               { package.id.version }
             </td>
-            {this.props.DisplayAssociatedDevicesLink ?
-              <td>
-                <button type="button" className="btn btn-default" onClick={_click.bind(null, package.id.name, package.id.version)}>{(_SelectedName == package.id.name && _SelectedVersion == package.id.version) ? 'Hide' : 'Show'} associated vehicles</button>
-              </td>
-            : ''}
             {this.props.DisplayCampaignLink ?
               <td>
-                <Router.Link to='new-campaign' params={{name: package.id.name, version: package.id.version}}>
+                <Router.Link to='new-campaign' params={{name: package.id.name, version: package.id.version}} onClick={e => e.stopPropagation()}>
                   Create Campaign
                 </Router.Link>
               </td>
@@ -137,7 +132,7 @@ define(function(require) {
       return (
         <div>
           <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true}>
-          <table className="table table-striped table-bordered" style={{marginBottom: 0}}>
+          <table id={this.props.AllowAssociatedDevicesAction ? 'table-packages' : ''} className="table table-striped table-bordered" style={{marginBottom: 0}}>
             <thead>
               <tr>
                 <td>
@@ -146,7 +141,6 @@ define(function(require) {
                 <td>
                   Version
                 </td>
-                {this.props.DisplayAssociatedDevicesLink ? <td/> : ''}
                 {this.props.DisplayCampaignLink ? <td/> : ''}
               </tr>
             </thead>
