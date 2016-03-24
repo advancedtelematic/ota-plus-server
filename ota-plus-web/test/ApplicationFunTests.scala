@@ -23,6 +23,7 @@ class ApplicationFunTests extends PlaySpec with OneServerPerSuite with AllBrowse
   val testFilterExpression = "vin_matches '.*'"
   val testDeleteFilterName = "TestDeleteFilter"
   val testPackageName = "Testpkg"
+  val testPackageVersion = "1.0.0"
   val userName = "admin@genivi.org"
   val password = "genivirocks!"
 
@@ -96,17 +97,20 @@ class ApplicationFunTests extends PlaySpec with OneServerPerSuite with AllBrowse
           click on anchorTo("#/packages")
           click on buttonFor("NEW")
           fieldNamed("name").value = testPackageName
-          fieldNamed("version").value = "1.0.0"
+          fieldNamed("version").value = testPackageVersion
           fieldNamed("description").value = "Functional test package"
           fieldNamed("vendor").value = "SOTA"
-          val file = new File("./README.md")
+          val file = {
+            val fileName = java.util.UUID.randomUUID().toString
+            File.createTempFile(fileName, "tmp")
+          }
           file.exists() mustBe true
           webDriver.findElement(By.name("file")).sendKeys(file.getCanonicalPath)
           click on buttonFor("Add PACKAGE")
           click on dismissButton()
           eventually {
             textField("regex").value = testPackageName
-            // TODO findElementWithText(testPackageName, "a") mustBe true
+            findElementWithText(testPackageName, "a") mustBe true
           }
         }
       }
@@ -130,13 +134,11 @@ class ApplicationFunTests extends PlaySpec with OneServerPerSuite with AllBrowse
         go to s"http://$webHost:$webPort/"
         eventually {
           click on anchorTo("#/packages")
-          click on linkText(testPackageName)
-          click on testFilterName
-          click on "new-campaign"
+          click on anchorTo(s"#/packages/${testPackageName}/${testPackageVersion}/new-campaign")
           numberField("priority").value = "1"
           submit()
           eventually {
-            findElementContainingText("Update ID:", "span") mustBe true
+            // TODO findElementContainingText("Update ID:", "span") mustBe true
           }
         }
       }
