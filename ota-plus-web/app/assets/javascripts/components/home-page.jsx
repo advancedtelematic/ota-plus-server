@@ -9,6 +9,7 @@ define(function(require) {
       ListOfVehicles = require('./vehicles/list-of-vehicles'),
       ListOfAssociatedVehicles = require('./vehicles/list-of-associated-vehicles'),
       VehiclesHeader = require('./vehicles/vehicles-header-component'),
+      PackagesHeader = require('./packages/packages-header-component'),
       db = require('stores/db');
 
   var Home = React.createClass({
@@ -60,74 +61,55 @@ define(function(require) {
       return (
         <div className="row">
           <div className="col-md-6">
-              {this.state.searchAssociatedVehicles ? 
-              <div>
-                <div className="row">
-                  <div className="col-md-12">
-                    <h1>
-                      Associated vehicles - {this.state.selectedName} {this.state.selectedVersion}
-                    </h1>
-                  </div>
-                </div>
-                <ListOfAssociatedVehicles 
-                  Vehicles={db.vehiclesWholeDataForPackage}
-                  PollEventName="poll-associated-vehicles"
-                  DispatchObject={{actionType: "get-vehicles-wholedata-for-package", name: this.state.selectedName, version: this.state.selectedVersion}}
-                  SelectedName={this.state.selectedName}/>
-              </div>
+            <VehiclesHeader/>
+            {this.state.searchAssociatedVehicles ? 
+              <ListOfAssociatedVehicles 
+                AllVehicles={db.searchableVehicles}
+                AllVehiclesPollEventName="poll-vehicles"
+                AllVehiclesDispatchObject={{actionType: "search-vehicles-by-regex", regex: ""}}
+                InstalledVehicles={db.vehiclesWholeDataForPackage}
+                InstalledVehiclesPollEventName="poll-installed-vehicles"
+                InstalledVehiclesDispatchObject={{actionType: "get-vehicles-wholedata-for-package", name: this.state.selectedName, version: this.state.selectedVersion}}
+                QueuedVehicles={db.vehiclesQueuedForPackage}
+                QueuedVehiclesPollEventName="poll-queued-vehicles"
+                QueuedVehiclesDispatchObject={{actionType: "get-vehicles-queued-for-package", name: this.state.selectedName, version: this.state.selectedVersion}}
+                SelectedName={this.state.selectedName}
+                SelectedVersion={this.state.selectedVersion}/>
             : 
-              <div>
-                <VehiclesHeader/>
-                <ListOfVehicles 
-                  Vehicles={db.searchableVehicles}
-                  DisplayAssociatedPackagesLink={true}
-                  PollEventName="poll-vehicles"
-                  DispatchObject={{actionType: "search-vehicles-by-regex", regex: ""}}
-                  onClick={this.showAssociatedPackagesClick}
-                  SelectedVin={this.state.selectedVin}/>
-              </div>
+              <ListOfVehicles 
+                Vehicles={db.searchableVehicles}
+                AllowAssociatedPackagesAction={true}
+                PollEventName="poll-vehicles"
+                DispatchObject={{actionType: "search-vehicles-by-regex", regex: ""}}
+                onClick={this.showAssociatedPackagesClick}
+                SelectedVin={this.state.selectedVin}/>
             }
-            
           </div>
           <div className="col-md-6">
-            {this.state.searchAssociatedPackages ? 
-              <div>
-                <div className="row">
-                  <div className="col-md-12">
-                    <h1>
-                      Associated Packages - {this.state.selectedVin}
-                    </h1>
-                  </div>
-                </div>
-                <ListOfAssociatedPackages
-                  AllPackages={db.searchablePackages}
-                  AllPackagesPollEventName="poll-packages"
-                  AllPackagesDispatchObject={{actionType: 'search-packages-by-regex', regex: "."}}
-                  AssociatedPackages={db.packagesForVin}
-                  AssociatedPackagesPollEventName="poll-associated-packages"
-                  AssociatedPackagesDispatchObject={{actionType: 'get-packages-for-vin', vin: this.state.selectedVin}}
-                  SelectedVin={this.state.selectedVin}
-                  DisplayCampaignLink={false}/>
-              </div>
+            <PackagesHeader/>
+            {this.state.searchAssociatedPackages ?
+              <ListOfAssociatedPackages
+                AllPackages={db.searchablePackages}
+                AllPackagesPollEventName="poll-packages"
+                AllPackagesDispatchObject={{actionType: 'search-packages-by-regex', regex: "."}}
+                InstalledPackages={db.packagesForVin}
+                InstalledPackagesPollEventName="poll-installed-packages"
+                InstalledPackagesDispatchObject={{actionType: 'get-packages-for-vin', vin: this.state.selectedVin}}
+                QueuedPackages={db.packageQueueForVin}
+                QueuedPackagesPollEventName="poll-queued-packages"
+                QueuedPackagesDispatchObject={{actionType: 'get-package-queue-for-vin', vin: this.state.selectedVin}}
+                SelectedVin={this.state.selectedVin}
+                DisplayCampaignLink={false}/>
             : 
-              <div>
-                <div className="row">
-                  <div className="col-md-12">
-                    <h1>
-                      Packages
-                    </h1>
-                  </div>
-                </div>
-                <ListOfPackages
-                  Packages={db.searchablePackages}
-                  PollEventName="poll-packages"
-                  DispatchObject={{actionType: 'search-packages-by-regex', regex: "."}}
-                  DisplayCampaignLink={false}
-                  DisplayAssociatedDevicesLink={true}
-                  onClick={this.showAssociatedVehiclesClick}
-                  SelectedName={this.state.selectedName}
-                  SelectedVersion={this.state.selectedVersion}/>
-              </div>
+              <ListOfPackages
+                Packages={db.searchablePackages}
+                PollEventName="poll-packages"
+                DispatchObject={{actionType: 'search-packages-by-regex', regex: "."}}
+                DisplayCampaignLink={false}
+                AllowAssociatedDevicesAction={true}
+                onClick={this.showAssociatedVehiclesClick}
+                SelectedName={this.state.selectedName}
+                SelectedVersion={this.state.selectedVersion}/>
             }
           </div>
         </div>

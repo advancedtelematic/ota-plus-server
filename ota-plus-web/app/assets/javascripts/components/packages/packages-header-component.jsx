@@ -5,23 +5,18 @@ define(function(require) {
   var PackagesHeaderComponent = React.createClass({
     render: function() {
       return (
-      <div>
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-md-6">
             <h1>
               Packages
             </h1>
           </div>
-        </div>
-        <div className="row">
-          <div className="col-md-8">
-            <p>
-            </p>
+          <div className="col-md-6">
+            <AddPackageComponent/>
           </div>
         </div>
-        <AddPackageComponent />
-      </div>
-    );}
+      );
+    }
   });
 
   return PackagesHeaderComponent;

@@ -9,13 +9,9 @@ define(['jquery', 'react'], function($, React) {
     render: function() {
       return (
         <div>
-          <div className="row">
-            <div className="col-md-12">
-              <button className="btn btn-primary pull-right" onClick={this.modalForm}>
-                { this.state.showForm ? "HIDE" : this.buttonLabel }
-              </button>
-            </div>
-          </div>
+          <button className="btn btn-primary pull-right btn-add-new-vin" onClick={this.modalForm}>
+            { this.state.showForm ? "HIDE" : this.buttonLabel }
+          </button>
           { this.state.showForm ? this.form() : null }
         </div>
       );

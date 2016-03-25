@@ -20,15 +20,15 @@ define(function(require) {
       this.props.onClick(t, vin);
     },
     render: function() {
-      var _DisplayAssociatedPackagesLink = this.props.DisplayAssociatedPackagesLink;
+      var _AllowAssociatedPackagesAction = this.props.AllowAssociatedPackagesAction;
       var _click = this.onClick;
       var _SelectedVin = this.props.SelectedVin;
       var vehicles = _.map(this.props.Vehicles.deref(), function(vehicle, i) {
         return (
           
-          <tr key={vehicle.vin} className={_SelectedVin == vehicle.vin ? 'selected' : ''}>
+          <tr key={vehicle.vin} className={_SelectedVin == vehicle.vin ? 'selected' : ''} onClick={_AllowAssociatedPackagesAction ? _click.bind(null, vehicle.vin) : ''}>
             <td>
-              <Router.Link to='vehicle' params={{vin: vehicle.vin}}>
+              <Router.Link to='vehicle' params={{vin: vehicle.vin}} onClick={e => e.stopPropagation()}>
               { vehicle.vin }
               </Router.Link>
             </td>
@@ -44,16 +44,11 @@ define(function(require) {
                 <a href={`/api/v1/client/${vehicle.vin}/rpm/64`}> 64 </a> &nbsp;
               )
             </td>
-            {_DisplayAssociatedPackagesLink ?
-              <td>
-                <button type="button" className="btn btn-default" onClick={_click.bind(null, vehicle.vin)}>{_SelectedVin == vehicle.vin ? 'Hide' : 'Show'} associated packages</button>
-              </td>
-            : ''}
           </tr>
         );
       });
       return (
-        <table className="table table-striped table-bordered">
+        <table id={this.props.AllowAssociatedPackagesAction ? 'table-vehicles' : ''} className="table table-striped table-bordered">
           <thead>
             <tr>
               <td>
@@ -61,7 +56,6 @@ define(function(require) {
               </td>
               <td />
               <td />
-              {this.props.DisplayAssociatedPackagesLink ? <td /> : ''}
             </tr>
           </thead>
           <tbody>
