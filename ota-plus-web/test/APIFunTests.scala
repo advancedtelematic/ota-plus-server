@@ -8,7 +8,6 @@ import java.security.InvalidParameterException
 import java.util.UUID
 import javax.inject.Inject
 
-import com.advancedtelematic.ota.Generators
 import org.asynchttpclient.AsyncHttpClient
 import org.asynchttpclient.request.body.multipart.FilePart
 import org.joda.time.DateTime
@@ -19,7 +18,7 @@ import org.scalatestplus.play._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
-import play.api.libs.ws.{WSClient, WS, WSResponse}
+import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.test.Helpers._
 
 object APITests extends Tag("APITests")
@@ -287,16 +286,22 @@ class APIFunTests @Inject() (wsClient: WSClient)
     val pattern = "yyyy-MM-dd'T'HH:mm:ssZZ"
     val currentTimestamp = DateTimeFormat.forPattern(pattern).print(new DateTime())
     val tomorrowTimestamp = DateTimeFormat.forPattern(pattern).print(new DateTime().plusDays(1))
-    val uuid = UUID.randomUUID()
+    val uuid = UUID.randomUUID().toString
     val data = Json.obj(
       "creationTime" -> currentTimestamp,
       "id" -> uuid,
       "packageId" -> Json.obj("name" -> testPackageName, "version" -> testPackageVersion),
+      "signature" -> "somesignature",
+      "description" -> "somedescription",
+      "requestConfirmation" -> "false",
       "periodOfValidity" -> (currentTimestamp + "/" + tomorrowTimestamp),
       "priority" -> 1 //this could be anything from 1-10; picked at random in this case
     )
-    val response = await(wsClient.url("http://" + webserverHost + s":$port/api/v1/updates")
-      .post(data))
+    val response = await(
+      wsClient.url("http://" + webserverHost + s":$port/api/v1/updates")
+      .withHeaders("Content-Type" -> "application/json")
+      .post(data)
+    )
     response.status mustBe OK
   }
 
