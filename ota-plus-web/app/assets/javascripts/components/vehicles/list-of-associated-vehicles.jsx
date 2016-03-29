@@ -29,7 +29,7 @@ define(function(require) {
       this.props.QueuedVehicles.addWatch(this.props.QueuedVehiclesPollEventName, _.bind(this.forceUpdate, this, null));
     },
     componentWillUpdate: function(nextProps, nextState) {
-      if(nextProps.SelectedName != this.props.SelectedName && nextProps.SelectedVersion != this.props.SelectedVersion) {
+      if(nextProps.SelectedName != this.props.SelectedName) {
         this.props.AllVehicles.removeWatch(this.props.AllVehiclesPollEventName);
         SotaDispatcher.dispatch(nextProps.AllVehiclesDispatchObject);
         this.props.AllVehicles.addWatch(nextProps.AllVehiclesPollEventName, _.bind(this.forceUpdate, this, null));
@@ -41,6 +41,8 @@ define(function(require) {
         this.props.QueuedVehicles.removeWatch(this.props.QueuedVehiclesPollEventName);
         SotaDispatcher.dispatch(nextProps.QueuedVehiclesDispatchObject);
         this.props.QueuedVehicles.addWatch(nextProps.QueuedVehiclesPollEventName, _.bind(this.forceUpdate, this, null));
+        
+        this.resetForm();
       }
     },
     handleSubmit: function(e) {

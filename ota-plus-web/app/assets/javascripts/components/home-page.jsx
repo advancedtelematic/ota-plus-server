@@ -42,18 +42,16 @@ define(function(require) {
         })
       }
     },
-    showAssociatedVehiclesClick: function (event, name, version) {
-      {(this.state.selectedName == name && this.state.selectedVersion == version) ?
+    showAssociatedVehiclesClick: function (event, name) {
+      {(this.state.selectedName == name) ?
         this.setState({
           searchAssociatedVehicles: false,
           selectedName: '',
-          selectedVersion: ''
         })
       :
         this.setState({
           searchAssociatedVehicles: true,
           selectedName: name,
-          selectedVersion: version
         })
       }
     },

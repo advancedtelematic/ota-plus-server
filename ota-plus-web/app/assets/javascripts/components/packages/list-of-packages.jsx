@@ -19,6 +19,11 @@ define(function(require) {
       SotaDispatcher.dispatch(this.props.DispatchObject);
       this.props.Packages.addWatch(this.props.PollEventName, _.bind(this.forceUpdate, this, null));
     },
+    componentWillUpdate: function(nextProps, nextState) {
+      if(nextProps.SelectedName != this.props.SelectedName) {
+        this.replaceState({});
+      }
+    },
     refreshData: function() {
       SotaDispatcher.dispatch(this.props.DispatchObject);
     },
@@ -101,34 +106,79 @@ define(function(require) {
         </div>
       );
     },
-    onClick: function(name, version, t) {
-      this.props.onClick(t, name, version);
+    onClick: function(name, e) {
+      this.props.onClick(e, name);
+    },
+    prepareData: function() {
+      var Packages = this.props.Packages.deref();
+      
+      var GroupedPackages = [];
+      Packages.filter(function(obj, index){
+        var objKey = obj.id.name+'_'+obj.id.version;
+        
+        if( typeof GroupedPackages[obj.id.name] == 'undefined' || !GroupedPackages[obj.id.name] instanceof Array ) {
+          GroupedPackages[obj.id.name] = [];
+          GroupedPackages[obj.id.name]['elements'] = [];
+          GroupedPackages[obj.id.name]['packageName'] = obj.id.name;
+        }
+        
+        GroupedPackages[obj.id.name]['elements'].push(obj);
+      });
+      
+      return GroupedPackages;
+    },
+    packageOnMouseEnter: function(i, packageName, event) {
+      var key = 'package'+i;
+      this.setState({
+        [key]: true
+      });
+    },
+    packageOnMouseLeave: function(i, packageName, event) {
+      if(this.props.SelectedName != packageName) {
+        var key = 'package'+i;
+        this.setState({
+          [key]: false
+        });
+      }
     },
     render: function() {
+      var Packages = this.prepareData();
       var _click = this.onClick;
-      var _SelectedName = this.props.SelectedName;
-      var _SelectedVersion = this.props.SelectedVersion;
-      var rows = _.map(this.props.Packages.deref(), function(package) {
-        return (
-          <tr key={package.id.name + '-' + package.id.version} className={(_SelectedName == package.id.name && _SelectedVersion == package.id.version) ? 'selected' : ''} onClick={this.props.AllowAssociatedDevicesAction ? _click.bind(null, package.id.name, package.id.version) : ''}>
+
+      var rows = [];
+      
+      var i = 0;
+      for(var index in Packages) {
+        var key = 'package'+i;
+        var SubPackages = Packages[index].elements;
+        var SubPackagesRows = [];
+        var _DisplayCampaignLink = this.props.DisplayCampaignLink;
+        rows.push(
+          <tr key={Packages[index].packageName} className={(this.props.SelectedName == Packages[index].packageName) ? 'selected' : ''} onClick={this.props.AllowAssociatedDevicesAction ? _click.bind(null, Packages[index].packageName) : ''} onMouseEnter={this.packageOnMouseEnter.bind(null, i, Packages[index].packageName)} onMouseLeave={this.packageOnMouseLeave.bind(null, i, Packages[index].packageName)}>
             <td>
-              <Router.Link to='package' params={{name: package.id.name, version: package.id.version}} onClick={e => e.stopPropagation()}>
-                { package.id.name }
-              </Router.Link>
-            </td>
-            <td>
-              { package.id.version }
-            </td>
-            {this.props.DisplayCampaignLink ?
-              <td>
-                <Router.Link to='new-campaign' params={{name: package.id.name, version: package.id.version}} onClick={e => e.stopPropagation()}>
-                  Create Campaign
-                </Router.Link>
-              </td>
-            : ''}
+              {Packages[index].packageName}
+              {(this.state[key] || this.props.SelectedName == Packages[index].packageName)?
+                <div>
+                  {SubPackages.forEach(function(subpackage){
+                    SubPackagesRows.push(
+                      <div>
+                        Version: <span className="label label-warning">{subpackage.id.version}</span>
+                        {_DisplayCampaignLink ?
+                            <Router.Link to='new-campaign' params={{name: subpackage.id.name, version: subpackage.id.version}} onClick={e => e.stopPropagation()} className="pull-right">
+                              Create Campaign
+                            </Router.Link>
+                        : ''}
+                      </div>
+                    );
+                  })}
+                  {SubPackagesRows}
+                </div>
+              : '' }
+            </td>            
           </tr>
         );
-      }, this);
+        i++;
+      }
       return (
         <div>
           <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true}>
@@ -138,10 +188,6 @@ define(function(require) {
                 <td>
                   Package Name
                 </td>
-                <td>
-                  Version
-                </td>
-                {this.props.DisplayCampaignLink ? <td/> : ''}
               </tr>
             </thead>
             <tbody>
