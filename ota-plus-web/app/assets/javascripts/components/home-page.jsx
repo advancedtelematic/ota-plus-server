@@ -26,8 +26,18 @@ define(function(require) {
       router: React.PropTypes.func
     },
     componentWillUnmount: function(){
+      window.removeEventListener("resize", this.updateDimensions);
     },
     componentWillMount: function(){
+    },
+    componentDidMount: function() {
+      window.addEventListener("resize", this.updateDimensions);
+      this.updateDimensions();
+    },
+    updateDimensions: function() {
+      var offset = $('.resizeWrapper').offset().top;
+      var divHeight = $(window).height() - offset - 40;
+      $('.resizeWrapper').css({'height': divHeight, 'overflow-y': 'auto'});
     },
     showAssociatedPackagesClick: function (event, vin) {
       {this.state.selectedVin == vin ?
@@ -72,7 +82,8 @@ define(function(require) {
                 QueuedVehiclesPollEventName="poll-queued-vehicles"
                 QueuedVehiclesDispatchObject={{actionType: "get-vehicles-queued-for-package", name: this.state.selectedName, version: this.state.selectedVersion}}
                 SelectedName={this.state.selectedName}
-                SelectedVersion={this.state.selectedVersion}/>
+                SelectedVersion={this.state.selectedVersion}
+                UpdateDimensions={this.updateDimensions}/>
             : 
               <ListOfVehicles 
                 Vehicles={db.searchableVehicles}
@@ -80,7 +91,8 @@ define(function(require) {
                 PollEventName="poll-vehicles"
                 DispatchObject={{actionType: "search-vehicles-by-regex", regex: ""}}
                 onClick={this.showAssociatedPackagesClick}
-                SelectedVin={this.state.selectedVin}/>
+                SelectedVin={this.state.selectedVin}
+                UpdateDimensions={this.updateDimensions}/>
             }
           </div>
           <div className="col-md-6">
@@ -97,7 +109,8 @@ define(function(require) {
                 QueuedPackagesPollEventName="poll-queued-packages"
                 QueuedPackagesDispatchObject={{actionType: 'get-package-queue-for-vin', vin: this.state.selectedVin}}
                 SelectedVin={this.state.selectedVin}
-                DisplayCampaignLink={false}/>
+                DisplayCampaignLink={false}
+                UpdateDimensions={this.updateDimensions}/>
             : 
               <ListOfPackages
                 Packages={db.searchablePackages}
@@ -107,7 +120,8 @@ define(function(require) {
                 AllowAssociatedDevicesAction={true}
                 onClick={this.showAssociatedVehiclesClick}
                 SelectedName={this.state.selectedName}
-                SelectedVersion={this.state.selectedVersion}/>
+                SelectedVersion={this.state.selectedVersion}
+                UpdateDimensions={this.updateDimensions}/>
             }
           </div>
         </div>

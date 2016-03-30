@@ -15,6 +15,12 @@ define(function(require) {
       SotaDispatcher.dispatch(this.props.DispatchObject);
       this.props.Vehicles.addWatch(this.props.PollEventName, _.bind(this.forceUpdate, this, null));
     },
+    componentWillUpdate: function(nextProps, nextState) {
+      this.props.UpdateDimensions();
+    },
+    componentDidMount: function() {
+      this.props.UpdateDimensions();
+    },
     onClick: function(vin, t) {
       this.props.onClick(t, vin);
     },
@@ -87,11 +93,13 @@ define(function(require) {
         );
       }, this);
       return (
-        <table id={this.props.AllowAssociatedPackagesAction ? 'table-vehicles' : ''} className="table table-bordered">
-          <tbody>
-            { vehicles }
-          </tbody>
-        </table>
+        <div className="resizeWrapper">
+          <table id={this.props.AllowAssociatedPackagesAction ? 'table-vehicles' : ''} className="table table-bordered">
+            <tbody>
+              { vehicles }
+            </tbody>
+          </table>
+        </div>
       );
     }
   });

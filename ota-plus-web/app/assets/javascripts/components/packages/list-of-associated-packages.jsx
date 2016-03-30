@@ -46,7 +46,11 @@ define(function(require) {
         this.props.QueuedPackages.addWatch(nextProps.QueuedPackagesPollEventName, _.bind(this.forceUpdate, this, null));
       
         this.setState({refreshData: false});
+        this.props.UpdateDimensions();
       }
+    },
+    componentDidMount: function() {
+      this.props.UpdateDimensions();
     },
     installPackage: function(packageName, packageVersion, e) {
       e.preventDefault();
@@ -152,18 +156,20 @@ define(function(require) {
       
       return (
         <form ref="form" onSubmit={this.handleSubmit}>
-          <table className="table table-striped table-bordered">
-            <thead>
-              <tr>
-                <td>
-                  Package Name
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              { rows }
-            </tbody>
-          </table>
+          <div className="resizeWrapper">
+            <table className="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <td>
+                    Package Name
+                  </td>
+                </tr>
+              </thead>
+              <tbody>
+                { rows }
+              </tbody>
+            </table>
+          </div>
         </form>
       );
     }

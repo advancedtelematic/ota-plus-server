@@ -23,6 +23,10 @@ define(function(require) {
       if(nextProps.SelectedName != this.props.SelectedName) {
         this.replaceState({});
       }
+      this.props.UpdateDimensions();
+    },
+    componentDidMount: function() {
+      this.props.UpdateDimensions();
     },
     refreshData: function() {
       SotaDispatcher.dispatch(this.props.DispatchObject);
@@ -180,20 +184,20 @@ define(function(require) {
         i++;
       }
       return (
-        <div>
+        <div className="resizeWrapper">
           <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true}>
-          <table id={this.props.AllowAssociatedDevicesAction ? 'table-packages' : ''} className="table table-striped table-bordered" style={{marginBottom: 0}}>
-            <thead>
-              <tr>
-                <td>
-                  Package Name
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              { rows }
-            </tbody>
-          </table>
+            <table id={this.props.AllowAssociatedDevicesAction ? 'table-packages' : ''} className="table table-striped table-bordered" style={{marginBottom: 0}}>
+              <thead>
+                <tr>
+                  <td>
+                    Package Name
+                  </td>
+                </tr>
+              </thead>
+              <tbody>
+                { rows }
+              </tbody>
+            </table>
           </Dropzone>
           { this.state.showForm ? this.form() : null }
         </div>
