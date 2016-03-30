@@ -43,7 +43,11 @@ define(function(require) {
         this.props.QueuedVehicles.addWatch(nextProps.QueuedVehiclesPollEventName, _.bind(this.forceUpdate, this, null));
         
         this.resetForm();
+        this.props.UpdateDimensions();
       }
+    },
+    componentDidMount: function() {
+      this.props.UpdateDimensions();
     },
     handleSubmit: function(e) {
       e.preventDefault();
@@ -135,29 +139,31 @@ define(function(require) {
       }, this);
       return (
         <form ref="form" onSubmit={this.handleSubmit}>
-          <table className="table table-striped table-bordered">
-            <thead>
-              <tr>
-                <td>
-                  VIN
-                </td>
-                <td/>
-                <td/>
-              </tr>
-            </thead>
-            <tbody>
-              { vehicles }
-            </tbody>
-            <tfoot>
-              <tr>
-                <td/>
-                <td/>
-                <td>
-                  <button className="btn btn-primary" type="submit" disabled={this.state.isButtonDisabled}>Apply changes</button>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+          <div className="resizeWrapper">
+            <table className="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <td>
+                    VIN
+                  </td>
+                  <td/>
+                  <td/>
+                </tr>
+              </thead>
+              <tbody>
+                { vehicles }
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td/>
+                  <td/>
+                  <td>
+                    <button className="btn btn-primary" type="submit" disabled={this.state.isButtonDisabled}>Apply changes</button>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </form>
       );
     }
