@@ -15,49 +15,79 @@ define(function(require) {
       SotaDispatcher.dispatch(this.props.DispatchObject);
       this.props.Vehicles.addWatch(this.props.PollEventName, _.bind(this.forceUpdate, this, null));
     },
-
     onClick: function(vin, t) {
       this.props.onClick(t, vin);
     },
     render: function() {
-      var _AllowAssociatedPackagesAction = this.props.AllowAssociatedPackagesAction;
-      var _click = this.onClick;
-      var _SelectedVin = this.props.SelectedVin;
       var vehicles = _.map(this.props.Vehicles.deref(), function(vehicle, i) {
         return (
-          
-          <tr key={vehicle.vin} className={_SelectedVin == vehicle.vin ? 'selected' : ''} onClick={_AllowAssociatedPackagesAction ? _click.bind(null, vehicle.vin) : ''}>
-            <td>
+          <tr key={vehicle.vin} className={this.props.SelectedVin == vehicle.vin ? 'selected' : ''} onClick={this.props.AllowAssociatedPackagesAction ? this.onClick.bind(null, vehicle.vin) : ''}>
+            <td className={'status-'+vehicle.status}>
               <Router.Link to='vehicle' params={{vin: vehicle.vin}} onClick={e => e.stopPropagation()}>
               { vehicle.vin }
               </Router.Link>
             </td>
             <td>
-              debian ( &nbsp;
-                <a href={`/api/v1/client/${vehicle.vin}/deb/32`}> 32 </a> &nbsp;
-                <a href={`/api/v1/client/${vehicle.vin}/deb/64`}> 64 </a> &nbsp;
-              )
-            </td>
-            <td>
-              rpm ( &nbsp;
-                <a href={`/api/v1/client/${vehicle.vin}/rpm/32`}> 32 </a> &nbsp;
-                <a href={`/api/v1/client/${vehicle.vin}/rpm/64`}> 64 </a> &nbsp;
-              )
+              <div>
+                {(() => {
+                  switch (vehicle.status) {
+                    case "neverseen":   
+                      return (
+                        <div>
+                          <div>
+                            <strong>Never seen online</strong>
+                          </div>
+                          <div>
+                            Download SDK: 
+                            <a href={`/api/v1/client/${vehicle.vin}/deb/32`} onClick={e => e.stopPropagation()}> debian 32 </a> or
+                            <a href={`/api/v1/client/${vehicle.vin}/deb/64`} onClick={e => e.stopPropagation()}> debian 64 </a>
+                          </div>
+                        </div>
+                      );
+                    case "error":
+                      return (
+                        <div>
+                          <div>
+                            <strong>Last seen online: {vehicle.lastseendate}</strong>
+                          </div>
+                          <div>
+                            Status: <span className="label label-danger">error</span>
+                          </div>
+                        </div>
+                      );
+                    case "outofdate":
+                      return (
+                        <div>
+                          <div>
+                            <strong>Last seen online: {vehicle.lastseendate}</strong>
+                          </div>
+                          <div>
+                            Status: <span className="label label-warning">out-of-date</span>
+                          </div>
+                        </div>
+                      );
+                    case "uptodate":
+                      return (
+                        <div>
+                          <div>
+                            <strong>Last seen online: {vehicle.lastseendate}</strong>
+                          </div>
+                          <div>
+                            Status: <span className="label label-success">up-to-date</span>
+                          </div>
+                        </div>
+                      );
+                    default:
+                      return (<div/>)
+                  }
+                })()}
+              </div>
             </td>
           </tr>
         );
-      });
+      }, this);
       return (
-        <table id={this.props.AllowAssociatedPackagesAction ? 'table-vehicles' : ''} className="table table-striped table-bordered">
-          <thead>
-            <tr>
-              <td>
-                VIN
-              </td>
-              <td />
-              <td />
-            </tr>
-          </thead>
+        <table id={this.props.AllowAssociatedPackagesAction ? 'table-vehicles' : ''} className="table table-bordered">
           <tbody>
             { vehicles }
           </tbody>

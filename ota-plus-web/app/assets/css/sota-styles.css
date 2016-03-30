@@ -65,7 +65,7 @@ a.page-title, a.page-title:hover {
 }
 
 table tr.selected {
-    background: #FFB393 !important;
+    background: #e3f2e3 !important;
 }
 
 .label-package, .label-vehicle {
@@ -82,4 +82,20 @@ table tbody tr {
 
 .btn-add-new-vin {
     margin-top: 25px;
+}
+
+.status-error {
+  border-left: 4px solid #D9534F !important;
+}
+
+.status-neverseen {
+  border-left: 4px solid #ccc !important;
+}
+
+.status-outofdate {
+  border-left: 4px solid #F0AD4E !important;
+}
+
+.status-uptodate {
+  border-left: 4px solid #5CB85C !important;
 }
