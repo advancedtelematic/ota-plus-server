@@ -99,3 +99,13 @@ table tbody tr {
 .status-uptodate {
   border-left: 4px solid #5CB85C !important;
 }
+
+.btn-install {
+  font-size: 75%;
+  padding: 0 .5em;
+}
+
+.btn-install[disabled] {
+  background: #aaa;
+  border-color: #aaa;
+}

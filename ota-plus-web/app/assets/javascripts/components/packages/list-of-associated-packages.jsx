@@ -31,7 +31,7 @@ define(function(require) {
       this.props.QueuedPackages.addWatch(this.props.QueuedPackagesPollEventName, _.bind(this.forceUpdate, this, null));
     },
     componentWillUpdate: function(nextProps, nextState) {
-      if(nextProps.SelectedVin != this.props.SelectedVin) {
+      if(nextProps.SelectedVin != this.props.SelectedVin || nextState.refreshData == true) {
         this.resetForm();
         this.props.AllPackages.removeWatch(this.props.AllPackagesPollEventName);
         SotaDispatcher.dispatch(nextProps.AllPackagesDispatchObject);
@@ -44,48 +44,20 @@ define(function(require) {
         this.props.QueuedPackages.removeWatch(this.props.QueuedPackagesPollEventName);
         SotaDispatcher.dispatch(nextProps.QueuedPackagesDispatchObject);
         this.props.QueuedPackages.addWatch(nextProps.QueuedPackagesPollEventName, _.bind(this.forceUpdate, this, null));
+      
+        this.setState({refreshData: false});
       }
     },
-    handleSubmit: function(e) {
+    installPackage: function(packageName, packageVersion, e) {
       e.preventDefault();
-      var formElements = this.refs.form.getDOMNode().elements;
-      var data = [];
-      _.map(formElements, function(element) {
-        if(element.type == 'checkbox' && element.checked) {
-          data.push({
-            name: element.dataset.packagename,
-            version: element.dataset.packageversion
-          });
-        }
-      });
-      if(data.length) {
-          SotaDispatcher.dispatch({
-          actionType: 'add-packages-to-vin',
-          vin: this.props.SelectedVin,
-          packages: data
-        });
-      } else {
-        alert('Please select at least one package');
-      }
+      
+      sendRequest.doPut('/api/v1/vehicles/' + this.props.SelectedVin + "/package/" + packageName + "/" + packageVersion)
+        .success(_.bind(function() {
+           this.setState({refreshData: true});
+        }, this));
     },
     resetForm: function() {
       this.refs.form.getDOMNode().reset();
-      this.changeButtonState();
-    },
-    changeButtonState: function() {
-      var formElements = this.refs.form.getDOMNode().elements;
-      var data = [];
-      _.map(formElements, function(element) {
-        if(element.type == 'checkbox' && element.checked) {
-          data.push({
-            name: element.dataset.packagename,
-            version: element.dataset.packageversion
-          });
-        }
-      });
-      this.setState({
-        isButtonDisabled: (data.length ? false : true)
-      });
     },
     prepareData: function() {
       var Installed = this.props.InstalledPackages.deref();
@@ -102,52 +74,82 @@ define(function(require) {
         QueuedIds[obj.name+'_'+obj.version] = obj.name+'_'+obj.version;
       });
       
+      var GroupedPackages = [];
       Packages.filter(function(obj, index){
         var objKey = obj.id.name+'_'+obj.id.version;
+        var isQueued = false;
+        
         if(objKey in InstalledIds) {
-          Packages[index].attributes = {checked: true, status: 'installed', string: 'Installed', label: 'label-success'};
+          Packages[index].attributes = {status: 'installed', string: 'Installed', label: 'label-success'};
         } else if(objKey in QueuedIds) {
-          Packages[index].attributes = {checked: true, status: 'queued', string: 'Queued', label: 'label-info'};
+          Packages[index].attributes = {status: 'queued', string: 'Queued', label: 'label-info'};
+          isQueued = true;
         } else {
-          Packages[index].attributes = {checked: false, status: 'notinstalled', string: 'Not installed', label: 'label-danger'};
+          Packages[index].attributes = {status: 'notinstalled', string: 'Not installed', label: 'label-danger'};
         }
+
+        if( typeof GroupedPackages[obj.id.name] == 'undefined' || !GroupedPackages[obj.id.name] instanceof Array ) {
+          GroupedPackages[obj.id.name] = [];
+          GroupedPackages[obj.id.name]['elements'] = [];
+          GroupedPackages[obj.id.name]['packageName'] = obj.id.name;
+          GroupedPackages[obj.id.name]['isQueued'] = isQueued;
+        }
+        
+        if(!GroupedPackages[obj.id.name].isQueued && isQueued) {
+            GroupedPackages[obj.id.name]['isQueued'] = true;
+        } 
+        
+        GroupedPackages[obj.id.name]['elements'].push(Packages[index]);
       });
       
-      return Packages;
+      return GroupedPackages;
+    },
+    packageOnMouseEnter: function(i, packageName, event) {
+      var key = 'package'+i;
+      this.setState({
+        [key]: true
+      });
+    },
+    packageOnMouseLeave: function(i, packageName, event) {
+      var key = 'package'+i;
+      this.setState({
+        [key]: false
+      });
     },
     render: function() {
       var Packages = this.prepareData();
-      var rows = _.map(Packages, function(package, index) {
-        return (
-          <tr key={'associated-package-' + package.id.name + '-' + package.id.version}>
+      var rows = [];
+      var i = 0;
+      for(var index in Packages) {
+        var key = 'package'+i;
+        var SubPackages = Packages[index].elements;
+        var SubPackagesRows = [];
+        rows.push(
+          <tr key={'associated-package-' + Packages[index].packageName} onMouseEnter={this.packageOnMouseEnter.bind(null, i, Packages[index].packageName)} onMouseLeave={this.packageOnMouseLeave.bind(null, i, Packages[index].packageName)}>
             <td>
-              <Router.Link to='package' params={{name: package.id.name, version: package.id.version}}>
-                { package.id.name }
-              </Router.Link>
-            </td>
-            <td>
-              { package.id.version }
-            </td>
-            <td>
-              <span className={'label label-package '+ package.attributes.label}>{package.attributes.string}</span>
-            </td>
-            <td>
-              {!package.attributes.checked ? 
-                <input type="checkbox" name="package" data-packagename={package.id.name} data-packageversion={package.id.version} onChange={this.changeButtonState} />
-              :
-              ''
-              }
-            </td>
-            {this.props.DisplayCampaignLink ?
-              <td>
-                <Router.Link to='new-campaign' params={{name: package.id.name, version: package.id.version}}>
-                  Create Campaign
-                </Router.Link>
-              </td>
-            : ''}
+              {Packages[index].packageName}
+              {(this.state[key] || this.props.SelectedName == Packages[index].packageName)?
+                <div>
+                  {SubPackages.forEach(function(subpackage){
+                    SubPackagesRows.push(
+                      <div>
+                        Version: <span className="label label-warning">{subpackage.id.version}</span> &nbsp;
+                        <span className={'label ' + subpackage.attributes.label}>{subpackage.attributes.string}</span> &nbsp;
+                        {subpackage.attributes.status == 'notinstalled' ?
+                          <button className='btn btn-primary btn-install' disabled={Packages[index].isQueued} onClick={this.installPackage.bind(null, subpackage.id.name, subpackage.id.version)}>Install</button> 
+                        : ''}
+                      </div>
+                    );
+                  }, this)}
+                  {SubPackagesRows}
+                </div>
+              : '' }
+            </td>    
           </tr>
         );
-      }, this);
+        i++;
+      }
+      
       return (
         <form ref="form" onSubmit={this.handleSubmit}>
           <table className="table table-striped table-bordered">
@@ -156,28 +158,11 @@ define(function(require) {
                 <td>
                   Package Name
                 </td>
-                <td>
-                  Version
-                </td>
-                <td/>
-                <td/>
-                {this.props.DisplayCampaignLink ? <td/> : ''}
               </tr>
             </thead>
             <tbody>
               { rows }
             </tbody>
-            <tfoot>
-              <tr>
-                <td/>
-                <td/>
-                <td>
-                  <button className="btn btn-primary" type="submit" disabled={this.state.isButtonDisabled}>Apply changes</button>
-                </td>
-                <td/>
-                {this.props.DisplayCampaignLink ? <td/> : ''}
-              </tr>
-            </tfoot>
           </table>
         </form>
       );
