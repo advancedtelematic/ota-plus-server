@@ -1,0 +1,12 @@
+version: '2'
+services:
+  db:
+    image: advancedtelematic/mariadb:stable
+  resolver:
+    image: advancedtelematic/sota-resolver:52-feat_configurable-rvi-dependency-2-668ffb2336b2404de69721a16026e69f8f903f4c
+  core:
+    image: advancedtelematic/sota-core:52-feat_configurable-rvi-dependency-2-668ffb2336b2404de69721a16026e69f8f903f4c
+  web:
+    image: advancedtelematic/ota-plus-web:9-master-44dff90f4e88a6659826ee32215a5f26ea74b4c3
+  auth-plus:
+    image: advancedtelematic/auth-plus:0.3.0
