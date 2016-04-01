@@ -29,8 +29,7 @@ object APITests extends Tag("APITests")
  * These tests assume a blank, migrated database, as well as a local webserver running on the port
  * given by test.webserver.port
  */
-class APIFunTests @Inject() (wsClient: WSClient)
-  extends PlaySpec with OneServerPerSuite with GeneratorDrivenPropertyChecks {
+class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPropertyChecks {
 
   val testVin = "TESTSTR0123456789"
   val testVinAlt = "TESTALT0123456789"
@@ -52,6 +51,8 @@ class APIFunTests @Inject() (wsClient: WSClient)
 
   val webserverHost = "localhost"
   override lazy val port = app.configuration.getString("test.webserver.port").map(_.toInt).getOrElse(9000)
+
+  val wsClient = app.injector.instanceOf[WSClient]
 
   object Method extends Enumeration {
     type Method = Value
@@ -98,7 +99,14 @@ class APIFunTests @Inject() (wsClient: WSClient)
     val putBuilder = asyncHttpClient
         .preparePut("http://" + webserverHost + s":$port/api/v1/packages/" + packageName + "/" +
           packageVersion + "?description=test&vendor=ACME")
-    val builder = putBuilder.addBodyPart(new FilePart("file", new File("../packages/ghc-7.6.3-18.3.el7.x86_64.rpm")))
+    val builder = {
+      val tmpFile = {
+        val fileName = java.util.UUID.randomUUID().toString
+        File.createTempFile(fileName, "tmp")
+      }
+      tmpFile.exists() mustBe true
+      putBuilder.addBodyPart(new FilePart("file", tmpFile))
+    }
     val response = asyncHttpClient.executeRequest(builder.build()).get()
     response.getStatusCode mustBe NO_CONTENT
   }
@@ -293,7 +301,7 @@ class APIFunTests @Inject() (wsClient: WSClient)
       "packageId" -> Json.obj("name" -> testPackageName, "version" -> testPackageVersion),
       "signature" -> "somesignature",
       "description" -> "somedescription",
-      "requestConfirmation" -> "false",
+      "requestConfirmation" -> false,
       "periodOfValidity" -> (currentTimestamp + "/" + tomorrowTimestamp),
       "priority" -> 1 //this could be anything from 1-10; picked at random in this case
     )
