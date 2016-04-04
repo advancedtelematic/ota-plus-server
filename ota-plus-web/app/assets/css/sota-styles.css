@@ -92,11 +92,11 @@ table tbody tr {
   border-left: 4px solid #ccc !important;
 }
 
-.status-outofdate {
+.status-out-of-date {
   border-left: 4px solid #F0AD4E !important;
 }
 
-.status-uptodate {
+.status-up-to-date {
   border-left: 4px solid #5CB85C !important;
 }
 
