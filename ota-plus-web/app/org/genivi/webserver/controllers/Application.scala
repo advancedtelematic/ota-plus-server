@@ -64,15 +64,8 @@ class Application @Inject() (ws: WSClient,
   private def proxyTo(apiUri: String, req: Request[RawBuffer]) : Future[Result] = {
     def toWsHeaders(hdrs: Headers): Map[String, String] = {
 
-      val localhostPruned: Headers = {
-        // Host:localhost header causes cloud webapp to resend to itself (PRO-188)
-        hdrs.get("Host") match {
-          case Some(v) if v.contains("localhost") || v.contains("127.0.0.1") => hdrs.remove("Host")
-          case _ => hdrs
-        }
-      }
-
-      localhostPruned.toMap.map {
+      // PRO-188. Temporary fix: remove "Host" header, which trips the infrastructure.
+      hdrs.remove("Host").toMap.map {
         case(name, values) => name -> values.head
       }
     }
