@@ -6,6 +6,10 @@ object Version {
   val JsonWebSecurity = "0.2.1"
   val MockWs = "2.5.0"
   val GeniviSota = "0.1.7"
+  // Version 0.11 of akka-persistence-cassandra depends on Akka 2.4.2 and Scala 2.11.6.
+  // It is compatible with Cassandra 3.0.0 or higher
+  // Details at https://github.com/akka/akka-persistence-cassandra
+  val AkkaCassandra = "0.11"
 }
 
 object Dependencies {
@@ -25,7 +29,7 @@ object Dependencies {
 
   val AkkaTestKit = "com.typesafe.akka" %% "akka-testkit" % Version.Akka % "test"
 
-//  lazy val Scalaz = "org.scalaz" %% "scalaz-core" % "7.1.3"
+  lazy val CassandraForAkkaPersistence = "com.typesafe.akka" %% "akka-persistence-cassandra" % Version.AkkaCassandra
 
   lazy val ScalaTest = "org.scalatest" % "scalatest_2.11" % "2.2.4"
 
