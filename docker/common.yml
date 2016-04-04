@@ -41,6 +41,21 @@ services:
       RESOLVER_API_URI: 'http://resolver:8081'
       CORE_INTERACTION_PROTOCOL: 'none'
 
+  auth-plus:
+    image: advancedtelematic/auth-plus:$DEFAULT_VERSION
+    ports:
+      - '9001:9001'
+
+  buildsrv:
+    image: advancedtelematic/ota-build-srv:$DEFAULT_VERSION
+    expose:
+      - '9200'
+    ports:
+      - '9200:9200'
+    environment:
+      OTA_AUTH_URL: http://localhost:9001
+      OTA_SERVER_URL: http://localhost:9000
+
   web:
     image: advancedtelematic/ota-plus-web:$DEFAULT_VERSION
     ports:
@@ -48,12 +63,9 @@ services:
     depends_on:
       - core
       - resolver
+      - auth-plus
+      - buildsrv
     environment:
       CORE_API_URI: 'http://core:8080'
       RESOLVER_API_URI: 'http://resolver:8081'
       PLAY_CRYPTO_SECRET: 'secret' # only for local dev!
-
-  auth-plus:
-    image: advancedtelematic/auth-plus:$DEFAULT_VERSION
-    ports:
-      - '9001:9001'
