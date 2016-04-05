@@ -62,10 +62,15 @@ class Application @Inject() (ws: WSClient,
    * @return The proxied request
    */
   private def proxyTo(apiUri: String, req: Request[RawBuffer]) : Future[Result] = {
-    def toWsHeaders(hdrs: Headers): Map[String, String] = {
-
-      // PRO-188. Temporary fix: remove "Host" header, which trips the infrastructure.
-      hdrs.remove("Host").toMap.map {
+    def toWsHeaders(hdrs0: Headers): Map[String, String] = {
+      // destination for the outgoing request, including port
+      val dest = {
+        val destURI = java.net.URI.create(apiUri)
+        val portIfAny = if (destURI.getPort == -1) "" else s":${destURI.getPort}"
+        destURI.getHost + portIfAny
+      }
+      val hdrs1 = hdrs0.remove("Host").add("Host" -> dest)
+      hdrs1.toMap.map {
         case(name, values) => name -> values.head
       }
     }
