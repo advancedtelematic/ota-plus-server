@@ -26,9 +26,10 @@ define(function(require) {
     },
     render: function() {
       var vehicles = _.map(this.props.Vehicles.deref(), function(vehicle, i) {
+        var lastSeenDate = new Date(vehicle.lastSeen * 1000);
         return (
           <tr key={vehicle.vin} className={this.props.SelectedVin == vehicle.vin ? 'selected' : ''} onClick={this.props.AllowAssociatedPackagesAction ? this.onClick.bind(null, vehicle.vin) : ''}>
-            <td className={'status-'+vehicle.status}>
+            <td className={'status-'+(vehicle.status != '' ? vehicle.status : 'neverseen')}>
               <Router.Link to='vehicle' params={{vin: vehicle.vin}} onClick={e => e.stopPropagation()}>
               { vehicle.vin }
               </Router.Link>
@@ -37,7 +38,40 @@ define(function(require) {
               <div>
                 {(() => {
                   switch (vehicle.status) {
-                    case "neverseen":   
+                    case "error":
+                      return (
+                        <div>
+                          <div>
+                            <strong>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</strong>
+                          </div>
+                          <div>
+                            Status: <span className="label label-danger">error</span>
+                          </div>
+                        </div>
+                      );
+                    case "out-of-date":
+                      return (
+                        <div>
+                          <div>
+                            <strong>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</strong>
+                          </div>
+                          <div>
+                            Status: <span className="label label-warning">out-of-date</span>
+                          </div>
+                        </div>
+                      );
+                    case "up-to-date":
+                      return (
+                        <div>
+                          <div>
+                            <strong>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</strong>
+                          </div>
+                          <div>
+                            Status: <span className="label label-success">up-to-date</span>
+                          </div>
+                        </div>
+                      );
+                    default:
                       return (
                         <div>
                           <div>
@@ -50,41 +84,6 @@ define(function(require) {
                           </div>
                         </div>
                       );
-                    case "error":
-                      return (
-                        <div>
-                          <div>
-                            <strong>Last seen online: {vehicle.lastseendate}</strong>
-                          </div>
-                          <div>
-                            Status: <span className="label label-danger">error</span>
-                          </div>
-                        </div>
-                      );
-                    case "outofdate":
-                      return (
-                        <div>
-                          <div>
-                            <strong>Last seen online: {vehicle.lastseendate}</strong>
-                          </div>
-                          <div>
-                            Status: <span className="label label-warning">out-of-date</span>
-                          </div>
-                        </div>
-                      );
-                    case "uptodate":
-                      return (
-                        <div>
-                          <div>
-                            <strong>Last seen online: {vehicle.lastseendate}</strong>
-                          </div>
-                          <div>
-                            Status: <span className="label label-success">up-to-date</span>
-                          </div>
-                        </div>
-                      );
-                    default:
-                      return (<div/>)
                   }
                 })()}
               </div>
