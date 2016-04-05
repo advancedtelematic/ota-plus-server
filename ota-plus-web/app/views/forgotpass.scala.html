@@ -1,0 +1,81 @@
+@()()
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>SOTA Admin UI - Forgot password</title>
+        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <link rel='stylesheet' href='@routes.Assets.versioned("css/main-styles.css")'>
+
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.slidedrawer.min.js")'></script>
+        <script>
+            $(function () {
+                $('.ats-footer-panel').slideDrawer({
+                    showDrawer: false,
+                    slideTimeout: true,
+                    slideSpeed: 600,
+                    slideTimeoutCount: 3000
+                });
+
+                $('#submit-form').click(function () {
+                    $('.ats-errors').show();
+                });
+
+                $('#email').keyup(function () {
+                    var email = $('#email').val();
+
+                    if (email != '') {
+                        $('#submit-form').attr('disabled', false);
+                    } else {
+                        $('#submit-form').attr('disabled', true);
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="ats-page">
+            <div class="container ats">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="#"><img src='@routes.Assets.versioned("img/logo.png")' id="logo"></a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
+                        <div class="ats-header text-center">
+                            <p>Enter your email address to receive instructions for resetting your password.</p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-10 col-lg-offset-1">
+                                <div class="ats-errors">
+                                    Email doesn't exist in database.
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="email" name="email" placeholder="email address" id="email">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="ats-button" id="submit-form" disabled>reset password</button>
+                                </div>
+                                <div class="form-group">
+                                    <a href="#"><i class="fa fa-angle-left"></i> Login</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="ats-footer-panel"> 
+                <header class="clickme">Need Support?</header>
+                <div class="drawer-content">
+                    <div class="intend">
+                        Content
+                    </div>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>
