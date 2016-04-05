@@ -17,7 +17,7 @@ define(function(require) {
       this.dispatchCallback = function(payload) {
         switch(payload.actionType) {
           case 'get-vehicles':
-            sendRequest.doGet('/api/v1/vehicles')
+            sendRequest.doGet('/api/v1/vehicles?status=true')
               .success(function(vehicles) {
                 db.vehicles.reset(vehicles);
               });
