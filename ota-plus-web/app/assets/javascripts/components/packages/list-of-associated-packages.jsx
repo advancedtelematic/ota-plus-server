@@ -82,9 +82,11 @@ define(function(require) {
       Packages.filter(function(obj, index){
         var objKey = obj.id.name+'_'+obj.id.version;
         var isQueued = false;
+        var isInstalled = false;
         
         if(objKey in InstalledIds) {
           Packages[index].attributes = {status: 'installed', string: 'Installed', label: 'label-success'};
+          isInstalled = true;
         } else if(objKey in QueuedIds) {
           Packages[index].attributes = {status: 'queued', string: 'Queued', label: 'label-info'};
           isQueued = true;
@@ -97,11 +99,16 @@ define(function(require) {
           GroupedPackages[obj.id.name]['elements'] = [];
           GroupedPackages[obj.id.name]['packageName'] = obj.id.name;
           GroupedPackages[obj.id.name]['isQueued'] = isQueued;
+          GroupedPackages[obj.id.name]['isQueuedOrInstalled'] = (isInstalled || isQueued);
         }
         
         if(!GroupedPackages[obj.id.name].isQueued && isQueued) {
             GroupedPackages[obj.id.name]['isQueued'] = true;
-        } 
+        }
+        
+        if(!GroupedPackages[obj.id.name].isQueuedOrInstalled && (isInstalled || isQueued)) {
+            GroupedPackages[obj.id.name]['isQueuedOrInstalled'] = true;
+        }
         
         GroupedPackages[obj.id.name]['elements'].push(Packages[index]);
       });
@@ -129,7 +136,7 @@ define(function(require) {
         var SubPackages = Packages[index].elements;
         var SubPackagesRows = [];
         rows.push(
-          <tr key={'associated-package-' + Packages[index].packageName} onMouseEnter={this.packageOnMouseEnter.bind(null, i, Packages[index].packageName)} onMouseLeave={this.packageOnMouseLeave.bind(null, i, Packages[index].packageName)}>
+          <tr key={'associated-package-' + Packages[index].packageName} onMouseEnter={this.packageOnMouseEnter.bind(null, i, Packages[index].packageName)} onMouseLeave={this.packageOnMouseLeave.bind(null, i, Packages[index].packageName)} className={Packages[index].isQueuedOrInstalled ? 'selected' : ''}>
             <td>
               {Packages[index].packageName}
               {(this.state[key] || this.props.SelectedName == Packages[index].packageName)?
@@ -157,14 +164,7 @@ define(function(require) {
       return (
         <form ref="form" onSubmit={this.handleSubmit}>
           <div className="resizeWrapper">
-            <table className="table table-striped table-bordered">
-              <thead>
-                <tr>
-                  <td>
-                    Package Name
-                  </td>
-                </tr>
-              </thead>
+            <table className="table table-bordered">
               <tbody>
                 { rows }
               </tbody>

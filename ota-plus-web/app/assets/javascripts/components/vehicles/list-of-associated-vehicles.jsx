@@ -140,16 +140,7 @@ define(function(require) {
       return (
         <form ref="form" onSubmit={this.handleSubmit}>
           <div className="resizeWrapper">
-            <table className="table table-striped table-bordered">
-              <thead>
-                <tr>
-                  <td>
-                    VIN
-                  </td>
-                  <td/>
-                  <td/>
-                </tr>
-              </thead>
+            <table className="table table-bordered">
               <tbody>
                 { vehicles }
               </tbody>
