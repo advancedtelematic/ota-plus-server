@@ -18,6 +18,8 @@ define(function(require) {
       this.vehiclesWholeDataForPackage = atom.createAtom([]);
       this.vehiclesQueuedForPackage = atom.createAtom([]);
 
+      this.vehicles = atom.createAtom([]);
+
       this.packages = atom.createAtom([]);
       this.showPackage = atom.createAtom({});
       this.searchablePackages = atom.createAtom([]);

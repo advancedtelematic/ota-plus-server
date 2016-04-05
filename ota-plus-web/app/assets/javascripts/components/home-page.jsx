@@ -72,9 +72,9 @@ define(function(require) {
             <VehiclesHeader/>
             {this.state.searchAssociatedVehicles ? 
               <ListOfAssociatedVehicles 
-                AllVehicles={db.searchableVehicles}
+                AllVehicles={db.vehicles}
                 AllVehiclesPollEventName="poll-vehicles"
-                AllVehiclesDispatchObject={{actionType: "search-vehicles-by-regex", regex: ""}}
+                AllVehiclesDispatchObject={{actionType: "get-vehicles"}}
                 InstalledVehicles={db.vehiclesWholeDataForPackage}
                 InstalledVehiclesPollEventName="poll-installed-vehicles"
                 InstalledVehiclesDispatchObject={{actionType: "get-vehicles-wholedata-for-package", name: this.state.selectedName, version: this.state.selectedVersion}}
@@ -86,10 +86,10 @@ define(function(require) {
                 UpdateDimensions={this.updateDimensions}/>
             : 
               <ListOfVehicles 
-                Vehicles={db.searchableVehicles}
+                Vehicles={db.vehicles}
                 AllowAssociatedPackagesAction={true}
                 PollEventName="poll-vehicles"
-                DispatchObject={{actionType: "search-vehicles-by-regex", regex: ""}}
+                DispatchObject={{actionType: "get-vehicles"}}
                 onClick={this.showAssociatedPackagesClick}
                 SelectedVin={this.state.selectedVin}
                 UpdateDimensions={this.updateDimensions}/>
