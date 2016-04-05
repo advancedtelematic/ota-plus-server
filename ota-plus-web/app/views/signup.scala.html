@@ -1,0 +1,126 @@
+@()()
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>SOTA Admin UI - Sign up</title>
+        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <link rel='stylesheet' href='@routes.Assets.versioned("css/strength.css")'>
+        <link rel='stylesheet' href='@routes.Assets.versioned("css/main-styles.css")'>
+
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src='@routes.Assets.versioned("js/strength.js")'></script>
+        <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.slidedrawer.min.js")'></script>
+        <script>
+            $(function () {
+                $('.ats-footer-panel').slideDrawer({
+                    showDrawer: false,
+                    slideTimeout: true,
+                    slideSpeed: 600,
+                    slideTimeoutCount: 3000
+                });
+
+                $('#submit-form').click(function () {
+                    $('.ats-errors').show();
+                });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $('#password').strength({
+                    strengthClass: 'strength',
+                    strengthMeterClass: 'strength_meter',
+                    strengthButtonClass: 'button_strength',
+                    strengthButtonText: ''
+                });
+
+                $('#fullname, #company, #email, #phone, #password, #repeat-password').keyup(function () {
+                    var fname = $('#fullname').val();
+                    var company = $('#company').val();
+                    var email = $('#email').val();
+                    var phone = $('#phone').val();
+                    var pwd = $('#password').val();
+                    var rPwd = $('#repeat-password').val();
+
+                    if (pwd == rPwd && pwd != '' && fname != '' && company != '' && email != '' && phone != '') {
+                        $('#submit-form').attr('disabled', false);
+                    } else {
+                        $('#submit-form').attr('disabled', true);
+                    }
+                });
+                
+                $('#password, #repeat-password').keyup(function () {
+                    var pwd = $('#password').val();
+                    var rPwd = $('#repeat-password').val();
+                    
+                    if (pwd == rPwd && pwd != '') {
+                        $('#repeat-password').removeClass('password-not-equal').addClass('password-equal');
+                    } else {
+                        $('#repeat-password').addClass('password-not-equal').removeClass('password-equal');
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="ats-page">
+            <div class="container ats">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="#"><img src='@routes.Assets.versioned("img/logo.png")' id="logo"></a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
+                        <div class="ats-header text-center">
+                            <p>Sign up to ATS Garage.</p>
+                            <p>Please set your personal information.</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-10 col-lg-offset-1">
+                                <div class="ats-errors">
+                                    Email already exists in database.
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="fullname" placeholder="full name" id="fullname" tabindex="1">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="company" placeholder="institution or company" id="company" tabindex="2">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="email" name="email" placeholder="email address" id="email" tabindex="3">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="phone" placeholder="phone number" id="phone" tabindex="4">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="password" name="password" placeholder="set password" id="password" tabindex="5">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="password" name="repeatpassword" placeholder="confirm password" id="repeat-password" tabindex="6">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="ats-button" id="submit-form" tabindex="7" disabled>Create free account</button>
+                                </div>
+                                <div class="text-center">
+                                    <p>By continuing, you agree to our</p> 
+                                    <a href="#" class="underlined">Terms & Conditions</a> and <a href="#" class="underlined">Privacy Policy</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="ats-footer-panel"> 
+                <header class="clickme">Need Support?</header>
+                <div class="drawer-content">
+                    <div class="intend">
+                        Content
+                    </div>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>
