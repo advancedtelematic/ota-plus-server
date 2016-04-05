@@ -186,14 +186,7 @@ define(function(require) {
       return (
         <div className="resizeWrapper">
           <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true}>
-            <table id={this.props.AllowAssociatedDevicesAction ? 'table-packages' : ''} className="table table-striped table-bordered" style={{marginBottom: 0}}>
-              <thead>
-                <tr>
-                  <td>
-                    Package Name
-                  </td>
-                </tr>
-              </thead>
+            <table id={this.props.AllowAssociatedDevicesAction ? 'table-packages' : ''} className="table table-bordered" style={{marginBottom: 0}}>
               <tbody>
                 { rows }
               </tbody>
