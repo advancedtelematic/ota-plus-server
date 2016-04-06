@@ -55,7 +55,12 @@ define(function(require) {
     installPackage: function(packageName, packageVersion, e) {
       e.preventDefault();
       
-      sendRequest.doPut('/api/v1/vehicles/' + this.props.SelectedVin + "/package/" + packageName + "/" + packageVersion)
+      var data = { 
+        name: packageName,
+        version: packageVersion
+      };
+      
+      sendRequest.doPost('/api/v1/updates/' + this.props.SelectedVin, data)
         .success(_.bind(function() {
            this.setState({refreshData: true});
         }, this));
