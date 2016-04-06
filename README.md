@@ -56,3 +56,31 @@ Step 4:`cd ota-plus-server` and run tests, for example:
 ```
   sbt "ota-plus-web/testOnly com.advancedtelematic.ota.ClientSdkControllerSpec"
 ```
+
+## Ota Plus Core
+
+The `ota-plus` includes a module named `ota-plus-core`. This module
+runs a webserver running the api that the `ota-plus-web` module will
+use to server client requests.
+
+The `ota-plus-core` module depends on the rvi sota core module, which
+is a `jar` dependency hosted on the advanced telematic internal nexus
+repository. This means you will need a vpn connection to compile this
+project so sbt can download the required libraries.
+
+To run `ota-plus-core` you can use `sbt ota-plus-core/run`. This
+requires a running myusql database. This database can be started using
+docker:
+
+    docker run -p 3306:3306 --name sota-mariadb -e MYSQL_ROOT_PASSWORD=somepass -d mariadb:latest
+
+This database needs some initialization:
+
+    mysql -u root -h 127.0.0.1 -psomepass
+    CREATE DATABASE sota_core;
+    CREATE USER 'sota'@'localhost' IDENTIFIED BY 's0ta';
+    GRANT ALL PRIVILEGES ON sota_core.* TO 'sota'@'%';
+    GRANT ALL PRIVILEGES ON sota_core_test.* TO 'sota'@'%';
+    FLUSH PRIVILEGES;
+
+    sbt flywayMigrate
