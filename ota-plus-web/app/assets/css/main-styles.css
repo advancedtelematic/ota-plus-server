@@ -191,6 +191,12 @@ a, a:hover, a:focus {
     cursor: pointer;
 }
 
+/* Modal */
+
+.modal-body {
+    font-size: 14px;
+}
+
 /* Media */
 
 @media screen and (max-width: 730px) {
