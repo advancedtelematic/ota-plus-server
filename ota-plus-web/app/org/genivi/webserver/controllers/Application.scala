@@ -49,8 +49,9 @@ class Application @Inject() (ws: WSClient,
   private def apiByPath(path: String) : String = path.split("/").toList match {
     case "packages" :: _ => coreApiUri
     case "updates" :: _ => coreApiUri
+    case "vehicles" :: Nil => coreApiUri
     case "vehicles" :: vin :: part :: _
-      if (Set("queued", "history", "sync")(part)) => coreApiUri
+      if Set("queued", "history", "sync", "updates").contains(part) => coreApiUri
     case _ => resolverApiUri
   }
 
