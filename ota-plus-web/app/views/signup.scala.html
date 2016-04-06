@@ -8,9 +8,11 @@
         <link rel='stylesheet' href='@routes.Assets.versioned("css/strength.css")'>
         <link rel='stylesheet' href='@routes.Assets.versioned("css/main-styles.css")'>
 
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/strength.js")'></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.slidedrawer.min.js")'></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src='@routes.Assets.versioned("js/verify.js")'></script>
         <script>
             $(function () {
                 $('.ats-footer-panel').slideDrawer({
@@ -23,17 +25,15 @@
                 $('#submit-form').click(function () {
                     $('.ats-errors').show();
                 });
-            });
-        </script>
-
-        <script>
-            $(document).ready(function () {
+                
                 $('#password').strength({
                     strengthClass: 'strength',
                     strengthMeterClass: 'strength_meter',
                     strengthButtonClass: 'button_strength',
                     strengthButtonText: ''
                 });
+                
+                $('body').verify({verifyMinWidth: 1024, verifyMinHeight: 768});
 
                 $('#fullname, #company, #email, #phone, #password, #repeat-password').keyup(function () {
                     var fname = $('#fullname').val();
@@ -49,11 +49,11 @@
                         $('#submit-form').attr('disabled', true);
                     }
                 });
-                
+
                 $('#password, #repeat-password').keyup(function () {
                     var pwd = $('#password').val();
                     var rPwd = $('#repeat-password').val();
-                    
+
                     if (pwd == rPwd && pwd != '') {
                         $('#repeat-password').removeClass('password-not-equal').addClass('password-equal');
                     } else {
@@ -64,6 +64,18 @@
         </script>
     </head>
     <body>
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"><i class="fa fa-warning"></i> U
+                    </div>
+                    <div class="modal-body">
+                        <p>Sorry, but your device screen size is not supported 
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="ats-page">
             <div class="container ats">
                 <div class="row">

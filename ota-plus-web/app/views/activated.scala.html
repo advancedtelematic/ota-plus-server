@@ -7,8 +7,10 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <link rel='stylesheet' href='@routes.Assets.versioned("css/main-styles.css")'>
 
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.slidedrawer.min.js")'></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src='@routes.Assets.versioned("js/verify.js")'></script>
         <script>
             $(function () {
                 $('.ats-footer-panel').slideDrawer({
@@ -17,6 +19,8 @@
                     slideSpeed: 600,
                     slideTimeoutCount: 3000
                 });
+                
+                $('body').verify({verifyMinWidth: 1024, verifyMinHeight: 768});
             });
         </script>
     </head>
