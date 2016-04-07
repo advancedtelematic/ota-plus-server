@@ -71,7 +71,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
 
   import Method._
   def makeRequest(path: String, method: Method) : WSResponse = {
-    val req = wsClient.url("http://" + webserverHost + s":$port/api/v1/" + path)
+    val req = wsClient.url(s"http://$webserverHost:$port/api/v1/" + path)
     method match {
       case PUT => await(req.put(""))
       case GET => await(req.get())
@@ -81,7 +81,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   def makeJsonRequest(path: String,  method: Method, data: JsObject) : WSResponse = {
-    val req = wsClient.url("http://" + webserverHost + s":$port/api/v1/" + path)
+    val req = wsClient.url(s"http://$webserverHost:$port/api/v1/" + path)
     method match {
       case PUT => await(req.put(data))
       case POST => await(req.post(data))
@@ -90,14 +90,14 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   def addVin(vin: String): Unit = {
-    val vehiclesResponse = makeRequest("vehicles/" + vin, PUT)
+    val vehiclesResponse = makeRequest(s"vehicles/$vin", PUT)
     vehiclesResponse.status mustBe NO_CONTENT
   }
 
   def addPackage(packageName: String, packageVersion: String): Unit = {
     val asyncHttpClient:AsyncHttpClient = wsClient.underlying
     val putBuilder = asyncHttpClient
-        .preparePut("http://" + webserverHost + s":$port/api/v1/packages/" + packageName + "/" +
+        .preparePut(s"http://$webserverHost:$port/api/v1/packages/$packageName/" +
           packageVersion + "?description=test&vendor=ACME")
     val builder = {
       val tmpFile = {
@@ -122,14 +122,11 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   def addFilterToPackage(packageName : String): Unit = {
-    val data = Json.obj(
-      "filterName" -> testFilterName,
-      "packageName" -> packageName,
-      "packageVersion" -> testPackageVersion
+    val req = wsClient.url(
+      s"http://$webserverHost:$port/api/v1/packages/$packageName/$testPackageVersion/filter/$testFilterName"
     )
-    val packageFiltersResponse = makeJsonRequest("packageFilters", POST, data)
+    val packageFiltersResponse = await(req.post(""))
     packageFiltersResponse.status mustBe OK
-    packageFiltersResponse.json.equals(data) mustBe true
   }
 
   def addComponent(partNumber : String, description : String): Unit = {
@@ -137,7 +134,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
       "partNumber" -> partNumber,
       "description" -> description
     )
-    val componentResponse = makeJsonRequest("components/" + partNumber, PUT, data)
+    val componentResponse = makeJsonRequest(s"components/$partNumber", PUT, data)
     componentResponse.status mustBe OK
     componentResponse.json mustEqual data
   }
@@ -151,7 +148,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   "test searching vins" taggedAs APITests in {
     val searchResponse = makeRequest("vehicles?regex=" + testVin, GET)
     searchResponse.status mustBe OK
-    searchResponse.json.toString() mustEqual "[{\"vin\":\"" + testVin + "\"}]"
+    searchResponse.json.toString() mustEqual s"""[{"vin":"$testVin","lastSeen":null}]"""
   }
 
   "test adding packages" taggedAs APITests in {
@@ -306,7 +303,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
       "priority" -> 1 //this could be anything from 1-10; picked at random in this case
     )
     val response = await(
-      wsClient.url("http://" + webserverHost + s":$port/api/v1/updates")
+      wsClient.url(s"http://$webserverHost:$port/api/v1/updates")
       .withHeaders("Content-Type" -> "application/json")
       .post(data)
     )
