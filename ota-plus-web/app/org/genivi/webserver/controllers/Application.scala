@@ -153,7 +153,9 @@ class Application @Inject() (ws: WSClient,
         val w =
           ws.url(clientUrl).withFollowRedirects(false)
           .withMethod("POST")
-          .withBody(Json.parse("{}"))
+          .withBody(Json.parse(
+            s"""{ "grant_types": ["client_credentials"], "client_name": "${vin.get}" }"""
+          ))
 
         w.execute flatMap { wresp =>
           wresp.json.asOpt[ClientInfo] match {
