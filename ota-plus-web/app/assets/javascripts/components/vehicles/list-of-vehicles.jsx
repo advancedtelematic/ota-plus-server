@@ -49,7 +49,7 @@ define(function(require) {
                           </div>
                         </div>
                       );
-                    case "OutOfDate":
+                    case "Outdated":
                       return (
                         <div>
                           <div>
