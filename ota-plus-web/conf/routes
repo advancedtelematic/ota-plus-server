@@ -9,6 +9,8 @@ GET     /                                       org.genivi.webserver.controllers
 GET     /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)
 GET     /webjars/*file                          controllers.WebJarAssets.at(file)
 
+GET     /api/v1/vehicles                        org.genivi.webserver.controllers.Application.getVehicles()
+
 PUT     /api/v1/vehicles/:vin                   org.genivi.webserver.controllers.Application.apiProxyBroadcast(vin: String)
 DELETE  /api/v1/vehicles/:vin                   org.genivi.webserver.controllers.Application.apiProxyBroadcast(vin: String)
 

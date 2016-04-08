@@ -49,7 +49,6 @@ class Application @Inject() (ws: WSClient,
   private def apiByPath(path: String) : String = path.split("/").toList match {
     case "packages" :: _ => coreApiUri
     case "updates" :: _ => coreApiUri
-    case "vehicles" :: Nil => coreApiUri
     case "vehicles" :: vin :: part :: _
       if Set("queued", "history", "sync", "updates").contains(part) => coreApiUri
     case _ => resolverApiUri
@@ -104,6 +103,12 @@ class Application @Inject() (ws: WSClient,
    */
   def apiProxy(path: String) : Action[RawBuffer] = Action.async(parse.raw) { implicit req =>
     proxyTo(apiByPath(path), req)
+  }
+
+  def getVehicles() : Action[RawBuffer] = Action.async(parse.raw) { implicit req =>
+    // TODO: Split paths/routes to avoid checking query parameters
+    val api = req.queryString.get("status").map(_ => coreApiUri).getOrElse(resolverApiUri)
+    proxyTo(api, req)
   }
 
   /**
