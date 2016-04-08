@@ -26,10 +26,10 @@ define(function(require) {
     },
     render: function() {
       var vehicles = _.map(this.props.Vehicles.deref(), function(vehicle, i) {
-        var lastSeenDate = new Date(vehicle.lastSeen * 1000);
+        var lastSeenDate = new Date(vehicle.lastSeen);
         return (
           <tr key={vehicle.vin} className={this.props.SelectedVin == vehicle.vin ? 'selected' : ''} onClick={this.props.AllowAssociatedPackagesAction ? this.onClick.bind(null, vehicle.vin) : ''}>
-            <td className={'status-'+(vehicle.status != '' ? vehicle.status : 'neverseen')}>
+            <td className={'status-'+(vehicle.status != '' ? vehicle.status.toLowerCase() : 'notseen')}>
               <Router.Link to='vehicle' params={{vin: vehicle.vin}} onClick={e => e.stopPropagation()}>
               { vehicle.vin }
               </Router.Link>
@@ -38,7 +38,7 @@ define(function(require) {
               <div>
                 {(() => {
                   switch (vehicle.status) {
-                    case "error":
+                    case "Error":
                       return (
                         <div>
                           <div>
@@ -49,7 +49,7 @@ define(function(require) {
                           </div>
                         </div>
                       );
-                    case "out-of-date":
+                    case "OutOfDate":
                       return (
                         <div>
                           <div>
@@ -60,7 +60,7 @@ define(function(require) {
                           </div>
                         </div>
                       );
-                    case "up-to-date":
+                    case "UpToDate":
                       return (
                         <div>
                           <div>
@@ -78,7 +78,7 @@ define(function(require) {
                             <strong>Never seen online</strong>
                           </div>
                           <div>
-                            Download SDK: 
+                            Download SDK:
                             <a href={`/api/v1/client/${vehicle.vin}/deb/32`} onClick={e => e.stopPropagation()}> debian 32 </a> or
                             <a href={`/api/v1/client/${vehicle.vin}/deb/64`} onClick={e => e.stopPropagation()}> debian 64 </a>
                           </div>

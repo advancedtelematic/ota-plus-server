@@ -88,15 +88,15 @@ table tbody tr {
   border-left: 4px solid #D9534F !important;
 }
 
-.status-neverseen {
+.status-notseen {
   border-left: 4px solid #ccc !important;
 }
 
-.status-out-of-date {
+.status-outofdate {
   border-left: 4px solid #F0AD4E !important;
 }
 
-.status-up-to-date {
+.status-uptodate {
   border-left: 4px solid #5CB85C !important;
 }
 
