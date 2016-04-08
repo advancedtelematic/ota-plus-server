@@ -26,6 +26,12 @@ def otaPlusProject(name: String): Project = Project(name, file(name))
       "com.google.guava" % "guava" % "18.0"
     ))
     .settings(shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project + "> " })
+    .settings(fullResolvers := Seq(
+      Resolver.defaultLocal,
+      "ATS Public" at "http://nexus.prod01.internal.advancedtelematic.com:8081/content/groups/public/",
+      DefaultMavenRepository,
+      projectResolver.value
+    ))
     .settings(libraryDependencies ++= Dependencies.TestFrameworks)
     .settings(
       testOptions in Test ++= Seq(

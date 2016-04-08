@@ -1,10 +1,10 @@
 object Version {
 
-  val Circe = "0.2.0"
-
+  val Circe = "0.3.0"
   val Refined = "0.3.1"
-
   val Akka = "2.4.2"
+  val JsonWebSecurity = "0.1.2"
+  val MockWs = "2.5.0"
 }
 
 object Dependencies {
@@ -13,7 +13,7 @@ object Dependencies {
   lazy val Circe = Seq(
     "io.circe" %% "circe-core"    % Version.Circe,
     "io.circe" %% "circe-generic" % Version.Circe,
-    "io.circe" %% "circe-parse"   % Version.Circe
+    "io.circe" %% "circe-parser"   % Version.Circe
   )
 
   lazy val Refined = "eu.timepit" %% "refined" % Version.Refined
@@ -35,5 +35,12 @@ object Dependencies {
   lazy val ParserCombinators = "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4"
 
   lazy val CommonsCodec = "commons-codec" % "commons-codec" % "1.10"
+
+  lazy val MockWs = "de.leanovate.play-mockws" %% "play-mockws" % Version.MockWs % "test"
+
+  val JsonWebSecurity = Seq(
+    "com.advancedtelematic" %% "jw-security-circe" % Version.JsonWebSecurity,
+    "com.advancedtelematic" %% "jw-security-jca" % Version.JsonWebSecurity
+  )
 
 }

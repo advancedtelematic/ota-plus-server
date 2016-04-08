@@ -35,9 +35,9 @@ libraryDependencies ++= Seq (
     "org.webjars.bower" % "flux" % "2.0.2",
     "org.webjars.bower" % "backbone" % "1.2.1",
     "org.webjars" % "bootstrap" % "3.3.4",
-    ws,
+    ws, Dependencies.MockWs,
     play.sbt.Play.autoImport.cache
-  )
+  ) ++ Dependencies.JsonWebSecurity
 
 enablePlugins(PlayScala, SbtWeb, Versioning.Plugin)
 
