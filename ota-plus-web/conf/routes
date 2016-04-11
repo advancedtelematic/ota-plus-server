@@ -20,3 +20,6 @@ GET     /api/v1/*path                           org.genivi.webserver.controllers
 PUT     /api/v1/*path                           org.genivi.webserver.controllers.Application.apiProxy(path: String)
 POST    /api/v1/*path                           org.genivi.webserver.controllers.Application.apiProxy(path: String)
 DELETE  /api/v1/*path                           org.genivi.webserver.controllers.Application.apiProxy(path: String)
+
+GET     /signup/:token                          com.advancedtelematic.signup.SignupController.checkInvitation(token: String)
+POST    /signup/:token                          com.advancedtelematic.signup.SignupController.setPassword(token: String)
