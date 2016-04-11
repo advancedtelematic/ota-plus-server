@@ -50,7 +50,13 @@ define(function(require) {
       }
     },
     componentDidMount: function() {
+      setInterval(this.refreshData, 5000);
       this.props.UpdateDimensions();
+    },
+    refreshData: function() {
+      SotaDispatcher.dispatch(this.props.AllPackagesDispatchObject);
+      SotaDispatcher.dispatch(this.props.InstalledPackagesDispatchObject);
+      SotaDispatcher.dispatch(this.props.QueuedPackagesDispatchObject);
     },
     installPackage: function(packageName, packageVersion, e) {
       e.preventDefault();

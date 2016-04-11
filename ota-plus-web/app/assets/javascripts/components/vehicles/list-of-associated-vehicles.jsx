@@ -47,7 +47,13 @@ define(function(require) {
       }
     },
     componentDidMount: function() {
+      setInterval(this.refreshData, 5000);
       this.props.UpdateDimensions();
+    },
+    refreshData: function() {
+      SotaDispatcher.dispatch(this.props.AllVehiclesDispatchObject);
+      SotaDispatcher.dispatch(this.props.InstalledVehiclesDispatchObject);
+      SotaDispatcher.dispatch(this.props.QueuedVehiclesDispatchObject);
     },
     handleSubmit: function(e) {
       e.preventDefault();

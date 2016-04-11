@@ -26,6 +26,7 @@ define(function(require) {
       this.props.UpdateDimensions();
     },
     componentDidMount: function() {
+      setInterval(this.refreshData, 5000);
       this.props.UpdateDimensions();
     },
     refreshData: function() {
