@@ -1,5 +1,7 @@
-@()()
-<!doctype html>
+@import com.advancedtelematic.login.LoginData
+
+@(passwordForm: Form[LoginData])()
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>SOTA Admin UI - Log in</title>
@@ -32,6 +34,10 @@
                         $('#submit-form').attr('disabled', true);
                     }
                 });
+
+                if (location.hash == "#error") {
+                    $('.ats-errors').show();
+                }
             });
         </script>
     </head>
@@ -55,18 +61,20 @@
                                 <div class="ats-errors">
                                     Username or password is incorrect.
                                 </div>
-                                <div class="form-group">
-                                    <input class="form-control" type="text" name="username" placeholder="username" id="username">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" type="password" name="password" placeholder="password" id="password">
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="ats-button" id="submit-form" disabled>Log in</button>
-                                </div>
-                                <div class="form-group">
-                                    <a href="#" class="pull-right">Forgot password <i class="fa fa-angle-right"></i></a>
-                                </div>
+                                @helper.form(action = com.advancedtelematic.login.routes.LoginController.authenticate) {
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="username" placeholder="username" id="username">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="password" name="password" placeholder="password" id="password">
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="ats-button" id="submit-form" disabled>Log in</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="#" class="pull-right">Forgot password <i class="fa fa-angle-right"></i></a>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
