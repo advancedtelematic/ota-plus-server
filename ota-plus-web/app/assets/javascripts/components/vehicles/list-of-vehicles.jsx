@@ -19,7 +19,11 @@ define(function(require) {
       this.props.UpdateDimensions();
     },
     componentDidMount: function() {
+      setInterval(this.refreshData, 5000);
       this.props.UpdateDimensions();
+    },
+    refreshData: function() {
+      SotaDispatcher.dispatch(this.props.DispatchObject);
     },
     onClick: function(vin, t) {
       this.props.onClick(t, vin);
