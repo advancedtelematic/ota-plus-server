@@ -109,3 +109,10 @@ table tbody tr {
   background: #aaa;
   border-color: #aaa;
 }
+
+.dashboard-frame {
+    width: 100%;
+    min-height: 800px;
+    margin: 15px 0 0 0;
+    border: 0;
+}
