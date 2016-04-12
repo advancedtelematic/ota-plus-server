@@ -2,6 +2,7 @@ define(function(require) {
 
   var React = require('react'),
       HomePage = require('components/home-page'),
+      Dashboard = require('components/dashboard'),
       VehiclesPageComponent = require('components/vehicles/vehicles-page-component'),
       PackagesPageComponent = require('components/packages/packages-page-component'),
       FiltersPageComponent = require('components/filters/filters-page-component'),
@@ -55,6 +56,9 @@ define(function(require) {
                 <li role="presentation">
                   <Link to="updates" className="updates"><i className="fa fa-download nav-link-btn"/>Updates</Link>
                 </li>
+                <li role="presentation">
+                  <Link to="dashboard"><i className="fa fa-download nav-link-btn"/>Dashboard</Link>
+                </li>
               </ul>
 	        </div>
           </div>
@@ -96,6 +100,7 @@ define(function(require) {
         <Route name="component" path="/component/:partNumber" handler={wrapComponent(ShowComponent, {Component: db.showComponent})} />
         <DefaultRoute handler={ComponentsPage}/>
       </Route>
+      <Route name="dashboard" handler={Dashboard}/>
     </Route>
   );
 
