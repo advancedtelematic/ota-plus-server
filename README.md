@@ -69,7 +69,7 @@ repository. This means you will need a vpn connection to compile this
 project so sbt can download the required libraries.
 
 To run `ota-plus-core` you can use `sbt ota-plus-core/run`. This
-requires a running myusql database. This database can be started using
+requires a running mysql database. This database can be started using
 docker:
 
     docker run -p 3306:3306 --name sota-mariadb -e MYSQL_ROOT_PASSWORD=somepass -d mariadb:latest
@@ -84,3 +84,24 @@ This database needs some initialization:
     FLUSH PRIVILEGES;
 
     sbt flywayMigrate
+
+## Developing the core api
+
+Having sota-core as a dependency means that if you need to change or
+add features to core, you will need to update `ota-plus-core` with the
+latest sota-core version and deploy it.
+
+Every time a commit is pushed to master in `sota-core`, it's version is
+incremented and a new jar is uploaded to nexus. You will need to
+change `build.sbt` in `ota-plus-server` to depend on this new version.
+
+To test and develop locally, it's useful to setup rvi sota core as a
+local dependency in `ota-plus-server`. This can be done by removing
+the dependency to the nexus jar artifact and adding a new local
+project:
+
+    lazy val rviSotaCore = ProjectRef(file("/home/simao/ats/rvi_sota_server"), "core")
+    
+     lazy val otaPlusCore = otaPlusProject("ota-plus-core")
+         .dependsOn(sotaCommon)
+    // .settings(libraryDependencies ++= Seq("org.genivi" %% "core" % "0.2.1"))
