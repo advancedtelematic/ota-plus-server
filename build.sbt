@@ -25,6 +25,7 @@ def otaPlusProject(name: String): Project = Project(name, file(name))
       "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4",
       "com.google.guava" % "guava" % "18.0"
     ))
+    .settings(resolvers ++= atsRepos)
     .settings(shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project + "> " })
     .settings(fullResolvers := Seq(
       Resolver.defaultLocal,
@@ -41,6 +42,11 @@ def otaPlusProject(name: String): Project = Project(name, file(name))
     .settings(testFrameworks := Seq(sbt.TestFrameworks.ScalaTest))
     .settings(fork in Test := false) // PRO-157
 
+lazy val atsRepos = Seq(
+  "ATS Releases" at "http://nexus.prod01.internal.advancedtelematic.com:8081/content/repositories/releases",
+  "ATS Snapshots" at "http://nexus.prod01.internal.advancedtelematic.com:8081/content/repositories/snapshots"
+)
+
 lazy val sotaCommon = otaPlusProject("common")
     .settings(libraryDependencies ++= Seq(
       Dependencies.Refined,
@@ -48,6 +54,9 @@ lazy val sotaCommon = otaPlusProject("common")
       "com.typesafe.akka" %% "akka-http-experimental" % "2.4.2",
       "de.heikoseeberger" %% "akka-http-circe" % "1.5.2"
     ) ++ Dependencies.Circe)
+
+lazy val otaPlusCore = otaPlusProject("ota-plus-core")
+  .settings(libraryDependencies ++= Seq("org.genivi" %% "core" % "0.1.1"))
 
 lazy val otaPlusWeb = otaPlusProject("ota-plus-web").dependsOn(sotaCommon)
 
