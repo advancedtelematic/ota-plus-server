@@ -40,6 +40,7 @@ services:
       CORE_DB_MIGRATE: 'true'
       RESOLVER_API_URI: 'http://resolver:8081'
       CORE_INTERACTION_PROTOCOL: 'none'
+      PACKAGES_VERSION_FORMAT: '.+'
 
   auth-plus:
     image: advancedtelematic/auth-plus:$DEFAULT_VERSION
@@ -69,3 +70,5 @@ services:
       CORE_API_URI: 'http://core:8080'
       RESOLVER_API_URI: 'http://resolver:8081'
       PLAY_CRYPTO_SECRET: 'secret' # only for local dev!
+      AUTHPLUS_HOST: 'http://auth-plus:9001'
+      BUILDSERVICE_API_HOST: 'http://buildsrv:9200'
