@@ -12,13 +12,13 @@ import slick.driver.MySQLDriver.api._
 
 class OtaPlusCoreWebservice(notifier: UpdateNotifier, resolver: ExternalResolverClient, db : Database)
                            (implicit system: ActorSystem, mat: ActorMaterializer,
-                            connectivity: Connectivity) extends Directives  {
+                            connectivity: Connectivity) extends Directives with Namespaces {
+
   implicit val log = Logging(system, "webservice")
 
   import ErrorHandler._
   import PackagesResource._
   import WebService._
-  import org.genivi.sota.core.common.NamespaceDirective._
 
   val vehiclesResource = new VehiclesResource(db, connectivity.client, resolver)
   val packagesResource = new PackagesResource(resolver, db)

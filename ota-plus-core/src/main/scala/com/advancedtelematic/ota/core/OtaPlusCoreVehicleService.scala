@@ -9,14 +9,15 @@ import org.genivi.sota.core.VehicleService
 import org.genivi.sota.core.resolver.ExternalResolverClient
 import slick.driver.MySQLDriver.api._
 
+
 class OtaPlusCoreVehicleService(db: Database,
                                 authPlusSignatureVerifier: CompactSerialization => Boolean,
                                 resolverClient: ExternalResolverClient)
                                (implicit system: ActorSystem, mat: ActorMaterializer)
-  extends Directives {
+
+  extends Directives with Namespaces {
 
   import org.genivi.sota.core.WebService._
-  import org.genivi.sota.core.common.NamespaceDirective._
 
   val vs = new VehicleService(db, resolverClient)
 

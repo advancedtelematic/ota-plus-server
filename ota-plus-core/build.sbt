@@ -1,6 +1,7 @@
 libraryDependencies ++= Seq(
-  Dependencies.SotaCore,
-  Dependencies.JsonWebSecurityAkka
+  Dependencies.AkkaHttpTestKit,
+  Dependencies.JsonWebSecurityAkka,
+  Dependencies.SotaCore
 ) ++ Dependencies.JsonWebSecurity
 
 dockerExposedPorts := Seq(8080)
@@ -14,4 +15,3 @@ Versioning.settings
 Release.settings
 
 enablePlugins(DockerPlugin, JavaAppPackaging)
-
