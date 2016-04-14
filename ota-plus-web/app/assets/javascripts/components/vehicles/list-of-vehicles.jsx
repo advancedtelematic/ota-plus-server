@@ -25,14 +25,18 @@ define(function(require) {
     refreshData: function() {
       SotaDispatcher.dispatch(this.props.DispatchObject);
     },
-    onClick: function(vin, t) {
-      this.props.onClick(t, vin);
+    onClick: function(vin, isNeverSeen, t) {
+      this.props.onClick(t, vin, isNeverSeen);
     },
     render: function() {
       var vehicles = _.map(this.props.Vehicles.deref(), function(vehicle, i) {
         var lastSeenDate = new Date(vehicle.lastSeen);
+        
+        var statuses = ["Error", "Outdated", "UpToDate"];
+        var isNeverSeen = (statuses.indexOf(vehicle.status) > -1) ? true : false;
+        
         return (
-          <tr key={vehicle.vin} className={this.props.SelectedVin == vehicle.vin ? 'selected' : ''} onClick={this.props.AllowAssociatedPackagesAction ? this.onClick.bind(null, vehicle.vin) : ''}>
+          <tr key={vehicle.vin} className={this.props.SelectedVin == vehicle.vin ? 'selected' : ''} onClick={this.props.AllowAssociatedPackagesAction ? this.onClick.bind(null, vehicle.vin, isNeverSeen) : ''}>
             <td className={'status-'+(vehicle.status != '' ? vehicle.status.toLowerCase() : 'notseen')}>
               <Router.Link to='vehicle' params={{vin: vehicle.vin}} onClick={e => e.stopPropagation()}>
               { vehicle.vin }

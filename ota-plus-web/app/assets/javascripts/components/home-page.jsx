@@ -20,6 +20,7 @@ define(function(require) {
         searchAssociatedVehicles: false,
         selectedName: '',
         selectedVersion: '',
+        selectedDeviceNeverSeen: false,
      };
     },
     contextTypes: {
@@ -39,16 +40,18 @@ define(function(require) {
       var divHeight = $(window).height() - offset - 40;
       $('.resizeWrapper').css({'height': divHeight, 'overflow-y': 'auto'});
     },
-    showAssociatedPackagesClick: function (event, vin) {
+    showAssociatedPackagesClick: function (event, vin, isNeverSeen) {
       {this.state.selectedVin == vin ?
         this.setState({
           searchAssociatedPackages: false,
-          selectedVin: ''
+          selectedVin: '',
+          selectedDeviceNeverSeen: false
         })
       :
         this.setState({
           searchAssociatedPackages: true,
-          selectedVin: vin
+          selectedVin: vin,
+          selectedDeviceNeverSeen: isNeverSeen
         })
       }
     },
@@ -109,6 +112,7 @@ define(function(require) {
                 QueuedPackagesPollEventName="poll-queued-packages"
                 QueuedPackagesDispatchObject={{actionType: 'get-package-queue-for-vin', vin: this.state.selectedVin}}
                 SelectedVin={this.state.selectedVin}
+                SelectedDeviceNeverSeen={this.state.selectedDeviceNeverSeen}
                 DisplayCampaignLink={false}
                 UpdateDimensions={this.updateDimensions}/>
             : 
