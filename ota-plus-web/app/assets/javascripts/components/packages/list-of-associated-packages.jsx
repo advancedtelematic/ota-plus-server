@@ -150,7 +150,6 @@ define(function(require) {
           <tr key={'associated-package-' + Packages[index].packageName} onMouseEnter={this.packageOnMouseEnter.bind(null, i, Packages[index].packageName)} onMouseLeave={this.packageOnMouseLeave.bind(null, i, Packages[index].packageName)} className={Packages[index].isQueuedOrInstalled ? 'selected' : ''}>
             <td>
               {Packages[index].packageName}
-              {(this.state[key] || this.props.SelectedName == Packages[index].packageName)?
                 <div>
                   {SubPackages.forEach(function(subpackage){
                     SubPackagesRows.push(
@@ -165,7 +164,6 @@ define(function(require) {
                   }, this)}
                   {SubPackagesRows}
                 </div>
-              : '' }
             </td>    
           </tr>
         );
