@@ -155,9 +155,13 @@ define(function(require) {
                     SubPackagesRows.push(
                       <div>
                         Version: <span className="label label-warning">{subpackage.id.version}</span> &nbsp;
-                        <span className={'label ' + subpackage.attributes.label}>{subpackage.attributes.string}</span> &nbsp;
-                        {subpackage.attributes.status == 'notinstalled' ?
-                          <button className='btn btn-primary btn-install' disabled={Packages[index].isQueued} onClick={this.installPackage.bind(null, subpackage.id.name, subpackage.id.version)}>Install</button> 
+                        {this.props.SelectedDeviceNeverSeen ?
+                          <span>
+                            <span className={'label ' + subpackage.attributes.label}>{subpackage.attributes.string}</span> &nbsp;
+                            {subpackage.attributes.status == 'notinstalled' ?
+                              <button className='btn btn-primary btn-install' disabled={Packages[index].isQueued} onClick={this.installPackage.bind(null, subpackage.id.name, subpackage.id.version)}>Install</button> 
+                            : ''}
+                          </span>
                         : ''}
                       </div>
                     );
