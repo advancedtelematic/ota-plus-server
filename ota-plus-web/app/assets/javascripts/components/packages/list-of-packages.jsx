@@ -162,7 +162,6 @@ define(function(require) {
           <tr key={Packages[index].packageName} className={(this.props.SelectedName == Packages[index].packageName) ? 'selected' : ''} onClick={this.props.AllowAssociatedDevicesAction ? _click.bind(null, Packages[index].packageName) : ''} onMouseEnter={this.packageOnMouseEnter.bind(null, i, Packages[index].packageName)} onMouseLeave={this.packageOnMouseLeave.bind(null, i, Packages[index].packageName)}>
             <td>
               {Packages[index].packageName}
-              {(this.state[key] || this.props.SelectedName == Packages[index].packageName)?
                 <div>
                   {SubPackages.forEach(function(subpackage){
                     SubPackagesRows.push(
@@ -178,7 +177,6 @@ define(function(require) {
                   })}
                   {SubPackagesRows}
                 </div>
-              : '' }
             </td>            
           </tr>
         );
