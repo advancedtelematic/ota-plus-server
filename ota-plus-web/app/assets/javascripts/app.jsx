@@ -33,12 +33,11 @@ define(function(require) {
       <div>
  	    <nav className="navbar navbar-default navbar-fixed-top top-nav">
 	      <div className="navbar-header">
-            <div className="top-logo">
-              <Link to="/" className="top-logo"/>
-            </div>
-            <div className="top-icon">
-              <Link to="/" className="page-title"><h2 className="nav-label">SOTA</h2></Link>
-            </div>
+                <Link to="/" className="navbar-brand">
+                  <img src="/assets/img/admin_logo.png"/>
+                </Link>
+
+                
 	        <div className="navbar-collapse collapse">
               <ul className="nav side-nav">
                 <li role="presentation">
