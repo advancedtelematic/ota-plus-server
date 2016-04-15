@@ -59,9 +59,13 @@ body {
     z-index: 9999;
 }
 
-a.page-title, a.page-title:hover {
-    color: #fff;
-    text-decoration: none;
+.navbar-brand {
+    padding: 5px;
+    margin-left: 30px;
+}
+
+.navbar-brand>img {
+    max-height: 65px;
 }
 
 table tr.selected {
