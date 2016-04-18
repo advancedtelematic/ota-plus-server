@@ -2,9 +2,10 @@ object Version {
 
   val Circe = "0.3.0"
   val Refined = "0.3.1"
-  val Akka = "2.4.2"
-  val JsonWebSecurity = "0.1.2"
+  val Akka = "2.4.4"
+  val JsonWebSecurity = "0.2.1"
   val MockWs = "2.5.0"
+  val GeniviSota = "0.1.7"
 }
 
 object Dependencies {
@@ -19,6 +20,8 @@ object Dependencies {
   lazy val Refined = "eu.timepit" %% "refined" % Version.Refined
 
   lazy val AkkaPersistence = "com.typesafe.akka" %% "akka-persistence" % Version.Akka
+
+  lazy val AkkaHttp = "com.typesafe.akka" %% "akka-http-experimental" % Version.Akka
 
   val AkkaTestKit = "com.typesafe.akka" %% "akka-testkit" % Version.Akka % "test"
 
@@ -39,8 +42,16 @@ object Dependencies {
   lazy val MockWs = "de.leanovate.play-mockws" %% "play-mockws" % Version.MockWs % "test"
 
   val JsonWebSecurity = Seq(
-    "com.advancedtelematic" %% "jw-security-circe" % Version.JsonWebSecurity,
+    "com.advancedtelematic" %% "jw-security-core" % Version.JsonWebSecurity,
     "com.advancedtelematic" %% "jw-security-jca" % Version.JsonWebSecurity
   )
+
+  val JsonWebSecurityAkka = "com.advancedtelematic" %% "jw-security-akka-http" % Version.JsonWebSecurity
+
+  val SotaCore = "org.genivi" %% "sota-core" % Version.GeniviSota
+
+  val SotaCommonData = "org.genivi" %% "sota-common-data" % Version.GeniviSota
+
+  val SotaCommonTest = "org.genivi" %% "sota-common-test" % Version.GeniviSota % "test"
 
 }

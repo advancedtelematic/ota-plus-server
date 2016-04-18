@@ -3,7 +3,7 @@ package com.advancedtelematic.ota.vehicle
 import java.util.UUID
 
 import akka.http.scaladsl.model.Uri
-import org.genivi.sota.datatype.VehicleCommon
+import org.genivi.sota.data.Vehicle
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.data.validation.ValidationError
@@ -56,5 +56,3 @@ object ClientInfo {
   */
 final case class VehicleMetadata(vin: Vehicle.Vin,
                                  clientInfo: ClientInfo)
-
-object Vehicle extends VehicleCommon

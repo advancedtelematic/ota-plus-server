@@ -47,17 +47,8 @@ lazy val atsRepos = Seq(
   "ATS Snapshots" at "http://nexus.prod01.internal.advancedtelematic.com:8081/content/repositories/snapshots"
 )
 
-lazy val sotaCommon = otaPlusProject("common")
-    .settings(libraryDependencies ++= Seq(
-      Dependencies.Refined,
-      Dependencies.NscalaTime,
-      "com.typesafe.akka" %% "akka-http-experimental" % "2.4.2",
-      "de.heikoseeberger" %% "akka-http-circe" % "1.5.2"
-    ) ++ Dependencies.Circe)
-
 lazy val otaPlusCore = otaPlusProject("ota-plus-core")
-  .settings(libraryDependencies ++= Seq("org.genivi" %% "core" % "0.1.1"))
 
-lazy val otaPlusWeb = otaPlusProject("ota-plus-web").dependsOn(sotaCommon)
+lazy val otaPlusWeb = otaPlusProject("ota-plus-web")
 
 publishArtifact := false

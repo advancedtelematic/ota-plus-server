@@ -44,7 +44,6 @@ class SignupController @Inject() (conf: Configuration,
 
   private[this] val verifySignature: CompactSerialization => Boolean = {
     import com.advancedtelematic.json.signature.JcaSupport._
-    import com.advancedtelematic.json.token.JwtCirceSupport._
     conf.getString("signup.secret").map { x =>
       val key: SecretKey = new SecretKeySpec( Base64.decodeBase64(x), "HMAC")
       JwsVerifier().algorithmAndKeys(`HMAC SHA-256`, KeyLookup.const(key)).verifySignature _
@@ -57,7 +56,6 @@ class SignupController @Inject() (conf: Configuration,
   val logger = Logger(this.getClass)
 
   private[this] def decodeInvitation(token: String): String Xor Invitation = {
-    import com.advancedtelematic.json.token.JwtCirceSupport._
     import com.advancedtelematic.json.signature.JcaSupport._
     import io.circe.parser._
     import cats.syntax.xor._

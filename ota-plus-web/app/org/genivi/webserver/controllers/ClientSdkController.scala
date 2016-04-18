@@ -3,8 +3,9 @@ package org.genivi.webserver.controllers
 import javax.inject.{Inject, Named, Singleton}
 
 import akka.actor.{ActorRef, ActorSystem}
-import com.advancedtelematic.ota.vehicle.{Vehicle, VehicleMetadata, Vehicles}
+import com.advancedtelematic.ota.vehicle.{VehicleMetadata, Vehicles}
 import org.asynchttpclient.uri.Uri
+import org.genivi.sota.data.Vehicle
 import play.api.http.HttpEntity
 import play.api.libs.json.JsString
 import play.api.{Configuration, Logger}

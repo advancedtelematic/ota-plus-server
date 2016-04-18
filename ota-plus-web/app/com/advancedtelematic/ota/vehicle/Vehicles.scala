@@ -6,6 +6,8 @@ import akka.actor.{Actor, ActorRef, Props}
 import akka.persistence.PersistentActor
 import akka.util.Timeout
 import com.google.inject.Provides
+import org.genivi.sota.data.Vehicle
+
 import scala.concurrent.{ExecutionContext, Future}
 
 object Commands {
