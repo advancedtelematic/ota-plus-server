@@ -5,14 +5,14 @@
 
 package org.genivi.webserver.controllers
 
+import org.genivi.sota.data.Vehicle
+
 /**
   * Implicits that allow giving custom param-types in the method signatures in the routes file.
   *
   * Details in http://cjwebb.github.io/blog/2015/06/23/play-framework-path-binders/
   */
 object PathBinders {
-
-  import com.advancedtelematic.ota.vehicle.Vehicle
 
   /**
     * Path binder to convert a String (eg, from a route path)

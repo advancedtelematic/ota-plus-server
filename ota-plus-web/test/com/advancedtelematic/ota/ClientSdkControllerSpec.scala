@@ -1,10 +1,11 @@
 package com.advancedtelematic.ota
 
+import org.genivi.sota.data.{Vehicle, VinGenerators}
 import org.scalatest.Tag
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.http.Status
-import play.api.libs.ws.{WSRequest, WSClient}
+import play.api.libs.ws.{WSClient, WSRequest}
 
 /**
   * Purpose of a tag: ScalaTest's command line options -n (include) and -l (exclude).
@@ -15,7 +16,7 @@ object APITests extends Tag("APITests")
 
 class ClientSdkControllerSpec extends PlaySpec
     with OneServerPerSuite
-    with GeneratorDrivenPropertyChecks {
+    with GeneratorDrivenPropertyChecks with VinGenerators {
 
   import play.api.test.Helpers._
   import Generators._
@@ -27,7 +28,7 @@ class ClientSdkControllerSpec extends PlaySpec
     val attempts = 5
     val wsClient = app.injector.instanceOf[WSClient]
     forAll (minSuccessful(attempts)) {
-      (vin: com.advancedtelematic.ota.vehicle.Vehicle.Vin, packfmt: PackageType, arch: Architecture) =>
+      (vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture) =>
 
         def fullUri(suffix: String): WSRequest = {
           wsClient.url(s"http://localhost:$port/api/v1/$suffix")

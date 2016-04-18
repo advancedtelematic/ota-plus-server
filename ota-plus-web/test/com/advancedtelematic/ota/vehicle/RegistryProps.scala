@@ -6,6 +6,7 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.model.Uri
 import akka.testkit.TestKit
 import akka.util.Timeout
+import org.genivi.sota.data.VinGenerators
 import org.scalacheck.Gen
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{BeforeAndAfterAll, Matchers, PropSpecLike}
@@ -16,7 +17,8 @@ class RegistryProps extends TestKit(ActorSystem("vehicle-registry"))
     with PropertyChecks
     with Matchers
     with ScalaFutures
-    with BeforeAndAfterAll {
+    with BeforeAndAfterAll
+    with VinGenerators {
 
   import Gen._
 
@@ -26,7 +28,7 @@ class RegistryProps extends TestKit(ActorSystem("vehicle-registry"))
   } yield ClientInfo(id, Uri(s"http://ota.plus/clients/$uuid"), token)
 
   val VehicleGen: Gen[VehicleMetadata] = for {
-    vin        <- Vehicle.genVin
+    vin        <- genVin
     clientInfo <- ClientInfoGen
   } yield VehicleMetadata(vin, clientInfo)
 

@@ -7,7 +7,8 @@ package org.genivi.webserver.controllers
 
 import javax.inject.{Inject, Named, Singleton}
 
-import com.advancedtelematic.ota.vehicle.{ClientInfo, Vehicle, VehicleMetadata, Vehicles}
+import com.advancedtelematic.ota.vehicle.{ClientInfo, VehicleMetadata, Vehicles}
+import org.genivi.sota.data.Vehicle
 import org.slf4j.LoggerFactory
 import play.api._
 import play.api.http.HttpEntity
@@ -158,8 +159,10 @@ class Application @Inject() (ws: WSClient,
         val w =
           ws.url(clientUrl).withFollowRedirects(false)
           .withMethod("POST")
-          .withBody(Json.parse(
-            s"""{ "grant_types": ["client_credentials"], "client_name": "${vin.get}" }"""
+          .withBody(Json.obj(
+            "grant_types" -> List("client_credentials"),
+            "client_name" -> vin.get,
+            "scope" -> List(s"ota-core.${vin.get}.write", s"ota-core.${vin.get}.read")
           ))
 
         w.execute flatMap { wresp =>

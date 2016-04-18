@@ -1,6 +1,7 @@
-import sbtbuildinfo.BuildInfoKeys._
-import sbtbuildinfo._
-import com.typesafe.sbt.packager.docker._
+libraryDependencies ++= Seq(
+  Dependencies.SotaCore,
+  Dependencies.JsonWebSecurityAkka
+) ++ Dependencies.JsonWebSecurity
 
 dockerExposedPorts := Seq(8080)
 

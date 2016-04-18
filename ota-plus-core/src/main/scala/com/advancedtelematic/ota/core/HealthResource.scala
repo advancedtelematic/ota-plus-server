@@ -1,4 +1,4 @@
-package com.advancedtelematic.core
+package com.advancedtelematic.ota.core
 
 import akka.http.scaladsl.server.Directives
 import slick.driver.MySQLDriver.api._

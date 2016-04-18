@@ -1,6 +1,7 @@
 import play.sbt.PlaySettings
 import play.sbt.routes.RoutesKeys
-import sbtbuildinfo.BuildInfoKeys._
+import
+sbtbuildinfo.BuildInfoKeys._
 import sbtbuildinfo._
 
 PlaySettings.defaultScalaSettings
@@ -9,7 +10,7 @@ play.sbt.routes.RoutesKeys.routesImport ++= Seq(
   "org.genivi.webserver.controllers.PathBinders._",
   "org.genivi.webserver.controllers.PackageType",
   "org.genivi.webserver.controllers.Architecture",
-  "com.advancedtelematic.ota.vehicle.Vehicle"
+  "org.genivi.sota.data.Vehicle"
 )
 
 RoutesKeys.routesGenerator := InjectedRoutesGenerator
@@ -25,6 +26,7 @@ testOptions in BrowserTests += Tests.Argument(TestFrameworks.ScalaTest, "-n", "B
 dockerExposedPorts := Seq(9000)
 
 libraryDependencies ++= Seq (
+    Dependencies.AkkaHttp,
     Dependencies.AkkaPersistence,
     Dependencies.AkkaTestKit,
     "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.0",
@@ -36,7 +38,9 @@ libraryDependencies ++= Seq (
     "org.webjars.bower" % "backbone" % "1.2.1",
     "org.webjars" % "bootstrap" % "3.3.4",
     ws, Dependencies.MockWs,
-    play.sbt.Play.autoImport.cache
+    play.sbt.Play.autoImport.cache,
+    Dependencies.SotaCommonData,
+    Dependencies.SotaCommonTest
   ) ++ Dependencies.JsonWebSecurity
 
 enablePlugins(PlayScala, SbtWeb, Versioning.Plugin)
