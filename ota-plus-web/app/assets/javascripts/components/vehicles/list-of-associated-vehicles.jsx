@@ -17,6 +17,7 @@ define(function(require) {
       this.props.AllVehicles.removeWatch(this.props.AllVehiclesPollEventName);
       this.props.InstalledVehicles.removeWatch(this.props.InstalledVehiclesPollEventName);
       this.props.QueuedVehicles.removeWatch(this.props.QueuedVehiclesPollEventName);
+      window.clearInterval(this.state.intervalId);
     },
     componentWillMount: function(){
       SotaDispatcher.dispatch(this.props.AllVehiclesDispatchObject);
@@ -47,7 +48,8 @@ define(function(require) {
       }
     },
     componentDidMount: function() {
-      setInterval(this.refreshData, 5000);
+      var intervalId =  setInterval(this.refreshData, 5000);
+      this.setState({intervalId: intervalId});
       this.props.UpdateDimensions();
     },
     refreshData: function() {
