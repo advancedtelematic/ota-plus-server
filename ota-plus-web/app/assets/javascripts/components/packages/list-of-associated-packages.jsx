@@ -19,6 +19,7 @@ define(function(require) {
       this.props.AllPackages.removeWatch(this.props.AllPackagesPollEventName);
       this.props.InstalledPackages.removeWatch(this.props.InstalledPackagesPollEventName);
       this.props.QueuedPackages.removeWatch(this.props.QueuedPackagesPollEventName);
+      window.clearInterval(this.state.intervalId);
     },
     componentWillMount: function(){
       SotaDispatcher.dispatch(this.props.AllPackagesDispatchObject);
@@ -50,7 +51,8 @@ define(function(require) {
       }
     },
     componentDidMount: function() {
-      setInterval(this.refreshData, 5000);
+      var intervalId =  setInterval(this.refreshData, 5000);
+      this.setState({intervalId: intervalId});
       this.props.UpdateDimensions();
     },
     refreshData: function() {

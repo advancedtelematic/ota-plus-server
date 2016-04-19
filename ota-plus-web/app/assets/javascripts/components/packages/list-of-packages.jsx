@@ -14,19 +14,18 @@ define(function(require) {
     },
     componentWillUnmount: function(){
       this.props.Packages.removeWatch(this.props.PollEventName);
+      window.clearInterval(this.state.intervalId);
     },
     componentWillMount: function(){
       SotaDispatcher.dispatch(this.props.DispatchObject);
       this.props.Packages.addWatch(this.props.PollEventName, _.bind(this.forceUpdate, this, null));
     },
     componentWillUpdate: function(nextProps, nextState) {
-      if(nextProps.SelectedName != this.props.SelectedName) {
-        this.replaceState({});
-      }
       this.props.UpdateDimensions();
     },
     componentDidMount: function() {
-      setInterval(this.refreshData, 5000);
+      var intervalId = setInterval(this.refreshData, 5000);
+      this.setState({intervalId: intervalId});
       this.props.UpdateDimensions();
     },
     refreshData: function() {
@@ -35,7 +34,8 @@ define(function(require) {
     getInitialState: function() {
       return {
         files: [],
-        showForm: false
+        showForm: false,
+        intervalId: null,
       };
     },
     onDrop: function (files) {
@@ -149,7 +149,7 @@ define(function(require) {
     render: function() {
       var Packages = this.prepareData();
       var _click = this.onClick;
-
+      
       var rows = [];
       
       var i = 0;

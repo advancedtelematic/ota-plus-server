@@ -10,6 +10,7 @@ define(function(require) {
   var ListOfVehicles = React.createClass({
     componentWillUnmount: function(){
       this.props.Vehicles.removeWatch(this.props.PollEventName);
+      window.clearInterval(this.state.intervalId);
     },
     componentWillMount: function(){
       SotaDispatcher.dispatch(this.props.DispatchObject);
@@ -19,11 +20,17 @@ define(function(require) {
       this.props.UpdateDimensions();
     },
     componentDidMount: function() {
-      setInterval(this.refreshData, 5000);
+      var intervalId =  setInterval(this.refreshData, 5000);
+      this.setState({intervalId: intervalId});
       this.props.UpdateDimensions();
     },
     refreshData: function() {
       SotaDispatcher.dispatch(this.props.DispatchObject);
+    },
+    getInitialState: function() {
+      return {
+        intervalId: null,
+      };
     },
     onClick: function(vin, isNeverSeen, t) {
       this.props.onClick(t, vin, isNeverSeen);
