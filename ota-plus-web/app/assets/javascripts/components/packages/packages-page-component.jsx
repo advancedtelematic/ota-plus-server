@@ -8,6 +8,11 @@ define(function(require) {
       db = require('stores/db');
 
   var PackagesPageComponent = React.createClass({
+    updateDimensions: function() {
+      var offset = $('.resizeWrapper').offset().top;
+      var divHeight = $(window).height() - offset - 40;
+      $('.resizeWrapper').css({'height': divHeight, 'overflow-y': 'auto'});
+    },  
     render: function() {
       return (
       <div>
@@ -19,7 +24,8 @@ define(function(require) {
           PollEventName="poll-packages"
           DispatchObject={{actionType: 'search-packages-by-regex', regex: "."}}
           DisplayCampaignLink={true}
-          AllowAssociatedDevicesAction={false}/>
+          AllowAssociatedDevicesAction={false}
+          UpdateDimensions={this.updateDimensions}/>
       </div>
     );}
   });

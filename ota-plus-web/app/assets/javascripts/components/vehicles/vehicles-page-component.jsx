@@ -8,6 +8,11 @@ define(function(require) {
       SearchBar = require('../search-bar');
 
   var VehiclesPageComponent = React.createClass({
+    updateDimensions: function() {
+      var offset = $('.resizeWrapper').offset().top;
+      var divHeight = $(window).height() - offset - 40;
+      $('.resizeWrapper').css({'height': divHeight, 'overflow-y': 'auto'});
+    },   
     render: function() {
       return (
       <div>
@@ -22,7 +27,8 @@ define(function(require) {
               Vehicles={db.searchableVehicles}
               AllowAssociatedPackagesAction={false}
               PollEventName="poll-vehicles"
-              DispatchObject={{actionType: "search-vehicles-by-regex", regex: ""}}/>
+              DispatchObject={{actionType: "search-vehicles-by-regex", regex: ""}}
+              UpdateDimensions={this.updateDimensions}/>
           </div>
         </div>
       </div>
