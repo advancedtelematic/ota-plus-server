@@ -28,9 +28,9 @@ define(function(require) {
             });
           break;
           case 'search-vehicles-by-regex':
-            var query = payload.regex ? '?regex=' + payload.regex : '';
+            var query = payload.regex ? '&regex=' + payload.regex : '';
 
-            sendRequest.doGet('/api/v1/vehicles' + query)
+            sendRequest.doGet('/api/v1/vehicles?status=true' + query)
               .success(function(vehicles) {
                 db.searchableVehicles.reset(vehicles);
               });
