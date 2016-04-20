@@ -1,0 +1,45 @@
+[{
+  "id": "${JOB_NAME}",
+  "uris": ["/root/docker.tar.gz"],
+  "cpus": 0.2,
+  "mem": 512.0,
+  "instances": 1,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "${IMAGE_ARTIFACT}",
+      "parameters": [{"key": "log-driver", "value": "syslog"}],
+      "forcePullImage": true,
+      "network": "BRIDGE",
+      "portMappings": [{
+        "containerPort": 8080,
+        "hostPort": 0,
+        "protocol": "tcp"
+      }]
+    }
+  },
+  "env": {
+    "SERVICE_NAME": "${JOB_NAME}",
+    "SERVICE_SCOPE": "internal",
+    "SERVICE_TYPE": "http",
+    "SERVICE_IMAGE": "${IMAGE_ARTIFACT}",
+    "SERVICE_HEALTH_CHECK": "curl --show-error --silent %<host>s:%<port>s/health",
+    "CORE_DB_URL": "${CORE_DB_URL}",
+    "CORE_DB_USER": "${CORE_DB_USER}",
+    "CORE_DB_PASSWORD": "${CORE_DB_PASSWORD}",
+    "CORE_DB_MIGRATE": "${CORE_DB_MIGRATE}",
+    "RESOLVER_API_URI": "${RESOLVER_API_URI}",
+    "CORE_INTERACTION_PROTOCOL": "${CORE_INTERACTION_PROTOCOL}",
+    "CORE_AWS_ACCESS_KEY": "${CORE_AWS_ACCESS_KEY}",
+    "CORE_AWS_SECRET_KEY": "${CORE_AWS_SECRET_KEY}",
+    "CORE_AWS_BUCKET_ID": "${CORE_AWS_BUCKET_ID}",
+    "PACKAGES_VERSION_FORMAT": "${PACKAGES_VERSION_FORMAT}",
+    "HOST": "${HOST}",
+    "PORT": "${PORT}"
+  },
+  "healthChecks": [{
+    "protocol": "HTTP",
+    "path": "/health",
+    "intervalSeconds": 30
+  }]
+}]
