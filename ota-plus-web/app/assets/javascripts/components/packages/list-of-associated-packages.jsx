@@ -83,7 +83,7 @@ define(function(require) {
       
       var InstalledIds = {};
       Installed.forEach(function(obj){
-        InstalledIds[obj.name+'_'+obj.version] = obj.name+'_'+obj.version;
+        InstalledIds[obj.id.name+'_'+obj.id.version] = obj.id.name+'_'+obj.id.version;
       });
 
       var QueuedIds = {};
