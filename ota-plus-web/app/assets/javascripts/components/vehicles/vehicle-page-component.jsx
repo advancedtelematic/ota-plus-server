@@ -16,6 +16,11 @@ define(function(require) {
     contextTypes: {
       router: React.PropTypes.func
     },
+    updateDimensions: function() {
+      var offset = $('.resizeWrapper').offset().top;
+      var divHeight = $(window).height() - offset - 40;
+      $('.resizeWrapper').css({'height': divHeight, 'overflow-y': 'auto'});
+    },   
     render: function() {
       var params = this.context.router.getCurrentParams();
       return (
@@ -31,7 +36,8 @@ define(function(require) {
               PollEventName="poll-packages"
               DispatchObject={{actionType: 'get-packages-for-vin', vin: params.vin}}
               DisplayCampaignLink={false}
-              AllowAssociatedDevicesAction={false}/>
+              AllowAssociatedDevicesAction={false}
+              UpdateDimensions={this.updateDimensions}/>
             <AddPackageManually Vin={params.vin}/>
             <SyncPackages Vin={params.vin}/>
             <h2>Installed Components</h2>
