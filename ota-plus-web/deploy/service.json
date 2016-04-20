@@ -1,0 +1,37 @@
+[{
+  "id": "${JOB_NAME}",
+  "uris": ["/root/docker.tar.gz"],
+  "cpus": 0.2,
+  "mem": 512.0,
+  "instances": 1,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "${IMAGE_ARTIFACT}",
+      "parameters": [{"key": "log-driver", "value": "syslog"}],
+      "forcePullImage": true,
+      "network": "BRIDGE",
+      "portMappings": [{
+        "containerPort": 9000,
+        "hostPort": 0,
+        "protocol": "tcp"
+      }]
+    }
+  },
+  "env": {
+    "SERVICE_NAME": "${JOB_NAME}",
+    "SERVICE_SCOPE": "public",
+    "SERVICE_TYPE": "http",
+    "SERVICE_IMAGE": "${IMAGE_ARTIFACT}",
+    "SERVICE_HEALTH_CHECK": "nc -vz %<host>s %<port>s",
+    "CORE_API_URI": "${CORE_API_URI}",
+    "RESOLVER_API_URI": "${RESOLVER_API_URI}",
+    "BUILDSERVICE_API_HOST": "${BUILDSERVICE_API_HOST}",
+    "AUTHPLUS_HOST": "${AUTHPLUS_HOST}",
+    "PLAY_CRYPTO_SECRET": "${PLAY_CRYPTO_SECRET}"
+  },
+  "healthChecks": [{
+    "protocol": "TCP",
+    "intervalSeconds": 30
+  }]
+}]
