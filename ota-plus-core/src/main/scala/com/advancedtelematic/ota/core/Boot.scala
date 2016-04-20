@@ -81,5 +81,4 @@ object Boot extends App {
       log.error(e, "Unable to start")
       sys.exit(1)
   }
-
 }

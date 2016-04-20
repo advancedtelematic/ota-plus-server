@@ -51,4 +51,6 @@ lazy val otaPlusCore = otaPlusProject("ota-plus-core")
 
 lazy val otaPlusWeb = otaPlusProject("ota-plus-web")
 
+lazy val otaPlusResolver = otaPlusProject("ota-plus-resolver")
+
 publishArtifact := false
