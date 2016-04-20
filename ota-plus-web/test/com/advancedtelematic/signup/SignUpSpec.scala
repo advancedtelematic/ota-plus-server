@@ -1,6 +1,5 @@
-package com.advancedteleamatic.signup
+package com.advancedtelematic.signup
 
-import com.advancedtelematic.signup.routes
 import mockws.MockWS
 import org.asynchttpclient.AsyncHttpClientConfig
 import org.openqa.selenium.WebDriver
