@@ -22,10 +22,15 @@ define(function(require) {
     },
     label: "History",
     panel: function() {
-      var finishedRows = _.map(this.props.Packages.deref(), function(package) {
+      var Packages = this.props.Packages.deref();
+      Packages.sort(function(a, b) {
+        return new Date(b.completionTime) - new Date(a.completionTime);
+      });
+      
+      var finishedRows = _.map(Packages.slice(0,10), function(package) {
         if(package.success === true) {
           return (
-            <tr key={package.packageId.name + '-' + package.packageId.version}>
+            <tr key={package.packageId.name + '-' + package.packageId.version + '-' + package.updateId}>
               <td>
                 <Router.Link to='package' params={{name: package.packageId.name, version: package.packageId.version}}>
                   { package.packageId.name }
