@@ -120,7 +120,7 @@ class VehiclesModule extends AbstractModule with AkkaGuiceSupport {
   @Named("vehicles-store")
   def getVehicles(@Named("vehicle-registry") registryActor: ActorRef): Vehicles = {
     import scala.concurrent.duration._
-    Vehicles(registryActor)(1.seconds)
+    Vehicles(registryActor)(2.seconds)
   }
 
 }

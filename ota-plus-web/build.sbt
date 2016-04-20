@@ -28,6 +28,7 @@ dockerExposedPorts := Seq(9000)
 libraryDependencies ++= Seq (
     Dependencies.AkkaHttp,
     Dependencies.AkkaPersistence,
+    Dependencies.CassandraForAkkaPersistence,
     Dependencies.AkkaTestKit,
     "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.0",
     "org.webjars" %% "webjars-play" % "2.4.0-1",
