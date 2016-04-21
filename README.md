@@ -16,13 +16,9 @@ Once everything is loaded, the OTA Plus admin GUI will be available at
 
 ## Tests
 
-Step 1: start all containers
-```
-  cd docker
-  docker-compose -f common.yml up
-```
+Step 1: start all containers using `docker/up.sh`
   - The above assumes `export DEFAULT_VERSION=latest`
-  - To update all installed images at once: `docker images | awk '{print $1}' | xargs -L1 docker pull`
+  - To update all installed images at once run `docker-compose -f common.yml pull` in the `docker` folder
   - In case some container fails to start (eg, "`docker_core_1 exited with code 255`") fall back to known-good images:
 ```
   docker-compose -f common.yml -f precise.yml up
@@ -31,13 +27,15 @@ Step 1: start all containers
 Step 2: stop web (each test suite will be handed a `FakeApplication` by `org.scalatestplus.play`)
 ```
   docker-compose -f common.yml stop web
+  docker ps -a
+  docker rm <id-for-web>
 ```
   - In case the dockerized web and the `FakeApplication` use different ports (currently 8000 and 9000 resp.) then both may run in parallel.
   - However running a single web app avoids any confusion.
 
-Step 3:clean databases, create schemas
+Step 3: clean databases, create schemas
 ```
-  cd rvi_sota_server/
+  cd rvi_sota_server
   sbt flywayClean flywayMigrate
 ```
 
