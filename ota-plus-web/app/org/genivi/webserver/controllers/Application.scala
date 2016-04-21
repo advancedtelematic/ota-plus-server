@@ -42,12 +42,14 @@ class Application @Inject() (ws: WSClient,
   val resolverApiUri = conf.getString("resolver.api.uri").get
 
   /**
-   * Returns an Option[String] of the uri of the service to proxy to
+   * Returns an Option[String] of the uri of the service to proxy to.
+   * Note: core knows nothing about Filters and Components.
    *
    * @param path The path of the request
    * @return The service to proxy to
    */
   private def apiByPath(path: String) : String = path.split("/").toList match {
+    case "packages" :: _ :: _ :: "filter" :: _ :: Nil => resolverApiUri // link, unlink existing filter and package
     case "packages" :: _ => coreApiUri
     case "updates" :: _ => coreApiUri
     case "vehicles" :: vin :: part :: _

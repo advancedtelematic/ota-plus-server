@@ -220,24 +220,28 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     filtersChangeResponse.status mustBe OK
   }
 
-  "test adding filters to a package" taggedAs APITests ignore { // TODO PRO-333
+  "test adding filters to a package" taggedAs APITests in {
     addFilterToPackage(testPackageName)
   }
 
-  "test removing filters from a package" taggedAs APITests ignore { // TODO blocked by PRO-333
-    val removeResponse = makeRequest("packageFilters/" + testPackageName + "/" + testPackageVersion + "/" +
-      testFilterName, DELETE)
+  "test removing filters from a package" taggedAs APITests in {
+    val req = wsClient.url(
+      s"http://$webserverHost:$port/api/v1/packages/$testPackageName/$testPackageVersion/filter/$testFilterName"
+    )
+    val removeResponse = await(req.delete())
     removeResponse.status mustBe OK
   }
 
-  "test re-adding filters to a package" taggedAs APITests ignore { // TODO PRO-333
+  "test re-adding filters to a package" taggedAs APITests in {
     //we also re-add the filter to test whether updates filter vins properly
     addFilterToPackage(testPackageName)
   }
 
-  "test removing package from a filter" taggedAs APITests ignore { // TODO blocked by PRO-333
-    val deleteResponse = makeRequest("packageFilters/" + testPackageName + "/" + testPackageVersion + "/" +
-      testFilterName, DELETE)
+  "test removing package from a filter" taggedAs APITests in {
+    val req = wsClient.url(
+      s"http://$webserverHost:$port/api/v1/packages/$testPackageName/$testPackageVersion/filter/$testFilterName"
+    )
+    val deleteResponse = await(req.delete())
     deleteResponse.status mustBe OK
   }
 
@@ -247,7 +251,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     searchResponse.body.toString mustEqual "[]"
   }
 
-  "test re-adding a package to a filter" taggedAs APITests ignore { // TODO blocked by PRO-333
+  "test re-adding a package to a filter" taggedAs APITests in {
     addFilterToPackage(testPackageName)
   }
 
