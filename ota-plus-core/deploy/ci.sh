@@ -35,7 +35,7 @@ export CORE_AWS_ACCESS_KEY="$(echo $VDATA | jq -r .data.core_aws_access_key)"
 export CORE_AWS_SECRET_KEY="$(echo $VDATA | jq -r .data.core_aws_secret_key)"
 export CORE_AWS_BUCKET_ID="$(echo $VDATA | jq -r .data.core_aws_bucket_id)"
 
-export CORE_DB_MIGRATE=false
+export CORE_DB_MIGRATE=true
 export CORE_INTERACTION_PROTOCOL="none"
 export PACKAGES_VERSION_FORMAT=".+"
 export HOST="0.0.0.0"
