@@ -290,8 +290,10 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   "test listing vins with component installed" taggedAs APITests in {
     val listResponse = makeRequest("vehicles?component=" + testComponentName, GET)
     listResponse.status mustBe OK
-    //TODO: need to make sure we only get a single vin back
+    // check the expected vin is there
     (listResponse.json \\ "vin").head.toString mustEqual "\"" + testVin + "\""
+    // check no other vin-s are there
+    (listResponse.json \\ "vin").size mustEqual 1
   }
 
   "test creating install campaigns" taggedAs APITests ignore {
