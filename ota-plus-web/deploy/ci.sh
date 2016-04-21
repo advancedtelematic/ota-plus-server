@@ -31,6 +31,7 @@ export RESOLVER_API_URI="$(echo $VDATA | jq -r .data.resolver_api_uri)"
 export BUILDSERVICE_API_HOST="$(echo $VDATA | jq -r .data.buildservice_api_host)"
 export AUTHPLUS_HOST="$(echo $VDATA | jq -r .data.authplus_host)"
 export CASSANDRA_CONTACT_POINT="$(echo $VDATA | jq -r .data.cassandra_contact_point)"
+export CASSANDRA_JOURNAL_KEYSPACE="$(echo $VDATA | jq -r .data.cassandra_journal_keyspace)"
 export port PORT="9000"
 
 REQ=$(envsubst < deploy/service.json)
