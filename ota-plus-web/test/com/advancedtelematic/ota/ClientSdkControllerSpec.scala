@@ -23,7 +23,7 @@ class ClientSdkControllerSpec extends PlaySpec
 
   override lazy val port = app.configuration.getString("test.webserver.port").map(_.toInt).getOrElse(9000)
 
-  "test download a preconfigured client" taggedAs APITests in {
+  "test download a preconfigured client" taggedAs APITests ignore { // TODO PRO-341
     import org.genivi.webserver.controllers.{Architecture, PackageType}
     val attempts = 5
     val wsClient = app.injector.instanceOf[WSClient]
