@@ -13,7 +13,7 @@ services:
       MYSQL_DATABASES: 'sota_resolver sota_resolver_test sota_core sota_core_test'
 
   resolver:
-    image: advancedtelematic/sota-resolver:$DEFAULT_VERSION
+    image: advancedtelematic/ota-plus-resolver:$DEFAULT_VERSION
     expose:
       - '8081'
     ports:
@@ -26,7 +26,7 @@ services:
       RESOLVER_DB_MIGRATE: 'true'
 
   core:
-    image: advancedtelematic/sota-core:$DEFAULT_VERSION
+    image: advancedtelematic/ota-plus-core:$DEFAULT_VERSION
     expose:
       - '8080'
     ports:
