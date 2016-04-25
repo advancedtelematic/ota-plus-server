@@ -1,3 +1,13 @@
+.page-title {
+    font-size: 20px;
+    margin: 20px 0 0 0;
+}
+
+.page-title, .page-title:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
 .top-nav {
     height: 72px;
 }
