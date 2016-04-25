@@ -28,13 +28,16 @@ define(function(require) {
   var DefaultRoute = Router.DefaultRoute;
 
   var App = React.createClass({
+    /*<img src="/assets/img/admin_logo.png"/>*/  
     render: function() {
       return (
       <div>
  	    <nav className="navbar navbar-default navbar-fixed-top top-nav">
 	      <div className="navbar-header">
-                <Link to="/" className="navbar-brand">
-                  <img src="/assets/img/admin_logo.png"/>
+                <Link to="/" className="navbar-brand page-title">
+                  <span className="page-title">
+                    LAB
+                  </span>
                 </Link>
 
                 
