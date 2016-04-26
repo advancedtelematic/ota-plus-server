@@ -64,3 +64,10 @@ inConfig(IntegrationTests)(Defaults.testTasks)
 
 inConfig(BrowserTests)(Defaults.testTasks)
 
+val mkVersionProperties = taskKey[Seq[File]]("Makes version.properties file")
+
+mkVersionProperties := {
+  val propFile = new File( baseDirectory.value + "/../deploy", "version.properties")
+  IO.write(propFile, version.value)
+  Seq(propFile)
+}
