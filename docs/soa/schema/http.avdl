@@ -1,0 +1,42 @@
+protocol HTTP {
+    // OK
+    record Status_200 {}
+
+    // Created
+    record Status_201 {}
+
+    // Accepted
+    record Status_202 {}
+
+    // No Content
+    record Status_204 {}
+
+    // Bad Request
+    record Status_400 {
+        string code;
+        string description;
+    }
+
+    // Forbidden
+    record Status_403 {
+        string code;
+        string description;
+    }
+
+    // Not Found
+    record Status_404 {
+        string code;
+        string description;
+    }
+
+    // Conflict
+    record Status_409 {
+        string code;
+        string description;
+    }
+
+    // Internal Server Error
+    record Status_500 {
+        string `error`;
+    }
+}

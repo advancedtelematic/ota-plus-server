@@ -1,0 +1,139 @@
+protocol Core {
+    import idl "structs.avdl";
+    import idl "http.avdl";
+
+
+    // GET /vehicles
+
+    record GetVehicles {}
+
+    record GetVehiclesResponse {
+        array<VIN> vehicles;
+    }
+
+    GetVehiclesResponse getVehicles(GetVehicles qry);
+
+
+    // PUT /vehicles/:vin
+
+    record AddVehicle {
+        VIN vin;
+    }
+
+    record VehicleAdded {
+        VIN vin;
+    }
+
+    union{Status_204, Status_400} addVehicle(AddVehicle cmd);
+
+
+    // DELETE /vehicles/:vin
+
+    record DeleteVehicle {
+        VIN vin;
+    }
+
+    record VehicleDeleted {
+        VIN vin;
+    }
+
+    union{Status_200, Status_404} deleteVehicle(AddVehicle cmd);
+
+
+    // GET /vehicles/:vin/queued
+
+    record GetQueuedPackages {
+        VIN vin;
+    }
+
+    record GetQueuedPackagesResponse {
+        array<Package> queuedPackages;
+    }
+
+    GetQueuedPackagesResponse getQueuedPackages(GetQueuedPackages qry);
+
+
+    // GET /vehicles/:vin/history
+
+    record GetPackageHistory {
+        VIN vin;
+    }
+
+    record GetPackageHistoryResponse {
+        array<PackageHistory> packageHistories;
+    }
+
+    union{Status_404, GetPackageHistoryResponse} getPackageHistory(GetPackageHistory qry);
+
+
+    // GET /packages
+
+    record GetPackages {}
+
+    record GetPackagesResponse {
+        array<PackageObject> packages;
+    }
+
+    GetPackagesResponse getPackages(GetPackages qry);
+
+
+    // PUT /packages/:name/:version
+
+    record AddPackage {
+        Package package;
+        bytes binary;
+        union{null, string} description = null;
+        union{null, string} vendor = null;
+    }
+
+    record PackageAdded {
+        Package package;
+        union{null, string} description = null;
+        union{null, string} vendor = null;
+    }
+
+    union{Status_204, Status_400} addPackage(AddPackage cmd);
+
+
+    // POST /updates
+
+    record InstallCampaign {
+        PackageCampaign campaign;
+    }
+
+    record CampaignInstalled {
+        PackageCampaign campaign;
+    }
+
+    union{Status_200, Status_500} installCampaign(InstallCampaign cmd);
+
+
+    // GET /updates
+
+    record GetUpdateCampaigns {}
+
+    record GetUpdateCampaignsResponse {
+        array<PackageCampaign> campaigns;
+    }
+
+    GetUpdateCampaignsResponse getUpdateCampaigns(GetUpdateCampaigns qry);
+
+
+    // GET /updates/:campaignId
+
+    record GetCampaignStatus {
+        string campaignId;
+    }
+
+    record GetCampaignStatusStruct {
+        VIN vin;
+        string id;
+        string status;
+    }
+
+    record GetCampaignStatusResponse {
+        array<GetCampaignStatusStruct> installStatuses;
+    }
+
+    union{Status_404, GetCampaignStatusResponse} getCampaignStatus(GetCampaignStatus qry);
+}

@@ -1,0 +1,53 @@
+protocol Structs {
+    fixed VIN(17);
+
+    record Component {
+        string partNumber;
+        string description;
+    }
+
+    record Package {
+        string name;
+        string version;
+    }
+
+    record PackageDescription {
+        Package package;
+        string vendor;
+        string description;
+    }
+
+    record PackageHistory {
+        Package package;
+        VIN vin;
+        long id;
+        boolean success;
+        string completionTime;
+    }
+
+    record PackageObject {
+        PackageDescription package;
+        long size;
+        string uri;
+        string checksum;
+    }
+
+    record PackageCampaign {
+        Package package;
+        string id;
+        string packageId;
+        string priority;
+        string creationTime;
+        string periodOfValidity;
+    }
+
+    record Filter {
+        string name;
+        string expression;
+    }
+
+    record PackageFilter {
+        Package package;
+        string filterName;
+    }
+}

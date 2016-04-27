@@ -1,0 +1,350 @@
+protocol Resolver {
+    import idl "structs.avdl";
+    import idl "http.avdl";
+
+
+    // GET /vehicles
+
+    record GetVehicles {}
+
+    record GetVehiclesResponse {
+        array<VIN> vins;
+    }
+
+    GetVehiclesResponse getVehicles(GetVehicles qry);
+
+
+    // PUT /vehicles/:vin
+
+    record AddVehicle {
+        VIN vin;
+    }
+
+    union{Status_204, Status_400} addVehicle(AddVehicle cmd);
+
+    record VehicleAdded {
+        VIN vin;
+    }
+
+
+    // DELETE /vehicles/:vin
+
+    record DeleteVehicle {
+        VIN vin;
+    }
+
+    record VehicleDeleted {
+        VIN vin;
+    }
+
+    union{Status_200, Status_404} deleteVehicle(AddVehicle cmd);
+
+
+    // GET /vehicles/:vin/component
+
+    record GetVehicleComponents {
+        VIN vin;
+    }
+
+    record GetVehicleComponentsResponse {
+        array<Component> components;
+    }
+
+    union{Status_404, GetVehicleComponentsResponse} getVehicleComponents(GetVehicleComponents qry);
+
+
+    // PUT /vehicles/:vin/component/:partNumber
+
+    record AddVehicleComponent {
+        VIN vin;
+        string partNumber;
+    }
+
+    record VehicleComponentAdded {
+        VIN vin;
+        string partNumber;
+    }
+
+    union{Status_200, Status_400} addVehicleComponent(AddVehicleComponent cmd);
+
+
+    // DELETE /vehicles/:vin/component/:partNumber
+
+    record DeleteVehicleComponent {
+        VIN vin;
+        string partNumber;
+    }
+
+    record VehicleComponentDeleted {
+        VIN vin;
+        string partNumber;
+    }
+
+    union{Status_200, Status_400} deleteVehicleComponent(DeleteVehicleComponent cmd);
+
+
+    // GET /vehicles/:vin/package
+
+    record GetVehiclePackages {
+        VIN vin;
+    }
+
+    record GetVehiclePackagesResponse {
+        array<Package> packages;
+    }
+
+    union{Status_404, GetVehiclePackagesResponse} getVehiclePackages(GetVehiclePackages qry);
+
+
+    // PUT /vehicles/:vin/package/:name/:version
+
+    record InstallPackage {
+        VIN vin;
+        Package package;
+    }
+
+    record PackageInstalled {
+        VIN vin;
+        Package package;
+    }
+
+    union{Status_200, Status_400} installPackage(InstallPackage cmd);
+
+
+    // DELETE /vehicles/:vin/package/:name/:version
+
+    record DeletePackage {
+        VIN vin;
+        string name;
+        string version;
+    }
+
+    record PackageDeleted {
+        VIN vin;
+        string name;
+        string version;
+    }
+
+    union{Status_200, Status_400} deletePackage(DeletePackage cmd);
+
+
+    // PUT /vehicles/:vin/packages
+
+    record InstallPackages {
+        VIN vin;
+        array<Package> packages;
+    }
+
+    union{Status_200, Status_400} installPackages(InstallPackages cmd);
+
+    record PackagesInstalled {
+        VIN vin;
+        array<Package> packages;
+    }
+
+
+    // GET /packages
+
+    record GetPackages {}
+
+    record GetPackagesResponse {
+        array<PackageObject> packages;
+    }
+
+    GetPackagesResponse getPackages(GetPackages qry);
+
+
+    // PUT /packages/:name/:version
+
+    record AddPackage {
+        PackageDescription package;
+    }
+
+    record PackageAdded {
+        PackageDescription package;
+    }
+
+    union{Status_200, Status_400} addPackage(AddPackage cmd);
+
+
+    // GET /components
+
+    record GetComponents {}
+
+    record GetComponentsResponse {
+        array<Component> components;
+    }
+
+    GetComponentsResponse getComponents(GetComponents qry);
+
+
+    // PUT /components/:partNumber
+
+    record AddComponent {
+        string partNumber;
+        string description;
+    }
+
+    record ComponentAdded {
+        string partNumber;
+        string description;
+    }
+
+    union{Status_200, Status_400} addComponent(AddComponent cmd);
+
+
+    // DELETE /components/:partNumber
+
+    record DeleteComponent {
+        string partNumber;
+    }
+
+    record ComponentDeleted {
+        string partNumber;
+    }
+
+    union{Status_200, Status_400} deleteComponent(DeleteComponent cmd);
+
+
+    // GET /resolve/:name/:version
+
+    record GetPackageVehicles {
+        Package package;
+    }
+
+    record GetPackageVehiclesResponse {
+        array<VIN> vehicles;
+    }
+
+    GetPackageVehiclesResponse getPackageVehicles(GetPackageVehicles qry);
+
+
+    // GET /filters
+
+    record GetFilters {}
+
+    record GetFiltersResponse {
+        array<Filter> filters;
+    }
+
+    GetFiltersResponse getFilters(GetFilters qry);
+
+
+    // POST /filters
+
+    record AddFilter {
+        Filter filter;
+    }
+
+    record FilterAdded {
+        Filter filter;
+    }
+
+    union{Status_200, Status_400} addFilter(AddFilter cmd);
+
+
+    // PUT /filters/:filter
+
+    record UpdateFilter {
+        Filter filter;
+    }
+
+    record FilterUpdated {
+        Filter filter;
+    }
+
+    union{Status_200, Status_400} updateFilter(UpdateFilter cmd);
+
+
+    // DELETE /filters/:filter
+
+    record DeleteFilter {
+        Filter filter;
+    }
+
+    record FilterDeleted {
+        Filter filter;
+    }
+
+    union{Status_200, Status_400} deleteFilter(DeleteFilter cmd);
+
+
+    // POST /validate/filter
+
+    record ValidateFilter {
+        Filter filter;
+    }
+
+    record FilterValidated {
+        Filter filter;
+    }
+
+    union{Status_200, Status_400} validateFilter(ValidateFilter cmd);
+
+
+    // GET /packages/filter
+
+    record GetPackageFilter {}
+
+    record GetPackageFilterResponse {
+        array<PackageFilter> packageFilters;
+    }
+
+    GetPackageFilterResponse getPackageFilter(GetPackageFilter qry);
+
+
+    // PUT /packages/:packageName/:packageVersion/filter/:filterName
+
+    record AttachFilterPackage {
+        Package package;
+        string filterName;
+    }
+
+    record FilterPackageAttached {
+        Package package;
+        string filterName;
+    }
+
+    union{Status_200, Status_409} attachFilterPackage(AttachFilterPackage cmd);
+
+
+    // DELETE /packages/:packageName/:packageVersion/filter/:filterName
+
+    record DeleteFilterPackage {
+        Package package;
+        string filterName;
+    }
+
+    record FilterPackageDeleted {
+        Package package;
+        string filterName;
+    }
+
+    union{Status_200, Status_400} deleteFilterPackage(DeleteFilterPackage cmd);
+
+
+    // GET /filters/:filterName/package
+
+    record GetFilterPackages {
+        string filterName;
+    }
+
+    record GetFilterPackagesResponse {
+        array<PackageDescription> packages;
+    }
+
+    GetFilterPackagesResponse getFilterPackages(GetFilterPackages qry);
+
+
+    // GET /packages/:packageName/:packageVersion/filter
+
+    record GetPackageFilters {
+        Package package;
+    }
+
+    record GetPackageFiltersResponse {
+        array<Filter> filters;
+    }
+
+    GetPackageFiltersResponse getPackageFilters(GetPackageFilters qry);
+}
