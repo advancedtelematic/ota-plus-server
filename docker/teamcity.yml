@@ -1,0 +1,14 @@
+version: '2'
+services:
+  db:
+    image: advancedtelematic/mariadb:stable
+  resolver:
+    image: ota-plus-resolver:BUILT_TAG
+  core:
+    image: ota-plus-core:BUILT_TAG
+  web:
+    image: ota-plus-web:BUILT_TAG
+  auth-plus:
+    image: advancedtelematic/auth-plus:latest
+  buildsrv:
+    image: advancedtelematic/ota-build-srv:latest
