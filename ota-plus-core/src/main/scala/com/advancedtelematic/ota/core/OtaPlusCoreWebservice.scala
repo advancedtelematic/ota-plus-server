@@ -8,7 +8,9 @@ import org.genivi.sota.core._
 import org.genivi.sota.core.resolver.{Connectivity, ExternalResolverClient}
 import org.genivi.sota.core.transfer._
 import org.genivi.sota.data.Vehicle
+import org.genivi.sota.data.Vehicle.Vin
 import slick.driver.MySQLDriver.api._
+import org.genivi.sota.marshalling.RefinedMarshallingSupport._
 
 class OtaPlusCoreWebservice(notifier: UpdateNotifier, resolver: ExternalResolverClient, db : Database)
                            (implicit system: ActorSystem, mat: ActorMaterializer,
@@ -23,19 +25,17 @@ class OtaPlusCoreWebservice(notifier: UpdateNotifier, resolver: ExternalResolver
   val vehiclesResource = new VehiclesResource(db, connectivity.client, resolver)
   val packagesResource = new PackagesResource(resolver, db)
   val updateRequestsResource = new UpdateRequestsResource(db, resolver, new UpdateService(notifier))
+  val historyResource = new HistoryResource(db)
 
-  val vehicleRoutes: Route = pathPrefix("vehicles") {
+  val deviceRoutes: Route = pathPrefix("vehicles") {
     extractExecutionContext { implicit ec =>
       extractNamespace(system) { ns =>
         extractVin { vin =>
           pathEnd {
             get { vehiclesResource.fetchVehicle(ns, vin) } ~
             put { vehiclesResource.updateVehicle(ns, vin) } ~
-            delete { vehiclesResource.deleteVehicleR(ns, vin) }
-          } ~
-          (path("queued") & get) { vehiclesResource.queuedPackages(ns, vin) } ~
-          (path("history") & get) { vehiclesResource.history(ns, vin) } ~
-          (path("sync") & put) { vehiclesResource.sync(ns, vin) }
+            delete { vehiclesResource.deleteVehicle(ns, vin) }
+          }
         } ~
         (pathEnd & get) { vehiclesResource.search(ns) }
       }
@@ -51,24 +51,32 @@ class OtaPlusCoreWebservice(notifier: UpdateNotifier, resolver: ExternalResolver
             get { packagesResource.fetch(ns, pid) } ~
             put { packagesResource.updatePackage(ns, pid) }
           } ~
-          path("queued") { packagesResource.queued(ns, pid) }
+          path("queued") { packagesResource.queuedVins(ns, pid) }
         }
       }
     }
 
 
   val updateRequestRoute: Route =
-    pathPrefix("updates") {
+    pathPrefix("update_requests") {
       (get & extractUuid) { updateRequestsResource.fetch } ~
-        (extractNamespace & extractVin & post) { (ns, vin) => updateRequestsResource.queueVehicleUpdate(ns, vin) } ~
         pathEnd {
           get { updateRequestsResource.fetchUpdates } ~
           (extractNamespace & post) { updateRequestsResource.createUpdate }
         }
     }
 
+  val historyRoutes: Route = {
+    (pathPrefix("history") & parameter('vin.as[Vin])) { vin =>
+      extractNamespace(system) { ns =>
+        (get & pathEnd) {
+          historyResource.history(ns, vin)
+        }
+      }
+    }
+  }
+
   val route = (handleErrors & pathPrefix("api" / "v1")) {
-    vehicleRoutes ~ packageRoutes ~ updateRequestRoute
+    deviceRoutes ~ packageRoutes ~ updateRequestRoute ~ historyRoutes
   }
 }
-

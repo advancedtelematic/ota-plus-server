@@ -74,7 +74,7 @@ object Boot extends App {
 
   val healthResource = new HealthResource(db)
   val webService = new OtaPlusCoreWebservice(DefaultUpdateNotifier, externalResolverClient, db)
-  val vehicleService = new OtaPlusCoreVehicleService(db,
+  val vehicleService = new OtaCoreVehicleUpdatesResource(db,
     settings.authPlusSignatureVerifier, externalResolverClient)
 
   val routes = logRequestResult("ota-plus-core", Logging.DebugLevel) {

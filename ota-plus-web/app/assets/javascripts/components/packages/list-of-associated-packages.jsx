@@ -68,7 +68,7 @@ define(function(require) {
         version: packageVersion
       };
       
-      sendRequest.doPost('/api/v1/updates/' + this.props.SelectedVin, data)
+      sendRequest.doPost('/api/v1/update_requests/' + this.props.SelectedVin, data)
         .success(_.bind(function() {
            this.setState({refreshData: true});
         }, this));

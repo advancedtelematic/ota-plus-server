@@ -17,7 +17,7 @@ define(function(require) {
       this.dispatchCallback = function(payload) {
         switch(payload.actionType) {
           case 'get-vehicles':
-            sendRequest.doGet('/api/v1/vehicles?status=true')
+            sendRequest.doGet('/api/v1/device_data?status=true')
               .success(function(vehicles) {
                 db.vehicles.reset(vehicles);
               });
@@ -30,7 +30,7 @@ define(function(require) {
           case 'search-vehicles-by-regex':
             var query = payload.regex ? '&regex=' + payload.regex : '';
 
-            sendRequest.doGet('/api/v1/vehicles?status=true' + query)
+            sendRequest.doGet('/api/v1/device_data?status=true' + query)
               .success(function(vehicles) {
                 db.searchableVehicles.reset(vehicles);
               });
@@ -59,13 +59,16 @@ define(function(require) {
               });
           break;
           case 'get-package-queue-for-vin':
-            sendRequest.doGet('/api/v1/vehicles/' + payload.vin + '/queued')
+            sendRequest.doGet('/api/v1/vehicle_updates/' + payload.vin)
               .success(function(packages) {
-                db.packageQueueForVin.reset(packages);
+                var list = _.map(packages, function(p) {
+                  return p.packageId;
+                });
+                db.packageQueueForVin.reset(list);
               });
           break;
           case 'get-package-history-for-vin':
-            sendRequest.doGet('/api/v1/vehicles/' + payload.vin + '/history')
+            sendRequest.doGet('/api/v1/history?vin=' + payload.vin)
               .success(function(packages) {
                 db.packageHistoryForVin.reset(packages);
               });
