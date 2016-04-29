@@ -23,3 +23,6 @@ DELETE  /api/v1/*path                           org.genivi.webserver.controllers
 
 GET     /signup/:token                          com.advancedtelematic.signup.SignupController.checkInvitation(token: String)
 POST    /signup/:token                          com.advancedtelematic.signup.SignupController.setPassword(token: String)
+
+GET     /login                                  com.advancedtelematic.login.LoginController.login
+POST	/authenticate				            com.advancedtelematic.login.LoginController.authenticate
