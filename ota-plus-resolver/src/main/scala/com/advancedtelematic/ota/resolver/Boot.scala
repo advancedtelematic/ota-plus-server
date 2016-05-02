@@ -24,6 +24,17 @@ object Boot extends App with Directives {
   implicit val db = Database.forConfig("database")
   val config = system.settings.config
 
+  if (config.getBoolean("database.migrate")) {
+    val url = config.getString("database.url")
+    val user = config.getString("database.properties.user")
+    val password = config.getString("database.properties.password")
+
+    import org.flywaydb.core.Flyway
+    val flyway = new Flyway
+    flyway.setDataSource(url, user, password)
+    flyway.migrate()
+  }
+
   val routes: Route = pathPrefix("api" / "v1") {
     (handleRejections(rejectionHandler) & handleExceptions(exceptionHandler)) {
       new VehicleDirectives().route ~

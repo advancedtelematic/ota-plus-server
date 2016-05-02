@@ -57,6 +57,17 @@ object Boot extends App {
     Try(system.terminate())
   }
 
+  if (config.getBoolean("database.migrate")) {
+    val url = config.getString("database.url")
+    val user = config.getString("database.properties.user")
+    val password = config.getString("database.properties.password")
+
+    import org.flywaydb.core.Flyway
+    val flyway = new Flyway
+    flyway.setDataSource(url, user, password)
+    flyway.migrate()
+  }
+
   val externalResolverClient = new DefaultExternalResolverClient(
     settings.resolverUri, settings.resolverResolveUri, settings.resolverPackagesUri, settings.resolverVehiclesUri
   )
