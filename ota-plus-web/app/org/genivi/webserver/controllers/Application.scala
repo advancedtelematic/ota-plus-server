@@ -7,8 +7,7 @@ package org.genivi.webserver.controllers
 
 import javax.inject.{Inject, Named, Singleton}
 
-import com.advancedtelematic.ota.vehicle.{ClientInfo, VehicleMetadata, Vehicles}
-import org.genivi.sota.data.Vehicle
+import com.advancedtelematic.ota.vehicle.Vehicles
 import org.slf4j.LoggerFactory
 import play.api._
 import play.api.http.HttpEntity
@@ -17,7 +16,6 @@ import play.api.libs.ws._
 import play.api.mvc._
 
 import scala.concurrent.Future
-import scala.util.control.NoStackTrace
 
 /**
  * The main application controller. Handles authentication and request proxying.
@@ -28,9 +26,10 @@ class Application @Inject() (ws: WSClient,
                              val messagesApi: MessagesApi,
                              val conf: Configuration,
                              @Named("vehicles-store") vehiclesStore: Vehicles)
-  extends Controller with I18nSupport {
+  extends Controller with I18nSupport with OtaPlusConfig {
 
   val auditLogger = LoggerFactory.getLogger("audit")
+
   private def logToAudit(caller: String, msg: String) {
     // Useful to debug instances running in the cloud.
     auditLogger.info(s"[Application.$caller()] $msg")
@@ -38,23 +37,35 @@ class Application @Inject() (ws: WSClient,
 
   implicit val context = play.api.libs.concurrent.Execution.Implicits.defaultContext
 
-  val coreApiUri = conf.getString("core.api.uri").get
-  val resolverApiUri = conf.getString("resolver.api.uri").get
-
   /**
-   * Returns an Option[String] of the uri of the service to proxy to.
+   * Returns the uri of the service to proxy to.
    * Note: core knows nothing about Filters and Components.
    *
    * @param path The path of the request
    * @return The service to proxy to
    */
-  private def apiByPath(path: String) : String = path.split("/").toList match {
-    case "packages" :: _ :: _ :: "filter" :: _ :: Nil => resolverApiUri // link, unlink existing filter and package
+  private def apiByPath(path: String) : Option[String] = {
+    val pathComponents = path.split("/").toList
+
+    val proxiedPrefixes = coreProxiedPrefixes orElse resolverProxiedPrefixes
+
+    proxiedPrefixes.lift(pathComponents)
+  }
+
+  private val coreProxiedPrefixes: PartialFunction[List[String], String] = {
     case "packages" :: _ => coreApiUri
-    case "updates" :: _ => coreApiUri
-    case "vehicles" :: vin :: part :: _
-      if Set("queued", "history", "sync", "updates").contains(part) => coreApiUri
-    case _ => resolverApiUri
+    case "vehicle_updates" :: _ => coreApiUri
+    case "update_requests" :: _ => coreApiUri
+    case "history" :: _ => coreApiUri
+  }
+
+  private val resolverProxiedPrefixes: PartialFunction[List[String], String] = {
+    case "vehicles" :: _ => resolverApiUri
+    case "firmware" :: _ => resolverApiUri
+    case "filters" :: _ => resolverApiUri
+    case "components" :: _ => resolverApiUri
+    case "resolve" :: _ => resolverApiUri
+    case "package_filters" :: _ => resolverApiUri
   }
 
   /**
@@ -97,82 +108,15 @@ class Application @Inject() (ws: WSClient,
   }
 
   /**
-   * Controller method delegating to the Core and to the Resolver APIs,
-   * provided the path does not denote the route to create or delete a VIN
-   * (see [[apiProxyBroadcast]] for that).
+   * Controller method delegating to the Core and to the Resolver APIs.
    *
    * @param path Path of the request
    * @return
    */
-  def apiProxy(path: String) : Action[RawBuffer] = Action.async(parse.raw) { implicit req =>
-    proxyTo(apiByPath(path), req)
-  }
-
-  def getVehicles() : Action[RawBuffer] = Action.async(parse.raw) { implicit req =>
-    // TODO: Split paths/routes to avoid checking query parameters
-    val api = req.queryString.get("status").map(_ => coreApiUri).getOrElse(resolverApiUri)
-    proxyTo(api, req)
-  }
-
-  /**
-   * Controller method to create (PUT) or delete (DELETE) a VIN.
-   * Proxies request to both core and resolver
-   *
-   * @param path The path of the request
-   * @return
-   */
-  def apiProxyBroadcast(path: String) : Action[RawBuffer] = Action.async(parse.raw) { implicit req =>
-    val vinStr = path.split("/").toList.last
-    import eu.timepit.refined.api.Refined
-    // compile-time refinement only works with literals or constant predicates
-    val vin: Vehicle.Vin = Refined.unsafeApply(vinStr) // TODO (mg) the predicate, has been checked already?
-
-    val futAuthPlus: Future[VehicleMetadata] = (req.method) match {
-      case "PUT" => getVehicleMetadata(vin)
-      case "DELETE" => Future.failed(throw ???) // TODO (mg) There's no endpoint to delete a VIN in Auth+. What to do?
-      case _ => Future.failed(throw ???) // TODO (mg) dedicated exception
-    }
-
-    // Must PUT "vehicles" on both core and resolver
-    // TODO: Retry until both responses are success
-    for {
-      respCore <- proxyTo(coreApiUri, req)
-      respResult <- proxyTo(resolverApiUri, req)
-      vMetadata <- futAuthPlus
-    } yield {
-      vehiclesStore.registerVehicle(vMetadata)
-      respCore
-    }
-  }
-
-  private[this] object ConfigAuthPlusHostNotFound extends Throwable with NoStackTrace
-  private[this] object ClientInfoUnparseable extends Throwable with NoStackTrace
-
-  /**
-    * Contact Auth+ to register for the first time the given VIN, obtaining [[VehicleMetadata]]
-    */
-  private def getVehicleMetadata(vin: Vehicle.Vin): Future[VehicleMetadata] = {
-    conf.getString("authplus.host") match {
-      case None =>
-        Future.failed(ConfigAuthPlusHostNotFound)
-      case Some(authplusHost) =>
-        val clientUrl = authplusHost + "/clients"
-        import play.api.libs.json._
-        val w =
-          ws.url(clientUrl).withFollowRedirects(false)
-          .withMethod("POST")
-          .withBody(Json.obj(
-            "grant_types" -> List("client_credentials"),
-            "client_name" -> vin.get,
-            "scope" -> List(s"ota-core.${vin.get}.write", s"ota-core.${vin.get}.read")
-          ))
-
-        w.execute flatMap { wresp =>
-          wresp.json.asOpt[ClientInfo] match {
-            case None => Future.failed(ClientInfoUnparseable)
-            case Some(clientInfo) => Future.successful(VehicleMetadata(vin, clientInfo))
-          }
-        }
+  def apiProxy(path: String) : Action[RawBuffer] = Action.async(parse.raw) { req =>
+    apiByPath(path) match {
+      case Some(p) => proxyTo(p, req)
+      case None => Future.successful(NotFound("Could not proxy request to requested path"))
     }
   }
 
@@ -184,5 +128,4 @@ class Application @Inject() (ws: WSClient,
   def index : Action[AnyContent] = Action{ implicit req =>
     Ok(views.html.main())
   }
-
 }

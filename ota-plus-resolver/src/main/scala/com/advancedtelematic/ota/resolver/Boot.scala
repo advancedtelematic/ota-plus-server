@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory
 import scala.util.Try
 import slick.jdbc.JdbcBackend.Database
 
+import scala.concurrent.ExecutionContext
+
 object Boot extends App with Directives {
   implicit val system = ActorSystem("ota-plus-resolver")
   implicit val materializer = ActorMaterializer()
@@ -41,7 +43,8 @@ object Boot extends App with Directives {
         new PackageDirectives().route ~
         new FilterDirectives().route ~
         new ResolveDirectives().route ~
-        new ComponentDirectives().route
+        new ComponentDirectives().route ~
+        new PackageFiltersResource().routes
     }
   } ~ new HealthResource(db).route
 

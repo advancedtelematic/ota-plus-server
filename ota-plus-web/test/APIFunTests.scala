@@ -124,7 +124,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
 
   def addFilterToPackage(packageName : String): Unit = {
     val req = wsClient.url(
-      s"http://$webserverHost:$port/api/v1/packages/$packageName/$testPackageVersion/filter/$testFilterName"
+      s"http://$webserverHost:$port/api/v1/package_filters/$packageName/$testPackageVersion/$testFilterName"
     )
     val packageFiltersResponse = await(req.put(""))
     packageFiltersResponse.status mustBe OK
@@ -226,7 +226,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
 
   "test removing filters from a package" taggedAs APITests in {
     val req = wsClient.url(
-      s"http://$webserverHost:$port/api/v1/packages/$testPackageName/$testPackageVersion/filter/$testFilterName"
+      s"http://$webserverHost:$port/api/v1/package_filters/$testPackageName/$testPackageVersion/$testFilterName"
     )
     val removeResponse = await(req.delete())
     removeResponse.status mustBe OK
@@ -239,7 +239,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
 
   "test removing package from a filter" taggedAs APITests in {
     val req = wsClient.url(
-      s"http://$webserverHost:$port/api/v1/packages/$testPackageName/$testPackageVersion/filter/$testFilterName"
+      s"http://$webserverHost:$port/api/v1/package_filters/$testPackageName/$testPackageVersion/$testFilterName"
     )
     val deleteResponse = await(req.delete())
     deleteResponse.status mustBe OK
