@@ -24,6 +24,14 @@ testOptions in BrowserTests += Tests.Argument(TestFrameworks.ScalaTest, "-n", "B
 
 dockerExposedPorts := Seq(9000)
 
+maintainer in Docker := "dev@advancedtelematic.com"
+
+packageName in Docker := "ota-plus-web"
+
+dockerRepository in Docker := Some("advancedtelematic")
+
+dockerUpdateLatest in Docker := true
+
 libraryDependencies ++= Seq (
     Dependencies.AkkaHttp,
     Dependencies.AkkaPersistence,
