@@ -1,7 +1,6 @@
 import play.sbt.PlaySettings
 import play.sbt.routes.RoutesKeys
-import
-sbtbuildinfo.BuildInfoKeys._
+import sbtbuildinfo.BuildInfoKeys._
 import sbtbuildinfo._
 
 PlaySettings.defaultScalaSettings

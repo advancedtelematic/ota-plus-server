@@ -28,7 +28,9 @@ object Dependencies {
 
   lazy val AkkaHttp = "com.typesafe.akka" %% "akka-http-experimental" % Version.Akka
 
-  val AkkaTestKit = "com.typesafe.akka" %% "akka-testkit" % Version.Akka % "test"
+  lazy val AkkaTestKit = "com.typesafe.akka" %% "akka-testkit" % Version.Akka % "test"
+
+  lazy val AkkaHttpTestKit = "com.typesafe.akka" %% "akka-http-testkit" % Version.Akka % "test"
 
   lazy val CassandraForAkkaPersistence = "com.typesafe.akka" %% "akka-persistence-cassandra" % Version.AkkaCassandra
 
