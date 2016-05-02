@@ -53,4 +53,8 @@ lazy val otaPlusWeb = otaPlusProject("ota-plus-web")
 
 lazy val otaPlusResolver = otaPlusProject("ota-plus-resolver")
 
+lazy val rootProject = (project in file(".")).
+  aggregate(otaPlusCore, otaPlusWeb, otaPlusResolver)
+  .settings(Release.settings)
+
 publishArtifact := false
