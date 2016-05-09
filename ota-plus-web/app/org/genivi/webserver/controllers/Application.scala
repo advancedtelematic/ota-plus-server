@@ -126,6 +126,10 @@ class Application @Inject() (ws: WSClient,
    * @return OK response and index html
    */
   def index : Action[AnyContent] = Action{ implicit req =>
-    Ok(views.html.main())
+    req.cookies.get("access_token") match {
+      case Some(_) => Ok(views.html.main())
+      // redirect to login page if not logged in
+      case None => Redirect(com.advancedtelematic.login.routes.LoginController.login())
+    }
   }
 }

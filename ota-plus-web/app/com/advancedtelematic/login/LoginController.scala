@@ -39,7 +39,7 @@ class LoginController @Inject()(conf: Configuration,
   }
 
   private[this] def buildPasswordRequest(username: String, password: String) =
-    Map("granttype" -> Seq("password"),
+    Map("grant_type" -> Seq("password"),
         "username" -> Seq(username),
         "password" -> Seq(password))
 
