@@ -16,6 +16,16 @@
     <script>
       @Html(org.webjars.RequireJS.getSetupJavaScript(routes.WebJarAssets.at("").url))
     </script>
+    <script>
+	cachedCallback = require.callback;
+	require = {
+	  callback: function() {
+	    cachedCallback()
+	    requirejs.config({"paths": {"react": ["/webjars/react/0.14.7/react-with-addons"]}});
+	    requirejs.config({"paths": {"react-dom": ["/webjars/react/0.14.7/react-dom"]}});
+	  }
+	}
+    </script>
     <script data-main="@routes.Assets.versioned("javascripts/react-app.js")" src="@routes.WebJarAssets.at(WebJarAssets.locate("require.min.js"))"></script>
   </body>
 </html>
