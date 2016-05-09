@@ -3,37 +3,15 @@ define(function(require) {
 
   var DB = (function() {
     function DB() {
-      this.updates = atom.createAtom([
-      ]);
-      this.showUpdate = atom.createAtom({});
-      this.updateStatus = atom.createAtom({});
-
-      this.packagesForFilter = atom.createAtom([]);
-      this.packagesForVin = atom.createAtom([]);
-      this.packageQueueForVin = atom.createAtom([]);
-      this.packageHistoryForVin = atom.createAtom([]);
-      this.componentsOnVin = atom.createAtom([]);
-      this.filtersForPackage = atom.createAtom([]);
-      this.vehiclesForPackage = atom.createAtom([]);
-      this.vehiclesWholeDataForPackage = atom.createAtom([]);
-      this.vehiclesQueuedForPackage = atom.createAtom([]);
-
-      this.vehicles = atom.createAtom([]);
-
+      this.devices = atom.createAtom([]);
+      this.showPackage = atom.createAtom([]);
+      this.showDevice = atom.createAtom([]);
       this.packages = atom.createAtom([]);
-      this.showPackage = atom.createAtom({});
+      this.packagesForVin = atom.createAtom([]);
+      this.packageHistoryForVin = atom.createAtom([]);
+      this.packageQueueForVin = atom.createAtom([]);
+      this.searchableDevices = atom.createAtom([]);
       this.searchablePackages = atom.createAtom([]);
-
-      this.filters = atom.createAtom([]);
-      this.searchableFilters = atom.createAtom([]);
-      this.showFilter = atom.createAtom({});
-
-      this.searchableComponents = atom.createAtom([]);
-      this.showComponent = atom.createAtom({});
-      this.vinsForComponent = atom.createAtom([]);
-
-      this.affectedVins = atom.createAtom([]);
-      this.searchableVehicles = atom.createAtom([]);
       this.postStatus = atom.createAtom([]);
     }
 
@@ -41,5 +19,4 @@ define(function(require) {
   })();
 
   return new DB();
-
 });

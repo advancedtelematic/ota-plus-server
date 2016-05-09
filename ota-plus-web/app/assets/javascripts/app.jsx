@@ -1,121 +1,128 @@
 define(function(require) {
-
+  /* Main packages */
   var React = require('react'),
-      HomePage = require('components/home-page'),
-      Dashboard = require('components/dashboard'),
-      VehiclesPageComponent = require('components/vehicles/vehicles-page-component'),
-      PackagesPageComponent = require('components/packages/packages-page-component'),
-      FiltersPageComponent = require('components/filters/filters-page-component'),
-      ComponentsPage = require('components/components/components-page'),
-      ShowPackage = require('components/packages/show-package'),
-      ShowFilter = require('components/filters/show-filter'),
-      ShowComponent = require('components/components/show-component'),
-      VehiclePageComponent = require('components/vehicles/vehicle-page-component'),
+      ReactDOM = require('react-dom'),
       Router = require('react-router'),
-      CreateCampaign = require('components/create-campaign-page-component'),
-      ListOfUpdates = require('components/updates/list-of-updates'),
-      ShowUpdate = require('components/updates/show-update-component'),
-      SotaDispatcher = require('sota-dispatcher');
+      Route = Router.Route,
+      RouteHandler = Router.RouteHandler,
+      DefaultRoute = Router.DefaultRoute,
+      db = require('stores/db'),
+      Handler = require('handlers/handler'),
+      ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
+      jQuery = require('jquery'),
+      Bootstrap = require('bootstrap'),
+      SotaDispatcher = require('sota-dispatcher')
+      SizeVerifier = require('../js/verify');
+      
+  /* Components*/
+  var Nav = require('components/nav'),
+      Translate = require('components/translation/translate'),
+      Devices = require('components/devices/devices'),
+      DeviceDetails = require('components/devices/device-details'),
+      Packages = require('components/packages/packages'),
+      NewDevice = require('components/devices/new-device'),
+      Modal = require('components/modal'),
+      Profile = require('components/profile');
 
-  // set up db
-  var db = require('stores/db');
-  // set up handlers
-  var Handler = require('handlers/handler');
+  const languages = {
+    en: 'en', 
+    de: 'de', 
+    jp: 'jp'
+  };
 
-  var Link = Router.Link;
-  var Route = Router.Route;
-  var RouteHandler = Router.RouteHandler;
-  var DefaultRoute = Router.DefaultRoute;
-
-  var App = React.createClass({
-    /*<img src="/assets/img/admin_logo.png"/>*/  
-    render: function() {
-      return (
-      <div>
- 	    <nav className="navbar navbar-default navbar-fixed-top top-nav">
-	      <div className="navbar-header">
-                <Link to="/" className="navbar-brand page-title">
-                  <span className="page-title">
-                    LAB
-                  </span>
-                </Link>
-
-                
-	        <div className="navbar-collapse collapse">
-              <ul className="nav side-nav">
-                <li role="presentation">
-                  <Link to="vehicles" className="vehicles"><i className="fa fa-car nav-link-btn"/>Vehicles</Link>
-                </li>
-                <li role="presentation">
-                  <Link to="packages" className="packages"><i className="fa fa-envelope nav-link-btn"/>Packages</Link>
-                </li>
-                <li role="presentation">
-                  <Link to="components" className="components"><i className="fa fa-cog nav-link-btn"/>Components</Link>
-                </li>
-                <li role="presentation">
-                  <Link to="filters" className="filters"><i className="fa fa-filter nav-link-btn"/>Filters</Link>
-                </li>
-                <li role="presentation">
-                  <Link to="updates" className="updates"><i className="fa fa-download nav-link-btn"/>Updates</Link>
-                </li>
-                <li role="presentation">
-                  <Link to="dashboard"><i className="fa fa-download nav-link-btn"/>Dashboard</Link>
-                </li>
-              </ul>
-	        </div>
-          </div>
-        </nav>
-        <div className="page wrapper container-fluid">
-          <RouteHandler />
-        </div>
-      </div>
-    );}
-  });
-
-  var wrapComponent = function(Component, props) {
-    return React.createClass({
-      render: function() {
-        return React.createElement(Component, props);
+  class App extends React.Component {
+    constructor(props) {
+      super(props);
+      
+      var currentLang = 'en';
+      if(localStorage.getItem('currentLang') && localStorage.getItem('currentLang') in languages) {
+        currentLang = localStorage.getItem('currentLang');
+      } else {
+        var browserLang = (navigator.language || navigator.userLanguage);  
+        if(browserLang && browserLang in languages) {
+          currentLang = browserLang;
+        }
       }
-    });
+      
+      this.state = {
+        currentLang: currentLang,
+        filterValue: '',
+      }
+      
+      this.changeLanguage = this.changeLanguage.bind(this);
+      this.changeFilter = this.changeFilter.bind(this);
+    }
+    componentDidMount() {
+      jQuery(function () {
+        jQuery('body').verify({verifyMinWidth: 1366, verifyMinHeight: 100});
+      });
+    }
+    changeLanguage(value) {
+      localStorage.setItem('currentLang', value);
+      this.setState({
+        currentLang: value
+      });
+    }
+    changeFilter(filter) {
+      this.setState({filterValue: filter});  
+    }
+    render() {
+      var params = this.context.router.getCurrentParams();  
+      var currentRoutes = this.context.router.getCurrentRoutes();
+      var page = (currentRoutes[currentRoutes.length - 1]['name']) ? 'page-' + currentRoutes[currentRoutes.length - 1]['name'].split(/(?=[A-Z])/).join("-").toLowerCase() : 'page-home';
+            
+      return (
+        <ReactCSSTransitionGroup
+          transitionLeave={false}
+          transitionAppear={true}
+          transitionEnterTimeout={500}
+          transitionAppearTimeout={500}
+          transitionName="homepage">
+          <div key={page} id={page}>
+            <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} changeFilter={this.changeFilter} filterValue={this.state.filterValue}/>
+            <div className="page wrapper container-fluid">
+              <RouteHandler {...params} filterValue={this.state.filterValue}  />
+            </div>
+          </div>
+        </ReactCSSTransitionGroup>
+      );
+    }
+  };
+
+  App.contextTypes = {
+    router: React.PropTypes.func
+  };
+
+  var wrapComponent = function wrapComponent(Component, props) {
+    return class wrapComponentClass extends React.Component {
+      render() {
+        return (
+          <Component {...props} params={this.props.params}/>
+        )
+      }
+    }
   };
 
   var routes = (
-    <Route handler={App} path="/">
-      <DefaultRoute handler={HomePage}/>
-      <Route name="vehicles" handler={VehiclesPageComponent}/>
-      <Route name="vehicle" path="vehicles/:vin" handler={VehiclePageComponent}/>
-      <Route name="packages">
-        <Route name="package" path="/packages/:name/:version" handler={wrapComponent(ShowPackage, {Package: db.showPackage})}/>
-        <Route name="new-campaign" path="/packages/:name/:version/new-campaign" handler={wrapComponent(CreateCampaign)}/>
-        <DefaultRoute handler={PackagesPageComponent}/>
+    <Route handler={App} path="/" ignoreScrollBehavior={true}>
+      <DefaultRoute handler={Translate(Devices)}/>
+      <Route path="/" handler={Translate(Devices)}>
+        <Route name="newDevice" path="/devices/new" handler={Translate(Modal(NewDevice, {TitleVar: "newdevice"}))}/>
       </Route>
-      <Route name="filters">
-        <Route name="filter" path="/filters/:name" handler={wrapComponent(ShowFilter, {Filter: db.showFilter})}/>
-        <DefaultRoute handler={FiltersPageComponent} />
-      </Route>
-      <Route name="updates">
-        <Route name="update" path="/updates/:id" handler={wrapComponent(ShowUpdate, {Update: db.showUpdate})} />
-        <DefaultRoute handler={wrapComponent(ListOfUpdates, {Updates: db.updates})} />
-      </Route>
-      <Route name="components">
-        <Route name="component" path="/component/:partNumber" handler={wrapComponent(ShowComponent, {Component: db.showComponent})} />
-        <DefaultRoute handler={ComponentsPage}/>
-      </Route>
-      <Route name="dashboard" handler={Dashboard}/>
+      <Route name="deviceDetails" path="/devices/:vin" handler={wrapComponent(Translate(DeviceDetails), {Device: db.showDevice})}/>
+      <Route name="packages" handler={Translate(Packages)}/>
+      <Route name="profile" handler={Translate(Profile)}/>
     </Route>
   );
 
   return {
-    run: function() {
+    run() {
       Router.run(routes, function (Handler) {
-        React.render(<Handler/>, document.getElementById('app'));
+        ReactDOM.render(<Handler />, document.getElementById('app'));
       });
-
       SotaDispatcher.dispatch({
         actionType: 'initialize'
       });
     }
   };
-
 });
