@@ -1,10 +1,10 @@
 package com.advancedtelematic.ota.resolver
 
 import akka.actor.ActorSystem
-import akka.event.Logging
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.stream.ActorMaterializer
+import org.genivi.sota.http.HealthResource
 import org.genivi.sota.resolver.filters.FilterDirectives
 import org.genivi.sota.resolver.packages.PackageDirectives
 import org.genivi.sota.resolver.resolve.ResolveDirectives
@@ -15,8 +15,7 @@ import org.slf4j.LoggerFactory
 
 import scala.util.Try
 import slick.jdbc.JdbcBackend.Database
-
-import scala.concurrent.ExecutionContext
+import org.genivi.sota.http.SotaDirectives.versionHeaders
 
 object Boot extends App with Directives {
   implicit val system = ActorSystem("ota-plus-resolver")
@@ -37,16 +36,24 @@ object Boot extends App with Directives {
     flyway.migrate()
   }
 
-  val routes: Route = pathPrefix("api" / "v1") {
+  lazy val version = {
+    val bi = org.genivi.sota.resolver.BuildInfo
+    "ota-plus-resolver/" + bi.version
+  }
+
+  val routes: Route = versionHeaders(version) {
     (handleRejections(rejectionHandler) & handleExceptions(exceptionHandler)) {
-      new VehicleDirectives().route ~
-        new PackageDirectives().route ~
-        new FilterDirectives().route ~
-        new ResolveDirectives().route ~
-        new ComponentDirectives().route ~
-        new PackageFiltersResource().routes
-    }
-  } ~ new HealthResource(db).route
+      pathPrefix("api" / "v1") {
+
+        new VehicleDirectives().route ~
+          new PackageDirectives().route ~
+          new FilterDirectives().route ~
+          new ResolveDirectives().route ~
+          new ComponentDirectives().route ~
+          new PackageFiltersResource().routes
+      }
+    } ~ new HealthResource(db).route
+  }
 
   val host = config.getString("server.host")
   val port = config.getInt("server.port")
