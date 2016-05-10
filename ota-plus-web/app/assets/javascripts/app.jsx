@@ -92,6 +92,8 @@ define(function(require) {
   App.contextTypes = {
     router: React.PropTypes.func
   };
+  
+  
 
   var wrapComponent = function wrapComponent(Component, props) {
     return class wrapComponentClass extends React.Component {
@@ -104,14 +106,14 @@ define(function(require) {
   };
 
   var routes = (
-    <Route handler={App} path="/" ignoreScrollBehavior={true}>
-      <DefaultRoute handler={Translate(Devices)}/>
-      <Route path="/" handler={Translate(Devices)}>
-        <Route name="newDevice" path="/devices/new" handler={Translate(Modal(NewDevice, {TitleVar: "newdevice"}))}/>
+    <Route handler={Translate(App)} path="/" ignoreScrollBehavior={true}>
+      <DefaultRoute handler={Devices}/>
+      <Route path="/" handler={Devices}>
+        <Route name="newDevice" path="/devices/new" handler={Modal(NewDevice, {TitleVar: "newdevice"})}/>
       </Route>
-      <Route name="deviceDetails" path="/devices/:vin" handler={wrapComponent(Translate(DeviceDetails), {Device: db.showDevice})}/>
-      <Route name="packages" handler={Translate(Packages)}/>
-      <Route name="profile" handler={Translate(Profile)}/>
+      <Route name="deviceDetails" path="/devices/:vin" handler={wrapComponent(DeviceDetails, {Device: db.showDevice})}/>
+      <Route name="packages" handler={Packages}/>
+      <Route name="profile" handler={Profile}/>
     </Route>
   );
 
