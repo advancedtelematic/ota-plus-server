@@ -8,11 +8,11 @@ define(function(require) {
       Packages = require('../packages/packages');
         
   class DeviceDetails extends React.Component {
-    constructor(props) {
-      super(props);
+    constructor(props, context) {
+      super(props, context);
       this.state = {
         showPackagesHistory: false,
-        textPackagesHistory: props.strings.viewhistory
+        textPackagesHistory: context.strings.viewhistory
       }
       this.showQueueHistory = this.showQueueHistory.bind(this);
     }
@@ -20,10 +20,10 @@ define(function(require) {
       SotaDispatcher.dispatch({actionType: 'get-device', vin: this.props.params.vin});
       this.props.Device.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
     }
-    componentWillUpdate(nextProps, nextState) {
-      if(nextProps.strings != this.props.strings) {
+    componentWillUpdate(nextProps, nextState, nextContext) {
+      if(nextContext.strings != this.context.strings) {
         this.setState({
-          textPackagesHistory: nextState.showPackagesHistory ? nextProps.strings.hidehistory : nextProps.strings.viewhistory
+          textPackagesHistory: nextState.showPackagesHistory ? nextContext.strings.hidehistory : nextContext.strings.viewhistory
         });
       }
     }
@@ -33,24 +33,24 @@ define(function(require) {
     showQueueHistory() {
       this.setState({
         showPackagesHistory: !this.state.showPackagesHistory,
-        textPackagesHistory: (this.state.showPackagesHistory) ? this.props.strings.viewhistory : this.props.strings.hidehistory,
+        textPackagesHistory: (this.state.showPackagesHistory) ? this.context.strings.viewhistory : this.context.strings.hidehistory,
       });
     }
     render() {
       var Device = this.props.Device.deref()[0];
       return (
         <div>
-          <DetailsHeader strings={this.props.strings} device={Device} />
+          <DetailsHeader device={Device} />
           <div className="row">
             <div className="col-md-6 nopadding border-right-2">
               <div className="panel panel-ats">
                 <div className="panel-heading">
                   <div className="panel-heading-left pull-left">
-                    {this.props.strings.packages}
+                    {this.context.strings.packages}
                   </div>
                 </div>
                 <div className="panel-body">
-                  <Packages key={'dsads'} strings={this.props.strings} vin={this.props.params.vin}/>
+                  <Packages key={'dsads'} vin={this.props.params.vin}/>
                 </div>
                 <div className="panel-footer">
                   10 compatible, 5 installed, 0 broken, 4 queued
@@ -61,7 +61,7 @@ define(function(require) {
               <div className="panel panel-ats">
                 <div className="panel-heading">
                   <div className="panel-heading-left pull-left">
-                    {this.props.strings.queue}
+                    {this.context.strings.queue}
                   </div>
                   <div className="panel-heading-right pull-right">
                     <button onClick={this.showQueueHistory} className="btn btn-black">{this.state.textPackagesHistory}</button>
@@ -81,11 +81,11 @@ define(function(require) {
                         transitionAppear={true}
                         transitionAppearTimeout={500}
                         transitionName="example">
-                          <PackagesHistory strings={this.props.strings} vin={this.props.params.vin}/>
+                          <PackagesHistory vin={this.props.params.vin}/>
                         </ReactCSSTransitionGroup>
                     : null}
                   
-                    <PackagesQueue strings={this.props.strings} vin={this.props.params.vin}/>
+                    <PackagesQueue vin={this.props.params.vin}/>
                   </div>
                 </div>
                 <div className="panel-footer">
@@ -98,6 +98,10 @@ define(function(require) {
         </div>
       );
     }
+  };
+  
+  DeviceDetails.contextTypes = {
+    strings: React.PropTypes.object.isRequired
   };
 
   return DeviceDetails;

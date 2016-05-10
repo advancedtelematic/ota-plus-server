@@ -10,8 +10,7 @@ define(function(require) {
           <QueueList 
             Packages={db.packageQueueForVin}
             PollEventName="poll-packages-queue-for-vin"
-            DispatchObject={{actionType: "get-package-queue-for-vin", vin: this.props.vin}}
-            strings={this.props.strings}/>
+            DispatchObject={{actionType: "get-package-queue-for-vin", vin: this.props.vin}}/>
         </div>
       );
     }
