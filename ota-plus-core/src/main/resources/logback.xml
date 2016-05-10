@@ -3,7 +3,7 @@
         <!-- encoders are assigned the type
              ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder>
-            <pattern>%highlight(%.-1level)|%d{HH:mm:ss.SSS}|%logger{36}|%message%n%exception</pattern>
+            <pattern>%.-1level|%d{HH:mm:ss.SSS}|%logger{36}|%message%n%exception</pattern>
         </encoder>
     </appender>
 

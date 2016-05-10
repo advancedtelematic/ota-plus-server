@@ -7,7 +7,7 @@ import akka.actor.ActorSystem
 import akka.event.Logging
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.Uri
-import akka.http.scaladsl.server.{Directives, Route}
+import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import com.advancedtelematic.jwa.`HMAC SHA-256`
@@ -17,8 +17,10 @@ import org.apache.commons.codec.binary.Base64
 import org.genivi.sota.core.db._
 import org.genivi.sota.core.resolver.{Connectivity, DefaultConnectivity, DefaultExternalResolverClient}
 import org.genivi.sota.core.transfer._
+import org.genivi.sota.http.HealthResource
 
 import scala.util.{Failure, Success, Try}
+import org.genivi.sota.http.SotaDirectives._
 
 class Settings(config: Config) {
   val host = config.getString("server.host")
@@ -77,13 +79,26 @@ object Boot extends App {
   val vehicleService = new OtaCoreVehicleUpdatesResource(db,
     settings.authPlusSignatureVerifier, externalResolverClient)
 
-  val routes = logRequestResult("ota-plus-core", Logging.DebugLevel) {
+  lazy val version = {
+    val bi = org.genivi.sota.core.BuildInfo
+    "ota-plus-core/" + bi.version
+  }
+
+  val routes = Route.seal(
     healthResource.route ~
     webService.route ~
     vehicleService.route
+  )
+
+  val loggedRoutes = {
+    versionHeaders(version) {
+      logRequestResult("ota-plus-core", Logging.DebugLevel) {
+        routes
+      }
+    }
   }
 
-  val startF = Http().bindAndHandle(routes, settings.host, settings.port)
+  val startF = Http().bindAndHandle(loggedRoutes, settings.host, settings.port)
 
   startF onComplete {
     case Success(services) =>
