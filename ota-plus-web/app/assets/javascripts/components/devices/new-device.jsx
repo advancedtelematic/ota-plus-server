@@ -24,15 +24,19 @@ define(function(require) {
       return (
         <form ref='form' onSubmit={this.handleSubmit}>
           <div className="form-group">
-            <label htmlFor="name">{this.props.strings.devicename}</label>
-            <input type="text" className="form-control" name="vin" ref="vin" placeholder={this.props.strings.devicename}/>
+            <label htmlFor="name">{this.context.strings.devicename}</label>
+            <input type="text" className="form-control" name="vin" ref="vin" placeholder={this.context.strings.devicename}/>
           </div>
           <div className="form-group text-right">
-            <button type="submit" className="btn btn-grey">{this.props.strings.adddevice}</button>
+            <button type="submit" className="btn btn-grey">{this.context.strings.adddevice}</button>
           </div>
         </form>  
       );
     }
+  };
+
+  NewDevice.contextTypes = {
+    strings: React.PropTypes.object.isRequired
   };
 
   return NewDevice;

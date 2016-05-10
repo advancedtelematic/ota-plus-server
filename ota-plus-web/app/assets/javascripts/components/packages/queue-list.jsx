@@ -67,7 +67,7 @@ define(function(require) {
             onDragEnd={this.dragEnd}
             onDragOver={this.dragOver}
             onDragStart={this.dragStart}>
-            <QueueListItem package={pack} strings={this.props.strings} status={status}/>
+            <QueueListItem package={pack} status={status}/>
           </div>
         );
       }, this);       
@@ -77,6 +77,10 @@ define(function(require) {
         </ul>
       );
     }
+  };
+
+  QueueList.contextTypes = {
+    strings: React.PropTypes.object.isRequired
   };
 
   return QueueList;

@@ -24,8 +24,8 @@ define(function(require) {
         <li className={'list-group-item ' + (this.state.showLog ? 'show-log ' : '') + this.props.status}>
           <span className="list-group-item-text-left">{this.props.package.name}</span>
           <span className="drag-bar pull-right"><i className="fa fa-bars"></i></span>
-          <button className="btn btn-action pull-right">{this.props.strings.cancel}</button>
-          <button className="btn btn-action pull-right" onClick={this.showLog}>{this.props.strings.log}</button>
+          <button className="btn btn-action pull-right">{this.context.strings.cancel}</button>
+          <button className="btn btn-action pull-right" onClick={this.showLog}>{this.context.strings.log}</button>
           {this.props.status == 'error' ? 
             <button className="btn btn-action pull-right">retry</button>
           : null}
@@ -54,6 +54,10 @@ define(function(require) {
         </li>
       );
     }
+  };
+
+  QueueListItem.contextTypes = {
+    strings: React.PropTypes.object.isRequired
   };
 
   return QueueListItem;
