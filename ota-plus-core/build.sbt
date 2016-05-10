@@ -1,7 +1,7 @@
 libraryDependencies ++= Seq(
   Dependencies.AkkaHttpTestKit,
-  Dependencies.JsonWebSecurityAkka,
-  Dependencies.SotaCore
+  Dependencies.SotaCore,
+  Dependencies.JsonWebSecurityAkka
 ) ++ Dependencies.JsonWebSecurity
 
 dockerExposedPorts := Seq(8080)
