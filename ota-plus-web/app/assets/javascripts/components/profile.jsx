@@ -10,7 +10,7 @@ define(function(require) {
             <div className="col-md-6">
               <div className="row">
                 <div className="col-md-12">
-                  <h3>{this.props.strings.profile}</h3>
+                  <h3>{this.context.strings.profile}</h3>
                 </div>
                 <div className="col-md-6">
                   <div className="thumbnail">
@@ -30,7 +30,7 @@ define(function(require) {
             <div className="col-md-6">
               <div className="row">
                 <div className="col-md-12">
-                  <h3>{this.props.strings.editpassword}</h3>
+                  <h3>{this.context.strings.editpassword}</h3>
                 </div>
                 <div className="col-md-6">
                   <form ref='form'>
@@ -58,6 +58,10 @@ define(function(require) {
       );
     }
   });
+
+  Profile.contextTypes = {
+    strings: React.PropTypes.object.isRequired
+  };
 
   return Profile;
 });

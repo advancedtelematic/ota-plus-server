@@ -12,8 +12,8 @@ define(function(require) {
   };
   
   var Translate = function Translate(Component) {
-    return class TranslateClass extends React.Component {  
-      render() {
+    var TranslateClass = class TranslateClass extends React.Component {  
+      getChildContext() {
         var lang = 'en';
         if(localStorage.getItem('currentLang') && localStorage.getItem('currentLang') in languages) {
           lang = localStorage.getItem('currentLang');
@@ -22,14 +22,24 @@ define(function(require) {
             if(browserLang && browserLang in languages) {
               lang = browserLang;
             }
-        }
-                
-        var strings = languages[lang];          
+        }  
+        var strings = languages[lang];  
+        return { 
+          strings: strings
+        };
+      }
+      render() {  
         return (
-  	  <Component {...this.props} {...this.state} strings={strings} />
+  	  <Component />
 	);
       }
     }
+    
+    TranslateClass.childContextTypes = {
+      strings: React.PropTypes.object.isRequired
+    };
+    
+    return TranslateClass;
   };
   
   return Translate;

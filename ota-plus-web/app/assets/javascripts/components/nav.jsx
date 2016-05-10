@@ -5,7 +5,7 @@ define(function(require) {
       LanguageSelector = require('./translation/language-selector'),
       Translate = require('./translation/translate'),
       SearchBar = require('./searchbar');
-	
+
   class Nav extends React.Component {
     render() {        
       return (
