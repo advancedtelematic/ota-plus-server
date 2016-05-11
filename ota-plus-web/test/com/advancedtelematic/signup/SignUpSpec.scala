@@ -124,7 +124,7 @@ class SignUpSpec extends PlaySpec
       signUpPage.setAndConfirmPassword("12345")
       signUpPage.submit()
 
-      pageTitle must be ("SOTA Admin UI")
+      pageTitle must be ("SOTA Admin UI - Log in")
     }
 
     val duplicateInvitation = "eyJhbGciOiJIUzI1NiJ9." +
