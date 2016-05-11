@@ -44,15 +44,14 @@ object Boot extends App with Directives {
   val routes: Route = versionHeaders(version) {
     (handleRejections(rejectionHandler) & handleExceptions(exceptionHandler)) {
       pathPrefix("api" / "v1") {
-
         new VehicleDirectives().route ~
           new PackageDirectives().route ~
           new FilterDirectives().route ~
           new ResolveDirectives().route ~
           new ComponentDirectives().route ~
           new PackageFiltersResource().routes
-      }
-    } ~ new HealthResource(db).route
+      } ~ new HealthResource(db).route
+    }
   }
 
   val host = config.getString("server.host")
