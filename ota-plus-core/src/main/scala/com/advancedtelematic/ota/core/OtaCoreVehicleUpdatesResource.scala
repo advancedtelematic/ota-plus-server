@@ -24,17 +24,16 @@ class OtaCoreVehicleUpdatesResource(db: Database,
 
   val route = {
     (pathPrefix("api" / "v1" / "vehicle_updates") & extractVin) { vin =>
-      pathEnd {
-        put {
-          authenticateJwt("auth-plus", _ => true) { jwt =>
-            oauth2Scope(jwt, s"ota-core.${vin.get}.write") {
-              vs.updateInstalledPackages(vin)
-            }
+      (path("installed") & put) {
+        authenticateJwt("auth-plus", _ => true) { jwt =>
+          oauth2Scope(jwt, s"ota-core.${vin.get}.write") {
+            vs.updateInstalledPackages(vin)
           }
-        } ~
-        (get & extractNamespace(system)) { ns =>
-          vs.pendingPackages(ns, vin)
         }
+      } ~
+      (put & path("order")) { vs.setInstallOrder(vin) } ~
+      (get & pathEnd & extractNamespace(system)) { ns =>
+        vs.pendingPackages(ns, vin)
       } ~
       (post & extractNamespace) { ns => vs.queueVehicleUpdate(ns, vin) } ~
       (get & extractUuid & path("download")) { vs.downloadPackage } ~
