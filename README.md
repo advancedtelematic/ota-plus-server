@@ -55,6 +55,23 @@ Step 4:`cd ota-plus-server` and run tests, for example:
   sbt "ota-plus-web/testOnly com.advancedtelematic.ota.ClientSdkControllerSpec"
 ```
 
+## Ota Plus Web
+
+To run the web app with authentication support you will need a running
+Auth+ Instance. Once Auth+ is running, a (client id, secret) pair can
+be obtained using:
+
+    bin/new_client.sh
+
+These new variables can then be passed to ota-plus-web on startup. To
+start ota web you could use:
+
+    eval $(bin/new_client.sh) ; sbt ota-plus-web/run
+
+A new (client_id, secret) pair needs to be created everytime Auth+ is
+restarted.
+
+
 ## Ota Plus Core
 
 The `ota-plus` includes a module named `ota-plus-core`. This module
