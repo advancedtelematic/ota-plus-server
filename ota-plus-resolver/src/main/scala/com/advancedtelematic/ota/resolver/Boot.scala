@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory
 
 import scala.util.Try
 import slick.jdbc.JdbcBackend.Database
-import org.genivi.sota.http.SotaDirectives.versionHeaders
+import org.genivi.sota.http.SotaDirectives._
 
 object Boot extends App with Directives {
   implicit val system = ActorSystem("ota-plus-resolver")
@@ -41,18 +41,19 @@ object Boot extends App with Directives {
     "ota-plus-resolver/" + bi.version
   }
 
-  val routes: Route = versionHeaders(version) {
-    (handleRejections(rejectionHandler) & handleExceptions(exceptionHandler)) {
-      pathPrefix("api" / "v1") {
-        new VehicleDirectives().route ~
-          new PackageDirectives().route ~
-          new FilterDirectives().route ~
-          new ResolveDirectives().route ~
-          new ComponentDirectives().route ~
-          new PackageFiltersResource().routes
-      } ~ new HealthResource(db).route
+  val routes: Route =
+    (logResponseMetrics("ota-plus-resolver") & versionHeaders(version)) {
+      (handleRejections(rejectionHandler) & handleExceptions(exceptionHandler)) {
+        pathPrefix("api" / "v1") {
+          new VehicleDirectives().route ~
+            new PackageDirectives().route ~
+            new FilterDirectives().route ~
+            new ResolveDirectives().route ~
+            new ComponentDirectives().route ~
+            new PackageFiltersResource().routes
+        } ~ new HealthResource(db).route
+      }
     }
-  }
 
   val host = config.getString("server.host")
   val port = config.getInt("server.port")
