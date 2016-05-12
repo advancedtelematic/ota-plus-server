@@ -17,7 +17,7 @@ import org.apache.commons.codec.binary.Base64
 import org.genivi.sota.core.db._
 import org.genivi.sota.core.resolver.{Connectivity, DefaultConnectivity, DefaultExternalResolverClient}
 import org.genivi.sota.core.transfer._
-import org.genivi.sota.http.HealthResource
+import org.genivi.sota.http.{HealthResource, SotaDirectives}
 
 import scala.util.{Failure, Success, Try}
 import org.genivi.sota.http.SotaDirectives._
@@ -91,10 +91,8 @@ object Boot extends App {
   )
 
   val loggedRoutes = {
-    versionHeaders(version) {
-      logRequestResult("ota-plus-core", Logging.DebugLevel) {
-        routes
-      }
+    (logResponseMetrics("ota-plus-core") & versionHeaders(version)) {
+      routes
     }
   }
 
