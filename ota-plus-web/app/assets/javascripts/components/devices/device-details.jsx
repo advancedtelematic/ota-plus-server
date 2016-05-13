@@ -15,8 +15,7 @@ define(function(require) {
         textPackagesHistory: context.strings.viewhistory
       }
       this.showQueueHistory = this.showQueueHistory.bind(this);
-    }
-    componentWillMount(){
+      
       SotaDispatcher.dispatch({actionType: 'get-device', vin: this.props.params.vin});
       this.props.Device.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
     }
@@ -37,65 +36,74 @@ define(function(require) {
       });
     }
     render() {
-      var Device = this.props.Device.deref()[0];
+      var Device = this.props.Device.deref();
       return (
-        <div>
-          <DetailsHeader device={Device} />
-          <div className="row">
-            <div className="col-md-6 nopadding border-right-2">
-              <div className="panel panel-ats">
-                <div className="panel-heading">
-                  <div className="panel-heading-left pull-left">
-                    {this.context.strings.packages}
+        <ReactCSSTransitionGroup
+          transitionAppear={true}
+          transactionLeave={false}
+          transitionAppearTimeout={500}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}
+          transitionName="example">  
+          <div>
+            <DetailsHeader device={Device} />
+            <div className="row">
+              <div className="col-md-6 nopadding border-right-2">
+                <div className="panel panel-ats">
+                  <div className="panel-heading">
+                    <div className="panel-heading-left pull-left">
+                      {this.context.strings.packages}
+                    </div>
                   </div>
-                </div>
-                <div className="panel-body">
-                  <Packages key={'dsads'} vin={this.props.params.vin}/>
-                </div>
-                <div className="panel-footer">
-                  10 compatible, 5 installed, 0 broken, 4 queued
+                  <div className="panel-body">
+                    <Packages vin={this.props.params.vin}/>
+                  </div>
+                  <div className="panel-footer">
+                    10 compatible, 5 installed, 0 broken, 4 queued
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-md-6 nopadding">
-              <div className="panel panel-ats">
-                <div className="panel-heading">
-                  <div className="panel-heading-left pull-left">
-                    {this.context.strings.queue}
+              <div className="col-md-6 nopadding">
+                <div className="panel panel-ats">
+                  <div className="panel-heading">
+                    <div className="panel-heading-left pull-left">
+                      {this.context.strings.queue}
+                    </div>
+                    <div className="panel-heading-right pull-right">
+                      <button onClick={this.showQueueHistory} className="btn btn-black">{this.state.textPackagesHistory}</button>
+                    </div>
                   </div>
-                  <div className="panel-heading-right pull-right">
-                    <button onClick={this.showQueueHistory} className="btn btn-black">{this.state.textPackagesHistory}</button>
-                  </div>
-                </div>
-                <div className="panel-body">
-                  <div className="alert alert-ats alert-dismissible fade in" role="alert">
-                    <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true"></span></button>
-                    <img src="/assets/img/icons/info.png" className="icon-info" alt=""/> 
-                    The installation of the queued packages will start automatically when you connect to your device.
-                  </div>
-                  <div id="queue-both-lists">
-                    {this.state.showPackagesHistory ? 
-                      <ReactCSSTransitionGroup
-                        transitionEnterTimeout={500}
-                        transitionLeaveTimeout={500}
-                        transitionAppear={true}
-                        transitionAppearTimeout={500}
-                        transitionName="example">
+                  <div className="panel-body">
+                    <div className="alert alert-ats alert-dismissible fade in" role="alert">
+                      <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true"></span></button>
+                      <img src="/assets/img/icons/info.png" className="icon-info" alt=""/> 
+                      The installation of the queued packages will start automatically when you connect to your device.
+                    </div>
+                    <div id="queue-both-lists">
+                      {this.state.showPackagesHistory ? 
+                        <ReactCSSTransitionGroup
+                          transitionAppear={true}
+                          transactionLeave={false}
+                          transitionAppearTimeout={500}
+                          transitionEnterTimeout={500}
+                          transitionLeaveTimeout={500}
+                          transitionName="example">
                           <PackagesHistory vin={this.props.params.vin}/>
                         </ReactCSSTransitionGroup>
-                    : null}
+                      : null}
                   
-                    <PackagesQueue vin={this.props.params.vin}/>
+                      <PackagesQueue vin={this.props.params.vin}/>
+                    </div>
                   </div>
-                </div>
-                <div className="panel-footer">
-                  4 packages in queue, 
-                  <i className="fa fa-circle package-circle red" aria-hidden="true"></i> 1 error
+                  <div className="panel-footer">
+                    4 packages in queue, 
+                    <i className="fa fa-circle package-circle red" aria-hidden="true"></i> 1 error
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </ReactCSSTransitionGroup>
       );
     }
   };

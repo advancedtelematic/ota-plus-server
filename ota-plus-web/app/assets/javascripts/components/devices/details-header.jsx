@@ -4,7 +4,10 @@ define(function(require) {
       Link = Router.Link;
         
   class DetailsHeader extends React.Component {
-    render() {
+    constructor(props) {
+      super(props);
+    }
+    render() {        
       var lastSeenDate = new Date(this.props.device.lastSeen);
       var labelClass = 'label-danger';
       switch(this.props.device.status) {
@@ -16,7 +19,6 @@ define(function(require) {
         default:
         break;
       }
-      
       return (
         <div className="row">
           <div className="device-header">

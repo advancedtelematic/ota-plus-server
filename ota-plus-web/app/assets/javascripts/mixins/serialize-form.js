@@ -1,4 +1,4 @@
-define(['jquery'], function($) {
+define(['jquery', 'react-dom'], function($, ReactDOM) {
   $.fn.serializeObject = function() {
     var o = {};
     var a = this.serializeArray();
@@ -16,7 +16,7 @@ define(['jquery'], function($) {
   };
 
   var serializeForm =  function(formRef) {
-    return $(formRef.getDOMNode()).serializeObject();
+    return $(ReactDOM.findDOMNode(formRef)).serializeObject();
   };
 
   return serializeForm;

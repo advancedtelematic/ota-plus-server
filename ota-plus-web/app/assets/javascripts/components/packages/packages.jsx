@@ -26,10 +26,12 @@ define(function(require) {
           that.setDivsHeight();
         }, 200);
       });
-            
+      
       window.addEventListener("resize", this.setDivsHeight);
       
-      that.setDivsHeight();
+      setTimeout(function(){
+        that.setDivsHeight();
+      }, 10);
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setDivsHeight);
@@ -71,7 +73,7 @@ define(function(require) {
       var offsetTop = jQuery('#queue-both-lists').offset().top;
       jQuery('#queue-both-lists').height(windowHeight - offsetTop - footerHeight - 40);
     }
-    render() {
+    render() {      
       return (
         <div id="packages">
           <div className="panel-subheading">

@@ -38,10 +38,11 @@ define(function(require) {
           </div>
   
           <ReactCSSTransitionGroup
-            transitionEnterTimeout={500}
-            transitionLeave={false}
             transitionAppear={true}
+            transactionLeave={false}
             transitionAppearTimeout={500}
+            transitionEnterTimeout={500}
+            transitionLeaveTimeout={500}
             transitionName="example">
             {this.state.showLog ? 
               !this.props.package.success ?
