@@ -24,4 +24,6 @@ var deTranslations = {
     log: 'Log',
     cancel: 'Stornieren',
     installedsuccessfully: 'Erfolgreich installiert',
+    newcampaign: 'Create new campaign',
+    ongoingcampaigns: 'Ongoing update campaigns',
 };

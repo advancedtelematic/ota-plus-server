@@ -7,6 +7,7 @@
     <title>SOTA Admin UI</title>
     <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
     <link rel='stylesheet' href='@routes.Assets.versioned("css/sota-styles.css")'>
   </head>
   <body>
@@ -23,6 +24,8 @@
 	    cachedCallback()
 	    requirejs.config({"paths": {"react": ["/webjars/react/0.14.7/react-with-addons"]}});
 	    requirejs.config({"paths": {"react-dom": ["/webjars/react/0.14.7/react-dom"]}});
+            requirejs.config({"paths": {"moment": ["https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min"]}});
+            requirejs.config({"paths": {"bootstrap-datetimepicker": ["https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min"]}});
 	  }
 	}
     </script>

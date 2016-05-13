@@ -22,7 +22,10 @@ define(function(require) {
       Packages = require('components/packages/packages'),
       NewDevice = require('components/devices/new-device'),
       Modal = require('components/modal'),
-      Profile = require('components/profile');
+      Profile = require('components/profile'),
+      RightPanel = require('components/campaigns/right-panel'),
+      NewCampaign = require('components/campaigns/new-campaign'),
+      Campaigns = require('components/campaigns/campaigns');
 
   const languages = {
     en: 'en', 
@@ -47,10 +50,12 @@ define(function(require) {
       this.state = {
         currentLang: currentLang,
         filterValue: '',
+        showCampaignPanel: false,
       }
       
       this.changeLanguage = this.changeLanguage.bind(this);
       this.changeFilter = this.changeFilter.bind(this);
+      this.toggleCampaignPanel = this.toggleCampaignPanel.bind(this);
     }
     componentDidMount() {
       jQuery(function () {
@@ -66,16 +71,23 @@ define(function(require) {
     changeFilter(filter) {
       this.setState({filterValue: filter});  
     }
+    toggleCampaignPanel() {
+      this.setState({
+        showCampaignPanel: !this.state.showCampaignPanel
+      });
+    }
     render() {
       var params = this.context.router.getCurrentParams();  
       var currentRoutes = this.context.router.getCurrentRoutes();
       var page = (currentRoutes[currentRoutes.length - 1]['name']) ? 'page-' + currentRoutes[currentRoutes.length - 1]['name'].split(/(?=[A-Z])/).join("-").toLowerCase() : 'page-home';
             
+      if(page == 'page-new-campaign' || page == 'page-campaigns') page += ' page-device-details';
+       
       return (
-        <div key={page} id={page}>
-          <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} changeFilter={this.changeFilter} filterValue={this.state.filterValue}/>
+        <div key={page} className={page}>
+          <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} changeFilter={this.changeFilter} filterValue={this.state.filterValue} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel}/>
           <div className="page wrapper container-fluid">
-            <RouteHandler {...params} filterValue={this.state.filterValue}  />
+            <RouteHandler {...params} filterValue={this.state.filterValue} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel} />
           </div>
         </div>
       );
@@ -100,13 +112,17 @@ define(function(require) {
 
   var routes = (
     <Route handler={Translate(App)} path="/" ignoreScrollBehavior={true}>
-      <DefaultRoute handler={Devices}/>
-      <Route path="/" handler={Devices}>
-        <Route name="newDevice" path="/devices/new" handler={Modal(NewDevice, {TitleVar: "newdevice"})}/>
+      <Route handler={RightPanel}>
+        <DefaultRoute handler={Devices}/>
+        <Route path="/" handler={Devices}>
+          <Route name="newDevice" path="/devices/new" handler={Modal(NewDevice, {TitleVar: "newdevice"})}/>
+        </Route>
+        <Route name="deviceDetails" path="/devices/:vin" handler={wrapComponent(DeviceDetails, {Device: db.showDevice})}>
+          <Route name="new-campaign" path="new-campaign" handler={Modal(NewCampaign, {TitleVar: "newcampaign", modalId: 'modal-new-campaign'})}/>
+        </Route>
+        <Route name="packages" handler={Packages}/>
+        <Route name="profile" handler={Profile}/>
       </Route>
-      <Route name="deviceDetails" path="/devices/:vin" handler={wrapComponent(DeviceDetails, {Device: db.showDevice})}/>
-      <Route name="packages" handler={Packages}/>
-      <Route name="profile" handler={Profile}/>
     </Route>
   );
 

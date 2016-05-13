@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      Router = require('react-router'),
       ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       SotaDispatcher = require('sota-dispatcher'),
       DetailsHeader = require('./details-header'),
@@ -103,6 +104,7 @@ define(function(require) {
               </div>
             </div>
           </div>
+          <Router.RouteHandler/>
         </ReactCSSTransitionGroup>
       );
     }
