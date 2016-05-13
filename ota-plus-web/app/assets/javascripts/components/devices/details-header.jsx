@@ -40,6 +40,9 @@ define(function(require) {
                 </div>
                 Device synchronized
               </div>
+              <Link to="new-campaign" params={{vin: (this.props.device.vin ? this.props.device.vin : '')}} className="btn-new-campaign pull-right">
+                Campaign wizard
+              </Link>
             </div>
           </div>
         </div>

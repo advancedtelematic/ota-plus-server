@@ -24,5 +24,7 @@ var enTranslations = {
     log: 'log',
     cancel: 'cancel',
     installedsuccessfully: 'Installed successfully',
+    newcampaign: 'Create new campaign',
+    ongoingcampaigns: 'Ongoing update campaigns',
 };
 
