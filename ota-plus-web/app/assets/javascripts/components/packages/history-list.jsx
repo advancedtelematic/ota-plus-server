@@ -4,7 +4,9 @@ define(function(require) {
       HistoryListItem = require('./history-list-item');
   
   class HistoryList extends React.Component {
-    componentWillMount(){
+    constructor(props) {
+      super(props);
+      
       SotaDispatcher.dispatch(this.props.DispatchObject);
       this.props.Packages.addWatch(this.props.PollEventName, _.bind(this.forceUpdate, this, null));
     }
@@ -22,9 +24,12 @@ define(function(require) {
         );
       }, this);       
       return (
-        <ul className="list-group"> 
+        packages.length > 0 ?
+          <ul className="list-group"> 
             {packages}
-        </ul>
+          </ul>
+        :
+          <div>History is empty</div>
       );
     }
   };

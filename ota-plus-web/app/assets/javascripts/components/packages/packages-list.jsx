@@ -9,11 +9,11 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        expandedPackages: []
+        data: {},
+        expandedPackages: [],
       };
       this.toggleExpandedPackages = this.toggleExpandedPackages.bind(this);
-    }
-    componentWillMount(){
+
       SotaDispatcher.dispatch(this.props.AllPackagesDispatchObject);
       this.props.AllPackages.addWatch(this.props.AllPackagesPollEventName, _.bind(this.forceUpdate, this, null));
       
@@ -34,12 +34,13 @@ define(function(require) {
       this.props.QueuedPackages.removeWatch(this.props.QueuedPackagesPollEventName);
     }
     componentDidMount() {
-      this.setPackagesListHeight();
-    }
-    setPackagesListHeight() {
-       
-      
-     
+      var that = this;
+    
+      setTimeout(function() {
+        that.setState({
+          data: that.prepareData(),
+        });
+      }, 200);
     }
     prepareData() {
       var Packages = this.props.AllPackages.deref();
@@ -53,9 +54,9 @@ define(function(require) {
       
       var QueuedIds = new Object();
       Queued.forEach(function(obj){
-        QueuedIds[obj.name+'_'+obj.version] = obj.name+'_'+obj.version;
+        QueuedIds[obj.packageId.name+'_'+obj.packageId.version] = obj.packageId.name+'_'+obj.packageId.version;
       });
-      
+            
       var GroupedPackages = new Object();
       Packages.filter(function(obj, index){
         var objKey = obj.id.name+'_'+obj.id.version;
@@ -136,8 +137,8 @@ define(function(require) {
       return 0;
     }
     render() {
-      var Packages = this.prepareData();
-
+      var Packages = this.state.data;
+console.log(this.state.data);
       var selectSort = this.props.selectSort;
       var SortedPackages = {};
       
@@ -201,16 +202,18 @@ define(function(require) {
             <PackagesListItem key={'package-' + pack.packageName + '-items'} name={pack.packageName} toggleExpandedPackages={this.toggleExpandedPackages} queuedPackage={queuedPackage} installedPackage={installedPackage} packageInfo={packageInfo} mainLabel={mainLabel}/>
             {this.state.expandedPackages.indexOf(pack.packageName) > -1 ?
               <ReactCSSTransitionGroup
+                transitionAppear={true}
+                transactionLeave={false}
+                transitionAppearTimeout={500}
                 transitionEnterTimeout={500}
                 transitionLeaveTimeout={500}
-                transitionAppear={true}
-                transitionAppearTimeout={500}
                 transitionName="example">
                 <PackageListItemDetails 
                   key={'package-' + pack.packageName + '-versions'} 
                   versions={sortedElements} 
                   vin={this.props.vin} 
-                  isQueued={pack.isQueued}/> 
+                  isQueued={pack.isQueued}
+                  refresh={this.refresh}/> 
               </ReactCSSTransitionGroup>
             : null}
           </div>

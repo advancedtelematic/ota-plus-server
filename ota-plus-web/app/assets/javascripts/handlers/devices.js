@@ -36,7 +36,7 @@ define(function(require) {
             });
           break;
           case 'search-devices-by-regex':
-            var query = payload.regex ? '?regex=' + payload.regex : '';
+            var query = payload.regex ? '&regex=' + payload.regex : '';
             sendRequest.doGet('/api/v1/device_data?status=true' + query)
               .success(function(vehicles) {
                 db.searchableDevices.reset(vehicles);
@@ -95,6 +95,18 @@ define(function(require) {
           case 'add-packages-to-vin':
             sendRequest.doPut('/api/v1/vehicles/' + payload.vin + '/packages', payload.packages)
               .success(function() {
+              });
+          break;
+          case 'install-package-for-vin':
+            sendRequest.doPost('/api/v1/vehicle_updates/' + payload.vin, payload.data)
+              .success(function() {
+                SotaDispatcher.dispatch({actionType: 'get-package-queue-for-vin', vin: payload.vin});
+              });
+          break;
+          case 'reorder-queue-for-vin':
+            sendRequest.doPut('/api/v1/vehicle_updates/' + payload.vin + '/order')
+              .success(function() {
+                SotaDispatcher.dispatch({actionType: 'get-package-queue-for-vin', vin: payload.vin});
               });
           break;
         }
