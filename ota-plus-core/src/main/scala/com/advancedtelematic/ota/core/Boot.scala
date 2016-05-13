@@ -91,7 +91,8 @@ object Boot extends App {
   )
 
   val loggedRoutes = {
-    (logResponseMetrics("ota-plus-core") & versionHeaders(version)) {
+    import akka.http.scaladsl.server.directives.DebuggingDirectives._
+    (logRequest("ota-core", Logging.InfoLevel) & logResponseMetrics("ota-plus-core") & versionHeaders(version)) {
       routes
     }
   }
