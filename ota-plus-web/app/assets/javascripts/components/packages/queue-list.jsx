@@ -7,22 +7,21 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        data: null
+        data: []
       }
       this.dragStart = this.dragStart.bind(this);
       this.dragEnd = this.dragEnd.bind(this);
       this.dragOver = this.dragOver.bind(this);
+      
+      SotaDispatcher.dispatch(this.props.DispatchObject);
+      this.props.QueuedPackages.addWatch(this.props.PollEventName, _.bind(this.setData, this, null));
     }
     componentWillUnmount(){
-      this.props.Packages.removeWatch(this.props.PollEventName);
+      this.props.QueuedPackages.removeWatch(this.props.PollEventName);
     }
-    componentWillMount(){
-      SotaDispatcher.dispatch(this.props.DispatchObject);
-      this.props.Packages.addWatch(this.props.PollEventName, _.bind(this.forceUpdate, this, null));
-    }
-    componentDidMount() {
+    setData() {
       this.setState({
-        data: {packages: this.props.Packages.deref()}
+        data: {packages: this.props.QueuedPackages.deref()}
       });
     }
     dragStart(e) {

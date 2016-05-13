@@ -14,7 +14,7 @@ define(function(require) {
     handleSubmit(e) {
       e.preventDefault();
 
-      payload = serializeForm(this.refs.form);
+      var payload = serializeForm(this.refs.form);
       SotaDispatcher.dispatch({
         actionType: 'create-vehicle',
         vehicle: payload

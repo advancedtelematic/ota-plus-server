@@ -7,7 +7,9 @@ define(function(require) {
       DeviceListItem = require('./devices-list-item');
   
   class DevicesList extends React.Component {
-    componentWillMount(){
+    constructor(props) {
+      super(props);
+            
       SotaDispatcher.dispatch(this.props.DispatchObject);
       this.props.Devices.addWatch(this.props.PollEventName, _.bind(this.forceUpdate, this, null));
     }
@@ -19,7 +21,7 @@ define(function(require) {
     componentWillUnmount(){
       this.props.Devices.removeWatch(this.props.PollEventName);
     }
-    render() {        
+    render() {   
       var devicesIds = [];
       var devices = _.map(this.props.Devices.deref(), function(device, i) {   
         return (
@@ -27,7 +29,7 @@ define(function(require) {
         );
       }, this);       
       return (
-        <div className="row" id="devices-list">
+        <div className="row" id="devices-list" >
           <div className="col-md-12">     
             <div id="devices-container">
             {devices.length > 0 ? 

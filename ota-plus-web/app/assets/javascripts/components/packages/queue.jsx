@@ -8,8 +8,8 @@ define(function(require) {
       return (
         <div id="queue">
           <QueueList 
-            Packages={db.packageQueueForVin}
-            PollEventName="poll-packages-queue-for-vin"
+            QueuedPackages={db.packageQueueForVin}
+            PollEventName="poll-queued-packages"
             DispatchObject={{actionType: "get-package-queue-for-vin", vin: this.props.vin}}/>
         </div>
       );

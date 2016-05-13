@@ -72,19 +72,12 @@ define(function(require) {
       var page = (currentRoutes[currentRoutes.length - 1]['name']) ? 'page-' + currentRoutes[currentRoutes.length - 1]['name'].split(/(?=[A-Z])/).join("-").toLowerCase() : 'page-home';
             
       return (
-        <ReactCSSTransitionGroup
-          transitionLeave={false}
-          transitionAppear={true}
-          transitionEnterTimeout={500}
-          transitionAppearTimeout={500}
-          transitionName="homepage">
-          <div key={page} id={page}>
-            <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} changeFilter={this.changeFilter} filterValue={this.state.filterValue}/>
-            <div className="page wrapper container-fluid">
-              <RouteHandler {...params} filterValue={this.state.filterValue}  />
-            </div>
+        <div key={page} id={page}>
+          <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} changeFilter={this.changeFilter} filterValue={this.state.filterValue}/>
+          <div className="page wrapper container-fluid">
+            <RouteHandler {...params} filterValue={this.state.filterValue}  />
           </div>
-        </ReactCSSTransitionGroup>
+        </div>
       );
     }
   };
