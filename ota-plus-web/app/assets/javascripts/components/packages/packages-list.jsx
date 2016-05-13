@@ -138,7 +138,6 @@ define(function(require) {
     }
     render() {
       var Packages = this.state.data;
-console.log(this.state.data);
       var selectSort = this.props.selectSort;
       var SortedPackages = {};
       
