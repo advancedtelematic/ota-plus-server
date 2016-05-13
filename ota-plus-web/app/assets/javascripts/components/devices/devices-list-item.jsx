@@ -4,6 +4,9 @@ define(function(require) {
       Link = Router.Link;
   
   class DeviceListItem extends React.Component {
+    constructor(props) {
+      super(props);
+    }
     render() {
       var itemId = 'vin-'+this.props.vin;
       var cutVin = this.props.vin.substring(0, 4);

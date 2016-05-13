@@ -22,7 +22,7 @@ define(function(require) {
     render() {
       return (
         <li className={'list-group-item ' + (this.state.showLog ? 'show-log ' : '') + this.props.status}>
-          <span className="list-group-item-text-left">{this.props.package.name}</span>
+          <span className="list-group-item-text-left">{this.props.package.packageId.name}</span>
           <span className="drag-bar pull-right"><i className="fa fa-bars"></i></span>
           <button className="btn btn-action pull-right">{this.context.strings.cancel}</button>
           <button className="btn btn-action pull-right" onClick={this.showLog}>{this.context.strings.log}</button>
@@ -35,14 +35,15 @@ define(function(require) {
                 <i className="fa fa-times-circle fa-stack-1x red" aria-hidden="true"></i>
               </span>
             : null}
-            <strong>v. {this.props.package.version}</strong>
+            <strong>v. {this.props.package.packageId.version}</strong>
           </div>
   
           <ReactCSSTransitionGroup
-            transitionEnterTimeout={500}
-            transitionLeave={false}
             transitionAppear={true}
+            transactionLeave={false}
             transitionAppearTimeout={500}
+            transitionEnterTimeout={500}
+            transitionLeaveTimeout={500}
             transitionName="example">
             {this.state.showLog ? 
               (this.props.status == 'error') ?

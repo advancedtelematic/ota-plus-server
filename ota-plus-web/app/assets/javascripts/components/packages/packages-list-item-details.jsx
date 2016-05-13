@@ -1,9 +1,12 @@
 define(function(require) {
-  var React = require('react');
+  var React = require('react'),
+  SotaDispatcher = require('sota-dispatcher');
 
   class PackageListItemDetails extends React.Component {
     constructor(props) {
       super(props);
+      
+      this.refreshData = this.refreshData.bind(this);
     }
     installPackage(packageName, packageVersion, e) {
       e.preventDefault();
@@ -13,10 +16,14 @@ define(function(require) {
         version: packageVersion
       };
       
-      sendRequest.doPost('/api/v1/updates/' + this.props.vin, data)
-        .success(_.bind(function() {
-           this.setState({refreshData: true});
-        }, this));
+      SotaDispatcher.dispatch({
+        actionType: 'install-package-for-vin',
+        data: data,
+        vin: this.props.vin
+      });
+    }
+    refreshData() {
+      SotaDispatcher.dispatch({actionType: "get-package-queue-for-vin", vin: this.props.vin});      
     }
     render() {
       var versions = _.map(this.props.versions, function(version, i) {
