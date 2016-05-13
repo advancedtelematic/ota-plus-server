@@ -24,4 +24,6 @@ var jpTranslations = {
     log: 'ログ',
     cancel: 'キャンセル',
     installedsuccessfully: '正常にインストールされました',
+    newcampaign: 'Create new campaign',
+    ongoingcampaigns: 'Ongoing update campaigns',
 };
