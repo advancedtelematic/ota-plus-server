@@ -7,41 +7,13 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        progress: 0,
-        progressIntervalId: null,
         showMoreStats: false,
         reload: 0,
       }
-      
+            
       this.toggleStats = this.toggleStats.bind(this);
-      this.updateProgress = this.updateProgress.bind(this);
       this.cancelCampaign = this.cancelCampaign.bind(this);
       this.pauseCampaign = this.pauseCampaign.bind(this);
-    }
-    componentDidMount() {
-      var id = setInterval(this.updateProgress, 1000);
-      this.setState({
-        progressIntervalId: id
-      });
-    }
-    updateProgress() {
-      var currentProgress = this.state.progress;
-      var newProgress = Math.min(currentProgress + 1, 100);
-            
-      if(newProgress < 100) {
-        this.setState({
-          progress: newProgress
-        });
-      } else if(newProgress == 100 && currentProgress != newProgress) {
-        var that = this;
-        clearInterval(this.state.progressIntervalId);
-        
-        setTimeout(function(){
-          that.setState({
-           progress: newProgress
-          });
-        }, 400);
-      }
     }
     toggleStats(e) {
       e.preventDefault();
@@ -62,20 +34,23 @@ define(function(require) {
     pauseCampaign() {
       var campaignsData = JSON.parse(localStorage.getItem('campaignsData'));  
       
-      var otherCampaignsData = campaignsData.filter(function(obj) {
-        return obj.name != this.props.campaign.name;
+      var newCampaignsData = [];
+          
+      _.map(campaignsData, function(campaign, i) {
+        newCampaignsData[i] = campaign;
+        
+        if(campaign.name == this.props.campaign.name) {
+          if(newCampaignsData[i].status == 'running') {
+            newCampaignsData[i].status = 'paused';
+          } else if(newCampaignsData[i].status == 'paused') {
+            newCampaignsData[i].status = 'running';
+          }
+        }
       }, this);
       
-      var thisCampaignData = campaignsData.find(function(obj) {
-        return obj.name == this.props.campaign.name;
-      }, this);
+      localStorage.setItem('campaignsData', JSON.stringify(newCampaignsData));
       
-      thisCampaignData.status = 'paused';
-      otherCampaignsData.push(thisCampaignData);
-      
-      /*localStorage.setItem('campaignsData', JSON.stringify(thisCampaignData));
-      
-      this.props.reload();*/
+      this.props.reload();
     }
     render() {
       var campaign = this.props.campaign;
@@ -85,10 +60,12 @@ define(function(require) {
             <div className="col-md-7">
               <h4>{campaign.name}</h4>
             </div>
-            <div className="col-md-5">
-              <button className="btn btn-campaign pull-right" onClick={this.cancelCampaign}>Cancel</button>
-              <button className="btn btn-campaign pull-right" onClick={this.pauseCampaign}>Pause</button>
-            </div>
+            {campaign.status != 'finished' ?
+              <div className="col-md-5">
+                <button className="btn btn-campaign pull-right" onClick={this.cancelCampaign}>Cancel</button>
+                <button className="btn btn-campaign pull-right" onClick={this.pauseCampaign}>{campaign.status == 'running' ? 'Pause' : 'Resume'}</button>
+              </div>
+            : null}
           </div>
           <div className="campaign-box-inner">
             <div>
@@ -96,7 +73,10 @@ define(function(require) {
               {campaign.status == 'running' ?
                 <span className="green">running</span> 
               :
-                <span className="red">stopped</span>
+                campaign.status == 'paused' ?
+                  <span className="red">paused</span>
+                :
+                  <span className="green">finished</span>
               }
               &nbsp; (launched today)
             </div>
@@ -112,7 +92,7 @@ define(function(require) {
                 </div>
                 <div className="col-md-3 nopadding">
                   <div className="progress">
-                    <div className="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: this.state.progress + '%'}}></div>
+                    <div className="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: this.props.campaign.progress + '%'}}></div>
                   </div>
                 </div>
               </div>
