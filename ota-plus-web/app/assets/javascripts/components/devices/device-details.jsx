@@ -78,7 +78,7 @@ define(function(require) {
                     <div className="alert alert-ats alert-dismissible fade in" role="alert">
                       <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true"></span></button>
                       <img src="/assets/img/icons/info.png" className="icon-info" alt=""/> 
-                      The installation of the queued packages will start automatically when you connect to your device.
+                      The installation of the packages will start automatically when you connect to your device.
                     </div>
                     <div id="queue-both-lists">
                       {this.state.showPackagesHistory ? 

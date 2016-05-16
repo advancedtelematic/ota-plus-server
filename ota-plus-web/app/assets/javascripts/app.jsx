@@ -51,6 +51,7 @@ define(function(require) {
         currentLang: currentLang,
         filterValue: '',
         showCampaignPanel: false,
+        intervalId: null,
       }
       
       this.changeLanguage = this.changeLanguage.bind(this);
@@ -75,6 +76,34 @@ define(function(require) {
       this.setState({
         showCampaignPanel: !this.state.showCampaignPanel
       });
+    }
+    componentDidMount() {
+      var intervalId = setInterval(function() {
+        var campaignsData = JSON.parse(localStorage.getItem('campaignsData'));
+        if(campaignsData !== null && campaignsData.length > 0) {
+          var newCampaignsData = [];
+          
+          _.map(campaignsData, function(campaign, i) {
+            newCampaignsData[i] = campaign;
+            if(newCampaignsData[i].status == 'running') {
+              if(newCampaignsData[i].progress < 100) {
+                newCampaignsData[i].progress = newCampaignsData[i].progress + 1;
+              } else {
+                newCampaignsData[i].status = 'finished';
+              }
+            }
+          });
+          
+          localStorage.setItem('campaignsData', JSON.stringify(newCampaignsData));
+        }
+      }, 5000);
+      
+      this.setState({
+        intervalId: intervalId
+      });
+    }
+    componentWillUnmount() {
+      clearInterval(this.state.intervalId);
     }
     render() {
       var params = this.context.router.getCurrentParams();  
