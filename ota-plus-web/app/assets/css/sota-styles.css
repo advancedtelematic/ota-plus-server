@@ -291,7 +291,7 @@ button.close:hover, button.close:active, button.close:focus {
     color: #D9534F;
 }
 
-.device-status.device-status-OutOfDate {
+.device-status.device-status-Outdated {
     color: #F0AD4E;
 }
 
@@ -322,7 +322,6 @@ button.close:hover, button.close:active, button.close:focus {
 
 .page-device-details .device-header-status {
     font-size: 16px;
-    width: 194px;
     height: 34px;
     padding: 6px 10px 0 10px;
     margin: 25px 0 0 0;
@@ -997,4 +996,8 @@ button.close:hover, button.close:active, button.close:focus {
 .fullsize-overflow-hidden {
     width: 100%;
     overflow: hidden;
+}
+
+.progress {
+    margin: 0;
 }

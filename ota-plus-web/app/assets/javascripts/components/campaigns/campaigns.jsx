@@ -9,9 +9,20 @@ define(function(require) {
       super(props);
       this.state = {
         counter: 0,
+        progressIntervalId: null,
       }
       
       this.reload = this.reload.bind(this);
+    }
+    componentDidMount() {
+      var that = this;
+      var id = setInterval(function() {
+        that.reload();
+      }, 500);
+      
+      this.setState({
+        progressIntervalId: id
+      });
     }
     reload() {
       this.setState({

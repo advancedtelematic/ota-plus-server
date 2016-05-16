@@ -94,6 +94,7 @@ define(function(require) {
     }
     createCampaign() {
       var newCampaigns = [];
+      var that = this;
       var data = serializeForm(this.refs.form);          
       if(localStorage.getItem('campaignsData') !== null) {
         newCampaigns = JSON.parse(localStorage.getItem('campaignsData'));
@@ -102,6 +103,7 @@ define(function(require) {
       var campaignData = {};
       campaignData['name'] = Math.random().toString(36).substring(13).toUpperCase() + '-4432' + '-44';
       campaignData['status'] = 'running';
+      campaignData['progress'] = 0;
       campaignData['min_battery_level'] = data.min_battery_level;
       campaignData['device_state'] = data.device_state;
       campaignData['installation_policy'] = data.installation_policy;
@@ -113,10 +115,9 @@ define(function(require) {
       campaignData['end_time'] = data.end_time;
       
       newCampaigns.push(campaignData);
-      
+            
       localStorage.setItem('campaignsData', JSON.stringify(newCampaigns));
-      
-      this.context.router.transitionTo('deviceDetails', {vin: this.props.params.vin});
+      this.context.router.transitionTo('deviceDetails', {vin: that.props.params.vin});
     }
     jumpToNextInput(e) {     
       var target = e.target;
@@ -196,7 +197,7 @@ define(function(require) {
             <div className="col-md-9">
               <select className="form-control" name="device_state">
                 <option value="look">Look</option>
-                <option value="aoo">Aoo</option>
+                <option value="acc">Acc</option>
                 <option value="on">On</option>
                 <option value="start">Start</option>
               </select>
@@ -216,7 +217,7 @@ define(function(require) {
               <select className="form-control" name="installation_policy">
                 <option value="1">Automatic download and install</option>
                 <option value="2">Automatic download, opt-in install</option>
-                <option value="3">Automatic download and install</option>
+                <option value="3">Opt-in download and install</option>
               </select>
             </div>
           </div>

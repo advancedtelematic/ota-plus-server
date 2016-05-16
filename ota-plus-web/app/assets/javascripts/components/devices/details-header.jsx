@@ -10,12 +10,15 @@ define(function(require) {
     render() {        
       var lastSeenDate = new Date(this.props.device.lastSeen);
       var labelClass = 'label-danger';
+      var deviceStatus = 'Never seen online';
       switch(this.props.device.status) {
-        case 'upToDate':
+        case 'UpToDate':
           labelClass = 'label-success';
+          deviceStatus = 'Device synchronized';
         break;
-        case 'outOfDate':
+        case 'Outdated':
           labelClass = 'label-warning';
+          deviceStatus = 'Device unsynchronized'
         default:
         break;
       }
@@ -38,7 +41,7 @@ define(function(require) {
                 <div className={"device-status device-status-" + this.props.device.status}>
                   <i className="fa fa-circle" aria-hidden="true"></i>
                 </div>
-                Device synchronized
+                {deviceStatus}
               </div>
               <Link to="new-campaign" params={{vin: (this.props.device.vin ? this.props.device.vin : '')}} className="btn-new-campaign pull-right">
                 Campaign wizard
