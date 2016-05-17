@@ -1,7 +1,5 @@
 define(function(require) {
   var React = require('react'),
-      Router = require('react-router'),
-      Link = Router.Link,
       Campaign = require('./campaign');
   
   class Campaigns extends React.Component {

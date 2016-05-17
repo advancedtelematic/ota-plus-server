@@ -9,7 +9,7 @@ define(function(require) {
     var url = '/api/v1/vehicles/' + payload.vehicle.vin;
     sendRequest.doPut(url, payload.vehicle)
       .success(function(vehicles) {
-        SotaDispatcher.dispatch({actionType: 'search-vehicles-by-regex'});
+        SotaDispatcher.dispatch({actionType: 'search-devices-by-regex'});
       });
   }
 

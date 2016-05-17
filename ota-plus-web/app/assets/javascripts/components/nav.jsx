@@ -37,7 +37,7 @@ define(function(require) {
               </a>
             : null}
             <LanguageSelector class="lang-selector pull-right" currentLang={this.props.currentLang} changeLang={this.props.changeLang}/>
-            <Link to="newDevice" className="btn-add margin-top-10 margin-left-30 pull-right">
+            <Link to="newdevice" className="btn-add margin-top-10 margin-left-30 pull-right">
               <img src="/assets/img/icons/add.png" alt="" />
             </Link>
             <SearchBar class="search-bar margin-top-10 pull-right" changeFilter={this.props.changeFilter} filterValue={this.props.filterValue}/>

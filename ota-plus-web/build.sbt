@@ -41,7 +41,6 @@ libraryDependencies ++= Seq (
     "org.webjars" %% "webjars-play" % "2.4.0-1",
     "org.webjars" % "webjars-locator" % "0.27",
     "org.webjars.bower" % "react" % "0.14.7",
-    "org.webjars.bower" % "react-router" % "0.13.4",
     "org.webjars.bower" % "flux" % "2.1.1",
     "org.webjars.bower" % "backbone" % "1.3.3",
     "org.webjars.bower" % "jquery" % "1.12.3",

@@ -2,10 +2,12 @@ define(function(require) {
   /* Main packages */
   var React = require('react'),
       ReactDOM = require('react-dom'),
-      Router = require('react-router'),
-      Route = Router.Route,
-      RouteHandler = Router.RouteHandler,
-      DefaultRoute = Router.DefaultRoute,
+      ReactRouter = require('react-router'),
+      Router = ReactRouter.Router,
+      Route = ReactRouter.Route,
+      Link = ReactRouter.Link,
+      IndexRoute = ReactRouter.IndexRoute,
+      HashHistory = ReactRouter.hashHistory,
       db = require('stores/db'),
       Handler = require('handlers/handler'),
       ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
@@ -106,17 +108,31 @@ define(function(require) {
       clearInterval(this.state.intervalId);
     }
     render() {
-      var params = this.context.router.getCurrentParams();  
-      var currentRoutes = this.context.router.getCurrentRoutes();
-      var page = (currentRoutes[currentRoutes.length - 1]['name']) ? 'page-' + currentRoutes[currentRoutes.length - 1]['name'].split(/(?=[A-Z])/).join("-").toLowerCase() : 'page-home';
+      var path = this.context.location.pathname.toLowerCase().split('/');
+      var page = '';
             
-      if(page == 'page-new-campaign' || page == 'page-campaigns') page += ' page-device-details';
-       
+      if(path[1] !== undefined) {
+        switch(path[1]) {
+          case '':
+            page = 'page-home';
+          break;
+          case 'newdevice': 
+            page = 'page-home';
+          break;
+          case 'devicedetails': 
+            page = 'page-device-details';
+          break;
+          default:
+          break;
+        }
+      }
+   
+      
       return (
         <div key={page} className={page}>
           <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} changeFilter={this.changeFilter} filterValue={this.state.filterValue} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel}/>
           <div className="page wrapper container-fluid">
-            <RouteHandler {...params} filterValue={this.state.filterValue} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel} />
+            {React.cloneElement(this.props.children, {filterValue: this.state.filterValue, showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
           </div>
         </div>
       );
@@ -124,42 +140,44 @@ define(function(require) {
   };
 
   App.contextTypes = {
-    router: React.PropTypes.func
+    location: React.PropTypes.object,
   };
-  
-  
 
   var wrapComponent = function wrapComponent(Component, props) {
     return class wrapComponentClass extends React.Component {
       render() {
         return (
-          <Component {...props} params={this.props.params}/>
+          <Component {...this.props} {...props} params={this.props.params}/>
         )
       }
     }
   };
 
   var routes = (
-    <Route handler={Translate(App)} path="/" ignoreScrollBehavior={true}>
-      <Route handler={RightPanel}>
-        <DefaultRoute handler={Devices}/>
-        <Route path="/" handler={Devices}>
-          <Route name="newDevice" path="/devices/new" handler={Modal(NewDevice, {TitleVar: "newdevice"})}/>
+    <Route component={Translate(App)} path="/" ignoreScrollBehavior={true}>
+      <Route component={RightPanel}>
+        <IndexRoute component={Devices}/>
+        <Route path="/" component={Devices}>
+          <Route path="newdevice" component={Modal(NewDevice, {TitleVar: "newdevice"})}/>
         </Route>
-        <Route name="deviceDetails" path="/devices/:vin" handler={wrapComponent(DeviceDetails, {Device: db.showDevice})}>
-          <Route name="new-campaign" path="new-campaign" handler={Modal(NewCampaign, {TitleVar: "newcampaign", modalId: 'modal-new-campaign'})}/>
+        <Route path="devicedetails/:vin" component={wrapComponent(DeviceDetails, {Device: db.showDevice})}>
+          <Route path="newcampaign" component={Modal(NewCampaign, {TitleVar: "newcampaign", modalId: 'modal-new-campaign'})}/>
         </Route>
-        <Route name="packages" handler={Packages}/>
-        <Route name="profile" handler={Profile}/>
+        <Route name="packages" component={Packages}/>
+        <Route name="profile" component={Profile}/>
       </Route>
     </Route>
   );
 
   return {
     run() {
-      Router.run(routes, function (Handler) {
-        ReactDOM.render(<Handler />, document.getElementById('app'));
-      });
+      ReactDOM.render(
+        <Router history={HashHistory}>
+          {routes}
+        </Router>, 
+        document.getElementById('app')
+      );
+        
       SotaDispatcher.dispatch({
         actionType: 'initialize'
       });
