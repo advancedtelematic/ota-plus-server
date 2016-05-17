@@ -1,6 +1,5 @@
 define(function(require) {
-  var React = require('react'),
-      Router = require('react-router');
+  var React = require('react');
 
   var Modal = function Modal(Component, vars) {
     var ModalClass = class ModalClass extends React.Component {
@@ -9,7 +8,7 @@ define(function(require) {
         this.close = this.close.bind(this);
       }
       close() {
-        return Router.History.back();
+        return this.context.router.goBack();
       }
       render() {
         return (
@@ -31,6 +30,8 @@ define(function(require) {
     }
     
     ModalClass.contextTypes = {
+      router: React.PropTypes.object.isRequired,
+      history: React.PropTypes.object.isRequired,
       strings: React.PropTypes.object.isRequired
     };
     

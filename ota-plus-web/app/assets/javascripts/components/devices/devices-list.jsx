@@ -1,7 +1,6 @@
 define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
-      RouteHandler = Router.RouteHandler,
       _ = require('underscore'),
       SotaDispatcher = require('sota-dispatcher'),
       DeviceListItem = require('./devices-list-item');

@@ -104,7 +104,7 @@ define(function(require) {
               </div>
             </div>
           </div>
-          <Router.RouteHandler/>
+          {this.props.children}
         </ReactCSSTransitionGroup>
       );
     }

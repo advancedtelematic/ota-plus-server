@@ -1,7 +1,5 @@
 define(function(require) {
   var React = require('react'),
-      Router = require('react-router'),
-      Link = Router.Link,
       _ = require('underscore'),
       serializeForm = require('../../mixins/serialize-form'),
       BootstrapDatetimepicker = require('bootstrap-datetimepicker'),
@@ -94,7 +92,6 @@ define(function(require) {
     }
     createCampaign() {
       var newCampaigns = [];
-      var that = this;
       var data = serializeForm(this.refs.form);          
       if(localStorage.getItem('campaignsData') !== null) {
         newCampaigns = JSON.parse(localStorage.getItem('campaignsData'));
@@ -116,8 +113,8 @@ define(function(require) {
       
       newCampaigns.push(campaignData);
             
-      localStorage.setItem('campaignsData', JSON.stringify(newCampaigns));
-      this.context.router.transitionTo('deviceDetails', {vin: that.props.params.vin});
+      localStorage.setItem('campaignsData', JSON.stringify(newCampaigns));      
+      this.context.history.pushState(null, `devicedetails/${this.props.params.vin}`);
     }
     jumpToNextInput(e) {     
       var target = e.target;
@@ -307,8 +304,8 @@ define(function(require) {
   };
 
   NewCampaign.contextTypes = {
+    history: React.PropTypes.object.isRequired,
     strings: React.PropTypes.object.isRequired,
-    router: React.PropTypes.func
   };
 
   return NewCampaign;

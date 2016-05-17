@@ -30,13 +30,17 @@ define(function(require) {
       }
       render() {  
         return (
-  	  <Component />
+  	  <Component {...this.props}/>
 	);
       }
     }
     
     TranslateClass.childContextTypes = {
       strings: React.PropTypes.object.isRequired
+    };
+    
+    TranslateClass.contextTypes = {
+      router: React.PropTypes.object.isRequired,
     };
     
     return TranslateClass;
