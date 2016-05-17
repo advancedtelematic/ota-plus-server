@@ -37,20 +37,26 @@ extends Controller with ApiClientSupport
     searchWith(req, resolverApi.search)
   }
 
+  private[this] def accessToken(req: Request[_]) = req.cookies.get("access_token").map(_.value)
+
   private def requestCreate(vin: Vin, req: Request[RawBuffer]): Future[Result] = {
+    val token = accessToken(req)
+
     // Must PUT "vehicles" on both core and resolver
     // TODO: Retry until both responses are success
     for {
+      respCore <-  coreApi.createVehicle(token, vin)
+      respResult <- resolverApi.createVehicle(token, vin)
       vehicleMetadata <- registerAuthPlusVehicle(vin)
-      respCore <-  coreApi.createVehicle(vin)
-      respResult <- resolverApi.createVehicle(vin)
       _ <- vehiclesStore.registerVehicle(vehicleMetadata)
     } yield respCore
   }
 
-  private def searchWith(req: Request[_], apiOp: Seq[(String, String)] => Future[Result]): Future[Result] = {
+  private def searchWith(req: Request[_], apiOp: (Option[String], Seq[(String, String)]) => Future[Result]):
+  Future[Result] = {
     val params = req.queryString.mapValues(_.head).toSeq
-    apiOp(params)
+
+    apiOp(accessToken(req), params)
   }
 
   /**
