@@ -30,6 +30,12 @@ trait ApiClient { self =>
     ws.url(baseUrl + apiPrefix + path)
       .withFollowRedirects(false)
 
+  def withBearerToken(request: WSRequest, token: Option[String]): WSRequest =
+    token match {
+      case Some(token) => request.withHeaders(("Authorization", "Bearer " + token))
+      case None => request
+    }
+
   def apiOp(apiRequest: => WSRequest): Future[WSResponse] = {
     apiExec.runSafe(apiRequest)
   }
@@ -43,17 +49,16 @@ trait ApiClient { self =>
   }
 }
 
-
 class CoreApi(val conf: Configuration, val ws: WSClient, val apiExec: ApiClientExec) extends ApiClient
   with OtaPlusConfig {
   val baseUrl = coreApiUri
 
-  def createVehicle(vin: Vin): Future[Result] = apiProxyOp {
-    apiRequest(s"vehicles/${vin.get}").withMethod("PUT")
+  def createVehicle(token: Option[String], vin: Vin): Future[Result] = apiProxyOp {
+    withBearerToken(apiRequest(s"vehicles/${vin.get}").withMethod("PUT"), token)
   }
 
-  def search(params: Seq[(String, String)]): Future[Result] = apiProxyOp {
-    apiRequest("vehicles").withQueryString(params:_*)
+  def search(token: Option[String], params: Seq[(String, String)]): Future[Result] = apiProxyOp {
+    withBearerToken(apiRequest("vehicles").withQueryString(params:_*), token)
   }
 }
 
@@ -62,12 +67,12 @@ class ResolverApi(val conf: Configuration, val ws: WSClient, val apiExec: ApiCli
   with OtaPlusConfig {
   val baseUrl = resolverApiUri
 
-  def createVehicle(vin: Vin): Future[Result] = apiProxyOp {
-    apiRequest(s"vehicles/${vin.get}").withMethod("PUT")
+  def createVehicle(token: Option[String], vin: Vin): Future[Result] = apiProxyOp {
+    withBearerToken(apiRequest(s"vehicles/${vin.get}").withMethod("PUT"), token)
   }
 
-  def search(params: Seq[(String, String)]): Future[Result] = apiProxyOp {
-    apiRequest("vehicles").withQueryString(params: _*)
+  def search(token: Option[String], params: Seq[(String, String)]): Future[Result] = apiProxyOp {
+    withBearerToken(apiRequest("vehicles").withQueryString(params: _*), token)
   }
 }
 
