@@ -10,7 +10,7 @@ define(function(require) {
     render() {        
       var lastSeenDate = new Date(this.props.device.lastSeen);
       var labelClass = 'label-danger';
-      var deviceStatus = 'Never seen online';
+      var deviceStatus = 'Device never seen online';
       switch(this.props.device.status) {
         case 'UpToDate':
           labelClass = 'label-success';

@@ -27,6 +27,9 @@ define(function(require) {
         counter: this.state.counter + 1
       });
     }
+    componentWillUnmount() {
+      clearInterval(this.state.progressIntervalId);
+    }
     render() {
       var campaignsData = JSON.parse(localStorage.getItem('campaignsData'));
       var campaigns = _.map(campaignsData, function(campaign, i) {

@@ -11,9 +11,11 @@ define(function(require) {
       this.state = {
         data: {},
         expandedPackages: [],
+        timeout: null,
       };
       this.toggleExpandedPackages = this.toggleExpandedPackages.bind(this);
-
+      this.refresh = this.refresh.bind(this);
+      
       SotaDispatcher.dispatch(this.props.AllPackagesDispatchObject);
       this.props.AllPackages.addWatch(this.props.AllPackagesPollEventName, _.bind(this.forceUpdate, this, null));
       
@@ -25,22 +27,33 @@ define(function(require) {
     }
     componentWillUpdate(nextProps, nextState) {
       if(nextProps.filterValue != this.props.filterValue) {
+        var that = this;
+        
         SotaDispatcher.dispatch(nextProps.AllPackagesDispatchObject);
+        this.refresh();
       }
+    }
+    componentDidMount() {
+      this.refresh();
     }
     componentWillUnmount(){
       this.props.AllPackages.removeWatch(this.props.AllPackagesPollEventName);
       this.props.InstalledPackages.removeWatch(this.props.InstalledPackagesPollEventName);
       this.props.QueuedPackages.removeWatch(this.props.QueuedPackagesPollEventName);
+      clearTimeout(this.state.timeout)
     }
-    componentDidMount() {
+    refresh() {   
       var that = this;
     
-      setTimeout(function() {
+      var timeout = setTimeout(function() {
         that.setState({
           data: that.prepareData(),
         });
       }, 200);
+      
+      this.setState({
+        timeout: timeout
+      }); 
     }
     prepareData() {
       var Packages = this.props.AllPackages.deref();
@@ -211,6 +224,7 @@ define(function(require) {
                   key={'package-' + pack.packageName + '-versions'} 
                   versions={sortedElements} 
                   vin={this.props.vin} 
+                  packageName={pack.packageName}
                   isQueued={pack.isQueued}
                   refresh={this.refresh}/> 
               </ReactCSSTransitionGroup>

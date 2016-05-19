@@ -65,7 +65,7 @@ define(function(require) {
                 db.vehiclesWholeDataForPackage.reset(vehicles);
               });
           break;
-          case 'get-package-queue-for-vin':
+          case 'get-package-queue-for-vin': 
             sendRequest.doGet('/api/v1/vehicle_updates/' + payload.vin)
               .success(function(packages) {
                 db.packageQueueForVin.reset(packages);
@@ -104,7 +104,7 @@ define(function(require) {
               });
           break;
           case 'reorder-queue-for-vin':
-            sendRequest.doPut('/api/v1/vehicle_updates/' + payload.vin + '/order')
+            sendRequest.doPut('/api/v1/vehicle_updates/' + payload.vin + '/order', payload.order)
               .success(function() {
                 SotaDispatcher.dispatch({actionType: 'get-package-queue-for-vin', vin: payload.vin});
               });
