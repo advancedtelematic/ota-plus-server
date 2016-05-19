@@ -32,7 +32,7 @@ define(function(require) {
               </div>
             </div>
             : null}
-            <Router.RouteHandler params={this.props.params} filterValue={this.props.filterValue}/>
+            {React.cloneElement(this.props.children, {params: this.props.params, filterValue: this.props.filterValue})}
           </div>
         );
       }

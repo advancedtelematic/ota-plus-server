@@ -1,7 +1,6 @@
 define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
-      RouteHandler = Router.RouteHandler,
       Link = Router.Link,
       db = require('stores/db'),
       ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
@@ -26,7 +25,7 @@ define(function(require) {
             PollEventName="searchable-devices"
             DispatchObject={{actionType: 'search-devices-by-regex', regex: this.props.filterValue}}
             filterValue={this.props.filterValue}/>
-          <RouteHandler />
+          {this.props.children}
         </div>
         </ReactCSSTransitionGroup>
       );

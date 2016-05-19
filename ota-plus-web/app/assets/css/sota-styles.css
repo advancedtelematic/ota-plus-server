@@ -168,7 +168,7 @@ button.close:hover, button.close:active, button.close:focus {
 
 /* Backgrounds */
 
-.page-home, .page-new-device {
+.page-home {
     height: 100%;
     min-height: 100vh;
     background: rgb(40,39,37);
