@@ -43,7 +43,7 @@ define(function(require) {
                 </div>
                 {deviceStatus}
               </div>
-              <Link to="new-campaign" params={{vin: (this.props.device.vin ? this.props.device.vin : '')}} className="btn-new-campaign pull-right">
+              <Link to={`devicedetails/${this.props.device.vin}/newcampaign`} className="btn-new-campaign pull-right">
                 Campaign wizard
               </Link>
             </div>

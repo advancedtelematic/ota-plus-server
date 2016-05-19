@@ -11,7 +11,7 @@ define(function(require) {
       var itemId = 'vin-'+this.props.vin;
       var cutVin = this.props.vin.substring(0, 4);
       return (
-        <Link to='deviceDetails' params={{vin: this.props.vin}} className="device-box">
+        <Link to={`devicedetails/${this.props.vin}`} className="device-box">
           <div className="device-icon"></div>
           <div className="device-desc">
             <div className="device-name">
