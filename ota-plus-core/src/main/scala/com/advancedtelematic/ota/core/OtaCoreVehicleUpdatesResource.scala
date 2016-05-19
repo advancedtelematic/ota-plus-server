@@ -32,11 +32,9 @@ class OtaCoreVehicleUpdatesResource(db: Database,
         }
       } ~
       (put & path("order")) { vs.setInstallOrder(vin) } ~
-      (get & pathEnd & extractNamespace(system)) { ns =>
-        vs.pendingPackages(ns, vin)
-      } ~
+      (get & pathEnd) { vs.pendingPackages(vin) } ~
       (post & extractNamespace) { ns => vs.queueVehicleUpdate(ns, vin) } ~
-      (get & extractUuid & path("download")) { vs.downloadPackage } ~
+      (get & extractUuid & path("download")) { uuid => vs.downloadPackage(vin, uuid) } ~
       (post & extractUuid) { vs.reportInstall }
     }
   }
