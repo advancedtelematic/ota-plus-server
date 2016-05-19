@@ -6,11 +6,62 @@
     <head>
         <title>SOTA Admin UI - Log in</title>
         <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <link rel='stylesheet' href='@routes.Assets.versioned("css/main-styles.css")'>
-
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
+        <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("js/bootstrap.min.js"))'></script>        
         <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.slidedrawer.min.js")'></script>
+        <script type="text/javascript" src='@routes.Assets.versioned("js/verify.js")'></script>
+    </head>
+    <body>
+        <div id="ats-page">
+            <div class="container ats">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="#"><img src='@routes.Assets.versioned("img/logo.png")' id="logo"></a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
+                        <div class="ats-header text-center">
+                            <p>Hi there, welcome back.</p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-10 col-lg-offset-1">
+                                <div class="ats-errors">
+                                    Username or password is incorrect.
+                                </div>
+                                @helper.form(action = com.advancedtelematic.login.routes.LoginController.authenticate) {
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="username" placeholder="username" id="username">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="password" name="password" placeholder="password" id="password">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="ats-button" id="submit-form" disabled>Log in</button>
+                                </div>
+                                <div class="form-group">
+                                    <a href="#" class="pull-right">Forgot password <i class="fa fa-angle-right"></i></a>
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="ats-footer-panel"> 
+                <header class="clickme">Need Support?</header>
+                <div class="drawer-content">
+                    <div class="intend">
+                        Content
+                    </div>
+                </div>
+            </section>
+        </div>
+
         <script>
             $(function () {
                 $('.ats-footer-panel').slideDrawer({
@@ -38,56 +89,9 @@
                 if (location.hash == "#error") {
                     $('.ats-errors').show();
                 }
+
+                $('body').verify({verifyMinWidth: 1024, verifyMinHeight: 768});
             });
         </script>
-    </head>
-    <body>
-        <div id="ats-page">
-            <div class="container ats">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <a href="#"><img src='@routes.Assets.versioned("img/logo.png")' id="logo"></a>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
-                        <div class="ats-header text-center">
-                            <p>Hi, there welcome back.</p>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-10 col-lg-offset-1">
-                                <div class="ats-errors">
-                                    Username or password is incorrect.
-                                </div>
-                                @helper.form(action = com.advancedtelematic.login.routes.LoginController.authenticate) {
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" name="username" placeholder="username" id="username">
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="password" name="password" placeholder="password" id="password">
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="submit" class="ats-button" id="submit-form" disabled>Log in</button>
-                                    </div>
-                                    <div class="form-group">
-                                        <a href="#" class="pull-right">Forgot password <i class="fa fa-angle-right"></i></a>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <section class="ats-footer-panel"> 
-                <header class="clickme">Need Support?</header>
-                <div class="drawer-content">
-                    <div class="intend">
-                        Content
-                    </div>
-                </div>
-            </section>
-        </div>
     </body>
 </html>
