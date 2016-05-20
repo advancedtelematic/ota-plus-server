@@ -51,10 +51,28 @@ define(function(require) {
     }
     updatePackagesOrder() {
       console.log('update order with API');
+            
+      var newOrder = {};   
+      
+      var packages = _.map(this.state.data.packages, function(pack, i) {
+        newOrder[i] = pack.requestId;
+      });
+      
+      var payload = JSON.stringify(newOrder);
+      SotaDispatcher.dispatch({
+        actionType: 'reorder-queue-for-vin',
+        vin: this.props.vin,
+        order: payload
+      });
     }
-    render() {
+    render() { 
       var Packages = (this.state.data) ? this.state.data.packages : null;
         
+      if(Packages !== undefined) {
+        Packages.sort(function(a, b) {
+          return a.installPos - b.installPos;
+        });
+      }
       var packages = _.map(Packages, function(pack, i) {
         var dragging = (this.state.data.dragging == i) ? "dragging" : "";  
         var status = (pack.name == 'package') ? 'error' : 'success';
@@ -71,9 +89,12 @@ define(function(require) {
         );
       }, this);       
       return (
-        <ul id="queue-list" className="list-group list-group-dnd"> 
-          {packages}
-        </ul>
+        packages.length > 0 ?
+          <ul id="queue-list" className="list-group list-group-dnd"> 
+            {packages}
+          </ul>
+        :
+          <div>Queue is empty</div>
       );
     }
   };
