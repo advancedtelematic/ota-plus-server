@@ -58,7 +58,8 @@ a, a:hover, a:focus {
 .ats .form-control {
     font-size: 17px;
     text-align: center;
-    padding: 25px 15px;
+    height: auto;
+    padding: 13px 15px;
     border: 2px solid #ccc;
     border-radius: 7px;
 }

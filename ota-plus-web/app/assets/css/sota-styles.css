@@ -635,7 +635,7 @@ button.close:hover, button.close:active, button.close:focus {
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 99999;
+    z-index: 1049;
 }
 
 .modal-dialog {
@@ -676,7 +676,7 @@ button.close:hover, button.close:active, button.close:focus {
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 99999;
+    z-index: 1049;
 }
 
 .rightPanel .modal-dialog {
@@ -723,6 +723,10 @@ button.close:hover, button.close:active, button.close:focus {
 
 .rightPanel .campaign-box-inner a {
     color: #555;
+}
+
+#verifyModal {
+    padding: 200px 0 0 0;
 }
 
 /* Animations */
