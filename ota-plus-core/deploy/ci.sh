@@ -7,9 +7,10 @@ if [[ ! -z $DEPLOY_ENV && $DEPLOY_ENV != "master" ]]; then
   export JOB_NAME="${JOB_NAME}-${DEPLOY_ENV}"
 fi
 
+export IMAGE_NAME="ota-plus-core"
 export REGISTRY="advancedtelematic"
 export DOCKER_TAG=`cat ../deploy/version.properties`
-export IMAGE_ARTIFACT=${REGISTRY}/${JOB_NAME}:${DOCKER_TAG}
+export IMAGE_ARTIFACT=${REGISTRY}/${IMAGE_NAME}:${DOCKER_TAG}
 
 export VAULT_ENDPOINT=$(echo $JOB_NAME | tr "-" "_")
 export VDATA=$(curl -s -H "X-Vault-Token: ${VAULT_TOKEN}" -X GET ${VAULT_ADDR}/v1/secret/$VAULT_ENDPOINT)
