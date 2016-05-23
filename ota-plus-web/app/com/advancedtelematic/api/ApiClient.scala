@@ -32,7 +32,7 @@ trait ApiClient { self =>
 
   def withBearerToken(request: WSRequest, token: Option[String]): WSRequest =
     token match {
-      case Some(token) => request.withHeaders(("Authorization", "Bearer " + token))
+      case Some(t) => request.withHeaders(("Authorization", "Bearer " + t))
       case None => request
     }
 
@@ -51,21 +51,26 @@ trait ApiClient { self =>
 
 class CoreApi(val conf: Configuration, val ws: WSClient, val apiExec: ApiClientExec) extends ApiClient
   with OtaPlusConfig {
-  val baseUrl = coreApiUri
-
-  def createVehicle(token: Option[String], vin: Vin): Future[Result] = apiProxyOp {
-    withBearerToken(apiRequest(s"vehicles/${vin.get}").withMethod("PUT"), token)
-  }
+  override val baseUrl = coreApiUri
 
   def search(token: Option[String], params: Seq[(String, String)]): Future[Result] = apiProxyOp {
     withBearerToken(apiRequest("vehicles").withQueryString(params:_*), token)
   }
 }
 
+class DeviceRegistryApi(val conf: Configuration, val ws: WSClient, val apiExec: ApiClientExec) extends ApiClient
+  with OtaPlusConfig {
+  override val baseUrl: String = deviceRegistryUri
+
+  def createDevice(token: Option[String], deviceId: Vin): Future[Result] = apiProxyOp {
+    withBearerToken(apiRequest(s"devices/${deviceId.get}").withMethod("PUT"), token)
+  }
+}
 
 class ResolverApi(val conf: Configuration, val ws: WSClient, val apiExec: ApiClientExec) extends ApiClient
   with OtaPlusConfig {
-  val baseUrl = resolverApiUri
+
+  override val baseUrl = resolverApiUri
 
   def createVehicle(token: Option[String], vin: Vin): Future[Result] = apiProxyOp {
     withBearerToken(apiRequest(s"vehicles/${vin.get}").withMethod("PUT"), token)
@@ -79,7 +84,7 @@ class ResolverApi(val conf: Configuration, val ws: WSClient, val apiExec: ApiCli
 class AuthPlusApi(val conf: Configuration, val ws: WSClient, val apiExec: ApiClientExec) extends ApiClient
   with OtaPlusConfig {
 
-  val baseUrl = authPlusApiUri
+  override val baseUrl = authPlusApiUri
 
   override val apiPrefix = "/"
 
