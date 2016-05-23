@@ -8,10 +8,10 @@ import org.scalatest.selenium.{Page, WebBrowser}
 import org.scalatestplus.play._
 import play.api.{Application, Configuration}
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.MimeTypes
 import play.api.libs.ws.ahc.{AhcConfigBuilder, AhcWSClient, AhcWSClientConfig}
 import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.mvc.Action
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
 case class LoginPage(port: Int, browser: WebBrowser)
@@ -94,16 +94,14 @@ class LoginSpec extends PlaySpec
       .build()
 
   "Login" should {
-    "Get the access token if username and password are set and correct" in {
+    "Redirect to main page if username and password are set and correct" in {
       val loginPage = LoginPage(port, this)
       go to loginPage
       pageTitle must be ("SOTA Admin UI - Log in")
 
       loginPage.setUsernameAndPassword(correctUser, correctPassword)
       loginPage.submit()
-
       pageTitle must be ("SOTA Admin UI")
-      cookie("access_token").value must be (token)
     }
 
     "Fail if username or password are incorrect" in {
@@ -127,6 +125,15 @@ class LoginSpec extends PlaySpec
       post("", "123").status must be (play.api.http.Status.BAD_REQUEST)
       post("123", "").status must be (play.api.http.Status.BAD_REQUEST)
       post("", "").status must be (play.api.http.Status.BAD_REQUEST)
+    }
+
+    val controller = app.injector.instanceOf[LoginController]
+
+    "set session token" in {
+      val req = FakeRequest().withFormUrlEncodedBody(("username", correctUser), ("password", correctPassword))
+      val result = controller.authenticate().apply(req)
+      status(result) mustBe SEE_OTHER
+      session(result).apply("access_token") mustBe token
     }
   }
 
