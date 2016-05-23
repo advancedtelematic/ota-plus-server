@@ -37,7 +37,7 @@ extends Controller with ApiClientSupport
     searchWith(req, resolverApi.search)
   }
 
-  private[this] def accessToken(req: Request[_]) = req.cookies.get("access_token").map(_.value)
+  private[this] def accessToken(req: Request[_]): Option[String] = req.session.get("access_token")
 
   private def requestCreate(vin: Vin, req: Request[RawBuffer]): Future[Result] = {
     val token = accessToken(req)
