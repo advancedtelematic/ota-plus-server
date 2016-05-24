@@ -12,16 +12,16 @@ define(function(require) {
       super(props);
       this.state = {
         data: {},
-        expandedPackages: [],
+        expandedPackage: null,
         timeout: null,
         intervalId: null,
         files: null,
         showForm: false
       };
-      this.toggleExpandedPackages = this.toggleExpandedPackages.bind(this);
       this.refreshData = this.refreshData.bind(this);
       this.onDrop = this.onDrop.bind(this);
       this.closeForm = this.closeForm.bind(this);
+      this.expandPackage = this.expandPackage.bind(this);
       
       this.props.AllPackages.addWatch(this.props.AllPackagesPollEventName, _.bind(this.forceUpdate, this, null));
       this.props.InstalledPackages.addWatch(this.props.InstalledPackagesPollEventName, _.bind(this.forceUpdate, this, null));
@@ -138,21 +138,16 @@ define(function(require) {
       
       return {'data': GroupedPackages, 'statistics': {'queuedCount': queuedCount, 'installedCount': installedCount}};
     }
-    toggleExpandedPackages(name) {
-      var expandedPackages = this.state.expandedPackages;
+    expandPackage(name) {
+      var expandedPackage = this.state.expandedPackage;
       
-      var index = 0;
-      if(index = expandedPackages.indexOf(name) > -1) {
-        expandedPackages = expandedPackages.filter(function(i) {
-	  return i != name;
-        });
+      if(expandedPackage == name) {
         this.setState({
-          expandedPackages: expandedPackages
+          expandedPackage: null
         });
       } else {
-        expandedPackages.push(name);
         this.setState({
-          expandedPackages: expandedPackages
+          expandedPackage: name
         });
       }
     }
@@ -242,8 +237,8 @@ define(function(require) {
         return (
           <div key={'package-' + pack.packageName}>
             {showLetterHeader ? <li className="list-group-item disabled">{firstLetter.toUpperCase()}</li> : null}
-            <PackagesListItem key={'package-' + pack.packageName + '-items'} name={pack.packageName} toggleExpandedPackages={this.toggleExpandedPackages} queuedPackage={queuedPackage} installedPackage={installedPackage} packageInfo={packageInfo} mainLabel={mainLabel}/>
-            {this.state.expandedPackages.indexOf(pack.packageName) > -1 ?
+            <PackagesListItem key={'package-' + pack.packageName + '-items'} name={pack.packageName} expandPackage={this.expandPackage} queuedPackage={queuedPackage} installedPackage={installedPackage} packageInfo={packageInfo} mainLabel={mainLabel}/>
+            {this.state.expandedPackage == pack.packageName ?
               <ReactCSSTransitionGroup
                 transitionAppear={true}
                 transactionLeave={false}

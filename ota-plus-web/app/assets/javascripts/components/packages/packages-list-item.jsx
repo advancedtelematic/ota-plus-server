@@ -7,7 +7,7 @@ define(function(require) {
       this.itemClick = this.itemClick.bind(this);
     }
     itemClick(e) {
-      this.props.toggleExpandedPackages(this.props.name);
+      this.props.expandPackage(this.props.name);
     }
     render() {
       return (
