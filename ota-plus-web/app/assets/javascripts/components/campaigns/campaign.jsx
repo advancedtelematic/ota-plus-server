@@ -58,12 +58,16 @@ define(function(require) {
             <div className="col-md-7">
               <h4>{campaign.name}</h4>
             </div>
-            {campaign.status != 'finished' ?
-              <div className="col-md-5">
-                <button className="btn btn-campaign pull-right" onClick={this.cancelCampaign}>Cancel</button>
-                <button className="btn btn-campaign pull-right" onClick={this.pauseCampaign}>{campaign.status == 'running' ? 'Pause' : 'Resume'}</button>
-              </div>
-            : null}
+            <div className="col-md-5">
+              {campaign.status != 'finished' ?
+                <div>
+                  <button className="btn btn-campaign pull-right" onClick={this.cancelCampaign}>Cancel</button>
+                  <button className="btn btn-campaign pull-right" onClick={this.pauseCampaign}>{campaign.status == 'running' ? 'Pause' : 'Resume'}</button>
+                </div>
+              : 
+                <button className="btn btn-campaign pull-right" onClick={this.cancelCampaign}>Remove from list</button>
+              }
+            </div>
           </div>
           <div className="campaign-box-inner">
             <div>

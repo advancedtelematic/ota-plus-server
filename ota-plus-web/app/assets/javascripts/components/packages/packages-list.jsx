@@ -46,8 +46,11 @@ define(function(require) {
       var that = this;
     
       var timeout = setTimeout(function() {
+        var result = that.prepareData();
+        var data = result.data;
+        that.props.setPackagesStatistics(result.statistics.installedCount, result.statistics.queuedCount);
         that.setState({
-          data: that.prepareData(),
+          data: data
         });
       }, 200);
       
@@ -59,7 +62,10 @@ define(function(require) {
       var Packages = this.props.AllPackages.deref();
       var Installed = this.props.InstalledPackages.deref();
       var Queued = this.props.QueuedPackages.deref();
-            
+      
+      var installedCount = 0;
+      var queuedCount = 0;
+      
       var InstalledIds = new Object();
       Installed.forEach(function(obj){
         InstalledIds[obj.id.name+'_'+obj.id.version] = obj.id.name+'_'+obj.id.version;
@@ -92,20 +98,25 @@ define(function(require) {
           GroupedPackages[obj.id.name]['packageName'] = obj.id.name;
           GroupedPackages[obj.id.name]['isQueued'] = isQueued;
           GroupedPackages[obj.id.name]['isInstalled'] = isInstalled;
+          
+          isQueued ? queuedCount++ : null;
+          isInstalled ? installedCount++ : null;
         }
         
         if(!GroupedPackages[obj.id.name].isQueued && isQueued) {
-            GroupedPackages[obj.id.name]['isQueued'] = true;
+          GroupedPackages[obj.id.name]['isQueued'] = true;
+          queuedCount++;
         }
         
         if(!GroupedPackages[obj.id.name].isInstalled && isInstalled) {
-            GroupedPackages[obj.id.name]['isInstalled'] = true;
+          GroupedPackages[obj.id.name]['isInstalled'] = true;
+          installedCount++;
         }
         
         GroupedPackages[obj.id.name]['elements'].push(Packages[index]);
       });
       
-      return GroupedPackages;
+      return {'data': GroupedPackages, 'statistics': {'queuedCount': queuedCount, 'installedCount': installedCount}};
     }
     toggleExpandedPackages(name) {
       var expandedPackages = this.state.expandedPackages;

@@ -11,7 +11,8 @@ define(function(require) {
             QueuedPackages={db.packageQueueForVin}
             PollEventName="poll-queued-packages"
             DispatchObject={{actionType: "get-package-queue-for-vin", vin: this.props.vin}}
-            vin={this.props.vin}/>
+            vin={this.props.vin}
+            setQueueStatistics={this.props.setQueueStatistics}/>
         </div>
       );
     }
