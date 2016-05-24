@@ -1,6 +1,7 @@
 package com.advancedtelematic.api
 
 import com.advancedtelematic.ota.vehicle.ClientInfo
+import org.genivi.sota.data.Device
 import org.genivi.sota.data.Vehicle.Vin
 import org.genivi.webserver.controllers.OtaPlusConfig
 import play.api.Configuration
@@ -17,7 +18,7 @@ case class RemoteApiError(result: Result, msg: String = "") extends Exception(ms
 
 case class RemoteApiParseError(msg: String) extends Exception(msg) with NoStackTrace
 
-trait ApiClient { self =>
+trait ApiClient {
   val baseUrl: String
 
   val apiPrefix = "/api/v1/"
@@ -26,15 +27,14 @@ trait ApiClient { self =>
 
   val apiExec: ApiClientExec
 
-  def apiRequest(path: String): WSRequest =
-    ws.url(baseUrl + apiPrefix + path)
-      .withFollowRedirects(false)
+  def apiRequest(path: String, token: Option[String] = None): WSRequest = {
+    val apiReq = ws.url(baseUrl + apiPrefix + path).withFollowRedirects(false)
 
-  def withBearerToken(request: WSRequest, token: Option[String]): WSRequest =
     token match {
-      case Some(t) => request.withHeaders(("Authorization", "Bearer " + t))
-      case None => request
+      case Some(t) => apiReq.withHeaders(("Authorization", "Bearer " + t))
+      case None => apiReq
     }
+  }
 
   def apiOp(apiRequest: => WSRequest): Future[WSResponse] = {
     apiExec.runSafe(apiRequest)
@@ -54,7 +54,7 @@ class CoreApi(val conf: Configuration, val ws: WSClient, val apiExec: ApiClientE
   override val baseUrl = coreApiUri
 
   def search(token: Option[String], params: Seq[(String, String)]): Future[Result] = apiProxyOp {
-    withBearerToken(apiRequest("vehicles").withQueryString(params:_*), token)
+    apiRequest("vehicles", token).withQueryString(params: _*)
   }
 }
 
@@ -63,7 +63,14 @@ class DeviceRegistryApi(val conf: Configuration, val ws: WSClient, val apiExec: 
   override val baseUrl: String = deviceRegistryUri
 
   def createDevice(token: Option[String], deviceId: Vin): Future[Result] = apiProxyOp {
-    withBearerToken(apiRequest(s"devices/${deviceId.get}").withMethod("PUT"), token)
+    val request = Json.obj(
+      "deviceId" -> deviceId.get,
+      "deviceType" -> Device.DeviceType.Vehicle
+    )
+
+    apiRequest(s"devices", token)
+      .withMethod("POST")
+      .withBody(request)
   }
 }
 
@@ -73,11 +80,11 @@ class ResolverApi(val conf: Configuration, val ws: WSClient, val apiExec: ApiCli
   override val baseUrl = resolverApiUri
 
   def createVehicle(token: Option[String], vin: Vin): Future[Result] = apiProxyOp {
-    withBearerToken(apiRequest(s"vehicles/${vin.get}").withMethod("PUT"), token)
+    apiRequest(s"vehicles/${vin.get}", token).withMethod("PUT")
   }
 
   def search(token: Option[String], params: Seq[(String, String)]): Future[Result] = apiProxyOp {
-    withBearerToken(apiRequest("vehicles").withQueryString(params: _*), token)
+    apiRequest("vehicles", token).withQueryString(params: _*)
   }
 }
 

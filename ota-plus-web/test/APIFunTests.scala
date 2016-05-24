@@ -91,7 +91,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
 
   def addVin(vin: String): Unit = {
     val vehiclesResponse = makeRequest(s"vehicles/$vin", PUT)
-    vehiclesResponse.status mustBe NO_CONTENT
+    vehiclesResponse.status mustBe CREATED
   }
 
   def addPackage(packageName: String, packageVersion: String): Unit = {

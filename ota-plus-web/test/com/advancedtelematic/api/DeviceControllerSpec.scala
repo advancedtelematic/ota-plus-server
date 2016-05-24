@@ -22,7 +22,7 @@ class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results 
 
   val mockClient = {
     val deviceRegistry = Route {
-      case (PUT, p) if p == s"http://localhost:8083/api/v1/devices/${vin.get}" =>
+      case (POST, p) if p == s"http://localhost:8083/api/v1/devices" =>
         Action { Created("Created In Device Registry") }
       case (GET, "http://localhost:8080/api/v1/vehicles") =>
         Action { Ok("Core Search") }
