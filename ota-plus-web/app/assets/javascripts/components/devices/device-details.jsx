@@ -13,9 +13,14 @@ define(function(require) {
       super(props, context);
       this.state = {
         showPackagesHistory: false,
-        textPackagesHistory: context.strings.viewhistory
+        textPackagesHistory: context.strings.viewhistory,
+        installedPackagesCount: 0,
+        queuedPackagesCount: 0,
+        queueCount: 0,
       }
       this.showQueueHistory = this.showQueueHistory.bind(this);
+      this.setPackagesStatistics = this.setPackagesStatistics.bind(this);
+      this.setQueueStatistics = this.setQueueStatistics.bind(this);
       
       SotaDispatcher.dispatch({actionType: 'get-device', vin: this.props.params.vin});
       this.props.Device.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
@@ -34,6 +39,17 @@ define(function(require) {
       this.setState({
         showPackagesHistory: !this.state.showPackagesHistory,
         textPackagesHistory: (this.state.showPackagesHistory) ? this.context.strings.viewhistory : this.context.strings.hidehistory,
+      });
+    }
+    setPackagesStatistics(installed, queued) {
+      this.setState({
+        installedPackagesCount: installed,
+        queuedPackagesCount: queued,
+      });
+    }
+    setQueueStatistics(queued) {
+      this.setState({
+        queueCount: queued,
       });
     }
     render() {
@@ -57,10 +73,13 @@ define(function(require) {
                     </div>
                   </div>
                   <div className="panel-body">
-                    <Packages vin={this.props.params.vin}/>
+                    <Packages 
+                      vin={this.props.params.vin} 
+                      setPackagesStatistics={this.setPackagesStatistics}/>
                   </div>
                   <div className="panel-footer">
-                    10 compatible, 5 installed, 0 broken, 4 queued
+                    {this.state.installedPackagesCount} installed, &nbsp;
+                    {this.state.queuedPackagesCount} queued
                   </div>
                 </div>
               </div>
@@ -93,12 +112,13 @@ define(function(require) {
                         </ReactCSSTransitionGroup>
                       : null}
                   
-                      <PackagesQueue vin={this.props.params.vin}/>
+                      <PackagesQueue 
+                        vin={this.props.params.vin}
+                        setQueueStatistics={this.setQueueStatistics}/>
                     </div>
                   </div>
                   <div className="panel-footer">
-                    4 packages in queue, 
-                    <i className="fa fa-circle package-circle red" aria-hidden="true"></i> 1 error
+                    {this.state.queueCount} packages in queue
                   </div>
                 </div>
               </div>
