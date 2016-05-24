@@ -24,6 +24,8 @@ class LoginController @Inject()(conf: Configuration,
                                 wSClient: WSClient)
                                (implicit context: ExecutionContext) extends Controller with I18nSupport {
 
+  private val token_key = "access_token"
+
   private[this] val authPlusHost: Uri = conf.getString("authplus.host").map(Uri.create).get
 
   val logger = Logger(this.getClass)
@@ -38,6 +40,11 @@ class LoginController @Inject()(conf: Configuration,
     Ok(views.html.login(loginForm))
   }
 
+  def logout : Action[AnyContent] = Action { implicit req =>
+    Redirect(org.genivi.webserver.controllers.routes.Application.index())
+      .withNewSession
+  }
+
   private[this] def buildPasswordRequest(username: String, password: String) =
     Map("grant_type" -> Seq("password"),
         "username" -> Seq(username),
@@ -45,7 +52,7 @@ class LoginController @Inject()(conf: Configuration,
 
   /*
      POST
-     set cookie on browser
+     set token in session
      */
   def authenticate: Action[AnyContent] = Action.async { implicit req =>
     loginForm.bindFromRequest.fold(
@@ -63,7 +70,7 @@ class LoginController @Inject()(conf: Configuration,
             case OK =>
               val token = (response.json \ "access_token").as[String]
               Redirect(org.genivi.webserver.controllers.routes.Application.index())
-                .withCookies(Cookie("access_token", token))
+                .withSession(token_key -> token)
 
             case BAD_REQUEST =>
               val error = (response.json \ "error").as[String]

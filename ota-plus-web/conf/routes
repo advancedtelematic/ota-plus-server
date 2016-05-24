@@ -25,5 +25,6 @@ GET     /signup/:token                          com.advancedtelematic.signup.Sig
 POST    /signup/:token                          com.advancedtelematic.signup.SignupController.setPassword(token: String)
 
 GET     /login                                  com.advancedtelematic.login.LoginController.login
+GET     /logout                                 com.advancedtelematic.login.LoginController.logout
 POST	/authenticate				            com.advancedtelematic.login.LoginController.authenticate
 
