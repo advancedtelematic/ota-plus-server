@@ -128,7 +128,8 @@ define(function(require) {
             filterValue={this.state.filterValue}
             selectStatus={this.state.selectStatus}
             selectSort={this.state.selectSort}
-            vin={this.props.vin}/>            
+            vin={this.props.vin}
+            setPackagesStatistics={this.props.setPackagesStatistics}/>            
         </div>
       );
     }
