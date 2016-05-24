@@ -52,7 +52,7 @@ define(function(require) {
         queueCount: queued,
       });
     }
-    render() {
+    render() {    
       var Device = this.props.Device.deref();
       return (
         <ReactCSSTransitionGroup
@@ -63,6 +63,14 @@ define(function(require) {
           transitionLeaveTimeout={500}
           transitionName="example">  
           <div>
+            {Device.status == "NotSeen" ? 
+              <div className="white-overlay">
+                Device never seen online <br />
+                Download the SDK
+                (<a href={`/api/v1/client/${this.props.params.vin}/deb/32`}>debian 32</a> &nbsp; or &nbsp;
+                 <a href={`/api/v1/client/${this.props.params.vin}/deb/64`}>debian 64</a>)
+              </div>
+            : null}
             <DetailsHeader device={Device} />
             <div className="row">
               <div className="col-md-6 nopadding border-right-2">

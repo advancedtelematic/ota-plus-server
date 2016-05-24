@@ -30,6 +30,26 @@ a, a:hover {
     margin: 0 52px;
 }
 
+.white-overlay {
+    color: #555;
+    font-weight: bold;
+    line-height: 1.5em;
+    text-align: center;
+    background: rgba(255,255,255, 0.8);
+    width: 100%;
+    height: 100%;
+    padding: 300px 0 0 0;
+    left: 0;
+    top: 0;
+    position: absolute;
+    z-index: 3;
+}
+
+.white-overlay a {
+    color: #555;
+    text-decoration: underline;
+}
+
 /* Margins */
 
 .nopadding {
@@ -187,6 +207,8 @@ button.close:hover, button.close:active, button.close:focus {
     background: linear-gradient(135deg,  rgba(40,39,37,1) 2%, rgba(201,127,102,1) 99%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#352824', endColorstr='#db7a57',GradientType=1 );
     background-attachment: fixed;
+    position: relative;
+    z-index: 99;
 }
 
 .page-device-details .log-code {
@@ -333,7 +355,7 @@ button.close:hover, button.close:active, button.close:focus {
     font-size: 22px;
 }
 
-.page-device-details .device-header-text .device-uuid {
+.page-device-details .device-header-text .device-lastseen {
     font-size: 14px;
     margin: 0;
     opacity: 0.5;
