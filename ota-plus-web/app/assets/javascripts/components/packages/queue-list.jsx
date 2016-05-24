@@ -20,9 +20,13 @@ define(function(require) {
       this.props.QueuedPackages.removeWatch(this.props.PollEventName);
     }
     setData() {
+      var data = this.props.QueuedPackages.deref();
+        
       this.setState({
-        data: {packages: this.props.QueuedPackages.deref()}
+        data: {packages: data}
       });
+      
+      this.props.setQueueStatistics(data.length);
     }
     dragStart(e) {
       this.dragged = Number(e.currentTarget.dataset.id);
