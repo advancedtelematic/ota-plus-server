@@ -3,7 +3,9 @@ define(function(require) {
       ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       SotaDispatcher = require('sota-dispatcher'),
       PackagesListItem = require('./packages-list-item'),
-      PackageListItemDetails = require('./packages-list-item-details');
+      PackageListItemDetails = require('./packages-list-item-details'),
+      Dropzone = require('../../mixins/dropzone'),
+      AddPackage = require('./add-package');
   
   class PackagesList extends React.Component {
     constructor(props) {
@@ -12,10 +14,14 @@ define(function(require) {
         data: {},
         expandedPackages: [],
         timeout: null,
-        intervalId: null
+        intervalId: null,
+        files: null,
+        showForm: false
       };
       this.toggleExpandedPackages = this.toggleExpandedPackages.bind(this);
       this.refreshData = this.refreshData.bind(this);
+      this.onDrop = this.onDrop.bind(this);
+      this.closeForm = this.closeForm.bind(this);
       
       this.props.AllPackages.addWatch(this.props.AllPackagesPollEventName, _.bind(this.forceUpdate, this, null));
       this.props.InstalledPackages.addWatch(this.props.InstalledPackagesPollEventName, _.bind(this.forceUpdate, this, null));
@@ -60,6 +66,17 @@ define(function(require) {
       this.setState({
         timeout: timeout
       }); 
+    }
+    onDrop(files) {
+      this.setState({
+        files: files,
+        showForm: true
+      });
+    }
+    closeForm() {
+      this.setState({
+        showForm: false
+      });
     }
     prepareData() {
       var Packages = this.props.AllPackages.deref();
@@ -248,16 +265,40 @@ define(function(require) {
       }, this);
 
       return (
-        <ul id="packages-list" className="list-group"> 
-          {packages.length > 0 ? 
-            packages 
-          :
-            <div className="col-md-12">
-              <br />
-              <i className="fa fa-warning"></i> Sorry, there is no results.
+        <div>
+          {this.props.lastSeen ?
+            <div>
+              <ul id="packages-list" className="list-group"> 
+                <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true} className="dnd-zone" activeClassName="dnd-zone-active">
+                  {packages.length > 0 ? packages 
+                  :
+                    <div className="col-md-12">
+                      <br />
+                      <i className="fa fa-warning"></i> Sorry, there is no results.
+                    </div>
+                  }
+                </Dropzone>
+              </ul>
+              {this.state.showForm ? 
+                <AddPackage 
+                  files={this.state.files}
+                  vin={this.props.vin}
+                  closeForm={this.closeForm}
+                  key="add-package"/> 
+              : null}
             </div>
+          : 
+            <ul id="packages-list" className="list-group"> 
+              {packages.length > 0 ? packages 
+              :
+                <div className="col-md-12">
+                  <br />
+                  <i className="fa fa-warning"></i> Sorry, there is no results.
+                </div>
+              }
+            </ul>
           }
-        </ul>
+        </div>
       );
     }
   };
