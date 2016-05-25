@@ -21,9 +21,9 @@ class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results 
   val vin: Vehicle.Vin = Refined.unsafeApply("WBAYE4C55ED138164")
 
   val mockClient = {
-    val deviceRegistry = Route {
-      case (POST, p) if p == s"http://localhost:8083/api/v1/devices" =>
-        Action { Created("Created In Device Registry") }
+    val core = Route {
+      case (PUT, p) if p == s"http://localhost:8080/api/v1/vehicles/${vin.get}" =>
+        Action { Created("Created In Core") }
       case (GET, "http://localhost:8080/api/v1/vehicles") =>
         Action { Ok("Core Search") }
     }
@@ -47,7 +47,7 @@ class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results 
         Action { Ok(json) }
     }
 
-    MockWS(deviceRegistry orElse resolver orElse authPlus)
+    MockWS(core orElse resolver orElse authPlus)
   }
 
   val application = new GuiceApplicationBuilder()
@@ -63,7 +63,7 @@ class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results 
       val result = controller.create(vin).apply(emptyRequest)
 
       status(result) must be(201)
-      contentAsString(result) must be("Created In Device Registry")
+      contentAsString(result) must be("Created In Core")
     }
 
     "search gets search results from resolver" in {
