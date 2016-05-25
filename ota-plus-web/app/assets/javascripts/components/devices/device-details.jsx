@@ -96,7 +96,8 @@ define(function(require) {
                   <div className="panel-body">
                     <Packages 
                       vin={this.props.params.vin} 
-                      setPackagesStatistics={this.setPackagesStatistics}/>
+                      setPackagesStatistics={this.setPackagesStatistics}
+                      lastSeen={Device.lastSeen}/>
                   </div>
                   <div className="panel-footer">
                     {this.state.installedPackagesCount} installed, &nbsp;

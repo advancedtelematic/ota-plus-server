@@ -129,7 +129,8 @@ define(function(require) {
             selectStatus={this.state.selectStatus}
             selectSort={this.state.selectSort}
             vin={this.props.vin}
-            setPackagesStatistics={this.props.setPackagesStatistics}/>            
+            setPackagesStatistics={this.props.setPackagesStatistics}
+            lastSeen={this.props.lastSeen}/>            
         </div>
       );
     }
