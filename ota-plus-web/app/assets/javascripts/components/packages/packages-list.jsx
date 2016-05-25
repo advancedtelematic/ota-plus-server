@@ -12,39 +12,42 @@ define(function(require) {
         data: {},
         expandedPackages: [],
         timeout: null,
+        intervalId: null
       };
       this.toggleExpandedPackages = this.toggleExpandedPackages.bind(this);
-      this.refresh = this.refresh.bind(this);
+      this.refreshData = this.refreshData.bind(this);
       
-      SotaDispatcher.dispatch(this.props.AllPackagesDispatchObject);
       this.props.AllPackages.addWatch(this.props.AllPackagesPollEventName, _.bind(this.forceUpdate, this, null));
-      
-      SotaDispatcher.dispatch(this.props.InstalledPackagesDispatchObject);
       this.props.InstalledPackages.addWatch(this.props.InstalledPackagesPollEventName, _.bind(this.forceUpdate, this, null));
-      
-      SotaDispatcher.dispatch(this.props.QueuedPackagesDispatchObject);
       this.props.QueuedPackages.addWatch(this.props.QueuedPackagesPollEventName, _.bind(this.forceUpdate, this, null));
     }
     componentWillUpdate(nextProps, nextState) {
-      if(nextProps.filterValue != this.props.filterValue) {
-        var that = this;
-        
+      if(nextProps.filterValue != this.props.filterValue) {        
         SotaDispatcher.dispatch(nextProps.AllPackagesDispatchObject);
-        this.refresh();
       }
     }
     componentDidMount() {
-      this.refresh();
+      var that = this;
+      var intervalId = setInterval(function() {
+        that.refreshData();
+      }, 1000);
+      this.setState({intervalId: intervalId});
+      this.refreshData();
     }
     componentWillUnmount(){
       this.props.AllPackages.removeWatch(this.props.AllPackagesPollEventName);
       this.props.InstalledPackages.removeWatch(this.props.InstalledPackagesPollEventName);
       this.props.QueuedPackages.removeWatch(this.props.QueuedPackagesPollEventName);
-      clearTimeout(this.state.timeout)
+      clearTimeout(this.state.timeout);
+      clearInterval(this.state.intervalId);
     }
-    refresh() {   
+    refreshData() {
       var that = this;
     
+      SotaDispatcher.dispatch(this.props.AllPackagesDispatchObject);      
+      SotaDispatcher.dispatch(this.props.InstalledPackagesDispatchObject);      
+      SotaDispatcher.dispatch(this.props.QueuedPackagesDispatchObject);
+      
       var timeout = setTimeout(function() {
         var result = that.prepareData();
         var data = result.data;
@@ -237,7 +240,7 @@ define(function(require) {
                   vin={this.props.vin} 
                   packageName={pack.packageName}
                   isQueued={pack.isQueued}
-                  refresh={this.refresh}/> 
+                  refresh={this.refreshData}/> 
               </ReactCSSTransitionGroup>
             : null}
           </div>

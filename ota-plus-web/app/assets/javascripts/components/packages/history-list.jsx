@@ -6,15 +6,29 @@ define(function(require) {
   class HistoryList extends React.Component {
     constructor(props) {
       super(props);
-      
+      this.state = ({
+        intervalId: null
+      });
+      this.refreshData = this.refreshData.bind(this);
       SotaDispatcher.dispatch(this.props.DispatchObject);
-      this.props.Packages.addWatch(this.props.PollEventName, _.bind(this.forceUpdate, this, null));
+      this.props.PackagesHistory.addWatch(this.props.PollEventName, _.bind(this.forceUpdate, this, null));
     }
-    componentWillUnmount(){
-      this.props.Packages.removeWatch(this.props.PollEventName);
+    componentDidMount() {
+      var that = this;
+      var intervalId = setInterval(function() {
+        that.refreshData();
+      }, 1000);
+      this.setState({intervalId: intervalId});
+    }
+    componentWillUnmount() {
+      this.props.PackagesHistory.removeWatch(this.props.PollEventName);
+      clearInterval(this.state.intervalId);
+    }
+    refreshData() {
+      SotaDispatcher.dispatch(this.props.DispatchObject);
     }
     render() {
-      var Packages = this.props.Packages.deref();
+      var Packages = this.props.PackagesHistory.deref();
       Packages.sort(function(a, b) {
         return new Date(b.completionTime) - new Date(a.completionTime);
       });
