@@ -42,13 +42,14 @@ extends Controller with ApiClientSupport
   private def requestCreate(vin: Vin, req: Request[RawBuffer]): Future[Result] = {
     val token = accessToken(req)
 
+    // Must PUT "vehicles" on both core and resolver
     // TODO: Retry until both responses are success
     for {
-      respDeviceRegistry <-  deviceApi.createDevice(token, vin)
+      respCore <-  coreApi.createVehicle(token, vin)
       respResult <- resolverApi.createVehicle(token, vin)
       vehicleMetadata <- registerAuthPlusVehicle(vin)
       _ <- vehiclesStore.registerVehicle(vehicleMetadata)
-    } yield respDeviceRegistry
+    } yield respCore
   }
 
   private def searchWith(req: Request[_], apiOp: (Option[String], Seq[(String, String)]) => Future[Result]):
