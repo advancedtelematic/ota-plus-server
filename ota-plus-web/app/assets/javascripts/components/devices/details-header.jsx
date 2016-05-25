@@ -7,10 +7,10 @@ define(function(require) {
     constructor(props) {
       super(props);
     }
-    render() {        
+    render() {
       var lastSeenDate = new Date(this.props.device.lastSeen);
       var labelClass = 'label-danger';
-      var deviceStatus = 'Device never seen online';
+      var deviceStatus = 'Status unknown';
       switch(this.props.device.status) {
         case 'UpToDate':
           labelClass = 'label-success';
@@ -34,7 +34,13 @@ define(function(require) {
             
               <div className="device-header-text">
                 <div className="device-name">{this.props.device.vin}</div>
-                <div className="device-uuid">113.223.232.123</div>
+                <div className="device-lastseen">
+                  {this.props.device.status != 'NotSeen' ?
+                    <span>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
+                  : 
+                    <span>Never seen online</span>
+                  }
+                </div>  
               </div>
       
               <div className="device-header-status pull-right">
