@@ -183,7 +183,7 @@ var Dropzone = React.createClass({
       style = {
         width: 200,
         height: 200,
-        borderWidth: 2,
+        borderWidth: 3,
         borderColor: '#666',
         borderStyle: 'dashed',
         borderRadius: 5,
@@ -197,8 +197,8 @@ var Dropzone = React.createClass({
     var appliedStyle;
     if (activeStyle && this.state.isDragActive) {
       appliedStyle = {
-        borderWidth: 1,
-        borderColor: '#333',
+        borderWidth: 2,
+        borderColor: 'blue',
         borderStyle: 'dashed',
       };
     } else {
