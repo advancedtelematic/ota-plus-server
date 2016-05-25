@@ -66,7 +66,7 @@ define(function(require) {
               });
           break;
           case 'get-package-queue-for-vin': 
-            sendRequest.doGet('/api/v1/vehicle_updates/' + payload.vin + '/queue')
+            sendRequest.doGet('/api/v1/vehicle_updates/' + payload.vin + '/queued')
               .success(function(packages) {
                 db.packageQueueForVin.reset(packages);
               });
