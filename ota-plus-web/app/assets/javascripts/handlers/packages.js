@@ -11,7 +11,6 @@ define(function(require) {
       '&vendor=' + encodeURIComponent(payload.package.vendor);
     sendRequest.doPut(url, payload.data, {form: true})
       .success(function() {
-        location.hash = "#/packages/" + payload.package.name + "/" + payload.package.version;
         SotaDispatcher.dispatch({actionType: 'get-packages'});
         SotaDispatcher.dispatch({actionType: 'search-packages-by-regex'});
       });
