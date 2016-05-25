@@ -1,0 +1,39 @@
+[{
+  "id": "${JOB_NAME}",
+  "uris": ["/root/docker.tar.gz"],
+  "cpus": 0.2,
+  "mem": 512.0,
+  "instances": 1,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "${IMAGE_ARTIFACT}",
+      "parameters": [{"key": "log-driver", "value": "syslog"}],
+      "forcePullImage": true,
+      "network": "BRIDGE",
+      "portMappings": [{
+        "containerPort": 8080,
+        "hostPort": 0,
+        "protocol": "tcp"
+      }]
+    }
+  },
+  "env": {
+    "SERVICE_NAME": "${JOB_NAME}",
+    "SERVICE_SCOPE": "public",
+    "SERVICE_TYPE": "http",
+    "SERVICE_IMAGE": "${IMAGE_ARTIFACT}",
+    "SERVICE_HEALTH_CHECK": "curl --show-error --silent %<host>s:%<port>s/health",
+    "DEVICE_REGISTRY_DB_URL": "${DEVICE_REGISTRY_DB_URL}",
+    "DEVICE_REGISTRY_DB_USER": "${DEVICE_REGISTRY_DB_USER}",
+    "DEVICE_REGISTRY_DB_PASSWORD": "${DEVICE_REGISTRY_DB_PASSWORD}",
+    "DEVICE_REGISTRY_DB_MIGRATE": "${DEVICE_REGISTRY_DB_MIGRATE}",
+    "HOST": "${HOST}",
+    "PORT": "${PORT}"
+  },
+  "healthChecks": [{
+    "protocol": "HTTP",
+    "path": "/health",
+    "intervalSeconds": 30
+  }]
+}]
