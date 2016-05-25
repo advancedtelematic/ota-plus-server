@@ -11,6 +11,8 @@ import com.advancedtelematic.jws.{Jws, KeyInfo}
 import com.advancedtelematic.jwt.JsonWebToken
 import com.advancedtelematic.ota.core.Generators._
 import javax.crypto.SecretKey
+
+import com.advancedtelematic.ota.common.Namespaces
 import org.genivi.sota.data.Namespace._
 import org.scalacheck.Gen
 import org.scalatest.prop.PropertyChecks

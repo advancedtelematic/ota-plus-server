@@ -99,11 +99,21 @@ class Application @Inject() (ws: WSClient,
       case Some(b) => w.withBody(b)
       case None => w.withBody(FileBody(req.body.asFile))
     }
-    wreq.execute.map { resp =>
+
+    val authorizedWReq = addBearerToken(req, wreq)
+
+    authorizedWReq.execute.map { resp =>
       Result(
         header = ResponseHeader(resp.status, resp.allHeaders.mapValues(x => x.head)),
         body = HttpEntity.Strict(resp.bodyAsBytes, None)
       )
+    }
+  }
+
+  private def addBearerToken[R](request: Request[R], wsRequest: WSRequest): WSRequest = {
+    request.cookies.get("access-token") match {
+      case Some(t) => wsRequest.withHeaders(("Authorization", "Bearer " + t))
+      case None => wsRequest
     }
   }
 
