@@ -13,7 +13,6 @@ define(function(require) {
       this.dragEnd = this.dragEnd.bind(this);
       this.dragOver = this.dragOver.bind(this);
       
-      SotaDispatcher.dispatch(this.props.DispatchObject);
       this.props.QueuedPackages.addWatch(this.props.PollEventName, _.bind(this.setData, this, null));
     }
     componentWillUnmount(){

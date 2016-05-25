@@ -9,7 +9,7 @@ define(function(require) {
         <div>
           <div id="history">
             <HistoryList 
-              Packages={db.packageHistoryForVin}
+              PackagesHistory={db.packageHistoryForVin}
               PollEventName="poll-packages-history-for-vin"
               DispatchObject={{actionType: "get-package-history-for-vin", vin: this.props.vin}}/>
           </div>
