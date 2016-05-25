@@ -17,13 +17,22 @@ define(function(require) {
         installedPackagesCount: 0,
         queuedPackagesCount: 0,
         queueCount: 0,
+        intervalId: null
       }
       this.showQueueHistory = this.showQueueHistory.bind(this);
       this.setPackagesStatistics = this.setPackagesStatistics.bind(this);
       this.setQueueStatistics = this.setQueueStatistics.bind(this);
+      this.refreshData = this.refreshData.bind(this);
       
       SotaDispatcher.dispatch({actionType: 'get-device', vin: this.props.params.vin});
       this.props.Device.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
+    }
+    componentDidMount() {
+      var that = this;
+      var intervalId = setInterval(function() {
+        that.refreshData();
+      }, 1000);
+      this.setState({intervalId: intervalId});
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
       if(nextContext.strings != this.context.strings) {
@@ -34,6 +43,7 @@ define(function(require) {
     }
     componentWillUnmount(){
       this.props.Device.removeWatch("poll-device");
+      clearInterval(this.state.intervalId);
     }
     showQueueHistory() {
       this.setState({
@@ -52,7 +62,10 @@ define(function(require) {
         queueCount: queued,
       });
     }
-    render() {    
+    refreshData() {
+      SotaDispatcher.dispatch({actionType: 'get-device', vin: this.props.params.vin});
+    }
+    render() {
       var Device = this.props.Device.deref();
       return (
         <ReactCSSTransitionGroup
