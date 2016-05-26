@@ -131,9 +131,11 @@ class LoginSpec extends PlaySpec
 
     "set session token" in {
       val req = FakeRequest().withFormUrlEncodedBody(("username", correctUser), ("password", correctPassword))
-      val result = controller.authenticate().apply(req)
+      val result = controller.authenticate()(req)
       status(result) mustBe SEE_OTHER
-      session(result).apply("access_token") mustBe token
+      val sess = session(result)
+      sess("access_token") mustBe token
+      sess("username") mustBe correctUser
     }
   }
 
