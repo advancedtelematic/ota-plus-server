@@ -71,6 +71,10 @@ start ota web you could use:
 A new (client_id, secret) pair needs to be created everytime Auth+ is
 restarted.
 
+To create an account to log in, you must generate a signup link using the tool [here](https://gitlab.advancedtelematic.com/vladimir/ota-plus-invite), or use [this](http://localhost:9000/signup/eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiRGVtbyIsImVtYWlsIjoiZGVtb0BhZHZhbmNlZHRlbGVtYXRpYy5jb20iLCJwaG9uZV9udW1iZXIiOiJVbmtub3duIn0.RMTV1PcOWDJhwEuo1tCHpM_xC4NYpCqZNN-ZtlMLaQg) url which creates an account for the `demo@advancedtelematic.com` email address:
+
+  
+
 
 ## Ota Plus Core
 
