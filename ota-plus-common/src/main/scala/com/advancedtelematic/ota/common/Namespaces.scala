@@ -1,15 +1,14 @@
-package com.advancedtelematic.ota.core
+package com.advancedtelematic.ota.common
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.headers.OAuth2BearerToken
 import akka.http.scaladsl.server.{Directive1, Directives}
 import com.advancedtelematic.jws.CompactSerialization
 import com.advancedtelematic.jwt.JsonWebToken
-import eu.timepit.refined._
-import eu.timepit.refined.auto._
 import io.circe.parser._
-import org.genivi.sota.data.Namespace._
-
+import org.genivi.sota.data.Namespace.Namespace
+import eu.timepit.refined.refineV
+import eu.timepit.refined.auto._
 
 trait Namespaces {
   self: Directives =>

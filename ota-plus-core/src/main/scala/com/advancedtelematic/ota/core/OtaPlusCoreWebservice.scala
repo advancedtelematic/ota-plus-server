@@ -4,6 +4,7 @@ import akka.actor.ActorSystem
 import akka.event.Logging
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.stream.ActorMaterializer
+import com.advancedtelematic.ota.common.Namespaces
 import org.genivi.sota.core._
 import org.genivi.sota.core.resolver.{Connectivity, ExternalResolverClient}
 import org.genivi.sota.core.transfer._
