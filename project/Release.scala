@@ -38,6 +38,8 @@ object Release {
           .map(_.bump(bumper).string).getOrElse(versionFormatError)
     }),
 
+    releaseIgnoreUntrackedFiles := true,
+
     releaseProcess := Seq(
       checkSnapshotDependencies,
       releaseStepCommand(ExtraReleaseCommands.initialVcsChecksCommand),
@@ -50,5 +52,4 @@ object Release {
       pushChanges
     )
   )
-
 }
