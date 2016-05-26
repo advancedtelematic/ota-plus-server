@@ -111,7 +111,7 @@ class Application @Inject() (ws: WSClient,
   }
 
   private def addBearerToken[R](request: Request[R], wsRequest: WSRequest): WSRequest = {
-    request.cookies.get("access-token") match {
+    request.session.get("access_token") match {
       case Some(t) => wsRequest.withHeaders(("Authorization", "Bearer " + t))
       case None => wsRequest
     }
