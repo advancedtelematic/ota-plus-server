@@ -37,6 +37,8 @@ class NamespaceSpec extends PropSpec
   }
 
   property("namespace is deriveable from user context") {
+    pending
+
     forAll(TokenGen, SecretKeyGen) { (token, key) =>
       val keyInfo = KeyInfo[SecretKey](key, None, None, None)
       val jwsSerialized = Jws.signCompact(token, `HMAC SHA-256`, keyInfo)
@@ -46,6 +48,8 @@ class NamespaceSpec extends PropSpec
   }
 
   property("yields default namespace without user context") {
+    pending
+
       Get("/test") ~>
         route ~> check { responseAs[String] shouldEqual "default" }
   }
