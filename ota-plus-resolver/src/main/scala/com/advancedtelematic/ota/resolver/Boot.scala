@@ -25,6 +25,8 @@ object Boot extends App with Directives {
   implicit val db = Database.forConfig("database")
   val config = system.settings.config
 
+  import com.advancedtelematic.ota.common.AuthNamespace._
+
   if (config.getBoolean("database.migrate")) {
     val url = config.getString("database.url")
     val user = config.getString("database.properties.user")
@@ -46,11 +48,11 @@ object Boot extends App with Directives {
     (logResponseMetrics("ota-plus-resolver") & versionHeaders(version)) {
       (handleRejections(rejectionHandler) & handleExceptions(exceptionHandler)) {
         pathPrefix("api" / "v1") {
-          new VehicleDirectives().route ~
-            new PackageDirectives().route ~
-            new FilterDirectives().route ~
-            new ResolveDirectives().route ~
-            new ComponentDirectives().route ~
+          new VehicleDirectives(authNamespace).route ~
+            new PackageDirectives(authNamespace).route ~
+            new FilterDirectives(authNamespace).route ~
+            new ResolveDirectives(authNamespace).route ~
+            new ComponentDirectives(authNamespace).route ~
             new PackageFiltersResource().routes
         } ~ new HealthResource(db, com.advancedtelematic.ota.resolver.BuildInfo.toMap).route
       }
