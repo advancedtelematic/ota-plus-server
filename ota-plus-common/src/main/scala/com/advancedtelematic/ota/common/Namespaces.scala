@@ -23,7 +23,19 @@ trait Namespaces {
     token      <- decode[JsonWebToken](serialized.encodedPayload.stringData()).leftMap(_.getMessage)
   } yield token).toOption
 
-  def extractNamespace(implicit system: ActorSystem): Directive1[Namespace] = extract { _ =>
-    defaultNs.getOrElse("")
+  def extractNamespace(implicit system: ActorSystem): Directive1[Namespace] = {
+    extractCredentials.flatMap {
+      case Some(OAuth2BearerToken(serializedToken)) => {
+        val tokenNs = for {
+          token <- extractToken(serializedToken)
+          nsE = refineV(token.subject.underlying): Either[String, Namespace]
+          ns <- nsE.right.toOption
+        } yield ns
+
+        provide(tokenNs orElse defaultNs getOrElse "")
+      }
+      case _ => provide(defaultNs getOrElse "")
+    }
   }
+
 }
