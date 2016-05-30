@@ -1,7 +1,7 @@
 version: '2'
 services:
   db:
-    image: advancedtelematic/mariadb:$DEFAULT_VERSION
+    image: advancedtelematic/mariadb:stable
     expose:
       - '3306'
     ports:
@@ -60,7 +60,7 @@ services:
   web:
     image: advancedtelematic/ota-plus-web:$DEFAULT_VERSION
     ports:
-      - '8000:9000'
+      - '9000:9000'
     depends_on:
       - core
       - resolver
