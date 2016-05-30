@@ -1038,3 +1038,7 @@ button.close:hover, button.close:active, button.close:focus {
 .dnd-zone-active {
     border: 2px dashed blue;
 }
+
+.btn-logout {
+    margin: 12px 0 0 12px;
+}
