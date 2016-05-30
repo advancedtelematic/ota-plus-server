@@ -65,7 +65,7 @@ define(function(require) {
     refreshData() {
       SotaDispatcher.dispatch({actionType: 'get-device', vin: this.props.params.vin});
     }
-    render() {
+    render() {    
       var Device = this.props.Device.deref();
       return (
         <ReactCSSTransitionGroup
