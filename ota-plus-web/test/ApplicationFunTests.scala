@@ -27,7 +27,7 @@ class ApplicationFunTests extends PlaySpec with OneServerPerSuite with AllBrowse
   val userName = "admin@genivi.org"
   val password = "genivirocks!"
 
-  override lazy val port = app.configuration.getString("test.webserver.port").map(_.toInt).getOrElse(9000)
+  override lazy val port = app.configuration.getString("test.webserver.port").map(_.toInt).getOrElse(9010)
 
   override def beforeAll() {
   }
