@@ -50,7 +50,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   )
 
   val webserverHost = "localhost"
-  override lazy val port = app.configuration.getString("test.webserver.port").map(_.toInt).getOrElse(9000)
+  override lazy val port = app.configuration.getString("test.webserver.port").map(_.toInt).getOrElse(9010)
 
   val wsClient = app.injector.instanceOf[WSClient]
 
