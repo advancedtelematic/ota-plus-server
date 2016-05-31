@@ -8,14 +8,13 @@ import com.advancedtelematic.ota.vehicle.{VehicleMetadata, Vehicles}
 import eu.timepit.refined._
 import javax.inject.{Inject, Named, Singleton}
 
-import org.genivi.sota.data.{Device, DeviceT}
+import org.genivi.sota.data.{Device, DeviceT, Namespace}
 import play.api.libs.json._
 import play.api.libs.ws._
 import play.api.mvc._
 import play.api.{Configuration, Logger}
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 import com.advancedtelematic.ota.device.Devices.refinedWriter
 import eu.timepit.refined.string.Uri
 
@@ -53,7 +52,7 @@ extends Controller with ApiClientSupport {
 
   private[this] def userOptions(req: AuthenticatedRequest[_]): UserOptions = {
     val traceId = req.headers.get("x-ats-traceid")
-    val namespace = req.session.get("username").flatMap(u => refineV[Uri](u).right.toOption)
+    val namespace = req.session.get("username").asInstanceOf[Option[Namespace]]
     // TODO: Switch back to access_token after https://advancedtelematic.atlassian.net/browse/PRO-858
     UserOptions(Some(req.idToken.token), traceId, namespace)
   }
