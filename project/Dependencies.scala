@@ -36,9 +36,16 @@ object Dependencies {
     "com.advancedtelematic" %% "jw-security-jca" % Version.JsonWebSecurity
   )
 
+  val Kinesis = Seq(
+    "com.amazonaws" % "aws-java-sdk" % "1.11.5",
+    "com.amazonaws" % "amazon-kinesis-client" % "1.6.3"
+  )
+
   val JsonWebSecurityAkka = "com.advancedtelematic" %% "jw-security-akka-http" % Version.JsonWebSecurity
 
   val SotaCore = "org.genivi" %% "sota-core" % Version.GeniviSota
+
+  val SotaCommon = "org.genivi" %% "sota-common" % Version.GeniviSota
 
   val SotaCommonData = "org.genivi" %% "sota-common-data" % Version.GeniviSota
 

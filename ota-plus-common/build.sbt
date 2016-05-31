@@ -1,7 +1,8 @@
 libraryDependencies ++= Seq(
   Dependencies.JsonWebSecurityAkka,
-  Dependencies.SotaCommonData
-) ++ Dependencies.JsonWebSecurity
+  Dependencies.SotaCommonData,
+  Dependencies.SotaCommon
+) ++ Dependencies.JsonWebSecurity ++ Dependencies.Kinesis
 
 enablePlugins(Versioning.Plugin)
 
