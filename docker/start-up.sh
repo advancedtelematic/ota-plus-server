@@ -80,11 +80,14 @@ docker run \
   -p 8080:8080 \
   --link=db \
   --link=resolver \
+  --link=nats \
   --link=device-registry \
   -e HOST='0.0.0.0' \
   -e CORE_DB_URL='jdbc:mariadb://db:3306/sota_core' \
   -e CORE_DB_MIGRATE='true' \
   -e RESOLVER_API_URI='http://resolver:8081' \
+  -e NATS_HOST='nats' \
+  -e NATS_PORT='4222' \
   -e DEVICE_REGISTRY_API_URI='http://device-registry:8083' \
   -e CORE_INTERACTION_PROTOCOL='none' \
   -e PACKAGES_VERSION_FORMAT='.+' \
@@ -107,7 +110,6 @@ fi
 echo $auth
 export AUTHPLUS_CLIENT_ID=$(echo $auth | jq .client_id | tr -d '"')
 export AUTHPLUS_SECRET=$(echo $auth | jq .client_secret | tr -d '"')
-
 
 BUILDSRV_DOCKER_TAG=${BUILDSRV_TAG-latest}
 echo 'Starting Buildsrv'
@@ -134,11 +136,14 @@ docker run \
   --link=resolver \
   --link=device-registry \
   --link=auth-plus \
+  --link=nats \
   --link=buildsrv \
   --link=nats \
   -e CORE_API_URI='http://core:8080' \
   -e RESOLVER_API_URI='http://resolver:8081' \
   -e DEVICE_REGISTRY_API_URI='http://device-registry:8083' \
+  -e NATS_HOST='nats' \
+  -e NATS_PORT='4222' \
   -e BUILDSERVICE_API_HOST='http://buildsrv:9200' \
   -e AUTHPLUS_HOST='http://auth-plus:9001' \
   -e PLAY_CRYPTO_SECRET='secret' \

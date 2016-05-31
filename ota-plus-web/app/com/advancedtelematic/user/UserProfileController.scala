@@ -65,7 +65,7 @@ class UserProfileController @Inject()(conf: Configuration, wsClient: WSClient)(i
     } yield UserId(idStr)
   }
 
-  def updateUserProfile: Action[JsValue] = AuthenticatedAction.async(BodyParsers.parse.json) { request =>
+  def updateUserProfile(): Action[JsValue] = AuthenticatedAction.async(BodyParsers.parse.json) { request =>
     val errorOrRequest = for {
       newName <- (request.body \ "name").validate[String].toXor
       userId  <- userIdFromToken(request.idToken)
