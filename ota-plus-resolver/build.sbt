@@ -17,6 +17,8 @@ dockerUpdateLatest in Docker := true
 
 enablePlugins(SbtWeb, Versioning.Plugin)
 
+buildInfoPackage := "com.advancedtelematic.ota.resolver"
+
 Versioning.settings
 
 Release.settings
