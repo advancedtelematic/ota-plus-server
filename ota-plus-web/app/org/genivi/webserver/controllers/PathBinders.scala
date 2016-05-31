@@ -6,10 +6,9 @@
 package org.genivi.webserver.controllers
 
 import eu.timepit.refined.refineV
+import eu.timepit.refined.string._
+import org.genivi.sota.data.Device._
 import org.genivi.sota.data.{Device, Vehicle}
-import cats.Show
-import cats.syntax.show._
-
 
 /**
   * Implicits that allow giving custom param-types in the method signatures in the routes file.
@@ -24,9 +23,9 @@ object PathBinders {
     */
   implicit object bindableDeviceUuid extends play.api.mvc.PathBindable[Device.Id] {
     def bind(key: String, value: String): Either[String, Device.Id] = {
-      refineV[Device.ValidId](value).right.map(Device.Id(_))
+      refineV[ValidId](value).right.map(Device.Id)
     }
-    def unbind(key: String, value: Device.Id): String = value.show
+    def unbind(key: String, value: Device.Id): String = value.underlying.get
   }
 
   /**
@@ -52,7 +51,7 @@ object PathBinders {
         case _ => Left(s"Expected ${Debian.fileExtension} or ${RPM.fileExtension}, found " + value)
       }
     }
-    def unbind(key: String, value: PackageType): String = value.toString
+    def unbind(key: String, value: PackageType): String = value.toString()
   }
 
   /**
@@ -67,7 +66,7 @@ object PathBinders {
         case _ => Left("Expected 32 or 64, found " + value)
       }
     }
-    def unbind(key: String, value: Architecture): String = value.toString
+    def unbind(key: String, value: Architecture): String = value.toString()
   }
 
 }
@@ -75,7 +74,7 @@ object PathBinders {
 trait PackageType {
   val fileExtension: String
   val contentType: String
-  override final def toString(): String = fileExtension
+  override final def toString: String = fileExtension
 }
 object Debian extends PackageType {
   val fileExtension: String = "deb"
@@ -91,5 +90,5 @@ case class Architecture(bits: Int) {
     case 32 | 64 => ()
     case _ => throw new IllegalArgumentException
   }
-  override def toString(): String = bits.toString
+  override def toString: String = bits.toString
 }
