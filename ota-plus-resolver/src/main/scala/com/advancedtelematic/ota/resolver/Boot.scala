@@ -38,7 +38,8 @@ object Boot extends App with Directives {
 
   lazy val version = {
     val bi = org.genivi.sota.resolver.BuildInfo
-    "ota-plus-resolver/" + bi.version
+    val otabi = com.advancedtelematic.ota.resolver.BuildInfo
+    s"${otabi.name}/${otabi.version} ${bi.name}/${bi.version}"
   }
 
   val routes: Route =
@@ -51,7 +52,7 @@ object Boot extends App with Directives {
             new ResolveDirectives().route ~
             new ComponentDirectives().route ~
             new PackageFiltersResource().routes
-        } ~ new HealthResource(db).route
+        } ~ new HealthResource(db, com.advancedtelematic.ota.resolver.BuildInfo.toMap).route
       }
     }
 

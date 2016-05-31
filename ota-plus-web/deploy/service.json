@@ -23,7 +23,7 @@
     "SERVICE_SCOPE": "public",
     "SERVICE_TYPE": "http",
     "SERVICE_IMAGE": "${IMAGE_ARTIFACT}",
-    "SERVICE_HEALTH_CHECK": "nc -vz %<host>s %<port>s",
+    "SERVICE_HEALTH_CHECK": "curl --show-error --silent %<host>s:%<port>s/health",
     "CORE_API_URI": "${CORE_API_URI}",
     "RESOLVER_API_URI": "${RESOLVER_API_URI}",
     "BUILDSERVICE_API_HOST": "${BUILDSERVICE_API_HOST}",
@@ -35,7 +35,8 @@
     "PLAY_CRYPTO_SECRET": "${PLAY_CRYPTO_SECRET}"
   },
   "healthChecks": [{
-    "protocol": "TCP",
+    "protocol": "HTTP",
+    "path": "/health",
     "intervalSeconds": 30
   }]
 }]

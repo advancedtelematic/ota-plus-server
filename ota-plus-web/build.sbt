@@ -1,7 +1,5 @@
 import play.sbt.PlaySettings
 import play.sbt.routes.RoutesKeys
-import sbtbuildinfo.BuildInfoKeys._
-import sbtbuildinfo._
 
 PlaySettings.defaultScalaSettings
 
@@ -78,3 +76,5 @@ mkVersionProperties := {
   IO.write(propFile, version.value)
   Seq(propFile)
 }
+
+buildInfoPackage := "com.advancedtelematic.ota.web"
