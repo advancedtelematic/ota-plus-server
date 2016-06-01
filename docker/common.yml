@@ -10,7 +10,7 @@ services:
       MYSQL_ROOT_PASSWORD: 'sota_test'
       MYSQL_USER: 'sota'
       MYSQL_PASSWORD: 's0ta'
-      MYSQL_DATABASES: 'sota_resolver sota_resolver_test sota_core sota_core_test'
+      MYSQL_DATABASES: 'sota_resolver sota_resolver_test sota_core sota_core_test sota_device_registry sota_device_registry_test'
 
   resolver:
     image: advancedtelematic/ota-plus-resolver:$DEFAULT_VERSION
@@ -33,6 +33,7 @@ services:
       - '8080:8080'
     depends_on:
       - resolver
+      - device-registry
       - db
     environment:
       HOST: '0.0.0.0'
@@ -41,6 +42,19 @@ services:
       RESOLVER_API_URI: 'http://resolver:8081'
       CORE_INTERACTION_PROTOCOL: 'none'
       PACKAGES_VERSION_FORMAT: '.+'
+
+  device-registry:
+    image: advancedtelematic/ota-plus-device-registry:$DEFAULT_VERSION
+    expose:
+      - '8083'
+    ports:
+      - '8083:8083'
+    depends_on:
+      - db
+    environment:
+      HOST: '0.0.0.0'
+      DEVICE_REGISTRY_DB_URL: "jdbc:mariadb://mysql:3306/sota_device_registry"
+      DEVICE_REGISTRY_DB_MIGRATE: 'true'
 
   auth-plus:
     image: advancedtelematic/auth-plus:$DEFAULT_VERSION
@@ -64,11 +78,13 @@ services:
     depends_on:
       - core
       - resolver
+      - device-registry
       - auth-plus
       - buildsrv
     environment:
       CORE_API_URI: 'http://core:8080'
       RESOLVER_API_URI: 'http://resolver:8081'
+      DEVICE_REGISTRY_API_URI: 'http://device-registry:8083'
       PLAY_CRYPTO_SECRET: 'secret' # only for local dev!
       AUTHPLUS_HOST: 'http://auth-plus:9001'
       BUILDSERVICE_API_HOST: 'http://buildsrv:9200'

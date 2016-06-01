@@ -9,6 +9,8 @@ var deTranslations = {
     addnew: 'Neue hinzufügen',
     newdevice: 'Neues Gerät',
     devicename: 'Gerätename',
+    deviceid: 'Geräte-Id (VIN)',
+    devicetype: 'Geräte-Typ',
     adddevice: 'Gerät hinzufügen',
     close: 'Schließen',
     of: 'von',

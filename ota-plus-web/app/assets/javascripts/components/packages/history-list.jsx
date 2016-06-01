@@ -11,10 +11,10 @@ define(function(require) {
         intervalId: null
       });
       this.refreshData = this.refreshData.bind(this);
-      SotaDispatcher.dispatch({actionType: "get-package-history-for-vin", vin: this.props.vin});
-      db.packageHistoryForVin.addWatch("poll-packages-history-for-vin", _.bind(this.forceUpdate, this, null));
-      SotaDispatcher.dispatch({actionType: "get-installation-log-for-vin", vin: this.props.vin});
-      db.installationLogForVin.addWatch("poll-installation-log-for-vin", _.bind(this.forceUpdate, this, null));
+      SotaDispatcher.dispatch({actionType: "get-package-history-for-device", vin: this.props.vin});
+      db.packageHistoryForDevice.addWatch("poll-packages-history-for-device", _.bind(this.forceUpdate, this, null));
+      SotaDispatcher.dispatch({actionType: "get-installation-log-for-device", vin: this.props.vin});
+      db.installationLogForDevice.addWatch("poll-installation-log-for-device", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
       var that = this;
@@ -24,17 +24,17 @@ define(function(require) {
       this.setState({intervalId: intervalId});
     }
     componentWillUnmount() {
-      db.packageHistoryForVin.removeWatch("poll-packages-history-for-vin");
-      db.installationLogForVin.removeWatch("poll-installation-log-for-vin");
+      db.packageHistoryForDevice.removeWatch("poll-packages-history-for-device");
+      db.installationLogForDevice.removeWatch("poll-installation-log-for-device");
       clearInterval(this.state.intervalId);
     }
     refreshData() {
-      SotaDispatcher.dispatch({actionType: "get-package-history-for-vin", vin: this.props.vin});
-      SotaDispatcher.dispatch({actionType: "get-installation-log-for-vin", vin: this.props.vin});
+      SotaDispatcher.dispatch({actionType: "get-package-history-for-device", vin: this.props.vin});
+      SotaDispatcher.dispatch({actionType: "get-installation-log-for-device", vin: this.props.vin});
     }
     render() {
-      var Packages = db.packageHistoryForVin.deref();
-      var AllInstallationsLog = db.installationLogForVin.deref();
+      var Packages = db.packageHistoryForDevice.deref();
+      var AllInstallationsLog = db.installationLogForDevice.deref();
       Packages.sort(function(a, b) {
         var dateCompared = new Date(b.completionTime) - new Date(a.completionTime);
         return dateCompared == 0 ? b.id - a.id : dateCompared;

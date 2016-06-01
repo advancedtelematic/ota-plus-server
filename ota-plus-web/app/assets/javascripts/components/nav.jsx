@@ -31,7 +31,7 @@ define(function(require) {
         isDropdownVisible: !this.state.isDropdownVisible
       });
     }
-    render() {      
+    render() {
       var campaignsData = JSON.parse(localStorage.getItem('campaignsData'));
       return (
         <nav className="navbar navbar-inverse navbar-fixed-top">
@@ -41,7 +41,7 @@ define(function(require) {
             </div>
             <ul className="right-nav pull-right">
               <li>
-                {campaignsData !== null && campaignsData.length > 0 ? 
+                {campaignsData !== null && campaignsData.length > 0 ?
                   <a href="#" className="btn-campaigns" onClick={this.toggleCampaignPanel}>
                     <img src="/assets/img/icons/wireless.png" className="icon-campaigns" alt=""/>
                   </a>
@@ -52,7 +52,7 @@ define(function(require) {
                   <img src="/assets/img/icons/profile_icon.png" />
                 </a>
                 <VelocityTransitionGroup enter={{animation: "fadeIn", duration: 200}} leave={{animation: "fadeOut", duration: 200}}>
-                  {this.state.isDropdownVisible ? 
+                  {this.state.isDropdownVisible ?
                     <ChangePassword />
                   : null}
                 </VelocityTransitionGroup>
@@ -63,6 +63,6 @@ define(function(require) {
       );
     }
   }
-  
+
   return Nav;
 });

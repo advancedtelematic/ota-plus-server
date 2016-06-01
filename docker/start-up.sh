@@ -21,7 +21,7 @@ docker run \
   -e MYSQL_ROOT_PASSWORD='sota_test' \
   -e MYSQL_USER='sota' \
   -e MYSQL_PASSWORD='s0ta' \
-  -e MYSQL_DATABASES='sota_resolver sota_resolver_test sota_core sota_core_test' \
+  -e MYSQL_DATABASES='sota_resolver sota_resolver_test sota_core sota_core_test sota_device_registry sota_device_registry_test' \
   advancedtelematic/mariadb:${MARIADB_DOCKER_TAG}
 
 SLEEP=${DB_SLEEP-20}
@@ -58,10 +58,25 @@ docker run \
   -e CORE_DB_URL='jdbc:mariadb://db:3306/sota_core' \
   -e CORE_DB_MIGRATE='true' \
   -e RESOLVER_API_URI='http://resolver:8081' \
+  -e DEVICE_REGISTRY_API_URI='http://device-registry:8083' \
   -e CORE_INTERACTION_PROTOCOL='none' \
   -e PACKAGES_VERSION_FORMAT='.+' \
   -e rootLevel='DEBUG' \
   advancedtelematic/ota-plus-core:$CORE_DOCKER_TAG
+
+DEVICE_REGISTRY_DOCKER_TAG=${DEVICE_REGISTRY_TAG-latest}
+echo 'Starting device registry'
+echo "tag ${DEVICE_REGISTRY_DOCKER_TAG}"
+docker run \
+  -d \
+  --name=device-registry \
+  --expose=8083 \
+  -p 8083:8083 \
+  --link=db \
+  -e HOST='0.0.0.0' \
+  -e DEVICE_REGISTRY_DB_URL='jdbc:mariadb://db:3306/sota_device_registry' \
+  -e DEVICE_REGISTRY_DB_MIGRATE='true' \
+  advancedtelematic/ota-plus-device-registry:$DEVICE_REGISTRY_DOCKER_TAG
 
 echo 'Creating user: demo@advancedtelematic.com password: demo'
 curl -H "Content-Type: application/json" -X POST -d '{"email":"demo@advancedtelematic.com","password":"demo"}' http://localhost:9001/users
@@ -102,10 +117,12 @@ docker run \
   -p 9000:9000 \
   --link=core \
   --link=resolver \
+  --link=device-registry \
   --link=auth-plus \
   --link=buildsrv \
   -e CORE_API_URI='http://core:8080' \
   -e RESOLVER_API_URI='http://resolver:8081' \
+  -e DEVICE_REGISTRY_API_URI='http://device-registry:8083' \
   -e BUILDSERVICE_API_HOST='http://buildsrv:9200' \
   -e AUTHPLUS_HOST='http://auth-plus:9001' \
   -e PLAY_CRYPTO_SECRET='secret' \

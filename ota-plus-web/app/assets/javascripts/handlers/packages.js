@@ -47,17 +47,23 @@ define(function(require) {
                 db.searchablePackages.reset(packages);
               });
           break;
-          case 'get-packages-for-vin':
-            sendRequest.doGet('/api/v1/vehicles/' + payload.vin + '/package')
-              .success(function(packages) {
-                var list = _.map(packages, function(package) {
-                  return {id: package}
-                });
-                db.packagesForVin.reset(list);
+          case 'get-packages-for-device':
+            sendRequest.doGet('api/v1/device_data')
+              .success(function(devices) {
+                const device = _.find(devices, i => i.id == payload.device);
+                if (!_.isUndefined(device)) {
+                  sendRequest.doGet('/api/v1/vehicles/' + device.deviceId + '/package')
+                    .success(function(packages) {
+                      var list = _.map(packages, function(package) {
+                        return {id: package}
+                      });
+                      db.packagesForDevice.reset(list);
+                    });
+                }
               });
           break;
-          case 'get-vehicles-queued-for-package':
-            sendRequest.doGet('/api/v1/packages/' + payload.name + "/" + payload.version + "/queued_vins")
+          case 'get-devices-queued-for-package':
+            sendRequest.doGet('/api/v1/packages/' + payload.name + "/" + payload.version + "/queued_devices")
               .success(function(vehicles) {
                 db.vehiclesQueuedForPackage.reset(vehicles);
               });

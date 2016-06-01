@@ -3,55 +3,61 @@ package com.advancedtelematic.ota.core
 import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Directives
 import akka.stream.ActorMaterializer
+import cats.Show
 import com.advancedtelematic.akka.http.jwt.JwtDirectives._
 import com.advancedtelematic.jws.CompactSerialization
 import com.advancedtelematic.ota.common.AuthNamespace
-import org.genivi.sota.core.{UpdateService, VehicleUpdatesResource}
+import org.genivi.sota.common.DeviceRegistry
 import org.genivi.sota.core.resolver.ExternalResolverClient
 import org.genivi.sota.core.transfer.DefaultUpdateNotifier
-import org.genivi.sota.data.Vehicle.Vin
-import slick.driver.MySQLDriver.api._
+import org.genivi.sota.core.{UpdateService, DeviceUpdatesResource}
+import org.genivi.sota.data.Device
 import org.genivi.sota.marshalling.RefinedMarshallingSupport._
+import slick.driver.MySQLDriver.api._
 
-class OtaCoreVehicleUpdatesResource(db: Database,
+
+class OtaCoreDeviceUpdatesResource(db: Database,
                                     authPlusSignatureVerifier: CompactSerialization => Boolean,
-                                    resolverClient: ExternalResolverClient)
+                                    resolverClient: ExternalResolverClient,
+                                    deviceRegistry: DeviceRegistry)
                                    (implicit system: ActorSystem, mat: ActorMaterializer)
   extends Directives {
 
-  import org.genivi.sota.core.WebService._
   import AuthNamespace._
+  import org.genivi.sota.core.WebService._
+  import Device._
 
-  val vs = new VehicleUpdatesResource(db, resolverClient, authNamespace)
+  val ds = new DeviceUpdatesResource(db, resolverClient, deviceRegistry, authNamespace)
 
   /**
     * Routes are grouped first by HTTP method to avoid tricky misunderstandings on the part of the Routing DSL.
-    * These routes must be kept in synch with [[VehicleUpdatesResource]]
+    * These routes must be kept in synch with [[DeviceUpdatesResource]]
     */
   val route = {
-    (pathPrefix("api" / "v1" / "vehicle_updates") & extractVin) { vin =>
+    // TODO vehicle_updates -> device_updates
+    (pathPrefix("api" / "v1" / "vehicle_updates") & extractDeviceUuid) { device =>
       get {
-        pathEnd { vs.logVehicleSeen(vin) { vs.pendingPackages(vin) } } ~
-        path("queued") { vs.pendingPackages(vin) } ~
-        path("results") { vs.resultsForVehicle(vin) } ~
-        (extractUuid & path("results")) { uuid => vs.resultsForUpdate(vin, uuid) } ~
-        (extractUuid & path("download")) { uuid => vs.downloadPackage(vin, uuid) }
+        pathEnd { ds.logDeviceSeen(device) { ds.pendingPackages(device) } } ~
+        path("queued") { ds.pendingPackages(device) } ~
+        path("results") { ds.results(device) } ~
+        (extractUuid & path("results")) { updateId => ds.resultsForUpdate(device, updateId) } ~
+        (extractUuid & path("download")) { updateId => ds.downloadPackage(device, updateId) }
       } ~
       put {
         (path("installed")) {
           authenticateJwt("auth-plus", _ => true) { jwt =>
-            oauth2Scope(jwt, s"ota-core.${vin.get}.write") {
-              vs.updateInstalledPackages(vin)
+            oauth2Scope(jwt, s"ota-core.${implicitly[Show[Id]].show(device)}.write") {
+              ds.updateInstalledPackages(device)
             }
           }
         } ~
-        path("order") { vs.setInstallOrder(vin) } ~
-        (extractUuid & path("cancelupdate") & authNamespace) { (uuid, ns) => vs.cancelUpdate(ns, vin, uuid) }
+        path("order") { ds.setInstallOrder(device) } ~
+        (extractUuid & path("cancelupdate") & authNamespace) { (updateId, _) => ds.cancelUpdate(device, updateId) }
       } ~
       post {
-        path("sync") { vs.sync(vin) } ~
-        (authNamespace & pathEnd) { ns => vs.queueVehicleUpdate(ns, vin) } ~
-        (extractUuid & pathEnd) { vs.reportInstall }
+        path("sync") { ds.sync(device) } ~
+        (authNamespace & pathEnd) { ns => ds.queueDeviceUpdate(ns, device) } ~
+        (extractUuid & pathEnd) { ds.reportInstall }
       }
     }
   }

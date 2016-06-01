@@ -9,6 +9,8 @@ var jpTranslations = {
     addnew: '新しく追加する',
     newdevice: '新しいデバイス',
     devicename: '装置名',
+    deviceid: 'Device Id (VIN)',
+    devicetype: 'Device type',
     adddevice: 'デバイスを追加',
     close: '閉じる',
     of: 'の',

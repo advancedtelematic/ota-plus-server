@@ -6,13 +6,13 @@ define(function(require) {
       BootstrapDatetimepicker = require('bootstrap-datetimepicker'),
       SotaDispatcher = require('sota-dispatcher'),
       ImpactListItem = require('./impact-list-item');
-    
+
   class ImpactAnalysis extends React.Component {
     constructor(props) {
       super(props);
-      
+
       this.updateProgress = this.updateProgress.bind(this);
-      
+
       this.state = {
         progress: 0,
         progressIntervalId: null,
@@ -29,7 +29,7 @@ define(function(require) {
     updateProgress() {
       var currentProgress = this.state.progress;
       var newProgress = Math.min(currentProgress + 3, 100);
-            
+
       if(newProgress < 100) {
         this.setState({
           progress: newProgress
@@ -37,13 +37,13 @@ define(function(require) {
       } else if(newProgress == 100 && currentProgress != newProgress) {
         var that = this;
         clearInterval(this.state.progressIntervalId);
-        
+
         var timeoutId = setTimeout(function(){
           that.setState({
            progress: newProgress
           });
         }, 400);
-        
+
         this.setState({
           timeoutId: timeoutId
         });
@@ -74,7 +74,7 @@ define(function(require) {
               </div>
             }
           </div>
-            
+
           <div className="col-md-12">
             <div className="fullsize-overflow-hidden">
               <div className="form-subtitle">
@@ -82,7 +82,7 @@ define(function(require) {
               </div>
             </div>
           </div>
-  
+
           <div className="col-md-12">
             <div className="impacted-devices">
               <ReactCSSTransitionGroup
@@ -104,13 +104,13 @@ define(function(require) {
               </ReactCSSTransitionGroup>
             </div>
           </div>
-  
+
           <div className="col-md-12">
             <div className="form-group text-center">
               <button type="submit" className="btn btn-black-big" disabled={this.state.progress != 100 ? true : false}>Create project</button>
             </div>
           </div>
-  
+
         </div>
       );
     }

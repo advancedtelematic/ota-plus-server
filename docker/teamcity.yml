@@ -6,6 +6,8 @@ services:
     image: advancedtelematic/ota-plus-resolver:BUILT_TAG
   core:
     image: advancedtelematic/ota-plus-core:BUILT_TAG
+  device-registry:
+    image: advancedtelematic/ota-plus-device-registry:BUILT_TAG
   web:
     image: advancedtelematic/ota-plus-web:BUILT_TAG
   auth-plus:
