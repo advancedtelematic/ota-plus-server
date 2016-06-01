@@ -16,6 +16,8 @@ dockerRepository in Docker := Some("advancedtelematic")
 
 dockerUpdateLatest in Docker := true
 
+buildInfoPackage := "com.advancedtelematic.ota.core"
+
 enablePlugins(SbtWeb, Versioning.Plugin)
 
 Versioning.settings
