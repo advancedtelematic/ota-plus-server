@@ -42,6 +42,8 @@ def otaPlusProject(name: String): Project = Project(name, file(name))
     .settings(testFrameworks := Seq(sbt.TestFrameworks.ScalaTest))
     .settings(fork in Test := false) // PRO-157
     .settings(publish := ())
+    .enablePlugins(BuildInfoPlugin)
+    .settings(buildInfoOptions ++= Seq(BuildInfoOption.ToJson, BuildInfoOption.ToMap))
 
 lazy val atsRepos = Seq(
   "ATS Releases" at "http://nexus.prod01.internal.advancedtelematic.com:8081/content/repositories/releases",

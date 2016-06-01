@@ -28,3 +28,5 @@ GET     /login                                  com.advancedtelematic.login.Logi
 GET     /logout                                 com.advancedtelematic.login.LoginController.logout
 POST	/authenticate				            com.advancedtelematic.login.LoginController.authenticate
 
+GET     /health                                 com.advancedtelematic.HealthController.health
+GET     /health/version                         com.advancedtelematic.HealthController.version

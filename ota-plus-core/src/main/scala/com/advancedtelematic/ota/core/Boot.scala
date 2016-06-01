@@ -17,7 +17,7 @@ import org.apache.commons.codec.binary.Base64
 import org.genivi.sota.core.db._
 import org.genivi.sota.core.resolver.{Connectivity, DefaultConnectivity, DefaultExternalResolverClient}
 import org.genivi.sota.core.transfer._
-import org.genivi.sota.http.{HealthResource, SotaDirectives}
+import org.genivi.sota.http.HealthResource
 
 import scala.util.{Failure, Success, Try}
 import org.genivi.sota.http.SotaDirectives._
@@ -74,14 +74,15 @@ object Boot extends App {
     settings.resolverUri, settings.resolverResolveUri, settings.resolverPackagesUri, settings.resolverVehiclesUri
   )
 
-  val healthResource = new HealthResource(db)
+  val healthResource = new HealthResource(db, com.advancedtelematic.ota.core.BuildInfo.toMap)
   val webService = new OtaPlusCoreWebservice(DefaultUpdateNotifier, externalResolverClient, db)
   val vehicleService = new OtaCoreVehicleUpdatesResource(db,
     settings.authPlusSignatureVerifier, externalResolverClient)
 
   lazy val version = {
     val bi = org.genivi.sota.core.BuildInfo
-    "ota-plus-core/" + bi.version
+    val otabi = com.advancedtelematic.ota.core.BuildInfo
+    s"${otabi.name}/${otabi.version} ${bi.name}/${bi.version}"
   }
 
   val routes = Route.seal(
