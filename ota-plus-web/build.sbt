@@ -47,7 +47,7 @@ libraryDependencies ++= Seq (
     "org.webjars" % "bootstrap" % "3.3.6",
     ws, Dependencies.MockWs,
     play.sbt.Play.autoImport.cache,
-    Dependencies.SotaCommonData,
+    Dependencies.SotaCommon,
     Dependencies.SotaCommonTest
   ) ++ Dependencies.JsonWebSecurity
 

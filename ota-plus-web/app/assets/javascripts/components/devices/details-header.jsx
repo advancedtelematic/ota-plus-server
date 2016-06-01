@@ -2,7 +2,7 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       Link = Router.Link;
-        
+
   class DetailsHeader extends React.Component {
     constructor(props) {
       super(props);
@@ -30,20 +30,20 @@ define(function(require) {
             <div className="device-box">
               <div className="device-icon"></div>
             </div>
-            
+
             <div className="device-header-text">
-              <div className="device-name">{this.props.device.vin}</div>
+              <div className="device-name">{this.props.device.deviceName}</div>
               <div className="device-lastseen">
                 {this.props.device.status != 'NotSeen' ?
                   <span>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
-                : 
+                :
                   <span>Never seen online</span>
                 }
-              </div>  
+              </div>
             </div>
-      
+
             <div className="device-header-status pull-right">
-              {this.props.duplicatingInProgress ? 
+              {this.props.duplicatingInProgress ?
                 <div>
                   <img src='/assets/img/icons/loading.gif' alt='' width="20"/> &nbsp;
                   Synchronising &nbsp;
@@ -57,7 +57,7 @@ define(function(require) {
                 </div>
               }
             </div>
-            <Link to={`devicedetails/${this.props.device.vin}/newcampaign`} className="btn-new-campaign pull-right">
+            <Link to={`devicedetails/${this.props.device.id}/newcampaign`} className="btn-new-campaign pull-right">
               Campaign wizard
             </Link>
           </div>

@@ -6,7 +6,7 @@ define(function(require) {
       ProductionDetailsHeader = require('./production-details-header'),
       PackagesQueue = require('../packages/queue'),
       Packages = require('../packages/packages');
-        
+
   class ProductionDeviceDetails extends React.Component {
     constructor(props, context) {
       super(props, context);
@@ -23,8 +23,8 @@ define(function(require) {
       this.setPackagesStatistics = this.setPackagesStatistics.bind(this);
       this.setQueueStatistics = this.setQueueStatistics.bind(this);
       this.refreshData = this.refreshData.bind(this);
-                        
-      SotaDispatcher.dispatch({actionType: 'get-device', vin: this.state.testVin});
+
+      SotaDispatcher.dispatch({actionType: 'get-device', device: this.state.testVin});
       this.props.Device.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
@@ -63,10 +63,11 @@ define(function(require) {
       });
     }
     refreshData() {
-      SotaDispatcher.dispatch({actionType: 'get-device', vin: this.state.testVin});
+      SotaDispatcher.dispatch({actionType: 'get-device', device: this.state.testVin});
     }
-    render() {    
-      var Device = this.props.Device.deref();
+    render() {
+      // TODO: might be initialized empty
+      const deviceWithStatus = this.props.Device.deref();
       return (
         <ReactCSSTransitionGroup
           transitionAppear={true}
@@ -74,11 +75,10 @@ define(function(require) {
           transitionAppearTimeout={500}
           transitionEnterTimeout={500}
           transitionLeaveTimeout={500}
-          transitionName="example">  
+          transitionName="example">
           <div>
-            <ProductionDetailsHeader 
-              device={Device}
-              vin={this.props.params.vin} />
+            <ProductionDetailsHeader
+              device={deviceWithStatus}/>
             <div className="col-md-6 nopadding border-right-2">
               <div className="panel panel-ats">
                 <div className="panel-heading">
@@ -87,8 +87,8 @@ define(function(require) {
                   </div>
                 </div>
                 <div className="panel-body">
-                  <Packages 
-                    vin={this.state.testVin} 
+                  <Packages
+                    device={this.state.testVin}
                     setPackagesStatistics={this.setPackagesStatistics}
                     lastSeen={Device.lastSeen}/>
                 </div>
@@ -113,7 +113,7 @@ define(function(require) {
                     showPackagesHistory={this.state.showPackagesHistory}
                     showQueueHistory={this.showQueueHistory}
                     setQueueStatistics={this.setQueueStatistics}
-                    vin={this.props.params.vin}/>
+                    device={this.props.params.id}/>
                 </div>
                 <div className="panel-footer">
                   {this.state.queueCount} packages in queue
@@ -126,7 +126,7 @@ define(function(require) {
       );
     }
   };
-  
+
   ProductionDeviceDetails.contextTypes = {
     strings: React.PropTypes.object.isRequired
   };

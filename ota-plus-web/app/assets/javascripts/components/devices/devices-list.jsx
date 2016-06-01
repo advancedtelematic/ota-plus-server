@@ -3,7 +3,7 @@ define(function(require) {
       Router = require('react-router'),
       _ = require('underscore'),
       DeviceListItem = require('./devices-list-item');
-  
+
   class DevicesList extends React.Component {
     constructor(props) {
       super(props);
@@ -11,18 +11,22 @@ define(function(require) {
     render() {
       var devices = [];
       var Devices = this.props.Devices;
-            
       var devices = _.map(Devices, function(device, i) {
         return (
-          <DeviceListItem key={device.vin} vin={device.vin} status={device.status} isProductionDevice={this.props.areProductionDevices}/>
+          <DeviceListItem key={device.deviceName}
+                          id={device.id}
+                          deviceName={device.deviceName}
+                          deviceId={device.deviceId}
+                          status={device.status}
+                          isProductionDevice={this.props.areProductionDevices}/>
         );
-      }, this);   
-      
+      }, this);
+
       return (
         <div className="row" id="devices-list">
             <div id="devices-container" className="container">
-            {devices.length > 0 ? 
-              devices 
+            {devices.length > 0 ?
+              devices
             :
               <div className="col-md-12">
                 <br />

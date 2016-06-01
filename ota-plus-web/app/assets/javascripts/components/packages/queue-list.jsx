@@ -3,7 +3,7 @@ define(function(require) {
       SotaDispatcher = require('sota-dispatcher'),
       db = require('stores/db'),
       QueueListItem = require('./queue-list-item');
-  
+
   class QueueList extends React.Component {
     constructor(props) {
       super(props);
@@ -15,15 +15,15 @@ define(function(require) {
       this.dragEnd = this.dragEnd.bind(this);
       this.dragOver = this.dragOver.bind(this);
       this.setData = this.setData.bind(this);
-      
-      db.packageQueueForVin.addWatch("poll-queued-packages", _.bind(this.setData, this, null));
+
+      db.packageQueueForDevice.addWatch("poll-queued-packages", _.bind(this.setData, this, null));
     }
     componentWillUnmount(){
-      db.packageQueueForVin.removeWatch("poll-queued-packages");
+      db.packageQueueForDevice.removeWatch("poll-queued-packages");
     }
     setData() {
       if (!$('#queue-list .dragging').length) {
-        var data = db.packageQueueForVin.deref();
+        var data = db.packageQueueForDevice.deref();
         data.sort(function(a, b) {
           var installPosCompared = a.installPos - b.installPos;
           return installPosCompared == 0 ? new Date(a.createdAt) - new Date(b.createdAt) : installPosCompared;
@@ -59,22 +59,22 @@ define(function(require) {
       this.sort(this.state.data.packages, undefined);
       this.updatePackagesOrder();
     }
-    updatePackagesOrder() {            
+    updatePackagesOrder() {
       var newOrder = {};
       var packages = _.map(this.state.data.packages, function(pack, i) {
         newOrder[i] = pack.requestId;
       });
       SotaDispatcher.dispatch({
-        actionType: 'reorder-queue-for-vin',
-        vin: this.props.vin,
+        actionType: 'reorder-queue-for-device',
+        device: this.props.device,
         order: newOrder
       });
     }
     render() {
       var Packages = this.state.data.packages !== undefined ? this.state.data.packages : [];
-      
+
       var packages = _.map(Packages, function(pack, i) {
-        var dragging = (this.state.data.dragging == i) ? "dragging" : "";  
+        var dragging = (this.state.data.dragging == i) ? "dragging" : "";
         var status = (pack.name == 'package') ? 'error' : 'success';
         return (
           <div data-id={i}
@@ -84,12 +84,12 @@ define(function(require) {
             onDragEnd={this.dragEnd}
             onDragOver={this.dragOver}
             onDragStart={this.dragStart}>
-            <QueueListItem package={pack} status={status} vin={this.props.vin}/>
+            <QueueListItem package={pack} status={status} device={this.props.device}/>
           </div>
         );
-      }, this);       
+      }, this);
       return (
-        <ul id="queue-list" className="list-group list-group-dnd"> 
+        <ul id="queue-list" className="list-group list-group-dnd">
           {packages.length > 0 ?
             packages
           :

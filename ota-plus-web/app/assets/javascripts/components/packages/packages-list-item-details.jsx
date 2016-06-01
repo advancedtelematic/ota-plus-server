@@ -6,40 +6,40 @@ define(function(require) {
   class PackageListItemDetails extends React.Component {
     constructor(props) {
       super(props);
-      
+
       this.refreshData = this.refreshData.bind(this);
       this.installPackage = this.installPackage.bind(this);
     }
     installPackage(packageName, packageVersion, e) {
       e.preventDefault();
       jQuery('.btn-install').attr('disabled', true).unbind('click');
-      var data = { 
+      var data = {
         name: packageName,
         version: packageVersion
       };
-      
+
       SotaDispatcher.dispatch({
-        actionType: 'install-package-for-vin',
+        actionType: 'install-package-for-device',
         data: data,
-        vin: this.props.vin
+        device: this.props.device
       });
-      
+
       this.refreshData();
     }
     refreshData() {
-      SotaDispatcher.dispatch({actionType: "get-package-queue-for-vin", vin: this.props.vin});      
+      SotaDispatcher.dispatch({actionType: "get-package-queue-for-device", device: this.props.device});
     }
     render() {
       var versions = _.map(this.props.versions, function(version, i) {
         return (
-          <PackagesListItemDetailsVersion 
+          <PackagesListItemDetailsVersion
             version={version}
             isQueued={this.props.isQueued}
             installPackage={this.installPackage}
             key={'package-' + this.props.packageName + '-' + version.id.version}/>
         );
-      }, this);  
-        
+      }, this);
+
       return (
         <div className="package-details">
           <ul>

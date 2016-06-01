@@ -15,5 +15,7 @@ trait OtaPlusConfig {
 
   val resolverApiUri = conf.underlying.getString("resolver.api.uri")
 
+  val devicesApiUri = conf.underlying.getString("deviceregistry.api.uri")
+
   val authPlusApiUri = conf.underlying.getString("authplus.host")
 }

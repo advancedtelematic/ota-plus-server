@@ -6,7 +6,7 @@ define(function(require) {
 
   return function(url, resourceName, callback, action) {
     var postStatus = (db.postStatus.deref() !== null && typeof db.postStatus.deref() === 'object') ? db.postStatus.deref() : {};
-    
+
     sendRequest.doGet(url, {global: false})
       .error(function(xhr, textStatus) {
         if (xhr.status == 404) {

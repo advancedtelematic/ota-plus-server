@@ -3,7 +3,7 @@ define(function(require) {
       Router = require('react-router'),
       Link = Router.Link,
       SearchBar = require('../searchbar');
-        
+
   class DevicesHeader extends React.Component {
     constructor(props) {
       super(props);
@@ -13,7 +13,7 @@ define(function(require) {
         <div id="devices-bar">
           <div className="container">
             <SearchBar class="search-bar pull-left" changeFilter={this.props.changeFilter}/>
-          
+
             <div className="select-bar select-bar-status pull-left">
               <div className="select-bar-text">Status</div>
               <div className="btn-group">
@@ -30,7 +30,7 @@ define(function(require) {
                 </ul>
               </div>
             </div>
-          
+
             <div className="select-bar select-bar-sort pull-left">
               <div className="select-bar-text">Sort by</div>
               <div className="btn-group">
@@ -44,7 +44,7 @@ define(function(require) {
                 </ul>
               </div>
             </div>
-  
+
             <Link to="newdevice" className="btn btn-add pull-right">
               <i className="fa fa-plus"></i> &nbsp; Add new device
             </Link>

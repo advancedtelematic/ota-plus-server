@@ -58,8 +58,10 @@ lazy val otaPlusWeb = otaPlusProject("ota-plus-web").dependsOn(otaPlusCommon)
 
 lazy val otaPlusResolver = otaPlusProject("ota-plus-resolver").dependsOn(otaPlusCommon)
 
+lazy val otaPlusDeviceRegistry = otaPlusProject("ota-plus-device-registry").dependsOn(otaPlusCommon)
+
 lazy val rootProject = (project in file(".")).
-  aggregate(otaPlusCore, otaPlusWeb, otaPlusResolver, otaPlusCommon)
+  aggregate(otaPlusCore, otaPlusWeb, otaPlusResolver, otaPlusCommon, otaPlusDeviceRegistry)
   .settings(Release.settings)
   .settings(publish := ())
 

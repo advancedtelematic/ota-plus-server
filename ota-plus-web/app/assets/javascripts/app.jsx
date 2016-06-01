@@ -15,7 +15,7 @@ define(function(require) {
       Bootstrap = require('bootstrap'),
       SotaDispatcher = require('sota-dispatcher')
       SizeVerifier = require('../js/verify');
-      
+
   /* Components*/
   var Nav = require('components/nav'),
       Translate = require('components/translation/translate'),
@@ -33,31 +33,31 @@ define(function(require) {
       TestSettings = require('components/test-settings');
 
   const languages = {
-    en: 'en', 
-    de: 'de', 
+    en: 'en',
+    de: 'de',
     jp: 'jp'
   };
 
   class App extends React.Component {
     constructor(props) {
       super(props);
-      
+
       var currentLang = 'en';
       if(localStorage.getItem('currentLang') && localStorage.getItem('currentLang') in languages) {
         currentLang = localStorage.getItem('currentLang');
       } else {
-        var browserLang = (navigator.language || navigator.userLanguage);  
+        var browserLang = (navigator.language || navigator.userLanguage);
         if(browserLang && browserLang in languages) {
           currentLang = browserLang;
         }
       }
-      
+
       this.state = {
         currentLang: currentLang,
         showCampaignPanel: false,
         intervalId: null,
       }
-      
+
       this.changeLanguage = this.changeLanguage.bind(this);
       this.toggleCampaignPanel = this.toggleCampaignPanel.bind(this);
     }
@@ -82,7 +82,7 @@ define(function(require) {
         var campaignsData = JSON.parse(localStorage.getItem('campaignsData'));
         if(campaignsData !== null && campaignsData.length > 0) {
           var newCampaignsData = [];
-          
+
           _.map(campaignsData, function(campaign, i) {
             newCampaignsData[i] = campaign;
             if(newCampaignsData[i].status == 'running') {
@@ -93,11 +93,11 @@ define(function(require) {
               }
             }
           });
-          
+
           localStorage.setItem('campaignsData', JSON.stringify(newCampaignsData));
         }
       }, 5000);
-      
+
       this.setState({
         intervalId: intervalId
       });
@@ -109,19 +109,19 @@ define(function(require) {
       var path = this.context.location.pathname.toLowerCase().split('/');
       var key = path[1] !== undefined ? path[1] : 'page';
       var page = '';
-            
+
       if(path[1] !== undefined) {
         switch(path[1]) {
           case '':
             page = 'page-home';
           break;
-          case 'newdevice': 
+          case 'newdevice':
             page = 'page-home';
           break;
-          case 'devicedetails': 
+          case 'devicedetails':
             page = 'page-device-details';
           break;
-          case 'productiondevicedetails': 
+          case 'productiondevicedetails':
             page = 'page-device-details';
           break;
           case 'testsettings':
@@ -131,7 +131,7 @@ define(function(require) {
           break;
         }
       }
-   
+
       return (
         <VelocityTransitionGroup enter={{animation: "fadeIn"}} runOnMount={true}>
           <div key={key} className={page}>
@@ -166,12 +166,12 @@ define(function(require) {
         <Route path="/" component={Devices}>
           <Route path="newdevice" component={Modal(NewDevice, {TitleVar: "newdevice", modalId: 'modal-new-device'})}/>
         </Route>
-        <Route path="devicedetails/:vin" component={wrapComponent(DeviceDetails, {Device: db.showDevice})}>
+        <Route path="devicedetails/:id" component={wrapComponent(DeviceDetails, {Device: db.showDevice})}>
           <Route path="impactanalysis/:count" component={Modal(ImpactAnalysis, {TitleVar: "impactanalysis", modalId: 'modal-impact-analysis'})}/>
           <Route path="newcampaign" component={Modal(NewCampaign, {TitleVar: "newcampaign", modalId: 'modal-new-campaign'})}/>
           <Route path=":action/:vin2" />
         </Route>
-        <Route path="productiondevicedetails/:vin" component={wrapComponent(ProductionDeviceDetails, {Device: db.showDevice})}/>
+        <Route path="productiondevicedetails/:id" component={wrapComponent(ProductionDeviceDetails, {Device: db.showDevice})}/>
         <Route name="packages" component={Packages}/>
         <Route name="profile" component={Profile}/>
         <Route path="testsettings" component={TestSettings}/>
@@ -184,10 +184,10 @@ define(function(require) {
       ReactDOM.render(
         <Router history={HashHistory}>
           {routes}
-        </Router>, 
+        </Router>,
         document.getElementById('app')
       );
-        
+
       SotaDispatcher.dispatch({
         actionType: 'initialize'
       });

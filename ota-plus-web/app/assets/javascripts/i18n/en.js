@@ -9,6 +9,8 @@ var enTranslations = {
     addnew: 'Add new',
     newdevice: 'New device',
     devicename: 'Device name',
+    deviceid: 'Device Id (VIN)',
+    devicetype: 'Device type',
     adddevice: 'Add device',
     close: 'Close',
     of: 'of',
