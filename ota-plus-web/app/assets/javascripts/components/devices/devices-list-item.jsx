@@ -10,8 +10,9 @@ define(function(require) {
     render() {
       var itemId = 'vin-'+this.props.vin;
       var cutVin = this.props.vin.substring(0, 4);
+      var link = this.props.isProductionDevice ? 'productiondevicedetails' : 'devicedetails';
       return (
-        <Link to={`devicedetails/${this.props.vin}`} className="device-box">
+        <Link to={`${link}/${this.props.vin}`} className="device-box">
           <div className="device-icon"></div>
           <div className="device-desc">
             <div className="device-name">

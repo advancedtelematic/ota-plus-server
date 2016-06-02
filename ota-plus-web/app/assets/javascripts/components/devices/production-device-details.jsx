@@ -3,12 +3,12 @@ define(function(require) {
       Router = require('react-router'),
       ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       SotaDispatcher = require('sota-dispatcher'),
-      DetailsHeader = require('./details-header'),
+      ProductionDetailsHeader = require('./production-details-header'),
       PackagesHistory = require('../packages/history'),
       PackagesQueue = require('../packages/queue'),
       Packages = require('../packages/packages');
         
-  class DeviceDetails extends React.Component {
+  class ProductionDeviceDetails extends React.Component {
     constructor(props, context) {
       super(props, context);
       this.state = {
@@ -18,16 +18,14 @@ define(function(require) {
         queuedPackagesCount: 0,
         queueCount: 0,
         intervalId: null,
-        timeoutIntervalId: null,
-        duplicatingInProgress: (this.props.params.action == 'synchronising' && this.props.params.vin2) ? true : false,
-        duplicatingTimeout: 2000,
+        testVin: localStorage.getItem('firstProductionTestDevice'),
       }
       this.showQueueHistory = this.showQueueHistory.bind(this);
       this.setPackagesStatistics = this.setPackagesStatistics.bind(this);
       this.setQueueStatistics = this.setQueueStatistics.bind(this);
       this.refreshData = this.refreshData.bind(this);
             
-      SotaDispatcher.dispatch({actionType: 'get-device', vin: this.props.params.vin});
+      SotaDispatcher.dispatch({actionType: 'get-device', vin: this.state.testVin});
       this.props.Device.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
@@ -36,19 +34,6 @@ define(function(require) {
         that.refreshData();
       }, 1000);
       this.setState({intervalId: intervalId});
-      
-      if(this.state.duplicatingInProgress) {
-        var that = this;
-        var timeoutIntervalId = setTimeout(function() {
-          that.setState({
-            duplicatingInProgress: false,
-          });
-        }, 10000);
-        
-        this.setState({
-          timeoutIntervalId: timeoutIntervalId
-        });
-      }
     }
     componentWillUpdate(nextProps, nextState, nextContext) {
       if(nextContext.strings != this.context.strings) {
@@ -60,7 +45,6 @@ define(function(require) {
     componentWillUnmount(){
       this.props.Device.removeWatch("poll-device");
       clearInterval(this.state.intervalId);
-      clearTimeout(this.state.timeoutIntervalId);
     }
     showQueueHistory() {
       this.setState({
@@ -80,7 +64,7 @@ define(function(require) {
       });
     }
     refreshData() {
-      SotaDispatcher.dispatch({actionType: 'get-device', vin: this.props.params.vin});
+      SotaDispatcher.dispatch({actionType: 'get-device', vin: this.state.testVin});
     }
     render() {    
       var Device = this.props.Device.deref();
@@ -93,24 +77,9 @@ define(function(require) {
           transitionLeaveTimeout={500}
           transitionName="example">  
           <div>
-            {Device.status == "NotSeen" ? 
-              <div className="white-overlay">
-                Device never seen online <br />
-                Download the SDK
-                (<a href={`/api/v1/client/${this.props.params.vin}/deb/32`}>debian 32</a> &nbsp; or &nbsp;
-                 <a href={`/api/v1/client/${this.props.params.vin}/deb/64`}>debian 64</a>)
-              </div>
-            : null}
-            {this.state.duplicatingInProgress ? 
-              <div className="grey-overlay">
-                <p><img src='/assets/img/icons/loading.gif' alt=''/></p>
-                <div>applying configuration from</div>
-                <div>{this.props.params.vin2}</div>
-              </div>
-            : null}
-            <DetailsHeader 
-              device={Device} 
-              duplicatingInProgress={this.state.duplicatingInProgress}/>
+            <ProductionDetailsHeader 
+              device={Device}
+              vin={this.props.params.vin} />
             <div className="col-md-6 nopadding border-right-2">
               <div className="panel panel-ats">
                 <div className="panel-heading">
@@ -120,7 +89,7 @@ define(function(require) {
                 </div>
                 <div className="panel-body">
                   <Packages 
-                    vin={this.props.params.vin} 
+                    vin={this.state.testVin} 
                     setPackagesStatistics={this.setPackagesStatistics}
                     lastSeen={Device.lastSeen}/>
                 </div>
@@ -155,12 +124,12 @@ define(function(require) {
                         transitionEnterTimeout={500}
                         transitionLeaveTimeout={500}
                         transitionName="example">
-                        <PackagesHistory vin={this.props.params.vin}/>
+                        <PackagesHistory vin={this.state.testVin}/>
                       </ReactCSSTransitionGroup>
                     : null}
                   
                     <PackagesQueue 
-                      vin={this.props.params.vin}
+                      vin={this.state.testVin}
                       setQueueStatistics={this.setQueueStatistics}/>
                   </div>
                 </div>
@@ -176,9 +145,10 @@ define(function(require) {
     }
   };
   
-  DeviceDetails.contextTypes = {
+  ProductionDeviceDetails.contextTypes = {
+    history: React.PropTypes.object.isRequired,
     strings: React.PropTypes.object.isRequired
   };
 
-  return DeviceDetails;
+  return ProductionDeviceDetails;
 });

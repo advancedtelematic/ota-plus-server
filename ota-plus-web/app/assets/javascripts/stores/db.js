@@ -13,6 +13,8 @@ define(function(require) {
       this.searchableDevices = atom.createAtom([]);
       this.searchablePackages = atom.createAtom([]);
       this.postStatus = atom.createAtom([]);
+      
+      this.searchableProductionDevices = atom.createAtom([]);
     }
 
     return DB;

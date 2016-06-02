@@ -31,7 +31,7 @@ define(function(require) {
       
       setTimeout(function(){
         that.setDivsHeight();
-      }, 10);
+      }, 100);
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setDivsHeight);
