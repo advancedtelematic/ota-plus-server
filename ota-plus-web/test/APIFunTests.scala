@@ -6,11 +6,16 @@
 import java.io.File
 import java.security.InvalidParameterException
 import java.util.UUID
+import javax.crypto.SecretKey
+import javax.crypto.spec.SecretKeySpec
 import javax.inject.Inject
 
+import com.advancedtelematic.jwa.`HMAC SHA-256`
+import com.advancedtelematic.jws.{Jws, KeyInfo, KeyLookup}
+import com.advancedtelematic.jwt._
 import org.asynchttpclient.AsyncHttpClient
 import org.asynchttpclient.request.body.multipart.FilePart
-import org.joda.time.DateTime
+import org.joda.time.{DateTime, Instant, LocalDateTime}
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.Tag
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
@@ -18,8 +23,11 @@ import org.scalatestplus.play._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
-import play.api.libs.ws.{WSClient, WSResponse}
+import play.api.libs.ws.{WS, WSClient, WSResponse}
+import play.api.mvc.{Cookie, Cookies}
 import play.api.test.Helpers._
+
+import scala.util.Random
 
 object APITests extends Tag("APITests")
 
@@ -68,10 +76,12 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     (JsPath \ "version").read[String]
   )(PackageId.apply _)
 
-
   import Method._
   def makeRequest(path: String, method: Method) : WSResponse = {
-    val req = wsClient.url(s"http://$webserverHost:$port/api/v1/" + path)
+    val req =
+      wsClient.url(s"http://$webserverHost:$port/api/v1/" + path)
+        .withHeaders("Authorization" -> s"Bearer $oauthToken")
+
     method match {
       case PUT => await(req.put(""))
       case GET => await(req.get())
@@ -81,12 +91,37 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   def makeJsonRequest(path: String,  method: Method, data: JsObject) : WSResponse = {
-    val req = wsClient.url(s"http://$webserverHost:$port/api/v1/" + path)
+    val req = wsClient
+      .url(s"http://$webserverHost:$port/api/v1/" + path)
+      .withHeaders("Authorization" -> s"Bearer $oauthToken")
+
     method match {
       case PUT => await(req.put(data))
       case POST => await(req.post(data))
       case _ => throw new InvalidParameterException("POST is not supported by this method")
     }
+  }
+
+  lazy val namespace = Subject("ittests@ats.com")
+
+  lazy val oauthToken : String = {
+    import com.advancedtelematic.json.signature.JcaSupport._
+
+    val token = JsonWebToken(
+      TokenId("itTestToken"),
+      Issuer("ItTests"),
+      ClientId(UUID.randomUUID()),
+      namespace,
+      Audience(Set.empty),
+      LocalDateTime.now().minusSeconds(1).toDate.toInstant,
+      LocalDateTime.now().plusHours(1).toDate.toInstant,
+      Scope(Set.empty)
+    )
+
+    val bytes = Array.fill[Byte](16)(Random.nextInt().toByte)
+    val key = new SecretKeySpec(bytes, "HmacSHA256")
+    val keyInfo = KeyInfo[SecretKey](key, None, None, None)
+    Jws.signCompact(token, `HMAC SHA-256`, keyInfo).toString()
   }
 
   def addVin(vin: String): Unit = {
@@ -99,6 +134,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     val putBuilder = asyncHttpClient
         .preparePut(s"http://$webserverHost:$port/api/v1/packages/$packageName/" +
           packageVersion + "?description=test&vendor=ACME")
+      .addHeader("Authorization", s"Bearer $oauthToken")
     val builder = {
       val tmpFile = {
         val fileName = java.util.UUID.randomUUID().toString
@@ -113,7 +149,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
 
   def addFilter(filterName : String): Unit = {
     val data = Json.obj(
-      "namespace"  -> "default",
+      "namespace"  -> namespace.underlying,
       "name"       -> filterName,
       "expression" -> testFilterExpression
     )
@@ -123,16 +159,13 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   def addFilterToPackage(packageName : String): Unit = {
-    val req = wsClient.url(
-      s"http://$webserverHost:$port/api/v1/package_filters/$packageName/$testPackageVersion/$testFilterName"
-    )
-    val packageFiltersResponse = await(req.put(""))
-    packageFiltersResponse.status mustBe OK
+    val resp = makeRequest(s"package_filters/$packageName/$testPackageVersion/$testFilterName", PUT)
+    resp.status mustBe OK
   }
 
   def addComponent(partNumber : String, description : String): Unit = {
     val data = Json.obj(
-      "namespace"   -> "default",
+      "namespace"   -> "ittests@ats.com",
       "partNumber"  -> partNumber,
       "description" -> description
     )
@@ -150,7 +183,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   "test searching vins" taggedAs APITests in {
     val searchResponse = makeRequest("vehicles?regex=" + testVin, GET)
     searchResponse.status mustBe OK
-    searchResponse.json.toString() mustEqual s"""[{"namespace":"default","vin":"$testVin","lastSeen":null}]"""
+    searchResponse.json.toString() mustEqual s"""[{"namespace":"ittests@ats.com","vin":"$testVin","lastSeen":null}]"""
   }
 
   "test adding packages" taggedAs APITests in {
@@ -225,11 +258,8 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test removing filters from a package" taggedAs APITests in {
-    val req = wsClient.url(
-      s"http://$webserverHost:$port/api/v1/package_filters/$testPackageName/$testPackageVersion/$testFilterName"
-    )
-    val removeResponse = await(req.delete())
-    removeResponse.status mustBe OK
+    val req = makeRequest(s"package_filters/$testPackageName/$testPackageVersion/$testFilterName", DELETE)
+    req.status mustBe OK
   }
 
   "test re-adding filters to a package" taggedAs APITests in {
@@ -238,11 +268,8 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test removing package from a filter" taggedAs APITests in {
-    val req = wsClient.url(
-      s"http://$webserverHost:$port/api/v1/package_filters/$testPackageName/$testPackageVersion/$testFilterName"
-    )
-    val deleteResponse = await(req.delete())
-    deleteResponse.status mustBe OK
+    val req = makeRequest(s"package_filters/$testPackageName/$testPackageVersion/$testFilterName", DELETE)
+    req.status mustBe OK
   }
 
   "test viewing packages with a given filter" taggedAs APITests in {
@@ -311,11 +338,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
       "periodOfValidity" -> (currentTimestamp + "/" + tomorrowTimestamp),
       "priority" -> 1 //this could be anything from 1-10; picked at random in this case
     )
-    val response = await(
-      wsClient.url(s"http://$webserverHost:$port/api/v1/updates")
-      .withHeaders("Content-Type" -> "application/json")
-      .post(data)
-    )
+    val response = makeJsonRequest("updates", POST, data)
     response.status mustBe OK
   }
 
@@ -346,8 +369,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test list of vins affected by update" taggedAs APITests ignore {
-    val listResponse = makeRequest("resolve/" + testPackageName + "/" + testPackageVersion, GET)
-    listResponse.status mustBe OK
+    val listResponse = makeRequest(s"resolve?namespace=${namespace.underlying}&package_name=$testPackageName&package_version=$testPackageVersion", GET)
     //TODO: parse this properly. The issue is the root key for each list in the response is a vin, not a static string.
     listResponse.body.contains(testVin) && !listResponse.body.contains(testVinAlt) mustBe true
   }

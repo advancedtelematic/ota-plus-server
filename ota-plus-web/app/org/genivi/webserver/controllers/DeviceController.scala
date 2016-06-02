@@ -12,6 +12,7 @@ import org.genivi.sota.data.Vehicle.Vin
 import play.api.libs.concurrent.Execution
 
 import scala.concurrent.Future
+import scala.util.Try
 
 @Singleton
 class DeviceController @Inject() (val ws: WSClient,
@@ -37,7 +38,16 @@ extends Controller with ApiClientSupport
     searchWith(req, resolverApi.search)
   }
 
-  private[this] def accessToken(req: Request[_]): Option[String] = req.session.get("access_token")
+  private[this] def accessToken(req: Request[_]): Option[String] = {
+    req.session.get("access_token").orElse(bearerToken(req))
+  }
+
+  private[this] def bearerToken(req: Request[_]): Option[String] = {
+    for {
+      authHeader <- req.headers.get("Authorization")
+      bearer <- Try(authHeader.split("Bearer ").last).toOption
+    } yield bearer
+  }
 
   private def requestCreate(vin: Vin, req: Request[RawBuffer]): Future[Result] = {
     val token = accessToken(req)

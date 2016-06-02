@@ -5,12 +5,13 @@ package com.advancedtelematic.ota.core
  * License: MPL-2.0
  */
 
-import com.advancedtelematic.jwt.{Audience, Scope, _}
 import java.time.Instant
-import org.scalacheck.Arbitrary._
-import org.scalacheck.{Arbitrary, Gen}
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
+
+import com.advancedtelematic.jwt.{Audience, Scope, _}
+import org.scalacheck.Arbitrary._
+import org.scalacheck.{Arbitrary, Gen}
 
 
 object Generators {
