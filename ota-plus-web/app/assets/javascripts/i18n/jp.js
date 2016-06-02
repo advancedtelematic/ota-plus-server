@@ -26,4 +26,5 @@ var jpTranslations = {
     installedsuccessfully: '正常にインストールされました',
     newcampaign: 'Create new campaign',
     ongoingcampaigns: 'Ongoing update campaigns',
+    impactanalysis: 'Impact analysis',
 };

@@ -3,12 +3,13 @@ define(function(require) {
       Router = require('react-router'),
       Link = Router.Link;
         
-  class DetailsHeader extends React.Component {
+  class ProductionDetailsHeader extends React.Component {
     constructor(props) {
       super(props);
     }
     render() {
       var lastSeenDate = new Date(this.props.device.lastSeen);
+      lastSeenDate.setDate(lastSeenDate.getDate()-10);
       var labelClass = 'label-danger';
       var deviceStatus = 'Status unknown';
       switch(this.props.device.status) {
@@ -31,10 +32,10 @@ define(function(require) {
             </div>
             
             <div className="device-header-text">
-              <div className="device-name">{this.props.device.vin}</div>
+              <div className="device-name">{this.props.vin}</div>
               <div className="device-lastseen">
                 {this.props.device.status != 'NotSeen' ?
-                  <span>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
+                  <span>Last seen online: {lastSeenDate.toDateString()}</span>
                 : 
                   <span>Never seen online</span>
                 }
@@ -42,22 +43,13 @@ define(function(require) {
             </div>
       
             <div className="device-header-status pull-right">
-              {this.props.duplicatingInProgress ? 
-                <div>
-                  <img src='/assets/img/icons/loading.gif' alt='' width="20"/> &nbsp;
-                  Synchronising &nbsp;
-                </div>
-              :
-                <div>
-                  <div className={"device-status device-status-" + this.props.device.status}>
-                    <i className="fa fa-circle" aria-hidden="true"></i>
-                  </div>
-                  {deviceStatus}
-                </div>
-              }
+              <div className={"device-status device-status-" + this.props.device.status}>
+                <i className="fa fa-circle" aria-hidden="true"></i>
+              </div>
+              {deviceStatus}
             </div>
-            <Link to={`devicedetails/${this.props.device.vin}/newcampaign`} className="btn-new-campaign pull-right">
-              Campaign wizard
+            <Link to={`devicedetails/${localStorage.getItem('firstProductionTestDevice')}/synchronising/${this.props.vin}`} className="btn-duplicate-device pull-right">
+              Duplicate to test device (1)
             </Link>
           </div>
         </div>
@@ -65,5 +57,5 @@ define(function(require) {
     }
   };
 
-  return DetailsHeader;
+  return ProductionDetailsHeader;
 });
