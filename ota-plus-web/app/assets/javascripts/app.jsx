@@ -21,13 +21,16 @@ define(function(require) {
       Translate = require('components/translation/translate'),
       Devices = require('components/devices/devices'),
       DeviceDetails = require('components/devices/device-details'),
+      ProductionDeviceDetails = require('components/devices/production-device-details'),
       Packages = require('components/packages/packages'),
       NewDevice = require('components/devices/new-device'),
       Modal = require('components/modal'),
+      ImpactAnalysis = require('components/devices/impact-analysis'),
       Profile = require('components/profile'),
       RightPanel = require('components/campaigns/right-panel'),
       NewCampaign = require('components/campaigns/new-campaign'),
-      Campaigns = require('components/campaigns/campaigns');
+      Campaigns = require('components/campaigns/campaigns'),
+      TestSettings = require('components/test-settings');
 
   const languages = {
     en: 'en', 
@@ -117,6 +120,12 @@ define(function(require) {
           case 'devicedetails': 
             page = 'page-device-details';
           break;
+          case 'productiondevicedetails': 
+            page = 'page-device-details';
+          break;
+          case 'testsettings':
+            page = 'page-home';
+          break;
           default:
           break;
         }
@@ -125,7 +134,7 @@ define(function(require) {
       return (
         <div key={page} className={page}>
           <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel}/>
-          <div className="page wrapper container-fluid">
+          <div className="page wrapper">
             {React.cloneElement(this.props.children, {showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
           </div>
         </div>
@@ -155,10 +164,14 @@ define(function(require) {
           <Route path="newdevice" component={Modal(NewDevice, {TitleVar: "newdevice", modalId: 'modal-new-device'})}/>
         </Route>
         <Route path="devicedetails/:vin" component={wrapComponent(DeviceDetails, {Device: db.showDevice})}>
+          <Route path="impactanalysis/:count" component={Modal(ImpactAnalysis, {TitleVar: "impactanalysis", modalId: 'modal-impact-analysis'})}/>
           <Route path="newcampaign" component={Modal(NewCampaign, {TitleVar: "newcampaign", modalId: 'modal-new-campaign'})}/>
+          <Route path=":action/:vin2" />
         </Route>
+        <Route path="productiondevicedetails/:vin" component={wrapComponent(ProductionDeviceDetails, {Device: db.showDevice})}/>
         <Route name="packages" component={Packages}/>
         <Route name="profile" component={Profile}/>
+        <Route path="testsettings" component={TestSettings}/>
       </Route>
     </Route>
   );

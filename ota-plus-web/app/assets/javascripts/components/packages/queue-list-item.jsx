@@ -11,7 +11,6 @@ define(function(require) {
       this.cancelUpdate = this.cancelUpdate.bind(this);
     }
     cancelUpdate() {
-      console.log('dziala');
       SotaDispatcher.dispatch({
         actionType: 'cancel-update',
         vin: this.props.vin,
