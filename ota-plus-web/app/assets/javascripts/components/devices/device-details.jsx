@@ -28,7 +28,7 @@ define(function(require) {
       this.setQueueStatistics = this.setQueueStatistics.bind(this);
       this.refreshData = this.refreshData.bind(this);
       this.countImpactAnalysisPackages = this.countImpactAnalysisPackages.bind(this);
-            
+      
       SotaDispatcher.dispatch({actionType: 'get-device', vin: this.props.params.vin});
       this.props.Device.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
     }
