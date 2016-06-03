@@ -25,6 +25,7 @@ define(function(require) {
       Packages = require('components/packages/packages'),
       NewDevice = require('components/devices/new-device'),
       Modal = require('components/modal'),
+      ImpactAnalysis = require('components/devices/impact-analysis'),
       Profile = require('components/profile'),
       RightPanel = require('components/campaigns/right-panel'),
       NewCampaign = require('components/campaigns/new-campaign'),
@@ -168,6 +169,7 @@ define(function(require) {
           <Route path="newdevice" component={Modal(NewDevice, {TitleVar: "newdevice"})}/>
         </Route>
         <Route path="devicedetails/:vin" component={wrapComponent(DeviceDetails, {Device: db.showDevice})}>
+          <Route path="impactanalysis/:count" component={Modal(ImpactAnalysis, {TitleVar: "impactanalysis", modalId: 'modal-impact-analysis'})}/>
           <Route path="newcampaign" component={Modal(NewCampaign, {TitleVar: "newcampaign", modalId: 'modal-new-campaign'})}/>
           <Route path=":action/:vin2" />
         </Route>

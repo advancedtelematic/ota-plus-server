@@ -1,6 +1,7 @@
 define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
+      Link = Router.Link,
       ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       SotaDispatcher = require('sota-dispatcher'),
       DetailsHeader = require('./details-header'),
@@ -21,12 +22,14 @@ define(function(require) {
         timeoutIntervalId: null,
         duplicatingInProgress: (this.props.params.action == 'synchronising' && this.props.params.vin2) ? true : false,
         duplicatingTimeout: 2000,
+        selectedImpactAnalysisPackagesCount: 0,
       }
       this.showQueueHistory = this.showQueueHistory.bind(this);
       this.setPackagesStatistics = this.setPackagesStatistics.bind(this);
       this.setQueueStatistics = this.setQueueStatistics.bind(this);
       this.refreshData = this.refreshData.bind(this);
-            
+      this.countImpactAnalysisPackages = this.countImpactAnalysisPackages.bind(this);
+      
       SotaDispatcher.dispatch({actionType: 'get-device', vin: this.props.params.vin});
       this.props.Device.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
     }
@@ -82,6 +85,11 @@ define(function(require) {
     refreshData() {
       SotaDispatcher.dispatch({actionType: 'get-device', vin: this.props.params.vin});
     }
+    countImpactAnalysisPackages(val) {
+      this.setState({
+        selectedImpactAnalysisPackagesCount: val
+      });
+    }
     render() {    
       var Device = this.props.Device.deref();
       return (
@@ -122,9 +130,23 @@ define(function(require) {
                   <Packages 
                     vin={this.props.params.vin} 
                     setPackagesStatistics={this.setPackagesStatistics}
-                    lastSeen={Device.lastSeen}/>
+                    lastSeen={Device.lastSeen}
+                    countImpactAnalysisPackages={this.countImpactAnalysisPackages}/>
                 </div>
                 <div className="panel-footer">
+                  {this.state.selectedImpactAnalysisPackagesCount > 0 ? 
+                    <ReactCSSTransitionGroup
+                      transitionAppear={true}
+                      transactionLeave={false}
+                      transitionAppearTimeout={500}
+                      transitionEnterTimeout={500}
+                      transitionLeaveTimeout={500}
+                      transitionName="example">
+                      <Link to={`devicedetails/${this.props.params.vin}/impactanalysis/${this.state.selectedImpactAnalysisPackagesCount}`} className="btn btn-black impact-analysis-button pull-left">
+                        Impact analysis
+                      </Link>
+                    </ReactCSSTransitionGroup>
+                  : null}
                   {this.state.installedPackagesCount} installed, &nbsp;
                   {this.state.queuedPackagesCount} queued
                 </div>

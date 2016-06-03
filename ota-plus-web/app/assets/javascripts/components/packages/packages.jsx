@@ -73,10 +73,17 @@ define(function(require) {
       var offsetTop = jQuery('#queue-both-lists').offset().top;
       jQuery('#queue-both-lists').height(windowHeight - offsetTop - footerHeight - 40);
     }
-    render() {      
+    render() {   
       return (
         <div id="packages">
           <div className="panel-subheading">
+            {this.context.location.pathname.toLowerCase().split('/')[1] != 'productiondevicedetails' &&
+            (localStorage.getItem('firstProductionTestDevice') == this.props.vin ||
+            localStorage.getItem('secondProductionTestDevice') == this.props.vin ||
+            localStorage.getItem('thirdProductionTestDevice') == this.props.vin) ? 
+              <input type="checkbox" id="selectPackages" className="pull-left"/>
+            : null}
+            
             <SearchBar class="search-bar pull-left" changeFilter={this.changeFilter}/>     
             
             <div className="select-bar pull-right margin-left-30">
@@ -130,10 +137,15 @@ define(function(require) {
             selectSort={this.state.selectSort}
             vin={this.props.vin}
             setPackagesStatistics={this.props.setPackagesStatistics}
-            lastSeen={this.props.lastSeen}/>            
+            lastSeen={this.props.lastSeen}
+            countImpactAnalysisPackages={this.props.countImpactAnalysisPackages}/>            
         </div>
       );
     }
+  };
+
+  Packages.contextTypes = {
+    location: React.PropTypes.object,
   };
 
   return Packages;
