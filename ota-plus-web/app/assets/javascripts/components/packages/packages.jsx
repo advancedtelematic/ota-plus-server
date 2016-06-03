@@ -80,7 +80,7 @@ define(function(require) {
       var offsetTop = jQuery('#queue-wrapper').offset().top;
       jQuery('#queue-wrapper').height(windowHeight - offsetTop - footerHeight);
     }
-    render() {      
+    render() {   
       return (
         <div id="packages">
           <div className="panel-subheading">

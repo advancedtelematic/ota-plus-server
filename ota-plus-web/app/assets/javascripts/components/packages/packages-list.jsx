@@ -75,10 +75,6 @@ define(function(require) {
           that.updateListToAnalyse();
         }
       });
-      
-      setInterval(function() {
-        $('.slide-enter-active').height();
-      }, 10);
     }
     componentWillUnmount(){
       this.props.AllPackages.removeWatch(this.props.AllPackagesPollEventName);
@@ -319,36 +315,36 @@ define(function(require) {
           });
           installedPackage = (tmp !== undefined) ? tmp.id.version : '';
           
-          return(
-            <li key={'package-' + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
-              <PackagesListItem 
-                key={'package-' + pack.packageName + '-items'} 
-                name={pack.packageName} 
-                expandPackage={this.expandPackage} 
-                queuedPackage={queuedPackage} 
-                installedPackage={installedPackage} 
-                packageInfo={packageInfo} 
-                mainLabel={mainLabel}
-                selectToAnalyse={this.selectToAnalyse}
-                vin={this.props.vin}/>
-              <ReactCSSTransitionGroup
-                transitionAppear={true}
-                transitionLeave={false}
-                transitionAppearTimeout={500}
-                transitionEnterTimeout={500}
-                transitionLeaveTimeout={500}
-                transitionName="slide">
-                {this.state.expandedPackage == pack.packageName ?
-                <PackageListItemDetails 
-                  key={'package-' + pack.packageName + '-versions'} 
-                  versions={sortedElements} 
-                  vin={this.props.vin} 
-                  packageName={pack.packageName}
-                  isQueued={pack.isQueued}
-                  refresh={this.refreshData}/> 
-                : null}
-              </ReactCSSTransitionGroup>
-            </li>
+        return (
+          <li key={'package-' + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
+            <PackagesListItem 
+              key={'package-' + pack.packageName + '-items'} 
+              name={pack.packageName} 
+              expandPackage={this.expandPackage} 
+              queuedPackage={queuedPackage} 
+              installedPackage={installedPackage} 
+              packageInfo={packageInfo} 
+              mainLabel={mainLabel}
+              selectToAnalyse={this.selectToAnalyse}
+              vin={this.props.vin}/>
+              {this.state.expandedPackage == pack.packageName ?
+                <ReactCSSTransitionGroup
+                  transitionAppear={true}
+                  transitionLeave={false}
+                  transitionAppearTimeout={500}
+                  transitionEnterTimeout={500}
+                  transitionLeaveTimeout={500}
+                  transitionName="example">
+                  <PackageListItemDetails 
+                    key={'package-' + pack.packageName + '-versions'} 
+                    versions={sortedElements} 
+                    vin={this.props.vin} 
+                    packageName={pack.packageName}
+                    isQueued={pack.isQueued}
+                    refresh={this.refreshData}/> 
+                </ReactCSSTransitionGroup>
+              : null}
+          </li>
           );
         }, this);
         

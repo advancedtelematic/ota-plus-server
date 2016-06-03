@@ -1,5 +1,6 @@
 define(function(require) {
-  var React = require('react');
+  var React = require('react'),
+      ReactDOM = require('react-dom');
 
   class PackagesListItem extends React.Component {
     constructor(props) {
@@ -21,7 +22,7 @@ define(function(require) {
         $('#selectPackages').prop('checked', true);
       }
     }
-    render() {
+    render() {      
       return (
         <button type="button" className="list-group-item" onClick={this.itemClick}>
           {this.context.location.pathname.toLowerCase().split('/')[1] != 'productiondevicedetails' &&
@@ -64,7 +65,7 @@ define(function(require) {
       );
     }
   };
-
+  
   PackagesListItem.contextTypes = {
     location: React.PropTypes.object,
   };
