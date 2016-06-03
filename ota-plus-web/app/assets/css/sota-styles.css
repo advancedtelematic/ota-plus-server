@@ -20,10 +20,7 @@ a, a:hover {
 
 .page {
     padding-top: 50px;
-}
-
-#devices {
-
+    overflow: hidden;
 }
 
 #devices-container {
@@ -223,7 +220,7 @@ button.close:hover, button.close:active, button.close:focus {
 /* Home page */
 
 .page-home #devices-list {
-    padding-top: 23px;
+    padding: 23px 0;
 }
 
 /* Navbar */
@@ -1045,4 +1042,49 @@ button.close:hover, button.close:active, button.close:focus {
 
 .btn-changepass {
     margin: 12px 0 0 12px;
+}
+
+.btn-full-section {
+    text-align: left;
+    background: #222;
+    width: 100%;
+    border-radius: 0;
+}
+
+.btn-full-section, .btn-full-section:hover, .btn-full-section:active, .btn-full-section:focus {
+    color: #fff;
+}
+
+.btn-duplicate-device {
+    color: #222;
+    font-size: 16px;
+    text-decoration: none;
+    background: url(/assets/img/icons/duplicate_device.jpg) no-repeat 8px #fff;
+    width: 254px;
+    height: 34px;
+    padding: 6px 10px 0 40px;
+    margin: 25px 15px 0 0;
+    border: 1px solid #000;
+    border-radius: 15px;
+    box-shadow: 1px 1px 4px #333;
+}
+
+.btn-duplicate-device:hover, .btn-duplicate-device:active, .btn-duplicate-device:focus {
+    color: #222;
+    text-decoration: none;
+}
+
+.grey-overlay {
+    color: #fff;
+    font-size: 20px;
+    line-height: 1.4em;
+    text-align: center;
+    background: rgba(120,120,120, 0.7);
+    width: 100%;
+    height: 100%;
+    padding: 300px 0 0 0;
+    left: 0;
+    top: 0;
+    position: absolute;
+    z-index: 3;
 }
