@@ -64,6 +64,10 @@ a, a:hover, a:focus {
     border-radius: 7px;
 }
 
+.ats .form-control.error {
+    border: 2px solid #A7E6E0;
+}
+
 .ats-errors {
     font: 400 17px Arial;
     text-align: justify;
