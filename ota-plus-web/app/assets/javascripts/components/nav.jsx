@@ -5,7 +5,8 @@ define(function(require) {
       ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       LanguageSelector = require('./translation/language-selector'),
       Translate = require('./translation/translate'),
-      SearchBar = require('./searchbar');
+      SearchBar = require('./searchbar'),
+      ChangePassword = require('./changepass');
 
   class Nav extends React.Component {
     constructor(props) {
@@ -30,18 +31,28 @@ define(function(require) {
             <div className="navbar-header">
               <Link to="/" className="navbar-brand"><img src="/assets/img/atslogo.png" id="logo" alt=""/></Link>
             </div>
-  
-            <a href="/changePassword" className="btn btn-grey btn-changepass pull-right">Change password</a>
-            <a href="/logout" className="btn btn-grey btn-logout pull-right">Logout</a>
-            {campaignsData !== null && campaignsData.length > 0 ? 
-              <a href="#" className="btn-campaigns pull-right" onClick={this.toggleCampaignPanel}>
-                <img src="/assets/img/icons/wireless.png" className="icon-campaigns" alt=""/>
-              </a>
-            : null}
+            <ul className="right-nav pull-right">
+              <li>
+                <Link to="newdevice" className="btn-add">
+                  <img src="/assets/img/icons/add.png" alt="" />
+                </Link>
+              </li>
+              <li>
+                {campaignsData !== null && campaignsData.length > 0 ? 
+                  <a href="#" className="btn-campaigns" onClick={this.toggleCampaignPanel}>
+                    <img src="/assets/img/icons/wireless.png" className="icon-campaigns" alt=""/>
+                  </a>
+                : null}
+              </li>
+              <li className="dropdown" id="menuLogin">
+                <a className="dropdown-toggle btn-profile" href="#" data-toggle="dropdown">
+                  <img src="/assets/img/icons/profile_icon.png" />
+                </a>
+                <ChangePassword />
+              </li>
+            </ul>
+            
             <LanguageSelector class="lang-selector pull-right" currentLang={this.props.currentLang} changeLang={this.props.changeLang}/>
-            <Link to="newdevice" className="btn-add margin-top-10 margin-left-30 pull-right">
-              <img src="/assets/img/icons/add.png" alt="" />
-            </Link>
             <SearchBar class="search-bar margin-top-10 pull-right" changeFilter={this.props.changeFilter} filterValue={this.props.filterValue}/>
           </nav>
         </ReactCSSTransitionGroup>
