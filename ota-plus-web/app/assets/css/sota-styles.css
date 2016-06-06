@@ -88,7 +88,11 @@ a, a:hover {
 }
 
 .orange {
-    color: #fc9774;
+    color: #FB9773 !important;
+}
+
+.brown {
+    color: #66493E;
 }
 
 /* Buttons */
@@ -249,10 +253,6 @@ button.close:hover, button.close:active, button.close:focus {
 .navbar-inverse .lang-selector {
     color: #000;
     margin: 16px 0 0 20px;
-}
-
-.navbar-inverse .btn-campaigns {
-    margin: 10px 0 0 20px;
 }
 
 /* Device box */
@@ -1045,4 +1045,79 @@ button.close:hover, button.close:active, button.close:focus {
 
 .btn-changepass {
     margin: 12px 0 0 12px;
+}
+
+.right-nav {
+    -webkit-padding-start: 10px;
+}
+
+.right-nav li {
+    margin: 10px 10px 0 10px;
+    display: inline-block;
+}
+
+.dropdown-right {
+    left: auto !important;
+    right: 0;
+}
+
+.dropdown-box {
+    padding: 0;
+    border-radius: 0;
+    top: 128%;
+}
+
+.dropdown-box:after{
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    position: absolute;
+    -moz-transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+    transform: rotate(-135deg);
+    top: -6px;
+    right: 10px;
+    border-right: #ccc solid 1px;
+    border-bottom: #ccc solid 1px;
+} 
+
+.dropdown-box hr {
+    margin: 10px 0;
+}
+
+.dropdown-box a {
+    color: #888;
+    text-decoration: none;
+}
+
+.margin-10 {
+    margin: 10px;
+}
+
+.btn-profile:hover {
+    opacity: 0.8;
+}
+
+.dropdown.open .btn-profile {
+    opacity: 0.8;
+}
+
+.input-username {
+    color: #66493E;
+    width: 100px;
+    padding: 0;
+    border: 0;
+}
+
+.pencil-button.pencil-button-edit {
+    opacity: 0.5;
+}
+
+.accept-button, .cancel-button {
+    opacity: 0.6;
+}
+
+.accept-button:hover, .cancel-button:hover {
+    opacity: 1; 
 }
