@@ -21,18 +21,22 @@ class VehicleSeenEventActor extends ActorPublisher[VehicleSeenMessage] {
   val log = Logging(context.system, this)
 
   def receive: Receive = {
-    case Request => initKinesis();run
+    case Request => log.debug("Received request message")
+                    initKinesis()
+                    context.become(run)
     case Cancel => context.stop(self)
   }
 
   def run: Receive = {
     case vsm:VehicleSeenMessage => onNext(vsm)
+                                   log.debug("Received request message")
                                    self ! PoisonPill //we are currently only interested in one message
     case _:Any                  => log.warning("Unknown message received by event Actor")
   }
 
   private def initKinesis() = {
 
+    log.debug("Initializing Kinesis Actor")
     def credentialsProvider = MessageBusClient.getCredentialsProvider
 
     val workerId = String.valueOf(UUID.randomUUID())
@@ -47,6 +51,7 @@ class VehicleSeenEventActor extends ActorPublisher[VehicleSeenMessage] {
 
     try {
       worker.run()
+      log.debug("Started Kinesis consumer worker")
     } catch {
       case t:Throwable => log.error("Caught exception when running kinesis worker:" + t)
     }

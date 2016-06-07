@@ -27,7 +27,7 @@ object MessageBusClient {
   private val version = "1.0.0"
   private implicit val log = LoggerFactory.getLogger(this.getClass)
 
-  var kinesisClient: AmazonKinesisClient = new AmazonKinesisClient()
+  var kinesisClient: AmazonKinesisClient = null
 
   val getClientConfigWithUserAgent: ClientConfiguration = {
     val config = new ClientConfiguration
@@ -58,13 +58,21 @@ object MessageBusClient {
     creds
   }
 
-  def init():Unit = {
+  def init(): Unit = {
     //TODO: Maybe create a new stream here programmatically?
+    log.debug("Initiating Kinesis client...")
     kinesisClient = new AmazonKinesisClient(getCredentialsProvider,
       getClientConfigWithUserAgent)
   }
 
+  def shutdown(): Unit = {
+    kinesisClient.shutdown()
+    //TODO: set kinesisClient to null or otherwise ensure it isn't used for requests after shutdown is called
+  }
+
   def sendVehicleSeen(vin: Vehicle.Vin): Future[Unit] = {
+    if(kinesisClient == null) init()
+
     val vm = VehicleSeenMessage(vin, DateTime.now())
 
     val putRecord= new PutRecordRequest()
@@ -74,12 +82,13 @@ object MessageBusClient {
 
     try {
       kinesisClient.putRecord(putRecord)
+      log.info("Sent vehicle seen message:" + vm)
     } catch {
-      case ex:AmazonClientException => log.error(s"Error sending record to Amazon Kinesis: $ex")
-      case np:NullPointerException  => log.error(s"kinesisClient is null, have you called init()?: $np")
-      case t :Throwable             => log.error(s"Unknown exception occurred: $t")
+      case ex:AmazonClientException => log.error(s"Error sending record to Amazon Kinesis: ${ex.toString}")
+      case np:NullPointerException  => log.error(s"kinesisClient is null, have you called init()?: ${np.toString}")
+      case t :Throwable             => log.error(s"Unknown exception occurred: ${t.toString}")
     }
-
+    //TODO: Fail if exception thrown
     Future.successful(())
   }
 
