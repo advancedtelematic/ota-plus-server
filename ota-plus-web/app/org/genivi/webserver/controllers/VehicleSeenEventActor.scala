@@ -2,7 +2,7 @@ package org.genivi.webserver.controllers
 
 import java.util.UUID
 
-import akka.actor.{PoisonPill, Props}
+import akka.actor.Props
 import akka.event.Logging
 import akka.stream.ActorMaterializer
 import akka.stream.actor.ActorPublisher
@@ -30,7 +30,7 @@ class VehicleSeenEventActor extends ActorPublisher[VehicleSeenMessage] {
   def run: Receive = {
     case vsm:VehicleSeenMessage => onNext(vsm)
                                    log.debug("Received request message")
-                                   self ! PoisonPill //we are currently only interested in one message
+                                   onCompleteThenStop() //we are currently only interested in one message
     case _:Any                  => log.warning("Unknown message received by event Actor")
   }
 
