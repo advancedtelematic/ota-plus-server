@@ -39,7 +39,7 @@ define(function(require) {
   
           <ReactCSSTransitionGroup
             transitionAppear={true}
-            transactionLeave={false}
+            transitionLeave={false}
             transitionAppearTimeout={500}
             transitionEnterTimeout={500}
             transitionLeaveTimeout={500}
