@@ -90,7 +90,7 @@ class SignupController @Inject() (conf: Configuration,
 
         case code =>
           logger.debug(s"Unexpected response from Auth+: $code")
-          ServiceUnavailable(views.html.serviceUnavailble())
+          ServiceUnavailable(views.html.serviceUnavailable())
       }
     }
   }

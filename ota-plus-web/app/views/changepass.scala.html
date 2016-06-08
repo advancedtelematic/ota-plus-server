@@ -1,4 +1,7 @@
-@()()
+@import com.advancedtelematic.changepassword.ChangePasswordData
+@import com.advancedtelematic.changepassword.routes.ChangePasswordController
+
+@(showForm: Form[ChangePasswordData])(implicit messages: Messages)
 <!doctype html>
 <html lang="en">
     <head>
@@ -30,18 +33,23 @@
 
                         <div class="row">
                             <div class="col-lg-10 col-lg-offset-1">
-                                <div class="form-group">
-                                    <input class="form-control" type="password" name="oldPassword" placeholder="old password" id="old-password" tabindex="1">
+                                <div class="ats-errors">
+                                    Wrong password
                                 </div>
-                                <div class="form-group">
-                                    <input class="form-control" type="password" name="newPassword" placeholder="new password" id="password" tabindex="2">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" type="password" name="passwordConfirmation" placeholder="confirm new password" id="repeat-password" tabindex="3">
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="ats-button" id="submit-form" tabindex="4" disabled>Change password</button>
-                                </div>
+                                @helper.form(action = com.advancedtelematic.changepassword.routes.ChangePasswordController.changePassword) {
+                                    <div class="form-group">
+                                        <input class="form-control error" type="password" name="oldPassword" placeholder="old password" id="old-password" tabindex="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="password" name="newPassword" placeholder="new password" id="password" tabindex="2">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="password" name="passwordConfirmation" placeholder="confirm new password" id="repeat-password" tabindex="3">
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="ats-button" id="submit-form" tabindex="4" disabled>Change password</button>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>

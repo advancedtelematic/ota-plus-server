@@ -94,5 +94,14 @@ class AuthPlusApi(val conf: Configuration, val ws: WSClient, val apiExec: ApiCli
       .withBody(request)
       .withMethod("POST")
   }
-}
 
+  def changePassword(token: Option[String], email: String, oldPassword: String, newPassword: String): Future[Result] =
+  apiProxyOp {
+    val params = Json.obj(
+      "oldPassword" -> oldPassword,
+      "newPassword" -> newPassword
+    )
+
+    withBearerToken(apiRequest(s"users/${email}/password").withBody(params).withMethod("PUT"), token)
+  }
+}
