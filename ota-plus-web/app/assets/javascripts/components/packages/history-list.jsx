@@ -30,7 +30,8 @@ define(function(require) {
     render() {
       var Packages = this.props.PackagesHistory.deref();
       Packages.sort(function(a, b) {
-        return new Date(b.completionTime) - new Date(a.completionTime);
+        var dateCompared = new Date(b.completionTime) - new Date(a.completionTime);
+        return dateCompared == 0 ? b.id - a.id : dateCompared;
       });
       var packages = _.map(Packages, function(pack, i) {
         return (
