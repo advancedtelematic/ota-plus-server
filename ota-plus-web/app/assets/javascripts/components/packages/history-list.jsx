@@ -35,7 +35,7 @@ define(function(require) {
       });
       var packages = _.map(Packages, function(pack, i) {
         return (
-          <HistoryListItem key={pack.packageId.name + '-' + pack.packageId.version} package={pack}/>
+          <HistoryListItem key={pack.packageId.name + '-' + pack.packageId.version + '-' + pack.id} package={pack}/>
         );
       }, this);       
       return (
