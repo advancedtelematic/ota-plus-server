@@ -70,7 +70,7 @@ class LoginController @Inject()(conf: Configuration,
             case OK =>
               val token = (response.json \ "access_token").as[String]
               Redirect(org.genivi.webserver.controllers.routes.Application.index())
-                .withSession(token_key -> token)
+                .withSession("username" -> loginData.username, token_key -> token)
 
             case BAD_REQUEST =>
               val error = (response.json \ "error").as[String]
@@ -79,7 +79,7 @@ class LoginController @Inject()(conf: Configuration,
 
             case code =>
               logger.debug(s"Unexpected response from Auth+: $code")
-              ServiceUnavailable(views.html.serviceUnavailble())
+              ServiceUnavailable(views.html.serviceUnavailable())
           }
         }
       }
