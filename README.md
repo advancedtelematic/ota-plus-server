@@ -124,3 +124,32 @@ project:
      lazy val otaPlusCore = otaPlusProject("ota-plus-core")
          .dependsOn(sotaCommon)
     // .settings(libraryDependencies ++= Seq("org.genivi" %% "core" % "0.2.1"))
+
+## Release process
+
+To publish the opt-plus-server projects run the following:
+
+```
+./sbt "release with-defaults"
+```
+
+This will
+- create an auto-incremented git tag (eg, 0.0.25)
+- push it github
+- create docker images with that tag
+- push it to dockerhub
+- update the "latest" docker tag
+
+To stop the git tag being created, set the following env var:
+
+```
+SKIP_TAG=true ./sbt "release with-defaults"
+```
+
+To publish with a different version, run the following:
+
+```
+SKIP_TAG=true ./sbt "release with-defaults release-version 1-dev-version"
+```
+
+Be sure to set the `SKIP_TAG=true` unless you want that tag to go to dockerhub. Also note: this will update the `latest` tag on dockerhub.
