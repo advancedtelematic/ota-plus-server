@@ -60,7 +60,7 @@ a, a:hover, a:focus {
     text-align: center;
     height: auto;
     padding: 13px 15px;
-    border: 2px solid #ccc;
+    border: 3px solid #ccc;
     border-radius: 7px;
 }
 
@@ -70,7 +70,7 @@ a, a:hover, a:focus {
 
 .ats-errors {
     font: 400 17px Arial;
-    text-align: justify;
+    text-align: center;
     background: #A6E6DF;
     padding: 25px 30px;
     margin: 0 15px;
@@ -200,6 +200,20 @@ a, a:hover, a:focus {
 
 .modal-body {
     font-size: 14px;
+}
+
+input.error {
+    border-color: #A6E6DF !important;
+}
+
+label.error {
+    color: #fff;
+    font-weight: lighter;
+    margin: 5px 0 0 0;
+}
+
+label.error .fa {
+    color: #A6E6DF;
 }
 
 /* Media */
