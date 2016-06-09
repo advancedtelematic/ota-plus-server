@@ -191,6 +191,11 @@ define(function(require) {
             return obj.isQueued;
           });
         break;
+        case 'uninstalled': 
+          Packages = _.filter(Packages, function(obj) {
+            return (!obj.isQueued && !obj.isInstalled);
+          });
+        break;
       } 
       
       Object.keys(Packages).sort(function(a, b) {
