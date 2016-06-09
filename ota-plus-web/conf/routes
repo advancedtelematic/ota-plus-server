@@ -31,5 +31,5 @@ POST	/authenticate				            com.advancedtelematic.login.LoginController.au
 GET     /health                                 com.advancedtelematic.HealthController.health
 GET     /health/version                         com.advancedtelematic.HealthController.version
 
-GET     /changePasswordForm                     com.advancedtelematic.changepassword.ChangePasswordController.changePasswordForm
-POST    /changePassword                         com.advancedtelematic.changepassword.ChangePasswordController.changePassword
+GET     /change_password                        com.advancedtelematic.changepassword.ChangePasswordController.changePasswordForm
+POST    /change_password                        com.advancedtelematic.changepassword.ChangePasswordController.changePassword
