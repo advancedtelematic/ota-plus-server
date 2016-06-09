@@ -1,6 +1,6 @@
 @import com.advancedtelematic.login.LoginData
 
-@(passwordForm: Form[LoginData])()
+@(passwordForm: Form[LoginData])(implicit messages: Messages)
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -13,6 +13,11 @@
         <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.slidedrawer.min.js")'></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/verify.js")'></script>
+        @if(passwordForm.hasGlobalErrors) {
+            <style type="text/css">
+                    .ats-errors { display: inherit }
+            </style>
+        }
     </head>
     <body>
         <div id="ats-page">
@@ -72,10 +77,6 @@
                     slideSpeed: 600,
                     slideTimeoutCount: 3000
                 });
-
-                if (location.hash == "#error") {
-                    $('.ats-errors').fadeIn();
-                }
 
                 $("#loginForm").validate({
                     rules: {
