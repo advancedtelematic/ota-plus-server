@@ -1,13 +1,12 @@
 package org.genivi.webserver.controllers
 
-import akka.actor.Actor.Receive
 import akka.actor.{ActorRef, Props}
 import akka.event.Logging
 import akka.stream.actor.ActorPublisher
 import akka.stream.actor.ActorPublisherMessage.{Cancel, Request}
 import com.advancedtelematic.ota.common.VehicleSeenMessage
 import org.genivi.sota.data.Vehicle
-import org.genivi.webserver.controllers.MessageBrokerActor.Subscriber
+import org.genivi.webserver.controllers.MessageBrokerActor.{Subscribe, UnSubscribe}
 
 object VehicleSeenActor {
   def props(kinesisActor: ActorRef, vin: Vehicle.Vin): Props = Props(new VehicleSeenActor(kinesisActor, vin))
@@ -19,7 +18,7 @@ class VehicleSeenActor(kinesisActor: ActorRef, vin: Vehicle.Vin) extends ActorPu
   val log = Logging(context.system, this)
 
   def receive: Receive = {
-    case Request(_) => kinesisActor ! Subscriber(vin, context.self)
+    case Request(_) => kinesisActor ! Subscribe(vin, context.self)
                        context.become(run)
     case Cancel     => context.stop(self)
   }
@@ -29,6 +28,7 @@ class VehicleSeenActor(kinesisActor: ActorRef, vin: Vehicle.Vin) extends ActorPu
                                              if(isActive && (totalDemand > 0)) {
                                                log.error("relaying vehicle seen message")
                                                onNext(VehicleSeenMessage(v, lastSeen))
+                                               kinesisActor ! UnSubscribe(v, context.self)
                                                onCompleteThenStop()
                                              }
     case _                                => log.error("Unknown message received")
