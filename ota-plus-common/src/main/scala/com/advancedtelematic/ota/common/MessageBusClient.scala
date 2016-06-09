@@ -23,7 +23,7 @@ object MessageBusClient {
   private val vehicleSeenPartitionKey = "VehicleSeen"
   val streamName = "coreStream"
   val appName = "ota-plus"
-  val regionName = "eu-central-1"
+  val regionName = "us-east-1"
   private val version = "1.0.0"
   private implicit val log = LoggerFactory.getLogger(this.getClass)
 

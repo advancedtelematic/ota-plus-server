@@ -1,11 +1,12 @@
 package org.genivi.webserver.controllers
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
-import akka.actor.ActorRef
+import akka.actor.{ActorRef, ActorSystem}
 import akka.stream.scaladsl.Source
 import com.advancedtelematic.ota.common.VehicleSeenMessage
 import org.genivi.sota.data.Vehicle
+import org.genivi.webserver.controllers.MessageBrokerActor.Start
 import play.api.Logger
 import play.api.http.ContentTypes
 import play.api.libs.Comet
@@ -14,9 +15,12 @@ import play.api.libs.json._
 import play.api.mvc._
 
 @Singleton
-class EventController extends Controller {
+class EventController @Inject() (system: ActorSystem) extends Controller {
 
   implicit val context = Execution.defaultContext
+
+  val kinesisActor = system.actorOf(MessageBrokerActor.props, "kinesisActor")
+  kinesisActor ! Start
 
   implicit val vinWrites = new Writes[VehicleSeenMessage] {
    def writes(vinMsg: VehicleSeenMessage) = Json.obj(
@@ -28,11 +32,10 @@ class EventController extends Controller {
   val logger = Logger(this.getClass)
 
   def subVehicleSeen(vin: Vehicle.Vin): Action[AnyContent] = Action {
-    //TODO: is making a new actor here every time best? Could we just have one declared in this controller?
-    val vehicleSeenSource: Source[VehicleSeenMessage, ActorRef] = Source.actorPublisher(VehicleSeenEventActor.props)
+    val vehicleSeenSource: Source[VehicleSeenMessage, ActorRef] =
+      Source.actorPublisher(VehicleSeenActor.props(kinesisActor, vin))
     Ok.chunked(vehicleSeenSource
-      .filter(m => m.vin == vin)
-        .map(Json.toJson(_))
+      .map(Json.toJson(_))
           via Comet.json("parent.vehicleSeen")).as(ContentTypes.JSON)
   }
 

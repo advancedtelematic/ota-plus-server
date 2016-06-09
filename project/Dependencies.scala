@@ -37,7 +37,7 @@ object Dependencies {
   )
 
   val Kinesis = Seq(
-    "com.amazonaws" % "aws-java-sdk" % "1.11.5",
+    "com.amazonaws" % "aws-java-sdk" % "1.10.77",
     "com.amazonaws" % "amazon-kinesis-client" % "1.6.3"
   )
 
