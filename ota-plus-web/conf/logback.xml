@@ -16,7 +16,7 @@
   <logger name="application" level="DEBUG" />
   <logger name="audit" level="INFO" />
 
-  <root level="ERROR">
+  <root level="${rootLevel:-INFO}">
     <appender-ref ref="STDOUT" />
   </root>
 
