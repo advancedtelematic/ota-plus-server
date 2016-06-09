@@ -75,7 +75,7 @@ define(function(require) {
             }
           </form>
           <div className="margin-10">
-            <a href="/changepassword">Change password</a>
+            <a href="/change_password">Change password</a>
           </div>
           <hr />
           <div className="margin-10">
