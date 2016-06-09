@@ -87,9 +87,9 @@ class LoginController @Inject()(conf: Configuration,
                 .withSession("username" -> loginData.username, token_key -> token)
 
             case BAD_REQUEST =>
-              val error = (response.json \ "error").as[String]
+              val error = (response.json \ "error").asOpt[String].getOrElse("(unknown error)")
               logger.debug(s"Bad request: $error")
-              Redirect(com.advancedtelematic.login.routes.LoginController.login().withFragment("error").toString())
+              BadRequest(views.html.login(loginForm.withGlobalError(s"Bad request: $error")))
 
             case code =>
               logger.debug(s"Unexpected response from Auth+: $code")
