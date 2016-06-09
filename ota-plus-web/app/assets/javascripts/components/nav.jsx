@@ -51,8 +51,6 @@ define(function(require) {
                 <ChangePassword />
               </li>
             </ul>
-            
-            <LanguageSelector class="lang-selector pull-right" currentLang={this.props.currentLang} changeLang={this.props.changeLang}/>
             <SearchBar class="search-bar margin-top-10 pull-right" changeFilter={this.props.changeFilter} filterValue={this.props.filterValue}/>
           </nav>
         </ReactCSSTransitionGroup>
