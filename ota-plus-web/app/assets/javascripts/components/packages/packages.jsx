@@ -104,6 +104,7 @@ define(function(require) {
                   <li><a href="#" onClick={this.selectStatus.bind(this, 'all')}>All</a></li>
                   <li><a href="#" onClick={this.selectStatus.bind(this, 'installed')}>Installed</a></li>
                   <li><a href="#" onClick={this.selectStatus.bind(this, 'queued')}>Queued</a></li>
+                  <li><a href="#" onClick={this.selectStatus.bind(this, 'uninstalled')}>Uninstalled</a></li>
                 </ul>
               </div>
             </div>
