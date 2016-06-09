@@ -11,6 +11,7 @@ import org.genivi.sota.data.Namespace.Namespace
 import org.genivi.webserver.controllers.OtaPlusConfig
 import play.api.Configuration
 import play.api.libs.json._
+import play.api.libs.ws.WSAuthScheme.BASIC
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.{Result, Results}
 
@@ -163,14 +164,33 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
   }
 
   def changePassword(token: String, email: String, oldPassword: String, newPassword: String): Future[Result] = {
-      val params = Json.obj(
-        "oldPassword" -> oldPassword,
-        "newPassword" -> newPassword
-      )
+    val params = Json.obj(
+      "oldPassword" -> oldPassword,
+      "newPassword" -> newPassword
+    )
 
     authPlusRequest(s"users/$email/password")
       .withToken(token)
       .transform(_.withBody(params).withMethod("PUT"))
+      .execResult(apiExec)
+  }
+
+  def passwordResetToken(client_id: String, secret: String, email: String)
+                        (implicit ec: ExecutionContext) : Future[Option[String]] =
+    authPlusRequest(s"users/$email/password_reset").transform(_.withAuth(client_id, secret, BASIC))
+      .execResponse(apiExec)
+      .map {
+        res => (res.json \ "tokenValue").asOpt[String]
+      }
+
+  def resetPassword(passwordResetToken: String, newPassword: String): Future[Result] = {
+    val params = Json.obj(
+      "tokenValue" -> passwordResetToken,
+      "newPassword" -> newPassword
+    )
+
+    authPlusRequest(s"password_reset")
+      .transform(_.withBody(params).withMethod("POST"))
       .execResult(apiExec)
   }
 
