@@ -3,6 +3,7 @@ define(function(require) {
       Router = require('react-router'),
       Link = Router.Link,
       _ = require('underscore'),
+      db = require('stores/db'),
       serializeForm = require('../../mixins/serialize-form'),
       SotaDispatcher = require('sota-dispatcher');
     
@@ -10,7 +11,19 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.state = {
+        errors: null
+      };
+      
+      db.postStatus.addWatch("poll-errors", _.bind(function() {
+        this.setState({
+          errors: db.postStatus.deref()['create-vehicle']
+        });
+      }, this));
     }
+    componentWillUnmount() {
+      db.postStatus.removeWatch("poll-errors");
+    }      
     handleSubmit(e) {
       e.preventDefault();
 
@@ -23,6 +36,11 @@ define(function(require) {
     render() {
       return (
         <form ref='form' onSubmit={this.handleSubmit}>
+          {this.state.errors ?
+            <div className="alert alert-danger">
+              {this.state.errors}
+            </div>
+          : null}
           <div className="form-group">
             <label htmlFor="name">{this.context.strings.devicename}</label>
             <input type="text" className="form-control" name="vin" ref="vin" placeholder={this.context.strings.devicename}/>

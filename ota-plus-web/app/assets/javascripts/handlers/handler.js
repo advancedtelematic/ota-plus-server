@@ -8,17 +8,23 @@ define(function(require) {
 
   var Handler = (function() {
       this.dispatchCallback = function(payload) {
-        db.postStatus.reset("");
+        var postStatus = (db.postStatus.deref() !== null && typeof db.postStatus.deref() === 'object') ? db.postStatus.deref() : {};
+        if(payload.actionType in postStatus) {
+          delete postStatus[payload.actionType];
+        }
+        
+        $(document).ajaxError(function(event, xhr) {
+          if (xhr.status === 401) {
+            return location.reload();
+          }
+          errors.renderRequestError(xhr, postStatus, payload.actionType);
+        });
+        
+        $(document).ajaxStop(function(event, xhr) {
+          $('.loading').fadeOut(); 
+        });
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));
-
-      $(document).ajaxError(function(event, xhr) {
-        if (xhr.status === 401) {
-          return location.reload();
-        }
-        errors.renderRequestError(xhr);
-      });
-
   });
 
   return new Handler();
