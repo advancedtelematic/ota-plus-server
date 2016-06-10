@@ -62,7 +62,7 @@ define(function(require) {
     }
     componentDidMount() {
       jQuery(function () {
-        jQuery('body').verify({verifyMinWidth: 1366, verifyMinHeight: 100});
+        jQuery('body').verify({verifyMinWidth: 1366, verifyMinHeight: 0});
       });
     }
     changeLanguage(value) {
