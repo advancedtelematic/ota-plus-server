@@ -7,11 +7,12 @@ define(function(require) {
 
   var createVehicle = function(payload) {
     var url = '/api/v1/vehicles/' + payload.vehicle.vin;
+    
     sendRequest.doPut(url, payload.vehicle)
       .success(function(vehicles) {
-        SotaDispatcher.dispatch({actionType: 'search-devices-by-regex'});
+        location.hash = "#/devicedetails/" + payload.vehicle.vin;
       });
-  }
+  };
 
   var Handler = (function() {
       this.dispatchCallback = function(payload) {
@@ -31,9 +32,11 @@ define(function(require) {
               });
           break;
           case 'create-vehicle':
-            checkExists('/api/v1/vehicles/' + payload.vehicle.vin, "Vehicle", function() {
+            $('.loading').fadeIn();
+            checkExists('/api/v1/vehicles/' + payload.vehicle.vin, "Device", function() {
               createVehicle(payload);
-            });
+            }, payload.actionType);
+            
           break;
           case 'search-devices-by-regex':
             var query = payload.regex ? '&regex=' + payload.regex : '';
