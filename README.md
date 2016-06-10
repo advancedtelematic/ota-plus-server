@@ -27,30 +27,18 @@ This also creates the user `demo@advancedtelematic.com` with the password `demo`
 
 ## Tests
 
-Step 1: start all containers using `docker/up.sh`
-  - The above assumes `export DEFAULT_VERSION=latest`
-  - To update all installed images at once run `docker-compose -f common.yml pull` in the `docker` folder
-  - In case some container fails to start (eg, "`docker_core_1 exited with code 255`") fall back to known-good images:
-```
-  docker-compose -f common.yml -f precise.yml up
-```
+Step 1: `docker/start-up.sh`
 
-Step 2: stop web (each test suite will be handed a `FakeApplication` by `org.scalatestplus.play`)
+Step 2: Stop web container
 ```
-  docker-compose -f common.yml stop web
-  docker ps -a
-  docker rm <id-for-web>
+  docker stop web
+  docker rm web
 ```
-  - In case the dockerized web and the `FakeApplication` use different ports (currently 8000 and 9000 resp.) then both may run in parallel.
-  - However running a single web app avoids any confusion.
+  - Why? Each test suite will be handed a `FakeApplication` by `org.scalatestplus.play`.
+  - In case the web container and the `FakeApplication` would use different ports then both might run in parallel.
+  - However currently both bind port 9000.
 
-Step 3: clean databases, create schemas
-```
-  cd rvi_sota_server
-  sbt flywayClean flywayMigrate
-```
-
-Step 4:`cd ota-plus-server` and run tests, for example:
+Step 3:`cd ota-plus-server` and run tests, for example:
 
 - Browser tests
 ```
@@ -65,6 +53,7 @@ Step 4:`cd ota-plus-server` and run tests, for example:
 ```
   sbt "ota-plus-web/testOnly com.advancedtelematic.ota.ClientSdkControllerSpec"
 ```
+
 
 ## Ota Plus Web
 
