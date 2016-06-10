@@ -36,8 +36,7 @@ class RecordProcessor(messageBroker: ActorRef) extends IRecordProcessor{
         case Xor.Left(e)  => log.warn("Received unrecognized record data from Kinesis:" + e.getMessage)
         case Xor.Right(json) => decode[VehicleSeenMessage](json.toString) match {
           case Xor.Left(e)  => log.warn("Received unrecognized json from Kinesis:" + e.getMessage)
-          case Xor.Right(vsm) => log.error("sending message to broker")
-                                 messageBroker ! vsm
+          case Xor.Right(vsm) => messageBroker ! vsm
         }
       }
     }
