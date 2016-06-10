@@ -13,28 +13,28 @@ object VehicleSeenActor {
 
 }
 
-class VehicleSeenActor(kinesisActor: ActorRef, vin: Vehicle.Vin) extends ActorPublisher[VehicleSeenMessage] {
+class VehicleSeenActor(messageBroker: ActorRef, vin: Vehicle.Vin) extends ActorPublisher[VehicleSeenMessage] {
 
   val log = Logging(context.system, this)
 
-  def receive: Receive = {
-    case Request(_) => kinesisActor ! Subscribe(vin, context.self)
-                       //If KinesisActor terminates, this actor cannot perform its function
-                       //thus, we ensure this actor dies in that case
-                       context.watch(kinesisActor)
-                       context.become(run)
-    case Cancel     => context.stop(self)
+  override def preStart(): Unit = {
+    messageBroker ! Subscribe(vin, context.self)
+    //If KinesisActor terminates, this actor cannot perform its function,
+    //so we ensure this actor dies in that case
+    context.watch(messageBroker)
   }
 
-  def run: Receive = {
-    case VehicleSeenMessage(v, lastSeen)  => log.error("Got vehicle seen msg, checking demand")
-                                             if(isActive && (totalDemand > 0)) {
-                                               log.error("relaying vehicle seen message")
-                                               onNext(VehicleSeenMessage(v, lastSeen))
-                                               kinesisActor ! UnSubscribe(v, context.self)
-                                               onCompleteThenStop()
-                                             }
-    case _                                => log.error("Unknown message received")
+  def receive: Receive = {
+    case Request(_)                      => //nothing to do here, demand is updated automatically
+    case Cancel                          => messageBroker! UnSubscribe(vin, self)
+                                            context.stop(self) //onCompleteThenStop() might be better here
+    case VehicleSeenMessage(_, lastSeen) => if(isActive && (totalDemand > 0)) {
+                                              onNext(VehicleSeenMessage(vin, lastSeen))
+                                            } else if(totalDemand <= 0) {
+                                              //This actor should always have totalDemand > 0, so log an error here
+                                              log.error("No demand for messages, dropping message")
+                                            }
+    case _                               => log.error("Unknown message received")
   }
 
 }

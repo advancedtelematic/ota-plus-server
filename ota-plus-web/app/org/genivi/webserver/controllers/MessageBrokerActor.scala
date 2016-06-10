@@ -8,20 +8,18 @@ import akka.stream.ActorMaterializer
 import com.advancedtelematic.ota.common.{MessageBusClient, VehicleSeenMessage}
 import com.amazonaws.services.kinesis.clientlibrary.lib.worker.{KinesisClientLibConfiguration, Worker}
 import org.genivi.sota.data.Vehicle
-import org.genivi.webserver.controllers.MessageBrokerActor.{Start, Subscribe, UnSubscribe}
+import org.genivi.webserver.controllers.MessageBrokerActor.{Subscribe, UnSubscribe}
 
 object MessageBrokerActor {
   def props: Props = Props[MessageBrokerActor]
 
   case class Subscribe(vin: Vehicle.Vin, sub: ActorRef)
   case class UnSubscribe(vin: Vehicle.Vin, sub: ActorRef)
-  case class Start()
 }
 
 class MessageBrokerActor extends Actor {
 
   implicit val mat = ActorMaterializer()(context)
-
   val log = Logging(context.system, this)
 
   type Subscribers = Map[Vehicle.Vin, Set[ActorRef]]
