@@ -1,18 +1,29 @@
 # OTA Plus
 
-To quickly get a dev system up and running, use docker-compose:
+To quickly get a dev system up and running, install the following requirements:
 
 ```
-cd docker
-docker-compose -f common.yml -f precise.yml up
+apt-get install jq docker-engine
 ```
 
-You can edit `precise.yml` with the particular image tags you want.
-Wait until the migrations have finished running before you actually use the
-server.
+then run the following:
+
+```
+./docker/start-up.sh
+```
+
+This will start up the applications with the `latest` docker tag. If you want a particular docker tag, you can pass any of the following env variables:
+
+- `WEB_TAG`
+- `RESOLVER_TAG`
+- `CORE_TAG`
+- `AUTH_PLUS_TAG`
+- `BUILDSRV_TAG`
 
 Once everything is loaded, the OTA Plus admin GUI will be available at
-`{docker-host}:8000`.
+`http://localhost:9000`.
+
+This also creates the user `demo@advancedtelematic.com` with the password `demo`
 
 ## Tests
 
