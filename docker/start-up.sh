@@ -24,8 +24,9 @@ docker run \
   -e MYSQL_DATABASES='sota_resolver sota_resolver_test sota_core sota_core_test' \
   advancedtelematic/mariadb:${MARIADB_DOCKER_TAG}
 
-echo sleeping for 10s
-sleep 10
+SLEEP=${DB_SLEEP-20}
+echo sleeping for ${SLEEP}s
+sleep $SLEEP
 
 RESOLVER_DOCKER_TAG=${RESOLVER_TAG-latest}
 echo 'Starting Resolver'
