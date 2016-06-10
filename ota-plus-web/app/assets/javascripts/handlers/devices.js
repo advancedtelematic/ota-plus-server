@@ -112,6 +112,12 @@ define(function(require) {
                 SotaDispatcher.dispatch({actionType: 'get-package-queue-for-vin', vin: payload.vin});
               });
           break;
+          case 'cancel-update':
+            sendRequest.doPut('/api/v1/vehicle_updates/' + payload.vin + '/' + payload.updateid + '/cancelupdate')
+              .success(function() {
+                SotaDispatcher.dispatch({actionType: 'get-package-queue-for-vin', vin: payload.vin});
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));
