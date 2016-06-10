@@ -19,6 +19,9 @@ class VehicleSeenActor(kinesisActor: ActorRef, vin: Vehicle.Vin) extends ActorPu
 
   def receive: Receive = {
     case Request(_) => kinesisActor ! Subscribe(vin, context.self)
+                       //If KinesisActor terminates, this actor cannot perform its function
+                       //thus, we ensure this actor dies in that case
+                       context.watch(kinesisActor)
                        context.become(run)
     case Cancel     => context.stop(self)
   }

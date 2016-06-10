@@ -19,8 +19,7 @@ class EventController @Inject() (system: ActorSystem) extends Controller {
 
   implicit val context = Execution.defaultContext
 
-  val kinesisActor = system.actorOf(MessageBrokerActor.props, "kinesisActor")
-  kinesisActor ! Start
+  val kinesisActor = system.actorOf(MessageBrokerActor.props, name = "messageBrokerActor")
 
   implicit val vinWrites = new Writes[VehicleSeenMessage] {
    def writes(vinMsg: VehicleSeenMessage) = Json.obj(
@@ -36,7 +35,7 @@ class EventController @Inject() (system: ActorSystem) extends Controller {
       Source.actorPublisher(VehicleSeenActor.props(kinesisActor, vin))
     Ok.chunked(vehicleSeenSource
       .map(Json.toJson(_))
-          via Comet.json("parent.vehicleSeen")).as(ContentTypes.JSON)
+        via Comet.json("parent.vehicleSeen")).as(ContentTypes.JSON)
   }
 
 }
