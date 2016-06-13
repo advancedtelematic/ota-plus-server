@@ -2,7 +2,11 @@ package org.genivi.webserver.controllers
 
 import play.api.Configuration
 
-case object ConfigurationException extends Exception(s"Could not get required configuration")
+import scala.util.control.NoStackTrace
+
+case class ConfigurationException(msg: String = "")
+  extends Exception(s"Could not get required configuration " + msg)
+    with NoStackTrace
 
 trait OtaPlusConfig {
   val conf: Configuration
