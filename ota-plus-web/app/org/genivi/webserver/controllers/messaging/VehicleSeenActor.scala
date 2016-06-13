@@ -1,4 +1,4 @@
-package org.genivi.webserver.controllers
+package org.genivi.webserver.controllers.messaging
 
 import akka.actor.{ActorRef, Props}
 import akka.event.Logging
@@ -6,11 +6,10 @@ import akka.stream.actor.ActorPublisher
 import akka.stream.actor.ActorPublisherMessage.{Cancel, Request}
 import com.advancedtelematic.ota.common.VehicleSeenMessage
 import org.genivi.sota.data.Vehicle
-import org.genivi.webserver.controllers.MessageBrokerActor.{Subscribe, UnSubscribe}
+import org.genivi.webserver.controllers.messaging.MessageBrokerActor.{Subscribe, UnSubscribe}
 
 object VehicleSeenActor {
   def props(kinesisActor: ActorRef, vin: Vehicle.Vin): Props = Props(new VehicleSeenActor(kinesisActor, vin))
-
 }
 
 class VehicleSeenActor(messageBroker: ActorRef, vin: Vehicle.Vin) extends ActorPublisher[VehicleSeenMessage] {

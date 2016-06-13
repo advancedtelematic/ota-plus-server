@@ -1,6 +1,5 @@
-package org.genivi.webserver.controllers
+package org.genivi.webserver.controllers.messaging
 
-import java.nio.ByteBuffer
 import java.util
 
 import akka.actor._
@@ -11,7 +10,6 @@ import com.amazonaws.services.kinesis.clientlibrary.types.ShutdownReason
 import com.amazonaws.services.kinesis.model.Record
 import io.circe.generic.auto._
 import io.circe.parser._
-import org.genivi.sota.marshalling.CirceMarshallingSupport._
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConversions._

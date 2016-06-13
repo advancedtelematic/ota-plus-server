@@ -1,4 +1,4 @@
-package org.genivi.webserver.controllers
+package org.genivi.webserver.controllers.messaging
 
 import java.util.UUID
 
@@ -8,7 +8,6 @@ import akka.stream.ActorMaterializer
 import com.advancedtelematic.ota.common.{MessageBusClient, VehicleSeenMessage}
 import com.amazonaws.services.kinesis.clientlibrary.lib.worker.{KinesisClientLibConfiguration, Worker}
 import org.genivi.sota.data.Vehicle
-import org.genivi.webserver.controllers.MessageBrokerActor.{Start, Subscribe, UnSubscribe}
 
 object MessageBrokerActor {
   def props: Props = Props[MessageBrokerActor]

@@ -6,6 +6,7 @@ import akka.actor.{ActorRef, ActorSystem}
 import akka.stream.scaladsl.Source
 import com.advancedtelematic.ota.common.VehicleSeenMessage
 import org.genivi.sota.data.Vehicle
+import org.genivi.webserver.controllers.messaging.{MessageBrokerActor, VehicleSeenActor}
 import play.api.Logger
 import play.api.http.ContentTypes
 import play.api.libs.Comet

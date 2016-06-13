@@ -1,4 +1,4 @@
-package org.genivi.webserver.controllers
+package org.genivi.webserver.controllers.messaging
 
 import akka.actor.ActorRef
 import com.amazonaws.services.kinesis.clientlibrary.interfaces.{IRecordProcessor, IRecordProcessorFactory}
