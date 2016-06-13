@@ -5,18 +5,18 @@ import javax.inject.Inject
 import com.fasterxml.jackson.core.JsonParseException
 import play.api.http.HttpEntity
 import play.api.libs.json.{JsError, JsSuccess, Reads}
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.{ResponseHeader, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
-class ApiClientExec @Inject()()(implicit ec: ExecutionContext) {
-  def runApiResult(request: => WSRequest): Future[Result] = {
+class ApiClientExec @Inject()(wsClient: WSClient)(implicit ec: ExecutionContext) {
+  def runApiResult(request: WSClient => WSRequest): Future[Result] = {
     runSafe(request).map(toResult)
   }
 
-  def runApiJson[T](request: => WSRequest)(implicit ev: Reads[T]): Future[T] = {
+  def runApiJson[T](request: WSClient => WSRequest)(implicit ev: Reads[T]): Future[T] = {
     runSafe(request)
       .flatMap { wresp =>
         wresp.json.validate[T] match {
@@ -32,8 +32,8 @@ class ApiClientExec @Inject()()(implicit ec: ExecutionContext) {
       }
   }
 
-  def runSafe(request: => WSRequest): Future[WSResponse] = {
-    run(request)
+  def runSafe(request: WSClient => WSRequest): Future[WSResponse] = {
+    run(request(wsClient))
       .recoverWith { case t => Future.failed(RemoteApiIOError(t)) }
       .flatMap {
         case result if isSuccess(result) =>
