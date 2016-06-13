@@ -2,7 +2,12 @@ package com.advancedtelematic.login
 
 import javax.inject.{Inject, Singleton}
 
+import cats.data.Validated
+import cats.std.all._
+import cats.syntax.apply._
 import org.asynchttpclient.uri.Uri
+import org.genivi.webserver.controllers.ConfigurationException
+import org.scalatest.Failed
 import play.api.{Configuration, Logger}
 import play.api.data.Form
 import play.api.data.Forms._
@@ -12,6 +17,7 @@ import play.api.libs.ws.WSClient
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Try}
 
 case class LoginData(username: String, password: String)
 
@@ -27,6 +33,14 @@ class LoginController @Inject()(conf: Configuration,
   private val token_key = "access_token"
 
   private[this] val authPlusHost: Uri = conf.getString("authplus.host").map(Uri.create).get
+
+  private lazy val authPlusCredentials: (String, String) = {
+    val clientIdV = Validated.fromOption(conf.getString("authplus.client_id"), "No client_id for auth plus\n")
+    val secret = Validated.fromOption(conf.getString("authplus.secret"), "No secret for auth plus\n")
+    val validated: Validated[String, (String, String)] = clientIdV.map2(secret)(Tuple2.apply)
+
+    validated.fold(e => throw ConfigurationException(e), identity)
+  }
 
   val logger = Logger(this.getClass)
   val loginForm = Form(
@@ -60,10 +74,10 @@ class LoginController @Inject()(conf: Configuration,
         Future.successful(BadRequest(views.html.login(formWithErrors)))
       },
       loginData => {
+        val (clientId, clientSecret) = authPlusCredentials
+
         wSClient.url(authPlusHost.toUrl + "/token")
-          .withAuth(conf.getString("authplus.client_id").get,
-                    conf.getString("authplus.secret").get,
-                    BASIC)
+          .withAuth(clientId, clientSecret, BASIC)
           .post( buildPasswordRequest(loginData.username, loginData.password) )
           .map { response =>
           response.status match {
