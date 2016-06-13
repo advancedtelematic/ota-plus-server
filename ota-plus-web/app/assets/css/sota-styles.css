@@ -1131,3 +1131,29 @@ button.close:hover, button.close:active, button.close:focus {
 .accept-button:hover, .cancel-button:hover {
     opacity: 1; 
 }
+
+/* Remove elements higlighting when focused or active*/
+
+*:focus {
+    outline: none !important;
+}
+
+button:focus {
+    outline: none;
+}
+
+button.list-group-item:focus {
+    background: transparent;
+}
+
+.btn:active {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.form-control:focus {
+    border-color:#ccc;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
