@@ -40,6 +40,7 @@ docker run \
   -e HOST='0.0.0.0' \
   -e RESOLVER_DB_URL='jdbc:mariadb://db:3306/sota_resolver' \
   -e RESOLVER_DB_MIGRATE='true' \
+  -e PACKAGES_VERSION_FORMAT='.+' \
   -e rootLevel='DEBUG' \
   advancedtelematic/ota-plus-resolver:$RESOLVER_DOCKER_TAG
 
