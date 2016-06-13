@@ -22,68 +22,80 @@ trait ApiClient { self =>
 
   val apiPrefix = "/api/v1/"
 
-  val ws: WSClient
-
-  val apiExec: ApiClientExec
-
-  def apiRequest(path: String): WSRequest =
-    ws.url(baseUrl + apiPrefix + path)
-      .withFollowRedirects(false)
-
-  def withBearerToken(request: WSRequest, token: Option[String]): WSRequest =
-    token match {
-      case Some(token) => request.withHeaders(("Authorization", "Bearer " + token))
-      case None => request
-    }
-
-  def apiOp(apiRequest: => WSRequest): Future[WSResponse] = {
-    apiExec.runSafe(apiRequest)
-  }
-
-  def apiProxyOp(apiRequest: => WSRequest): Future[Result] = {
-    apiExec.runApiResult(apiRequest)
-  }
-
-  def apiJsonOp[T](apiRequest: => WSRequest)(implicit ev: Reads[T]): Future[T] = {
-    apiExec.runApiJson[T](apiRequest)
+  def apiRequest(path: String): ApiOp = new ApiOp {
+    override def build = ws => ws.url(baseUrl + apiPrefix + path).withFollowRedirects(false)
   }
 }
 
-class CoreApi(val conf: Configuration, val ws: WSClient, val apiExec: ApiClientExec) extends ApiClient
+trait ApiOp { self =>
+  def build: WSClient => WSRequest
+
+  def withToken(token: Option[String]): ApiOp =
+    token match {
+      case Some(t) => transform(request => request.withHeaders(("Authorization", "Bearer " + t)))
+      case None => self
+    }
+
+  def transform(f: WSRequest => WSRequest): ApiOp = new ApiOp {
+    override def build = ws => f(self.build(ws))
+  }
+
+  def execResponse(apiExec: ApiClientExec): Future[WSResponse] = {
+    apiExec.runSafe(build)
+  }
+
+  def execResult(apiExec: ApiClientExec): Future[Result] = {
+    apiExec.runApiResult(build)
+  }
+
+  def execJson[T](apiExec: ApiClientExec)(implicit ev: Reads[T]): Future[T] = {
+    apiExec.runApiJson[T](build)
+  }
+}
+
+class CoreApi(val conf: Configuration, val apiExec: ApiClientExec) extends ApiClient
   with OtaPlusConfig {
   val baseUrl = coreApiUri
 
-  def createVehicle(token: Option[String], vin: Vin): Future[Result] = apiProxyOp {
-    withBearerToken(apiRequest(s"vehicles/${vin.get}").withMethod("PUT"), token)
-  }
+  def createVehicle(token: Option[String], vin: Vin): Future[Result] =
+    apiRequest(s"vehicles/${vin.get}")
+      .withToken(token)
+      .transform(_.withMethod("PUT"))
+      .execResult(apiExec)
 
-  def search(token: Option[String], params: Seq[(String, String)]): Future[Result] = apiProxyOp {
-    withBearerToken(apiRequest("vehicles").withQueryString(params:_*), token)
-  }
+  def search(token: Option[String], params: Seq[(String, String)]): Future[Result] =
+    apiRequest("vehicles")
+      .withToken(token)
+      .transform(_.withQueryString(params:_*))
+      .execResult(apiExec)
 }
 
 
-class ResolverApi(val conf: Configuration, val ws: WSClient, val apiExec: ApiClientExec) extends ApiClient
+class ResolverApi(val conf: Configuration, val apiExec: ApiClientExec) extends ApiClient
   with OtaPlusConfig {
   val baseUrl = resolverApiUri
 
-  def createVehicle(token: Option[String], vin: Vin): Future[Result] = apiProxyOp {
-    withBearerToken(apiRequest(s"vehicles/${vin.get}").withMethod("PUT"), token)
-  }
+  def createVehicle(token: Option[String], vin: Vin): Future[Result] =
+    apiRequest(s"vehicles/${vin.get}")
+      .withToken(token)
+      .transform(_.withMethod("PUT"))
+      .execResult(apiExec)
 
-  def search(token: Option[String], params: Seq[(String, String)]): Future[Result] = apiProxyOp {
-    withBearerToken(apiRequest("vehicles").withQueryString(params: _*), token)
-  }
+  def search(token: Option[String], params: Seq[(String, String)]): Future[Result] =
+    apiRequest("vehicles")
+      .withToken(token)
+      .transform(_.withQueryString(params: _*))
+      .execResult(apiExec)
 }
 
-class AuthPlusApi(val conf: Configuration, val ws: WSClient, val apiExec: ApiClientExec) extends ApiClient
+class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends ApiClient
   with OtaPlusConfig {
 
   val baseUrl = authPlusApiUri
 
   override val apiPrefix = "/"
 
-  def createClient(vin: Vin)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = apiJsonOp {
+  def createClient(vin: Vin)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
     val request = Json.obj(
       "grant_types" -> List("client_credentials"),
       "client_name" -> vin.get,
@@ -91,17 +103,18 @@ class AuthPlusApi(val conf: Configuration, val ws: WSClient, val apiExec: ApiCli
     )
 
     apiRequest("clients")
-      .withBody(request)
-      .withMethod("POST")
+      .transform(_.withBody(request).withMethod("POST"))
+      .execJson(apiExec)
   }
 
-  def changePassword(token: Option[String], email: String, oldPassword: String, newPassword: String): Future[Result] =
-  apiProxyOp {
-    val params = Json.obj(
-      "oldPassword" -> oldPassword,
-      "newPassword" -> newPassword
-    )
+  def changePassword(token: Option[String], email: String, oldPassword: String, newPassword: String): Future[Result] = {
+      val params = Json.obj(
+        "oldPassword" -> oldPassword,
+        "newPassword" -> newPassword
+      )
 
-    withBearerToken(apiRequest(s"users/${email}/password").withBody(params).withMethod("PUT"), token)
+    apiRequest(s"users/$email/password")
+      .transform(_.withBody(params).withMethod("PUT"))
+      .execResult(apiExec)
   }
 }
