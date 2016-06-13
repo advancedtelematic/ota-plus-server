@@ -21,13 +21,12 @@ case class VehicleSeenMessage(vin: Vehicle.Vin, lastSeen: DateTime)
 object MessageBusClient {
 
   private val vehicleSeenPartitionKey = "VehicleSeen"
+  private val defaultShardCount = 1
   val streamName = "coreStream"
   val appName = "ota-plus"
   val regionName = "us-east-1"
   private val version = "1.0.0"
   private implicit val log = LoggerFactory.getLogger(this.getClass)
-
-  var kinesisClient: AmazonKinesisClient = null
 
   val getClientConfigWithUserAgent: ClientConfiguration = {
     val config = new ClientConfiguration
@@ -44,35 +43,32 @@ object MessageBusClient {
     config
   }
 
-  def getCredentialsProvider: AWSCredentialsProvider ={
-    //No choice but to use null here due to Java exception code
-    var creds: AWSCredentialsProvider = null
-    try {
-      creds = new ProfileCredentialsProvider("default")
-    } catch {
-      case a:AmazonClientException => log.error("Cannot load the credentials from the credential profiles file. " +
-                    "Please make sure that your credentials file is at the correct " +
-                    "location (~/.aws/credentials), and is in valid format." +
-                    a.toString)
-    }
-    creds
+  var kinesisClient: AmazonKinesisClient = new AmazonKinesisClient()
+  getCredentialsProvider match {
+    case Some(creds) => kinesisClient = new AmazonKinesisClient(creds, getClientConfigWithUserAgent)
+      if (kinesisClient.listStreams().getStreamNames.contains(streamName)) {
+        kinesisClient.createStream(streamName, defaultShardCount)
+      }
+    case None        => log.error("failed to create kinesis client due to missing credentials")
   }
 
-  def init(): Unit = {
-    //TODO: Maybe create a new stream here programmatically?
-    log.debug("Initiating Kinesis client...")
-    kinesisClient = new AmazonKinesisClient(getCredentialsProvider,
-      getClientConfigWithUserAgent)
+  def getCredentialsProvider: Option[AWSCredentialsProvider] ={
+    try {
+      Some(new ProfileCredentialsProvider("default"))
+    } catch {
+      case a:AmazonClientException => log.error("Cannot load the credentials from the credential profiles file. " +
+                                        "Please make sure that your credentials file is at the correct " +
+                                        "location (~/.aws/credentials), and is in valid format." +
+                                        a.toString)
+                                      None
+    }
   }
 
   def shutdown(): Unit = {
     kinesisClient.shutdown()
-    //TODO: set kinesisClient to null or otherwise ensure it isn't used for requests after shutdown is called
   }
 
   def sendVehicleSeen(vin: Vehicle.Vin): Future[Unit] = {
-    if(kinesisClient == null) init()
-
     val vm = VehicleSeenMessage(vin, DateTime.now())
 
     val putRecord= new PutRecordRequest()
@@ -82,14 +78,13 @@ object MessageBusClient {
 
     try {
       kinesisClient.putRecord(putRecord)
-      log.info("Sent vehicle seen message:" + vm)
+      log.trace("Sent vehicle seen message:" + vm)
+      Future.successful(())
     } catch {
-      case ex:AmazonClientException => log.error(s"Error sending record to Amazon Kinesis: ${ex.toString}")
-      case np:NullPointerException  => log.error(s"kinesisClient is null, have you called init()?: ${np.toString}")
-      case t :Throwable             => log.error(s"Unknown exception occurred: ${t.toString}")
+      case ex @(_:AmazonClientException | _:NullPointerException | _:Throwable) =>
+        log.error(s"Error sending record to Amazon Kinesis: ${ex.toString}")
+        Future.failed(ex)
     }
-    //TODO: Fail if exception thrown
-    Future.successful(())
   }
 
 }

@@ -27,7 +27,8 @@ class MessageBrokerActor extends Stash with Actor {
 
   self ! Start()
 
-  //Need to ensure we have started listening to kinesis asap, so we stash until we are ready
+  //Need to ensure we have started listening to kinesis asap,
+  //so we stash until we are ready, and use a Start() message
   def receive: Receive = {
     case Start() => initKinesis()
                     unstashAll()
