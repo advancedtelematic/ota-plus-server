@@ -130,6 +130,9 @@ define(function(require) {
       
       return (
         <div key={page} className={page}>
+          <div className="loading">
+            <img src="/assets/img/icons/loading.gif" alt="" />
+          </div>
           <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} changeFilter={this.changeFilter} filterValue={this.state.filterValue} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel}/>
           <div className="page wrapper container-fluid">
             {React.cloneElement(this.props.children, {filterValue: this.state.filterValue, showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
@@ -158,7 +161,7 @@ define(function(require) {
       <Route component={RightPanel}>
         <IndexRoute component={Devices}/>
         <Route path="/" component={Devices}>
-          <Route path="newdevice" component={Modal(NewDevice, {TitleVar: "newdevice"})}/>
+          <Route path="newdevice" component={Modal(NewDevice, {TitleVar: "newdevice", modalId: 'modal-new-device'})}/>
         </Route>
         <Route path="devicedetails/:vin" component={wrapComponent(DeviceDetails, {Device: db.showDevice})}>
           <Route path="newcampaign" component={Modal(NewCampaign, {TitleVar: "newcampaign", modalId: 'modal-new-campaign'})}/>
