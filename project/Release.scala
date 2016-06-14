@@ -28,6 +28,29 @@ object Release {
   val showNextVersion = settingKey[String]("the future version once releaseNextVersion has been applied to it")
   val showReleaseVersion = settingKey[String]("the version once releaseVersion has been applied to it")
 
+  val skipTag = scala.util.Properties.envOrElse("SKIP_TAG", "false")
+
+  def isTag(rs: Object) = {
+    rs == releaseStepCommand("docker:publishLocal")
+  }
+
+  val commonReleaseSteps: Seq[sbtrelease.ReleasePlugin.autoImport.ReleaseStep] =
+    Seq(
+      checkSnapshotDependencies,
+      releaseStepCommand(ExtraReleaseCommands.initialVcsChecksCommand),
+      inquireVersions,
+      setReleaseVersion,
+      releaseStepCommand("mkVersionProperties"),
+      releaseStepCommand("docker:publishLocal"),
+      releaseStepCommand("docker:publish")
+    )
+
+  val releaseSteps =
+    if (skipTag == "true") {
+      commonReleaseSteps ++ Seq(pushChanges)
+    } else {
+      commonReleaseSteps ++ Seq(tagRelease, pushChanges)
+    }
   lazy val settings = Seq(
     showReleaseVersion <<= (version, releaseVersion)((v,f)=>f(v)),
     showNextVersion <<= (version, releaseNextVersion)((v,f)=>f(v)),
@@ -40,16 +63,6 @@ object Release {
 
     releaseIgnoreUntrackedFiles := true,
 
-    releaseProcess := Seq(
-      checkSnapshotDependencies,
-      releaseStepCommand(ExtraReleaseCommands.initialVcsChecksCommand),
-      inquireVersions,
-      setReleaseVersion,
-      releaseStepCommand("mkVersionProperties"),
-      releaseStepCommand("docker:publishLocal"),
-      releaseStepCommand("docker:publish"),
-      tagRelease,
-      pushChanges
-    )
+    releaseProcess := releaseSteps
   )
 }
