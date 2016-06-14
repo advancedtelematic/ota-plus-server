@@ -4,17 +4,20 @@ define(function(require) {
       errors = require('../handlers/errors');
       sendRequest = require('./send-request');
 
-  return function(url, resourceName, callback) {
+  return function(url, resourceName, callback, action) {
+    var postStatus = (db.postStatus.deref() !== null && typeof db.postStatus.deref() === 'object') ? db.postStatus.deref() : {};
+    
     sendRequest.doGet(url, {global: false})
       .error(function(xhr, textStatus) {
         if (xhr.status == 404) {
           callback();
         } else {
-          errors.renderRequestError(xhr);
+          errors.renderRequestError(xhr, postStatus, action);
         }
       })
       .success(function() {
-        db.postStatus.reset(resourceName + " already exists");
+        postStatus[action] = resourceName + " already exists";
+        db.postStatus.reset(postStatus);
       });
   };
 });
