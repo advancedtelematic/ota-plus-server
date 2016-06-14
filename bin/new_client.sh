@@ -7,7 +7,7 @@ set -u
 
 which jq > /dev/null
 
-auth_plus_out=$(curl --silent --connect-timeout 3 -H "Content-Type: application/json" \
+auth_plus_out=$(curl --connect-timeout 3 -H "Content-Type: application/json" \
                      -X POST \
                      -d '{  "client_name": "ABC", "grant_types": ["client_credentials", "password"]  }' \
                      "$AUTHPLUS_URL/clients")

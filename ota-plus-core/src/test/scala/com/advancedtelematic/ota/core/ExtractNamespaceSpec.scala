@@ -38,7 +38,8 @@ class ExtractNamespaceSpec extends PropSpec
 
   property("returns an unauthorized response if namespace is not available") {
     Get("/test") ~> route ~> check {
-      rejection shouldBe a[AuthorizationFailedRejection.type]
+      status shouldBe StatusCodes.Unauthorized
+      responseAs[String] should include("No oauth token provided")
     }
   }
 }
