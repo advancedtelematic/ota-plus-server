@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      SotaDispatcher = require('sota-dispatcher'),
       ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       Router = require('react-router'),
       Link = Router.Link;
@@ -7,13 +8,22 @@ define(function(require) {
   class QueueListItem extends React.Component {
     constructor(props) {
       super(props);
+      this.cancelUpdate = this.cancelUpdate.bind(this);
+    }
+    cancelUpdate() {
+      console.log('dziala');
+      SotaDispatcher.dispatch({
+        actionType: 'cancel-update',
+        vin: this.props.vin,
+        updateid: this.props.package.requestId
+      });
     }
     render() {
       return (
         <li className={'list-group-item ' + this.props.status}>
           <span className="list-group-item-text-left">{this.props.package.packageId.name}</span>
           <span className="drag-bar pull-right"><i className="fa fa-bars"></i></span>
-          <button className="btn btn-action pull-right">{this.context.strings.cancel}</button>
+          <button className="btn btn-action pull-right" onClick={this.cancelUpdate}>{this.context.strings.cancel}</button>
           {this.props.status == 'error' ? 
             <button className="btn btn-action pull-right">retry</button>
           : null}
@@ -31,7 +41,7 @@ define(function(require) {
   };
 
   QueueListItem.contextTypes = {
-    strings: React.PropTypes.object.isRequired
+    strings: React.PropTypes.object.isRequired,
   };
 
   return QueueListItem;
