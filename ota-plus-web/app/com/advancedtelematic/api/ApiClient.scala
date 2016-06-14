@@ -17,26 +17,24 @@ case class RemoteApiError(result: Result, msg: String = "") extends Exception(ms
 
 case class RemoteApiParseError(msg: String) extends Exception(msg) with NoStackTrace
 
-trait ApiClient { self =>
-  val baseUrl: String
+object ApiRequest {
+  def base(baserUrl: String): String => ApiRequest = apply(baserUrl)
 
-  val apiPrefix = "/api/v1/"
-
-  def apiRequest(path: String): ApiOp = new ApiOp {
-    override def build = ws => ws.url(baseUrl + apiPrefix + path).withFollowRedirects(false)
+  def apply(baseUrl: String)(path: String): ApiRequest = new ApiRequest {
+    override def build = ws => ws.url(baseUrl + path).withFollowRedirects(false)
   }
 }
 
-trait ApiOp { self =>
+trait ApiRequest { self =>
   def build: WSClient => WSRequest
 
-  def withToken(token: Option[String]): ApiOp =
+  def withToken(token: Option[String]): ApiRequest =
     token match {
       case Some(t) => transform(request => request.withHeaders(("Authorization", "Bearer " + t)))
       case None => self
     }
 
-  def transform(f: WSRequest => WSRequest): ApiOp = new ApiOp {
+  def transform(f: WSRequest => WSRequest): ApiRequest = new ApiRequest {
     override def build = ws => f(self.build(ws))
   }
 
@@ -53,9 +51,8 @@ trait ApiOp { self =>
   }
 }
 
-class CoreApi(val conf: Configuration, val apiExec: ApiClientExec) extends ApiClient
-  with OtaPlusConfig {
-  val baseUrl = coreApiUri
+class CoreApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
+  val apiRequest = ApiRequest.base(coreApiUri + "/api/v1/")
 
   def createVehicle(token: Option[String], vin: Vin): Future[Result] =
     apiRequest(s"vehicles/${vin.get}")
@@ -71,9 +68,8 @@ class CoreApi(val conf: Configuration, val apiExec: ApiClientExec) extends ApiCl
 }
 
 
-class ResolverApi(val conf: Configuration, val apiExec: ApiClientExec) extends ApiClient
-  with OtaPlusConfig {
-  val baseUrl = resolverApiUri
+class ResolverApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
+  val apiRequest = ApiRequest.base(resolverApiUri + "/api/v1/")
 
   def createVehicle(token: Option[String], vin: Vin): Future[Result] =
     apiRequest(s"vehicles/${vin.get}")
@@ -88,12 +84,9 @@ class ResolverApi(val conf: Configuration, val apiExec: ApiClientExec) extends A
       .execResult(apiExec)
 }
 
-class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends ApiClient
-  with OtaPlusConfig {
+class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
 
-  val baseUrl = authPlusApiUri
-
-  override val apiPrefix = "/"
+  val apiRequest = ApiRequest.base(authPlusApiUri + "/")
 
   def createClient(vin: Vin)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
     val request = Json.obj(
