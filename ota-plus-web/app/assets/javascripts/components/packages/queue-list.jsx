@@ -87,7 +87,7 @@ define(function(require) {
             onDragEnd={this.dragEnd}
             onDragOver={this.dragOver}
             onDragStart={this.dragStart}>
-            <QueueListItem package={pack} status={status}/>
+            <QueueListItem package={pack} status={status} vin={this.props.vin}/>
           </div>
         );
       }, this);       
