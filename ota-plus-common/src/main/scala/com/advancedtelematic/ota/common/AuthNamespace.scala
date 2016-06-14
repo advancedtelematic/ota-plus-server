@@ -1,5 +1,6 @@
 package com.advancedtelematic.ota.common
 
+import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.model.headers.OAuth2BearerToken
 import akka.http.scaladsl.server.{AuthorizationFailedRejection, Directive1, Directives, Rejection}
 import cats.data.Xor
@@ -11,8 +12,6 @@ import eu.timepit.refined.refineV
 
 object AuthNamespace {
   import Directives._
-
-  private[this] def badNamespaceRejection(msg: String): Rejection = AuthorizationFailedRejection
 
   private[this] def extractToken(serializedToken: String): Xor[String, JsonWebToken] =
     for {
@@ -36,7 +35,7 @@ object AuthNamespace {
       case Xor.Left(msg) =>
         extractLog flatMap { l =>
           l.info(s"Could not extract namespace: $msg")
-          reject(badNamespaceRejection(msg))
+          complete(HttpResponse(StatusCodes.Unauthorized, entity = msg))
         }
     }
   }
