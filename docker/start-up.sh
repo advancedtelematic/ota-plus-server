@@ -92,7 +92,7 @@ docker run \
   advancedtelematic/ota-build-srv:$BUILDSRV_DOCKER_TAG
 
 WEB_DOCKER_TAG=${WEB_TAG-latest}
-echo 'Starting Core'
+echo 'Starting Web'
 echo "tag ${WEB_DOCKER_TAG}"
 docker run \
   -d \
