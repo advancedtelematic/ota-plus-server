@@ -66,6 +66,7 @@ docker run \
 echo 'Creating user: demo@advancedtelematic.com password: demo'
 curl -H "Content-Type: application/json" -X POST -d '{"email":"demo@advancedtelematic.com","password":"demo"}' http://localhost:9001/users
 
+echo
 echo 'Creating ota-plus-web credentials'
 
 if ! auth=$(curl -s -H "Content-Type: application/json" -d '{ "client_name": "ABC", "grant_types": ["client_credentials","password"] }' "http://localhost:9001/clients");
@@ -73,7 +74,7 @@ then echo "Error: couldn't get token"
      exit 1
 fi
 
-echo auth
+echo $auth
 export AUTHPLUS_CLIENT_ID=$(echo $auth | jq .client_id | tr -d '"')
 export AUTHPLUS_SECRET=$(echo $auth | jq .client_secret | tr -d '"')
 
