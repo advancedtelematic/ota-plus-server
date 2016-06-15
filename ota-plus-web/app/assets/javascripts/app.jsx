@@ -51,13 +51,11 @@ define(function(require) {
       
       this.state = {
         currentLang: currentLang,
-        filterValue: '',
         showCampaignPanel: false,
         intervalId: null,
       }
       
       this.changeLanguage = this.changeLanguage.bind(this);
-      this.changeFilter = this.changeFilter.bind(this);
       this.toggleCampaignPanel = this.toggleCampaignPanel.bind(this);
     }
     componentDidMount() {
@@ -70,9 +68,6 @@ define(function(require) {
       this.setState({
         currentLang: value
       });
-    }
-    changeFilter(filter) {
-      this.setState({filterValue: filter});  
     }
     toggleCampaignPanel() {
       this.setState({
@@ -127,15 +122,11 @@ define(function(require) {
         }
       }
    
-      
       return (
         <div key={page} className={page}>
-          <div className="loading">
-            <img src="/assets/img/icons/loading.gif" alt="" />
-          </div>
-          <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} changeFilter={this.changeFilter} filterValue={this.state.filterValue} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel}/>
+          <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel}/>
           <div className="page wrapper container-fluid">
-            {React.cloneElement(this.props.children, {filterValue: this.state.filterValue, showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
+            {React.cloneElement(this.props.children, {showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
           </div>
         </div>
       );

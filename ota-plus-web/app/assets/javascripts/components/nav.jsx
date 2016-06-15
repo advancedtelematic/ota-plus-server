@@ -5,7 +5,6 @@ define(function(require) {
       ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       LanguageSelector = require('./translation/language-selector'),
       Translate = require('./translation/translate'),
-      SearchBar = require('./searchbar'),
       ChangePassword = require('./changepass');
 
   class Nav extends React.Component {
@@ -28,30 +27,26 @@ define(function(require) {
           transitionLeaveTimeout={500}
           transitionName="example">
           <nav className="navbar navbar-inverse navbar-fixed-top">
-            <div className="navbar-header">
-              <Link to="/" className="navbar-brand"><img src="/assets/img/atslogo.png" id="logo" alt=""/></Link>
-            </div>
-            <ul className="right-nav pull-right">
-              <li>
-                <Link to="newdevice" className="btn-add">
-                  <img src="/assets/img/icons/add.png" alt="" />
-                </Link>
-              </li>
-              <li>
-                {campaignsData !== null && campaignsData.length > 0 ? 
-                  <a href="#" className="btn-campaigns" onClick={this.toggleCampaignPanel}>
-                    <img src="/assets/img/icons/wireless.png" className="icon-campaigns" alt=""/>
+            <div className="container">
+              <div className="navbar-header">
+                <Link to="/" className="navbar-brand"><img src="/assets/img/atslogo.png" id="logo" alt=""/></Link>
+              </div>
+              <ul className="right-nav pull-right">
+                <li>
+                  {campaignsData !== null && campaignsData.length > 0 ? 
+                    <a href="#" className="btn-campaigns" onClick={this.toggleCampaignPanel}>
+                      <img src="/assets/img/icons/wireless.png" className="icon-campaigns" alt=""/>
+                    </a>
+                  : null}
+                </li>
+                <li className="dropdown" id="menuLogin">
+                  <a className="dropdown-toggle btn-profile" href="#" data-toggle="dropdown">
+                    <img src="/assets/img/icons/profile_icon.png" />
                   </a>
-                : null}
-              </li>
-              <li className="dropdown" id="menuLogin">
-                <a className="dropdown-toggle btn-profile" href="#" data-toggle="dropdown">
-                  <img src="/assets/img/icons/profile_icon.png" />
-                </a>
-                <ChangePassword />
-              </li>
-            </ul>
-            <SearchBar class="search-bar margin-top-10 pull-right" changeFilter={this.props.changeFilter} filterValue={this.props.filterValue}/>
+                  <ChangePassword />
+                </li>
+              </ul>
+            </div>
           </nav>
         </ReactCSSTransitionGroup>
       );
