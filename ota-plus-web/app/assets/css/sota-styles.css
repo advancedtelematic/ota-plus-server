@@ -1,5 +1,10 @@
 /* Main */
 
+* {
+    padding: 0;
+    margin: 0;
+}
+
 @font-face {
     font-family: AkkuratRegular;
     src: url(../fonts/Akkurat-Regular.otf);
@@ -417,9 +422,13 @@ button.close:hover, button.close:active, button.close:focus {
 
 .page-device-details #packages-list, .page-device-details #queue-both-lists {
     width: 100% !important;
-    overflow-y: scroll;
     overflow-x: hidden;
+    overflow-y: hidden;
     margin: 0;
+}
+
+.page-device-details #queue-both-lists {
+    overflow-y: scroll;
 }
 
 .page-device-details .list-group-item {
@@ -1132,6 +1141,13 @@ button.close:hover, button.close:active, button.close:focus {
     opacity: 1; 
 }
 
+#packages-list-inside {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    position: relative;
+    zoom: 1;
+}
 /* Remove elements higlighting when focused or active*/
 
 *:focus {

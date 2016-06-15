@@ -8,6 +8,7 @@
     <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href='@routes.Assets.versioned("css/jquery.ioslist.css")'>
     <link rel='stylesheet' href='@routes.Assets.versioned("css/sota-styles.css")'>
   </head>
   <body>
@@ -27,6 +28,8 @@
 	    requirejs.config({"paths": {"react-router": ["https://cdnjs.cloudflare.com/ajax/libs/react-router/2.4.0/ReactRouter.min"]}});
             requirejs.config({"paths": {"moment": ["https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min"]}});
             requirejs.config({"paths": {"bootstrap-datetimepicker": ["https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min"]}});
+            requirejs.config({"paths": {"ioslist": ["@routes.Assets.versioned("js/jquery.ioslist.min")"]}});
+
 	  }
 	}
     </script>
