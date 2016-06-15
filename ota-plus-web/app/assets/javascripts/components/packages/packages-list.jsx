@@ -199,14 +199,14 @@ define(function(require) {
       } 
       
       Object.keys(Packages).sort(function(a, b) {
-        if(selectSort !== 'undefined' && selectSort == 'desc') 
-          return b.localeCompare(a);
-        else
-          return a.localeCompare(b);
+        if(selectSort !== 'undefined' && selectSort == 'desc')
+          return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? -1 : b.localeCompare(a);
+        else 
+          return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? 1 : a.localeCompare(b);
       }).forEach(function(key) {
         SortedPackages[key] = Packages[key];
       });
-
+      
       var lettersArray = [];
       var packages = _.map(SortedPackages, function(pack, i) {
         var queuedPackage = '';
@@ -233,6 +233,8 @@ define(function(require) {
         installedPackage = (tmp !== undefined) ? tmp.id.version : '';
                 
         var firstLetter = pack.packageName.charAt(0);
+        var firstLetter = firstLetter.match(/[a-zA-Z]/) ? firstLetter : '#';
+
         var showLetterHeader = false;
         if(lettersArray.indexOf(firstLetter) == -1) {
           lettersArray.push(firstLetter);
@@ -289,7 +291,7 @@ define(function(require) {
             </div>
           : 
             <ul id="packages-list" className="list-group"> 
-              {packages.length > 0 ? packages 
+              {packages.length > 0 ? packages
               :
                 <div className="col-md-12">
                   <br />
