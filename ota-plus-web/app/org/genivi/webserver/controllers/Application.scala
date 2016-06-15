@@ -136,10 +136,11 @@ class Application @Inject() (ws: WSClient,
    * @return OK response and index html
    */
   def index : Action[AnyContent] = Action{ implicit req =>
-    req.session.get("access_token") match {
-      case Some(_) => Ok(views.html.main())
+    if (req.session.get("username").isDefined && req.session.get("access_token").isDefined) {
+      Ok(views.html.main())
+    } else {
       // redirect to login page if not logged in
-      case None => Redirect(com.advancedtelematic.login.routes.LoginController.login())
+      Redirect(com.advancedtelematic.login.routes.LoginController.login()).withNewSession
     }
   }
 }

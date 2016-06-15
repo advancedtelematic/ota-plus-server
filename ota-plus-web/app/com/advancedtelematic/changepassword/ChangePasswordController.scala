@@ -32,9 +32,19 @@ class ChangePasswordController @Inject() (val ws: WSClient,
   )
 
   def changePasswordForm : Action[AnyContent] = Action { implicit req =>
-    Ok(views.html.changepass(passwordForm))
+    if (validSession(req)) {
+      Ok(views.html.changepass(passwordForm))
+    } else {
+      logger.debug("No valid session found, redirecting")
+      Redirect(com.advancedtelematic.login.routes.LoginController.login()).withNewSession
+    }
   }
 
+  def validSession(req: Request[AnyContent]): Boolean = {
+    req.session.get("username").isDefined && req.session.get("access_token").isDefined
+  }
+
+  // handler for password change POST
   def changePassword: Action[AnyContent] = Action.async { implicit req =>
 
     passwordForm.bindFromRequest.fold(
@@ -43,9 +53,9 @@ class ChangePasswordController @Inject() (val ws: WSClient,
       },
       changePasswordData => {
         authPlusApi.changePassword(req.session.get("access_token"),
-                                   req.session.get("username").get,
-                                   changePasswordData.oldPassword,
-                                   changePasswordData.newPassword).map {
+          req.session.get("username").get,
+          changePasswordData.oldPassword,
+          changePasswordData.newPassword).map {
           res => res.header.status match {
             case OK =>
               Redirect(org.genivi.webserver.controllers.routes.Application.index())
