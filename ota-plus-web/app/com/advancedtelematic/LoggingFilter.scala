@@ -1,7 +1,7 @@
 package com.advancedtelematic
 
 import javax.inject.Inject
-import akka.stream.Materializer
+import _root_.akka.stream.Materializer
 import play.api.Logger
 import play.api.mvc._
 import scala.concurrent.{ExecutionContext, Future}

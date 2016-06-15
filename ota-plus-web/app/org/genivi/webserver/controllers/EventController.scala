@@ -33,7 +33,8 @@ class EventController @Inject() (system: ActorSystem) extends Controller {
   def subVehicleSeen(vin: Vehicle.Vin): Action[AnyContent] = Action {
     val vehicleSeenSource: Source[VehicleSeenMessage, ActorRef] =
       Source.actorPublisher(VehicleSeenActor.props(kinesisActor, vin))
-    Ok.chunked(vehicleSeenSource
+    //take(1) is a workaround to force message to be sent instantly to the UI client.
+    Ok.chunked(vehicleSeenSource.take(1)
       .map(Json.toJson(_))
         via Comet.json("parent.vehicleSeen")).as(ContentTypes.JSON)
   }

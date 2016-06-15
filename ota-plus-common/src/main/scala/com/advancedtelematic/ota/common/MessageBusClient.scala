@@ -43,14 +43,8 @@ object MessageBusClient {
     config
   }
 
-  var kinesisClient: AmazonKinesisClient = new AmazonKinesisClient()
-  getCredentialsProvider match {
-    case Some(creds) => kinesisClient = new AmazonKinesisClient(creds, getClientConfigWithUserAgent)
-      if (kinesisClient.listStreams().getStreamNames.contains(streamName)) {
-        kinesisClient.createStream(streamName, defaultShardCount)
-      }
-    case None        => log.error("failed to create kinesis client due to missing credentials")
-  }
+  val kinesisClient: AmazonKinesisClient = new AmazonKinesisClient(getCredentialsProvider.get,
+                                                                    getClientConfigWithUserAgent)
 
   def getCredentialsProvider: Option[AWSCredentialsProvider] ={
     try {

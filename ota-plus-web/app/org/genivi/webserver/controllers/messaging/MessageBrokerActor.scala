@@ -8,6 +8,7 @@ import akka.stream.ActorMaterializer
 import com.advancedtelematic.ota.common.{MessageBusClient, VehicleSeenMessage}
 import com.amazonaws.services.kinesis.clientlibrary.lib.worker.{KinesisClientLibConfiguration, Worker}
 import org.genivi.sota.data.Vehicle
+import org.genivi.webserver.controllers.messaging.MessageBrokerActor.{Start, Subscribe, UnSubscribe}
 
 object MessageBrokerActor {
   def props: Props = Props[MessageBrokerActor]
@@ -43,12 +44,10 @@ class MessageBrokerActor extends Stash with Actor {
   }
 
   private def initKinesis() = {
-    def credentialsProvider = MessageBusClient.getCredentialsProvider
-
     val workerId = String.valueOf(UUID.randomUUID())
-    val kclConfig =
-      new KinesisClientLibConfiguration(MessageBusClient.streamName, MessageBusClient.streamName, credentialsProvider,
-        workerId)
+    val kclConfig = new KinesisClientLibConfiguration(MessageBusClient.appName, MessageBusClient.streamName,
+      //.get is ok here as an error message has already been displayed to the user
+      MessageBusClient.getCredentialsProvider.get, workerId)
         .withRegionName(MessageBusClient.regionName)
         .withCommonClientConfig(MessageBusClient.getClientConfigWithUserAgent)
 

@@ -26,7 +26,7 @@ class VehicleSeenActor(messageBroker: ActorRef, vin: Vehicle.Vin) extends ActorP
   def receive: Receive = {
     case Request(_)                      => //nothing to do here, demand is updated automatically
     case Cancel                          => messageBroker! UnSubscribe(vin, self)
-                                            context.stop(self) //onCompleteThenStop() might be better here
+                                            context.stop(self)
     case VehicleSeenMessage(_, lastSeen) => if(isActive && (totalDemand > 0)) {
                                               onNext(VehicleSeenMessage(vin, lastSeen))
                                             } else if(totalDemand <= 0) {
