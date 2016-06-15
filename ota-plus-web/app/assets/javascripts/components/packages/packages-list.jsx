@@ -1,11 +1,14 @@
 define(function(require) {
   var React = require('react'),
+      ReactDOM = require('react-dom'),
       ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       SotaDispatcher = require('sota-dispatcher'),
       PackagesListItem = require('./packages-list-item'),
       PackageListItemDetails = require('./packages-list-item-details'),
       Dropzone = require('../../mixins/dropzone'),
-      AddPackage = require('./add-package');
+      AddPackage = require('./add-package'),
+      jQuery = require('jquery'),
+      IOSList = require('ioslist');
   
   class PackagesList extends React.Component {
     constructor(props) {
@@ -16,7 +19,8 @@ define(function(require) {
         timeout: null,
         intervalId: null,
         files: null,
-        showForm: false
+        showForm: false,
+        iosListObj: null,
       };
       this.refreshData = this.refreshData.bind(this);
       this.onDrop = this.onDrop.bind(this);
@@ -28,8 +32,15 @@ define(function(require) {
       this.props.QueuedPackages.addWatch(this.props.QueuedPackagesPollEventName, _.bind(this.forceUpdate, this, null));
     }
     componentWillUpdate(nextProps, nextState) {
-      if(nextProps.filterValue != this.props.filterValue) {        
+      if(nextProps.filterValue != this.props.filterValue) {
         SotaDispatcher.dispatch(nextProps.AllPackagesDispatchObject);
+      }
+    }
+    componentDidUpdate(prevProps, prevState) {
+      if(Object.keys(prevState.data).length === 0 && Object.keys(this.state.data).length > 0) {
+        jQuery(ReactDOM.findDOMNode(this.refs.packagesList)).ioslist();
+      } else {
+          jQuery('.ioslist-fake-header').trigger('click');
       }
     }
     componentDidMount() {
@@ -39,6 +50,14 @@ define(function(require) {
       }, 1000);
       this.setState({intervalId: intervalId});
       this.refreshData();
+      
+      var tmpIntervalId = setInterval(function() {
+        var packagesListNode = ReactDOM.findDOMNode(that.refs.packagesList);
+        if(packagesListNode) {
+          var a = jQuery(packagesListNode).ioslist();
+          clearInterval(tmpIntervalId);
+        }
+      }, 30);
     }
     componentWillUnmount(){
       this.props.AllPackages.removeWatch(this.props.AllPackagesPollEventName);
@@ -61,6 +80,8 @@ define(function(require) {
         that.setState({
           data: data
         });
+        
+        clearTimeout(timeout);
       }, 200);
       
       this.setState({
@@ -178,7 +199,7 @@ define(function(require) {
     render() {
       var Packages = this.state.data;
       var selectSort = this.props.selectSort;
-      var SortedPackages = {};
+      var GroupedPackages = {};
       
       switch(this.props.selectStatus) {
         case 'installed': 
@@ -197,54 +218,52 @@ define(function(require) {
           });
         break;
       } 
-      
+            
       Object.keys(Packages).sort(function(a, b) {
         if(selectSort !== 'undefined' && selectSort == 'desc')
           return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? -1 : b.localeCompare(a);
         else 
           return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? 1 : a.localeCompare(b);
       }).forEach(function(key) {
-        SortedPackages[key] = Packages[key];
+        var firstLetter = key.charAt(0).toUpperCase();
+        firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
+      
+        if( typeof GroupedPackages[firstLetter] == 'undefined' || !GroupedPackages[firstLetter] instanceof Array ) {
+           GroupedPackages[firstLetter] = [];
+        }
+        GroupedPackages[firstLetter].push(Packages[key]);
       });
       
-      var lettersArray = [];
-      var packages = _.map(SortedPackages, function(pack, i) {
-        var queuedPackage = '';
-        var installedPackage = '';
-        var packageInfo = '';
-        var mainLabel = '';
-        
-        var elements = pack.elements;
-        var that = this;
-        var sortedElements = elements.sort(function (a, b) {
-          var aVersion = a.id.version;
-          var bVersion = b.id.version;
-          return that.compareVersions(bVersion, aVersion);
-        });
-        
-        var tmp = sortedElements.find(function (i) {
-          return i.attributes.status == 'queued';
-        });
-        queuedPackage = (tmp !== undefined) ? tmp.id.version : '';
-        
-        tmp = sortedElements.find(function (i) {
-          return i.attributes.status == 'installed';
-        });
-        installedPackage = (tmp !== undefined) ? tmp.id.version : '';
+      var packages = _.map(GroupedPackages, function(packages, index) {
                 
-        var firstLetter = pack.packageName.charAt(0);
-        var firstLetter = firstLetter.match(/[a-zA-Z]/) ? firstLetter : '#';
-
-        var showLetterHeader = false;
-        if(lettersArray.indexOf(firstLetter) == -1) {
-          lettersArray.push(firstLetter);
-          showLetterHeader = true;
-        }
+        var items = _.map(packages, function(pack, i) {
+          var that = this;
+          var queuedPackage = '';
+          var installedPackage = '';
+          var packageInfo = '';
+          var mainLabel = '';
+                    
+          var versions = pack.elements;
+                  
+          var sortedElements = versions.sort(function (a, b) {
+            var aVersion = a.id.version;
+            var bVersion = b.id.version;
+            return that.compareVersions(bVersion, aVersion);
+          });
+          
+          var tmp = sortedElements.find(function (i) {
+            return i.attributes.status == 'queued';
+          });
+          queuedPackage = (tmp !== undefined) ? tmp.id.version : '';
         
-        return (
-          <div key={'package-' + pack.packageName}>
-            {showLetterHeader ? <li className="list-group-item disabled">{firstLetter.toUpperCase()}</li> : null}
-            <PackagesListItem key={'package-' + pack.packageName + '-items'} name={pack.packageName} expandPackage={this.expandPackage} queuedPackage={queuedPackage} installedPackage={installedPackage} packageInfo={packageInfo} mainLabel={mainLabel}/>
+          tmp = sortedElements.find(function (i) {
+            return i.attributes.status == 'installed';
+          });
+          installedPackage = (tmp !== undefined) ? tmp.id.version : '';
+          
+          return(
+            <li key={'package-' + pack.packageName}>
+              <PackagesListItem key={'package-' + pack.packageName + '-items'} name={pack.packageName} expandPackage={this.expandPackage} queuedPackage={queuedPackage} installedPackage={installedPackage} packageInfo={packageInfo} mainLabel={mainLabel}/>
             {this.state.expandedPackage == pack.packageName ?
               <ReactCSSTransitionGroup
                 transitionAppear={true}
@@ -262,17 +281,33 @@ define(function(require) {
                   refresh={this.refreshData}/> 
               </ReactCSSTransitionGroup>
             : null}
+            </li>
+          );
+        }, this);
+        
+        return(
+          <div className="ioslist-group-container" key={'list-group-container-' + index}>
+            <div className="ioslist-group-header">{index}</div>
+            <ul>
+              {items}
+            </ul>
           </div>
         );
       }, this);
-
+            
       return (
         <div>
           {this.props.lastSeen ?
             <div>
               <ul id="packages-list" className="list-group"> 
                 <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true} className="dnd-zone" activeClassName="dnd-zone-active">
-                  {packages.length > 0 ? packages 
+                  {packages.length > 0 ? 
+                    <div id="packages-list-inside" ref="packagesList">
+                      <h2 className="ioslist-fake-header"></h2>
+                      <div className="ioslist-wrapper">
+                        {packages}
+                      </div>
+                    </div>
                   :
                     <div className="col-md-12">
                       <br />
@@ -291,7 +326,10 @@ define(function(require) {
             </div>
           : 
             <ul id="packages-list" className="list-group"> 
-              {packages.length > 0 ? packages
+              {packages.length > 0 ? 
+                <div id="packages-list-inside" ref="packagesList">
+                  {packages}
+                </div>
               :
                 <div className="col-md-12">
                   <br />

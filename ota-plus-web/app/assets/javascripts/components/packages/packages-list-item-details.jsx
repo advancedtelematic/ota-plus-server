@@ -46,7 +46,7 @@ define(function(require) {
                 </span>
               :
                 (!this.props.isQueued) ? 
-                  <button className="btn btn-grey btn-install" onClick={this.installPackage.bind(this, version.id.name, version.id.version)}>install v. {version.id.version}</button>
+                  <button className="btn btn-grey btn-install pull-right" onClick={this.installPackage.bind(this, version.id.name, version.id.version)}>install v. {version.id.version}</button>
                 : 
                   <span className="package-label package-label-installed">      
                     v. {version.id.version}
