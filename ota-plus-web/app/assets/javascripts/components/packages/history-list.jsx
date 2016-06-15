@@ -39,12 +39,13 @@ define(function(require) {
         );
       }, this);       
       return (
-        packages.length > 0 ?
-          <ul className="list-group"> 
-            {packages}
-          </ul>
-        :
-          <div>History is empty</div>
+        <ul id="history-list" className="list-group"> 
+          {packages.length > 0 ?
+            packages
+          :
+            <div>History is empty</div>
+          }
+        </ul>
       );
     }
   };
