@@ -34,17 +34,38 @@ define(function(require) {
     refreshData() {
       SotaDispatcher.dispatch(this.props.DispatchObject);
     }
-    render() {   
+    render() {     
+      var devices = [];
       var devicesIds = [];
-      var devices = _.map(this.props.Devices.deref(), function(device, i) {   
+      var selectedStatus = this.props.selectedStatus;
+      var selectedSort = this.props.selectedSort;
+      var Packages = this.props.Devices.deref();
+      var SortedPackages = [];
+            
+      Packages = Packages.filter(function (pack) {          
+        return (selectedStatus === 'All' || selectedStatus === pack.status);
+      });
+            
+      Object.keys(Packages).sort(function(a, b) {
+        var aName = Packages[a].vin;
+        var bName = Packages[b].vin;
+        if(selectedSort !== 'undefined' && selectedSort == 'desc')
+          return bName.localeCompare(aName);
+        else
+          return aName.localeCompare(bName);
+      }).forEach(function(key) {
+        SortedPackages.push(Packages[key]);
+      });
+            
+      var devices = _.map(SortedPackages, function(device, i) {
         return (
           <DeviceListItem key={device.vin} vin={device.vin} status={device.status}/>
         );
-      }, this);       
+      }, this);   
+      
       return (
-        <div className="row" id="devices-list" >
-          <div className="col-md-12">     
-            <div id="devices-container">
+        <div className="row" id="devices-list">
+            <div id="devices-container" className="container">
             {devices.length > 0 ? 
               devices 
             :
@@ -53,7 +74,6 @@ define(function(require) {
                 <i className="fa fa-warning"></i> Sorry, there is no results.
               </div>
             }
-            </div>
           </div>
         </div>
       );
