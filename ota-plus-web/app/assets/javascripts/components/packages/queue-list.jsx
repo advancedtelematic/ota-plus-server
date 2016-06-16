@@ -68,14 +68,13 @@ define(function(require) {
         order: payload
       });
     }
-    render() { 
-      var Packages = (this.state.data) ? this.state.data.packages : null;
-        
-      if(Packages !== undefined) {
-        Packages.sort(function(a, b) {
-          return a.installPos - b.installPos;
-        });
-      }
+    render() {        
+      var Packages = this.props.QueuedPackages.deref();
+      Packages.sort(function(a, b) {
+        var installPosCompared = a.installPos - b.installPos;
+        return installPosCompared == 0 ? new Date(b.createdAt) - new Date(a.createdAt) : installPosCompared;
+      });
+      
       var packages = _.map(Packages, function(pack, i) {
         var dragging = (this.state.data.dragging == i) ? "dragging" : "";  
         var status = (pack.name == 'package') ? 'error' : 'success';
@@ -92,12 +91,13 @@ define(function(require) {
         );
       }, this);       
       return (
-        packages.length > 0 ?
-          <ul id="queue-list" className="list-group list-group-dnd"> 
-            {packages}
-          </ul>
-        :
-          <div>Queue is empty</div>
+        <ul id="queue-list" className="list-group list-group-dnd"> 
+          {packages.length > 0 ?
+            packages
+          :
+            <div>Queue is empty</div>
+          }
+        </ul>
       );
     }
   };

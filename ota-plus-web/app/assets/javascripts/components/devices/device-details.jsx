@@ -4,7 +4,6 @@ define(function(require) {
       ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       SotaDispatcher = require('sota-dispatcher'),
       DetailsHeader = require('./details-header'),
-      PackagesHistory = require('../packages/history'),
       PackagesQueue = require('../packages/queue'),
       Packages = require('../packages/packages');
         
@@ -70,7 +69,7 @@ define(function(require) {
       return (
         <ReactCSSTransitionGroup
           transitionAppear={true}
-          transactionLeave={false}
+          transitionLeave={false}
           transitionAppearTimeout={500}
           transitionEnterTimeout={500}
           transitionLeaveTimeout={500}
@@ -111,33 +110,16 @@ define(function(require) {
                     <div className="panel-heading-left pull-left">
                       {this.context.strings.queue}
                     </div>
-                    <div className="panel-heading-right pull-right">
-                      <button onClick={this.showQueueHistory} className="btn btn-black">{this.state.textPackagesHistory}</button>
-                    </div>
+                    <div className="panel-heading-right pull-right"></div>
                   </div>
-                  <div className="panel-body">
-                    <div className="alert alert-ats alert-dismissible fade in" role="alert">
-                      <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true"></span></button>
-                      <img src="/assets/img/icons/info.png" className="icon-info" alt=""/> 
-                      The installation of the packages will start automatically when you connect to your device.
-                    </div>
-                    <div id="queue-both-lists">
-                      {this.state.showPackagesHistory ? 
-                        <ReactCSSTransitionGroup
-                          transitionAppear={true}
-                          transactionLeave={false}
-                          transitionAppearTimeout={500}
-                          transitionEnterTimeout={500}
-                          transitionLeaveTimeout={500}
-                          transitionName="example">
-                          <PackagesHistory vin={this.props.params.vin}/>
-                        </ReactCSSTransitionGroup>
-                      : null}
                   
-                      <PackagesQueue 
-                        vin={this.props.params.vin}
-                        setQueueStatistics={this.setQueueStatistics}/>
-                    </div>
+                  <div className="panel-body">
+                    <PackagesQueue
+                      textPackagesHistory={this.state.textPackagesHistory}
+                      showPackagesHistory={this.state.showPackagesHistory}
+                      showQueueHistory={this.showQueueHistory}
+                      setQueueStatistics={this.setQueueStatistics}
+                      vin={this.props.params.vin}/>
                   </div>
                   <div className="panel-footer">
                     {this.state.queueCount} packages in queue
