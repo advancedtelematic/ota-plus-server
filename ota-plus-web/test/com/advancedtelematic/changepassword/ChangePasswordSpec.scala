@@ -31,19 +31,38 @@ class ChangePasswordSpec extends PlaySpec with OneServerPerSuite {
   "ChangePasswordController" should {
 
     "change password" in {
-      val req = FakeRequest().withFormUrlEncodedBody(("oldPassword", "oldPassword"),
-        ("newPassword", "newPassword"), ("passwordConfirmation", "newPassword"))
-        .withSession(("access_token", "access_token"), ("username", "username"))
+      val req = FakeRequest().withFormUrlEncodedBody("oldPassword" -> "oldPassword",
+        "newPassword" -> "newPassword", "passwordConfirmation" -> "newPassword")
+        .withSession("access_token" -> "access_token", "username" -> "username")
       val result = controller.changePassword()(req)
       status(result) mustBe SEE_OTHER
     }
 
     "should error on different passwordConfirmation" in {
-      val req = FakeRequest().withFormUrlEncodedBody(("oldPassword", "oldPassword"),
-        ("newPassword", "newPassword"), ("passwordConfirmation", "differentPassword"))
-        .withSession(("access_token", "access_token"), ("username", "username"))
+      val req = FakeRequest().withFormUrlEncodedBody("oldPassword" -> "oldPassword",
+        "newPassword" -> "newPassword", "passwordConfirmation" -> "differentPassword")
+        .withSession("access_token" -> "access_token", "username" -> "username")
       val result = controller.changePassword()(req)
       status(result) mustBe BAD_REQUEST
     }
+
+    "should error on missing username in session" in {
+      val req = FakeRequest().withFormUrlEncodedBody("oldPassword" -> "oldPassword",
+        "newPassword" -> "newPassword", "passwordConfirmation" -> "newPassword")
+        .withSession("access_token" -> "access_token")
+      val result = controller.changePassword()(req)
+
+      status(result) mustBe SERVICE_UNAVAILABLE
+    }
+
+    "should error on missing token in session" in {
+      val req = FakeRequest().withFormUrlEncodedBody("oldPassword" -> "oldPassword",
+        "newPassword" -> "newPassword", "passwordConfirmation" -> "newPassword")
+        .withSession("username" -> "username")
+      val result = controller.changePassword()(req)
+
+      status(result) mustBe SERVICE_UNAVAILABLE
+    }
+
   }
 }
