@@ -32,6 +32,13 @@ define(function(require) {
       setTimeout(function(){
         that.setDivsHeight();
       }, 100);
+
+      var tmpIntervalId = setInterval(function(){
+        if(jQuery('#packages-list').length && jQuery('#queue-wrapper').length) {
+          that.setDivsHeight();
+          clearInterval(tmpIntervalId);
+        }
+      }, 10);
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setDivsHeight);
@@ -70,8 +77,8 @@ define(function(require) {
     setQueueListHeight() {
       var windowHeight = jQuery(window).height();
       var footerHeight = jQuery('.panel-footer').outerHeight();
-      var offsetTop = jQuery('#queue-both-lists').offset().top;
-      jQuery('#queue-both-lists').height(windowHeight - offsetTop - footerHeight - 40);
+      var offsetTop = jQuery('#queue-wrapper').offset().top;
+      jQuery('#queue-wrapper').height(windowHeight - offsetTop - footerHeight);
     }
     render() {      
       return (
