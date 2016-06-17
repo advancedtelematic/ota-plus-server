@@ -17,12 +17,15 @@ define(function(require) {
       this.changeUsernameFieldLength = this.changeUsernameFieldLength.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
     }
-    toggleEditField() {
-      this.setState({
+    toggleEditField(e) {
+     if(e !== undefined)
+       e.preventDefault();
+     this.setState({
         showEditField: !this.state.showEditField
       });
     }
-    toggleEditButton(state) {
+    toggleEditButton(state, e) {
+      e.preventDefault();
       this.setState({
         showEditButton: state
       })
@@ -33,7 +36,8 @@ define(function(require) {
         usernameFieldLength: val.length
       });
     }
-    handleSubmit() {
+    handleSubmit(e) {
+      e.preventDefault();
       this.setState({
         username: this.refs.username.value
       });

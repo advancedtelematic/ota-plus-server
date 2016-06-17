@@ -54,6 +54,7 @@ define(function(require) {
         selectStatus: status,
         selectStatusName: name
       });
+      document.body.dispatchEvent(new CustomEvent("refreshList"));
     }
     selectSort(sort, e) {
       e.preventDefault();
@@ -90,7 +91,7 @@ define(function(require) {
               <div className="select-bar-text">Sort by</div>
               <div className="btn-group">
                 <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {this.state.selectSortName} &nbsp;
+                  <span className="pull-left">{this.state.selectSortName} &nbsp;</span>
                   <span className="fa fa-angle-down pull-right"></span>
                 </button>
                 <ul className="dropdown-menu">
@@ -104,7 +105,7 @@ define(function(require) {
               <div className="select-bar-text">Status</div>
               <div className="btn-group">
                 <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {this.state.selectStatusName} &nbsp;
+                  <span className="pull-left">{this.state.selectStatusName} &nbsp;</span>
                   <span className="fa fa-angle-down pull-right"></span>
                 </button>
                 <ul className="dropdown-menu">
