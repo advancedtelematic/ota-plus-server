@@ -119,11 +119,22 @@ local dependency in `ota-plus-server`. This can be done by removing
 the dependency to the nexus jar artifact and adding a new local
 project:
 
-    lazy val rviSotaCore = ProjectRef(file("/home/simao/ats/rvi_sota_server"), "core")
+In `ota-plus-server/build.sbt`
+
+    lazy val sotaCore = ProjectRef(file("/home/simao/ats/rvi_sota_server"), "core")
     
-     lazy val otaPlusCore = otaPlusProject("ota-plus-core")
-         .dependsOn(sotaCommon)
-    // .settings(libraryDependencies ++= Seq("org.genivi" %% "core" % "0.2.1"))
+    lazy val otaPlusCore = otaPlusProject("ota-plus-core")
+        .dependsOn(otaPlusCommon)
+        .dependsOn(sotaCore)
+
+You then also need to comment out in `project/Dependencies.scala`:
+
+    // val GeniviSota = "0.1.53"
+    // val SotaCore = "org.genivi" %% "sota-core" % Version.GeniviSota
+    
+And in `ota-plus-core/build.sbt`:
+
+    // Dependencies.SotaCore,
 
 ## Release process
 
