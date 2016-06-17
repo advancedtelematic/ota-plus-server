@@ -39,7 +39,7 @@
     padding-left: 32px;
     margin-right: 17px;
     right: 0;
-    z-index: 1000;
+    z-index: 998;
 }
 
 .ioslist-fake-header.ioslist-hidden {
