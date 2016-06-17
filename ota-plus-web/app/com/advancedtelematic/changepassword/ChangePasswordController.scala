@@ -52,18 +52,19 @@ class ChangePasswordController @Inject() (val ws: WSClient,
         Future.successful(BadRequest(views.html.changepass(formWithErrors)))
       },
       changePasswordData => {
-        authPlusApi.changePassword(req.session.get("access_token"),
-          req.session.get("username").get,
+        authPlusApi.changePassword(
+          req.session("access_token"),
+          req.session("username"),
           changePasswordData.oldPassword,
           changePasswordData.newPassword).map {
-          res => res.header.status match {
-            case OK =>
-              Redirect(org.genivi.webserver.controllers.routes.Application.index())
+            res => res.header.status match {
+              case OK =>
+                Redirect(org.genivi.webserver.controllers.routes.Application.index())
 
-            case code =>
-              logger.debug(s"Unexpected response from Auth+: $code")
-              ServiceUnavailable(views.html.serviceUnavailable())
-          }
+              case code =>
+                logger.debug(s"Unexpected response from Auth+: $code")
+                ServiceUnavailable(views.html.serviceUnavailable())
+            }
         }
       }
     )

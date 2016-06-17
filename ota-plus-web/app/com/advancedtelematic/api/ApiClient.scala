@@ -28,9 +28,12 @@ object ApiRequest {
 trait ApiRequest { self =>
   def build: WSClient => WSRequest
 
+  def withToken(token: String): ApiRequest =
+    transform(request => request.withHeaders(("Authorization", "Bearer " + token)))
+
   def withToken(token: Option[String]): ApiRequest =
     token match {
-      case Some(t) => transform(request => request.withHeaders(("Authorization", "Bearer " + t)))
+      case Some(t) => withToken(t)
       case None => self
     }
 
@@ -100,13 +103,14 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
       .execJson(apiExec)
   }
 
-  def changePassword(token: Option[String], email: String, oldPassword: String, newPassword: String): Future[Result] = {
+  def changePassword(token: String, email: String, oldPassword: String, newPassword: String): Future[Result] = {
       val params = Json.obj(
         "oldPassword" -> oldPassword,
         "newPassword" -> newPassword
       )
 
     apiRequest(s"users/$email/password")
+      .withToken(token)
       .transform(_.withBody(params).withMethod("PUT"))
       .execResult(apiExec)
   }
