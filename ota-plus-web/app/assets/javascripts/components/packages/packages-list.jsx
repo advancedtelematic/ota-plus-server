@@ -262,7 +262,7 @@ define(function(require) {
           installedPackage = (tmp !== undefined) ? tmp.id.version : '';
           
           return(
-            <li key={'package-' + pack.packageName}>
+            <li key={'package-' + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
               <PackagesListItem key={'package-' + pack.packageName + '-items'} name={pack.packageName} expandPackage={this.expandPackage} queuedPackage={queuedPackage} installedPackage={installedPackage} packageInfo={packageInfo} mainLabel={mainLabel}/>
             {this.state.expandedPackage == pack.packageName ?
               <ReactCSSTransitionGroup
