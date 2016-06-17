@@ -186,7 +186,11 @@ button.close:hover, button.close:active, button.close:focus {
 }
 
 .package-details .btn-install {
-    margin: 2px 0;
+    font-size: 12px;
+    width: 100%;
+    padding: 5px 12px 3px 12px;
+    margin: 0;
+    border: 0;
 }
 
 /* Icons */
@@ -464,6 +468,60 @@ button.close:hover, button.close:active, button.close:focus {
     float: left;
 }
 
+.page-device-details .selected .list-group-item {
+    background: #f5f5f5;
+}
+
+.page-device-details .selected .list-group-item .package-name {
+    font-weight: bold;
+}
+
+.page-device-details .package-details {
+    width: 100%;
+    background: #f5f5f5;
+    float: left;
+}
+
+.page-device-details .package-details ul {
+    width: 100%;
+    padding: 5px 10px;
+    float: left;
+}
+
+.page-device-details .package-details ul li {
+    background: #fff;
+    height: 26px;
+    margin: 5px 0;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.page-device-details .package-details .package-status-label {
+    text-transform: capitalize;
+}
+
+.page-device-details .package-details .package-version-right {
+    line-height: 26px;
+    text-align: center;
+    width: 70px;
+    height: 26px;
+    margin: 0 0 0 10px;
+    display: inline-block;
+    border-left: 1px solid #e1e1e1;
+    border-right: 1px solid #e1e1e1;
+}
+
+.page-device-details .package-details .accept-button, .page-device-details .package-details .cancel-button {
+    margin: 3px 5px;
+}
+
+.package-right-box {
+    width: 250px;
+}
+
+.page-device-details .package-details .package-statuses {
+    line-height: 26px;
+}
+
 .page-device-details .list-group-item-text-right {
     color: #555;
     margin: 0 10px 0 10px;
@@ -585,9 +643,6 @@ button.close:hover, button.close:active, button.close:focus {
     margin-bottom: -1px;
 }
 
-#packages .list-group-item .package-label {
-    margin: -4px 0 0 0;
-}
 
 /* Forms */
 
@@ -626,39 +681,20 @@ button.close:hover, button.close:active, button.close:focus {
 
 /* Label */
 
-.package-label {
-    font-size: 10px;
-    text-align: center;
-    padding: 5px 12px;
-    border-radius: 10px;
-    display: block;
+.package-statuses {
+    font-size: 12px;
+    margin-left: 10px;
 }
 
-.package-details .package-label {
-    padding: 5px 7px;
-    margin: 2px 0;
-    float: left;
-}
-
-.package-label-installed {
-    border: 1px solid #888;
-}
-
-.package-label-uninstalled {
-    color: #aaa;
-    border: 1px solid #bbb;
-}
-
-.package-label-queued {
-    margin: 0 15px 0 0;
-}
-
-.package-status-corner {
+.package-status-circle {
     color: #fff;
     font-size: 12px;
-    position: absolute;
-    top: -3px;
-    right: 8px;
+    line-height: 1.2em;
+    vertical-align: top;
+}
+
+.package-version .package-status-circle {
+    line-height: 2.0em;
 }
 
 .package-circle {
@@ -1263,4 +1299,19 @@ button.list-group-item:focus {
 
 .btn-history:focus {
     color: #fff;
+}
+
+.input-comment {
+    width: 80%;
+    padding: 0;
+    margin: 5px 0 0 10px;
+    border: 0;
+}
+
+.package-left-box {
+    width: 60%;
+}
+
+.package-status-label-uninstalled {
+    color: #999;
 }
