@@ -1,0 +1,220 @@
+$color_blue: #A6E6DF;
+$footer_panel_bg_color: #282828;
+
+/* Main */
+
+* {
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+html {
+    height: 100%;
+    min-height: 100%;
+}
+
+body {
+    color: #fff;
+    font: normal 13px Arial;
+    background: rgb(53,40,36); /* Old browsers */
+    background: -moz-linear-gradient(-45deg,  rgba(0,0,0,1) 2%, rgba(122,61,41,1) 99%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg,  rgba(0,0,0,1) 2%,rgba(122,61,41,1) 99%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg,  rgba(0,0,0,1) 2%,rgba(122,61,41,1) 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#352824', endColorstr='#db7a57',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    background-attachment: fixed;
+}
+
+a, a:hover, a:focus {
+    color: #fff;
+}
+
+#logo {
+    width: 80px;
+    margin: 80px 0 50px 0;
+}
+
+.strong {
+    color: #80e59d !important;
+}
+
+.underlined {
+    text-decoration: underline;
+}
+
+.ats {
+    padding-bottom: 70px;
+
+    &-header {
+        font-size: 22px;
+        margin: 20px 0 40px 0;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-control {
+        font-size: 17px;
+        text-align: center;
+        height: auto;
+        padding: 13px 15px;
+        border: 3px solid #ccc;
+        border-radius: 7px;
+
+        &.error {
+            border: 2px solid #A7E6E0;
+        }
+    }
+
+    &-errors {
+        font: 400 17px Arial;
+        text-align: center;
+        background: $color_blue;
+        padding: 25px 30px;
+        margin: 0 15px;
+        margin-bottom: 20px;
+        border-radius: 7px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 100%;
+        z-index: 999;
+        display: none;
+    }
+
+    &-button {
+        font-size: 19px;
+        text-align: center;
+        background: #C5795F;
+        width: 100%;
+        padding: 15px;
+        transition: background-color 0.5s ease;
+        border: 0;
+        border-radius: 25px;
+        display: block;
+
+        &:hover {
+            background: #FFA987;
+        }
+
+        &[disabled] {
+            background: #b7b7b7;
+        }
+    }
+
+    input.error {
+        border-color: $color_blue !important;
+    }
+
+    label.error {
+        color: #fff;
+        font-weight: lighter;
+        margin: 5px 0 0 0;
+
+        .fa {
+            color: $color_blue;
+        }
+    }
+
+    &-footer-panel {
+        width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0px;
+        overflow: hidden;
+        z-index: 999; 
+
+        header {
+            text-align: center;
+            background: $footer_panel_bg_color; 
+            width: 300px;
+            padding: 10px 15px;
+            margin: 0 auto;
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+            display: block;
+        }
+
+        .drawer-content {
+            background: $footer_panel_bg_color; 
+            width: 100%;
+            padding: 0 20px;
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+            box-sizing: border-box;
+
+            .intend {
+                padding: 20px 0;
+            }
+
+            @media screen and (max-width: 350px) {
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+            }
+        }
+
+        .clickme {
+            cursor: pointer;
+        }
+
+        @media screen and (max-width: 730px) {
+            width: 100%;
+        }
+    }
+}
+
+/* Password meter */
+
+.strength_meter {
+    background: transparent;
+    width: auto;
+    height: auto;
+    margin: 5px 0 5px 0;
+    float: left;
+
+    &, & div {
+        border-radius: 4px;
+    }
+
+    div {
+        color: #fff;
+        text-align: left;
+        width: auto;
+        display: inline;
+    }
+
+    .veryweak, .weak, .medium, .strong {
+        background: transparent;
+        border: 0;
+    }
+
+    .veryweak, .weak {
+        color: #e58080 !important;
+    }
+
+    .medium {
+        color: #e5c580 !important;
+    }
+
+    .password-not-equal {
+        color: #a94442;
+        background: #efcece;
+        border-color: #ebccd1;
+    }
+
+    .password-equal {
+        background: #d3edce;
+        border-color: #d3edce;
+    }
+}
+
+/* Modal */
+
+.modal-body {
+    font-size: 14px;
+}
