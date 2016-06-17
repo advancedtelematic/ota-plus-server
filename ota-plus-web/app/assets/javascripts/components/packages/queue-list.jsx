@@ -72,7 +72,7 @@ define(function(require) {
       var Packages = this.props.QueuedPackages.deref();
       Packages.sort(function(a, b) {
         var installPosCompared = a.installPos - b.installPos;
-        return installPosCompared == 0 ? new Date(b.createdAt) - new Date(a.createdAt) : installPosCompared;
+        return installPosCompared == 0 ? new Date(a.createdAt) - new Date(b.createdAt) : installPosCompared;
       });
       
       var packages = _.map(Packages, function(pack, i) {
