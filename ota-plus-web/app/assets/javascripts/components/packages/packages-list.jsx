@@ -40,7 +40,7 @@ define(function(require) {
       if(Object.keys(prevState.data).length === 0 && Object.keys(this.state.data).length > 0) {
         jQuery(ReactDOM.findDOMNode(this.refs.packagesList)).ioslist();
       } else {
-          jQuery('.ioslist-fake-header').trigger('click');
+        document.body.dispatchEvent(new CustomEvent("refreshList"));
       }
     }
     componentDidMount() {
@@ -117,8 +117,8 @@ define(function(require) {
         QueuedIds[obj.packageId.name+'_'+obj.packageId.version] = obj.packageId.name+'_'+obj.packageId.version;
       });
             
-      var GroupedPackages = new Object();
-      Packages.filter(function(obj, index){
+      var GroupedPackages = {};
+      Packages.find(function(obj, index){
         var objKey = obj.id.name+'_'+obj.id.version;
         var isQueued = false;
         var isInstalled = false;
@@ -156,8 +156,50 @@ define(function(require) {
         
         GroupedPackages[obj.id.name]['elements'].push(Packages[index]);
       });
+                
+      var SelectedPackages = {};        
+      switch(this.props.selectStatus) {
+        case 'installed':             
+          _.each(GroupedPackages, function(obj, key) {
+            if(obj.isInstalled) 
+              SelectedPackages[key] = GroupedPackages[key];
+          });
+        break;
+        case 'queued': 
+          _.each(GroupedPackages, function(obj, key) {
+            if(obj.isQueued) 
+              SelectedPackages[key] = GroupedPackages[key];
+          });
+        break;
+        case 'uninstalled': 
+          _.each(GroupedPackages, function(obj, key) {
+            if(!obj.isInstalled && !obj.isQueued) 
+              SelectedPackages[key] = GroupedPackages[key];
+          });
+        break;
+        default:
+          SelectedPackages = GroupedPackages;
+        break;
+      }
       
-      return {'data': GroupedPackages, 'statistics': {'queuedCount': queuedCount, 'installedCount': installedCount}};
+      var selectSort = this.props.selectSort;
+      var SortedPackages = {};
+      Object.keys(SelectedPackages).sort(function(a, b) {
+        if(selectSort !== 'undefined' && selectSort == 'desc')
+          return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? -1 : b.localeCompare(a);
+        else 
+          return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? 1 : a.localeCompare(b);
+      }).forEach(function(key) {
+        var firstLetter = key.charAt(0).toUpperCase();
+        firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
+                
+        if( typeof SortedPackages[firstLetter] == 'undefined' || !SortedPackages[firstLetter] instanceof Array ) {
+           SortedPackages[firstLetter] = [];
+        }
+        SortedPackages[firstLetter].push(SelectedPackages[key]);
+      });
+           
+      return {'data': SortedPackages, 'statistics': {'queuedCount': queuedCount, 'installedCount': installedCount}};
     }
     expandPackage(name) {
       var expandedPackage = this.state.expandedPackage;
@@ -196,45 +238,8 @@ define(function(require) {
       }
       return 0;
     }
-    render() {
-      var Packages = this.state.data;
-      var selectSort = this.props.selectSort;
-      var GroupedPackages = {};
-      
-      switch(this.props.selectStatus) {
-        case 'installed': 
-          Packages = _.filter(Packages, function(obj) {
-            return obj.isInstalled;
-          });
-        break;
-        case 'queued': 
-          Packages = _.filter(Packages, function(obj) {
-            return obj.isQueued;
-          });
-        break;
-        case 'uninstalled': 
-          Packages = _.filter(Packages, function(obj) {
-            return (!obj.isQueued && !obj.isInstalled);
-          });
-        break;
-      } 
-            
-      Object.keys(Packages).sort(function(a, b) {
-        if(selectSort !== 'undefined' && selectSort == 'desc')
-          return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? -1 : b.localeCompare(a);
-        else 
-          return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? 1 : a.localeCompare(b);
-      }).forEach(function(key) {
-        var firstLetter = key.charAt(0).toUpperCase();
-        firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-      
-        if( typeof GroupedPackages[firstLetter] == 'undefined' || !GroupedPackages[firstLetter] instanceof Array ) {
-           GroupedPackages[firstLetter] = [];
-        }
-        GroupedPackages[firstLetter].push(Packages[key]);
-      });
-      
-      var packages = _.map(GroupedPackages, function(packages, index) {
+    render() {            
+      var packages = _.map(this.state.data, function(packages, index) {
                 
         var items = _.map(packages, function(pack, i) {
           var that = this;
