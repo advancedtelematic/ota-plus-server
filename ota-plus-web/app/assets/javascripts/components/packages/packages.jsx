@@ -91,7 +91,7 @@ define(function(require) {
               <div className="btn-group">
                 <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   {this.state.selectSortName} &nbsp;
-                  <span className="fa fa-angle-down"></span>
+                  <span className="fa fa-angle-down pull-right"></span>
                 </button>
                 <ul className="dropdown-menu">
                   <li><a href="#" onClick={this.selectSort.bind(this, 'asc')}>A &gt; Z</a></li>
@@ -105,7 +105,7 @@ define(function(require) {
               <div className="btn-group">
                 <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   {this.state.selectStatusName} &nbsp;
-                  <span className="fa fa-angle-down"></span>
+                  <span className="fa fa-angle-down pull-right"></span>
                 </button>
                 <ul className="dropdown-menu">
                   <li><a href="#" onClick={this.selectStatus.bind(this, 'all')}>All</a></li>

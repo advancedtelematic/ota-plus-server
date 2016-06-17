@@ -13,28 +13,33 @@ define(function(require) {
       return (
         <button type="button" className="list-group-item" onClick={this.itemClick}>
           <div className="pull-left">
-            {this.props.name}
+            <span className="package-name">{this.props.name}</span>
           </div>
-          <div className="pull-right">
+          <div className="pull-right package-statuses">
             {this.props.installedPackage ? 
-              <span className="package-label package-label-installed pull-right">
-                v. {this.props.installedPackage} installed        
-                <span className="fa-stack package-status-corner">
+              <span className="pull-right">
+                <span className="fa-stack package-status-circle">
                   <i className="fa fa-circle fa-stack-1x"></i>
                   <i className="fa fa-check-circle fa-stack-1x green" aria-hidden="true"></i>
                 </span>
+                v. {this.props.installedPackage} installed        
               </span>
             : 
-              <span className="package-label package-label-uninstalled pull-right">
+              <span className="pull-right package-status-label-uninstalled">
                 Uninstalled        
               </span>
             }
           </div>
-          <div className="pull-right">
+          <div className="pull-right package-statuses">
             {this.props.queuedPackage ? 
-              <div className="package-label-queued">
-                <i className="fa fa-circle package-circle orange" aria-hidden="true"></i> v. {this.props.queuedPackage} queued
-              </div>
+              <span className="pull-right">
+                <span className="fa-stack package-status-circle">
+                  <i className="fa fa-circle fa-stack-1x"></i>
+                  <i className="fa fa-dot-circle-o fa-stack-1x orange" aria-hidden="true"></i>
+                </span>
+                v. {this.props.queuedPackage} queued        
+              </span>
+              
             : null }
           </div>
         </button>
