@@ -18,7 +18,7 @@ define(function(require) {
               <div className="select-bar-text">Status</div>
               <div className="btn-group">
                 <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {this.props.selectedStatusName} &nbsp;
+                  <span className="pull-left">{this.props.selectedStatusName} &nbsp;</span>
                   <span className="fa fa-angle-down pull-right"></span>
                 </button>
                 <ul className="dropdown-menu">
@@ -34,7 +34,7 @@ define(function(require) {
               <div className="select-bar-text">Sort by</div>
               <div className="btn-group">
                 <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {this.props.selectedSortName} &nbsp;
+                  <span className="pull-left">{this.props.selectedSortName} &nbsp;</span>
                   <span className="fa fa-angle-down pull-right"></span>
                 </button>
                 <ul className="dropdown-menu">
