@@ -36,9 +36,6 @@
 
 .ioslist-fake-header {
     width: 100%;
-    padding-left: 32px;
-    margin-right: 17px;
-    right: 0;
     z-index: 998;
 }
 
