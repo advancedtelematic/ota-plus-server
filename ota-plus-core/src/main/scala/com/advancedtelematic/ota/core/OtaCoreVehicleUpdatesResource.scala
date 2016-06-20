@@ -24,21 +24,35 @@ class OtaCoreVehicleUpdatesResource(db: Database,
 
   val vs = new VehicleUpdatesResource(db, resolverClient, authNamespace)
 
+  /**
+    * Routes are grouped first by HTTP method to avoid tricky misunderstandings on the part of the Routing DSL.
+    * These routes must be kept in synch with [[VehicleUpdatesResource]]
+    */
   val route = {
     (pathPrefix("api" / "v1" / "vehicle_updates") & extractVin) { vin =>
-      (path("installed") & put) {
-        authenticateJwt("auth-plus", _ => true) { jwt =>
-          oauth2Scope(jwt, s"ota-core.${vin.get}.write") {
-            vs.updateInstalledPackages(vin)
-          }
-        }
+      get {
+        pathEnd { vs.logVehicleSeen(vin) { vs.pendingPackages(vin) } } ~
+        path("queued") { vs.pendingPackages(vin) } ~
+        path("results") { vs.resultsForVehicle(vin) } ~
+        (extractUuid & path("results")) { uuid => vs.resultsForUpdate(uuid) } ~
+        (extractUuid & path("download")) { uuid => vs.downloadPackage(vin, uuid) }
       } ~
-      (put & path("order")) { vs.setInstallOrder(vin) } ~
-      (get & pathEnd) { vs.logVehicleSeen(vin) { vs.pendingPackages(vin) } } ~
-      (get & path("queued")) { vs.pendingPackages(vin) } ~
-      (post & authNamespace) { ns => vs.queueVehicleUpdate(ns, vin) } ~
-      (get & extractUuid & path("download")) { uuid => vs.downloadPackage(vin, uuid) } ~
-      (post & extractUuid) { vs.reportInstall }
+      put {
+        (path("installed")) {
+          authenticateJwt("auth-plus", _ => true) { jwt =>
+            oauth2Scope(jwt, s"ota-core.${vin.get}.write") {
+              vs.updateInstalledPackages(vin)
+            }
+          }
+        } ~
+        path("order") { vs.setInstallOrder(vin) } ~
+        (extractUuid & path("cancelupdate") ) { uuid => vs.cancelUpdate(vin, uuid) }
+      } ~
+      post {
+        path("sync") { vs.sync(vin) } ~
+        (authNamespace & pathEnd) { ns => vs.queueVehicleUpdate(ns, vin) } ~
+        (extractUuid & pathEnd) { vs.reportInstall }
+      }
     }
   }
 }
