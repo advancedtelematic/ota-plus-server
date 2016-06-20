@@ -1,15 +1,14 @@
 package com.advancedtelematic.ota.core
 
 import akka.actor.ActorSystem
-import akka.http.scaladsl.server.Directives
+import akka.http.scaladsl.server.{Directive0, Directives}
 import akka.stream.ActorMaterializer
 import com.advancedtelematic.akka.http.jwt.JwtDirectives._
 import com.advancedtelematic.jws.CompactSerialization
-import com.advancedtelematic.ota.common.AuthNamespace
-import org.genivi.sota.core.{UpdateService, VehicleUpdatesResource}
+import com.advancedtelematic.ota.common.{MessageBusClient, AuthNamespace}
+import org.genivi.sota.core.{VehicleUpdatesResource, UpdateService}
 import org.genivi.sota.core.resolver.ExternalResolverClient
-import org.genivi.sota.core.transfer.DefaultUpdateNotifier
-import org.genivi.sota.data.Vehicle.Vin
+import org.genivi.sota.data.Vehicle
 import slick.driver.MySQLDriver.api._
 import org.genivi.sota.marshalling.RefinedMarshallingSupport._
 
@@ -24,6 +23,15 @@ class OtaCoreVehicleUpdatesResource(db: Database,
 
   val vs = new VehicleUpdatesResource(db, resolverClient, authNamespace)
 
+  /**
+   * Broadcasts vehicle seen event on message bus
+   */
+  def logVehicleSeen(vin: Vehicle.Vin): Directive0 = {
+    extractRequestContext flatMap { _ =>
+      onComplete(MessageBusClient.sendVehicleSeen(vin))
+    } flatMap (_ => pass)
+  }
+
   val route = {
     (pathPrefix("api" / "v1" / "vehicle_updates") & extractVin) { vin =>
       (path("installed") & put) {
@@ -34,7 +42,7 @@ class OtaCoreVehicleUpdatesResource(db: Database,
         }
       } ~
       (put & path("order")) { vs.setInstallOrder(vin) } ~
-      (get & pathEnd) { vs.logVehicleSeen(vin) { vs.pendingPackages(vin) } } ~
+      (get & pathEnd) { vs.logVehicleSeen(vin) { logVehicleSeen(vin) {vs.pendingPackages(vin) } } } ~
       (get & path("queued")) { vs.pendingPackages(vin) } ~
       (post & authNamespace) { ns => vs.queueVehicleUpdate(ns, vin) } ~
       (get & extractUuid & path("download")) { uuid => vs.downloadPackage(vin, uuid) } ~

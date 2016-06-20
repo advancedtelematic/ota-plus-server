@@ -12,6 +12,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import com.advancedtelematic.jwa.`HMAC SHA-256`
 import com.advancedtelematic.jws.{JwsVerifier, KeyLookup}
+import com.advancedtelematic.ota.common.MessageBusClient
 import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.commons.codec.binary.Base64
 import org.genivi.sota.core.db._
@@ -57,6 +58,7 @@ object Boot extends App {
   sys.addShutdownHook {
     Try(db.close())
     Try(system.terminate())
+    MessageBusClient.shutdown()
   }
 
   if (config.getBoolean("database.migrate")) {
