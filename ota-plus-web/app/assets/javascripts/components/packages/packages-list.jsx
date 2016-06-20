@@ -21,11 +21,14 @@ define(function(require) {
         files: null,
         showForm: false,
         iosListObj: null,
+        selectedToAnalyse: [],
       };
       this.refreshData = this.refreshData.bind(this);
       this.onDrop = this.onDrop.bind(this);
       this.closeForm = this.closeForm.bind(this);
       this.expandPackage = this.expandPackage.bind(this);
+      this.selectToAnalyse = this.selectToAnalyse.bind(this);
+      this.updateListToAnalyse = this.updateListToAnalyse.bind(this);
       
       this.props.AllPackages.addWatch(this.props.AllPackagesPollEventName, _.bind(this.forceUpdate, this, null));
       this.props.InstalledPackages.addWatch(this.props.InstalledPackagesPollEventName, _.bind(this.forceUpdate, this, null));
@@ -58,6 +61,20 @@ define(function(require) {
           clearInterval(tmpIntervalId);
         }
       }, 30);
+      
+      $('#selectPackages').change(function() {
+        if($(this).prop('checked')) {
+          $('.checkbox-impact').each(function() {
+            $(this).prop('checked', 'checked');
+          });
+          that.updateListToAnalyse('selectAll');
+        } else {
+          $('.checkbox-impact').each(function() {
+            $(this).prop('checked', false);
+          });
+          that.updateListToAnalyse();
+        }
+      });
     }
     componentWillUnmount(){
       this.props.AllPackages.removeWatch(this.props.AllPackagesPollEventName);
@@ -214,6 +231,38 @@ define(function(require) {
         });
       }
     }
+    selectToAnalyse(name) {
+      var selectedToAnalyse = this.state.selectedToAnalyse;
+    
+      var index = 0;		
+      if(index = selectedToAnalyse.indexOf(name) > -1) {	
+        selectedToAnalyse = selectedToAnalyse.filter(function(i) {		
+ 	  return i != name;		
+        });
+      } else {
+        selectedToAnalyse.push(name);
+      }
+      this.setState({
+        selectedToAnalyse: selectedToAnalyse
+      });
+      
+      this.props.countImpactAnalysisPackages(selectedToAnalyse.length);
+    }
+    updateListToAnalyse(action) {
+      var selectedToAnalyse = [];
+            
+      if(action == 'selectAll') {
+        _.each(this.state.data, function(group, i) {
+          _.each(group, function(pack, j) {
+            selectedToAnalyse.push(pack.packageName);
+          });
+        });
+      }
+      this.setState({
+        selectedToAnalyse: selectedToAnalyse,
+      });
+      this.props.countImpactAnalysisPackages(selectedToAnalyse.length);
+    }
     compareVersions(a, b) {
       if (a === b) {
        return 0;
@@ -266,27 +315,36 @@ define(function(require) {
           });
           installedPackage = (tmp !== undefined) ? tmp.id.version : '';
           
-          return(
-            <li key={'package-' + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
-              <PackagesListItem key={'package-' + pack.packageName + '-items'} name={pack.packageName} expandPackage={this.expandPackage} queuedPackage={queuedPackage} installedPackage={installedPackage} packageInfo={packageInfo} mainLabel={mainLabel}/>
-            {this.state.expandedPackage == pack.packageName ?
-              <ReactCSSTransitionGroup
-                transitionAppear={true}
-                transitionLeave={false}
-                transitionAppearTimeout={500}
-                transitionEnterTimeout={500}
-                transitionLeaveTimeout={500}
-                transitionName="example">
-                <PackageListItemDetails 
-                  key={'package-' + pack.packageName + '-versions'} 
-                  versions={sortedElements} 
-                  vin={this.props.vin} 
-                  packageName={pack.packageName}
-                  isQueued={pack.isQueued}
-                  refresh={this.refreshData}/> 
-              </ReactCSSTransitionGroup>
-            : null}
-            </li>
+        return (
+          <li key={'package-' + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
+            <PackagesListItem 
+              key={'package-' + pack.packageName + '-items'} 
+              name={pack.packageName} 
+              expandPackage={this.expandPackage} 
+              queuedPackage={queuedPackage} 
+              installedPackage={installedPackage} 
+              packageInfo={packageInfo} 
+              mainLabel={mainLabel}
+              selectToAnalyse={this.selectToAnalyse}
+              vin={this.props.vin}/>
+              {this.state.expandedPackage == pack.packageName ?
+                <ReactCSSTransitionGroup
+                  transitionAppear={true}
+                  transitionLeave={false}
+                  transitionAppearTimeout={500}
+                  transitionEnterTimeout={500}
+                  transitionLeaveTimeout={500}
+                  transitionName="example">
+                  <PackageListItemDetails 
+                    key={'package-' + pack.packageName + '-versions'} 
+                    versions={sortedElements} 
+                    vin={this.props.vin} 
+                    packageName={pack.packageName}
+                    isQueued={pack.isQueued}
+                    refresh={this.refreshData}/> 
+                </ReactCSSTransitionGroup>
+              : null}
+          </li>
           );
         }, this);
         
