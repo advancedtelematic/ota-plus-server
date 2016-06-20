@@ -118,6 +118,30 @@ define(function(require) {
                 SotaDispatcher.dispatch({actionType: 'get-package-queue-for-vin', vin: payload.vin});
               });
           break;
+          case 'search-production-devices':
+            var devices = [];
+            
+            if(payload.regex.length >= 17) {
+              sendRequest.doGet('/api/v1/device_data?status=true')
+              .success(function(data) {
+                devices = _.filter(data, function(device) {
+                  return device.vin == localStorage.getItem('firstProductionTestDevice');
+                });
+                devices[0].vin = payload.regex.substr(0, 17);
+                db.searchableProductionDevices.reset(devices);
+              });               
+            } else {
+              db.searchableProductionDevices.reset([]);
+            }
+          break;
+          case 'get-production-device':
+            sendRequest.doGet('/api/v1/device_data?status=true')
+              .success(function(devices) {
+                db.showDevice.reset(_.find(devices, function(device) {
+                  return device.vin == localStorage.getItem('firstProductionTestDevice');
+                }));
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));

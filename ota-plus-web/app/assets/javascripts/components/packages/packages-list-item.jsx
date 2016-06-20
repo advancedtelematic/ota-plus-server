@@ -1,17 +1,36 @@
 define(function(require) {
-  var React = require('react');
+  var React = require('react'),
+      ReactDOM = require('react-dom');
 
   class PackagesListItem extends React.Component {
     constructor(props) {
       super(props);
       this.itemClick = this.itemClick.bind(this);
+      this.checkboxClick = this.checkboxClick.bind(this);
     }
     itemClick(e) {
-      this.props.expandPackage(this.props.name);
+      if(e.target.className.indexOf('checkbox-impact') < 0) {
+        this.props.expandPackage(this.props.name);
+      }
     }
-    render() {
+    checkboxClick(e) {
+      this.props.selectToAnalyse(this.props.name);
+      
+      if($('.checkbox-impact:checked').length < $('.checkbox-impact').length) {
+        $('#selectPackages').prop('checked', false);
+      } else {
+        $('#selectPackages').prop('checked', true);
+      }
+    }
+    render() {      
       return (
         <button type="button" className="list-group-item" onClick={this.itemClick}>
+          {this.context.location.pathname.toLowerCase().split('/')[1] != 'productiondevicedetails' &&
+            (localStorage.getItem('firstProductionTestDevice') == this.props.vin ||
+            localStorage.getItem('secondProductionTestDevice') == this.props.vin ||
+            localStorage.getItem('thirdProductionTestDevice') == this.props.vin) ? 
+            <input type="checkbox" className="checkbox-impact pull-left" onChange={this.checkboxClick}/>
+          : null}
           <div className="pull-left">
             <span className="package-name">{this.props.name}</span>
           </div>
@@ -45,6 +64,10 @@ define(function(require) {
         </button>
       );
     }
+  };
+  
+  PackagesListItem.contextTypes = {
+    location: React.PropTypes.object,
   };
 
   return PackagesListItem;

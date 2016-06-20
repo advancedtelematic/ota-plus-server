@@ -26,5 +26,6 @@ var enTranslations = {
     installedsuccessfully: 'Installed successfully',
     newcampaign: 'Create new campaign',
     ongoingcampaigns: 'Ongoing update campaigns',
+    impactanalysis: 'Impact analysis',
 };
 
