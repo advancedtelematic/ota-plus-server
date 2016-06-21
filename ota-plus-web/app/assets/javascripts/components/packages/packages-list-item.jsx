@@ -36,13 +36,15 @@ define(function(require) {
           </div>
           <div className="pull-right package-statuses">
             {this.props.installedPackage ? 
-              <span className="pull-right">
-                <span className="fa-stack package-status-circle">
-                  <i className="fa fa-circle fa-stack-1x"></i>
-                  <i className="fa fa-check-circle fa-stack-1x green" aria-hidden="true"></i>
+              !this.props.selected ? 
+                <span className="pull-right">
+                  <span className="fa-stack package-status-circle">
+                    <i className="fa fa-circle fa-stack-1x"></i>
+                    <i className="fa fa-check-circle fa-stack-1x green" aria-hidden="true"></i>
+                  </span>
+                  v. {this.props.installedPackage} installed        
                 </span>
-                v. {this.props.installedPackage} installed        
-              </span>
+              : null
             : 
               <span className="pull-right package-status-label-uninstalled">
                 Uninstalled        
@@ -50,7 +52,7 @@ define(function(require) {
             }
           </div>
           <div className="pull-right package-statuses">
-            {this.props.queuedPackage ? 
+            {this.props.queuedPackage && !this.props.selected ? 
               <span className="pull-right">
                 <span className="fa-stack package-status-circle">
                   <i className="fa fa-circle fa-stack-1x"></i>
