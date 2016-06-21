@@ -326,7 +326,8 @@ define(function(require) {
               packageInfo={packageInfo} 
               mainLabel={mainLabel}
               selectToAnalyse={this.selectToAnalyse}
-              vin={this.props.vin}/>
+              vin={this.props.vin}
+              selected={this.state.expandedPackage == pack.packageName ? true : false}/>
               <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
                 {this.state.expandedPackage == pack.packageName ?
                   <PackageListItemDetails 
