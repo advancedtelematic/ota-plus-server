@@ -117,7 +117,7 @@ class SignupController @Inject() (conf: Configuration,
   }
 
   def setPassword(token: String) = Action.async { implicit request =>
-    decodeInvitation(token) match {
+    val resultFuture = decodeInvitation(token) match {
       case Xor.Left(err) =>
         logger.debug(s"Invalid token in form: '$token'")
         Future.successful( BadRequest )
@@ -130,6 +130,9 @@ class SignupController @Inject() (conf: Configuration,
           x => registerUser(invitation, x.password)
         )
     }
+
+    // remove session information so that the user has to log in again
+    resultFuture.map(_.withNewSession)
   }
   // sclastyle:on
 }
