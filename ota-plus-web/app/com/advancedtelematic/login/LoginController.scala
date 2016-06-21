@@ -90,10 +90,12 @@ class LoginController @Inject()(conf: Configuration,
               val error = (response.json \ "error").asOpt[String].getOrElse("(unknown error)")
               logger.debug(s"Bad request: $error")
               BadRequest(views.html.login(loginForm.withGlobalError(s"Bad request: $error")))
+                .withNewSession
 
             case code =>
               logger.debug(s"Unexpected response from Auth+: $code")
               ServiceUnavailable(views.html.serviceUnavailable())
+                .withNewSession
           }
         }
       }
