@@ -4,7 +4,7 @@
 .ioslist-group-header, .ioslist-fake-header { color: #202020; font-size: 13px; font-weight: bold; background: #b9b9b9; height: 28px; padding: 7px 15px; margin: 0; border-bottom: 1px solid #999; position: absolute; z-index: 2; }
 [data-ios="true"] .ioslist-group-header, [data-ios="true"] .ioslist-fake-header { width: 288px; }
 .ioslist-group-header { width: 100%; min-height: 1px; top: 0; bottom: auto; }
-.ioslist-fake-header { width: 100%; padding-left: 32px; margin-right: 17px; right: 0; z-index: 1000; }
+.ioslist-fake-header { width: 100%; z-index: 97; }
 .ioslist-fake-header.ioslist-hidden { visibility: hidden; }
 .ioslist ul { list-style: none; margin: 0; padding: 0; }
 .ioslist ul li { margin: 0; }

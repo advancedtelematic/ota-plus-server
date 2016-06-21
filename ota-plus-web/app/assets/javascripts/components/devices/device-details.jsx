@@ -45,7 +45,7 @@ define(function(require) {
           that.setState({
             duplicatingInProgress: false,
           });
-        }, 1000);
+        }, 10000);
         
         this.setState({
           timeoutIntervalId: timeoutIntervalId
