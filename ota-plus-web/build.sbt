@@ -42,7 +42,7 @@ libraryDependencies ++= Seq (
     "org.webjars.bower" % "flux" % "2.1.1",
     "org.webjars.bower" % "backbone" % "1.3.3",
     "org.webjars.bower" % "jquery" % "1.12.3",
-    "org.webjars.bower" % "lodash" % "4.13.1",
+    "org.webjars.bower" % "lodash" % "3.10.1",
     "org.webjars" % "bootstrap" % "3.3.6",
     ws, Dependencies.MockWs,
     play.sbt.Play.autoImport.cache,
