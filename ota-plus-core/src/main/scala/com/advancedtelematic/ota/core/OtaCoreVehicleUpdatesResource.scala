@@ -46,7 +46,7 @@ class OtaCoreVehicleUpdatesResource(db: Database,
           }
         } ~
         path("order") { vs.setInstallOrder(vin) } ~
-        (extractUuid & path("cancelupdate") ) { uuid => vs.cancelUpdate(vin, uuid) }
+        (extractUuid & path("cancelupdate") & authNamespace) { (uuid, ns) => vs.cancelUpdate(ns, vin, uuid) }
       } ~
       post {
         path("sync") { vs.sync(vin) } ~
