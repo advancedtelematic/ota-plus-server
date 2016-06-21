@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>SOTA Admin UI - Edit profile</title>        
+        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <link rel='stylesheet' href='@routes.Assets.versioned("css/strength.css")'>
+        <link rel='stylesheet' href='@routes.Assets.versioned("css/main-styles.css")'>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
+        <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("js/bootstrap.min.js"))'></script>        
+        <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+        <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.slidedrawer.min.js")'></script>
+        <script type="text/javascript" src='@routes.Assets.versioned("js/strength.js")'></script>
+        <script type="text/javascript" src='@routes.Assets.versioned("js/verify.js")'></script>
+    </head>
+    <body>
+        <div id="ats-page">
+            <div class="container ats">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="#"><img src='@routes.Assets.versioned("img/logo.png")' id="logo"></a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
+                        <div class="ats-header text-center">
+                            <p>Edit profile</p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-10 col-lg-offset-1">
+                                <div class="ats-errors">
+                                    Something goes wrong
+                                </div>
+                                <form id="editProfileForm">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="fullname" placeholder="full name" id="fullname" tabindex="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="company" placeholder="institution or company" id="company" tabindex="2">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="email" name="email" placeholder="email address" id="email" tabindex="3">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="phone" placeholder="phone number" id="phone" tabindex="4">
+                                    </div>
+                                    <div class="form-group margin-top-30">
+                                        <button type="submit" class="ats-button" id="submit-form" tabindex="4">Save</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="/#/" class="ats-button grey">Cancel</a>
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="/change_password" class="ats-button bordered">Change password</a>
+                                    </div>
+                                    <div class="text-center margin-top-30">
+                                        <p>By continuing, you agree to our</p> 
+                                        <a href="#" class="underlined">Terms & Conditions</a> and <a href="#" class="underlined">Privacy Policy</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="ats-footer-panel"> 
+                <header class="clickme">Need Support?</header>
+                <div class="drawer-content">
+                    <div class="intend">
+                        Content
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <script>
+            $(function () {
+                $('.ats-footer-panel').slideDrawer({
+                    showDrawer: false,
+                    slideTimeout: true,
+                    slideSpeed: 600,
+                    slideTimeoutCount: 3000
+                });
+                $('body').verify({verifyMinWidth: 1366, verifyMinHeight: 0});
+                $("#editProfileForm").validate({
+                    rules: {
+                        fullname: {
+                            required: true
+                        },
+                        company: {
+                            required: true
+                        },
+                        email: {
+                            email: true,
+                            required: true
+                        },
+                        phone: {
+                            phone: true,
+                            required: true
+                        }
+                    },
+                    messages: {
+                        fullname: {
+                            required: "<i class='fa fa-times-circle'></i> Please enter full name"
+                        },
+                        company: {
+                            required: "<i class='fa fa-times-circle'></i> Please enter institution or company"
+                        },
+                        email: {
+                            email: "<i class='fa fa-times-circle'></i> Please enter a valid email address",
+                            required: "<i class='fa fa-times-circle'></i> Please enter email address"
+                        },
+                        phone: {
+                            phone: "<i class='fa fa-times-circle'></i> Please enter a valid phone number",
+                            required: "<i class='fa fa-times-circle'></i> Please enter phone number"
+                        }
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
