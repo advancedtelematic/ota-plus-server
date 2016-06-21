@@ -12,6 +12,7 @@
         <link rel='stylesheet' href='@routes.Assets.versioned("css/main-styles.css")'>
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("js/bootstrap.min.js"))'></script>        
+        <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.slidedrawer.min.js")'></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/strength.js")'></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/verify.js")'></script>
@@ -36,19 +37,26 @@
                                 <div class="ats-errors">
                                     Wrong password
                                 </div>
-                                @helper.form(action = com.advancedtelematic.changepassword.routes.ChangePasswordController.changePassword) {
-                                    <div class="form-group">
-                                        <input class="form-control error" type="password" name="oldPassword" placeholder="old password" id="old-password" tabindex="1">
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="password" name="newPassword" placeholder="new password" id="password" tabindex="2">
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="password" name="passwordConfirmation" placeholder="confirm new password" id="repeat-password" tabindex="3">
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="submit" class="ats-button" id="submit-form" tabindex="4" disabled>Change password</button>
-                                    </div>
+                                @helper.form(action = com.advancedtelematic.changepassword.routes.ChangePasswordController.changePassword, 'id -> "changePasswordForm") {
+                                <div class="form-group">
+                                    <input class="form-control error" type="password" name="oldPassword" placeholder="old password" id="old-password" tabindex="1">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control margin-bottom-0" type="password" name="newPassword" placeholder="new password" id="password" tabindex="2">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="password" name="passwordConfirmation" placeholder="confirm new password" id="repeat-password" tabindex="3">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="ats-button" id="submit-form" tabindex="4">Save</button>
+                                </div>
+                                <div class="form-group">
+                                    <a href="/edit_profile" class="ats-button grey">Cancel</a>
+                                </div>
+                                <div class="text-center margin-top-30">
+                                    <p>By continuing, you agree to our</p> 
+                                    <a href="#" class="underlined">Terms & Conditions</a> and <a href="#" class="underlined">Privacy Policy</a>
+                                </div>
                                 }
                             </div>
                         </div>
@@ -81,20 +89,30 @@
                     strengthButtonText: ''
                 });
 
-                $('#old-password, #password, #repeat-password').keyup(function () {
-                    var oldPwd = $('#old-password').val();
-                    var pwd = $('#password').val();
-                    var rPwd = $('#repeat-password').val();
-
-                    if (pwd == rPwd && pwd != '') {
-                        $('#repeat-password').removeClass('password-not-equal').addClass('password-equal');
-                        if(oldPwd != '')
-                            $('#submit-form').attr('disabled', false);
-                        else
-                            $('#submit-form').attr('disabled', true);
-                    } else {
-                        $('#repeat-password').addClass('password-not-equal').removeClass('password-equal');
-                        $('#submit-form').attr('disabled', true);
+                $("#changePasswordForm").validate({
+                    rules: {
+                        oldPassword: {
+                            required: true
+                        },
+                        newPassword: {
+                            required: true
+                        },
+                        passwordConfirmation: {
+                            required: true,
+                            equalTo: "#old-password"
+                        }
+                    },
+                    messages: {
+                        oldPassword: {
+                            required: "<i class='fa fa-times-circle'></i> Please enter old password"
+                        },
+                        newPassword: {
+                            required: "<i class='fa fa-times-circle'></i> Please enter new password"
+                        },
+                        passwordConfirmation: {
+                            required: "<i class='fa fa-times-circle'></i> Please confirm new password",
+                            equalTo: "<i class='fa fa-times-circle'></i> Please enter the same value again"
+                        }
                     }
                 });
 

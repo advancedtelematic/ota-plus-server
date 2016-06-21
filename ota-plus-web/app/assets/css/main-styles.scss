@@ -1,13 +1,28 @@
 $color_blue: #A6E6DF;
+$color_red: #d66f6f;
 $footer_panel_bg_color: #282828;
 
 /* Main */
+
+@font-face {
+    font-family: AkkuratRegular;
+    src: url(../fonts/Akkurat-Regular.otf);
+}
 
 * {
     text-decoration: none;
     padding: 0;
     margin: 0;
     list-style: none;
+    outline: none !important;
+}
+
+*:focus {  
+    text-decoration: none;
+}
+
+button:focus {
+    outline: none;
 }
 
 html {
@@ -17,21 +32,18 @@ html {
 
 body {
     color: #fff;
-    font: normal 13px Arial;
-    background: rgb(53,40,36); /* Old browsers */
-    background: -moz-linear-gradient(-45deg,  rgba(0,0,0,1) 2%, rgba(122,61,41,1) 99%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(-45deg,  rgba(0,0,0,1) 2%,rgba(122,61,41,1) 99%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(135deg,  rgba(0,0,0,1) 2%,rgba(122,61,41,1) 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#352824', endColorstr='#db7a57',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    font: normal 13px AkkuratRegular;
+    background: url(../img/bg.jpg) no-repeat;
     background-attachment: fixed;
 }
 
 a, a:hover, a:focus {
     color: #fff;
+    text-decoration: none;
 }
 
 #logo {
-    width: 80px;
+    width: 70px;
     margin: 80px 0 50px 0;
 }
 
@@ -43,16 +55,22 @@ a, a:hover, a:focus {
     text-decoration: underline;
 }
 
+@for $i from 0 through 5 {
+    .margin-top-#{$i*10} { 
+        margin-top: 10px * $i !important; 
+    }
+    
+    .margin-bottom-#{$i*10} { 
+        margin-bottom: 10px * $i !important; 
+    }
+}
+
 .ats {
     padding-bottom: 70px;
 
     &-header {
-        font-size: 22px;
+        font-size: 28px;
         margin: 20px 0 40px 0;
-    }
-
-    .form-group {
-        margin-bottom: 25px;
     }
 
     .form-control {
@@ -60,22 +78,27 @@ a, a:hover, a:focus {
         text-align: center;
         height: auto;
         padding: 13px 15px;
-        border: 3px solid #ccc;
-        border-radius: 7px;
+        margin-bottom: 20px;
+        border: 2px solid rgba(255,255,255,0.2);
+        border-radius: 12px;
+        -moz-background-clip: padding;     /* Firefox 3.6 */
+        -webkit-background-clip: padding;  /* Safari 4? Chrome 6? */
+        background-clip: padding-box;
 
         &.error {
-            border: 2px solid #A7E6E0;
+            margin-bottom: 0;
+            border: 2px solid $color_blue;
         }
     }
 
     &-errors {
         font: 400 17px Arial;
         text-align: center;
-        background: $color_blue;
+        background: $color_red;
         padding: 25px 30px;
         margin: 0 15px;
         margin-bottom: 20px;
-        border-radius: 7px;
+        border-radius: 12px;
         position: absolute;
         left: 0;
         right: 0;
@@ -87,25 +110,45 @@ a, a:hover, a:focus {
     &-button {
         font-size: 19px;
         text-align: center;
-        background: #C5795F;
+        text-decoration: none;
+        background: rgba(255,170,136,0.5);
         width: 100%;
         padding: 15px;
-        transition: background-color 0.5s ease;
+        transition: all 0.5s ease;
         border: 0;
         border-radius: 25px;
         display: block;
 
         &:hover {
-            background: #FFA987;
+            background: rgba(255,170,136,1.0);
+            text-decoration: none;
         }
 
         &[disabled] {
             background: #b7b7b7;
         }
+
+        &.grey {
+            background: rgba(183,183,183,0.5);
+
+            &:hover {
+                background: rgba(183,183,183,1.0);
+            }
+        }
+
+        &.bordered {
+            background: transparent;
+            border: 2px solid #fff;
+
+            &:hover {
+                color: #ffaa88;
+                border-color: #ffaa88;
+            }
+        }
     }
 
     input.error {
-        border-color: $color_blue !important;
+        border-color: $color_red !important;
     }
 
     label.error {
@@ -114,7 +157,7 @@ a, a:hover, a:focus {
         margin: 5px 0 0 0;
 
         .fa {
-            color: $color_blue;
+            color: $color_red;
         }
     }
 
