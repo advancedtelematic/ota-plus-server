@@ -1,6 +1,6 @@
 define(function(require) {
   var React = require('react'),
-      ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       db = require('stores/db'),
       QueueList = require('./queue-list'),
       HistoryList = require('./history-list');
@@ -18,13 +18,7 @@ define(function(require) {
             The installation of the packages will start automatically when you connect to your device.
           </div>
           <div id="queue-wrapper">
-            <ReactCSSTransitionGroup
-              transitionAppear={true}
-              transitionLeave={false}
-              transitionAppearTimeout={500}
-              transitionEnterTimeout={500}
-              transitionLeaveTimeout={500}
-              transitionName="example">
+            <VelocityTransitionGroup enter={{animation: "fadeIn"}}>
               {!this.props.showPackagesHistory ? 
                 <QueueList 
                   QueuedPackages={db.packageQueueForVin}
@@ -40,7 +34,7 @@ define(function(require) {
                   DispatchObject={{actionType: "get-package-history-for-vin", vin: this.props.vin}}
                   key="history-list"/>
               }
-            </ReactCSSTransitionGroup>
+            </VelocityTransitionGroup>
           </div>
         </div>
       );
