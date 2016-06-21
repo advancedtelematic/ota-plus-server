@@ -46,10 +46,7 @@
 
     &-fake-header {
         width: 100%;
-        padding-left: 32px;
-        margin-right: 17px;
-        right: 0;
-        z-index: 1000;
+        z-index: 97;
 
         &.ioslist-hidden {
             visibility: hidden;
