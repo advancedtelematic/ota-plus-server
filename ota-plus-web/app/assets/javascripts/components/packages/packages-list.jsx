@@ -1,14 +1,14 @@
 define(function(require) {
   var React = require('react'),
       ReactDOM = require('react-dom'),
-      ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       SotaDispatcher = require('sota-dispatcher'),
       PackagesListItem = require('./packages-list-item'),
       PackageListItemDetails = require('./packages-list-item-details'),
       Dropzone = require('../../mixins/dropzone'),
       AddPackage = require('./add-package'),
       jQuery = require('jquery'),
-      IOSList = require('ioslist');
+      IOSList = require('ioslist'),
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
   
   class PackagesList extends React.Component {
     constructor(props) {
@@ -327,14 +327,8 @@ define(function(require) {
               mainLabel={mainLabel}
               selectToAnalyse={this.selectToAnalyse}
               vin={this.props.vin}/>
-              {this.state.expandedPackage == pack.packageName ?
-                <ReactCSSTransitionGroup
-                  transitionAppear={true}
-                  transitionLeave={false}
-                  transitionAppearTimeout={500}
-                  transitionEnterTimeout={500}
-                  transitionLeaveTimeout={500}
-                  transitionName="example">
+              <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+                {this.state.expandedPackage == pack.packageName ?
                   <PackageListItemDetails 
                     key={'package-' + pack.packageName + '-versions'} 
                     versions={sortedElements} 
@@ -342,8 +336,8 @@ define(function(require) {
                     packageName={pack.packageName}
                     isQueued={pack.isQueued}
                     refresh={this.refreshData}/> 
-                </ReactCSSTransitionGroup>
-              : null}
+                : null}
+              </VelocityTransitionGroup>
           </li>
           );
         }, this);
