@@ -473,6 +473,8 @@ button.close:hover, button.close:active, button.close:focus {
 
 .page-device-details .selected .list-group-item {
     background: #f5f5f5;
+    border-bottom: 0;
+    border-right: 0;
 }
 
 .page-device-details .selected .list-group-item .package-name {
