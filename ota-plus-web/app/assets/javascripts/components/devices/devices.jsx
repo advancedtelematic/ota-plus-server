@@ -6,7 +6,8 @@ define(function(require) {
       SotaDispatcher = require('sota-dispatcher')
       ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       DevicesList = require('./devices-list'),
-      DevicesHeader = require('./devices-header');
+      DevicesHeader = require('./devices-header'),
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
   
   class Devices extends React.Component {
     constructor(props) {
@@ -132,47 +133,33 @@ define(function(require) {
           <button className="btn btn-full-section first" onClick={this.expandSection.bind(this, 'testDevices')}>
             <i className={(this.state.expandedSectionName == 'testDevices') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> TEST DEVICES ({this.numberWithDots(SortedDevices.length)} out of {this.numberWithDots(db.devices.deref().length)})
           </button>
-          {this.state.expandedSectionName == 'testDevices' ? 
-            <div>
-              <ReactCSSTransitionGroup
-                transitionAppear={true}
-                transitionLeave={false}
-                transitionAppearTimeout={500}
-                transitionEnterTimeout={500}
-                transitionLeaveTimeout={500}
-                transitionName="example">   
+          <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+            {this.state.expandedSectionName == 'testDevices' ? 
+              <div>
                 <div id="devices">
                   <DevicesList
                     Devices={SortedDevices}
                     areProductionDevices={false}/>
                   {this.props.children}
                 </div>
-              </ReactCSSTransitionGroup>
-            </div>
-          : null}
-      
+              </div>
+            : null}
+          </VelocityTransitionGroup>
           <button className="btn btn-full-section" onClick={this.expandSection.bind(this, 'productionDevices')}>
             <i className={(this.state.expandedSectionName == 'productionDevices') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> PRODUCTION DEVICES ({this.numberWithDots(productionDevicesCount)} out of {this.numberWithDots(totalProductionDevicesCount)})
           </button>
-          {this.state.expandedSectionName == 'productionDevices' ? 
-            <div>
-              <ReactCSSTransitionGroup
-                transitionAppear={true}
-                transitionLeave={false}
-                transitionAppearTimeout={500}
-                transitionEnterTimeout={500}
-                transitionLeaveTimeout={500}
-                transitionName="example">   
+          <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+            {this.state.expandedSectionName == 'productionDevices' ? 
+              <div>
                 <div id="devices">
                   <DevicesList
                     Devices={db.searchableProductionDevices.deref()}
                     areProductionDevices={true}/>
                   {this.props.children}
                 </div>
-              </ReactCSSTransitionGroup>
-            </div>
-          : null}
-      
+              </div>
+            : null}
+          </VelocityTransitionGroup>
           <button className="btn btn-full-section" onClick={this.expandSection.bind(this, 'packages')}>
             <i className={(this.state.expandedSectionName == 'packages') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> PACKAGES ({this.state.filterValue.length  == 0 ? this.numberWithDots(this.state.packagesCount) : this.state.filterValue.length == 1 ? 1 : this.state.filterValue.length == 2 ? 0 : 0} out of {this.numberWithDots(this.state.packagesCount)})
           </button>
