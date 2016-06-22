@@ -34,7 +34,7 @@ class OtaCoreVehicleUpdatesResource(db: Database,
         pathEnd { vs.logVehicleSeen(vin) { vs.pendingPackages(vin) } } ~
         path("queued") { vs.pendingPackages(vin) } ~
         path("results") { vs.resultsForVehicle(vin) } ~
-        (extractUuid & path("results")) { uuid => vs.resultsForUpdate(uuid) } ~
+        (extractUuid & path("results")) { uuid => vs.resultsForUpdate(vin, uuid) } ~
         (extractUuid & path("download")) { uuid => vs.downloadPackage(vin, uuid) }
       } ~
       put {
