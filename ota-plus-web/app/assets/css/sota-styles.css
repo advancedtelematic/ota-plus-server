@@ -341,7 +341,7 @@ button.close:hover, button.close:active, button.close:focus {
     vertical-align: middle;
 }
 
-.device-status.device-status-error {
+.device-status.device-status-Error {
     color: #D9534F;
 }
 

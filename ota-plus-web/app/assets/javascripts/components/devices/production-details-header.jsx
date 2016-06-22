@@ -10,16 +10,17 @@ define(function(require) {
     render() {
       var lastSeenDate = new Date(this.props.device.lastSeen);
       lastSeenDate.setDate(lastSeenDate.getDate()-10);
-      var labelClass = 'label-danger';
       var deviceStatus = 'Status unknown';
       switch(this.props.device.status) {
         case 'UpToDate':
-          labelClass = 'label-success';
           deviceStatus = 'Device synchronized';
         break;
         case 'Outdated':
-          labelClass = 'label-warning';
-          deviceStatus = 'Device unsynchronized'
+          deviceStatus = 'Device unsynchronized';
+        break;
+        case 'Error':
+          deviceStatus = 'Installation error';
+        break;
         default:
         break;
       }
