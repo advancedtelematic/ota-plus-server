@@ -45,8 +45,9 @@ define(function(require) {
     }
     render() {
       return (
-        <div className="dropdown-menu dropdown-box dropdown-right">
-          <form className="user-form margin-10" ref="userForm">
+        <div className="dropdown-menu dropdown-profile dropdown-right">
+          <form className="user-form" ref="userForm">
+            <img src="/assets/img/icons/profile_icon_big.png" className="profile-icon pull-left" alt="" />
             {this.state.showEditField ?
               <div>
                 <input className="input-username" name="username" type="text" placeholder={this.state.username} ref="username" onKeyUp={this.changeUsernameFieldLength}/>
@@ -69,7 +70,7 @@ define(function(require) {
               </div>
             : 
               <div onMouseEnter={this.toggleEditButton.bind(this, true)} onMouseLeave={this.toggleEditButton.bind(this, false)}>
-                <strong><span className="brown">{this.state.username}</span></strong>
+                <strong><span className="username">{this.state.username}</span></strong>
                 {this.state.showEditButton ? 
                   <a href="#" className="pencil-button pull-right" onClick={this.toggleEditField}>
                     <img src="/assets/img/icons/edit_icon.png" alt="" />
@@ -77,13 +78,25 @@ define(function(require) {
                 : null}
               </div>
             }
+            <div>
+              <span className="email">email@address.com</span>
+            </div>
+            <div>
+              <a href="/logout" className="btn btn-orange btn-logout">Log out</a>
+            </div>
           </form>
-          <div className="margin-10">
-            <a href="/change_password">Change password</a>
-          </div>
           <hr />
-          <div className="margin-10">
-            <a href="/logout" className="orange">Log out</a>
+          
+          <div className="profile-links">
+            <div>
+              <a href="/edit_profile">Edit profile</a>
+            </div>
+            <div>
+              <a href="#">Upgrade the plan</a>
+            </div>
+            <div>
+              <a href="/logout">Sign out</a>
+            </div>
           </div>
         </div>  
       );
