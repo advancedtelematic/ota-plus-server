@@ -2,11 +2,14 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       Link = Router.Link,
-      ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       SotaDispatcher = require('sota-dispatcher'),
       DetailsHeader = require('./details-header'),
       PackagesQueue = require('../packages/queue'),
-      Packages = require('../packages/packages');
+      Packages = require('../packages/packages'),      
+      VelocityUI = require('velocity-ui'),
+      VelocityHelpers = require('mixins/velocity/velocity-helpers'),
+      VelocityComponent = require('mixins/velocity/velocity-component'),
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
         
   class DeviceDetails extends React.Component {
     constructor(props, context) {
@@ -91,23 +94,29 @@ define(function(require) {
     }
     render() {
       var Device = this.props.Device.deref();
+      
+      function animateLeftPosition(left) {
+        return VelocityHelpers.registerEffect({
+          defaultDuration: 100,
+          calls: [
+            [{
+              left: left,
+            }]
+          ],
+        });
+      }
+      
       return (
-        <ReactCSSTransitionGroup
-          transitionAppear={true}
-          transitionLeave={false}
-          transitionAppearTimeout={500}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={500}
-          transitionName="example">  
-          <div>
-            {Device.status == "NotSeen" ? 
-              <div className="white-overlay">
-                Device never seen online <br />
-                Download the SDK
-                (<a href={`/api/v1/client/${this.props.params.vin}/deb/32`}>debian 32</a> &nbsp; or &nbsp;
-                 <a href={`/api/v1/client/${this.props.params.vin}/deb/64`}>debian 64</a>)
-              </div>
-            : null}
+        <div>
+          {Device.status == "NotSeen" ? 
+            <div className="white-overlay">
+              Device never seen online <br />
+              Download the SDK
+              (<a href={`/api/v1/client/${this.props.params.vin}/deb/32`}>debian 32</a> &nbsp; or &nbsp;
+               <a href={`/api/v1/client/${this.props.params.vin}/deb/64`}>debian 64</a>)
+            </div>
+          : null}
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {this.state.duplicatingInProgress ? 
               <div className="grey-overlay">
                 <p><img src='/assets/img/icons/loading.gif' alt=''/></p>
@@ -115,67 +124,63 @@ define(function(require) {
                 <div>{this.props.params.vin2}</div>
               </div>
             : null}
-            <DetailsHeader 
-              device={Device} 
-              duplicatingInProgress={this.state.duplicatingInProgress}/>
-            <div className="col-md-6 nopadding border-right-2">
-              <div className="panel panel-ats">
-                <div className="panel-heading">
-                  <div className="panel-heading-left pull-left">
-                    {this.context.strings.packages}
-                  </div>
-                </div>
-                <div className="panel-body">
-                  <Packages 
-                    vin={this.props.params.vin} 
-                    setPackagesStatistics={this.setPackagesStatistics}
-                    lastSeen={Device.lastSeen}
-                    countImpactAnalysisPackages={this.countImpactAnalysisPackages}/>
-                </div>
-                <div className="panel-footer">
-                  {this.state.selectedImpactAnalysisPackagesCount > 0 ? 
-                    <ReactCSSTransitionGroup
-                      transitionAppear={true}
-                      transitionLeave={false}
-                      transitionAppearTimeout={500}
-                      transitionEnterTimeout={500}
-                      transitionLeaveTimeout={500}
-                      transitionName="example">
-                      <Link to={`devicedetails/${this.props.params.vin}/impactanalysis/${this.state.selectedImpactAnalysisPackagesCount}`} className="btn btn-black impact-analysis-button pull-left">
-                        Impact analysis
-                      </Link>
-                    </ReactCSSTransitionGroup>
-                  : null}
-                  {this.state.installedPackagesCount} installed, &nbsp;
-                  {this.state.queuedPackagesCount} queued
+          </VelocityTransitionGroup>
+          <DetailsHeader 
+            device={Device} 
+            duplicatingInProgress={this.state.duplicatingInProgress}/>
+          <div className="col-md-6 nopadding border-right-2">
+            <div className="panel panel-ats">
+              <div className="panel-heading">
+                <div className="panel-heading-left pull-left">
+                  {this.context.strings.packages}
                 </div>
               </div>
+              <div className="panel-body">
+                <Packages 
+                  vin={this.props.params.vin} 
+                  setPackagesStatistics={this.setPackagesStatistics}
+                  lastSeen={Device.lastSeen}
+                  countImpactAnalysisPackages={this.countImpactAnalysisPackages}/>
+              </div>
+              <div className="panel-footer">
+                <VelocityComponent animation={this.state.selectedImpactAnalysisPackagesCount ? animateLeftPosition('15px') : animateLeftPosition('-250px')}>
+                  <Link to={`devicedetails/${this.props.params.vin}/impactanalysis/${this.state.selectedImpactAnalysisPackagesCount}`} className="btn btn-black impact-analysis-button pull-left">
+                    Impact analysis
+                  </Link>
+                </VelocityComponent>
+                <VelocityComponent animation={this.state.selectedImpactAnalysisPackagesCount ? animateLeftPosition('140px') : animateLeftPosition('15px')}>
+                  <span className="packages-statistics">
+                    {this.state.installedPackagesCount} installed, &nbsp;
+                    {this.state.queuedPackagesCount} queued
+                  </span>
+                </VelocityComponent>
+              </div>
             </div>
-            <div className="col-md-6 nopadding">
-              <div className="panel panel-ats">
-                <div className="panel-heading">
-                  <div className="panel-heading-left pull-left">
-                    {this.context.strings.queue}
-                  </div>
-                  <div className="panel-heading-right pull-right">
-                  </div>
+          </div>
+          <div className="col-md-6 nopadding">
+            <div className="panel panel-ats">
+              <div className="panel-heading">
+                <div className="panel-heading-left pull-left">
+                  {this.context.strings.queue}
                 </div>
-                <div className="panel-body">
-                  <PackagesQueue
-                    textPackagesHistory={this.state.textPackagesHistory}
-                    showPackagesHistory={this.state.showPackagesHistory}
-                    showQueueHistory={this.showQueueHistory}
-                    setQueueStatistics={this.setQueueStatistics}
-                    vin={this.props.params.vin}/>
+                <div className="panel-heading-right pull-right">
                 </div>
-                <div className="panel-footer">
-                  {this.state.queueCount} packages in queue
-                </div>
+              </div>
+              <div className="panel-body">
+                <PackagesQueue
+                  textPackagesHistory={this.state.textPackagesHistory}
+                  showPackagesHistory={this.state.showPackagesHistory}
+                  showQueueHistory={this.showQueueHistory}
+                  setQueueStatistics={this.setQueueStatistics}
+                  vin={this.props.params.vin}/>
+              </div>
+              <div className="panel-footer">
+                {this.state.queueCount} packages in queue
               </div>
             </div>
           </div>
           {this.props.children}
-        </ReactCSSTransitionGroup>
+        </div>
       );
     }
   };
