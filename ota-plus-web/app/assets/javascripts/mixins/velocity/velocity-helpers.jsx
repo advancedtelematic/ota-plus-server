@@ -1,9 +1,13 @@
+define(function(require, exports, module) {
+
 // Copyright (c) 2015 Twitter, Inc. and other contributors
 
+
+var lodash = require('lodash');
 var _ = {
-  isObject: require('lodash/lang/isObject'),
+  isObject: lodash.isObject,
 };
-var Velocity = require('./lib/velocity-animate-shim');
+var Velocity = require('./velocity-animate-shim');
 
 var effectCounter = 0;
 
@@ -68,7 +72,7 @@ function registerEffect(suffix, animation) {
   }
 
   if (Velocity.RegisterEffect === undefined) {
-    throw "Velocity.RegisterEffect not found. You need to require('velocity-animate/velocity.ui') at a top level for UI Pack.";
+    throw "Velocity.RegisterEffect not found. You need to import 'velocity-animate/velocity.ui' at a top level for UI Pack.";
   }
 
   Velocity.RegisterEffect(key, animation);
@@ -78,3 +82,4 @@ function registerEffect(suffix, animation) {
 module.exports = {
   registerEffect: registerEffect,
 };
+});
