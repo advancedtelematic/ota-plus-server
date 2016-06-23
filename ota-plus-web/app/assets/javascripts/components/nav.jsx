@@ -2,53 +2,64 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       Link = Router.Link,
-      ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       LanguageSelector = require('./translation/language-selector'),
       Translate = require('./translation/translate'),
-      ChangePassword = require('./changepass');
+      ChangePassword = require('./changepass'),
+      VelocityComponent = require('mixins/velocity/velocity-component'),
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');;
 
   class Nav extends React.Component {
     constructor(props) {
       super(props);
+      this.state = {
+        isDropdownVisible: false
+      };
       this.toggleCampaignPanel = this.toggleCampaignPanel.bind(this);
+      this.toggleDropdown = this.toggleDropdown.bind(this);
+    }
+    componentDidMount() {
+      jQuery('.dropdown').on('hide.bs.dropdown', function () {
+        return false;
+      });
     }
     toggleCampaignPanel(e) {
       e.preventDefault();
       this.props.toggleCampaignPanel();
     }
+    toggleDropdown(e) {
+      this.setState({
+        isDropdownVisible: !this.state.isDropdownVisible
+      });
+    }
     render() {      
       var campaignsData = JSON.parse(localStorage.getItem('campaignsData'));
       return (
-        <ReactCSSTransitionGroup
-          transitionAppear={true}
-          transitionLeave={false}
-          transitionAppearTimeout={500}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={500}
-          transitionName="example">
-          <nav className="navbar navbar-inverse navbar-fixed-top">
-            <div className="container">
-              <div className="navbar-header">
-                <Link to="/" className="navbar-brand"><img src="/assets/img/atslogo.png" id="logo" alt=""/></Link>
-              </div>
-              <ul className="right-nav pull-right">
-                <li>
-                  {campaignsData !== null && campaignsData.length > 0 ? 
-                    <a href="#" className="btn-campaigns" onClick={this.toggleCampaignPanel}>
-                      <img src="/assets/img/icons/wireless.png" className="icon-campaigns" alt=""/>
-                    </a>
-                  : null}
-                </li>
-                <li className="dropdown" id="menuLogin">
-                  <a className="dropdown-toggle btn-profile" href="#" data-toggle="dropdown">
-                    <img src="/assets/img/icons/profile_icon.png" />
-                  </a>
-                  <ChangePassword />
-                </li>
-              </ul>
+        <nav className="navbar navbar-inverse navbar-fixed-top">
+          <div className="container">
+            <div className="navbar-header">
+              <Link to="/" className="navbar-brand"><img src="/assets/img/atslogo.png" id="logo" alt=""/></Link>
             </div>
-          </nav>
-        </ReactCSSTransitionGroup>
+            <ul className="right-nav pull-right">
+              <li>
+                {campaignsData !== null && campaignsData.length > 0 ? 
+                  <a href="#" className="btn-campaigns" onClick={this.toggleCampaignPanel}>
+                    <img src="/assets/img/icons/wireless.png" className="icon-campaigns" alt=""/>
+                  </a>
+                : null}
+              </li>
+              <li className="dropdown" id="menuLogin">
+                <a className="dropdown-toggle btn-profile" href="#" onClick={this.toggleDropdown} data-toggle="dropdown">
+                  <img src="/assets/img/icons/profile_icon.png" />
+                </a>
+                <VelocityTransitionGroup enter={{animation: "fadeIn", duration: 200}} leave={{animation: "fadeOut", duration: 200}}>
+                  {this.state.isDropdownVisible ? 
+                    <ChangePassword />
+                  : null}
+                </VelocityTransitionGroup>
+              </li>
+            </ul>
+          </div>
+        </nav>
       );
     }
   }
