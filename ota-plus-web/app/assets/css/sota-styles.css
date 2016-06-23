@@ -816,7 +816,7 @@ button.close:hover, button.close:active, button.close:focus {
 
 /* Animations */
 
-#packages-list, #queue-list {
+#packages-list, #queue-wrapper {
     transition: height 0.3s ease-in;
 }
 
@@ -862,6 +862,7 @@ button.close:hover, button.close:active, button.close:focus {
 }
 
 .page-device-details {
+    overflow: hidden;
     transition: all 0.6s ease-in;
 }
 
@@ -1379,6 +1380,13 @@ button.list-group-item:focus {
 
 .impact-analysis-button {
     margin: -2px 10px 0 0;
+    position: fixed;
+    left: -250px;
+}
+
+.packages-statistics {
+    position: fixed;
+    left: 15px;
 }
 
 #modal-impact-analysis .device-box {

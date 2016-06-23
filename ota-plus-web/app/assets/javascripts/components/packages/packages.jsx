@@ -12,7 +12,9 @@ define(function(require) {
         selectStatus: 'all',
         selectStatusName: 'All',
         selectSort: 'asc',
-        selectSortName: 'A > Z'
+        selectSortName: 'A > Z',
+        intervalId: null,
+        timeoutId: null
       }
       
       this.changeFilter = this.changeFilter.bind(this);
@@ -29,18 +31,23 @@ define(function(require) {
       
       window.addEventListener("resize", this.setDivsHeight);
       
-      setTimeout(function(){
+      var intervalId = setInterval(function(){
         that.setDivsHeight();
-      }, 100);
-      var tmpIntervalId = setInterval(function(){
-        if(jQuery('#packages-list').length && jQuery('#queue-wrapper').length) {
-          that.setDivsHeight();
-          clearInterval(tmpIntervalId);
-        }
-      }, 10);
+      }, 50);
+      
+      var timeoutId = setTimeout(function() {
+        clearInterval(intervalId);
+      }, 5000);
+      
+      this.setState({
+        intervalId: intervalId,
+        timeoutId: timeoutId
+      });
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setDivsHeight);
+      clearInterval(this.state.intervalId);
+      clearTimeout(this.state.timeoutId);
     }
     changeFilter(filter) {
       this.setState({filterValue: filter});  
@@ -124,7 +131,7 @@ define(function(require) {
             </div>
           </div>
   
-          <div className="alert alert-ats alert-dismissible fade in" role="alert">
+          <div className="alert alert-ats alert-dismissible" role="alert">
             <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true"></span></button>
             <img src="/assets/img/icons/info.png" className="icon-info" alt=""/> 
             Click on the package you want to install and select its version to add it to the queue.

@@ -10,7 +10,7 @@ define(function(require) {
       HashHistory = ReactRouter.hashHistory,
       db = require('stores/db'),
       Handler = require('handlers/handler'),
-      ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       jQuery = require('jquery'),
       Bootstrap = require('bootstrap'),
       SotaDispatcher = require('sota-dispatcher')
@@ -107,6 +107,7 @@ define(function(require) {
     }
     render() {
       var path = this.context.location.pathname.toLowerCase().split('/');
+      var key = path[1] !== undefined ? path[1] : 'page';
       var page = '';
             
       if(path[1] !== undefined) {
@@ -132,12 +133,14 @@ define(function(require) {
       }
    
       return (
-        <div key={page} className={page}>
-          <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel}/>
-          <div className="page wrapper">
-            {React.cloneElement(this.props.children, {showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
+        <VelocityTransitionGroup enter={{animation: "fadeIn"}} runOnMount={true}>
+          <div key={key} className={page}>
+            <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel}/>
+            <div className="page wrapper">
+              {React.cloneElement(this.props.children, {showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
+            </div>
           </div>
-        </div>
+        </VelocityTransitionGroup>
       );
     }
   };
