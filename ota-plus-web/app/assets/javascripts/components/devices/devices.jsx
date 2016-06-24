@@ -34,7 +34,6 @@ define(function(require) {
       db.devices.addWatch("devices", _.bind(this.forceUpdate, this, null));
       SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: ''});
       db.searchableDevices.addWatch("searchable-devices", _.bind(this.forceUpdate, this, null));
-      SotaDispatcher.dispatch({actionType: 'search-production-devices', regex: ''});
       db.searchableProductionDevices.addWatch("searchable-production-devices", _.bind(this.forceUpdate, this, null));
     }
     changeFilter(filter) {
