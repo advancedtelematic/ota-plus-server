@@ -15,6 +15,8 @@ define(function(require) {
       this.postStatus = atom.createAtom([]);
       
       this.searchableProductionDevices = atom.createAtom([]);
+      this.installationLogForVin = atom.createAtom([]);
+      this.installationLogForUpdateId = atom.createAtom([]);
     }
 
     return DB;
