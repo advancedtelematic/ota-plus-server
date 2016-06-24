@@ -10,20 +10,15 @@ define(function(require) {
   class NewDevice extends React.Component {
     constructor(props) {
       super(props);
-      this.handleSubmit = this.handleSubmit.bind(this);
       this.state = {
         errors: null
       };
-      
-      db.postStatus.addWatch("poll-errors", _.bind(function() {
-        this.setState({
-          errors: db.postStatus.deref()['create-vehicle']
-        });
-      }, this));
+      this.handleSubmit = this.handleSubmit.bind(this);      
+      db.postStatus.addWatch("poll-errors", _.bind(this.forceUpdate, this, null));
     }
     componentWillUnmount() {
-      db.postStatus.removeWatch("poll-errors");
-    }      
+      db.postStatus.reset([]);
+    }     
     handleSubmit(e) {
       e.preventDefault();
 
@@ -36,9 +31,9 @@ define(function(require) {
     render() {
       return (
         <form ref='form' onSubmit={this.handleSubmit}>
-          {this.state.errors ?
+          {db.postStatus.deref()['create-vehicle'] ?
             <div className="alert alert-danger">
-              {this.state.errors}
+              {db.postStatus.deref()['create-vehicle']}
             </div>
           : null}
           <div className="form-group">
