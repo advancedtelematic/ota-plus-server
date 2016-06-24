@@ -1,13 +1,14 @@
 
 import javax.inject.Inject
 
-import com.advancedtelematic.LoggingFilter
+import com.advancedtelematic.{LoggingFilter, TraceIdFilter}
 import play.api.http.HttpFilters
 
 class OtaPlusFilters  @Inject() (
-                          log: LoggingFilter
+                          log: LoggingFilter,
+                          traceIdFilter: TraceIdFilter
                         ) extends HttpFilters {
 
-  val filters = Seq(log)
+  val filters = Seq(traceIdFilter, log)
 }
 

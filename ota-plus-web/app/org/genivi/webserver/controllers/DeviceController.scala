@@ -2,6 +2,7 @@ package org.genivi.webserver.controllers
 
 import javax.inject.{Inject, Named, Singleton}
 
+import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.ota.vehicle.{VehicleMetadata, Vehicles}
 import org.genivi.sota.data.Vehicle
@@ -38,8 +39,10 @@ extends Controller with ApiClientSupport
     searchWith(req, resolverApi.search)
   }
 
-  private[this] def accessToken(req: Request[_]): Option[String] = {
-    req.session.get("access_token").orElse(bearerToken(req))
+  private[this] def userOptions(req: Request[_]): UserOptions = {
+    val traceId = req.headers.get("x-ats-traceid")
+    val token = req.session.get("access_token").orElse(bearerToken(req))
+    UserOptions(token, traceId)
   }
 
   private[this] def bearerToken(req: Request[_]): Option[String] = {
@@ -50,23 +53,22 @@ extends Controller with ApiClientSupport
   }
 
   private def requestCreate(vin: Vin, req: Request[RawBuffer]): Future[Result] = {
-    val token = accessToken(req)
+    val options = userOptions(req)
 
     // Must PUT "vehicles" on both core and resolver
     // TODO: Retry until both responses are success
     for {
-      respCore <-  coreApi.createVehicle(token, vin)
-      respResult <- resolverApi.createVehicle(token, vin)
+      respCore <-  coreApi.createVehicle(options, vin)
+      respResult <- resolverApi.createVehicle(options, vin)
       vehicleMetadata <- registerAuthPlusVehicle(vin)
       _ <- vehiclesStore.registerVehicle(vehicleMetadata)
     } yield respCore
   }
 
-  private def searchWith(req: Request[_], apiOp: (Option[String], Seq[(String, String)]) => Future[Result]):
-  Future[Result] = {
+  private def searchWith
+  (req: Request[_], apiSearch: (UserOptions, Seq[(String, String)]) => Future[Result]): Future[Result] = {
     val params = req.queryString.mapValues(_.head).toSeq
-
-    apiOp(accessToken(req), params)
+    apiSearch(userOptions(req), params)
   }
 
   /**

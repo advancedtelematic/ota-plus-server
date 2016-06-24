@@ -9,8 +9,8 @@ GET     /                                       org.genivi.webserver.controllers
 GET     /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)
 GET     /webjars/*file                          controllers.WebJarAssets.at(file)
 
-GET     /api/v1/vehicles                        org.genivi.webserver.controllers.DeviceController.search()
-GET     /api/v1/device_data                     org.genivi.webserver.controllers.DeviceController.listDeviceAttributes()
+GET     /api/v1/vehicles                        org.genivi.webserver.controllers.DeviceController.search
+GET     /api/v1/device_data                     org.genivi.webserver.controllers.DeviceController.listDeviceAttributes
 
 PUT     /api/v1/vehicles/:vin                   org.genivi.webserver.controllers.DeviceController.create(vin: Vehicle.Vin)
 
