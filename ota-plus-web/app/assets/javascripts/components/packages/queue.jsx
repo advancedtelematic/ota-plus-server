@@ -1,7 +1,6 @@
 define(function(require) {
   var React = require('react'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      db = require('stores/db'),
       QueueList = require('./queue-list'),
       HistoryList = require('./history-list');
   
@@ -21,9 +20,6 @@ define(function(require) {
             <VelocityTransitionGroup enter={{animation: "fadeIn"}}>
               {!this.props.showPackagesHistory ? 
                 <QueueList 
-                  QueuedPackages={db.packageQueueForVin}
-                  PollEventName="poll-queued-packages"
-                  DispatchObject={{actionType: "get-package-queue-for-vin", vin: this.props.vin}}
                   vin={this.props.vin}
                   setQueueStatistics={this.props.setQueueStatistics}
                   key="queue-list"/>
