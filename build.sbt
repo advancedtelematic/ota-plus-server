@@ -54,7 +54,7 @@ lazy val otaPlusCommon = otaPlusProject("ota-plus-common")
 
 lazy val otaPlusCore = otaPlusProject("ota-plus-core").dependsOn(otaPlusCommon)
 
-lazy val otaPlusWeb = otaPlusProject("ota-plus-web")
+lazy val otaPlusWeb = otaPlusProject("ota-plus-web").dependsOn(otaPlusCommon)
 
 lazy val otaPlusResolver = otaPlusProject("ota-plus-resolver").dependsOn(otaPlusCommon)
 

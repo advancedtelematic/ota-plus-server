@@ -1,5 +1,6 @@
 package com.advancedtelematic.api
 
+import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.ota.vehicle.ClientInfo
 import org.genivi.sota.data.Vehicle.Vin
 import org.genivi.webserver.controllers.OtaPlusConfig
@@ -18,6 +19,8 @@ case class RemoteApiError(result: Result, msg: String = "") extends Exception(ms
 case class RemoteApiParseError(msg: String) extends Exception(msg) with NoStackTrace
 
 object ApiRequest {
+  case class UserOptions(token: Option[String] = None, traceId: Option[String] = None)
+
   def base(baserUrl: String): String => ApiRequest = apply(baserUrl)
 
   def apply(baseUrl: String)(path: String): ApiRequest = new ApiRequest {
@@ -28,14 +31,23 @@ object ApiRequest {
 trait ApiRequest { self =>
   def build: WSClient => WSRequest
 
+  def withUserOptions(userOptions: UserOptions): ApiRequest = {
+    self
+      .withToken(userOptions.token)
+      .withTraceId(userOptions.traceId)
+  }
+
+  def withTraceId(traceId: Option[String]): ApiRequest = {
+    traceId map { t =>
+      transform(_.withHeaders("x-ats-traceid" -> t))
+    } getOrElse self
+  }
+
   def withToken(token: String): ApiRequest =
-    transform(request => request.withHeaders(("Authorization", "Bearer " + token)))
+    transform(_.withHeaders(("Authorization", "Bearer " + token)))
 
   def withToken(token: Option[String]): ApiRequest =
-    token match {
-      case Some(t) => withToken(t)
-      case None => self
-    }
+    token.map(withToken).getOrElse(self)
 
   def transform(f: WSRequest => WSRequest): ApiRequest = new ApiRequest {
     override def build = ws => f(self.build(ws))
@@ -57,15 +69,15 @@ trait ApiRequest { self =>
 class CoreApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
   val apiRequest = ApiRequest.base(coreApiUri + "/api/v1/")
 
-  def createVehicle(token: Option[String], vin: Vin): Future[Result] =
+  def createVehicle(options: UserOptions, vin: Vin): Future[Result] =
     apiRequest(s"vehicles/${vin.get}")
-      .withToken(token)
+      .withUserOptions(options)
       .transform(_.withMethod("PUT"))
       .execResult(apiExec)
 
-  def search(token: Option[String], params: Seq[(String, String)]): Future[Result] =
+  def search(options: UserOptions, params: Seq[(String, String)]): Future[Result] =
     apiRequest("vehicles")
-      .withToken(token)
+      .withUserOptions(options)
       .transform(_.withQueryString(params:_*))
       .execResult(apiExec)
 }
@@ -74,15 +86,15 @@ class CoreApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPl
 class ResolverApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
   val apiRequest = ApiRequest.base(resolverApiUri + "/api/v1/")
 
-  def createVehicle(token: Option[String], vin: Vin): Future[Result] =
+  def createVehicle(options: UserOptions, vin: Vin): Future[Result] =
     apiRequest(s"vehicles/${vin.get}")
-      .withToken(token)
+      .withUserOptions(options)
       .transform(_.withMethod("PUT"))
       .execResult(apiExec)
 
-  def search(token: Option[String], params: Seq[(String, String)]): Future[Result] =
+  def search(options: UserOptions, params: Seq[(String, String)]): Future[Result] =
     apiRequest("vehicles")
-      .withToken(token)
+      .withUserOptions(options)
       .transform(_.withQueryString(params: _*))
       .execResult(apiExec)
 }

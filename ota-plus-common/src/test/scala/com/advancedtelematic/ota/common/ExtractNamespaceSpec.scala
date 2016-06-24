@@ -1,4 +1,4 @@
-package com.advancedtelematic.ota.core
+package com.advancedtelematic.ota.common
 
 import javax.crypto.SecretKey
 
@@ -9,8 +9,6 @@ import akka.http.scaladsl.testkit.ScalatestRouteTest
 import com.advancedtelematic.json.signature.JcaSupport._
 import com.advancedtelematic.jwa.`HMAC SHA-256`
 import com.advancedtelematic.jws.{Jws, KeyInfo}
-import com.advancedtelematic.ota.common.AuthNamespace
-import com.advancedtelematic.ota.core.Generators._
 import org.genivi.sota.data.Namespace._
 import org.scalatest.prop.PropertyChecks
 import org.scalatest.{Matchers, PropSpec}
@@ -21,6 +19,7 @@ class ExtractNamespaceSpec extends PropSpec
   with Matchers
   with Directives {
 
+  import Generators._
   import AuthNamespace._
 
   def route: Route = (path("test") & authNamespace) { (ns: Namespace) =>

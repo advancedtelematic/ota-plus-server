@@ -32,6 +32,7 @@ dockerUpdateLatest in Docker := true
 
 libraryDependencies ++= Seq (
     Dependencies.AkkaHttp,
+    Dependencies.AkkaStream,
     Dependencies.AkkaPersistence,
     Dependencies.CassandraForAkkaPersistence,
     Dependencies.AkkaTestKit,

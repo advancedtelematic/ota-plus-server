@@ -1,4 +1,4 @@
-package com.advancedtelematic.ota.core
+package com.advancedtelematic.ota.common
 
 /**
  * Copyright: Copyright (C) 2015, Jaguar Land Rover
