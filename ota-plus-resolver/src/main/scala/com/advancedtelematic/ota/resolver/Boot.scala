@@ -4,6 +4,7 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.stream.ActorMaterializer
+import com.advancedtelematic.ota.common.TraceId
 import org.genivi.sota.http.HealthResource
 import org.genivi.sota.resolver.filters.FilterDirectives
 import org.genivi.sota.resolver.packages.PackageDirectives
@@ -45,7 +46,7 @@ object Boot extends App with Directives {
   }
 
   val routes: Route =
-    (logResponseMetrics("ota-plus-resolver") & versionHeaders(version)) {
+    (TraceId.withTraceId & logResponseMetrics("ota-plus-resolver", TraceId.traceMetrics) & versionHeaders(version)) {
       (handleRejections(rejectionHandler) & handleExceptions(exceptionHandler)) {
         pathPrefix("api" / "v1") {
           new VehicleDirectives(authNamespace).route ~
