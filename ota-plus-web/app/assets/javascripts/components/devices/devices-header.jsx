@@ -26,6 +26,7 @@ define(function(require) {
                   <li><a href="#" onClick={this.props.selectStatus.bind(this, 'UpToDate')}>Synchronised</a></li>
                   <li><a href="#" onClick={this.props.selectStatus.bind(this, 'Outdated')}>Not synchronised</a></li>
                   <li><a href="#" onClick={this.props.selectStatus.bind(this, 'NotSeen')}>Never seen online</a></li>
+                  <li><a href="#" onClick={this.props.selectStatus.bind(this, 'Error')}>Installation error</a></li>
                 </ul>
               </div>
             </div>
