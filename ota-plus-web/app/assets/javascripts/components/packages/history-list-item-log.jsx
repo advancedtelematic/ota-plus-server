@@ -4,15 +4,14 @@ define(function(require) {
   class HistoryListItemLog extends React.Component {
     render() {
       return (
-        <div style={{marginTop: 10}}>
+        <div style={{marginTop: 10}} className="pull-left">
           <p><strong>{this.props.name}</strong> Log</p>
-          Package successfully installed on Tue 22 March 2016 11:43:22
+          Package successfully installed on {this.props.completionTime.toDateString() + ' ' + this.props.completionTime.toLocaleTimeString()}
   
           <div className="log-code">
-            echo<br />
-            bash<br />
-            Note the bash global variable did not change<br />
-            "local" is bash reserved word
+            {this.props.installationLog.resultText ? 
+              this.props.installationLog.resultText
+            : <span>Log is empty</span>}
           </div>
         </div>
       );

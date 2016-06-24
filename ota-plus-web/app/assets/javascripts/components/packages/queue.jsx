@@ -29,9 +29,7 @@ define(function(require) {
                   key="queue-list"/>
               :
                 <HistoryList 
-                  PackagesHistory={db.packageHistoryForVin}
-                  PollEventName="poll-packages-history-for-vin"
-                  DispatchObject={{actionType: "get-package-history-for-vin", vin: this.props.vin}}
+                  vin={this.props.vin}
                   key="history-list"/>
               }
             </VelocityTransitionGroup>
