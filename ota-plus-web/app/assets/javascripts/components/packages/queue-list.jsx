@@ -1,6 +1,7 @@
 define(function(require) {
   var React = require('react'),
       SotaDispatcher = require('sota-dispatcher'),
+      db = require('stores/db'),
       QueueListItem = require('./queue-list-item');
   
   class QueueList extends React.Component {
@@ -9,42 +10,29 @@ define(function(require) {
       this.state = {
         data: []
       }
+      this.sort = this.sort.bind(this);
       this.dragStart = this.dragStart.bind(this);
       this.dragEnd = this.dragEnd.bind(this);
       this.dragOver = this.dragOver.bind(this);
+      this.setData = this.setData.bind(this);
       
-      this.props.QueuedPackages.addWatch(this.props.PollEventName, _.bind(this.setData, this, null));
+      db.packageQueueForVin.addWatch("poll-queued-packages", _.bind(this.setData, this, null));
     }
     componentWillUnmount(){
-      this.props.QueuedPackages.removeWatch(this.props.PollEventName);
+      db.packageQueueForVin.removeWatch("poll-queued-packages");
     }
     setData() {
-      var data = this.props.QueuedPackages.deref();
-        
-      this.setState({
-        data: {packages: data}
-      });
-      
-      this.props.setQueueStatistics(data.length);
-    }
-    dragStart(e) {
-      this.dragged = Number(e.currentTarget.dataset.id);
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData("text/html", null);
-    }
-    dragEnd() {
-      this.sort(this.state.data.packages, undefined);
-      this.updatePackagesOrder();
-    }
-    dragOver(e) {
-      e.preventDefault();
-      var over = e.currentTarget
-      var dragging = this.state.data.dragging;
-      var from = isFinite(dragging) ? dragging : this.dragged;
-      var to = Number(over.dataset.id);
-      var items = this.state.data.packages;
-      items.splice(to, 0, items.splice(from,1)[0]);
-      this.sort(items, to);
+      if (!$('#queue-list .dragging').length) {
+        var data = db.packageQueueForVin.deref();
+        data.sort(function(a, b) {
+          var installPosCompared = a.installPos - b.installPos;
+          return installPosCompared == 0 ? new Date(a.createdAt) - new Date(b.createdAt) : installPosCompared;
+        });
+        this.setState({
+          data: {packages: data}
+        });
+        this.props.setQueueStatistics(data.length);
+      }
     }
     sort(packages, dragging) {
       var data = this.state.data;
@@ -52,28 +40,38 @@ define(function(require) {
       data.dragging = dragging;
       this.setState({data: data});
     }
-    updatePackagesOrder() {
-      console.log('update order with API');
-            
-      var newOrder = {};   
-      
+    dragStart(e) {
+      this.dragged = Number(e.currentTarget.dataset.id);
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData("text/html", null);
+    }
+    dragOver(e) {
+      e.preventDefault();
+      var over = e.currentTarget;
+      var dragging = this.state.data.dragging;
+      var from = isFinite(dragging) ? dragging : this.dragged;
+      var to = Number(over.dataset.id);
+      var items = this.state.data.packages;
+      items.splice(to, 0, items.splice(from,1)[0]);
+      this.sort(items, to);
+    }
+    dragEnd() {
+      this.sort(this.state.data.packages, undefined);
+      this.updatePackagesOrder();
+    }
+    updatePackagesOrder() {            
+      var newOrder = {};
       var packages = _.map(this.state.data.packages, function(pack, i) {
         newOrder[i] = pack.requestId;
       });
-      
-      var payload = JSON.stringify(newOrder);
       SotaDispatcher.dispatch({
         actionType: 'reorder-queue-for-vin',
         vin: this.props.vin,
-        order: payload
+        order: newOrder
       });
     }
-    render() {        
-      var Packages = this.props.QueuedPackages.deref();
-      Packages.sort(function(a, b) {
-        var installPosCompared = a.installPos - b.installPos;
-        return installPosCompared == 0 ? new Date(a.createdAt) - new Date(b.createdAt) : installPosCompared;
-      });
+    render() {
+      var Packages = this.state.data.packages !== undefined ? this.state.data.packages : [];
       
       var packages = _.map(Packages, function(pack, i) {
         var dragging = (this.state.data.dragging == i) ? "dragging" : "";  

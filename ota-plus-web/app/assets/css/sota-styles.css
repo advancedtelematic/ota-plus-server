@@ -173,8 +173,9 @@ a, a:hover {
 .btn-action {
     color: #979797;
     background: none;
-    margin: -9px 0 0 0;
-    border-left: 1px solid #ccc;
+    padding: 8px 12px 10px 12px;
+    margin: -11px 0 0 0;
+    border-left: 1px solid #ddd;
     border-radius: 0;
 }
 
@@ -683,9 +684,9 @@ button.close:hover, button.close:active, button.close:focus {
 
 .drag-bar {
     color: #979797;
-    padding: 9px 15px 8px 15px;
-    margin: -9px 0 0 0;
-    border-left: 1px solid #ccc;
+    padding: 12px 15px 10px 15px;
+    margin: -11px 0 0 0;
+    border-left: 1px solid #ddd;
 }
 
 /* Label */
