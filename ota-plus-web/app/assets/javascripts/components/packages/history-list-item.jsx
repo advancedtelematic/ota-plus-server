@@ -2,7 +2,8 @@ define(function(require) {
   var React = require('react'),
       ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       HistoryListItemErrorlog = require('./history-list-item-errorlog'),
-      HistoryListItemLog = require('./history-list-item-log');
+      HistoryListItemLog = require('./history-list-item-log'),
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
 
   class HistoryListItem extends React.Component {
     constructor(props) {
@@ -37,20 +38,25 @@ define(function(require) {
             v. {this.props.package.packageId.version} {this.props.package.success ? 'installed successfully' : 'not installed'} on {completionTime.toDateString() + ' ' + completionTime.toLocaleTimeString()}
           </div>
   
-          <ReactCSSTransitionGroup
-            transitionAppear={true}
-            transitionLeave={false}
-            transitionAppearTimeout={500}
-            transitionEnterTimeout={500}
-            transitionLeaveTimeout={500}
-            transitionName="example">
-            {this.state.showLog ? 
-              !this.props.package.success ?
-                <HistoryListItemErrorlog name={this.props.package.packageId.name}/>
-              :
-                <HistoryListItemLog name={this.props.package.packageId.name}/>
-            : null}
-          </ReactCSSTransitionGroup>
+          {!this.props.package.success ?
+            <VelocityTransitionGroup enter={{animation: "fadeIn"}}>
+              {this.state.showLog ? 
+                <HistoryListItemErrorlog 
+                  name={this.props.package.packageId.name}
+                  completionTime={completionTime}
+                  installationLog={this.props.installationLog}/>
+              : null}
+            </VelocityTransitionGroup>
+          :
+            <VelocityTransitionGroup enter={{animation: "fadeIn"}}>
+              {this.state.showLog ? 
+                <HistoryListItemLog 
+                  name={this.props.package.packageId.name}
+                  completionTime={completionTime}
+                  installationLog={this.props.installationLog}/>
+              : null}
+            </VelocityTransitionGroup>      
+          }
         </li>
       );
     }

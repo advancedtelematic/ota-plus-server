@@ -142,6 +142,18 @@ define(function(require) {
                 }));
               });
           break;
+          case 'get-installation-log-for-vin':
+            sendRequest.doGet('api/v1/vehicle_updates/' + payload.vin + '/results')
+              .success(function(log) {
+                db.installationLogForVin.reset(log);
+              });
+          break;
+          case 'get-installation-log-for-updateid':
+            sendRequest.doGet('api/v1/vehicle_updates/' + payload.vin + '/'  + payload.updateId + '/results')
+              .success(function(log) {
+                db.installationLogForUpdateId.reset(log);
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));
