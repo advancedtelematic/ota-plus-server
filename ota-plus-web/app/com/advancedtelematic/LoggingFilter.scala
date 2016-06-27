@@ -6,11 +6,14 @@ import com.advancedtelematic.api.RemoteApiError
 import play.api.Logger
 import play.api.mvc.{Filter, RequestHeader, Result}
 import _root_.akka.stream.Materializer
+import com.advancedtelematic.ota.common.TraceId
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 class LoggingFilter @Inject()(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
+
+  lazy val serviceName = sys.env.getOrElse("SERVICE_NAME", "ota-plus-web")
 
   def apply(nextFilter: RequestHeader => Future[Result])
            (requestHeader: RequestHeader): Future[Result] = {
@@ -18,21 +21,21 @@ class LoggingFilter @Inject()(implicit val mat: Materializer, ec: ExecutionConte
     val startTime = System.currentTimeMillis
     nextFilter(requestHeader) andThen {
       case Success(result) =>
-        logRequest(requestHeader, result.header.status.toString, startTime)
+        logRequest(requestHeader, result.header.status, startTime)
       case Failure(RemoteApiError(result, _)) =>
-        logRequest(requestHeader, result.header.status.toString, startTime)
+        logRequest(requestHeader, result.header.status, startTime)
       case _ =>
-        logRequest(requestHeader, "???", startTime)
+        logRequest(requestHeader, 500, startTime)
     }
   }
 
-  protected def logRequest(requestHeader: RequestHeader, resultCode: String, startTime: Long): Unit = {
+  protected def logRequest(requestHeader: RequestHeader, resultCode: Int, startTime: Long): Unit = {
     val endTime = System.currentTimeMillis
     val serviceTime = endTime - startTime
 
     val metrics = Map(
-      "service_name" -> "ota-plus-web",
-      "traceid" -> requestHeader.headers.get("x-ats-traceid").getOrElse("?"),
+      "service_name" -> serviceName,
+      "traceid" -> requestHeader.headers.get(TraceId.TRACEID_HEADER).getOrElse("?"),
       "method" -> requestHeader.method,
       "path" -> requestHeader.path,
       "stime" -> serviceTime.toString,
