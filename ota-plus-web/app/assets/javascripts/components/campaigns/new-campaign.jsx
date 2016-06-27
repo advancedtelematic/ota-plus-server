@@ -292,7 +292,7 @@ define(function(require) {
               <input type="text" name="pin2" maxLength={1} placeholder="_" maxLength={1} onChange={this.pinChange}/>
               <input type="text" name="pin3" maxLength={1} placeholder="_" maxLength={1} onChange={this.pinChange}/>
                             
-              <input type="text" name="pin4" pmaxLength={1} laceholder="_" maxLength={1} className="margin-left-60" onChange={this.pinChange}/>
+              <input type="text" name="pin4" pmaxLength={1} placeholder="_" maxLength={1} className="margin-left-60" onChange={this.pinChange}/>
               <input type="text" name="pin5" maxLength={1} placeholder="_" maxLength={1} onChange={this.pinChange}/>
               <input type="text" name="pin6" maxLength={1} placeholder="_" maxLength={1} onChange={this.pinChange}/>
               <input type="text" name="pin7" maxLength={1} placeholder="_" maxLength={1} onChange={this.pinChange}/>

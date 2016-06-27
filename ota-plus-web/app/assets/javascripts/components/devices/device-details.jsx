@@ -144,7 +144,7 @@ define(function(require) {
               </div>
               <div className="panel-footer">
                 <VelocityComponent animation={this.state.selectedImpactAnalysisPackagesCount ? animateLeftPosition('15px') : animateLeftPosition('-250px')}>
-                  <Link to={`devicedetails/${this.props.params.vin}/impactanalysis/${this.state.selectedImpactAnalysisPackagesCount}`} className="btn btn-black impact-analysis-button pull-left">
+                  <Link to={`devicedetails/${this.props.params.vin}/impactanalysis/${this.state.selectedImpactAnalysisPackagesCount}`} className="btn btn-black btn-impact-analysis pull-left">
                     Impact analysis
                   </Link>
                 </VelocityComponent>
