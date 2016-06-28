@@ -6,13 +6,15 @@ import com.advancedtelematic.ota.device.Devices._
 import com.advancedtelematic.ota.vehicle.{VehicleMetadata, Vehicles}
 import eu.timepit.refined._
 import javax.inject.{Inject, Named, Singleton}
+
 import org.genivi.sota.data.{Device, DeviceT, Vehicle}
 import play.api.libs.concurrent.Execution
 import play.api.libs.json._
 import play.api.libs.ws._
 import play.api.mvc._
 import play.api.{Configuration, Logger}
-import scala.concurrent.Future
+
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import com.advancedtelematic.ota.device.Devices.refinedWriter
 
@@ -21,16 +23,14 @@ class DeviceController @Inject() (val ws: WSClient,
                                   val conf: Configuration,
                                   val clientExec: ApiClientExec,
                                   @Named("vehicles-store") vehiclesStore: Vehicles)
+                                 (implicit ec: ExecutionContext)
 extends Controller with ApiClientSupport
   with OtaPlusConfig {
 
-  implicit val context = Execution.defaultContext
-
   val logger = Logger(this.getClass)
 
-  def create() = Action.async(parse.json) { req =>
-    val device = req.body.as[DeviceT]
-    requestCreate(device, req)
+  def create() = Action.async(parse.json[DeviceT]) { req =>
+    requestCreate(req.body, req)
   }
 
   def listDeviceAttributes() = Action.async(parse.raw) { req =>
@@ -50,7 +50,7 @@ extends Controller with ApiClientSupport
     } yield bearer
   }
 
-  private def requestCreate(device: DeviceT, req: Request[JsValue]): Future[Result] = {
+  private def requestCreate(device: DeviceT, req: Request[_]): Future[Result] = {
     val options = userOptions(req)
 
     implicit val w = refinedWriter[String, Device.Id]
