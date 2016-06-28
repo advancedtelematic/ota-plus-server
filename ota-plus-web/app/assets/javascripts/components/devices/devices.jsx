@@ -88,6 +88,8 @@ define(function(require) {
       var selectedStatus = this.state.selectedStatus;
       var selectedSort = this.state.selectedSort;
 
+      var isTutorialShown = (this.props.location.pathname.indexOf('newdevice') > -1 || db.devices.deref().length) ? false : true;
+      
       var productionDevicesCount = 0;
       var totalProductionDevicesCount = 15382448;
       if(this.state.filterValue.length >= 17) {
@@ -127,7 +129,8 @@ define(function(require) {
             selectedSort={this.state.selectedSort}
             selectedSortName={this.state.selectedSortName}
             selectStatus={this.selectStatus}
-            selectSort={this.selectSort}/>
+            selectSort={this.selectSort}
+            isTutorialShown={isTutorialShown}/>
           <button className="btn btn-full-section first" onClick={this.expandSection.bind(this, 'testDevices')}>
             <i className={(this.state.expandedSectionName == 'testDevices') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> TEST DEVICES ({this.numberWithDots(SortedDevices.length)} out of {this.numberWithDots(db.devices.deref().length)})
           </button>

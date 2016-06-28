@@ -840,13 +840,13 @@ a.close, button.close {
     margin: 0 !important;
 }
 
-@for $i from 1 through 10 {
-    .margin-top-#{$i*10} {
-        margin-top: $i*10px !important;
+@for $i from 1 through 20 {
+    .margin-top-#{$i*5} {
+        margin-top: $i*5px !important;
     }
 
-    .margin-left-#{$i*10} {
-        margin-left: $i*10px !important;
+    .margin-left-#{$i*5} {
+        margin-left: $i*5px !important;
     }
 }
 
@@ -1233,24 +1233,15 @@ a.close, button.close {
 
 /* Overlays */
 
-.white-overlay {
+.lightgrey-overlay {
     color: #555;
-    font-weight: bold;
-    line-height: 1.5em;
-    text-align: center;
-    background: rgba(255,255,255, 0.8);
+    background: rgba(200,200,200, 0.6);
     width: 100%;
     height: 100%;
-    padding: 300px 0 0 0;
     left: 0;
     top: 0;
     position: absolute;
     z-index: 3;
-
-    a {
-        color: #555;
-        text-decoration: underline;
-    }
 }
 
 .grey-overlay {
@@ -1362,6 +1353,10 @@ a.close, button.close {
 
 /* General */
 
+.width-full {
+    width: 100%;
+}
+
 .loading {
     text-align: center;
     background: rgba(255,255,255, 0.6);
@@ -1403,6 +1398,15 @@ a.close, button.close {
     box-shadow: 0 3px 15px rgba(0,0,0,.6);
 }
 
+@for $i from 1 through 10 {
+    .width-#{$i*10} {
+        width: $i*10% !important;
+    }
+
+    .width-#{$i*10} {
+        width: $i*10% !important;
+    }
+}
 /* Animations */
 
 .example-enter {
@@ -1421,4 +1425,185 @@ a.close, button.close {
     &.example-appear-active {
         opacity: 1;
     }
+}
+
+/* Tutorial */
+
+#tutorial-add-new-device {
+    width: 500px;
+    top: 22px;
+    float: right;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.5);
+
+    .logo {
+        width: 50px;
+        margin-right: 20px;
+        vertical-align: bottom;
+    }
+
+    @media (min-width: 1570px) {
+        top: 55px;
+        right: -150px;
+    }
+}
+
+#tutorial-install-device {
+    width: 80%;
+    padding: 30px;
+    margin: 4% 10%;
+    float: left;
+    border-radius: 15px;
+
+    .tutorial-icon {
+        margin: 0 20px 0 0;
+    }
+
+    .inner-box {
+        margin: 30px 50px 30px 50px;
+    }
+
+    .or-text {
+        color: #888;
+        font-size: 10px;
+        margin: 0 10px;
+    }
+
+    @media (min-width: 1500px) {
+        margin: 12% 10%;
+    }
+
+    @media (min-width: 1700px) {
+        width: 60%;
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+
+    /*    @media (max-width: 1700px) {
+            width: 80% !important;
+            margin: 0 10%;
+        }*/
+
+    /*    @media (max-width: 1500px) {
+            transform: scale(0.85) !important;
+            width: 90% !important;
+            padding: 30px !important;
+            margin: 0 5% !important;
+            
+            .btn-orange {
+                font-size: 12px;
+            }
+        }*/
+}
+
+.tutorial-add-package {
+    width: 350px;
+    float: none;
+    z-index: 111;
+
+    .circle {
+        font-size: 20px !important;
+        width: 40px !important;
+        height: 40px !important;
+        margin-top: 2px !important;
+    }
+}
+
+#tutorial-add-package-first-step {
+    position: absolute !important;
+    left: 98%;
+    top: 200px;
+}
+
+#tutorial-add-package-second-step {
+    position: absolute !important;
+    left: 100%;
+    top: 110px;
+}
+
+#tutorial-add-package-third-step {
+    margin-left: -175px;
+    margin-bottom: 30px;
+    float: left;
+    position: relative !important;
+    top: 20px;
+    left: 50%;
+
+    &:after {
+        left: 50%;
+        right: 0;
+    }
+}
+
+.tutorial-overlay {
+    color: #222;
+    background: #fff;
+    padding: 30px;
+    border-radius: 7px;
+    -webkit-filter: drop-shadow(0 1px 8px rgba(0,0,0,.4));
+    -moz-filter: drop-shadow(0 1px 8px rgba(0,0,0,.4));
+    -ms-filter: drop-shadow(0 1px 8px rgba(0,0,0,.4));
+    -o-filter: drop-shadow(0 1px 8px rgba(0,0,0,.4));
+    filter: drop-shadow(0 1px 8px rgba(0,0,0,.4));
+
+    position: relative;
+
+    .circle {
+        color: #fff;
+        font-size: 30px;
+        font-weight: bold;
+        text-align: center;
+        background: $color-orange;
+        width: 50px;
+        height: 50px;
+        padding: 8px 0;
+        margin: 0 20px 0 0;
+        border-radius: 25px;
+        display: inline-block;
+    }
+
+    &.arrow {
+        &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 0;
+            height: 0;
+        }
+
+        &.arrow-up:after {
+            margin-bottom: -1px;
+            right: 60px;
+            bottom: 100%;
+            border-bottom: 12px solid #fff;
+            border-top: 12px solid transparent;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+        }
+
+        &.arrow-left:after {
+            right: 100%;
+            top: 50%;
+            margin-top: -12px;
+            border-top: 12px solid transparent;
+            border-right: 12px solid #fff;
+            border-bottom: 12px solid transparent;
+            border-left: 12px solid transparent;
+        }
+    }
+}
+
+.font-24 {
+    font-size: 24px;
+    line-height: 1.5em;
+}
+
+.font-20 {
+    font-size: 20px;
+    line-height: 1.5em;
+}
+
+.font-16 {
+    font-size: 16px;
+    line-height: 1.5em;
+
 }
