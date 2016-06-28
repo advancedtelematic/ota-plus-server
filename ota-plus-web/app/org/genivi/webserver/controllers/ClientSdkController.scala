@@ -5,7 +5,7 @@ import javax.inject.{Inject, Named, Singleton}
 import akka.actor.{ActorRef, ActorSystem}
 import com.advancedtelematic.ota.vehicle.{VehicleMetadata, Vehicles}
 import org.asynchttpclient.uri.Uri
-import org.genivi.sota.data.Vehicle
+import org.genivi.sota.data.{Device, Vehicle}
 import play.api.http.HttpEntity
 import play.api.libs.json.JsString
 import play.api.{Configuration, Logger}
@@ -23,6 +23,8 @@ class ClientSdkController @Inject() (system: ActorSystem,
                                      @Named("vehicles-store") vehiclesStore: Vehicles) extends Controller {
 
   import play.api.libs.concurrent.Execution.Implicits.defaultContext
+  import Device._
+  import cats.syntax.show._
 
   val logger = Logger(this.getClass)
   private def logDebug(caller: String, msg: String) {
@@ -51,7 +53,7 @@ class ClientSdkController @Inject() (system: ActorSystem,
           case Some(vmeta) => Future.successful(vmeta)
         };
         secret <- clientSecret(vMetadata);
-        result <- preconfClient(vin, packfmt, arch, vMetadata.clientInfo.clientId, secret)
+        result <- preconfClient(vMetadata.deviceId, packfmt, arch, vMetadata.clientInfo.clientId, secret)
       ) yield result
     }
 
@@ -59,14 +61,14 @@ class ClientSdkController @Inject() (system: ActorSystem,
     * The url to use to request a pre-configured client, obtained by filling-in placeholders.
     */
   private def sdkUrl(
-                      vin: Vehicle.Vin,
+                      device: Device.Id,
                       packfmt: PackageType, arch: Architecture,
                       clientID: java.util.UUID, secret: String
                     ): Try[Uri] = {
 
     def placedholderFiller(uri: String): String = {
       val replacements = Seq(
-        "[vin]"         -> vin.get,
+        "[vin]"         -> device.show,
         "[packagetype]" -> packfmt.toString(),
         "[arch]"        -> arch.toString(),
         "[client_id]"   -> clientID.toString(),
@@ -108,14 +110,14 @@ class ClientSdkController @Inject() (system: ActorSystem,
   /**
     * Contact Build Service to obtain a pre-configured client
     */
-  private def preconfClient(vin: Vehicle.Vin,
+  private def preconfClient(device: Device.Id,
                             packfmt: PackageType, arch: Architecture,
                             clientID: java.util.UUID, secret: String): Future[Result] = {
-    Future.fromTry( sdkUrl(vin, packfmt, arch, clientID, secret) )
-      .flatMap(streamPackageFromBuildService(vin, packfmt, arch))
+    Future.fromTry(sdkUrl(device, packfmt, arch, clientID, secret))
+      .flatMap(streamPackageFromBuildService(device, packfmt, arch))
       .recover {
         case NonFatal(t) =>
-          logger.error( "Failed to stream sdk from build service", t )
+          logger.error("Failed to stream sdk from build service", t)
           InternalServerError
       }
   }
@@ -123,7 +125,7 @@ class ClientSdkController @Inject() (system: ActorSystem,
   /**
     * Requests client sdk package from the build service and streams response to the requester.
     */
-  private def streamPackageFromBuildService(vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture)
+  private def streamPackageFromBuildService(device: Device.Id, packfmt: PackageType, arch: Architecture)
                                            (url: Uri): Future[Result] = {
     val futureResponse = wsClient.url(url.toUrl).withMethod("POST").stream
     futureResponse.map { streamedResp =>
@@ -142,7 +144,7 @@ class ClientSdkController @Inject() (system: ActorSystem,
           case _ =>
             Ok.chunked(body).as(packfmt.contentType)
         }
-        val suggestedFilename = s"ota-plus-sdk-${vin.get}-$packfmt-$arch.${packfmt.fileExtension}"
+        val suggestedFilename = s"ota-plus-sdk-${device.show}-$packfmt-$arch.${packfmt.fileExtension}"
         ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
       } else {
         logger.error(s"Unexpected response status from build service: $statusResp")

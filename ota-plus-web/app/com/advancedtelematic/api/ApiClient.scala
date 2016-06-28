@@ -14,6 +14,7 @@ import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.{Result, Results}
 import scala.concurrent.Future
 import scala.util.control.NoStackTrace
+import cats.syntax.show.toShowOps
 
 
 case class RemoteApiIOError(cause: Throwable) extends Exception(cause) with NoStackTrace
@@ -97,21 +98,25 @@ class ResolverApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
 class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
   val apiRequest = ApiRequest.base(devicesApiUri + "/api/v1/")
 
-  def createDevice(options: UserOptions, device: DeviceT): Future[Result] =
-    apiRequest(s"devices")
+  def createDevice(options: UserOptions, device: DeviceT): Future[Device.Id] = {
+    import com.advancedtelematic.ota.device.Devices.idReads
+
+    apiRequest("devices")
       .withUserOptions(options)
       .transform(_.withMethod("POST").withBody(Json.toJson(device)))
-      .execResult(apiExec)
+      .execJson(apiExec)(idReads)
+  }
 }
 
 class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
+
   val apiRequest = ApiRequest.base(authPlusApiUri + "/")
 
-  def createClient(vin: Vin)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
+  def createClient(device: Device.Id)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
     val request = Json.obj(
       "grant_types" -> List("client_credentials"),
-      "client_name" -> vin.get,
-      "scope" -> List(s"ota-core.${vin.get}.write", s"ota-core.${vin.get}.read")
+      "client_name" -> device.show,
+      "scope" -> List(s"ota-core.${device.show}.write", s"ota-core.${device.show}.read")
     )
 
     apiRequest("clients")

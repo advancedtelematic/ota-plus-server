@@ -1,6 +1,7 @@
 package com.advancedtelematic.ota.device_registry
 
 import akka.actor.ActorSystem
+import akka.event.Logging
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.stream.ActorMaterializer
@@ -9,6 +10,7 @@ import org.genivi.sota.http.HealthResource
 import org.genivi.sota.http.SotaDirectives._
 import org.genivi.sota.rest.Handlers.{exceptionHandler, rejectionHandler}
 import org.slf4j.LoggerFactory
+
 import scala.util.Try
 import slick.jdbc.JdbcBackend.Database
 
