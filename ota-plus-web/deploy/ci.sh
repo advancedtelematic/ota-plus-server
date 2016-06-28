@@ -17,6 +17,7 @@ export VDATA=$(curl -s -H "X-Vault-Token: ${VAULT_TOKEN}" -X GET ${VAULT_ADDR}/v
 export PLAY_CRYPTO_SECRET="$(echo $VDATA | jq -r .data.play_crypto_secret)"
 export CORE_API_URI="$(echo $VDATA | jq -r .data.core_api_uri)"
 export RESOLVER_API_URI="$(echo $VDATA | jq -r .data.resolver_api_uri)"
+export DEVICE_REGISTRY_API_URI="$(echo $VDATA | jq -r .data.device_registry_api_uri)"
 export BUILDSERVICE_API_HOST="$(echo $VDATA | jq -r .data.buildservice_api_host)"
 export AUTHPLUS_HOST="$(echo $VDATA | jq -r .data.authplus_host)"
 export AUTHPLUS_CLIENT_ID="$(echo $VDATA | jq -r .data.authplus_client_id)"
