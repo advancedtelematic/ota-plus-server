@@ -1267,7 +1267,6 @@ a.close, button.close {
 }
 
 .profile-icon {
-    margin: 0 16px 0 0;
 }
 
 .dropdown-profile {
@@ -1275,6 +1274,21 @@ a.close, button.close {
     padding: 20px 20px 11px 20px;
     border-radius: 0;
     top: 122%;
+
+    &:after {
+        content: '';
+        width: 10px;
+        height: 10px;
+        background: #fff;
+        position: absolute;
+        -moz-transform: rotate(-135deg);
+        -webkit-transform: rotate(-135deg);
+        transform: rotate(-135deg);
+        top: -6px;
+        right: 10px;
+        border-right: #ccc solid 1px;
+        border-bottom: #ccc solid 1px;
+    }
 
     a {
         color: #888;
@@ -1291,6 +1305,7 @@ a.close, button.close {
     .input-username {
         color: $color-brown;
         font-size: 16px;
+        text-align: center;
         width: 150px;
         padding: 0;
         border: 0;
@@ -1305,6 +1320,21 @@ a.close, button.close {
     .email {
         color: #b2b2b2;
         font-size: 12px;
+    }
+
+    .pencil-button {
+        position: absolute;
+        right: 20px;
+    }
+
+    .accept-button {
+        position: absolute;
+        right: 35px;
+    } 
+
+    .cancel-button {
+        position: absolute;
+        right: 20px;
     }
 }
 
