@@ -1,16 +1,21 @@
 package com.advancedtelematic.api
 
 import com.advancedtelematic.api.ApiRequest.UserOptions
+import cats.Show
+import com.advancedtelematic.ota.device.Devices._
 import com.advancedtelematic.ota.vehicle.ClientInfo
+import org.genivi.sota.data.{Device, DeviceT}
 import org.genivi.sota.data.Vehicle.Vin
+import org.genivi.sota.data.Namespace.Namespace
 import org.genivi.webserver.controllers.OtaPlusConfig
 import play.api.Configuration
-import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.libs.json._
-import play.api.mvc.Result
-
+import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
+import play.api.mvc.{Result, Results}
 import scala.concurrent.Future
 import scala.util.control.NoStackTrace
+import cats.syntax.show.toShowOps
+
 
 case class RemoteApiIOError(cause: Throwable) extends Exception(cause) with NoStackTrace
 
@@ -69,50 +74,54 @@ trait ApiRequest { self =>
 class CoreApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
   val apiRequest = ApiRequest.base(coreApiUri + "/api/v1/")
 
-  def createVehicle(options: UserOptions, vin: Vin): Future[Result] =
-    apiRequest(s"vehicles/${vin.get}")
-      .withUserOptions(options)
-      .transform(_.withMethod("PUT"))
-      .execResult(apiExec)
-
   def search(options: UserOptions, params: Seq[(String, String)]): Future[Result] =
-    apiRequest("vehicles")
+    apiRequest("devices")
       .withUserOptions(options)
       .transform(_.withQueryString(params:_*))
       .execResult(apiExec)
 }
 
-
 class ResolverApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
   val apiRequest = ApiRequest.base(resolverApiUri + "/api/v1/")
 
-  def createVehicle(options: UserOptions, vin: Vin): Future[Result] =
-    apiRequest(s"vehicles/${vin.get}")
-      .withUserOptions(options)
-      .transform(_.withMethod("PUT"))
-      .execResult(apiExec)
+  def createDevice(options: UserOptions, device: DeviceT): Future[Result] =
+    device.deviceId match {
+      case Some(id) =>
+        apiRequest("vehicles/" + implicitly[Show[Device.DeviceId]].show(id))
+          .withUserOptions(options)
+          .transform(_.withMethod("PUT"))
+          .execResult(apiExec)
+      case None => Future.successful(Results.NoContent) // TODO handle empty device Ids
+    }
+}
 
-  def search(options: UserOptions, params: Seq[(String, String)]): Future[Result] =
-    apiRequest("vehicles")
+class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
+  val apiRequest = ApiRequest.base(devicesApiUri + "/api/v1/")
+
+  def createDevice(options: UserOptions, device: DeviceT): Future[Device.Id] = {
+    import com.advancedtelematic.ota.device.Devices.idReads
+
+    apiRequest("devices")
       .withUserOptions(options)
-      .transform(_.withQueryString(params: _*))
-      .execResult(apiExec)
+      .transform(_.withMethod("POST").withBody(Json.toJson(device)))
+      .execJson(apiExec)(idReads)
+  }
 }
 
 class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
 
   val apiRequest = ApiRequest.base(authPlusApiUri + "/")
 
-  def createClient(vin: Vin)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
+  def createClient(device: Device.Id)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
     val request = Json.obj(
       "grant_types" -> List("client_credentials"),
-      "client_name" -> vin.get,
-      "scope" -> List(s"ota-core.${vin.get}.write", s"ota-core.${vin.get}.read")
+      "client_name" -> device.show,
+      "scope" -> List(s"ota-core.${device.show}.write", s"ota-core.${device.show}.read")
     )
 
     apiRequest("clients")
       .transform(_.withBody(request).withMethod("POST"))
-      .execJson(apiExec)
+      .execJson(apiExec)(ev)
   }
 
   def changePassword(token: String, email: String, oldPassword: String, newPassword: String): Future[Result] = {

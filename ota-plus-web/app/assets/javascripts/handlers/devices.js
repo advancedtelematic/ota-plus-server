@@ -5,54 +5,60 @@ define(function(require) {
       checkExists = require('../mixins/check-exists'),
       sendRequest = require('../mixins/send-request');
 
-  var createVehicle = function(payload) {
-    var url = '/api/v1/vehicles/' + payload.vehicle.vin;
-    
-    sendRequest.doPut(url, payload.vehicle)
-      .success(function(vehicles) {
-        location.hash = "#/devicedetails/" + payload.vehicle.vin;
+  var createDevice = function(payload) {
+    let url = '/api/v1/devices';
+    let device = {
+      deviceName: payload.device.deviceName,
+      deviceId: payload.device.deviceId === '' ? null : payload.device.deviceId ,
+      deviceType: payload.device.deviceType
+    }
+    sendRequest.doPost(url, device)
+      .success(function(id) {
+        location.hash = "#/devicedetails/" + id;
       });
   };
 
   var Handler = (function() {
       this.dispatchCallback = function(payload) {
         switch(payload.actionType) {
-          case 'get-devices':
-            sendRequest.doGet('/api/v1/device_data?status=true')
-              .success(function(devices) {
-                db.devices.reset(devices);
-              });
-          break;
           case 'get-device':
-            sendRequest.doGet('/api/v1/device_data?status=true')
-              .success(function(devices) {
-                db.showDevice.reset(_.find(devices, function(device) {
-                  return device.vin == payload.vin;
-                }));
+            sendRequest.doGet('/api/v1/device_data?status=true') // TODO: more efficient querying
+              .success(function(devicesWithStatus) {
+                const deviceWithStatus = _.find(devicesWithStatus, i => i.device == payload.device);
+                sendRequest.doGet('/api/v1/device_data') // TODO: send request to device registry instead
+                  .success(function(devices) {
+                    const device = _.find(devices, i => i.id == payload.device);
+                    db.showDevice.reset(_.extend(device, { status: deviceWithStatus.status }));
+                  });
               });
-          break;
-          case 'create-vehicle':
+            break;
+          case 'create-device':
             $('.loading').fadeIn();
-            checkExists('/api/v1/vehicles/' + payload.vehicle.vin, "Device", function() {
-              createVehicle(payload);
+            checkExists('/api/v1/devices?deviceName=' + payload.device.deviceName, "Device", function() {
+              createDevice(payload);
             }, payload.actionType);
-            
-          break;
+            break;
           case 'search-devices-by-regex':
-            var query = payload.regex ? '&regex=' + payload.regex : '';
-            sendRequest.doGet('/api/v1/device_data?status=true' + query)
-              .success(function(vehicles) {
-                db.searchableDevices.reset(vehicles);
+            var query = payload.regex ? 'regex=' + payload.regex : '';
+            sendRequest.doGet('/api/v1/device_data?' + query)
+              .success(function(devices) {
+                sendRequest.doGet('/api/v1/device_data?status=true&' + query)
+                  .success(function(deviceStatuses) {
+                    const statuses = _.groupBy(deviceStatuses, 'device');
+                    const devicesWithStatus =
+                      _.map(devices, i => _.extend(i, { status : _.first(statuses[i.id]).status }));
+                    db.searchableDevices.reset(devicesWithStatus);
+                  });
               });
-          break;
-          case 'fetch-affected-vins':
+            break;
+          case 'fetch-affected-devices':
             var affectedVinsUrl = '/api/v1/resolve/' + payload.name + "/" + payload.version;
 
             sendRequest.doGet(affectedVinsUrl)
               .success(function(vehicles) {
                 db.affectedVins.reset(vehicles);
               });
-          break;
+            break;
           case 'get-vehicles-for-package':
             sendRequest.doGet('/api/v1/vehicles?packageName=' + payload.name + '&packageVersion=' + payload.version)
               .success(function(vehicles) {
@@ -61,75 +67,78 @@ define(function(require) {
                 });
                 db.vehiclesForPackage.reset(list);
               });
-          break;
+            break;
           case 'get-vehicles-wholedata-for-package':
               sendRequest.doGet('/api/v1/vehicles?packageName=' + payload.name + '&packageVersion=' + payload.version)
               .success(function(vehicles) {
                 db.vehiclesWholeDataForPackage.reset(vehicles);
               });
-          break;
-          case 'get-package-queue-for-vin': 
-            sendRequest.doGet('/api/v1/vehicle_updates/' + payload.vin + '/queued')
+            break;
+          case 'get-package-queue-for-device':
+            console.log(payload)
+            if (!_.isUndefined(payload.device)) {
+              sendRequest.doGet('/api/v1/vehicle_updates/' + payload.device + '/queued')
+                .success(function(packages) {
+                  db.packageQueueForDevice.reset(packages);
+                });
+            }
+            break;
+          case 'get-package-history-for-devices':
+            sendRequest.doGet('/api/v1/history?uuid=' + payload.device)
               .success(function(packages) {
-                db.packageQueueForVin.reset(packages);
+                db.packageHistoryForDevice.reset(packages);
               });
-          break;
-          case 'get-package-history-for-vin':
-            sendRequest.doGet('/api/v1/history?vin=' + payload.vin)
-              .success(function(packages) {
-                db.packageHistoryForVin.reset(packages);
-              });
-          break;
-          case 'list-components-on-vin':
-            sendRequest.doGet('/api/v1/vehicles/' + payload.vin + '/component')
+            break;
+          case 'list-components-on-device':
+            sendRequest.doGet('/api/v1/vehicles/' + payload.deviceId + '/component')
               .success(function(components) {
                 db.componentsOnVin.reset(components);
               });
-          break;
-          case 'add-component-to-vin':
-            sendRequest.doPut('/api/v1/vehicles/' + payload.vin + '/component/' + payload.partNumber)
+            break;
+          case 'add-component-to-device':
+            sendRequest.doPut('/api/v1/vehicles/' + payload.device + '/component/' + payload.partNumber)
               .success(function() {
-                SotaDispatcher.dispatch({actionType: 'list-components-on-vin', vin: payload.vin});
+                SotaDispatcher.dispatch({actionType: 'list-components-on-device', device: payload.device});
               });
-          break;
-          case 'sync-packages-for-vin':
-            sendRequest.doPut('/api/v1/vehicles/' + payload.vin + '/sync');
-          break;
-          case 'add-packages-to-vin':
-            sendRequest.doPut('/api/v1/vehicles/' + payload.vin + '/packages', payload.packages)
+            break;
+          case 'sync-packages-for-device':
+            sendRequest.doPut('/api/v1/vehicle_updates/' + payload.device + '/sync');
+            break;
+          case 'add-packages-to-device':
+            sendRequest.doPut('/api/v1/vehicles/' + payload.deviceId + '/packages', payload.packages)
               .success(function() {
               });
-          break;
-          case 'install-package-for-vin':
-            sendRequest.doPost('/api/v1/vehicle_updates/' + payload.vin, payload.data)
+            break;
+          case 'install-package-for-device':
+            sendRequest.doPost('/api/v1/vehicle_updates/' + payload.device, payload.data)
               .success(function() {
-                SotaDispatcher.dispatch({actionType: 'get-package-queue-for-vin', vin: payload.vin});
+                SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: payload.device});
               });
-          break;
-          case 'reorder-queue-for-vin':
-            sendRequest.doPut('/api/v1/vehicle_updates/' + payload.vin + '/order', payload.order)
+            break;
+          case 'reorder-queue-for-device':
+            sendRequest.doPut('/api/v1/vehicle_updates/' + payload.device + '/order', payload.order)
               .success(function() {
-                SotaDispatcher.dispatch({actionType: 'get-package-queue-for-vin', vin: payload.vin});
+                SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: payload.device});
               });
           break;
           case 'cancel-update':
-            sendRequest.doPut('/api/v1/vehicle_updates/' + payload.vin + '/' + payload.updateid + '/cancelupdate')
+            sendRequest.doPut('/api/v1/vehicle_updates/' + payload.device + '/' + payload.updateid + '/cancelupdate')
               .success(function() {
-                SotaDispatcher.dispatch({actionType: 'get-package-queue-for-vin', vin: payload.vin});
+                SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: payload.device});
               });
           break;
           case 'search-production-devices':
             var devices = [];
-            
+
             if(payload.regex.length >= 17) {
               sendRequest.doGet('/api/v1/device_data?status=true')
               .success(function(data) {
                 devices = _.filter(data, function(device) {
                   return device.vin == localStorage.getItem('firstProductionTestDevice');
                 });
-                devices[0].vin = payload.regex.substr(0, 17);
+                devices[0].deviceId = payload.regex.substr(0, 17);
                 db.searchableProductionDevices.reset(devices);
-              });               
+              });
             } else {
               db.searchableProductionDevices.reset([]);
             }
@@ -142,10 +151,10 @@ define(function(require) {
                 }));
               });
           break;
-          case 'get-installation-log-for-vin':
+          case 'get-installation-log-for-device':
             sendRequest.doGet('api/v1/vehicle_updates/' + payload.vin + '/results')
               .success(function(log) {
-                db.installationLogForVin.reset(log);
+                db.installationLogForDevice.reset(log);
               });
           break;
           case 'get-installation-log-for-updateid':

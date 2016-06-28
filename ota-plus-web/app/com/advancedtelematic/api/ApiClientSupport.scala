@@ -13,4 +13,6 @@ trait ApiClientSupport {
   val resolverApi = new ResolverApi(conf, clientExec)
 
   val authPlusApi = new AuthPlusApi(conf, clientExec)
+
+  val devicesApi = new DevicesApi(conf, clientExec)
 }

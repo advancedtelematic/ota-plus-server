@@ -6,7 +6,7 @@ import cats.data.Xor
 import com.advancedtelematic.jws.CompactSerialization
 import com.advancedtelematic.jwt.JsonWebToken
 import io.circe.parser._
-import org.genivi.sota.data.Namespace.Namespace
+import org.genivi.sota.data.Namespace._
 import eu.timepit.refined.refineV
 
 object AuthNamespace {

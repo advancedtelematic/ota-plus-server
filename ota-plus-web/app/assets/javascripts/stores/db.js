@@ -7,15 +7,15 @@ define(function(require) {
       this.showPackage = atom.createAtom([]);
       this.showDevice = atom.createAtom([]);
       this.packages = atom.createAtom([]);
-      this.packagesForVin = atom.createAtom([]);
-      this.packageHistoryForVin = atom.createAtom([]);
-      this.packageQueueForVin = atom.createAtom([]);
+      this.packagesForDevice = atom.createAtom([]);
+      this.packageHistoryForDevice = atom.createAtom([]);
+      this.packageQueueForDevice = atom.createAtom([]);
       this.searchableDevices = atom.createAtom([]);
       this.searchablePackages = atom.createAtom([]);
       this.postStatus = atom.createAtom([]);
       
       this.searchableProductionDevices = atom.createAtom([]);
-      this.installationLogForVin = atom.createAtom([]);
+      this.installationLogForDevice = atom.createAtom([]);
       this.installationLogForUpdateId = atom.createAtom([]);
     }
 

@@ -5,41 +5,44 @@ import akka.event.Logging
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.stream.ActorMaterializer
 import com.advancedtelematic.ota.common.AuthNamespace
+import eu.timepit.refined.api.Refined
+import eu.timepit.refined.string.Uuid
+import org.genivi.sota.common.DeviceRegistry
 import org.genivi.sota.core._
 import org.genivi.sota.core.resolver.{Connectivity, ExternalResolverClient}
 import org.genivi.sota.core.transfer._
-import org.genivi.sota.data.Vehicle.Vin
-import slick.driver.MySQLDriver.api._
+import org.genivi.sota.data.Device
 import org.genivi.sota.marshalling.RefinedMarshallingSupport._
+import scala.concurrent.ExecutionContext
+import slick.driver.MySQLDriver.api._
 
 
-class OtaPlusCoreWebservice(notifier: UpdateNotifier, resolver: ExternalResolverClient, db : Database)
-                           (implicit system: ActorSystem, mat: ActorMaterializer,
-                            connectivity: Connectivity) extends Directives {
+class OtaPlusCoreWebService(notifier: UpdateNotifier,
+                            resolver: ExternalResolverClient,
+                            deviceRegistry: DeviceRegistry,
+                            db: Database)
+                           (implicit system: ActorSystem,
+                            mat: ActorMaterializer,
+                            connectivity: Connectivity,
+                            ec: ExecutionContext) extends Directives {
 
   implicit val log = Logging(system, "webservice")
 
+  import AuthNamespace._
   import ErrorHandler._
   import PackagesResource._
   import WebService._
-  import AuthNamespace._
 
-  val vehiclesResource = new VehiclesResource(db, connectivity.client, resolver, authNamespace)
+  val devicesResource = new DevicesResource(db, connectivity.client, resolver, deviceRegistry, authNamespace)
   val packagesResource = new PackagesResource(resolver, db, authNamespace)
-  val updateRequestsResource = new UpdateRequestsResource(db, resolver, new UpdateService(notifier), authNamespace)
+  val updateService = new UpdateService(notifier, deviceRegistry)
+  val updateRequestsResource = new UpdateRequestsResource(db, resolver, updateService, authNamespace)
   val historyResource = new HistoryResource(db, authNamespace)
 
-  val deviceRoutes: Route = pathPrefix("vehicles") {
+  val deviceRoutes: Route = pathPrefix("devices") {
     extractExecutionContext { implicit ec =>
       authNamespace { ns =>
-        extractVin { vin =>
-          pathEnd {
-            get { vehiclesResource.fetchVehicle(ns, vin) } ~
-            put { vehiclesResource.updateVehicle(ns, vin) } ~
-            delete { vehiclesResource.deleteVehicle(ns, vin) }
-          }
-        } ~
-        (pathEnd & get) { vehiclesResource.search(ns) }
+        (pathEnd & get) { devicesResource.search(ns) }
       }
     }
   }
@@ -53,7 +56,7 @@ class OtaPlusCoreWebservice(notifier: UpdateNotifier, resolver: ExternalResolver
             get { packagesResource.fetch(ns, pid) } ~
             put { packagesResource.updatePackage(ns, pid) }
           } ~
-          path("queued") { packagesResource.queuedVins(ns, pid) }
+          path("queued") { packagesResource.queuedDevices(ns, pid) }
         }
       }
     }
@@ -69,10 +72,10 @@ class OtaPlusCoreWebservice(notifier: UpdateNotifier, resolver: ExternalResolver
     }
 
   val historyRoutes: Route = {
-    (pathPrefix("history") & parameter('vin.as[Vin])) { vin =>
+    (pathPrefix("history") & parameter('uuid.as[String Refined Device.ValidId])) { uuid =>
       authNamespace { ns =>
         (get & pathEnd) {
-          historyResource.history(ns, vin)
+          historyResource.history(ns, Device.Id(uuid))
         }
       }
     }

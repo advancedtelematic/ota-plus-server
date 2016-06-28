@@ -63,7 +63,7 @@ object Boot extends App with Directives {
   val port = config.getInt("server.port")
   val bindingFuture = Http().bindAndHandle(routes, host, port)
 
-  log.info(s"Sota resolver started at http://$host:$port/")
+  log.info(s"OTA resolver started at http://$host:$port/")
 
   sys.addShutdownHook {
     Try(db.close())

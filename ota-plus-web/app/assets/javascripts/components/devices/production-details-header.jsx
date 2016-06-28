@@ -2,7 +2,7 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       Link = Router.Link;
-        
+
   class ProductionDetailsHeader extends React.Component {
     constructor(props) {
       super(props);
@@ -31,25 +31,25 @@ define(function(require) {
             <div className="device-box">
               <div className="device-icon"></div>
             </div>
-            
+
             <div className="device-header-text">
-              <div className="device-name">{this.props.vin}</div>
+              <div className="device-name">{this.props.device.deviceName}</div>
               <div className="device-lastseen">
                 {this.props.device.status != 'NotSeen' ?
                   <span>Last seen online: {lastSeenDate.toDateString()}</span>
-                : 
+                :
                   <span>Never seen online</span>
                 }
-              </div>  
+              </div>
             </div>
-      
+
             <div className="device-header-status pull-right">
               <div className={"device-status device-status-" + this.props.device.status}>
                 <i className="fa fa-circle" aria-hidden="true"></i>
               </div>
               {deviceStatus}
             </div>
-            <Link to={`devicedetails/${localStorage.getItem('firstProductionTestDevice')}/synchronising/${this.props.vin}`} className="btn-duplicate-device pull-right">
+            <Link to={`devicedetails/${localStorage.getItem('firstProductionTestDevice')}/synchronising/${this.props.device.deviceId}`} className="btn-duplicate-device pull-right">
               Duplicate to test device (1)
             </Link>
           </div>
