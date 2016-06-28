@@ -14,7 +14,7 @@ import play.api.mvc._
 import play.api.{Configuration, Logger}
 import scala.concurrent.Future
 import scala.util.Try
-
+import com.advancedtelematic.ota.device.Devices.refinedWriter
 
 @Singleton
 class DeviceController @Inject() (val ws: WSClient,
@@ -53,17 +53,19 @@ extends Controller with ApiClientSupport
   private def requestCreate(device: DeviceT, req: Request[JsValue]): Future[Result] = {
     val options = userOptions(req)
 
+    implicit val w = refinedWriter[String, Device.Id]
+
     // Must POST "devices" on device registry and
     // PUT "vehicles" on resolver, if VIN is known already
     // TODO: Retry until both responses are success
     for {
-      result <- devicesApi.createDevice(options, device)
+      deviceId <- devicesApi.createDevice(options, device)
       _ <- resolverApi.createDevice(options, device)
-      // TODO VIN validation
+      // TODO: Vin validation
       vin = refineV[Vehicle.ValidVin](device.deviceId.get.underlying).right.get
-      vehicleMetadata <- registerAuthPlusVehicle(vin)
+      vehicleMetadata <- registerAuthPlusVehicle(vin, deviceId)
       _ <- vehiclesStore.registerVehicle(vehicleMetadata)
-    } yield result
+    } yield Results.Ok(Json.toJson(deviceId))
   }
 
   private def searchWith
@@ -76,7 +78,7 @@ extends Controller with ApiClientSupport
   * Contact Auth+ to register for the first time the given VIN,
   * obtaining [[VehicleMetadata]]
   */
-  private def registerAuthPlusVehicle(name: Vehicle.Vin): Future[VehicleMetadata] = {
-    authPlusApi.createClient(name).map(i => VehicleMetadata(name, i))
+  private def registerAuthPlusVehicle(name: Vehicle.Vin, deviceId: Device.Id): Future[VehicleMetadata] = {
+    authPlusApi.createClient(deviceId).map(i => VehicleMetadata(name, deviceId, i))
   }
 }

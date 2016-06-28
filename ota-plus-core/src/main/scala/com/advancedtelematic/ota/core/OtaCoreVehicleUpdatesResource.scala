@@ -4,6 +4,7 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Directives
 import akka.stream.ActorMaterializer
 import cats.Show
+import cats.syntax.show.toShowOps
 import com.advancedtelematic.akka.http.jwt.JwtDirectives._
 import com.advancedtelematic.jws.CompactSerialization
 import com.advancedtelematic.ota.common.AuthNamespace
@@ -46,7 +47,7 @@ class OtaCoreDeviceUpdatesResource(db: Database,
       put {
         (path("installed")) {
           authenticateJwt("auth-plus", _ => true) { jwt =>
-            oauth2Scope(jwt, s"ota-core.${implicitly[Show[Id]].show(device)}.write") {
+            oauth2Scope(jwt, s"ota-core.${device.show}.write") {
               ds.updateInstalledPackages(device)
             }
           }

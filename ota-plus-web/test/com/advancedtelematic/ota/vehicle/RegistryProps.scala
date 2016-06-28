@@ -1,12 +1,14 @@
 package com.advancedtelematic.ota.vehicle
 
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.Uri
 import akka.testkit.TestKit
 import akka.util.Timeout
-import org.genivi.sota.data.VinGenerators
+import eu.timepit.refined.api.Refined
+import org.genivi.sota.data.{Device, DeviceGenerators, VinGenerators}
 import org.scalacheck.Gen
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{BeforeAndAfterAll, Matchers, PropSpecLike}
@@ -30,7 +32,8 @@ class RegistryProps extends TestKit(ActorSystem("vehicle-registry"))
   val VehicleGen: Gen[VehicleMetadata] = for {
     vin        <- genVin
     clientInfo <- ClientInfoGen
-  } yield VehicleMetadata(vin, clientInfo)
+    deviceId <- DeviceGenerators.arbId.arbitrary
+  } yield VehicleMetadata(vin, deviceId, clientInfo)
 
   val vehicles = Vehicles( system.actorOf( VehicleRegistry.props() ) )(Timeout(1, TimeUnit.SECONDS))
 

@@ -100,7 +100,10 @@ object Boot extends App {
   )
 
   val loggedRoutes = {
-    (TraceId.withTraceId & logResponseMetrics("ota-plus-core", TraceId.traceMetrics) & versionHeaders(version)) {
+    (logRequestResult("ota-plus-core", Logging.DebugLevel) &
+      TraceId.withTraceId &
+      logResponseMetrics("ota-plus-core", TraceId.traceMetrics) &
+      versionHeaders(version)) {
       routes
     }
   }
