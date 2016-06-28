@@ -2,7 +2,7 @@ define(function(require) {
   var React = require('react'),
       serializeForm = require('../mixins/serialize-form'),
       Router = require('react-router');
-	
+
   class TestSettings extends React.Component {
     constructor(props) {
       super(props);
@@ -11,7 +11,7 @@ define(function(require) {
     handleSubmit(e) {
       e.preventDefault();
       var data = serializeForm(this.refs.form);
-      
+
       localStorage.setItem('firstProductionTestDevice', data.first_production_test_device);
       localStorage.setItem('secondProductionTestDevice', data.second_production_test_device);
       localStorage.setItem('thirdProductionTestDevice', data.third_production_test_device);

@@ -4,7 +4,7 @@ define(function(require) {
       serializeForm = require('../../mixins/serialize-form'),
       BootstrapDatetimepicker = require('bootstrap-datetimepicker'),
       SotaDispatcher = require('sota-dispatcher');
-    
+
   class NewCampaign extends React.Component {
     constructor(props) {
       super(props);
@@ -29,7 +29,7 @@ define(function(require) {
       this.setState({
         progressIntervalId: id
       });
-      
+
       jQuery('#start-date, #end-date').datetimepicker({
          format: 'DD/MM/YYYY',
          defaultDate: new Date()
@@ -52,7 +52,7 @@ define(function(require) {
     updateProgress() {
       var currentProgress = this.state.progress;
       var newProgress = Math.min(currentProgress + 3, 100);
-            
+
       if(newProgress < 100) {
         this.setState({
           progress: newProgress
@@ -60,7 +60,7 @@ define(function(require) {
       } else if(newProgress == 100 && currentProgress != newProgress) {
         var that = this;
         clearInterval(this.state.progressIntervalId);
-        
+
         setTimeout(function(){
           that.setState({
            progress: newProgress
@@ -72,17 +72,17 @@ define(function(require) {
       var target = e.target;
       var name = target.attributes["name"].value;
       var newPin = this.state.pin;
-      
+
       newPin[name] = parseInt(target.value);
-      
+
       this.setState({
         pin: newPin
       });
-      
+
       if(Object.keys(newPin).length == 8) {
         this.createCampaign();
       }
-      
+
       /*
        * To check if pin is equal to specific one
       if(_.isEqual(newPin, this.state.correctPin)) {
@@ -92,11 +92,11 @@ define(function(require) {
     }
     createCampaign() {
       var newCampaigns = [];
-      var data = serializeForm(this.refs.form);          
+      var data = serializeForm(this.refs.form);
       if(localStorage.getItem('campaignsData') !== null) {
         newCampaigns = JSON.parse(localStorage.getItem('campaignsData'));
       }
-       
+
       var campaignData = {};
       campaignData['name'] = Math.random().toString(36).substring(13).toUpperCase() + '-4432' + '-44';
       campaignData['status'] = 'running';
@@ -110,13 +110,13 @@ define(function(require) {
       campaignData['start_time'] = data.start_time;
       campaignData['end_date'] = data.end_date;
       campaignData['end_time'] = data.end_time;
-      
+
       newCampaigns.push(campaignData);
-            
-      localStorage.setItem('campaignsData', JSON.stringify(newCampaigns));      
-      this.context.history.pushState(null, `devicedetails/${this.props.params.vin}`);
+
+      localStorage.setItem('campaignsData', JSON.stringify(newCampaigns));
+      this.context.history.pushState(null, `devicedetails/${this.props.params.id}`);
     }
-    jumpToNextInput(e) {     
+    jumpToNextInput(e) {
       var target = e.target;
       var maxLength = parseInt(target.attributes["maxlength"].value, 10);
       var myLength = target.value.length;
@@ -139,12 +139,12 @@ define(function(require) {
     render() {
       return (
         <form ref="form" onSubmit={this.handleSubmit} id="form-new-campaign">
-        
+
           <div className="row">
             <div className="col-md-3">
               Targeted devices:
             </div>
-    
+
             <div className="col-md-9">
               {this.state.progress != 100 ?
                 <div className="row">
@@ -164,13 +164,13 @@ define(function(require) {
               }
             </div>
           </div>
-  
+
           <div className="fullsize-overflow-hidden">
             <div className="form-subtitle">
               Pre-requisites
             </div>
           </div>
-  
+
           <div className="row">
             <div className="col-md-3">
               <div className="form-row-title">Min battery level:</div>
@@ -186,7 +186,7 @@ define(function(require) {
               </select>
             </div>
           </div>
-  
+
           <div className="row">
             <div className="col-md-3">
               <div className="form-row-title">Device state:</div>
@@ -200,7 +200,7 @@ define(function(require) {
               </select>
             </div>
           </div>
-  
+
           <div className="fullsize-overflow-hidden">
             <div className="form-subtitle">
               Options
@@ -218,20 +218,20 @@ define(function(require) {
               </select>
             </div>
           </div>
-  
+
           <div className="row">
             <div className="col-md-3">
               <div className="form-row-title">Auto-stop safety:</div>
             </div>
             <div className="col-md-9">
-      
-              <div className="btn-group btn-toggle"> 
+
+              <div className="btn-group btn-toggle">
                 <button className={"btn btn-sm btn-toggle-first " + (this.state.autoStopSafety ? 'btn-success' : 'btn-transparent')} type="button" onClick={this.changeAutoStopSafety}>ON</button>
                 <button className={"btn btn-sm " + (this.state.autoStopSafety ? 'btn-transparent' : 'btn-default')} type="button" onClick={this.changeAutoStopSafety}>OFF</button>
               </div>
             </div>
           </div>
-  
+
           <div className="row">
             <div className="col-md-3">
               <div className="form-row-title">Priority level:</div>
@@ -246,7 +246,7 @@ define(function(require) {
               </select>
             </div>
           </div>
-          
+
           <div className="row">
             <div className="col-md-3">
               <div className="form-row-title">Start and end:</div>
@@ -264,7 +264,7 @@ define(function(require) {
                   <i className="fa fa-clock-o" aria-hidden="true"></i>
                 </span>
               </div>
-      
+
               <div className="input-group" style={{width: 110}} id="end-date">
                 <input type="text" className="form-control form-addon" placeholder="" name="end_date" />
                 <span className="input-group-addon">
@@ -277,10 +277,10 @@ define(function(require) {
                   <i className="fa fa-clock-o" aria-hidden="true"></i>
                 </span>
               </div>
-      
+
             </div>
           </div>
-          
+
           {!this.state.showPinPanel ?
             <div className="form-group text-center">
               <button type="submit" className="btn btn-red" disabled={this.state.progress != 100 ? true : false}>Launch campaign</button>
@@ -291,14 +291,13 @@ define(function(require) {
               <input type="text" name="pin1" maxLength={1} placeholder="_" maxLength={1} onChange={this.pinChange}/>
               <input type="text" name="pin2" maxLength={1} placeholder="_" maxLength={1} onChange={this.pinChange}/>
               <input type="text" name="pin3" maxLength={1} placeholder="_" maxLength={1} onChange={this.pinChange}/>
-                            
               <input type="text" name="pin4" pmaxLength={1} placeholder="_" maxLength={1} className="margin-left-60" onChange={this.pinChange}/>
               <input type="text" name="pin5" maxLength={1} placeholder="_" maxLength={1} onChange={this.pinChange}/>
               <input type="text" name="pin6" maxLength={1} placeholder="_" maxLength={1} onChange={this.pinChange}/>
               <input type="text" name="pin7" maxLength={1} placeholder="_" maxLength={1} onChange={this.pinChange}/>
             </div>
           }
-        </form>  
+        </form>
       );
     }
   };

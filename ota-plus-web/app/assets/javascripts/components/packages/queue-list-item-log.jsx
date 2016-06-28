@@ -1,13 +1,13 @@
 define(function(require) {
   var React = require('react');
-  
+
   class QueueListItemLog extends React.Component {
     render() {
       return (
         <div style={{marginTop: 10}}>
           <p><strong>{this.props.name}</strong> Log</p>
           Package successfully installed on Tue 22 March 2016 11:43:22
-  
+
           <div className="log-code">
             echo<br />
             bash<br />

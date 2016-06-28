@@ -13,7 +13,7 @@ define(function(require) {
     cancelUpdate() {
       SotaDispatcher.dispatch({
         actionType: 'cancel-update',
-        vin: this.props.vin,
+        device: this.props.device,
         updateid: this.props.package.requestId
       });
     }
@@ -23,11 +23,11 @@ define(function(require) {
           <span className="list-group-item-text-left">{this.props.package.packageId.name}</span>
           <span className="drag-bar pull-right"><i className="fa fa-bars"></i></span>
           <button className="btn btn-action pull-right" onClick={this.cancelUpdate}>{this.context.strings.cancel}</button>
-          {this.props.status == 'error' ? 
+          {this.props.status == 'error' ?
             <button className="btn btn-action pull-right">retry</button>
           : null}
           <div className="pull-right list-group-item-text-right">
-            {this.props.status == 'error' ? 
+            {this.props.status == 'error' ?
               <span className="fa-stack package-status-icon">
                 <i className="fa fa-times-circle fa-stack-1x red" aria-hidden="true"></i>
               </span>

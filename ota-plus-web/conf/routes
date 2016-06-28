@@ -9,10 +9,8 @@ GET     /                                       org.genivi.webserver.controllers
 GET     /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)
 GET     /webjars/*file                          controllers.WebJarAssets.at(file)
 
-GET     /api/v1/vehicles                        org.genivi.webserver.controllers.DeviceController.search
-GET     /api/v1/device_data                     org.genivi.webserver.controllers.DeviceController.listDeviceAttributes
-
-PUT     /api/v1/vehicles/:vin                   org.genivi.webserver.controllers.DeviceController.create(vin: Vehicle.Vin)
+GET     /api/v1/device_data                     org.genivi.webserver.controllers.DeviceController.listDeviceAttributes()
+POST    /api/v1/devices                         org.genivi.webserver.controllers.DeviceController.create()
 
 GET     /api/v1/client/:vin/:packfmt/:arch      org.genivi.webserver.controllers.ClientSdkController.downloadClientSdk(vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture)
 
@@ -26,7 +24,7 @@ POST    /signup/:token                          com.advancedtelematic.signup.Sig
 
 GET     /login                                  com.advancedtelematic.login.LoginController.login
 GET     /logout                                 com.advancedtelematic.login.LoginController.logout
-POST	/authenticate				            com.advancedtelematic.login.LoginController.authenticate
+POST	  /authenticate				                    com.advancedtelematic.login.LoginController.authenticate
 
 GET     /health                                 com.advancedtelematic.HealthController.health
 GET     /health/version                         com.advancedtelematic.HealthController.version

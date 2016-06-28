@@ -5,12 +5,12 @@ define(function(require) {
       SotaDispatcher = require('sota-dispatcher'),
       DetailsHeader = require('./details-header'),
       PackagesQueue = require('../packages/queue'),
-      Packages = require('../packages/packages'),      
+      Packages = require('../packages/packages'),
       VelocityUI = require('velocity-ui'),
       VelocityHelpers = require('mixins/velocity/velocity-helpers'),
       VelocityComponent = require('mixins/velocity/velocity-component'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
-        
+
   class DeviceDetails extends React.Component {
     constructor(props, context) {
       super(props, context);
@@ -31,8 +31,8 @@ define(function(require) {
       this.setQueueStatistics = this.setQueueStatistics.bind(this);
       this.refreshData = this.refreshData.bind(this);
       this.countImpactAnalysisPackages = this.countImpactAnalysisPackages.bind(this);
-      
-      SotaDispatcher.dispatch({actionType: 'get-device', vin: this.props.params.vin});
+
+      SotaDispatcher.dispatch({actionType: 'get-device', device: this.props.params.id});
       this.props.Device.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
@@ -41,7 +41,7 @@ define(function(require) {
         that.refreshData();
       }, 1000);
       this.setState({intervalId: intervalId});
-      
+
       if(this.state.duplicatingInProgress) {
         var that = this;
         var timeoutIntervalId = setTimeout(function() {
@@ -49,7 +49,7 @@ define(function(require) {
             duplicatingInProgress: false,
           });
         }, 10000);
-        
+
         this.setState({
           timeoutIntervalId: timeoutIntervalId
         });
@@ -85,7 +85,7 @@ define(function(require) {
       });
     }
     refreshData() {
-      SotaDispatcher.dispatch({actionType: 'get-device', vin: this.props.params.vin});
+      SotaDispatcher.dispatch({actionType: 'get-device', device: this.props.params.id});
     }
     countImpactAnalysisPackages(val) {
       this.setState({
@@ -93,8 +93,9 @@ define(function(require) {
       });
     }
     render() {
-      var Device = this.props.Device.deref();
-      
+      // TODO: might be initialized empty
+      const deviceWithStatus = this.props.Device.deref();
+
       function animateLeftPosition(left) {
         return VelocityHelpers.registerEffect({
           defaultDuration: 100,
@@ -105,19 +106,19 @@ define(function(require) {
           ],
         });
       }
-      
+
       return (
         <div>
-          {Device.status == "NotSeen" ? 
+          {deviceWithStatus.status == "NotSeen" ?
             <div className="white-overlay">
               Device never seen online <br />
               Download the SDK
-              (<a href={`/api/v1/client/${this.props.params.vin}/deb/32`}>debian 32</a> &nbsp; or &nbsp;
-               <a href={`/api/v1/client/${this.props.params.vin}/deb/64`}>debian 64</a>)
+              (<a href={`/api/v1/client/${deviceWithStatus.deviceId}/deb/32`}>debian 32</a> &nbsp; or &nbsp;
+               <a href={`/api/v1/client/${deviceWithStatus.deviceId}/deb/64`}>debian 64</a>)
             </div>
           : null}
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-            {this.state.duplicatingInProgress ? 
+            {this.state.duplicatingInProgress ?
               <div className="grey-overlay">
                 <p><img src='/assets/img/icons/loading.gif' alt=''/></p>
                 <div>applying configuration from</div>
@@ -125,8 +126,8 @@ define(function(require) {
               </div>
             : null}
           </VelocityTransitionGroup>
-          <DetailsHeader 
-            device={Device} 
+          <DetailsHeader
+            device={deviceWithStatus}
             duplicatingInProgress={this.state.duplicatingInProgress}/>
           <div className="col-md-6 nopadding border-right-2">
             <div className="panel panel-ats">
@@ -136,15 +137,15 @@ define(function(require) {
                 </div>
               </div>
               <div className="panel-body">
-                <Packages 
-                  vin={this.props.params.vin} 
+                <Packages
+                  device={deviceWithStatus.id}
                   setPackagesStatistics={this.setPackagesStatistics}
-                  lastSeen={Device.lastSeen}
+                  lastSeen={deviceWithStatus.lastSeen}
                   countImpactAnalysisPackages={this.countImpactAnalysisPackages}/>
               </div>
               <div className="panel-footer">
                 <VelocityComponent animation={this.state.selectedImpactAnalysisPackagesCount ? animateLeftPosition('15px') : animateLeftPosition('-250px')}>
-                  <Link to={`devicedetails/${this.props.params.vin}/impactanalysis/${this.state.selectedImpactAnalysisPackagesCount}`} className="btn btn-black btn-impact-analysis pull-left">
+                  <Link to={`devicedetails/${this.props.params.id}/impactanalysis/${this.state.selectedImpactAnalysisPackagesCount}`} className="btn btn-black btn-impact-analysis pull-left">
                     Impact analysis
                   </Link>
                 </VelocityComponent>
@@ -172,7 +173,7 @@ define(function(require) {
                   showPackagesHistory={this.state.showPackagesHistory}
                   showQueueHistory={this.showQueueHistory}
                   setQueueStatistics={this.setQueueStatistics}
-                  vin={this.props.params.vin}/>
+                  device={this.props.params.id}/>
               </div>
               <div className="panel-footer">
                 {this.state.queueCount} packages in queue
@@ -184,7 +185,7 @@ define(function(require) {
       );
     }
   };
-  
+
   DeviceDetails.contextTypes = {
     strings: React.PropTypes.object.isRequired
   };

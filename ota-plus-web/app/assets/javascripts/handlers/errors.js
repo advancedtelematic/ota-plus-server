@@ -12,7 +12,7 @@ define(function(require) {
       } else if (ct.indexOf('json') > -1) {
         postStatus[action] = JSON.parse(result).description;
       }
-            
+
       db.postStatus.reset(postStatus);
     }
   };

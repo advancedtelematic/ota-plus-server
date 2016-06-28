@@ -8,7 +8,6 @@ define(function(require) {
       DevicesList = require('./devices-list'),
       DevicesHeader = require('./devices-header'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
-  
   class Devices extends React.Component {
     constructor(props) {
       super(props);
@@ -24,12 +23,12 @@ define(function(require) {
         campaignsCount: 32,
         productionDevicesCount: 0,
       };
-      
+
       this.changeFilter = this.changeFilter.bind(this);
       this.selectStatus = this.selectStatus.bind(this);
       this.selectSort = this.selectSort.bind(this);
       this.refreshData = this.refreshData.bind(this);
-      
+
       SotaDispatcher.dispatch({actionType: 'get-devices'});
       db.devices.addWatch("devices", _.bind(this.forceUpdate, this, null));
       SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: ''});
@@ -41,7 +40,7 @@ define(function(require) {
     }
     selectStatus(status, e) {
       e.preventDefault();
-      
+
       var name = jQuery(e.target).text();
       this.setState({
         selectedStatus: status,
@@ -50,12 +49,12 @@ define(function(require) {
     }
     selectSort(sort, e) {
       e.preventDefault();
-      
+
       var name = jQuery(e.target).text();
       this.setState({
         selectedSort: sort,
         selectedSortName: name
-      });       
+      });
     }
     componentDidMount() {
       var that = this;
@@ -88,7 +87,7 @@ define(function(require) {
       var SortedDevices = [];
       var selectedStatus = this.state.selectedStatus;
       var selectedSort = this.state.selectedSort;
-      
+
       var productionDevicesCount = 0;
       var totalProductionDevicesCount = 15382448;
       if(this.state.filterValue.length >= 17) {
@@ -96,14 +95,14 @@ define(function(require) {
       } else {
         productionDevicesCount = this.state.filterValue.length > 0 ? this.state.filterValue.length == 16 ? 25 : Math.round(totalProductionDevicesCount / (this.state.filterValue.length * 3499)) : totalProductionDevicesCount;
       }
-      
-      Devices = Devices.filter(function (pack) {          
+
+      Devices = Devices.filter(function (pack) {
         return (selectedStatus === 'All' || selectedStatus === pack.status);
       });
-            
+
       Object.keys(Devices).sort(function(a, b) {
-        var aName = Devices[a].vin;
-        var bName = Devices[b].vin;
+        var aName = Devices[a].deviceName;
+        var bName = Devices[b].deviceName;
         if(selectedSort !== 'undefined' && selectedSort == 'desc')
           return bName.localeCompare(aName);
         else
@@ -111,7 +110,7 @@ define(function(require) {
       }).forEach(function(key) {
         SortedDevices.push(Devices[key]);
       });
-      
+
       return (
         <ReactCSSTransitionGroup
           transitionAppear={true}
@@ -119,9 +118,9 @@ define(function(require) {
           transitionAppearTimeout={500}
           transitionEnterTimeout={500}
           transitionLeaveTimeout={500}
-          transitionName="example">   
-          <DevicesHeader 
-            changeFilter={this.changeFilter} 
+          transitionName="example">
+          <DevicesHeader
+            changeFilter={this.changeFilter}
             filterValue={this.state.filterValue}
             selectedStatus={this.state.selectedStatus}
             selectedStatusName={this.state.selectedStatusName}
@@ -133,7 +132,7 @@ define(function(require) {
             <i className={(this.state.expandedSectionName == 'testDevices') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> TEST DEVICES ({this.numberWithDots(SortedDevices.length)} out of {this.numberWithDots(db.devices.deref().length)})
           </button>
           <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
-            {this.state.expandedSectionName == 'testDevices' ? 
+            {this.state.expandedSectionName == 'testDevices' ?
               <div>
                 <div id="devices">
                   <DevicesList
@@ -148,7 +147,7 @@ define(function(require) {
             <i className={(this.state.expandedSectionName == 'productionDevices') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> PRODUCTION DEVICES ({this.numberWithDots(productionDevicesCount)} out of {this.numberWithDots(totalProductionDevicesCount)})
           </button>
           <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
-            {this.state.expandedSectionName == 'productionDevices' ? 
+            {this.state.expandedSectionName == 'productionDevices' ?
               <div>
                 <div id="devices">
                   <DevicesList
@@ -162,14 +161,14 @@ define(function(require) {
           <button className="btn btn-full-section" onClick={this.expandSection.bind(this, 'packages')}>
             <i className={(this.state.expandedSectionName == 'packages') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> PACKAGES ({this.state.filterValue.length  == 0 ? this.numberWithDots(this.state.packagesCount) : this.state.filterValue.length == 1 ? 1 : this.state.filterValue.length == 2 ? 0 : 0} out of {this.numberWithDots(this.state.packagesCount)})
           </button>
-          {this.state.expandedSectionName == 'packages' ? 
+          {this.state.expandedSectionName == 'packages' ?
             <div></div>
           : null}
-      
+
           <button className="btn btn-full-section" onClick={this.expandSection.bind(this, 'campaigns')}>
             <i className={(this.state.expandedSectionName == 'campaigns') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> CAMPAIGNS ({this.state.filterValue.length  == 0 ? this.numberWithDots(this.state.campaignsCount) : this.state.filterValue.length == 1 ? 1 : this.state.filterValue.length == 2 ? 0 : 0} out of {this.numberWithDots(this.state.campaignsCount)})
           </button>
-          {this.state.expandedSectionName == 'campaigns' ? 
+          {this.state.expandedSectionName == 'campaigns' ?
             <div></div>
           : null}
         </ReactCSSTransitionGroup>

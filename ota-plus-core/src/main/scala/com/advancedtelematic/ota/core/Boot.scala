@@ -1,27 +1,27 @@
 package com.advancedtelematic.ota.core
 
-import javax.crypto.SecretKey
-import javax.crypto.spec.SecretKeySpec
-
 import akka.actor.ActorSystem
 import akka.event.Logging
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.Uri
-import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import com.advancedtelematic.jwa.`HMAC SHA-256`
 import com.advancedtelematic.jws.{JwsVerifier, KeyLookup}
 import com.advancedtelematic.ota.common.TraceId
 import com.typesafe.config.{Config, ConfigFactory}
+import javax.crypto.SecretKey
+import javax.crypto.spec.SecretKeySpec
 import org.apache.commons.codec.binary.Base64
+import org.genivi.sota.client.DeviceRegistryClient
 import org.genivi.sota.core.db._
 import org.genivi.sota.core.resolver.{Connectivity, DefaultConnectivity, DefaultExternalResolverClient}
 import org.genivi.sota.core.transfer._
 import org.genivi.sota.http.HealthResource
-
-import scala.util.{Failure, Success, Try}
 import org.genivi.sota.http.SotaDirectives._
+import scala.util.{Failure, Success, Try}
+
 
 class Settings(config: Config) {
   val host = config.getString("server.host")
@@ -31,6 +31,9 @@ class Settings(config: Config) {
   val resolverResolveUri = Uri(config.getString("resolver.resolveUri"))
   val resolverPackagesUri = Uri(config.getString("resolver.packagesUri"))
   val resolverVehiclesUri = Uri(config.getString("resolver.vehiclesUri"))
+
+  val deviceRegistryUri = Uri(config.getString("device_registry.baseUri"))
+  val deviceRegistryApi = Uri(config.getString("device_registry.devicesUri"))
 
   val authPlusSignatureVerifier = {
     import com.advancedtelematic.json.signature.JcaSupport._
@@ -75,10 +78,14 @@ object Boot extends App {
     settings.resolverUri, settings.resolverResolveUri, settings.resolverPackagesUri, settings.resolverVehiclesUri
   )
 
+  val deviceRegistry= new DeviceRegistryClient(
+    settings.deviceRegistryUri, settings.deviceRegistryApi
+  )
+
   val healthResource = new HealthResource(db, com.advancedtelematic.ota.core.BuildInfo.toMap)
-  val webService = new OtaPlusCoreWebservice(DefaultUpdateNotifier, externalResolverClient, db)
-  val vehicleService = new OtaCoreVehicleUpdatesResource(db,
-    settings.authPlusSignatureVerifier, externalResolverClient)
+  val webService = new OtaPlusCoreWebService(DefaultUpdateNotifier, externalResolverClient, deviceRegistry, db)
+  val vehicleService = new OtaCoreDeviceUpdatesResource(db,
+    settings.authPlusSignatureVerifier, externalResolverClient, deviceRegistry)
 
   lazy val version = {
     val bi = org.genivi.sota.core.BuildInfo
@@ -93,7 +100,10 @@ object Boot extends App {
   )
 
   val loggedRoutes = {
-    (TraceId.withTraceId & logResponseMetrics("ota-plus-core", TraceId.traceMetrics) & versionHeaders(version)) {
+    (logRequestResult("ota-plus-core", Logging.DebugLevel) &
+      TraceId.withTraceId &
+      logResponseMetrics("ota-plus-core", TraceId.traceMetrics) &
+      versionHeaders(version)) {
       routes
     }
   }

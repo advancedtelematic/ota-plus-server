@@ -3,7 +3,7 @@ define(function(require) {
       db = require('stores/db'),
       PackagesList = require('./packages-list'),
       SearchBar = require('../searchbar');
-  
+
   class Packages extends React.Component {
     constructor(props) {
       super(props);
@@ -16,7 +16,7 @@ define(function(require) {
         intervalId: null,
         timeoutId: null
       }
-      
+
       this.changeFilter = this.changeFilter.bind(this);
       this.setDivsHeight = this.setDivsHeight.bind(this);
     }
@@ -28,17 +28,17 @@ define(function(require) {
           that.setDivsHeight();
         }, 200);
       });
-      
+
       window.addEventListener("resize", this.setDivsHeight);
-      
+
       var intervalId = setInterval(function(){
         that.setDivsHeight();
       }, 50);
-      
+
       var timeoutId = setTimeout(function() {
         clearInterval(intervalId);
       }, 5000);
-      
+
       this.setState({
         intervalId: intervalId,
         timeoutId: timeoutId
@@ -50,11 +50,11 @@ define(function(require) {
       clearTimeout(this.state.timeoutId);
     }
     changeFilter(filter) {
-      this.setState({filterValue: filter});  
+      this.setState({filterValue: filter});
     }
     selectStatus(status, e) {
       e.preventDefault();
-      
+
       var name = jQuery(e.target).text();
       this.setState({
         selectStatus: status,
@@ -64,7 +64,7 @@ define(function(require) {
     }
     selectSort(sort, e) {
       e.preventDefault();
-      
+
       var name = jQuery(e.target).text();
       this.setState({
         selectSort: sort,
@@ -87,19 +87,19 @@ define(function(require) {
       var offsetTop = jQuery('#queue-wrapper').offset().top;
       jQuery('#queue-wrapper').height(windowHeight - offsetTop - footerHeight);
     }
-    render() {   
+    render() {
       return (
         <div id="packages">
           <div className="panel-subheading">
             {this.context.location.pathname.toLowerCase().split('/')[1] != 'productiondevicedetails' &&
-            (localStorage.getItem('firstProductionTestDevice') == this.props.vin ||
-            localStorage.getItem('secondProductionTestDevice') == this.props.vin ||
-            localStorage.getItem('thirdProductionTestDevice') == this.props.vin) ? 
+            (localStorage.getItem('firstProductionTestDevice') == this.props.device ||
+            localStorage.getItem('secondProductionTestDevice') == this.props.device ||
+            localStorage.getItem('thirdProductionTestDevice') == this.props.device) ?
               <input type="checkbox" id="selectPackages" className="pull-left"/>
             : null}
-            
-            <SearchBar class="search-bar pull-left" changeFilter={this.changeFilter}/>     
-            
+
+            <SearchBar class="search-bar pull-left" changeFilter={this.changeFilter}/>
+
             <div className="select-bar pull-right margin-left-30">
               <div className="select-bar-text">Sort by</div>
               <div className="btn-group">
@@ -113,7 +113,7 @@ define(function(require) {
                 </ul>
               </div>
             </div>
-            
+
             <div className="select-bar pull-right">
               <div className="select-bar-text">Status</div>
               <div className="btn-group">
@@ -130,30 +130,30 @@ define(function(require) {
               </div>
             </div>
           </div>
-  
+
           <div className="alert alert-ats alert-dismissible" role="alert">
             <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true"></span></button>
-            <img src="/assets/img/icons/info.png" className="icon-info" alt=""/> 
+            <img src="/assets/img/icons/info.png" className="icon-info" alt=""/>
             Click on the package you want to install and select its version to add it to the queue.
           </div>
-          
+
           <PackagesList
             AllPackages={db.searchablePackages}
             AllPackagesPollEventName="poll-packages"
             AllPackagesDispatchObject={{actionType: 'search-packages-by-regex', regex: this.state.filterValue}}
-            InstalledPackages={db.packagesForVin}
+            InstalledPackages={db.packagesForDevice}
             InstalledPackagesPollEventName="poll-installed-packages"
-            InstalledPackagesDispatchObject={{actionType: 'get-packages-for-vin', vin: this.props.vin}}
-            QueuedPackages={db.packageQueueForVin}
+            InstalledPackagesDispatchObject={{actionType: 'get-packages-for-device', device: this.props.device}}
+            QueuedPackages={db.packageQueueForDevice}
             QueuedPackagesPollEventName="poll-queued-packages"
-            QueuedPackagesDispatchObject={{actionType: 'get-package-queue-for-vin', vin: this.props.vin}}
+            QueuedPackagesDispatchObject={{actionType: 'get-package-queue-for-device', device: this.props.device}}
             filterValue={this.state.filterValue}
             selectStatus={this.state.selectStatus}
             selectSort={this.state.selectSort}
-            vin={this.props.vin}
+            device={this.props.device}
             setPackagesStatistics={this.props.setPackagesStatistics}
             lastSeen={this.props.lastSeen}
-            countImpactAnalysisPackages={this.props.countImpactAnalysisPackages}/>            
+            countImpactAnalysisPackages={this.props.countImpactAnalysisPackages}/>
         </div>
       );
     }

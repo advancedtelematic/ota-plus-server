@@ -1,42 +1,40 @@
 package org.genivi.webserver.controllers
 
-import javax.inject.{Inject, Named, Singleton}
-
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
+import com.advancedtelematic.ota.device.Devices._
 import com.advancedtelematic.ota.vehicle.{VehicleMetadata, Vehicles}
-import org.genivi.sota.data.Vehicle
-import play.api.{Configuration, Logger}
+import eu.timepit.refined._
+import javax.inject.{Inject, Named, Singleton}
+
+import org.genivi.sota.data.{Device, DeviceT, Vehicle}
+import play.api.libs.concurrent.Execution
+import play.api.libs.json._
 import play.api.libs.ws._
 import play.api.mvc._
-import org.genivi.sota.data.Vehicle.Vin
-import play.api.libs.concurrent.Execution
+import play.api.{Configuration, Logger}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
+import com.advancedtelematic.ota.device.Devices.refinedWriter
 
 @Singleton
 class DeviceController @Inject() (val ws: WSClient,
                                   val conf: Configuration,
                                   val clientExec: ApiClientExec,
                                   @Named("vehicles-store") vehiclesStore: Vehicles)
+                                 (implicit ec: ExecutionContext)
 extends Controller with ApiClientSupport
   with OtaPlusConfig {
 
-  implicit val context = Execution.defaultContext
-
   val logger = Logger(this.getClass)
 
-  def create(vin: Vehicle.Vin) = Action.async(parse.raw) { req =>
-    requestCreate(vin, req)
+  def create() = Action.async(parse.json[DeviceT]) { req =>
+    requestCreate(req.body, req)
   }
 
   def listDeviceAttributes() = Action.async(parse.raw) { req =>
     searchWith(req, coreApi.search)
-  }
-
-  def search() = Action.async(parse.raw) { req =>
-    searchWith(req, resolverApi.search)
   }
 
   private[this] def userOptions(req: Request[_]): UserOptions = {
@@ -52,17 +50,22 @@ extends Controller with ApiClientSupport
     } yield bearer
   }
 
-  private def requestCreate(vin: Vin, req: Request[RawBuffer]): Future[Result] = {
+  private def requestCreate(device: DeviceT, req: Request[_]): Future[Result] = {
     val options = userOptions(req)
 
-    // Must PUT "vehicles" on both core and resolver
+    implicit val w = refinedWriter[String, Device.Id]
+
+    // Must POST "devices" on device registry and
+    // PUT "vehicles" on resolver, if VIN is known already
     // TODO: Retry until both responses are success
     for {
-      respCore <-  coreApi.createVehicle(options, vin)
-      respResult <- resolverApi.createVehicle(options, vin)
-      vehicleMetadata <- registerAuthPlusVehicle(vin)
+      deviceId <- devicesApi.createDevice(options, device)
+      _ <- resolverApi.createDevice(options, device)
+      // TODO: Vin validation
+      vin = refineV[Vehicle.ValidVin](device.deviceId.get.underlying).right.get
+      vehicleMetadata <- registerAuthPlusVehicle(vin, deviceId)
       _ <- vehiclesStore.registerVehicle(vehicleMetadata)
-    } yield respCore
+    } yield Results.Ok(Json.toJson(deviceId))
   }
 
   private def searchWith
@@ -75,7 +78,7 @@ extends Controller with ApiClientSupport
   * Contact Auth+ to register for the first time the given VIN,
   * obtaining [[VehicleMetadata]]
   */
-  private def registerAuthPlusVehicle(vin: Vehicle.Vin): Future[VehicleMetadata] = {
-    authPlusApi.createClient(vin).map(i => VehicleMetadata(vin, i))
+  private def registerAuthPlusVehicle(name: Vehicle.Vin, deviceId: Device.Id): Future[VehicleMetadata] = {
+    authPlusApi.createClient(deviceId).map(i => VehicleMetadata(name, deviceId, i))
   }
 }
