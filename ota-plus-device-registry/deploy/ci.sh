@@ -18,12 +18,8 @@ export VDATA=$(curl -s -H "X-Vault-Token: ${VAULT_TOKEN}" -X GET ${VAULT_ADDR}/v
 export DEVICE_REGISTRY_DB_USER="$(echo $VDATA | jq -r .data.db_username)"
 export DEVICE_REGISTRY_DB_PASSWORD="$(echo $VDATA | jq -r .data.db_password)"
 export DEVICE_REGISTRY_DB_URL="$(echo $VDATA | jq -r .data.db_url)"
-
-# export DEVICE_REGISTRY_AWS_ACCESS_KEY="$(echo $VDATA | jq -r .data.device_registry_aws_access_key)"
-# export DEVICE_REGISTRY_AWS_SECRET_KEY="$(echo $VDATA | jq -r .data.device_registry_aws_secret_key)"
-# export DEVICE_REGISTRY_AWS_BUCKET_ID="$(echo $VDATA | jq -r .data.device_registry_aws_bucket_id)"
-
 export DEVICE_REGISTRY_DB_MIGRATE=true
+
 export HOST="0.0.0.0"
 export PORT="8083"
 
