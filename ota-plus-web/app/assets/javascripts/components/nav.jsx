@@ -52,8 +52,8 @@ define(function(require) {
                   <img src="/assets/img/icons/profile_icon.png" />
                 </a>
                 <VelocityTransitionGroup enter={{animation: "fadeIn", duration: 200}} leave={{animation: "fadeOut", duration: 200}}>
-                  {this.state.isDropdownVisible ?
-                    <ChangePassword />
+                  {this.state.isDropdownVisible ? 
+                    <ChangePassword logout={this.props.logout}/>
                   : null}
                 </VelocityTransitionGroup>
               </li>
