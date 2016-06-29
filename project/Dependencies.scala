@@ -1,5 +1,5 @@
 object Version {
-  val Akka = "2.4.4"
+  val Akka = "2.4.7"
   val JsonWebSecurity = "0.2.1"
   val MockWs = "2.5.0"
   val GeniviSota = "0.1.72"
