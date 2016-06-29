@@ -18,6 +18,8 @@ dockerUpdateLatest in Docker := true
 
 buildInfoPackage := "com.advancedtelematic.ota.core"
 
+bashScriptExtraDefines ++= Seq("""addJava "-Xmx512m"""")
+
 enablePlugins(SbtWeb, Versioning.Plugin)
 
 Versioning.settings
