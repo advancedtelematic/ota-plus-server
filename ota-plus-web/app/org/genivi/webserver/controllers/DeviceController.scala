@@ -1,5 +1,7 @@
 package org.genivi.webserver.controllers
 
+import java.net.URI
+
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.ota.device.Devices._
@@ -17,6 +19,7 @@ import play.api.{Configuration, Logger}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import com.advancedtelematic.ota.device.Devices.refinedWriter
+import eu.timepit.refined.string.Uri
 
 @Singleton
 class DeviceController @Inject() (val ws: WSClient,
@@ -37,10 +40,15 @@ extends Controller with ApiClientSupport
     searchWith(req, coreApi.search)
   }
 
+  def search() = Action.async(parse.raw) { req =>
+    searchWith(req, devicesApi.search)
+  }
+
   private[this] def userOptions(req: Request[_]): UserOptions = {
     val traceId = req.headers.get("x-ats-traceid")
     val token = req.session.get("access_token").orElse(bearerToken(req))
-    UserOptions(token, traceId)
+    val namespace = req.session.get("username").flatMap(u => refineV[Uri](u).right.toOption)
+    UserOptions(token, traceId, namespace)
   }
 
   private[this] def bearerToken(req: Request[_]): Option[String] = {
@@ -65,11 +73,11 @@ extends Controller with ApiClientSupport
       vin = refineV[Vehicle.ValidVin](device.deviceId.get.underlying).right.get
       vehicleMetadata <- registerAuthPlusVehicle(vin, deviceId)
       _ <- vehiclesStore.registerVehicle(vehicleMetadata)
-    } yield Results.Ok(Json.toJson(deviceId))
+    } yield Results.Created(Json.toJson(deviceId))
   }
 
-  private def searchWith
-  (req: Request[_], apiSearch: (UserOptions, Seq[(String, String)]) => Future[Result]): Future[Result] = {
+  private def searchWith[R]
+  (req: Request[_], apiSearch: (UserOptions, Seq[(String, String)]) => Future[R]): Future[R] = {
     val params = req.queryString.mapValues(_.head).toSeq
     apiSearch(userOptions(req), params)
   }

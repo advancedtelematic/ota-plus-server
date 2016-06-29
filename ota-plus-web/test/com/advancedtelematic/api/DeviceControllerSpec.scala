@@ -2,10 +2,10 @@ package com.advancedtelematic.api
 
 import akka.stream.Materializer
 import akka.util.ByteString
-import cats.Show
+import cats.syntax.show._
 import com.advancedtelematic.ota.device.Devices._
-import eu.timepit.refined.api.Refined
 import java.util.UUID
+
 import mockws.{MockWS, Route}
 import org.genivi.sota.data.{Device, DeviceT}
 import org.genivi.webserver.controllers.DeviceController
@@ -17,7 +17,6 @@ import play.api.libs.ws.WSClient
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-
 
 class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results {
 
@@ -32,7 +31,7 @@ class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results 
     }
 
     val resolver = Route {
-      case (PUT, p) if p == s"http://localhost:8081/api/v1/vehicles/${implicitly[Show[DeviceId]].show(device.deviceId.get)}" =>
+      case (PUT, p) if p == s"http://localhost:8081/api/v1/vehicles/${device.deviceId.get.show}" =>
         Action { Created("") }
       case (GET, "http://localhost:8081/api/v1/vehicles") =>
         Action { Ok("Resolver Search") }
@@ -40,9 +39,9 @@ class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results 
 
     val deviceRegistry = Route {
       case (POST, p) if p == s"http://localhost:8083/api/v1/devices" =>
-        Action { Created("Created In device registry") }
-      case (GET, "http://localhost:8080/api/v1/devices") =>
-        Action { Ok("Device registry Search") }
+        Action { Created(s"""\"7d0e4c63-26ae-46b6-bbfe-78cb2ed3cf94\""""") }
+      case (GET, "http://localhost:8083/api/v1/devices") =>
+        Action { Ok("[]") }
     }
 
     val authPlus = Route {
@@ -71,13 +70,12 @@ class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results 
   val emptyRequest = FakeRequest().withBody(RawBuffer(0, ByteString()))
 
   "DeviceController" should {
-    "create forwards request to both device registry and resolver" in {
-
+    "forward create to both device registry and resolver" in {
       val request = FakeRequest(POST, "/").withJsonBody(Json.toJson(device))
       val result = call(controller.create(), request)
 
       status(result) must be(201)
-      contentAsString(result) must be("Created In device registry")
+      contentAsJson(result).as[Device.Id].show must be("7d0e4c63-26ae-46b6-bbfe-78cb2ed3cf94")
     }
 
     "listDeviceAttributes gets results from core" in {
@@ -85,6 +83,13 @@ class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results 
 
       status(result) must be(200)
       contentAsString(result) must be("Core Search")
+    }
+
+    "search forwards request to device registry" in {
+      val request = FakeRequest(GET, "/?deviceId=LOL")
+      val result = call(controller.search(), request)
+
+      status(result) must be(200)
     }
   }
 }
