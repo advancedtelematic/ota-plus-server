@@ -24,7 +24,8 @@ case class RemoteApiError(result: Result, msg: String = "") extends Exception(ms
 case class RemoteApiParseError(msg: String) extends Exception(msg) with NoStackTrace
 
 object ApiRequest {
-  case class UserOptions(token: Option[String] = None, traceId: Option[String] = None)
+  case class UserOptions(token: Option[String] = None, traceId: Option[String] = None,
+                         namespace: Option[Namespace] = None)
 
   def base(baserUrl: String): String => ApiRequest = apply(baserUrl)
 
@@ -105,6 +106,15 @@ class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends Ot
       .withUserOptions(options)
       .transform(_.withMethod("POST").withBody(Json.toJson(device)))
       .execJson(apiExec)(idReads)
+  }
+
+  def search(options: UserOptions, params: Seq[(String, String)]): Future[Result] = {
+    val _params = params ++ options.namespace.map(n => "namespace" -> n.get.toString).toSeq
+
+    apiRequest("devices")
+      .withUserOptions(options)
+      .transform(_.withQueryString(_params:_*))
+      .execResult(apiExec)
   }
 }
 
