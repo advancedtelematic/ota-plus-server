@@ -2,8 +2,9 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       Link = Router.Link,
-      SearchBar = require('../searchbar');
-
+      SearchBar = require('../searchbar'),
+      TutorialAddNewDevice = require('../tutorial/add-new-device');
+        
   class DevicesHeader extends React.Component {
     constructor(props) {
       super(props);
@@ -48,6 +49,9 @@ define(function(require) {
             <Link to="newdevice" className="btn btn-add pull-right">
               <i className="fa fa-plus"></i> &nbsp; Add new device
             </Link>
+            {this.props.isTutorialShown ? 
+              <TutorialAddNewDevice />
+            : null}
           </div>
         </div>
       );
