@@ -30,6 +30,8 @@ dockerRepository in Docker := Some("advancedtelematic")
 
 dockerUpdateLatest in Docker := true
 
+bashScriptExtraDefines ++= Seq("""addJava "-Xmx800m"""")
+
 libraryDependencies ++= Seq (
     Dependencies.AkkaHttp,
     Dependencies.AkkaStream,
