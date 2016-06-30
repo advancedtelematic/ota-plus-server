@@ -133,14 +133,14 @@ define(function(require) {
       }
 
       return (
-        <VelocityTransitionGroup enter={{animation: "fadeIn"}} runOnMount={true}>
-          <div key={key} className={page}>
+        <div key={key} className={page}>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} runOnMount={true}>
             <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel}/>
             <div className="page wrapper">
               {React.cloneElement(this.props.children, {showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
             </div>
-          </div>
-        </VelocityTransitionGroup>
+          </VelocityTransitionGroup>
+        </div>
       );
     }
   };

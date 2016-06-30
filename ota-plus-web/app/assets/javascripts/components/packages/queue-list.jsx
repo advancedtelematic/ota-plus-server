@@ -2,8 +2,10 @@ define(function(require) {
   var React = require('react'),
       SotaDispatcher = require('sota-dispatcher'),
       db = require('stores/db'),
-      QueueListItem = require('./queue-list-item');
-
+      QueueListItem = require('./queue-list-item'),
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
+      TutorialAddPackageThirdStep = require('../tutorial/add-package-third-step');
+  
   class QueueList extends React.Component {
     constructor(props) {
       super(props);
@@ -91,7 +93,10 @@ define(function(require) {
       return (
         <ul id="queue-list" className="list-group list-group-dnd">
           {packages.length > 0 ?
-            packages
+            <span>
+              {packages}
+              <TutorialAddPackageThirdStep />
+            </span>
           :
             <div>Queue is empty</div>
           }

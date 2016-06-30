@@ -153,7 +153,8 @@ define(function(require) {
             device={this.props.device}
             setPackagesStatistics={this.props.setPackagesStatistics}
             lastSeen={this.props.lastSeen}
-            countImpactAnalysisPackages={this.props.countImpactAnalysisPackages}/>
+            countImpactAnalysisPackages={this.props.countImpactAnalysisPackages}
+            deviceStatus={this.props.deviceStatus}/>       
         </div>
       );
     }

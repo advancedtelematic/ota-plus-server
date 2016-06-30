@@ -8,8 +8,10 @@ define(function(require) {
       AddPackage = require('./add-package'),
       jQuery = require('jquery'),
       IOSList = require('ioslist'),
-      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
-
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
+      TutorialAddPackageFirstStep = require('../tutorial/add-package-first-step'),
+      TutorialAddPackageSecondStep = require('../tutorial/add-package-second-step');
+  
   class PackagesList extends React.Component {
     constructor(props) {
       super(props);
@@ -396,6 +398,12 @@ define(function(require) {
               }
             </ul>
           }
+          {this.props.deviceStatus != 'NotSeen' && !this.props.AllPackages.deref().length ? 
+            <TutorialAddPackageFirstStep />
+          : null}
+          {this.props.deviceStatus != 'NotSeen' && this.props.AllPackages.deref().length && !this.props.InstalledPackages.deref().length && !this.props.QueuedPackages.deref().length ?
+            <TutorialAddPackageSecondStep />
+          : null}
         </div>
       );
     }
