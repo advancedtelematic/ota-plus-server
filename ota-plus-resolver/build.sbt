@@ -15,6 +15,8 @@ dockerRepository in Docker := Some("advancedtelematic")
 
 dockerUpdateLatest in Docker := true
 
+bashScriptExtraDefines ++= Seq("""addJava "-Xmx512m"""")
+
 enablePlugins(SbtWeb, Versioning.Plugin)
 
 buildInfoPackage := "com.advancedtelematic.ota.resolver"
