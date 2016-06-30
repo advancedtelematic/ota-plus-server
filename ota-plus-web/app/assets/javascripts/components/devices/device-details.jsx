@@ -6,6 +6,7 @@ define(function(require) {
       DetailsHeader = require('./details-header'),
       PackagesQueue = require('../packages/queue'),
       Packages = require('../packages/packages'),
+      TutorialInstallDevice = require('../tutorial/install-device'),
       VelocityUI = require('velocity-ui'),
       VelocityHelpers = require('mixins/velocity/velocity-helpers'),
       VelocityComponent = require('mixins/velocity/velocity-component'),
@@ -110,11 +111,8 @@ define(function(require) {
       return (
         <div>
           {deviceWithStatus.status == "NotSeen" ?
-            <div className="white-overlay">
-              Device never seen online <br />
-              Download the SDK
-              (<a href={`/api/v1/client/${deviceWithStatus.deviceId}/deb/32`}>debian 32</a> &nbsp; or &nbsp;
-               <a href={`/api/v1/client/${deviceWithStatus.deviceId}/deb/64`}>debian 64</a>)
+            <div className="lightgrey-overlay">
+              <TutorialInstallDevice />              
             </div>
           : null}
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
@@ -141,7 +139,8 @@ define(function(require) {
                   device={deviceWithStatus.id}
                   setPackagesStatistics={this.setPackagesStatistics}
                   lastSeen={deviceWithStatus.lastSeen}
-                  countImpactAnalysisPackages={this.countImpactAnalysisPackages}/>
+                  countImpactAnalysisPackages={this.countImpactAnalysisPackages}
+                  deviceStatus={deviceWithStatus.status}/>
               </div>
               <div className="panel-footer">
                 <VelocityComponent animation={this.state.selectedImpactAnalysisPackagesCount ? animateLeftPosition('15px') : animateLeftPosition('-250px')}>
