@@ -5,18 +5,17 @@
 
 import java.io.File
 import java.security.InvalidParameterException
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.UUID
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
-import javax.inject.Inject
 
 import com.advancedtelematic.jwa.`HMAC SHA-256`
 import com.advancedtelematic.jws.{Jws, KeyInfo, KeyLookup}
 import com.advancedtelematic.jwt._
 import org.asynchttpclient.AsyncHttpClient
 import org.asynchttpclient.request.body.multipart.FilePart
-import org.joda.time.{DateTime, Instant, LocalDateTime}
-import org.joda.time.format.DateTimeFormat
 import org.scalatest.Tag
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatestplus.play._
@@ -24,7 +23,6 @@ import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.ws.{WS, WSClient, WSResponse}
-import play.api.mvc.{Cookie, Cookies}
 import play.api.test.Helpers._
 
 import scala.util.Random
@@ -113,8 +111,8 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
       ClientId(UUID.randomUUID()),
       namespace,
       Audience(Set.empty),
-      LocalDateTime.now().minusSeconds(1).toDate.toInstant,
-      LocalDateTime.now().plusHours(1).toDate.toInstant,
+      Instant.now.minusSeconds(1),
+      Instant.now.plus(1, ChronoUnit.HOURS),
       Scope(Set.empty)
     )
 
@@ -325,8 +323,8 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
 
   "test creating install campaigns" taggedAs APITests ignore {
     val pattern = "yyyy-MM-dd'T'HH:mm:ssZZ"
-    val currentTimestamp = DateTimeFormat.forPattern(pattern).print(new DateTime())
-    val tomorrowTimestamp = DateTimeFormat.forPattern(pattern).print(new DateTime().plusDays(1))
+    val currentTimestamp = Instant.now.toString
+    val tomorrowTimestamp = Instant.now.plus(1, ChronoUnit.DAYS).toString
     val uuid = UUID.randomUUID().toString
     val data = Json.obj(
       "creationTime" -> currentTimestamp,
