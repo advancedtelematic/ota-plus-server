@@ -19,6 +19,8 @@ enablePlugins(SbtWeb, Versioning.Plugin)
 
 buildInfoPackage := "com.advancedtelematic.ota.device_registry"
 
+bashScriptExtraDefines ++= Seq("""addJava "-Xmx512m"""")
+
 Versioning.settings
 
 Release.settings
