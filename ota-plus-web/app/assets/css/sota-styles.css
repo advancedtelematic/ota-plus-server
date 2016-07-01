@@ -354,14 +354,16 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 /* Profile */
 .user-form { width: 100%; float: left; }
 
-.profile-icon { margin: 0 16px 0 0; }
-
 .dropdown-profile { min-width: 330px; padding: 20px 20px 11px 20px; border-radius: 0; top: 122%; }
+.dropdown-profile:after { content: ''; width: 10px; height: 10px; background: #fff; position: absolute; -moz-transform: rotate(-135deg); -webkit-transform: rotate(-135deg); transform: rotate(-135deg); top: -6px; right: 10px; border-right: #ccc solid 1px; border-bottom: #ccc solid 1px; }
 .dropdown-profile a { color: #888; text-decoration: none; }
 .dropdown-profile hr { width: 100%; margin: 13px 0; border-color: #ccc; float: left; }
-.dropdown-profile .input-username { color: #66493E; font-size: 16px; width: 150px; padding: 0; border: 0; }
+.dropdown-profile .input-username { color: #66493E; font-size: 16px; text-align: center; width: 150px; padding: 0; border: 0; }
 .dropdown-profile .username { color: #000; font-size: 16px; word-wrap: break-word; }
 .dropdown-profile .email { color: #b2b2b2; font-size: 12px; }
+.dropdown-profile .pencil-button { position: absolute; right: 20px; }
+.dropdown-profile .accept-button { position: absolute; right: 35px; }
+.dropdown-profile .cancel-button { position: absolute; right: 20px; }
 
 .dropdown.open .btn-profile { opacity: 0.8; }
 
