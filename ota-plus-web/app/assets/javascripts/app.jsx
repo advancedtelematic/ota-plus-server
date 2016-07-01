@@ -10,10 +10,7 @@ define(function(require) {
       HashHistory = ReactRouter.hashHistory,
       db = require('stores/db'),
       Handler = require('handlers/handler'),
-      VelocityUI = require('velocity-ui'),
-      VelocityHelpers = require('mixins/velocity/velocity-helpers'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      VelocityComponent = require('mixins/velocity/velocity-component'),
       jQuery = require('jquery'),
       Bootstrap = require('bootstrap'),
       SotaDispatcher = require('sota-dispatcher')
@@ -59,13 +56,15 @@ define(function(require) {
         currentLang: currentLang,
         showCampaignPanel: false,
         intervalId: null,
-        hideAnimationUp: true,
-        hideAnimationDown: true,
       }
 
       this.changeLanguage = this.changeLanguage.bind(this);
       this.toggleCampaignPanel = this.toggleCampaignPanel.bind(this);
-      this.logout = this.logout.bind(this);
+    }
+    componentDidMount() {
+      jQuery(function () {
+        jQuery('body').verify({verifyMinWidth: 1366, verifyMinHeight: 0});
+      });
     }
     changeLanguage(value) {
       localStorage.setItem('currentLang', value);
@@ -78,22 +77,7 @@ define(function(require) {
         showCampaignPanel: !this.state.showCampaignPanel
       });
     }
-    logout(e) {
-      e.preventDefault();
-      var that = this;
-      setTimeout(function() {
-        that.setState({hideAnimationDown: !that.state.hideAnimationDown});
-      }, 200);
-    }
     componentDidMount() {
-      var that = this;
-      setTimeout(function() {
-        that.setState({hideAnimationUp: !that.state.hideAnimationUp});
-      }, 200);
-      
-      jQuery(function () {
-        jQuery('body').verify({verifyMinWidth: 1366, verifyMinHeight: 0});
-      });
       var intervalId = setInterval(function() {
         var campaignsData = JSON.parse(localStorage.getItem('campaignsData'));
         if(campaignsData !== null && campaignsData.length > 0) {
@@ -122,27 +106,6 @@ define(function(require) {
       clearInterval(this.state.intervalId);
     }
     render() {
-      var Animations = {
-        up: VelocityHelpers.registerEffect({
-          defaultDuration: 800,
-          calls: [
-            [{
-              translateY: '-100%'
-            }]
-          ],
-        }),
-        down: VelocityHelpers.registerEffect({
-          defaultDuration: 200,
-          calls: [
-            [{
-              translateY: '100%'
-            }]
-          ],
-        }),
-      };
-      
-      var referrer = document.referrer.split('/')[3];
-      
       var path = this.context.location.pathname.toLowerCase().split('/');
       var key = path[1] !== undefined ? path[1] : 'page';
       var page = '';
@@ -170,23 +133,11 @@ define(function(require) {
       }
 
       return (
-        <div>
-          {referrer !== undefined && referrer == 'login' ?
-            <VelocityComponent animation={!this.state.hideAnimationUp ? Animations.up : null}>
-              <div className="door"></div>
-            </VelocityComponent>
-          : null}
-          <VelocityTransitionGroup enter={{animation: Animations.down, complete: function() {window.location.href = "/logout"}}}>
-            {!this.state.hideAnimationDown ? 
-              <div className="door door-up"></div>
-            : null}
-          </VelocityTransitionGroup>
+        <div key={key} className={page}>
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} runOnMount={true}>
-            <div key={key} className={page}>
-              <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel} logout={this.logout}/>
-              <div className="page wrapper">
-                {React.cloneElement(this.props.children, {showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
-              </div>
+            <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel}/>
+            <div className="page wrapper">
+              {React.cloneElement(this.props.children, {showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
             </div>
           </VelocityTransitionGroup>
         </div>
@@ -196,7 +147,6 @@ define(function(require) {
 
   App.contextTypes = {
     location: React.PropTypes.object,
-    router: React.PropTypes.object,
   };
 
   var wrapComponent = function wrapComponent(Component, props) {

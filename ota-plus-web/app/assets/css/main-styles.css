@@ -9,7 +9,6 @@ button:focus { outline: none; }
 html { height: 100%; min-height: 100%; }
 
 body { color: #fff; font: normal 13px AkkuratRegular; background: url(../img/bg.jpg) no-repeat; background-attachment: fixed; }
-body.login { background: url("../img/bg_login.jpg") top center no-repeat; }
 
 a, a:hover, a:focus { color: #fff; text-decoration: none; }
 
@@ -18,8 +17,6 @@ a, a:hover, a:focus { color: #fff; text-decoration: none; }
 .strong { color: #80e59d !important; }
 
 .underlined { text-decoration: underline; }
-
-.login .container { padding: 330px 0 0 0; }
 
 .margin-top-0 { margin-top: 0px !important; }
 
