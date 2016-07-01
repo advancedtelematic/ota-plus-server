@@ -14,14 +14,20 @@
         <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.slidedrawer.min.js")'></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/verify.js")'></script>
         @if(passwordForm.hasGlobalErrors) {
-        <style type="text/css">
-            .ats-errors { display: inherit }
-        </style>
+            <style type="text/css">
+                    .ats-errors { display: inherit }
+            </style>
         }
     </head>
-    <body class="login">
-        <div id="ats-page" style="display: none;">
+    <body>
+        <div id="ats-page">
             <div class="container ats">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="#"><img src='@routes.Assets.versioned("img/logo.png")' id="logo"></a>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
                         <div class="ats-header text-center">
@@ -65,8 +71,6 @@
 
         <script>
             $(function () {
-                $('#ats-page').fadeIn('slow');
-
                 $('.ats-footer-panel').slideDrawer({
                     showDrawer: false,
                     slideTimeout: true,
@@ -91,13 +95,6 @@
                             required: "<i class='fa fa-times-circle'></i> Please enter password"
                         }
                     }
-                });
-
-                $('#submit-form').click(function (e) {
-                    e.preventDefault();
-                    $('#ats-page').fadeOut(200, function () {
-                        $('#loginForm').submit();
-                    });
                 });
 
                 $('body').verify({verifyMinWidth: 1366, verifyMinHeight: 0});
