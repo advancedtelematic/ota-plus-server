@@ -35,6 +35,10 @@ body {
     font: normal 13px AkkuratRegular;
     background: url(../img/bg.jpg) no-repeat;
     background-attachment: fixed;
+    
+    &.login {
+        background: url('../img/bg_login.jpg') top center no-repeat;
+    }
 }
 
 a, a:hover, a:focus {
@@ -55,6 +59,12 @@ a, a:hover, a:focus {
     text-decoration: underline;
 }
 
+.login {
+    .container {
+        padding: 330px 0 0 0;
+    }
+}
+
 @for $i from 0 through 5 {
     .margin-top-#{$i*10} { 
         margin-top: 10px * $i !important; 
@@ -67,7 +77,7 @@ a, a:hover, a:focus {
 
 .ats {
     padding-bottom: 70px;
-
+    
     &-header {
         font-size: 28px;
         margin: 20px 0 40px 0;

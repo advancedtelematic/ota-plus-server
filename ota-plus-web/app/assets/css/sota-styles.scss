@@ -1669,3 +1669,16 @@ a.close, button.close {
 .vertical-align-middle {
     vertical-align: middle;
 }
+
+.door {
+    background: url('../img/steel_doors.jpg') top center no-repeat;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    z-index: 99999;
+    
+    &.door-up {
+        top: -100%;
+    }
+}
