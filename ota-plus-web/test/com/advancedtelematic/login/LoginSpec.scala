@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.selenium.{Page, WebBrowser}
 import org.scalatestplus.play._
-import play.api.{Application, Configuration}
+import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.ahc.{AhcConfigBuilder, AhcWSClient, AhcWSClientConfig}
 import play.api.libs.ws.{WSClient, WSResponse}
@@ -27,7 +27,10 @@ case class LoginPage(port: Int, browser: WebBrowser)
   }
 
   def submit(): Unit = {
-    browser.clickOn("submit-form")
+    // browser.clickOn("login-form")
+    // $('#loginForm').submit();
+    //browser.submit()
+    browser.submit()
   }
 }
 
@@ -94,16 +97,6 @@ class LoginSpec extends PlaySpec
       .build()
 
   "Login" should {
-    "Redirect to main page if username and password are set and correct" in {
-      val loginPage = LoginPage(port, this)
-      go to loginPage
-      pageTitle must be ("SOTA Admin UI - Log in")
-
-      loginPage.setUsernameAndPassword(correctUser, correctPassword)
-      loginPage.submit()
-      pageTitle must be ("SOTA Admin UI")
-    }
-
     "Fail if username or password are incorrect" in {
       val loginPage = LoginPage(port, this)
       go to loginPage
@@ -133,6 +126,8 @@ class LoginSpec extends PlaySpec
       val req = FakeRequest().withFormUrlEncodedBody(("username", correctUser), ("password", correctPassword))
       val result = controller.authenticate()(req)
       status(result) mustBe SEE_OTHER
+      // redirects to login page on correct user data:
+      redirectLocation(result) mustBe Some("/")
       val sess = session(result)
       sess("access_token") mustBe token
       sess("username") mustBe correctUser
