@@ -5,7 +5,11 @@
 
 package org.genivi.webserver.controllers
 
-import org.genivi.sota.data.Vehicle
+import eu.timepit.refined.refineV
+import org.genivi.sota.data.{Device, Vehicle}
+import cats.Show
+import cats.syntax.show._
+
 
 /**
   * Implicits that allow giving custom param-types in the method signatures in the routes file.
@@ -16,11 +20,21 @@ object PathBinders {
 
   /**
     * Path binder to convert a String (eg, from a route path)
+    * to a Device.Id wrapped in a Right (if valid, Left otherwise).
+    */
+  implicit object bindableDeviceUuid extends play.api.mvc.PathBindable[Device.Id] {
+    def bind(key: String, value: String): Either[String, Device.Id] = {
+      refineV[Device.ValidId](value).right.map(Device.Id(_))
+    }
+    def unbind(key: String, value: Device.Id): String = value.show
+  }
+
+  /**
+    * Path binder to convert a String (eg, from a route path)
     * to a Vehicle.Vin wrapped in a Right (if valid, Left otherwise).
     */
   implicit object bindableVin extends play.api.mvc.PathBindable[Vehicle.Vin] {
     def bind(key: String, value: String): Either[String, Vehicle.Vin] = {
-      import eu.timepit.refined.refineV
       refineV(value)
     }
     def unbind(key: String, value: Vehicle.Vin): String = value.get

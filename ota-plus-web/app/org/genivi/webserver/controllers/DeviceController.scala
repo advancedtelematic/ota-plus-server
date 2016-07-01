@@ -44,6 +44,11 @@ extends Controller with ApiClientSupport
     searchWith(req, devicesApi.search)
   }
 
+  def get(id: Device.Id) = Action.async(parse.raw) { req =>
+    val options = userOptions(req)
+    devicesApi.getDevice(options, id).map(d => Results.Ok(Json.toJson(d)))
+  }
+
   private[this] def userOptions(req: Request[_]): UserOptions = {
     val traceId = req.headers.get("x-ats-traceid")
     val token = req.session.get("access_token").orElse(bearerToken(req))
