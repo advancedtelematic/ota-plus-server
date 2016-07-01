@@ -474,3 +474,6 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .font-20 { font-size: 20px; line-height: 1.5em; }
 
 .font-16 { font-size: 16px; line-height: 1.5em; }
+
+.door { background: url("../img/steel_doors.jpg") top center no-repeat; width: 100%; height: 100%; position: fixed; left: 0; z-index: 99999; }
+.door.door-up { top: -100%; }
