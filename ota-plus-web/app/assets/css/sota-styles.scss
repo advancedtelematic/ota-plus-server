@@ -1622,6 +1622,31 @@ a.close, button.close {
     }
 }
 
+/* Blocked queue */
+
+.box-red {
+    color: #fff;
+    font-size: 12px;
+    background: #d37676;
+    width: 100%;
+    padding: 20px;
+    float: left;
+    
+    .btn-white {
+        font-size: 11px;
+        letter-spacing: 0.3px;
+        background: rgba(255,255,255,0.25);
+        padding: 3px 14px;
+        border-radius: 15px;
+        border: 1px solid #fff;
+        
+        &:hover, &:focus, &:active {
+            color: #d37676;
+            background: #fff;
+        }
+    }
+}
+
 .font-24 {
     font-size: 24px;
     line-height: 1.5em;
@@ -1635,5 +1660,12 @@ a.close, button.close {
 .font-16 {
     font-size: 16px;
     line-height: 1.5em;
+}
 
+.font-14 {
+    font-size: 14px;
+}
+
+.vertical-align-middle {
+    vertical-align: middle;
 }

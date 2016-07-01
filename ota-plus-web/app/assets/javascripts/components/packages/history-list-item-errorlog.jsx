@@ -4,12 +4,12 @@ define(function(require) {
   class HistoryListItemErrorlog extends React.Component {
     render() {
       return (
-        <div style={{marginTop: 10}}>
+        <div className="margin-top-10">
           <div><strong>{this.props.name}</strong> Log</div>
           Package not installed on {this.props.completionTime.toDateString() + ' ' + this.props.completionTime.toLocaleTimeString()}
           <div>Terminated due to Error:</div>
           <div className="log-code">
-            {this.props.installationLog.resultText ? 
+            {this.props.installationLog.resultText !== undefined && this.props.installationLog.resultText ? 
               this.props.installationLog.resultText
             : <span>Log is empty</span>}
           </div>
