@@ -96,7 +96,7 @@ define(function(require) {
               <a href="#">Upgrade plan</a>
             </div>
             <div>
-              <a href="#" onClick={this.props.logout}>Sign out</a>
+              <a href="/logout">Sign out</a>
             </div>
           </div>
         </div>  
