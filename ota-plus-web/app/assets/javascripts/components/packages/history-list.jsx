@@ -11,9 +11,10 @@ define(function(require) {
         intervalId: null
       });
       this.refreshData = this.refreshData.bind(this);
-      SotaDispatcher.dispatch({actionType: "get-package-history-for-device", vin: this.props.vin});
+                        
+      SotaDispatcher.dispatch({actionType: "get-package-history-for-device", device: this.props.device});
       db.packageHistoryForDevice.addWatch("poll-packages-history-for-device", _.bind(this.forceUpdate, this, null));
-      SotaDispatcher.dispatch({actionType: "get-installation-log-for-device", vin: this.props.vin});
+      SotaDispatcher.dispatch({actionType: "get-installation-log-for-device", device: this.props.device});
       db.installationLogForDevice.addWatch("poll-installation-log-for-device", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
@@ -23,14 +24,14 @@ define(function(require) {
       }, 1000);
       this.setState({intervalId: intervalId});
     }
-    componentWillUnmount() {
+    componentWillUnmount() {    
       db.packageHistoryForDevice.removeWatch("poll-packages-history-for-device");
       db.installationLogForDevice.removeWatch("poll-installation-log-for-device");
       clearInterval(this.state.intervalId);
     }
     refreshData() {
-      SotaDispatcher.dispatch({actionType: "get-package-history-for-device", vin: this.props.vin});
-      SotaDispatcher.dispatch({actionType: "get-installation-log-for-device", vin: this.props.vin});
+      SotaDispatcher.dispatch({actionType: "get-package-history-for-device", device: this.props.device});
+      SotaDispatcher.dispatch({actionType: "get-installation-log-for-device", device: this.props.device});
     }
     render() {
       var Packages = db.packageHistoryForDevice.deref();
@@ -39,17 +40,25 @@ define(function(require) {
         var dateCompared = new Date(b.completionTime) - new Date(a.completionTime);
         return dateCompared == 0 ? b.id - a.id : dateCompared;
       });
+      
+      var firstFailedInstallId = Packages.find(function(obj) {
+        return !obj.success;
+      }, this);
+            
       var packages = _.map(Packages, function(pack, i) {
-                
-        var installationLog = AllInstallationsLog.find(function(obj) {
-          return obj.updateId == pack.updateId;
+        var installationLog = AllInstallationsLog.find(function(obj) { 
+          return obj.updateId == pack.updateId
         }, this);
+                          
+        var isLogShown = (this.props.isFirstFailedExpanded && firstFailedInstallId.updateId == pack.updateId) ? true : false;
 
         return (
           <HistoryListItem 
             key={pack.packageId.name + '-' + pack.packageId.version + '-' + pack.id} 
             package={pack}
-            installationLog={installationLog}/>
+            installationLog={installationLog !== undefined ? installationLog : []}
+            isLogShown={isLogShown}
+            device={this.props.device}/>
         );
       }, this);       
       return (

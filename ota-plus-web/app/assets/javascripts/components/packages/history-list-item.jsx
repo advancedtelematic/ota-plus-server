@@ -1,6 +1,6 @@
 define(function(require) {
   var React = require('react'),
-      ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
+      SotaDispatcher = require('sota-dispatcher'),
       HistoryListItemErrorlog = require('./history-list-item-errorlog'),
       HistoryListItemLog = require('./history-list-item-log'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
@@ -9,22 +9,54 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        showLog: false
+        isLogShown: this.props.isLogShown
       }
-      this.showLog = this.showLog.bind(this);
+      this.toggleLog = this.toggleLog.bind(this);
+      this.ignoreFailedInstall = this.ignoreFailedInstall.bind(this);
+      this.retryFailedInstall = this.retryFailedInstall.bind(this);
     }
-    showLog() {
+    toggleLog() {
       this.setState({
-        showLog: !this.state.showLog
+        isLogShown: !this.state.isLogShown
       });
     }
-    render() {
+    componentWillReceiveProps(nextProps) {
+      if(nextProps.isLogShown && !this.props.isLogShown) {
+        this.setState({
+          isLogShown: true
+        });
+      }
+    }
+    ignoreFailedInstall() {
+      console.log('ignored');
+    }
+    retryFailedInstall() {
+      var data = {
+        name: this.props.package.packageId.name,
+        version: this.props.package.packageId.version
+      };
+
+      SotaDispatcher.dispatch({
+        actionType: 'install-package-for-device',
+        data: data,
+        device: this.props.device
+      });
+      console.log('remove from history list');
+    }
+    render() {         
       var completionTime = new Date(this.props.package.completionTime);
       return (
-        <li className={'list-group-item grey ' + (this.state.showLog ? 'show-log' : '') }>
+        <li className={'list-group-item grey ' + (this.state.isLogShown ? 'show-log' : '') }>
           {this.props.package.packageId.name}
           
-          <button onClick={this.showLog} className="btn btn-action pull-right">log</button>
+          <button onClick={this.toggleLog} className="btn btn-action pull-right">log</button>
+  
+          {!this.props.package.success ?
+            <span>
+              <button onClick={this.ignoreFailedInstall} className="btn btn-action pull-right">ignore</button>
+              <button onClick={this.retryFailedInstall} className="btn btn-action pull-right">retry</button>
+            </span>
+          : null}
   
           <div className="list-group-item-text-right pull-right">
               <span className="fa-stack package-status-icon">
@@ -40,7 +72,7 @@ define(function(require) {
   
           {!this.props.package.success ?
             <VelocityTransitionGroup enter={{animation: "fadeIn"}}>
-              {this.state.showLog ? 
+              {this.state.isLogShown ? 
                 <HistoryListItemErrorlog 
                   name={this.props.package.packageId.name}
                   completionTime={completionTime}
@@ -49,7 +81,7 @@ define(function(require) {
             </VelocityTransitionGroup>
           :
             <VelocityTransitionGroup enter={{animation: "fadeIn"}}>
-              {this.state.showLog ? 
+              {this.state.isLogShown ? 
                 <HistoryListItemLog 
                   name={this.props.package.packageId.name}
                   completionTime={completionTime}
