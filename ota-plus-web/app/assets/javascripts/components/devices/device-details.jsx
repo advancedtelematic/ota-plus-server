@@ -16,7 +16,7 @@ define(function(require) {
     constructor(props, context) {
       super(props, context);
       this.state = {
-        showPackagesHistory: false,
+        isPackagesHistoryShown: false,
         textPackagesHistory: context.strings.viewhistory,
         installedPackagesCount: 0,
         queuedPackagesCount: 0,
@@ -27,7 +27,8 @@ define(function(require) {
         duplicatingTimeout: 2000,
         selectedImpactAnalysisPackagesCount: 0,
       }
-      this.showQueueHistory = this.showQueueHistory.bind(this);
+      this.toggleQueueHistory = this.toggleQueueHistory.bind(this);
+      this.reviewFailedInstall = this.reviewFailedInstall.bind(this);
       this.setPackagesStatistics = this.setPackagesStatistics.bind(this);
       this.setQueueStatistics = this.setQueueStatistics.bind(this);
       this.refreshData = this.refreshData.bind(this);
@@ -59,7 +60,7 @@ define(function(require) {
     componentWillUpdate(nextProps, nextState, nextContext) {
       if(nextContext.strings != this.context.strings) {
         this.setState({
-          textPackagesHistory: nextState.showPackagesHistory ? nextContext.strings.hidehistory : nextContext.strings.viewhistory
+          textPackagesHistory: nextState.isPackagesHistoryShown ? nextContext.strings.hidehistory : nextContext.strings.viewhistory
         });
       }
     }
@@ -68,10 +69,16 @@ define(function(require) {
       clearInterval(this.state.intervalId);
       clearTimeout(this.state.timeoutIntervalId);
     }
-    showQueueHistory() {
+    toggleQueueHistory() {
       this.setState({
-        showPackagesHistory: !this.state.showPackagesHistory,
-        textPackagesHistory: (this.state.showPackagesHistory) ? this.context.strings.viewhistory : this.context.strings.hidehistory,
+        isPackagesHistoryShown: !this.state.isPackagesHistoryShown,
+        textPackagesHistory: (this.state.isPackagesHistoryShown) ? this.context.strings.viewhistory : this.context.strings.hidehistory,
+      });
+    }
+    reviewFailedInstall() {
+      this.setState({
+        isPackagesHistoryShown: true,
+        textPackagesHistory: this.context.strings.hidehistory,
       });
     }
     setPackagesStatistics(installed, queued) {
@@ -169,10 +176,12 @@ define(function(require) {
               <div className="panel-body">
                 <PackagesQueue
                   textPackagesHistory={this.state.textPackagesHistory}
-                  showPackagesHistory={this.state.showPackagesHistory}
-                  showQueueHistory={this.showQueueHistory}
+                  isPackagesHistoryShown={this.state.isPackagesHistoryShown}
+                  toggleQueueHistory={this.toggleQueueHistory}
+                  reviewFailedInstall={this.reviewFailedInstall}
                   setQueueStatistics={this.setQueueStatistics}
-                  device={this.props.params.id}/>
+                  device={this.props.params.id}
+                  status={deviceWithStatus.status}/>
               </div>
               <div className="panel-footer">
                 {this.state.queueCount} packages in queue
