@@ -112,7 +112,7 @@ define(function(require) {
         <div>
           {deviceWithStatus.status == "NotSeen" ?
             <div className="lightgrey-overlay">
-              <TutorialInstallDevice />              
+              <TutorialInstallDevice />
             </div>
           : null}
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>

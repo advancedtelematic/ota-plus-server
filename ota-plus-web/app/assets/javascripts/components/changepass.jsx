@@ -47,7 +47,10 @@ define(function(require) {
       return (
         <div className="dropdown-menu dropdown-profile dropdown-right">
           <form className="user-form" ref="userForm">
-            <img src="/assets/img/icons/profile_icon_big.png" className="profile-icon pull-left" alt="" />
+            <div className="width-100 text-center pull-left">
+              <img src="/assets/img/icons/profile_icon_big.png" className="profile-icon" alt="" />
+            </div>
+            <div className="width-100 text-center margin-top-10 pull-left">
             {this.state.showEditField ?
               <div>
                 <input className="input-username" name="username" type="text" placeholder={this.state.username} ref="username" onKeyUp={this.changeUsernameFieldLength}/>
@@ -81,8 +84,6 @@ define(function(require) {
             <div>
               <span className="email">email@address.com</span>
             </div>
-            <div>
-              <a href="/logout" className="btn btn-orange btn-logout">Log out</a>
             </div>
           </form>
           <hr />
@@ -92,7 +93,7 @@ define(function(require) {
               <a href="/edit_profile">Edit profile</a>
             </div>
             <div>
-              <a href="#">Upgrade the plan</a>
+              <a href="#">Upgrade plan</a>
             </div>
             <div>
               <a href="/logout">Sign out</a>
