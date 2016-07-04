@@ -4,7 +4,7 @@ import java.util.UUID
 
 import akka.stream.Materializer
 import com.advancedtelematic.TraceIdFilter
-import com.advancedtelematic.ota.common.TraceId
+import com.advancedtelematic.ota.common.{TraceId, TraceIdSig}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.mvc._
 import play.api.test.FakeRequest
@@ -18,9 +18,7 @@ class TraceIdFilterSpec extends PlaySpec with OneServerPerSuite with Results {
 
   val filter = new TraceIdFilter
 
-  val action = Action { rh =>
-    Results.NoContent.withHeaders(rh.headers.toMap.mapValues(_.head).toList: _*)
-  }
+  val action = Action(NoContent)
 
   "TraceIdFilter" should {
     "add traceid header if none is supplied" in {
@@ -29,23 +27,55 @@ class TraceIdFilterSpec extends PlaySpec with OneServerPerSuite with Results {
 
       status(result) must be(204)
       header(TraceId.TRACEID_HEADER, result).map(UUID.fromString) must be(defined)
+      header(TraceId.TRACEID_HMAC_HEADER, result) must be(defined)
     }
 
-    "add trace id header if an invalid one is supplied" in {
+    "add trace id headers if an invalid one is supplied" in {
       val rh = FakeRequest().withHeaders(TraceId.TRACEID_HEADER -> "InvalidHeader")
       val result = filter(action)(rh).run()
 
       status(result) must be(204)
       header(TraceId.TRACEID_HEADER, result).map(UUID.fromString) must be(defined)
+      header(TraceId.TRACEID_HMAC_HEADER, result) must be(defined)
     }
 
-    "keep the header if a valid one is supplied" in {
-      val traceId = UUID.randomUUID()
-      val rh = FakeRequest().withHeaders(TraceId.TRACEID_HEADER -> traceId.toString)
+    "adds a trace id headers if an invalid sig is supplied" in {
+      val rh = FakeRequest().withHeaders(TraceId.TRACEID_HEADER -> UUID.randomUUID().toString,
+        TraceId.TRACEID_HMAC_HEADER -> "invalid")
       val result = filter(action)(rh).run()
 
       status(result) must be(204)
-      header(TraceId.TRACEID_HEADER, result).map(UUID.fromString) must contain(traceId)
+      header(TraceId.TRACEID_HEADER, result).map(UUID.fromString) must be(defined)
+      header(TraceId.TRACEID_HMAC_HEADER, result) must be(defined)
+    }
+
+    "keep the header if a valid one is supplied" in {
+      val traceId = UUID.randomUUID().toString
+      val sig = TraceIdSig(traceId).get
+      val rh = FakeRequest().withHeaders(TraceId.TRACEID_HEADER -> traceId, TraceId.TRACEID_HMAC_HEADER -> sig)
+      val result = filter(action)(rh).run()
+
+      status(result) must be(204)
+      header(TraceId.TRACEID_HEADER, result) must contain(traceId)
+      header(TraceId.TRACEID_HMAC_HEADER, result) must contain(sig)
+    }
+
+    "traceid sig must be a valid sig for given traceid" in {
+      val rh = FakeRequest()
+
+      val action = Action { req =>
+        val id = req.headers.get(TraceId.TRACEID_HEADER).get
+        val sig = req.headers.get(TraceId.TRACEID_HMAC_HEADER).get
+
+        sig mustEqual TraceIdSig(id).get
+
+        NoContent
+      }
+
+      val result = filter(action)(rh).run()
+
+      header(TraceId.TRACEID_HEADER, result) must be(defined)
+      header(TraceId.TRACEID_HMAC_HEADER, result) must be(defined)
     }
   }
 }
