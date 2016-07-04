@@ -2,6 +2,7 @@ define(function(require) {
   var React = require('react'),
       ReactDOM = require('react-dom'),
       SotaDispatcher = require('sota-dispatcher'),
+      db = require('stores/db'),
       PackagesListItem = require('./packages-list-item'),
       PackageListItemDetails = require('./packages-list-item-details'),
       Dropzone = require('../../mixins/dropzone'),
@@ -32,13 +33,13 @@ define(function(require) {
       this.selectToAnalyse = this.selectToAnalyse.bind(this);
       this.updateListToAnalyse = this.updateListToAnalyse.bind(this);
 
-      this.props.AllPackages.addWatch(this.props.AllPackagesPollEventName, _.bind(this.forceUpdate, this, null));
-      this.props.InstalledPackages.addWatch(this.props.InstalledPackagesPollEventName, _.bind(this.forceUpdate, this, null));
-      this.props.QueuedPackages.addWatch(this.props.QueuedPackagesPollEventName, _.bind(this.forceUpdate, this, null));
+      db.searchablePackages.addWatch("poll-packages", _.bind(this.forceUpdate, this, null));
+      db.packagesForDevice.addWatch("poll-installed-packages", _.bind(this.forceUpdate, this, null));
+      db.packageQueueForDevice.addWatch("poll-queued-packages", _.bind(this.forceUpdate, this, null));
     }
     componentWillUpdate(nextProps, nextState) {
       if(nextProps.filterValue != this.props.filterValue) {
-        SotaDispatcher.dispatch(nextProps.AllPackagesDispatchObject);
+        SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
       }
     }
     componentDidUpdate(prevProps, prevState) {
@@ -79,18 +80,18 @@ define(function(require) {
       });
     }
     componentWillUnmount(){
-      this.props.AllPackages.removeWatch(this.props.AllPackagesPollEventName);
-      this.props.InstalledPackages.removeWatch(this.props.InstalledPackagesPollEventName);
-      this.props.QueuedPackages.removeWatch(this.props.QueuedPackagesPollEventName);
+      db.searchablePackages.removeWatch("poll-packages");
+      db.packagesForDevice.removeWatch("poll-installed-packages");
+      db.packageQueueForDevice.removeWatch("poll-queued-packages");
       clearTimeout(this.state.timeout);
       clearInterval(this.state.intervalId);
     }
     refreshData() {
       var that = this;
 
-      SotaDispatcher.dispatch(this.props.AllPackagesDispatchObject);
-      SotaDispatcher.dispatch(this.props.InstalledPackagesDispatchObject);
-      SotaDispatcher.dispatch(this.props.QueuedPackagesDispatchObject);
+      SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
+      SotaDispatcher.dispatch({actionType: 'get-packages-for-device', device: this.props.device});
+      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device});
 
       var timeout = setTimeout(function() {
         var result = that.prepareData();
@@ -119,9 +120,9 @@ define(function(require) {
       });
     }
     prepareData() {
-      var Packages = this.props.AllPackages.deref();
-      var Installed = this.props.InstalledPackages.deref();
-      var Queued = this.props.QueuedPackages.deref();
+      var Packages = db.searchablePackages.deref();
+      var Installed = db.packagesForDevice.deref();
+      var Queued = db.packageQueueForDevice.deref();
 
       var installedCount = 0;
       var queuedCount = 0;
@@ -398,10 +399,10 @@ define(function(require) {
               }
             </ul>
           }
-          {this.props.deviceStatus != 'NotSeen' && !this.props.AllPackages.deref().length ? 
+          {this.props.deviceStatus != 'NotSeen' && !db.searchablePackages.deref().length ? 
             <TutorialAddPackageFirstStep />
           : null}
-          {this.props.deviceStatus != 'NotSeen' && this.props.AllPackages.deref().length && !this.props.InstalledPackages.deref().length && !this.props.QueuedPackages.deref().length ?
+          {this.props.deviceStatus != 'NotSeen' && db.searchablePackages.deref().length && !db.packagesForDevice.deref().length && ! db.packageQueueForDevice.deref().length ?
             <TutorialAddPackageSecondStep />
           : null}
         </div>

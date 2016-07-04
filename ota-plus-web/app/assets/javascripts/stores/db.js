@@ -10,7 +10,7 @@ define(function(require) {
       this.packagesForDevice = atom.createAtom([]);
       this.packageHistoryForDevice = atom.createAtom([]);
       this.packageQueueForDevice = atom.createAtom([]);
-      this.searchableDevices = atom.createAtom([]);
+      this.searchableDevices = atom.createAtom();
       this.searchablePackages = atom.createAtom([]);
       this.postStatus = atom.createAtom([]);
       
