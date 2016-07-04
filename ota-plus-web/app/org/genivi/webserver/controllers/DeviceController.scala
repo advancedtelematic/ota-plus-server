@@ -21,6 +21,8 @@ import scala.util.Try
 import com.advancedtelematic.ota.device.Devices.refinedWriter
 import eu.timepit.refined.string.Uri
 
+import scala.util.control.NoStackTrace
+
 @Singleton
 class DeviceController @Inject() (val ws: WSClient,
                                   val conf: Configuration,
@@ -31,6 +33,8 @@ extends Controller with ApiClientSupport
   with OtaPlusConfig {
 
   val logger = Logger(this.getClass)
+
+  private[this] object NoSuchVinRegistered extends Throwable with NoStackTrace
 
   def create() = Action.async(parse.json[DeviceT]) { req =>
     requestCreate(req.body, req)
@@ -74,9 +78,7 @@ extends Controller with ApiClientSupport
     for {
       deviceId <- devicesApi.createDevice(options, device)
       _ <- resolverApi.createDevice(options, device)
-      // TODO: Vin validation
-      vin = refineV[Vehicle.ValidVin](device.deviceId.get.underlying).right.get
-      vehicleMetadata <- registerAuthPlusVehicle(vin, deviceId)
+      vehicleMetadata <- registerAuthPlusVehicle(deviceId)
       _ <- vehiclesStore.registerVehicle(vehicleMetadata)
     } yield Results.Created(Json.toJson(deviceId))
   }
@@ -91,7 +93,23 @@ extends Controller with ApiClientSupport
   * Contact Auth+ to register for the first time the given VIN,
   * obtaining [[VehicleMetadata]]
   */
-  private def registerAuthPlusVehicle(name: Vehicle.Vin, deviceId: Device.Id): Future[VehicleMetadata] = {
-    authPlusApi.createClient(deviceId).map(i => VehicleMetadata(name, deviceId, i))
+  private def registerAuthPlusVehicle(deviceId: Device.Id): Future[VehicleMetadata] = {
+    authPlusApi.createClient(deviceId).map(i => VehicleMetadata(deviceId, i))
   }
+
+  /**
+    * Contact Auth+ to fetch the ClientInfo for the given device.
+    */
+  def fetchClientInfo(deviceId: Device.Id) : Action[AnyContent] =
+    Action.async { implicit request =>
+      for (
+        vMetadataOpt <- vehiclesStore.getVehicle(deviceId);
+        vMetadata <- vMetadataOpt match {
+          case None => Future.failed[VehicleMetadata](NoSuchVinRegistered)
+          case Some(vmeta) => Future.successful(vmeta)
+        };
+        clientInfo <- authPlusApi.fetchClientInfo(vMetadata.clientInfo.clientId)
+      ) yield Ok(clientInfo)
+    }
+
 }
