@@ -4,7 +4,7 @@ define(function(require) {
       Link = Router.Link,
       LanguageSelector = require('./translation/language-selector'),
       Translate = require('./translation/translate'),
-      ChangePassword = require('./changepass'),
+      Profile = require('./profile'),
       VelocityComponent = require('mixins/velocity/velocity-component'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');;
 
@@ -49,11 +49,12 @@ define(function(require) {
               </li>
               <li className="dropdown" id="menuLogin">
                 <a className="dropdown-toggle btn-profile" href="#" onClick={this.toggleDropdown} data-toggle="dropdown">
-                  <img src="/assets/img/icons/profile_icon.png" />
+                  <img src="/assets/img/icons/profile_icon.png" /> &nbsp;
+                  <i className="fa fa-caret-down"></i>
                 </a>
                 <VelocityTransitionGroup enter={{animation: "fadeIn", duration: 200}} leave={{animation: "fadeOut", duration: 200}}>
                   {this.state.isDropdownVisible ? 
-                    <ChangePassword logout={this.props.logout}/>
+                    <Profile logout={this.props.logout}/>
                   : null}
                 </VelocityTransitionGroup>
               </li>
