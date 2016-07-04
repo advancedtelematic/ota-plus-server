@@ -1437,6 +1437,12 @@ a.close, button.close {
         width: $i*10% !important;
     }
 }
+
+.loader {
+    font-size: 14px;
+    padding: 20px;
+}
+
 /* Animations */
 
 .example-enter {

@@ -181,14 +181,12 @@ define(function(require) {
               <div className="door door-up"></div>
             : null}
           </VelocityTransitionGroup>
-          <VelocityTransitionGroup enter={{animation: "fadeIn"}} runOnMount={true}>
-            <div key={key} className={page}>
-              <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel} logout={this.logout}/>
-              <div className="page wrapper">
-                {React.cloneElement(this.props.children, {showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
-              </div>
+          <div key={key} className={page}>
+            <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel} logout={this.logout}/>
+            <div className="page wrapper">
+              {React.cloneElement(this.props.children, {showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
             </div>
-          </VelocityTransitionGroup>
+          </div>
         </div>
       );
     }
@@ -216,7 +214,7 @@ define(function(require) {
         <Route path="/" component={Devices}>
           <Route path="newdevice" component={Modal(NewDevice, {TitleVar: "newdevice", modalId: 'modal-new-device'})}/>
         </Route>
-        <Route path="devicedetails/:id" component={wrapComponent(DeviceDetails, {Device: db.showDevice})}>
+        <Route path="devicedetails/:id" component={DeviceDetails}>
           <Route path="impactanalysis/:count" component={Modal(ImpactAnalysis, {TitleVar: "impactanalysis", modalId: 'modal-impact-analysis'})}/>
           <Route path="newcampaign" component={Modal(NewCampaign, {TitleVar: "newcampaign", modalId: 'modal-new-campaign'})}/>
           <Route path=":action/:vin2" />

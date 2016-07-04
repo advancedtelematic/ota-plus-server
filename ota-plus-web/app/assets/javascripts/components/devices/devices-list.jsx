@@ -9,6 +9,7 @@ define(function(require) {
       super(props);
     }
     render() {
+        
       var devices = [];
       var Devices = this.props.Devices;
       var devices = _.map(Devices, function(device, i) {

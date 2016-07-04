@@ -2,6 +2,7 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       Link = Router.Link,
+      db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       DetailsHeader = require('./details-header'),
       PackagesQueue = require('../packages/queue'),
@@ -35,8 +36,7 @@ define(function(require) {
       this.countImpactAnalysisPackages = this.countImpactAnalysisPackages.bind(this);
 
       SotaDispatcher.dispatch({actionType: 'get-device', device: this.props.params.id});
-      this.props.Device.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
-      console.log(document.referrer);
+      db.showDevice.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
       var that = this;
@@ -66,7 +66,8 @@ define(function(require) {
       }
     }
     componentWillUnmount(){
-      this.props.Device.removeWatch("poll-device");
+      db.showDevice.reset([]);
+      db.showDevice.removeWatch("poll-device");
       clearInterval(this.state.intervalId);
       clearTimeout(this.state.timeoutIntervalId);
     }
@@ -103,7 +104,7 @@ define(function(require) {
     }
     render() {
       // TODO: might be initialized empty
-      const deviceWithStatus = this.props.Device.deref();
+      const deviceWithStatus = db.showDevice.deref();
 
       function animateLeftPosition(left) {
         return VelocityHelpers.registerEffect({
