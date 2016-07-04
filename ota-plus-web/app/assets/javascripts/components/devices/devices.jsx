@@ -4,9 +4,9 @@ define(function(require) {
       Link = Router.Link,
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher')
-      ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       DevicesList = require('./devices-list'),
       DevicesHeader = require('./devices-header'),
+      Loader = require('../loader'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
   class Devices extends React.Component {
     constructor(props) {
@@ -29,9 +29,12 @@ define(function(require) {
       this.selectSort = this.selectSort.bind(this);
       this.refreshData = this.refreshData.bind(this);
 
+      db.devices.reset();
+      db.searchableDevices.reset();
+      db.searchableProductionDevices.reset();
       SotaDispatcher.dispatch({actionType: 'get-devices'});
-      db.devices.addWatch("devices", _.bind(this.forceUpdate, this, null));
       SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: ''});
+      db.devices.addWatch("devices", _.bind(this.forceUpdate, this, null));
       db.searchableDevices.addWatch("searchable-devices", _.bind(this.forceUpdate, this, null));
       db.searchableProductionDevices.addWatch("searchable-production-devices", _.bind(this.forceUpdate, this, null));
     }
@@ -64,6 +67,9 @@ define(function(require) {
       this.setState({intervalId: intervalId});
     }
     componentWillUnmount(){
+      db.devices.reset();
+      db.searchableDevices.reset();
+      db.searchableProductionDevices.reset();
       db.devices.removeWatch("devices");
       db.searchableDevices.removeWatch("searchable-devices");
       db.searchableProductionDevices.removeWatch("searchable-production-devices");
@@ -80,47 +86,44 @@ define(function(require) {
       });
     }
     numberWithDots(x) {
-      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      return x !== undefined ? x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : '';
     }
     render() {
       var Devices = db.searchableDevices.deref();
-      var SortedDevices = [];
+      var SortedDevices;
       var selectedStatus = this.state.selectedStatus;
       var selectedSort = this.state.selectedSort;
 
-      var isTutorialShown = (this.props.location.pathname.indexOf('newdevice') > -1 || db.devices.deref().length) ? false : true;
+      var isTutorialShown = (this.props.location.pathname.indexOf('newdevice') > -1 || db.devices.deref() === undefined || db.devices.deref().length) ? false : true;
       
       var productionDevicesCount = 0;
       var totalProductionDevicesCount = 15382448;
       if(this.state.filterValue.length >= 17) {
-        productionDevicesCount = db.searchableProductionDevices.deref().length;
+        productionDevicesCount = db.searchableProductionDevices.deref() !== undefined ? db.searchableProductionDevices.deref().length : 0;
       } else {
         productionDevicesCount = this.state.filterValue.length > 0 ? this.state.filterValue.length == 16 ? 25 : Math.round(totalProductionDevicesCount / (this.state.filterValue.length * 3499)) : totalProductionDevicesCount;
       }
-
-      Devices = Devices.filter(function (pack) {
-        return (selectedStatus === 'All' || selectedStatus === pack.status);
-      });
-
-      Object.keys(Devices).sort(function(a, b) {
-        var aName = Devices[a].deviceName;
-        var bName = Devices[b].deviceName;
-        if(selectedSort !== 'undefined' && selectedSort == 'desc')
-          return bName.localeCompare(aName);
-        else
-          return aName.localeCompare(bName);
-      }).forEach(function(key) {
-        SortedDevices.push(Devices[key]);
-      });
-
+      
+      if(Devices !== undefined) {
+        SortedDevices = [];
+        Devices = Devices.filter(function (pack) {
+          return (selectedStatus === 'All' || selectedStatus === pack.status);
+        });
+      
+        Object.keys(Devices).sort(function(a, b) {
+          var aName = Devices[a].deviceName;
+          var bName = Devices[b].deviceName;
+          if(selectedSort !== 'undefined' && selectedSort == 'desc')
+            return bName.localeCompare(aName);
+          else
+            return aName.localeCompare(bName);
+        }).forEach(function(key) {
+          SortedDevices.push(Devices[key]);
+        });
+      }
+      
       return (
-        <ReactCSSTransitionGroup
-          transitionAppear={true}
-          transitionLeave={false}
-          transitionAppearTimeout={500}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={500}
-          transitionName="example">
+        <div>
           <DevicesHeader
             changeFilter={this.changeFilter}
             filterValue={this.state.filterValue}
@@ -132,20 +135,38 @@ define(function(require) {
             selectSort={this.selectSort}
             isTutorialShown={isTutorialShown}/>
           <button className="btn btn-full-section first" onClick={this.expandSection.bind(this, 'testDevices')}>
-            <i className={(this.state.expandedSectionName == 'testDevices') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> TEST DEVICES ({this.numberWithDots(SortedDevices.length)} out of {this.numberWithDots(db.devices.deref().length)})
-          </button>
-          <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
-            {this.state.expandedSectionName == 'testDevices' ?
-              <div>
-                <div id="devices">
-                  <DevicesList
-                    Devices={SortedDevices}
-                    areProductionDevices={false}/>
-                  {this.props.children}
-                </div>
-              </div>
+            <i className={(this.state.expandedSectionName == 'testDevices') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> &nbsp;
+            TEST DEVICES &nbsp;
+            {SortedDevices !== undefined ?
+              <span>
+                (
+                  {this.numberWithDots(SortedDevices.length)} 
+                  {db.devices.deref() !== undefined ?
+                    <span>
+                      &nbsp;out of {this.numberWithDots(db.devices.deref().length)}
+                    </span>
+                  : null}
+                )
+              </span>
             : null}
-          </VelocityTransitionGroup>
+          </button>
+          {SortedDevices == undefined ?
+            <Loader />
+          :
+            <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}} runOnMount={true}>
+              {this.state.expandedSectionName == 'testDevices' ? 
+                <div>
+                  <div id="devices">
+                    <DevicesList
+                      Devices={SortedDevices}
+                      areProductionDevices={false}/>
+                    {this.props.children}
+                  </div>
+                </div>
+              : undefined}
+            </VelocityTransitionGroup>
+          }
+          
           <button className="btn btn-full-section" onClick={this.expandSection.bind(this, 'productionDevices')}>
             <i className={(this.state.expandedSectionName == 'productionDevices') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> PRODUCTION DEVICES ({this.numberWithDots(productionDevicesCount)} out of {this.numberWithDots(totalProductionDevicesCount)})
           </button>
@@ -174,7 +195,7 @@ define(function(require) {
           {this.state.expandedSectionName == 'campaigns' ?
             <div></div>
           : null}
-        </ReactCSSTransitionGroup>
+        </div>
       );
     }
   };
