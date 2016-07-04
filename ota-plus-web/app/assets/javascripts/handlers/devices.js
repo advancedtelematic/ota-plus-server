@@ -21,6 +21,20 @@ define(function(require) {
   var Handler = (function() {
       this.dispatchCallback = function(payload) {
         switch(payload.actionType) {
+          case 'get-devices':
+            sendRequest.doGet('/api/v1/device_data')
+              .success(function(devices) {
+                sendRequest.doGet('/api/v1/device_data?status=true')
+                  .success(function(deviceStatuses) {
+                    const statuses = _.groupBy(deviceStatuses, 'device');
+                    const devicesWithStatus =
+                      _.map(devices, i => _.extend(i, { 
+                          status : _.first(statuses[i.id]) !== undefined && _.first(statuses[i.id]).status !== undefined ? _.first(statuses[i.id]).status : null
+                      }));
+                    db.devices.reset(devicesWithStatus);
+                  });
+              });
+            break;
           case 'get-device':
             sendRequest.doGet('/api/v1/device_data?status=true') // TODO: more efficient querying
               .success(function(devicesWithStatus) {
@@ -46,7 +60,9 @@ define(function(require) {
                   .success(function(deviceStatuses) {
                     const statuses = _.groupBy(deviceStatuses, 'device');
                     const devicesWithStatus =
-                      _.map(devices, i => _.extend(i, { status : _.first(statuses[i.id]).status }));
+                      _.map(devices, i => _.extend(i, { 
+                          status : _.first(statuses[i.id]) !== undefined && _.first(statuses[i.id]).status !== undefined ? _.first(statuses[i.id]).status : null
+                      }));
                     db.searchableDevices.reset(devicesWithStatus);
                   });
               });
