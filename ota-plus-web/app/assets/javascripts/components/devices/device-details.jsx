@@ -36,6 +36,7 @@ define(function(require) {
 
       SotaDispatcher.dispatch({actionType: 'get-device', device: this.props.params.id});
       this.props.Device.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
+      console.log(document.referrer);
     }
     componentDidMount() {
       var that = this;
