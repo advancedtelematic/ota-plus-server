@@ -138,15 +138,6 @@ define(function(require) {
           </div>
 
           <PackagesList
-            AllPackages={db.searchablePackages}
-            AllPackagesPollEventName="poll-packages"
-            AllPackagesDispatchObject={{actionType: 'search-packages-by-regex', regex: this.state.filterValue}}
-            InstalledPackages={db.packagesForDevice}
-            InstalledPackagesPollEventName="poll-installed-packages"
-            InstalledPackagesDispatchObject={{actionType: 'get-packages-for-device', device: this.props.device}}
-            QueuedPackages={db.packageQueueForDevice}
-            QueuedPackagesPollEventName="poll-queued-packages"
-            QueuedPackagesDispatchObject={{actionType: 'get-package-queue-for-device', device: this.props.device}}
             filterValue={this.state.filterValue}
             selectStatus={this.state.selectStatus}
             selectSort={this.state.selectSort}

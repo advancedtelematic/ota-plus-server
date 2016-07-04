@@ -31,7 +31,7 @@ define(function(require) {
                       _.map(devices, i => _.extend(i, { 
                           status : _.first(statuses[i.id]) !== undefined && _.first(statuses[i.id]).status !== undefined ? _.first(statuses[i.id]).status : null
                       }));
-                    db.devices.reset(devicesWithStatus);
+                      db.devices.reset(devicesWithStatus);                    
                   });
               });
             break;
@@ -42,7 +42,7 @@ define(function(require) {
                 sendRequest.doGet('/api/v1/device_data') // TODO: send request to device registry instead
                   .success(function(devices) {
                     const device = _.find(devices, i => i.id == payload.device);
-                    db.showDevice.reset(_.extend(device, { status: deviceWithStatus.status }));
+                    db.showDevice.reset(_.extend(device, { status: deviceWithStatus !== undefined ? deviceWithStatus.status : null}));
                   });
               });
             break;
@@ -150,8 +150,9 @@ define(function(require) {
               sendRequest.doGet('/api/v1/device_data?status=true')
               .success(function(data) {
                 devices = _.filter(data, function(device) {
-                  return device.vin == localStorage.getItem('firstProductionTestDevice');
+                  return device.device == localStorage.getItem('firstProductionTestDevice');
                 });
+                
                 devices[0].deviceId = payload.regex.substr(0, 17);
                 db.searchableProductionDevices.reset(devices);
               });
