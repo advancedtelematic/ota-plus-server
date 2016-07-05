@@ -8,16 +8,16 @@ define(function(require) {
     var postStatus = (db.postStatus.deref() !== null && typeof db.postStatus.deref() === 'object') ? db.postStatus.deref() : {};
 
     sendRequest.doGet(url, {global: false})
-      .error(function(xhr, textStatus) {
-        if (xhr.status == 404) {
+      .error(function(xhr) {
+        errors.renderRequestError(xhr, postStatus, action);
+      })
+      .success(function(data) {
+        if (_.isEmpty(data)) {
           callback();
         } else {
-          errors.renderRequestError(xhr, postStatus, action);
+          postStatus[action] = resourceName + " already exists";
+          db.postStatus.reset(postStatus);
         }
-      })
-      .success(function() {
-        postStatus[action] = resourceName + " already exists";
-        db.postStatus.reset(postStatus);
       });
   };
 });

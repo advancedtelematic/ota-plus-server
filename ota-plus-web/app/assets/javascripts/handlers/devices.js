@@ -36,7 +36,7 @@ define(function(require) {
             break;
           case 'create-device':
             $('.loading').fadeIn();
-            checkExists('/api/v1/devices?deviceName=' + payload.device.deviceName, "Device", function() {
+            checkExists('/api/v1/devices?deviceId=' + payload.device.deviceId, "Device", function() {
               createDevice(payload);
             }, payload.actionType);
             break;
