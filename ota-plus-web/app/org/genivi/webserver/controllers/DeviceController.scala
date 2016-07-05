@@ -46,7 +46,7 @@ extends Controller with ApiClientSupport
 
   def get(id: Device.Id) = Action.async(parse.raw) { req =>
     val options = userOptions(req)
-    devicesApi.getDevice(options, id).map(d => Results.Ok(Json.toJson(d)))
+    devicesApi.getDevice(options, id)
   }
 
   private[this] def userOptions(req: Request[_]): UserOptions = {
