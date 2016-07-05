@@ -149,7 +149,8 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .btn-new-campaign:hover, .btn-new-campaign:focus, .btn-new-campaign:active { text-decoration: none; }
 
 .btn-profile { opacity: 1.0; }
-.btn-profile :hover { opacity: 0.8; }
+.btn-profile:hover { opacity: 0.8; }
+.btn-profile:hover, .btn-profile:focus, .btn-profile:active { text-decoration: none; }
 
 .pencil-button.pencil-button-edit { opacity: 0.5; }
 
@@ -355,7 +356,6 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .user-form { width: 100%; float: left; }
 
 .dropdown-profile { min-width: 330px; padding: 20px 20px 11px 20px; border-radius: 0; top: 122%; }
-.dropdown-profile:after { content: ''; width: 10px; height: 10px; background: #fff; position: absolute; -moz-transform: rotate(-135deg); -webkit-transform: rotate(-135deg); transform: rotate(-135deg); top: -6px; right: 10px; border-right: #ccc solid 1px; border-bottom: #ccc solid 1px; }
 .dropdown-profile a { color: #888; text-decoration: none; }
 .dropdown-profile hr { width: 100%; margin: 13px 0; border-color: #ccc; float: left; }
 .dropdown-profile .input-username { color: #66493E; font-size: 16px; text-align: center; width: 150px; padding: 0; border: 0; }

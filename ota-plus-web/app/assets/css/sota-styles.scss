@@ -732,8 +732,12 @@ a.close, button.close {
 .btn-profile {
     opacity: 1.0;
 
-    :hover {
+    &:hover {
         opacity: 0.8;
+    }
+    
+    &:hover, &:focus, &:active {
+        text-decoration: none;
     }
 }
 
@@ -1274,21 +1278,6 @@ a.close, button.close {
     padding: 20px 20px 11px 20px;
     border-radius: 0;
     top: 122%;
-
-    &:after {
-        content: '';
-        width: 10px;
-        height: 10px;
-        background: #fff;
-        position: absolute;
-        -moz-transform: rotate(-135deg);
-        -webkit-transform: rotate(-135deg);
-        transform: rotate(-135deg);
-        top: -6px;
-        right: 10px;
-        border-right: #ccc solid 1px;
-        border-bottom: #ccc solid 1px;
-    }
 
     a {
         color: #888;
