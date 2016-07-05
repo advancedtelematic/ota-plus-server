@@ -99,6 +99,12 @@ class ResolverApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
 class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
   val apiRequest = ApiRequest.base(devicesApiUri + "/api/v1/")
 
+  def getDevice(options: UserOptions, id: Device.Id): Future[Result] = {
+    apiRequest("devices/" + id.show)
+      .withUserOptions(options)
+      .execResult(apiExec)
+  }
+
   def createDevice(options: UserOptions, device: DeviceT): Future[Device.Id] = {
     import com.advancedtelematic.ota.device.Devices.idReads
 
