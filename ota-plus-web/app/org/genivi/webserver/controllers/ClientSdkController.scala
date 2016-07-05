@@ -2,12 +2,12 @@ package org.genivi.webserver.controllers
 
 import javax.inject.{Inject, Named, Singleton}
 
-import akka.actor.{ActorRef, ActorSystem}
+import akka.actor.ActorSystem
+import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.ota.vehicle.{VehicleMetadata, Vehicles}
 import org.asynchttpclient.uri.Uri
-import org.genivi.sota.data.{Device, Vehicle}
+import org.genivi.sota.data.Device
 import play.api.http.HttpEntity
-import play.api.libs.json.JsString
 import play.api.{Configuration, Logger}
 import play.api.libs.ws.WSClient
 import play.api.mvc._
@@ -18,41 +18,37 @@ import scala.util.{Failure, Try}
 
 @Singleton
 class ClientSdkController @Inject() (system: ActorSystem,
-                                     wsClient: WSClient,
-                                     conf: Configuration,
-                                     @Named("vehicles-store") vehiclesStore: Vehicles) extends Controller {
+                                     val ws: WSClient,
+                                     val conf: Configuration,
+                                     val clientExec: ApiClientExec,
+                                     @Named("vehicles-store") vehiclesStore: Vehicles)
+extends Controller with ApiClientSupport {
 
   import play.api.libs.concurrent.Execution.Implicits.defaultContext
   import Device._
   import cats.syntax.show._
 
   val logger = Logger(this.getClass)
-  private def logDebug(caller: String, msg: String) {
-    // Useful to debug instances running in the cloud.
-    logger.debug(s"[ClientSdkController.$caller()] $msg")
-  }
 
   private[this] object ConfigParameterNotFound extends Throwable with NoStackTrace
-  private[this] object ConfigAuthPlusHostNotFound extends Throwable with NoStackTrace
   private[this] object NoSuchVinRegistered extends Throwable with NoStackTrace
 
   /**
     * Send a pre-configured client for the requested package-format (deb or rpm) and architecture (32 or 64 bit).
     *
-    * @param vin
+    * @param deviceId
     * @param packfmt either "deb" or "rpm"
     * @param arch either "32" or "64"
     */
-  def downloadClientSdk(vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture) : Action[AnyContent] =
+  def downloadClientSdk(deviceId: Device.Id, packfmt: PackageType, arch: Architecture) : Action[AnyContent] =
     Action.async { implicit request =>
-      logDebug("downloadClientSdk", s"Params: ${vin.get}-$packfmt-$arch.${packfmt.fileExtension}")
       for (
-        vMetadataOpt <- vehiclesStore.getVehicle(vin);
+        vMetadataOpt <- vehiclesStore.getVehicle(deviceId);
         vMetadata <- vMetadataOpt match {
           case None => Future.failed[VehicleMetadata](NoSuchVinRegistered)
           case Some(vmeta) => Future.successful(vmeta)
         };
-        secret <- clientSecret(vMetadata);
+        secret <- authPlusApi.fetchSecret(vMetadata.clientInfo.clientId);
         result <- preconfClient(vMetadata.deviceId, packfmt, arch, vMetadata.clientInfo.clientId, secret)
       ) yield result
     }
@@ -80,31 +76,11 @@ class ClientSdkController @Inject() (system: ActorSystem,
     val buildserviceEndpoint = for (
       host <- conf.getString("buildservice.api.host");
       query <- conf.getString("buildservice.api.query").map( placedholderFiller )
-    ) yield host + query;
+    ) yield host + query
 
     buildserviceEndpoint
       .map( url => Try(Uri.create(url)) )
       .getOrElse( Failure(ConfigParameterNotFound) )
-  }
-
-  /**
-    * Contact Auth+ to obtain `client_secret` for the given VIN
-    */
-  private def clientSecret(vMetadata: VehicleMetadata): Future[String] = {
-    conf.getString("authplus.host") match {
-      case None =>
-        Future.failed(ConfigAuthPlusHostNotFound)
-      case Some(authplusHost) =>
-        val clientUrl = authplusHost + vMetadata.clientInfo.registrationUri
-        val w = wsClient.url(clientUrl).withFollowRedirects(false).withMethod("GET")
-        w.execute flatMap { wresp =>
-          val t2: Try[String] = for (
-            parsed <- Try( wresp.json );
-            secret <- Try( (parsed \ "client_secret").validate[String].get )
-          ) yield secret
-          Future.fromTry(t2)
-        }
-    }
   }
 
   /**
@@ -127,7 +103,7 @@ class ClientSdkController @Inject() (system: ActorSystem,
     */
   private def streamPackageFromBuildService(device: Device.Id, packfmt: PackageType, arch: Architecture)
                                            (url: Uri): Future[Result] = {
-    val futureResponse = wsClient.url(url.toUrl).withMethod("POST").stream
+    val futureResponse = ws.url(url.toUrl).withMethod("POST").stream
     futureResponse.map { streamedResp =>
       val statusResp = streamedResp.headers.status
       if (statusResp == 200) {

@@ -6,7 +6,7 @@ import akka.actor.{Actor, ActorRef, Props}
 import akka.persistence.PersistentActor
 import akka.util.Timeout
 import com.google.inject.Provides
-import org.genivi.sota.data.Vehicle
+import org.genivi.sota.data.Device
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -14,15 +14,15 @@ object Commands {
 
   final case class RegisterVehicle(vehicle: VehicleMetadata)
 
-  final case class GetVehicleState(vin: Vehicle.Vin)
+  final case class GetVehicleState(deviceId: Device.Id)
 
 }
 
-class VehicleEntity(vin: Vehicle.Vin) extends PersistentActor {
+class VehicleEntity(deviceId: Device.Id) extends PersistentActor {
   import VehicleEntity.{Event, VehicleRegistered}
   import com.advancedtelematic.ota.vehicle.Commands._
 
-  override def persistenceId: String = vin.get
+  override def persistenceId: String = deviceId.underlying.get
 
   var state: Option[VehicleMetadata] = None
 
@@ -42,7 +42,7 @@ class VehicleEntity(vin: Vehicle.Vin) extends PersistentActor {
         sender ! event
       }
 
-    case GetVehicleState(`vin`) =>
+    case GetVehicleState(deviceId) =>
       sender ! state
   }
 }
@@ -52,21 +52,23 @@ object VehicleEntity {
 
   final case class VehicleRegistered(vehicle: VehicleMetadata) extends Event
 
-  def props(vin: Vehicle.Vin): Props = Props( new VehicleEntity(vin) )
+  def props(deviceId: Device.Id): Props = Props( new VehicleEntity(deviceId) )
 }
 
 class VehicleRegistry extends Actor {
   import com.advancedtelematic.ota.vehicle.Commands._
 
-  private[this] def entityRef(vin: Vehicle.Vin): ActorRef =
-    context.child(vin.get).getOrElse( context.actorOf( VehicleEntity.props(vin), vin.get ))
+  private[this] def entityRef(deviceId: Device.Id): ActorRef =
+    context
+      .child(deviceId.underlying.get)
+      .getOrElse( context.actorOf( VehicleEntity.props(deviceId), deviceId.underlying.get ))
 
   override def receive: Receive = {
     case cmd@RegisterVehicle(vehicle) =>
-      entityRef(vehicle.vin).forward(cmd)
+      entityRef(vehicle.deviceId).forward(cmd)
 
-    case cmd@GetVehicleState(vin) =>
-      entityRef(vin).forward(cmd)
+    case cmd@GetVehicleState(deviceId) =>
+      entityRef(deviceId).forward(cmd)
   }
 }
 
@@ -81,20 +83,20 @@ class Vehicles(registry: ActorRef)
   import com.advancedtelematic.ota.vehicle.Commands._
 
   /**
-    * Persists the given vehicle metadata which in turn was obtained from Auth+ during first-time registration of a VIN.
+    * Persists the given device metadata which in turn was obtained from Auth+ during first-time registration of a VIN.
     */
   def registerVehicle(vehicle: VehicleMetadata)
                      (implicit ec: ExecutionContext): Future[Unit] =
     registry.ask( RegisterVehicle(vehicle) ).map(_ => ())
 
   /**
-    * Gets from the persistent store the vehicle metadata for a VIN that's been already registered with Auth+.
+    * Gets from the persistent store the metadata for a device that's been registered already with Auth+.
     * Of particular interest is the clientId, a UUID in one-to-one association with the VIN.
     * Note: the `client_secret` is not contained in the result. It has to be obtained from Auth+.
     */
-  def getVehicle(vin: Vehicle.Vin)
+  def getVehicle(deviceId: Device.Id)
                 (implicit ec: ExecutionContext): Future[Option[VehicleMetadata]] =
-    registry.ask( GetVehicleState(vin) ).mapTo[Option[VehicleMetadata]]
+    registry.ask( GetVehicleState(deviceId) ).mapTo[Option[VehicleMetadata]]
 
 }
 
