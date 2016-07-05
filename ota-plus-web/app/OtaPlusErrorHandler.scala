@@ -26,9 +26,7 @@ class OtaPlusErrorHandler @Inject() (
         BadGateway(e)
     }
 
-    if(handler.isDefinedAt(exception))
-      Future.successful(handler(exception))
-    else
-      super.onServerError(request, exception)
+    if (handler.isDefinedAt(exception)) { Future.successful(handler(exception)) }
+    else { super.onServerError(request, exception) }
   }
 }

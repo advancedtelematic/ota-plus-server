@@ -38,6 +38,12 @@ object ApiRequest {
   }
 }
 
+/**
+  * Common utilities to simplify building requests for micro-services.
+  * <p>
+  * Each [[OtaPlusConfig]] subclass ( one each for core, resolver, device-registry, and auth-plus )
+  * owns a dedicated [[ApiRequest]] created via [[ApiRequest.apply]].
+  */
 trait ApiRequest { self =>
   def build: WSClient => WSRequest
 
@@ -76,23 +82,29 @@ trait ApiRequest { self =>
   }
 }
 
+/**
+  * Controllers extending [[ApiClientSupport]] access [[CoreApi]] endpoints using a singleton.
+  */
 class CoreApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
-  val apiRequest = ApiRequest.base(coreApiUri + "/api/v1/")
+  private val coreRequest = ApiRequest.base(coreApiUri + "/api/v1/")
 
   def search(options: UserOptions, params: Seq[(String, String)]): Future[Result] =
-    apiRequest("devices")
+    coreRequest("devices")
       .withUserOptions(options)
       .transform(_.withQueryString(params:_*))
       .execResult(apiExec)
 }
 
+/**
+  * Controllers extending [[ApiClientSupport]] access [[ResolverApi]] endpoints using a singleton.
+  */
 class ResolverApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
-  val apiRequest = ApiRequest.base(resolverApiUri + "/api/v1/")
+  private val resolverRequest = ApiRequest.base(resolverApiUri + "/api/v1/")
 
   def createDevice(options: UserOptions, device: DeviceT): Future[Result] =
     device.deviceId match {
       case Some(id) =>
-        apiRequest("vehicles/" + implicitly[Show[Device.DeviceId]].show(id))
+        resolverRequest(s"vehicles/${id.show}")
           .withUserOptions(options)
           .transform(_.withMethod("PUT"))
           .execResult(apiExec)
@@ -100,11 +112,14 @@ class ResolverApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
     }
 }
 
+/**
+  * Controllers extending [[ApiClientSupport]] access [[DevicesApi]] endpoints using a singleton.
+  */
 class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
-  val apiRequest = ApiRequest.base(devicesApiUri + "/api/v1/")
+  private val devicesRequest = ApiRequest.base(devicesApiUri + "/api/v1/")
 
   def getDevice(options: UserOptions, id: Device.Id): Future[Result] = {
-    apiRequest("devices/" + id.show)
+    devicesRequest("devices/" + id.show)
       .withUserOptions(options)
       .execResult(apiExec)
   }
@@ -112,7 +127,7 @@ class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends Ot
   def createDevice(options: UserOptions, device: DeviceT): Future[Device.Id] = {
     import com.advancedtelematic.ota.device.Devices.idReads
 
-    apiRequest("devices")
+    devicesRequest("devices")
       .withUserOptions(options)
       .transform(_.withMethod("POST").withBody(Json.toJson(device)))
       .execJson(apiExec)(idReads)
@@ -121,16 +136,19 @@ class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends Ot
   def search(options: UserOptions, params: Seq[(String, String)]): Future[Result] = {
     val _params = params ++ options.namespace.map(n => "namespace" -> n.get.toString).toSeq
 
-    apiRequest("devices")
+    devicesRequest("devices")
       .withUserOptions(options)
       .transform(_.withQueryString(_params:_*))
       .execResult(apiExec)
   }
 }
 
+/**
+  * Controllers extending [[ApiClientSupport]] access [[AuthPlusApi]] endpoints using a singleton.
+  */
 class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
 
-  val apiRequest = ApiRequest.base(authPlusApiUri + "/")
+  private val authPlusRequest = ApiRequest.base(authPlusApiUri + "/")
 
   def createClient(device: Device.Id)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
     val request = Json.obj(
@@ -139,7 +157,7 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
       "scope" -> List(s"ota-core.${device.show}.write", s"ota-core.${device.show}.read")
     )
 
-    apiRequest("clients")
+    authPlusRequest("clients")
       .transform(_.withBody(request).withMethod("POST"))
       .execJson(apiExec)(ev)
   }
@@ -150,7 +168,7 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
         "newPassword" -> newPassword
       )
 
-    apiRequest(s"users/$email/password")
+    authPlusRequest(s"users/$email/password")
       .withToken(token)
       .transform(_.withBody(params).withMethod("PUT"))
       .execResult(apiExec)
@@ -165,7 +183,7 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
     * </ul>
     */
   def fetchClientInfo(clientID: UUID)(implicit ec: ExecutionContext): Future[JsValue] = {
-    apiRequest(s"clients/${clientID.toString}")
+    authPlusRequest(s"clients/${clientID.toString}")
       .transform(_.withMethod("GET"))
       .execResponse(apiExec)
       .flatMap { wresp =>
