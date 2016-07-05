@@ -22,28 +22,16 @@ define(function(require) {
       this.dispatchCallback = function(payload) {
         switch(payload.actionType) {
           case 'get-devices':
-            sendRequest.doGet('/api/v1/device_data')
+            sendRequest.doGet('/api/v1/device_data?status=true')
               .success(function(devices) {
-                sendRequest.doGet('/api/v1/device_data?status=true')
-                  .success(function(deviceStatuses) {
-                    const statuses = _.groupBy(deviceStatuses, 'device');
-                    const devicesWithStatus =
-                      _.map(devices, i => _.extend(i, { 
-                          status : _.first(statuses[i.id]) !== undefined && _.first(statuses[i.id]).status !== undefined ? _.first(statuses[i.id]).status : null
-                      }));
-                      db.devices.reset(devicesWithStatus);                    
-                  });
+                db.devices.reset(devices);
               });
             break;
           case 'get-device':
             sendRequest.doGet('/api/v1/device_data?status=true') // TODO: more efficient querying
-              .success(function(devicesWithStatus) {
-                const deviceWithStatus = _.find(devicesWithStatus, i => i.device == payload.device);
-                sendRequest.doGet('/api/v1/device_data') // TODO: send request to device registry instead
-                  .success(function(devices) {
-                    const device = _.find(devices, i => i.id == payload.device);
-                    db.showDevice.reset(_.extend(device, { status: deviceWithStatus !== undefined ? deviceWithStatus.status : null}));
-                  });
+              .success(function(devices) {
+                  const device = _.find(devices, i => i.id == payload.device);
+                  db.showDevice.reset(device)
               });
             break;
           case 'create-device':
@@ -54,17 +42,9 @@ define(function(require) {
             break;
           case 'search-devices-by-regex':
             var query = payload.regex ? 'regex=' + payload.regex : '';
-            sendRequest.doGet('/api/v1/device_data?' + query)
+            sendRequest.doGet('/api/v1/device_data?status=true' + query)
               .success(function(devices) {
-                sendRequest.doGet('/api/v1/device_data?status=true&' + query)
-                  .success(function(deviceStatuses) {
-                    const statuses = _.groupBy(deviceStatuses, 'device');
-                    const devicesWithStatus =
-                      _.map(devices, i => _.extend(i, { 
-                          status : _.first(statuses[i.id]) !== undefined && _.first(statuses[i.id]).status !== undefined ? _.first(statuses[i.id]).status : null
-                      }));
-                    db.searchableDevices.reset(devicesWithStatus);
-                  });
+                db.searchableDevices.reset(devices);
               });
             break;
           case 'fetch-affected-devices':
