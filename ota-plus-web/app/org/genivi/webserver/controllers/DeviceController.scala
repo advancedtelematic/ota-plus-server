@@ -1,7 +1,5 @@
 package org.genivi.webserver.controllers
 
-import java.net.URI
-
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.ota.device.Devices._
@@ -9,8 +7,7 @@ import com.advancedtelematic.ota.vehicle.{VehicleMetadata, Vehicles}
 import eu.timepit.refined._
 import javax.inject.{Inject, Named, Singleton}
 
-import org.genivi.sota.data.{Device, DeviceT, Vehicle}
-import play.api.libs.concurrent.Execution
+import org.genivi.sota.data.{Device, DeviceT}
 import play.api.libs.json._
 import play.api.libs.ws._
 import play.api.mvc._
@@ -29,26 +26,25 @@ class DeviceController @Inject() (val ws: WSClient,
                                   val clientExec: ApiClientExec,
                                   @Named("vehicles-store") vehiclesStore: Vehicles)
                                  (implicit ec: ExecutionContext)
-extends Controller with ApiClientSupport
-  with OtaPlusConfig {
+extends Controller with ApiClientSupport {
 
   val logger = Logger(this.getClass)
 
   private[this] object NoSuchVinRegistered extends Throwable with NoStackTrace
 
-  def create() = Action.async(parse.json[DeviceT]) { req =>
-    requestCreate(req.body, req)
+  def create(): Action[DeviceT] = Action.async(parse.json[DeviceT]) { req =>
+    requestCreate(req.body, userOptions(req))
   }
 
-  def listDeviceAttributes() = Action.async(parse.raw) { req =>
+  def listDeviceAttributes(): Action[RawBuffer] = Action.async(parse.raw) { req =>
     searchWith(req, coreApi.search)
   }
 
-  def search() = Action.async(parse.raw) { req =>
+  def search(): Action[RawBuffer] = Action.async(parse.raw) { req =>
     searchWith(req, devicesApi.search)
   }
 
-  def get(id: Device.Id) = Action.async(parse.raw) { req =>
+  def get(id: Device.Id): Action[RawBuffer] = Action.async(parse.raw) { req =>
     val options = userOptions(req)
     devicesApi.getDevice(options, id)
   }
@@ -67,9 +63,12 @@ extends Controller with ApiClientSupport
     } yield bearer
   }
 
-  private def requestCreate(device: DeviceT, req: Request[_]): Future[Result] = {
-    val options = userOptions(req)
-
+  /**
+    * Create a device ( based on the given [[DeviceT]] ) by contacting device-registry, resolver, and Auth+
+    *
+    * @return a [[Device.Id]] as response body
+    */
+  private def requestCreate(device: DeviceT, options: UserOptions): Future[Result] = {
     implicit val w = refinedWriter[String, Device.Id]
 
     // Must POST "devices" on device registry and
@@ -79,7 +78,6 @@ extends Controller with ApiClientSupport
       deviceId <- devicesApi.createDevice(options, device)
       _ <- resolverApi.createDevice(options, device)
       vehicleMetadata <- registerAuthPlusVehicle(deviceId)
-      _ <- vehiclesStore.registerVehicle(vehicleMetadata)
     } yield Results.Created(Json.toJson(deviceId))
   }
 
@@ -90,11 +88,15 @@ extends Controller with ApiClientSupport
   }
 
   /**
-  * Contact Auth+ to register for the first time the given VIN,
-  * obtaining [[VehicleMetadata]]
-  */
+    * Contact Auth+ to register for the first time the given [[Device.Id]],
+    * to later persist (in cassandra-journal) the resulting [[VehicleMetadata]]
+    */
   private def registerAuthPlusVehicle(deviceId: Device.Id): Future[VehicleMetadata] = {
-    authPlusApi.createClient(deviceId).map(i => VehicleMetadata(deviceId, i))
+    for {
+      clientInfo <- authPlusApi.createClient(deviceId)
+      vehicleMetadata = VehicleMetadata(deviceId, clientInfo)
+      _ <- vehiclesStore.registerVehicle(vehicleMetadata)
+    } yield vehicleMetadata
   }
 
   /**
