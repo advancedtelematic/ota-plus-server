@@ -90,7 +90,7 @@ define(function(require) {
                   <Packages
                     device={this.state.testVin}
                     setPackagesStatistics={this.setPackagesStatistics}
-                    lastSeen={Device.lastSeen}/>
+                    lastSeen={deviceWithStatus.lastSeen}/>
                 </div>
                 <div className="panel-footer">
                   {this.state.installedPackagesCount} installed, &nbsp;

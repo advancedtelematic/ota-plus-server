@@ -8,12 +8,8 @@ define(function(require) {
     render() {
       return (
         <div className="loader text-center">
-          <div>
-            Getting data from server
-          </div>
-          <div className="margin-top-20">
-            <img src="/assets/img/icons/loading2.gif" alt=""/>
-          </div>
+          <img src="/assets/img/icons/loading2.gif" alt="" style={{height:'30px'}}/> &nbsp;
+          Getting data from server
         </div>
       );
     }

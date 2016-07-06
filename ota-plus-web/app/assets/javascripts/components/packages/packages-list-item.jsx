@@ -26,9 +26,9 @@ define(function(require) {
       return (
         <button type="button" className="list-group-item" onClick={this.itemClick}>
           {this.context.location.pathname.toLowerCase().split('/')[1] != 'productiondevicedetails' &&
-            (localStorage.getItem('firstProductionTestDevice') == this.props.vin ||
-            localStorage.getItem('secondProductionTestDevice') == this.props.vin ||
-            localStorage.getItem('thirdProductionTestDevice') == this.props.vin) ?
+            (localStorage.getItem('firstProductionTestDevice') == this.props.deviceId ||
+            localStorage.getItem('secondProductionTestDevice') == this.props.deviceId ||
+            localStorage.getItem('thirdProductionTestDevice') == this.props.deviceId) ?
             <input type="checkbox" className="checkbox-impact pull-left" onChange={this.checkboxClick}/>
           : null}
           <div className="pull-left">
