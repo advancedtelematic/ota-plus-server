@@ -21,13 +21,13 @@ define(function(require) {
       SotaDispatcher.dispatch({
         actionType: 'install-package-for-device',
         data: data,
-        device: this.props.device
+        device: this.props.deviceId
       });
 
       this.refreshData();
     }
     refreshData() {
-      SotaDispatcher.dispatch({actionType: "get-package-queue-for-device", device: this.props.device});
+      SotaDispatcher.dispatch({actionType: "get-package-queue-for-device", device: this.props.deviceId});
     }
     render() {
       var versions = _.map(this.props.versions, function(version, i) {
