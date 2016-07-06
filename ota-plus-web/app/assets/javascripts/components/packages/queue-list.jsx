@@ -3,6 +3,7 @@ define(function(require) {
       SotaDispatcher = require('sota-dispatcher'),
       db = require('stores/db'),
       QueueListItem = require('./queue-list-item'),
+      Loader = require('../loader'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       TutorialAddPackageThirdStep = require('../tutorial/add-package-third-step');
   
@@ -10,8 +11,9 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        data: []
+        data: undefined,
       }
+      
       this.sort = this.sort.bind(this);
       this.dragStart = this.dragStart.bind(this);
       this.dragEnd = this.dragEnd.bind(this);
@@ -20,20 +22,22 @@ define(function(require) {
 
       db.packageQueueForDevice.addWatch("poll-queued-packages", _.bind(this.setData, this, null));
     }
-    componentWillUnmount(){
+    componentWillUnmount() {
       db.packageQueueForDevice.removeWatch("poll-queued-packages");
     }
     setData() {
       if (!$('#queue-list .dragging').length) {
         var data = db.packageQueueForDevice.deref();
-        data.sort(function(a, b) {
-          var installPosCompared = a.installPos - b.installPos;
-          return installPosCompared == 0 ? new Date(a.createdAt) - new Date(b.createdAt) : installPosCompared;
-        });
-        this.setState({
-          data: {packages: data}
-        });
-        this.props.setQueueStatistics(data.length);
+        if(!_.isUndefined(data)) {
+          data.sort(function(a, b) {
+            var installPosCompared = a.installPos - b.installPos;
+            return installPosCompared == 0 ? new Date(a.createdAt) - new Date(b.createdAt) : installPosCompared;
+          });
+          this.setState({
+            data: {packages: data}
+          });
+          this.props.setQueueStatistics(data.length);
+        }
       }
     }
     sort(packages, dragging) {
@@ -68,39 +72,48 @@ define(function(require) {
       });
       SotaDispatcher.dispatch({
         actionType: 'reorder-queue-for-device',
-        device: this.props.device,
+        device: this.props.deviceId,
         order: newOrder
       });
     }
     render() {
-      var Packages = this.state.data.packages !== undefined ? this.state.data.packages : [];
-
-      var packages = _.map(Packages, function(pack, i) {
-        var dragging = (this.state.data.dragging == i) ? "dragging" : "";
-        var status = (pack.name == 'package') ? 'error' : 'success';
-        return (
-          <div data-id={i}
-            className={dragging}
-            key={i}
-            draggable="true"
-            onDragEnd={this.dragEnd}
-            onDragOver={this.dragOver}
-            onDragStart={this.dragStart}>
-            <QueueListItem package={pack} status={status} device={this.props.device}/>
-          </div>
-        );
-      }, this);
+      if(!_.isUndefined(this.state.data) && !_.isUndefined(this.state.data.packages)) {
+        var packages = _.map(this.state.data.packages, function(pack, i) {
+          var dragging = (this.state.data.dragging == i) ? "dragging" : "";
+          var status = (pack.name == 'package') ? 'error' : 'success';
+          return (
+            <div data-id={i}
+              className={dragging}
+              key={i}
+              draggable="true"
+              onDragEnd={this.dragEnd}
+              onDragOver={this.dragOver}
+              onDragStart={this.dragStart}>
+              <QueueListItem package={pack} status={status} deviceId={this.props.deviceId}/>
+            </div>
+          );
+        }, this);
+      }
       return (
-        <ul id="queue-list" className="list-group list-group-dnd">
-          {packages.length > 0 ?
-            <span>
-              {packages}
-              <TutorialAddPackageThirdStep />
-            </span>
-          :
-            <div>Queue is empty</div>
-          }
-        </ul>
+        <div>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {!_.isUndefined(packages) ?
+              <ul id="queue-list" className="list-group list-group-dnd">
+                {packages.length ?
+                  <span>
+                    {packages}
+                    <TutorialAddPackageThirdStep />
+                  </span>
+                :
+                  <div>Queue is empty</div>
+                }
+              </ul>
+            : undefined}
+          </VelocityTransitionGroup>
+          {_.isUndefined(packages) ? 
+            <Loader />
+          : undefined}
+        </div>
       );
     }
   };

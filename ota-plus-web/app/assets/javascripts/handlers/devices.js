@@ -9,7 +9,7 @@ define(function(require) {
     let url = '/api/v1/devices';
     let device = {
       deviceName: payload.device.deviceName,
-      deviceId: payload.device.deviceId === '' ? null : payload.device.deviceId ,
+      deviceId: payload.device.deviceId === '' ? null : payload.device.deviceId,
       deviceType: payload.device.deviceType
     }
     sendRequest.doPost(url, device)
@@ -31,7 +31,7 @@ define(function(require) {
             sendRequest.doGet('/api/v1/device_data?status=true') // TODO: more efficient querying
               .success(function(devices) {
                   const device = _.find(devices, i => i.id == payload.device);
-                  db.showDevice.reset(device)
+                  db.showDevice.reset(device);
               });
             break;
           case 'create-device':
@@ -71,7 +71,6 @@ define(function(require) {
               });
             break;
           case 'get-package-queue-for-device':
-            console.log(payload)
             if (!_.isUndefined(payload.device)) {
               sendRequest.doGet('/api/v1/vehicle_updates/' + payload.device + '/queued')
                 .success(function(packages) {
@@ -79,7 +78,7 @@ define(function(require) {
                 });
             }
             break;
-          case 'get-package-history-for-devices':
+          case 'get-package-history-for-device':
             sendRequest.doGet('/api/v1/history?uuid=' + payload.device)
               .success(function(packages) {
                 db.packageHistoryForDevice.reset(packages);
@@ -144,18 +143,18 @@ define(function(require) {
             sendRequest.doGet('/api/v1/device_data?status=true')
               .success(function(devices) {
                 db.showDevice.reset(_.find(devices, function(device) {
-                  return device.vin == localStorage.getItem('firstProductionTestDevice');
+                  return device.device == localStorage.getItem('firstProductionTestDevice');
                 }));
               });
           break;
           case 'get-installation-log-for-device':
-            sendRequest.doGet('api/v1/vehicle_updates/' + payload.vin + '/results')
+            sendRequest.doGet('api/v1/vehicle_updates/' + payload.device + '/results')
               .success(function(log) {
                 db.installationLogForDevice.reset(log);
               });
           break;
           case 'get-installation-log-for-updateid':
-            sendRequest.doGet('api/v1/vehicle_updates/' + payload.vin + '/'  + payload.updateId + '/results')
+            sendRequest.doGet('api/v1/vehicle_updates/' + payload.device + '/'  + payload.updateId + '/results')
               .success(function(log) {
                 db.installationLogForUpdateId.reset(log);
               });

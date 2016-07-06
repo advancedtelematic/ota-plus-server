@@ -3,7 +3,7 @@ define(function(require) {
       Router = require('react-router'),
       Link = Router.Link,
       db = require('stores/db'),
-      SotaDispatcher = require('sota-dispatcher')
+      SotaDispatcher = require('sota-dispatcher'),
       DevicesList = require('./devices-list'),
       DevicesHeader = require('./devices-header'),
       Loader = require('../loader'),
@@ -86,7 +86,7 @@ define(function(require) {
       });
     }
     numberWithDots(x) {
-      return x !== undefined ? x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : '';
+      return !_.isUndefined(x) ? x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : '';
     }
     render() {
       var Devices = db.searchableDevices.deref();
@@ -94,17 +94,17 @@ define(function(require) {
       var selectedStatus = this.state.selectedStatus;
       var selectedSort = this.state.selectedSort;
 
-      var isTutorialShown = (this.props.location.pathname.indexOf('newdevice') > -1 || db.devices.deref() === undefined || db.devices.deref().length) ? false : true;
+      var isTutorialShown = (this.props.location.pathname.indexOf('newdevice') > -1 || _.isUndefined(db.devices.deref()) || db.devices.deref().length) ? false : true;
       
       var productionDevicesCount = 0;
       var totalProductionDevicesCount = 15382448;
       if(this.state.filterValue.length >= 17) {
-        productionDevicesCount = db.searchableProductionDevices.deref() !== undefined ? db.searchableProductionDevices.deref().length : 0;
+        productionDevicesCount = !_.isUndefined(db.searchableProductionDevices.deref()) ? db.searchableProductionDevices.deref().length : 0;
       } else {
         productionDevicesCount = this.state.filterValue.length > 0 ? this.state.filterValue.length == 16 ? 25 : Math.round(totalProductionDevicesCount / (this.state.filterValue.length * 3499)) : totalProductionDevicesCount;
       }
       
-      if(Devices !== undefined) {
+      if(!_.isUndefined(Devices)) {
         SortedDevices = [];
         Devices = Devices.filter(function (pack) {
           return (selectedStatus === 'All' || selectedStatus === pack.status);
@@ -113,7 +113,7 @@ define(function(require) {
         Object.keys(Devices).sort(function(a, b) {
           var aName = Devices[a].deviceName;
           var bName = Devices[b].deviceName;
-          if(selectedSort !== 'undefined' && selectedSort == 'desc')
+          if(!_.isUndefined(selectedSort) && selectedSort == 'desc')
             return bName.localeCompare(aName);
           else
             return aName.localeCompare(bName);
@@ -137,11 +137,11 @@ define(function(require) {
           <button className="btn btn-full-section first" onClick={this.expandSection.bind(this, 'testDevices')}>
             <i className={(this.state.expandedSectionName == 'testDevices') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> &nbsp;
             TEST DEVICES &nbsp;
-            {SortedDevices !== undefined ?
+            {!_.isUndefined(SortedDevices) ?
               <span>
                 (
                   {this.numberWithDots(SortedDevices.length)} 
-                  {db.devices.deref() !== undefined ?
+                  {!_.isUndefined(db.devices.deref()) ?
                     <span>
                       &nbsp;out of {this.numberWithDots(db.devices.deref().length)}
                     </span>
@@ -150,7 +150,7 @@ define(function(require) {
               </span>
             : null}
           </button>
-          {SortedDevices == undefined ?
+          {_.isUndefined(SortedDevices) ?
             <Loader />
           :
             <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}} runOnMount={true}>

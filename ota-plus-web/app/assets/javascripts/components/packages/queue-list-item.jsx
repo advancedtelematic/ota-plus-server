@@ -1,7 +1,6 @@
 define(function(require) {
   var React = require('react'),
       SotaDispatcher = require('sota-dispatcher'),
-      ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       Router = require('react-router'),
       Link = Router.Link;
 
@@ -13,7 +12,7 @@ define(function(require) {
     cancelUpdate() {
       SotaDispatcher.dispatch({
         actionType: 'cancel-update',
-        device: this.props.device,
+        device: this.props.deviceId,
         updateid: this.props.package.requestId
       });
     }
