@@ -159,6 +159,11 @@ define(function(require) {
                 db.installationLogForUpdateId.reset(log);
               });
           break;
+          case 'unblock-queue':
+            sendRequest.doPut('api/v1/vehicle_updates/' + payload.device + '/unblock')
+              .success(function(result) {
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));

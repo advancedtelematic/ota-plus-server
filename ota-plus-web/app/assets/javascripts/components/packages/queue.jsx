@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       QueueList = require('./queue-list'),
       HistoryList = require('./history-list');
@@ -45,7 +46,10 @@ define(function(require) {
       this.props.reviewFailedInstall();
     }
     unblockQueue() {
-      console.log('unblocked');
+      SotaDispatcher.dispatch({
+        actionType: 'unblock-queue',
+        device: this.props.device.id
+      });
     }
     setQueueListHeight() {
       var windowHeight = jQuery(window).height();
