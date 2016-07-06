@@ -8,6 +8,7 @@ define(function(require) {
       PackagesQueue = require('../packages/queue'),
       Packages = require('../packages/packages'),
       TutorialInstallDevice = require('../tutorial/install-device'),
+      Loader = require('../loader'),
       VelocityUI = require('velocity-ui'),
       VelocityHelpers = require('mixins/velocity/velocity-helpers'),
       VelocityComponent = require('mixins/velocity/velocity-component'),
@@ -35,6 +36,7 @@ define(function(require) {
       this.refreshData = this.refreshData.bind(this);
       this.countImpactAnalysisPackages = this.countImpactAnalysisPackages.bind(this);
 
+      db.showDevice.reset();
       SotaDispatcher.dispatch({actionType: 'get-device', device: this.props.params.id});
       db.showDevice.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
     }
@@ -66,7 +68,7 @@ define(function(require) {
       }
     }
     componentWillUnmount(){
-      db.showDevice.reset([]);
+      db.showDevice.reset();
       db.showDevice.removeWatch("poll-device");
       clearInterval(this.state.intervalId);
       clearTimeout(this.state.timeoutIntervalId);
@@ -119,7 +121,7 @@ define(function(require) {
 
       return (
         <div>
-          {deviceWithStatus.status == "NotSeen" ?
+          {!_.isUndefined(deviceWithStatus) && deviceWithStatus.status == "NotSeen" ?
             <div className="lightgrey-overlay">
               <TutorialInstallDevice />
             </div>
@@ -133,9 +135,18 @@ define(function(require) {
               </div>
             : null}
           </VelocityTransitionGroup>
-          <DetailsHeader
-            device={deviceWithStatus}
-            duplicatingInProgress={this.state.duplicatingInProgress}/>
+          <div className="device-header">
+            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+              {!_.isUndefined(deviceWithStatus) ? 
+                <DetailsHeader
+                  device={deviceWithStatus}
+                  duplicatingInProgress={this.state.duplicatingInProgress}/>
+              : undefined}
+            </VelocityTransitionGroup>
+            {_.isUndefined(deviceWithStatus) ? 
+              <Loader />
+            : undefined}
+          </div>
           <div className="col-md-6 nopadding border-right-2">
             <div className="panel panel-ats">
               <div className="panel-heading">
@@ -144,12 +155,10 @@ define(function(require) {
                 </div>
               </div>
               <div className="panel-body">
-                <Packages
-                  device={deviceWithStatus.id}
-                  setPackagesStatistics={this.setPackagesStatistics}
-                  lastSeen={deviceWithStatus.lastSeen}
-                  countImpactAnalysisPackages={this.countImpactAnalysisPackages}
-                  deviceStatus={deviceWithStatus.status}/>
+                  <Packages
+                    device={deviceWithStatus}
+                    setPackagesStatistics={this.setPackagesStatistics}
+                    countImpactAnalysisPackages={this.countImpactAnalysisPackages}/>
               </div>
               <div className="panel-footer">
                 <VelocityComponent animation={this.state.selectedImpactAnalysisPackagesCount ? animateLeftPosition('15px') : animateLeftPosition('-250px')}>
@@ -182,8 +191,7 @@ define(function(require) {
                   toggleQueueHistory={this.toggleQueueHistory}
                   reviewFailedInstall={this.reviewFailedInstall}
                   setQueueStatistics={this.setQueueStatistics}
-                  device={this.props.params.id}
-                  status={deviceWithStatus.status}/>
+                  device={deviceWithStatus}/>
               </div>
               <div className="panel-footer">
                 {this.state.queueCount} packages in queue

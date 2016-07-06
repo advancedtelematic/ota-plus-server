@@ -8,11 +8,29 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        isFirstFailedExpanded: false
+        isFirstFailedExpanded: false,
+        queueListHeight: '300px'
       }
+      
       this.toggleQueueHistory = this.toggleQueueHistory.bind(this);
       this.reviewFailedInstall = this.reviewFailedInstall.bind(this);
       this.unblockQueue = this.unblockQueue.bind(this);
+      this.setQueueListHeight = this.setQueueListHeight.bind(this);
+    }
+    componentDidMount() {
+      var that = this;
+      
+      jQuery('#queue .close').click(function() {
+        var timeoutId = setTimeout(function(){
+          that.setQueueListHeight();
+          clearTimeout(timeoutId);
+        }, 200);
+      });
+      window.addEventListener("resize", this.setQueueListHeight);
+      this.setQueueListHeight();
+    }
+    componentWillUnmount() {
+      window.removeEventListener("resize", this.setQueueListHeight);
     }
     toggleQueueHistory() {
       this.setState({
@@ -28,6 +46,14 @@ define(function(require) {
     }
     unblockQueue() {
       console.log('unblocked');
+    }
+    setQueueListHeight() {
+      var windowHeight = jQuery(window).height();
+      var footerHeight = jQuery('.panel-footer').outerHeight();
+      var offsetTop = jQuery('#queue-wrapper').offset().top;
+      this.setState({
+        queueListHeight: windowHeight - offsetTop - footerHeight
+      });
     }
     render() {
       return (
@@ -54,18 +80,19 @@ define(function(require) {
             </div>
           : null}
           
-          <div id="queue-wrapper">          
-              {!this.props.isPackagesHistoryShown ?
+          <div id="queue-wrapper" style={{height: this.state.queueListHeight}}>
+            {!_.isUndefined(this.props.device) ? 
+              !this.props.isPackagesHistoryShown ?
                 <QueueList
-                  device={this.props.device}
-                  setQueueStatistics={this.props.setQueueStatistics}
-                  key="queue-list"/>
+                  key="queue-list"
+                  deviceId={this.props.device.id}
+                  setQueueStatistics={this.props.setQueueStatistics}/>
               :
                 <HistoryList
-                  device={this.props.device}
                   key="history-list"
+                  deviceId={this.props.device.id}
                   isFirstFailedExpanded={this.state.isFirstFailedExpanded}/>
-              }
+            : undefined}
           </div>
         </div>
       );

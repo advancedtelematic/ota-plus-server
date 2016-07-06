@@ -13,8 +13,9 @@ GET     /api/v1/device_data                     org.genivi.webserver.controllers
 GET     /api/v1/devices                         org.genivi.webserver.controllers.DeviceController.search()
 POST    /api/v1/devices                         org.genivi.webserver.controllers.DeviceController.create()
 GET     /api/v1/devices/:uuid                   org.genivi.webserver.controllers.DeviceController.get(uuid: Device.Id)
+GET     /api/v1/devices/:deviceId/clientInfo    org.genivi.webserver.controllers.DeviceController.fetchClientInfo(deviceId: Device.Id)
 
-GET     /api/v1/client/:vin/:packfmt/:arch      org.genivi.webserver.controllers.ClientSdkController.downloadClientSdk(vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture)
+GET     /api/v1/client/:deviceId/:packfmt/:arch org.genivi.webserver.controllers.ClientSdkController.downloadClientSdk(deviceId: Device.Id, packfmt: PackageType, arch: Architecture)
 
 GET     /api/v1/*path                           org.genivi.webserver.controllers.Application.apiProxy(path: String)
 PUT     /api/v1/*path                           org.genivi.webserver.controllers.Application.apiProxy(path: String)

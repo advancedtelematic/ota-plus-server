@@ -30,10 +30,9 @@ class RegistryProps extends TestKit(ActorSystem("vehicle-registry"))
   } yield ClientInfo(id, Uri(s"http://ota.plus/clients/$uuid"), token)
 
   val VehicleGen: Gen[VehicleMetadata] = for {
-    vin        <- genVin
     clientInfo <- ClientInfoGen
     deviceId <- DeviceGenerators.arbId.arbitrary
-  } yield VehicleMetadata(vin, deviceId, clientInfo)
+  } yield VehicleMetadata(deviceId, clientInfo)
 
   val vehicles = Vehicles( system.actorOf( VehicleRegistry.props() ) )(Timeout(1, TimeUnit.SECONDS))
 
@@ -41,7 +40,7 @@ class RegistryProps extends TestKit(ActorSystem("vehicle-registry"))
     implicit val exec = system.dispatcher
     forAll( VehicleGen ) { vehicle =>
       vehicles.registerVehicle(vehicle).flatMap { _ =>
-        vehicles.getVehicle(vehicle.vin)
+        vehicles.getVehicle(vehicle.deviceId)
       }.futureValue shouldBe Some(vehicle)
 
     }
