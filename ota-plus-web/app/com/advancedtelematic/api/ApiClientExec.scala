@@ -35,11 +35,9 @@ class ApiClientExec @Inject()(wsClient: WSClient)(implicit ec: ExecutionContext)
   def runSafe(request: WSClient => WSRequest): Future[WSResponse] = {
     run(request(wsClient))
       .recoverWith { case t => Future.failed(RemoteApiIOError(t)) }
-      .flatMap {
-        case result if isSuccess(result) =>
-          Future.successful(result)
-        case result =>
-          Future.failed(RemoteApiError(toResult(result)))
+      .flatMap { result =>
+        if (isSuccess(result)) { Future.successful(result) }
+        else { Future.failed(RemoteApiError(toResult(result))) }
       }
   }
 
