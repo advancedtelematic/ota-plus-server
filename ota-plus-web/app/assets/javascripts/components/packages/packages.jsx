@@ -13,41 +13,25 @@ define(function(require) {
         selectStatusName: 'All',
         selectSort: 'asc',
         selectSortName: 'A > Z',
-        intervalId: null,
-        timeoutId: null
+        packagesListHeight: '300px'
       }
-
+      
       this.changeFilter = this.changeFilter.bind(this);
-      this.setDivsHeight = this.setDivsHeight.bind(this);
+      this.setPackagesListHeight = this.setPackagesListHeight.bind(this);
     }
     componentDidMount() {
       var that = this;
-
-      jQuery('.close').click(function() {
-        setTimeout(function(){
-          that.setDivsHeight();
+      jQuery('#packages .close').click(function() {
+        var timeoutId = setTimeout(function(){
+          that.setPackagesListHeight();
+          clearTimeout(timeoutId);
         }, 200);
       });
-
-      window.addEventListener("resize", this.setDivsHeight);
-
-      var intervalId = setInterval(function(){
-        that.setDivsHeight();
-      }, 50);
-
-      var timeoutId = setTimeout(function() {
-        clearInterval(intervalId);
-      }, 5000);
-
-      this.setState({
-        intervalId: intervalId,
-        timeoutId: timeoutId
-      });
+      window.addEventListener("resize", this.setPackagesListHeight);
+      this.setPackagesListHeight();
     }
     componentWillUnmount() {
-      window.removeEventListener("resize", this.setDivsHeight);
-      clearInterval(this.state.intervalId);
-      clearTimeout(this.state.timeoutId);
+      window.removeEventListener("resize", this.setPackagesListHeight);
     }
     changeFilter(filter) {
       this.setState({filterValue: filter});
@@ -71,32 +55,27 @@ define(function(require) {
         selectSortName: name
       });
     }
-    setDivsHeight() {
-      this.setPackagesListHeight();
-      this.setQueueListHeight();
-    }
     setPackagesListHeight() {
       var windowHeight = jQuery(window).height();
       var footerHeight = jQuery('.panel-footer').outerHeight();
-      var offsetTop = jQuery('#packages-list').offset().top;
-      jQuery('#packages-list').height(windowHeight - offsetTop - footerHeight);
-    }
-    setQueueListHeight() {
-      var windowHeight = jQuery(window).height();
-      var footerHeight = jQuery('.panel-footer').outerHeight();
-      var offsetTop = jQuery('#queue-wrapper').offset().top;
-      jQuery('#queue-wrapper').height(windowHeight - offsetTop - footerHeight);
+      var offsetTop = jQuery('#packages-wrapper').offset().top;
+            
+      this.setState({
+        packagesListHeight: windowHeight - offsetTop - footerHeight
+      });
     }
     render() {
       return (
         <div id="packages">
           <div className="panel-subheading">
-            {this.context.location.pathname.toLowerCase().split('/')[1] != 'productiondevicedetails' &&
-            (localStorage.getItem('firstProductionTestDevice') == this.props.device ||
-            localStorage.getItem('secondProductionTestDevice') == this.props.device ||
-            localStorage.getItem('thirdProductionTestDevice') == this.props.device) ?
-              <input type="checkbox" id="selectPackages" className="pull-left"/>
-            : null}
+            {!_.isUndefined(this.props.device) ? 
+              this.context.location.pathname.toLowerCase().split('/')[1] != 'productiondevicedetails' &&
+              (localStorage.getItem('firstProductionTestDevice') == this.props.device.id ||
+              localStorage.getItem('secondProductionTestDevice') == this.props.device.id ||
+              localStorage.getItem('thirdProductionTestDevice') == this.props.device.id) ?
+                <input type="checkbox" id="selectPackages" className="pull-left"/>
+              : null
+            : undefined}
 
             <SearchBar class="search-bar pull-left" changeFilter={this.changeFilter}/>
 
@@ -136,16 +115,19 @@ define(function(require) {
             <img src="/assets/img/icons/info.png" className="icon-info" alt=""/>
             Click on the package you want to install and select its version to add it to the queue.
           </div>
-
-          <PackagesList
-            filterValue={this.state.filterValue}
-            selectStatus={this.state.selectStatus}
-            selectSort={this.state.selectSort}
-            device={this.props.device}
-            setPackagesStatistics={this.props.setPackagesStatistics}
-            lastSeen={this.props.lastSeen}
-            countImpactAnalysisPackages={this.props.countImpactAnalysisPackages}
-            deviceStatus={this.props.deviceStatus}/>       
+  
+          <div id="packages-wrapper" style={{height: this.state.packagesListHeight}}>
+            {!_.isUndefined(this.props.device) ?
+              <PackagesList
+                filterValue={this.state.filterValue}
+                selectStatus={this.state.selectStatus}
+                selectSort={this.state.selectSort}
+                setPackagesStatistics={this.props.setPackagesStatistics}
+                countImpactAnalysisPackages={this.props.countImpactAnalysisPackages}
+                device={this.props.device}
+                packagesListHeight={this.state.packagesListHeight}/>
+            : undefined}
+          </div>
         </div>
       );
     }

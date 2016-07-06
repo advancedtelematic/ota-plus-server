@@ -24,7 +24,7 @@ define(function(require) {
         break;
       }
       return (
-        <div className="device-header">
+        
           <div className="col-md-12">
             <Link to="/"><img src="/assets/img/icons/back.png" className="icon-back" alt=""/></Link>
             <div className="device-box">
@@ -34,7 +34,7 @@ define(function(require) {
             <div className="device-header-text">
               <div className="device-name">{this.props.device.deviceName}</div>
               <div className="device-lastseen">
-                {this.props.device.status != 'NotSeen' ?
+                {this.props.device.status !== 'NotSeen' ?
                   <span>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
                 :
                   <span>Never seen online</span>
@@ -60,7 +60,6 @@ define(function(require) {
             <Link to={`devicedetails/${this.props.device.id}/newcampaign`} className="btn-new-campaign pull-right">
               Campaign wizard
             </Link>
-          </div>
         </div>
       );
     }

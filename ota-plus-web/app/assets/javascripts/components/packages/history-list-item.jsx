@@ -39,7 +39,7 @@ define(function(require) {
       SotaDispatcher.dispatch({
         actionType: 'install-package-for-device',
         data: data,
-        device: this.props.device
+        device: this.props.deviceId
       });
       console.log('remove from history list');
     }
