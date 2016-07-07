@@ -49,6 +49,4 @@ object Dependencies {
   val SotaCommonTest = "org.genivi" %% "sota-common-test" % Version.GeniviSota % "test"
 
   val SotaResolver = "org.genivi" %% "sota-resolver" % Version.GeniviResolver
-
-  val SotaDeviceRegistry = "org.genivi" %% "sota-device_registry" % Version.GeniviSota
 }
