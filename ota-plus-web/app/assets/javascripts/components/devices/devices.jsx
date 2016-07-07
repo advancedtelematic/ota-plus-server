@@ -104,6 +104,8 @@ define(function(require) {
         productionDevicesCount = this.state.filterValue.length > 0 ? this.state.filterValue.length == 16 ? 25 : Math.round(totalProductionDevicesCount / (this.state.filterValue.length * 3499)) : totalProductionDevicesCount;
       }
       
+      var areTestSettingsCorrect = localStorage.getItem('firstProductionTestDevice') !== '' && localStorage.getItem('secondProductionTestDevice') !== '' && localStorage.getItem('thirdProductionTestDevice') !== '' ? true : false;
+      
       if(!_.isUndefined(Devices)) {
         SortedDevices = [];
         Devices = Devices.filter(function (pack) {
@@ -134,66 +136,75 @@ define(function(require) {
             selectStatus={this.selectStatus}
             selectSort={this.selectSort}
             isTutorialShown={isTutorialShown}/>
-          <button className="btn btn-full-section first" onClick={this.expandSection.bind(this, 'testDevices')}>
-            <i className={(this.state.expandedSectionName == 'testDevices') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> &nbsp;
-            TEST DEVICES &nbsp;
-            {!_.isUndefined(SortedDevices) ?
-              <span>
-                (
-                  {this.numberWithDots(SortedDevices.length)} 
-                  {!_.isUndefined(db.devices.deref()) ?
-                    <span>
-                      &nbsp;out of {this.numberWithDots(db.devices.deref().length)}
-                    </span>
-                  : null}
-                )
-              </span>
-            : null}
-          </button>
-          {_.isUndefined(SortedDevices) ?
-            <Loader />
-          :
-            <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}} runOnMount={true}>
-              {this.state.expandedSectionName == 'testDevices' ? 
-                <div>
-                  <div id="devices">
-                    <DevicesList
-                      Devices={SortedDevices}
-                      areProductionDevices={false}/>
-                    {this.props.children}
-                  </div>
-                </div>
-              : undefined}
-            </VelocityTransitionGroup>
-          }
           
-          <button className="btn btn-full-section" onClick={this.expandSection.bind(this, 'productionDevices')}>
-            <i className={(this.state.expandedSectionName == 'productionDevices') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> PRODUCTION DEVICES ({this.numberWithDots(productionDevicesCount)} out of {this.numberWithDots(totalProductionDevicesCount)})
-          </button>
-          <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
-            {this.state.expandedSectionName == 'productionDevices' ?
-              <div>
-                <div id="devices">
-                  <DevicesList
-                    Devices={db.searchableProductionDevices.deref()}
-                    areProductionDevices={true}/>
-                  {this.props.children}
-                </div>
-              </div>
-            : null}
-          </VelocityTransitionGroup>
-          <button className="btn btn-full-section" onClick={this.expandSection.bind(this, 'packages')}>
-            <i className={(this.state.expandedSectionName == 'packages') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> PACKAGES ({this.state.filterValue.length  == 0 ? this.numberWithDots(this.state.packagesCount) : this.state.filterValue.length == 1 ? 1 : this.state.filterValue.length == 2 ? 0 : 0} out of {this.numberWithDots(this.state.packagesCount)})
-          </button>
-          {this.state.expandedSectionName == 'packages' ?
-            <div></div>
+          {areTestSettingsCorrect ?
+            <button className="btn btn-full-section first" onClick={this.expandSection.bind(this, 'testDevices')}>
+              <i className={(this.state.expandedSectionName == 'testDevices') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> &nbsp;
+              TEST DEVICES &nbsp;
+              {!_.isUndefined(SortedDevices) ?
+                <span>
+                  (
+                    {this.numberWithDots(SortedDevices.length)} 
+                    {!_.isUndefined(db.devices.deref()) ?
+                      <span>
+                        &nbsp;out of {this.numberWithDots(db.devices.deref().length)}
+                      </span>
+                    : null}
+                  )
+                </span>
+              : null}
+            </button>
           : null}
+          <div style={{paddingTop: !areTestSettingsCorrect ? '70px' : 0}}>
+            {_.isUndefined(SortedDevices) ?
+              <Loader />
+            :
+              <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}} runOnMount={true}>
+                {this.state.expandedSectionName == 'testDevices' ? 
+                  <div>
+                    <div id="devices">
+                      <DevicesList
+                        Devices={SortedDevices}
+                        areProductionDevices={false}/>
+                      {this.props.children}
+                    </div>
+                  </div>
+                : undefined}
+              </VelocityTransitionGroup>
+            }
+          </div>
+          {areTestSettingsCorrect ?
+            <div>
+              <button className="btn btn-full-section" onClick={this.expandSection.bind(this, 'productionDevices')}>
+                <i className={(this.state.expandedSectionName == 'productionDevices') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> PRODUCTION DEVICES ({this.numberWithDots(productionDevicesCount)} out of {this.numberWithDots(totalProductionDevicesCount)})
+              </button>
+              <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+                {this.state.expandedSectionName == 'productionDevices' ?
+                  <div>
+                    <div id="devices">
+                      <DevicesList
+                        Devices={db.searchableProductionDevices.deref()}
+                        areProductionDevices={true}/>
+                      {this.props.children}
+                    </div>
+                  </div>
+                : null}
+              </VelocityTransitionGroup>
 
-          <button className="btn btn-full-section" onClick={this.expandSection.bind(this, 'campaigns')}>
-            <i className={(this.state.expandedSectionName == 'campaigns') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> CAMPAIGNS ({this.state.filterValue.length  == 0 ? this.numberWithDots(this.state.campaignsCount) : this.state.filterValue.length == 1 ? 1 : this.state.filterValue.length == 2 ? 0 : 0} out of {this.numberWithDots(this.state.campaignsCount)})
-          </button>
-          {this.state.expandedSectionName == 'campaigns' ?
-            <div></div>
+              <button className="btn btn-full-section" onClick={this.expandSection.bind(this, 'packages')}>
+                <i className={(this.state.expandedSectionName == 'packages') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> PACKAGES ({this.state.filterValue.length  == 0 ? this.numberWithDots(this.state.packagesCount) : this.state.filterValue.length == 1 ? 1 : this.state.filterValue.length == 2 ? 0 : 0} out of {this.numberWithDots(this.state.packagesCount)})
+              </button>
+              {this.state.expandedSectionName == 'packages' ?
+                <div></div>
+              : null}
+
+              <button className="btn btn-full-section" onClick={this.expandSection.bind(this, 'campaigns')}>
+                <i className={(this.state.expandedSectionName == 'campaigns') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> CAMPAIGNS ({this.state.filterValue.length  == 0 ? this.numberWithDots(this.state.campaignsCount) : this.state.filterValue.length == 1 ? 1 : this.state.filterValue.length == 2 ? 0 : 0} out of {this.numberWithDots(this.state.campaignsCount)})
+              </button>
+              {this.state.expandedSectionName == 'campaigns' ?
+                <div></div>
+              : null}
+            </div>
           : null}
         </div>
       );
