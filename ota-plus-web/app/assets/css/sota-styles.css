@@ -348,7 +348,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 #form-new-campaign .pin-panel input { font-size: 16px; line-height: 16px; text-align: center; background: white; /* Old browsers */ background: -moz-linear-gradient(top, white 0%, #c6c6c6 100%); /* FF3.6-15 */ background: -webkit-linear-gradient(top, white 0%, #c6c6c6 100%); /* Chrome10-25,Safari5.1-6 */ background: linear-gradient(to bottom, white 0%, #c6c6c6 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#c6c6c6',GradientType=0 ); /* IE6-9 */ width: 40px; height: 40px; padding: 5px; margin: 1px; border: 0; border-radius: 5px; box-shadow: 1px 1px 5px #888888; }
 
 /* Overlays */
-.lightgrey-overlay { color: #555; background: rgba(200, 200, 200, 0.6); width: 100%; height: 100%; left: 0; top: 0; position: absolute; z-index: 3; }
+.lightgrey-overlay { color: #555; background: rgba(200, 200, 200, 0.6); width: 100%; height: 100%; left: 0; top: 0; position: absolute; z-index: 98; }
 
 .grey-overlay { color: #fff; font-size: 20px; line-height: 1.4em; text-align: center; background: rgba(120, 120, 120, 0.7); width: 100%; height: 100%; padding: 300px 0 0 0; left: 0; top: 0; position: absolute; z-index: 98; }
 
