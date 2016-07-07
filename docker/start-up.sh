@@ -44,26 +44,6 @@ docker run \
   -e rootLevel='DEBUG' \
   advancedtelematic/ota-plus-resolver:$RESOLVER_DOCKER_TAG
 
-CORE_DOCKER_TAG=${CORE_TAG-latest}
-echo 'Starting Core'
-echo "tag ${CORE_DOCKER_TAG}"
-docker run \
-  -d \
-  --name=core \
-  --expose=8080 \
-  -p 8080:8080 \
-  --link=db \
-  --link=resolver \
-  -e HOST='0.0.0.0' \
-  -e CORE_DB_URL='jdbc:mariadb://db:3306/sota_core' \
-  -e CORE_DB_MIGRATE='true' \
-  -e RESOLVER_API_URI='http://resolver:8081' \
-  -e DEVICE_REGISTRY_API_URI='http://device-registry:8083' \
-  -e CORE_INTERACTION_PROTOCOL='none' \
-  -e PACKAGES_VERSION_FORMAT='.+' \
-  -e rootLevel='DEBUG' \
-  advancedtelematic/ota-plus-core:$CORE_DOCKER_TAG
-
 DEVICE_REGISTRY_DOCKER_TAG=${DEVICE_REGISTRY_TAG-latest}
 echo 'Starting device registry'
 echo "tag ${DEVICE_REGISTRY_DOCKER_TAG}"
@@ -77,6 +57,27 @@ docker run \
   -e DEVICE_REGISTRY_DB_URL='jdbc:mariadb://db:3306/sota_device_registry' \
   -e DEVICE_REGISTRY_DB_MIGRATE='true' \
   advancedtelematic/ota-plus-device-registry:$DEVICE_REGISTRY_DOCKER_TAG
+
+CORE_DOCKER_TAG=${CORE_TAG-latest}
+echo 'Starting Core'
+echo "tag ${CORE_DOCKER_TAG}"
+docker run \
+  -d \
+  --name=core \
+  --expose=8080 \
+  -p 8080:8080 \
+  --link=db \
+  --link=resolver \
+  --link=device-registry \
+  -e HOST='0.0.0.0' \
+  -e CORE_DB_URL='jdbc:mariadb://db:3306/sota_core' \
+  -e CORE_DB_MIGRATE='true' \
+  -e RESOLVER_API_URI='http://resolver:8081' \
+  -e DEVICE_REGISTRY_API_URI='http://device-registry:8083' \
+  -e CORE_INTERACTION_PROTOCOL='none' \
+  -e PACKAGES_VERSION_FORMAT='.+' \
+  -e rootLevel='DEBUG' \
+  advancedtelematic/ota-plus-core:$CORE_DOCKER_TAG
 
 echo 'Creating user: demo@advancedtelematic.com password: demo'
 curl -H "Content-Type: application/json" -X POST -d '{"email":"demo@advancedtelematic.com","password":"demo"}' http://localhost:9001/users
