@@ -56,7 +56,7 @@ docker run \
   -e HOST='0.0.0.0' \
   -e DEVICE_REGISTRY_DB_URL='jdbc:mariadb://db:3306/sota_device_registry' \
   -e DEVICE_REGISTRY_DB_MIGRATE='true' \
-  advancedtelematic/ota-plus-device-registry:$DEVICE_REGISTRY_DOCKER_TAG
+  advancedtelematic/sota-device_registry:$DEVICE_REGISTRY_DOCKER_TAG
 
 CORE_DOCKER_TAG=${CORE_TAG-latest}
 echo 'Starting Core'
