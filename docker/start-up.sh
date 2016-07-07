@@ -77,7 +77,7 @@ docker run \
   -e CORE_INTERACTION_PROTOCOL='none' \
   -e PACKAGES_VERSION_FORMAT='.+' \
   -e rootLevel='DEBUG' \
-  advancedtelematic/ota-plus-core:$CORE_DOCKER_TAG
+  advancedtelematic/sota-core:$CORE_DOCKER_TAG
 
 echo 'Creating user: demo@advancedtelematic.com password: demo'
 curl -H "Content-Type: application/json" -X POST -d '{"email":"demo@advancedtelematic.com","password":"demo"}' http://localhost:9001/users

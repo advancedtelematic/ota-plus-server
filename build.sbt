@@ -52,14 +52,12 @@ lazy val atsRepos = Seq(
 
 lazy val otaPlusCommon = otaPlusProject("ota-plus-common")
 
-lazy val otaPlusCore = otaPlusProject("ota-plus-core").dependsOn(otaPlusCommon)
-
 lazy val otaPlusWeb = otaPlusProject("ota-plus-web").dependsOn(otaPlusCommon)
 
 lazy val otaPlusResolver = otaPlusProject("ota-plus-resolver").dependsOn(otaPlusCommon)
 
 lazy val rootProject = (project in file(".")).
-  aggregate(otaPlusCore, otaPlusWeb, otaPlusResolver, otaPlusCommon)
+  aggregate(otaPlusWeb, otaPlusResolver, otaPlusCommon)
   .settings(Release.settings)
   .settings(publish := ())
 
