@@ -23,6 +23,9 @@ define(function(require) {
         default:
         break;
       }
+      
+      var isTestDevice = localStorage.getItem('firstProductionTestDevice') === this.props.device.id || localStorage.getItem('secondProductionTestDevice') === this.props.device.id || localStorage.getItem('thirdProductionTestDevice') === this.props.device.id ? true : false;
+      
       return (
         
           <div className="col-md-12">
@@ -57,9 +60,11 @@ define(function(require) {
                 </div>
               }
             </div>
-            <Link to={`devicedetails/${this.props.device.id}/newcampaign`} className="btn-new-campaign pull-right">
-              Campaign wizard
-            </Link>
+            {isTestDevice ? 
+              <Link to={`devicedetails/${this.props.device.id}/newcampaign`} className="btn-new-campaign pull-right">
+                Campaign wizard
+              </Link>
+            : null}
         </div>
       );
     }
