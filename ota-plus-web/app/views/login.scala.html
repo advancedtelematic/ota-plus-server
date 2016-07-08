@@ -1,6 +1,6 @@
-@import com.advancedtelematic.login.LoginData
+@import com.advancedtelematic.login.Auth0Config
 
-@(passwordForm: Form[LoginData])(implicit messages: Messages)
+@(config: Auth0Config)(implicit messages: Messages)
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -13,11 +13,12 @@
         <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.slidedrawer.min.js")'></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/verify.js")'></script>
-        @if(passwordForm.hasGlobalErrors) {
-        <style type="text/css">
-            .ats-errors { display: inherit }
-        </style>
-        }
+        <script src="https://cdn.auth0.com/js/lock-9.0.min.js"></script>
+        <script>
+          var AUTH0_CLIENT_ID = '@config.clientId';
+	      var AUTH0_DOMAIN = '@config.domain';
+	      var AUTH0_CALLBACK_URL = '@config.callbackURL';
+        </script>
     </head>
     <body class="login">
         <div id="ats-page" style="display: none;">
@@ -26,29 +27,6 @@
                     <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
                         <div class="ats-header text-center">
                             <p>Hi there, welcome back.</p>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-10 col-lg-offset-1">
-                                <div class="ats-errors">
-                                    Username or password <br />
-                                    is incorrect.
-                                </div>
-                                @helper.form(action = com.advancedtelematic.login.routes.LoginController.authenticate, 'id -> "loginForm") {
-                                <div class="form-group">
-                                    <input class="form-control" type="text" name="username" placeholder="username" id="username">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" type="password" name="password" placeholder="password" id="password">
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="ats-button" id="submit-form">Log in</button>
-                                </div>
-                                <div class="form-group">
-                                    <a href="#" class="pull-right">Forgot password <i class="fa fa-angle-right"></i></a>
-                                </div>
-                                }
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -74,34 +52,17 @@
                     slideTimeoutCount: 3000
                 });
 
-                $("#loginForm").validate({
-                    rules: {
-                        username: {
-                            required: true
-                        },
-                        password: {
-                            required: true
-                        }
-                    },
-                    messages: {
-                        username: {
-                            required: "<i class='fa fa-times-circle'></i> Please enter username"
-                        },
-                        password: {
-                            required: "<i class='fa fa-times-circle'></i> Please enter password"
-                        }
-                    }
-                });
-
-                $('#submit-form').click(function (e) {
-                    e.preventDefault();
-                    $('#ats-page').fadeOut(200, function () {
-                        $('#loginForm').submit();
-                    });
-                });
-
                 $('body').verify({verifyMinWidth: 1366, verifyMinHeight: 0});
             });
+
+            $(document).ready(function() {
+                var lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN);
+
+                  lock.show({
+                    callbackURL: AUTH0_CALLBACK_URL
+                  });
+            });
+
         </script>
     </body>
 </html>

@@ -8,6 +8,7 @@ package org.genivi.webserver.controllers
 import javax.inject.{Inject, Named, Singleton}
 
 import com.advancedtelematic.ota.vehicle.Vehicles
+import com.advancedtelematic.AuthenticatedAction
 import org.slf4j.LoggerFactory
 import play.api._
 import play.api.http.HttpEntity
@@ -141,12 +142,7 @@ class Application @Inject() (ws: WSClient,
    *
    * @return OK response and index html
    */
-  def index : Action[AnyContent] = Action{ implicit req =>
-    if (req.session.get("username").isDefined && req.session.get("access_token").isDefined) {
-      Ok(views.html.main())
-    } else {
-      // redirect to login page if not logged in
-      Redirect(com.advancedtelematic.login.routes.LoginController.login()).withNewSession
-    }
+  def index : Action[AnyContent] = AuthenticatedAction { request =>
+    Ok(views.html.main())
   }
 }
