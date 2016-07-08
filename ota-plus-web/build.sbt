@@ -48,6 +48,7 @@ libraryDependencies ++= Seq (
     "org.webjars.bower" % "jquery" % "1.12.3",
     "org.webjars.bower" % "lodash" % "3.10.1",
     "org.webjars" % "bootstrap" % "3.3.6",
+    "com.amazonaws" % "aws-java-sdk-ses" % "1.11.13",
     ws, Dependencies.MockWs,
     play.sbt.Play.autoImport.cache,
     Dependencies.SotaCommon,
