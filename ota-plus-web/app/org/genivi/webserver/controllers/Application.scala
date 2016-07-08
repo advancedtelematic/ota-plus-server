@@ -102,10 +102,16 @@ class Application @Inject() (ws: WSClient,
 
     val authorizedWReq = addBearerToken(req, wreq)
 
-    authorizedWReq.execute.map { resp =>
+    authorizedWReq.stream().map { resp =>
+      val rStatus = resp.headers.status
+      val rHeaders = resp.headers
+        .headers
+        .filterNot { case(k, v) => k == "Content-Length" }
+        .mapValues(_.head)
+
       Result(
-        header = ResponseHeader(resp.status, resp.allHeaders.mapValues(x => x.head)),
-        body = HttpEntity.Strict(resp.bodyAsBytes, None)
+        header = ResponseHeader(rStatus, rHeaders),
+        body = play.api.http.HttpEntity.Streamed(resp.body, contentLength = None, contentType = None)
       )
     }
   }
