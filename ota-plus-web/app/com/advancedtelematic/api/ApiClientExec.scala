@@ -37,7 +37,7 @@ class ApiClientExec @Inject()(wsClient: WSClient)(implicit ec: ExecutionContext)
       .recoverWith { case t => Future.failed(RemoteApiIOError(t)) }
       .flatMap { result =>
         if (isSuccess(result)) { Future.successful(result) }
-        else { Future.failed(RemoteApiError(toResult(result))) }
+        else { Future.failed(RemoteApiError(toResult(result), result.statusText)) }
       }
   }
 
