@@ -9,19 +9,40 @@ define(function(require) {
     }
     render() {
       const link = this.props.isProductionDevice ? 'productiondevicedetails' : 'devicedetails';
-      const deviceId = this.props.deviceId;
-      const deviceName = this.props.deviceName;
+      const lastSeenDate = new Date(this.props.device.lastSeen);
+      var deviceName = this.props.device.deviceName;
+      deviceName = deviceName.length > 20 ? deviceName.substring(0, 20) + '..' : deviceName;
+      var deviceStatus = 'Status unknown';
+      switch(this.props.device.status) {
+        case 'UpToDate':
+          deviceStatus = 'Device synchronized';
+        break;
+        case 'Outdated':
+          deviceStatus = 'Device unsynchronized';
+        break;
+        case 'Error':
+          deviceStatus = 'Installation error';
+        break;
+        default:
+        break;
+      }
       return (
-        <Link to={`${link}/${this.props.id}`} className="device-box">
-          <div className="device-icon"></div>
-          <div className="device-desc">
-            <div className="device-name">
-              <div className={"device-status device-status-" + this.props.status}>
-                <i className="fa fa-circle" aria-hidden="true"></i>
-              </div>
-              {deviceName}
+        <Link to={`${link}/${this.props.device.id}`} className="device-box">
+          <div className="device-icon">
+            <div className={"device-status device-status-" + this.props.device.status}>
+              <i className="fa fa-circle" aria-hidden="true"></i>
             </div>
-            <div className="device-uuid">{deviceId}</div>
+          </div>
+          <div className="device-desc">
+            <div className="device-name">{deviceName}</div>
+            <div className="device-lastseen">
+              {this.props.device.status !== 'NotSeen' ?
+                <span>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
+              :
+                <span>Never seen online</span>
+              }
+            </div>
+            <div className="device-status-text">Device status: {deviceStatus}</div>
           </div>
         </Link>
       );

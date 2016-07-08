@@ -8,16 +8,18 @@ define(function(require) {
       super(props);
     }
     render() {
-      const deviceId = this.props.deviceId;
-      const deviceName = this.props.deviceName;
+      var deviceUuid = this.props.deviceId;
+      deviceUuid = deviceUuid.substring(0, 8);
       return (
-        <Link to={`devicedetails/${this.props.id}`} className="device-box">
+        <Link to={`devicedetails/${this.props.deviceId}`} className="device-box">
           <div className="device-icon"></div>
           <div className="device-desc">
             <div className="device-name">
-              {deviceName}
+              {deviceUuid}
             </div>
-            <div className="device-uuid">{deviceId}</div>
+            <div className="device-uuid">
+              {this.props.number}
+            </div>
           </div>
         </Link>
       );

@@ -93,13 +93,13 @@ define(function(require) {
                 transitionLeaveTimeout={500}
                 transitionName="example">
               {this.state.progress > 30 ?
-                <ImpactListItem key={localStorage.getItem('firstProductionTestDevice')} vin={localStorage.getItem('firstProductionTestDevice')} number="1.549.482"/>
+                <ImpactListItem key={localStorage.getItem('firstProductionTestDevice')} deviceId={localStorage.getItem('firstProductionTestDevice')} number="1.549.482"/>
               : null}
               {this.state.progress > 50 ?
-                <ImpactListItem key={localStorage.getItem('secondProductionTestDevice')} vin={localStorage.getItem('secondProductionTestDevice')} number="2.435.932"/>
+                <ImpactListItem key={localStorage.getItem('secondProductionTestDevice')} deviceId={localStorage.getItem('secondProductionTestDevice')} number="2.435.932"/>
               : null}
               {this.state.progress > 80 ?
-                <ImpactListItem key={localStorage.getItem('thirdProductionTestDevice')} vin={localStorage.getItem('thirdProductionTestDevice')} number="1.348.839"/>
+                <ImpactListItem key={localStorage.getItem('thirdProductionTestDevice')} deviceId={localStorage.getItem('thirdProductionTestDevice')} number="1.348.839"/>
               : null}
               </ReactCSSTransitionGroup>
             </div>
