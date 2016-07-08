@@ -9,7 +9,11 @@ define(function(require) {
 
     sendRequest.doGet(url, {global: false})
       .error(function(xhr) {
-        errors.renderRequestError(xhr, postStatus, action);
+        if (xhr.status == 404) {
+          callback();
+        } else {
+          errors.renderRequestError(xhr, postStatus, action);
+        }
       })
       .success(function(data) {
         if (_.isEmpty(data)) {
