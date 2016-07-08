@@ -15,8 +15,11 @@ define(function(require) {
       var devices = _.map(Devices, function(device, i) {
         return (
           <DeviceListItem key={device.deviceName}
-            device={device}
-            isProductionDevice={this.props.areProductionDevices}/>
+                          id={device.id}
+                          deviceName={device.deviceName}
+                          deviceId={device.deviceId}
+                          status={device.status}
+                          isProductionDevice={this.props.areProductionDevices}/>
         );
       }, this);
 

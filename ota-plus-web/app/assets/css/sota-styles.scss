@@ -73,7 +73,7 @@ button {
 /* Containers */
 
 #devices-container {
-    padding: 0 15px !important;
+    padding: 0 !important;
     margin-top: 20px;
     margin-bottom: 20px;
 }
@@ -81,10 +81,7 @@ button {
 .container {
     width: 1204px;
     margin: 0 auto;
-
-    @media (max-width: 1409px) {
-
-    }
+    padding: 0 39px;
 
     @media (min-width: 1410px) {
         width: 1378px;
@@ -92,26 +89,14 @@ button {
 
     @media (min-width: 1570px) {
         width: 1550px;
-
-        .device-box {
-            width: 20%;
-        }
     }
 
     @media (min-width: 1740px) {
         width: 1720px;
-
-        .device-box {
-            width: 20%;
-        }
     }
 
     @media (min-width: 1920px) {
         width: 1892px;
-
-        .device-box {
-            width: 16.66%;
-        }
     }
 }
 
@@ -156,71 +141,45 @@ button {
 
 /* Device box */
 
-.device-icon {
-    text-align: center;
-    background: url(/assets/img/icons/device_small.png) no-repeat;
-    background-size: cover;
-    width: 60px;
-    height: 60px;
-    float: left;
-}
-
-.device-name {
-    font-size: 17px;
-    width: 210px;
-    float: left;
-}
-
-.device-lastseen {
-    width: 210px;
-    float: left;
-}
-
-.device-uuid {
-    font-size: 12px;
-    width: 210px;
-    margin: 5px 0 0 0;
-    opacity: 0.5;
-    float: left;
-}
-
 .device-box {
-    color: #fff;
-    width: 25%;
-    height: 100px;
+    color: #999;
+    text-align: center;
+    text-decoration: none;
+    word-wrap: break-word;
+    width: 110px;
+    margin: 12px 31px 11px 31px;
     display: inline-block;
+    vertical-align: middle;
 
-    &:hover, &:active, &:focus {
-        color: #fff;
+    &:hover {
+        color: #c97f66;
         text-decoration: none;
     }
 
-    .device-status {
-        font-size: 16px;
-        position: relative;
-        top: -5px;
-        left: 32px;
+    .device-icon {
+        text-align: center;
+        background: url(/assets/img/icons/device_large.png) no-repeat;
+        width: 106px;
+        height: 106px;
+        margin: 0 auto;
+        display: block;
     }
 
     .device-desc {
-        width: 210px;
-        margin-left: 15px;
-        float: left;
+        color: #fff;
+        padding: 0 10px;
+        margin: 15px 0 0 0;
+        display: block;
+    }
 
-        .device-name {
-            font-size: 18px;
-            line-height: 1.5em;
-        }
+    .device-name {
+        font-size: 17px;
+    }
 
-        .device-lastseen {
-            font-size: 10px;
-            line-height: 1.6em;
-        }
-
-        .device-status-text {
-            font-size: 10px;
-            line-height: 1.6em;
-        }
+    .device-uuid {
+        font-size: 12px;
+        margin: 5px 0 0 0;
+        opacity: 0.5;
     }
 }
 
@@ -248,36 +207,22 @@ button {
 
 /* Pages */
 
-.device-header-text {
-    height: 45px;
-    margin: 20px 0 0 10px;
-    vertical-align: middle;
-    display: inline-block;
-
-    .device-name {
-        font-size: 22px;
-    }
-
-    .device-lastseen {
-        font-size: 14px;
-        margin: 0;
-        opacity: 0.5;
-    }
-}
-
 .page-home {
     height: 100%;
     min-height: 100vh;
-    background: url(/assets/img/bg.jpg) no-repeat;
+    background: rgb(40,39,37);
+    background: -moz-linear-gradient(-45deg,  rgba(40,39,37,1) 2%, rgba(201,127,102,1) 99%);
+    background: -webkit-linear-gradient(-45deg,  rgba(40,39,37,1) 2%, rgba(201,127,102,1) 99%);
+    background: linear-gradient(135deg,  rgba(40,39,37,1) 2%, rgba(201,127,102,1) 99%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#352824', endColorstr='#db7a57',GradientType=1 );
     background-attachment: fixed;
-    background-size: cover;
 
     #devices-list {
         padding: 10px 0;
     }
 
     #devices-bar {
-        background: #666;
+        background: #707070;
         width: 100%;
         height: 40px;
         position: fixed;
@@ -295,31 +240,47 @@ button {
 }
 
 .page-device-details {
-    background: url(/assets/img/bg.jpg) no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
     max-height: 100vh;
     overflow: hidden;
 
     .device-header {
-        background: url(/assets/img/bg.jpg) no-repeat;
-        background-attachment: fixed;
         height: 80px;
+        background: rgb(40,39,37);
+        background: -moz-linear-gradient(-45deg,  rgba(40,39,37,1) 2%, rgba(201,127,102,1) 99%);
+        background: -webkit-linear-gradient(-45deg,  rgba(40,39,37,1) 2%, rgba(201,127,102,1) 99%);
+        background: linear-gradient(135deg,  rgba(40,39,37,1) 2%, rgba(201,127,102,1) 99%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#352824', endColorstr='#db7a57',GradientType=1 );
+        background-attachment: fixed;
         position: relative;
         z-index: 99;
 
-        .device-icon {
-            width: 50px;
-            height: 50px;
-            display: inline-block;
-            vertical-align: middle;
+        .device-box {
+            width: 60px;
+            height: auto;
             margin: 15px 0 0 30px;
-            float: none;
+
+            .device-icon {
+                background: url(/assets/img/icons/device_small.png) no-repeat;
+                width: 50px;
+                height: 50px;
+            }
+        }
+    }
+
+    .device-header-text {
+        height: 45px;
+        margin: 20px 0 0 10px;
+        vertical-align: middle;
+        display: inline-block;
+
+        .device-name {
+            font-size: 22px;
         }
 
-        .device-name, .device-lastseen {
-            width: auto;
-            float: none;
+        .device-lastseen {
+            font-size: 14px;
+            margin: 0;
+            opacity: 0.5;
         }
     }
 
@@ -333,7 +294,6 @@ button {
     }
 
     .panel-ats {
-        background: transparent;
         width: 100%;
         margin-bottom: 0;
         border: 0;
@@ -573,8 +533,6 @@ button {
     }
 
     #packages-wrapper {
-        background: #fff;
-
         #packages-list-inside {
             width: 100%;
             height: 100%;
@@ -589,7 +547,7 @@ button {
         overflow-x: hidden;
         overflow-y: hidden;
         margin: 0;
-
+        
         .list-group {
             margin: 0;
         }
@@ -619,7 +577,7 @@ button {
     font-size: 12px;
     text-transform: uppercase;
     background: #ffa987;
-    padding: 5px 16px 5px 16px;
+    padding: 5px 16px 4px 16px;
     margin: 6px 0 0 0;
     border-radius: 15px;
 
@@ -775,7 +733,7 @@ a.close, button.close {
     &:hover {
         opacity: 0.8;
     }
-
+    
     &:hover, &:focus, &:active {
         text-decoration: none;
     }
@@ -815,7 +773,7 @@ a.close, button.close {
 
 .btn-full-section {
     text-align: left;
-    background: rgba(0,0,0,0.5);
+    background: #222;
     width: 100%;
     border-radius: 0;
 
@@ -1062,43 +1020,10 @@ a.close, button.close {
 
 #modal-impact-analysis {
     .device-box {
-        color: #999;
-        text-align: center;
-        text-decoration: none;
-        word-wrap: break-word;
-        width: 110px;
-        display: inline-block;
-        vertical-align: middle;
         margin: 0 5px;
-
-        .device-icon {
-            text-align: center;
-            background: url(/assets/img/icons/device_large.png) no-repeat;
-            width: 106px;
-            height: 106px;
-            margin: 0 auto;
-            display: block;
-        }
 
         .device-desc {
             color: #333;
-            width: auto;
-            margin: 0;
-            display: inline-block;
-            float: none;
-
-            .device-name {
-                width: auto;
-                float: none;
-            }
-
-            .device-uuid {
-                font-size: 12px;
-                width: auto;
-                margin: 5px 0 0 0;
-                float: none;
-                opacity: 0.5;
-            }
         }
     }
 }
@@ -1699,7 +1624,7 @@ a.close, button.close {
     width: 100%;
     padding: 20px;
     float: left;
-
+    
     .btn-white {
         font-size: 11px;
         letter-spacing: 0.3px;
@@ -1707,7 +1632,7 @@ a.close, button.close {
         padding: 3px 14px;
         border-radius: 15px;
         border: 1px solid #fff;
-
+        
         &:hover, &:focus, &:active {
             color: #d37676;
             background: #fff;
@@ -1745,7 +1670,7 @@ a.close, button.close {
     position: fixed;
     left: 0;
     z-index: 99999;
-
+    
     &.door-up {
         top: -100%;
     }

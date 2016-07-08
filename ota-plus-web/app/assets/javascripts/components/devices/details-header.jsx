@@ -30,7 +30,10 @@ define(function(require) {
         
           <div className="col-md-12">
             <Link to="/"><img src="/assets/img/icons/back.png" className="icon-back" alt=""/></Link>
-            <div className="device-icon"></div>
+            <div className="device-box">
+              <div className="device-icon"></div>
+            </div>
+
             <div className="device-header-text">
               <div className="device-name">{this.props.device.deviceName}</div>
               <div className="device-lastseen">
