@@ -24,13 +24,14 @@ button.list-group-item:focus { background: transparent; }
 #devices-container { padding: 0 15px !important; margin-top: 20px; margin-bottom: 20px; }
 
 .container { width: 1204px; margin: 0 auto; }
+@media (max-width: 1409px) { .container { width: 1340px; } }
 @media (min-width: 1410px) { .container { width: 1378px; } }
 @media (min-width: 1570px) { .container { width: 1550px; }
-  .container .device-box { width: 20%; } }
+  .container .device-box { width: 25%; } }
 @media (min-width: 1740px) { .container { width: 1720px; }
   .container .device-box { width: 20%; } }
 @media (min-width: 1920px) { .container { width: 1892px; }
-  .container .device-box { width: 16.66%; } }
+  .container .device-box { width: 20%; } }
 
 /* Navbar */
 .right-nav { -webkit-padding-start: 10px; }
@@ -46,16 +47,16 @@ button.list-group-item:focus { background: transparent; }
 /* Device box */
 .device-icon { text-align: center; background: url(/assets/img/icons/device_small.png) no-repeat; background-size: cover; width: 60px; height: 60px; float: left; }
 
-.device-name { font-size: 17px; width: 210px; float: left; }
+.device-name { font-size: 17px; width: 230px; float: left; }
 
-.device-lastseen { width: 210px; float: left; }
+.device-lastseen { width: 230px; float: left; }
 
-.device-uuid { font-size: 12px; width: 210px; margin: 5px 0 0 0; opacity: 0.5; float: left; }
+.device-uuid { font-size: 12px; width: 230px; margin: 5px 0 0 0; opacity: 0.5; float: left; }
 
 .device-box { color: #fff; width: 25%; height: 100px; display: inline-block; }
 .device-box:hover, .device-box:active, .device-box:focus { color: #fff; text-decoration: none; }
 .device-box .device-status { font-size: 16px; position: relative; top: -5px; left: 32px; }
-.device-box .device-desc { width: 210px; margin-left: 15px; float: left; }
+.device-box .device-desc { width: 230px; margin-left: 15px; float: left; }
 .device-box .device-desc .device-name { font-size: 18px; line-height: 1.5em; }
 .device-box .device-desc .device-lastseen { font-size: 10px; line-height: 1.6em; }
 .device-box .device-desc .device-status-text { font-size: 10px; line-height: 1.6em; }
@@ -326,7 +327,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 #modal-impact-analysis .device-box { color: #999; text-align: center; text-decoration: none; word-wrap: break-word; width: 110px; display: inline-block; vertical-align: middle; margin: 0 5px; }
 #modal-impact-analysis .device-box .device-icon { text-align: center; background: url(/assets/img/icons/device_large.png) no-repeat; width: 106px; height: 106px; margin: 0 auto; display: block; }
 #modal-impact-analysis .device-box .device-desc { color: #333; width: auto; margin: 0; display: inline-block; float: none; }
-#modal-impact-analysis .device-box .device-desc .device-name { font-size: 17px; width: auto; float: none; }
+#modal-impact-analysis .device-box .device-desc .device-name { width: auto; float: none; }
 #modal-impact-analysis .device-box .device-desc .device-uuid { font-size: 12px; width: auto; margin: 5px 0 0 0; float: none; opacity: 0.5; }
 
 .rightPanel { background-color: rgba(45, 50, 68, 0.8); width: 100vw; height: 100%; min-height: 100vh; position: fixed; left: 0; top: 0; z-index: 1049; }
