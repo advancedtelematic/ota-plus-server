@@ -42,7 +42,7 @@ docker run \
   -e RESOLVER_DB_MIGRATE='true' \
   -e PACKAGES_VERSION_FORMAT='.+' \
   -e rootLevel='DEBUG' \
-  advancedtelematic/ota-plus-resolver:$RESOLVER_DOCKER_TAG
+  advancedtelematic/sota-resolver:$RESOLVER_DOCKER_TAG
 
 DEVICE_REGISTRY_DOCKER_TAG=${DEVICE_REGISTRY_TAG-latest}
 echo 'Starting device registry'
