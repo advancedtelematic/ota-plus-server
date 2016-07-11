@@ -50,14 +50,10 @@ lazy val atsRepos = Seq(
   "ATS Snapshots" at "http://nexus.prod01.internal.advancedtelematic.com:8081/content/repositories/snapshots"
 )
 
-lazy val otaPlusCommon = otaPlusProject("ota-plus-common")
-
-lazy val otaPlusWeb = otaPlusProject("ota-plus-web").dependsOn(otaPlusCommon)
-
-lazy val otaPlusResolver = otaPlusProject("ota-plus-resolver").dependsOn(otaPlusCommon)
+lazy val otaPlusWeb = otaPlusProject("ota-plus-web")
 
 lazy val rootProject = (project in file(".")).
-  aggregate(otaPlusWeb, otaPlusResolver, otaPlusCommon)
+  aggregate(otaPlusWeb)
   .settings(Release.settings)
   .settings(publish := ())
 
