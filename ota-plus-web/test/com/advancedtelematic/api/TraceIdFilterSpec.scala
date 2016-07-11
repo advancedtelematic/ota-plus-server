@@ -4,7 +4,7 @@ import java.util.UUID
 
 import akka.stream.Materializer
 import com.advancedtelematic.TraceIdFilter
-import com.advancedtelematic.ota.common.{TraceId, TraceIdSig}
+import org.genivi.sota.http.{TraceId, TraceIdSig}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.mvc._
 import play.api.test.FakeRequest

@@ -6,13 +6,12 @@ import com.advancedtelematic.api.RemoteApiError
 import play.api.Logger
 import play.api.mvc.{Filter, RequestHeader, Result}
 import _root_.akka.stream.Materializer
-import com.advancedtelematic.ota.common.TraceId
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
+import org.genivi.sota.http.TraceId
 
 class LoggingFilter @Inject()(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
-
   lazy val serviceName = sys.env.getOrElse("SERVICE_NAME", "ota-plus-web")
 
   def apply(nextFilter: RequestHeader => Future[Result])
