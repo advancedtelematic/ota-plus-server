@@ -54,18 +54,27 @@ define(function(require) {
           currentLang = browserLang;
         }
       }
+      
+      var path = this.props.location.pathname.toLowerCase().split('/');
+      var isHomePage = path[0] == '' && path[1] == '' ? true : false;
 
       this.state = {
         currentLang: currentLang,
         showCampaignPanel: false,
         intervalId: null,
-        hideAnimationUp: true,
+        hideAnimationUp: isHomePage,
         hideAnimationDown: true,
       }
 
       this.changeLanguage = this.changeLanguage.bind(this);
       this.toggleCampaignPanel = this.toggleCampaignPanel.bind(this);
       this.logout = this.logout.bind(this);
+      this.openDoor = this.openDoor.bind(this);
+      
+      if(isHomePage) {
+        db.devices.addWatch("watch-devices", _.bind(this.openDoor, this, null));
+        db.searchableDevices.addWatch("watch-searchable-devices", _.bind(this.openDoor, this, null));
+      }
     }
     changeLanguage(value) {
       localStorage.setItem('currentLang', value);
@@ -85,11 +94,18 @@ define(function(require) {
         that.setState({hideAnimationDown: !that.state.hideAnimationDown});
       }, 200);
     }
+    openDoor() {
+      if(!_.isUndefined(db.devices.deref()) && !_.isUndefined(db.searchableDevices.deref())) {
+        var that = this;
+        db.devices.removeWatch("watch-devices");
+        db.searchableDevices.removeWatch("watch-searchable-devices");
+        setTimeout(function() {
+          that.setState({hideAnimationUp: !that.state.hideAnimationUp});
+        }, 300);
+      }
+    }
     componentDidMount() {
       var that = this;
-      setTimeout(function() {
-        that.setState({hideAnimationUp: !that.state.hideAnimationUp});
-      }, 200);
       
       jQuery(function () {
         jQuery('body').verify({verifyMinWidth: 1366, verifyMinHeight: 0});
@@ -174,9 +190,13 @@ define(function(require) {
 
       return (
         <div>
-          {referrer !== undefined && referrer == 'login' ?
+          {!_.isUndefined(path[1]) && path[1] == '' && referrer !== undefined && referrer == 'login' ?
             <VelocityComponent animation={!this.state.hideAnimationUp ? Animations.up : null}>
-              <div className="door"></div>
+              <div className="door">
+                {this.state.hideAnimationUp ? 
+                  <img src="/assets/img/icons/loading2.gif" className="loader"/>
+                : null}
+              </div>
             </VelocityComponent>
           : null}
           <VelocityTransitionGroup enter={{animation: Animations.down, complete: function() {window.location.href = "/logout"}}}>
