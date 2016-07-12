@@ -3,6 +3,7 @@ package org.genivi.webserver.controllers
 import javax.inject.{Inject, Named, Singleton}
 
 import akka.actor.ActorSystem
+import com.advancedtelematic.AuthenticatedApiAction
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.ota.vehicle.{VehicleMetadata, Vehicles}
 import org.asynchttpclient.uri.Uri
@@ -41,7 +42,7 @@ extends Controller with ApiClientSupport {
     * @param arch either "32" or "64"
     */
   def downloadClientSdk(deviceId: Device.Id, packfmt: PackageType, arch: Architecture) : Action[AnyContent] =
-    Action.async { implicit request =>
+    AuthenticatedApiAction.async { implicit request =>
       for (
         vMetadataOpt <- vehiclesStore.getVehicle(deviceId);
         vMetadata <- vMetadataOpt match {
