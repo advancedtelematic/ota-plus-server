@@ -1792,4 +1792,11 @@ a.close, button.close {
     &.door-up {
         top: -100%;
     }
+
+    .loader {
+        margin-left: -60px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+    }
 }
