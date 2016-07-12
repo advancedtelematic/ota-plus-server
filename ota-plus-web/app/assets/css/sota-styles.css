@@ -42,6 +42,10 @@ button.list-group-item:focus { background: transparent; }
 .navbar-inverse .navbar-brand { padding: 8px 0 0 0; }
 .navbar-inverse .navbar-brand #logo { width: 34px; }
 .navbar-inverse .lang-selector { color: #000; margin: 16px 0 0 20px; }
+.navbar-inverse #navbar { margin: 0 0 0 30px; }
+.navbar-inverse .navbar-nav > li > a { color: #888; font-size: 15px; height: 51px; padding-left: 7px; padding-right: 7px; margin: 0 10px; transition: all 0.2s ease-in; }
+.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus, .navbar-inverse .navbar-nav > li > a:active { color: #555; }
+.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a.active { border-bottom: 5px solid #FB9773; }
 
 @media (min-width: 768px) { .navbar > .container .navbar-brand { margin-left: 0; } }
 /* Device box */
@@ -83,52 +87,71 @@ button.list-group-item:focus { background: transparent; }
 .page-device-details .device-header .device-icon { width: 50px; height: 50px; display: inline-block; vertical-align: middle; margin: 15px 0 0 30px; float: none; }
 .page-device-details .device-header .device-name, .page-device-details .device-header .device-lastseen { width: auto; float: none; }
 .page-device-details .device-header-status { font-size: 16px; height: 34px; padding: 6px 10px 0 10px; margin: 25px 0 0 0; border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 15px; }
-.page-device-details .panel-ats { background: transparent; width: 100%; margin-bottom: 0; border: 0; float: left; position: relative; }
-.page-device-details .panel-ats .panel-heading { font-size: 16px; font-weight: bold; text-transform: uppercase; background: #202020; width: 100%; height: 36px; padding: 0 15px; border-top: 1px solid #555; border-bottom: 1px solid #000; border-radius: 0; float: left; }
-.page-device-details .panel-ats .panel-heading .panel-heading-left { padding: 8px 0; }
-.page-device-details .panel-ats .panel-heading .panel-heading-right { padding: 7px 0 8px 0; }
-.page-device-details .panel-ats .panel-subheading { background: #666; height: 40px; padding: 0 15px; }
-.page-device-details .panel-ats .panel-body { color: #222; width: 100%; padding: 0; float: left; }
-.page-device-details .panel-ats .panel-footer { color: #fff; background: #202020; width: 100%; height: 24px; padding: 5px 15px; border: 0; border-radius: 0; float: left; }
-.page-device-details .list-group-item { width: 100%; padding: 11px 0 11px 15px; border-radius: 0; float: left; }
-.page-device-details .list-group-item.error { border: 1px solid #ff0000; }
-.page-device-details .list-group-item.grey { background: #d3d3d3; border-color: #b7b7b7; }
-.page-device-details .list-group-item.show-log { height: auto !important; }
-.page-device-details .list-group-item .package-status-icon { color: #fff; margin: -17px 3px -15px 0; display: inline-block; }
-.page-device-details .selected .list-group-item { background: #f5f5f5; border-bottom: 0; border-right: 0; }
-.page-device-details .selected .list-group-item .package-name { font-weight: bold; }
-.page-device-details .package-details { width: 100%; background: #f5f5f5; float: left; }
-.page-device-details .package-details ul { width: 100%; padding: 5px 10px; float: left; }
-.page-device-details .package-details ul li { background: #fff; height: 26px; margin: 5px 0; border-bottom: 1px solid #e1e1e1; }
-.page-device-details .package-details .package-statuses { line-height: 26px; }
-.page-device-details .package-details .package-status-label { text-transform: capitalize; }
-.page-device-details .package-details .package-version-right { line-height: 26px; text-align: center; width: 70px; height: 26px; margin: 0 0 0 10px; display: inline-block; border-left: 1px solid #e1e1e1; border-right: 1px solid #e1e1e1; }
-.page-device-details .package-details .accept-button, .page-device-details .package-details .cancel-button { margin: 3px 5px; }
-.page-device-details .package-details .btn-install { font-size: 12px; width: 100%; padding: 5px 12px 3px 12px; margin: 0; border: 0; }
-.page-device-details .package-details .input-comment { width: 80%; padding: 0; margin: 5px 0 0 10px; border: 0; }
-.page-device-details .package-version .package-statuses .package-status-circle { line-height: 2.0em; }
-.page-device-details .package-version .package-left-box { width: 50%; }
-.page-device-details .package-statuses { font-size: 12px; margin-left: 10px; }
-.page-device-details .package-statuses .package-status-circle { color: #fff; font-size: 12px; line-height: 1.2em; vertical-align: top; }
-.page-device-details .package-statuses .package-status-label-uninstalled { color: #999; }
-.page-device-details .packages-statistics { position: fixed; left: 15px; }
-.page-device-details .list-group-item-text-right { color: #555; margin: 0 10px 0 10px; }
-.page-device-details #packages .list-group-item { height: 40px; padding-right: 15px; }
-.page-device-details #packages .list-group-item:last-child { margin-bottom: -1px; }
-.page-device-details .package-right-box { width: 310px; }
-.page-device-details #queue-list, .page-device-details #history-list { width: 100%; padding: 20px; float: left; }
-.page-device-details #queue-list .list-group-item, .page-device-details #history-list .list-group-item { height: 40px; margin: 0 0 5px 0; }
-.page-device-details #queue-list .list-group-item a { color: #555; }
-.page-device-details #queue-list .list-group-item.error { border-color: #ff0000; }
-.page-device-details #queue-list .list-group-item.error #queue-list .list-group-item.error.list-group-item-text-left, .page-device-details #queue-list .list-group-item.error .list-group-item-text-right { color: #ff0000; }
-.page-device-details #history-list .list-group-item-text-right { color: #979797; }
-.page-device-details #history-list .btn-action { border-left-color: #b7b7b7; }
-.page-device-details #packages-wrapper { background: #fff; }
-.page-device-details #packages-wrapper #packages-list-inside { width: 100%; height: 100%; overflow: visible; position: relative; zoom: 1; }
-.page-device-details #packages-list, .page-device-details #queue-wrapper { width: 100% !important; overflow-x: hidden; overflow-y: hidden; margin: 0; }
-.page-device-details #packages-list .list-group, .page-device-details #queue-wrapper .list-group { margin: 0; }
-.page-device-details #queue-wrapper { background: #f0f0f0; width: 100%; float: left; overflow-y: scroll; }
-.page-device-details .log-code { color: #fff; font-size: 11px; font-family: Courier New; background: #333; padding: 15px; margin: 10px 0 10px -15px; }
+
+.page-packages .package-statuses { margin-right: 10px; }
+
+.panel-ats { background: transparent; width: 100%; margin-bottom: 0; border: 0; float: left; position: relative; }
+.panel-ats .panel-heading { font-size: 16px; font-weight: bold; text-transform: uppercase; background: #202020; width: 100%; height: 36px; padding: 0 15px; border-top: 1px solid #555; border-bottom: 1px solid #000; border-radius: 0; float: left; }
+.panel-ats .panel-heading .panel-heading-left { padding: 8px 0; }
+.panel-ats .panel-heading .panel-heading-right { padding: 7px 0 8px 0; }
+.panel-ats .panel-subheading { background: #666; height: 40px; padding: 0 15px; }
+.panel-ats .panel-body { color: #222; width: 100%; padding: 0; float: left; }
+.panel-ats .panel-footer { color: #fff; background: #202020; width: 100%; height: 24px; padding: 5px 15px; border: 0; border-radius: 0; float: left; }
+
+.list-group-item { width: 100%; padding: 11px 0 11px 15px; border-radius: 0; float: left; }
+.list-group-item.error { border: 1px solid #ff0000; }
+.list-group-item.grey { background: #d3d3d3; border-color: #b7b7b7; }
+.list-group-item.show-log { height: auto !important; }
+.list-group-item .package-status-icon { color: #fff; margin: -17px 3px -15px 0; display: inline-block; }
+
+.selected .list-group-item { background: #f5f5f5; border-bottom: 0; border-right: 0; }
+.selected .list-group-item .package-name { font-weight: bold; }
+
+.package-details { width: 100%; background: #f5f5f5; float: left; }
+.package-details ul { width: 100%; padding: 5px 10px; float: left; }
+.package-details ul li { background: #fff; height: 26px; margin: 5px 0; border-bottom: 1px solid #e1e1e1; }
+.package-details .package-statuses { line-height: 26px; }
+.package-details .package-status-label { text-transform: capitalize; }
+.package-details .package-version-right { line-height: 26px; text-align: center; width: 70px; height: 26px; margin: 0 0 0 10px; display: inline-block; border-left: 1px solid #e1e1e1; border-right: 1px solid #e1e1e1; }
+.package-details .accept-button, .package-details .cancel-button { margin: 3px 5px; }
+.package-details .btn-install { font-size: 12px; width: 100%; padding: 5px 12px 3px 12px; margin: 0; border: 0; }
+.package-details .input-comment { width: 80%; padding: 0; margin: 5px 0 0 10px; border: 0; }
+
+.package-version .package-statuses .package-status-circle { line-height: 2.0em; }
+.package-version .package-left-box { width: 50%; }
+
+.package-statuses { font-size: 12px; margin-left: 10px; }
+.package-statuses .package-status-circle { color: #fff; font-size: 12px; line-height: 1.2em; vertical-align: top; }
+.package-statuses .package-status-label-uninstalled { color: #999; }
+
+.packages-statistics { position: fixed; left: 15px; }
+
+.list-group-item-text-right { color: #555; margin: 0 10px 0 10px; }
+
+#packages .list-group-item { height: 40px; padding-right: 15px; }
+#packages .list-group-item:last-child { margin-bottom: -1px; }
+
+.package-right-box { width: 310px; }
+
+#queue-list, #history-list { width: 100%; padding: 20px; float: left; }
+#queue-list .list-group-item, #history-list .list-group-item { height: 40px; margin: 0 0 5px 0; }
+
+#queue-list .list-group-item a { color: #555; }
+#queue-list .list-group-item.error { border-color: #ff0000; }
+#queue-list .list-group-item.error #queue-list .list-group-item.error.list-group-item-text-left, #queue-list .list-group-item.error .list-group-item-text-right { color: #ff0000; }
+
+#history-list .list-group-item-text-right { color: #979797; }
+#history-list .btn-action { border-left-color: #b7b7b7; }
+
+#packages-wrapper { background: #fff; }
+#packages-wrapper #packages-list-inside { width: 100%; height: 100%; overflow: visible; position: relative; zoom: 1; }
+
+#packages-list, #queue-wrapper { width: 100% !important; overflow-x: hidden; overflow-y: hidden; margin: 0; }
+#packages-list .list-group, #queue-wrapper .list-group { margin: 0; }
+
+#queue-wrapper { background: #f0f0f0; width: 100%; float: left; overflow-y: scroll; }
+
+.log-code { color: #fff; font-size: 11px; font-family: Courier New; background: #333; padding: 15px; margin: 10px 0 10px -15px; }
 
 /* Buttons */
 .btn-add { color: #fff; font-size: 12px; text-transform: uppercase; background: #ffa987; padding: 5px 16px 5px 16px; margin: 6px 0 0 0; border-radius: 15px; }
@@ -306,6 +329,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 /* D&D */
 .dnd-zone { width: 100%; height: 100%; }
 .dnd-zone.dnd-zone-active { border: 2px dashed blue; }
+.dnd-zone.dnd-zone-active:after { color: blue; font-size: 20px; content: "DRAG AND DROP ZONE"; position: absolute; top: 50%; left: 45%; z-index: 999; }
 
 .list-group-dnd li { cursor: move; }
 

@@ -14,7 +14,13 @@ define(function(require) {
       var payload = serializeForm(this.refs.form);
       payload.id = {name: payload.name, version: payload.version};
       var data = new FormData();
-      data.append('file', this.props.files[0]);
+      
+      var file = this.props.files[0];
+      if($('.file-upload')[0].files[0]) {
+        file = $('.file-upload')[0].files[0];
+      }
+      
+      data.append('file', file);
       SotaDispatcher.dispatch({
         actionType: 'create-package',
         package: payload,
@@ -65,7 +71,11 @@ define(function(require) {
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="binary">Package Binary</label>
-                        {this.props.files.length > 0 ? <div> {this.props.files.map((file) => <div key={file.name}>{file.name} </div> )} </div> : ''}
+                        {this.props.files && this.props.files.length > 0 ? 
+                          <div> {this.props.files.map((file) => <div key={file.name}>{file.name} </div> )} </div> 
+                        : 
+                          <input type="file" className="file-upload" name="file" />
+                        }
                       </div>
                     </div>
                   </div>
