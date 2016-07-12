@@ -25,7 +25,7 @@ define(function(require) {
       Devices = require('components/devices/devices'),
       DeviceDetails = require('components/devices/device-details'),
       ProductionDeviceDetails = require('components/devices/production-device-details'),
-      Packages = require('components/packages/packages'),
+      Packages = require('components/packages-page/packages'),
       NewDevice = require('components/devices/new-device'),
       Modal = require('components/modal'),
       ImpactAnalysis = require('components/devices/impact-analysis'),
@@ -164,6 +164,9 @@ define(function(require) {
           case 'testsettings':
             page = 'page-home';
           break;
+          case 'packages':
+            page = 'page-packages';
+          break;
           default:
           break;
         }
@@ -220,8 +223,7 @@ define(function(require) {
           <Route path=":action/:vin2" />
         </Route>
         <Route path="productiondevicedetails/:id" component={wrapComponent(ProductionDeviceDetails, {Device: db.showDevice})}/>
-        <Route name="packages" component={Packages}/>
-        <Route name="profile" component={Profile}/>
+        <Route path="packages" component={Packages}/>
         <Route path="testsettings" component={TestSettings}/>
       </Route>
     </Route>
