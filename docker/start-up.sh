@@ -24,6 +24,16 @@ docker run \
   -e MYSQL_DATABASES='sota_resolver sota_resolver_test sota_core sota_core_test sota_device_registry sota_device_registry_test' \
   advancedtelematic/mariadb:${MARIADB_DOCKER_TAG}
 
+NATS_DOCKER_TAG=${NATS_DOCKER_TAG-0.8.1}
+echo 'Starting nats'
+echo "tag ${NATS_DOCKER_TAG}"
+docker run \
+  -d \
+  --name=nats \
+  --expose=4222 \
+  -p 4222:4222 \
+  nats:${NATS_DOCKER_TAG}
+
 SLEEP=${DB_SLEEP-20}
 echo sleeping for ${SLEEP}s
 sleep $SLEEP
@@ -121,6 +131,7 @@ docker run \
   --link=device-registry \
   --link=auth-plus \
   --link=buildsrv \
+  --link=nats \
   -e CORE_API_URI='http://core:8080' \
   -e RESOLVER_API_URI='http://resolver:8081' \
   -e DEVICE_REGISTRY_API_URI='http://device-registry:8083' \
