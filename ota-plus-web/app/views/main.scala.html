@@ -1,4 +1,5 @@
-@()()
+@import helper._
+@()()(implicit req: RequestHeader)
 
 <!DOCTYPE html>
 
@@ -36,5 +37,7 @@
 	}
     </script>
     <script data-main="@routes.Assets.versioned("javascripts/react-app.js")" src="@routes.WebJarAssets.at(WebJarAssets.locate("require.min.js"))"></script>
+
+    @CSRF.formField
   </body>
 </html>

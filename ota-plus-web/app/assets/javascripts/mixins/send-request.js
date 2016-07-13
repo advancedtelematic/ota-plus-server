@@ -1,5 +1,10 @@
 define(['jquery', 'underscore', '../stores/db'], function($, _, db) {
   var sendRequest = {
+
+    getCsrfToken: function() {
+      return $('input[name=csrfToken]').val();
+    },
+
     send: function(type, url, data, opts) {
       opts = opts || {};
       if (opts.form) {
@@ -12,6 +17,7 @@ define(['jquery', 'underscore', '../stores/db'], function($, _, db) {
       return $.ajax(_.extend({
         type: type,
         url: url,
+        headers: {'Csrf-Token': this.getCsrfToken()},
         dataType: 'json',
         data: JSON.stringify(data),
         contentType: "application/json"
@@ -22,6 +28,7 @@ define(['jquery', 'underscore', '../stores/db'], function($, _, db) {
       return $.ajax({
         type: type,
         url: url,
+        headers: {'Csrf-Token': this.getCsrfToken()},
         cache: false,
         contentType: false,
         processData: false,
