@@ -24,6 +24,10 @@ export AUTHPLUS_CLIENT_ID="$(echo $VDATA | jq -r .data.authplus_client_id)"
 export AUTHPLUS_SECRET="$(echo $VDATA | jq -r .data.authplus_secret)"
 export CASSANDRA_CONTACT_POINT="$(echo $VDATA | jq -r .data.cassandra_contact_point)"
 export CASSANDRA_JOURNAL_KEYSPACE="$(echo $VDATA | jq -r .data.cassandra_journal_keyspace)"
+export AUTH0_CLIENT_ID="$(echo $VDATA | jq -r .data.auth0_client_id)"
+export AUTH0_CLIENT_SECRET="$(echo $VDATA | jq -r .data.auth0_client_secret)"
+export AUTH0_DOMAIN="$(echo $VDATA | jq -r .data.auth0_domain)"
+export AUTH0_CALLBACK_URL="$(echo $VDATA | jq -r .data.auth0_callback_url)"
 export port PORT="9000"
 
 REQ=$(envsubst < deploy/service.json)

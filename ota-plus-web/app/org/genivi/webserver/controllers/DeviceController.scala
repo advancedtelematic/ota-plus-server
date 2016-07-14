@@ -52,7 +52,8 @@ extends Controller with ApiClientSupport {
 
   private[this] def userOptions(req: Request[_]): UserOptions = {
     val traceId = req.headers.get("x-ats-traceid")
-    val token = req.session.get("access_token").orElse(bearerToken(req))
+    // TODO: Switch back to access_token after https://advancedtelematic.atlassian.net/browse/PRO-858
+    val token = req.session.get("id_token").orElse(bearerToken(req))
     val namespace = req.session.get("username").flatMap(u => refineV[Uri](u).right.toOption)
     UserOptions(token, traceId, namespace)
   }

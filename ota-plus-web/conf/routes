@@ -27,17 +27,8 @@ POST    /signup/:token                          com.advancedtelematic.signup.Sig
 
 GET     /login                                  com.advancedtelematic.login.LoginController.login
 GET     /logout                                 com.advancedtelematic.login.LoginController.logout
-POST	  /authenticate				                    com.advancedtelematic.login.LoginController.authenticate
+GET     /callback                               com.advancedtelematic.login.LoginController.callback(code: Option[String])
 
 GET     /health                                 com.advancedtelematic.HealthController.health
 GET     /health/version                         com.advancedtelematic.HealthController.version
-
-GET     /change_password                        com.advancedtelematic.changepassword.ChangePasswordController.changePasswordForm
-POST    /change_password                        com.advancedtelematic.changepassword.ChangePasswordController.changePassword
-
-GET     /forgot_password                        com.advancedtelematic.ResetPasswordController.forgotPassword
-POST    /forgot_password                        com.advancedtelematic.ResetPasswordController.forgotPasswordEmail
-
-GET     /reset_password/:token                  com.advancedtelematic.ResetPasswordController.resetPasswordForm(token: String)
-POST    /reset_password/:token                  com.advancedtelematic.ResetPasswordController.resetPassword(token: String)
 

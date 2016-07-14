@@ -2,17 +2,11 @@ package com.advancedtelematic.login
 
 import javax.inject.{Inject, Singleton}
 
-import cats.data.Validated
-import cats.std.all._
-import cats.syntax.apply._
 import org.asynchttpclient.uri.Uri
-import org.genivi.webserver.controllers.ConfigurationException
-import org.scalatest.Failed
-import play.api.{Configuration, Logger}
-import play.api.data.Form
-import play.api.data.Forms._
+import play.api.http.{HeaderNames, MimeTypes}
+import play.api.libs.json.{JsValue, Json}
+import play.api.Configuration
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.ws.WSAuthScheme.BASIC
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 
@@ -25,80 +19,88 @@ case class LoginData(username: String, password: String)
   * Handles just login/authentication
   */
 @Singleton
-class LoginController @Inject()(conf: Configuration,
-                                val messagesApi: MessagesApi,
-                                wSClient: WSClient)
-                               (implicit context: ExecutionContext) extends Controller with I18nSupport {
+class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesApi, wSClient: WSClient)(
+    implicit context: ExecutionContext)
+    extends Controller
+    with I18nSupport {
 
   private val token_key = "access_token"
 
   private[this] val authPlusHost: Uri = conf.getString("authplus.host").map(Uri.create).get
 
-  private lazy val authPlusCredentials: (String, String) = {
-    val clientIdV = Validated.fromOption(conf.getString("authplus.client_id"), "No client_id for auth plus\n")
-    val secret = Validated.fromOption(conf.getString("authplus.secret"), "No secret for auth plus\n")
-    val validated: Validated[String, (String, String)] = clientIdV.map2(secret)(Tuple2.apply)
+  val auth0Config = Auth0Config(conf).get
 
-    validated.fold(e => throw ConfigurationException(e), identity)
+  val login: Action[AnyContent] = Action { implicit req =>
+    Ok(views.html.login(auth0Config))
   }
 
-  val logger = Logger(this.getClass)
-  val loginForm = Form(
-    mapping(
-      "username" -> nonEmptyText,
-      "password" -> nonEmptyText
-    )(LoginData.apply)(LoginData.unapply)
-  )
-
-  def login : Action[AnyContent] = Action { implicit req =>
-    Ok(views.html.login(loginForm))
+  def logout: Action[AnyContent] = Action { implicit req =>
+    Redirect(org.genivi.webserver.controllers.routes.Application.index()).withNewSession
   }
 
-  def logout : Action[AnyContent] = Action { implicit req =>
-    Redirect(org.genivi.webserver.controllers.routes.Application.index())
-      .withNewSession
-  }
-
-  private[this] def buildPasswordRequest(username: String, password: String) =
-    Map("grant_type" -> Seq("password"),
-        "username" -> Seq(username),
-        "password" -> Seq(password))
-
-  /*
-     POST
-     set token in session
-     */
-  def authenticate: Action[AnyContent] = Action.async { implicit req =>
-    loginForm.bindFromRequest.fold(
-      formWithErrors => {
-        Future.successful(BadRequest(views.html.login(formWithErrors)))
-      },
-      loginData => {
-        val (clientId, clientSecret) = authPlusCredentials
-
-        wSClient.url(authPlusHost.toUrl + "/token")
-          .withAuth(clientId, clientSecret, BASIC)
-          .post( buildPasswordRequest(loginData.username, loginData.password) )
-          .map { response =>
-          response.status match {
-            case OK =>
-              val token = (response.json \ "access_token").as[String]
-              Redirect(org.genivi.webserver.controllers.routes.Application.index())
-                .withSession("username" -> loginData.username, token_key -> token)
-
-            case BAD_REQUEST =>
-              val error = (response.json \ "error").asOpt[String].getOrElse("(unknown error)")
-              logger.debug(s"Bad request: $error")
-              BadRequest(views.html.login(loginForm.withGlobalError(s"Bad request: $error")))
-                .withNewSession
-
-            case code =>
-              logger.debug(s"Unexpected response from Auth+: $code")
-              ServiceUnavailable(views.html.serviceUnavailable())
-                .withNewSession
+  def callback(codeOpt: Option[String] = None): Action[AnyContent] = Action.async {
+    (for {
+      code <- codeOpt
+    } yield {
+      // Get the token
+      getToken(code).flatMap {
+        case (idToken, accessToken) =>
+          // Get the user
+          getUser(accessToken).map { user =>
+            Redirect(org.genivi.webserver.controllers.routes.Application.index()).withSession(
+                "id_token"     -> idToken,
+                "access_token" -> accessToken
+            )
           }
-        }
+
+      }.recover {
+        case ex: IllegalStateException => Unauthorized(ex.getMessage)
       }
-    )
+    }).getOrElse(Future.successful(BadRequest("No parameters supplied")))
+  }
+
+  def getToken(code: String): Future[(String, String)] = {
+    val tokenResponse = wSClient
+      .url(String.format("https://%s/oauth/token", auth0Config.domain))
+      .withHeaders(HeaderNames.ACCEPT -> MimeTypes.JSON)
+      .post(
+          Json.obj(
+              "client_id"     -> auth0Config.clientId,
+              "client_secret" -> auth0Config.secret,
+              "redirect_uri"  -> auth0Config.callbackURL,
+              "code"          -> code,
+              "grant_type"    -> "authorization_code"
+          )
+      )
+
+    tokenResponse.flatMap { response =>
+      (for {
+        idToken     <- (response.json \ "id_token").asOpt[String]
+        accessToken <- (response.json \ "access_token").asOpt[String]
+      } yield {
+        Future.successful((idToken, accessToken))
+      }).getOrElse(Future.failed[(String, String)](new IllegalStateException("Tokens not sent")))
+    }
+  }
+
+  def getUser(accessToken: String): Future[JsValue] = {
+    val userResponse = wSClient
+      .url(String.format("https://%s/userinfo", auth0Config.domain))
+      .withQueryString("access_token" -> accessToken)
+      .get()
+
+    userResponse.flatMap(response => Future.successful(response.json))
+  }
+}
+
+case class Auth0Config(secret: String, clientId: String, callbackURL: String, domain: String)
+object Auth0Config {
+  def apply(configuration: Configuration): Option[Auth0Config] = {
+    for {
+      clientSecret <- configuration.getString("auth0.clientSecret")
+      clientId     <- configuration.getString("auth0.clientId")
+      callbackUrl  <- configuration.getString("auth0.callbackURL")
+      domain       <- configuration.getString("auth0.domain")
+    } yield Auth0Config(clientSecret, clientId, callbackUrl, domain)
   }
 }

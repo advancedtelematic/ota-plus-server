@@ -57,23 +57,11 @@ Step 3:`cd ota-plus-server` and run tests, for example:
 
 ## Ota Plus Web
 
-To run the web app with authentication support you will need a running
-Auth+ Instance. Once Auth+ is running, a (client id, secret) pair can
-be obtained using:
+To run the web app with authentication support you will need a configure an application
+on [Auth0](https://auth0.com) and set `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_DOMAIN`
+and `AUTH0_CALLBACK_URL` environment variables. 
 
-    bin/new_client.sh
-
-These new variables can then be passed to ota-plus-web on startup. To
-start ota web you could use:
-
-    eval $(bin/new_client.sh) ; sbt ota-plus-web/run
-
-A new (client_id, secret) pair needs to be created everytime Auth+ is
-restarted.
-
-To create an account to log in, you must generate a signup link using the tool [here](https://gitlab.advancedtelematic.com/vladimir/ota-plus-invite), or use [this](http://localhost:9000/signup/eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiRGVtbyIsImVtYWlsIjoiZGVtb0BhZHZhbmNlZHRlbGVtYXRpYy5jb20iLCJwaG9uZV9udW1iZXIiOiJVbmtub3duIn0.RMTV1PcOWDJhwEuo1tCHpM_xC4NYpCqZNN-ZtlMLaQg) url which creates an account for the `demo@advancedtelematic.com` email address:
-
-  
+The `AUTH0_CALLBACK_URL` should be in the list of `Allowed Callback URLs` of the Auth0 application.   
 
 
 ## Ota Plus Core
