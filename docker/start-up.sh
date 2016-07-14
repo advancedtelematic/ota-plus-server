@@ -87,6 +87,7 @@ docker run \
   -e CORE_INTERACTION_PROTOCOL='none' \
   -e PACKAGES_VERSION_FORMAT='.+' \
   -e rootLevel='DEBUG' \
+  -e MESSAGING_MODE='test' \
   advancedtelematic/sota-core:$CORE_DOCKER_TAG
 
 echo 'Creating user: demo@advancedtelematic.com password: demo'
