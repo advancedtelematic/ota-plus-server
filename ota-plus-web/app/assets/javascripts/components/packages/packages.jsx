@@ -13,10 +13,13 @@ define(function(require) {
         selectStatusName: 'All',
         selectSort: 'asc',
         selectSortName: 'A > Z',
-        packagesListHeight: '300px'
+        packagesListHeight: '300px',
+        showForm: false
       }
       
       this.changeFilter = this.changeFilter.bind(this);
+      this.openForm = this.openForm.bind(this);
+      this.closeForm = this.closeForm.bind(this);
       this.setPackagesListHeight = this.setPackagesListHeight.bind(this);
     }
     componentDidMount() {
@@ -32,6 +35,16 @@ define(function(require) {
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setPackagesListHeight);
+    }
+    openForm() {
+      this.setState({
+        showForm: true
+      });
+    }
+    closeForm() {
+      this.setState({
+        showForm: false
+      });
     }
     changeFilter(filter) {
       this.setState({filterValue: filter});
@@ -79,21 +92,13 @@ define(function(require) {
 
             <SearchBar class="search-bar pull-left" changeFilter={this.changeFilter}/>
 
-            <div className="select-bar pull-right margin-left-30">
-              <div className="select-bar-text">Sort by</div>
-              <div className="btn-group">
-                <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span className="pull-left">{this.state.selectSortName} &nbsp;</span>
-                  <span className="fa fa-angle-down pull-right"></span>
-                </button>
-                <ul className="dropdown-menu">
-                  <li><a href="#" onClick={this.selectSort.bind(this, 'asc')}>A &gt; Z</a></li>
-                  <li><a href="#" onClick={this.selectSort.bind(this, 'desc')}>Z &gt; A</a></li>
-                </ul>
-              </div>
+            <div className="pull-right margin-left-15">
+              <button onClick={this.openForm} className="btn btn-add pull-right">
+                <i className="fa fa-plus"></i> &nbsp; Add new
+              </button>
             </div>
-
-            <div className="select-bar pull-right">
+    
+            <div className="select-bar pull-right margin-left-15">
               <div className="select-bar-text">Status</div>
               <div className="btn-group">
                 <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -108,6 +113,14 @@ define(function(require) {
                 </ul>
               </div>
             </div>
+    
+            <div className="sort-text pull-right">
+              {this.state.selectSort == 'asc' ? 
+                <a href="#" onClick={this.selectSort.bind(this, 'desc')}><i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z</a>
+              :
+                <a href="#" onClick={this.selectSort.bind(this, 'asc')}><i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A</a>
+              }
+            </div>
           </div>
 
           <div className="alert alert-ats alert-dismissible" role="alert">
@@ -119,13 +132,16 @@ define(function(require) {
           <div id="packages-wrapper" style={{height: this.state.packagesListHeight}}>
             {!_.isUndefined(this.props.device) ?
               <PackagesList
-                filterValue={this.state.filterValue}
+                packagesListHeight={this.state.packagesListHeight}
                 selectStatus={this.state.selectStatus}
                 selectSort={this.state.selectSort}
+                filterValue={this.state.filterValue}
                 setPackagesStatistics={this.props.setPackagesStatistics}
                 countImpactAnalysisPackages={this.props.countImpactAnalysisPackages}
                 device={this.props.device}
-                packagesListHeight={this.state.packagesListHeight}/>
+                showForm={this.state.showForm}
+                openForm={this.openForm}
+                closeForm={this.closeForm}/>
             : undefined}
           </div>
         </div>

@@ -23,13 +23,12 @@ define(function(require) {
         timeout: null,
         intervalId: null,
         files: null,
-        showForm: false,
+        showForm: this.props.showForm,
         iosListObj: null,
         selectedToAnalyse: [],
       };
       this.refreshData = this.refreshData.bind(this);
       this.onDrop = this.onDrop.bind(this);
-      this.closeForm = this.closeForm.bind(this);
       this.expandPackage = this.expandPackage.bind(this);
       this.selectToAnalyse = this.selectToAnalyse.bind(this);
       this.updateListToAnalyse = this.updateListToAnalyse.bind(this);
@@ -41,6 +40,11 @@ define(function(require) {
     componentWillUpdate(nextProps, nextState) {
       if(nextProps.filterValue != this.props.filterValue) {
         SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
+      }
+    }
+    componentWillReceiveProps(nextProps) {
+      if(this.props.showForm !== nextProps.showForm) {
+        this.setState({showForm: nextProps.showForm});
       }
     }
     componentDidUpdate(prevProps, prevState) {
@@ -106,13 +110,9 @@ define(function(require) {
     onDrop(files) {
       this.setState({
         files: files,
-        showForm: true
       });
-    }
-    closeForm() {
-      this.setState({
-        showForm: false
-      });
+      
+      this.props.openForm();
     }
     prepareData() {
       var Packages = db.searchablePackages.deref();
@@ -381,12 +381,14 @@ define(function(require) {
             {_.isUndefined(packages) ? 
               <Loader />
             : undefined}
-            {this.state.showForm ?
-              <AddPackage
-                files={this.state.files}
-                closeForm={this.closeForm}
-                key="add-package"/>
-            : null}
+            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+              {this.state.showForm ?
+                <AddPackage
+                  files={this.state.files}
+                  closeForm={this.props.closeForm}
+                  key="add-package"/>
+              : null}
+            </VelocityTransitionGroup>
           </div>
             
           {this.props.device.status !== 'NotSeen' 

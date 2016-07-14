@@ -22,12 +22,14 @@ define(function(require) {
         packagesCount: 67,
         campaignsCount: 32,
         productionDevicesCount: 0,
+        devicesListHeight: '400px',
       };
 
       this.changeFilter = this.changeFilter.bind(this);
       this.selectStatus = this.selectStatus.bind(this);
       this.selectSort = this.selectSort.bind(this);
       this.refreshData = this.refreshData.bind(this);
+      this.setDevicesListHeight = this.setDevicesListHeight.bind(this);
 
       db.devices.reset();
       db.searchableDevices.reset();
@@ -65,6 +67,9 @@ define(function(require) {
         that.refreshData();
       }, 1000);
       this.setState({intervalId: intervalId});
+      
+      window.addEventListener("resize", this.setDevicesListHeight);
+      this.setDevicesListHeight();
     }
     componentWillUnmount(){
       db.devices.reset();
@@ -74,6 +79,7 @@ define(function(require) {
       db.searchableDevices.removeWatch("searchable-devices");
       db.searchableProductionDevices.removeWatch("searchable-production-devices");
       clearInterval(this.state.intervalId);
+      window.removeEventListener("resize", this.setDevicesListHeight);
     }
     refreshData() {
       SotaDispatcher.dispatch({actionType: 'get-devices'});
@@ -87,6 +93,14 @@ define(function(require) {
     }
     numberWithDots(x) {
       return !_.isUndefined(x) ? x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : '';
+    }
+    setDevicesListHeight() {
+      var windowHeight = jQuery(window).height();
+      var offsetTop = jQuery('#devices-bar').offset().top + jQuery('#devices-bar').height();
+      var btnSectionsHeight = jQuery('.btn-full-section').length ? 4 * 34 : 0;
+      this.setState({
+        devicesListHeight: windowHeight - offsetTop - btnSectionsHeight
+      });
     }
     render() {
       var Devices = db.searchableDevices.deref();
@@ -155,14 +169,14 @@ define(function(require) {
               : null}
             </button>
           : null}
-          <div style={{paddingTop: !areTestSettingsCorrect ? '70px' : 0}}>
+          <div style={{paddingTop: !areTestSettingsCorrect ? '40px' : 0}}>
             {_.isUndefined(SortedDevices) ?
               <Loader />
             :
               <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}} runOnMount={true}>
                 {this.state.expandedSectionName == 'testDevices' ? 
                   <div>
-                    <div id="devices">
+                    <div className="devices" style={{height: this.state.devicesListHeight}}>
                       <DevicesList
                         Devices={SortedDevices}
                         areProductionDevices={false}/>
@@ -181,7 +195,7 @@ define(function(require) {
               <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
                 {this.state.expandedSectionName == 'productionDevices' ?
                   <div>
-                    <div id="devices">
+                    <div className="devices" style={{height: this.state.devicesListHeight}}>
                       <DevicesList
                         Devices={db.searchableProductionDevices.deref()}
                         areProductionDevices={true}/>
