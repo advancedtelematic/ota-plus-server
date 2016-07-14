@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-export JOB_NAME="ota-plus-web"
+export JOB_NAME="${JOB_NAME-ota-plus-web}"
 
 if [[ ! -z $DEPLOY_ENV && $DEPLOY_ENV != "master" ]]; then
   export JOB_NAME="${JOB_NAME}-${DEPLOY_ENV}"
