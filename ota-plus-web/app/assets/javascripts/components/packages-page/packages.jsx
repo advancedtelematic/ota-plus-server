@@ -1,0 +1,111 @@
+define(function(require) {
+  var React = require('react'),
+      Router = require('react-router'),
+      Link = Router.Link,
+      SearchBar = require('../searchbar'),
+      PackagesList = require('./packages-list');
+
+  class Packages extends React.Component {
+    constructor(props, context) {
+      super(props, context);
+      this.state = {
+        filterValue: '',
+        selectSort: 'asc',
+        selectSortName: 'A > Z',
+        packagesListHeight: '300px',
+        showForm: false
+      }
+      this.changeFilter = this.changeFilter.bind(this);
+      this.openForm = this.openForm.bind(this);
+      this.closeForm = this.closeForm.bind(this);
+      this.setPackagesListHeight = this.setPackagesListHeight.bind(this);
+    }
+    componentDidMount() {
+      window.addEventListener("resize", this.setPackagesListHeight);
+      this.setPackagesListHeight();
+    }
+    componentWillUnmount() {
+      window.removeEventListener("resize", this.setPackagesListHeight);
+    }
+    openForm() {
+      this.setState({
+        showForm: true
+      });
+    }
+    closeForm() {
+      this.setState({
+        showForm: false
+      });
+    }
+    setPackagesListHeight() {
+      var windowHeight = jQuery(window).height();
+      var footerHeight = jQuery('.panel-footer').outerHeight();
+      var offsetTop = jQuery('#packages-wrapper').offset().top;
+            
+      this.setState({
+        packagesListHeight: windowHeight - offsetTop - footerHeight
+      });
+    }
+    changeFilter(filter) {
+      this.setState({filterValue: filter});
+    }
+    selectSort(sort, e) {
+      e.preventDefault();
+
+      var name = jQuery(e.target).text();
+      this.setState({
+        selectSort: sort,
+        selectSortName: name
+      });
+    }
+    render() {
+      return (
+        <div>
+          <div className="panel panel-ats">
+            <div className="panel-body">
+              <div className="panel-subheading">
+                <div className="container">
+                  <SearchBar class="search-bar pull-left" changeFilter={this.changeFilter}/>
+                  
+                  <div className="select-bar pull-left margin-left-100">
+                    <div className="select-bar-text">Sort by</div>
+                    <div className="btn-group">
+                      <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span className="pull-left">{this.state.selectSortName} &nbsp;</span>
+                        <span className="fa fa-angle-down pull-right"></span>
+                      </button>
+                      <ul className="dropdown-menu">
+                        <li><a href="#" onClick={this.selectSort.bind(this, 'asc')}>A &gt; Z</a></li>
+                        <li><a href="#" onClick={this.selectSort.bind(this, 'desc')}>Z &gt; A</a></li>
+                      </ul>
+                    </div>
+                  </div>
+          
+                  <button onClick={this.openForm} className="btn btn-add pull-right">
+                    <i className="fa fa-plus"></i> &nbsp; Add new package
+                  </button>
+                </div>
+              </div>
+              <div id="packages-wrapper" style={{height: this.state.packagesListHeight}}>
+                <PackagesList 
+                  packagesListHeight={this.state.packagesListHeight}
+                  selectSort={this.state.selectSort}
+                  filterValue={this.state.filterValue}
+                  showForm={this.state.showForm}
+                  openForm={this.openForm}
+                  closeForm={this.closeForm}/>
+              </div>
+            </div>
+            <div className="panel-footer"></div>
+          </div>
+        </div>
+      );
+    }
+  };
+
+  Packages.contextTypes = {
+    strings: React.PropTypes.object.isRequired
+  };
+
+  return Packages;
+});

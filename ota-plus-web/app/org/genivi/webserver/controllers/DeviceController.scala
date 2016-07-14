@@ -19,6 +19,7 @@ import com.advancedtelematic.ota.device.Devices.refinedWriter
 import eu.timepit.refined.string.Uri
 
 import scala.util.control.NoStackTrace
+import cats.syntax.show.toShowOps
 
 @Singleton
 class DeviceController @Inject() (val ws: WSClient,
@@ -104,7 +105,7 @@ extends Controller with ApiClientSupport {
     */
   def fetchClientInfo(deviceId: Device.Id) : Action[AnyContent] =
     Action.async { implicit request =>
-      for (
+      val fut = for (
         vMetadataOpt <- vehiclesStore.getVehicle(deviceId);
         vMetadata <- vMetadataOpt match {
           case None => Future.failed[VehicleMetadata](NoSuchVinRegistered)
@@ -112,6 +113,10 @@ extends Controller with ApiClientSupport {
         };
         clientInfo <- authPlusApi.fetchClientInfo(vMetadata.clientInfo.clientId)
       ) yield Ok(clientInfo)
+
+      fut.recoverWith { case _ =>
+        Future.successful( BadRequest(s"No device has been registered with this app for UUID ${deviceId.show}") )
+      }
     }
 
 }
