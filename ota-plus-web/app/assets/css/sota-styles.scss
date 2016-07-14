@@ -1589,10 +1589,13 @@ a.close, button.close {
 }
 
 #tutorial-install-device {
-    width: 80%;
+    width: 1200px;
     padding: 30px;
-    margin: 4% 10%;
     float: left;
+    position: relative;
+    top: 22%;
+    left: 50%;
+    margin-left: -600px;
     border-radius: 15px;
 
     .tutorial-icon {
@@ -1600,7 +1603,7 @@ a.close, button.close {
     }
 
     .inner-box {
-        margin: 30px 50px 30px 50px;
+        margin: 30px 30px 30px 30px;
     }
 
     .or-text {
@@ -1608,32 +1611,14 @@ a.close, button.close {
         font-size: 10px;
         margin: 0 10px;
     }
-
-    @media (min-width: 1500px) {
-        margin: 12% 10%;
+    
+    .tutorial-img-box {
+        width: 100px;
     }
-
-    @media (min-width: 1700px) {
-        width: 60%;
-        margin-left: 20%;
-        margin-right: 20%;
+    
+    .tutorial-desc-box {
+        width: 250px;
     }
-
-    /*    @media (max-width: 1700px) {
-            width: 80% !important;
-            margin: 0 10%;
-        }*/
-
-    /*    @media (max-width: 1500px) {
-            transform: scale(0.85) !important;
-            width: 90% !important;
-            padding: 30px !important;
-            margin: 0 5% !important;
-            
-            .btn-orange {
-                font-size: 12px;
-            }
-        }*/
 }
 
 .tutorial-add-package {
@@ -1775,6 +1760,10 @@ a.close, button.close {
 
 .font-14 {
     font-size: 14px;
+}
+
+.font-12 {
+    font-size: 12px;
 }
 
 .vertical-align-middle {
