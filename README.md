@@ -164,3 +164,64 @@ SKIP_TAG=true ./sbt "release with-defaults release-version 1-dev-version"
 ```
 
 Be sure to set the `SKIP_TAG=true` unless you want that tag to go to dockerhub. Also note: this will update the `latest` tag on dockerhub.
+
+## Documentation for event endpoints
+
+Since there is no formal docs yet for OTA+, some initial documentation is here for the event
+endpoints. This should be moved to the official OTA+ docs once they are created.
+
+The event endpoints use the iframe forever technique for compatibility. To subscribe to events, an
+iframe must be created with a src attribute pointing towards the API endpoint for the event of
+interest. For example, subscribing to the deviceSeen event endpoint can be done like so:
+
+```html
+<iframe src="/api/v1/events/devices/7dfaf672-59a4-4290-94d3-448aa3ea5c76">
+</iframe>
+```
+
+This endpoint will send back javascript blocks inside `<script>` tags. Here is an example of the response
+received by the browser from the deviceSeen endpoint(formatted nicely, the actual script data returned
+will be stripped of whitespace):
+
+```html
+<script type="text/javascript">
+    parent.deviceSeen({
+      "deviceId":"7dfaf672-59a4-4290-94d3-448aa3ea5c76",
+      "lastSeen":"2016-07-01T08:26:01.472Z"
+    });
+</script>
+```
+
+Note that in the block above, the name of the callback function which is invoked, 'deviceSeen', is
+hardcoded into the message. The callback function for each event type must be exactly as specified for a
+given event endpoint. An example for the eventSeen endpoint is below:
+
+```html
+<script type="text/javascript">
+     var deviceSeen = function(deviceSeenMsg) {
+         //handle message here
+     }
+</script>
+```
+
+### Event endpoints
+
+#### Device Seen
+
+This endpoint returns events each time a given device contacts Core to look for updates. The json
+returned has the following structure:
+
+```json
+{
+  "deviceId": UUID
+  "lastSeen": Instant
+}
+```
+
+`Instant` is the given instant when the device contacted core, specified in UTC time using the
+ISO-8601 standard format.
+
+The callback function name for this endpoint is `deviceSeen`.
+
+The endpoint for this event is `/api/v1/events/devices/{uuid}`, where {uuid} is a valid device which
+exists in the OTA+ system.

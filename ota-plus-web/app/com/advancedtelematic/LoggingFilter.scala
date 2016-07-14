@@ -3,6 +3,7 @@ package com.advancedtelematic
 import javax.inject.Inject
 
 import com.advancedtelematic.api.RemoteApiError
+import _root_.akka.stream.Materializer
 import play.api.Logger
 import play.api.mvc.{Filter, RequestHeader, Result}
 import _root_.akka.stream.Materializer
