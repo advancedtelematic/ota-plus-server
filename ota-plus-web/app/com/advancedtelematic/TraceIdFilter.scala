@@ -3,8 +3,9 @@ package com.advancedtelematic
 import javax.inject.Inject
 
 import _root_.akka.stream.Materializer
-import com.advancedtelematic.ota.common.TraceId
+import org.genivi.sota.http.TraceId
 import play.api.mvc.{Filter, RequestHeader, Result}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 

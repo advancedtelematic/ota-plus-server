@@ -2,6 +2,7 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       Link = Router.Link,
+      IndexLink = Router.IndexLink,
       LanguageSelector = require('./translation/language-selector'),
       Translate = require('./translation/translate'),
       Profile = require('./profile'),
@@ -38,6 +39,12 @@ define(function(require) {
           <div className="container">
             <div className="navbar-header">
               <Link to="/" className="navbar-brand"><img src="/assets/img/atslogo.png" id="logo" alt=""/></Link>
+            </div>
+            <div id="navbar" className="pull-left">
+              <ul className="nav navbar-nav">
+                <li><IndexLink to="/" activeClassName="active">Devices</IndexLink></li>
+                <li><Link to="/packages" activeClassName="active">Packages</Link></li>
+              </ul>
             </div>
             <ul className="right-nav pull-right">
               <li>
