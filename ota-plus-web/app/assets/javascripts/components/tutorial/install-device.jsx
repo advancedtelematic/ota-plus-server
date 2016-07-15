@@ -25,6 +25,7 @@ define(function(require) {
       this.setState({isSecondInfoShown: !this.state.isSecondInfoShown}); 
     }
     render() {
+      console.log(this.props);
       return (
         <div id="tutorial-install-device" className="tutorial-overlay">
           <div className="pull-left width-full">
@@ -52,12 +53,12 @@ define(function(require) {
                           <a href={"/api/v1/client/" + this.props.deviceId + "/deb/32"} className="btn btn-orange" target="_blank">intel32</a>
                         </td>
                         <td>
-                          <a href={"/api/v1/client/" + this.props.deviceId + "/deb/64"} className="btn btn-orange" target="_blank">intel64</a>
+                          <a href={"/api/v1/client/" + this.props.deviceId + "/rpm/32"} className="btn btn-orange" target="_blank">intel32</a>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <a href={"/api/v1/client/" + this.props.deviceId + "/rpm/32"} className="btn btn-orange" target="_blank">intel32</a>
+                          <a href={"/api/v1/client/" + this.props.deviceId + "/deb/64"} className="btn btn-orange" target="_blank">intel64</a>
                         </td>
                         <td>
                           <a href={"/api/v1/client/" + this.props.deviceId + "/rpm/64"} className="btn btn-orange" target="_blank">intel64</a>
