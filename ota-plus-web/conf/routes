@@ -22,9 +22,6 @@ PUT     /api/v1/*path                           org.genivi.webserver.controllers
 POST    /api/v1/*path                           org.genivi.webserver.controllers.Application.apiProxy(path: String)
 DELETE  /api/v1/*path                           org.genivi.webserver.controllers.Application.apiProxy(path: String)
 
-GET     /signup/:token                          com.advancedtelematic.signup.SignupController.checkInvitation(token: String)
-POST    /signup/:token                          com.advancedtelematic.signup.SignupController.setPassword(token: String)
-
 GET     /login                                  com.advancedtelematic.login.LoginController.login
 GET     /logout                                 com.advancedtelematic.login.LoginController.logout
 GET     /callback                               com.advancedtelematic.login.LoginController.callback(code: Option[String])
@@ -32,3 +29,6 @@ GET     /callback                               com.advancedtelematic.login.Logi
 GET     /health                                 com.advancedtelematic.HealthController.health
 GET     /health/version                         com.advancedtelematic.HealthController.version
 
+# User profile
+GET     /user/profile                           com.advancedtelematic.user.UserProfileController.getUserProfile
+PUT     /user/profile                           com.advancedtelematic.user.UserProfileController.updateUserProfile
