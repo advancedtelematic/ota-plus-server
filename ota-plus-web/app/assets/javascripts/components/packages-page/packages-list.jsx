@@ -80,7 +80,7 @@ define(function(require) {
     }
     onDrop(files) {
       this.setState({
-        files: files
+        files: files,
       });
       
       this.props.openForm();
@@ -237,12 +237,12 @@ define(function(require) {
               <Loader />
             : undefined}
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-            {this.state.showForm ?
-              <AddPackage
-                files={this.state.files}
-                closeForm={this.props.closeForm}
-                key="add-package"/>
-            : null}
+              {this.state.showForm ?
+                <AddPackage
+                  files={this.state.files}
+                  closeForm={this.props.closeForm}
+                  key="add-package"/>
+              : null}
             </VelocityTransitionGroup>
           </div>
         </div>
