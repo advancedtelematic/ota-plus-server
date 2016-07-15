@@ -43,16 +43,12 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
       code <- codeOpt
     } yield {
       // Get the token
-      getToken(code).flatMap {
+      getToken(code).map {
         case (idToken, accessToken) =>
-          // Get the user
-          getUser(accessToken).map { user =>
-            Redirect(org.genivi.webserver.controllers.routes.Application.index()).withSession(
-                "id_token"     -> idToken,
-                "access_token" -> accessToken
-            )
-          }
-
+          Redirect(org.genivi.webserver.controllers.routes.Application.index()).withSession(
+              "id_token"     -> idToken,
+              "access_token" -> accessToken
+          )
       }.recover {
         case ex: IllegalStateException => Unauthorized(ex.getMessage)
       }
@@ -83,14 +79,6 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
     }
   }
 
-  def getUser(accessToken: String): Future[JsValue] = {
-    val userResponse = wSClient
-      .url(String.format("https://%s/userinfo", auth0Config.domain))
-      .withQueryString("access_token" -> accessToken)
-      .get()
-
-    userResponse.flatMap(response => Future.successful(response.json))
-  }
 }
 
 case class Auth0Config(secret: String, clientId: String, callbackURL: String, domain: String)
