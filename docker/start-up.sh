@@ -52,6 +52,7 @@ docker run \
   -e RESOLVER_DB_MIGRATE='true' \
   -e PACKAGES_VERSION_FORMAT='.+' \
   -e rootLevel='DEBUG' \
+  -e AUTH_PROTOCOL=${AUTH_PROTOCOL-'oauth.idtoken'} \
   advancedtelematic/sota-resolver:$RESOLVER_DOCKER_TAG
 
 DEVICE_REGISTRY_DOCKER_TAG=${DEVICE_REGISTRY_TAG-latest}
@@ -66,6 +67,7 @@ docker run \
   -e HOST='0.0.0.0' \
   -e DEVICE_REGISTRY_DB_URL='jdbc:mariadb://db:3306/sota_device_registry' \
   -e DEVICE_REGISTRY_DB_MIGRATE='true' \
+  -e AUTH_PROTOCOL=${AUTH_PROTOCOL-'oauth.idtoken'} \
   advancedtelematic/sota-device_registry:$DEVICE_REGISTRY_DOCKER_TAG
 
 CORE_DOCKER_TAG=${CORE_TAG-latest}
@@ -88,6 +90,7 @@ docker run \
   -e PACKAGES_VERSION_FORMAT='.+' \
   -e rootLevel='DEBUG' \
   -e MESSAGING_MODE='test' \
+  -e AUTH_PROTOCOL=${AUTH_PROTOCOL-'oauth.idtoken'} \
   advancedtelematic/sota-core:$CORE_DOCKER_TAG
 
 echo 'Creating user: demo@advancedtelematic.com password: demo'
