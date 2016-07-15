@@ -118,7 +118,8 @@ class Application @Inject() (ws: WSClient,
   }
 
   private def addBearerToken[R](request: Request[R], wsRequest: WSRequest): WSRequest = {
-    request.session.get("access_token") match {
+    // TODO: Switch back to access_token after https://advancedtelematic.atlassian.net/browse/PRO-858
+    request.session.get("id_token") match {
       case Some(t) => wsRequest.withHeaders(("Authorization", "Bearer " + t))
       case None => wsRequest
     }
