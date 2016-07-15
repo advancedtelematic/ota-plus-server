@@ -118,7 +118,9 @@ define(function(require) {
         productionDevicesCount = this.state.filterValue.length > 0 ? this.state.filterValue.length == 16 ? 25 : Math.round(totalProductionDevicesCount / (this.state.filterValue.length * 3499)) : totalProductionDevicesCount;
       }
       
-      var areTestSettingsCorrect = localStorage.getItem('firstProductionTestDevice') !== '' && localStorage.getItem('secondProductionTestDevice') !== '' && localStorage.getItem('thirdProductionTestDevice') !== '' ? true : false;
+      var areTestSettingsCorrect = localStorage.getItem('firstProductionTestDevice') && localStorage.getItem('firstProductionTestDevice') !== '' && 
+                                   localStorage.getItem('secondProductionTestDevice') && localStorage.getItem('secondProductionTestDevice') !== '' && 
+                                   localStorage.getItem('thirdProductionTestDevice') && localStorage.getItem('thirdProductionTestDevice') !== '' ? true : false;
       
       if(!_.isUndefined(Devices)) {
         SortedDevices = [];
