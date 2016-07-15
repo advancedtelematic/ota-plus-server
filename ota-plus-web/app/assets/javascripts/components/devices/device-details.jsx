@@ -122,7 +122,7 @@ define(function(require) {
         <div>
           {!_.isUndefined(deviceWithStatus) && deviceWithStatus.status == "NotSeen" ?
             <div className="lightgrey-overlay">
-              <TutorialInstallDevice deviceId={this.props.params.id}/>
+              <TutorialInstallDevice deviceId={deviceWithStatus.id}/>
             </div>
           : null}
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
