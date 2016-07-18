@@ -4,7 +4,8 @@ define(function(require) {
       db = require('../stores/db'),
       errors = require('./errors'),
       devicesHandler = require('./devices'),
-      packagesHandler = require('./packages');
+      packagesHandler = require('./packages'),
+      userHandler = require('./user');
 
   var Handler = (function() {
       this.dispatchCallback = function(payload) {

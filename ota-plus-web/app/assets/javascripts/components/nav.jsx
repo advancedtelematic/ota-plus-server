@@ -3,6 +3,7 @@ define(function(require) {
       Router = require('react-router'),
       Link = Router.Link,
       IndexLink = Router.IndexLink,
+      SotaDispatcher = require('sota-dispatcher'),
       LanguageSelector = require('./translation/language-selector'),
       Translate = require('./translation/translate'),
       Profile = require('./profile'),
@@ -19,6 +20,7 @@ define(function(require) {
       this.toggleDropdown = this.toggleDropdown.bind(this);
     }
     componentDidMount() {
+      SotaDispatcher.dispatch({actionType: 'get-user'});
       jQuery('.dropdown').on('hide.bs.dropdown', function () {
         return false;
       });
