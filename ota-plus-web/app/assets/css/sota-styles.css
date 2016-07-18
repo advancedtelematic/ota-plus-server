@@ -402,7 +402,10 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 /* Profile */
 .user-form { width: 100%; float: left; }
 
+.profile-icon { width: 50px; height: 50px; border-radius: 25px; }
+
 .dropdown-profile { min-width: 330px; padding: 20px 20px 11px 20px; border-radius: 0; top: 122%; }
+.dropdown-profile .loader { color: #888; }
 .dropdown-profile a { color: #888; text-decoration: none; }
 .dropdown-profile hr { width: 100%; margin: 13px 0; border-color: #ccc; float: left; }
 .dropdown-profile .input-username { color: #66493E; font-size: 16px; text-align: center; width: 150px; padding: 0; border: 0; }

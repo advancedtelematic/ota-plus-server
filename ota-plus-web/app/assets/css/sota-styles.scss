@@ -1407,6 +1407,9 @@ a.close, button.close {
 }
 
 .profile-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
 }
 
 .dropdown-profile {
@@ -1415,6 +1418,10 @@ a.close, button.close {
     border-radius: 0;
     top: 122%;
 
+    .loader {
+        color: #888;
+    }
+    
     a {
         color: #888;
         text-decoration: none;
