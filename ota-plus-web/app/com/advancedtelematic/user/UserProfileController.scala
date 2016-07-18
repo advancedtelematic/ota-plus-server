@@ -60,7 +60,7 @@ class UserProfileController @Inject()(conf: Configuration, wsClient: WSClient)(i
   private[this] def userIdFromToken(idToken: IdToken): String Xor UserId = {
     for {
       cs    <- CompactSerialization.parse(idToken.token)
-      idStr <- (Json.parse(cs.encodedPayload.underlying) \ "sub").validate[String].toXor
+      idStr <- (Json.parse(cs.encodedPayload.stringData()) \ "sub").validate[String].toXor
     } yield UserId(idStr)
   }
 
@@ -70,9 +70,9 @@ class UserProfileController @Inject()(conf: Configuration, wsClient: WSClient)(i
       userId  <- userIdFromToken(request.idToken)
     } yield
       wsClient
-        .url(s"https://${auth0Config.domain}/api/v2/users/$userId")
+        .url(s"https://${auth0Config.domain}/api/v2/users/${userId.id}")
         .withHeaders("Authorization" -> s"Bearer $ManagementAccessToken")
-        .withBody(Json.obj("name"    -> newName))
+        .withBody(Json.obj("user_metadata" -> Json.obj("name"    -> newName)))
         .withMethod("PATCH")
 
     errorOrRequest match {
