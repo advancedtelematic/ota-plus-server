@@ -9,10 +9,13 @@ define(function(require) {
     var url = '/api/v1/packages/' + payload.package.name + '/' + payload.package.version +
       '?description=' + encodeURIComponent(payload.package.description) +
       '&vendor=' + encodeURIComponent(payload.package.vendor);
-    sendRequest.doPut(url, payload.data, {form: true})
+    sendRequest.doPut(url, payload.data, {form: true, 'action': payload.actionType})
       .success(function() {
-        SotaDispatcher.dispatch({actionType: 'get-packages'});
-        SotaDispatcher.dispatch({actionType: 'search-packages-by-regex'});
+        checkExists('/api/v1/packages/' + payload.package.name + '/' + payload.package.version,
+          "Package", function() {
+            SotaDispatcher.dispatch({actionType: 'get-packages'});
+            SotaDispatcher.dispatch({actionType: 'search-packages-by-regex'});
+        }, payload.actionType, true);
       });
   };
 
@@ -37,7 +40,7 @@ define(function(require) {
             checkExists('/api/v1/packages/' + payload.package.name + '/' + payload.package.version,
               "Package", function() {
                 createPackage(payload);
-              });
+              }, payload.actionType);
           break;
           case 'search-packages-by-regex':
             var query = payload.regex ? '?regex=' + payload.regex : '';
