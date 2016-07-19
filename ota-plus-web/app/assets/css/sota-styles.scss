@@ -1595,7 +1595,8 @@ a.close, button.close {
     top: 22px;
     float: right;
     box-shadow: 0 3px 15px rgba(0, 0, 0, 0.5);
-
+    right: -150px;
+    
     .logo {
         width: 50px;
         margin-right: 20px;
@@ -1604,7 +1605,6 @@ a.close, button.close {
 
     @media (min-width: 1570px) {
         top: 55px;
-        right: -150px;
     }
 }
 
