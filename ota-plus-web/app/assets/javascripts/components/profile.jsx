@@ -2,7 +2,10 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       Link = Router.Link,
-      SotaDispatcher = require('sota-dispatcher');
+      db = require('stores/db'),
+      SotaDispatcher = require('sota-dispatcher'),
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
+      Loader = require('./loader');
 
   class Profile extends React.Component {
     constructor(props) {
@@ -11,11 +14,29 @@ define(function(require) {
         showEditField: false,
         showEditButton: false,
         usernameFieldLength: 0,
-        username: 'Username',
+        username: null,
+        email: null,
+        picture: null
       };
+      this.setData = this.setData.bind(this);
       this.toggleEditField = this.toggleEditField.bind(this);
       this.changeUsernameFieldLength = this.changeUsernameFieldLength.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+      
+      db.user.addWatch("poll-user", _.bind(this.setData, this, null));
+    }
+    componentDidMount() {
+      this.setData();
+    }
+    componentWillUnmount() {
+      db.user.removeWatch("poll-user");
+    }
+    setData() {
+      this.setState({
+        username: !_.isUndefined(db.user.deref()) ? db.user.deref().fullName : null,
+        email: !_.isUndefined(db.user.deref()) ? db.user.deref().email : null,
+        picture: !_.isUndefined(db.user.deref()) ? db.user.deref().picture : null
+      });
     }
     toggleEditField(e) {
      if(e !== undefined)
@@ -38,54 +59,72 @@ define(function(require) {
     }
     handleSubmit(e) {
       e.preventDefault();
-      this.setState({
-        username: this.refs.username.value
+      var data = {};
+      data.name = this.refs.username.value;
+      
+      SotaDispatcher.dispatch({
+        actionType: 'update-user',
+        data: data
       });
+      
       this.toggleEditField();
     }
-    render() {
+    render() {        
       return (
         <div className="dropdown-menu dropdown-profile dropdown-right">
           <form className="user-form" ref="userForm">
-            <div className="width-100 text-center pull-left">
-              <img src="/assets/img/icons/profile_icon_big.png" className="profile-icon" alt="" />
-            </div>
-            <div className="width-100 text-center margin-top-10 pull-left">
-            {this.state.showEditField ?
-              <div>
-                <input className="input-username" name="username" type="text" placeholder={this.state.username} ref="username" onKeyUp={this.changeUsernameFieldLength}/>
-                
-                {this.state.usernameFieldLength > 0 ?
-                  <div className="pull-right">
-                    <a href="#" className="accept-button" onClick={this.handleSubmit}>
-                      <img src="/assets/img/icons/accept_icon.png" alt="" />
-                    </a>
-                    &nbsp;
-                    <a href="#" className="cancel-button" onClick={this.toggleEditField}>
-                      <img src="/assets/img/icons/close_icon.png" alt="" />
-                    </a>
+            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+              {!_.isUndefined(db.user.deref()) ?
+                <div>
+                  <div className="width-100 text-center pull-left">
+                    {this.state.picture ? 
+                      <img src={this.state.picture} className="profile-icon" alt="" />
+                    :
+                      <img src="/assets/img/icons/profile_icon_big.png" className="profile-icon" alt="" />
+                    }
                   </div>
-                :
-                  <a href="#" className="pencil-button pencil-button-edit pull-right" onClick={this.toggleEditField}>
-                    <img src="/assets/img/icons/edit_icon.png" alt="" />
-                  </a>      
-                }
-              </div>
-            : 
-              <div onMouseEnter={this.toggleEditButton.bind(this, true)} onMouseLeave={this.toggleEditButton.bind(this, false)}>
-                <strong><span className="username">{this.state.username}</span></strong>
-                {this.state.showEditButton ? 
-                  <a href="#" className="pencil-button pull-right" onClick={this.toggleEditField}>
-                    <img src="/assets/img/icons/edit_icon.png" alt="" />
-                  </a>
-                : null}
-              </div>
-            }
-            <div>
-              <span className="email">email@address.com</span>
-            </div>
-            </div>
+                  <div className="width-100 text-center margin-top-10 pull-left">
+                    {this.state.showEditField ?
+                      <div>
+                        <input className="input-username" name="username" type="text" placeholder={this.state.username} ref="username" onKeyUp={this.changeUsernameFieldLength}/>
+                        {this.state.usernameFieldLength > 0 ?
+                          <div className="pull-right">
+                            <a href="#" className="accept-button" onClick={this.handleSubmit}>
+                              <img src="/assets/img/icons/accept_icon.png" alt="" />
+                            </a>
+                            &nbsp;
+                            <a href="#" className="cancel-button" onClick={this.toggleEditField}>
+                              <img src="/assets/img/icons/close_icon.png" alt="" />
+                            </a>
+                          </div>
+                        :
+                          <a href="#" className="pencil-button pencil-button-edit pull-right" onClick={this.toggleEditField}>
+                            <img src="/assets/img/icons/edit_icon.png" alt="" />
+                          </a>      
+                        }
+                      </div>
+                    : 
+                      <div onMouseEnter={this.toggleEditButton.bind(this, true)} onMouseLeave={this.toggleEditButton.bind(this, false)}>
+                        <strong><span className="username">{this.state.username}</span></strong>
+                        {this.state.showEditButton ? 
+                          <a href="#" className="pencil-button pull-right" onClick={this.toggleEditField}>
+                            <img src="/assets/img/icons/edit_icon.png" alt="" />
+                          </a>
+                        : null}
+                      </div>
+                    }
+                    <div>
+                      <span className="email">{this.state.email}</span>
+                    </div>
+                  </div>
+                </div>
+              : undefined}
+            </VelocityTransitionGroup>
           </form>
+            
+          {_.isUndefined(db.user.deref()) ?
+            <Loader />
+          : undefined}
           <hr />
           
           <div className="profile-links">
