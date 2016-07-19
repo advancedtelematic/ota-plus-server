@@ -1,5 +1,6 @@
 package org.genivi.webserver.controllers
 
+import com.advancedtelematic.{AuthenticatedApiAction, AuthenticatedRequest}
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.ota.device.Devices._
@@ -33,36 +34,28 @@ extends Controller with ApiClientSupport {
 
   private[this] object NoSuchVinRegistered extends Throwable with NoStackTrace
 
-  def create(): Action[DeviceT] = Action.async(parse.json[DeviceT]) { req =>
+  def create(): Action[DeviceT] = AuthenticatedApiAction.async(parse.json[DeviceT]) { req =>
     requestCreate(req.body, userOptions(req))
   }
 
-  def listDeviceAttributes(): Action[RawBuffer] = Action.async(parse.raw) { req =>
+  def listDeviceAttributes(): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
     searchWith(req, coreApi.search)
   }
 
-  def search(): Action[RawBuffer] = Action.async(parse.raw) { req =>
+  def search(): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
     searchWith(req, devicesApi.search)
   }
 
-  def get(id: Device.Id): Action[RawBuffer] = Action.async(parse.raw) { req =>
+  def get(id: Device.Id): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
     val options = userOptions(req)
     devicesApi.getDevice(options, id)
   }
 
-  private[this] def userOptions(req: Request[_]): UserOptions = {
+  private[this] def userOptions(req: AuthenticatedRequest[_]): UserOptions = {
     val traceId = req.headers.get("x-ats-traceid")
-    // TODO: Switch back to access_token after https://advancedtelematic.atlassian.net/browse/PRO-858
-    val token = req.session.get("id_token").orElse(bearerToken(req))
     val namespace = req.session.get("username").flatMap(u => refineV[Uri](u).right.toOption)
-    UserOptions(token, traceId, namespace)
-  }
-
-  private[this] def bearerToken(req: Request[_]): Option[String] = {
-    for {
-      authHeader <- req.headers.get("Authorization")
-      bearer <- Try(authHeader.split("Bearer ").last).toOption
-    } yield bearer
+    // TODO: Switch back to access_token after https://advancedtelematic.atlassian.net/browse/PRO-858
+    UserOptions(Some(req.idToken.token), traceId, namespace)
   }
 
   /**
@@ -84,7 +77,7 @@ extends Controller with ApiClientSupport {
   }
 
   private def searchWith[R]
-  (req: Request[_], apiSearch: (UserOptions, Seq[(String, String)]) => Future[R]): Future[R] = {
+  (req: AuthenticatedRequest[_], apiSearch: (UserOptions, Seq[(String, String)]) => Future[R]): Future[R] = {
     val params = req.queryString.mapValues(_.head).toSeq
     apiSearch(userOptions(req), params)
   }
@@ -105,7 +98,7 @@ extends Controller with ApiClientSupport {
     * Contact Auth+ to fetch the ClientInfo for the given device.
     */
   def fetchClientInfo(deviceId: Device.Id) : Action[AnyContent] =
-    Action.async { implicit request =>
+    AuthenticatedApiAction.async { implicit request =>
       val fut = for (
         vMetadataOpt <- vehiclesStore.getVehicle(deviceId);
         vMetadata <- vMetadataOpt match {
