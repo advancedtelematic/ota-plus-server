@@ -1,34 +1,48 @@
 define(function(require) {
   var React = require('react'),
+      db = require('stores/db'),
       serializeForm = require('../../mixins/serialize-form'),
       SotaDispatcher = require('sota-dispatcher');
   
   class AddPackage extends React.Component {
     constructor(props) {
       super(props);
+      this.state = {
+        showProgressBar: false,
+        uploadProgress: 0
+      };
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.setProgress = this.setProgress.bind(this);
+      db.postProgress.addWatch("poll-progress", _.bind(this.setProgress, this, null));
     }
-  
+    componentWillUnmount() {
+      db.postProgress.removeWatch("poll-progress");
+    }
     handleSubmit(e) {
       e.preventDefault();
+            
       var payload = serializeForm(this.refs.form);
       payload.id = {name: payload.name, version: payload.version};
       var data = new FormData();
       
-      var file = this.props.files[0];
-      if($('.file-upload')[0].files[0]) {
+      var file = this.props.files && !_.isUndefined(this.props.files[0]) ? this.props.files[0] : undefined;
+      if(!_.isUndefined($('.file-upload')[0]) && !_.isUndefined($('.file-upload')[0].files) && !_.isUndefined($('.file-upload')[0].files[0])) {
         file = $('.file-upload')[0].files[0];
       }
-      
+
       data.append('file', file);
       SotaDispatcher.dispatch({
         actionType: 'create-package',
         package: payload,
         data: data
       });
-      this.props.closeForm();
+//      this.props.closeForm();
+    }
+    setProgress() {
+      this.setState({uploadProgress: db.postProgress.deref()['create-package']});
     }
     render() {
+      var uploadProgress = this.state.uploadProgress ? this.state.uploadProgress : null;
       return (
         <div id="modal-new-campaign" className="myModal">
           <div className="modal-dialog">
@@ -39,6 +53,11 @@ define(function(require) {
               </div>
               <div className="modal-body">
                 <form ref='form' onSubmit={this.handleSubmit} encType="multipart/form-data">
+                  {db.postStatus.deref()['create-package'] ?
+                    <div className="alert alert-danger">
+                      {db.postStatus.deref()['create-package']}
+                    </div>
+                  : null}
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-group">
@@ -77,6 +96,11 @@ define(function(require) {
                           <input type="file" className="file-upload" name="file" />
                         }
                       </div>
+                      {uploadProgress && uploadProgress < 100 ? 
+                        <div className="progress">
+                          <div id="progressBar" className="progress-bar" role="progressbar" style={{width: uploadProgress + '%'}}></div>
+                        </div>
+                      : null}
                     </div>
                   </div>
                   <div className="row">
