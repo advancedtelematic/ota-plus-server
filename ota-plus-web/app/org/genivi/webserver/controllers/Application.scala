@@ -8,7 +8,7 @@ package org.genivi.webserver.controllers
 import javax.inject.{Inject, Named, Singleton}
 
 import com.advancedtelematic.ota.vehicle.Vehicles
-import com.advancedtelematic.AuthenticatedAction
+import com.advancedtelematic.{AuthenticatedAction, AuthenticatedApiAction, AuthenticatedRequest}
 import org.slf4j.LoggerFactory
 import play.api._
 import play.api.http.HttpEntity
@@ -76,7 +76,7 @@ class Application @Inject() (ws: WSClient,
    * @param req request to proxy
    * @return The proxied request
    */
-  private def proxyTo(apiUri: String, req: Request[RawBuffer]) : Future[Result] = {
+  private def proxyTo(apiUri: String, req: AuthenticatedRequest[RawBuffer]) : Future[Result] = {
     def toWsHeaders(hdrs0: Headers): Map[String, String] = {
       // destination for the outgoing request, including port
       val dest = {
@@ -95,15 +95,15 @@ class Application @Inject() (ws: WSClient,
       .withMethod(req.method)
       .withQueryString(req.queryString.mapValues(_.head).toSeq :_*)
       .withHeaders(toWsHeaders(req.headers).toSeq :_*)
+      .withHeaders(("Authorization", "Bearer " + req.idToken.token))
+      // TODO: Switch back to access_token after https://advancedtelematic.atlassian.net/browse/PRO-858
 
     val wreq = req.body.asBytes() match {
       case Some(b) => w.withBody(b)
       case None => w.withBody(FileBody(req.body.asFile))
     }
 
-    val authorizedWReq = addBearerToken(req, wreq)
-
-    authorizedWReq.stream().map { resp =>
+    wreq.stream().map { resp =>
       val rStatus = resp.headers.status
       val rHeaders = resp.headers
         .headers
@@ -117,21 +117,13 @@ class Application @Inject() (ws: WSClient,
     }
   }
 
-  private def addBearerToken[R](request: Request[R], wsRequest: WSRequest): WSRequest = {
-    // TODO: Switch back to access_token after https://advancedtelematic.atlassian.net/browse/PRO-858
-    request.session.get("id_token") match {
-      case Some(t) => wsRequest.withHeaders(("Authorization", "Bearer " + t))
-      case None => wsRequest
-    }
-  }
-
   /**
    * Controller method delegating to the Core and to the Resolver APIs.
    *
    * @param path Path of the request
    * @return
    */
-  def apiProxy(path: String) : Action[RawBuffer] = Action.async(parse.raw) { req =>
+  def apiProxy(path: String) : Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
     apiByPath(path) match {
       case Some(p) => proxyTo(p, req)
       case None => Future.successful(NotFound("Could not proxy request to requested path"))

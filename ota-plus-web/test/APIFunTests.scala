@@ -24,6 +24,7 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.ws.{WS, WSClient, WSResponse}
 import play.api.test.Helpers._
+import play.api.mvc.{Cookies, Session}
 
 import scala.util.Random
 
@@ -78,7 +79,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   def makeRequest(path: String, method: Method) : WSResponse = {
     val req =
       wsClient.url(s"http://$webserverHost:$port/api/v1/" + path)
-        .withHeaders("Authorization" -> s"Bearer $oauthToken")
+        .withHeaders("Cookie" -> makeSessionCookie())
 
     method match {
       case PUT => await(req.put(""))
@@ -91,7 +92,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   def makeJsonRequest(path: String,  method: Method, data: JsObject) : WSResponse = {
     val req = wsClient
       .url(s"http://$webserverHost:$port/api/v1/" + path)
-      .withHeaders("Authorization" -> s"Bearer $oauthToken")
+      .withHeaders("Cookie" -> makeSessionCookie())
 
     method match {
       case PUT => await(req.put(data))
@@ -99,6 +100,11 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
       case _ => throw new InvalidParameterException("POST is not supported by this method")
     }
   }
+
+  def makeCookie(session: (String, String)*) =
+    Cookies.encodeCookieHeader(Seq(Session.encodeAsCookie(Session(session.toMap))))
+
+  def makeSessionCookie() = makeCookie("id_token" -> oauthToken, "access_token" -> oauthToken)
 
   lazy val namespace = Subject("ittests@ats.com")
 
@@ -132,7 +138,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     val putBuilder = asyncHttpClient
         .preparePut(s"http://$webserverHost:$port/api/v1/packages/$packageName/" +
           packageVersion + "?description=test&vendor=ACME")
-      .addHeader("Authorization", s"Bearer $oauthToken")
+      .addHeader("Cookie", makeSessionCookie())
     val builder = {
       val tmpFile = {
         val fileName = java.util.UUID.randomUUID().toString
