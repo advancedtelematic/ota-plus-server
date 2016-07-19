@@ -22,9 +22,10 @@ final case class UserId(id: String) extends AnyVal
 
 object UserProfile {
 
-  val FromUserInfoReads: Reads[UserProfile] = ((__ \ "name").read[String] and
-        (__ \ "email").read[String] and
-        (__ \ "picture").read[String])(UserProfile.apply _)
+  val FromUserInfoReads: Reads[UserProfile] =
+    (((__ \ "user_metadata" \ "name").read[String] | (__ \ "name").read[String]) and
+          (__ \ "email").read[String] and
+          (__ \ "picture").read[String])(UserProfile.apply _)
 
   implicit val FormatInstance: Format[UserProfile] = Json.format[UserProfile]
 }
@@ -71,8 +72,8 @@ class UserProfileController @Inject()(conf: Configuration, wsClient: WSClient)(i
     } yield
       wsClient
         .url(s"https://${auth0Config.domain}/api/v2/users/${userId.id}")
-        .withHeaders("Authorization" -> s"Bearer $ManagementAccessToken")
-        .withBody(Json.obj("user_metadata" -> Json.obj("name"    -> newName)))
+        .withHeaders("Authorization"       -> s"Bearer $ManagementAccessToken")
+        .withBody(Json.obj("user_metadata" -> Json.obj("name" -> newName)))
         .withMethod("PATCH")
 
     errorOrRequest match {
