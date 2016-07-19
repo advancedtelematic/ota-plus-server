@@ -17,6 +17,8 @@ define(function(require) {
       this.searchableProductionDevices = atom.createAtom([]);
       this.installationLogForDevice = atom.createAtom();
       this.installationLogForUpdateId = atom.createAtom();
+      
+      this.user = atom.createAtom();
     }
 
     return DB;
