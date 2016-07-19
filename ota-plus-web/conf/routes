@@ -24,7 +24,9 @@ DELETE  /api/v1/*path                           org.genivi.webserver.controllers
 
 GET     /login                                  com.advancedtelematic.login.LoginController.login
 GET     /logout                                 com.advancedtelematic.login.LoginController.logout
-GET     /callback                               com.advancedtelematic.login.LoginController.callback(code: Option[String])
+GET     /callback                               com.advancedtelematic.login.LoginController.authorizationFailed(error: String, error_description: String)
+GET     /callback                               com.advancedtelematic.login.LoginController.callback(code: String)
+GET     /closed_beta                            com.advancedtelematic.login.LoginController.closedBeta
 
 GET     /health                                 com.advancedtelematic.HealthController.health
 GET     /health/version                         com.advancedtelematic.HealthController.version

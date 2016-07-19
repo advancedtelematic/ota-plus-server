@@ -49,7 +49,7 @@ class LoginSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAll {
 
     "set session token" in {
       val req    = FakeRequest("POST", "/?code=AUTHORIZATIONCODE")
-      val result = controller.callback(Some("AUTHORIZATIONCODE"))()(req)
+      val result = controller.callback("AUTHORIZATIONCODE")()(req)
       status(result) mustBe SEE_OTHER
       // redirects to login page on correct user data:
       redirectLocation(result) mustBe Some("/")

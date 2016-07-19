@@ -38,21 +38,29 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
     Redirect(org.genivi.webserver.controllers.routes.Application.index()).withNewSession
   }
 
-  def callback(codeOpt: Option[String] = None): Action[AnyContent] = Action.async {
-    (for {
-      code <- codeOpt
-    } yield {
-      // Get the token
-      getToken(code).map {
-        case (idToken, accessToken) =>
-          Redirect(org.genivi.webserver.controllers.routes.Application.index()).withSession(
-              "id_token"     -> idToken,
-              "access_token" -> accessToken
-          )
-      }.recover {
-        case ex: IllegalStateException => Unauthorized(ex.getMessage)
-      }
-    }).getOrElse(Future.successful(BadRequest("No parameters supplied")))
+  val closedBeta: Action[AnyContent] = Action {
+    Ok(views.html.closedBeta())
+  }
+
+  def authorizationFailed(error: String, errorDescription: String): Action[AnyContent] = Action {
+    if (errorDescription == "closed.beta") {
+      Redirect(routes.LoginController.closedBeta())
+    } else {
+      Redirect(routes.LoginController.login())
+    }
+  }
+
+  def callback(code: String): Action[AnyContent] = Action.async {
+    // Get the token
+    getToken(code).map {
+      case (idToken, accessToken) =>
+        Redirect(org.genivi.webserver.controllers.routes.Application.index()).withSession(
+            "id_token"     -> idToken,
+            "access_token" -> accessToken
+        )
+    }.recover {
+      case ex: IllegalStateException => Unauthorized(ex.getMessage)
+    }
   }
 
   def getToken(code: String): Future[(String, String)] = {
