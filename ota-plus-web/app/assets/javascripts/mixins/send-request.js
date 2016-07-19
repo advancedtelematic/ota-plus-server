@@ -1,9 +1,9 @@
-define(['jquery', 'underscore'], function($, _) {
+define(['jquery', 'underscore', '../stores/db'], function($, _, db) {
   var sendRequest = {
     send: function(type, url, data, opts) {
       opts = opts || {};
       if (opts.form) {
-        return this.formMultipart(type, url, data);
+        return this.formMultipart(type, url, data, opts);
       } else {
         return this.jsonAjax(type, url, data, opts);
       }
@@ -17,14 +17,25 @@ define(['jquery', 'underscore'], function($, _) {
         contentType: "application/json"
       }, opts));
     },
-    formMultipart: function(type, url, data) {
+    formMultipart: function(type, url, data, opts) {
+      var postProgress = (db.postProgress.deref() !== null && typeof db.postProgress.deref() === 'object') ? db.postProgress.deref() : {};
       return $.ajax({
         type: type,
         url: url,
         cache: false,
         contentType: false,
         processData: false,
-        data: data
+        data: data,
+        xhr: function() {
+          var myXhr = $.ajaxSettings.xhr();
+          if(myXhr.upload) {
+            myXhr.upload.addEventListener('progress',function(evt) {
+              postProgress[opts.action] = Math.round(evt.loaded / evt.total * 100);
+              db.postProgress.reset(postProgress);
+            }, false);
+          }
+          return myXhr;
+        }
       });
     },
     doGet: function(url, opts) {

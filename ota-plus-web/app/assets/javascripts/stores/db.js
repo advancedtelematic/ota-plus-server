@@ -13,6 +13,7 @@ define(function(require) {
       this.searchableDevices = atom.createAtom();
       this.searchablePackages = atom.createAtom();
       this.postStatus = atom.createAtom([]);
+      this.postProgress = atom.createAtom([]);
       
       this.searchableProductionDevices = atom.createAtom([]);
       this.installationLogForDevice = atom.createAtom();
