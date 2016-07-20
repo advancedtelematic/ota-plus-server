@@ -27,6 +27,7 @@
                     <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
                         <div class="ats-header text-center">
                             <p>Hi there, welcome back.</p>
+                            <div id="widget-container"></div>
                         </div>
                     </div>
                 </div>
@@ -59,7 +60,8 @@
                 var lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN);
 
                   lock.show({
-                    callbackURL: AUTH0_CALLBACK_URL
+                    callbackURL: AUTH0_CALLBACK_URL,
+                    container: 'widget-container'
                   });
             });
 
