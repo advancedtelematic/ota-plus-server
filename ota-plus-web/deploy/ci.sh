@@ -25,6 +25,8 @@ export AUTH0_CLIENT_SECRET="$(echo $VDATA | jq -r .data.auth0_client_secret)"
 export AUTH0_DOMAIN="$(echo $VDATA | jq -r .data.auth0_domain)"
 export AUTH0_CALLBACK_URL="$(echo $VDATA | jq -r .data.auth0_callback_url)"
 export AUTH0_USER_UPDATE_TOKEN="$(echo $VDATA | jq -r .data.auth0_user_update_token)"
+export WEB_AWS_ACCESS_KEY="$(echo $VDATA | jq -r .data.web_aws_access_key)"
+export WEB_AWS_SECRET_KEY="$(echo $VDATA | jq -r .data.web_aws_secret_key)"
 export port PORT="9000"
 
 REQ=$(envsubst < deploy/service.json)
