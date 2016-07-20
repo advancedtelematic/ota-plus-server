@@ -52,6 +52,7 @@ libraryDependencies ++= Seq (
     ws, Dependencies.MockWs,
     play.sbt.Play.autoImport.cache,
     Dependencies.SotaCommon,
+    Dependencies.SotaCommonMessaging,
     Dependencies.SotaCommonTest
   ) ++ Dependencies.JsonWebSecurity
 

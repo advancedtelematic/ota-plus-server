@@ -3,11 +3,9 @@ package com.advancedtelematic.api
 import java.util.UUID
 
 import com.advancedtelematic.api.ApiRequest.UserOptions
-import cats.Show
 import com.advancedtelematic.ota.device.Devices._
 import com.advancedtelematic.ota.vehicle.ClientInfo
-import org.genivi.sota.data.{Device, DeviceT}
-import org.genivi.sota.data.Namespace.Namespace
+import org.genivi.sota.data.{Device, DeviceT, Namespace}
 import org.genivi.webserver.controllers.OtaPlusConfig
 import play.api.Configuration
 import play.api.libs.json._

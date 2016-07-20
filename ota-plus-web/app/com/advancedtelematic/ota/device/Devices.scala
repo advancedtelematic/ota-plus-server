@@ -4,8 +4,8 @@ import cats.Show
 import eu.timepit.refined._
 import eu.timepit.refined.api.{Refined, Validate}
 import java.time.Instant
-import org.genivi.sota.data.{Device, DeviceT}
-import org.genivi.sota.data.Namespace.Namespace
+
+import org.genivi.sota.data.{Device, DeviceT, Namespace}
 import org.genivi.sota.marshalling.{DeserializationException, RefinementError}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
@@ -31,6 +31,8 @@ object Devices {
 
   implicit val deviceIdReads: Reads[DeviceId] = Reads.StringReads.map(r => DeviceId(r))
 
+  implicit val namespaceReads: Reads[Namespace] = Reads.StringReads.map(n => Namespace(n))
+
   implicit val DeviceTypeR: Reads[DeviceType.Value] = Reads.enumNameReads(Device.DeviceType)
 
   implicit val InstantR: Reads[Instant] = Reads[Instant] { js => Reads.DefaultDateReads.reads(js).map(_.toInstant) }
@@ -54,6 +56,8 @@ object Devices {
   implicit def showWrites[T, P](implicit ev: Show[T]): Writes[T] = Writes.StringWrites.contramap(p => ev.show(p))
 
   implicit val DeviceTypeW: Writes[DeviceType.Value] = Writes.enumNameWrites[Device.DeviceType.type]
+
+  implicit val namespaceWrites: Writes[Namespace] = Writes.StringWrites.contramap(n => n.toString)
 
   implicit val InstantW: Writes[Instant] = Writes.StringWrites.contramap(i => i.toString)
 
