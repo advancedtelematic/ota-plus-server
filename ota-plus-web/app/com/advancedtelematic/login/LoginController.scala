@@ -42,7 +42,7 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
     Ok(views.html.closedBeta())
   }
 
-  def authorizationFailed(error: String, errorDescription: String): Action[AnyContent] = Action {
+  def authorizationFailed(error: String, errorDescription: String): Result = {
     if (errorDescription == "closed.beta") {
       Redirect(routes.LoginController.closedBeta())
     } else {
@@ -50,17 +50,28 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
     }
   }
 
-  def callback(code: String): Action[AnyContent] = Action.async {
-    // Get the token
-    getToken(code).map {
-      case (idToken, accessToken) =>
-        Redirect(org.genivi.webserver.controllers.routes.Application.index()).withSession(
-            "id_token"     -> idToken,
-            "access_token" -> accessToken
-        )
-    }.recover {
-      case ex: IllegalStateException => Unauthorized(ex.getMessage)
-    }
+  val callback: Action[AnyContent] = Action.async { request =>
+    request.getQueryString("code")
+      .map[Future[Result]] { code =>
+        // Get the token
+        getToken(code).map {
+          case (idToken, accessToken) =>
+            Redirect(org.genivi.webserver.controllers.routes.Application.index()).withSession(
+                "id_token"     -> idToken,
+                "access_token" -> accessToken
+            )
+        }.recover {
+          case ex: IllegalStateException => Unauthorized(ex.getMessage)
+        }
+      }
+      .getOrElse {
+        val errorAndDescription: Option[(String, String)] = for {
+          error       <- request.getQueryString("error")
+          description <- request.getQueryString("error_description")
+        } yield (error, description)
+        Future.successful(
+            errorAndDescription.map((authorizationFailed _).tupled).getOrElse(BadRequest(Results.EmptyContent())))
+      }
   }
 
   def getToken(code: String): Future[(String, String)] = {
