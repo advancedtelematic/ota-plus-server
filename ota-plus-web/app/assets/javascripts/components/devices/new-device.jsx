@@ -31,9 +31,9 @@ define(function(require) {
     render() {
       return (
         <form ref='form' onSubmit={this.handleSubmit}>
-          {db.postStatus.deref()['create-vehicle'] ?
+          {db.postStatus.deref()['create-device'] ?
             <div className="alert alert-danger">
-              {db.postStatus.deref()['create-vehicle']}
+              {db.postStatus.deref()['create-device']}
             </div>
           : null}
           <div className="form-group">
