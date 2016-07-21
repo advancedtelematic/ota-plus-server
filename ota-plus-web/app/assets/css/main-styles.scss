@@ -303,10 +303,9 @@ body {
                     min-height: 0;
                 }
 
-                .a0-error {
+                .a0-error, .a0-success {
                     font: 400 17px Arial;
                     text-align: center;
-                    background: #d66f6f;
                     padding: 25px 30px;
                     margin: 0 15px;
                     margin-bottom: 20px;
@@ -316,6 +315,14 @@ body {
                     right: 0;
                     bottom: 100%;
                     z-index: 999;
+                }
+                
+                .a0-error {
+                    background: #d66f6f;
+                }
+                
+                .a0-success {
+                    background: #7ED321;
                 }
 
                 .a0-instructions {
