@@ -29,9 +29,9 @@ define(function(require) {
               <div className="col-md-12">
                 <br />
                 {this.props.areProductionDevices ?
-                  <span><i className="fa fa-warning"></i> Sorry, there are too many results.</span>
+                  <span><i className="fa fa-warning"></i> Sorry, there are too many devices to show.</span>
                 :
-                  <span><i className="fa fa-warning"></i> Sorry, there is no results.</span>
+                  <span><i className="fa fa-warning"></i> Sorry, there are no devices to show.</span>
                 }
               </div>
             }
