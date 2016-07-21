@@ -87,7 +87,9 @@ body #a0-lock.a0-theme-default .a0-switch .a0-active { background-color: #444; }
 body #a0-lock.a0-theme-default .a0-btn-small.a0-back { left: 22px; }
 body #a0-lock.a0-theme-default .a0-panel { width: 370px; box-shadow: none; -webkit-box-shadow: none; }
 body #a0-lock.a0-theme-default .a0-panel .a0-top-header { min-height: 0; }
-body #a0-lock.a0-theme-default .a0-panel .a0-error { font: 400 17px Arial; text-align: center; background: #d66f6f; padding: 25px 30px; margin: 0 15px; margin-bottom: 20px; border-radius: 12px; position: absolute; left: 0; right: 0; bottom: 100%; z-index: 999; }
+body #a0-lock.a0-theme-default .a0-panel .a0-error, body #a0-lock.a0-theme-default .a0-panel .a0-success { font: 400 17px Arial; text-align: center; padding: 25px 30px; margin: 0 15px; margin-bottom: 20px; border-radius: 12px; position: absolute; left: 0; right: 0; bottom: 100%; z-index: 999; }
+body #a0-lock.a0-theme-default .a0-panel .a0-error { background: #d66f6f; }
+body #a0-lock.a0-theme-default .a0-panel .a0-success { background: #7ED321; }
 body #a0-lock.a0-theme-default .a0-panel .a0-instructions { color: #fff; padding: 0 25px; }
 body #a0-lock.a0-theme-default .a0-panel .a0-icon-container { display: none; }
 body #a0-lock.a0-theme-default .a0-panel .a0-mode { background: transparent; }
