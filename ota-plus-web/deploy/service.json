@@ -1,4 +1,4 @@
-[{
+{
   "id": "${JOB_NAME}",
   "uris": ["/root/docker.tar.gz"],
   "cpus": 0.2,
@@ -24,24 +24,7 @@
     "SERVICE_TYPE": "http",
     "SERVICE_IMAGE": "${IMAGE_ARTIFACT}",
     "SERVICE_HEALTH_CHECK": "curl --show-error --silent %<host>s:%<port>s/health",
-    "CORE_API_URI": "${CORE_API_URI}",
-    "RESOLVER_API_URI": "${RESOLVER_API_URI}",
-    "DEVICE_REGISTRY_API_URI": "${DEVICE_REGISTRY_API_URI}",
-    "BUILDSERVICE_API_HOST": "${BUILDSERVICE_API_HOST}",
-    "CASSANDRA_CONTACT_POINT": "${CASSANDRA_CONTACT_POINT}",
-    "CASSANDRA_JOURNAL_KEYSPACE": "${CASSANDRA_JOURNAL_KEYSPACE}",
     "PERSISTENCE_JOURNAL": "cassandra-journal",
-    "AUTHPLUS_HOST": "${AUTHPLUS_HOST}",
-    "AUTHPLUS_CLIENT_ID": "${AUTHPLUS_CLIENT_ID}",
-    "AUTHPLUS_SECRET": "${AUTHPLUS_SECRET}",
-    "PLAY_CRYPTO_SECRET": "${PLAY_CRYPTO_SECRET}",
-    "AUTH0_CLIENT_ID": "${AUTH0_CLIENT_ID}",
-    "AUTH0_CLIENT_SECRET": "${AUTH0_CLIENT_SECRET}",
-    "AUTH0_DOMAIN": "${AUTH0_DOMAIN}",
-    "AUTH0_CALLBACK_URL": "${AUTH0_CALLBACK_URL}",
-    "AUTH0_USER_UPDATE_TOKEN": "${AUTH0_USER_UPDATE_TOKEN}",
-    "AWS_ACCESS_KEY_ID": "${WEB_AWS_ACCESS_KEY}",
-    "AWS_SECRET_ACCESS_KEY": "${WEB_AWS_SECRET_KEY}",
     "MESSAGING_MODE": "kinesis"
   },
   "healthChecks": [{
@@ -49,4 +32,4 @@
     "path": "/health",
     "intervalSeconds": 30
   }]
-}]
+}
