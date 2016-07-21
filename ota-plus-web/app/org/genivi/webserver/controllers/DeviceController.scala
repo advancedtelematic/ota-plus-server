@@ -69,8 +69,8 @@ extends Controller with ApiClientSupport {
     // PUT "vehicles" on resolver, if VIN is known already
     // TODO: Retry until both responses are success
     for {
-      deviceId <- devicesApi.createDevice(options, device)
       _ <- resolverApi.createDevice(options, device)
+      deviceId <- devicesApi.createDevice(options, device)
       vehicleMetadata <- registerAuthPlusVehicle(deviceId)
     } yield Results.Created(Json.toJson(deviceId))
   }
