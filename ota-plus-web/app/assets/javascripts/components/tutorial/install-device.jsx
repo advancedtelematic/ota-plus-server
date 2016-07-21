@@ -76,7 +76,7 @@ define(function(require) {
               </div>
               <div className="tutorial-desc-box pull-left">
                 <div className="margin-top-10">
-                  <strong>2.</strong> Install the package <br />with your package manager
+                  <strong>2.</strong> Copy the package to your <br /> device, and install it <br />using your package manager
                 </div>
                 <div className="margin-top-25 font-12 orange">
                   <i className="fa fa-cog" aria-hidden="true"></i> <a href="#" onClick={this.toggleFirstInfo} className="orange">How do I do that?</a>

@@ -13,13 +13,7 @@ define(function(require) {
           
           <div className="margin-top-30 font-20">
             <div>
-              <strong>1. </strong> Lorem ipsum dolor sit amet enim
-            </div>
-            <div className="margin-top-20">
-              <strong>2. </strong> Lorem ipsum dolor sit amet enim es dolores
-            </div>
-            <div className="margin-top-20">
-              <strong>3. </strong> Lorem ipsum dolor
+              <strong>Get started by adding your first device here</strong>
             </div>
           </div>
         </div>
