@@ -371,7 +371,7 @@ define(function(require) {
                     :
                       <div className="col-md-12">
                         <br />
-                        <i className="fa fa-warning"></i> Sorry, there is no results.
+                        <i className="fa fa-warning"></i> Sorry, there are no results.
                       </div>
                     }
                   </Dropzone>
