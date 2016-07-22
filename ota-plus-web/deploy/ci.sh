@@ -2,13 +2,13 @@
 set -e
 
 export JOB_NAME="${JOB_NAME-ota-plus-web}"
+export VAULT_ENDPOINT=${VAULT_ENDPOINT-$(echo $JOB_NAME | tr "-" "_")}
 export IMAGE_NAME="ota-plus-web"
 export REGISTRY="advancedtelematic"
 export DOCKER_TAG=`cat ../deploy/version.properties`
 export IMAGE_ARTIFACT=${REGISTRY}/${IMAGE_NAME}:${DOCKER_TAG}
 
 # Merge service environment variables with secrets from this vault endpoint.
-export VAULT_ENDPOINT="ota_plus_web_catalog"
 export CATALOG_ADDR="http://catalog.gw.prod01.internal.advancedtelematic.com"
 
 REQ=$(envsubst < deploy/service.json)
