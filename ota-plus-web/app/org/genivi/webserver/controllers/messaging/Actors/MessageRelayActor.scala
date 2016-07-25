@@ -3,9 +3,9 @@ package org.genivi.webserver.controllers.messaging.Actors
 import akka.event.Logging
 import akka.stream.actor.ActorPublisher
 import akka.stream.actor.ActorPublisherMessage.{Cancel, Request}
+import scala.annotation.tailrec
 import org.genivi.sota.messaging.Messages.Message
 
-import scala.annotation.tailrec
 import scala.reflect.ClassTag
 
 class MessageRelayActor[T <: Message](implicit m: ClassTag[T]) extends ActorPublisher[T] {
