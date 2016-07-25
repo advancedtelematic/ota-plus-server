@@ -47,9 +47,12 @@ docker run \
   --expose=8083 \
   -p 8083:8083 \
   --link=db \
+  --link=nats \
   -e HOST='0.0.0.0' \
   -e DEVICE_REGISTRY_DB_URL='jdbc:mariadb://db:3306/sota_device_registry' \
   -e DEVICE_REGISTRY_DB_MIGRATE='true' \
+  -e NATS_HOST='nats' \
+  -e NATS_PORT='4222' \
   -e AUTH_PROTOCOL=${AUTH_PROTOCOL-'oauth.idtoken'} \
   advancedtelematic/sota-device_registry:$DEVICE_REGISTRY_DOCKER_TAG
 
@@ -94,7 +97,6 @@ docker run \
   -e CORE_INTERACTION_PROTOCOL='none' \
   -e PACKAGES_VERSION_FORMAT='.+' \
   -e rootLevel='DEBUG' \
-  -e MESSAGING_MODE='test' \
   -e AUTH_PROTOCOL=${AUTH_PROTOCOL-'oauth.idtoken'} \
   advancedtelematic/sota-core:$CORE_DOCKER_TAG
 
