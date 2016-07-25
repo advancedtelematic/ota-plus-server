@@ -14,8 +14,11 @@ import javax.crypto.spec.SecretKeySpec
 import com.advancedtelematic.jwa.`HMAC SHA-256`
 import com.advancedtelematic.jws.{Jws, KeyInfo, KeyLookup}
 import com.advancedtelematic.jwt._
+import io.circe.Decoder
 import org.asynchttpclient.AsyncHttpClient
 import org.asynchttpclient.request.body.multipart.FilePart
+import org.genivi.sota.data.Device
+import org.genivi.sota.data.Device.{DeviceId, DeviceName, DeviceType}
 import org.scalatest.Tag
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatestplus.play._
@@ -25,8 +28,16 @@ import play.api.libs.json.Reads._
 import play.api.libs.ws.{WS, WSClient, WSResponse}
 import play.api.test.Helpers._
 import play.api.mvc.{Cookies, Session}
-
+import org.scalatest.Tag
+import org.scalatestplus.play._
+import play.api.Configuration
+import play.api.libs.ws.{WSClient, WSResponse}
+import play.api.mvc.{Cookie, Cookies}
+import play.api.test.Helpers._
+import com.advancedtelematic.ota.device.Devices._
 import scala.util.Random
+import Device._
+import cats.syntax.show._
 
 object APITests extends Tag("APITests")
 
@@ -38,6 +49,7 @@ object APITests extends Tag("APITests")
  */
 class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPropertyChecks {
 
+//  val testNamespace = "default"
   val testVin = "TESTSTR0123456789"
   val testVinAlt = "TESTALT0123456789"
   val testPackageName = "TestPkg"
@@ -51,10 +63,9 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   val testComponentNameAlt = "Satnav"
   val testComponentDescription = "A radio component"
   val testComponentDescriptionAlt = "A satellite navigation component"
-  val componentJson = Json.obj(
-    "partNumber" -> testComponentName,
-    "description" -> testComponentDescription
-  )
+
+  var testId    : Option[String] = None
+  var testIdAlt : Option[String] = None
 
   val webserverHost = "localhost"
   override lazy val port = app.configuration.getString("test.webserver.port").map(_.toInt).getOrElse(9010)
@@ -67,7 +78,6 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   case class PackageId(name: String, version: String)
-
   case class Vehicle(vin: String)
 
   implicit val packageIdReads: Reads[PackageId] = (
@@ -79,7 +89,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   def makeRequest(path: String, method: Method) : WSResponse = {
     val req =
       wsClient.url(s"http://$webserverHost:$port/api/v1/" + path)
-        .withHeaders("Cookie" -> makeSessionCookie())
+        .withHeaders("Cookie" -> sessionCookie)
 
     method match {
       case PUT => await(req.put(""))
@@ -92,7 +102,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   def makeJsonRequest(path: String,  method: Method, data: JsObject) : WSResponse = {
     val req = wsClient
       .url(s"http://$webserverHost:$port/api/v1/" + path)
-      .withHeaders("Cookie" -> makeSessionCookie())
+      .withHeaders("Cookie" -> sessionCookie)
 
     method match {
       case PUT => await(req.put(data))
@@ -104,7 +114,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   def makeCookie(session: (String, String)*) =
     Cookies.encodeCookieHeader(Seq(Session.encodeAsCookie(Session(session.toMap))))
 
-  def makeSessionCookie() = makeCookie("id_token" -> oauthToken, "access_token" -> oauthToken)
+  lazy val sessionCookie = makeCookie("id_token" -> oauthToken, "access_token" -> oauthToken)
 
   lazy val namespace = Subject("ittests@ats.com")
 
@@ -128,9 +138,17 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     Jws.signCompact(token, `HMAC SHA-256`, keyInfo).toString()
   }
 
-  def addVin(vin: String): Unit = {
-    val vehiclesResponse = makeRequest(s"vehicles/$vin", PUT)
-    vehiclesResponse.status mustBe NO_CONTENT
+  def addVin(vin: String): String = {
+    val device = Json.obj("deviceName" -> vin, "deviceId" -> vin, "deviceType" -> "Vehicle")
+
+    // create in device registry
+    val response = makeJsonRequest("devices", POST, device)
+    response.status mustBe CREATED
+
+    response.json.asOpt[String] match {
+      case Some(id: String) => id
+      case None => fail("JSON parse error:" + response.body)
+    }
   }
 
   def addPackage(packageName: String, packageVersion: String): Unit = {
@@ -138,7 +156,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     val putBuilder = asyncHttpClient
         .preparePut(s"http://$webserverHost:$port/api/v1/packages/$packageName/" +
           packageVersion + "?description=test&vendor=ACME")
-      .addHeader("Cookie", makeSessionCookie())
+      .addHeader("Cookie", sessionCookie)
     val builder = {
       val tmpFile = {
         val fileName = java.util.UUID.randomUUID().toString
@@ -157,13 +175,13 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
       "name"       -> filterName,
       "expression" -> testFilterExpression
     )
-    val filtersResponse = makeJsonRequest("filters", POST, data)
+    val filtersResponse = makeJsonRequest("resolver/filters", POST, data)
     filtersResponse.status mustBe OK
     filtersResponse.json.mustEqual(data)
   }
 
   def addFilterToPackage(packageName : String): Unit = {
-    val resp = makeRequest(s"package_filters/$packageName/$testPackageVersion/$testFilterName", PUT)
+    val resp = makeRequest(s"resolver/package_filters/$packageName/$testPackageVersion/$testFilterName", PUT)
     resp.status mustBe OK
   }
 
@@ -173,21 +191,27 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
       "partNumber"  -> partNumber,
       "description" -> description
     )
-    val componentResponse = makeJsonRequest(s"components/$partNumber", PUT, data)
+    val componentResponse = makeJsonRequest(s"resolver/components/$partNumber", PUT, data)
     componentResponse.status mustBe OK
     componentResponse.json mustEqual data
   }
 
-  "test adding vins" taggedAs APITests in {
-    addVin(testVin)
+  "test adding devices" taggedAs APITests in {
+    testId = Some(addVin(testVin))
     //add second vin to aid in testing filtering later on
-    addVin(testVinAlt)
+    testIdAlt = Some(addVin(testVinAlt))
   }
 
-  "test searching vins" taggedAs APITests in {
-    val searchResponse = makeRequest("vehicles?regex=" + testVin, GET)
-    searchResponse.status mustBe OK
-    searchResponse.json.toString() mustEqual s"""[{"namespace":"ittests@ats.com","vin":"$testVin","lastSeen":null}]"""
+  "test searching devices" taggedAs APITests in {
+    val response = makeRequest(s"devices?namespace=${namespace.underlying}&regex=" + testVin, GET)
+
+    response.status mustBe OK
+
+    response.json.asOpt[List[Device]] match {
+      case Some(resp : List[Device]) => resp.length mustBe 1
+        resp.headOption.flatMap(_.deviceId).map(_.show) must contain(testVin)
+      case None => fail("JSON parse error:" + response.body)
+    }
   }
 
   "test adding packages" taggedAs APITests in {
@@ -197,13 +221,13 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test adding manually installed packages" taggedAs APITests in {
-    val packageResponse = makeRequest("vehicles/" + testVinAlt + "/package/" + testPackageNameAlt +
+    val packageResponse = makeRequest("resolver/devices/" + testIdAlt.get + "/package/" + testPackageNameAlt +
       "/" + testPackageVersion, PUT)
     packageResponse.status mustBe OK
   }
 
   "test viewing manually installed packages" taggedAs APITests in {
-    val searchResponse = makeRequest("vehicles/" + testVinAlt + "/package", GET)
+    val searchResponse = makeRequest("resolver/devices/" + testIdAlt.get + "/package", GET)
     searchResponse.status mustBe OK
     val json = Json.parse(searchResponse.body)
     json.validate[Iterable[PackageId]] match {
@@ -216,11 +240,11 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test viewing vehicles with a given package installed" taggedAs APITests in {
-    val viewResponse = makeRequest("vehicles?packageName=" + testPackageNameAlt + "&packageVersion=" +
-      testPackageVersion, GET)
+    val viewResponse = makeRequest("resolver/devices?packageName="
+      + testPackageNameAlt + "&packageVersion=" + testPackageVersion, GET)
     viewResponse.status mustBe OK
     //TODO: need to make sure we only get a single vin back
-    (viewResponse.json \\ "vin").head.toString() mustEqual "\"" + testVinAlt + "\""
+    viewResponse.json.as[Seq[Device.Id]].headOption.map(_.show) must contain(testIdAlt.get)
   }
 
   "test searching packages" taggedAs APITests in {
@@ -234,16 +258,16 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
 
   "test deleting filters" taggedAs APITests in {
     addFilter(testFilterNameDelete)
-    val deleteResponse = makeRequest("filters/" + testFilterNameDelete, DELETE)
+    val deleteResponse = makeRequest("resolver/filters/" + testFilterNameDelete, DELETE)
     println(deleteResponse.body)
     deleteResponse.status mustBe OK
-    val searchResponse = makeRequest("filters?regex=" + testFilterNameDelete, GET)
+    val searchResponse = makeRequest("resolver/filters?regex=" + testFilterNameDelete, GET)
     searchResponse.status mustBe OK
     searchResponse.body.toString mustEqual "[]"
   }
 
   "test searching filters" taggedAs APITests in {
-    val searchResponse = makeRequest("filters?regex=" + testFilterName, GET)
+    val searchResponse = makeRequest("resolver/filters?regex=" + testFilterName, GET)
     searchResponse.status mustBe OK
   }
 
@@ -253,7 +277,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
       "name"       -> testFilterName,
       "expression" -> testFilterAlternateExpression
     )
-    val filtersChangeResponse = makeJsonRequest("filters/" + testFilterName, PUT, data)
+    val filtersChangeResponse = makeJsonRequest("resolver/filters/" + testFilterName, PUT, data)
     filtersChangeResponse.status mustBe OK
   }
 
@@ -262,7 +286,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test removing filters from a package" taggedAs APITests in {
-    val req = makeRequest(s"package_filters/$testPackageName/$testPackageVersion/$testFilterName", DELETE)
+    val req = makeRequest(s"resolver/package_filters/$testPackageName/$testPackageVersion/$testFilterName", DELETE)
     req.status mustBe OK
   }
 
@@ -272,12 +296,12 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test removing package from a filter" taggedAs APITests in {
-    val req = makeRequest(s"package_filters/$testPackageName/$testPackageVersion/$testFilterName", DELETE)
+    val req = makeRequest(s"resolver/package_filters/$testPackageName/$testPackageVersion/$testFilterName", DELETE)
     req.status mustBe OK
   }
 
   "test viewing packages with a given filter" taggedAs APITests in {
-    val searchResponse = makeRequest("filters/" + testFilterName + "/package", GET)
+    val searchResponse = makeRequest("resolver/filters/" + testFilterName + "/package", GET)
     searchResponse.status mustBe OK
     searchResponse.body.toString mustEqual "[]"
   }
@@ -291,40 +315,44 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   }
 
   "test searching components" taggedAs APITests in { // TODO PRO-338
-    val searchResponse = makeRequest("components?regex=" + testComponentName, GET)
+    val searchResponse = makeRequest("resolver/components?regex=" + testComponentName, GET)
+    val componentJson = Json.obj(
+      "partNumber" -> testComponentName,
+      "description" -> testComponentDescription
+    )
     searchResponse.status mustBe OK
     searchResponse.json.equals(componentJson)
   }
 
   "test deleting components" taggedAs APITests in {
     addComponent(testComponentNameAlt, testComponentDescriptionAlt)
-    val deleteResponse = makeRequest("components/" + testComponentNameAlt, DELETE)
+    val deleteResponse = makeRequest("resolver/components/" + testComponentNameAlt, DELETE)
     deleteResponse.status mustBe OK
-    val searchResponse = makeRequest("components?regex=" + testComponentNameAlt, GET)
+    val searchResponse = makeRequest("resolver/components?regex=" + testComponentNameAlt, GET)
     searchResponse.status mustBe OK
     searchResponse.body.toString mustEqual "[]"
   }
 
   "test adding component to vin" taggedAs APITests in {
     addComponent(testComponentName, testComponentDescription)
-    val addResponse = makeRequest("vehicles/" + testVin + "/component/" + testComponentName, PUT)
+    val addResponse = makeRequest("resolver/devices/" + testId.get + "/component/" + testComponentName, PUT)
     addResponse.status mustBe OK
   }
 
-  "test viewing components installed on vin" taggedAs APITests in {
-    val listResponse = makeRequest("vehicles/" + testVin + "/component", GET)
+  "test viewing components installed on device" taggedAs APITests in {
+    val listResponse = makeRequest("resolver/devices/" + testId.get + "/component", GET)
     listResponse.status mustBe OK
     //TODO: parse this body as json
     listResponse.body.toString mustEqual "[\"" + testComponentName + "\"]"
   }
 
-  "test listing vins with component installed" taggedAs APITests in {
-    val listResponse = makeRequest("vehicles?component=" + testComponentName, GET)
-    listResponse.status mustBe OK
-    // check the expected vin is there
-    (listResponse.json \\ "vin").head.toString mustEqual "\"" + testVin + "\""
-    // check no other vin-s are there
-    (listResponse.json \\ "vin").size mustEqual 1
+  "test devices with component installed" taggedAs APITests in {
+    val response = makeRequest("resolver/devices?component=" + testComponentName, GET)
+    response.status mustBe OK
+
+    val parsed = response.json.as[Seq[Device.Id]]
+
+    parsed.headOption.map(_.show) must contain(testId.get)
   }
 
   "test creating install campaigns" taggedAs APITests ignore {
@@ -346,8 +374,8 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     response.status mustBe OK
   }
 
-  "test install queue for a vin" taggedAs APITests ignore {
-    val queueResponse = makeRequest("vehicles/" + testVin + "/queued", GET)
+  "test install queue for a device" taggedAs APITests ignore {
+    val queueResponse = makeRequest("resolver/devices/" + testId.get + "/queued", GET)
     queueResponse.status mustBe OK
     val json = Json.parse(queueResponse.body)
     json.validate[Iterable[PackageId]] match {
@@ -359,8 +387,8 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     }
   }
 
-  "test getting package queue for vin" taggedAs APITests ignore {
-    val packageQueueResponse = makeRequest("vehicles/" + testVin + "/queued", GET)
+  "test getting package queue for device" taggedAs APITests ignore {
+    val packageQueueResponse = makeRequest("resolver/devices/" + testId.get + "/queued", GET)
     packageQueueResponse.status mustBe OK
     val json = Json.parse(packageQueueResponse.body)
     json.validate[Iterable[PackageId]] match {
@@ -372,10 +400,10 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     }
   }
 
-  "test list of vins affected by update" taggedAs APITests ignore {
+  "test list of devices affected by update" taggedAs APITests ignore {
     val listResponse = makeRequest(s"resolve?namespace=${namespace.underlying}&package_name=$testPackageName&package_version=$testPackageVersion", GET)
     //TODO: parse this properly. The issue is the root key for each list in the response is a vin, not a static string.
-    listResponse.body.contains(testVin) && !listResponse.body.contains(testVinAlt) mustBe true
+    listResponse.body.contains(testId.get) && !listResponse.body.contains(testIdAlt.get) mustBe true
   }
 
 }

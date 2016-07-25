@@ -8,7 +8,7 @@ import akka.http.scaladsl.model.Uri
 import akka.testkit.TestKit
 import akka.util.Timeout
 import eu.timepit.refined.api.Refined
-import org.genivi.sota.data.{Device, DeviceGenerators, VinGenerators}
+import org.genivi.sota.data.{DeviceGenerators, DeviceIdGenerators}
 import org.scalacheck.Gen
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{BeforeAndAfterAll, Matchers, PropSpecLike}
@@ -19,8 +19,7 @@ class RegistryProps extends TestKit(ActorSystem("vehicle-registry"))
     with PropertyChecks
     with Matchers
     with ScalaFutures
-    with BeforeAndAfterAll
-    with VinGenerators {
+    with BeforeAndAfterAll {
 
   import Gen._
 
@@ -29,10 +28,10 @@ class RegistryProps extends TestKit(ActorSystem("vehicle-registry"))
     token <- alphaStr.map( RegistrationAccessToken.apply )
   } yield ClientInfo(id, Uri(s"http://ota.plus/clients/$uuid"), token)
 
-  val VehicleGen: Gen[VehicleMetadata] = for {
+  val VehicleGen: Gen[DeviceMetadata] = for {
     clientInfo <- ClientInfoGen
     deviceId <- DeviceGenerators.arbId.arbitrary
-  } yield VehicleMetadata(deviceId, clientInfo)
+  } yield DeviceMetadata(deviceId, clientInfo)
 
   val vehicles = Vehicles( system.actorOf( VehicleRegistry.props() ) )(Timeout(1, TimeUnit.SECONDS))
 

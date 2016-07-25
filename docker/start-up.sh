@@ -38,23 +38,6 @@ SLEEP=${DB_SLEEP-20}
 echo sleeping for ${SLEEP}s
 sleep $SLEEP
 
-RESOLVER_DOCKER_TAG=${RESOLVER_TAG-latest}
-echo 'Starting Resolver'
-echo "tag ${RESOLVER_DOCKER_TAG}"
-docker run \
-  -d \
-  --name=resolver \
-  --expose=8081 \
-  -p 8081:8081 \
-  --link=db \
-  -e HOST='0.0.0.0' \
-  -e RESOLVER_DB_URL='jdbc:mariadb://db:3306/sota_resolver' \
-  -e RESOLVER_DB_MIGRATE='true' \
-  -e PACKAGES_VERSION_FORMAT='.+' \
-  -e rootLevel='DEBUG' \
-  -e AUTH_PROTOCOL=${AUTH_PROTOCOL-'oauth.idtoken'} \
-  advancedtelematic/sota-resolver:$RESOLVER_DOCKER_TAG
-
 DEVICE_REGISTRY_DOCKER_TAG=${DEVICE_REGISTRY_TAG-latest}
 echo 'Starting device registry'
 echo "tag ${DEVICE_REGISTRY_DOCKER_TAG}"
@@ -69,6 +52,25 @@ docker run \
   -e DEVICE_REGISTRY_DB_MIGRATE='true' \
   -e AUTH_PROTOCOL=${AUTH_PROTOCOL-'oauth.idtoken'} \
   advancedtelematic/sota-device_registry:$DEVICE_REGISTRY_DOCKER_TAG
+
+RESOLVER_DOCKER_TAG=${RESOLVER_TAG-latest}
+echo 'Starting Resolver'
+echo "tag ${RESOLVER_DOCKER_TAG}"
+docker run \
+  -d \
+  --name=resolver \
+  --expose=8081 \
+  -p 8081:8081 \
+  --link=db \
+  --link=device-registry \
+  -e HOST='0.0.0.0' \
+  -e DEVICE_REGISTRY_API_URI='http://device-registry:8083' \
+  -e RESOLVER_DB_URL='jdbc:mariadb://db:3306/sota_resolver' \
+  -e RESOLVER_DB_MIGRATE='true' \
+  -e PACKAGES_VERSION_FORMAT='.+' \
+  -e rootLevel='DEBUG' \
+  -e AUTH_PROTOCOL=${AUTH_PROTOCOL-'oauth.idtoken'} \
+  advancedtelematic/sota-resolver:$RESOLVER_DOCKER_TAG
 
 CORE_DOCKER_TAG=${CORE_TAG-latest}
 echo 'Starting Core'

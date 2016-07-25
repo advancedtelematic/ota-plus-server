@@ -61,7 +61,7 @@ class Application @Inject() (ws: WSClient,
   }
 
   private val resolverProxiedPrefixes: PartialFunction[List[String], String] = {
-    case "vehicles" :: _ => resolverApiUri
+    case "resolver" :: _ => resolverApiUri
     case "firmware" :: _ => resolverApiUri
     case "filters" :: _ => resolverApiUri
     case "components" :: _ => resolverApiUri

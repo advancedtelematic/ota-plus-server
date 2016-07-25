@@ -9,7 +9,7 @@ import cats.syntax.show._
 import eu.timepit.refined.refineV
 import eu.timepit.refined.string._
 import org.genivi.sota.data.Device._
-import org.genivi.sota.data.{Device, Vehicle}
+import org.genivi.sota.data.Device
 
 /**
   * Implicits that allow giving custom param-types in the method signatures in the routes file.
@@ -27,17 +27,6 @@ object PathBinders {
       refineV[ValidId](value).right.map(Device.Id)
     }
     def unbind(key: String, value: Device.Id): String = value.show
-  }
-
-  /**
-    * Path binder to convert a String (eg, from a route path)
-    * to a Vehicle.Vin wrapped in a Right (if valid, Left otherwise).
-    */
-  implicit object bindableVin extends play.api.mvc.PathBindable[Vehicle.Vin] {
-    def bind(key: String, value: String): Either[String, Vehicle.Vin] = {
-      refineV(value)
-    }
-    def unbind(key: String, value: Vehicle.Vin): String = value.get
   }
 
   /**
