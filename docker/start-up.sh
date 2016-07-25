@@ -87,7 +87,6 @@ docker run \
   -e CORE_INTERACTION_PROTOCOL='none' \
   -e PACKAGES_VERSION_FORMAT='.+' \
   -e rootLevel='DEBUG' \
-  -e MESSAGING_MODE='test' \
   -e AUTH_PROTOCOL=${AUTH_PROTOCOL-'oauth.idtoken'} \
   advancedtelematic/sota-core:$CORE_DOCKER_TAG
 
