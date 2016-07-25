@@ -9,7 +9,7 @@ import cats.syntax.show._
 import eu.timepit.refined.refineV
 import eu.timepit.refined.string._
 import org.genivi.sota.data.Device._
-import org.genivi.sota.data.Device
+import org.genivi.sota.data.{Device, Namespace}
 
 /**
   * Implicits that allow giving custom param-types in the method signatures in the routes file.
@@ -27,6 +27,13 @@ object PathBinders {
       refineV[ValidId](value).right.map(Device.Id)
     }
     def unbind(key: String, value: Device.Id): String = value.show
+  }
+
+  implicit object bindableNamespace extends play.api.mvc.PathBindable[Namespace] {
+    def bind(key: String, value: String): Either[String, Namespace] = {
+      Right(Namespace(value))
+    }
+    def unbind(key: String, value: Namespace): String = value.get
   }
 
   /**
