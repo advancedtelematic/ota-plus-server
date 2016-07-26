@@ -71,11 +71,11 @@ define(function(require) {
             The installation of the packages will start automatically when you connect to your device.
           </div>
   
-          {this.props.status === 'Error' ? 
+          {!_.isUndefined(this.props.device) && this.props.device.status === 'Error' ?
             <div className="box-red">
               <span className="font-14"><strong><i className="fa fa-warning" aria-hidden="true"></i> Paused!</strong></span>
               <div className="margin-top-10">
-                We've interrupted the installation process for this device because of. Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui.
+                We've interrupted the installation process for this device because of a failed update.
               </div>
               <div className="margin-top-10">
                 <button className="btn btn-white" onClick={this.reviewFailedInstall}><i className="fa fa-arrow-right font-14" aria-hidden="true"></i> &nbsp; Review failed install</button>
