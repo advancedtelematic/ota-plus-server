@@ -55,7 +55,7 @@ define(function(require) {
               .success(function(devices) {
                 const device = _.find(devices, i => i.id == payload.device);
                 if (!_.isUndefined(device)) {
-                  sendRequest.doGet('/api/v1/resolver/devices/' + device.deviceId + '/package')
+                  sendRequest.doGet('/api/v1/resolver/devices/' + device.id + '/package')
                     .success(function(packages) {
                       var list = _.map(packages, function(package) {
                         return {id: package}
