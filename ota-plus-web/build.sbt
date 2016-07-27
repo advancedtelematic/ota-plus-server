@@ -7,7 +7,6 @@ play.sbt.routes.RoutesKeys.routesImport ++= Seq(
   "org.genivi.webserver.controllers.PathBinders._",
   "org.genivi.webserver.controllers.PackageType",
   "org.genivi.webserver.controllers.Architecture",
-  "org.genivi.sota.data.Vehicle",
   "org.genivi.sota.data.Device"
 )
 

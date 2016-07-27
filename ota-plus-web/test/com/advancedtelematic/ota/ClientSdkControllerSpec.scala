@@ -1,11 +1,13 @@
 package com.advancedtelematic.ota
 
-import org.genivi.sota.data.{Vehicle, VinGenerators}
+import org.genivi.sota.data.{Device, DeviceGenerators, DeviceIdGenerators}
 import org.scalatest.Tag
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.http.Status
 import play.api.libs.ws.{WSClient, WSRequest}
+import Device._
+import cats.syntax.show._
 
 /**
   * Purpose of a tag: ScalaTest's command line options -n (include) and -l (exclude).
@@ -16,7 +18,7 @@ object APITests extends Tag("APITests")
 
 class ClientSdkControllerSpec extends PlaySpec
     with OneServerPerSuite
-    with GeneratorDrivenPropertyChecks with VinGenerators {
+    with GeneratorDrivenPropertyChecks with DeviceIdGenerators with DeviceGenerators {
 
   import play.api.test.Helpers._
   import Generators._
@@ -28,17 +30,17 @@ class ClientSdkControllerSpec extends PlaySpec
     val attempts = 5
     val wsClient = app.injector.instanceOf[WSClient]
     forAll (minSuccessful(attempts)) {
-      (vin: Vehicle.Vin, packfmt: PackageType, arch: Architecture) =>
+      (device: Device.Id, packfmt: PackageType, arch: Architecture) =>
 
         def fullUri(suffix: String): WSRequest = {
           wsClient.url(s"http://localhost:$port/api/v1/$suffix")
         }
         // Step 1: Register Vin
-        val webappRegistrationLink = s"vehicles/${vin.get}"
+        val webappRegistrationLink = s"vehicles/${device.show}"
         val registrationResponse = await(fullUri(webappRegistrationLink).put(""))
         registrationResponse.status mustBe Status.NO_CONTENT
         // Step 2: Request preconf client
-        val webappDownloadLink = s"client/${vin.get}/${packfmt.fileExtension}/${arch.toString}"
+        val webappDownloadLink = s"client/${device.show}/${packfmt.fileExtension}/${arch.toString}"
         val fileResponse = await(fullUri(webappDownloadLink).get)
         fileResponse.status mustBe Status.OK
     }
