@@ -12,7 +12,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 object Commands {
 
-  final case class RegisterVehicle(vehicle: VehicleMetadata)
+  final case class RegisterVehicle(vehicle: DeviceMetadata)
 
   final case class GetVehicleState(deviceId: Device.Id)
 
@@ -24,7 +24,7 @@ class VehicleEntity(deviceId: Device.Id) extends PersistentActor {
 
   override def persistenceId: String = deviceId.underlying.get
 
-  var state: Option[VehicleMetadata] = None
+  var state: Option[DeviceMetadata] = None
 
   def updateState(event: Event): Unit = event match {
     case VehicleRegistered(vehicle) =>
@@ -50,7 +50,7 @@ class VehicleEntity(deviceId: Device.Id) extends PersistentActor {
 object VehicleEntity {
   sealed trait Event
 
-  final case class VehicleRegistered(vehicle: VehicleMetadata) extends Event
+  final case class VehicleRegistered(vehicle: DeviceMetadata) extends Event
 
   def props(deviceId: Device.Id): Props = Props( new VehicleEntity(deviceId) )
 }
@@ -85,7 +85,7 @@ class Vehicles(registry: ActorRef)
   /**
     * Persists the given device metadata which in turn was obtained from Auth+ during first-time registration of a VIN.
     */
-  def registerVehicle(vehicle: VehicleMetadata)
+  def registerVehicle(vehicle: DeviceMetadata)
                      (implicit ec: ExecutionContext): Future[Unit] =
     registry.ask( RegisterVehicle(vehicle) ).map(_ => ())
 
@@ -95,8 +95,8 @@ class Vehicles(registry: ActorRef)
     * Note: the `client_secret` is not contained in the result. It has to be obtained from Auth+.
     */
   def getVehicle(deviceId: Device.Id)
-                (implicit ec: ExecutionContext): Future[Option[VehicleMetadata]] =
-    registry.ask( GetVehicleState(deviceId) ).mapTo[Option[VehicleMetadata]]
+                (implicit ec: ExecutionContext): Future[Option[DeviceMetadata]] =
+    registry.ask( GetVehicleState(deviceId) ).mapTo[Option[DeviceMetadata]]
 
 }
 

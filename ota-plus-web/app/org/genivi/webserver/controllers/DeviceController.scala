@@ -4,7 +4,7 @@ import com.advancedtelematic.{AuthenticatedApiAction, AuthenticatedRequest}
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.ota.device.Devices._
-import com.advancedtelematic.ota.vehicle.{VehicleMetadata, Vehicles}
+import com.advancedtelematic.ota.vehicle.{DeviceMetadata, Vehicles}
 import eu.timepit.refined._
 import javax.inject.{Inject, Named, Singleton}
 
@@ -65,30 +65,26 @@ extends Controller with ApiClientSupport {
   private def requestCreate(device: DeviceT, options: UserOptions): Future[Result] = {
     implicit val w = refinedWriter[String, Device.Id]
 
-    // Must POST "devices" on device registry and
-    // PUT "vehicles" on resolver, if VIN is known already
-    // TODO: Retry until both responses are success
     for {
-      _ <- resolverApi.createDevice(options, device)
       deviceId <- devicesApi.createDevice(options, device)
       vehicleMetadata <- registerAuthPlusVehicle(deviceId)
     } yield Results.Created(Json.toJson(deviceId))
   }
 
-  private def searchWith[R]
-  (req: AuthenticatedRequest[_], apiSearch: (UserOptions, Seq[(String, String)]) => Future[R]): Future[R] = {
+  private def searchWith[R](req: AuthenticatedRequest[_],
+                            apiSearch: (UserOptions, Seq[(String, String)]) => Future[R]): Future[R] = {
     val params = req.queryString.mapValues(_.head).toSeq
     apiSearch(userOptions(req), params)
   }
 
   /**
     * Contact Auth+ to register for the first time the given [[Device.Id]],
-    * to later persist (in cassandra-journal) the resulting [[VehicleMetadata]]
+    * to later persist (in cassandra-journal) the resulting [[DeviceMetadata]]
     */
-  private def registerAuthPlusVehicle(deviceId: Device.Id): Future[VehicleMetadata] = {
+  private def registerAuthPlusVehicle(deviceId: Device.Id): Future[DeviceMetadata] = {
     for {
       clientInfo <- authPlusApi.createClient(deviceId)
-      vehicleMetadata = VehicleMetadata(deviceId, clientInfo)
+      vehicleMetadata = DeviceMetadata(deviceId, clientInfo)
       _ <- vehiclesStore.registerVehicle(vehicleMetadata)
     } yield vehicleMetadata
   }
@@ -101,7 +97,7 @@ extends Controller with ApiClientSupport {
       val fut = for (
         vMetadataOpt <- vehiclesStore.getVehicle(deviceId);
         vMetadata <- vMetadataOpt match {
-          case None => Future.failed[VehicleMetadata](NoSuchVinRegistered)
+          case None => Future.failed[DeviceMetadata](NoSuchVinRegistered)
           case Some(vmeta) => Future.successful(vmeta)
         };
         clientInfo <- authPlusApi.fetchClientInfo(vMetadata.clientInfo.clientId)

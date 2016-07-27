@@ -95,23 +95,6 @@ class CoreApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPl
 }
 
 /**
-  * Controllers extending [[ApiClientSupport]] access [[ResolverApi]] endpoints using a singleton.
-  */
-class ResolverApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
-  private val resolverRequest = ApiRequest.base(resolverApiUri + "/api/v1/")
-
-  def createDevice(options: UserOptions, device: DeviceT): Future[Result] =
-    device.deviceId match {
-      case Some(id) =>
-        resolverRequest(s"vehicles/${id.show}")
-          .withUserOptions(options)
-          .transform(_.withMethod("PUT"))
-          .execResult(apiExec)
-      case None => Future.successful(Results.NoContent) // TODO handle empty device Ids
-    }
-}
-
-/**
   * Controllers extending [[ApiClientSupport]] access [[DevicesApi]] endpoints using a singleton.
   */
 class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {

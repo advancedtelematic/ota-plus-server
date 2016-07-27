@@ -5,7 +5,7 @@ import javax.inject.{Inject, Named, Singleton}
 import akka.actor.ActorSystem
 import com.advancedtelematic.AuthenticatedApiAction
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
-import com.advancedtelematic.ota.vehicle.{VehicleMetadata, Vehicles}
+import com.advancedtelematic.ota.vehicle.{DeviceMetadata, Vehicles}
 import org.asynchttpclient.uri.Uri
 import org.genivi.sota.data.Device
 import play.api.http.HttpEntity
@@ -46,7 +46,7 @@ extends Controller with ApiClientSupport {
       for (
         vMetadataOpt <- vehiclesStore.getVehicle(deviceId);
         vMetadata <- vMetadataOpt match {
-          case None => Future.failed[VehicleMetadata](NoSuchVinRegistered)
+          case None => Future.failed[DeviceMetadata](NoSuchVinRegistered)
           case Some(vmeta) => Future.successful(vmeta)
         };
         secret <- authPlusApi.fetchSecret(vMetadata.clientInfo.clientId);
