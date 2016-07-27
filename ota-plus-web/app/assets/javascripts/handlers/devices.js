@@ -85,7 +85,7 @@ define(function(require) {
               });
             break;
           case 'list-components-on-device':
-            sendRequest.doGet('/api/v1/resolver/devices/' + payload.deviceId + '/component')
+            sendRequest.doGet('/api/v1/resolver/devices/' + payload.id + '/component')
               .success(function(components) {
                 db.componentsOnVin.reset(components);
               });
@@ -100,7 +100,7 @@ define(function(require) {
             sendRequest.doPut('/api/v1/vehicle_updates/' + payload.device + '/sync');
             break;
           case 'add-packages-to-device':
-            sendRequest.doPut('/api/v1/resolver/devices/' + payload.deviceId + '/packages', payload.packages)
+            sendRequest.doPut('/api/v1/resolver/devices/' + payload.id + '/packages', payload.packages)
               .success(function() {
               });
             break;
