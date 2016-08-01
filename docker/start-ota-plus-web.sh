@@ -1,0 +1,74 @@
+#!/bin/bash
+
+AUTH_PLUS_DOCKER_TAG=${AUTH_PLUS_TAG-latest}
+echo 'Starting Auth Plus'
+echo "tag ${AUTH_PLUS_DOCKER_TAG}"
+docker run \
+  -d \
+  --name=auth-plus \
+  --expose=9001 \
+  -p 9001:9001 \
+  advancedtelematic/auth-plus:latest
+
+sleep 20
+
+echo 'Creating user: demo@advancedtelematic.com password: demo'
+curl -H "Content-Type: application/json" -X POST -d '{"email":"demo@advancedtelematic.com","password":"demo"}' http://localhost:9001/users
+
+echo
+echo 'Creating ota-plus-web credentials'
+
+if ! auth=$(curl -s -H "Content-Type: application/json" -d '{ "client_name": "ABC", "grant_types": ["client_credentials","password"] }' "http://localhost:9001/clients");
+then echo "Error: couldn't get token"
+     exit 1
+fi
+
+echo $auth
+export AUTHPLUS_CLIENT_ID=$(echo $auth | jq .client_id | tr -d '"')
+export AUTHPLUS_SECRET=$(echo $auth | jq .client_secret | tr -d '"')
+
+BUILDSRV_DOCKER_TAG=${BUILDSRV_TAG-latest}
+echo 'Starting Buildsrv'
+echo "tag ${BUILDSRV_DOCKER_TAG}"
+docker run \
+  -d \
+  --name=buildsrv \
+  --expose=9200 \
+  -p 9200:9200 \
+  --link=auth-plus \
+  -e OTA_AUTH_URL='http://auth-plus:9001' \
+  -e OTA_SERVER_URL='http://localhost:9000' \
+  advancedtelematic/ota-build-srv:$BUILDSRV_DOCKER_TAG
+
+WEB_DOCKER_TAG=${WEB_TAG-latest}
+echo 'Starting Web'
+echo "tag ${WEB_DOCKER_TAG}"
+docker run \
+  -d \
+  --name=web \
+  --expose=9000 \
+  -p 9000:9000 \
+  --link=core \
+  --link=resolver \
+  --link=device-registry \
+  --link=auth-plus \
+  --link=nats \
+  --link=buildsrv \
+  --link=nats \
+  -e CORE_API_URI='http://core:8080' \
+  -e RESOLVER_API_URI='http://resolver:8081' \
+  -e DEVICE_REGISTRY_API_URI='http://device-registry:8083' \
+  -e NATS_HOST='nats' \
+  -e NATS_PORT='4222' \
+  -e BUILDSERVICE_API_HOST='http://buildsrv:9200' \
+  -e AUTHPLUS_HOST='http://auth-plus:9001' \
+  -e PLAY_CRYPTO_SECRET='secret' \
+  -e AUTHPLUS_CLIENT_ID=$AUTHPLUS_CLIENT_ID \
+  -e AUTHPLUS_SECRET=$AUTHPLUS_SECRET \
+  -e AUTH0_CLIENT_ID=$AUTH0_CLIENT_ID \
+  -e AUTH0_CLIENT_SECRET=$AUTH0_CLIENT_SECRET \
+  -e AUTH0_DOMAIN=$AUTH0_DOMAIN \
+  -e AUTH0_CALLBACK_URL=$AUTH0_CALLBACK_URL \
+  -e AUTH0_USER_UPDATE_TOKEN=$AUTH0_USER_UPDATE_TOKEN \
+  -e rootLevel='DEBUG' \
+  advancedtelematic/ota-plus-web:$WEB_DOCKER_TAG
