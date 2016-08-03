@@ -17,7 +17,7 @@ import eu.timepit.refined.api.Refined
 import io.circe.Decoder
 import org.genivi.sota.data.Device.{DeviceName, DeviceType}
 import org.genivi.sota.data.{Device, Namespace}
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceSeen, Message}
+import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, Message}
 import org.genivi.webserver.controllers.EventController
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -43,6 +43,7 @@ object MessagingData {
   val deviceIdOpt = Some(Device.DeviceId(deviceUUID))
   val deviceType = DeviceType.Vehicle
   val deviceCreatedMessage = new DeviceCreated(namespace, deviceName, deviceIdOpt, deviceType)
+  val deviceDeletedMessage = new DeviceDeleted(namespace, deviceId)
 }
 
 class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
@@ -55,6 +56,9 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
     "<html><body><script type=\"text/javascript\">parent.deviceCreated(" + Json.toJson(msg) + ");</script>"
   }
 
+  protected def getDeviceDeletedResponse(msg: DeviceDeleted): String = {
+    "<html><body><script type=\"text/javascript\">parent.deviceDeleted(" + Json.toJson(msg) + ");</script>"
+  }
   val mockMsgSrc = new MessageSourceProvider {
     override def getSource[T <: Message]()(implicit system: ActorSystem,
                                   tag: ClassTag[T],
@@ -63,6 +67,8 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
         Source.single(MessagingData.deviceSeenMessage).asInstanceOf[Source[T, NotUsed]]
       } else if(tag.runtimeClass.equals(classOf[DeviceCreated])) {
         Source.single(MessagingData.deviceCreatedMessage).asInstanceOf[Source[T, NotUsed]]
+      } else if(tag.runtimeClass.equals(classOf[DeviceDeleted])) {
+        Source.single(MessagingData.deviceDeletedMessage).asInstanceOf[Source[T, NotUsed]]
       } else {
         throw new IllegalArgumentException(s"[test] Event class not supported ${tag.runtimeClass.getSimpleName}")
       }
@@ -89,11 +95,20 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
     }
 
     "route DeviceCreateds from akka bus to client" in {
-      val request = FakeRequest(GET, s"/events/devices/${MessagingData.namespace}")
+      val request = FakeRequest(GET, s"/events/devicecreated/${MessagingData.namespace}")
       val result = call(controller.subDeviceCreated(MessagingData.namespace), request)
 
       status(result) must be(OK)
       contentAsString(result).trim mustBe getDeviceCreatedResponse(MessagingData.deviceCreatedMessage)
     }
+
+    "route DeviceDeleteds from akka bus to client" in {
+      val request = FakeRequest(GET, s"/events/devicedeleted/${MessagingData.namespace}")
+      val result = call(controller.subDeviceDeleted(MessagingData.namespace), request)
+
+      status(result) must be(OK)
+      contentAsString(result).trim mustBe getDeviceDeletedResponse(MessagingData.deviceDeletedMessage)
+    }
   }
+
 }
