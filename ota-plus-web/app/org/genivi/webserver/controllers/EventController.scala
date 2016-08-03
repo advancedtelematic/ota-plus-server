@@ -5,10 +5,10 @@ import javax.inject.{Inject, Singleton}
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import akka.stream.scaladsl.Source
-import com.advancedtelematic.ota.Messages.Messages.{deviceCreatedWrites, deviceSeenWrites}
+import com.advancedtelematic.ota.Messages.Messages.{deviceCreatedWrites, deviceSeenWrites, deviceDeletedWrites}
 import org.genivi.sota.data.{Device, Namespace}
 import org.genivi.sota.messaging.MessageBusManager
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceSeen}
+import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen}
 import org.genivi.webserver.controllers.messaging.MessageBusConnection
 import play.api.http.ContentTypes
 import play.api.libs.Comet
@@ -26,8 +26,8 @@ class EventController @Inject()
 
   implicit val context = Execution.defaultContext
 
-  MessageBusManager.subscribeDeviceCreated(system, conf.underlying)
-  MessageBusManager.subscribeDeviceSeen(system, conf.underlying)
+  MessageBusManager.subscribe[DeviceSeen](system, conf.underlying)
+  MessageBusManager.subscribe[DeviceCreated](system, conf.underlying)
 
   def subDeviceSeen(device: Device.Id): Action[AnyContent] = Action {
     val deviceSeenSource: Source[DeviceSeen, _] = subFn.getDeviceSeenSource(system)
@@ -43,5 +43,13 @@ class EventController @Inject()
       .filter(dcm => dcm.namespace == namespace)
       .map(Json.toJson(_))
       via Comet.json("parent.deviceCreated")).as(ContentTypes.JSON)
+  }
+
+  def subDeviceDeleted(namespace: Namespace): Action[AnyContent] = Action {
+    val deviceDeletedSource: Source[DeviceDeleted, _] = subFn.getDeviceDeletedSource(system)
+    Ok.chunked(deviceDeletedSource
+      .filter(ddm => ddm.ns == namespace)
+      .map(Json.toJson(_))
+      via Comet.json("parent.deviceDeleted")).as(ContentTypes.JSON)
   }
 }

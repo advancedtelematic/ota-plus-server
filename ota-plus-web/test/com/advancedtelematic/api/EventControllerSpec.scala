@@ -10,7 +10,7 @@ import com.advancedtelematic.ota.Messages.Messages._
 import eu.timepit.refined.api.Refined
 import org.genivi.sota.data.Device.{DeviceName, DeviceType}
 import org.genivi.sota.data.{Device, Namespace}
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceSeen}
+import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen}
 import org.genivi.webserver.controllers.EventController
 import org.genivi.webserver.controllers.messaging.MessageBusConnection
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -34,6 +34,7 @@ object MessagingData {
   val deviceIdOpt = Some(Device.DeviceId(deviceUUID))
   val deviceType = DeviceType.Vehicle
   val deviceCreatedMessage = new DeviceCreated(namespace, deviceName, deviceIdOpt, deviceType)
+  val deviceDeletedMessage = new DeviceDeleted(namespace, deviceId)
 }
 
 class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
@@ -46,12 +47,19 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
     "<html><body><script type=\"text/javascript\">parent.deviceCreated(" + Json.toJson(msg) + ");</script>"
   }
 
+  protected def getDeviceDeletedResponse(msg: DeviceDeleted): String = {
+    "<html><body><script type=\"text/javascript\">parent.deviceDeleted(" + Json.toJson(msg) + ");</script>"
+  }
+
   val mockMsgSrc = new MessageBusConnection {
     def getDeviceSeenSource(system: ActorSystem)(implicit mat: Materializer): Source[DeviceSeen, _] =
       Source.single(MessagingData.deviceSeenMessage)
 
     def getDeviceCreatedSource(system: ActorSystem)(implicit mat: Materializer): Source[DeviceCreated, _] =
       Source.single(MessagingData.deviceCreatedMessage)
+
+    def getDeviceDeletedSource(system: ActorSystem)(implicit mat: Materializer): Source[DeviceDeleted, _] =
+      Source.single(MessagingData.deviceDeletedMessage)
   }
 
   val application = new GuiceApplicationBuilder()
@@ -74,11 +82,20 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
     }
 
     "route DeviceCreateds from akka bus to client" in {
-      val request = FakeRequest(GET, s"/events/devices/${MessagingData.namespace}")
+      val request = FakeRequest(GET, s"/events/devicecreated/${MessagingData.namespace}")
       val result = call(controller.subDeviceCreated(MessagingData.namespace), request)
 
       status(result) must be(OK)
       contentAsString(result).trim mustBe getDeviceCreatedResponse(MessagingData.deviceCreatedMessage)
     }
+
+    "route DeviceDeleteds from akka bus to client" in {
+      val request = FakeRequest(GET, s"/events/devicedeleted/${MessagingData.namespace}")
+      val result = call(controller.subDeviceDeleted(MessagingData.namespace), request)
+
+      status(result) must be(OK)
+      contentAsString(result).trim mustBe getDeviceDeletedResponse(MessagingData.deviceDeletedMessage)
+    }
   }
+
 }
