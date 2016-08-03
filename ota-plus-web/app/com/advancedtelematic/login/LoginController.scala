@@ -3,17 +3,28 @@ package com.advancedtelematic.login
 import javax.inject.{Inject, Singleton}
 
 import org.asynchttpclient.uri.Uri
+import org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 import play.api.http.{HeaderNames, MimeTypes}
 import play.api.libs.json.{JsValue, Json}
 import play.api.Configuration
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.ws.WSClient
+import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Try}
 
-case class LoginData(username: String, password: String)
+final case class LoginData(username: String, password: String)
+
+final case class MalformedResponse(response: WSResponse) extends Throwable {
+  override def getMessage: String =
+    s"No tokens found in Auth0 response: Status '${response.status} ${response.statusText}', body ${response.body}"
+}
+
+final case class UnexpectedResponse(response: WSResponse) extends Throwable {
+  override def getMessage: String =
+    s"Unexpected Auth0 response with status '${response.status} ${response.statusText}', body: ${response.body}"
+}
 
 /**
   * Handles just login/authentication
@@ -51,7 +62,8 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
   }
 
   val callback: Action[AnyContent] = Action.async { request =>
-    request.getQueryString("code")
+    request
+      .getQueryString("code")
       .map[Future[Result]] { code =>
         // Get the token
         getToken(code).map {
@@ -89,12 +101,15 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
       )
 
     tokenResponse.flatMap { response =>
-      (for {
-        idToken     <- (response.json \ "id_token").asOpt[String]
-        accessToken <- (response.json \ "access_token").asOpt[String]
-      } yield {
-        Future.successful((idToken, accessToken))
-      }).getOrElse(Future.failed[(String, String)](new IllegalStateException("Tokens not sent")))
+      if (response.status == ResponseStatusCodes.OK_200) {
+        (for {
+          idToken     <- (response.json \ "id_token").asOpt[String]
+          accessToken <- (response.json \ "access_token").asOpt[String]
+        } yield Future.successful((idToken, accessToken)))
+          .getOrElse(Future.failed[(String, String)](MalformedResponse(response)))
+      } else {
+        Future.failed( UnexpectedResponse(response) )
+      }
     }
   }
 
