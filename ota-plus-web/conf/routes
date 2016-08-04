@@ -18,6 +18,8 @@ GET     /api/v1/devices/:deviceId/clientInfo    org.genivi.webserver.controllers
 GET     /api/v1/client/:deviceId/:packfmt/:arch org.genivi.webserver.controllers.ClientSdkController.downloadClientSdk(deviceId: Device.Id, packfmt: PackageType, arch: Architecture)
 
 GET     /api/v1/events/devices/:device          org.genivi.webserver.controllers.EventController.subDeviceSeen(device: Device.Id)
+GET     /api/v1/events/devicecreated/:namespace org.genivi.webserver.controllers.EventController.subDeviceCreated(namespace: Namespace)
+GET     /api/v1/events/devicedeleted/:namespace org.genivi.webserver.controllers.EventController.subDeviceDeleted(namespace: Namespace)
 
 GET     /api/v1/*path                           org.genivi.webserver.controllers.Application.apiProxy(path: String)
 PUT     /api/v1/*path                           org.genivi.webserver.controllers.Application.apiProxy(path: String)
