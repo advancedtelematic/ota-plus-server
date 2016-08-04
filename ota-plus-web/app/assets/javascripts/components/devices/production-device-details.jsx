@@ -2,6 +2,7 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
+      db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       ProductionDetailsHeader = require('./production-details-header'),
       PackagesQueue = require('../packages/queue'),
@@ -17,15 +18,12 @@ define(function(require) {
         queuedPackagesCount: 0,
         queueCount: 0,
         intervalId: null,
-        testVin: localStorage.getItem('firstProductionTestDevice'),
+        testId: localStorage.getItem('firstProductionTestDevice'),
       }
       this.toggleQueueHistory = this.toggleQueueHistory.bind(this);
       this.setPackagesStatistics = this.setPackagesStatistics.bind(this);
       this.setQueueStatistics = this.setQueueStatistics.bind(this);
       this.refreshData = this.refreshData.bind(this);
-
-      SotaDispatcher.dispatch({actionType: 'get-device', device: this.state.testVin});
-      this.props.Device.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
       var that = this;
@@ -42,7 +40,6 @@ define(function(require) {
       }
     }
     componentWillUnmount(){
-      this.props.Device.removeWatch("poll-device");
       clearInterval(this.state.intervalId);
     }
     toggleQueueHistory() {
@@ -63,11 +60,13 @@ define(function(require) {
       });
     }
     refreshData() {
-      SotaDispatcher.dispatch({actionType: 'get-device', device: this.state.testVin});
+      SotaDispatcher.dispatch({actionType: 'get-device', device: this.state.testId});
     }
     render() {
       // TODO: might be initialized empty
-      const deviceWithStatus = this.props.Device.deref();
+      const devices = db.searchableProductionDevices.deref();
+      const deviceWithStatus = !_.isUndefined(devices) && devices.length ? devices[0] : undefined;
+
       return (
         <ReactCSSTransitionGroup
           transitionAppear={true}
@@ -77,8 +76,10 @@ define(function(require) {
           transitionLeaveTimeout={500}
           transitionName="example">
           <div>
+          {!_.isUndefined(deviceWithStatus) ?
             <ProductionDetailsHeader
               device={deviceWithStatus}/>
+            : undefined }
             <div className="col-md-6 nopadding border-right-2">
               <div className="panel panel-ats">
                 <div className="panel-heading">
@@ -87,10 +88,12 @@ define(function(require) {
                   </div>
                 </div>
                 <div className="panel-body">
+                {!_.isUndefined(deviceWithStatus) ?
                   <Packages
-                    device={this.state.testVin}
+                    device={deviceWithStatus}
                     setPackagesStatistics={this.setPackagesStatistics}
                     lastSeen={deviceWithStatus.lastSeen}/>
+                  : undefined}
                 </div>
                 <div className="panel-footer">
                   {this.state.installedPackagesCount} installed, &nbsp;
@@ -113,7 +116,7 @@ define(function(require) {
                     isPackagesHistoryShown={this.state.isPackagesHistoryShown}
                     toggleQueueHistory={this.toggleQueueHistory}
                     setQueueStatistics={this.setQueueStatistics}
-                    device={this.props.params.id}/>
+                    device={deviceWithStatus}/>
                 </div>
                 <div className="panel-footer">
                   {this.state.queueCount} packages in queue
