@@ -242,7 +242,7 @@ define(function(require) {
           <Route path="newcampaign" component={Modal(NewCampaign, {TitleVar: "newcampaign", modalId: 'modal-new-campaign'})}/>
           <Route path=":action/:vin2" />
         </Route>
-        <Route path="productiondevicedetails/:id" component={wrapComponent(ProductionDeviceDetails, {Device: db.showDevice})}/>
+        <Route path="productiondevicedetails/:id" component={ProductionDeviceDetails}/>
         <Route path="packages" component={Packages}/>
         <Route path="testsettings" component={TestSettings}/>
       </Route>
