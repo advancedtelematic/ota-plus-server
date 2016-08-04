@@ -50,7 +50,10 @@ class ApiClientExec @Inject()(wsClient: WSClient)(implicit ec: ExecutionContext)
   }
 
   private val toResult: WSResponse => Result = { resp =>
-    val resultHeaders = resp.allHeaders.mapValues(_.head)
+    val resultHeaders = resp.allHeaders
+      .filterNot { case (k, v) => k == "Content-Length" }
+      .mapValues(_.head)
+
     Result(
       header = ResponseHeader(resp.status, resultHeaders),
       body = HttpEntity.Strict(resp.bodyAsBytes, None)
