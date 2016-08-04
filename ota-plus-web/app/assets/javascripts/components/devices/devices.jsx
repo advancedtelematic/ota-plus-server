@@ -74,7 +74,6 @@ define(function(require) {
     componentWillUnmount(){
       db.devices.reset();
       db.searchableDevices.reset();
-      db.searchableProductionDevices.reset();
       db.devices.removeWatch("devices");
       db.searchableDevices.removeWatch("searchable-devices");
       db.searchableProductionDevices.removeWatch("searchable-production-devices");

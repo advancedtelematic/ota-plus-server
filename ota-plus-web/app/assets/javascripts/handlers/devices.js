@@ -129,10 +129,10 @@ define(function(require) {
               sendRequest.doGet('/api/v1/device_data?status=true')
               .success(function(data) {
                 devices = _.filter(data, function(device) {
-                  return device.device == localStorage.getItem('firstProductionTestDevice');
+                  return device.id == localStorage.getItem('firstProductionTestDevice');
                 });
                 
-                devices[0].deviceId = payload.regex.substr(0, 17);
+                devices[0].deviceName = payload.regex.substr(0, 17);
                 db.searchableProductionDevices.reset(devices);
               });
             } else {
@@ -143,7 +143,7 @@ define(function(require) {
             sendRequest.doGet('/api/v1/device_data?status=true')
               .success(function(devices) {
                 db.showDevice.reset(_.find(devices, function(device) {
-                  return device.device == localStorage.getItem('firstProductionTestDevice');
+                  return device.id == localStorage.getItem('firstProductionTestDevice');
                 }));
               });
           break;
