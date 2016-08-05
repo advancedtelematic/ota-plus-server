@@ -2,15 +2,17 @@ package com.advancedtelematic.api
 
 import java.time.Instant
 
+import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import com.advancedtelematic.ota.Messages.Messages._
 import eu.timepit.refined.api.Refined
+import io.circe.Decoder
 import org.genivi.sota.data.Device.{DeviceName, DeviceType}
 import org.genivi.sota.data.{Device, Namespace}
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceSeen}
+import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceSeen, Message}
 import org.genivi.webserver.controllers.EventController
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -20,6 +22,8 @@ import play.api.libs.json._
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+
+import scala.reflect.ClassTag
 
 object MessagingData {
   val deviceUUID = "77a1888b-9bc8-4673-8f23-a51240303db4"
@@ -52,6 +56,15 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
 
     def getDeviceCreatedSource(system: ActorSystem)(implicit mat: Materializer) =
       Source.single(MessagingData.deviceCreatedMessage)
+
+    override def getSource[T <: Message]()(implicit system: ActorSystem, tag: ClassTag[T], decoder: Decoder[T]): Source[T, NotUsed] = {
+      if(tag.runtimeClass.equals(classOf[DeviceSeen]))
+        Source.single(MessagingData.deviceSeenMessage).asInstanceOf[Source[T, NotUsed]]
+      else if(tag.runtimeClass.equals(classOf[DeviceCreated]))
+        Source.single(MessagingData.deviceCreatedMessage).asInstanceOf[Source[T, NotUsed]]
+      else
+        throw new IllegalArgumentException(s"[test] Event class not supported ${tag.runtimeClass.getSimpleName}")
+    }
   }
 
   val application = new GuiceApplicationBuilder()
