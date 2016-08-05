@@ -35,6 +35,7 @@ def otaPlusProject(name: String): Project = Project(name, file(name))
       DefaultMavenRepository,
       projectResolver.value
     ))
+    .settings(libraryDependencies += filters)
     .settings(libraryDependencies ++= Dependencies.TestFrameworks)
     .settings(
       testOptions in Test ++= Seq(

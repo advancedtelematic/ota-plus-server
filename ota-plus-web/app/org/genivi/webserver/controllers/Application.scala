@@ -135,7 +135,7 @@ class Application @Inject() (ws: WSClient,
    *
    * @return OK response and index html
    */
-  def index : Action[AnyContent] = AuthenticatedAction { request =>
+  def index : Action[AnyContent] = AuthenticatedAction { implicit req =>
     Ok(views.html.main())
   }
 }

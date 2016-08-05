@@ -34,6 +34,7 @@ import play.api.Configuration
 import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.mvc.{Cookie, Cookies}
 import play.api.test.Helpers._
+import play.filters.csrf.CSRF
 import com.advancedtelematic.ota.device.Devices._
 import scala.util.Random
 import Device._
@@ -72,6 +73,11 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
 
   val wsClient = app.injector.instanceOf[WSClient]
 
+  val csrfTokenProvider = app.injector.instanceOf[CSRF.TokenProvider]
+
+  val csrfToken = csrfTokenProvider.generateToken
+
+
   object Method extends Enumeration {
     type Method = Value
     val GET, PUT, DELETE, POST = Value
@@ -86,10 +92,13 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   )(PackageId.apply _)
 
   import Method._
+  def apiUri(path: String) = s"http://$webserverHost:$port/api/v1/" + path
+
   def makeRequest(path: String, method: Method) : WSResponse = {
     val req =
       wsClient.url(s"http://$webserverHost:$port/api/v1/" + path)
         .withHeaders("Cookie" -> sessionCookie)
+        .withHeaders("Csrf-Token" -> csrfToken)
 
     method match {
       case PUT => await(req.put(""))
@@ -103,6 +112,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     val req = wsClient
       .url(s"http://$webserverHost:$port/api/v1/" + path)
       .withHeaders("Cookie" -> sessionCookie)
+      .withHeaders("Csrf-Token" -> csrfToken)
 
     method match {
       case PUT => await(req.put(data))
@@ -114,7 +124,10 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   def makeCookie(session: (String, String)*) =
     Cookies.encodeCookieHeader(Seq(Session.encodeAsCookie(Session(session.toMap))))
 
-  lazy val sessionCookie = makeCookie("id_token" -> oauthToken, "access_token" -> oauthToken)
+  lazy val sessionCookie = makeCookie(
+    "id_token" -> oauthToken,
+    "access_token" -> oauthToken,
+    "csrfToken" -> csrfToken)
 
   lazy val namespace = Subject("ittests@ats.com")
 
@@ -157,6 +170,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
         .preparePut(s"http://$webserverHost:$port/api/v1/packages/$packageName/" +
           packageVersion + "?description=test&vendor=ACME")
       .addHeader("Cookie", sessionCookie)
+      .addHeader("Csrf-Token", csrfToken)
     val builder = {
       val tmpFile = {
         val fileName = java.util.UUID.randomUUID().toString
@@ -404,6 +418,52 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     val listResponse = makeRequest(s"resolve?namespace=${namespace.underlying}&package_name=$testPackageName&package_version=$testPackageVersion", GET)
     //TODO: parse this properly. The issue is the root key for each list in the response is a vin, not a static string.
     listResponse.body.contains(testId.get) && !listResponse.body.contains(testIdAlt.get) mustBe true
+  }
+
+  "ANY request without session cookie should be rejected" taggedAs APITests in {
+    val req = wsClient.url(apiUri("devices"))
+
+    val resp = await(req.get())
+    resp.status mustBe FORBIDDEN
+
+    val respPut = await(req.put(""))
+    respPut.status mustBe FORBIDDEN
+
+    val device = Json.obj("deviceName" -> "", "deviceId" -> "", "deviceType" -> "Vehicle")
+    val respPost = await(req.post(device))
+    respPost.status mustBe FORBIDDEN
+
+    val respDel = await(req.delete())
+    respDel.status mustBe FORBIDDEN
+  }
+
+  "PUT/POST/DELETE requests without CSRF token should be rejected" taggedAs APITests in {
+    val req = wsClient.url(apiUri("devices"))
+      .withHeaders("Cookie" -> sessionCookie)
+
+    val respPut = await(req.put(""))
+    respPut.status mustBe FORBIDDEN
+
+    val respPost = await(req.post(""))
+    respPost.status mustBe FORBIDDEN
+
+    val respDel = await(req.delete())
+    respDel.status mustBe FORBIDDEN
+  }
+
+  "PUT/POST/DELETE requests with invalid CSRF token should be rejected" taggedAs APITests in {
+    val req = wsClient.url(apiUri("devices"))
+      .withHeaders("Cookie" -> sessionCookie)
+      .withHeaders("Csrf-Token" -> "invalid")
+
+    val respPut = await(req.put(""))
+    respPut.status mustBe FORBIDDEN
+
+    val respPost = await(req.post(""))
+    respPost.status mustBe FORBIDDEN
+
+    val respDel = await(req.delete())
+    respDel.status mustBe FORBIDDEN
   }
 
 }
