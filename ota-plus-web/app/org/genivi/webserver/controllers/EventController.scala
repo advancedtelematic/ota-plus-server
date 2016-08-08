@@ -9,10 +9,11 @@ import javax.inject.{Inject, Singleton}
 
 import akka.actor.ActorSystem
 import akka.stream.Materializer
-import com.advancedtelematic.ota.Messages.Messages.{deviceCreatedWrites, deviceSeenWrites}
+import akka.stream.scaladsl.Source
+import com.advancedtelematic.ota.Messages.Messages.{deviceCreatedWrites, deviceDeletedWrites, deviceSeenWrites}
 import org.genivi.sota.data.{Device, Namespace}
 import org.genivi.sota.messaging.MessageBus
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceSeen}
+import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen}
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
 import play.api.http.ContentTypes
 import play.api.libs.Comet
@@ -43,5 +44,13 @@ class EventController @Inject()
       .filter(dcm => dcm.namespace == namespace)
       .map(Json.toJson(_))
       via Comet.json("parent.deviceCreated")).as(ContentTypes.JSON)
+  }
+
+  def subDeviceDeleted(namespace: Namespace): Action[AnyContent] = Action {
+    val deviceDeletedSource: Source[DeviceDeleted, _] = messageBusProvider.getSource[DeviceDeleted]()
+    Ok.chunked(deviceDeletedSource
+      .filter(ddm => ddm.ns == namespace)
+      .map(Json.toJson(_))
+      via Comet.json("parent.deviceDeleted")).as(ContentTypes.JSON)
   }
 }
