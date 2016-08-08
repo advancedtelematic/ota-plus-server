@@ -3,8 +3,8 @@ define(function(require) {
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      HistoryListItem = require('./history-list-item'),
-      Loader = require('../loader');
+      HistoryListItem = require('es6!./history-list-item'),
+      Loader = require('es6!../loader');
   
   class HistoryList extends React.Component {
     constructor(props) {
