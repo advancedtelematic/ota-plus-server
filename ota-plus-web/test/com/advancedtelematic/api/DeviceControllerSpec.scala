@@ -69,11 +69,15 @@ class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results 
 
   val emptyRequest = FakeRequest().withBody(RawBuffer(0, ByteString()))
 
+  implicit class RequestSyntax[A](request: FakeRequest[A]) {
+    def withAuthSession(): FakeRequest[A] =
+      request.withSession("id_token" -> "", "access_token" -> "", "auth_plus_access_token" -> "")
+  }
+
   "DeviceController" should {
     "forward create to both device registry and resolver" in {
       val request = FakeRequest(POST, "/")
-        .withJsonBody(Json.toJson(device))
-        .withSession("id_token" -> "", "access_token" -> "")
+        .withJsonBody(Json.toJson(device)).withAuthSession()
       val result = call(controller.create(), request)
 
       status(result) must be(201)
@@ -82,15 +86,14 @@ class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results 
 
     "listDeviceAttributes gets results from core" in {
       val result = controller.listDeviceAttributes().apply(
-        emptyRequest.withSession("id_token" -> "", "access_token" -> ""))
+        emptyRequest.withAuthSession())
 
       status(result) must be(200)
       contentAsString(result) must be("Core Search")
     }
 
     "search forwards request to device registry" in {
-      val request = FakeRequest(GET, "/?deviceId=LOL")
-        .withSession("id_token" -> "", "access_token" -> "")
+      val request = FakeRequest(GET, "/?deviceId=LOL").withAuthSession()
       val result = call(controller.search(), request)
 
       status(result) must be(200)

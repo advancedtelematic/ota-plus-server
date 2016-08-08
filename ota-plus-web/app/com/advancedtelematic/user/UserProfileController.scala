@@ -4,7 +4,7 @@ import javax.inject.{Inject, Singleton}
 
 import cats.data.Xor
 import com.advancedtelematic.jws.CompactSerialization
-import com.advancedtelematic.{AccessToken, AuthenticatedAction, IdToken}
+import com.advancedtelematic.{Auth0AccessToken, AuthenticatedAction, IdToken}
 import com.advancedtelematic.login.Auth0Config
 import org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 import play.api.{Configuration, Logger}
@@ -49,7 +49,7 @@ class UserProfileController @Inject()(conf: Configuration, wsClient: WSClient)(i
 
   def getUserProfile: Action[AnyContent] = AuthenticatedAction.async { request =>
     val userProfile: Future[UserProfile] =
-      getUser(request.accessToken).map(UserProfile.FromUserInfoReads.reads).flatMap[UserProfile] {
+      getUser(request.auth0AccessToken).map(UserProfile.FromUserInfoReads.reads).flatMap[UserProfile] {
         case JsSuccess(profile, _) =>
           Future.successful(profile)
         case JsError(errors) =>
@@ -60,7 +60,7 @@ class UserProfileController @Inject()(conf: Configuration, wsClient: WSClient)(i
 
   private[this] def userIdFromToken(idToken: IdToken): String Xor UserId = {
     for {
-      cs    <- CompactSerialization.parse(idToken.token)
+      cs    <- CompactSerialization.parse(idToken.value)
       idStr <- (Json.parse(cs.encodedPayload.stringData()) \ "sub").validate[String].toXor
     } yield UserId(idStr)
   }
@@ -93,10 +93,10 @@ class UserProfileController @Inject()(conf: Configuration, wsClient: WSClient)(i
     }
   }
 
-  private[this] def getUser(accessToken: AccessToken): Future[JsValue] = {
+  private[this] def getUser(accessToken: Auth0AccessToken): Future[JsValue] = {
     val userResponse = wsClient
       .url(String.format("https://%s/userinfo", auth0Config.domain))
-      .withQueryString("access_token" -> accessToken.token)
+      .withQueryString("access_token" -> accessToken.value)
       .get()
 
     userResponse.flatMap(response => Future.successful(response.json))
