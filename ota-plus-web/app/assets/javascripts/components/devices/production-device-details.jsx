@@ -1,12 +1,16 @@
 define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
-      ReactCSSTransitionGroup = React.addons.CSSTransitionGroup,
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       ProductionDetailsHeader = require('./production-details-header'),
       PackagesQueue = require('../packages/queue'),
-      Packages = require('../packages/packages');
+      Packages = require('../packages/packages'),
+      Loader = require('../loader'),
+      VelocityUI = require('velocity-ui'),
+      VelocityHelpers = require('mixins/velocity/velocity-helpers'),
+      VelocityComponent = require('mixins/velocity/velocity-component'),
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
 
   class ProductionDeviceDetails extends React.Component {
     constructor(props, context) {
@@ -24,6 +28,10 @@ define(function(require) {
       this.setPackagesStatistics = this.setPackagesStatistics.bind(this);
       this.setQueueStatistics = this.setQueueStatistics.bind(this);
       this.refreshData = this.refreshData.bind(this);
+      
+      db.showDevice.reset();
+      SotaDispatcher.dispatch({actionType: 'get-production-device'});
+      db.showDevice.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
       var that = this;
@@ -40,6 +48,8 @@ define(function(require) {
       }
     }
     componentWillUnmount(){
+      db.showDevice.reset();
+      db.showDevice.removeWatch("poll-device");
       clearInterval(this.state.intervalId);
     }
     toggleQueueHistory() {
@@ -60,72 +70,71 @@ define(function(require) {
       });
     }
     refreshData() {
-      SotaDispatcher.dispatch({actionType: 'get-device', device: this.state.testId});
+      SotaDispatcher.dispatch({actionType: 'get-production-device'});
     }
     render() {
       // TODO: might be initialized empty
-      const devices = db.searchableProductionDevices.deref();
-      const deviceWithStatus = !_.isUndefined(devices) && devices.length ? devices[0] : undefined;
+      const deviceWithStatus = db.showDevice.deref();
 
       return (
-        <ReactCSSTransitionGroup
-          transitionAppear={true}
-          transitionLeave={false}
-          transitionAppearTimeout={500}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={500}
-          transitionName="example">
-          <div>
-          {!_.isUndefined(deviceWithStatus) ?
-            <ProductionDetailsHeader
-              device={deviceWithStatus}/>
-            : undefined }
-            <div className="col-md-6 nopadding border-right-2">
-              <div className="panel panel-ats">
-                <div className="panel-heading">
-                  <div className="panel-heading-left pull-left">
-                    {this.context.strings.packages}
-                  </div>
-                </div>
-                <div className="panel-body">
-                {!_.isUndefined(deviceWithStatus) ?
-                  <Packages
-                    device={deviceWithStatus}
-                    setPackagesStatistics={this.setPackagesStatistics}
-                    lastSeen={deviceWithStatus.lastSeen}/>
-                  : undefined}
-                </div>
-                <div className="panel-footer">
-                  {this.state.installedPackagesCount} installed, &nbsp;
-                  {this.state.queuedPackagesCount} queued
+        <div>
+          <div className="device-header">
+            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+              {!_.isUndefined(deviceWithStatus) ? 
+                <ProductionDetailsHeader
+                  device={deviceWithStatus}
+                  id={this.props.params.id}/>
+              : undefined}
+            </VelocityTransitionGroup>
+            {_.isUndefined(deviceWithStatus) ? 
+              <Loader />
+            : undefined}
+          </div>
+          <div className="col-md-6 nopadding border-right-2">
+            <div className="panel panel-ats">
+              <div className="panel-heading">
+                <div className="panel-heading-left pull-left">
+                  {this.context.strings.packages}
                 </div>
               </div>
+              <div className="panel-body">
+                  <Packages
+                    device={deviceWithStatus}
+                    setPackagesStatistics={this.setPackagesStatistics}/>
+              </div>
+              <div className="panel-footer">
+                <span className="packages-statistics">
+                  {this.state.installedPackagesCount} installed, &nbsp;
+                  {this.state.queuedPackagesCount} queued
+                </span>
+              </div>
             </div>
-            <div className="col-md-6 nopadding">
-              <div className="panel panel-ats">
-                <div className="panel-heading">
-                  <div className="panel-heading-left pull-left">
-                    {this.context.strings.queue}
-                  </div>
-                  <div className="panel-heading-right pull-right">
-                  </div>
+          </div>
+          <div className="col-md-6 nopadding">
+            <div className="panel panel-ats">
+              <div className="panel-heading">
+                <div className="panel-heading-left pull-left">
+                  {this.context.strings.queue}
                 </div>
-                <div className="panel-body">
-                  <PackagesQueue
-                    textPackagesHistory={this.state.textPackagesHistory}
-                    isPackagesHistoryShown={this.state.isPackagesHistoryShown}
-                    toggleQueueHistory={this.toggleQueueHistory}
-                    setQueueStatistics={this.setQueueStatistics}
-                    device={deviceWithStatus}/>
+                <div className="panel-heading-right pull-right">
                 </div>
-                <div className="panel-footer">
-                  {this.state.queueCount} packages in queue
-                </div>
+              </div>
+              <div className="panel-body">
+                <PackagesQueue
+                  textPackagesHistory={this.state.textPackagesHistory}
+                  isPackagesHistoryShown={this.state.isPackagesHistoryShown}
+                  toggleQueueHistory={this.toggleQueueHistory}
+                  reviewFailedInstall={this.reviewFailedInstall}
+                  setQueueStatistics={this.setQueueStatistics}
+                  device={deviceWithStatus}/>
+              </div>
+              <div className="panel-footer">
+                {this.state.queueCount} packages in queue
               </div>
             </div>
           </div>
           {this.props.children}
-        </ReactCSSTransitionGroup>
+        </div>
       );
     }
   };

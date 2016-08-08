@@ -24,35 +24,32 @@ define(function(require) {
         default:
         break;
       }
+            
       return (
-        <div className="device-header">
-          <div className="col-md-12">
-            <Link to="/"><img src="/assets/img/icons/back.png" className="icon-back" alt=""/></Link>
-            <div className="device-box">
-              <div className="device-icon"></div>
+        <div className="col-md-12">
+          <Link to="/"><img src="/assets/img/icons/back.png" className="icon-back" alt=""/></Link>
+          <div className="device-icon"></div>
+  
+          <div className="device-header-text">
+            <div className="device-name">{this.props.id}</div>
+            <div className="device-lastseen">
+              {this.props.device.status !== 'NotSeen' ?
+                <span>Last seen online: {lastSeenDate.toDateString()}</span>
+              :
+                <span>Never seen online</span>
+              }
             </div>
-
-            <div className="device-header-text">
-              <div className="device-name">{this.props.device.deviceName}</div>
-              <div className="device-lastseen">
-                {this.props.device.status != 'NotSeen' ?
-                  <span>Last seen online: {lastSeenDate.toDateString()}</span>
-                :
-                  <span>Never seen online</span>
-                }
-              </div>
-            </div>
-
-            <div className="device-header-status pull-right">
-              <div className={"device-status device-status-" + this.props.device.status}>
-                <i className="fa fa-circle" aria-hidden="true"></i>
-              </div>
-              {deviceStatus}
-            </div>
-            <Link to={`devicedetails/${localStorage.getItem('firstProductionTestDevice')}/synchronising/${this.props.device.deviceId}`} className="btn-duplicate-device pull-right">
-              Duplicate to test device (1)
-            </Link>
           </div>
+
+          <div className="device-header-status pull-right">
+            <div className={"device-status device-status-" + this.props.device.status}>
+              <i className="fa fa-circle" aria-hidden="true"></i>
+            </div>
+            {deviceStatus}
+          </div>
+          <Link to={`devicedetails/${localStorage.getItem('firstProductionTestDevice')}/synchronising/${this.props.id}`} className="btn-duplicate-device pull-right">
+            Duplicate to test device (1)
+          </Link>
         </div>
       );
     }
