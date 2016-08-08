@@ -5,7 +5,7 @@ define(function(require) {
       serializeForm = require('../../mixins/serialize-form'),
       BootstrapDatetimepicker = require('bootstrap-datetimepicker'),
       SotaDispatcher = require('sota-dispatcher'),
-      ImpactListItem = require('./impact-list-item');
+      ImpactListItem = require('es6!./impact-list-item');
 
   class ImpactAnalysis extends React.Component {
     constructor(props) {

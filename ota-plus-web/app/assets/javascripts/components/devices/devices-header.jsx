@@ -2,8 +2,8 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       Link = Router.Link,
-      SearchBar = require('../searchbar'),
-      TutorialAddNewDevice = require('../tutorial/add-new-device');
+      SearchBar = require('es6!../searchbar'),
+      TutorialAddNewDevice = require('es6!../tutorial/add-new-device');
         
   class DevicesHeader extends React.Component {
     constructor(props) {

@@ -2,10 +2,10 @@ define(function(require) {
   var React = require('react'),
       SotaDispatcher = require('sota-dispatcher'),
       db = require('stores/db'),
-      QueueListItem = require('./queue-list-item'),
-      Loader = require('../loader'),
+      QueueListItem = require('es6!./queue-list-item'),
+      Loader = require('es6!../loader'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      TutorialAddPackageThirdStep = require('../tutorial/add-package-third-step');
+      TutorialAddPackageThirdStep = require('es6!../tutorial/add-package-third-step');
   
   class QueueList extends React.Component {
     constructor(props) {

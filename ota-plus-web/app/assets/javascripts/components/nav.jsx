@@ -4,9 +4,9 @@ define(function(require) {
       Link = Router.Link,
       IndexLink = Router.IndexLink,
       SotaDispatcher = require('sota-dispatcher'),
-      LanguageSelector = require('./translation/language-selector'),
+      LanguageSelector = require('es6!./translation/language-selector'),
       Translate = require('./translation/translate'),
-      Profile = require('./user/profile'),
+      Profile = require('es6!./user/profile'),
       VelocityComponent = require('mixins/velocity/velocity-component'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');;
 
