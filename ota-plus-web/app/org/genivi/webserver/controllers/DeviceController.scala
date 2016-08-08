@@ -54,7 +54,7 @@ extends Controller with ApiClientSupport {
     val traceId = req.headers.get("x-ats-traceid")
     val namespace = req.session.get("username").asInstanceOf[Option[Namespace]]
     // TODO: Switch back to access_token after https://advancedtelematic.atlassian.net/browse/PRO-858
-    UserOptions(Some(req.idToken.token), traceId, namespace)
+    UserOptions(Some(req.idToken.value), traceId, namespace)
   }
 
   /**
