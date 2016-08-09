@@ -32,19 +32,25 @@ define(function(require) {
       this.expandPackage = this.expandPackage.bind(this);
       this.selectToAnalyse = this.selectToAnalyse.bind(this);
       this.updateListToAnalyse = this.updateListToAnalyse.bind(this);
+      this.refreshAsChanged = this.refreshAsChanged.bind(this);
 
-      db.searchablePackages.addWatch("poll-packages", _.bind(this.setData, this, null));
-      db.packagesForDevice.addWatch("poll-installed-packages", _.bind(this.setData, this, null));
-      db.packageQueueForDevice.addWatch("poll-queued-packages", _.bind(this.setData, this, null));
+      db.searchablePackages.addWatch("poll-packages", _.bind(this.refreshAsChanged, this, null));
+      db.searchablePackagesForDevice.addWatch("poll-installed-packages", _.bind(this.refreshAsChanged, this, null));
+      db.packageQueueForDevice.addWatch("poll-queued-packages", _.bind(this.refreshAsChanged, this, null));
     }
     componentWillUpdate(nextProps, nextState) {
       if(nextProps.filterValue != this.props.filterValue) {
-        SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
+        SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: nextProps.filterValue});
+        SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.id, regex: nextProps.filterValue});
       }
     }
     componentWillReceiveProps(nextProps) {
       if(this.props.showForm !== nextProps.showForm) {
         this.setState({showForm: nextProps.showForm});
+      }
+            
+      if(this.props.selectStatus !== nextProps.selectStatus || this.props.selectType !== nextProps.selectType) {
+        this.setData(nextProps.selectStatus, nextProps.selectType);
       }
     }
     componentDidUpdate(prevProps, prevState) {
@@ -58,7 +64,7 @@ define(function(require) {
       var that = this;
       var intervalId = setInterval(function() {
         that.refreshData();
-      }, 1000);
+      }, 9999999);
       this.setState({intervalId: intervalId});
       this.refreshData();
 
@@ -86,21 +92,24 @@ define(function(require) {
     }
     componentWillUnmount() {
       db.searchablePackages.reset();
-      db.packagesForDevice.reset();
+      db.searchablePackagesForDevice.reset();
       db.packageQueueForDevice.reset();
       db.searchablePackages.removeWatch("poll-packages");
-      db.packagesForDevice.removeWatch("poll-installed-packages");
+      db.searchablePackagesForDevice.removeWatch("poll-installed-packages");
       db.packageQueueForDevice.removeWatch("poll-queued-packages");
       clearTimeout(this.state.timeout);
       clearInterval(this.state.intervalId);
     }
     refreshData() {
       SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
-      SotaDispatcher.dispatch({actionType: 'get-packages-for-device', device: this.props.device.id});
+      SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.id, regex: this.props.filterValue});
       SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device.id});
     }
-    setData() {
-      var result = this.prepareData();
+    refreshAsChanged() {
+      this.setData(this.props.selectStatus, this.props.selectType);
+    }
+    setData(selectStatus, selectType) {
+      var result = this.prepareData(selectStatus, selectType);
       var data = result.data;
       this.props.setPackagesStatistics(result.statistics.installedCount, result.statistics.queuedCount);
       this.setState({
@@ -114,16 +123,36 @@ define(function(require) {
       
       this.props.openForm();
     }
-    prepareData() {
-      var Packages = db.searchablePackages.deref();
-      var Installed = db.packagesForDevice.deref();
-      var Queued = db.packageQueueForDevice.deref();
+    prepareData(selectStatus, selectType) {
+      var Packages = _.clone(db.searchablePackages.deref());
+      var Installed = _.clone(db.searchablePackagesForDevice.deref());
+      var Queued = _.clone(db.packageQueueForDevice.deref());
 
       var SortedPackages = undefined;
       var installedCount = 0;
       var queuedCount = 0;
-      if(!_.isUndefined(Packages) && !_.isUndefined(Installed) && !_.isUndefined(Queued)) {
 
+      var selectedStatus = selectStatus ? selectStatus : this.props.selectStatus;
+      var selectedType = selectedType ? selectedType : this.props.selectedType;
+      if(!_.isUndefined(Packages) && !_.isUndefined(Installed) && !_.isUndefined(Queued)) {
+        switch(selectType) {
+          case 'all': 
+            Installed.forEach(function(installed){
+              Packages.push(installed);
+            });
+          break;
+          case 'system':
+            Packages.forEach(function(obj) {
+              Installed = Installed.filter(function(res){
+                return (res.id.name != obj.id.name && res.id.version != obj.id.version);
+              });
+            });
+            Packages = Installed;
+          break;
+          default:
+          break;
+        }
+                        
         var InstalledIds = new Object();
         Installed.forEach(function(obj){
           InstalledIds[obj.id.name+'_'+obj.id.version] = obj.id.name+'_'+obj.id.version;
@@ -175,7 +204,7 @@ define(function(require) {
         });
 
         var SelectedPackages = {};
-        switch(this.props.selectStatus) {
+        switch(selectedStatus) {
           case 'installed':
             _.each(GroupedPackages, function(obj, key) {
               if(obj.isInstalled)
@@ -288,7 +317,7 @@ define(function(require) {
       }
       return 0;
     }
-    render() {
+    render() {     
       if(!_.isUndefined(this.state.data)) {
         var packages = _.map(this.state.data, function(packages, index) {
 
@@ -397,7 +426,7 @@ define(function(require) {
           : null}
           {this.props.device.status !== 'NotSeen' 
                       && !_.isUndefined(db.searchablePackages.deref()) && db.searchablePackages.deref().length
-                      && !_.isUndefined(db.packagesForDevice.deref()) && !db.packagesForDevice.deref().length 
+                      && !_.isUndefined(db.searchablePackagesForDevice.deref()) && !db.searchablePackagesForDevice.deref().length 
                       && !_.isUndefined(db.packageQueueForDevice.deref()) && db.packageQueueForDevice.deref().length ?
             null
           : null}
