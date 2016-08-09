@@ -8,7 +8,7 @@ define(function(require) {
       super(props);
     }
     render() {
-      const link = this.props.isProductionDevice ? 'productiondevicedetails' : 'devicedetails';
+      const link = this.props.isProductionDevice ? 'productiondevicedetails/' + this.props.productionDeviceName : 'devicedetails/' + this.props.device.id;
       const lastSeenDate = new Date(this.props.device.lastSeen);
       var deviceName = this.props.device.deviceName;
       deviceName = deviceName.length > 20 ? deviceName.substring(0, 20) + '..' : deviceName;
@@ -27,7 +27,7 @@ define(function(require) {
         break;
       }
       return (
-        <Link to={`${link}/${this.props.device.id}`} className="device-box">
+        <Link to={`${link}`} className="device-box">
           <div className="device-icon">
             <div className={"device-status device-status-" + this.props.device.status}>
               <i className="fa fa-circle" aria-hidden="true"></i>
