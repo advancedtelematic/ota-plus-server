@@ -8,6 +8,7 @@ define(function(require) {
       this.showDevice = atom.createAtom();
       this.packages = atom.createAtom([]);
       this.packagesForDevice = atom.createAtom();
+      this.searchablePackagesForDevice = atom.createAtom();
       this.packageHistoryForDevice = atom.createAtom();
       this.packageQueueForDevice = atom.createAtom();
       this.searchableDevices = atom.createAtom();

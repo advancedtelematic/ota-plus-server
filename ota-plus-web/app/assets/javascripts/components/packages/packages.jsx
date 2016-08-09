@@ -13,6 +13,8 @@ define(function(require) {
         selectStatusName: 'All',
         selectSort: 'asc',
         selectSortName: 'A > Z',
+        selectType: 'installable',
+        selectTypeName: 'Installable packages',
         packagesListHeight: '300px',
         showForm: false
       }
@@ -57,7 +59,6 @@ define(function(require) {
         selectStatus: status,
         selectStatusName: name
       });
-      document.body.dispatchEvent(new CustomEvent("refreshList"));
     }
     selectSort(sort, e) {
       e.preventDefault();
@@ -66,6 +67,15 @@ define(function(require) {
       this.setState({
         selectSort: sort,
         selectSortName: name
+      });
+    }
+    selectType(type, e) {
+      e.preventDefault();
+
+      var name = jQuery(e.target).text();
+      this.setState({
+        selectType: type,
+        selectTypeName: name
       });
     }
     setPackagesListHeight() {
@@ -114,6 +124,21 @@ define(function(require) {
               </div>
             </div>
     
+             <div className="select-bar pull-right margin-left-15">
+              <div className="select-bar-text">Type</div>
+              <div className="btn-group">
+                <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span className="pull-left">{this.state.selectTypeName} &nbsp;</span>
+                  <span className="fa fa-angle-down pull-right"></span>
+                </button>
+                <ul className="dropdown-menu">
+                  <li><a href="#" onClick={this.selectType.bind(this, 'all')}>All packages</a></li>
+                  <li><a href="#" onClick={this.selectType.bind(this, 'system')}>System packages</a></li>
+                  <li><a href="#" onClick={this.selectType.bind(this, 'installable')}>Installable packages</a></li>
+                </ul>
+              </div>
+            </div>
+            
             <div className="sort-text pull-right">
               {this.state.selectSort == 'asc' ? 
                 <a href="#" onClick={this.selectSort.bind(this, 'desc')}><i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z</a>
@@ -135,6 +160,7 @@ define(function(require) {
                 packagesListHeight={this.state.packagesListHeight}
                 selectStatus={this.state.selectStatus}
                 selectSort={this.state.selectSort}
+                selectType={this.state.selectType}
                 filterValue={this.state.filterValue}
                 setPackagesStatistics={this.props.setPackagesStatistics}
                 countImpactAnalysisPackages={this.props.countImpactAnalysisPackages}
