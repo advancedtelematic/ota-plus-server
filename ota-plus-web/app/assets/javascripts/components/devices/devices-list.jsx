@@ -16,7 +16,8 @@ define(function(require) {
         return (
           <DeviceListItem key={device.deviceName}
             device={device}
-            isProductionDevice={this.props.areProductionDevices}/>
+            isProductionDevice={this.props.areProductionDevices}
+            productionDeviceName={this.props.productionDeviceName}/>
         );
       }, this);
 

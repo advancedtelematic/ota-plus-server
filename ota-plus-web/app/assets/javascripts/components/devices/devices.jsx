@@ -199,7 +199,8 @@ define(function(require) {
                     <div className="devices" style={{height: this.state.devicesListHeight}}>
                       <DevicesList
                         Devices={db.searchableProductionDevices.deref()}
-                        areProductionDevices={true}/>
+                        areProductionDevices={true}
+                        productionDeviceName={this.state.filterValue}/>
                       {this.props.children}
                     </div>
                   </div>
