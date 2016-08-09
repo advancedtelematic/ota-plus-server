@@ -29,11 +29,12 @@ define(function(require) {
       NewDevice = require('components/devices/new-device'),
       Modal = require('components/modal'),
       ImpactAnalysis = require('components/devices/impact-analysis'),
-      Profile = require('components/profile'),
+      Profile = require('components/user/profile'),
       RightPanel = require('components/campaigns/right-panel'),
       NewCampaign = require('components/campaigns/new-campaign'),
       Campaigns = require('components/campaigns/campaigns'),
-      TestSettings = require('components/test-settings');
+      TestSettings = require('components/test-settings'),
+      EditProfile = require('components/user/edit-profile');
 
   const languages = {
     en: 'en',
@@ -183,6 +184,9 @@ define(function(require) {
           case 'packages':
             page = 'page-packages';
           break;
+          case 'editprofile':
+            page = 'page-home';
+          break;
           default:
           break;
         }
@@ -245,6 +249,7 @@ define(function(require) {
         <Route path="productiondevicedetails/:id" component={ProductionDeviceDetails}/>
         <Route path="packages" component={Packages}/>
         <Route path="testsettings" component={TestSettings}/>
+        <Route path="editprofile" component={EditProfile}/>
       </Route>
     </Route>
   );

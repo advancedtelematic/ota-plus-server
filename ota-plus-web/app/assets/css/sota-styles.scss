@@ -2,8 +2,12 @@
 
 $font-size: 13px;
 $font-family: "AkkuratRegular";
+$color_blue: #A6E6DF;
+$color_red: #d66f6f;
 $color-orange: #FB9773;
 $color-brown: #66493E;
+
+@import "common.scss";
 
 * {
     text-decoration: none;
@@ -1012,10 +1016,10 @@ a.close, button.close {
 
 .sort-text {
     margin: 11px 0 0 0;
-    
+
     a {
         color: #fff;
-        
+
         &:hover, &:active, &:focus {
             color: #fff;
             text-decoration: none;
@@ -1421,7 +1425,7 @@ a.close, button.close {
     .loader {
         color: #888;
     }
-    
+
     a {
         color: #888;
         text-decoration: none;
@@ -1603,7 +1607,7 @@ a.close, button.close {
     float: right;
     box-shadow: 0 3px 15px rgba(0, 0, 0, 0.5);
     right: -150px;
-    
+
     .logo {
         width: 50px;
         margin-right: 20px;
