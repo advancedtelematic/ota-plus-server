@@ -2,6 +2,8 @@ $color_blue: #A6E6DF;
 $color_red: #d66f6f;
 $footer_panel_bg_color: #282828;
 
+@import "common.scss";
+
 /* Main */
 
 @font-face {
@@ -77,86 +79,7 @@ a, a:hover, a:focus {
 
 .ats {
     padding-bottom: 70px;
-
-    &-header {
-        font-size: 28px;
-        margin: 20px 0 40px 0;
-    }
-
-    .form-control {
-        font-size: 17px;
-        text-align: center;
-        height: auto;
-        padding: 13px 15px;
-        margin-bottom: 20px;
-        border: 2px solid rgba(255,255,255,0.2);
-        border-radius: 12px;
-        -moz-background-clip: padding;     /* Firefox 3.6 */
-        -webkit-background-clip: padding;  /* Safari 4? Chrome 6? */
-        background-clip: padding-box;
-
-        &.error {
-            margin-bottom: 0;
-            border: 2px solid $color_blue;
-        }
-    }
-
-    &-errors {
-        font: 400 17px Arial;
-        text-align: center;
-        background: $color_red;
-        padding: 25px 30px;
-        margin: 0 15px;
-        margin-bottom: 20px;
-        border-radius: 12px;
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 100%;
-        z-index: 999;
-        display: none;
-    }
-
-    &-button {
-        font-size: 19px;
-        text-align: center;
-        text-decoration: none;
-        background: rgba(255,170,136,0.5);
-        width: 100%;
-        padding: 15px;
-        transition: all 0.5s ease;
-        border: 0;
-        border-radius: 25px;
-        display: block;
-
-        &:hover {
-            background: rgba(255,170,136,1.0);
-            text-decoration: none;
-        }
-
-        &[disabled] {
-            background: #b7b7b7;
-        }
-
-        &.grey {
-            background: rgba(183,183,183,0.5);
-
-            &:hover {
-                background: rgba(183,183,183,1.0);
-            }
-        }
-
-        &.bordered {
-            background: transparent;
-            border: 2px solid #fff;
-
-            &:hover {
-                color: #ffaa88;
-                border-color: #ffaa88;
-            }
-        }
-    }
-
+    
     input.error {
         border-color: $color_red !important;
     }
