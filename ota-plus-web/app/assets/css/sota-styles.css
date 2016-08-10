@@ -1,4 +1,16 @@
 /* Main */
+.ats-header { font-size: 28px; margin: 20px 0 40px 0; }
+.ats .form-control { font-size: 17px; text-align: center; height: auto; padding: 13px 15px; margin-bottom: 20px; border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 12px; -moz-background-clip: padding; /* Firefox 3.6 */ -webkit-background-clip: padding; /* Safari 4? Chrome 6? */ background-clip: padding-box; }
+.ats .form-control.error { margin-bottom: 0; border: 2px solid #A6E6DF; }
+.ats-errors { font: 400 17px Arial; text-align: center; background: #d66f6f; padding: 25px 30px; margin: 0 15px; margin-bottom: 20px; border-radius: 12px; position: absolute; left: 0; right: 0; bottom: 100%; z-index: 999; display: none; }
+.ats-button { font-size: 19px; text-align: center; text-decoration: none; background: rgba(255, 170, 136, 0.5); width: 100%; padding: 15px; transition: all 0.5s ease; border: 0; border-radius: 25px; display: block; }
+.ats-button:hover { background: #ffaa88; text-decoration: none; }
+.ats-button[disabled] { background: #b7b7b7; }
+.ats-button.grey { background: rgba(183, 183, 183, 0.5); }
+.ats-button.grey:hover { background: #b7b7b7; }
+.ats-button.bordered { background: transparent; border: 2px solid #fff; }
+.ats-button.bordered:hover { color: #ffaa88; border-color: #ffaa88; }
+
 * { text-decoration: none; padding: 0; margin: 0; list-style: none; }
 
 *:focus { outline: none !important; }
