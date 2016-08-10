@@ -16,25 +16,25 @@ define(function(require) {
       VelocityComponent = require('mixins/velocity/velocity-component'),
       jQuery = require('jquery'),
       Bootstrap = require('bootstrap'),
-      SotaDispatcher = require('sota-dispatcher')
+      SotaDispatcher = require('sota-dispatcher'),
       SizeVerifier = require('../js/verify');
 
   /* Components*/
-  var Nav = require('components/nav'),
-      Translate = require('components/translation/translate'),
-      Devices = require('components/devices/devices'),
-      DeviceDetails = require('components/devices/device-details'),
-      ProductionDeviceDetails = require('components/devices/production-device-details'),
-      Packages = require('components/packages-page/packages'),
-      NewDevice = require('components/devices/new-device'),
-      Modal = require('components/modal'),
-      ImpactAnalysis = require('components/devices/impact-analysis'),
-      Profile = require('components/user/profile'),
-      RightPanel = require('components/campaigns/right-panel'),
-      NewCampaign = require('components/campaigns/new-campaign'),
-      Campaigns = require('components/campaigns/campaigns'),
-      TestSettings = require('components/test-settings'),
-      EditProfile = require('components/user/edit-profile');
+  var Nav = require('es6!components/nav'),
+      Translate = require('es6!components/translation/translate'),
+      Devices = require('es6!components/devices/devices'),
+      DeviceDetails = require('es6!components/devices/device-details'),
+      ProductionDeviceDetails = require('es6!components/devices/production-device-details'),
+      Packages = require('es6!components/packages-page/packages'),
+      NewDevice = require('es6!components/devices/new-device'),
+      Modal = require('es6!components/modal'),
+      ImpactAnalysis = require('es6!components/devices/impact-analysis'),
+      Profile = require('es6!components/profile'),
+      RightPanel = require('es6!components/campaigns/right-panel'),
+      NewCampaign = require('es6!components/campaigns/new-campaign'),
+      Campaigns = require('es6!components/campaigns/campaigns'),
+      TestSettings = require('es6!components/test-settings'),
+      EditProfile = require('es6!components/user/edit-profile');
 
   const languages = {
     en: 'en',

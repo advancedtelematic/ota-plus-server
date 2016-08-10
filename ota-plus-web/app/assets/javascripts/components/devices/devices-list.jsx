@@ -2,7 +2,7 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       _ = require('underscore'),
-      DeviceListItem = require('./devices-list-item');
+      DeviceListItem = require('es6!./devices-list-item');
 
   class DevicesList extends React.Component {
     constructor(props) {

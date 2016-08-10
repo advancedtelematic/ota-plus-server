@@ -3,16 +3,16 @@ define(function(require) {
       ReactDOM = require('react-dom'),
       SotaDispatcher = require('sota-dispatcher'),
       db = require('stores/db'),
-      PackagesListItem = require('./packages-list-item'),
-      PackageListItemDetails = require('./packages-list-item-details'),
-      Dropzone = require('../../mixins/dropzone'),
-      AddPackage = require('./add-package'),
-      Loader = require('../loader'),
+      PackagesListItem = require('es6!./packages-list-item'),
+      PackageListItemDetails = require('es6!./packages-list-item-details'),
+      Dropzone = require('es6!../../mixins/dropzone'),
+      AddPackage = require('es6!./add-package'),
+      Loader = require('es6!../loader'),
       jQuery = require('jquery'),
       IOSList = require('ioslist'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      TutorialAddPackageFirstStep = require('../tutorial/add-package-first-step'),
-      TutorialAddPackageSecondStep = require('../tutorial/add-package-second-step');
+      TutorialAddPackageFirstStep = require('es6!../tutorial/add-package-first-step'),
+      TutorialAddPackageSecondStep = require('es6!../tutorial/add-package-second-step');
   
   class PackagesList extends React.Component {
     constructor(props) {
