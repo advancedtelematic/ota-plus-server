@@ -4,9 +4,9 @@ define(function(require) {
       Link = Router.Link,
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
-      DevicesList = require('./devices-list'),
-      DevicesHeader = require('./devices-header'),
-      Loader = require('../loader'),
+      DevicesList = require('es6!./devices-list'),
+      DevicesHeader = require('es6!./devices-header'),
+      Loader = require('es6!../loader'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
   class Devices extends React.Component {
     constructor(props) {

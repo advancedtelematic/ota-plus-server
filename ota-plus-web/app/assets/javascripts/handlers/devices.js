@@ -6,12 +6,12 @@ define(function(require) {
       sendRequest = require('../mixins/send-request');
 
   var createDevice = function(payload) {
-    let url = '/api/v1/devices';
-    let device = {
+    var url = '/api/v1/devices';
+    var device = {
       deviceName: payload.device.deviceName,
       deviceId: payload.device.deviceId === '' ? null : payload.device.deviceId,
       deviceType: payload.device.deviceType
-    }
+    };
     sendRequest.doPost(url, device)
       .success(function(id) {
         location.hash = "#/devicedetails/" + id;
@@ -30,8 +30,10 @@ define(function(require) {
           case 'get-device':
             sendRequest.doGet('/api/v1/device_data?status=true') // TODO: more efficient querying
               .success(function(devices) {
-                  const device = _.find(devices, i => i.id == payload.device);
-                  db.showDevice.reset(device);
+                var device = _.find(devices, function(device) {
+                  return device.id == payload.device;
+                });
+                db.showDevice.reset(device);
               });
             break;
           case 'create-device':
@@ -148,19 +150,19 @@ define(function(require) {
               });
           break;
           case 'get-installation-log-for-device':
-            sendRequest.doGet('api/v1/vehicle_updates/' + payload.device + '/results')
+            sendRequest.doGet('/api/v1/vehicle_updates/' + payload.device + '/results')
               .success(function(log) {
                 db.installationLogForDevice.reset(log);
               });
           break;
           case 'get-installation-log-for-updateid':
-            sendRequest.doGet('api/v1/vehicle_updates/' + payload.device + '/'  + payload.updateId + '/results')
+            sendRequest.doGet('/api/v1/vehicle_updates/' + payload.device + '/'  + payload.updateId + '/results')
               .success(function(log) {
                 db.installationLogForUpdateId.reset(log);
               });
           break;
           case 'unblock-queue':
-            sendRequest.doPut('api/v1/vehicle_updates/' + payload.device + '/unblock')
+            sendRequest.doPut('/api/v1/vehicle_updates/' + payload.device + '/unblock')
               .success(function(result) {
               });
           break;

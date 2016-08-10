@@ -51,9 +51,12 @@ define(function(require) {
               });
           break;
           case 'get-packages-for-device':
-            sendRequest.doGet('api/v1/device_data')
-              .success(function(devices) {
-                const device = _.find(devices, i => i.id == payload.device);
+            sendRequest.doGet('/api/v1/device_data')
+              .success(function(devices) {        
+                var device = _.find(devices, function(device) {
+                  return device.id == payload.device;
+                });
+        
                 if (!_.isUndefined(device)) {
                   sendRequest.doGet('/api/v1/resolver/devices/' + device.id + '/package')
                     .success(function(packages) {

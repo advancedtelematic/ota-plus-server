@@ -1,7 +1,7 @@
 define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
-      Campaigns = require('./campaigns'),
+      Campaigns = require('es6!./campaigns'),
       VelocityComponent = require('mixins/velocity/velocity-component'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
 

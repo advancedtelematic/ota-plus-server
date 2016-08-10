@@ -1,8 +1,8 @@
 define(function(require) {
   var React = require('react'),
       db = require('stores/db'),
-      PackagesList = require('./packages-list'),
-      SearchBar = require('../searchbar');
+      PackagesList = require('es6!./packages-list'),
+      SearchBar = require('es6!../searchbar');
 
   class Packages extends React.Component {
     constructor(props) {
