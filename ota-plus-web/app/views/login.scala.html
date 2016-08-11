@@ -1,6 +1,6 @@
 @import com.advancedtelematic.login.Auth0Config
 
-@(config: Auth0Config)(implicit messages: Messages)
+@(config: Auth0Config)(implicit messages: Messages, flash: Flash)
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -13,7 +13,7 @@
         <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.slidedrawer.min.js")'></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/verify.js")'></script>
-        <script src="https://cdn.auth0.com/js/lock-9.0.min.js"></script>
+        <script src="https://cdn.auth0.com/js/lock-9.2.min.js"></script>
         <script>
           var AUTH0_CLIENT_ID = '@config.clientId';
 	      var AUTH0_DOMAIN = '@config.domain';
@@ -58,6 +58,9 @@
 
             $(document).ready(function() {
                 var lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN);
+                lock.on("authorization_error", function(err) {
+                  alert(err);
+                });
 
                   lock.show({
                     callbackURL: AUTH0_CALLBACK_URL,

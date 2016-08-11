@@ -108,20 +108,12 @@ class LoginSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAll {
       redirectLocation(result) mustBe Some("/login")
     }
 
-    "redirect to login if error passed to callback" in {
-      val req = FakeRequest("GET", "/callback?error=who_cares")
+    "redirect to authorization error if error passed to callback" in {
+      val req = FakeRequest("GET", "/callback?error=unauthorized&error_description=Ups")
 
       val result = controller.callback()()(req)
       status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some("/login")
-    }
-
-    "redirect to closed beta page" in {
-      val req = FakeRequest("GET", "/callback?error=unauthorized&error_description=closed.beta")
-
-      val result = controller.callback()()(req)
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some("/closed_beta")
+      redirectLocation(result) mustBe Some("/authorization_error")
     }
 
     "redirect to login if Auth0 responds with error to the token request" in {
