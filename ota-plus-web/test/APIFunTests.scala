@@ -127,6 +127,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   lazy val sessionCookie = makeCookie(
     "id_token" -> oauthToken,
     "access_token" -> oauthToken,
+    "auth_plus_access_token" -> oauthToken,
     "csrfToken" -> csrfToken)
 
   lazy val namespace = Subject("ittests@ats.com")

@@ -8,6 +8,8 @@ object Version {
   // It is compatible with Cassandra 3.0.0 or higher
   // Details at https://github.com/akka/akka-persistence-cassandra
   val AkkaCassandra = "0.17"
+  val LogTree = "1.3.0"
+  val Scalaz = "7.2.0"
 }
 
 object Dependencies {
@@ -36,6 +38,11 @@ object Dependencies {
   val JsonWebSecurity = Seq(
     "com.advancedtelematic" %% "jw-security-core" % Version.JsonWebSecurity,
     "com.advancedtelematic" %% "jw-security-jca" % Version.JsonWebSecurity
+  )
+
+  val LogTree = Seq(
+    "com.casualmiracles" %% "treelog" % Version.LogTree,
+    "org.scalaz" %% "scalaz-core" % Version.Scalaz
   )
 
   val JsonWebSecurityAkka = "com.advancedtelematic" %% "jw-security-akka-http" % Version.JsonWebSecurity

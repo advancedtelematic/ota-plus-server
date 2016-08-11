@@ -54,7 +54,7 @@ libraryDependencies ++= Seq (
     Dependencies.SotaCommon,
     Dependencies.SotaCommonMessaging,
     Dependencies.SotaCommonTest
-  ) ++ Dependencies.JsonWebSecurity
+    ) ++ Dependencies.JsonWebSecurity ++ Dependencies.LogTree
 
 enablePlugins(PlayScala, SbtWeb, Versioning.Plugin)
 
