@@ -1,4 +1,4 @@
-@()()
+@()(implicit flash: Flash)
 <!doctype html>
 <html lang="en">
     <head>
@@ -9,7 +9,6 @@
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("js/bootstrap.min.js"))'></script>        
         <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.slidedrawer.min.js")'></script>
-        <
         <script type="text/javascript" src='@routes.Assets.versioned("js/verify.js")'></script>
     </head>
     <body>
@@ -24,8 +23,9 @@
                 <div class="row">
                     <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
                         <div class="ats-header text-center">
-                            <p>Thank you for signing up.</p>
-                            <p>Your account has not been activated. <a href='mailto:support@@atsgarage.com'>Please contact us</a> .</p>
+                           @if(flash.get("authzError").isDefined) {
+                           <p>@flash("authzError")</p>
+                           }
                         </div>
                     </div>
                 </div>
