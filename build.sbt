@@ -33,7 +33,8 @@ def otaPlusProject(name: String): Project = Project(name, file(name))
       Resolver.defaultLocal,
       "ATS Public" at "http://nexus.prod01.internal.advancedtelematic.com:8081/content/groups/public/",
       DefaultMavenRepository,
-      projectResolver.value
+      projectResolver.value,
+      "version99 Empty loggers" at "http://version99.qos.ch"
     ))
     .settings(libraryDependencies += filters)
     .settings(libraryDependencies ++= Dependencies.TestFrameworks)
