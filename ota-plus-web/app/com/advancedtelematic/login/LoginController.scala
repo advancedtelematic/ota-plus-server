@@ -47,23 +47,22 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
 
   val login: Action[AnyContent] = Action { implicit req =>
     Ok(views.html.login(auth0Config))
-      .withHeaders("Content-Security-Policy" -> s"connect-src 'self' https://${auth0Config.domain}")
   }
 
   def logout: Action[AnyContent] = Action { implicit req =>
     Redirect(org.genivi.webserver.controllers.routes.Application.index()).withNewSession
   }
 
-  val closedBeta: Action[AnyContent] = Action {
-    Ok(views.html.closedBeta())
+  val authorizationError: Action[AnyContent] = Action { implicit request =>
+    Unauthorized(views.html.authorizationError())
+  }
+
+  val accountActivated: Action[AnyContent] = Action {
+    Ok(views.html.activated())
   }
 
   def authorizationFailed(error: String, errorDescription: String): Result = {
-    if (errorDescription == "closed.beta") {
-      Redirect(routes.LoginController.closedBeta())
-    } else {
-      Redirect(routes.LoginController.login())
-    }
+    Redirect(routes.LoginController.authorizationError()).flashing("authzError" -> errorDescription)
   }
 
   private[this] def exchangeIdTokenForAssertion(idToken: IdToken): AsyncDescribedComputation[JwtAssertion] = {
