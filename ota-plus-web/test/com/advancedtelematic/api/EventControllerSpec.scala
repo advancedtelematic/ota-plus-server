@@ -14,10 +14,9 @@ import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import com.advancedtelematic.ota.Messages.Messages._
 import eu.timepit.refined.api.Refined
-import io.circe.Decoder
 import org.genivi.sota.data.Device.{DeviceName, DeviceType}
 import org.genivi.sota.data.{Device, Namespace}
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, Message}
+import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, MessageLike}
 import org.genivi.webserver.controllers.EventController
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -28,22 +27,20 @@ import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-import scala.reflect.ClassTag
-
 object MessagingData {
   val deviceUUID = "77a1888b-9bc8-4673-8f23-a51240303db4"
   val nonMatchingDeviceUUID = "99a1888b-9bc8-4673-8f23-a51240303db4"
   val deviceId = Device.Id(Refined.unsafeApply(deviceUUID))
   val nonMatchingDeviceId = Device.Id(Refined.unsafeApply(nonMatchingDeviceUUID))
   val lastSeen = Instant.now()
-  val deviceSeenMessage = new DeviceSeen(deviceId, lastSeen)
+  val deviceSeenMessage = DeviceSeen(deviceId, lastSeen)
   val deviceName = DeviceName("testDevice")
   val namespace = Namespace("default")
   val invalidNamespace = Namespace("invalid")
   val deviceIdOpt = Some(Device.DeviceId(deviceUUID))
   val deviceType = DeviceType.Vehicle
-  val deviceCreatedMessage = new DeviceCreated(namespace, deviceName, deviceIdOpt, deviceType)
-  val deviceDeletedMessage = new DeviceDeleted(namespace, deviceId)
+  val deviceCreatedMessage = DeviceCreated(namespace, deviceName, deviceIdOpt, deviceType)
+  val deviceDeletedMessage = DeviceDeleted(namespace, deviceId)
 }
 
 class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
@@ -60,17 +57,16 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
     "<html><body><script type=\"text/javascript\">parent.deviceDeleted(" + Json.toJson(msg) + ");</script>"
   }
   val mockMsgSrc = new MessageSourceProvider {
-    override def getSource[T <: Message]()(implicit system: ActorSystem,
-                                  tag: ClassTag[T],
-                                  decoder: Decoder[T]): Source[T, _] = {
-      if (tag.runtimeClass.equals(classOf[DeviceSeen])) {
+    override def getSource[T]()(implicit system: ActorSystem, messageLike: MessageLike[T]): Source[T, _] = {
+      if (messageLike.tag.runtimeClass.equals(classOf[DeviceSeen])) {
         Source.single(MessagingData.deviceSeenMessage).asInstanceOf[Source[T, NotUsed]]
-      } else if(tag.runtimeClass.equals(classOf[DeviceCreated])) {
+      } else if(messageLike.tag.runtimeClass.equals(classOf[DeviceCreated])) {
         Source.single(MessagingData.deviceCreatedMessage).asInstanceOf[Source[T, NotUsed]]
-      } else if(tag.runtimeClass.equals(classOf[DeviceDeleted])) {
+      } else if(messageLike.tag.runtimeClass.equals(classOf[DeviceDeleted])) {
         Source.single(MessagingData.deviceDeletedMessage).asInstanceOf[Source[T, NotUsed]]
       } else {
-        throw new IllegalArgumentException(s"[test] Event class not supported ${tag.runtimeClass.getSimpleName}")
+        throw new IllegalArgumentException("[test] Event class not supported " +
+          s"${messageLike.tag.runtimeClass.getSimpleName}")
       }
     }
   }
