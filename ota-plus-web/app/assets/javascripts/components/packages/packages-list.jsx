@@ -393,13 +393,13 @@ define(function(require) {
             
           {this.props.device.status !== 'NotSeen' 
                       && !_.isUndefined(db.searchablePackages.deref()) && !db.searchablePackages.deref().length ? 
-            <TutorialAddPackageFirstStep />
+            null
           : null}
           {this.props.device.status !== 'NotSeen' 
                       && !_.isUndefined(db.searchablePackages.deref()) && db.searchablePackages.deref().length
                       && !_.isUndefined(db.packagesForDevice.deref()) && !db.packagesForDevice.deref().length 
                       && !_.isUndefined(db.packageQueueForDevice.deref()) && db.packageQueueForDevice.deref().length ?
-            <TutorialAddPackageSecondStep />
+            null
           : null}
         </div>
       );
