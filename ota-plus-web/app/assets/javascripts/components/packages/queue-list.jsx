@@ -102,7 +102,6 @@ define(function(require) {
                 {packages.length ?
                   <span>
                     {packages}
-                    <TutorialAddPackageThirdStep />
                   </span>
                 :
                   <div>Queue is empty</div>
