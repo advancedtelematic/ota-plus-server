@@ -556,7 +556,7 @@ button {
 }
 
 .packages-statistics {
-    position: fixed;
+    position: absolute;
     left: 15px;
 }
 
@@ -569,6 +569,7 @@ button {
     .list-group-item {
         height: 40px;
         padding-right: 15px;
+        border-left: 0;
 
         &:last-child {
             margin-bottom: -1px;
@@ -913,7 +914,7 @@ a.close, button.close {
 
 .btn-impact-analysis {
     margin: -2px 10px 0 0;
-    position: fixed;
+    position: absolute;
     left: -250px;
 }
 
@@ -954,6 +955,10 @@ a.close, button.close {
 
 .brown {
     color: $color-brown;
+}
+
+.black {
+    color: #000;
 }
 
 /* Icons */
@@ -1819,4 +1824,120 @@ a.close, button.close {
         left: 50%;
         top: 50%;
     }
+}
+
+#components {
+    #components-overlay {
+        width: 150vw;
+        height: 100%;
+        background: rgba(251, 151, 115, 0.3);
+        position: absolute;
+        left: 100%;
+        top: 0;
+        z-index: 120;
+
+        .table {
+            & > tbody {
+                & > tr {
+                    & > td, & > th {
+                        padding: 2px 15px;
+                        border: 0;
+                    }
+                }
+            }
+        }
+
+        .components-details {
+            color: #fff;
+            background: $color-orange;
+            width: 900px;
+            height: 100%;
+            padding: 10px 20px;
+            position: relative;
+            overflow-y: scroll;
+
+            .btn-close-components {
+                background: transparent;
+                width: 25px;
+                border: 0;
+                position: absolute;
+                top: 10px;
+                right: 10px;
+            }
+
+            .components-details-header {
+                width: 200px;
+                padding-left: 20px;
+                padding-bottom: 10px;
+                margin-left: -20px;
+                border-bottom: 1px solid #fff;
+            }
+        }
+
+    }
+
+    #components-list {
+        background: #fff;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        z-index: 121;
+        -webkit-box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.7);
+        -moz-box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.7);
+        box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.7);
+        position: absolute;
+        left: 0;
+        overflow-y: scroll;
+
+        #components-menu {
+            li {
+                a {
+                    color: #555;
+                    font-size: 14px;
+                    text-decoration: none;
+                    width: 100%;
+                    padding: 10px 15px;
+                    display: block;
+                    border-bottom: 1px solid #ddd;
+
+                    &:hover {
+                        background: #eee;
+
+                        .components-info-icon {
+                            border: 1px solid $color-orange;
+                            padding: 2px 6px;
+                            border-radius: 15px;
+                            display: block;
+                        }
+                    }
+
+                    &.selected {
+                        font-weight: bold;
+                        background: #eee;
+                    }
+
+                    .fa-chevron-down, .fa-chevron-right {
+                        color: $color-orange;
+                        font-size: 10px;
+                        width: 15px;
+                    }
+
+                    .components-info-icon {
+                        color: $color-orange;
+                        float: right;
+                        display: none;
+                    }
+                }
+
+                ul {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+#panel-heading-components {
+    position: relative;
+    z-index: 122;
 }
