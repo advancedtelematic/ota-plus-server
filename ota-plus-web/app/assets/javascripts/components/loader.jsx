@@ -8,7 +8,7 @@ define(function(require) {
     render() {
       return (
         <div className="loader text-center">
-          <img src="/assets/img/icons/loading.gif" alt="" style={{height:'30px'}}/> &nbsp;
+          <i className="fa fa-circle-o-notch fa-spin fa-2x"></i> &nbsp;
           Getting data from server
         </div>
       );

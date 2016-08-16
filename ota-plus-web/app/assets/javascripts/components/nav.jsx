@@ -16,6 +16,7 @@ define(function(require) {
       super(props);
       this.toggleCampaignPanel = this.toggleCampaignPanel.bind(this);
       db.user.addWatch("poll-user-nav", _.bind(this.forceUpdate, this, null));
+      db.impactAnalysis.addWatch("poll-impact-analysis-nav", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
       SotaDispatcher.dispatch({actionType: 'get-user'});
@@ -34,6 +35,7 @@ define(function(require) {
     }
     render() {
       var campaignsData = JSON.parse(localStorage.getItem('campaignsData'));
+      var impactAnalysis = db.impactAnalysis.deref();
       var user = db.user.deref();
       return (
         <nav className="navbar navbar-inverse navbar-fixed-top">
@@ -48,6 +50,16 @@ define(function(require) {
               </ul>
             </div>
             <ul className="right-nav pull-right">
+              <li id="li-impactanalysis">
+                <Link to="/impactanalysis" activeClassName="active" id="link-impactanalysis" className={(_.isUndefined(impactAnalysis) || _.isEmpty(impactAnalysis) ? "disabled" : "")}>
+                  {_.isUndefined(impactAnalysis) ? 
+                    <span>
+                      <i className="fa fa-circle-o-notch fa-spin"></i> &nbsp;
+                    </span>
+                  : undefined}
+                  Threats
+                </Link>
+              </li>
               <li>
                 {campaignsData !== null && campaignsData.length > 0 ?
                   <a href="#" className="btn-campaigns" onClick={this.toggleCampaignPanel}>
