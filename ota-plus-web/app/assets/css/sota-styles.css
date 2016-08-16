@@ -93,6 +93,8 @@ button.list-group-item:focus { background: transparent; }
 .page-device-details .device-header .device-icon { width: 50px; height: 50px; display: inline-block; vertical-align: middle; margin: 15px 0 0 30px; float: none; }
 .page-device-details .device-header .device-name, .page-device-details .device-header .device-lastseen { width: auto; float: none; }
 .page-device-details .device-header-status { font-size: 16px; height: 34px; padding: 6px 10px 0 10px; margin: 25px 0 0 0; border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 15px; }
+.page-device-details .package-version .btn-blacklist { width: 45px; height: 32px; padding: 0 0 0 10px; margin: 0 0 0 10px; display: block; border-left: 1px solid #e1e1e1; border-right: 0; border-radius: 0; }
+.page-device-details .package-version.package-blacklist .btn-blacklist { border-left-color: #e1e1e1; }
 
 .page-packages .package-statuses { margin-right: 10px; }
 
@@ -115,16 +117,28 @@ button.list-group-item:focus { background: transparent; }
 
 .package-details { width: 100%; background: #f5f5f5; float: left; }
 .package-details ul { width: 100%; padding: 5px 10px; float: left; }
-.package-details ul li { background: #fff; height: 26px; margin: 5px 0; border-bottom: 1px solid #e1e1e1; }
-.package-details .package-statuses { line-height: 26px; }
+.package-details ul li { background: #fff; height: 32px; margin: 5px 0; border-bottom: 1px solid #e1e1e1; }
+.package-details .package-statuses { line-height: 32px; }
 .package-details .package-status-label { text-transform: capitalize; }
-.package-details .package-version-right { line-height: 26px; text-align: center; width: 70px; height: 26px; margin: 0 0 0 10px; display: inline-block; border-left: 1px solid #e1e1e1; border-right: 1px solid #e1e1e1; }
-.package-details .accept-button, .package-details .cancel-button { margin: 3px 5px; }
-.package-details .btn-install { font-size: 12px; width: 100%; padding: 5px 12px 3px 12px; margin: 0; border: 0; }
-.package-details .input-comment { width: 80%; padding: 0; margin: 5px 0 0 10px; border: 0; }
+.package-details .package-version-right { line-height: 32px; text-align: center; width: 70px; height: 32px; display: inline-block; border-left: 1px solid #e1e1e1; border-right: 1px solid #e1e1e1; }
+.package-details .accept-button, .package-details .cancel-button { margin: 6px 5px; }
+.package-details .btn-install { font-size: 12px; width: 100%; padding: 8px 12px 6px 12px; margin: 0; border: 0; }
+.package-details .input-comment { width: 80%; padding: 0; margin: 8px 0 0 10px; border: 0; }
 
-.package-version .package-statuses .package-status-circle { line-height: 2.0em; }
+.icon-exclamation { color: red; font-size: 16px; margin-right: 10px; }
+
+.page-packages .package-version .btn-blacklist { border-right: 0; }
+
+.package-version .package-statuses .package-status-circle { line-height: 32px; }
 .package-version .package-left-box { width: 50%; }
+.package-version.package-blacklist { color: red; font-weight: bold; background: #F3BDBD; }
+.package-version.package-blacklist .green { color: red; }
+.package-version.package-blacklist .input-comment { background: #F3BDBD; }
+.package-version.package-blacklist .icon-exclamation { margin-top: 8px; margin-right: 5px; }
+.package-version.package-blacklist .btn-blacklist { border-left-color: #fff; }
+.package-version .btn-blacklist { height: 24px; padding: 0 25px; margin: 3px 0 0 6px; border-left: 2px solid #ddd; border-right: 2px solid #ddd; display: block; }
+.package-version .btn-blacklist.btn-edit-blacklist { background: url(/assets/img/icons/edit_black.png) no-repeat center; background-size: 22px 22px !important; }
+.package-version .btn-blacklist.btn-add-blacklist { background: url(/assets/img/icons/blacklist.png) no-repeat center; background-size: 18px 23px !important; }
 
 .package-statuses { font-size: 12px; margin-left: 10px; }
 .package-statuses .package-status-circle { color: #fff; font-size: 12px; line-height: 1.2em; vertical-align: top; }
@@ -318,6 +332,9 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .darkgrey { color: #444; }
 .darkgrey:hover, .darkgrey:focus, .darkgrey:active { color: #444; }
 
+.blue { color: #96DED2; }
+.blue:hover, .blue:focus, .blue:active { color: #96DED2; }
+
 /* Icons */
 .icon-info { margin: -2px 10px 0 0; float: left; }
 
@@ -359,6 +376,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .myModal .modal-dialog .modal-content { border: 0; }
 .myModal .modal-dialog .modal-content .modal-header { color: #fff; text-align: center; background: #979797; border-top-left-radius: 5px; border-top-right-radius: 5px; }
 .myModal .modal-dialog .modal-content .modal-body { color: #444; padding: 60px 80px 20px 80px; }
+.myModal.small-margin .modal-dialog .modal-content .modal-body { color: #444; padding: 20px 20px 20px 20px; }
 
 #modal-add-package .modal-dialog, #modal-new-campaign .modal-dialog, #modal-impact-analysis .modal-dialog { width: 640px; }
 #modal-add-package .modal-dialog .modal-body, #modal-new-campaign .modal-dialog .modal-body, #modal-impact-analysis .modal-dialog .modal-body { min-height: 320px; padding: 40px 25px 20px 25px; }
@@ -582,7 +600,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 .modal-open { overflow-x: auto; overflow-y: hidden; }
 
-.btn-confirm { font-weight: bold; background: #96DED2; padding: 13px 60px; border-radius: 30px; }
+.btn-confirm { color: #333; font-weight: bold; background: #96DED2; padding: 13px 60px; border-radius: 30px; }
 
 /* Disabled nav responsive */
 .container > .navbar-header { margin: 0; }
@@ -628,3 +646,5 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .package-item-name { width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .queue-item-name { width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.text-stroke { text-decoration: line-through; }

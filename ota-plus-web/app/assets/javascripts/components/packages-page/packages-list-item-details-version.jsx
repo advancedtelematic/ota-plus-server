@@ -24,6 +24,13 @@ define(function(require) {
           commentTmp: nextProps.version.description
         });
     }
+    componentWillReceiveProps(nextProps) {
+      if(nextProps.version.description !== this.props.version.description)
+        this.setState({
+          comment: nextProps.version.description,
+          commentTmp: nextProps.version.description
+        });
+    }
     enableEditField(e) {
       e.preventDefault();
       this.setState({
@@ -65,9 +72,12 @@ define(function(require) {
         data: {"description": this.refs.comment.value}
       });
     }
+    formBlacklist(action, e) {
+      this.props.showBlacklistForm(this.props.version.id.name, this.props.version.id.version, action);
+    }
     render() {
       return (
-        <li className="package-version">
+        <li className={"package-version " + (this.props.version.isBlackListed ? "package-blacklist" : "")}>
           <div className="package-left-box pull-left">
             <form>
               <fieldset>
@@ -87,6 +97,17 @@ define(function(require) {
             </form>
           </div>
           <div className="package-right-box pull-right text-right">
+            {this.props.version.isBlackListed ?
+              <div>
+                <div className="pull-right">
+                  <button className="btn btn-blacklist btn-edit-blacklist" onClick={this.formBlacklist.bind(this, 'edit')}></button>
+                </div>
+              </div>
+            : 
+              <div className="pull-right">
+                <button className="btn btn-blacklist btn-add-blacklist" onClick={this.formBlacklist.bind(this, 'add')}></button>
+              </div>
+            }
             <div className="package-statuses pull-right">
               v. {this.props.version.id.version}
             </div>

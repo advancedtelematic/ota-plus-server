@@ -8,6 +8,7 @@ define(function(require) {
       PackageListItemDetails = require('es6!./packages-list-item-details'),
       Dropzone = require('es6!../../mixins/dropzone'),
       AddPackage = require('es6!../packages/add-package'),
+      BlacklistForm = require('es6!../packages/blacklist-form'),
       Loader = require('es6!../loader'),
       jQuery = require('jquery'),
       IOSList = require('ioslist');
@@ -24,17 +25,23 @@ define(function(require) {
         timeout: null,
         intervalId: null,
         files: null,
-        showForm: this.props.showForm,
+        isFormShown: this.props.isFormShown,
         iosListObj: null,
-        event: event
+        event: event,
+        blacklistedPackageName: null,
+        blacklistedPackageVersion: null,
+        blacklistMode: null,
+        isBlacklistFormShown: false,
       };
       
       this.refreshData = this.refreshData.bind(this);
       this.onDrop = this.onDrop.bind(this);
       this.expandPackage = this.expandPackage.bind(this);
       this.refresh = this.refresh.bind(this);
+      this.showBlacklistForm = this.showBlacklistForm.bind(this);
+      this.closeBlacklistForm = this.closeBlacklistForm.bind(this);
       
-      db.searchablePackages.addWatch("poll-packages", _.bind(this.refresh, this, null));
+      db.searchablePackages.addWatch("poll-packages", _.bind(this.refresh, this, null));      
     }
     componentWillUpdate(nextProps, nextState) {
       if(nextProps.filterValue != this.props.filterValue) {
@@ -42,8 +49,8 @@ define(function(require) {
       }
     }
     componentWillReceiveProps(nextProps) {
-      if(this.props.showForm !== nextProps.showForm) {
-        this.setState({showForm: nextProps.showForm});
+      if(this.props.isFormShown !== nextProps.isFormShown) {
+        this.setState({isFormShown: nextProps.isFormShown});
       }
       
       if(this.props.selectedSort !== nextProps.selectedSort) {
@@ -111,13 +118,13 @@ define(function(require) {
         var GroupedPackages = {};
         _.each(Packages, function(obj, index){
           var objKey = obj.id.name+'_'+obj.id.version;
-
+          
           if( typeof GroupedPackages[obj.id.name] == 'undefined' || !GroupedPackages[obj.id.name] instanceof Array ) {
             GroupedPackages[obj.id.name] = new Object();
             GroupedPackages[obj.id.name]['elements'] = [];
             GroupedPackages[obj.id.name]['packageName'] = obj.id.name;
           }
-          
+                    
           GroupedPackages[obj.id.name]['elements'].push(Packages[index]);
         });
 
@@ -153,6 +160,21 @@ define(function(require) {
         });
       }
     }
+    showBlacklistForm(packageName, packageVersion, mode) {
+      this.setState({
+        isBlacklistFormShown: true,
+        blacklistedPackageName: packageName,
+        blacklistedPackageVersion: packageVersion,
+        blacklistMode: mode
+      });
+    }
+    closeBlacklistForm() {
+      this.setState({
+        isBlacklistFormShown: false,
+        blacklistedPackageName: null,
+        blacklistedPackageVersion: null
+      });
+    }
     compareVersions(a, b) {
       if (a === b) {
        return 0;
@@ -177,13 +199,12 @@ define(function(require) {
       }
       return 0;
     }
-    render() {
+    render() {        
       if(!_.isUndefined(this.state.data)) {
         var packages = _.map(this.state.data, function(packages, index) {
 
           var items = _.map(packages, function(pack, i) {
             var that = this;
-            var packageInfo = '';
             var mainLabel = '';
 
             var versions = pack.elements;
@@ -199,8 +220,6 @@ define(function(require) {
                 key={'package-' + pack.packageName + '-items'}
                 name={pack.packageName}
                 expandPackage={this.expandPackage}
-                packageInfo={packageInfo}
-                mainLabel={mainLabel}
                 selected={this.state.expandedPackage == pack.packageName ? true : false}/>
                 <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
                   {this.state.expandedPackage == pack.packageName ?
@@ -208,7 +227,8 @@ define(function(require) {
                       key={'package-' + pack.packageName + '-versions'}
                       versions={sortedElements}
                       packageName={pack.packageName}
-                      refresh={this.refreshData}/>
+                      refresh={this.refreshData}
+                      showBlacklistForm={this.showBlacklistForm}/>
                   : null}
                 </VelocityTransitionGroup>
             </li>
@@ -260,12 +280,21 @@ define(function(require) {
               <Loader />
             : undefined}
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-              {this.state.showForm ?
+              {this.state.isFormShown ?
                 <AddPackage
                   files={this.state.files}
                   closeForm={this.props.closeForm}
                   focusPackage={this.props.focusPackage}
                   key="add-package"/>
+              : null}
+            </VelocityTransitionGroup>
+            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+              {this.state.isBlacklistFormShown ?
+                <BlacklistForm
+                  mode={this.state.blacklistMode}
+                  packageName={this.state.blacklistedPackageName}
+                  packageVersion={this.state.blacklistedPackageVersion}
+                  closeForm={this.closeBlacklistForm}/>
               : null}
             </VelocityTransitionGroup>
           </div>
