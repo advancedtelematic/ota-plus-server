@@ -56,7 +56,6 @@ define(function(require) {
                 var device = _.find(devices, function(device) {
                   return device.id == payload.device;
                 });
-        
                 if (!_.isUndefined(device)) {
                   sendRequest.doGet('/api/v1/resolver/devices/' + device.id + '/package')
                     .success(function(packages) {
@@ -68,6 +67,23 @@ define(function(require) {
                 }
               });
           break;
+          case 'search-packages-for-device-by-regex':
+            var query = payload.regex ? '?regex=' + payload.regex : '';
+            sendRequest.doGet('/api/v1/device_data')
+              .success(function(devices) {
+                var device = _.find(devices, function(device) {
+                  return device.id == payload.device;
+                });
+                if (!_.isUndefined(device)) {
+                  sendRequest.doGet('/api/v1/resolver/devices/' + device.id + '/package' + query)
+                    .success(function(packages) {
+                      var list = _.map(packages, function(package) {
+                        return {id: package}
+                      });
+                      db.searchablePackagesForDevice.reset(list);
+                    });
+                }
+              });
           case 'get-devices-queued-for-package':
             sendRequest.doGet('/api/v1/packages/' + payload.name + "/" + payload.version + "/queued_devices")
               .success(function(vehicles) {
