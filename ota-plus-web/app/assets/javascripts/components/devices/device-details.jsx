@@ -146,6 +146,18 @@ define(function(require) {
               <Loader />
             : undefined}
           </div>
+          <div className="col-md-2 nopadding">
+            <div className="panel panel-ats">
+              <div className="panel-heading" id="panel-heading-components">
+                <div className="panel-heading-left pull-left">
+                  Components
+                </div>
+              </div>
+              <div className="panel-body">
+                <Components />
+              </div>
+            </div>
+          </div>
           <div className="col-md-6 nopadding border-right-2">
             <div className="panel panel-ats">
               <div className="panel-heading">
@@ -159,7 +171,7 @@ define(function(require) {
                     setPackagesStatistics={this.setPackagesStatistics}
                     countImpactAnalysisPackages={this.countImpactAnalysisPackages}/>
               </div>
-              <div className="panel-footer">
+              <div className="panel-footer" style={{position: 'relative'}}>
                 <VelocityComponent animation={this.state.selectedImpactAnalysisPackagesCount ? animateLeftPosition('15px') : animateLeftPosition('-250px')}>
                   <Link to={`devicedetails/${this.props.params.id}/impactanalysis/${this.state.selectedImpactAnalysisPackagesCount}`} className="btn btn-black btn-impact-analysis pull-left">
                     Impact analysis
@@ -174,7 +186,7 @@ define(function(require) {
               </div>
             </div>
           </div>
-          <div className="col-md-6 nopadding">
+          <div className="col-md-4 nopadding">
             <div className="panel panel-ats">
               <div className="panel-heading">
                 <div className="panel-heading-left pull-left">

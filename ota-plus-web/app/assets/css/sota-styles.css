@@ -137,11 +137,11 @@ button.list-group-item:focus { background: transparent; }
 .package-statuses .package-status-circle { color: #fff; font-size: 12px; line-height: 1.2em; vertical-align: top; }
 .package-statuses .package-status-label-uninstalled { color: #999; }
 
-.packages-statistics { position: fixed; left: 15px; }
+.packages-statistics { position: absolute; left: 15px; }
 
 .list-group-item-text-right { color: #555; margin: 0 10px 0 10px; }
 
-#packages .list-group-item { height: 40px; padding-right: 15px; }
+#packages .list-group-item { height: 40px; padding-right: 15px; border-left: 0; }
 #packages .list-group-item:last-child { margin-bottom: -1px; }
 
 .package-right-box { width: 310px; }
@@ -223,7 +223,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .btn-black-big:hover, .btn-black-big:focus, .btn-black-big:active { color: #fff; }
 .btn-black-big:disabled { color: #555; font-weight: normal; background: #ddd; }
 
-.btn-impact-analysis { margin: -2px 10px 0 0; position: fixed; left: -250px; }
+.btn-impact-analysis { margin: -2px 10px 0 0; position: absolute; left: -250px; }
 
 .btn-logout { margin: 6px 0 7px 0; }
 
@@ -318,6 +318,8 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .orange { color: #FB9773 !important; }
 
 .brown { color: #66493E; }
+
+.black { color: #000; }
 
 /* Icons */
 .icon-info { margin: -2px 10px 0 0; }
@@ -553,3 +555,19 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .door { background: url("../img/steel_doors.jpg") top center no-repeat; width: 100%; height: 100%; position: fixed; left: 0; z-index: 99999; }
 .door.door-up { top: -100%; }
 .door .loader { margin-left: -60px; position: absolute; left: 50%; top: 50%; }
+
+#components #components-overlay { width: 150vw; height: 100%; background: rgba(251, 151, 115, 0.3); position: absolute; left: 100%; top: 0; z-index: 120; }
+#components #components-overlay .table > tbody > tr > td, #components #components-overlay .table > tbody > tr > th { padding: 2px 15px; border: 0; }
+#components #components-overlay .components-details { color: #fff; background: #FB9773; width: 900px; height: 100%; padding: 10px 20px; position: relative; overflow-y: scroll; }
+#components #components-overlay .components-details .btn-close-components { background: transparent; width: 25px; border: 0; position: absolute; top: 10px; right: 10px; }
+#components #components-overlay .components-details .components-details-header { width: 200px; padding-left: 20px; padding-bottom: 10px; margin-left: -20px; border-bottom: 1px solid #fff; }
+#components #components-list { background: #fff; width: 100%; height: 100%; position: relative; z-index: 121; -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); position: absolute; left: 0; overflow-y: scroll; }
+#components #components-list #components-menu li a { color: #555; font-size: 14px; text-decoration: none; width: 100%; padding: 10px 15px; display: block; border-bottom: 1px solid #ddd; }
+#components #components-list #components-menu li a:hover { background: #eee; }
+#components #components-list #components-menu li a:hover .components-info-icon { border: 1px solid #FB9773; padding: 2px 6px; border-radius: 15px; display: block; }
+#components #components-list #components-menu li a.selected { font-weight: bold; background: #eee; }
+#components #components-list #components-menu li a .fa-chevron-down, #components #components-list #components-menu li a .fa-chevron-right { color: #FB9773; font-size: 10px; width: 15px; }
+#components #components-list #components-menu li a .components-info-icon { color: #FB9773; float: right; display: none; }
+#components #components-list #components-menu li ul { display: none; }
+
+#panel-heading-components { position: relative; z-index: 122; }

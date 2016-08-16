@@ -20,6 +20,7 @@ define(function(require) {
       this.installationLogForUpdateId = atom.createAtom();
       
       this.user = atom.createAtom();
+      this.components = atom.createAtom();
     }
 
     return DB;
