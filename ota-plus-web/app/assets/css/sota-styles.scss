@@ -122,7 +122,7 @@ button {
                 border-radius: 20px;
                 display: inline-block;
                 position: relative;
-                transition: all 0.3s ease-in;
+                transition: all 0.3s;
 
                 &:after {
                     background: red;
@@ -211,7 +211,7 @@ button {
 
 /* Device box */
 
-.device-icon {
+.device-icon, .group-icon {
     text-align: center;
     background: url(/assets/img/icons/device_small.png) no-repeat;
     background-size: cover;
@@ -240,12 +240,40 @@ button {
     float: left;
 }
 
-.device-box {
+.device-box, .group-box {
     color: #fff;
     width: 25%;
     height: 100px;
     display: inline-block;
+    position: relative;
+}
 
+.group-box {
+    &:hover, &:active, &:focus {
+        color: #fff;
+    }
+    
+    .group-desc {
+        width: 230px;
+        margin-left: 15px;
+        margin-top: 20px;
+        float: left;
+
+        .group-name {
+            font-size: 18px;
+            line-height: 1.5em;
+            margin-top: 15px;
+        }
+    }
+
+    .group-icon {
+        background-image: url(/assets/img/icons/group_small.png);
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+}
+
+.device-box {
     &:hover, &:active, &:focus {
         color: #fff;
         text-decoration: none;
@@ -260,6 +288,7 @@ button {
     .device-desc {
         width: 230px;
         margin-left: 15px;
+        margin-top: 20px;
         float: left;
 
         .device-name {
@@ -276,6 +305,11 @@ button {
             font-size: 10px;
             line-height: 1.6em;
         }
+    }
+
+    .device-icon {
+        margin-top: 20px;
+        margin-left: 20px;
     }
 }
 
@@ -1091,6 +1125,14 @@ a.close, button.close {
     color: #96DED2;
 
     &:hover, &:focus, &:active {
+        color: $color_darkgrey;
+    }
+}
+
+.blue {
+    color: #96DED2;
+
+    &:hover, &:focus, &:active {
         color: #96DED2;
     }
 }
@@ -1284,6 +1326,12 @@ a.close, button.close {
     .fullsize-overflow-hidden {
         width: 100%;
         overflow: hidden;
+    }
+}
+
+#modal-create-group {
+    .modal-body {
+        padding: 40px 25px 20px 25px;
     }
 }
 
@@ -2249,6 +2297,34 @@ a.close, button.close {
             .25em 0 0 black,
             .5em 0 0 black;}}
 
+@keyframes dots-white {
+    0% {
+        color: rgba(255,255,255,0.5);
+        text-shadow:
+            .35em 0 0 rgba(255,255,255,0.0),
+            .7em 0 0 rgba(255,255,255,0.0);}
+    25% {
+        color: rgba(255,255,255,1.0);
+        text-shadow:
+            .35em 0 0 rgba(255,255,255,0.5),
+            .7em 0 0 rgba(255,255,255,0.0);}
+    50% {
+        color: rgba(255,255,255,0.5);
+        text-shadow:
+            .35em 0 0 rgba(255,255,255,1.0),
+            .7em 0 0 rgba(255,255,255,0.5);}
+    75% {
+        color: rgba(255,255,255,0.0);
+        text-shadow:
+            .35em 0 0 rgba(255,255,255,0.5),
+            .7em 0 0 rgba(255,255,255,1.0);}
+    100% {
+        color: rgba(255,255,255,0.5);
+        text-shadow:
+            .35em 0 0 rgba(255,255,255,0.0),
+            .7em 0 0 rgba(255,255,255,0.5);}
+}
+
 .history-item-name {
     width: 40%;
     @include textoverflow-ellipsis;
@@ -2278,45 +2354,6 @@ a.close, button.close {
 }
 
 .impact-analysis {
-    .impact-analysis-header {
-        background: rgba(0,0,0,0.5);
-        width: 100%;
-        padding: 30px 0;
-        float: left;
-
-        .impact-analysis-icon {
-            text-align: center;
-            background: url(/assets/img/icons/impact_analysis.png) no-repeat;
-            background-size: cover;
-            width: 80px;
-            height: 80px;
-            display: inline-block;
-            vertical-align: middle;
-            margin: 0 0 0 30px;
-        }
-
-        .icon-back {
-            margin: 0;
-        }
-
-        .impact-analysis-header-text {
-            width: auto;
-            margin: 0 0 0 25px;
-            display: inline-block;
-            vertical-align: middle;
-
-            .title {
-                font-size: 22px;
-            }
-
-            .counter {
-                font-size: 14px;
-                margin: 3px 0 0 0;
-                opacity: 0.8;
-            }
-        }
-    }
-
     .impact-analysis-blacklisted-packages {
         margin: 25px 0;
 
@@ -2420,4 +2457,123 @@ hr.full-line {
         animation: dots-white 1.5s steps(5, end) infinite;
         margin-left: 3px;
     }
+}
+
+.dragging {
+    .device-box:after {
+        content: "";
+        display: block;
+        height: 100%;
+        position: absolute;
+        padding: 40px 0 0 0;
+        top: 0px;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, .5);
+        border: 1px dashed #ccc;
+        border-radius: 10px;
+        transition: all 0.2s ease-in;
+    }
+}
+
+.droppable {
+    .device-box:after {
+        content: "";
+        display: block;
+        height: 100%;
+        position: absolute;
+        padding: 40px 0 0 0;
+        top: 0px;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, .2);
+        border: 1px dashed #ccc;
+        border-radius: 10px;
+        transition: all 0.2s ease-in;
+    }
+
+    &.active {
+        .device-box:after {
+            content: "";
+            display: block;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, .1);
+            border: 1px dashed #ccc;
+            border-radius: 10px;
+            transition: all 0.2s ease-in;
+        }
+    }
+}
+
+.btn-confirm {
+    color: #333;
+    font-weight: bold;
+    background: #96DED2;
+    padding: 13px 60px;
+}
+
+.create-group-icon {
+    vertical-align: top;
+    margin: 2px 0 0 0;
+}
+
+.grey-header {
+    background: rgba(0,0,0,0.5);
+    width: 100%;
+    padding: 30px 0;
+    float: left;
+
+    .grey-header-icon {
+        text-align: center;
+        background: url(/assets/img/icons/impact_analysis.png) no-repeat;
+        background-size: cover;
+        width: 80px;
+        height: 80px;
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 0 0 30px;
+    }
+
+    .icon-back {
+        margin: 0;
+    }
+
+    .grey-header-text {
+        width: auto;
+        margin: 0 0 0 25px;
+        display: inline-block;
+        vertical-align: middle;
+
+        .grey-header-title {
+            font-size: 22px;
+        }
+
+        .grey-header-counter {
+            font-size: 14px;
+            margin: 3px 0 0 0;
+            opacity: 0.8;
+        }
+    }
+}
+
+.group {
+    .grey-header-icon {
+        background-image: url(/assets/img/icons/group_large.png);
+    }
+
+    #group-devices-list {
+        width: 100%;
+        overflow-y: auto;
+        float: left;
+    }
+}
+
+.counting:after {
+    content: ' .';
+    animation: dots-white 1.5s steps(5, end) infinite;
+    margin-left: 3px;
 }

@@ -21,7 +21,7 @@ define(function(require) {
           );
         });
       }
-            
+
       return (
         <div className="col-md-12">
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>

@@ -12,6 +12,7 @@ define(function(require) {
       this.packageHistoryForDevice = atom.createAtom();
       this.packageQueueForDevice = atom.createAtom();
       this.searchableDevices = atom.createAtom();
+      this.searchableDevicesWithComponents = atom.createAtom();
       this.searchablePackages = atom.createAtom();
       this.postStatus = atom.createAtom({});
       this.postProgress = atom.createAtom([]);
@@ -27,6 +28,8 @@ define(function(require) {
       this.blacklistedPackage = atom.createAtom();
       this.blacklistedPackages = atom.createAtom();
       this.impactAnalysis = atom.createAtom();
+      this.group = atom.createAtom();
+      this.groups = atom.createAtom();
     }
 
     return DB;
