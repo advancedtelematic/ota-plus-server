@@ -96,6 +96,12 @@ define(function(require) {
               .success(function() {
               });
           break;
+          case 'get-blacklisted-packages':
+            sendRequest.doGet('/api/v1/blacklist')
+              .success(function(packages) {
+                db.blacklistedPackages.reset(packages);
+              });
+          break;
           case 'get-blacklisted-package':
             sendRequest.doGet('/api/v1/blacklist/' + payload.name + '/' + payload.version, {action: payload.actionType})
               .success(function(packages) {
@@ -118,6 +124,12 @@ define(function(require) {
           case 'remove-package-from-blacklist':
             sendRequest.doDelete('/api/v1/blacklist/' + payload.name + '/' + payload.version, null, {action: payload.actionType})
               .success(function() {
+              });
+          break;
+          case 'impact-analysis':
+            sendRequest.doGet('/api/v1/impact/blacklist')
+              .success(function(impact) {
+                db.impactAnalysis.reset(impact);                
               });
           break;
         }

@@ -34,7 +34,8 @@ define(function(require) {
       NewCampaign = require('es6!components/campaigns/new-campaign'),
       Campaigns = require('es6!components/campaigns/campaigns'),
       TestSettings = require('es6!components/test-settings'),
-      EditProfile = require('es6!components/user/edit-profile');
+      EditProfile = require('es6!components/user/edit-profile'),
+      ImpactAnalysisPage = require('es6!components/impactanalysis/impact-analysis-page')
 
   const languages = {
     en: 'en'
@@ -61,6 +62,7 @@ define(function(require) {
         currentLang: currentLang,
         showCampaignPanel: false,
         intervalId: null,
+        impactAnalysisIntervalId: null,
         hideAnimationUp: isHomePage,
         hideAnimationDown: true,
       }
@@ -74,6 +76,8 @@ define(function(require) {
         db.devices.addWatch("watch-devices", _.bind(this.openDoor, this, null));
         db.searchableDevices.addWatch("watch-searchable-devices", _.bind(this.openDoor, this, null));
       }
+      
+      SotaDispatcher.dispatch({actionType: 'impact-analysis'});
     }
     changeLanguage(value) {
       localStorage.setItem('currentLang', value);
@@ -128,13 +132,19 @@ define(function(require) {
           localStorage.setItem('campaignsData', JSON.stringify(newCampaignsData));
         }
       }, 5000);
-
+      
+      var impactAnalysisIntervalId = setInterval(function() {
+        SotaDispatcher.dispatch({actionType: 'impact-analysis'});
+      }, 1000);
+      
       this.setState({
-        intervalId: intervalId
+        intervalId: intervalId,
+        impactAnalysisIntervalId: impactAnalysisIntervalId
       });
     }
     componentWillUnmount() {
       clearInterval(this.state.intervalId);
+      clearInterval(this.state.impactAnalysisIntervalId);
     }
     render() {
       var Animations = {
@@ -165,9 +175,10 @@ define(function(require) {
       if(path[1] !== undefined) {
         switch(path[1]) {
           case '':
-            page = 'page-home';
-          break;
           case 'newdevice':
+          case 'testsettings': 
+          case 'editprofile':
+          case 'impactanalysis':
             page = 'page-home';
           break;
           case 'devicedetails':
@@ -176,14 +187,8 @@ define(function(require) {
           case 'productiondevicedetails':
             page = 'page-device-details';
           break;
-          case 'testsettings':
-            page = 'page-home';
-          break;
           case 'packages':
             page = 'page-packages';
-          break;
-          case 'editprofile':
-            page = 'page-home';
           break;
           default:
           break;
@@ -248,6 +253,7 @@ define(function(require) {
         <Route path="packages" component={Packages}/>
         <Route path="testsettings" component={TestSettings}/>
         <Route path="editprofile" component={EditProfile}/>
+        <Route path="impactanalysis" component={ImpactAnalysisPage}/>
       </Route>
     </Route>
   );

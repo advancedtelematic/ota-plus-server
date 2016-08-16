@@ -100,6 +100,46 @@ button {
     li {
         margin: 10px 0 0 20px;
         display: inline-block;
+
+        &#li-impactanalysis {
+            margin: 0;
+
+            a {
+                color: #fff;
+                font-size: 15px;
+                text-decoration: none;
+                background: red;
+                padding: 8px 13px;
+                margin: 0;
+                border-radius: 20px;
+                display: inline-block;
+                position: relative;
+                transition: all 0.3s ease-in;
+
+                &:after {
+                    background: red;
+                    width: 100%;
+                    height: 0;
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    left: 0;
+                    bottom: -10px;
+                }
+
+                &.disabled {
+                    background: #ccc;
+
+                    &:after {
+                        background: #ccc;
+                    }
+                }
+            }
+
+            a:hover:after, a.active:after {
+                height: 5px;
+            }
+        }
     }
 }
 
@@ -2215,4 +2255,132 @@ a.close, button.close {
 
 .text-stroke {
     text-decoration: line-through;
+}
+
+.impact-analysis {
+    .impact-analysis-header {
+        background: rgba(0,0,0,0.5);
+        width: 100%;
+        padding: 30px 0;
+        float: left;
+
+        .impact-analysis-icon {
+            text-align: center;
+            background: url(/assets/img/icons/impact_analysis.png) no-repeat;
+            background-size: cover;
+            width: 80px;
+            height: 80px;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0 0 0 30px;
+        }
+
+        .icon-back {
+            margin: 0;
+        }
+
+        .impact-analysis-header-text {
+            width: auto;
+            margin: 0 0 0 25px;
+            display: inline-block;
+            vertical-align: middle;
+
+            .title {
+                font-size: 22px;
+            }
+
+            .counter {
+                font-size: 14px;
+                margin: 3px 0 0 0;
+                opacity: 0.8;
+            }
+        }
+    }
+
+    .impact-analysis-blacklisted-packages {
+        margin: 25px 0;
+
+        .title {
+            font-size: 16px;
+            margin: 5px 20px 0 0;
+        }
+
+        .impact-analysis-blacklisted-package {
+            color: #444;
+            background: #fff;
+            padding: 5px 10px;
+            margin: 0 10px;
+            display: inline-block;
+            -webkit-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.45);
+            -moz-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.45);
+            box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.45);
+            border-radius: 3px;
+        }
+    }
+
+    #impacted-devices-list {
+        width: 100%;
+        overflow-y: auto;
+        float: left;
+    }
+
+    .impacted-device, .impacted-group {    
+        width: 110px;
+        text-align: center;
+        float: left;
+
+        .title {
+            font-size: 15px;
+            word-break: break-all;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            margin: 5px 0 0 0;
+            opacity: 0.5;
+        }
+    }
+
+    .impact-devices-group {
+        margin: 20px 0;
+        float: left;
+    }
+
+    .impacted-device {
+        margin-right: 60px;
+
+        &.notavailable {
+            .device-icon {
+                background-image: url(/assets/img/icons/device_large_transparent.png);
+            }
+        }
+    }
+
+    .impacted-group {
+        .device-icon {
+            background-image: url(/assets/img/icons/group_large.png);
+        }
+    }
+
+    .dots {
+        background: url(/assets/img/icons/dots.png) no-repeat;
+        background-size: cover;
+        width: 20px;
+        height: 5px;
+        margin: 50px 20px 0 20px;
+        float: left;
+        opacity: 0.4;
+    }
+
+    .device-icon {
+        width: 106px;
+        height: 106px;
+        background-image: url(/assets/img/icons/device_large.png);
+    }
+}
+
+hr.full-line {
+    width: 100%;
+    margin: 0;
+    border-color: #222;
 }
