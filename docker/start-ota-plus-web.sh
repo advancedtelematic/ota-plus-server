@@ -8,6 +8,9 @@ docker run \
   --name=auth-plus \
   --expose=9001 \
   -p 9001:9001 \
+  -e JWKS_URI=${JWKS_URI} \
+  -e JWT_ASSERTION_AUD=${JWT_ASSERTION_AUD} \
+  -e JWT_ASSERTION_ISSUER=${JWT_ASSERTION_ISSUER} \
   advancedtelematic/auth-plus:latest
 
 sleep 20
@@ -18,7 +21,7 @@ curl -H "Content-Type: application/json" -X POST -d '{"email":"demo@advancedtele
 echo
 echo 'Creating ota-plus-web credentials'
 
-if ! auth=$(curl -s -H "Content-Type: application/json" -d '{ "client_name": "ABC", "grant_types": ["client_credentials","password"] }' "http://localhost:9001/clients");
+if ! auth=$(curl -s -H "Content-Type: application/json" -d '{ "client_name": "ABC", "grant_types": ["client_credentials","password", "urn:ietf:params:oauth:grant-type:jwt-bearer"] }' "http://localhost:9001/clients");
 then echo "Error: couldn't get token"
      exit 1
 fi
@@ -70,5 +73,6 @@ docker run \
   -e AUTH0_DOMAIN=$AUTH0_DOMAIN \
   -e AUTH0_CALLBACK_URL=$AUTH0_CALLBACK_URL \
   -e AUTH0_USER_UPDATE_TOKEN=$AUTH0_USER_UPDATE_TOKEN \
+  -e AUTH0_AUTH_PLUS_CLIENT_ID=${AUTH0_AUTH_PLUS_CLIENT_ID} \
   -e rootLevel='DEBUG' \
   advancedtelematic/ota-plus-web:$WEB_DOCKER_TAG
