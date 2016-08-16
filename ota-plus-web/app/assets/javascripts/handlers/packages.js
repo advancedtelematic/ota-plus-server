@@ -91,6 +91,11 @@ define(function(require) {
                 db.vehiclesQueuedForPackage.reset(vehicles);
               });
           break;
+          case 'update-package-details':
+            sendRequest.doPut('/api/v1/packages/' + payload.name + '/' + payload.version + '/info', payload.data)
+              .success(function() {
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));
