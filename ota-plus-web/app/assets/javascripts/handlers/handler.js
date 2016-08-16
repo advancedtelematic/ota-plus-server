@@ -6,7 +6,8 @@ define(function(require) {
       devicesHandler = require('./devices'),
       packagesHandler = require('./packages'),
       userHandler = require('./user'),
-      componentsHandler = require('./components');
+      componentsHandler = require('./components'),
+      groupsHandler = require('./groups');
 
   var Handler = (function() {
       this.dispatchCallback = function(payload) {

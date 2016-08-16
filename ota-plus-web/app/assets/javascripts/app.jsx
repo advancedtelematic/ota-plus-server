@@ -35,7 +35,8 @@ define(function(require) {
       Campaigns = require('es6!components/campaigns/campaigns'),
       TestSettings = require('es6!components/test-settings'),
       EditProfile = require('es6!components/user/edit-profile'),
-      ImpactAnalysisPage = require('es6!components/impactanalysis/impact-analysis-page')
+      ImpactAnalysisPage = require('es6!components/impactanalysis/impact-analysis-page'),
+      Group = require('es6!components/groups/group');
 
   const languages = {
     en: 'en'
@@ -179,6 +180,7 @@ define(function(require) {
           case 'testsettings': 
           case 'editprofile':
           case 'impactanalysis':
+          case 'group':
             page = 'page-home';
           break;
           case 'devicedetails':
@@ -254,6 +256,7 @@ define(function(require) {
         <Route path="testsettings" component={TestSettings}/>
         <Route path="editprofile" component={EditProfile}/>
         <Route path="impactanalysis" component={ImpactAnalysisPage}/>
+        <Route path="group/:id" component={Group} />
       </Route>
     </Route>
   );
