@@ -92,7 +92,31 @@ define(function(require) {
               });
           break;
           case 'update-package-details':
-            sendRequest.doPut('/api/v1/packages/' + payload.name + '/' + payload.version + '/info', payload.data)
+            sendRequest.doPut('/api/v1/packages/' + payload.name + '/' + payload.version + '/info', payload.data, {action: payload.actionType})
+              .success(function() {
+              });
+          break;
+          case 'get-blacklisted-package':
+            sendRequest.doGet('/api/v1/blacklist/' + payload.name + '/' + payload.version, {action: payload.actionType})
+              .success(function(packages) {
+                var package = _.find(packages, function(package) {
+                  return package.packageId.name == payload.name && package.packageId.version == payload.version;
+                });
+                db.blacklistedPackage.reset(package);
+              });
+          break;
+          case 'add-package-to-blacklist':
+            sendRequest.doPost('/api/v1/blacklist/' + payload.name + '/' + payload.version, payload.data, {action: payload.actionType})
+              .success(function() {
+              });
+          break;
+          case 'update-package-in-blacklist':
+            sendRequest.doPut('/api/v1/blacklist/' + payload.name + '/' + payload.version, payload.data, {action: payload.actionType})
+              .success(function() {
+              });
+          break;
+          case 'remove-package-from-blacklist':
+            sendRequest.doDelete('/api/v1/blacklist/' + payload.name + '/' + payload.version, null, {action: payload.actionType})
               .success(function() {
               });
           break;
