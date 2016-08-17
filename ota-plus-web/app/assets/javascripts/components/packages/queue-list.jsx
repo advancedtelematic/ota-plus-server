@@ -11,6 +11,7 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
+        intervalId: null,
         data: undefined,
       }
       
@@ -19,11 +20,23 @@ define(function(require) {
       this.dragEnd = this.dragEnd.bind(this);
       this.dragOver = this.dragOver.bind(this);
       this.setData = this.setData.bind(this);
-
-      db.packageQueueForDevice.addWatch("poll-queued-packages", _.bind(this.setData, this, null));
+      this.refreshData = this.refreshData.bind(this);
+      
+      db.packageQueueForDevice.addWatch("poll-queued-packages-queue-list", _.bind(this.setData, this, null));
+    }
+    componentDidMount() {
+      var that = this;
+      var intervalId = setInterval(function() {
+        that.refreshData();
+      }, 1000);
+      this.setState({intervalId: intervalId});
     }
     componentWillUnmount() {
-      db.packageQueueForDevice.removeWatch("poll-queued-packages");
+      db.packageQueueForDevice.removeWatch("poll-queued-packages-queue-list");
+      clearInterval(this.state.intervalId);
+    }
+    refreshData() {
+      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.deviceId});
     }
     setData() {
       if (!$('#queue-list .dragging').length) {
