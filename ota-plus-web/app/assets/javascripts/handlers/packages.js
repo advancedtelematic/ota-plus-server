@@ -84,6 +84,7 @@ define(function(require) {
                     });
                 }
               });
+          break;
           case 'get-devices-queued-for-package':
             sendRequest.doGet('/api/v1/packages/' + payload.name + "/" + payload.version + "/queued_devices")
               .success(function(vehicles) {
