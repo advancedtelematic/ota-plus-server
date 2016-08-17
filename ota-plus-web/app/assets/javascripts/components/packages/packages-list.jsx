@@ -21,22 +21,23 @@ define(function(require) {
         data: undefined,
         expandedPackage: null,
         timeout: null,
-        intervalId: null,
         files: null,
         showForm: this.props.showForm,
         iosListObj: null,
         selectedToAnalyse: [],
+        tmpQueueData: undefined,
       };
       this.refreshData = this.refreshData.bind(this);
       this.onDrop = this.onDrop.bind(this);
       this.expandPackage = this.expandPackage.bind(this);
       this.selectToAnalyse = this.selectToAnalyse.bind(this);
       this.updateListToAnalyse = this.updateListToAnalyse.bind(this);
-      this.refreshAsChanged = this.refreshAsChanged.bind(this);
+      this.refresh = this.refresh.bind(this);
+      this.queueUpdated = this.queueUpdated.bind(this);
 
-      db.searchablePackages.addWatch("poll-packages", _.bind(this.refreshAsChanged, this, null));
-      db.searchablePackagesForDevice.addWatch("poll-installed-packages", _.bind(this.refreshAsChanged, this, null));
-      db.packageQueueForDevice.addWatch("poll-queued-packages", _.bind(this.refreshAsChanged, this, null));
+      db.searchablePackages.addWatch("poll-packages", _.bind(this.refresh, this, null));
+      db.searchablePackagesForDevice.addWatch("poll-installed-packages", _.bind(this.refresh, this, null));
+      db.packageQueueForDevice.addWatch("poll-queued-packages", _.bind(this.queueUpdated, this, null));
     }
     componentWillUpdate(nextProps, nextState) {
       if(nextProps.filterValue != this.props.filterValue) {
@@ -62,10 +63,6 @@ define(function(require) {
     }
     componentDidMount() {
       var that = this;
-      var intervalId = setInterval(function() {
-        that.refreshData();
-      }, 9999999);
-      this.setState({intervalId: intervalId});
       this.refreshData();
 
       var tmpIntervalId = setInterval(function() {
@@ -98,15 +95,23 @@ define(function(require) {
       db.searchablePackagesForDevice.removeWatch("poll-installed-packages");
       db.packageQueueForDevice.removeWatch("poll-queued-packages");
       clearTimeout(this.state.timeout);
-      clearInterval(this.state.intervalId);
     }
     refreshData() {
+      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device.id});
       SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
       SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.id, regex: this.props.filterValue});
-      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device.id});
     }
-    refreshAsChanged() {
+    refresh() {
       this.setData(this.props.selectStatus, this.props.selectType);
+    }
+    queueUpdated() {
+      if(JSON.stringify(this.state.tmpQueueData) !== JSON.stringify(db.packageQueueForDevice.deref())) {
+        SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
+        SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.id, regex: this.props.filterValue});
+      }
+      this.setState({
+        tmpQueueData: db.packageQueueForDevice.deref()
+      });
     }
     setData(selectStatus, selectType) {
       var result = this.prepareData(selectStatus, selectType);
