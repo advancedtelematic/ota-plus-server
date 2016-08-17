@@ -18,8 +18,10 @@ define(function(require) {
     componentDidMount() {
       SotaDispatcher.dispatch({actionType: 'get-user'});
       $(".dropdown-profile").click(function(e) {
-        e.stopPropagation();
-      });      
+        if(e.target.tagName.toLowerCase() !== 'a') {
+          e.stopPropagation();
+        }
+      });
     }
     toggleCampaignPanel(e) {
       e.preventDefault();
