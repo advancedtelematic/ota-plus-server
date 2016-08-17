@@ -25,7 +25,6 @@ define(function(require) {
       this.setState({isSecondInfoShown: !this.state.isSecondInfoShown}); 
     }
     render() {
-      console.log(this.props);
       return (
         <div id="tutorial-install-device" className="tutorial-overlay">
           <div className="pull-left width-full">

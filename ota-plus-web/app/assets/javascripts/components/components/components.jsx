@@ -2,9 +2,9 @@ define(function(require) {
   var React = require('react'),
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
-      ComponentsList = require('./components-list'),
-      ComponentsOverlay = require('./components-overlay'),
-      Loader = require('../loader'),
+      ComponentsList = require('es6!./components-list'),
+      ComponentsOverlay = require('es6!./components-overlay'),
+      Loader = require('es6!../loader'),
       VelocityUI = require('velocity-ui'),
       VelocityHelpers = require('mixins/velocity/velocity-helpers'),
       VelocityComponent = require('mixins/velocity/velocity-component'),
@@ -50,7 +50,6 @@ define(function(require) {
       });
     }
     render() {
-      console.log(this.state.componentsListHeight);
       function animateLeftPosition(left, opacity, action) {
         return VelocityHelpers.registerEffect("transition."+action, {
           defaultDuration: 400,
