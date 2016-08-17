@@ -8,6 +8,7 @@ define(function(require) {
       PackagesQueue = require('es6!../packages/queue'),
       Packages = require('es6!../packages/packages'),
       TutorialInstallDevice = require('es6!../tutorial/install-device'),
+      Components = require('es6!../components/components'),
       Loader = require('es6!../loader'),
       VelocityUI = require('velocity-ui'),
       VelocityHelpers = require('mixins/velocity/velocity-helpers'),
