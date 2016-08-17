@@ -14,7 +14,7 @@ define(function(require) {
         selectSort: 'asc',
         selectSortName: 'A > Z',
         selectType: 'installable',
-        selectTypeName: 'Installable packages',
+        selectTypeName: 'Installable',
         packagesListHeight: '300px',
         showForm: false
       }
@@ -104,7 +104,7 @@ define(function(require) {
 
             <div className="pull-right margin-left-15">
               <button onClick={this.openForm} className="btn btn-add pull-right">
-                <i className="fa fa-plus"></i> &nbsp; Add new
+                <i className="fa fa-plus"></i> &nbsp; Add
               </button>
             </div>
     
@@ -132,9 +132,9 @@ define(function(require) {
                   <span className="fa fa-angle-down pull-right"></span>
                 </button>
                 <ul className="dropdown-menu">
-                  <li><a href="#" onClick={this.selectType.bind(this, 'all')}>All packages</a></li>
-                  <li><a href="#" onClick={this.selectType.bind(this, 'system')}>System packages</a></li>
-                  <li><a href="#" onClick={this.selectType.bind(this, 'installable')}>Installable packages</a></li>
+                  <li><a href="#" onClick={this.selectType.bind(this, 'all')}>All</a></li>
+                  <li><a href="#" onClick={this.selectType.bind(this, 'system')}>System</a></li>
+                  <li><a href="#" onClick={this.selectType.bind(this, 'installable')}>Installable</a></li>
                 </ul>
               </div>
             </div>

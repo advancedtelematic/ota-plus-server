@@ -344,7 +344,7 @@ button {
         background-attachment: fixed;
         height: 80px;
         position: relative;
-        z-index: 99;
+        z-index: 124;
 
         .device-icon {
             width: 50px;
@@ -574,6 +574,10 @@ button {
         &:last-child {
             margin-bottom: -1px;
         }
+    }
+    
+    .search-bar {
+        width: 200px;
     }
 }
 
@@ -1390,7 +1394,7 @@ a.close, button.close {
     left: 0;
     top: 0;
     position: absolute;
-    z-index: 98;
+    z-index: 123;
 }
 
 .grey-overlay {
