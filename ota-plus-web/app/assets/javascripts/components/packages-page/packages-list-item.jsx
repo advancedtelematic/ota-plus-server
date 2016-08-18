@@ -12,7 +12,7 @@ define(function(require) {
     }
     render() {
       return (
-        <button type="button" className="list-group-item" onClick={this.itemClick}>
+        <button type="button" className="list-group-item" onClick={this.itemClick} id={"button-package-" + this.props.name}>
           <div className="pull-left">
             <span className="package-name">{this.props.name}</span>
           </div>

@@ -65,7 +65,7 @@ define(function(require) {
             <div className="panel-body">
               <div className="panel-subheading">
                 <div className="container">
-                  <SearchBar class="search-bar pull-left" changeFilter={this.changeFilter}/>
+                  <SearchBar class="search-bar pull-left" inputId="search-packages-input" changeFilter={this.changeFilter}/>
                   
                   <div className="select-bar pull-left margin-left-100">
                     <div className="select-bar-text">Sort by</div>
@@ -75,13 +75,13 @@ define(function(require) {
                         <span className="fa fa-angle-down pull-right"></span>
                       </button>
                       <ul className="dropdown-menu">
-                        <li><a href="#" onClick={this.selectSort.bind(this, 'asc')}>A &gt; Z</a></li>
-                        <li><a href="#" onClick={this.selectSort.bind(this, 'desc')}>Z &gt; A</a></li>
+                        <li><a href="#" onClick={this.selectSort.bind(this, 'asc')} id="link-sort-packages-asc">A &gt; Z</a></li>
+                        <li><a href="#" onClick={this.selectSort.bind(this, 'desc')} id="link-sort-packages-desc">Z &gt; A</a></li>
                       </ul>
                     </div>
                   </div>
           
-                  <button onClick={this.openForm} className="btn btn-add pull-right">
+                  <button onClick={this.openForm} className="btn btn-add pull-right" id="button-add-new-package">
                     <i className="fa fa-plus"></i> &nbsp; Add new package
                   </button>
                 </div>
