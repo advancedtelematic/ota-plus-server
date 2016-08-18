@@ -37,8 +37,8 @@ define(function(require) {
             </div>
             <div id="navbar" className="pull-left">
               <ul className="nav navbar-nav">
-                <li><IndexLink to="/" activeClassName="active">Devices</IndexLink></li>
-                <li><Link to="/packages" activeClassName="active">Packages</Link></li>
+                <li><IndexLink to="/" activeClassName="active" id="link-devices">Devices</IndexLink></li>
+                <li><Link to="/packages" activeClassName="active" id="link-packages">Packages</Link></li>
               </ul>
             </div>
             <ul className="right-nav pull-right">

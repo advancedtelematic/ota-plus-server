@@ -25,7 +25,7 @@ define(function(require) {
               <div>
                 <div className="width-100 text-center pull-left">
                   {user.picture ? 
-                    <img src={user.picture} className="profile-icon" alt="" />
+                    <img src={user.picture} className="profile-icon" alt="" id="icon-profile"/>
                   :
                     <img src="/assets/img/icons/profile_icon_big.png" className="profile-icon" alt="" />
                   }
@@ -49,13 +49,13 @@ define(function(require) {
           
           <div className="profile-links">
             <div>
-              <Link to="editprofile">Edit profile</Link>
+              <Link to="editprofile" id="link-editprofile">Edit profile</Link>
             </div>
             <div>
-              <a href="#">Upgrade plan</a>
+              <a href="#" id="link-upgradeplan">Upgrade plan</a>
             </div>
             <div>
-              <a href="#" onClick={this.props.logout}>Sign out</a>
+              <a href="#" onClick={this.props.logout} id="link-signout">Sign out</a>
             </div>
           </div>
         </div>  

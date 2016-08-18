@@ -24,7 +24,7 @@ define(function(require) {
     }
     render() {
       return (
-        <button type="button" className="list-group-item" onClick={this.itemClick}>
+        <button type="button" className="list-group-item" onClick={this.itemClick} id={"button-package-" + this.props.name}>
           {this.context.location.pathname.toLowerCase().split('/')[1] != 'productiondevicedetails' &&
             (localStorage.getItem('firstProductionTestDevice') == this.props.deviceId ||
             localStorage.getItem('secondProductionTestDevice') == this.props.deviceId ||

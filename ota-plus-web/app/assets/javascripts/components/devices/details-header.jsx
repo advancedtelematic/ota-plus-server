@@ -51,7 +51,7 @@ define(function(require) {
               :
                 <div>
                   <div className={"device-status device-status-" + this.props.device.status}>
-                    <i className="fa fa-circle" aria-hidden="true"></i>
+                    <i className="fa fa-circle" id="device-status-circle" aria-hidden="true"></i>
                   </div>
                   {deviceStatus}
                 </div>
