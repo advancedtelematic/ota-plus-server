@@ -35,7 +35,7 @@ class EventController @Inject()
     Ok.chunked(deviceSeenSource
       .filter(dsm => dsm.deviceId == device)
       .map(Json.toJson(_))
-      via Comet.json("parent.deviceSeen")).as(ContentTypes.JSON)
+      via Comet.json("parent.deviceSeen")).as(ContentTypes.HTML)
   }
 
   def subDeviceCreated(namespace: Namespace): Action[AnyContent] = Action {
@@ -43,7 +43,7 @@ class EventController @Inject()
     Ok.chunked(deviceCreatedSource
       .filter(dcm => dcm.namespace == namespace)
       .map(Json.toJson(_))
-      via Comet.json("parent.deviceCreated")).as(ContentTypes.JSON)
+      via Comet.json("parent.deviceCreated")).as(ContentTypes.HTML)
   }
 
   def subDeviceDeleted(namespace: Namespace): Action[AnyContent] = Action {
@@ -51,6 +51,6 @@ class EventController @Inject()
     Ok.chunked(deviceDeletedSource
       .filter(ddm => ddm.ns == namespace)
       .map(Json.toJson(_))
-      via Comet.json("parent.deviceDeleted")).as(ContentTypes.JSON)
+      via Comet.json("parent.deviceDeleted")).as(ContentTypes.HTML)
   }
 }
