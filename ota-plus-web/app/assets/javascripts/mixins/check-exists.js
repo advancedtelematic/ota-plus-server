@@ -1,16 +1,14 @@
 define(function(require) {
   var db = require('../stores/db'),
-      errors = require('../handlers/errors');
+      request = require('../handlers/request');
       sendRequest = require('./send-request');
 
-  return function(url, resourceName, callback, action, ifExists) {
-    var postStatus = (db.postStatus.deref() !== null && typeof db.postStatus.deref() === 'object') ? db.postStatus.deref() : {};
-
-    sendRequest.doGet(url, {global: false})
+  return function(url, resourceName, callback, action, checkIfExists) {
+    sendRequest.doGet(url, {action: 'check-exists', notHandleAjaxActions: true})
       .error(function(xhr) {
-        if(ifExists) {
+        if(checkIfExists) {
           if (xhr.status == 404) {
-            errors.renderRequestError(xhr, postStatus, action);
+            request.renderRequestError(xhr, action);
           } else {
             callback();
           }
@@ -18,15 +16,15 @@ define(function(require) {
           if (xhr.status == 404) {
             callback();
           } else {
-            errors.renderRequestError(xhr, postStatus, action);
+            request.renderRequestError(xhr, action);
           }
         }
       })
       .success(function(data) {
-        if(ifExists) {
+        var xhr = [];
+        if(checkIfExists) {
           if (_.isEmpty(data)) {
-            postStatus[action] = resourceName + " doesn't exist";
-            db.postStatus.reset(postStatus);
+            request.renderRequestError(resourceName + " doesn't exist.", action);
           } else {
             callback();
           }
@@ -34,8 +32,7 @@ define(function(require) {
           if (_.isEmpty(data)) {
             callback();
           } else {
-            postStatus[action] = resourceName + " already exists";
-            db.postStatus.reset(postStatus);
+            request.renderRequestError(resourceName + " already exists.", action);
           }
         }
       });

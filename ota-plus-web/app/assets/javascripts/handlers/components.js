@@ -8,7 +8,7 @@ define(function(require) {
       this.dispatchCallback = function(payload) {
         switch(payload.actionType) {
           case 'get-components':
-            sendRequest.doGet('/assets/javascripts/stores/components.json')
+            sendRequest.doGet('/assets/javascripts/stores/components.json', {action: payload.actionType})
               .success(function(components) {
                 db.components.reset(components);
               });
