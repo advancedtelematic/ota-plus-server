@@ -9,13 +9,13 @@ define(function(require) {
       this.dispatchCallback = function(payload) {
         switch(payload.actionType) {
           case 'get-user':
-            sendRequest.doGet('/user/profile')
+            sendRequest.doGet('/user/profile', {action: payload.actionType})
               .success(function(user) {
                 db.user.reset(user);
               });
           break;
           case 'update-user':
-            sendRequest.doPut('/user/profile', payload.data)
+            sendRequest.doPut('/user/profile', payload.data, {action: payload.actionType})
               .success(function(user) {
                 db.user.reset(user);
               });
