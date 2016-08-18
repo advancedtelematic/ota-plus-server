@@ -27,7 +27,7 @@ define(function(require) {
         break;
       }
       return (
-        <Link to={`${link}`} className="device-box">
+        <Link to={`${link}`} className="device-box" id={"link-devicedetails-" + this.props.device.id}>
           <div className="device-icon">
             <div className={"device-status device-status-" + this.props.device.status}>
               <i className="fa fa-circle" aria-hidden="true"></i>

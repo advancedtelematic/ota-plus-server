@@ -13,12 +13,12 @@ define(function(require) {
       return (
         <div id="devices-bar">
           <div className="container">
-            <SearchBar class="search-bar pull-left" changeFilter={this.props.changeFilter}/>
+            <SearchBar class="search-bar pull-left" inputId="search-devices-input" changeFilter={this.props.changeFilter} />
 
             <div className="select-bar select-bar-status pull-left">
               <div className="select-bar-text">Status</div>
               <div className="btn-group">
-                <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" className="btn btn-grey dropdown-toggle" id="dropdown-devices-status" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span className="pull-left">{this.props.selectedStatusName} &nbsp;</span>
                   <span className="fa fa-angle-down pull-right"></span>
                 </button>
@@ -35,13 +35,13 @@ define(function(require) {
             <div className="select-bar select-bar-sort pull-left">
               <div className="select-bar-text">Sort by</div>
               <div className="btn-group">
-                <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" className="btn btn-grey dropdown-toggle" id="dropdown-devices-sortby" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span className="pull-left">{this.props.selectedSortName} &nbsp;</span>
                   <span className="fa fa-angle-down pull-right"></span>
                 </button>
                 <ul className="dropdown-menu">
-                  <li><a href="#" onClick={this.props.selectSort.bind(this, 'asc')}>A &gt; Z</a></li>
-                  <li><a href="#" onClick={this.props.selectSort.bind(this, 'desc')}>Z &gt; A</a></li>
+                  <li><a href="#" onClick={this.props.selectSort.bind(this, 'asc')} id="link-sort-devices-asc">A &gt; Z</a></li>
+                  <li><a href="#" onClick={this.props.selectSort.bind(this, 'desc')} id="link-sort-devices-desc">Z &gt; A</a></li>
                 </ul>
               </div>
             </div>

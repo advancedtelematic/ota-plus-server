@@ -21,7 +21,7 @@ define(function(require) {
         <li className={'list-group-item ' + this.props.status}>
           <span className="list-group-item-text-left">{this.props.package.packageId.name}</span>
           <span className="drag-bar pull-right"><i className="fa fa-bars"></i></span>
-          <button className="btn btn-action pull-right" onClick={this.cancelUpdate}>{this.context.strings.cancel}</button>
+          <button className="btn btn-action pull-right" onClick={this.cancelUpdate} id="button-cancel-update">{this.context.strings.cancel}</button>
           {this.props.status == 'error' ?
             <button className="btn btn-action pull-right">retry</button>
           : null}

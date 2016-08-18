@@ -97,9 +97,9 @@ define(function(require) {
                     v. {this.props.version.id.version}
                     <div className="package-version-right pull-right">
                       {!this.props.isQueued ? 
-                        <button className="btn btn-action btn-install pull-right" onClick={this.props.installPackage.bind(this, this.props.version.id.name, this.props.version.id.version)}>Install</button>
+                        <button className="btn btn-action btn-install pull-right" id={"button-install-package-" + this.props.version.id.name + "-" + this.props.version.id.version} onClick={this.props.installPackage.bind(this, this.props.version.id.name, this.props.version.id.version)}>Install</button>
                       :
-                        <button className="btn btn-action btn-install pull-right" disabled={true}>Install</button>
+                        <button className="btn btn-action btn-install pull-right" id={"button-install-package-" + this.props.version.id.name + "-" + this.props.version.id.version} disabled={true}>Install</button>
                       }
                     </div>
                   </div>
