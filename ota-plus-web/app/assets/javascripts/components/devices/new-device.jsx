@@ -23,6 +23,8 @@ define(function(require) {
       e.preventDefault();
 
       var payload = serializeForm(this.refs.form);
+      payload.deviceId = payload.deviceName;
+      payload.deviceType = 'Other';
       SotaDispatcher.dispatch({
         actionType: 'create-device',
         device: payload
@@ -40,18 +42,6 @@ define(function(require) {
             <label htmlFor="deviceName">{this.context.strings.devicename}</label>
             <input type="text" className="form-control" name="deviceName"
                    ref="deviceName" placeholder={this.context.strings.devicename}/>
-          </div>
-          <div className="form-group">
-            <label htmlFor="deviceId">{this.context.strings.deviceid}</label>
-            <input type="text" className="form-control" name="deviceId"
-                   ref="deviceId" placeholder={this.context.strings.deviceid}/>
-          </div>
-          <div className="form-group">
-            <label htmlFor="deviceType">{this.context.strings.devicetype}</label>
-            <select className="form-control" name="deviceType">
-              <option value="Vehicle">Vehicle</option>
-              <option value="Other">Other</option>
-            </select>
           </div>
           <div className="form-group text-right">
             <button type="submit" className="btn btn-grey">{this.context.strings.adddevice}</button>
