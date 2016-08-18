@@ -100,10 +100,10 @@ define(function(require) {
               : null
             : undefined}
 
-            <SearchBar class="search-bar pull-left" changeFilter={this.changeFilter}/>
+            <SearchBar class="search-bar pull-left" inputId="search-packages-input" changeFilter={this.changeFilter}/>
 
             <div className="pull-right margin-left-15">
-              <button onClick={this.openForm} className="btn btn-add pull-right">
+              <button onClick={this.openForm} className="btn btn-add pull-right" id="button-add-new-package">
                 <i className="fa fa-plus"></i> &nbsp; Add
               </button>
             </div>
@@ -141,9 +141,9 @@ define(function(require) {
             
             <div className="sort-text pull-right">
               {this.state.selectSort == 'asc' ? 
-                <a href="#" onClick={this.selectSort.bind(this, 'desc')}><i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z</a>
+                <a href="#" onClick={this.selectSort.bind(this, 'desc')} id="link-sort-packages-desc"><i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z</a>
               :
-                <a href="#" onClick={this.selectSort.bind(this, 'asc')}><i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A</a>
+                <a href="#" onClick={this.selectSort.bind(this, 'asc')} id="link-sort-packages-asc"><i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A</a>
               }
             </div>
           </div>
