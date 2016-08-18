@@ -50,8 +50,10 @@ define(function(require) {
         this.setState({showForm: nextProps.showForm});
       }
             
-      if(this.props.selectStatus !== nextProps.selectStatus || this.props.selectType !== nextProps.selectType) {
-        this.setData(nextProps.selectStatus, nextProps.selectType);
+      if(this.props.selectStatus !== nextProps.selectStatus || 
+              this.props.selectType !== nextProps.selectType || 
+              this.props.selectSort !== nextProps.selectSort) {
+        this.setData(nextProps.selectStatus, nextProps.selectType, nextProps.selectSort);
       }
     }
     componentDidUpdate(prevProps, prevState) {
@@ -102,7 +104,7 @@ define(function(require) {
       SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.id, regex: this.props.filterValue});
     }
     refresh() {
-      this.setData(this.props.selectStatus, this.props.selectType);
+      this.setData(this.props.selectStatus, this.props.selectType, this.props.selectSort);
     }
     queueUpdated() {
       if(JSON.stringify(this.state.tmpQueueData) !== JSON.stringify(db.packageQueueForDevice.deref())) {
@@ -113,8 +115,8 @@ define(function(require) {
         tmpQueueData: db.packageQueueForDevice.deref()
       });
     }
-    setData(selectStatus, selectType) {
-      var result = this.prepareData(selectStatus, selectType);
+    setData(selectStatus, selectType, selectSort) {
+      var result = this.prepareData(selectStatus, selectType, selectSort);
       var data = result.data;
       this.props.setPackagesStatistics(result.statistics.installedCount, result.statistics.queuedCount);
       this.setState({
@@ -128,7 +130,7 @@ define(function(require) {
       
       this.props.openForm();
     }
-    prepareData(selectStatus, selectType) {
+    prepareData(selectStatus, selectType, selectSort) {
       var Packages = _.clone(db.searchablePackages.deref());
       var Installed = _.clone(db.searchablePackagesForDevice.deref());
       var Queued = _.clone(db.packageQueueForDevice.deref());
@@ -139,6 +141,7 @@ define(function(require) {
 
       var selectedStatus = selectStatus ? selectStatus : this.props.selectStatus;
       var selectedType = selectedType ? selectedType : this.props.selectedType;
+      var selectedSort = selectSort ? selectSort : this.props.selectSort;
       if(!_.isUndefined(Packages) && !_.isUndefined(Installed) && !_.isUndefined(Queued)) {
         switch(selectType) {
           case 'all': 
@@ -233,10 +236,9 @@ define(function(require) {
           break;
         }
 
-        var selectSort = this.props.selectSort;
         SortedPackages = {};
         Object.keys(SelectedPackages).sort(function(a, b) {
-          if(selectSort !== 'undefined' && selectSort == 'desc')
+          if(selectedSort !== 'undefined' && selectedSort == 'desc')
             return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? -1 : b.localeCompare(a);
           else
             return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? 1 : a.localeCompare(b);
