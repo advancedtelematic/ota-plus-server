@@ -5,12 +5,12 @@ define(function(require) {
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      Loader = require('../loader');
+      Loader = require('../loader'),
+      ResponsesCustomMsg = require('../responses-custom-msg');
 
   class TestSettings extends React.Component {
     constructor(props) {
       super(props);
-      
       this.handleSubmit = this.handleSubmit.bind(this);
       db.user.addWatch("poll-user-editprofile", _.bind(this.forceUpdate, this, null));
     }
@@ -41,6 +41,10 @@ define(function(require) {
               {!_.isUndefined(user) ?
                 <div className="row">
                   <div className="col-lg-8 col-lg-offset-2">
+                    <ResponsesCustomMsg 
+                      action="update-user" 
+                      successText="Profile has been updated." 
+                      errorText="Error occured during profile update."/>
                     <form>
                       <div className="form-group">
                         <input className="form-control" type="text" name="fullname" placeholder="full name" id="fullname" ref="username" defaultValue={user.fullName}/>
