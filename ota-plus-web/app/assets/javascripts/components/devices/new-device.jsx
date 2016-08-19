@@ -5,19 +5,13 @@ define(function(require) {
       _ = require('underscore'),
       db = require('stores/db'),
       serializeForm = require('../../mixins/serialize-form'),
-      SotaDispatcher = require('sota-dispatcher');
+      SotaDispatcher = require('sota-dispatcher'),
+      Responses = require('../responses');
 
   class NewDevice extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {
-        errors: null
-      };
       this.handleSubmit = this.handleSubmit.bind(this);
-      db.postStatus.addWatch("poll-errors", _.bind(this.forceUpdate, this, null));
-    }
-    componentWillUnmount() {
-      db.postStatus.reset([]);
     }
     handleSubmit(e) {
       e.preventDefault();
@@ -33,11 +27,7 @@ define(function(require) {
     render() {
       return (
         <form ref='form' onSubmit={this.handleSubmit}>
-          {db.postStatus.deref()['create-device'] ?
-            <div className="alert alert-danger">
-              {db.postStatus.deref()['create-device']}
-            </div>
-          : null}
+          <Responses action="create-device" />
           <div className="form-group">
             <label htmlFor="deviceName">{this.context.strings.devicename}</label>
             <input type="text" className="form-control" name="deviceName"

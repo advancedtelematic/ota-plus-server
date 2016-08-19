@@ -9,13 +9,13 @@ define(function(require) {
     var url = '/api/v1/packages/' + payload.package.name + '/' + payload.package.version +
       '?description=' + encodeURIComponent(payload.package.description) +
       '&vendor=' + encodeURIComponent(payload.package.vendor);
-    sendRequest.doPut(url, payload.data, {form: true, 'action': payload.actionType})
+    sendRequest.doPut(url, payload.data, {form: true, action: payload.actionType})
       .success(function() {
         checkExists('/api/v1/packages/' + payload.package.name + '/' + payload.package.version,
           "Package", function() {
             SotaDispatcher.dispatch({actionType: 'get-packages'});
             SotaDispatcher.dispatch({actionType: 'search-packages-by-regex'});
-        }, payload.actionType, true);
+        }, 'create-package', true);
       });
   };
 
@@ -23,13 +23,13 @@ define(function(require) {
       this.dispatchCallback = function(payload) {
         switch(payload.actionType) {
           case 'get-packages':
-            sendRequest.doGet('/api/v1/packages')
+            sendRequest.doGet('/api/v1/packages', {action: payload.actionType})
               .success(function(packages) {
                 db.packages.reset(packages);
               });
           break;
           case 'get-package':
-            sendRequest.doGet('/api/v1/packages')
+            sendRequest.doGet('/api/v1/packages', {action: payload.actionType})
               .success(function(packages) {
                 db.showPackage.reset(_.find(packages, function(package) {
                   return package.id.name == payload.name && package.id.version == payload.version;
@@ -40,24 +40,24 @@ define(function(require) {
             checkExists('/api/v1/packages/' + payload.package.name + '/' + payload.package.version,
               "Package", function() {
                 createPackage(payload);
-              }, payload.actionType);
+              }, 'create-package');
           break;
           case 'search-packages-by-regex':
             var query = payload.regex ? '?regex=' + payload.regex : '';
 
-            sendRequest.doGet('/api/v1/packages' + query)
+            sendRequest.doGet('/api/v1/packages' + query, {action: payload.actionType})
               .success(function(packages) {
                 db.searchablePackages.reset(packages);
               });
           break;
           case 'get-packages-for-device':
-            sendRequest.doGet('/api/v1/device_data')
+            sendRequest.doGet('/api/v1/device_data', {action: payload.actionType})
               .success(function(devices) {        
                 var device = _.find(devices, function(device) {
                   return device.id == payload.device;
                 });
                 if (!_.isUndefined(device)) {
-                  sendRequest.doGet('/api/v1/resolver/devices/' + device.id + '/package')
+                  sendRequest.doGet('/api/v1/resolver/devices/' + device.id + '/package', {action: payload.actionType})
                     .success(function(packages) {
                       var list = _.map(packages, function(package) {
                         return {id: package}
@@ -69,13 +69,13 @@ define(function(require) {
           break;
           case 'search-packages-for-device-by-regex':
             var query = payload.regex ? '?regex=' + payload.regex : '';
-            sendRequest.doGet('/api/v1/device_data')
+            sendRequest.doGet('/api/v1/device_data', {action: payload.actionType})
               .success(function(devices) {
                 var device = _.find(devices, function(device) {
                   return device.id == payload.device;
                 });
                 if (!_.isUndefined(device)) {
-                  sendRequest.doGet('/api/v1/resolver/devices/' + device.id + '/package' + query)
+                  sendRequest.doGet('/api/v1/resolver/devices/' + device.id + '/package' + query, {action: payload.actionType})
                     .success(function(packages) {
                       var list = _.map(packages, function(package) {
                         return {id: package}
@@ -86,7 +86,7 @@ define(function(require) {
               });
           break;
           case 'get-devices-queued-for-package':
-            sendRequest.doGet('/api/v1/packages/' + payload.name + "/" + payload.version + "/queued_devices")
+            sendRequest.doGet('/api/v1/packages/' + payload.name + "/" + payload.version + "/queued_devices", {action: payload.actionType})
               .success(function(vehicles) {
                 db.vehiclesQueuedForPackage.reset(vehicles);
               });

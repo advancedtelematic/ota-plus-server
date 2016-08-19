@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', '../stores/db'], function($, _, db) {
+define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function($, _, db, request) {
   var sendRequest = {
 
     getCsrfToken: function() {
@@ -14,18 +14,28 @@ define(['jquery', 'underscore', '../stores/db'], function($, _, db) {
       }
     },
     jsonAjax: function(type, url, data, opts) {
-      return $.ajax(_.extend({
+      var ajaxReq = $.ajax(_.extend({
         type: type,
         url: url,
         headers: {'Csrf-Token': this.getCsrfToken()},
         dataType: 'json',
         data: JSON.stringify(data),
-        contentType: "application/json"
+        contentType: "application/json",
       }, opts));
+      
+      if(opts.notHandleAjaxActions) 
+        return ajaxReq;
+      
+      return ajaxReq.success(function(data) {
+        request.renderRequestSuccess(data, opts.action);
+      })
+      .error(function(xhr) {
+        request.renderRequestError(xhr, opts.action);
+      });
     },
     formMultipart: function(type, url, data, opts) {
       var postProgress = (db.postProgress.deref() !== null && typeof db.postProgress.deref() === 'object') ? db.postProgress.deref() : {};
-      return $.ajax({
+      var ajaxReq =  $.ajax({
         type: type,
         url: url,
         headers: {'Csrf-Token': this.getCsrfToken()},
@@ -43,6 +53,16 @@ define(['jquery', 'underscore', '../stores/db'], function($, _, db) {
           }
           return myXhr;
         }
+      });
+      
+      if(opts.notHandleAjaxActions)
+        return ajaxReq;
+      
+      return ajaxReq.success(function(data) {
+        request.renderRequestSuccess(data, opts.action);
+      })
+      .error(function(xhr) {
+        request.renderRequestError(xhr, opts.action);
       });
     },
     doGet: function(url, opts) {
