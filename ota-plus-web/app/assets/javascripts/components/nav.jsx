@@ -3,6 +3,7 @@ define(function(require) {
       Router = require('react-router'),
       Link = Router.Link,
       IndexLink = Router.IndexLink,
+      db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       LanguageSelector = require('es6!./translation/language-selector'),
       Translate = require('./translation/translate'),
@@ -14,6 +15,7 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.toggleCampaignPanel = this.toggleCampaignPanel.bind(this);
+      db.user.addWatch("poll-user-nav", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
       SotaDispatcher.dispatch({actionType: 'get-user'});
@@ -23,12 +25,16 @@ define(function(require) {
         }
       });
     }
+    componentWillUnmount() {
+      db.user.removeWatch("poll-user-nav");
+    }
     toggleCampaignPanel(e) {
       e.preventDefault();
       this.props.toggleCampaignPanel();
     }
     render() {
       var campaignsData = JSON.parse(localStorage.getItem('campaignsData'));
+      var user = db.user.deref();
       return (
         <nav className="navbar navbar-inverse navbar-fixed-top">
           <div className="container">
@@ -51,8 +57,12 @@ define(function(require) {
               </li>
               <li className="dropdown" id="menuLogin">
                 <a className="dropdown-toggle btn-profile" href="#" data-toggle="dropdown">
-                  <img src="/assets/img/icons/profile_icon.png" /> &nbsp;
-                  <i className="fa fa-caret-down"></i>
+                  {!_.isUndefined(user) && user.picture ? 
+                    <img src={user.picture} className="profile-icon" alt="" id="icon-profile"/> 
+                  :
+                    <img src="/assets/img/icons/profile_icon_big.png" className="profile-icon" alt="" />
+                  }
+                  &nbsp; <i className="fa fa-caret-down"></i>
                 </a>
                 <Profile logout={this.props.logout}/>
               </li>
