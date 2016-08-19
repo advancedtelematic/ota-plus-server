@@ -2,7 +2,8 @@ define(function(require) {
   var React = require('react'),
       db = require('stores/db'),
       serializeForm = require('../../mixins/serialize-form'),
-      SotaDispatcher = require('sota-dispatcher');
+      SotaDispatcher = require('sota-dispatcher'),
+      Responses = require('../responses');
   
   class AddPackage extends React.Component {
     constructor(props) {
@@ -53,11 +54,7 @@ define(function(require) {
               </div>
               <div className="modal-body">
                 <form ref='form' onSubmit={this.handleSubmit} encType="multipart/form-data">
-                  {db.postStatus.deref()['create-package'] ?
-                    <div className="alert alert-danger">
-                      {db.postStatus.deref()['create-package']}
-                    </div>
-                  : null}
+                  <Responses action="create-package" />
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-group">
