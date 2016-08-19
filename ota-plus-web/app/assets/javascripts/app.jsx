@@ -37,9 +37,7 @@ define(function(require) {
       EditProfile = require('es6!components/user/edit-profile');
 
   const languages = {
-    en: 'en',
-    de: 'de',
-    jp: 'jp'
+    en: 'en'
   };
 
   class App extends React.Component {

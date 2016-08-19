@@ -7,8 +7,6 @@ define(function(require) {
       
   const languages = {
     en: enTranslations,
-    de: deTranslations,
-    jp: jpTranslations,
   };
   
   var Translate = function Translate(Component) {
