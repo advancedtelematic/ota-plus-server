@@ -1,7 +1,7 @@
 package com.advancedtelematic.ota.Messages
 
 import com.advancedtelematic.ota.device.Devices._
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, UpdateSpec}
+import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, PackageCreated, UpdateSpec}
 import play.api.libs.json.{JsString, Writes, _}
 
 object MessageWriters {
@@ -26,6 +26,17 @@ object MessageWriters {
     def writes(deviceMsg: DeviceDeleted) = Json.obj(
       "namespace" -> deviceMsg.namespace.get,
       "deviceId" -> deviceMsg.deviceId.underlying.get
+    )
+  }
+
+  implicit val packageCreatedWrites = new Writes[PackageCreated] {
+    def writes(packageCreatedMsg: PackageCreated) = Json.obj(
+      "namespace" -> packageCreatedMsg.namespace.get,
+      "packageId" -> Json.toJson(packageCreatedMsg.packageId),
+      "description" -> Json.toJson(packageCreatedMsg.description.getOrElse("")),
+      "vendor" -> Json.toJson(packageCreatedMsg.description.getOrElse("")),
+      "signature" -> Json.toJson(packageCreatedMsg.description.getOrElse("")),
+      "fileName" -> packageCreatedMsg.fileName
     )
   }
 

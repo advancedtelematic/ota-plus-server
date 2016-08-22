@@ -3,39 +3,40 @@
 # ~~~~
 
 # Home page
-GET     /                                       org.genivi.webserver.controllers.Application.index
+GET     /                                        org.genivi.webserver.controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)
-GET     /webjars/*file                          controllers.WebJarAssets.at(file)
+GET     /assets/*file                            controllers.Assets.versioned(path="/public", file: Asset)
+GET     /webjars/*file                           controllers.WebJarAssets.at(file)
 
-GET     /api/v1/device_data                     org.genivi.webserver.controllers.DeviceController.listDeviceAttributes()
-GET     /api/v1/devices                         org.genivi.webserver.controllers.DeviceController.search()
-POST    /api/v1/devices                         org.genivi.webserver.controllers.DeviceController.create()
-GET     /api/v1/devices/:uuid                   org.genivi.webserver.controllers.DeviceController.get(uuid: Device.Id)
-GET     /api/v1/devices/:deviceId/clientInfo    org.genivi.webserver.controllers.DeviceController.fetchClientInfo(deviceId: Device.Id)
+GET     /api/v1/device_data                      org.genivi.webserver.controllers.DeviceController.listDeviceAttributes()
+GET     /api/v1/devices                          org.genivi.webserver.controllers.DeviceController.search()
+POST    /api/v1/devices                          org.genivi.webserver.controllers.DeviceController.create()
+GET     /api/v1/devices/:uuid                    org.genivi.webserver.controllers.DeviceController.get(uuid: Device.Id)
+GET     /api/v1/devices/:deviceId/clientInfo     org.genivi.webserver.controllers.DeviceController.fetchClientInfo(deviceId: Device.Id)
 
-GET     /api/v1/client/:deviceId/:packfmt/:arch org.genivi.webserver.controllers.ClientSdkController.downloadClientSdk(deviceId: Device.Id, packfmt: PackageType, arch: Architecture)
+GET     /api/v1/client/:deviceId/:packfmt/:arch  org.genivi.webserver.controllers.ClientSdkController.downloadClientSdk(deviceId: Device.Id, packfmt: PackageType, arch: Architecture)
 
-GET     /api/v1/events/devices/:device          org.genivi.webserver.controllers.EventController.subDeviceSeen(device: Device.Id)
-GET     /api/v1/events/devicecreated/:namespace org.genivi.webserver.controllers.EventController.subDeviceCreated(namespace: Namespace)
-GET     /api/v1/events/devicedeleted/:namespace org.genivi.webserver.controllers.EventController.subDeviceDeleted(namespace: Namespace)
-GET     /api/v1/events/updatespec/:namespace    org.genivi.webserver.controllers.EventController.subUpdateSpec(namespace: Namespace)
+GET     /api/v1/events/devices/:device           org.genivi.webserver.controllers.EventController.subDeviceSeen(device: Device.Id)
+GET     /api/v1/events/devicecreated/:namespace  org.genivi.webserver.controllers.EventController.subDeviceCreated(namespace: Namespace)
+GET     /api/v1/events/devicedeleted/:namespace  org.genivi.webserver.controllers.EventController.subDeviceDeleted(namespace: Namespace)
+GET     /api/v1/events/packagecreated/:namespace org.genivi.webserver.controllers.EventController.subPackageCreated(namespace: Namespace)
+GET     /api/v1/events/updatespec/:namespace     org.genivi.webserver.controllers.EventController.subUpdateSpec(namespace: Namespace)
 
-GET     /api/v1/*path                           org.genivi.webserver.controllers.Application.apiProxy(path: String)
-PUT     /api/v1/*path                           org.genivi.webserver.controllers.Application.apiProxy(path: String)
-POST    /api/v1/*path                           org.genivi.webserver.controllers.Application.apiProxy(path: String)
-DELETE  /api/v1/*path                           org.genivi.webserver.controllers.Application.apiProxy(path: String)
+GET     /api/v1/*path                            org.genivi.webserver.controllers.Application.apiProxy(path: String)
+PUT     /api/v1/*path                            org.genivi.webserver.controllers.Application.apiProxy(path: String)
+POST    /api/v1/*path                            org.genivi.webserver.controllers.Application.apiProxy(path: String)
+DELETE  /api/v1/*path                            org.genivi.webserver.controllers.Application.apiProxy(path: String)
 
-GET     /login                                  com.advancedtelematic.login.LoginController.login
-GET     /logout                                 com.advancedtelematic.login.LoginController.logout
-GET     /callback                               com.advancedtelematic.login.LoginController.callback
-GET     /authorization_error                    com.advancedtelematic.login.LoginController.authorizationError
-GET     /welcome                                com.advancedtelematic.login.LoginController.accountActivated
+GET     /login                                   com.advancedtelematic.login.LoginController.login
+GET     /logout                                  com.advancedtelematic.login.LoginController.logout
+GET     /callback                                com.advancedtelematic.login.LoginController.callback
+GET     /authorization_error                     com.advancedtelematic.login.LoginController.authorizationError
+GET     /welcome                                 com.advancedtelematic.login.LoginController.accountActivated
 
-GET     /health                                 com.advancedtelematic.HealthController.health
-GET     /health/version                         com.advancedtelematic.HealthController.version
+GET     /health                                  com.advancedtelematic.HealthController.health
+GET     /health/version                          com.advancedtelematic.HealthController.version
 
 # User profile
-GET     /user/profile                           com.advancedtelematic.user.UserProfileController.getUserProfile
-PUT     /user/profile                           com.advancedtelematic.user.UserProfileController.updateUserProfile
+GET     /user/profile                            com.advancedtelematic.user.UserProfileController.getUserProfile
+PUT     /user/profile                            com.advancedtelematic.user.UserProfileController.updateUserProfile
