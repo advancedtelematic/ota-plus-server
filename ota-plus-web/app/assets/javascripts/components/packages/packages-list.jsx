@@ -73,8 +73,8 @@ define(function(require) {
           var a = jQuery(packagesListNode).ioslist();
           clearInterval(tmpIntervalId);
         }
-      }, 30);
-
+      }, 500);
+      
       $('#selectPackages').change(function() {
         if($(this).prop('checked')) {
           $('.checkbox-impact').each(function() {
@@ -422,6 +422,7 @@ define(function(require) {
                 <AddPackage
                   files={this.state.files}
                   closeForm={this.props.closeForm}
+                  focusPackage={this.props.focusPackage}
                   key="add-package"/>
               : null}
             </VelocityTransitionGroup>

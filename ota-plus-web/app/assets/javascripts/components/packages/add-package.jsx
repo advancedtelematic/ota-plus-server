@@ -14,10 +14,13 @@ define(function(require) {
       };
       this.handleSubmit = this.handleSubmit.bind(this);
       this.setProgress = this.setProgress.bind(this);
+      this.handleResponse = this.handleResponse.bind(this);
       db.postProgress.addWatch("poll-progress", _.bind(this.setProgress, this, null));
+      db.postStatus.addWatch("poll-response-add-package", _.bind(this.handleResponse, this, null));
     }
     componentWillUnmount() {
       db.postProgress.removeWatch("poll-progress");
+      db.postStatus.removeWatch("poll-response-add-package");
     }
     handleSubmit(e) {
       e.preventDefault();
@@ -37,10 +40,18 @@ define(function(require) {
         package: payload,
         data: data
       });
-//      this.props.closeForm();
     }
     setProgress() {
       this.setState({uploadProgress: db.postProgress.deref()['create-package']});
+    }
+    handleResponse() {
+      var payload = serializeForm(this.refs.form);
+      var postStatus = !_.isUndefined(db.postStatus.deref()['create-package']) ? db.postStatus.deref()['create-package'] : null;
+      if(postStatus && postStatus.status === 'success') {
+        db.postStatus.removeWatch("poll-response-add-package");
+        this.props.focusPackage(payload.name);
+        this.props.closeForm();
+      }
     }
     render() {
       var uploadProgress = this.state.uploadProgress ? this.state.uploadProgress : null;
@@ -54,7 +65,7 @@ define(function(require) {
               </div>
               <div className="modal-body">
                 <form ref='form' onSubmit={this.handleSubmit} encType="multipart/form-data">
-                  <Responses action="create-package" />
+                  <Responses action="create-package" handledStatuses="error"/>
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-group">
