@@ -41,7 +41,7 @@ docker run \
   --link=auth-plus \
   -e OTA_AUTH_URL='http://auth-plus:9001' \
   -e OTA_SERVER_URL='http://localhost:9000' \
-  advancedtelematic/ota-build-srv:$BUILDSRV_DOCKER_TAG
+  advancedtelematic/ota-plus-buildsrv:$BUILDSRV_DOCKER_TAG
 
 WEB_DOCKER_TAG=${WEB_TAG-latest}
 echo 'Starting Web'
