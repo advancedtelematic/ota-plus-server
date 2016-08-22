@@ -10,10 +10,6 @@ define(function(require) {
   class Profile extends React.Component {
     constructor(props) {
       super(props);
-      db.user.addWatch("poll-user", _.bind(this.forceUpdate, this, null));
-    }
-    componentWillUnmount() {
-      db.user.removeWatch("poll-user");
     }
     render() {
       var user = db.user.deref();
