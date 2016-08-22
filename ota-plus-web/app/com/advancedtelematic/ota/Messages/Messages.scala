@@ -24,8 +24,8 @@ object Messages {
 
   implicit val deviceDeletedWrites = new Writes[DeviceDeleted] {
     def writes(deviceMsg: DeviceDeleted) = Json.obj(
-      "namespace" -> deviceMsg.ns.get,
-      "deviceId" -> deviceMsg.id.underlying.get
+      "namespace" -> deviceMsg.namespace.get,
+      "deviceId" -> deviceMsg.deviceId.underlying.get
     )
   }
 }
