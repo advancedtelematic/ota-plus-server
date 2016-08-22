@@ -27,7 +27,8 @@ define(function(require) {
       return str;
     }
     render() {
-      var postStatus = !_.isUndefined(db.postStatus.deref()[this.props.action]) ? db.postStatus.deref()[this.props.action] : null;
+      var handledStatuses = this.props.handledStatuses || 'all';
+      var postStatus = !_.isUndefined(db.postStatus.deref()[this.props.action]) && (handledStatuses === 'all' || (db.postStatus.deref()[this.props.action].status === handledStatuses)) ? db.postStatus.deref()[this.props.action] : null;
       return (
         <div>
           {postStatus ?
