@@ -49,7 +49,7 @@ class EventController @Inject()
   def subDeviceDeleted(namespace: Namespace): Action[AnyContent] = Action {
     val deviceDeletedSource: Source[DeviceDeleted, _] = messageBusProvider.getSource[DeviceDeleted]()
     Ok.chunked(deviceDeletedSource
-      .filter(ddm => ddm.ns == namespace)
+      .filter(ddm => ddm.namespace == namespace)
       .map(Json.toJson(_))
       via Comet.json("parent.deviceDeleted")).as(ContentTypes.JSON)
   }
