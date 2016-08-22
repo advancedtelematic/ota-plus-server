@@ -10,10 +10,10 @@ import javax.inject.{Inject, Singleton}
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import akka.stream.scaladsl.Source
-import com.advancedtelematic.ota.Messages.Messages.{deviceCreatedWrites, deviceDeletedWrites, deviceSeenWrites}
+import com.advancedtelematic.ota.Messages.MessageWriters.{deviceCreatedWrites, deviceDeletedWrites, deviceSeenWrites,
+updateSpecWrites}
 import org.genivi.sota.data.{Device, Namespace}
-import org.genivi.sota.messaging.MessageBus
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen}
+import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, UpdateSpec}
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
 import play.api.http.ContentTypes
 import play.api.libs.Comet
@@ -26,9 +26,6 @@ class EventController @Inject()
     (val messageBusProvider: MessageSourceProvider,
      val conf: Configuration)(implicit mat: Materializer, system: ActorSystem)
   extends Controller {
-
-  MessageBus.subscribe[DeviceSeen](system, conf.underlying)
-  MessageBus.subscribe[DeviceCreated](system, conf.underlying)
 
   def subDeviceSeen(device: Device.Id): Action[AnyContent] = Action {
     val deviceSeenSource = messageBusProvider.getSource[DeviceSeen]()
@@ -52,5 +49,13 @@ class EventController @Inject()
       .filter(ddm => ddm.namespace == namespace)
       .map(Json.toJson(_))
       via Comet.json("parent.deviceDeleted")).as(ContentTypes.HTML)
+  }
+
+  def subUpdateSpec(namespace: Namespace): Action[AnyContent] = Action {
+    val updateSpecSource: Source[UpdateSpec, _] = messageBusProvider.getSource[UpdateSpec]()
+    Ok.chunked(updateSpecSource
+      .filter(usm => usm.namespace == namespace)
+      .map(Json.toJson(_))
+      via Comet.json("parent.updateSpec")).as(ContentTypes.HTML)
   }
 }
