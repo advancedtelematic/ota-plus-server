@@ -6,7 +6,7 @@ import akka.stream.testkit.scaladsl.TestSink
 import akka.testkit.TestKit
 import com.advancedtelematic.api.MessagingData
 import org.genivi.sota.messaging.Messages.DeviceSeen
-import com.advancedtelematic.ota.Messages.Messages.deviceSeenWrites
+import com.advancedtelematic.ota.Messages.MessageWriters.deviceSeenWrites
 import org.genivi.sota.messaging.MessageBus
 import org.genivi.webserver.controllers.messaging.MessageBusActorListener
 import org.scalatest.WordSpecLike
