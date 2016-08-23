@@ -1,11 +1,20 @@
 define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
-      Link = Router.Link;
+      Link = Router.Link,
+      db = require('stores/db'),
+      Events = require('../../handlers/events');
 
   class DetailsHeader extends React.Component {
     constructor(props) {
       super(props);
+      db.deviceSeen.addWatch("poll-deviceseen", _.bind(this.forceUpdate, this, null));
+    }
+    componentDidMount() {
+      window.deviceSeen = Events.deviceSeen;
+    }
+    componentWillUnmount() {
+      db.deviceSeen.removeWatch("poll-deviceseen");
     }
     render() {
       var lastSeenDate = new Date(this.props.device.lastSeen);
@@ -25,6 +34,7 @@ define(function(require) {
       }
       
       var isTestDevice = localStorage.getItem('firstProductionTestDevice') === this.props.device.id || localStorage.getItem('secondProductionTestDevice') === this.props.device.id || localStorage.getItem('thirdProductionTestDevice') === this.props.device.id ? true : false;
+      lastSeenDate = !_.isUndefined(db.deviceSeen.deref()) ? new Date(db.deviceSeen.deref().lastSeen) : lastSeenDate;
       
       return (
         
@@ -62,6 +72,7 @@ define(function(require) {
                 Campaign wizard
               </Link>
             : null}
+            <iframe src={"/api/v1/events/devices/" + this.props.device.id} style={{display: 'none'}}></iframe>
         </div>
       );
     }
