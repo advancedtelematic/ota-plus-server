@@ -10,10 +10,9 @@ import javax.inject.{Inject, Singleton}
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import akka.stream.scaladsl.Source
-import com.advancedtelematic.ota.Messages.MessageWriters.{deviceCreatedWrites, deviceDeletedWrites, deviceSeenWrites,
-updateSpecWrites}
+import com.advancedtelematic.ota.Messages.MessageWriters._
 import org.genivi.sota.data.{Device, Namespace}
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, UpdateSpec}
+import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, PackageCreated, UpdateSpec}
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
 import play.api.http.ContentTypes
 import play.api.libs.Comet
@@ -49,6 +48,14 @@ class EventController @Inject()
       .filter(ddm => ddm.namespace == namespace)
       .map(Json.toJson(_))
       via Comet.json("parent.deviceDeleted")).as(ContentTypes.HTML)
+  }
+
+  def subPackageCreated(namespace: Namespace): Action[AnyContent] = Action {
+    val packageCreatedSource: Source[PackageCreated, _] = messageBusProvider.getSource[PackageCreated]()
+    Ok.chunked(packageCreatedSource
+      .filter(usm => usm.namespace == namespace)
+      .map(Json.toJson(_))
+      via Comet.json("parent.packageCreated")).as(ContentTypes.HTML)
   }
 
   def subUpdateSpec(namespace: Namespace): Action[AnyContent] = Action {
