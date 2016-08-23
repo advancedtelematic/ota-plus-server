@@ -16,7 +16,7 @@ import com.advancedtelematic.ota.Messages.MessageWriters._
 import eu.timepit.refined.api.Refined
 import org.genivi.sota.data.Device.{DeviceName, DeviceType}
 import org.genivi.sota.data.{Device, Namespace, PackageId}
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, MessageLike, UpdateSpec}
+import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, MessageLike, PackageCreated, UpdateSpec}
 import org.genivi.webserver.controllers.EventController
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -43,6 +43,7 @@ object MessagingData {
   val deviceCreatedMessage = DeviceCreated(namespace, deviceName, deviceIdOpt, deviceType)
   val deviceDeletedMessage = DeviceDeleted(namespace, deviceId)
   val updateSpecMessage = UpdateSpec(namespace, deviceId, packageId, "Finished")
+  val packageCreatedMessage = PackageCreated(namespace, packageId, Some("description"), Some("ghc"), None, "/root/")
 }
 
 class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
@@ -59,6 +60,10 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
     "<html><body><script type=\"text/javascript\">parent.deviceDeleted(" + Json.toJson(msg) + ");</script>"
   }
 
+  protected def getPackageCreatedResponse(msg: PackageCreated): String = {
+    "<html><body><script type=\"text/javascript\">parent.packageCreated(" + Json.toJson(msg) + ");</script>"
+  }
+
   protected def getUpdateSpecResponse(msg: UpdateSpec): String = {
     "<html><body><script type=\"text/javascript\">parent.updateSpec(" + Json.toJson(msg) + ");</script>"
   }
@@ -73,6 +78,8 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
         Source.single(MessagingData.deviceDeletedMessage).asInstanceOf[Source[T, NotUsed]]
       } else if(messageLike.tag.runtimeClass.equals(classOf[UpdateSpec])) {
         Source.single(MessagingData.updateSpecMessage).asInstanceOf[Source[T, NotUsed]]
+      } else if(messageLike.tag.runtimeClass.equals(classOf[PackageCreated])) {
+        Source.single(MessagingData.packageCreatedMessage).asInstanceOf[Source[T, NotUsed]]
       } else {
         throw new IllegalArgumentException("[test] Event class not supported " +
           s"${messageLike.tag.runtimeClass.getSimpleName}")
@@ -113,6 +120,14 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
 
       status(result) must be(OK)
       contentAsString(result).trim mustBe getDeviceDeletedResponse(MessagingData.deviceDeletedMessage)
+    }
+
+    "route PackageCreated from akka bus to client" in {
+      val request = FakeRequest(GET, s"/events/packagecreated/${MessagingData.namespace}")
+      val result = call(controller.subPackageCreated(MessagingData.namespace), request)
+
+      status(result) must be(OK)
+      contentAsString(result).trim mustBe getPackageCreatedResponse(MessagingData.packageCreatedMessage)
     }
 
     "route UpdateSpecs from akka bus to client" in {
