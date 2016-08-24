@@ -61,7 +61,7 @@ define(function(require) {
             break;
           case 'get-package-queue-for-device':
             if (!_.isUndefined(payload.device)) {
-              sendRequest.doGet('/api/v1/vehicle_updates/' + payload.device + '/queued', {action: payload.actionType})
+              sendRequest.doGet('/api/v1/device_updates/' + payload.device + '/queued', {action: payload.actionType})
                 .success(function(packages) {
                   db.packageQueueForDevice.reset(packages);
                 });
@@ -86,7 +86,7 @@ define(function(require) {
               });
             break;
           case 'sync-packages-for-device':
-            sendRequest.doPut('/api/v1/vehicle_updates/' + payload.device + '/sync', null, {action: payload.actionType});
+            sendRequest.doPut('/api/v1/device_updates/' + payload.device + '/sync', null, {action: payload.actionType});
             break;
           case 'add-packages-to-device':
             sendRequest.doPut('/api/v1/resolver/devices/' + payload.id + '/packages', payload.packages, {action: payload.actionType})
@@ -94,19 +94,19 @@ define(function(require) {
               });
             break;
           case 'install-package-for-device':
-            sendRequest.doPost('/api/v1/vehicle_updates/' + payload.device, payload.data, {action: payload.actionType})
+            sendRequest.doPost('/api/v1/device_updates/' + payload.device, payload.data, {action: payload.actionType})
               .success(function() {
                 SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: payload.device});
               });
             break;
           case 'reorder-queue-for-device':
-            sendRequest.doPut('/api/v1/vehicle_updates/' + payload.device + '/order', payload.order, {action: payload.actionType})
+            sendRequest.doPut('/api/v1/device_updates/' + payload.device + '/order', payload.order, {action: payload.actionType})
               .success(function() {
                 SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: payload.device});
               });
           break;
           case 'cancel-update':
-            sendRequest.doPut('/api/v1/vehicle_updates/' + payload.device + '/' + payload.updateid + '/cancelupdate', null, {action: payload.actionType})
+            sendRequest.doPut('/api/v1/device_updates/' + payload.device + '/' + payload.updateid + '/cancelupdate', null, {action: payload.actionType})
               .success(function() {
                 SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: payload.device});
               });
@@ -137,19 +137,19 @@ define(function(require) {
               });
           break;
           case 'get-installation-log-for-device':
-            sendRequest.doGet('/api/v1/vehicle_updates/' + payload.device + '/results', {action: payload.actionType})
+            sendRequest.doGet('/api/v1/device_updates/' + payload.device + '/results', {action: payload.actionType})
               .success(function(log) {
                 db.installationLogForDevice.reset(log);
               });
           break;
           case 'get-installation-log-for-updateid':
-            sendRequest.doGet('/api/v1/vehicle_updates/' + payload.device + '/'  + payload.updateId + '/results', {action: payload.actionType})
+            sendRequest.doGet('/api/v1/device_updates/' + payload.device + '/'  + payload.updateId + '/results', {action: payload.actionType})
               .success(function(log) {
                 db.installationLogForUpdateId.reset(log);
               });
           break;
           case 'unblock-queue':
-            sendRequest.doPut('/api/v1/vehicle_updates/' + payload.device + '/unblock', null, {action: payload.actionType})
+            sendRequest.doPut('/api/v1/device_updates/' + payload.device + '/unblock', null, {action: payload.actionType})
               .success(function(result) {
               });
           break;
