@@ -198,7 +198,8 @@ final case class Auth0Config(secret: String,
                              clientId: String,
                              callbackURL: String,
                              domain: String,
-                             authPlusClientId: String)
+                             authPlusClientId: String,
+                             dbConnection: String)
 object Auth0Config {
   def apply(configuration: Configuration): Option[Auth0Config] = {
     for {
@@ -207,7 +208,8 @@ object Auth0Config {
       callbackUrl      <- configuration.getString("auth0.callbackURL")
       domain           <- configuration.getString("auth0.domain")
       authPlusClientId <- configuration.getString("auth0.authPlusClientId")
-    } yield Auth0Config(clientSecret, clientId, callbackUrl, domain, authPlusClientId)
+      dbConnection     <- configuration.getString("auth0.dbConnection")
+    } yield Auth0Config(clientSecret, clientId, callbackUrl, domain, authPlusClientId, dbConnection)
   }
 }
 

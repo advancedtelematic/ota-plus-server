@@ -64,7 +64,10 @@
 
                   lock.show({
                     callbackURL: AUTH0_CALLBACK_URL,
-                    container: 'widget-container'
+                    container: 'widget-container',
+                    authParams: {
+                        scope: 'openid email'
+                    }
                   });
             });
 

@@ -41,3 +41,4 @@ GET     /health/version                          com.advancedtelematic.HealthCon
 # User profile
 GET     /user/profile                            com.advancedtelematic.user.UserProfileController.getUserProfile
 PUT     /user/profile                            com.advancedtelematic.user.UserProfileController.updateUserProfile
+POST    /user/change_password                    com.advancedtelematic.user.UserProfileController.changePassword
