@@ -134,7 +134,7 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
     val request = Json.obj(
         "grant_types" -> List("client_credentials"),
         "client_name" -> device.show,
-        "scope"       -> List(s"ota-core.${device.show}.write", s"ota-core.${device.show}.read")
+        "scope"       -> s"ota-core.${device.show}.write ota-core.${device.show}.read"
     )
 
     authPlusRequest("clients").transform(_.withBody(request).withMethod("POST")).execJson(apiExec)(ev)
