@@ -1,5 +1,6 @@
 package com.advancedtelematic.user
 
+import com.advancedtelematic.AuthenticatedRequest
 import javax.inject.{Inject, Singleton}
 
 import cats.data.Xor
@@ -24,8 +25,8 @@ object UserProfile {
 
   val FromUserInfoReads: Reads[UserProfile] =
     (((__ \ "user_metadata" \ "name").read[String] | (__ \ "name").read[String]) and
-          (__ \ "email").read[String] and
-          (__ \ "picture").read[String])(UserProfile.apply _)
+      (__ \ "email").read[String] and
+      (__ \ "picture").read[String])(UserProfile.apply _)
 
   implicit val FormatInstance: Format[UserProfile] = Json.format[UserProfile]
 }
@@ -47,15 +48,15 @@ class UserProfileController @Inject()(conf: Configuration, wsClient: WSClient)(i
 
   private[this] val ManagementAccessToken = conf.getString("auth0.userUpdateToken").get
 
+  def queryUserProfile[A](request: AuthenticatedRequest[A]): Future[UserProfile] =
+    getUser(request.auth0AccessToken).map(UserProfile.FromUserInfoReads.reads).flatMap[UserProfile] {
+      case JsSuccess(profile, _) =>
+        Future.successful(profile)
+      case JsError(errors) =>
+        Future.failed(new Throwable(errors.toString()))
+    }
   def getUserProfile: Action[AnyContent] = AuthenticatedAction.async { request =>
-    val userProfile: Future[UserProfile] =
-      getUser(request.auth0AccessToken).map(UserProfile.FromUserInfoReads.reads).flatMap[UserProfile] {
-        case JsSuccess(profile, _) =>
-          Future.successful(profile)
-        case JsError(errors) =>
-          Future.failed(new Throwable(errors.toString()))
-      }
-    userProfile.map(x => Ok(Json.toJson(x)))
+    queryUserProfile(request).map(x => Ok(Json.toJson(x)))
   }
 
   private[this] def userIdFromToken(idToken: IdToken): String Xor UserId = {
@@ -63,6 +64,40 @@ class UserProfileController @Inject()(conf: Configuration, wsClient: WSClient)(i
       cs    <- CompactSerialization.parse(idToken.value)
       idStr <- (Json.parse(cs.encodedPayload.stringData()) \ "sub").validate[String].toXor
     } yield UserId(idStr)
+  }
+
+  private[this] def emailFromToken(idToken: IdToken): String Xor String =
+    for {
+      cs    <- CompactSerialization.parse(idToken.value)
+      email <- (Json.parse(cs.encodedPayload.stringData()) \ "email").validate[String].toXor
+    } yield email
+
+  /**
+    * email can be read from the id token, if the authorization request inclueded the 'email' scope.
+    * If it is not found there, user info should be queried.
+    */
+  def getEmail(request: AuthenticatedRequest[_]): Future[String] = {
+    emailFromToken(request.idToken).fold(_ => queryUserProfile(request).map(_.email), Future.successful)
+  }
+
+  val changePassword: Action[AnyContent] = AuthenticatedAction.async { request =>
+    for {
+      email <- getEmail(request)
+      response <- wsClient
+                   .url(s"https://${auth0Config.domain}/dbconnections/change_password")
+                   .post(
+                     Json.obj("client_id"  -> auth0Config.clientId,
+                              "email"      -> email,
+                              "connection" -> auth0Config.dbConnection))
+                   .map { response =>
+                     if (response.status == ResponseStatusCodes.OK_200) {
+                       Ok(EmptyContent())
+                     } else {
+                       log.error(s"Failed to change password of '$email'. Auth0 responded with ${response.statusText}")
+                       ServiceUnavailable(EmptyContent())
+                     }
+                   }
+    } yield response
   }
 
   def updateUserProfile(): Action[JsValue] = AuthenticatedAction.async(BodyParsers.parse.json) { request =>
@@ -83,7 +118,7 @@ class UserProfileController @Inject()(conf: Configuration, wsClient: WSClient)(i
             Ok(Json.toJson(response.json.as(UserProfile.FromUserInfoReads)))
           } else {
             log.error(
-                s"Unable to update user profile. Auth0 responded with '${response.status} ${response.statusText}'")
+              s"Unable to update user profile. Auth0 responded with '${response.status} ${response.statusText}'")
             InternalServerError(EmptyContent())
           }
         }
