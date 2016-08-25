@@ -101,6 +101,10 @@ class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends Ot
     devicesRequest("devices/" + id.show).withUserOptions(options).execResult(apiExec)
   }
 
+  def getSystemInfo(options: UserOptions, id: Device.Id): Future[Result] = {
+    devicesRequest("devices/" + id.show + "/system_info").withUserOptions(options).execResult(apiExec)
+  }
+
   def createDevice(options: UserOptions, device: DeviceT): Future[Device.Id] = {
     import com.advancedtelematic.ota.device.Devices.idReads
 
