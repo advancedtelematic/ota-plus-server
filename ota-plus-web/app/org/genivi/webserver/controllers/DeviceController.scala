@@ -50,6 +50,11 @@ extends Controller with ApiClientSupport {
     devicesApi.getDevice(options, id)
   }
 
+  def fetchSystemInfo(id: Device.Id): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
+    val options = userOptions(req)
+    devicesApi.getSystemInfo(options, id)
+  }
+
   private[this] def userOptions(req: AuthenticatedRequest[_]): UserOptions = {
     val traceId = req.headers.get("x-ats-traceid")
     val namespace = req.session.get("username").asInstanceOf[Option[Namespace]]

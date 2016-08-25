@@ -14,6 +14,7 @@ GET     /api/v1/devices                          org.genivi.webserver.controller
 POST    /api/v1/devices                          org.genivi.webserver.controllers.DeviceController.create()
 GET     /api/v1/devices/:uuid                    org.genivi.webserver.controllers.DeviceController.get(uuid: Device.Id)
 GET     /api/v1/devices/:deviceId/clientInfo     org.genivi.webserver.controllers.DeviceController.fetchClientInfo(deviceId: Device.Id)
+GET     /api/v1/devices/:deviceId/system_info    org.genivi.webserver.controllers.DeviceController.fetchSystemInfo(deviceId: Device.Id)
 
 GET     /api/v1/client/:deviceId/:packfmt/:arch  org.genivi.webserver.controllers.ClientSdkController.downloadClientSdk(deviceId: Device.Id, packfmt: PackageType, arch: Architecture)
 
