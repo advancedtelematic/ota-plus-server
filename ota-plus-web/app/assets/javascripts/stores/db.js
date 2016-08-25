@@ -22,6 +22,7 @@ define(function(require) {
       
       this.user = atom.createAtom();
       this.components = atom.createAtom();
+      this.deviceSeen = atom.createAtom();
     }
 
     return DB;
