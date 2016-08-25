@@ -59,6 +59,7 @@ class Application @Inject() (ws: WSClient,
     case "vehicle_updates" :: _ => coreApiUri
     case "update_requests" :: _ => coreApiUri
     case "history" :: _ => coreApiUri
+    case "blacklist" :: _ => coreApiUri
   }
 
   private val resolverProxiedPrefixes: PartialFunction[List[String], String] = {
