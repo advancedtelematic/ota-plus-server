@@ -16,18 +16,25 @@ define(function(require) {
       this.state = {
         detailsShown: false,
         detailsId: null,
+        isComponentsListEmpty: null,
         componentsListHeight: '400px'
       };
       this.showDetails = this.showDetails.bind(this);
       this.closeDetails = this.closeDetails.bind(this);
       this.setComponentsListHeight = this.setComponentsListHeight.bind(this);
-      SotaDispatcher.dispatch({actionType: 'get-components'});
+      this.checkPostStatus = this.checkPostStatus.bind(this);
+      db.components.addWatch("poll-components-list", _.bind(this.forceUpdate, this, null));
+      db.postStatus.addWatch("poll-components-list-post-status", _.bind(this.checkPostStatus, this, null));
+      SotaDispatcher.dispatch({actionType: 'get-components', device: this.props.deviceId});
     }
     componentDidMount() {
       window.addEventListener("resize", this.setComponentsListHeight);
       this.setComponentsListHeight();
     }
     componentWillUnmount() {
+      db.components.reset();
+      db.components.removeWatch("poll-components-list");
+      db.postStatus.removeWatch("poll-components-list-post-status");
       window.removeEventListener("resize", this.setComponentsListHeight);
     }
     setComponentsListHeight() {
@@ -49,6 +56,13 @@ define(function(require) {
         detailsId: null
       });
     }
+    checkPostStatus() {
+      var postStatus = db.postStatus.deref()['get-components'];
+      if(!_.isUndefined(db.postStatus.deref()['get-components'])) {
+        if(postStatus.code == '404')
+          this.setState({isComponentsListEmpty: true});
+      }
+    }
     render() {
       function animateLeftPosition(left, opacity, action) {
         return VelocityHelpers.registerEffect("transition."+action, {
@@ -63,28 +77,35 @@ define(function(require) {
       }
       return (
         <div id="components" style={{height: this.state.componentsListHeight}}>
-          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-            {!_.isUndefined(db.components.deref()) ? 
-              <div>
-                <ComponentsList
-                  data={db.components.deref()}
-                  showDetails={this.showDetails}
-                  closeDetails={this.closeDetails}
-                  id={this.state.detailsId}
-                  height={this.state.componentsListHeight}/>
-          
-                <VelocityComponent animation={this.state.detailsShown ? 'fadeIn' : 'fadeOut'}>
-                  <ComponentsOverlay
+          {this.state.isComponentsListEmpty === null ?
+            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+              {!_.isUndefined(db.components.deref()) ? 
+                <div>
+                  <ComponentsList
                     data={db.components.deref()}
+                    showDetails={this.showDetails}
+                    closeDetails={this.closeDetails}
                     id={this.state.detailsId}
-                    closeDetails={this.closeDetails}/>
-                </VelocityComponent>
-              </div> 
-            : undefined}
-            {_.isUndefined(db.components.deref()) ? 
-              <Loader />
-            : undefined}
-          </VelocityTransitionGroup>
+                    height={this.state.componentsListHeight}/>
+          
+                  <VelocityComponent animation={this.state.detailsShown ? 'fadeIn' : 'fadeOut'}>
+                    <ComponentsOverlay
+                      data={db.components.deref()}
+                      id={this.state.detailsId}
+                      closeDetails={this.closeDetails}/>
+                  </VelocityComponent>
+                </div> 
+              : undefined}
+              {_.isUndefined(db.components.deref()) ? 
+                <Loader />
+              : undefined}
+            </VelocityTransitionGroup>
+          : 
+            <div className="padding-15">
+              <i className="fa fa-exclamation-triangle"></i> &nbsp;
+              There are no components for this device
+            </div>
+          }
         </div>
       );
     }
