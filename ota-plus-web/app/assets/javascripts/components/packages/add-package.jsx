@@ -60,7 +60,7 @@ define(function(require) {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <button type="button" className="close" data-dismiss="modal" onClick={this.props.closeForm}>&times;</button>
+                <button type="button" className="close" data-dismiss="modal" onClick={this.props.closeForm}></button>
                 <h4 className="modal-title">New package</h4>
               </div>
               <div className="modal-body">
