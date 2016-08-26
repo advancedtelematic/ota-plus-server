@@ -5,7 +5,6 @@ define(function(require) {
   class ComponentsList extends React.Component {
     constructor(props) {
       super(props);
-      db.components.addWatch("poll-components-list", _.bind(this.forceUpdate, this, null));
     }
     componentWillReceiveProps(nextProps) {
       if(this.props.id !== nextProps.id) {
@@ -69,9 +68,6 @@ define(function(require) {
       var result = this.parseMenu(this.props.data, true);
       menu.append(result);
       MenuTree.walk();
-    }
-    componentWillUnmount() {
-      db.components.removeWatch("poll-components-list");
     }
     parseMenu(data, isMain) {
       var html = '';

@@ -155,7 +155,7 @@ define(function(require) {
                 </div>
               </div>
               <div className="panel-body">
-                <Components />
+                <Components deviceId={this.props.params.id}/>
               </div>
             </div>
           </div>
