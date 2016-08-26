@@ -1,5 +1,6 @@
 define(function(require) {
-  var React = require('react');
+  var React = require('react'),
+      SotaDispatcher = require('sota-dispatcher');
 
   class PackagesListItemDetailsVersion extends React.Component {
     constructor(props) {
@@ -8,13 +9,21 @@ define(function(require) {
         activeEditField: false,
         showEditButton: false,
         commentFieldLength: 0,
-        comment: '',
-        commentTmp: '',
+        comment: this.props.version.description,
+        commentTmp: this.props.version.description,
       };
       this.enableEditField = this.enableEditField.bind(this);
       this.disableEditField = this.disableEditField.bind(this);
       this.changeCommentFieldLength = this.changeCommentFieldLength.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    componentWillReceiveProps(nextProps) {
+      if(nextProps.version.description !== this.props.version.description) {
+        this.setState({
+          comment: nextProps.version.description,
+          commentTmp: nextProps.version.description
+        });
+    }
     }
     enableEditField(e) {
       e.preventDefault();
@@ -48,6 +57,13 @@ define(function(require) {
         comment: this.refs.comment.value,
         commentTmp: this.refs.comment.value,
         activeEditField: false
+      });
+      
+      SotaDispatcher.dispatch({
+        actionType: 'update-package-details',
+        name: this.props.version.id.name,
+        version: this.props.version.id.version,
+        data: {"description": this.refs.comment.value}
       });
     }
     render() {
