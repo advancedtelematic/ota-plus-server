@@ -5,6 +5,7 @@
 
 package org.genivi.webserver.controllers
 
+import com.advancedtelematic.login.Auth0Config
 import javax.inject.{Inject, Named, Singleton}
 
 import com.advancedtelematic.ota.vehicle.Vehicles
@@ -30,6 +31,8 @@ class Application @Inject() (ws: WSClient,
   extends Controller with I18nSupport with OtaPlusConfig {
 
   val auditLogger = LoggerFactory.getLogger("audit")
+
+  private[this] val auth0Config = Auth0Config(conf).get
 
   private def logToAudit(caller: String, msg: String) {
     // Useful to debug instances running in the cloud.
@@ -138,6 +141,6 @@ class Application @Inject() (ws: WSClient,
    * @return OK response and index html
    */
   def index : Action[AnyContent] = AuthenticatedAction { implicit req =>
-    Ok(views.html.main())
+    Ok(views.html.main(auth0Config))
   }
 }
