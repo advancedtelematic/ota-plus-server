@@ -1,6 +1,7 @@
 package com.advancedtelematic.login
 
 import akka.NotUsed
+import com.advancedtelematic.AuthenticatedAction
 import com.advancedtelematic.api.{UnexpectedResponse, MalformedResponse}
 import com.advancedtelematic.{AuthPlusAccessToken, Auth0AccessToken, JwtAssertion, IdToken}
 import com.advancedtelematic.api.AuthPlusApi
@@ -18,7 +19,7 @@ import play.api.libs.ws.{WSAuthScheme, WSClient, WSResponse}
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Try}
+import scala.util.{ Failure, Success, Try }
 
 final case class LoginData(username: String, password: String)
 
@@ -49,7 +50,20 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
     Ok(views.html.login(auth0Config))
   }
 
-  def logout: Action[AnyContent] = Action { implicit req =>
+  def logout: Action[AnyContent] = AuthenticatedAction { implicit req =>
+    wsClient.url(s"${authPlusConfig.uri}/revoke")
+      .withAuth(authPlusConfig.clientId, authPlusConfig.clientSecret, WSAuthScheme.BASIC)
+      .post(Map("token" -> Seq(req.authPlusAccessToken.value)))
+      .onComplete {
+        case Success(response) if response.status == ResponseStatusCodes.OK_200 => 
+          log.debug(s"Access token '${req.authPlusAccessToken.value}' revoked.")
+
+        case Success(response) =>
+          log.error(s"Revocation request for token '${req.authPlusAccessToken.value}' failed with response ${response}")
+
+      case Failure(t) =>
+        log.error(s"Revocation request for token '${req.authPlusAccessToken.value}' failed.", t)
+      }
     Redirect(org.genivi.webserver.controllers.routes.Application.index()).withNewSession
   }
 

@@ -201,7 +201,7 @@ define(function(require) {
               </div>
             </VelocityComponent>
           : null}
-          <VelocityTransitionGroup enter={{animation: Animations.down, complete: function() {window.location.href = "/logout"}}}>
+          <VelocityTransitionGroup enter={{animation: Animations.down, complete: function() {window.location.href = logoutUrl}}}>
             {!this.state.hideAnimationDown ? 
               <div className="door door-up"></div>
             : null}
