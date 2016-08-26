@@ -1,5 +1,6 @@
 @import helper._
-@()()(implicit req: RequestHeader)
+@import com.advancedtelematic.login.Auth0Config
+@(config: Auth0Config)()(implicit req: RequestHeader)
 
 <!DOCTYPE html>
 
@@ -16,6 +17,10 @@
     <div id="app">
     </div>
 
+    <script>
+        var appUrl = location.protocol+'//'+location.host;
+        var logoutUrl = 'https://' + '@config.domain' + '/v2/logout?returnTo='+ appUrl + '/logout&client_id=' + '@config.clientId';
+    </script>
     <script>
       @Html(org.webjars.RequireJS.getSetupJavaScript(routes.WebJarAssets.at("").url))
     </script>
