@@ -1839,6 +1839,10 @@ a.close, button.close {
 }
 
 #components {
+    background: #fff;
+    position: relative;
+    z-index: 119;
+    
     #components-overlay {
         width: 150vw;
         height: 100%;
@@ -1952,4 +1956,8 @@ a.close, button.close {
 #panel-heading-components {
     position: relative;
     z-index: 122;
+}
+
+.padding-15 {
+    padding: 15px;
 }
