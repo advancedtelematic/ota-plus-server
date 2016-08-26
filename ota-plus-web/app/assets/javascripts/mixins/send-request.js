@@ -7,6 +7,12 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
 
     send: function(type, url, data, opts) {
       opts = opts || {};
+      
+      var postStatus = _.clone(db.postStatus.deref());
+      if(!_.isUndefined(opts.action) && !_.isUndefined(postStatus[opts.action]))
+        delete postStatus[opts.action];
+      db.postStatus.reset(postStatus);
+            
       if (opts.form) {
         return this.formMultipart(type, url, data, opts);
       } else {
