@@ -37,7 +37,8 @@ body {
     font: normal 13px AkkuratRegular;
     background: url(../img/bg.jpg) no-repeat;
     background-attachment: fixed;
-
+    height: 100%;
+    
     &.login {
         background: url('../img/bg_login.jpg') top center no-repeat;
         background-size: cover;
@@ -63,8 +64,22 @@ a, a:hover, a:focus {
 }
 
 .login {
-    .container {
-        padding: 330px 0 0 0;
+    #ats-page {
+        height: 100%;
+        position: relative;
+
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+}
+
+.container {
+    @media (max-width: 767px) {
+        width: 100%;
     }
 }
 
@@ -79,8 +94,6 @@ a, a:hover, a:focus {
 }
 
 .ats {
-    padding-bottom: 70px;
-
     input.error {
         border-color: $color_red !important;
     }
@@ -106,7 +119,7 @@ a, a:hover, a:focus {
         overflow: hidden;
         z-index: 999; 
 
-        header {
+        .clickme {
             text-align: center;
             background: $footer_panel_bg_color; 
             width: 300px;
@@ -115,28 +128,6 @@ a, a:hover, a:focus {
             border-top-left-radius: 25px;
             border-top-right-radius: 25px;
             display: block;
-        }
-
-        .drawer-content {
-            background: $footer_panel_bg_color; 
-            width: 100%;
-            padding: 0 20px;
-            border-top-left-radius: 25px;
-            border-top-right-radius: 25px;
-            box-sizing: border-box;
-
-            .intend {
-                padding: 20px 0;
-            }
-
-            @media screen and (max-width: 350px) {
-                border-top-left-radius: 0;
-                border-top-right-radius: 0;
-            }
-        }
-
-        .clickme {
-            cursor: pointer;
         }
 
         @media screen and (max-width: 730px) {
@@ -225,7 +216,7 @@ body {
                 .a0-forgot-pass {
                     text-align: right;
                     display: block;
-                    
+
                     &:before {
                         content: "" !important;
                     }
