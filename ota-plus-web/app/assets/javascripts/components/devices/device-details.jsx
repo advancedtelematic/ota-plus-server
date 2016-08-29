@@ -9,6 +9,7 @@ define(function(require) {
       Packages = require('es6!../packages/packages'),
       TutorialInstallDevice = require('es6!../tutorial/install-device'),
       Components = require('es6!../components/components'),
+      AddPackage = require('es6!../packages/add-package'),
       Loader = require('es6!../loader'),
       VelocityUI = require('velocity-ui'),
       VelocityHelpers = require('mixins/velocity/velocity-helpers'),
@@ -29,6 +30,8 @@ define(function(require) {
         duplicatingInProgress: (this.props.params.action == 'synchronising' && this.props.params.vin2) ? true : false,
         duplicatingTimeout: 2000,
         selectedImpactAnalysisPackagesCount: 0,
+        files: null,
+        isFormShown: false
       }
       this.toggleQueueHistory = this.toggleQueueHistory.bind(this);
       this.reviewFailedInstall = this.reviewFailedInstall.bind(this);
@@ -36,6 +39,10 @@ define(function(require) {
       this.setQueueStatistics = this.setQueueStatistics.bind(this);
       this.refreshData = this.refreshData.bind(this);
       this.countImpactAnalysisPackages = this.countImpactAnalysisPackages.bind(this);
+      this.openForm = this.openForm.bind(this);
+      this.closeForm = this.closeForm.bind(this);
+      this.onDrop = this.onDrop.bind(this);
+      this.focusPackage = this.focusPackage.bind(this);
 
       db.showDevice.reset();
       SotaDispatcher.dispatch({actionType: 'get-device', device: this.props.params.id});
@@ -105,8 +112,40 @@ define(function(require) {
         selectedImpactAnalysisPackagesCount: val
       });
     }
+    focusPackage(packageName) {
+      var tmpInterval = setInterval(function() {
+        var btn = $("#button-package-" + packageName);
+        if(btn.length) {
+          if(!btn.parent('li').hasClass('selected')) 
+            btn.click();
+                    
+          setTimeout(function() {     
+            $('.ioslist-wrapper').animate({
+              scrollTop: $('.ioslist-wrapper').scrollTop() + btn.offset().top - $('.ioslist-wrapper').offset().top - $('.ioslist-fake-header').outerHeight()
+            }, 300);
+          }, 600);
+          clearInterval(tmpInterval);
+        }
+      }, 100);
+    }
+    openForm() {
+      this.setState({
+        isFormShown: true
+      });
+    }
+    closeForm() {
+      this.setState({
+        isFormShown: false
+      });
+    }
+    onDrop(files) {
+      this.setState({
+        files: files,
+      });
+      
+      this.openForm();
+    }
     render() {
-      // TODO: might be initialized empty
       const deviceWithStatus = db.showDevice.deref();
 
       function animateLeftPosition(left) {
@@ -147,7 +186,7 @@ define(function(require) {
               <Loader />
             : undefined}
           </div>
-          <div className="col-xs-2 nopadding">
+          <div id="components-column" className="col-xs-2 nopadding">
             <div className="panel panel-ats">
               <div className="panel-heading" id="panel-heading-components">
                 <div className="panel-heading-left pull-left">
@@ -159,7 +198,7 @@ define(function(require) {
               </div>
             </div>
           </div>
-          <div className="col-xs-6 nopadding border-right-2">
+          <div id="packages-column" className="col-xs-6 nopadding">
             <div className="panel panel-ats">
               <div className="panel-heading">
                 <div className="panel-heading-left pull-left">
@@ -170,7 +209,9 @@ define(function(require) {
                   <Packages
                     device={deviceWithStatus}
                     setPackagesStatistics={this.setPackagesStatistics}
-                    countImpactAnalysisPackages={this.countImpactAnalysisPackages}/>
+                    countImpactAnalysisPackages={this.countImpactAnalysisPackages}
+                    openForm={this.openForm}
+                    onDrop={this.onDrop}/>
               </div>
               <div className="panel-footer" style={{position: 'relative'}}>
                 <VelocityComponent animation={this.state.selectedImpactAnalysisPackagesCount ? animateLeftPosition('15px') : animateLeftPosition('-250px')}>
@@ -210,6 +251,15 @@ define(function(require) {
               </div>
             </div>
           </div>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isFormShown ?
+              <AddPackage
+                files={this.state.files}
+                closeForm={this.closeForm}
+                focusPackage={this.focusPackage}
+                key="add-package"/>
+            : null}
+            </VelocityTransitionGroup>
           {this.props.children}
         </div>
       );

@@ -76,7 +76,7 @@ button.list-group-item:focus { background: transparent; }
 .device-status.device-status-UpToDate { color: #39de28; }
 
 /* Pages */
-.device-header-text { height: 45px; margin: 20px 0 0 10px; vertical-align: middle; display: inline-block; }
+.device-header-text { min-width: 500px; height: 45px; margin: 20px 0 0 10px; vertical-align: middle; display: inline-block; }
 .device-header-text .device-name { font-size: 22px; }
 .device-header-text .device-lastseen { font-size: 14px; margin: 0; opacity: 0.5; }
 
@@ -155,7 +155,7 @@ button.list-group-item:focus { background: transparent; }
 #packages-list, #queue-wrapper { width: 100% !important; overflow-x: hidden; overflow-y: hidden; margin: 0; }
 #packages-list .list-group, #queue-wrapper .list-group { margin: 0; }
 
-#queue-wrapper { background: #f0f0f0; width: 100%; float: left; overflow-y: scroll; }
+#queue-wrapper { background: #f0f0f0; width: 100%; overflow-y: scroll; }
 
 .log-code { color: #fff; font-size: 11px; font-family: Courier New; background: #333; padding: 15px; margin: 10px 0 10px -15px; }
 
@@ -315,7 +315,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .black { color: #000; }
 
 /* Icons */
-.icon-info { margin: -2px 10px 0 0; }
+.icon-info { margin: -2px 10px 0 0; float: left; }
 
 .icon-back { margin: 17px 0 0 0; }
 
@@ -336,7 +336,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .sort-text a:hover, .sort-text a:active, .sort-text a:focus { color: #fff; text-decoration: none; }
 
 /* Alerts */
-.alert-ats { color: #fff; background: #FB9773; height: 40px; padding: 9px 35px 8px 15px; margin: 0; border-bottom: 1px solid #e28768; border-radius: 0; }
+.alert-ats { color: #fff; background: #FB9773; min-height: 40px; padding: 9px 35px 8px 15px; margin: 0; border-bottom: 1px solid #e28768; border-radius: 0; display: block; }
 
 /* D&D */
 .dnd-zone { width: 100%; height: 100%; }
@@ -553,13 +553,14 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .door.door-up { top: -100%; }
 .door .loader { margin-left: -60px; position: absolute; left: 50%; top: 50%; }
 
-#components { background: #fff; position: relative; z-index: 119; }
+#components { position: relative; }
 #components #components-overlay { width: 150vw; height: 100%; background: rgba(251, 151, 115, 0.3); position: absolute; left: 100%; top: 0; z-index: 120; }
 #components #components-overlay .table > tbody > tr > td, #components #components-overlay .table > tbody > tr > th { padding: 2px 15px; border: 0; }
 #components #components-overlay .components-details { color: #fff; background: #FB9773; width: 900px; height: 100%; padding: 10px 20px; position: relative; overflow-y: scroll; }
 #components #components-overlay .components-details .btn-close-components { background: transparent; width: 25px; border: 0; position: absolute; top: 10px; right: 10px; }
 #components #components-overlay .components-details .components-details-header { width: 200px; padding-left: 20px; padding-bottom: 10px; margin-left: -20px; border-bottom: 1px solid #fff; }
-#components #components-list { background: #fff; width: 100%; height: 100%; position: relative; z-index: 121; -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); position: absolute; left: 0; overflow-y: scroll; }
+#components #components-list { background: #fff; width: 100%; height: 100%; position: absolute; z-index: 121; left: 0; overflow-y: scroll; }
+#components #components-list.components-list-shadow { -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); }
 #components #components-list #components-menu li a { color: #555; font-size: 14px; text-decoration: none; width: 100%; padding: 10px 15px; display: block; border-bottom: 1px solid #ddd; }
 #components #components-list #components-menu li a:hover { background: #eee; }
 #components #components-list #components-menu li a:hover .components-info-icon { border: 1px solid #FB9773; padding: 2px 6px; border-radius: 15px; display: block; }
@@ -592,3 +593,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .navbar-nav.navbar-right:last-child { margin-right: -15px !important; }
 
 .navbar-right { float: right !important; }
+
+#components-column { z-index: 121; -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); }
+
+#packages-column { z-index: 120; -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); }
