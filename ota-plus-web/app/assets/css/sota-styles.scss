@@ -83,40 +83,8 @@ button {
 }
 
 .container {
-    width: 1204px;
+    width: 100%;
     margin: 0 auto;
-
-    @media (max-width: 1409px) {
-        width: 1340px;
-    }
-
-    @media (min-width: 1410px) {
-        width: 1378px;
-    }
-
-    @media (min-width: 1570px) {
-        width: 1550px;
-
-        .device-box {
-            width: 25%;
-        }
-    }
-
-    @media (min-width: 1740px) {
-        width: 1720px;
-
-        .device-box {
-            width: 20%;
-        }
-    }
-
-    @media (min-width: 1920px) {
-        width: 1892px;
-
-        .device-box {
-            width: 20%;
-        }
-    }
 }
 
 /* Navbar */
@@ -139,10 +107,10 @@ button {
     }
 
     .navbar-brand {
-        padding: 8px 0 0 0;
+        padding: 6px 0 0 0;
 
         #logo {
-            width: 34px;
+            height: 40px;
         }
     }
 
@@ -342,6 +310,7 @@ button {
     .device-header {
         background: url(/assets/img/bg.jpg) no-repeat;
         background-attachment: fixed;
+        background-size: cover;
         height: 80px;
         position: relative;
         z-index: 124;
@@ -983,7 +952,7 @@ a.close, button.close {
 
 .search-bar {
     width: 284px;
-    margin: 8px 0 0 0;
+    margin: 9px 0 0 0;
 
     .input-group-addon {
         padding: 0 10px;
@@ -1651,7 +1620,7 @@ a.close, button.close {
     }
 
     .inner-box {
-        margin: 30px 30px 30px 30px;
+        margin: 30px;
     }
 
     .or-text {
@@ -1960,4 +1929,8 @@ a.close, button.close {
 
 .padding-15 {
     padding: 15px;
+}
+
+.page-packages .panel-subheading {
+    padding: 0;
 }

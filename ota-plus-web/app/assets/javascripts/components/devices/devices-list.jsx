@@ -7,9 +7,22 @@ define(function(require) {
   class DevicesList extends React.Component {
     constructor(props) {
       super(props);
+      this.setBoxesWidth = this.setBoxesWidth.bind(this);
+    }
+    componentDidMount() {
+      var that = this;
+      this.setBoxesWidth();
+      $(window).resize(function() {
+        that.setBoxesWidth();
+      });
+    }
+    setBoxesWidth() {
+      var containerWidth = $('#devices-container').width();
+      var minBoxWidth = 320;
+      var howManyBoxesPerRow = Math.floor(containerWidth / minBoxWidth);
+      $('.device-box').width(containerWidth / howManyBoxesPerRow);
     }
     render() {
-        
       var devices = [];
       var Devices = this.props.Devices;
       var devices = _.map(Devices, function(device, i) {
@@ -22,8 +35,8 @@ define(function(require) {
       }, this);
 
       return (
-        <div className="row" id="devices-list">
-            <div id="devices-container" className="container">
+        <div id="devices-list">
+          <div id="devices-container" className="container">
             {devices.length > 0 ?
               devices
             :

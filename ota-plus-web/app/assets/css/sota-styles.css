@@ -35,15 +35,7 @@ button.list-group-item:focus { background: transparent; }
 /* Containers */
 #devices-container { padding: 0 15px !important; margin-top: 20px; margin-bottom: 20px; }
 
-.container { width: 1204px; margin: 0 auto; }
-@media (max-width: 1409px) { .container { width: 1340px; } }
-@media (min-width: 1410px) { .container { width: 1378px; } }
-@media (min-width: 1570px) { .container { width: 1550px; }
-  .container .device-box { width: 25%; } }
-@media (min-width: 1740px) { .container { width: 1720px; }
-  .container .device-box { width: 20%; } }
-@media (min-width: 1920px) { .container { width: 1892px; }
-  .container .device-box { width: 20%; } }
+.container { width: 100%; margin: 0 auto; }
 
 /* Navbar */
 .right-nav { -webkit-padding-start: 10px; }
@@ -51,8 +43,8 @@ button.list-group-item:focus { background: transparent; }
 
 .navbar-inverse { background: #fff; border: 0; }
 .navbar-inverse a { color: #555; }
-.navbar-inverse .navbar-brand { padding: 8px 0 0 0; }
-.navbar-inverse .navbar-brand #logo { width: 34px; }
+.navbar-inverse .navbar-brand { padding: 6px 0 0 0; }
+.navbar-inverse .navbar-brand #logo { height: 40px; }
 .navbar-inverse .lang-selector { color: #000; margin: 16px 0 0 20px; }
 .navbar-inverse #navbar { margin: 0 0 0 30px; }
 .navbar-inverse .navbar-nav > li > a { color: #888; font-size: 15px; height: 51px; padding-left: 7px; padding-right: 7px; margin: 0 10px; transition: all 0.2s ease-in; }
@@ -96,7 +88,7 @@ button.list-group-item:focus { background: transparent; }
 .page-home #devices-bar .select-bar-sort { margin-left: 35px; }
 
 .page-device-details { background: url(/assets/img/bg.jpg) no-repeat; background-attachment: fixed; background-size: cover; max-height: 100vh; overflow: hidden; }
-.page-device-details .device-header { background: url(/assets/img/bg.jpg) no-repeat; background-attachment: fixed; height: 80px; position: relative; z-index: 124; }
+.page-device-details .device-header { background: url(/assets/img/bg.jpg) no-repeat; background-attachment: fixed; background-size: cover; height: 80px; position: relative; z-index: 124; }
 .page-device-details .device-header .device-icon { width: 50px; height: 50px; display: inline-block; vertical-align: middle; margin: 15px 0 0 30px; float: none; }
 .page-device-details .device-header .device-name, .page-device-details .device-header .device-lastseen { width: auto; float: none; }
 .page-device-details .device-header-status { font-size: 16px; height: 34px; padding: 6px 10px 0 10px; margin: 25px 0 0 0; border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 15px; }
@@ -330,7 +322,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .icon-campaigns { width: 30px; }
 
 /* Bars */
-.search-bar { width: 284px; margin: 8px 0 0 0; }
+.search-bar { width: 284px; margin: 9px 0 0 0; }
 .search-bar .input-group-addon { padding: 0 10px; border-left: 0; border-top-right-radius: 15px; border-bottom-right-radius: 15px; }
 .search-bar .form-control { height: 30px; border-right: 0; border-radius: 15px; -webkit-box-shadow: none; box-shadow: none; }
 .search-bar .form-control, .search-bar .input-group-addon { color: #979797; font-size: 12px; font-weight: bold; background: #707070; height: 24px; }
@@ -517,7 +509,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 #tutorial-install-device { width: 1200px; padding: 30px; float: left; position: relative; top: 22%; left: 50%; margin-left: -600px; border-radius: 15px; }
 #tutorial-install-device .tutorial-icon { margin: 0 20px 0 0; }
-#tutorial-install-device .inner-box { margin: 30px 30px 30px 30px; }
+#tutorial-install-device .inner-box { margin: 30px; }
 #tutorial-install-device .or-text { color: #888; font-size: 10px; margin: 0 10px; }
 #tutorial-install-device .tutorial-img-box { width: 100px; }
 #tutorial-install-device .tutorial-desc-box { width: 250px; }
@@ -577,3 +569,5 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 #panel-heading-components { position: relative; z-index: 122; }
 
 .padding-15 { padding: 15px; }
+
+.page-packages .panel-subheading { padding: 0; }

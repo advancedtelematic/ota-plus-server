@@ -65,7 +65,7 @@ define(function(require) {
       var that = this;
       var intervalId = setInterval(function() {
         that.refreshData();
-      }, 1000);
+      }, 10000);
       this.setState({intervalId: intervalId});
       
       window.addEventListener("resize", this.setDevicesListHeight);
