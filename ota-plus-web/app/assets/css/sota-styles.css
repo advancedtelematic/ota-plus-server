@@ -547,7 +547,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 .vertical-align-middle { vertical-align: middle; }
 
-.door { background: url("../img/steel_doors.jpg") top center no-repeat; width: 100%; height: 100%; position: fixed; left: 0; z-index: 99999; }
+.door { background: url("../img/steel_doors.jpg") top center no-repeat; background-size: cover; width: 100%; height: 100%; position: fixed; left: 0; z-index: 99999; }
 .door.door-up { top: -100%; }
 .door .loader { margin-left: -60px; position: absolute; left: 50%; top: 50%; }
 

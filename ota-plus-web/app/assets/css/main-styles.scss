@@ -40,6 +40,7 @@ body {
 
     &.login {
         background: url('../img/bg_login.jpg') top center no-repeat;
+        background-size: cover;
     }
 }
 
@@ -79,7 +80,7 @@ a, a:hover, a:focus {
 
 .ats {
     padding-bottom: 70px;
-    
+
     input.error {
         border-color: $color_red !important;
     }
@@ -217,10 +218,18 @@ body {
             }
 
             .a0-panel {
-                width: 370px;
+                width: 100%;
                 box-shadow: none;
                 -webkit-box-shadow: none;
 
+                .a0-forgot-pass {
+                    text-align: right;
+                    display: block;
+                    
+                    &:before {
+                        content: "" !important;
+                    }
+                }
 
                 .a0-top-header {
                     min-height: 0;
@@ -239,11 +248,11 @@ body {
                     bottom: 100%;
                     z-index: 999;
                 }
-                
+
                 .a0-error {
                     background: #d66f6f;
                 }
-                
+
                 .a0-success {
                     background: #7ED321;
                 }
@@ -316,7 +325,7 @@ body {
                         text-align: center;
                         text-decoration: none;
                         letter-spacing: 0px;
-                        background: rgba(255,170,136,0.5) !important;
+                        background: rgba(255,170,136,1.0) !important;
                         width: 100%;
                         padding: 15px;
                         transition: all 0.5s ease;
