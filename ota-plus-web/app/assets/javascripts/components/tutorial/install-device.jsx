@@ -116,8 +116,12 @@ define(function(require) {
             </div>
           </div>
   
-          <div className="margin-top-20 text-center pull-left width-full">
-            <i className="fa fa-cog" aria-hidden="true"></i> Want to automate new device registration? Read the API documentation <a href="#" className="orange">here</a>.
+          <div className="text-center font-20">
+            - or -
+          </div>
+  
+          <div className="margin-top-20 text-center pull-left width-full font-16">
+            <a href="#" className="orange">Download the unique credentials for this device</a>, and then <a href="#" className="orange">manually install the OTA client.</a>
           </div>
         </div>
       );

@@ -10,8 +10,8 @@ define(function(require) {
       super(props, context);
       this.state = {
         filterValue: '',
-        selectSort: 'asc',
-        selectSortName: 'A > Z',
+        selectedSort: 'asc',
+        selectedSortName: 'A > Z',
         packagesListHeight: '300px',
         showForm: false
       }
@@ -71,8 +71,8 @@ define(function(require) {
 
       var name = jQuery(e.target).text();
       this.setState({
-        selectSort: sort,
-        selectSortName: name
+        selectedSort: sort,
+        selectedSortName: name
       });
     }
     render() {
@@ -88,7 +88,7 @@ define(function(require) {
                     <div className="select-bar-text">Sort by</div>
                     <div className="btn-group">
                       <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span className="pull-left">{this.state.selectSortName} &nbsp;</span>
+                        <span className="pull-left">{this.state.selectedSortName} &nbsp;</span>
                         <span className="fa fa-angle-down pull-right"></span>
                       </button>
                       <ul className="dropdown-menu">
@@ -106,7 +106,7 @@ define(function(require) {
               <div id="packages-wrapper" style={{height: this.state.packagesListHeight}}>
                 <PackagesList 
                   packagesListHeight={this.state.packagesListHeight}
-                  selectSort={this.state.selectSort}
+                  selectedSort={this.state.selectedSort}
                   filterValue={this.state.filterValue}
                   showForm={this.state.showForm}
                   openForm={this.openForm}

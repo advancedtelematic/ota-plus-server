@@ -1034,17 +1034,25 @@ a.close, button.close {
 .dnd-zone {
     width: 100%;
     height: 100%;
-
+    
     &.dnd-zone-active {
-        border: 2px dashed blue;
+        border: 2px dashed #FB9773;
 
         &:after {
-            color: blue;
+            color: #555;
             font-size: 20px;
-            content: "DRAG AND DROP ZONE";
+            text-align: center;
+            content: "DROP TO CREATE PACKAGE";
+            background: rgba(255,255,255,0.85);
+            width: 320px;
+            padding: 30px;
+            margin-left: -160px;
+            margin-top: -40px;
+            border: 1px solid #ccc;
             position: absolute;
             top: 50%;
-            left: 45%;
+            left: 50%;
+            border-radius: 15px;
             z-index: 999;
         }
     }
@@ -1958,7 +1966,6 @@ a.close, button.close {
 .page-packages .panel-subheading {
     padding: 0;
 }
-
 .modal-open {
     overflow-x: auto;
     overflow-y: hidden;
@@ -2005,7 +2012,7 @@ a.close, button.close {
 .navbar-right {
   float: right!important;
 }
-  
+
 #components-column {
     z-index: 121;
     -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
@@ -2013,6 +2020,26 @@ a.close, button.close {
     box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
 }
 
+.height-100 {
+    height: 100%;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.center-y {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.center-xy {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 #packages-column {
     z-index: 120;
     -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
