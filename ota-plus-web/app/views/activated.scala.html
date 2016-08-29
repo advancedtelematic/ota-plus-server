@@ -8,9 +8,6 @@
         <link rel='stylesheet' href='@routes.Assets.versioned("css/main-styles.css")'>
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("js/bootstrap.min.js"))'></script>        
-        <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.slidedrawer.min.js")'></script>
-        <
-        <script type="text/javascript" src='@routes.Assets.versioned("js/verify.js")'></script>
     </head>
     <body>
         <div id="ats-page">
@@ -42,25 +39,8 @@
                 </div>
             </div>
             <section class="ats-footer-panel"> 
-                <header class="clickme">Need Support?</header>
-                <div class="drawer-content">
-                    <div class="intend">
-                        Content
-                    </div>
-                </div>
+                <header class="clickme"><a href="mailto:support%40atsgarage.com">Need Support?</a></header>
             </section>
         </div>
-        <script>
-            $(function () {
-                $('.ats-footer-panel').slideDrawer({
-                    showDrawer: false,
-                    slideTimeout: true,
-                    slideSpeed: 600,
-                    slideTimeoutCount: 3000
-                });
-
-                $('body').verify({verifyMinWidth: 1366, verifyMinHeight: 0});
-            });
-        </script>
     </body>
 </html>

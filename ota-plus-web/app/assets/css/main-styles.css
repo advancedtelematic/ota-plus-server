@@ -21,7 +21,7 @@ button:focus { outline: none; }
 html { height: 100%; min-height: 100%; }
 
 body { color: #fff; font: normal 13px AkkuratRegular; background: url(../img/bg.jpg) no-repeat; background-attachment: fixed; }
-body.login { background: url("../img/bg_login.jpg") top center no-repeat; }
+body.login { background: url("../img/bg_login.jpg") top center no-repeat; background-size: cover; }
 
 a, a:hover, a:focus { color: #fff; text-decoration: none; }
 
@@ -86,7 +86,9 @@ a, a:hover, a:focus { color: #fff; text-decoration: none; }
 body #a0-lock.a0-theme-default .a0-switch span { color: #eee; }
 body #a0-lock.a0-theme-default .a0-switch .a0-active { background-color: #444; }
 body #a0-lock.a0-theme-default .a0-btn-small.a0-back { left: 22px; }
-body #a0-lock.a0-theme-default .a0-panel { width: 370px; box-shadow: none; -webkit-box-shadow: none; }
+body #a0-lock.a0-theme-default .a0-panel { width: 100%; box-shadow: none; -webkit-box-shadow: none; }
+body #a0-lock.a0-theme-default .a0-panel .a0-forgot-pass { text-align: right; display: block; }
+body #a0-lock.a0-theme-default .a0-panel .a0-forgot-pass:before { content: "" !important; }
 body #a0-lock.a0-theme-default .a0-panel .a0-top-header { min-height: 0; }
 body #a0-lock.a0-theme-default .a0-panel .a0-error, body #a0-lock.a0-theme-default .a0-panel .a0-success { font: 400 17px Arial; text-align: center; padding: 25px 30px; margin: 0 15px; margin-bottom: 20px; border-radius: 12px; position: absolute; left: 0; right: 0; bottom: 100%; z-index: 999; }
 body #a0-lock.a0-theme-default .a0-panel .a0-error { background: #d66f6f; }
@@ -102,7 +104,7 @@ body #a0-lock.a0-theme-default .a0-panel .a0-email input, body #a0-lock.a0-theme
 body #a0-lock.a0-theme-default .a0-panel .a0-separator { color: #fff; margin: 15px 0; }
 body #a0-lock.a0-theme-default .a0-panel .a0-action button { text-transform: none; text-indent: 0; height: 55px; }
 body #a0-lock.a0-theme-default .a0-panel .a0-action button:after { display: none; }
-body #a0-lock.a0-theme-default .a0-panel button.a0-primary { font-size: 17px; text-align: center; text-decoration: none; letter-spacing: 0px; background: rgba(255, 170, 136, 0.5) !important; width: 100%; padding: 15px; transition: all 0.5s ease; border: 0; border-radius: 25px; display: block; position: static; }
+body #a0-lock.a0-theme-default .a0-panel button.a0-primary { font-size: 17px; text-align: center; text-decoration: none; letter-spacing: 0px; background: #ffaa88 !important; width: 100%; padding: 15px; transition: all 0.5s ease; border: 0; border-radius: 25px; display: block; position: static; }
 body #a0-lock.a0-theme-default .a0-panel button.a0-primary:hover { background: #ffaa88; text-decoration: none; }
 body #a0-lock.a0-theme-default .a0-panel .bottom-content { padding: 0 20px; }
 body #a0-lock.a0-theme-default .a0-panel .a0-forgot-pass { color: #fff; margin: 10px 0; }
