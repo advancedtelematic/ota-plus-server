@@ -343,8 +343,8 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 /* D&D */
 .dnd-zone { width: 100%; height: 100%; }
-.dnd-zone.dnd-zone-active { border: 2px dashed blue; }
-.dnd-zone.dnd-zone-active:after { color: blue; font-size: 20px; content: "DRAG AND DROP ZONE"; position: absolute; top: 50%; left: 45%; z-index: 999; }
+.dnd-zone.dnd-zone-active { border: 2px dashed #FB9773; }
+.dnd-zone.dnd-zone-active:after { color: #555; font-size: 20px; text-align: center; content: "DROP TO CREATE PACKAGE"; background: rgba(255, 255, 255, 0.85); width: 320px; padding: 30px; margin-left: -160px; margin-top: -40px; border: 1px solid #ccc; position: absolute; top: 50%; left: 50%; border-radius: 15px; z-index: 999; }
 
 .list-group-dnd li { cursor: move; }
 
@@ -602,3 +602,11 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 #components-column { z-index: 121; -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); }
 
 #packages-column { z-index: 120; -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); }
+
+.height-100 { height: 100%; }
+
+.position-relative { position: relative; }
+
+.center-y { position: absolute; top: 50%; transform: translate(0, -50%); }
+
+.center-xy { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }

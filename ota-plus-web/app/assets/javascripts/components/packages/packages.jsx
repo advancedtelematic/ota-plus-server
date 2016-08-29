@@ -11,12 +11,12 @@ define(function(require) {
       
       this.state = {
         filterValue: '',
-        selectStatus: 'all',
-        selectStatusName: 'All',
-        selectSort: 'asc',
-        selectSortName: 'A > Z',
-        selectType: 'installable',
-        selectTypeName: 'Installable',
+        selectedStatus: 'all',
+        selectedStatusName: 'All',
+        selectedSort: 'asc',
+        selectedSortName: 'A > Z',
+        selectedType: 'managed',
+        selectedTypeName: 'Managed by ATS Garage',
         packagesListHeight: '300px',
         alertHidden: false
       }
@@ -63,8 +63,8 @@ define(function(require) {
 
       var name = jQuery(e.target).text();
       this.setState({
-        selectStatus: status,
-        selectStatusName: name
+        selectedStatus: status,
+        selectedStatusName: name
       });
     }
     selectSort(sort, e) {
@@ -72,8 +72,8 @@ define(function(require) {
 
       var name = jQuery(e.target).text();
       this.setState({
-        selectSort: sort,
-        selectSortName: name
+        selectedSort: sort,
+        selectedSortName: name
       });
     }
     selectType(type, e) {
@@ -81,8 +81,8 @@ define(function(require) {
 
       var name = jQuery(e.target).text();
       this.setState({
-        selectType: type,
-        selectTypeName: name
+        selectedType: type,
+        selectedTypeName: name
       });
     }
     setPackagesListHeight() {
@@ -119,7 +119,7 @@ define(function(require) {
               <div className="select-bar-text">Status</div>
               <div className="btn-group">
                 <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span className="pull-left">{this.state.selectStatusName} &nbsp;</span>
+                  <span className="pull-left">{this.state.selectedStatusName} &nbsp;</span>
                   <span className="fa fa-angle-down pull-right"></span>
                 </button>
                 <ul className="dropdown-menu">
@@ -135,19 +135,19 @@ define(function(require) {
               <div className="select-bar-text">Type</div>
               <div className="btn-group">
                 <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span className="pull-left">{this.state.selectTypeName} &nbsp;</span>
+                  <span className="pull-left">{this.state.selectedTypeName} &nbsp;</span>
                   <span className="fa fa-angle-down pull-right"></span>
                 </button>
                 <ul className="dropdown-menu">
                   <li><a href="#" onClick={this.selectType.bind(this, 'all')}>All</a></li>
-                  <li><a href="#" onClick={this.selectType.bind(this, 'system')}>System</a></li>
-                  <li><a href="#" onClick={this.selectType.bind(this, 'installable')}>Installable</a></li>
+                  <li><a href="#" onClick={this.selectType.bind(this, 'managed')}>Managed by ATS Garage</a></li>
+                  <li><a href="#" onClick={this.selectType.bind(this, 'unmanaged')}>Unmanaged</a></li>
                 </ul>
               </div>
             </div>
             
             <div className="sort-text pull-right">
-              {this.state.selectSort == 'asc' ? 
+              {this.state.selectedSort == 'asc' ? 
                 <a href="#" onClick={this.selectSort.bind(this, 'desc')} id="link-sort-packages-desc"><i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z</a>
               :
                 <a href="#" onClick={this.selectSort.bind(this, 'asc')} id="link-sort-packages-asc"><i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A</a>
@@ -165,9 +165,9 @@ define(function(require) {
             {!_.isUndefined(this.props.device) ?
               <PackagesList
                 packagesListHeight={this.state.packagesListHeight}
-                selectStatus={this.state.selectStatus}
-                selectSort={this.state.selectSort}
-                selectType={this.state.selectType}
+                selectedStatus={this.state.selectedStatus}
+                selectedSort={this.state.selectedSort}
+                selectedType={this.state.selectedType}
                 filterValue={this.state.filterValue}
                 setPackagesStatistics={this.props.setPackagesStatistics}
                 countImpactAnalysisPackages={this.props.countImpactAnalysisPackages}

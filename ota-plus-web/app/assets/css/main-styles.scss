@@ -38,7 +38,7 @@ body {
     background: url(../img/bg.jpg) no-repeat;
     background-attachment: fixed;
     height: 100%;
-    
+
     &.login {
         background: url('../img/bg_login.jpg') top center no-repeat;
         background-size: cover;
@@ -53,6 +53,14 @@ a, a:hover, a:focus {
 #logo {
     width: 70px;
     margin: 80px 0 50px 0;
+}
+
+.black {
+    color: #333;
+    
+    &:hover, &:focus, &:active {
+        color: #333;
+    }
 }
 
 .strong {
@@ -74,6 +82,45 @@ a, a:hover, a:focus {
             left: 50%;
             transform: translate(-50%, -50%);
         }
+    }
+}
+
+.modal {
+    padding: 100px 0 0 0;
+
+    .modal-dialog {
+        width: 463px;
+        height: 240px;
+
+        .modal-content {
+            border: 0;
+
+            .modal-header {
+                color: #fff;
+                text-align: center;
+                background: #979797;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+            }
+
+            .modal-body {
+                color: #444;
+                padding: 20px 30px;
+            }
+        }
+    }
+}
+
+a.close, button.close {
+    width: 24px;
+    height: 24px;
+    background: url(/assets/img/icons/close.png) no-repeat;
+    border: 0;
+    border-radius: 0;
+    opacity: 0.8;
+
+    &:hover, &:focus, &:active {
+        opacity: 1;
     }
 }
 

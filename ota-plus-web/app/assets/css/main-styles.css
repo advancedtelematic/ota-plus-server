@@ -27,12 +27,24 @@ a, a:hover, a:focus { color: #fff; text-decoration: none; }
 
 #logo { width: 70px; margin: 80px 0 50px 0; }
 
+.black { color: #333; }
+.black:hover, .black:focus, .black:active { color: #333; }
+
 .strong { color: #80e59d !important; }
 
 .underlined { text-decoration: underline; }
 
 .login #ats-page { height: 100%; position: relative; }
 .login #ats-page .container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+.modal { padding: 100px 0 0 0; }
+.modal .modal-dialog { width: 463px; height: 240px; }
+.modal .modal-dialog .modal-content { border: 0; }
+.modal .modal-dialog .modal-content .modal-header { color: #fff; text-align: center; background: #979797; border-top-left-radius: 5px; border-top-right-radius: 5px; }
+.modal .modal-dialog .modal-content .modal-body { color: #444; padding: 20px 30px; }
+
+a.close, button.close { width: 24px; height: 24px; background: url(/assets/img/icons/close.png) no-repeat; border: 0; border-radius: 0; opacity: 0.8; }
+a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:focus, button.close:active { opacity: 1; }
 
 @media (max-width: 767px) { .container { width: 100%; } }
 

@@ -95,9 +95,11 @@ define(function(require) {
                 : undefined}
               </VelocityTransitionGroup>
             : 
-              <div className="padding-15">
-                <i className="fa fa-exclamation-triangle"></i> &nbsp;
-                There are no components for this device
+              <div className="height-100 position-relative text-center">
+                <div className="center-y padding-15">
+                  This device hasn’t reported any information about
+                  its hardware or system components yet
+                </div>
               </div>
             }
           </div>
