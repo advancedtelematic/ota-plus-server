@@ -17,9 +17,11 @@ define(function(require) {
       });
     }
     render() {
+      var packageName = this.props.package.packageId.name;
+      packageName = packageName.length > 30 ? packageName.substring(0, 30) + '..' : packageName;
       return (
         <li className={'list-group-item ' + this.props.status}>
-          <span className="list-group-item-text-left">{this.props.package.packageId.name}</span>
+          <span className="list-group-item-text-left">{packageName}</span>
           <span className="drag-bar pull-right"><i className="fa fa-bars"></i></span>
           <button className="btn btn-action pull-right" onClick={this.cancelUpdate} id="button-cancel-update">{this.context.strings.cancel}</button>
           {this.props.status == 'error' ?

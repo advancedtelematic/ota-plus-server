@@ -69,7 +69,9 @@ define(function(require) {
       this.setState({intervalId: intervalId});
       
       window.addEventListener("resize", this.setDevicesListHeight);
-      this.setDevicesListHeight();
+      setTimeout(function() {
+        that.setDevicesListHeight();
+      }, 1);
     }
     componentWillUnmount(){
       db.devices.reset();

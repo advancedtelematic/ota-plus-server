@@ -17,6 +17,8 @@ define(function(require) {
       db.deviceSeen.removeWatch("poll-deviceseen");
     }
     render() {
+      var deviceName = this.props.device.deviceName;
+      deviceName = deviceName.length > 20 ? deviceName.substring(0, 20) + '..' : deviceName;
       var lastSeenDate = new Date(this.props.device.lastSeen);
       var deviceStatus = 'Status unknown';
       switch(this.props.device.status) {
@@ -42,7 +44,7 @@ define(function(require) {
             <Link to="/"><img src="/assets/img/icons/back.png" className="icon-back" alt=""/></Link>
             <div className="device-icon"></div>
             <div className="device-header-text">
-              <div className="device-name">{this.props.device.deviceName}</div>
+              <div className="device-name">{deviceName}</div>
               <div className="device-lastseen">
                 {this.props.device.status !== 'NotSeen' ?
                   <span>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>

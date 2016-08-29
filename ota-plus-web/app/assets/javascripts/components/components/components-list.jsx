@@ -90,9 +90,7 @@ define(function(require) {
     }
     render() {
       return (
-        <div id="components-list" style={{height: this.props.height}}>
-          <ul id="components-menu"></ul>
-        </div>
+        <ul id="components-menu"></ul>
       );
     }
   };

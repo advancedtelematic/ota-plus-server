@@ -12,8 +12,6 @@ define(function(require) {
         isLogShown: this.props.isLogShown
       }
       this.toggleLog = this.toggleLog.bind(this);
-      this.ignoreFailedInstall = this.ignoreFailedInstall.bind(this);
-      this.retryFailedInstall = this.retryFailedInstall.bind(this);
     }
     toggleLog() {
       this.setState({
@@ -27,36 +25,15 @@ define(function(require) {
         });
       }
     }
-    ignoreFailedInstall() {
-      console.log('ignored');
-    }
-    retryFailedInstall() {
-      var data = {
-        name: this.props.package.packageId.name,
-        version: this.props.package.packageId.version
-      };
-
-      SotaDispatcher.dispatch({
-        actionType: 'install-package-for-device',
-        data: data,
-        device: this.props.deviceId
-      });
-      console.log('remove from history list');
-    }
-    render() {         
+    render() {
+      var packageName = this.props.package.packageId.name;
+      packageName = packageName.length > 20 ? packageName.substring(0, 20) + '..' : packageName;
       var completionTime = new Date(this.props.package.completionTime);
       return (
         <li className={'list-group-item grey ' + (this.state.isLogShown ? 'show-log' : '') }>
-          {this.props.package.packageId.name}
+          {packageName}
           
           <button onClick={this.toggleLog} className="btn btn-action pull-right">log</button>
-  
-          {!this.props.package.success ?
-            <span>
-              <button onClick={this.ignoreFailedInstall} className="btn btn-action pull-right">ignore</button>
-              <button onClick={this.retryFailedInstall} className="btn btn-action pull-right">retry</button>
-            </span>
-          : null}
   
           <div className="list-group-item-text-right pull-right">
               <span className="fa-stack package-status-icon">
@@ -67,7 +44,7 @@ define(function(require) {
                   <i className="fa fa-times-circle fa-stack-1x red" aria-hidden="true"></i>
                 }
               </span>
-            v. {this.props.package.packageId.version} {this.props.package.success ? 'installed successfully' : 'not installed'} on {completionTime.toDateString() + ' ' + completionTime.toLocaleTimeString()}
+            v. {this.props.package.packageId.version} {this.props.package.success ? 'installed' : 'not installed'}
           </div>
   
           {!this.props.package.success ?
