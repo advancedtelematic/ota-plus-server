@@ -16,15 +16,15 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
       if (opts.form) {
         return this.formMultipart(type, url, data, opts);
       } else {
-        return this.jsonAjax(type, url, data, opts);
+        return this.formAjax(type, url, data, opts);
       }
     },
-    jsonAjax: function(type, url, data, opts) {
+    formAjax: function(type, url, data, opts) {
       var ajaxReq = $.ajax(_.extend({
         type: type,
         url: url,
         headers: {'Csrf-Token': this.getCsrfToken()},
-        dataType: 'json',
+        dataType: opts.contentType ? opts.contentType : 'json',
         data: JSON.stringify(data),
         contentType: "application/json",
       }, opts));
