@@ -32,13 +32,13 @@
                 var windowHeight = $(window).height();
 
                 if (windowWidth < minWidth || windowHeight < minHeight) {
-                    $('#' + verifyModalId).modal({backdrop: 'static'});
+                    $('#' + verifyModalId).modal();
                 } else {
                     $('#' + verifyModalId).modal('hide');
                 }
             }
 
-            this.$elem.after('<div id=' + verifyModalId + ' class="modal fade" role="dialog"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header"><h4 class="modal-title"><i class="fa fa-warning"></i> ' + this.options.verifyHeaderText + ' </div><div class="modal-body"><p> ' + this.options.verifyBodyText + ' </div></div></div></div>');
+            this.$elem.after('<div id=' + verifyModalId + ' class="modal fade" role="dialog"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"></button><h4 class="modal-title"><i class="fa fa-warning"></i> ' + this.options.verifyHeaderText + ' </div><div class="modal-body"><p> ' + this.options.verifyBodyText + ' </div></div></div></div>');
             
             toggleModal(verifyModalId, verifyMinWidth, verifyMinHeight);
 
