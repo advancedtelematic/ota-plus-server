@@ -11,13 +11,11 @@
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("js/bootstrap.min.js"))'></script>        
         <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
-        <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.slidedrawer.min.js")'></script>
-        <script type="text/javascript" src='@routes.Assets.versioned("js/verify.js")'></script>
         <script src="https://cdn.auth0.com/js/lock-9.2.min.js"></script>
         <script>
-          var AUTH0_CLIENT_ID = '@config.clientId';
-	      var AUTH0_DOMAIN = '@config.domain';
-	      var AUTH0_CALLBACK_URL = '@config.callbackURL';
+            var AUTH0_CLIENT_ID = '@config.clientId';
+            var AUTH0_DOMAIN = '@config.domain';
+            var AUTH0_CALLBACK_URL = '@config.callbackURL';
         </script>
     </head>
     <body class="login">
@@ -26,19 +24,13 @@
                 <div class="row">
                     <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
                         <div class="ats-header text-center">
-                            <p>Hi there, welcome back.</p>
                             <div id="widget-container"></div>
                         </div>
                     </div>
                 </div>
             </div>
             <section class="ats-footer-panel"> 
-                <header class="clickme">Need Support?</header>
-                <div class="drawer-content">
-                    <div class="intend">
-                        Content
-                    </div>
-                </div>
+                <header class="clickme"><a href="mailto:support%40atsgarage.com">Need Support?</a></header>
             </section>
         </div>
 
@@ -46,29 +38,28 @@
             $(function () {
                 $('#ats-page').fadeIn('slow');
 
-                $('.ats-footer-panel').slideDrawer({
-                    showDrawer: false,
-                    slideTimeout: true,
-                    slideSpeed: 600,
-                    slideTimeoutCount: 3000
-                });
-
-                $('body').verify({verifyMinWidth: 1366, verifyMinHeight: 0});
-            });
-
-            $(document).ready(function() {
                 var lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN);
-                lock.on("authorization_error", function(err) {
-                  alert(err);
+                lock.on("authorization_error", function (err) {
+                    alert(err);
                 });
 
-                  lock.show({
+                lock.show({
                     callbackURL: AUTH0_CALLBACK_URL,
                     container: 'widget-container',
                     authParams: {
                         scope: 'openid email'
+                    },
+                    dict: {
+                        signin: {
+                            action: "Log in",
+                            forgotText: "Forgot Password >"
+                        }
                     }
-                  });
+                });
+
+                lock.on('signin ready', function () {
+                    $(".a0-forgot-pass").detach().appendTo('.bottom-content');
+                });
             });
 
         </script>
