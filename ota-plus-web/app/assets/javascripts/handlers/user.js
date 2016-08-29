@@ -20,6 +20,11 @@ define(function(require) {
                 db.user.reset(user);
               });
           break;
+          case 'change-password':
+            sendRequest.doPost('/user/change_password', null, {action: payload.actionType})
+              .success(function() {
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));

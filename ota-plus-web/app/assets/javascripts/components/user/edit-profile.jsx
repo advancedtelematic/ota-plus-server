@@ -12,6 +12,7 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.changePassword = this.changePassword.bind(this);
       db.user.addWatch("poll-user-editprofile", _.bind(this.forceUpdate, this, null));
     }
     componentWillUnmount() {
@@ -28,9 +29,15 @@ define(function(require) {
         data: data
       });
     }
+    changePassword(e) {
+      e.preventDefault();
+      SotaDispatcher.dispatch({
+        actionType: 'change-password',
+      });
+    }
     render() {
       var user = db.user.deref();
-            
+      
       return (
         <div className="row margin-top-70 ats">
           <div className="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
@@ -45,6 +52,10 @@ define(function(require) {
                       action="update-user" 
                       successText="Profile has been updated." 
                       errorText="Error occured during profile update."/>
+                    <ResponsesCustomMsg 
+                      action="change-password" 
+                      successText="An email with password resetting instructions has been sent to your email account." 
+                      errorText="Error occured during password changing."/>
                     <form>
                       <div className="form-group">
                         <input className="form-control" type="text" name="fullname" placeholder="full name" id="fullname" ref="username" defaultValue={user.fullName}/>
@@ -65,7 +76,7 @@ define(function(require) {
                         <Link to="/" className="ats-button grey">Cancel</Link>
                       </div>
                       <div className="form-group">
-                        <a href="/change_password" className="ats-button bordered">Change password</a>
+                        <a href="#" className="ats-button bordered" onClick={this.changePassword}>Change password</a>
                       </div>
                     </form>
                   </div>
