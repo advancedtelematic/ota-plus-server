@@ -147,7 +147,7 @@ define(function(require) {
               <Loader />
             : undefined}
           </div>
-          <div className="col-md-2 nopadding">
+          <div className="col-xs-2 nopadding">
             <div className="panel panel-ats">
               <div className="panel-heading" id="panel-heading-components">
                 <div className="panel-heading-left pull-left">
@@ -159,7 +159,7 @@ define(function(require) {
               </div>
             </div>
           </div>
-          <div className="col-md-6 nopadding border-right-2">
+          <div className="col-xs-6 nopadding border-right-2">
             <div className="panel panel-ats">
               <div className="panel-heading">
                 <div className="panel-heading-left pull-left">
@@ -187,7 +187,7 @@ define(function(require) {
               </div>
             </div>
           </div>
-          <div className="col-md-4 nopadding">
+          <div className="col-xs-4 nopadding">
             <div className="panel panel-ats">
               <div className="panel-heading">
                 <div className="panel-heading-left pull-left">
