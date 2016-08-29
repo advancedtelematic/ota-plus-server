@@ -39,7 +39,7 @@ define(function(require) {
         <nav className="navbar navbar-inverse navbar-fixed-top">
           <div className="container">
             <div className="navbar-header">
-              <Link to="/" className="navbar-brand"><img src="/assets/img/atslogo.png" id="logo" alt=""/></Link>
+              <Link to="/" className="navbar-brand"><img src="/assets/img/atsgarage.png" id="logo" alt=""/></Link>
             </div>
             <div id="navbar" className="pull-left">
               <ul className="nav navbar-nav">
