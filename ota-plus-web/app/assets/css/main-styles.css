@@ -20,7 +20,7 @@ button:focus { outline: none; }
 
 html { height: 100%; min-height: 100%; }
 
-body { color: #fff; font: normal 13px AkkuratRegular; background: url(../img/bg.jpg) no-repeat; background-attachment: fixed; }
+body { color: #fff; font: normal 13px AkkuratRegular; background: url(../img/bg.jpg) no-repeat; background-attachment: fixed; height: 100%; }
 body.login { background: url("../img/bg_login.jpg") top center no-repeat; background-size: cover; }
 
 a, a:hover, a:focus { color: #fff; text-decoration: none; }
@@ -31,7 +31,10 @@ a, a:hover, a:focus { color: #fff; text-decoration: none; }
 
 .underlined { text-decoration: underline; }
 
-.login .container { padding: 330px 0 0 0; }
+.login #ats-page { height: 100%; position: relative; }
+.login #ats-page .container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+@media (max-width: 767px) { .container { width: 100%; } }
 
 .margin-top-0 { margin-top: 0px !important; }
 
@@ -57,16 +60,11 @@ a, a:hover, a:focus { color: #fff; text-decoration: none; }
 
 .margin-bottom-50 { margin-bottom: 50px !important; }
 
-.ats { padding-bottom: 70px; }
 .ats input.error { border-color: #d66f6f !important; }
 .ats label.error { color: #fff; font-weight: lighter; margin: 5px 0 0 0; }
 .ats label.error .fa { color: #d66f6f; }
 .ats-footer-panel { width: 700px; margin-left: auto; margin-right: auto; position: fixed; left: 0; right: 0; bottom: 0px; overflow: hidden; z-index: 999; }
-.ats-footer-panel header { text-align: center; background: #282828; width: 300px; padding: 10px 15px; margin: 0 auto; border-top-left-radius: 25px; border-top-right-radius: 25px; display: block; }
-.ats-footer-panel .drawer-content { background: #282828; width: 100%; padding: 0 20px; border-top-left-radius: 25px; border-top-right-radius: 25px; box-sizing: border-box; }
-.ats-footer-panel .drawer-content .intend { padding: 20px 0; }
-@media screen and (max-width: 350px) { .ats-footer-panel .drawer-content { border-top-left-radius: 0; border-top-right-radius: 0; } }
-.ats-footer-panel .clickme { cursor: pointer; }
+.ats-footer-panel .clickme { text-align: center; background: #282828; width: 300px; padding: 10px 15px; margin: 0 auto; border-top-left-radius: 25px; border-top-right-radius: 25px; display: block; }
 @media screen and (max-width: 730px) { .ats-footer-panel { width: 100%; } }
 
 /* Password meter */
