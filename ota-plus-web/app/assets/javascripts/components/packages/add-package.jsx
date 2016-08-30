@@ -10,11 +10,13 @@ define(function(require) {
       super(props);
       this.state = {
         showProgressBar: false,
-        uploadProgress: 0
+        uploadProgress: 0,
+        isButtonDisabled: false
       };
       this.handleSubmit = this.handleSubmit.bind(this);
       this.setProgress = this.setProgress.bind(this);
       this.handleResponse = this.handleResponse.bind(this);
+      this.closeForm = this.closeForm.bind(this);
       db.postProgress.addWatch("poll-progress", _.bind(this.setProgress, this, null));
       db.postStatus.addWatch("poll-response-add-package", _.bind(this.handleResponse, this, null));
     }
@@ -40,6 +42,7 @@ define(function(require) {
         package: payload,
         data: data
       });
+      this.setState({isButtonDisabled: true});
     }
     setProgress() {
       this.setState({uploadProgress: db.postProgress.deref()['create-package']});
@@ -51,20 +54,26 @@ define(function(require) {
         db.postStatus.removeWatch("poll-response-add-package");
         this.props.focusPackage(payload.name);
         this.props.closeForm();
+      } else {
+        this.setState({isButtonDisabled: false});
       }
+    }
+    closeForm(e) {
+      e.preventDefault();
+      this.props.closeForm();
     }
     render() {
       var uploadProgress = this.state.uploadProgress ? this.state.uploadProgress : null;
       return (
-        <div id="modal-new-campaign" className="myModal">
+        <div id="modal-add-package" className="myModal">
           <div className="modal-dialog">
             <div className="modal-content">
-              <div className="modal-header">
-                <button type="button" className="close" data-dismiss="modal" onClick={this.props.closeForm}></button>
+              <form ref='form' onSubmit={this.handleSubmit} encType="multipart/form-data">
+                <div className="modal-header">
+                  <button type="button" className="close" data-dismiss="modal" onClick={this.props.closeForm}></button>
                 <h4 className="modal-title">New package</h4>
-              </div>
-              <div className="modal-body">
-                <form ref='form' onSubmit={this.handleSubmit} encType="multipart/form-data">
+                </div>
+                <div className="modal-body">
                   <Responses action="create-package" handledStatuses="error"/>
                   <div className="row">
                     <div className="col-md-6">
@@ -111,15 +120,12 @@ define(function(require) {
                       : null}
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="form-group">
-                        <button type="submit" className="btn btn-grey pull-right">Add package</button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
+                </div>
+                <div className="modal-footer">
+                  <a href="#" onClick={this.closeForm} className="darkgrey margin-top-20 pull-left">close</a>
+                  <button type="submit" className="btn btn-confirm pull-right" disabled={this.state.isButtonDisabled}>Create package</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

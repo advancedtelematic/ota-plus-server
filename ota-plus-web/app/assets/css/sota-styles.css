@@ -80,7 +80,7 @@ button.list-group-item:focus { background: transparent; }
 .device-header-text .device-name { font-size: 22px; }
 .device-header-text .device-lastseen { font-size: 14px; margin: 0; opacity: 0.5; }
 
-.page-home { height: 100%; max-height: 100vh; background: url(/assets/img/bg.jpg) no-repeat; background-attachment: fixed; background-size: cover; overflow: hidden; }
+.page-home { height: 100vh; max-height: 100vh; background: url(/assets/img/bg.jpg) no-repeat; background-attachment: fixed; background-size: cover; overflow: hidden; }
 .page-home .devices { overflow-y: scroll; overflow-x: hidden; }
 .page-home #devices-list { padding: 10px 0; }
 .page-home #devices-bar { background: #666; width: 100%; height: 40px; min-width: 1348px; position: absolute; left: 0; z-index: 99; }
@@ -314,6 +314,9 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 .black { color: #000; }
 
+.darkgrey { color: #444; }
+.darkgrey:hover, .darkgrey:focus, .darkgrey:active { color: #444; }
+
 /* Icons */
 .icon-info { margin: -2px 10px 0 0; float: left; }
 
@@ -357,7 +360,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .myModal .modal-dialog .modal-content .modal-body { color: #444; padding: 60px 80px 20px 80px; }
 
 #modal-add-package .modal-dialog, #modal-new-campaign .modal-dialog, #modal-impact-analysis .modal-dialog { width: 640px; }
-#modal-add-package .modal-dialog .modal-body, #modal-new-campaign .modal-dialog .modal-body, #modal-impact-analysis .modal-dialog .modal-body { min-height: 380px; padding: 40px 25px 20px 25px; }
+#modal-add-package .modal-dialog .modal-body, #modal-new-campaign .modal-dialog .modal-body, #modal-impact-analysis .modal-dialog .modal-body { min-height: 320px; padding: 40px 25px 20px 25px; }
 #modal-add-package .fullsize-overflow-hidden, #modal-new-campaign .fullsize-overflow-hidden, #modal-impact-analysis .fullsize-overflow-hidden { width: 100%; overflow: hidden; }
 
 #modal-impact-analysis .device-box { color: #999; text-align: center; text-decoration: none; word-wrap: break-word; width: 110px; display: inline-block; vertical-align: middle; margin: 0 5px; }
@@ -576,6 +579,8 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .page-packages .panel-subheading { padding: 0; }
 
 .modal-open { overflow-x: auto; overflow-y: hidden; }
+
+.btn-confirm { font-weight: bold; background: #96DED2; padding: 13px 60px; border-radius: 30px; }
 
 /* Disabled nav responsive */
 .container > .navbar-header { margin: 0; }
