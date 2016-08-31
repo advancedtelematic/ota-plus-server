@@ -21,6 +21,8 @@ define(function(require) {
         alertHidden: false
       }
       
+      Cookies.set('alerts', {'packages': 'closed', 'queue': 'closed'});
+      
       var alertCookie;
       try {
         alertCookie = JSON.parse(Cookies.get('alerts'));

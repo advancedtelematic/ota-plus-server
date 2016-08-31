@@ -417,7 +417,7 @@ define(function(require) {
                         {this.state.selectedType === 'unmanaged' ? 
                           <div className="center-xy padding-15">
                             This device hasn’t reported any information about<br />
-                            its system-installed software packages yet 
+                            its system-installed software packages yet.
                           </div>
                         :
                           <div className="center-xy padding-15">

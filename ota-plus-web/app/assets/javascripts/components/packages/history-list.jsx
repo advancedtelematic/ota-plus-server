@@ -72,11 +72,14 @@ define(function(require) {
         <div>
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {!_.isUndefined(packages) ? 
-              <ul id="history-list" className="list-group"> 
+              <ul id="history-list" className="list-group height-100"> 
                 {packages.length > 0 ?
                   packages
                 :
-                  <div>History is empty</div>
+                  <div className="text-center center-xy">
+                    Installation history is empty. <br />
+                    The installation of the queued packages will start automatically when your device connects.
+                  </div>
                 }
               </ul>
             : undefined}

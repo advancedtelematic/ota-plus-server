@@ -34,7 +34,7 @@ define(function(require) {
           result = (
             <div className="text-center center-y padding-15">
               This device hasn’t reported any information about
-              its hardware or system components yet
+              its hardware or system components yet.
             </div>
           );
         }
