@@ -6,7 +6,6 @@ define(function(require) {
       PackagesListItem = require('es6!./packages-list-item'),
       PackageListItemDetails = require('es6!./packages-list-item-details'),
       Dropzone = require('es6!../../mixins/dropzone'),
-      AddPackage = require('es6!./add-package'),
       Loader = require('es6!../loader'),
       jQuery = require('jquery'),
       IOSList = require('ioslist'),
@@ -21,8 +20,6 @@ define(function(require) {
         data: undefined,
         expandedPackage: null,
         timeout: null,
-        files: null,
-        showForm: this.props.showForm,
         iosListObj: null,
         selectedToAnalyse: [],
         tmpQueueData: undefined,
@@ -124,11 +121,7 @@ define(function(require) {
       });
     }
     onDrop(files) {
-      this.setState({
-        files: files,
-      });
-      
-      this.props.openForm();
+      this.props.onDrop(files);
     }
     prepareData(selectStatus, selectType, selectSort) {
       var Packages = _.clone(db.searchablePackages.deref());
@@ -173,9 +166,12 @@ define(function(require) {
 
         var GroupedPackages = {};
         Packages.find(function(obj, index){
+          var uri = obj.uri.uri;
           var objKey = obj.id.name+'_'+obj.id.version;
           var isQueued = false;
           var isInstalled = false;
+          
+          var isDebOrRpmPackage = uri.toLowerCase().includes('.deb') || uri.toLowerCase().includes('.rpm') ? true : false;
 
           if(objKey in InstalledIds) {
             Packages[index].attributes = {status: 'installed', string: 'Installed', label: 'label-success'};
@@ -193,6 +189,7 @@ define(function(require) {
             GroupedPackages[obj.id.name]['packageName'] = obj.id.name;
             GroupedPackages[obj.id.name]['isQueued'] = isQueued;
             GroupedPackages[obj.id.name]['isInstalled'] = isInstalled;
+            GroupedPackages[obj.id.name]['isDebOrRpmPackage'] = isDebOrRpmPackage;
 
             isQueued ? queuedCount++ : null;
             isInstalled ? installedCount++ : null;
@@ -206,6 +203,10 @@ define(function(require) {
           if(!GroupedPackages[obj.id.name].isInstalled && isInstalled) {
             GroupedPackages[obj.id.name]['isInstalled'] = true;
             installedCount++;
+          }
+          
+          if(!GroupedPackages[obj.id.name].isDebOrRpmPackage && isDebOrRpmPackage) {
+            GroupedPackages[obj.id.name]['isDebOrRpmPackage'] = true;
           }
 
           GroupedPackages[obj.id.name]['elements'].push(Packages[index]);
@@ -361,6 +362,7 @@ define(function(require) {
                 expandPackage={this.expandPackage}
                 queuedPackage={queuedPackage}
                 installedPackage={installedPackage}
+                isDebOrRpmPackage={pack.isDebOrRpmPackage}
                 packageInfo={packageInfo}
                 mainLabel={mainLabel}
                 selectToAnalyse={this.selectToAnalyse}
@@ -417,15 +419,6 @@ define(function(require) {
             {_.isUndefined(packages) ? 
               <Loader />
             : undefined}
-            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-              {this.state.showForm ?
-                <AddPackage
-                  files={this.state.files}
-                  closeForm={this.props.closeForm}
-                  focusPackage={this.props.focusPackage}
-                  key="add-package"/>
-              : null}
-            </VelocityTransitionGroup>
           </div>
             
           {this.props.device.status !== 'NotSeen' 
