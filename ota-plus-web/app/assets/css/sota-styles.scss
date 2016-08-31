@@ -2020,6 +2020,13 @@ a.close, button.close {
     box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
 }
 
+#packages-column {
+    z-index: 120;
+    -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
+    -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
+    box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
+}
+
 .height-100 {
     height: 100%;
 }
@@ -2039,10 +2046,4 @@ a.close, button.close {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-#packages-column {
-    z-index: 120;
-    -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
-    -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
-    box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
 }
