@@ -938,7 +938,7 @@ a.close, button.close {
 
 .darkgrey {
     color: #444;
-    
+
     &:hover, &:focus, &:active {
         color: #444;
     }
@@ -1034,7 +1034,7 @@ a.close, button.close {
 .dnd-zone {
     width: 100%;
     height: 100%;
-    
+
     &.dnd-zone-active {
         border: 2px dashed #FB9773;
 
@@ -1229,12 +1229,12 @@ a.close, button.close {
 
 #verifyModal {
     padding: 200px 0 0 0;
-    
+
     .modal-title {
         color: #FB9773;
         text-align: center;
     }
-    
+
     .modal-body {
         font-size: 13px;
         text-align: center;
@@ -1998,19 +1998,19 @@ a.close, button.close {
 }
 
 .navbar-collapse.collapse {
-  display: block!important;
+    display: block!important;
 }
 
 .navbar-nav>li, .navbar-nav {
-  float: left !important;
+    float: left !important;
 }
 
 .navbar-nav.navbar-right:last-child {
-  margin-right: -15px !important;
+    margin-right: -15px !important;
 }
 
 .navbar-right {
-  float: right!important;
+    float: right!important;
 }
 
 #components-column {
@@ -2044,6 +2044,6 @@ a.close, button.close {
 .center-xy {
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    left: 15%;
+    transform: translate(-10%, -50%);
 }
