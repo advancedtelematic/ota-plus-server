@@ -23,6 +23,7 @@ define(function(require) {
         iosListObj: null,
         selectedToAnalyse: [],
         tmpQueueData: undefined,
+        selectedType: null
       };
       this.refreshData = this.refreshData.bind(this);
       this.onDrop = this.onDrop.bind(this);
@@ -47,11 +48,15 @@ define(function(require) {
         this.setState({showForm: nextProps.showForm});
       }
             
-      if(this.props.selectStatus !== nextProps.selectStatus || 
-              this.props.selectType !== nextProps.selectType || 
-              this.props.selectSort !== nextProps.selectSort) {
-        this.setData(nextProps.selectStatus, nextProps.selectType, nextProps.selectSort);
+      if(this.props.selectedStatus !== nextProps.selectedStatus || 
+              this.props.selectedType !== nextProps.selectedType || 
+              this.props.selectedSort !== nextProps.selectedSort) {
+        this.setData(nextProps.selectedStatus, nextProps.selectedType, nextProps.selectedSort);
       }
+      if(this.props.selectedType !== nextProps.selectedType) {
+        this.setState({selectedType: nextProps.selectedType});
+      }
+      
     }
     componentDidUpdate(prevProps, prevState) {
       if(!_.isUndefined(prevState.data) && Object.keys(prevState.data).length === 0 && !_.isUndefined(this.state.data) && Object.keys(this.state.data).length > 0) {
@@ -101,7 +106,7 @@ define(function(require) {
       SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.id, regex: this.props.filterValue});
     }
     refresh() {
-      this.setData(this.props.selectStatus, this.props.selectType, this.props.selectSort);
+      this.setData(this.props.selectedStatus, this.props.selectedType, this.props.selectedSort);
     }
     queueUpdated() {
       if(JSON.stringify(this.state.tmpQueueData) !== JSON.stringify(db.packageQueueForDevice.deref())) {
@@ -112,8 +117,8 @@ define(function(require) {
         tmpQueueData: db.packageQueueForDevice.deref()
       });
     }
-    setData(selectStatus, selectType, selectSort) {
-      var result = this.prepareData(selectStatus, selectType, selectSort);
+    setData(selectedStatus, selectedType, selectedSort) {
+      var result = this.prepareData(selectedStatus, selectedType, selectedSort);
       var data = result.data;
       this.props.setPackagesStatistics(result.statistics.installedCount, result.statistics.queuedCount);
       this.setState({
@@ -123,7 +128,7 @@ define(function(require) {
     onDrop(files) {
       this.props.onDrop(files);
     }
-    prepareData(selectStatus, selectType, selectSort) {
+    prepareData(selectedStatus, selectedType, selectedSort) {
       var Packages = _.clone(db.searchablePackages.deref());
       var Installed = _.clone(db.searchablePackagesForDevice.deref());
       var Queued = _.clone(db.packageQueueForDevice.deref());
@@ -132,17 +137,18 @@ define(function(require) {
       var installedCount = 0;
       var queuedCount = 0;
 
-      var selectedStatus = selectStatus ? selectStatus : this.props.selectStatus;
+      var selectedStatus = selectedStatus ? selectedStatus : this.props.selectedStatus;
       var selectedType = selectedType ? selectedType : this.props.selectedType;
-      var selectedSort = selectSort ? selectSort : this.props.selectSort;
+      var selectedSort = selectedSort ? selectedSort : this.props.selectedSort;
+            
       if(!_.isUndefined(Packages) && !_.isUndefined(Installed) && !_.isUndefined(Queued)) {
-        switch(selectType) {
+        switch(selectedType) {
           case 'all': 
             Installed.forEach(function(installed){
               Packages.push(installed);
             });
           break;
-          case 'system':
+          case 'unmanaged':
             Packages.forEach(function(obj) {
               Installed = Installed.filter(function(res){
                 return (res.id.name != obj.id.name && res.id.version != obj.id.version);
@@ -166,11 +172,11 @@ define(function(require) {
 
         var GroupedPackages = {};
         Packages.find(function(obj, index){
-          var uri = obj.uri.uri;
+          var uri = !_.isUndefined(obj.uri) && !_.isUndefined(obj.uri.uri) ? obj.uri.uri : '';
           var objKey = obj.id.name+'_'+obj.id.version;
           var isQueued = false;
           var isInstalled = false;
-          
+                    
           var isDebOrRpmPackage = uri.toLowerCase().includes('.deb') || uri.toLowerCase().includes('.rpm') ? true : false;
 
           if(objKey in InstalledIds) {
@@ -407,9 +413,18 @@ define(function(require) {
                         </div>
                       </div>
                     :
-                      <div className="col-md-12">
-                        <br />
-                        <i className="fa fa-warning"></i> Sorry, there are no results.
+                      <div className="height-100 position-relative text-center">
+                        {this.state.selectedType === 'unmanaged' ? 
+                          <div className="center-xy padding-15">
+                            This device hasn’t reported any information about<br />
+                            its system-installed software packages yet 
+                          </div>
+                        :
+                          <div className="center-xy padding-15">
+                            There are no packages managed by ATS Garage to<br />
+                            show. To add a new package, drag and drop it here. 
+                          </div>
+                        }
                       </div>
                     }
                   </Dropzone>
