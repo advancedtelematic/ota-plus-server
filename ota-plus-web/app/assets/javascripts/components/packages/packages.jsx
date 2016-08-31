@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      Cookies = require('js-cookie'),
       db = require('stores/db'),
       PackagesList = require('es6!./packages-list'),
       SearchBar = require('es6!../searchbar');
@@ -7,6 +8,7 @@ define(function(require) {
   class Packages extends React.Component {
     constructor(props) {
       super(props);
+      
       this.state = {
         filterValue: '',
         selectStatus: 'all',
@@ -16,21 +18,35 @@ define(function(require) {
         selectType: 'installable',
         selectTypeName: 'Installable',
         packagesListHeight: '300px',
-        showForm: false
+        alertHidden: false
       }
       
-      this.changeFilter = this.changeFilter.bind(this);
-      this.openForm = this.openForm.bind(this);
-      this.closeForm = this.closeForm.bind(this);
-      this.focusPackage = this.focusPackage.bind(this);
+      var alertCookie;
+      try {
+        alertCookie = JSON.parse(Cookies.get('alerts'));
+      } catch (e) {
+        alertCookie = {};
+      }
+      if(!_.isUndefined(alertCookie.packages) && alertCookie.packages === 'closed')
+        this.state.alertHidden = true;
+            
+      this.changeFilter = this.changeFilter.bind(this);      
       this.setPackagesListHeight = this.setPackagesListHeight.bind(this);
     }
     componentDidMount() {
       var that = this;
       jQuery('#packages .close').click(function() {
-        var timeoutId = setTimeout(function(){
+        var timeoutId = setTimeout(function() {
+          var alertCookie;
+          try {
+            alertCookie = JSON.parse(Cookies.get('alerts'));
+          } catch (e) {
+            alertCookie = {};
+          }
           that.setPackagesListHeight();
           clearTimeout(timeoutId);
+          alertCookie.packages = "closed";
+          Cookies.set('alerts', alertCookie);
         }, 200);
       });
       window.addEventListener("resize", this.setPackagesListHeight);
@@ -38,32 +54,6 @@ define(function(require) {
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setPackagesListHeight);
-    }
-    focusPackage(packageName) {
-      var tmpInterval = setInterval(function() {
-        var btn = $("#button-package-" + packageName);
-        if(btn.length) {
-          if(!btn.parent('li').hasClass('selected')) 
-            btn.click();
-                    
-          setTimeout(function() {     
-            $('.ioslist-wrapper').animate({
-              scrollTop: $('.ioslist-wrapper').scrollTop() + btn.offset().top - $('.ioslist-wrapper').offset().top - $('.ioslist-fake-header').outerHeight()
-            }, 300);
-          }, 600);
-          clearInterval(tmpInterval);
-        }
-      }, 100);
-    }
-    openForm() {
-      this.setState({
-        showForm: true
-      });
-    }
-    closeForm() {
-      this.setState({
-        showForm: false
-      });
     }
     changeFilter(filter) {
       this.setState({filterValue: filter});
@@ -120,7 +110,7 @@ define(function(require) {
             <SearchBar class="search-bar pull-left" inputId="search-packages-input" changeFilter={this.changeFilter}/>
 
             <div className="pull-right margin-left-15">
-              <button onClick={this.openForm} className="btn btn-add pull-right" id="button-add-new-package">
+              <button onClick={this.props.openForm} className="btn btn-add pull-right" id="button-add-new-package">
                 <i className="fa fa-plus"></i> &nbsp; Add
               </button>
             </div>
@@ -165,7 +155,7 @@ define(function(require) {
             </div>
           </div>
 
-          <div className="alert alert-ats alert-dismissible" role="alert">
+          <div className={"alert alert-ats alert-dismissible" + (this.state.alertHidden ? " hidden" : '')} role="alert">
             <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true"></span></button>
             <img src="/assets/img/icons/info.png" className="icon-info" alt=""/>
             Click on the package you want to install and select its version to add it to the queue.
@@ -182,10 +172,7 @@ define(function(require) {
                 setPackagesStatistics={this.props.setPackagesStatistics}
                 countImpactAnalysisPackages={this.props.countImpactAnalysisPackages}
                 device={this.props.device}
-                showForm={this.state.showForm}
-                openForm={this.openForm}
-                closeForm={this.closeForm}
-                focusPackage={this.focusPackage}/>
+                onDrop={this.props.onDrop}/>
             : undefined}
           </div>
         </div>

@@ -46,15 +46,17 @@ define(function(require) {
     }
     showDetails(id) {
       this.setState({
-        detailsShown: (this.state.detailsId !== id ? true : true),
+        detailsShown: true,
         detailsId: (this.state.detailsId !== id ? id : this.state.detailsId)
       });
+      $('#components-list').addClass('components-list-shadow');
     }
     closeDetails() {
       this.setState({
         detailsShown: false,
         detailsId: null
       });
+      $('#components-list').removeClass('components-list-shadow');
     }
     checkPostStatus() {
       var postStatus = db.postStatus.deref()['get-components'];
@@ -77,35 +79,37 @@ define(function(require) {
       }
       return (
         <div id="components" style={{height: this.state.componentsListHeight}}>
-          {this.state.isComponentsListEmpty === null ?
-            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-              {!_.isUndefined(db.components.deref()) ? 
-                <div>
+          <div id="components-list">
+            {this.state.isComponentsListEmpty === null ?
+              <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+                {!_.isUndefined(db.components.deref()) ? 
                   <ComponentsList
                     data={db.components.deref()}
                     showDetails={this.showDetails}
                     closeDetails={this.closeDetails}
                     id={this.state.detailsId}
                     height={this.state.componentsListHeight}/>
+                : undefined}
+                {_.isUndefined(db.components.deref()) ? 
+                  <Loader />
+                : undefined}
+              </VelocityTransitionGroup>
+            : 
+              <div className="padding-15">
+                <i className="fa fa-exclamation-triangle"></i> &nbsp;
+                There are no components for this device
+              </div>
+            }
+          </div>
           
-                  <VelocityComponent animation={this.state.detailsShown ? 'fadeIn' : 'fadeOut'}>
-                    <ComponentsOverlay
-                      data={db.components.deref()}
-                      id={this.state.detailsId}
-                      closeDetails={this.closeDetails}/>
-                  </VelocityComponent>
-                </div> 
-              : undefined}
-              {_.isUndefined(db.components.deref()) ? 
-                <Loader />
-              : undefined}
-            </VelocityTransitionGroup>
-          : 
-            <div className="padding-15">
-              <i className="fa fa-exclamation-triangle"></i> &nbsp;
-              There are no components for this device
-            </div>
-          }
+          {!_.isUndefined(db.components.deref()) ? 
+            <VelocityComponent animation={this.state.detailsShown ? 'fadeIn' : 'fadeOut'}>
+              <ComponentsOverlay
+                data={db.components.deref()}
+                id={this.state.detailsId}
+                closeDetails={this.closeDetails}/>
+            </VelocityComponent>
+          : undefined}
         </div>
       );
     }
