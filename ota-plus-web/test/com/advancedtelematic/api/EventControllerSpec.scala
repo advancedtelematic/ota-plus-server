@@ -1,8 +1,3 @@
-/**
-  * Copyright: Copyright (C) 2015, Jaguar Land Rover
-  * License: MPL-2.0
-  */
-
 package com.advancedtelematic.api
 
 import java.time.Instant
@@ -16,7 +11,7 @@ import com.advancedtelematic.ota.Messages.MessageWriters._
 import eu.timepit.refined.api.Refined
 import org.genivi.sota.data.Device.{DeviceName, DeviceType}
 import org.genivi.sota.data.{Device, Namespace, PackageId}
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, MessageLike, PackageCreated, UpdateSpec}
+import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, PackageCreated, UpdateSpec}
 import org.genivi.webserver.controllers.EventController
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -26,6 +21,8 @@ import play.api.libs.json._
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+
+import scala.reflect.ClassTag
 
 object MessagingData {
   val deviceUUID = "77a1888b-9bc8-4673-8f23-a51240303db4"
@@ -69,20 +66,20 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
   }
 
   val mockMsgSrc = new MessageSourceProvider {
-    override def getSource[T]()(implicit system: ActorSystem, messageLike: MessageLike[T]): Source[T, _] = {
-      if (messageLike.tag.runtimeClass.equals(classOf[DeviceSeen])) {
+    override def getSource[T]()(implicit system: ActorSystem, tag: ClassTag[T]): Source[T, _] = {
+      if (tag.runtimeClass.equals(classOf[DeviceSeen])) {
         Source.single(MessagingData.deviceSeenMessage).asInstanceOf[Source[T, NotUsed]]
-      } else if(messageLike.tag.runtimeClass.equals(classOf[DeviceCreated])) {
+      } else if(tag.runtimeClass.equals(classOf[DeviceCreated])) {
         Source.single(MessagingData.deviceCreatedMessage).asInstanceOf[Source[T, NotUsed]]
-      } else if(messageLike.tag.runtimeClass.equals(classOf[DeviceDeleted])) {
+      } else if(tag.runtimeClass.equals(classOf[DeviceDeleted])) {
         Source.single(MessagingData.deviceDeletedMessage).asInstanceOf[Source[T, NotUsed]]
-      } else if(messageLike.tag.runtimeClass.equals(classOf[UpdateSpec])) {
+      } else if(tag.runtimeClass.equals(classOf[UpdateSpec])) {
         Source.single(MessagingData.updateSpecMessage).asInstanceOf[Source[T, NotUsed]]
-      } else if(messageLike.tag.runtimeClass.equals(classOf[PackageCreated])) {
+      } else if(tag.runtimeClass.equals(classOf[PackageCreated])) {
         Source.single(MessagingData.packageCreatedMessage).asInstanceOf[Source[T, NotUsed]]
       } else {
         throw new IllegalArgumentException("[test] Event class not supported " +
-          s"${messageLike.tag.runtimeClass.getSimpleName}")
+          s"${tag.runtimeClass.getSimpleName}")
       }
     }
   }
