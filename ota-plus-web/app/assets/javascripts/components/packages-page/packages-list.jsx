@@ -105,10 +105,10 @@ define(function(require) {
           GroupedPackages[obj.id.name]['elements'].push(Packages[index]);
         });
 
-        var selectSort = this.props.selectSort;
+        var selectedSort = this.props.selectedSort;
         SortedPackages = {};
         Object.keys(GroupedPackages).sort(function(a, b) {
-          if(selectSort !== 'undefined' && selectSort == 'desc')
+          if(selectedSort !== 'undefined' && selectedSort == 'desc')
             return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? -1 : b.localeCompare(a);
           else
             return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? 1 : a.localeCompare(b);
@@ -224,9 +224,11 @@ define(function(require) {
                         </div>
                       </div>
                     :
-                      <div className="col-md-12">
-                        <br />
-                        <i className="fa fa-warning"></i> Sorry, there are no results.
+                      <div className="col-md-12 height-100 position-relative text-center">
+                        <div className="center-xy padding-15">
+                          There are no packages managed by ATS Garage to<br />
+                          show. To add a new package, drag and drop it here. 
+                        </div>
                       </div>
                     }
                   </Dropzone>
