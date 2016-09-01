@@ -35,13 +35,13 @@ extends Controller with ApiClientSupport {
   private[this] object NoSuchVinRegistered extends Throwable with NoStackTrace
 
   /**
-    * Send a pre-configured client for the requested package-format (deb or rpm) and architecture (32 or 64 bit).
+    * Send a pre-configured client configuration for the requested artifact (deb, rpm, toml).
     *
     * @param deviceId
-    * @param packfmt either "deb" or "rpm"
+    * @param artifact one of "deb", "rpm", "toml"
     * @param arch either "32" or "64"
     */
-  def downloadClientSdk(deviceId: Device.Id, packfmt: PackageType, arch: Architecture) : Action[AnyContent] =
+  def downloadClientSdk(deviceId: Device.Id, artifact: ArtifactType, arch: Architecture) : Action[AnyContent] =
     AuthenticatedApiAction.async { implicit request =>
       for (
         vMetadataOpt <- vehiclesStore.getVehicle(deviceId);
@@ -50,7 +50,7 @@ extends Controller with ApiClientSupport {
           case Some(vmeta) => Future.successful(vmeta)
         };
         secret <- authPlusApi.fetchSecret(vMetadata.clientInfo.clientId);
-        result <- preconfClient(vMetadata.deviceId, packfmt, arch, vMetadata.clientInfo.clientId, secret)
+        result <- preconfClient(vMetadata.deviceId, artifact, arch, vMetadata.clientInfo.clientId, secret)
       ) yield result
     }
 
@@ -59,14 +59,14 @@ extends Controller with ApiClientSupport {
     */
   private def sdkUrl(
                       device: Device.Id,
-                      packfmt: PackageType, arch: Architecture,
+                      artifact: ArtifactType, arch: Architecture,
                       clientID: java.util.UUID, secret: String
                     ): Try[Uri] = {
 
     def placedholderFiller(uri: String): String = {
       val replacements = Seq(
         "[vin]"         -> device.show,
-        "[packagetype]" -> packfmt.toString(),
+        "[packagetype]" -> artifact.toString(),
         "[arch]"        -> arch.toString(),
         "[client_id]"   -> clientID.toString(),
         "[secret]"      -> secret
@@ -88,10 +88,10 @@ extends Controller with ApiClientSupport {
     * Contact Build Service to obtain a pre-configured client
     */
   private def preconfClient(device: Device.Id,
-                            packfmt: PackageType, arch: Architecture,
+                            artifact: ArtifactType, arch: Architecture,
                             clientID: java.util.UUID, secret: String): Future[Result] = {
-    Future.fromTry(sdkUrl(device, packfmt, arch, clientID, secret))
-      .flatMap(streamPackageFromBuildService(device, packfmt, arch))
+    Future.fromTry(sdkUrl(device, artifact, arch, clientID, secret))
+      .flatMap(streamPackageFromBuildService(device, artifact, arch))
       .recover {
         case NonFatal(t) =>
           logger.error("Failed to stream sdk from build service", t)
@@ -102,7 +102,7 @@ extends Controller with ApiClientSupport {
   /**
     * Requests client sdk package from the build service and streams response to the requester.
     */
-  private def streamPackageFromBuildService(device: Device.Id, packfmt: PackageType, arch: Architecture)
+  private def streamPackageFromBuildService(device: Device.Id, artifact: ArtifactType, arch: Architecture)
                                            (url: Uri): Future[Result] = {
     val futureResponse = ws.url(url.toUrl).withMethod("POST").stream
     futureResponse.map { streamedResp =>
@@ -115,13 +115,13 @@ extends Controller with ApiClientSupport {
             val entity = HttpEntity.Streamed(
               body,
               Some(Integer.parseInt(length)),
-              Some(packfmt.contentType)
+              Some(artifact.contentType)
             )
             Ok.sendEntity(entity)
           case _ =>
-            Ok.chunked(body).as(packfmt.contentType)
+            Ok.chunked(body).as(artifact.contentType)
         }
-        val suggestedFilename = s"ota-plus-sdk-${device.show}-$packfmt-$arch.${packfmt.fileExtension}"
+        val suggestedFilename = s"ota-plus-sdk-${device.show}-$artifact-$arch.${artifact.fileExtension}"
         ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
       } else {
         logger.error(s"Unexpected response status from build service: $statusResp")
