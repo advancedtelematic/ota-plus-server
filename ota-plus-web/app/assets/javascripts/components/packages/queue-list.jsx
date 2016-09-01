@@ -98,13 +98,16 @@ define(function(require) {
         <div>
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {!_.isUndefined(packages) ?
-              <ul id="queue-list" className="list-group list-group-dnd">
+              <ul id="queue-list" className="list-group list-group-dnd height-100">
                 {packages.length ?
                   <span>
                     {packages}
                   </span>
                 :
-                  <div>Queue is empty</div>
+                  <div className="text-center center-xy">
+                    Installation queue is empty. <br />
+                    Click on a package you want to install and select a version to add it to the queue.
+                  </div>
                 }
               </ul>
             : undefined}
