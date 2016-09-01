@@ -21,7 +21,7 @@ POST    /api/v1/devices/:groupName/group_info    org.genivi.webserver.controller
 PUT     /api/v1/devices/:groupName/group_info    org.genivi.webserver.controllers.DeviceController.updateGroupInfo(groupName: String)
 DELETE  /api/v1/devices/:groupName/group_info    org.genivi.webserver.controllers.DeviceController.deleteGroupInfo(groupName: String)
 
-GET     /api/v1/client/:deviceId/:packfmt/:arch  org.genivi.webserver.controllers.ClientSdkController.downloadClientSdk(deviceId: Device.Id, packfmt: PackageType, arch: Architecture)
+GET     /api/v1/client/:deviceId/:artifact/:arch org.genivi.webserver.controllers.ClientSdkController.downloadClientSdk(deviceId: Device.Id, artifact: ArtifactType, arch: Architecture)
 
 GET     /api/v1/events/devices/:device           org.genivi.webserver.controllers.EventController.subDeviceSeen(device: Device.Id)
 GET     /api/v1/events/devicecreated/:namespace  org.genivi.webserver.controllers.EventController.subDeviceCreated(namespace: Namespace)
