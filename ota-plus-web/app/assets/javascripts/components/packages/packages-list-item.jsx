@@ -24,7 +24,6 @@ define(function(require) {
     }
     render() {
       var packageName = this.props.name;
-      packageName = packageName.length > 30 ? packageName.substring(0, 30) + '..' : packageName;
       return (
         <button type="button" className="list-group-item" onClick={this.itemClick} id={"button-package-" + this.props.name}>
           {this.context.location.pathname.toLowerCase().split('/')[1] != 'productiondevicedetails' &&
@@ -33,8 +32,8 @@ define(function(require) {
             localStorage.getItem('thirdProductionTestDevice') == this.props.deviceId) ?
             <input type="checkbox" className="checkbox-impact pull-left" onChange={this.checkboxClick}/>
           : null}
-          <div className="pull-left">
-            <span className="package-name">{packageName}</span>
+          <div className="package-item-name pull-left">
+            {packageName}
           </div>
 
           {this.props.isDebOrRpmPackage || !this.props.isManagedPackage ? 

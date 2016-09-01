@@ -18,7 +18,6 @@ define(function(require) {
     }
     render() {
       var deviceName = this.props.device.deviceName;
-      deviceName = deviceName.length > 20 ? deviceName.substring(0, 20) + '..' : deviceName;
       var lastSeenDate = new Date(this.props.device.lastSeen);
       var deviceStatus = 'Status unknown';
       switch(this.props.device.status) {
