@@ -45,7 +45,9 @@ object PathBinders {
       value match {
         case Debian.fileExtension => Right(Debian)
         case RPM.fileExtension => Right(RPM)
-        case _ => Left(s"Expected ${Debian.fileExtension} or ${RPM.fileExtension}, found " + value)
+        case Toml.fileExtension => Right(Toml)
+        case _ =>
+          Left(s"Expected ${Debian.fileExtension} or ${RPM.fileExtension} or ${Toml.fileExtension}, found " + value)
       }
     }
     def unbind(key: String, value: PackageType): String = value.toString()
@@ -80,6 +82,10 @@ object Debian extends PackageType {
 object RPM extends PackageType {
   val fileExtension: String = "rpm"
   val contentType: String = "application/x-redhat-package-manager"
+}
+object Toml extends PackageType {
+  val fileExtension: String = "toml"
+  val contentType: String = "text/plain"
 }
 
 case class Architecture(bits: Int) {
