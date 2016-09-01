@@ -38,10 +38,10 @@ object PathBinders {
 
   /**
     * Path binder to convert a String (eg, from a route path)
-    * to a PackageType wrapped in a Right (if valid, Left otherwise).
+    * to a ArtifactType wrapped in a Right (if valid, Left otherwise).
     */
-  implicit object bindablePackageType extends play.api.mvc.PathBindable[PackageType] {
-    def bind(key: String, value: String): Either[String, PackageType] = {
+  implicit object bindableArtifactType extends play.api.mvc.PathBindable[ArtifactType] {
+    def bind(key: String, value: String): Either[String, ArtifactType] = {
       value match {
         case Debian.fileExtension => Right(Debian)
         case RPM.fileExtension => Right(RPM)
@@ -50,7 +50,7 @@ object PathBinders {
           Left(s"Expected ${Debian.fileExtension} or ${RPM.fileExtension} or ${Toml.fileExtension}, found " + value)
       }
     }
-    def unbind(key: String, value: PackageType): String = value.toString()
+    def unbind(key: String, value: ArtifactType): String = value.toString()
   }
 
   /**
@@ -70,20 +70,20 @@ object PathBinders {
 
 }
 
-trait PackageType {
+trait ArtifactType {
   val fileExtension: String
   val contentType: String
   override final def toString: String = fileExtension
 }
-object Debian extends PackageType {
+object Debian extends ArtifactType {
   val fileExtension: String = "deb"
   val contentType: String = "application/vnd.debian.binary-package"
 }
-object RPM extends PackageType {
+object RPM extends ArtifactType {
   val fileExtension: String = "rpm"
   val contentType: String = "application/x-redhat-package-manager"
 }
-object Toml extends PackageType {
+object Toml extends ArtifactType {
   val fileExtension: String = "toml"
   val contentType: String = "text/plain"
 }

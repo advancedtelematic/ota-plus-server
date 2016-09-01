@@ -26,11 +26,11 @@ class ClientSdkControllerSpec extends PlaySpec
   override lazy val port = app.configuration.getString("test.webserver.port").map(_.toInt).getOrElse(9010)
 
   "test download a preconfigured client" taggedAs APITests ignore { // TODO PRO-341
-    import org.genivi.webserver.controllers.{Architecture, PackageType}
+    import org.genivi.webserver.controllers.{Architecture, ArtifactType}
     val attempts = 5
     val wsClient = app.injector.instanceOf[WSClient]
     forAll (minSuccessful(attempts)) {
-      (device: Device.Id, packfmt: PackageType, arch: Architecture) =>
+      (device: Device.Id, artifact: ArtifactType, arch: Architecture) =>
 
         def fullUri(suffix: String): WSRequest = {
           wsClient.url(s"http://localhost:$port/api/v1/$suffix")
@@ -40,7 +40,7 @@ class ClientSdkControllerSpec extends PlaySpec
         val registrationResponse = await(fullUri(webappRegistrationLink).put(""))
         registrationResponse.status mustBe Status.NO_CONTENT
         // Step 2: Request preconf client
-        val webappDownloadLink = s"client/${device.show}/${packfmt.fileExtension}/${arch.toString}"
+        val webappDownloadLink = s"client/${device.show}/${artifact.fileExtension}/${arch.toString}"
         val fileResponse = await(fullUri(webappDownloadLink).get)
         fileResponse.status mustBe Status.OK
     }
