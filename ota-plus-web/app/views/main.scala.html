@@ -18,7 +18,7 @@
     </div>
 
     <script>
-        var appUrl = location.protocol+'//'+location.host;
+        var appUrl = location.protocol+'//'+location.host + (location.port ? ':'+location.port: '');
         var logoutUrl = 'https://' + '@config.domain' + '/v2/logout?returnTo='+ appUrl + '/logout&client_id=' + '@config.clientId';
     </script>
     <script>
