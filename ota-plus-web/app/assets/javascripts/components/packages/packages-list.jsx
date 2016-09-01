@@ -414,16 +414,21 @@ define(function(require) {
                       </div>
                     :
                       <div className="height-100 position-relative text-center">
-                        {this.state.selectedType === 'unmanaged' ? 
+                        {this.props.filterValue !== '' ? 
                           <div className="center-xy padding-15">
-                            This device hasn’t reported any information about<br />
-                            its system-installed software packages yet.
+                            No matching packages found.
                           </div>
                         :
-                          <div className="center-xy padding-15">
-                            There are no packages managed by ATS Garage to<br />
-                            show. To add a new package, drag and drop it here. 
-                          </div>
+                          this.state.selectedType === 'unmanaged' ? 
+                            <div className="center-xy padding-15">
+                              This device hasn’t reported any information about<br />
+                              its system-installed software packages yet.
+                            </div>
+                          :
+                            <div className="center-xy padding-15">
+                              There are no packages managed by ATS Garage to<br />
+                              show. To add a new package, drag and drop it here. 
+                            </div>
                         }
                       </div>
                     }
