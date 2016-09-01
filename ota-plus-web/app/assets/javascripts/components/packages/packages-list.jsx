@@ -142,9 +142,13 @@ define(function(require) {
       var selectedSort = selectedSort ? selectedSort : this.props.selectedSort;
             
       if(!_.isUndefined(Packages) && !_.isUndefined(Installed) && !_.isUndefined(Queued)) {
+        Packages.forEach(function(obj, index) {
+          Packages[index].isManagedPackage = true;
+        });
+        
         switch(selectedType) {
           case 'all': 
-            Installed.forEach(function(installed){
+            Installed.forEach(function(installed, index){
               Packages.push(installed);
             });
           break;
@@ -178,6 +182,7 @@ define(function(require) {
           var isInstalled = false;
                     
           var isDebOrRpmPackage = uri.toLowerCase().includes('.deb') || uri.toLowerCase().includes('.rpm') ? true : false;
+          var isManagedPackage = !_.isUndefined(obj.isManagedPackage) && obj.isManagedPackage ? true : false;
 
           if(objKey in InstalledIds) {
             Packages[index].attributes = {status: 'installed', string: 'Installed', label: 'label-success'};
@@ -196,6 +201,7 @@ define(function(require) {
             GroupedPackages[obj.id.name]['isQueued'] = isQueued;
             GroupedPackages[obj.id.name]['isInstalled'] = isInstalled;
             GroupedPackages[obj.id.name]['isDebOrRpmPackage'] = isDebOrRpmPackage;
+            GroupedPackages[obj.id.name]['isManagedPackage'] = isManagedPackage;
 
             isQueued ? queuedCount++ : null;
             isInstalled ? installedCount++ : null;
@@ -369,6 +375,7 @@ define(function(require) {
                 queuedPackage={queuedPackage}
                 installedPackage={installedPackage}
                 isDebOrRpmPackage={pack.isDebOrRpmPackage}
+                isManagedPackage={pack.isManagedPackage}
                 packageInfo={packageInfo}
                 mainLabel={mainLabel}
                 selectToAnalyse={this.selectToAnalyse}
