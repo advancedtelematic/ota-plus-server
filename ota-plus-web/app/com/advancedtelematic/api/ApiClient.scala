@@ -1,19 +1,16 @@
 package com.advancedtelematic.api
 
-import com.advancedtelematic.{AuthPlusAccessToken, Auth0AccessToken, JwtAssertion}
 import java.util.UUID
 
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.ota.device.Devices._
 import com.advancedtelematic.ota.vehicle.ClientInfo
-import org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 import org.genivi.sota.data.{Device, DeviceT, Namespace}
 import org.genivi.webserver.controllers.OtaPlusConfig
 import play.api.Configuration
 import play.api.libs.json._
-import play.api.libs.ws.WSAuthScheme.BASIC
-import play.api.libs.ws.{WSAuthScheme, WSClient, WSRequest, WSResponse}
-import play.api.mvc.{Result, Results}
+import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
+import play.api.mvc.Result
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NoStackTrace
@@ -103,6 +100,28 @@ class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends Ot
 
   def getSystemInfo(options: UserOptions, id: Device.Id): Future[Result] = {
     devicesRequest("devices/" + id.show + "/system_info").withUserOptions(options).execResult(apiExec)
+  }
+
+  def fetchGroupInfo(options: UserOptions, groupName: String): Future[Result] = {
+    devicesRequest(s"devices/group_info?groupName=$groupName").withUserOptions(options).execResult(apiExec)
+  }
+
+  def createGroupInfo(options: UserOptions, groupName: String, body: JsValue): Future[Result] = {
+    devicesRequest(s"devices/group_info?groupName=$groupName")
+      .withUserOptions(options)
+      .transform(_.withMethod("POST").withBody(body))
+      .execResult(apiExec)
+  }
+
+  def updateGroupInfo(options: UserOptions, groupName: String, body: JsValue): Future[Result] = {
+    devicesRequest(s"devices/group_info?groupName=$groupName")
+      .withUserOptions(options)
+      .transform(_.withMethod("PUT").withBody(body))
+      .execResult(apiExec)
+  }
+
+  def deleteGroupInfo(options: UserOptions, groupName: String): Future[Result] = {
+    devicesRequest(s"devices/group_info?groupName=$groupName").withUserOptions(options).execResult(apiExec)
   }
 
   def createDevice(options: UserOptions, device: DeviceT): Future[Device.Id] = {

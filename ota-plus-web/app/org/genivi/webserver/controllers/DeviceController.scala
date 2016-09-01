@@ -55,6 +55,26 @@ extends Controller with ApiClientSupport {
     devicesApi.getSystemInfo(options, id)
   }
 
+  def fetchGroupInfo(groupName: String): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
+    val options = userOptions(req)
+    devicesApi.fetchGroupInfo(options, groupName)
+  }
+
+  def createGroupInfo(groupName: String): Action[JsValue] = AuthenticatedApiAction.async(parse.json) { req =>
+    val options = userOptions(req)
+    devicesApi.createGroupInfo(options, groupName, req.body)
+  }
+
+  def updateGroupInfo(groupName: String): Action[JsValue] = AuthenticatedApiAction.async(parse.json) { req =>
+    val options = userOptions(req)
+    devicesApi.updateGroupInfo(options, groupName, req.body)
+  }
+
+  def deleteGroupInfo(groupName: String): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
+    val options = userOptions(req)
+    devicesApi.deleteGroupInfo(options, groupName)
+  }
+
   private[this] def userOptions(req: AuthenticatedRequest[_]): UserOptions = {
     val traceId = req.headers.get("x-ats-traceid")
     val namespace = req.session.get("username").asInstanceOf[Option[Namespace]]
