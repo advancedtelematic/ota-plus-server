@@ -3,13 +3,23 @@ define(function(require) {
       Router = require('react-router'),
       SotaDispatcher = require('sota-dispatcher');
 
+  var timeout = undefined;
+
   class SearchBar extends React.Component {
     constructor(props) {
       super(props);
       this.handleChange = this.handleChange.bind(this);
     }
     handleChange(event) {
-      this.props.changeFilter(event.target.value);
+      var that = this;
+      var filterValue = event.target.value || '';
+      if(timeout != undefined) {
+        clearTimeout(timeout);
+      }
+      timeout = setTimeout(function() {
+        timeout = undefined;
+        that.props.changeFilter(filterValue);
+      }, 500);
     }
     render() {
       return (

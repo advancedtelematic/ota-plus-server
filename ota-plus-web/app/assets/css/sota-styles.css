@@ -557,6 +557,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .door.door-up { top: -100%; }
 .door.tmp-disable-door-style { background: #7b7b7b; }
 .door.tmp-disable-door-style { background: #7b7b7b; }
+.door.tmp-disable-door-style { background: #7b7b7b; }
 .door .loader { margin-left: -60px; position: absolute; left: 50%; top: 50%; }
 
 #components { position: relative; }
