@@ -69,10 +69,10 @@ define(function(require) {
         }, this);
       }
       return (
-        <div>
+        <div className="height-100">
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {!_.isUndefined(packages) ? 
-              <ul id="history-list" className="list-group height-100"> 
+              <ul id="history-list" className="list-group height-100 position-relative"> 
                 {packages.length > 0 ?
                   packages
                 :
