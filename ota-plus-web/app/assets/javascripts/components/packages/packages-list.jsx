@@ -16,6 +16,9 @@ define(function(require) {
   class PackagesList extends React.Component {
     constructor(props) {
       super(props);
+      
+      var event = new CustomEvent("refreshList");
+      
       this.state = {
         data: undefined,
         expandedPackage: null,
@@ -23,7 +26,8 @@ define(function(require) {
         iosListObj: null,
         selectedToAnalyse: [],
         tmpQueueData: undefined,
-        selectedType: null
+        selectedType: null,
+        event: event
       };
       this.refreshData = this.refreshData.bind(this);
       this.onDrop = this.onDrop.bind(this);
@@ -61,7 +65,7 @@ define(function(require) {
       if(!_.isUndefined(prevState.data) && Object.keys(prevState.data).length === 0 && !_.isUndefined(this.state.data) && Object.keys(this.state.data).length > 0) {
         jQuery(ReactDOM.findDOMNode(this.refs.packagesList)).ioslist();
       } else {
-        document.body.dispatchEvent(new CustomEvent("refreshList"));
+        document.body.dispatchEvent(this.state.event);
       }
     }
     componentDidMount() {
@@ -141,7 +145,7 @@ define(function(require) {
       var selectedSort = selectedSort ? selectedSort : this.props.selectedSort;
             
       if(!_.isUndefined(Packages) && !_.isUndefined(Installed) && !_.isUndefined(Queued)) {
-        Packages.forEach(function(obj, index) {
+        _.each(Packages, function(obj, index){
           Packages[index].isManagedPackage = true;
         });
         
@@ -164,23 +168,23 @@ define(function(require) {
         }
                         
         var InstalledIds = new Object();
-        Installed.forEach(function(obj){
+        _.each(Installed, function(obj, index){
           InstalledIds[obj.id.name+'_'+obj.id.version] = obj.id.name+'_'+obj.id.version;
         });
 
         var QueuedIds = new Object();
-        Queued.forEach(function(obj){
+        _.each(Queued, function(obj, index){
           QueuedIds[obj.packageId.name+'_'+obj.packageId.version] = obj.packageId.name+'_'+obj.packageId.version;
         });
 
         var GroupedPackages = {};
-        Packages.find(function(obj, index){
+        _.each(Packages, function(obj, index){
           var uri = !_.isUndefined(obj.uri) && !_.isUndefined(obj.uri.uri) ? obj.uri.uri : '';
           var objKey = obj.id.name+'_'+obj.id.version;
           var isQueued = false;
           var isInstalled = false;
                     
-          var isDebOrRpmPackage = uri.toLowerCase().includes('.deb') || uri.toLowerCase().includes('.rpm') ? true : false;
+          var isDebOrRpmPackage = uri.toLowerCase().indexOf('.deb') > -1 || uri.toLowerCase().indexOf('.rpm') > -1 ? true : false;
           var isManagedPackage = !_.isUndefined(obj.isManagedPackage) && obj.isManagedPackage ? true : false;
 
           if(objKey in InstalledIds) {
@@ -355,12 +359,12 @@ define(function(require) {
               return that.compareVersions(bVersion, aVersion);
             });
 
-            var tmp = sortedElements.find(function (i) {
+            var tmp = _.find(sortedElements, function (i) {
               return i.attributes.status == 'queued';
             });
             queuedPackage = (tmp !== undefined) ? tmp.id.version : '';
 
-            tmp = sortedElements.find(function (i) {
+            tmp = _.find(sortedElements, function (i) {
               return i.attributes.status == 'installed';
             });
             installedPackage = (tmp !== undefined) ? tmp.id.version : '';

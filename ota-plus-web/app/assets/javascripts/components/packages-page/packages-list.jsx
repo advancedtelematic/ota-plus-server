@@ -15,6 +15,9 @@ define(function(require) {
   class PackagesList extends React.Component {
     constructor(props) {
       super(props);
+      
+      var event = new CustomEvent("refreshList");
+      
       this.state = {
         data: undefined,
         expandedPackage: null,
@@ -23,7 +26,9 @@ define(function(require) {
         files: null,
         showForm: this.props.showForm,
         iosListObj: null,
+        event: event
       };
+      
       this.refreshData = this.refreshData.bind(this);
       this.onDrop = this.onDrop.bind(this);
       this.expandPackage = this.expandPackage.bind(this);
@@ -49,7 +54,7 @@ define(function(require) {
       if(!_.isUndefined(prevState.data) && Object.keys(prevState.data).length === 0 && !_.isUndefined(this.state.data) && Object.keys(this.state.data).length > 0) {
         jQuery(ReactDOM.findDOMNode(this.refs.packagesList)).ioslist();
       } else {
-        document.body.dispatchEvent(new CustomEvent("refreshList"));
+        document.body.dispatchEvent(this.state.event);
       }
     }
     componentDidMount() {
@@ -104,7 +109,7 @@ define(function(require) {
       
       if(!_.isUndefined(Packages)) {
         var GroupedPackages = {};
-        Packages.find(function(obj, index){
+        _.each(Packages, function(obj, index){
           var objKey = obj.id.name+'_'+obj.id.version;
 
           if( typeof GroupedPackages[obj.id.name] == 'undefined' || !GroupedPackages[obj.id.name] instanceof Array ) {
