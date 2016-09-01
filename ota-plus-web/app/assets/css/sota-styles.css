@@ -607,6 +607,6 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 .position-relative { position: relative; }
 
-.center-y { position: absolute; top: 50%; transform: translate(0, -50%); }
+.center-y { width: 100%; position: absolute; top: 50%; transform: translate(0, -50%); }
 
-.center-xy { position: absolute; top: 50%; left: 15%; transform: translate(-10%, -50%); }
+.center-xy { width: 100%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }

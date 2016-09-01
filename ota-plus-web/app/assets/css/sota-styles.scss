@@ -2036,14 +2036,16 @@ a.close, button.close {
 }
 
 .center-y {
+    width: 100%;
     position: absolute;
     top: 50%;
     transform: translate(0, -50%);
 }
 
 .center-xy {
+    width: 100%;
     position: absolute;
     top: 50%;
-    left: 15%;
-    transform: translate(-10%, -50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
