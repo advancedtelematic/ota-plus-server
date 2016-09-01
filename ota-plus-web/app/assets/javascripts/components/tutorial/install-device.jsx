@@ -121,7 +121,9 @@ define(function(require) {
           </div>
   
           <div className="margin-top-20 text-center pull-left width-full font-16">
-            <a href="#" className="orange">Download the unique credentials for this device</a>, and then <a href="#" className="orange">manually install the OTA client.</a>
+            <a href={"/api/v1/client/" + this.props.deviceId + "/toml/64"} className="orange" target="_blank">Download the unique credentials for this device</a>, 
+            and then&nbsp;
+            <a href="https://app.atsgarage.com/assets/docs/client-install-guide.html" className="orange" target="_blank">manually install the OTA client.</a>
           </div>
         </div>
       );
