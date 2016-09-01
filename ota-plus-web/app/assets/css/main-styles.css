@@ -22,6 +22,7 @@ html { height: 100%; min-height: 100%; }
 
 body { color: #fff; font: normal 13px AkkuratRegular; background: url(../img/bg.jpg) no-repeat; background-attachment: fixed; height: 100%; }
 body.login { background: url("../img/bg_login.jpg") top center no-repeat; background-size: cover; }
+body.login.tmp-disable-door-style { background: #7b7b7b; }
 
 a, a:hover, a:focus { color: #fff; text-decoration: none; }
 
@@ -97,14 +98,17 @@ body #a0-lock.a0-theme-default .a0-switch span { color: #eee; }
 body #a0-lock.a0-theme-default .a0-switch .a0-active { background-color: #444; }
 body #a0-lock.a0-theme-default .a0-btn-small.a0-back { left: 22px; }
 body #a0-lock.a0-theme-default .a0-panel { width: 100%; box-shadow: none; -webkit-box-shadow: none; }
+body #a0-lock.a0-theme-default .a0-panel .a0-avatar-guest { display: none !important; }
+body #a0-lock.a0-theme-default .a0-panel .a0-icon-container { color: #fff; min-height: 154px; background: #7b7b7b; }
+body #a0-lock.a0-theme-default .a0-panel .a0-icon-container .a0-image img { height: 65px; }
 body #a0-lock.a0-theme-default .a0-panel .a0-forgot-pass { text-align: right; display: block; }
 body #a0-lock.a0-theme-default .a0-panel .a0-forgot-pass:before { content: "" !important; }
-body #a0-lock.a0-theme-default .a0-panel .a0-top-header { min-height: 0; }
+body #a0-lock.a0-theme-default .a0-panel .a0-top-header { background: transparent; min-height: 0; }
+body #a0-lock.a0-theme-default .a0-panel .a0-bg-gradient { background: transparent; }
 body #a0-lock.a0-theme-default .a0-panel .a0-error, body #a0-lock.a0-theme-default .a0-panel .a0-success { font: 400 17px Arial; text-align: center; padding: 25px 30px; margin: 0 15px; margin-bottom: 20px; border-radius: 12px; position: absolute; left: 0; right: 0; bottom: 100%; z-index: 999; }
 body #a0-lock.a0-theme-default .a0-panel .a0-error { background: #d66f6f; }
 body #a0-lock.a0-theme-default .a0-panel .a0-success { background: #7ED321; }
 body #a0-lock.a0-theme-default .a0-panel .a0-instructions { color: #fff; padding: 0 25px; }
-body #a0-lock.a0-theme-default .a0-panel .a0-icon-container { display: none; }
 body #a0-lock.a0-theme-default .a0-panel .a0-mode { background: transparent; }
 body #a0-lock.a0-theme-default .a0-panel .a0-mode form .a0-body-content { padding: 0 20px; background: transparent; }
 body #a0-lock.a0-theme-default .a0-panel .a0-email .a0-input-box, body #a0-lock.a0-theme-default .a0-panel .a0-password .a0-input-box { border-radius: 12px; border: 2px solid rgba(255, 255, 255, 0.2); -moz-background-clip: padding; -webkit-background-clip: padding; background-clip: padding-box; margin: 15px 0; }

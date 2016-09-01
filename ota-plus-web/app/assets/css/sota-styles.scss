@@ -1830,6 +1830,10 @@ a.close, button.close {
     &.door-up {
         top: -100%;
     }
+    
+    &.tmp-disable-door-style {
+        background: #7b7b7b;
+    }
 
     .loader {
         margin-left: -60px;
