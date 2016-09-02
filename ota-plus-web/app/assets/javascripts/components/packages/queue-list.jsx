@@ -95,10 +95,10 @@ define(function(require) {
         }, this);
       }
       return (
-        <div>
+        <div className="height-100">
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {!_.isUndefined(packages) ?
-              <ul id="queue-list" className="list-group list-group-dnd height-100">
+              <ul id="queue-list" className="list-group list-group-dnd height-100 position-relative">
                 {packages.length ?
                   <span>
                     {packages}
