@@ -225,10 +225,16 @@ define(function(require) {
                       </div>
                     :
                       <div className="col-md-12 height-100 position-relative text-center">
-                        <div className="center-xy padding-15">
-                          There are no packages managed by ATS Garage to<br />
-                          show. To add a new package, drag and drop it here. 
-                        </div>
+                        {this.props.filterValue !== '' ? 
+                          <div className="center-xy padding-15">
+                            No matching packages found.
+                          </div>
+                        :
+                          <div className="center-xy padding-15">
+                            There are no packages managed by ATS Garage to<br />
+                            show. To add a new package, drag and drop it here. 
+                          </div>
+                        }
                       </div>
                     }
                   </Dropzone>
