@@ -32,7 +32,7 @@ define(function(require) {
           );
         } else {
           result = (
-            <div className="text-center center-y padding-15">
+            <div className="text-center center-xy padding-15">
               This device hasn’t reported any information about
               its hardware or system components yet.
             </div>
