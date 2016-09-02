@@ -11,8 +11,9 @@ import java.util.UUID
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 
-import com.advancedtelematic.jwa.`HMAC SHA-256`
-import com.advancedtelematic.jws.{Jws, KeyInfo, KeyLookup}
+import com.advancedtelematic.jwa.HS256
+import com.advancedtelematic.json.signature.JcaSupport._
+import com.advancedtelematic.jws.{CompactSerialization, JwsPayload}
 import com.advancedtelematic.jwt._
 import io.circe.Decoder
 import org.asynchttpclient.AsyncHttpClient
@@ -36,6 +37,7 @@ import play.api.mvc.{Cookie, Cookies}
 import play.api.test.Helpers._
 import play.filters.csrf.CSRF
 import com.advancedtelematic.ota.device.Devices._
+
 import scala.util.Random
 import Device._
 import cats.syntax.show._
@@ -133,7 +135,6 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   lazy val namespace = Subject("ittests@ats.com")
 
   lazy val oauthToken : String = {
-    import com.advancedtelematic.json.signature.JcaSupport._
 
     val token = JsonWebToken(
       TokenId("itTestToken"),
@@ -146,10 +147,12 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
       Scope(Set.empty)
     )
 
-    val bytes = Array.fill[Byte](16)(Random.nextInt().toByte)
-    val key = new SecretKeySpec(bytes, "HmacSHA256")
-    val keyInfo = KeyInfo[SecretKey](key, None, None, None)
-    Jws.signCompact(token, `HMAC SHA-256`, keyInfo).toString()
+    val HmacKeySize = 32
+
+    val bytes = Array.fill[Byte](HmacKeySize)(Random.nextInt().toByte)
+    val key: SecretKey = new SecretKeySpec(bytes, "HmacSHA256")
+    val keyInfo = HS256.signingKey(key).toOption.get
+    CompactSerialization(HS256.withKey(JwsPayload(token), keyInfo)).value
   }
 
   def addVin(vin: String): String = {

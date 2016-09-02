@@ -1,28 +1,27 @@
-/**
-  * Copyright: Copyright (C) 2015, Jaguar Land Rover
-  * License: MPL-2.0
-  */
-
 package org.genivi.webserver.controllers.messaging
 
 import akka.actor.ActorSystem
+import akka.stream.OverflowStrategy
 import akka.stream.scaladsl.Source
-import cats.data.Xor
 import com.google.inject.ImplementedBy
-import org.genivi.sota.messaging.MessageBus
-import org.genivi.sota.messaging.Messages.MessageLike
+
+import scala.reflect.ClassTag
 
 @ImplementedBy(classOf[MessageBusActorListener])
 trait MessageSourceProvider {
-  def getSource[T]()(implicit system: ActorSystem, messageLike: MessageLike[T]): Source[T, _]
+  def getSource[T]()(implicit system: ActorSystem, tag: ClassTag[T]): Source[T, _]
 }
 
 class MessageBusActorListener extends MessageSourceProvider {
-
-  def getSource[T]()(implicit system: ActorSystem, messageLike: MessageLike[T]): Source[T, _] = {
-    MessageBus.subscribe(system, system.settings.config) match {
-      case Xor.Right(v) => v
-      case Xor.Left(e)  => throw e
+  def getSource[T]()(implicit system: ActorSystem, tag: ClassTag[T]): Source[T, _] = {
+    val bufferSize = 888
+    Source.actorRef[T](bufferSize, OverflowStrategy.dropTail).mapMaterializedValue { ref =>
+      if(system.eventStream.subscribe(ref, tag.runtimeClass)) {
+        system.log.info(s"Successfully subscribed to ${tag.runtimeClass.getSimpleName} events")
+      } else {
+        system.log.error(s"Filed to subscribe to Akka EventBus for message type ${tag.runtimeClass.getSimpleName}")
+      }
+      ref
     }
   }
 }
