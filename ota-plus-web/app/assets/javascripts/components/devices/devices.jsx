@@ -42,6 +42,7 @@ define(function(require) {
     }
     changeFilter(filter) {
       this.setState({filterValue: filter});
+      this.refreshData(filter);
     }
     selectStatus(status, e) {
       e.preventDefault();
@@ -82,10 +83,10 @@ define(function(require) {
       clearInterval(this.state.intervalId);
       window.removeEventListener("resize", this.setDevicesListHeight);
     }
-    refreshData() {
+    refreshData(filterValue) {
       SotaDispatcher.dispatch({actionType: 'get-devices'});
-      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: this.state.filterValue});
-      SotaDispatcher.dispatch({actionType: 'search-production-devices', regex: this.state.filterValue});
+      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: (typeof filterValue !== 'undefined' ? filterValue : this.state.filterValue)});
+      SotaDispatcher.dispatch({actionType: 'search-production-devices', regex: (typeof filterValue !== 'undefined' ? filterValue : this.state.filterValue)});
     }
     expandSection(sectionName, e) {
       this.setState({

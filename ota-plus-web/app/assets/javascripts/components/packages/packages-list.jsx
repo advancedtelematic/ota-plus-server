@@ -56,7 +56,6 @@ define(function(require) {
       if(this.props.selectedType !== nextProps.selectedType) {
         this.setState({selectedType: nextProps.selectedType});
       }
-      
     }
     componentDidUpdate(prevProps, prevState) {
       if(!_.isUndefined(prevState.data) && Object.keys(prevState.data).length === 0 && !_.isUndefined(this.state.data) && Object.keys(this.state.data).length > 0) {
