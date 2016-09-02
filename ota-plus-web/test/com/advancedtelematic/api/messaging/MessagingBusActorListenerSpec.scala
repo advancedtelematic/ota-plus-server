@@ -8,7 +8,7 @@ import com.advancedtelematic.api.MessagingData
 import org.genivi.sota.messaging.Messages.DeviceSeen
 import com.advancedtelematic.ota.Messages.MessageWriters.deviceSeenWrites
 import org.genivi.sota.messaging.MessageBus
-import org.genivi.webserver.controllers.messaging.MessageBusActorListener
+import org.genivi.webserver.controllers.messaging.EventBusActorListener
 import org.scalatest.WordSpecLike
 
 class MessagingBusActorListenerSpec extends TestKit(ActorSystem()) with WordSpecLike {
@@ -16,15 +16,13 @@ class MessagingBusActorListenerSpec extends TestKit(ActorSystem()) with WordSpec
   implicit val mat = ActorMaterializer()
   implicit val ec = system.dispatcher
 
-  "MessageBusActorListener" should {
+  "EventBusActorListener" should {
     "push relevant messages to akka stream" in {
-      val source = new MessageBusActorListener().getSource[DeviceSeen]()
-
-      val publisher =  MessageBus.publisher(system, system.settings.config).toOption.get
-
+      val source = new EventBusActorListener().getSource[DeviceSeen]()
       val stream = source.runWith(TestSink.probe)
       stream.request(1)
 
+      val publisher =  MessageBus.publisher(system, system.settings.config).toOption.get
       publisher.publish(MessagingData.deviceSeenMessage)
 
       stream.expectNextN(1)
