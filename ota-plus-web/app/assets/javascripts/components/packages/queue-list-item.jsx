@@ -20,13 +20,22 @@ define(function(require) {
       var packageName = this.props.package.packageId.name;
       packageName = packageName.length > 30 ? packageName.substring(0, 30) + '..' : packageName;
       return (
-        <li className={'list-group-item ' + this.props.status}>
+        <li className={'list-group-item ' + this.props.status + ' queue-item-status-' + this.props.package.status}>
           <span className="list-group-item-text-left">{packageName}</span>
-          <span className="drag-bar pull-right"><i className="fa fa-bars"></i></span>
-          <button className="btn btn-action pull-right" onClick={this.cancelUpdate} id="button-cancel-update">{this.context.strings.cancel}</button>
-          {this.props.status == 'error' ?
-            <button className="btn btn-action pull-right">retry</button>
-          : null}
+          {!_.isUndefined(this.props.package.status) && this.props.package.status == 'InFlight' ? 
+            <div className="queue-inflight-box pull-right">
+              in progress
+            </div>
+          :
+            <span>
+              <span className="drag-bar pull-right"><i className="fa fa-bars"></i></span>
+              <button className="btn btn-action pull-right" onClick={this.cancelUpdate} id="button-cancel-update">{this.context.strings.cancel}</button>
+              {this.props.status == 'error' ?
+                <button className="btn btn-action pull-right">retry</button>
+              : null}
+            </span>
+          }
+          
           <div className="pull-right list-group-item-text-right">
             {this.props.status == 'error' ?
               <span className="fa-stack package-status-icon">
