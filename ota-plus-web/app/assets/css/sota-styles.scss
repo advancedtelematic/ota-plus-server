@@ -2049,3 +2049,40 @@ a.close, button.close {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.queue-item-status-InFlight {
+    background: #D3D3D3;
+}
+
+.queue-inflight-box {
+    background: none;
+    padding: 11px 16px 10px 12px;
+    margin: -11px 0 0 0;
+    border-left: 1px solid #eee;
+}
+
+.queue-inflight-box:after {
+    content: ' .';
+    animation: dots 1s steps(5, end) infinite;
+    margin-left: -3px;
+}
+
+@keyframes dots {
+    0%, 20% {
+        color: rgba(0,0,0,0);
+        text-shadow:
+            .25em 0 0 rgba(0,0,0,0),
+            .5em 0 0 rgba(0,0,0,0);}
+    40% {
+        color: black;
+        text-shadow:
+            .25em 0 0 rgba(0,0,0,0),
+            .5em 0 0 rgba(0,0,0,0);}
+    60% {
+        text-shadow:
+            .25em 0 0 black,
+            .5em 0 0 rgba(0,0,0,0);}
+    80%, 100% {
+        text-shadow:
+            .25em 0 0 black,
+            .5em 0 0 black;}}

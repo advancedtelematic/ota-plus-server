@@ -610,3 +610,14 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .center-y { width: 100%; position: absolute; top: 50%; transform: translate(0, -50%); }
 
 .center-xy { width: 100%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+.queue-item-status-InFlight { background: #D3D3D3; }
+
+.queue-inflight-box { background: none; padding: 11px 16px 10px 12px; margin: -11px 0 0 0; border-left: 1px solid #eee; }
+
+.queue-inflight-box:after { content: ' .'; animation: dots 1s steps(5, end) infinite; margin-left: -3px; }
+
+@keyframes dots { 0%, 20% { color: transparent; text-shadow: 0.25em 0 0 transparent, 0.5em 0 0 transparent; }
+  40% { color: black; text-shadow: 0.25em 0 0 transparent, 0.5em 0 0 transparent; }
+  60% { text-shadow: 0.25em 0 0 black, 0.5em 0 0 transparent; }
+  80%, 100% { text-shadow: .25em 0 0 black, .5em 0 0 black; } }
