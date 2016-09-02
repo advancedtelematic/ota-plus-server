@@ -443,6 +443,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_configuration">Configuration</a></li>
 <li><a href="#_downloadcomplete">DownloadComplete</a></li>
 <li><a href="#_sendupdatereport">SendUpdateReport</a></li>
+<li><a href="#_sendinstalledpackages">SendInstalledPackages</a></li>
 </ul>
 </li>
 </ul>
@@ -707,6 +708,9 @@ timeout = 60</pre>
 <li>
 <p>It must send a <code>SendUpdateReport</code> command on the command socket, with a status code, when the update finishes.</p>
 </li>
+<li>
+<p>It must send a <code>SendInstalledPackages</code> command on the command socket, listing the names and versions of installed packages, after a successful package install.</p>
+</li>
 </ul>
 </div>
 <div class="sect3">
@@ -893,13 +897,38 @@ Over D-Bus, it is also possible to sent a longer textual description of the inst
 </table>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_sendinstalledpackages">SendInstalledPackages</h4>
+<div class="paragraph">
+<p>This command is used to notify the OTA client of what packages are installed on the system. It <em>must</em> be sent (to the command socket) after each <code>SendUpdateReport</code>, and also <em>may</em> be sent at any other time. ATS recommends sending it on system startup, at a minimum.</p>
+</div>
+<div class="paragraph">
+<p>The command syntax is simply this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>SendInstalledPackages package1_name package1_version package2_name package2_version [...] packageN_name packageN_version</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Package names and versions can&#8217;t contain spaces, but there are no other character restrictions. For example, all of the package/versions listed here are valid:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>SendInstalledPackages gcc 7.63 Movie&amp;MusicPlayer rc2-beta3 ECU9274927BF82-firmware gitID-2fab572</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note, however, that all packages must have a version.</p>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-09-01 17:33:01 CEST
+Last updated 2016-09-02 16:27:46 CEST
 </div>
 </div>
 </body>
