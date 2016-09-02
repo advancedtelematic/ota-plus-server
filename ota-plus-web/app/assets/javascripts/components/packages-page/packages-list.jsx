@@ -27,17 +27,22 @@ define(function(require) {
       this.refreshData = this.refreshData.bind(this);
       this.onDrop = this.onDrop.bind(this);
       this.expandPackage = this.expandPackage.bind(this);
-
-      db.searchablePackages.addWatch("poll-packages", _.bind(this.setData, this, null));
+      this.refresh = this.refresh.bind(this);
+      
+      db.searchablePackages.addWatch("poll-packages", _.bind(this.refresh, this, null));
     }
     componentWillUpdate(nextProps, nextState) {
       if(nextProps.filterValue != this.props.filterValue) {
-        SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
+        SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: nextProps.filterValue});
       }
     }
     componentWillReceiveProps(nextProps) {
       if(this.props.showForm !== nextProps.showForm) {
         this.setState({showForm: nextProps.showForm});
+      }
+      
+      if(this.props.selectedSort !== nextProps.selectedSort) {
+        this.setData(nextProps.selectedSort);
       }
     }
     componentDidUpdate(prevProps, prevState) {
@@ -72,8 +77,11 @@ define(function(require) {
     refreshData() {
       SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
     }
-    setData() {
-      var result = this.prepareData();
+    refresh() {
+      this.setData(this.props.selectedSort);
+    }
+    setData(selectedSort) {
+      var result = this.prepareData(selectedSort);
       this.setState({
         data: result.data
       });
@@ -85,12 +93,15 @@ define(function(require) {
       
       this.props.openForm();
     }
-    prepareData() {
+    prepareData(selectedSort) {
       var Packages = db.searchablePackages.deref();
 
       var SortedPackages = undefined;
       var installedCount = 0;
       var queuedCount = 0;
+      
+      var selectedSort = selectedSort ? selectedSort : this.props.selectedSort;
+      
       if(!_.isUndefined(Packages)) {
         var GroupedPackages = {};
         Packages.find(function(obj, index){
@@ -105,7 +116,6 @@ define(function(require) {
           GroupedPackages[obj.id.name]['elements'].push(Packages[index]);
         });
 
-        var selectedSort = this.props.selectedSort;
         SortedPackages = {};
         Object.keys(GroupedPackages).sort(function(a, b) {
           if(selectedSort !== 'undefined' && selectedSort == 'desc')
