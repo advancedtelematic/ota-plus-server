@@ -2,8 +2,7 @@ object Version {
   val Akka = "2.4.7"
   val JsonWebSecurity = "0.2.1"
   val MockWs = "2.5.0"
-  val GeniviSota = "0.1.138"
-  val GeniviResolver = GeniviSota
+  val GeniviSota = "0.1.144"
   // Version 0.17 of akka-persistence-cassandra depends on Akka 2.4.7 and Scala 2.11.8
   // It is compatible with Cassandra 3.0.0 or higher
   // Details at https://github.com/akka/akka-persistence-cassandra
@@ -47,15 +46,7 @@ object Dependencies {
 
   val JsonWebSecurityAkka = "com.advancedtelematic" %% "jw-security-akka-http" % Version.JsonWebSecurity
 
-  val SotaCore = "org.genivi" %% "sota-core" % Version.GeniviSota
-
-  val SotaCommon = "org.genivi" %% "sota-common" % Version.GeniviSota
-
-  val SotaCommonData = "org.genivi" %% "sota-common-data" % Version.GeniviSota
-
   val SotaCommonMessaging = "org.genivi" %% "sota-common-messaging" % Version.GeniviSota
 
   val SotaCommonTest = "org.genivi" %% "sota-common-test" % Version.GeniviSota % "test"
-
-  val SotaResolver = "org.genivi" %% "sota-resolver" % Version.GeniviResolver
 }
