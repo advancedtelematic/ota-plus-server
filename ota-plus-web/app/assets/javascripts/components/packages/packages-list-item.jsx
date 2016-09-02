@@ -36,7 +36,8 @@ define(function(require) {
           <div className="pull-left">
             <span className="package-name">{packageName}</span>
           </div>
-          {this.props.isDebOrRpmPackage ? 
+
+          {this.props.isDebOrRpmPackage || !this.props.isManagedPackage ? 
             <div>
               <div className="pull-right package-statuses">
                 {this.props.installedPackage ?
