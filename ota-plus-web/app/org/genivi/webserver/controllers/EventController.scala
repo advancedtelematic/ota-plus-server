@@ -8,6 +8,7 @@ import com.advancedtelematic.ota.Messages.MessageWriters._
 import com.advancedtelematic.ota.Messages.WebMessageBusListenerActor
 import org.genivi.sota.data.{Device, Namespace}
 import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, PackageCreated, UpdateSpec}
+import org.genivi.sota.messaging.daemon.MessageBusListenerActor.Subscribe
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
 import play.api.http.ContentTypes
 import play.api.libs.Comet
@@ -21,12 +22,13 @@ class EventController @Inject()
      val conf: Configuration)(implicit mat: Materializer, system: ActorSystem)
   extends Controller {
 
-  //Each kinesis stream should have exactly one Worker instance, so create them here
-  val deviceSeenSub = system.actorOf(WebMessageBusListenerActor.props[DeviceSeen])
-  val deviceCreatedSub = system.actorOf(WebMessageBusListenerActor.props[DeviceCreated])
-  val deviceDeletedSub = system.actorOf(WebMessageBusListenerActor.props[DeviceDeleted])
-  val packageCreatedSub = system.actorOf(WebMessageBusListenerActor.props[PackageCreated])
-  val updateSpecSub = system.actorOf(WebMessageBusListenerActor.props[UpdateSpec])
+  val listenerProps = List(WebMessageBusListenerActor.props[DeviceSeen],
+    WebMessageBusListenerActor.props[DeviceCreated],
+    WebMessageBusListenerActor.props[DeviceDeleted],
+    WebMessageBusListenerActor.props[PackageCreated],
+    WebMessageBusListenerActor.props[UpdateSpec])
+  listenerProps.foreach(p => system.actorOf(p) ! Subscribe)
+
 
   def subDeviceSeen(device: Device.Id): Action[AnyContent] = Action {
     val deviceSeenSource = messageBusProvider.getSource[DeviceSeen]()
