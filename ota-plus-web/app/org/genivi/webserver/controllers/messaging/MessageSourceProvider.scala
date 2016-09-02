@@ -7,12 +7,12 @@ import com.google.inject.ImplementedBy
 
 import scala.reflect.ClassTag
 
-@ImplementedBy(classOf[MessageBusActorListener])
+@ImplementedBy(classOf[EventBusActorListener])
 trait MessageSourceProvider {
   def getSource[T]()(implicit system: ActorSystem, tag: ClassTag[T]): Source[T, _]
 }
 
-class MessageBusActorListener extends MessageSourceProvider {
+class EventBusActorListener extends MessageSourceProvider {
   def getSource[T]()(implicit system: ActorSystem, tag: ClassTag[T]): Source[T, _] = {
     val bufferSize = 888
     Source.actorRef[T](bufferSize, OverflowStrategy.dropTail).mapMaterializedValue { ref =>
