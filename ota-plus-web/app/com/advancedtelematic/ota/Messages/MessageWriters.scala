@@ -1,5 +1,6 @@
 package com.advancedtelematic.ota.Messages
 
+import cats.syntax.show._
 import com.advancedtelematic.ota.device.Devices._
 import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, PackageCreated, UpdateSpec}
 import play.api.libs.json.{JsString, Writes, _}
@@ -8,7 +9,7 @@ object MessageWriters {
 
   implicit val deviceSeenWrites = new Writes[DeviceSeen] {
     def writes(deviceMsg: DeviceSeen) = Json.obj(
-      "deviceId" -> deviceMsg.uuid.underlying.get,
+      "uuid" -> deviceMsg.uuid.show,
       "lastSeen" -> deviceMsg.lastSeen.toString
     )
   }
@@ -16,8 +17,8 @@ object MessageWriters {
   implicit val deviceCreatedWrites = new Writes[DeviceCreated] {
     def writes(deviceMsg: DeviceCreated) = Json.obj(
       "namespace" -> deviceMsg.namespace.get,
-      "deviceName" -> deviceMsg.deviceName.underlying,
-      "deviceId" -> deviceMsg.deviceId.map(d => JsString(d.underlying)),
+      "deviceName" -> deviceMsg.deviceName.show,
+      "deviceId" -> deviceMsg.deviceId.map(d => JsString(d.show)),
       "deviceType" -> deviceMsg.deviceType
     )
   }
@@ -25,7 +26,7 @@ object MessageWriters {
   implicit val deviceDeletedWrites = new Writes[DeviceDeleted] {
     def writes(deviceMsg: DeviceDeleted) = Json.obj(
       "namespace" -> deviceMsg.namespace.get,
-      "deviceId" -> deviceMsg.uuid.underlying.get
+      "uuid" -> deviceMsg.uuid.show
     )
   }
 
@@ -42,8 +43,8 @@ object MessageWriters {
   implicit val updateSpecWrites = new Writes[UpdateSpec] {
     def writes(updateSpecMsg: UpdateSpec) = Json.obj(
       "namespace" -> updateSpecMsg.namespace.get,
-      "deviceId" -> updateSpecMsg.deviceId.underlying.get,
-      "packageId" -> Json.toJson(updateSpecMsg.packageId),
+      "device" -> updateSpecMsg.device.show,
+      "packageUuid" -> Json.toJson(updateSpecMsg.packageUuid),
       "status" -> updateSpecMsg.status
     )
   }
