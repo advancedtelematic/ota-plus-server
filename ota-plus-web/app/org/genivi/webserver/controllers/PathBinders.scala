@@ -9,7 +9,7 @@ import cats.syntax.show._
 import eu.timepit.refined.refineV
 import eu.timepit.refined.string._
 import org.genivi.sota.data.Device._
-import org.genivi.sota.data.{Device, Namespace}
+import org.genivi.sota.data.{Device, Namespace, Uuid}
 
 /**
   * Implicits that allow giving custom param-types in the method signatures in the routes file.
@@ -20,13 +20,13 @@ object PathBinders {
 
   /**
     * Path binder to convert a String (eg, from a route path)
-    * to a Device.Id wrapped in a Right (if valid, Left otherwise).
+    * to a Uuid wrapped in a Right (if valid, Left otherwise).
     */
-  implicit object bindableDeviceUuid extends play.api.mvc.PathBindable[Device.Id] {
-    def bind(key: String, value: String): Either[String, Device.Id] = {
-      refineV[ValidId](value).right.map(Device.Id)
+  implicit object bindableDeviceUuid extends play.api.mvc.PathBindable[Uuid] {
+    def bind(key: String, value: String): Either[String, Uuid] = {
+      refineV[Uuid.Valid](value).right.map(Uuid(_))
     }
-    def unbind(key: String, value: Device.Id): String = value.show
+    def unbind(key: String, value: Uuid): String = value.show
   }
 
   implicit object bindableNamespace extends play.api.mvc.PathBindable[Namespace] {

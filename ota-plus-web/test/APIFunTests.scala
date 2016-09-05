@@ -3,6 +3,13 @@
  * License: MPL-2.0
  */
 
+import cats.syntax.show._
+import com.advancedtelematic.json.signature.JcaSupport._
+import com.advancedtelematic.jwa.HS256
+import com.advancedtelematic.jws.{CompactSerialization, JwsPayload}
+import com.advancedtelematic.jwt._
+import com.advancedtelematic.ota.device.Devices._
+import io.circe.Decoder
 import java.io.File
 import java.security.InvalidParameterException
 import java.time.Instant
@@ -10,37 +17,24 @@ import java.time.temporal.ChronoUnit
 import java.util.UUID
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
-
-import com.advancedtelematic.jwa.HS256
-import com.advancedtelematic.json.signature.JcaSupport._
-import com.advancedtelematic.jws.{CompactSerialization, JwsPayload}
-import com.advancedtelematic.jwt._
-import io.circe.Decoder
 import org.asynchttpclient.AsyncHttpClient
 import org.asynchttpclient.request.body.multipart.FilePart
-import org.genivi.sota.data.Device
-import org.genivi.sota.data.Device.{DeviceId, DeviceName, DeviceType}
+import org.genivi.sota.data.{Device, Uuid}
 import org.scalatest.Tag
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatestplus.play._
-import play.api.libs.json._
+import play.api.Configuration
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
+import play.api.libs.json._
 import play.api.libs.ws.{WS, WSClient, WSResponse}
-import play.api.test.Helpers._
-import play.api.mvc.{Cookies, Session}
-import org.scalatest.Tag
-import org.scalatestplus.play._
-import play.api.Configuration
 import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.mvc.{Cookie, Cookies}
+import play.api.mvc.{Cookies, Session}
 import play.api.test.Helpers._
 import play.filters.csrf.CSRF
-import com.advancedtelematic.ota.device.Devices._
-
 import scala.util.Random
-import Device._
-import cats.syntax.show._
+
 
 object APITests extends Tag("APITests")
 
@@ -51,6 +45,8 @@ object APITests extends Tag("APITests")
  * given by test.webserver.port
  */
 class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPropertyChecks {
+
+  import Device._
 
 //  val testNamespace = "default"
   val testVin = "TESTSTR0123456789"
@@ -262,7 +258,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
       + testPackageNameAlt + "&packageVersion=" + testPackageVersion, GET)
     viewResponse.status mustBe OK
     //TODO: need to make sure we only get a single vin back
-    viewResponse.json.as[Seq[Device.Id]].headOption.map(_.show) must contain(testIdAlt.get)
+    viewResponse.json.as[Seq[Uuid]].headOption.map(_.show) must contain(testIdAlt.get)
   }
 
   "test searching packages" taggedAs APITests in {
@@ -368,7 +364,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     val response = makeRequest("resolver/devices?component=" + testComponentName, GET)
     response.status mustBe OK
 
-    val parsed = response.json.as[Seq[Device.Id]]
+    val parsed = response.json.as[Seq[Uuid]]
 
     parsed.headOption.map(_.show) must contain(testId.get)
   }

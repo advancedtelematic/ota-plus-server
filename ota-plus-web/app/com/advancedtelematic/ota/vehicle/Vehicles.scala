@@ -6,7 +6,7 @@ import akka.actor.{Actor, ActorRef, Props}
 import akka.persistence.PersistentActor
 import akka.util.Timeout
 import com.google.inject.Provides
-import org.genivi.sota.data.Device
+import org.genivi.sota.data.{Device, Uuid}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -14,15 +14,15 @@ object Commands {
 
   final case class RegisterVehicle(vehicle: DeviceMetadata)
 
-  final case class GetVehicleState(deviceId: Device.Id)
+  final case class GetVehicleState(device: Uuid)
 
 }
 
-class VehicleEntity(deviceId: Device.Id) extends PersistentActor {
+class VehicleEntity(device: Uuid) extends PersistentActor {
   import VehicleEntity.{Event, VehicleRegistered}
   import com.advancedtelematic.ota.vehicle.Commands._
 
-  override def persistenceId: String = deviceId.underlying.get
+  override def persistenceId: String = device.underlying.get
 
   var state: Option[DeviceMetadata] = None
 
@@ -42,7 +42,7 @@ class VehicleEntity(deviceId: Device.Id) extends PersistentActor {
         sender ! event
       }
 
-    case GetVehicleState(deviceId) =>
+    case GetVehicleState(device) =>
       sender ! state
   }
 }
@@ -52,23 +52,23 @@ object VehicleEntity {
 
   final case class VehicleRegistered(vehicle: DeviceMetadata) extends Event
 
-  def props(deviceId: Device.Id): Props = Props( new VehicleEntity(deviceId) )
+  def props(device: Uuid): Props = Props( new VehicleEntity(device) )
 }
 
 class VehicleRegistry extends Actor {
   import com.advancedtelematic.ota.vehicle.Commands._
 
-  private[this] def entityRef(deviceId: Device.Id): ActorRef =
+  private[this] def entityRef(device: Uuid): ActorRef =
     context
-      .child(deviceId.underlying.get)
-      .getOrElse( context.actorOf( VehicleEntity.props(deviceId), deviceId.underlying.get ))
+      .child(device.underlying.get)
+      .getOrElse( context.actorOf( VehicleEntity.props(device), device.underlying.get ))
 
   override def receive: Receive = {
     case cmd@RegisterVehicle(vehicle) =>
-      entityRef(vehicle.deviceId).forward(cmd)
+      entityRef(vehicle.uuid).forward(cmd)
 
-    case cmd@GetVehicleState(deviceId) =>
-      entityRef(deviceId).forward(cmd)
+    case cmd@GetVehicleState(device) =>
+      entityRef(device).forward(cmd)
   }
 }
 
@@ -94,9 +94,9 @@ class Vehicles(registry: ActorRef)
     * Of particular interest is the clientId, a UUID in one-to-one association with the VIN.
     * Note: the `client_secret` is not contained in the result. It has to be obtained from Auth+.
     */
-  def getVehicle(deviceId: Device.Id)
+  def getVehicle(device: Uuid)
                 (implicit ec: ExecutionContext): Future[Option[DeviceMetadata]] =
-    registry.ask( GetVehicleState(deviceId) ).mapTo[Option[DeviceMetadata]]
+    registry.ask( GetVehicleState(device) ).mapTo[Option[DeviceMetadata]]
 
 }
 
