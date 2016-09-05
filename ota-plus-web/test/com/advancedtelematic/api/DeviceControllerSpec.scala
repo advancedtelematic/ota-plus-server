@@ -4,10 +4,8 @@ import akka.stream.Materializer
 import akka.util.ByteString
 import cats.syntax.show._
 import com.advancedtelematic.ota.device.Devices._
-import java.util.UUID
-
 import mockws.{MockWS, Route}
-import org.genivi.sota.data.{Device, DeviceT}
+import org.genivi.sota.data.{Device, DeviceT, Uuid}
 import org.genivi.webserver.controllers.DeviceController
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.inject.bind
@@ -17,6 +15,7 @@ import play.api.libs.ws.WSClient
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+
 
 class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results {
 
@@ -48,7 +47,7 @@ class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results 
       case (POST, s) if s.endsWith("/clients") =>
         val json = s"""
             {
-              "client_id" : "${UUID.randomUUID()}",
+              "client_id" : "${Uuid.generate()}",
               "registration_client_uri": "http://ats.com",
               "registration_access_token": "something"
             }"""
@@ -81,7 +80,7 @@ class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results 
       val result = call(controller.create(), request)
 
       status(result) must be(201)
-      contentAsJson(result).as[Device.Id].show must be("7d0e4c63-26ae-46b6-bbfe-78cb2ed3cf94")
+      contentAsJson(result).as[Uuid].show must be("7d0e4c63-26ae-46b6-bbfe-78cb2ed3cf94")
     }
 
     "listDeviceAttributes gets results from core" in {

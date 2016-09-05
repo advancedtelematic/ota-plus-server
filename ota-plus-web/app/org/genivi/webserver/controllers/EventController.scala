@@ -6,7 +6,7 @@ import akka.actor.ActorSystem
 import akka.stream.Materializer
 import com.advancedtelematic.ota.Messages.MessageWriters._
 import com.advancedtelematic.ota.Messages.WebMessageBusListenerActor
-import org.genivi.sota.data.{Device, Namespace}
+import org.genivi.sota.data.{Device, Namespace, Uuid}
 import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, PackageCreated, UpdateSpec}
 import org.genivi.sota.messaging.daemon.MessageBusListenerActor.Subscribe
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
@@ -30,10 +30,10 @@ class EventController @Inject()
   listenerProps.foreach(p => system.actorOf(p) ! Subscribe)
 
 
-  def subDeviceSeen(device: Device.Id): Action[AnyContent] = Action {
+  def subDeviceSeen(device: Uuid): Action[AnyContent] = Action {
     val deviceSeenSource = messageBusProvider.getSource[DeviceSeen]()
     Ok.chunked(deviceSeenSource
-      .filter(dsm => dsm.deviceId == device)
+      .filter(dsm => dsm.uuid == device)
       .map(Json.toJson(_))
       via Comet.json("parent.deviceSeen")).as(ContentTypes.HTML)
   }

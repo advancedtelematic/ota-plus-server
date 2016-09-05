@@ -5,7 +5,7 @@ import eu.timepit.refined._
 import eu.timepit.refined.api.{Refined, Validate}
 import java.time.Instant
 
-import org.genivi.sota.data.{Device, DeviceT, Namespace}
+import org.genivi.sota.data.{Device, DeviceT, Namespace, Uuid}
 import org.genivi.sota.marshalling.{DeserializationException, RefinementError}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
@@ -25,13 +25,13 @@ object Devices {
       }
     }
 
-  implicit def idReads(implicit r: Reads[Refined[String, ValidId]]): Reads[Device.Id] = r.map(r => Device.Id(r))
+  implicit def idReads(implicit r: Reads[Refined[String, Uuid.Valid]]): Reads[Uuid] = r.map(Uuid(_))
 
-  implicit val deviceNameReads: Reads[DeviceName] = Reads.StringReads.map(r => DeviceName(r))
+  implicit val deviceNameReads: Reads[DeviceName] = Reads.StringReads.map(DeviceName)
 
-  implicit val deviceIdReads: Reads[DeviceId] = Reads.StringReads.map(r => DeviceId(r))
+  implicit val deviceIdReads: Reads[DeviceId] = Reads.StringReads.map(DeviceId)
 
-  implicit val namespaceReads: Reads[Namespace] = Reads.StringReads.map(n => Namespace(n))
+  implicit val namespaceReads: Reads[Namespace] = Reads.StringReads.map(Namespace(_))
 
   implicit val DeviceTypeR: Reads[DeviceType.Value] = Reads.enumNameReads(Device.DeviceType)
 
@@ -41,7 +41,7 @@ object Devices {
 
   implicit val DeviceR: Reads[Device] = {(
     (__ \ "namespace").read[Namespace] and
-      (__ \ "id").read[Id] and
+      (__ \ "uuid").read[Uuid] and
       (__ \ "deviceName").read[DeviceName] and
       (__ \ "deviceId").readNullable[DeviceId] and
       (__ \ "deviceType").read[DeviceType] and
@@ -65,7 +65,7 @@ object Devices {
 
   implicit val DeviceW: Writes[Device] = (
     (__ \ "namespace").write[Namespace] and
-      (__ \ "id").write[Id] and
+      (__ \ "uuid").write[Uuid] and
       (__ \ "deviceName").write[DeviceName] and
       (__ \ "deviceId").writeNullable[DeviceId] and
       (__ \ "deviceType").write[DeviceType] and
