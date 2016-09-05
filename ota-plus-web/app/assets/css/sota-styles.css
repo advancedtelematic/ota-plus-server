@@ -55,7 +55,7 @@ button.list-group-item:focus { background: transparent; }
 /* Device box */
 .device-icon { text-align: center; background: url(/assets/img/icons/device_small.png) no-repeat; background-size: cover; width: 60px; height: 60px; float: left; }
 
-.device-name { font-size: 17px; width: 230px; float: left; }
+.device-name { font-size: 17px; width: 230px; float: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .device-lastseen { width: 230px; float: left; }
 
@@ -76,7 +76,8 @@ button.list-group-item:focus { background: transparent; }
 .device-status.device-status-UpToDate { color: #39de28; }
 
 /* Pages */
-.device-header-text { min-width: 500px; height: 45px; margin: 20px 0 0 10px; vertical-align: middle; display: inline-block; }
+.device-header-text { width: 700px; height: 45px; margin: 20px 0 0 10px; vertical-align: middle; display: inline-block; }
+@media (min-width: 1500px) { .device-header-text { width: 60%; } }
 .device-header-text .device-name { font-size: 22px; }
 .device-header-text .device-lastseen { font-size: 14px; margin: 0; opacity: 0.5; }
 
@@ -110,7 +111,7 @@ button.list-group-item:focus { background: transparent; }
 .list-group-item .package-status-icon { color: #fff; margin: -17px 3px -15px 0; display: inline-block; }
 
 .selected .list-group-item { background: #f5f5f5; border-bottom: 0; border-right: 0; }
-.selected .list-group-item .package-name { font-weight: bold; }
+.selected .list-group-item .package-item-name { font-weight: bold; }
 
 .package-details { width: 100%; background: #f5f5f5; float: left; }
 .package-details ul { width: 100%; padding: 5px 10px; float: left; }
@@ -144,7 +145,7 @@ button.list-group-item:focus { background: transparent; }
 
 #queue-list .list-group-item a { color: #555; }
 #queue-list .list-group-item.error { border-color: #ff0000; }
-#queue-list .list-group-item.error #queue-list .list-group-item.error.list-group-item-text-left, #queue-list .list-group-item.error .list-group-item-text-right { color: #ff0000; }
+#queue-list .list-group-item.error #queue-list .list-group-item.error.queue-item-name, #queue-list .list-group-item.error .list-group-item-text-right { color: #ff0000; }
 
 #history-list .list-group-item-text-right { color: #979797; }
 #history-list .btn-action { border-left-color: #b7b7b7; }
@@ -555,6 +556,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .door { background: url("../img/steel_doors.jpg") top center no-repeat; background-size: cover; width: 100%; height: 100%; position: fixed; left: 0; z-index: 99999; }
 .door.door-up { top: -100%; }
 .door.tmp-disable-door-style { background: #7b7b7b; }
+.door.tmp-disable-door-style { background: #7b7b7b; }
 .door .loader { margin-left: -60px; position: absolute; left: 50%; top: 50%; }
 
 #components { position: relative; }
@@ -622,3 +624,8 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
   40% { color: black; text-shadow: 0.25em 0 0 transparent, 0.5em 0 0 transparent; }
   60% { text-shadow: 0.25em 0 0 black, 0.5em 0 0 transparent; }
   80%, 100% { text-shadow: .25em 0 0 black, .5em 0 0 black; } }
+.history-item-name { width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.package-item-name { width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.queue-item-name { width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

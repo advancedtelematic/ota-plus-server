@@ -27,12 +27,12 @@ define(function(require) {
     }
     render() {
       var packageName = this.props.package.packageId.name;
-      packageName = packageName.length > 20 ? packageName.substring(0, 20) + '..' : packageName;
       var completionTime = new Date(this.props.package.completionTime);
       return (
         <li className={'list-group-item grey ' + (this.state.isLogShown ? 'show-log' : '') }>
-          {packageName}
-          
+          <div className="history-item-name pull-left">
+            {packageName}
+          </div>
           <button onClick={this.toggleLog} className="btn btn-action pull-right">log</button>
   
           <div className="list-group-item-text-right pull-right">

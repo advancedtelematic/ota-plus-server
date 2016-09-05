@@ -9,6 +9,12 @@ $color-brown: #66493E;
 
 @import "common.scss";
 
+@mixin textoverflow-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 * {
     text-decoration: none;
     padding: 0;
@@ -168,6 +174,7 @@ button {
     font-size: 17px;
     width: 230px;
     float: left;
+    @include textoverflow-ellipsis;
 }
 
 .device-lastseen {
@@ -248,11 +255,15 @@ button {
 /* Pages */
 
 .device-header-text {
-    min-width: 500px;
+    width: 700px;
     height: 45px;
     margin: 20px 0 0 10px;
     vertical-align: middle;
     display: inline-block;
+
+    @media (min-width: 1500px) {
+        width: 60%;
+    }
 
     .device-name {
         font-size: 22px;
@@ -434,7 +445,7 @@ button {
         border-bottom: 0;
         border-right: 0;
 
-        .package-name {
+        .package-item-name {
             font-weight: bold;
         }
     }
@@ -575,7 +586,7 @@ button {
         &.error {
             border-color: #ff0000;
 
-            #queue-list .list-group-item.error.list-group-item-text-left, .list-group-item-text-right {
+            #queue-list .list-group-item.error.queue-item-name, .list-group-item-text-right {
                 color: #ff0000;
             }
         }
@@ -1833,6 +1844,10 @@ a.close, button.close {
         background: #7b7b7b;
     }
 
+    &.tmp-disable-door-style {
+        background: #7b7b7b;
+    }
+
     .loader {
         margin-left: -60px;
         position: absolute;
@@ -2088,3 +2103,18 @@ a.close, button.close {
         text-shadow:
             .25em 0 0 black,
             .5em 0 0 black;}}
+
+.history-item-name {
+    width: 40%;
+    @include textoverflow-ellipsis;
+}
+
+.package-item-name {
+    width: 70%;
+    @include textoverflow-ellipsis;
+}
+
+.queue-item-name {
+    width: 40%;
+    @include textoverflow-ellipsis;
+}
