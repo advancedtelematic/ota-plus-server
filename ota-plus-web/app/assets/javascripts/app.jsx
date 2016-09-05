@@ -194,7 +194,7 @@ define(function(require) {
         <div>
           {!_.isUndefined(path[1]) && path[1] == '' && referrer !== undefined && referrer == 'login' ?
             <VelocityComponent animation={!this.state.hideAnimationUp ? Animations.up : null}>
-              <div className="door">
+              <div className="door tmp-disable-door-style">
                 {this.state.hideAnimationUp ? 
                   <img src="/assets/img/icons/loading.gif" className="loader"/>
                 : null}
@@ -203,7 +203,7 @@ define(function(require) {
           : null}
           <VelocityTransitionGroup enter={{animation: Animations.down, complete: function() {window.location.href = logoutUrl}}}>
             {!this.state.hideAnimationDown ? 
-              <div className="door door-up"></div>
+              <div className="door door-up tmp-disable-door-style"></div>
             : null}
           </VelocityTransitionGroup>
           <div key={key} className={page}>

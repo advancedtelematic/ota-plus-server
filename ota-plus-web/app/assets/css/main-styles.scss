@@ -42,6 +42,10 @@ body {
     &.login {
         background: url('../img/bg_login.jpg') top center no-repeat;
         background-size: cover;
+        
+        &.tmp-disable-door-style {
+            background: #7b7b7b;
+        }
     }
 }
 
@@ -260,6 +264,22 @@ body {
                 box-shadow: none;
                 -webkit-box-shadow: none;
 
+                .a0-avatar-guest {
+                    display: none !important;
+                }
+                
+                .a0-icon-container {
+                    color: #fff;
+                    min-height: 154px;
+                    background: #7b7b7b;
+                    
+                    .a0-image {
+                        img {
+                            height: 65px;
+                        }
+                    }
+                }
+                
                 .a0-forgot-pass {
                     text-align: right;
                     display: block;
@@ -270,9 +290,14 @@ body {
                 }
 
                 .a0-top-header {
+                    background: transparent;
                     min-height: 0;
                 }
-
+                
+                .a0-bg-gradient {
+                    background: transparent;
+                }
+                
                 .a0-error, .a0-success {
                     font: 400 17px Arial;
                     text-align: center;
@@ -298,10 +323,6 @@ body {
                 .a0-instructions {
                     color: #fff;
                     padding: 0 25px;
-                }
-
-                .a0-icon-container {
-                    display: none;
                 }
 
                 .a0-mode {
