@@ -18,10 +18,11 @@ define(function(require) {
     }
     render() {
       var packageName = this.props.package.packageId.name;
-      packageName = packageName.length > 30 ? packageName.substring(0, 30) + '..' : packageName;
       return (
         <li className={'list-group-item ' + this.props.status + ' queue-item-status-' + this.props.package.status}>
-          <span className="list-group-item-text-left">{packageName}</span>
+          <div className="queue-item-name pull-left">
+            {packageName}
+          </div>
           {!_.isUndefined(this.props.package.status) && this.props.package.status == 'InFlight' ? 
             <div className="queue-inflight-box pull-right">
               in progress

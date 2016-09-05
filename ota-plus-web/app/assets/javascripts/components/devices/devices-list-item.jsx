@@ -11,7 +11,6 @@ define(function(require) {
       const link = this.props.isProductionDevice ? 'productiondevicedetails/' + this.props.productionDeviceName : 'devicedetails/' + this.props.device.id;
       const lastSeenDate = new Date(this.props.device.lastSeen);
       var deviceName = this.props.device.deviceName;
-      deviceName = deviceName.length > 20 ? deviceName.substring(0, 20) + '..' : deviceName;
       var deviceStatus = 'Status unknown';
       switch(this.props.device.status) {
         case 'UpToDate':
