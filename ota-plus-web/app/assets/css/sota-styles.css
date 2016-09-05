@@ -33,7 +33,7 @@ button.list-group-item:focus { background: transparent; }
 .page { padding-top: 50px; overflow: hidden; }
 
 /* Containers */
-#devices-container { padding: 0 15px !important; margin-top: 20px; margin-bottom: 20px; }
+#devices-container { padding: 0 15px !important; }
 
 .container { width: 100%; margin: 0 auto; }
 
@@ -82,7 +82,7 @@ button.list-group-item:focus { background: transparent; }
 
 .page-home { height: 100vh; max-height: 100vh; background: url(/assets/img/bg.jpg) no-repeat; background-attachment: fixed; background-size: cover; overflow: hidden; }
 .page-home .devices { overflow-y: scroll; overflow-x: hidden; }
-.page-home #devices-list { padding: 10px 0; }
+.page-home #devices-list { padding: 20px 0 0 0; }
 .page-home #devices-bar { background: #666; width: 100%; height: 40px; min-width: 1348px; position: absolute; left: 0; z-index: 99; }
 .page-home #devices-bar .select-bar-status { margin-left: 152px; }
 .page-home #devices-bar .select-bar-sort { margin-left: 35px; }

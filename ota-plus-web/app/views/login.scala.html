@@ -57,8 +57,8 @@
                     }
                 });
 
-                lock.on('ready', function() {
-                    var appUrl = location.protocol + '//' + location.host + (location.port ? ':'+location.port: '');
+                lock.on('ready', function () {
+                    var appUrl = location.protocol + '//' + location.host + (location.port ? ':' + location.port : '');
                     $(".a0-image").append('<img src="' + appUrl + '/assets/img/atsgarage_white.png" alt="">');
                 });
                 lock.on('signin ready', function () {

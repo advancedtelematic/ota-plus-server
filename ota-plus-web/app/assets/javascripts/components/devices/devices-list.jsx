@@ -7,20 +7,26 @@ define(function(require) {
   class DevicesList extends React.Component {
     constructor(props) {
       super(props);
+      this.state = {
+        boxWidth: 320
+      };
       this.setBoxesWidth = this.setBoxesWidth.bind(this);
     }
     componentDidMount() {
       var that = this;
       this.setBoxesWidth();
-      $(window).resize(function() {
-        that.setBoxesWidth();
-      });
+      window.addEventListener("resize", this.setBoxesWidth);
+    }
+    componentWillUnmount() {
+      window.removeEventListener("resize", this.setBoxesWidth);
     }
     setBoxesWidth() {
       var containerWidth = $('#devices-container').width();
       var minBoxWidth = 320;
       var howManyBoxesPerRow = Math.floor(containerWidth / minBoxWidth);
-      $('.device-box').width(containerWidth / howManyBoxesPerRow);
+      this.setState({
+        boxWidth: containerWidth / howManyBoxesPerRow
+      });
     }
     render() {
       var devices = [];
@@ -30,17 +36,18 @@ define(function(require) {
           <DeviceListItem key={device.deviceName}
             device={device}
             isProductionDevice={this.props.areProductionDevices}
-            productionDeviceName={this.props.productionDeviceName}/>
+            productionDeviceName={this.props.productionDeviceName}
+            width={this.state.boxWidth}/>
         );
       }, this);
 
       return (
-        <div id="devices-list">
-          <div id="devices-container" className="container">
+        <div id="devices-list" className="height-100">
+          <div id="devices-container" className="container position-relative height-100">
             {devices.length > 0 ?
               devices
             :
-              <div className="col-md-12">
+              <div className="col-md-12 text-center center-xy">
                 <br />
                 {this.props.areProductionDevices ?
                   <span><i className="fa fa-warning"></i> Sorry, there are too many devices to show.</span>
