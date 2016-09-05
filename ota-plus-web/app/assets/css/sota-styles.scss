@@ -78,8 +78,6 @@ button {
 
 #devices-container {
     padding: 0 15px !important;
-    margin-top: 20px;
-    margin-bottom: 20px;
 }
 
 .container {
@@ -281,7 +279,7 @@ button {
     }
 
     #devices-list {
-        padding: 10px 0;
+        padding: 20px 0 0 0;
     }
 
     #devices-bar {
@@ -1830,7 +1828,7 @@ a.close, button.close {
     &.door-up {
         top: -100%;
     }
-    
+
     &.tmp-disable-door-style {
         background: #7b7b7b;
     }
