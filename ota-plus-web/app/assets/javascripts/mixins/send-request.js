@@ -53,6 +53,11 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
           var myXhr = $.ajaxSettings.xhr();
           if(myXhr.upload) {
             myXhr.upload.addEventListener('progress',function(evt) {
+              if(db.postResetProgress.deref() === true) {
+                ajaxReq.abort();
+                db.postResetProgress.reset();
+                db.postProgress.reset();
+              }
               postProgress[opts.action] = Math.round(evt.loaded / evt.total * 100);
               db.postProgress.reset(postProgress);
             }, false);
