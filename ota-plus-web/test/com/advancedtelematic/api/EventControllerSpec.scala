@@ -1,16 +1,16 @@
 package com.advancedtelematic.api
 
-import java.time.Instant
-
 import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
+import cats.syntax.show._
 import com.advancedtelematic.ota.Messages.MessageWriters._
 import eu.timepit.refined.api.Refined
-import org.genivi.sota.data.Device.{DeviceName, DeviceType}
-import org.genivi.sota.data.{Device, Namespace, PackageId}
+import java.time.Instant
+import java.util.UUID
+import org.genivi.sota.data.{Device, Namespace, PackageId, Uuid}
 import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, PackageCreated, UpdateSpec}
 import org.genivi.webserver.controllers.EventController
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
@@ -21,25 +21,25 @@ import play.api.libs.json._
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-
 import scala.reflect.ClassTag
 
+import Device._
+
+
 object MessagingData {
-  val deviceUUID = "77a1888b-9bc8-4673-8f23-a51240303db4"
-  val nonMatchingDeviceUUID = "99a1888b-9bc8-4673-8f23-a51240303db4"
-  val deviceId = Device.Id(Refined.unsafeApply(deviceUUID))
-  val nonMatchingDeviceId = Device.Id(Refined.unsafeApply(nonMatchingDeviceUUID))
+  val deviceUuid = Uuid(Refined.unsafeApply("77a1888b-9bc8-4673-8f23-a51240303db4"))
+  val nonMatchingDeviceUuid = Uuid(Refined.unsafeApply("99a1888b-9bc8-4673-8f23-a51240303db4"))
   val lastSeen = Instant.now()
-  val deviceSeenMessage = DeviceSeen(deviceId, lastSeen)
+  val deviceSeenMessage = DeviceSeen(deviceUuid, lastSeen)
   val deviceName = DeviceName("testDevice")
   val namespace = Namespace("default")
   val invalidNamespace = Namespace("invalid")
-  val deviceIdOpt = Some(Device.DeviceId(deviceUUID))
+  val deviceId = Some(DeviceId("testVin"))
   val deviceType = DeviceType.Vehicle
   val packageId = PackageId(Refined.unsafeApply("ghc"), Refined.unsafeApply("1.0.0"))
-  val deviceCreatedMessage = DeviceCreated(namespace, deviceName, deviceIdOpt, deviceType)
-  val deviceDeletedMessage = DeviceDeleted(namespace, deviceId)
-  val updateSpecMessage = UpdateSpec(namespace, deviceId, packageId, "Finished")
+  val deviceCreatedMessage = DeviceCreated(namespace, deviceUuid, deviceName, deviceId, deviceType)
+  val deviceDeletedMessage = DeviceDeleted(namespace, deviceUuid)
+  val updateSpecMessage = UpdateSpec(namespace, deviceUuid, packageId, "Finished")
   val packageCreatedMessage = PackageCreated(namespace, packageId, Some("description"), Some("ghc"), None, "/root/")
 }
 
@@ -96,8 +96,8 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
 
   "EventController" should {
     "route DeviceSeens from akka bus to client" in {
-      val request = FakeRequest(GET, s"/events/devices/${MessagingData.deviceUUID}")
-      val result = call(controller.subDeviceSeen(MessagingData.deviceId), request)
+      val request = FakeRequest(GET, s"/events/devices/${MessagingData.deviceUuid}")
+      val result = call(controller.subDeviceSeen(MessagingData.deviceUuid), request)
 
       status(result) must be(OK)
       contentAsString(result).trim mustBe getDeviceSeenResponse(MessagingData.deviceSeenMessage)

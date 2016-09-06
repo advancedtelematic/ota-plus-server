@@ -7,7 +7,7 @@ import com.advancedtelematic.AuthenticatedApiAction
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.ota.vehicle.{DeviceMetadata, Vehicles}
 import org.asynchttpclient.uri.Uri
-import org.genivi.sota.data.Device
+import org.genivi.sota.data.{Device, Uuid}
 import play.api.http.HttpEntity
 import play.api.{Configuration, Logger}
 import play.api.libs.ws.WSClient
@@ -37,20 +37,20 @@ extends Controller with ApiClientSupport {
   /**
     * Send a pre-configured client configuration for the requested artifact (deb, rpm, toml).
     *
-    * @param deviceId
+    * @param device UUID of device
     * @param artifact one of "deb", "rpm", "toml"
     * @param arch either "32" or "64"
     */
-  def downloadClientSdk(deviceId: Device.Id, artifact: ArtifactType, arch: Architecture) : Action[AnyContent] =
+  def downloadClientSdk(device: Uuid, artifact: ArtifactType, arch: Architecture) : Action[AnyContent] =
     AuthenticatedApiAction.async { implicit request =>
       for (
-        vMetadataOpt <- vehiclesStore.getVehicle(deviceId);
+        vMetadataOpt <- vehiclesStore.getVehicle(device);
         vMetadata <- vMetadataOpt match {
           case None => Future.failed[DeviceMetadata](NoSuchVinRegistered)
           case Some(vmeta) => Future.successful(vmeta)
         };
         secret <- authPlusApi.fetchSecret(vMetadata.clientInfo.clientId);
-        result <- preconfClient(vMetadata.deviceId, artifact, arch, vMetadata.clientInfo.clientId, secret)
+        result <- preconfClient(vMetadata.uuid, artifact, arch, vMetadata.clientInfo.clientId, secret)
       ) yield result
     }
 
@@ -58,7 +58,7 @@ extends Controller with ApiClientSupport {
     * The url to use to request a pre-configured client, obtained by filling-in placeholders.
     */
   private def sdkUrl(
-                      device: Device.Id,
+                      device: Uuid,
                       artifact: ArtifactType, arch: Architecture,
                       clientID: java.util.UUID, secret: String
                     ): Try[Uri] = {
@@ -87,7 +87,7 @@ extends Controller with ApiClientSupport {
   /**
     * Contact Build Service to obtain a pre-configured client
     */
-  private def preconfClient(device: Device.Id,
+  private def preconfClient(device: Uuid,
                             artifact: ArtifactType, arch: Architecture,
                             clientID: java.util.UUID, secret: String): Future[Result] = {
     Future.fromTry(sdkUrl(device, artifact, arch, clientID, secret))
@@ -102,7 +102,7 @@ extends Controller with ApiClientSupport {
   /**
     * Requests client sdk package from the build service and streams response to the requester.
     */
-  private def streamPackageFromBuildService(device: Device.Id, artifact: ArtifactType, arch: Architecture)
+  private def streamPackageFromBuildService(device: Uuid, artifact: ArtifactType, arch: Architecture)
                                            (url: Uri): Future[Result] = {
     val futureResponse = ws.url(url.toUrl).withMethod("POST").stream
     futureResponse.map { streamedResp =>

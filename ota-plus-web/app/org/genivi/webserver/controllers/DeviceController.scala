@@ -8,7 +8,7 @@ import com.advancedtelematic.ota.vehicle.{DeviceMetadata, Vehicles}
 import eu.timepit.refined._
 import javax.inject.{Inject, Named, Singleton}
 
-import org.genivi.sota.data.{Device, DeviceT, Namespace}
+import org.genivi.sota.data.{Device, DeviceT, Namespace, Uuid}
 import play.api.libs.json._
 import play.api.libs.ws._
 import play.api.mvc._
@@ -45,12 +45,12 @@ extends Controller with ApiClientSupport {
     searchWith(req, devicesApi.search)
   }
 
-  def get(id: Device.Id): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
+  def get(id: Uuid): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
     val options = userOptions(req)
     devicesApi.getDevice(options, id)
   }
 
-  def fetchSystemInfo(id: Device.Id): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
+  def fetchSystemInfo(id: Uuid): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
     val options = userOptions(req)
     devicesApi.getSystemInfo(options, id)
   }
@@ -85,15 +85,15 @@ extends Controller with ApiClientSupport {
   /**
     * Create a device ( based on the given [[DeviceT]] ) by contacting device-registry, resolver, and Auth+
     *
-    * @return a [[Device.Id]] as response body
+    * @return a [[Uuid]] as response body
     */
   private def requestCreate(device: DeviceT, options: UserOptions): Future[Result] = {
-    implicit val w = refinedWriter[String, Device.Id]
+    implicit val w = refinedWriter[String, Uuid]
 
     for {
-      deviceId <- devicesApi.createDevice(options, device)
-      vehicleMetadata <- registerAuthPlusVehicle(deviceId)
-    } yield Results.Created(Json.toJson(deviceId))
+      device <- devicesApi.createDevice(options, device)
+      vehicleMetadata <- registerAuthPlusVehicle(device)
+    } yield Results.Created(Json.toJson(device))
   }
 
   private def searchWith[R](req: AuthenticatedRequest[_],
@@ -103,13 +103,13 @@ extends Controller with ApiClientSupport {
   }
 
   /**
-    * Contact Auth+ to register for the first time the given [[Device.Id]],
+    * Contact Auth+ to register for the first time the given [[Uuid]],
     * to later persist (in cassandra-journal) the resulting [[DeviceMetadata]]
     */
-  private def registerAuthPlusVehicle(deviceId: Device.Id): Future[DeviceMetadata] = {
+  private def registerAuthPlusVehicle(device: Uuid): Future[DeviceMetadata] = {
     for {
-      clientInfo <- authPlusApi.createClient(deviceId)
-      vehicleMetadata = DeviceMetadata(deviceId, clientInfo)
+      clientInfo <- authPlusApi.createClient(device)
+      vehicleMetadata = DeviceMetadata(device, clientInfo)
       _ <- vehiclesStore.registerVehicle(vehicleMetadata)
     } yield vehicleMetadata
   }
@@ -117,10 +117,10 @@ extends Controller with ApiClientSupport {
   /**
     * Contact Auth+ to fetch the ClientInfo for the given device.
     */
-  def fetchClientInfo(deviceId: Device.Id) : Action[AnyContent] =
+  def fetchClientInfo(device: Uuid) : Action[AnyContent] =
     AuthenticatedApiAction.async { implicit request =>
       val fut = for (
-        vMetadataOpt <- vehiclesStore.getVehicle(deviceId);
+        vMetadataOpt <- vehiclesStore.getVehicle(device);
         vMetadata <- vMetadataOpt match {
           case None => Future.failed[DeviceMetadata](NoSuchVinRegistered)
           case Some(vmeta) => Future.successful(vmeta)
@@ -129,7 +129,7 @@ extends Controller with ApiClientSupport {
       ) yield Ok(clientInfo)
 
       fut.recoverWith { case _ =>
-        Future.successful( BadRequest(s"No device has been registered with this app for UUID ${deviceId.show}") )
+        Future.successful( BadRequest(s"No device has been registered with this app for UUID ${device.show}") )
       }
     }
 

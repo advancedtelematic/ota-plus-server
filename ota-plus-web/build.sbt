@@ -7,8 +7,8 @@ play.sbt.routes.RoutesKeys.routesImport ++= Seq(
   "org.genivi.webserver.controllers.PathBinders._",
   "org.genivi.webserver.controllers.ArtifactType",
   "org.genivi.webserver.controllers.Architecture",
-  "org.genivi.sota.data.Device",
-  "org.genivi.sota.data.Namespace"
+  "org.genivi.sota.data.Namespace",
+  "org.genivi.sota.data.Uuid"
 )
 
 RoutesKeys.routesGenerator := InjectedRoutesGenerator
