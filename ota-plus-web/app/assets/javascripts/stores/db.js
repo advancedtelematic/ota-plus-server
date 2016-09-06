@@ -15,6 +15,7 @@ define(function(require) {
       this.searchablePackages = atom.createAtom();
       this.postStatus = atom.createAtom({});
       this.postProgress = atom.createAtom([]);
+      this.postResetProgress = atom.createAtom();
       
       this.searchableProductionDevices = atom.createAtom([]);
       this.installationLogForDevice = atom.createAtom();
