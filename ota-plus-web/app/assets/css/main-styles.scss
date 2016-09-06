@@ -270,13 +270,16 @@ body {
                 
                 .a0-icon-container {
                     color: #fff;
-                    min-height: 154px;
                     background: #7b7b7b;
                     
                     .a0-image {
                         img {
                             height: 65px;
                         }
+                    }
+                    
+                    h1 {
+                        display: none;
                     }
                 }
                 

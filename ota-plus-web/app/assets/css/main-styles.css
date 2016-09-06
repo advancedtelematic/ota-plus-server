@@ -99,8 +99,9 @@ body #a0-lock.a0-theme-default .a0-switch .a0-active { background-color: #444; }
 body #a0-lock.a0-theme-default .a0-btn-small.a0-back { left: 22px; }
 body #a0-lock.a0-theme-default .a0-panel { width: 100%; box-shadow: none; -webkit-box-shadow: none; }
 body #a0-lock.a0-theme-default .a0-panel .a0-avatar-guest { display: none !important; }
-body #a0-lock.a0-theme-default .a0-panel .a0-icon-container { color: #fff; min-height: 154px; background: #7b7b7b; }
+body #a0-lock.a0-theme-default .a0-panel .a0-icon-container { color: #fff; background: #7b7b7b; }
 body #a0-lock.a0-theme-default .a0-panel .a0-icon-container .a0-image img { height: 65px; }
+body #a0-lock.a0-theme-default .a0-panel .a0-icon-container h1 { display: none; }
 body #a0-lock.a0-theme-default .a0-panel .a0-forgot-pass { text-align: right; display: block; }
 body #a0-lock.a0-theme-default .a0-panel .a0-forgot-pass:before { content: "" !important; }
 body #a0-lock.a0-theme-default .a0-panel .a0-top-header { background: transparent; min-height: 0; }
