@@ -42,9 +42,7 @@ define(function(require) {
           </div>
 
           <div className="device-header-status pull-right">
-            <div className={"device-status device-status-" + this.props.device.status}>
-              <i className="fa fa-circle" aria-hidden="true"></i>
-            </div>
+            <div className={"device-status device-status-" + this.props.device.status}></div>
             {deviceStatus}
           </div>
           <Link to={`devicedetails/${localStorage.getItem('firstProductionTestDevice')}/synchronising/${this.props.id}`} className="btn-duplicate-device pull-right">

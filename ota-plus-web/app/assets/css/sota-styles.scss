@@ -202,7 +202,6 @@ button {
     }
 
     .device-status {
-        font-size: 16px;
         position: relative;
         top: -5px;
         left: 32px;
@@ -233,22 +232,24 @@ button {
 /* Device status */
 
 .device-status {
-    font-size: 12px;
-    color: #ccc;
+    background: url(/assets/img/icons/orange_questionmark.png) no-repeat;
+    width: 24px;
+    height: 24px;
+    background-size: cover;
     margin: -2px 5px 0 0;
     display: inline-block;
     vertical-align: middle;
 
     &.device-status-Error {
-        color: #D9534F;
+        background-image: url(/assets/img/icons/red_cross.png);
     }
 
     &.device-status-Outdated {
-        color: #F0AD4E;
+        background-image: url(/assets/img/icons/orange_exclamation.png);
     }
 
     &.device-status-UpToDate {
-        color: #39de28;
+        background-image: url(/assets/img/icons/green_tick.png);
     }
 }
 
