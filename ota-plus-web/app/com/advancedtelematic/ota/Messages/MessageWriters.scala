@@ -8,7 +8,7 @@ object MessageWriters {
 
   implicit val deviceSeenWrites = new Writes[DeviceSeen] {
     def writes(deviceMsg: DeviceSeen) = Json.obj(
-      "deviceId" -> deviceMsg.uuid.underlying.get,
+      "deviceId" -> deviceMsg.deviceId.underlying.get,
       "lastSeen" -> deviceMsg.lastSeen.toString
     )
   }
@@ -25,7 +25,7 @@ object MessageWriters {
   implicit val deviceDeletedWrites = new Writes[DeviceDeleted] {
     def writes(deviceMsg: DeviceDeleted) = Json.obj(
       "namespace" -> deviceMsg.namespace.get,
-      "deviceId" -> deviceMsg.uuid.underlying.get
+      "deviceId" -> deviceMsg.deviceId.underlying.get
     )
   }
 
