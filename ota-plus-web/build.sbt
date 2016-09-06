@@ -52,6 +52,7 @@ libraryDependencies ++= Seq (
     "com.amazonaws" % "aws-java-sdk-ses" % "1.11.13",
     ws, Dependencies.MockWs,
     play.sbt.Play.autoImport.cache,
+    Dependencies.SotaCommon,
     Dependencies.SotaCommonMessaging,
     Dependencies.SotaCommonTest
     ) ++ Dependencies.JsonWebSecurity ++ Dependencies.LogTree
