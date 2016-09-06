@@ -3,21 +3,20 @@ define(function(require) {
       db = require('stores/db'),
       serializeForm = require('../../mixins/serialize-form'),
       SotaDispatcher = require('sota-dispatcher'),
-      Responses = require('../responses');
+      Responses = require('../responses'),
+      ProgressBar = require('../progress-bar');
   
   class AddPackage extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
         showProgressBar: false,
-        uploadProgress: 0,
-        isButtonDisabled: false
+        isButtonDisabled: false,
       };
       this.handleSubmit = this.handleSubmit.bind(this);
-      this.setProgress = this.setProgress.bind(this);
       this.handleResponse = this.handleResponse.bind(this);
       this.closeForm = this.closeForm.bind(this);
-      db.postProgress.addWatch("poll-progress", _.bind(this.setProgress, this, null));
+      
       db.postStatus.addWatch("poll-response-add-package", _.bind(this.handleResponse, this, null));
     }
     componentWillUnmount() {
@@ -26,44 +25,47 @@ define(function(require) {
     }
     handleSubmit(e) {
       e.preventDefault();
-            
-      var payload = serializeForm(this.refs.form);
-      payload.id = {name: payload.name, version: payload.version};
-      var data = new FormData();
+    
+      if(!this.state.isButtonDisabled) {
+        var payload = serializeForm(this.refs.form);
+        payload.id = {name: payload.name, version: payload.version};
+        var data = new FormData();
       
-      var file = this.props.files && !_.isUndefined(this.props.files[0]) ? this.props.files[0] : undefined;
-      if(!_.isUndefined($('.file-upload')[0]) && !_.isUndefined($('.file-upload')[0].files) && !_.isUndefined($('.file-upload')[0].files[0])) {
-        file = $('.file-upload')[0].files[0];
-      }
+        var file = this.props.files && !_.isUndefined(this.props.files[0]) ? this.props.files[0] : undefined;
+        if(!_.isUndefined($('.file-upload')[0]) && !_.isUndefined($('.file-upload')[0].files) && !_.isUndefined($('.file-upload')[0].files[0])) {
+          file = $('.file-upload')[0].files[0];
+        }
 
-      data.append('file', file);
-      SotaDispatcher.dispatch({
-        actionType: 'create-package',
-        package: payload,
-        data: data
-      });
-      this.setState({isButtonDisabled: true});
-    }
-    setProgress() {
-      this.setState({uploadProgress: db.postProgress.deref()['create-package']});
+        data.append('file', file);
+        SotaDispatcher.dispatch({
+          actionType: 'create-package',
+          package: payload,
+          data: data
+        });
+        
+        this.setState({isButtonDisabled: true});
+      }
     }
     handleResponse() {
       var payload = serializeForm(this.refs.form);
-      var postStatus = !_.isUndefined(db.postStatus.deref()['create-package']) ? db.postStatus.deref()['create-package'] : null;
-      if(postStatus && postStatus.status === 'success') {
-        db.postStatus.removeWatch("poll-response-add-package");
-        this.props.focusPackage(payload.name);
-        this.props.closeForm();
-      } else {
-        this.setState({isButtonDisabled: false});
+      var postStatus = db.postStatus.deref()['create-package'];
+      
+      if(!_.isUndefined(postStatus)) {
+        if(postStatus.status === 'success') {
+          db.postStatus.removeWatch("poll-response-add-package");
+          this.props.focusPackage(payload.name);
+          this.props.closeForm();
+        } else {
+          this.setState({isButtonDisabled: false});
+        }
       }
     }
     closeForm(e) {
       e.preventDefault();
+      db.postResetProgress.reset(true);
       this.props.closeForm();
     }
-    render() {
-      var uploadProgress = this.state.uploadProgress ? this.state.uploadProgress : null;
+    render() {    
       return (
         <div id="modal-add-package" className="myModal">
           <div className="modal-dialog">
@@ -113,11 +115,7 @@ define(function(require) {
                           <input type="file" className="file-upload" name="file" />
                         }
                       </div>
-                      {uploadProgress && uploadProgress < 100 ? 
-                        <div className="progress">
-                          <div id="progressBar" className="progress-bar" role="progressbar" style={{width: uploadProgress + '%'}}></div>
-                        </div>
-                      : null}
+                      <ProgressBar action="create-package"/>
                     </div>
                   </div>
                 </div>
