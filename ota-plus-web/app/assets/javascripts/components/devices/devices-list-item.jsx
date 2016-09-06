@@ -28,9 +28,7 @@ define(function(require) {
       return (
         <Link to={`${link}`} className="device-box" id={"link-devicedetails-" + this.props.device.id} style={{width: this.props.width}}>
           <div className="device-icon">
-            <div className={"device-status device-status-" + this.props.device.status}>
-              <i className="fa fa-circle" aria-hidden="true"></i>
-            </div>
+            <div className={"device-status device-status-" + this.props.device.status}></div>
           </div>
           <div className="device-desc">
             <div className="device-name">{deviceName}</div>

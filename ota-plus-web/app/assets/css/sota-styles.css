@@ -63,17 +63,17 @@ button.list-group-item:focus { background: transparent; }
 
 .device-box { color: #fff; width: 25%; height: 100px; display: inline-block; }
 .device-box:hover, .device-box:active, .device-box:focus { color: #fff; text-decoration: none; }
-.device-box .device-status { font-size: 16px; position: relative; top: -5px; left: 32px; }
+.device-box .device-status { position: relative; top: -5px; left: 32px; }
 .device-box .device-desc { width: 230px; margin-left: 15px; float: left; }
 .device-box .device-desc .device-name { font-size: 18px; line-height: 1.5em; }
 .device-box .device-desc .device-lastseen { font-size: 10px; line-height: 1.6em; }
 .device-box .device-desc .device-status-text { font-size: 10px; line-height: 1.6em; }
 
 /* Device status */
-.device-status { font-size: 12px; color: #ccc; margin: -2px 5px 0 0; display: inline-block; vertical-align: middle; }
-.device-status.device-status-Error { color: #D9534F; }
-.device-status.device-status-Outdated { color: #F0AD4E; }
-.device-status.device-status-UpToDate { color: #39de28; }
+.device-status { background: url(/assets/img/icons/orange_questionmark.png) no-repeat; width: 24px; height: 24px; background-size: cover; margin: -2px 5px 0 0; display: inline-block; vertical-align: middle; }
+.device-status.device-status-Error { background-image: url(/assets/img/icons/red_cross.png); }
+.device-status.device-status-Outdated { background-image: url(/assets/img/icons/orange_exclamation.png); }
+.device-status.device-status-UpToDate { background-image: url(/assets/img/icons/green_tick.png); }
 
 /* Pages */
 .device-header-text { width: 700px; height: 45px; margin: 20px 0 0 10px; vertical-align: middle; display: inline-block; }
