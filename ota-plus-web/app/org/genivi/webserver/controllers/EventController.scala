@@ -33,7 +33,7 @@ class EventController @Inject()
   def subDeviceSeen(device: Device.Id): Action[AnyContent] = Action {
     val deviceSeenSource = messageBusProvider.getSource[DeviceSeen]()
     Ok.chunked(deviceSeenSource
-      .filter(dsm => dsm.uuid == device)
+      .filter(dsm => dsm.deviceId == device)
       .map(Json.toJson(_))
       via Comet.json("parent.deviceSeen")).as(ContentTypes.HTML)
   }
