@@ -41,7 +41,7 @@ object MessagingData {
   val deviceCreatedMessage = DeviceCreated(namespace, deviceId, deviceName, deviceIdOpt, deviceType)
   val deviceDeletedMessage = DeviceDeleted(namespace, deviceId)
   val updateSpecMessage = UpdateSpec(namespace, deviceId, packageId, "Finished")
-  val packageCreatedMessage = PackageCreated(namespace, packageId, Some("description"), Some("ghc"), None, "/root/")
+  val packageCreatedMessage = PackageCreated(namespace, packageId, Some("description"), Some("ghc"), None)
 }
 
 class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {

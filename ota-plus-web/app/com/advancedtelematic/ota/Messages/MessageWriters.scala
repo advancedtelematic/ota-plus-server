@@ -35,8 +35,7 @@ object MessageWriters {
       "packageId" -> Json.toJson(packageCreatedMsg.packageId),
       "description" -> Json.toJson(packageCreatedMsg.description.getOrElse("")),
       "vendor" -> Json.toJson(packageCreatedMsg.description.getOrElse("")),
-      "signature" -> Json.toJson(packageCreatedMsg.description.getOrElse("")),
-      "fileName" -> packageCreatedMsg.fileName
+      "signature" -> Json.toJson(packageCreatedMsg.description.getOrElse(""))
     )
   }
 
