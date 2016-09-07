@@ -41,6 +41,7 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
     },
     formMultipart: function(type, url, data, opts) {
       var postProgress = (db.postProgress.deref() !== null && typeof db.postProgress.deref() === 'object') ? db.postProgress.deref() : {};
+      var postRequest = (db.postRequest.deref() !== null && typeof db.postRequest.deref() === 'object') ? db.postRequest.deref() : {};
       var ajaxReq =  $.ajax({
         type: type,
         url: url,
@@ -53,11 +54,6 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
           var myXhr = $.ajaxSettings.xhr();
           if(myXhr.upload) {
             myXhr.upload.addEventListener('progress',function(evt) {
-              if(db.postResetProgress.deref() === true) {
-                ajaxReq.abort();
-                db.postResetProgress.reset();
-                db.postProgress.reset();
-              }
               postProgress[opts.action] = Math.round(evt.loaded / evt.total * 100);
               db.postProgress.reset(postProgress);
             }, false);
@@ -65,6 +61,9 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
           return myXhr;
         }
       });
+      
+      postRequest[opts.action] = ajaxReq;
+      db.postRequest.reset(postRequest);
       
       if(opts.notHandleAjaxActions)
         return ajaxReq;
