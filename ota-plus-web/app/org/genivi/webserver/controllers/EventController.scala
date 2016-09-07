@@ -22,12 +22,19 @@ class EventController @Inject()
      val conf: Configuration)(implicit mat: Materializer, system: ActorSystem)
   extends Controller {
 
-  val listenerProps = List(WebMessageBusListenerActor.props[DeviceSeen],
+  /*
+  This means we cannot have more than app server,
+  as each actor will use up one app name to start a worker.
+
+  See PRO-1358 on how to fix this
+   */
+  List(
+    WebMessageBusListenerActor.props[DeviceSeen],
     WebMessageBusListenerActor.props[DeviceCreated],
     WebMessageBusListenerActor.props[DeviceDeleted],
     WebMessageBusListenerActor.props[PackageCreated],
-    WebMessageBusListenerActor.props[UpdateSpec])
-  listenerProps.foreach(p => system.actorOf(p) ! Subscribe)
+    WebMessageBusListenerActor.props[UpdateSpec]
+  ).foreach(p => system.actorOf(p) ! Subscribe)
 
 
   def subDeviceSeen(device: Device.Id): Action[AnyContent] = Action {
