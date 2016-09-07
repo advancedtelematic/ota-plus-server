@@ -62,7 +62,10 @@ define(function(require) {
     }
     closeForm(e) {
       e.preventDefault();
-      db.postResetProgress.reset(true);
+      var xhrRequest = db.postRequest.deref()['create-package'];
+      if(!_.isUndefined(xhrRequest) && typeof xhrRequest.abort() === 'function')
+        xhrRequest.abort();
+      db.postRequest.reset();
       this.props.closeForm();
     }
     render() {    
