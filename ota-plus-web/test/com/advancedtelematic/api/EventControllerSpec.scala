@@ -1,6 +1,7 @@
 package com.advancedtelematic.api
 
 import java.time.Instant
+import java.util.UUID
 
 import akka.NotUsed
 import akka.actor.ActorSystem
@@ -37,10 +38,10 @@ object MessagingData {
   val deviceIdOpt = Some(Device.DeviceId(deviceUUID))
   val deviceType = DeviceType.Vehicle
   val packageId = PackageId(Refined.unsafeApply("ghc"), Refined.unsafeApply("1.0.0"))
-  val deviceCreatedMessage = DeviceCreated(namespace, deviceName, deviceIdOpt, deviceType)
+  val deviceCreatedMessage = DeviceCreated(namespace, deviceId, deviceName, deviceIdOpt, deviceType)
   val deviceDeletedMessage = DeviceDeleted(namespace, deviceId)
   val updateSpecMessage = UpdateSpec(namespace, deviceId, packageId, "Finished")
-  val packageCreatedMessage = PackageCreated(namespace, packageId, Some("description"), Some("ghc"), None, "/root/")
+  val packageCreatedMessage = PackageCreated(namespace, packageId, Some("description"), Some("ghc"), None)
 }
 
 class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
