@@ -15,6 +15,7 @@
   <logger name="play" level="INFO" />
   <logger name="application" level="DEBUG" />
   <logger name="audit" level="INFO" />
+  <logger name="com.amazonaws.services.kinesis" level="warn" />
 
   <root level="${rootLevel:-INFO}">
     <appender-ref ref="STDOUT" />
