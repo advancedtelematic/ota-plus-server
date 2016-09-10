@@ -63,7 +63,7 @@ define(function(require) {
       clearInterval(this.state.intervalId);
     }
     refreshData() {
-      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device.id});
+      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device.uuid});
     }
     toggleQueueHistory() {
       this.setState({
@@ -80,7 +80,7 @@ define(function(require) {
     unblockQueue() {
       SotaDispatcher.dispatch({
         actionType: 'unblock-queue',
-        device: this.props.device.id
+        device: this.props.device.uuid
       });
     }
     setQueueListHeight() {
@@ -121,12 +121,12 @@ define(function(require) {
               !this.props.isPackagesHistoryShown ?
                 <QueueList
                   key="queue-list"
-                  deviceId={this.props.device.id}
+                  deviceId={this.props.device.uuid}
                   setQueueStatistics={this.props.setQueueStatistics}/>
               :
                 <HistoryList
                   key="history-list"
-                  deviceId={this.props.device.id}
+                  deviceId={this.props.device.uuid}
                   isFirstFailedExpanded={this.state.isFirstFailedExpanded}/>
             : undefined}
           </div>

@@ -34,7 +34,7 @@ define(function(require) {
         break;
       }
       
-      var isTestDevice = localStorage.getItem('firstProductionTestDevice') === this.props.device.id || localStorage.getItem('secondProductionTestDevice') === this.props.device.id || localStorage.getItem('thirdProductionTestDevice') === this.props.device.id ? true : false;
+      var isTestDevice = localStorage.getItem('firstProductionTestDevice') === this.props.device.uuid || localStorage.getItem('secondProductionTestDevice') === this.props.device.uuid || localStorage.getItem('thirdProductionTestDevice') === this.props.device.uuid ? true : false;
       lastSeenDate = !_.isUndefined(db.deviceSeen.deref()) ? new Date(db.deviceSeen.deref().lastSeen) : lastSeenDate;
       
       return (
@@ -67,11 +67,11 @@ define(function(require) {
               }
             </div>
             {isTestDevice ? 
-              <Link to={`devicedetails/${this.props.device.id}/newcampaign`} className="btn-new-campaign pull-right">
+              <Link to={`devicedetails/${this.props.device.uuid}/newcampaign`} className="btn-new-campaign pull-right">
                 Campaign wizard
               </Link>
             : null}
-            <iframe src={"/api/v1/events/devices/" + this.props.device.id} style={{display: 'none'}}></iframe>
+            <iframe src={"/api/v1/events/devices/" + this.props.device.uuid} style={{display: 'none'}}></iframe>
         </div>
       );
     }

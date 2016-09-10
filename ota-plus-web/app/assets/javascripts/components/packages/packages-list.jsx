@@ -44,7 +44,7 @@ define(function(require) {
     componentWillUpdate(nextProps, nextState) {
       if(nextProps.filterValue != this.props.filterValue) {
         SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: nextProps.filterValue});
-        SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.id, regex: nextProps.filterValue});
+        SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.uuid, regex: nextProps.filterValue});
       }
     }
     componentWillReceiveProps(nextProps) {
@@ -104,9 +104,9 @@ define(function(require) {
       clearTimeout(this.state.timeout);
     }
     refreshData() {
-      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device.id});
+      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device.uuid});
       SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
-      SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.id, regex: this.props.filterValue});
+      SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.uuid, regex: this.props.filterValue});
     }
     refresh() {
       this.setData(this.props.selectedStatus, this.props.selectedType, this.props.selectedSort);
@@ -114,7 +114,7 @@ define(function(require) {
     queueUpdated() {
       if(JSON.stringify(this.state.tmpQueueData) !== JSON.stringify(db.packageQueueForDevice.deref())) {
         SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
-        SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.id, regex: this.props.filterValue});
+        SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.uuid, regex: this.props.filterValue});
       }
       this.setState({
         tmpQueueData: db.packageQueueForDevice.deref()
@@ -386,7 +386,7 @@ define(function(require) {
                 packageInfo={packageInfo}
                 mainLabel={mainLabel}
                 selectToAnalyse={this.selectToAnalyse}
-                deviceId={this.props.device.id}
+                deviceId={this.props.device.uuid}
                 selected={this.state.expandedPackage == pack.packageName ? true : false}
                 isBlackListed={pack.isBlackListed}/>
                 <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
@@ -394,7 +394,7 @@ define(function(require) {
                     <PackageListItemDetails
                       key={'package-' + pack.packageName + '-versions'}
                       versions={sortedElements}
-                      deviceId={this.props.device.id}
+                      deviceId={this.props.device.uuid}
                       packageName={pack.packageName}
                       isQueued={pack.isQueued}
                       refresh={this.refreshData}
