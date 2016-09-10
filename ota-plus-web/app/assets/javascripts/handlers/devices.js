@@ -18,7 +18,7 @@ define(function(require) {
             sendRequest.doGet('/api/v1/device_data?status=true', {action: payload.actionType}) // TODO: more efficient querying
               .success(function(devices) {
                 var device = _.find(devices, function(device) {
-                  return device.id == payload.device;
+                  return device.uuid == payload.device;
                 });
                 db.showDevice.reset(device);
               });
@@ -141,7 +141,7 @@ define(function(require) {
               sendRequest.doGet('/api/v1/device_data?status=true', {action: payload.actionType})
               .success(function(data) {
                 devices = _.filter(data, function(device) {
-                  return device.id == localStorage.getItem('firstProductionTestDevice');
+                  return device.uuid == localStorage.getItem('firstProductionTestDevice');
                 });
                 
                 devices[0].deviceName = payload.regex.substr(0, 17);
@@ -155,7 +155,7 @@ define(function(require) {
             sendRequest.doGet('/api/v1/device_data?status=true', {action: payload.actionType})
               .success(function(devices) {
                 db.showDevice.reset(_.find(devices, function(device) {
-                  return device.id == localStorage.getItem('firstProductionTestDevice');
+                  return device.uuid == localStorage.getItem('firstProductionTestDevice');
                 }));
               });
           break;
