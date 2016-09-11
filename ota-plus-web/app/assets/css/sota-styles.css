@@ -135,6 +135,7 @@ button.list-group-item:focus { background: transparent; }
 
 .page-packages .package-version .btn-blacklist { border-right: 0; }
 
+.package-version .package-version-name { max-width: 170px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .package-version .package-statuses .package-status-circle { line-height: 32px; }
 .package-version .package-left-box { width: 50%; }
 .package-version.package-blacklist { color: red; font-weight: bold; background: #F3BDBD; }
@@ -650,6 +651,9 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .history-item-name { width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .package-item-name { width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.package-item-details { width: 30%; }
+.package-item-details .package-name { max-width: 50%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .queue-item-name { width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 

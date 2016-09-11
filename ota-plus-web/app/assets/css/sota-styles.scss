@@ -585,6 +585,12 @@ button {
 }
 
 .package-version {
+    .package-version-name {
+        max-width: 170px;
+        display: inline-block;
+        @include textoverflow-ellipsis;
+    }
+    
     .package-statuses {
         .package-status-circle {
             line-height: 32px;
@@ -2246,6 +2252,15 @@ a.close, button.close {
 .package-item-name {
     width: 70%;
     @include textoverflow-ellipsis;
+}
+
+.package-item-details {
+    width: 30%;
+    
+    .package-name {
+        max-width: 50%;
+        @include textoverflow-ellipsis;
+    }
 }
 
 .queue-item-name {

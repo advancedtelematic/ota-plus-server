@@ -93,7 +93,7 @@ define(function(require) {
           <div className="package-right-box pull-right text-right">
             {(this.props.version.attributes.status == 'installed' || this.props.version.attributes.status == 'queued') ?
               <div className="package-statuses pull-right">
-                <div className="pull-left">
+                <div className="package-version-name pull-left">
                   {!this.props.version.isBlackListed ? 
                     <span className="fa-stack package-status-circle">
                       <i className="fa fa-check-circle fa-stack-1x green" aria-hidden="true"></i>
@@ -111,7 +111,7 @@ define(function(require) {
                     </div>
                   }
                 
-                  v. {this.props.version.id.version}
+                  v. <span title={this.props.version.id.version}>{this.props.version.id.version}</span>
                 </div>
                 {this.props.version.isBlackListed ?
                   <div className="pull-left">
@@ -131,8 +131,8 @@ define(function(require) {
               </div>
             :
               <div className="package-statuses pull-right">
-                <div className="pull-left">
-                  v. {this.props.version.id.version}
+                <div className="package-version-name pull-left">
+                  v. <span title={this.props.version.id.version}>{this.props.version.id.version}</span>
                 </div>
                 
                 <div className="pull-left">
