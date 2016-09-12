@@ -201,7 +201,7 @@ define(function(require) {
             <VelocityComponent animation={!this.state.hideAnimationUp ? Animations.up : null}>
               <div className="door tmp-disable-door-style">
                 {this.state.hideAnimationUp ? 
-                  <img src="/assets/img/icons/loading.gif" className="loader"/>
+                  <i className="fa fa-circle-o-notch fa-spin fa-2x loader"></i>
                 : null}
               </div>
             </VelocityComponent>

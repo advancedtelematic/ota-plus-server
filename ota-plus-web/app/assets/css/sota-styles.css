@@ -526,8 +526,6 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 .width-100 { width: 100% !important; }
 
-.loader { font-size: 14px; padding: 25px; }
-
 /* Animations */
 .example-enter { opacity: 0.01; transition: all 0.6s ease-in; }
 .example-enter.example-enter-active { opacity: 1; }
