@@ -61,24 +61,23 @@ define(function(require) {
       if(!_.isUndefined(impactAnalysis)) {
         impactedDevices = {};
         impactedPackages = {};
-      
+        
         _.each(impactAnalysis, function(impact) {
-          var device = impact[0];
-          var pack = impact[1];
-          impactedPackages[pack.name.get + '-' + pack.version.get] = {
-            packageId: {
-              name: pack.name.get,
-              version: pack.version.get
+          _.each(impact, function(pack, deviceUUID) {
+            impactedPackages[pack.name + '-' + pack.version] = {
+              packageId: {
+                name: pack.name,
+                version: pack.version
+              }
             }
-          };
+            var deviceData = _.findWhere(devices, {id: deviceUUID});
           
-          var deviceData = _.findWhere(devices, {id: device.underlying.get});
-          
-          impactedDevices[device.underlying.get] = {
-            id: device.underlying.get,
-            deviceName: !_.isUndefined(deviceData) ? deviceData.deviceName : device.underlying.get
-          };
-        });
+            impactedDevices[deviceUUID] = {
+              id: deviceUUID,
+              deviceName: !_.isUndefined(deviceData) ? deviceData.deviceName : deviceUUID
+            };
+          });          
+        });        
       }
       return (
         <div className="impact-analysis">
