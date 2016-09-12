@@ -13,9 +13,16 @@ define(function(require) {
       db.postStatus.removeWatch("poll-response-" + this.props.action);
       
       var postStatus = _.clone(db.postStatus.deref());
-      if(!_.isUndefined(postStatus[this.props.action]))
-        delete postStatus[this.props.action];
-      db.postStatus.reset(postStatus);
+      
+      if(!_.isUndefined(this.props.multipleKey)) {
+        if(!_.isUndefined(postStatus[this.props.action]) && !_.isUndefined(postStatus[this.props.action][this.props.multipleKey]))
+          delete postStatus[this.props.action][this.props.multipleKey];
+        db.postStatus.reset(postStatus);
+      } else {
+        if(!_.isUndefined(postStatus[this.props.action]))
+          delete postStatus[this.props.action];
+        db.postStatus.reset(postStatus);
+      }
     }
     objToString(obj) {
       var str = '';
@@ -28,7 +35,14 @@ define(function(require) {
     }
     render() {
       var handledStatuses = this.props.handledStatuses || 'all';
-      var postStatus = !_.isUndefined(db.postStatus.deref()[this.props.action]) && (handledStatuses === 'all' || (db.postStatus.deref()[this.props.action].status === handledStatuses)) ? db.postStatus.deref()[this.props.action] : null;
+      var postStatus;
+      
+      if(!_.isUndefined(this.props.multipleKey)) {
+        postStatus = !_.isUndefined(db.postStatus.deref()[this.props.action]) && !_.isUndefined(db.postStatus.deref()[this.props.action][this.props.multipleKey]) && (handledStatuses === 'all' || (db.postStatus.deref()[this.props.action][this.props.multipleKey].status === handledStatuses)) ? db.postStatus.deref()[this.props.action][this.props.multipleKey] : null;
+      } else {
+        postStatus = !_.isUndefined(db.postStatus.deref()[this.props.action]) && (handledStatuses === 'all' || (db.postStatus.deref()[this.props.action].status === handledStatuses)) ? db.postStatus.deref()[this.props.action] : null;
+      }
+      
       return (
         <div>
           {postStatus ?
