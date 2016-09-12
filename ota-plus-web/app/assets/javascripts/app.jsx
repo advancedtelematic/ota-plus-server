@@ -36,7 +36,8 @@ define(function(require) {
       TestSettings = require('es6!components/test-settings'),
       EditProfile = require('es6!components/user/edit-profile'),
       ImpactAnalysisPage = require('es6!components/impactanalysis/impact-analysis-page'),
-      Group = require('es6!components/groups/group');
+      Group = require('es6!components/groups/group'),
+      UploadModal = require('es6!components/packages/upload-modal');
 
   const languages = {
     en: 'en'
@@ -66,12 +67,15 @@ define(function(require) {
         impactAnalysisIntervalId: null,
         hideAnimationUp: isHomePage,
         hideAnimationDown: true,
+        isUploadModalShown: true
       }
 
       this.changeLanguage = this.changeLanguage.bind(this);
       this.toggleCampaignPanel = this.toggleCampaignPanel.bind(this);
       this.logout = this.logout.bind(this);
       this.openDoor = this.openDoor.bind(this);
+      this.openUploadModal = this.openUploadModal.bind(this);
+      this.closeUploadModal = this.closeUploadModal.bind(this);
       
       if(isHomePage) {
         db.devices.addWatch("watch-devices", _.bind(this.openDoor, this, null));
@@ -107,6 +111,12 @@ define(function(require) {
           that.setState({hideAnimationUp: !that.state.hideAnimationUp});
         }, 300);
       }
+    }
+    openUploadModal() {
+      this.setState({isUploadModalShown: true});
+    }
+    closeUploadModal() {
+      this.setState({isUploadModalShown: false});
     }
     componentDidMount() {
       var that = this;
@@ -214,10 +224,23 @@ define(function(require) {
             : null}
           </VelocityTransitionGroup>
           <div key={key} className={page}>
-            <Nav currentLang={this.state.currentLang} changeLang={this.changeLanguage} showCampaignPanel={this.state.showCampaignPanel} toggleCampaignPanel={this.toggleCampaignPanel} logout={this.logout}/>
+            <Nav 
+              currentLang={this.state.currentLang} 
+              changeLang={this.changeLanguage} 
+              showCampaignPanel={this.state.showCampaignPanel} 
+              toggleCampaignPanel={this.toggleCampaignPanel} 
+              openUploadModal={this.openUploadModal}
+              logout={this.logout}/>
             <div className="page wrapper">
               {React.cloneElement(this.props.children, {showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
             </div>
+            
+            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+              {this.state.isUploadModalShown ?
+                <UploadModal 
+                  closeModal={this.closeUploadModal}/>
+              : undefined}
+            </VelocityTransitionGroup>
           </div>
         </div>
       );

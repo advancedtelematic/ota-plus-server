@@ -40,14 +40,16 @@ button.list-group-item:focus { background: transparent; }
 .container { width: 100%; margin: 0 auto; }
 
 /* Navbar */
-.right-nav { -webkit-padding-start: 10px; }
-.right-nav li { margin: 10px 0 0 20px; display: inline-block; }
-.right-nav li#li-impactanalysis { margin: 0; }
+.right-nav { -webkit-padding-start: 10px; margin-bottom: 0; }
+.right-nav li { margin: 10px 0 0 20px; display: inline-block; vertical-align: top; }
+.right-nav li#li-impactanalysis { margin: 6px 0 0 0; }
 .right-nav li#li-impactanalysis a { color: #fff; font-size: 15px; text-decoration: none; background: red; padding: 8px 13px; margin: 0; border-radius: 20px; display: inline-block; position: relative; transition: all 0.3s; }
 .right-nav li#li-impactanalysis a:after { background: red; width: 100%; height: 0; content: ''; display: block; position: absolute; left: 0; bottom: -10px; transition: all 0.2s ease-in; }
 .right-nav li#li-impactanalysis a.disabled { background: #ccc; }
 .right-nav li#li-impactanalysis a.disabled:after { background: #ccc; }
 .right-nav li#li-impactanalysis a:hover:after, .right-nav li#li-impactanalysis a.active:after { height: 5px; }
+.right-nav li#li-upload-nav-bar { margin: 10px 15px 0 0; }
+.right-nav li#li-upload-nav-bar #upload-nav-bar { display: inline-block; }
 
 .navbar-inverse { background: #fff; min-width: 1348px; position: absolute; border: 0; }
 .navbar-inverse a { color: #555; }
@@ -397,6 +399,8 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .myModal .modal-dialog .modal-content .modal-body { color: #444; padding: 60px 80px 20px 80px; }
 .myModal.small-margin .modal-dialog .modal-content .modal-body { color: #444; padding: 20px 20px 20px 20px; }
 
+.moveableModal { position: relative; z-index: 1049; }
+
 #modal-add-package .modal-dialog, #modal-new-campaign .modal-dialog, #modal-impact-analysis .modal-dialog { width: 640px; }
 #modal-add-package .modal-dialog .modal-body, #modal-new-campaign .modal-dialog .modal-body, #modal-impact-analysis .modal-dialog .modal-body { min-height: 320px; padding: 40px 25px 20px 25px; }
 #modal-add-package .fullsize-overflow-hidden, #modal-new-campaign .fullsize-overflow-hidden, #modal-impact-analysis .fullsize-overflow-hidden { width: 100%; overflow: hidden; }
@@ -715,3 +719,14 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 .group #group-devices-list { width: 100%; overflow-y: auto; float: left; }
 
 .counting:after { content: ' .'; animation: dots-white 1.5s steps(5, end) infinite; margin-left: 3px; }
+
+.upload-bar { width: 30px; height: 30px; }
+
+#modal-upload { background: transparent; width: 600px; height: auto; min-height: auto; padding: 0; position: absolute; top: auto; right: 30px; bottom: 30px; left: auto; z-index: 1048; }
+#modal-upload .modal-dialog { width: 100%; height: auto; margin: 0; }
+#modal-upload .modal-dialog .modal-content .modal-body { padding: 0; }
+#modal-upload .modal-dialog .modal-content .modal-body .modal-subheader { background: #dedede; padding: 5px 20px; }
+#modal-upload .modal-dialog .modal-content .modal-body .modal-desc { max-height: 150px; padding: 0; overflow-y: auto; }
+#modal-upload .modal-dialog .modal-content .modal-body .modal-desc .table-uploads { margin-bottom: 5px; }
+#modal-upload .modal-dialog .modal-content .modal-body .modal-desc .table-uploads > tbody > tr > td { padding: 8px 20px; border-bottom: 0; vertical-align: middle; }
+#modal-upload .modal-dialog .modal-content .modal-body .modal-desc .table-uploads #bar { width: 30px; height: 30px; }

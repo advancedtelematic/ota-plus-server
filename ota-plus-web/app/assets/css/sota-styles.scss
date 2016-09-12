@@ -104,13 +104,15 @@ button {
 
 .right-nav {
     -webkit-padding-start: 10px;
+    margin-bottom: 0;
 
     li {
         margin: 10px 0 0 20px;
         display: inline-block;
+        vertical-align: top;
 
         &#li-impactanalysis {
-            margin: 0;
+            margin: 6px 0 0 0;
 
             a {
                 color: #fff;
@@ -147,6 +149,14 @@ button {
 
             a:hover:after, a.active:after {
                 height: 5px;
+            }
+        }
+
+        &#li-upload-nav-bar {
+            margin: 10px 15px 0 0;
+
+            #upload-nav-bar {
+                display: inline-block;
             }
         }
     }
@@ -252,7 +262,7 @@ button {
     &:hover, &:active, &:focus {
         color: #fff;
     }
-    
+
     .group-desc {
         width: 230px;
         margin-left: 15px;
@@ -1311,6 +1321,11 @@ a.close, button.close {
             }
         }
     }
+}
+
+.moveableModal {
+    position: relative;
+    z-index: 1049;
 }
 
 #modal-add-package, #modal-new-campaign, #modal-impact-analysis {
@@ -2560,6 +2575,7 @@ hr.full-line {
     }
 }
 
+
 .group {
     .grey-header-icon {
         background-image: url(/assets/img/icons/group_large.png);
@@ -2576,4 +2592,65 @@ hr.full-line {
     content: ' .';
     animation: dots-white 1.5s steps(5, end) infinite;
     margin-left: 3px;
+}
+
+.upload-bar {
+    width: 30px;
+    height: 30px;
+}
+
+#modal-upload {
+    background: transparent;
+    width: 600px;
+    height: auto;
+    min-height: auto;
+    padding: 0;
+    position: absolute;
+    top: auto;
+    right: 30px;
+    bottom: 30px;
+    left: auto;
+    z-index: 1048;
+
+    .modal-dialog {
+        width: 100%;
+        height: auto;
+        margin: 0;
+
+        .modal-content {
+            .modal-body {
+                padding: 0;
+
+                .modal-subheader {
+                    background: #dedede;
+                    padding: 5px 20px;
+                }
+
+                .modal-desc {
+                    max-height: 150px;
+                    padding: 0;
+                    overflow-y: auto;
+
+                    .table-uploads {
+                        margin-bottom: 5px;
+                        
+                        & > tbody {
+                            & > tr {
+                                & > td {
+                                    padding: 8px 20px;
+                                    border-bottom: 0;
+                                    vertical-align: middle;
+                                }
+                            }
+                        }
+
+                        #bar {
+                            width: 30px;
+                            height: 30px;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

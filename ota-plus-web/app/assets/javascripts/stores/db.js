@@ -15,7 +15,7 @@ define(function(require) {
       this.searchableDevicesWithComponents = atom.createAtom();
       this.searchablePackages = atom.createAtom();
       this.postStatus = atom.createAtom({});
-      this.postProgress = atom.createAtom([]);
+      this.postUpload = atom.createAtom();
       this.postRequest = atom.createAtom();
       
       this.searchableProductionDevices = atom.createAtom([]);

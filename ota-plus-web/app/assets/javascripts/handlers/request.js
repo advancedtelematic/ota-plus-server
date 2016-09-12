@@ -2,7 +2,7 @@ define(function(require) {
   var db = require('../stores/db');
 
   return {
-    renderRequestError: function(xhr, action) {
+    renderRequestError: function(xhr, action, multipleKey) {
       var postStatus = _.clone(db.postStatus.deref());
       var result = '';
       var errorObj = {status: 'error'};
@@ -24,18 +24,32 @@ define(function(require) {
         }
       }
       
-      postStatus[action] = errorObj;
+      if(!_.isUndefined(multipleKey)) {
+        if(_.isUndefined(postStatus[action]))
+          postStatus[action] = {};
+        postStatus[action][multipleKey] = errorObj;
+      } else {
+        postStatus[action] = errorObj;
+      }
+      
       db.postStatus.reset(postStatus);
     },
-    renderRequestSuccess: function(data, action, code) {
+    renderRequestSuccess: function(data, action, code, multipleKey) {
       var postStatus = _.clone(db.postStatus.deref());
       var successObj = {status: 'success', code: code};
       
       if(!_.isUndefined(data)) {
         successObj.response = data;
       }
-            
-      postStatus[action] = successObj;
+      
+      if(!_.isUndefined(multipleKey)) {
+        if(_.isUndefined(postStatus[action]))
+          postStatus[action] = {};
+        postStatus[action][multipleKey] = successObj;
+      } else {
+        postStatus[action] = successObj;
+      }
+      
       db.postStatus.reset(postStatus);
     }
   };

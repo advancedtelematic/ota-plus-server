@@ -9,13 +9,9 @@ define(function(require) {
     var url = '/api/v1/packages/' + payload.package.name + '/' + payload.package.version +
       '?description=' + encodeURIComponent(payload.package.description) +
       '&vendor=' + encodeURIComponent(payload.package.vendor);
-    sendRequest.doPut(url, payload.data, {form: true, action: payload.actionType})
+    sendRequest.doPut(url, payload.data, {form: true, action: payload.actionType, multiple: true, uploadData: {name: payload.package.name, version: payload.package.version}})
       .success(function() {
-        checkExists('/api/v1/packages/' + payload.package.name + '/' + payload.package.version,
-          "Package", function() {
-            SotaDispatcher.dispatch({actionType: 'get-packages'});
-            SotaDispatcher.dispatch({actionType: 'search-packages-by-regex'});
-        }, 'create-package', true);
+       
       });
   };
 
@@ -36,15 +32,14 @@ define(function(require) {
                 }));
               });
           break;
-          case 'create-package':
+          case 'create-package':              
             checkExists('/api/v1/packages/' + payload.package.name + '/' + payload.package.version,
               "Package", function() {
                 createPackage(payload);
-              }, 'create-package');
+              }, 'create-package', false, {name: payload.package.name, version: payload.package.version}, true);
           break;
           case 'search-packages-by-regex':
             var query = payload.regex ? '?regex=' + payload.regex : '';
-
             sendRequest.doGet('/api/v1/packages' + query, {action: payload.actionType})
               .success(function(packages) {
                 db.searchablePackages.reset(packages);

@@ -11,6 +11,8 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
+        name: undefined,
+        version: undefined,
         showProgressBar: false,
         isButtonDisabled: false,
         isProcessingBarShown: false
@@ -23,7 +25,6 @@ define(function(require) {
       db.postStatus.addWatch("poll-response-add-package", _.bind(this.handleResponse, this, null));
     }
     componentWillUnmount() {
-      db.postProgress.removeWatch("poll-progress");
       db.postStatus.removeWatch("poll-response-add-package");
     }
     handleSubmit(e) {
@@ -46,15 +47,20 @@ define(function(require) {
           data: data
         });
         
-        this.setState({isButtonDisabled: true});
+        this.setState({
+          isButtonDisabled: true,
+          name: payload.name,
+          version: payload.version
+        });
       }
     }
     handleResponse() {
       var payload = serializeForm(this.refs.form);
       var postStatus = db.postStatus.deref()['create-package'];
+      var key = payload.name + '-' + payload.version;
       
-      if(!_.isUndefined(postStatus)) {
-        if(postStatus.status === 'success') {
+      if(!_.isUndefined(postStatus) && !_.isUndefined(postStatus[key])) {
+        if(postStatus[key].status === 'success') {
           db.postStatus.removeWatch("poll-response-add-package");
           this.props.focusPackage(payload.name);
           this.props.closeForm();
@@ -65,16 +71,13 @@ define(function(require) {
     }
     closeForm(e) {
       e.preventDefault();
-      var xhrRequest = !_.isUndefined(db.postRequest.deref()) && !_.isUndefined(db.postRequest.deref()['create-package']) ? db.postRequest.deref()['create-package'] : undefined;
-      if(!_.isUndefined(xhrRequest) && typeof xhrRequest.abort() === 'function')
-        xhrRequest.abort();
-      db.postRequest.reset();
       this.props.closeForm();
     }
     uploadFinished() {
       this.setState({isProcessingBarShown: true});
     }
     render() {
+      var multipleKey = this.state.name + '-' + this.state.version;
       return (
         <div id="modal-add-package" className="myModal">
           <div className="modal-dialog">
@@ -85,7 +88,10 @@ define(function(require) {
                 <h4 className="modal-title">New package</h4>
                 </div>
                 <div className="modal-body">
-                  <Responses action="create-package" handledStatuses="error"/>
+                  <Responses 
+                    action="create-package" 
+                    multipleKey={multipleKey} 
+                    handledStatuses="error"/>
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-group">
@@ -126,6 +132,7 @@ define(function(require) {
                       </div>
                       <ProgressBar 
                         action="create-package"
+                        multipleKey={multipleKey}
                         finishCallback={this.uploadFinished}/>
                       
                       {this.state.isProcessingBarShown ?

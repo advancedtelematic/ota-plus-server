@@ -3,7 +3,7 @@ define(function(require) {
       Router = require('react-router'),
       Link = Router.Link,
       db = require('stores/db'),
-      SotaDispatcher = require('sota-dispatcher')
+      SotaDispatcher = require('sota-dispatcher');
 
   class ProcessBar extends React.Component {
     constructor(props) {
