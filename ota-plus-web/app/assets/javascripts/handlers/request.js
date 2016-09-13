@@ -6,7 +6,7 @@ define(function(require) {
       var postStatus = _.clone(db.postStatus.deref());
       var result = '';
       var errorObj = {status: 'error'};
-      
+            
       if(typeof xhr === 'string') {
         errorObj.response = xhr;
       } else {
@@ -25,14 +25,14 @@ define(function(require) {
       postStatus[action] = errorObj;
       db.postStatus.reset(postStatus);
     },
-    renderRequestSuccess: function(data, action) {
+    renderRequestSuccess: function(data, action, code) {
       var postStatus = _.clone(db.postStatus.deref());
-      var successObj = {status: 'success', code: 200};
+      var successObj = {status: 'success', code: code};
       
       if(!_.isUndefined(data)) {
         successObj.response = data;
       }
-      
+            
       postStatus[action] = successObj;
       db.postStatus.reset(postStatus);
     }

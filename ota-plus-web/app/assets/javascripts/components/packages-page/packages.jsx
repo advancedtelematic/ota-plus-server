@@ -13,7 +13,7 @@ define(function(require) {
         selectedSort: 'asc',
         selectedSortName: 'A > Z',
         packagesListHeight: '300px',
-        showForm: false
+        isFormShown: false
       }
       this.changeFilter = this.changeFilter.bind(this);
       this.openForm = this.openForm.bind(this);
@@ -30,12 +30,12 @@ define(function(require) {
     }
     openForm() {
       this.setState({
-        showForm: true
+        isFormShown: true
       });
     }
     closeForm() {
       this.setState({
-        showForm: false
+        isFormShown: false
       });
     }
     focusPackage(packageName) {
@@ -108,7 +108,7 @@ define(function(require) {
                   packagesListHeight={this.state.packagesListHeight}
                   selectedSort={this.state.selectedSort}
                   filterValue={this.state.filterValue}
-                  showForm={this.state.showForm}
+                  isFormShown={this.state.isFormShown}
                   openForm={this.openForm}
                   closeForm={this.closeForm}
                   focusPackage={this.focusPackage}/>

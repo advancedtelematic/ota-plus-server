@@ -42,10 +42,14 @@ define(function(require) {
                 {this.props.installedPackage ?
                   !this.props.selected ?
                     <span className="pull-right">
-                      <span className="fa-stack package-status-circle">
-                        <i className="fa fa-circle fa-stack-1x"></i>
-                        <i className="fa fa-check-circle fa-stack-1x green" aria-hidden="true"></i>
-                      </span>
+                      {this.props.isBlackListed ? 
+                        <i className="fa fa-exclamation-triangle icon-exclamation"></i>
+                      :
+                        <span className="fa-stack package-status-circle">
+                          <i className="fa fa-circle fa-stack-1x"></i>
+                          <i className="fa fa-check-circle fa-stack-1x green" aria-hidden="true"></i>
+                        </span>
+                      }
                       v. {this.props.installedPackage} installed
                     </span>
                   : null
@@ -68,6 +72,11 @@ define(function(require) {
                   </span>
                 : null }
               </div>
+            </div>
+          : null}
+          {this.props.isBlackListed && this.props.installedPackage && !this.props.selected ?
+            <div className="pull-right">
+              
             </div>
           : null}
         </button>

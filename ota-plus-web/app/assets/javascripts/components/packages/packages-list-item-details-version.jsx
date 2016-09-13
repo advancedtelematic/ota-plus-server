@@ -58,7 +58,6 @@ define(function(require) {
         commentTmp: this.refs.comment.value,
         activeEditField: false
       });
-      
       SotaDispatcher.dispatch({
         actionType: 'update-package-details',
         name: this.props.version.id.name,
@@ -66,62 +65,105 @@ define(function(require) {
         data: {"description": this.refs.comment.value}
       });
     }
+    formBlacklist(action, e) {
+      this.props.showBlacklistForm(this.props.version.id.name, this.props.version.id.version, action);
+    }
     render() {
       return (
-        <li className="package-version">
-              <div className="package-left-box pull-left">
-                <form>
-                  <fieldset>
-                    <input className="input-comment" name="comment" value={this.state.commentTmp} type="text" placeholder="Comment here." ref="comment" onKeyUp={this.changeCommentFieldLength} onChange={this.changeCommentFieldLength} onFocus={this.enableEditField} />
+        <li className={"package-version " + (this.props.version.isBlackListed ? "package-blacklist" : "")}>
+          <div className="package-left-box pull-left">
+            <form>
+              <fieldset>
+                <input className="input-comment" name="comment" value={this.state.commentTmp} type="text" placeholder="Comment here." ref="comment" onKeyUp={this.changeCommentFieldLength} onChange={this.changeCommentFieldLength} onFocus={this.enableEditField} />
                     
-                    {this.state.commentFieldLength > 0 && this.state.activeEditField ?
-                      <div className="pull-right">
-                        <a href="#" className="cancel-button pull-right" onClick={this.disableEditField}>
-                          <img src="/assets/img/icons/close_icon.png" alt="" />
-                        </a>
-                        &nbsp;
-                        <a href="#" className="accept-button pull-right" onClick={this.handleSubmit}>
-                          <img src="/assets/img/icons/accept_icon.png" alt="" />
-                        </a>
-                      </div>
-                    : null}
-                    
-                  </fieldset>
-                </form>
-              </div>
-              <div className="package-right-box pull-right text-right">
-                {(this.props.version.attributes.status == 'installed' || this.props.version.attributes.status == 'queued') ?
-                  <div className="package-statuses pull-right">
+                {this.state.commentFieldLength > 0 && this.state.activeEditField ?
+                  <div className="pull-right">
+                    <a href="#" className="cancel-button pull-right" onClick={this.disableEditField}>
+                      <img src="/assets/img/icons/close_icon.png" alt="" />
+                    </a>
+                    &nbsp;
+                    <a href="#" className="accept-button pull-right" onClick={this.handleSubmit}>
+                      <img src="/assets/img/icons/accept_icon.png" alt="" />
+                    </a>
+                  </div>
+                : null}
+              </fieldset>
+            </form>
+          </div>
+          <div className="package-right-box pull-right text-right">
+            {(this.props.version.attributes.status == 'installed' || this.props.version.attributes.status == 'queued') ?
+              <div className="package-statuses pull-right">
+                <div className="pull-left">
+                  {!this.props.version.isBlackListed ? 
                     <span className="fa-stack package-status-circle">
                       <i className="fa fa-check-circle fa-stack-1x green" aria-hidden="true"></i>
                       <i className="fa fa-circle fa-stack-1x"></i>
-                      {(this.props.version.attributes.status == 'installed') ? 
+                  
+                      {this.props.version.attributes.status == 'installed' ? 
                         <i className="fa fa-check-circle fa-stack-1x green" aria-hidden="true"></i>
                       :
                         <i className="fa fa-dot-circle-o fa-stack-1x orange" aria-hidden="true"></i>
                       }
                     </span>
-                    v. {this.props.version.id.version}
-                    <div className="package-version-right pull-right">
-                      <span className={"package-status-label " + (this.props.version.attributes.status == 'installed' ? 'green' : 'orange')}>
-                        {this.props.version.attributes.status}
-                      </span>
+                  : 
+                    <div className="pull-left">
+                      <i className="fa fa-exclamation-triangle icon-exclamation"></i>
                     </div>
+                  }
+                
+                  v. {this.props.version.id.version}
+                </div>
+                {this.props.version.isBlackListed ?
+                  <div className="pull-left">
+                    <button className="btn btn-blacklist btn-edit-blacklist" onClick={this.formBlacklist.bind(this, 'edit')}></button>
                   </div>
-                :
-                  <div className="package-statuses pull-right">
-                    v. {this.props.version.id.version}
-                    <div className="package-version-right pull-right">
-                      {!this.props.isQueued ? 
-                        <button className="btn btn-action btn-install pull-right" id={"button-install-package-" + this.props.version.id.name + "-" + this.props.version.id.version} onClick={this.props.installPackage.bind(this, this.props.version.id.name, this.props.version.id.version)}>Install</button>
-                      :
-                        <button className="btn btn-action btn-install pull-right" id={"button-install-package-" + this.props.version.id.name + "-" + this.props.version.id.version} disabled={true}>Install</button>
-                      }
-                    </div>
+                : 
+                  <div className="pull-left">
+                    <button className="btn btn-blacklist btn-add-blacklist" onClick={this.formBlacklist.bind(this, 'add')}></button>
                   </div>
                 }
+                
+                <div className="package-version-right pull-right">
+                  <span className={"package-status-label " + (this.props.version.attributes.status == 'installed' ? 'green' : 'orange')}>
+                    {this.props.version.attributes.status}
+                  </span>
+                </div>
               </div>
-          </li>
+            :
+              <div className="package-statuses pull-right">
+                <div className="pull-left">
+                  v. {this.props.version.id.version}
+                </div>
+                
+                <div className="pull-left">
+                {this.props.version.isBlackListed ?
+                  <div className="pull-left">
+                    <button className="btn btn-blacklist btn-edit-blacklist" onClick={this.formBlacklist.bind(this, 'edit')}></button>
+                  </div>
+                : 
+                  <div className="pull-left">
+                    <button className="btn btn-blacklist btn-add-blacklist" onClick={this.formBlacklist.bind(this, 'add')}></button>
+                  </div>
+                }
+                </div>
+        
+                <div className="package-version-right pull-right">
+                  {!this.props.isQueued ? 
+                    <button className="btn btn-action btn-install pull-right" id={"button-install-package-" + this.props.version.id.name + "-" + this.props.version.id.version} onClick={this.props.installPackage.bind(this, this.props.version.id.name, this.props.version.id.version)} disabled={this.props.version.isBlackListed}>
+                      {this.props.version.isBlackListed ? 
+                        <span className="text-stroke">Install</span> 
+                      :
+                        <span>Install</span>
+                      }
+                    </button>
+                  :
+                    <button className="btn btn-action btn-install pull-right" id={"button-install-package-" + this.props.version.id.name + "-" + this.props.version.id.version} disabled={true}>Install</button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </li>
       );
     }
   };

@@ -36,6 +36,7 @@ define(function(require) {
             version={version}
             isQueued={this.props.isQueued}
             installPackage={this.installPackage}
+            showBlacklistForm={this.props.showBlacklistForm}
             key={'package-' + this.props.packageName + '-' + version.id.version}/>
         );
       }, this);
