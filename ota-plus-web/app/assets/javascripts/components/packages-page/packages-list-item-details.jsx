@@ -12,6 +12,7 @@ define(function(require) {
         return (
           <PackagesListItemDetailsVersion
             version={version}
+            showBlacklistForm={this.props.showBlacklistForm}
             key={'package-' + this.props.packageName + '-' + version.id.version}/>
         );
       }, this);

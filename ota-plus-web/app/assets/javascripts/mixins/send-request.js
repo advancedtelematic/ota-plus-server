@@ -1,4 +1,5 @@
 define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function($, _, db, request) {
+    
   var sendRequest = {
 
     getCsrfToken: function() {
@@ -33,9 +34,13 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
         return ajaxReq;
       
       return ajaxReq.success(function(data) {
-        request.renderRequestSuccess(data, opts.action);
+        request.renderRequestSuccess(data, opts.action, 200);
       })
       .error(function(xhr) {
+        if (xhr.status==201) {
+          request.renderRequestSuccess(xhr, opts.action, 201); 
+          return; 
+        }
         request.renderRequestError(xhr, opts.action);
       });
     },
@@ -69,9 +74,13 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
         return ajaxReq;
       
       return ajaxReq.success(function(data) {
-        request.renderRequestSuccess(data, opts.action);
+        request.renderRequestSuccess(data, opts.action, 200);
       })
       .error(function(xhr) {
+        if (xhr.status==201) {
+          request.renderRequestSuccess(xhr, opts.action, 201); 
+          return; 
+        }
         request.renderRequestError(xhr, opts.action);
       });
     },

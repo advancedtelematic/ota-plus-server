@@ -10,6 +10,7 @@ define(function(require) {
       TutorialInstallDevice = require('es6!../tutorial/install-device'),
       Components = require('es6!../components/components'),
       AddPackage = require('es6!../packages/add-package'),
+      BlacklistForm = require('es6!../packages/blacklist-form'),
       Loader = require('es6!../loader'),
       VelocityUI = require('velocity-ui'),
       VelocityHelpers = require('mixins/velocity/velocity-helpers'),
@@ -20,6 +21,7 @@ define(function(require) {
     constructor(props, context) {
       super(props, context);
       this.state = {
+        filterValue: '',
         isPackagesHistoryShown: false,
         textPackagesHistory: context.strings.viewhistory,
         installedPackagesCount: 0,
@@ -31,7 +33,11 @@ define(function(require) {
         duplicatingTimeout: 2000,
         selectedImpactAnalysisPackagesCount: 0,
         files: null,
-        isFormShown: false
+        isFormShown: false,
+        blacklistedPackageName: null,
+        blacklistedPackageVersion: null,
+        blacklistMode: null,
+        isBlacklistFormShown: false,
       }
       this.toggleQueueHistory = this.toggleQueueHistory.bind(this);
       this.reviewFailedInstall = this.reviewFailedInstall.bind(this);
@@ -43,6 +49,9 @@ define(function(require) {
       this.closeForm = this.closeForm.bind(this);
       this.onDrop = this.onDrop.bind(this);
       this.focusPackage = this.focusPackage.bind(this);
+      this.showBlacklistForm = this.showBlacklistForm.bind(this);
+      this.closeBlacklistForm = this.closeBlacklistForm.bind(this);
+      this.changeFilter = this.changeFilter.bind(this);
 
       db.showDevice.reset();
       SotaDispatcher.dispatch({actionType: 'get-device', device: this.props.params.id});
@@ -145,6 +154,28 @@ define(function(require) {
       
       this.openForm();
     }
+    showBlacklistForm(packageName, packageVersion, mode) {
+      this.setState({
+        isBlacklistFormShown: true,
+        blacklistedPackageName: packageName,
+        blacklistedPackageVersion: packageVersion,
+        blacklistMode: mode
+      });
+    }
+    closeBlacklistForm() {
+      var that = this;
+      this.setState({
+        isBlacklistFormShown: false,
+        blacklistedPackageName: null,
+        blacklistedPackageVersion: null
+      });
+      setTimeout(function() {
+        SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: that.state.filterValue});
+      }, 1);
+    }
+    changeFilter(filter) {
+      this.setState({filterValue: filter});
+    }
     render() {
       const deviceWithStatus = db.showDevice.deref();
 
@@ -211,7 +242,11 @@ define(function(require) {
                     setPackagesStatistics={this.setPackagesStatistics}
                     countImpactAnalysisPackages={this.countImpactAnalysisPackages}
                     openForm={this.openForm}
-                    onDrop={this.onDrop}/>
+                    onDrop={this.onDrop}
+                    showBlacklistForm={this.showBlacklistForm}
+                    closeBlacklistForm={this.closeBlacklistForm}
+                    filterValue={this.state.filterValue}
+                    changeFilter={this.changeFilter}/>
               </div>
               <div className="panel-footer" style={{position: 'relative'}}>
                 <VelocityComponent animation={this.state.selectedImpactAnalysisPackagesCount ? animateLeftPosition('15px') : animateLeftPosition('-250px')}>
@@ -259,7 +294,17 @@ define(function(require) {
                 focusPackage={this.focusPackage}
                 key="add-package"/>
             : null}
-            </VelocityTransitionGroup>
+          </VelocityTransitionGroup>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isBlacklistFormShown ?
+              <BlacklistForm
+                mode={this.state.blacklistMode}
+                packageName={this.state.blacklistedPackageName}
+                packageVersion={this.state.blacklistedPackageVersion}
+                closeForm={this.closeBlacklistForm}
+                refreshData={this.refreshData}/>
+            : null}
+          </VelocityTransitionGroup>
           {this.props.children}
         </div>
       );

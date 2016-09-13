@@ -205,6 +205,7 @@ define(function(require) {
             GroupedPackages[obj.id.name]['isInstalled'] = isInstalled;
             GroupedPackages[obj.id.name]['isDebOrRpmPackage'] = isDebOrRpmPackage;
             GroupedPackages[obj.id.name]['isManagedPackage'] = isManagedPackage;
+            GroupedPackages[obj.id.name]['isBlackListed'] = obj.isBlackListed && isInstalled ? true : false;
 
             isQueued ? queuedCount++ : null;
             isInstalled ? installedCount++ : null;
@@ -223,6 +224,9 @@ define(function(require) {
           if(!GroupedPackages[obj.id.name].isDebOrRpmPackage && isDebOrRpmPackage) {
             GroupedPackages[obj.id.name]['isDebOrRpmPackage'] = true;
           }
+          
+          if(!GroupedPackages[obj.id.name]['isBlackListed'] && obj.isBlackListed && isInstalled)
+            GroupedPackages[obj.id.name]['isBlackListed'] = true;
 
           GroupedPackages[obj.id.name]['elements'].push(Packages[index]);
         });
@@ -383,7 +387,8 @@ define(function(require) {
                 mainLabel={mainLabel}
                 selectToAnalyse={this.selectToAnalyse}
                 deviceId={this.props.device.id}
-                selected={this.state.expandedPackage == pack.packageName ? true : false}/>
+                selected={this.state.expandedPackage == pack.packageName ? true : false}
+                isBlackListed={pack.isBlackListed}/>
                 <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
                   {this.state.expandedPackage == pack.packageName ?
                     <PackageListItemDetails
@@ -392,7 +397,9 @@ define(function(require) {
                       deviceId={this.props.device.id}
                       packageName={pack.packageName}
                       isQueued={pack.isQueued}
-                      refresh={this.refreshData}/>
+                      refresh={this.refreshData}
+                      showBlacklistForm={this.props.showBlacklistForm}
+                      closeBlacklistForm={this.props.closeBlacklistForm}/>
                   : null}
                 </VelocityTransitionGroup>
             </li>

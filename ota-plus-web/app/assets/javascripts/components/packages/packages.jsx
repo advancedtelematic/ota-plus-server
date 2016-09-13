@@ -10,7 +10,6 @@ define(function(require) {
       super(props);
       
       this.state = {
-        filterValue: '',
         selectedStatus: 'all',
         selectedStatusName: 'All',
         selectedSort: 'asc',
@@ -32,7 +31,6 @@ define(function(require) {
       if(!_.isUndefined(alertCookie.packages) && alertCookie.packages === 'closed')
         this.state.alertHidden = true;
             
-      this.changeFilter = this.changeFilter.bind(this);      
       this.setPackagesListHeight = this.setPackagesListHeight.bind(this);
     }
     componentDidMount() {
@@ -56,9 +54,6 @@ define(function(require) {
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setPackagesListHeight);
-    }
-    changeFilter(filter) {
-      this.setState({filterValue: filter});
     }
     selectStatus(status, e) {
       e.preventDefault();
@@ -109,7 +104,7 @@ define(function(require) {
               : null
             : undefined}
 
-            <SearchBar class="search-bar pull-left" inputId="search-packages-input" changeFilter={this.changeFilter}/>
+            <SearchBar class="search-bar pull-left" inputId="search-packages-input" changeFilter={this.props.changeFilter}/>
 
             <div className="pull-right margin-left-15">
               <button onClick={this.props.openForm} className="btn btn-add pull-right" id="button-add-new-package">
@@ -170,11 +165,13 @@ define(function(require) {
                 selectedStatus={this.state.selectedStatus}
                 selectedSort={this.state.selectedSort}
                 selectedType={this.state.selectedType}
-                filterValue={this.state.filterValue}
+                filterValue={this.props.filterValue}
                 setPackagesStatistics={this.props.setPackagesStatistics}
                 countImpactAnalysisPackages={this.props.countImpactAnalysisPackages}
                 device={this.props.device}
-                onDrop={this.props.onDrop}/>
+                onDrop={this.props.onDrop}
+                showBlacklistForm={this.props.showBlacklistForm}
+                closeBlacklistForm={this.props.closeBlacklistForm}/>
             : undefined}
           </div>
         </div>
