@@ -40,6 +40,12 @@ button.list-group-item:focus { background: transparent; }
 /* Navbar */
 .right-nav { -webkit-padding-start: 10px; }
 .right-nav li { margin: 10px 0 0 20px; display: inline-block; }
+.right-nav li#li-impactanalysis { margin: 0; }
+.right-nav li#li-impactanalysis a { color: #fff; font-size: 15px; text-decoration: none; background: red; padding: 8px 13px; margin: 0; border-radius: 20px; display: inline-block; position: relative; transition: all 0.3s ease-in; }
+.right-nav li#li-impactanalysis a:after { background: red; width: 100%; height: 0; content: ''; display: block; position: absolute; left: 0; bottom: -10px; }
+.right-nav li#li-impactanalysis a.disabled { background: #ccc; }
+.right-nav li#li-impactanalysis a.disabled:after { background: #ccc; }
+.right-nav li#li-impactanalysis a:hover:after, .right-nav li#li-impactanalysis a.active:after { height: 5px; }
 
 .navbar-inverse { background: #fff; min-width: 1348px; position: absolute; border: 0; }
 .navbar-inverse a { color: #555; }
@@ -648,3 +654,25 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .queue-item-name { width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .text-stroke { text-decoration: line-through; }
+
+.impact-analysis .impact-analysis-header { background: rgba(0, 0, 0, 0.5); width: 100%; padding: 30px 0; float: left; }
+.impact-analysis .impact-analysis-header .impact-analysis-icon { text-align: center; background: url(/assets/img/icons/impact_analysis.png) no-repeat; background-size: cover; width: 80px; height: 80px; display: inline-block; vertical-align: middle; margin: 0 0 0 30px; }
+.impact-analysis .impact-analysis-header .icon-back { margin: 0; }
+.impact-analysis .impact-analysis-header .impact-analysis-header-text { width: auto; margin: 0 0 0 25px; display: inline-block; vertical-align: middle; }
+.impact-analysis .impact-analysis-header .impact-analysis-header-text .title { font-size: 22px; }
+.impact-analysis .impact-analysis-header .impact-analysis-header-text .counter { font-size: 14px; margin: 3px 0 0 0; opacity: 0.8; }
+.impact-analysis .impact-analysis-blacklisted-packages { margin: 25px 0; }
+.impact-analysis .impact-analysis-blacklisted-packages .title { font-size: 16px; margin: 5px 20px 0 0; }
+.impact-analysis .impact-analysis-blacklisted-packages .impact-analysis-blacklisted-package { color: #444; background: #fff; padding: 5px 10px; margin: 0 10px; display: inline-block; -webkit-box-shadow: 0px 0px 13px 1px rgba(0, 0, 0, 0.45); -moz-box-shadow: 0px 0px 13px 1px rgba(0, 0, 0, 0.45); box-shadow: 0px 0px 13px 1px rgba(0, 0, 0, 0.45); border-radius: 3px; }
+.impact-analysis #impacted-devices-list { width: 100%; overflow-y: auto; float: left; }
+.impact-analysis .impacted-device, .impact-analysis .impacted-group { width: 110px; text-align: center; float: left; }
+.impact-analysis .impacted-device .title, .impact-analysis .impacted-group .title { font-size: 15px; word-break: break-all; }
+.impact-analysis .impacted-device .subtitle, .impact-analysis .impacted-group .subtitle { font-size: 12px; margin: 5px 0 0 0; opacity: 0.5; }
+.impact-analysis .impact-devices-group { margin: 20px 0; float: left; }
+.impact-analysis .impacted-device { margin-right: 60px; }
+.impact-analysis .impacted-device.notavailable .device-icon { background-image: url(/assets/img/icons/device_large_transparent.png); }
+.impact-analysis .impacted-group .device-icon { background-image: url(/assets/img/icons/group_large.png); }
+.impact-analysis .dots { background: url(/assets/img/icons/dots.png) no-repeat; background-size: cover; width: 20px; height: 5px; margin: 50px 20px 0 20px; float: left; opacity: 0.4; }
+.impact-analysis .device-icon { width: 106px; height: 106px; background-image: url(/assets/img/icons/device_large.png); }
+
+hr.full-line { width: 100%; margin: 0; border-color: #222; }
