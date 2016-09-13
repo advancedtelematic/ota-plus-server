@@ -20,10 +20,10 @@ define(function(require) {
               <div className="title">Impact analyser</div>
               <div className="counter">
                 {!_.isUndefined(impactedDevices) ? 
-                  _.isUndefined(impactedDevices.length) ? 
-                    <span>No impacted devices</span>
+                  Object.keys(impactedDevices).length ?
+                    <span>Impact: {Object.keys(impactedDevices).length} Devices</span>
                   :
-                    <span>Impact: {impactedDevices.length} Devices</span>
+                    <span>No impacted devices</span>
                 :
                   <span><i className="fa fa-circle-o-notch fa-spin"></i> impact analysis</span>
                 }
