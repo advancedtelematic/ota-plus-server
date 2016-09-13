@@ -25,6 +25,8 @@ define(function(require) {
       this.components = atom.createAtom();
       this.deviceSeen = atom.createAtom();
       this.blacklistedPackage = atom.createAtom();
+      this.blacklistedPackages = atom.createAtom();
+      this.impactAnalysis = atom.createAtom();
     }
 
     return DB;
