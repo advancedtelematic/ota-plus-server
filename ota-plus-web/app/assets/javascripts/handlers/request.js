@@ -14,11 +14,15 @@ define(function(require) {
         result = xhr.responseText;
         errorObj.code = xhr.status;
         
+        console.log(ct);
+        
         if (ct.indexOf('plain') > -1) {
           console.log('Plaintext error message');
           errorObj.response = result;
         } else if (ct.indexOf('json') > -1) {
           errorObj.response = JSON.parse(result).description;
+        } else if(ct.indexOf('text/html') > -1) {
+          errorObj.response = xhr.statusText;
         }
       }
       
