@@ -37,20 +37,22 @@ define(function(require) {
           </div>
 
           {this.props.isDebOrRpmPackage || !this.props.isManagedPackage ? 
-            <div>
-              <div className="pull-right package-statuses">
+            <div className={(!this.props.queuedPackage && !this.props.selected ? "": "package-item-details ") + "pull-right"}>
+              <div className="package-statuses">
                 {this.props.installedPackage ?
                   !this.props.selected ?
-                    <span className="pull-right">
+                    <span className="pull-right width-100">
+                      <span className="pull-right">installed</span>
+                      <span className="package-name pull-right" title={this.props.installedPackage}>{this.props.installedPackage}&nbsp;</span>
+                      <span className="pull-right">v.&nbsp;</span>
                       {this.props.isBlackListed ? 
-                        <i className="fa fa-exclamation-triangle icon-exclamation"></i>
+                        <i className="fa fa-exclamation-triangle icon-exclamation pull-right"></i>
                       :
-                        <span className="fa-stack package-status-circle">
+                        <span className="fa-stack package-status-circle pull-right">
                           <i className="fa fa-circle fa-stack-1x"></i>
                           <i className="fa fa-check-circle fa-stack-1x green" aria-hidden="true"></i>
                         </span>
                       }
-                      v. {this.props.installedPackage} installed
                     </span>
                   : null
                 :
@@ -63,12 +65,14 @@ define(function(require) {
               </div>
               <div className="pull-right package-statuses">
                 {this.props.queuedPackage && !this.props.selected ?
-                  <span className="pull-right">
-                    <span className="fa-stack package-status-circle">
+                  <span className="pull-right width-100">            
+                    <span className="pull-right">queued</span>
+                    <span className="package-name pull-right" title={this.props.queuedPackage}>{this.props.queuedPackage}&nbsp;</span>
+                    <span className="pull-right">v.&nbsp;</span>
+                    <span className="fa-stack package-status-circle pull-right">
                       <i className="fa fa-circle fa-stack-1x"></i>
                       <i className="fa fa-dot-circle-o fa-stack-1x orange" aria-hidden="true"></i>
                     </span>
-                    v. {this.props.queuedPackage} queued
                   </span>
                 : null }
               </div>

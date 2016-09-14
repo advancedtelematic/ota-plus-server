@@ -109,7 +109,9 @@ define(function(require) {
               </div>
             }
             <div className="package-statuses pull-right">
-              v. {this.props.version.id.version}
+              <div className="package-version-name pull-right">
+                v. <span title={this.props.version.id.version}>{this.props.version.id.version}</span>
+              </div>
             </div>
           </div>
         </li>
