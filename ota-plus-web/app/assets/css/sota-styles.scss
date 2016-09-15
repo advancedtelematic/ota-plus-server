@@ -83,8 +83,16 @@ button {
 
 /* Containers */
 
-#devices-container {
+#devices-container, #impacted-devices-container {
     padding: 0 15px !important;
+}
+
+#impacted-devices-container {
+    a {
+        margin: 0 0 20px 0;
+        display: inline-block;
+        vertical-align: top;
+    }
 }
 
 .container {
@@ -332,6 +340,7 @@ button {
     }
 
     #devices-list {
+        width: 100%;
         padding: 20px 0 0 0;
     }
 
@@ -590,7 +599,7 @@ button {
         display: inline-block;
         @include textoverflow-ellipsis;
     }
-    
+
     .package-statuses {
         .package-status-circle {
             line-height: 32px;
@@ -2256,7 +2265,7 @@ a.close, button.close {
 
 .package-item-details {
     width: 30%;
-    
+
     .package-name {
         max-width: 50%;
         @include textoverflow-ellipsis;
@@ -2362,6 +2371,7 @@ a.close, button.close {
     }
 
     .impacted-device {
+        width: 180px;
         margin-right: 60px;
 
         &.notavailable {
@@ -2388,9 +2398,11 @@ a.close, button.close {
     }
 
     .device-icon {
-        width: 106px;
+        width: 100%;
         height: 106px;
         background-image: url(/assets/img/icons/device_large.png);
+        background-size: 106px 106px;
+        background-position: center;
     }
 }
 
@@ -2406,7 +2418,7 @@ hr.full-line {
             animation: dots 1.5s steps(5, end) infinite;
         }
     }
-    
+
     &:after {
         content: ' .';
         animation: dots-white 1.5s steps(5, end) infinite;
