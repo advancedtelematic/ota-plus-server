@@ -16,6 +16,7 @@ GET     /api/v1/devices/:uuid                    org.genivi.webserver.controller
 GET     /api/v1/devices/:deviceId/clientInfo     org.genivi.webserver.controllers.DeviceController.fetchClientInfo(deviceId: Device.Id)
 GET     /api/v1/devices/:deviceId/system_info    org.genivi.webserver.controllers.DeviceController.fetchSystemInfo(deviceId: Device.Id)
 
+GET     /api/v1/devices/group_info               org.genivi.webserver.controllers.DeviceController.listGroupInfo()
 GET     /api/v1/devices/:groupName/group_info    org.genivi.webserver.controllers.DeviceController.fetchGroupInfo(groupName: String)
 POST    /api/v1/devices/:groupName/group_info    org.genivi.webserver.controllers.DeviceController.createGroupInfo(groupName: String)
 PUT     /api/v1/devices/:groupName/group_info    org.genivi.webserver.controllers.DeviceController.updateGroupInfo(groupName: String)
