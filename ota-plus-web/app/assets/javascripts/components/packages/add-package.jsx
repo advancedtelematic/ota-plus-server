@@ -4,7 +4,8 @@ define(function(require) {
       serializeForm = require('../../mixins/serialize-form'),
       SotaDispatcher = require('sota-dispatcher'),
       Responses = require('../responses'),
-      ProgressBar = require('../progress-bar');
+      ProgressBar = require('../progress-bar'),
+      ProcessBar = require('../process-bar');
   
   class AddPackage extends React.Component {
     constructor(props) {
@@ -12,10 +13,12 @@ define(function(require) {
       this.state = {
         showProgressBar: false,
         isButtonDisabled: false,
+        isProcessingBarShown: false
       };
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleResponse = this.handleResponse.bind(this);
       this.closeForm = this.closeForm.bind(this);
+      this.uploadFinished = this.uploadFinished.bind(this);
       
       db.postStatus.addWatch("poll-response-add-package", _.bind(this.handleResponse, this, null));
     }
@@ -68,7 +71,10 @@ define(function(require) {
       db.postRequest.reset();
       this.props.closeForm();
     }
-    render() {    
+    uploadFinished() {
+      this.setState({isProcessingBarShown: true});
+    }
+    render() {
       return (
         <div id="modal-add-package" className="myModal">
           <div className="modal-dialog">
@@ -118,7 +124,13 @@ define(function(require) {
                           <input type="file" className="file-upload" name="file" />
                         }
                       </div>
-                      <ProgressBar action="create-package"/>
+                      <ProgressBar 
+                        action="create-package"
+                        finishCallback={this.uploadFinished}/>
+                      
+                      {this.state.isProcessingBarShown ?
+                        <ProcessBar label="Processing in progress"/>
+                      : null}
                     </div>
                   </div>
                 </div>
