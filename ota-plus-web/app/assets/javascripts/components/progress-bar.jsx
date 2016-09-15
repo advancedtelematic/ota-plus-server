@@ -19,8 +19,12 @@ define(function(require) {
       db.postProgress.removeWatch("poll-progress-" + this.props.action);
     }
     setProgress() {
-      if(!_.isUndefined(db.postProgress.deref()) && !_.isUndefined(db.postProgress.deref()[this.props.action]))
+      if(!_.isUndefined(db.postProgress.deref()) && !_.isUndefined(db.postProgress.deref()[this.props.action])) {
+          console.log(db.postProgress.deref()[this.props.action]);
+        if(db.postProgress.deref()[this.props.action] == 100)
+          this.props.finishCallback();
         this.setState({uploadProgress: db.postProgress.deref()[this.props.action] < 100 ? db.postProgress.deref()[this.props.action] : undefined});
+      }
     }
     render() {
       return (
