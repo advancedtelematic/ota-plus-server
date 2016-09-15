@@ -102,26 +102,30 @@ class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends Ot
     devicesRequest("devices/" + id.show + "/system_info").withUserOptions(options).execResult(apiExec)
   }
 
+  def listGroupInfo(options: UserOptions): Future[Result] = {
+    devicesRequest(s"devices/group_info").withUserOptions(options).execResult(apiExec)
+  }
+
   def fetchGroupInfo(options: UserOptions, groupName: String): Future[Result] = {
-    devicesRequest(s"devices/group_info?groupName=$groupName").withUserOptions(options).execResult(apiExec)
+    devicesRequest(s"devices/$groupName/group_info").withUserOptions(options).execResult(apiExec)
   }
 
   def createGroupInfo(options: UserOptions, groupName: String, body: JsValue): Future[Result] = {
-    devicesRequest(s"devices/group_info?groupName=$groupName")
+    devicesRequest(s"devices/$groupName/group_info")
       .withUserOptions(options)
       .transform(_.withMethod("POST").withBody(body))
       .execResult(apiExec)
   }
 
   def updateGroupInfo(options: UserOptions, groupName: String, body: JsValue): Future[Result] = {
-    devicesRequest(s"devices/group_info?groupName=$groupName")
+    devicesRequest(s"devices/$groupName/group_info")
       .withUserOptions(options)
       .transform(_.withMethod("PUT").withBody(body))
       .execResult(apiExec)
   }
 
   def deleteGroupInfo(options: UserOptions, groupName: String): Future[Result] = {
-    devicesRequest(s"devices/group_info?groupName=$groupName").withUserOptions(options).execResult(apiExec)
+    devicesRequest(s"devices/$groupName/group_info").withUserOptions(options).execResult(apiExec)
   }
 
   def createDevice(options: UserOptions, device: DeviceT): Future[Device.Id] = {
