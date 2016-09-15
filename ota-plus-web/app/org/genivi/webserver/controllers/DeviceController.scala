@@ -55,6 +55,11 @@ extends Controller with ApiClientSupport {
     devicesApi.getSystemInfo(options, id)
   }
 
+  def listGroupInfo(): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
+    val options = userOptions(req)
+    devicesApi.listGroupInfo(options)
+  }
+
   def fetchGroupInfo(groupName: String): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
     val options = userOptions(req)
     devicesApi.fetchGroupInfo(options, groupName)
