@@ -108,7 +108,7 @@ define(function(require) {
               <div className="modal-body">
                 {!_.isUndefined(this.state.comment) ?
                   <form ref='form' onSubmit={this.handleSubmit} encType="multipart/form-data">
-                    <Responses action="update-package-in-blacklist" handledStatuses="error"/>
+                    <Responses action={this.props.mode === 'edit' ?  'update-package-in-blacklist' : 'add-package-to-blacklist'} handledStatuses="error"/>
                     <div className="row">
                       <div className="col-md-12">
                         <div className="form-group">
