@@ -26,7 +26,6 @@ define(function(require) {
       DeviceDetails = require('es6!components/devices/device-details'),
       ProductionDeviceDetails = require('es6!components/devices/production-device-details'),
       Packages = require('es6!components/packages-page/packages'),
-      NewDevice = require('es6!components/devices/new-device'),
       Modal = require('es6!components/modal'),
       ImpactAnalysis = require('es6!components/devices/impact-analysis'),
       Profile = require('es6!components/profile'),
@@ -186,7 +185,6 @@ define(function(require) {
       if(path[1] !== undefined) {
         switch(path[1]) {
           case '':
-          case 'newdevice':
           case 'testsettings': 
           case 'editprofile':
           case 'impactanalysis':
@@ -268,9 +266,7 @@ define(function(require) {
     <Route component={Translate(App)} path="/" ignoreScrollBehavior={true}>
       <Route component={RightPanel}>
         <IndexRoute component={Devices}/>
-        <Route path="/" component={Devices}>
-          <Route path="newdevice" component={Modal(NewDevice, {TitleVar: "newdevice", modalId: 'modal-new-device'})}/>
-        </Route>
+        <Route path="/" component={Devices}/>
         <Route path="devicedetails/:id" component={DeviceDetails}>
           <Route path="impactanalysis/:count" component={Modal(ImpactAnalysis, {TitleVar: "impactanalysis", modalId: 'modal-impact-analysis'})}/>
           <Route path="newcampaign" component={Modal(NewCampaign, {TitleVar: "newcampaign", modalId: 'modal-new-campaign'})}/>
