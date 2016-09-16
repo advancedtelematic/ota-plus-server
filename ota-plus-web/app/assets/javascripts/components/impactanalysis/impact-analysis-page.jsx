@@ -2,18 +2,22 @@ define(function(require) {
   var React = require('react'),
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       ImpactAnalysisHeader = require('es6!./impact-analysis-header'),
       BlacklistedPackagesList = require('es6!./blacklisted-packages-list'),
-      ImpactedDevicesList = require('es6!./impacted-devices-list');
+      ImpactedDevicesList = require('es6!./impacted-devices-list'),
+      ImpactTooltip = require('es6!./impact-tooltip');
   
   class ImpactAnalysisPage extends React.Component {
     constructor(props) {
       super(props);
-      
       this.state = {
         intervalId: null,
-        impactedDevicesListHeight: '400px'
+        impactedDevicesListHeight: '400px',
+        isImpactTooltipShown: false
       };
+      this.showImpactTooltip = this.showImpactTooltip.bind(this);
+      this.hideImpactTooltip = this.hideImpactTooltip.bind(this);
       this.setImpactedDevicesListHeight = this.setImpactedDevicesListHeight.bind(this);
       
       SotaDispatcher.dispatch({actionType: 'get-devices'});
@@ -52,6 +56,12 @@ define(function(require) {
         impactedDevicesListHeight: windowHeight - offsetTop
       });
     }
+    showImpactTooltip() {
+      this.setState({isImpactTooltipShown: true});
+    }
+    hideImpactTooltip() {
+      this.setState({isImpactTooltipShown: false});
+    }
     render() {
       var impactAnalysis = db.impactAnalysis.deref();
       var devices = db.devices.deref();
@@ -77,7 +87,7 @@ define(function(require) {
               deviceName: !_.isUndefined(deviceData) ? deviceData.deviceName : deviceUUID
             };
           });          
-        });        
+        });
       }
       return (
         <div className="impact-analysis">
@@ -85,12 +95,23 @@ define(function(require) {
             impactedDevices={impactedDevices}/>
           <div id="impacted-devices-list" style={{height: this.state.impactedDevicesListHeight}}>
             <BlacklistedPackagesList 
-              packages={db.blacklistedPackages.deref()}/>
-            <BlacklistedPackagesList 
-              packages={impactedPackages}
-              type="impacted"/>
-            <ImpactedDevicesList 
-              Devices={impactedDevices} />
+              packages={db.blacklistedPackages.deref()}
+              showImpactTooltip={this.showImpactTooltip}/>
+            {!_.isUndefined(impactedPackages) && !_.isEmpty(impactedPackages) ? 
+              <BlacklistedPackagesList 
+                packages={impactedPackages}
+                type="impacted"/>
+            : undefined}
+            {!_.isUndefined(impactedDevices) && !_.isEmpty(impactedDevices) ?
+              <ImpactedDevicesList 
+                devices={impactedDevices}/>
+            : undefined}
+            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+              {this.state.isImpactTooltipShown ?
+                <ImpactTooltip 
+                  hideImpactTooltip={this.hideImpactTooltip}/>
+              : undefined}
+            </VelocityTransitionGroup>
           </div>
         </div>
       );

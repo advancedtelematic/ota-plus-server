@@ -30,8 +30,7 @@ define(function(require) {
     }
     render() {
       var devices = [];
-      var Devices = this.props.Devices;
-      var devices = _.map(Devices, function(device, i) {
+      var devices = _.map(this.props.devices, function(device, i) {
         return (
           <ImpactedDevicesListItem key={device.deviceName}
             device={device}

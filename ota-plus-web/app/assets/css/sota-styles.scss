@@ -2,11 +2,12 @@
 
 $font-size: 13px;
 $font-family: "AkkuratRegular";
-$color_blue: #A6E6DF;
-$color_red: #d66f6f;
+$color-blue: #A6E6DF;
+$color-red: #d66f6f;
 $color-orange: #FB9773;
 $color-brown: #66493E;
-$color_darkgrey: #444;
+$color-darkgrey: #444;
+$color-lightgrey: #888;
 
 @import "common.scss";
 
@@ -110,47 +111,6 @@ button {
         margin: 10px 0 0 20px;
         display: inline-block;
         vertical-align: top;
-
-        &#li-impactanalysis {
-            margin: 6px 0 0 0;
-
-            a {
-                color: #fff;
-                font-size: 15px;
-                text-decoration: none;
-                background: red;
-                padding: 8px 13px;
-                margin: 0;
-                border-radius: 20px;
-                display: inline-block;
-                position: relative;
-                transition: all 0.3s;
-
-                &:after {
-                    background: red;
-                    width: 100%;
-                    height: 0;
-                    content: '';
-                    display: block;
-                    position: absolute;
-                    left: 0;
-                    bottom: -10px;
-                    transition: all 0.2s ease-in;
-                }
-
-                &.disabled {
-                    background: #ccc;
-
-                    &:after {
-                        background: #ccc;
-                    }
-                }
-            }
-
-            a:hover:after, a.active:after {
-                height: 5px;
-            }
-        }
 
         &#li-upload-nav-bar {
             margin: 10px 15px 0 0;
@@ -687,13 +647,17 @@ button {
         display: block;
 
         &.btn-edit-blacklist {
-            background: url(/assets/img/icons/edit_black.png) no-repeat center;
-            background-size: 22px 22px !important;
+            background: url(/assets/img/icons/ban_red.png) no-repeat center;
+            background-size: 20px 20px !important;
         }
 
         &.btn-add-blacklist {
-            background: url(/assets/img/icons/blacklist.png) no-repeat center;
-            background-size: 18px 23px !important;
+            background: url(/assets/img/icons/ban_grey.png) no-repeat center;
+            background-size: 20px 20px !important;
+
+            &:hover {
+                background: url(/assets/img/icons/ban_red.png) no-repeat center;
+            }
         }
     }
 }
@@ -1124,10 +1088,18 @@ a.close, button.close {
 }
 
 .darkgrey {
-    color: $color_darkgrey;
+    color: $color-darkgrey;
 
     &:hover, &:focus, &:active {
-        color: $color_darkgrey;
+        color: $color-darkgrey;
+    }
+}
+
+.lightgrey {
+    color: $color-lightgrey;
+
+    &:hover, &:focus, &:active {
+        color: $color-lightgrey;
     }
 }
 
@@ -1135,7 +1107,7 @@ a.close, button.close {
     color: #96DED2;
 
     &:hover, &:focus, &:active {
-        color: $color_darkgrey;
+        color: $color-darkgrey;
     }
 }
 
@@ -2196,6 +2168,7 @@ a.close, button.close {
 
 .btn-confirm {
     color: #333;
+    font-size: 16px;
     font-weight: bold;
     background: #96DED2;
     padding: 13px 60px;
@@ -2632,7 +2605,7 @@ hr.full-line {
 
                     .table-uploads {
                         margin-bottom: 5px;
-                        
+
                         & > tbody {
                             & > tr {
                                 & > td {
@@ -2652,4 +2625,59 @@ hr.full-line {
             }
         }
     }
+}
+
+#link-impactanalysis {
+    .badge {
+        font-size: 11px;
+        background: red;
+        padding-left: 8px;
+        padding-right: 8px;
+        position: absolute;
+        top: 8px;
+        left: 114px;
+    }
+}
+
+#modal-blacklist {
+    .modal-dialog {
+        width: 520px;
+
+        .modal-content {
+            .modal-header {
+                .modal-title {
+                    img {
+                        vertical-align: bottom;
+                    }
+                }
+
+                &.blacklist-header {
+                    background: red;
+                }
+            }
+
+            .modal-body {
+                padding: 40px 60px 30px 60px;
+            }
+        }
+    }
+}
+
+#impact-tooltip {
+    padding-top: 200px;
+    
+    .modal-dialog {
+        width: 684px;;
+
+        .modal-content {
+            .modal-body {
+                line-height: 1.6em;
+                padding: 35px 20px 20px 20px;
+            }
+        }
+    }
+}
+
+.underlined {
+    text-decoration: underline;
 }
