@@ -65,7 +65,7 @@ define(function(require) {
     }
     closeForm(e) {
       e.preventDefault();
-      var xhrRequest = db.postRequest.deref()['create-package'];
+      var xhrRequest = !_.isUndefined(db.postRequest.deref()) && !_.isUndefined(db.postRequest.deref()['create-package']) ? db.postRequest.deref()['create-package'] : undefined;
       if(!_.isUndefined(xhrRequest) && typeof xhrRequest.abort() === 'function')
         xhrRequest.abort();
       db.postRequest.reset();
