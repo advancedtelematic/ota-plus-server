@@ -1,6 +1,7 @@
 package com.advancedtelematic.login
 
 import akka.NotUsed
+import org.genivi.sota.data.Namespace
 import com.advancedtelematic.AuthenticatedAction
 import com.advancedtelematic.api.{UnexpectedResponse, MalformedResponse}
 import com.advancedtelematic.{AuthPlusAccessToken, Auth0AccessToken, JwtAssertion, IdToken}
@@ -22,6 +23,11 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{ Failure, Success, Try }
 
 final case class LoginData(username: String, password: String)
+
+final case class UnexpectedToken(token: IdToken, msg: String) extends Throwable {
+  override def getMessage: String =
+    s"Cannot parse namespace from token: '${token.value}', '${msg}'"
+}
 
 /**
   * Handles just login/authentication
@@ -116,7 +122,7 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
           .getOrElse(Redirect(routes.LoginController.login())) |> Future.successful
       }
       .getOrElse {
-        val tokens: AsyncDescribedComputation[(IdToken, Auth0AccessToken, AuthPlusAccessToken)] = for {
+        val tokens: AsyncDescribedComputation[(IdToken, Auth0AccessToken, AuthPlusAccessToken, Namespace)] = for {
           code <- AsyncDescribedComputation.lift(
                      request
                        .getQueryString("code")
@@ -125,15 +131,18 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
           (idToken, accessToken) = tokens
           assertion           <- exchangeIdTokenForAssertion(idToken)
           authPlusAccessToken <- requestAuthPlusAccessToken(assertion)
-        } yield (idToken, accessToken, authPlusAccessToken)
+          ns <- extractNsFromToken(idToken) |> AsyncDescribedComputation.lift
+        } yield (idToken, accessToken, authPlusAccessToken, ns)
 
         tokens.run
           .map("Processing authorization callback" ~< _)
           .foreach(computation => log.info(computation.run.written.shows))
 
+
         tokens.run.map(_.fold[Result](_ => Redirect(routes.LoginController.login()), {
-          case (idToken, auth0AccessToken, authPlusAccessToken) =>
+          case (idToken, auth0AccessToken, authPlusAccessToken, ns) =>
             Redirect(org.genivi.webserver.controllers.routes.Application.index()).withSession(
+                "namespace"              -> ns.get,
                 "id_token"               -> idToken.value,
                 "access_token"           -> auth0AccessToken.value,
                 "auth_plus_access_token" -> authPlusAccessToken.value
@@ -206,6 +215,18 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
       accessToken <- extractToken(response) |> AsyncDescribedComputation.lift
     } yield accessToken).run.map("Request access token from Auth+" ~< _) |> AsyncDescribedComputation.apply
   }
+
+  import org.genivi.sota.http.{IdToken => IdTokenSub, NsFromToken}
+  private[this] def extractNsFromToken(token: IdToken)
+    (implicit nsFromToken: NsFromToken[IdTokenSub]) : DescribedComputation[Namespace] = {
+
+    import cats.data.Xor
+    NsFromToken.parseToken(token.value) match {
+      case Xor.Right(t) => success(Namespace(nsFromToken.namespace(t)), "Extracted namspace")
+      case Xor.Left(msg) => failure(msg) ~~ UnexpectedToken(token, msg)
+    }
+  }
+
 }
 
 final case class Auth0Config(secret: String,

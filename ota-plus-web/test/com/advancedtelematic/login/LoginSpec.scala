@@ -47,12 +47,44 @@ class LoginSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAll {
       )
   )
 
+  lazy val namespace : String = "LoginSpec"
+
+  lazy val idToken : String = {
+    import com.advancedtelematic.json.signature.JcaSupport._
+    import com.advancedtelematic.jwa.HS256
+    import com.advancedtelematic.jws.{CompactSerialization, JwsPayload}
+    import com.advancedtelematic.jwt._
+    import java.time.Instant
+    import java.time.temporal.ChronoUnit
+    import java.util.UUID
+    import javax.crypto.SecretKey
+    import javax.crypto.spec.SecretKeySpec
+    import scala.util.Random
+
+    val token = JsonWebToken(
+      TokenId("LoginSpec"),
+      Issuer("LoginSpec"),
+      ClientId(UUID.randomUUID()),
+      Subject(namespace),
+      Audience(Set.empty),
+      Instant.now.minusSeconds(1),
+      Instant.now.plus(1, ChronoUnit.HOURS),
+      Scope(Set.empty)
+    )
+
+    val HmacKeySize = 32
+    val bytes = Array.fill[Byte](HmacKeySize)(Random.nextInt().toByte)
+    val key: SecretKey = new SecretKeySpec(bytes, "HmacSHA256")
+    val keyInfo = HS256.signingKey(key).toOption.get
+    CompactSerialization(HS256.withKey(JwsPayload(token), keyInfo)).value
+  }
+
   val mockClient = MockWS {
     case ("POST", `tokenEndpointUrl`) =>
       Action(parse.tolerantJson) { implicit request =>
         (request.body \ "code").as[String] match {
           case "AUTHORIZATIONCODE" =>
-            Ok(Json.obj("id_token" -> "IDTOKEN", "access_token" -> "AUTH0_ACCESS_TOKEN"))
+            Ok(Json.obj("id_token" -> idToken, "access_token" -> "AUTH0_ACCESS_TOKEN"))
 
           case "ERROR" =>
             Forbidden(Json.obj("error" -> "invalid_grant", "error_description" -> "Invalid authorization code"))
@@ -65,8 +97,6 @@ class LoginSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAll {
     case ("POST", `delegatEndpointUrl`) =>
       Action(parse.tolerantJson) { implicit request =>
         (request.body \ "id_token").as[String] match {
-          case "IDTOKEN" =>
-            Ok(Json.obj("id_token" -> "DELEGATION_ID_TOKEN"))
           case "DELEGATION_FAIL" =>
             Unauthorized(
                 Json.obj("error" -> "invalid_token", "error_description" -> "jwt expired", "statusCode" -> 401))
@@ -78,7 +108,7 @@ class LoginSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAll {
     case ("POST", `authPlusTokenEndpoint`) =>
       Action(parse.form(tokenRequestForm)) { implicit request =>
         request.body match {
-          case (_, "DELEGATION_ID_TOKEN") =>
+          case (_, token) if token == idToken =>
             Ok(Json.obj("access_token" -> "AUTHPLUS_ACCESS_TOKEN"))
 
           case (_, "AUTHPLUS_FAIL") =>
@@ -149,7 +179,8 @@ class LoginSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAll {
       val sess = session(result)
       sess.get("access_token") mustBe Some("AUTH0_ACCESS_TOKEN")
       sess.get("auth_plus_access_token") mustBe Some("AUTHPLUS_ACCESS_TOKEN")
-      sess.get("id_token") mustBe Some("IDTOKEN")
+      sess.get("id_token") mustBe Some(idToken)
+      sess.get("namespace") mustBe Some(namespace)
     }
   }
 

@@ -3,8 +3,9 @@ package org.genivi.webserver.controllers
 import javax.inject.{Inject, Named, Singleton}
 
 import akka.actor.ActorSystem
-import com.advancedtelematic.AuthenticatedApiAction
+import com.advancedtelematic.{AuthenticatedApiAction, AuthenticatedRequest}
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
+import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.ota.vehicle.{DeviceMetadata, Vehicles}
 import org.asynchttpclient.uri.Uri
 import org.genivi.sota.data.{Device, Uuid}
@@ -44,7 +45,8 @@ extends Controller with ApiClientSupport {
   def downloadClientSdk(device: Uuid, artifact: ArtifactType, arch: Architecture) : Action[AnyContent] =
     AuthenticatedApiAction.async { implicit request =>
       for (
-        vMetadataOpt <- vehiclesStore.getVehicle(device);
+        dev <- devicesApi.getDevice(UserOptions(Some(request.idToken.value)), device);
+        vMetadataOpt <- vehiclesStore.getVehicle(device) if dev.namespace == request.namespace;
         vMetadata <- vMetadataOpt match {
           case None => Future.failed[DeviceMetadata](NoSuchVinRegistered)
           case Some(vmeta) => Future.successful(vmeta)

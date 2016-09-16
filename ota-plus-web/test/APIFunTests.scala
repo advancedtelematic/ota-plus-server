@@ -126,6 +126,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     "id_token" -> oauthToken,
     "access_token" -> oauthToken,
     "auth_plus_access_token" -> oauthToken,
+    "namespace" -> namespace.underlying,
     "csrfToken" -> csrfToken)
 
   lazy val namespace = Subject("ittests@ats.com")
