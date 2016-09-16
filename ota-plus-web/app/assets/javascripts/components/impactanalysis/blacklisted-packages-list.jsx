@@ -7,6 +7,11 @@ define(function(require) {
   class BlacklistedPackagesList extends React.Component {
     constructor(props) {
       super(props);
+      this.showImpactTooltip = this.showImpactTooltip.bind(this);
+    }
+    showImpactTooltip(e) {
+      e.preventDefault();
+      this.props.showImpactTooltip();
     }
     render() {
       var packages = undefined;
@@ -23,7 +28,7 @@ define(function(require) {
       }
 
       return (
-        <div className="col-md-12">
+        <div className={"col-md-12" + (_.isUndefined(packages) || _.isEmpty(packages) ? ' height-100' : '')}>
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {!_.isUndefined(packages) ?
               !_.isUndefined(type) && type == "impacted" ?
@@ -50,8 +55,15 @@ define(function(require) {
                     <hr className="full-line pull-left" />
                   </div>
                 : 
-                  <div>
-                    There are no blacklisted packages
+                  <div className="height-100 position-relative text-center">
+                    <div className="center-xy padding-15">
+                      <div className="font-16">There are no blacklisted packages.</div>
+                      <div className="margin-top-10">
+                        <a href="#" className="font-16 underlined" onClick={this.showImpactTooltip}>
+                          <strong>What is this?</strong>
+                        </a>
+                      </div>
+                    </div>
                   </div>
             : undefined}
           </VelocityTransitionGroup>
