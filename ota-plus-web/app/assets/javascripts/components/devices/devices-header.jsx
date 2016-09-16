@@ -46,9 +46,9 @@ define(function(require) {
               </div>
             </div>
 
-            <Link to="newdevice" className="btn btn-add pull-right">
+            <button type="button" onClick={this.props.openNewDeviceModal} className="btn btn-add pull-right">
               <i className="fa fa-plus"></i> &nbsp; Add new device
-            </Link>
+            </button>
             {this.props.isTutorialShown ? 
               <TutorialAddNewDevice />
             : null}
