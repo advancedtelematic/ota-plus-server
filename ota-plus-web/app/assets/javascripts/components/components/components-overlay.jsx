@@ -16,7 +16,7 @@ define(function(require) {
     }
     findNode(id, currentNode) {
       var i, currentChild, result;
-      if (id == currentNode.id) {
+      if (id == currentNode['id-nr']) {
         return currentNode;
       } else {
         if (currentNode.children != null) {
@@ -63,7 +63,7 @@ define(function(require) {
                 </div>
               </div>
             );
-          } else {
+          } else if(index !== 'id-nr'){
             general.push(
               <tr key={'component-' + index}>
                 <th>{index}:</th>
