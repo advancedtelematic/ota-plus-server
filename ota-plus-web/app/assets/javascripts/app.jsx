@@ -103,7 +103,7 @@ define(function(require) {
       }, 200);
     }
     openDoor() {
-      if(!_.isUndefined(db.devices.deref()) && !_.isUndefined(db.searchableDevices.deref())) {
+      if(!_.isUndefined(db.devices.deref()) && !_.isUndefined(db.searchableDevicesWithComponents.deref())) {
         var that = this;
         db.devices.removeWatch("watch-devices");
         db.searchableDevices.removeWatch("watch-searchable-devices");
