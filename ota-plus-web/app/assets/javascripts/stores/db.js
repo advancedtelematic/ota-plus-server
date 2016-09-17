@@ -28,6 +28,7 @@ define(function(require) {
       this.blacklistedPackage = atom.createAtom();
       this.blacklistedPackages = atom.createAtom();
       this.impactAnalysis = atom.createAtom();
+      this.impactedDevicesCount = atom.createAtom();
       this.group = atom.createAtom();
       this.groups = atom.createAtom();
     }
