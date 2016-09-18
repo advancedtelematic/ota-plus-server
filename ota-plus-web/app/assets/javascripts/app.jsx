@@ -36,7 +36,8 @@ define(function(require) {
       EditProfile = require('es6!components/user/edit-profile'),
       ImpactAnalysisPage = require('es6!components/impactanalysis/impact-analysis-page'),
       Group = require('es6!components/groups/group'),
-      UploadModal = require('es6!components/packages/upload-modal');
+      UploadModal = require('es6!components/packages/upload-modal'),
+      Campaigns = require('es6!components/newcampaigns/campaigns');
 
   const languages = {
     en: 'en'
@@ -188,6 +189,7 @@ define(function(require) {
           case 'testsettings': 
           case 'editprofile':
           case 'impactanalysis':
+          case 'campaigns':
           case 'group':
             page = 'page-home';
           break;
@@ -278,6 +280,7 @@ define(function(require) {
         <Route path="editprofile" component={EditProfile}/>
         <Route path="impactanalysis" component={ImpactAnalysisPage}/>
         <Route path="group/:id" component={Group} />
+        <Route path="campaigns" component={Campaigns}/>
       </Route>
     </Route>
   );
