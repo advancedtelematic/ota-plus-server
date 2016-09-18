@@ -99,21 +99,22 @@ define(function(require) {
                 <li><Link to="/packages" activeClassName="active" id="link-packages">Packages</Link></li>
                 <li>
                   <Link to="/impactanalysis" activeClassName="active" id="link-impactanalysis">
-                  {_.isUndefined(impactedDevices) ? 
-                    <span>
-                      <i className="fa fa-circle-o-notch fa-spin"></i> &nbsp;
-                    </span>
-                  : 
-                    !_.isEmpty(impactedDevices) ?
-                      <span className="badge">
-                        {Object.keys(impactedDevices).length}
+                    {_.isUndefined(impactedDevices) ? 
+                      <span>
+                        <i className="fa fa-circle-o-notch fa-spin"></i> &nbsp;
                       </span>
-                    :
-                      null
-                  }
-                  Impact analysis
-                </Link>
+                    : 
+                      !_.isEmpty(impactedDevices) ?
+                        <span className="badge">
+                          {Object.keys(impactedDevices).length}
+                        </span>
+                      :
+                        null
+                    }
+                    Impact analysis
+                  </Link>
                 </li>
+                <li><Link to="/campaigns" activeClassName="active" id="link-campaigns">Campaigns</Link></li>
               </ul>
             </div>
             <ul className="right-nav pull-right">
