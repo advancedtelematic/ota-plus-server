@@ -714,13 +714,14 @@ button {
     float: left;
 
     .list-group-item {
-        height: 40px;
         margin: 0 0 5px 0;
     }
 }
 
 #queue-list {
     .list-group-item {
+        min-height: 40px;
+
         a {
             color: #555;
         }
@@ -736,6 +737,10 @@ button {
 }
 
 #history-list {
+    .list-group-item {
+        height: 40px;
+    }
+
     .list-group-item-text-right {
         color: #979797;
     }
@@ -1983,27 +1988,11 @@ a.close, button.close {
     }
 }
 
-.font-24 {
-    font-size: 24px;
-    line-height: 1.5em;
-}
-
-.font-20 {
-    font-size: 20px;
-    line-height: 1.5em;
-}
-
-.font-16 {
-    font-size: 16px;
-    line-height: 1.5em;
-}
-
-.font-14 {
-    font-size: 14px;
-}
-
-.font-12 {
-    font-size: 12px;
+@for $i from 1 through 12 {
+    .font-#{$i*2} { 
+        font-size: $i*2px;
+        line-height: 1.5em;
+    }
 }
 
 .vertical-align-middle {
@@ -2031,6 +2020,7 @@ a.close, button.close {
         position: absolute;
         left: 50%;
         top: 50%;
+        transform: translate(-50%, -50%);
     }
 }
 
@@ -2665,7 +2655,7 @@ hr.full-line {
 
 #impact-tooltip {
     padding-top: 200px;
-    
+
     .modal-dialog {
         width: 684px;;
 
