@@ -11,7 +11,9 @@ define(function(require) {
       super(props);
       this.state = {
         data: !_.isUndefined(db.postUpload.deref()) ? db.postUpload.deref()['create-package'] : undefined,
-        bars: undefined
+        bars: undefined,
+        lastUpdatedSecondsRemaining: null,
+        secondsRemaining: 0
       };
       this.closeModal = this.closeModal.bind(this);
       this.cancelUpload = this.cancelUpload.bind(this);
@@ -46,6 +48,25 @@ define(function(require) {
     }
     setData() {
       var postUpload = !_.isUndefined(db.postUpload.deref()) && !_.isUndefined(db.postUpload.deref()['create-package']) ? db.postUpload.deref()['create-package'] : undefined;
+      var secondsRemaining = 0;
+      var lastUpdatedSecondsRemaining = this.state.lastUpdatedSecondsRemaining;
+      var currentTime = new Date().getTime();
+      
+      if(lastUpdatedSecondsRemaining == null || currentTime - lastUpdatedSecondsRemaining > 15 * 1000) {
+        _.each(postUpload, function(upload, uploadKey) {
+          var uploadSize = upload.size/(1024*1024);
+          var uploadedSize = upload.uploaded/(1024*1024);
+          var uploadSpeed = !isNaN(upload.upSpeed) ? upload.upSpeed : 100;
+          var timeLeft = (upload.size - upload.uploaded) / (1024 * uploadSpeed);
+        
+          secondsRemaining = timeLeft > secondsRemaining ? timeLeft : secondsRemaining;
+        });
+                
+        this.setState({
+          secondsRemaining: secondsRemaining,
+          lastUpdatedSecondsRemaining: currentTime
+        });
+      }
       this.setState({
         data: postUpload
       });
@@ -98,18 +119,15 @@ define(function(require) {
         svgStyle: null
       };
       
-      var secondsRemaining = 0;
-      
+      var secondsRemaining = this.state.secondsRemaining;
+            
       var uploads = _.map(this.state.data, function(upload, uploadKey) {
         var key = "bar-" + uploadKey;
         var uploadSize = upload.size/(1024*1024);
         var uploadedSize = upload.uploaded/(1024*1024);
         var uploadSpeed = !isNaN(upload.upSpeed) ? upload.upSpeed : 100;
-        var timeLeft = (upload.size - upload.uploaded) / (1024 * uploadSpeed);
         var statusShown;
-        
-        secondsRemaining = timeLeft > secondsRemaining ? timeLeft : secondsRemaining;
-        
+                
         if(upload.progress < 100) {
           statusShown = (
             <Circle

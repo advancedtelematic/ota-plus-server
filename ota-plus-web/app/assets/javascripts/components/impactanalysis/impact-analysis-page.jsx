@@ -47,7 +47,7 @@ define(function(require) {
       db.blacklistedPackages.removeWatch("poll-blacklisted-packages");
       db.impactAnalysis.removeWatch("poll-impact-analysis-page");
       db.devices.removeWatch("poll-devices-impact-analysis-page");
-      window.removeEventListener("resize", this.setDevicesListHeight);
+      window.removeEventListener("resize", this.setImpactedDevicesListHeight);
     }
     setImpactedDevicesListHeight() {
       var windowHeight = jQuery(window).height();
