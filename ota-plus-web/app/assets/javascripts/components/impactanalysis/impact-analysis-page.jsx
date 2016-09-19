@@ -69,21 +69,24 @@ define(function(require) {
       var impactedPackages = undefined;
             
       if(!_.isUndefined(impactAnalysis)) {
+          console.log(impactAnalysis);
+          
+          
         impactedDevices = {};
         impactedPackages = {};
                         
-        _.each(impactAnalysis, function(impact) {
-          _.each(impact, function(pack, deviceUUID) {
+        _.each(impactAnalysis, function(impact, deviceUUID) {
+          _.each(impact, function(pack) {
             impactedPackages[pack.name + '-' + pack.version] = {
               packageId: {
                 name: pack.name,
                 version: pack.version
               }
             }
-            var deviceData = _.findWhere(devices, {id: deviceUUID});
+            var deviceData = _.findWhere(devices, {uuid: deviceUUID});
           
             impactedDevices[deviceUUID] = {
-              id: deviceUUID,
+              uuid: deviceUUID,
               deviceName: !_.isUndefined(deviceData) ? deviceData.deviceName : deviceUUID
             };
           });          
