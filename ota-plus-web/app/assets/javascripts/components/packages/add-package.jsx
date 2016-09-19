@@ -13,19 +13,17 @@ define(function(require) {
       this.state = {
         name: undefined,
         version: undefined,
-        showProgressBar: false,
         isButtonDisabled: false,
-        isProcessingBarShown: false
       };
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleResponse = this.handleResponse.bind(this);
-      this.closeForm = this.closeForm.bind(this);
-      this.uploadFinished = this.uploadFinished.bind(this);
-      
+      this.closeForm = this.closeForm.bind(this);      
       db.postStatus.addWatch("poll-response-add-package", _.bind(this.handleResponse, this, null));
+      db.postUpload.addWatch("poll-response-upload-package", _.bind(this.handleResponse, this, null));
     }
     componentWillUnmount() {
       db.postStatus.removeWatch("poll-response-add-package");
+      db.postUpload.removeWatch("poll-response-upload-package");
     }
     handleSubmit(e) {
       e.preventDefault();
@@ -56,15 +54,14 @@ define(function(require) {
     }
     handleResponse() {
       var payload = serializeForm(this.refs.form);
-      var postStatus = db.postStatus.deref()['create-package'];
-      var key = payload.name + '-' + payload.version;
+      var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref()['create-package'] : undefined;
+      var postUpload = !_.isUndefined(db.postUpload.deref()) ? db.postUpload.deref()['create-package'] : undefined;
+      var key = (payload.name && payload.version) ? payload.name + '-' + payload.version : undefined;
       
-      if(!_.isUndefined(postStatus) && !_.isUndefined(postStatus[key])) {
-        if(postStatus[key].status === 'success') {
-          db.postStatus.removeWatch("poll-response-add-package");
-          this.props.focusPackage(payload.name);
-          this.props.closeForm();
-        } else {
+      if(!_.isUndefined(key) && !_.isUndefined(postUpload) && !_.isUndefined(postUpload[key])) {
+        this.props.closeForm();
+      } else if(!_.isUndefined(key) && !_.isUndefined(postStatus) && !_.isUndefined(postStatus[key])) {
+        if(postStatus[key].status === 'error') {
           this.setState({isButtonDisabled: false});
         }
       }
@@ -72,9 +69,6 @@ define(function(require) {
     closeForm(e) {
       e.preventDefault();
       this.props.closeForm();
-    }
-    uploadFinished() {
-      this.setState({isProcessingBarShown: true});
     }
     render() {
       var multipleKey = this.state.name + '-' + this.state.version;
@@ -130,14 +124,6 @@ define(function(require) {
                           <input type="file" className="file-upload" name="file" />
                         }
                       </div>
-                      <ProgressBar 
-                        action="create-package"
-                        multipleKey={multipleKey}
-                        finishCallback={this.uploadFinished}/>
-                      
-                      {this.state.isProcessingBarShown ?
-                        <ProcessBar label="Processing in progress"/>
-                      : null}
                     </div>
                   </div>
                 </div>
