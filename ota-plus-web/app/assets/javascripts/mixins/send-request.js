@@ -9,13 +9,20 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
     send: function(type, url, data, opts) {
       opts = opts || {};
       
+      var postStatus = _.clone(db.postStatus.deref());
+      
       if(_.isUndefined(opts.multiple) || !opts.multiple) {
-        var postStatus = _.clone(db.postStatus.deref());
         if(!_.isUndefined(opts.action) && !_.isUndefined(postStatus[opts.action]))
           delete postStatus[opts.action];
-        db.postStatus.reset(postStatus);
+      } else {
+        var uploadData = opts.uploadData || {};
+        var key = _.map(uploadData, function(elem) {return elem;}).join("-");
+        if(!_.isUndefined(opts.action) && !_.isUndefined(postStatus[opts.action]) && !_.isUndefined(postStatus[opts.action][key]))
+          delete postStatus[opts.action][key];
       }
-            
+      
+      db.postStatus.reset(postStatus);
+        
       if (opts.form) {
         return this.formMultipart(type, url, data, opts);
       } else {
