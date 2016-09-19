@@ -36,6 +36,25 @@ define(function(require) {
                 db.searchableDevices.reset(devices);
               });
             break;
+          case 'search-devices-by-regex-with-components':
+            var query = payload.regex ? '&regex=' + payload.regex : '';
+            sendRequest.doGet('/api/v1/device_data?status=true' + query, {action: payload.actionType})
+              .success(function(devices) {                  
+                var after = _.after(Object.keys(devices).length, function() {
+                  db.searchableDevicesWithComponents.reset(newDevices);
+                });
+                  
+                var newDevices = _.each(devices, function(device, index) {
+                  sendRequest.doGet('/api/v1/devices/' + device.id + '/system_info', {action: 'get-components-for-devices'})
+                    .success(function(components) {
+                      devices[index].components = components;
+                    })
+                    .always(function() {
+                      after();
+                    });
+                });
+              });
+          break;
           case 'fetch-affected-devices':
             var affectedVinsUrl = '/api/v1/resolve/' + payload.name + "/" + payload.version;
 
