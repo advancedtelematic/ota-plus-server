@@ -2,23 +2,98 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       _ = require('underscore'),
-      DeviceListItem = require('es6!./devices-list-item');
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
+      Cookies = require('js-cookie'),
+      DeviceListItem = require('es6!./devices-list-item'),
+      DeviceListGroupItem = require('es6!./devices-list-groupitem'),
+      CreateGroup = require('es6!../groups/create-group');
 
   class DevicesList extends React.Component {
     constructor(props) {
       super(props);
+
       this.state = {
-        boxWidth: 320
+        boxWidth: 320,
+        showForm: false,
+        draggingId: null,
+        draggingName: null,
+        overId: null,
+        groupNames: [],
+        Groups: null,
+        Devices: null
       };
+      
+      this.restoreGroups = this.restoreGroups.bind(this);
+      this.checkIfComponentsMatch = this.checkIfComponentsMatch.bind(this);
+      
       this.setBoxesWidth = this.setBoxesWidth.bind(this);
+      this.openForm = this.openForm.bind(this);
+      this.closeForm = this.closeForm.bind(this);      
+      this.dragStart = this.dragStart.bind(this);
+      this.dragEnter = this.dragEnter.bind(this);
+      this.dragEnd = this.dragEnd.bind(this);
+      this.dragOver = this.dragOver.bind(this);
+      this.dragLeave = this.dragLeave.bind(this);
+      this.drop = this.drop.bind(this);
     }
     componentDidMount() {
       var that = this;
       this.setBoxesWidth();
       window.addEventListener("resize", this.setBoxesWidth);
+      this.restoreGroups(this.props.Devices, this.props.groups);
+    }
+    componentWillReceiveProps(nextProps) {
+      this.restoreGroups(nextProps.Devices, nextProps.groups);
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setBoxesWidth);
+    }
+    checkIfComponentsMatch(data, common, isCorrect) {
+      if (Object.keys(common).length !== _.union(Object.keys(data), Object.keys(common)).length) {
+        isCorrect = false;
+      } else {
+        for (var prop in common) {
+          if (common[prop] !== null) {
+            if (data.hasOwnProperty(prop)) {
+              if (typeof common[prop] == 'object') {
+                isCorrect = this.checkIfComponentsMatch(data[prop], common[prop], isCorrect);
+              } else if(common[prop] !== data[prop]) {
+		isCorrect = false;
+	      }
+            } else {
+              isCorrect = false;
+            }
+          }
+        }
+      }
+      return isCorrect;
+    }
+    restoreGroups(devices, groupsJSON) {
+      var that = this;
+      var groups = [];
+            
+      _.each(devices, function(device, deviceIndex) {
+        _.each(groupsJSON, function(group) {
+          var deviceComponents = _.clone(device.components);
+          var correct = true;
+          
+          if(!_.isUndefined(deviceComponents)) {
+            correct = that.checkIfComponentsMatch(deviceComponents, JSON.parse(group.groupInfo), correct);
+            if(correct) {
+              if(typeof groups[group.groupName] == 'undefined' || !groups[group.groupName] instanceof Array) {
+                groups[group.groupName] = [];
+              }
+              groups[group.groupName].push(deviceIndex);
+              delete devices[deviceIndex];
+            }
+          }
+        });
+      });
+            
+      this.setState({
+        Devices: devices,
+        Groups: groups
+      });
     }
     setBoxesWidth() {
       var containerWidth = $('#devices-container').width();
@@ -28,24 +103,108 @@ define(function(require) {
         boxWidth: containerWidth / howManyBoxesPerRow
       });
     }
-    render() {
+    openForm() {
+      this.setState({
+        showForm: true
+      });
+    }
+    closeForm() {
+      this.setState({
+        showForm: false
+      });
+    }
+    dragStart(e) {
+      this.setState({
+        draggingId: Number(e.currentTarget.dataset.id),
+        draggingName: e.currentTarget.dataset.name
+      });
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData("text/html", null);
+    }
+    dragEnter(e) {
+      e.preventDefault();
+    }
+    dragOver(e) {
+      e.preventDefault();
+      this.setState({overId: Number(e.currentTarget.dataset.id)});
+    }
+    dragLeave(e) {
+      this.setState({overId: null});
+    }
+    dragEnd(e) {
+      this.setState({draggingId: null, draggingName: null, overId: null});
+    }
+    drop(e) {
+      var draggingName = this.state.draggingName;
+      var draggingId = this.state.draggingId;
+      var dropName = e.currentTarget.dataset.name;
+      var dropId = Number(e.currentTarget.dataset.id);
+      var groupNames = [draggingName, dropName];
+            
+      if(this.state.draggingId && this.state.draggingId !== dropId) {
+        this.setState({
+          groupNames: groupNames
+        });
+        this.openForm();
+      }   
+    }
+    render() {        
       var devices = [];
-      var Devices = this.props.Devices;
-      var devices = _.map(Devices, function(device, i) {
-        return (
-          <DeviceListItem key={device.deviceName}
-            device={device}
-            isProductionDevice={this.props.areProductionDevices}
-            productionDeviceName={this.props.productionDeviceName}
-            width={this.state.boxWidth}/>
+      var groups = [];
+      var Devices = this.state.Devices;
+      var Groups = this.state.Groups;
+            
+      for(var i in Groups) {
+        groups.push(
+          <span key={'group-' + i}>
+            <DeviceListGroupItem
+              devices={Groups[i]}
+              name={i}
+              width={this.state.boxWidth}/>
+          </span>
         );
+      }
+            
+      var devices = _.map(Devices, function(device, i) {
+        if(!_.isUndefined(device)) {
+          var className = '';
+          if(this.state.draggingId !== null) {
+            if(this.state.draggingId !== i) {
+              className = this.state.overId === i ? 'droppable active' : 'droppable';
+            } else {
+              className = 'dragging';
+            }
+          }
+          return (
+            <span data-id={i}
+              data-name={device.deviceName}
+              className={className}
+              key={"dnd-device-" + i}
+              draggable="true"
+              onDragEnd={this.dragEnd}
+              onDragOver={this.dragOver}
+              onDragLeave={this.dragLeave}
+              onDragStart={this.dragStart}
+              onDragEnter={this.dragEnter}
+              onDrop={this.drop}>
+              <DeviceListItem key={device.deviceName}
+                device={device}
+                isProductionDevice={this.props.areProductionDevices}
+                productionDeviceName={this.props.productionDeviceName}
+                width={this.state.boxWidth}/>
+            </span>
+          );
+        }
       }, this);
 
       return (
         <div id="devices-list" className="height-100">
           <div id="devices-container" className="container position-relative height-100">
             {devices.length > 0 ?
-              devices
+              <div>
+                {groups}
+                {devices}
+              </div>
             :
               <div className="col-md-12 text-center center-xy">
                 <br />
@@ -57,6 +216,14 @@ define(function(require) {
               </div>
             }
           </div>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.showForm ?
+              <CreateGroup
+                groupNames={this.state.groupNames}
+                closeForm={this.closeForm}
+                key="create-group"/>
+            : null}
+          </VelocityTransitionGroup>
         </div>
       );
     }

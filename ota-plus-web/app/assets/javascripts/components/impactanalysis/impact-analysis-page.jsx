@@ -36,7 +36,7 @@ define(function(require) {
         intervalId: intervalId
       });
     }
-    componentWillUnmount() {
+    componentWillUnmount(){
       clearInterval(this.state.intervalId);
       db.devices.reset();
       db.blacklistedPackages.reset();
@@ -61,7 +61,7 @@ define(function(require) {
       if(!_.isUndefined(impactAnalysis)) {
         impactedDevices = {};
         impactedPackages = {};
-        
+                        
         _.each(impactAnalysis, function(impact) {
           _.each(impact, function(pack, deviceUUID) {
             impactedPackages[pack.name + '-' + pack.version] = {

@@ -8,6 +8,7 @@ define(function(require) {
       DevicesHeader = require('es6!./devices-header'),
       Loader = require('es6!../loader'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
+      
   class Devices extends React.Component {
     constructor(props) {
       super(props);
@@ -32,13 +33,15 @@ define(function(require) {
       this.setDevicesListHeight = this.setDevicesListHeight.bind(this);
 
       db.devices.reset();
-      db.searchableDevices.reset();
+      db.searchableDevicesWithComponents.reset();
       db.searchableProductionDevices.reset();
       SotaDispatcher.dispatch({actionType: 'get-devices'});
-      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: ''});
+      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex-with-components', regex: ''});
+      SotaDispatcher.dispatch({actionType: 'get-groups'});
       db.devices.addWatch("devices", _.bind(this.forceUpdate, this, null));
-      db.searchableDevices.addWatch("searchable-devices", _.bind(this.forceUpdate, this, null));
+      db.searchableDevicesWithComponents.addWatch("searchable-devices-with-components", _.bind(this.forceUpdate, this, null));
       db.searchableProductionDevices.addWatch("searchable-production-devices", _.bind(this.forceUpdate, this, null));
+      db.groups.addWatch("groups", _.bind(this.forceUpdate, this, null));
     }
     changeFilter(filter) {
       this.setState({filterValue: filter});
@@ -76,17 +79,19 @@ define(function(require) {
     }
     componentWillUnmount(){
       db.devices.reset();
-      db.searchableDevices.reset();
+      db.searchableDevicesWithComponents.reset();
       db.devices.removeWatch("devices");
-      db.searchableDevices.removeWatch("searchable-devices");
+      db.searchableDevicesWithComponents.removeWatch("searchable-devices-with-components");
       db.searchableProductionDevices.removeWatch("searchable-production-devices");
+      db.groups.removeWatch("groups");
       clearInterval(this.state.intervalId);
       window.removeEventListener("resize", this.setDevicesListHeight);
     }
     refreshData(filterValue) {
       SotaDispatcher.dispatch({actionType: 'get-devices'});
-      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: (typeof filterValue !== 'undefined' ? filterValue : this.state.filterValue)});
+      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex-with-components', regex: (typeof filterValue !== 'undefined' ? filterValue : this.state.filterValue)});
       SotaDispatcher.dispatch({actionType: 'search-production-devices', regex: (typeof filterValue !== 'undefined' ? filterValue : this.state.filterValue)});
+      SotaDispatcher.dispatch({actionType: 'get-groups'});
     }
     expandSection(sectionName, e) {
       this.setState({
@@ -105,7 +110,7 @@ define(function(require) {
       });
     }
     render() {
-      var Devices = db.searchableDevices.deref();
+      var Devices = db.searchableDevicesWithComponents.deref();
       var SortedDevices;
       var selectedStatus = this.state.selectedStatus;
       var selectedSort = this.state.selectedSort;
@@ -141,7 +146,7 @@ define(function(require) {
           SortedDevices.push(Devices[key]);
         });
       }
-      
+                        
       return (
         <div>
           <DevicesHeader
@@ -174,7 +179,7 @@ define(function(require) {
             </button>
           : null}
           <div style={{paddingTop: !areTestSettingsCorrect ? '40px' : 0}}>
-            {_.isUndefined(SortedDevices) ?
+            {_.isUndefined(SortedDevices) || _.isUndefined(db.groups.deref()) ?
               <Loader />
             :
               <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}} runOnMount={true}>
@@ -183,7 +188,8 @@ define(function(require) {
                     <div className="devices" style={{height: this.state.devicesListHeight}}>
                       <DevicesList
                         Devices={SortedDevices}
-                        areProductionDevices={false}/>
+                        areProductionDevices={false}
+                        groups={db.groups.deref()}/>
                       {this.props.children}
                     </div>
                   </div>

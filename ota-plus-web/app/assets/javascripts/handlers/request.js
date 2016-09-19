@@ -13,9 +13,7 @@ define(function(require) {
         var ct = xhr.getResponseHeader("content-type") || "";
         result = xhr.responseText;
         errorObj.code = xhr.status;
-        
-        console.log(ct);
-        
+                
         if (ct.indexOf('plain') > -1) {
           console.log('Plaintext error message');
           errorObj.response = result;

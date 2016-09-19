@@ -7,7 +7,7 @@ define(function(require) {
     }
     render() {
       return (
-        <div className="loader text-center">
+        <div className="loader text-center padding-15">
           <i className="fa fa-circle-o-notch fa-spin fa-2x"></i> &nbsp;
           Getting data from server
         </div>
