@@ -12,17 +12,22 @@ define(function(require) {
         uploadProgress: undefined,
       };
       this.setProgress = this.setProgress.bind(this);
-      db.postProgress.addWatch("poll-progress-" + this.props.action, _.bind(this.setProgress, this, null));
+      db.postUpload.addWatch("poll-progress-" + this.props.action, _.bind(this.setProgress, this, null));
     }
     componentWillUnmount() {
-      db.postProgress.reset();
-      db.postProgress.removeWatch("poll-progress-" + this.props.action);
+      db.postUpload.removeWatch("poll-progress-" + this.props.action);
     }
     setProgress() {
-      if(!_.isUndefined(db.postProgress.deref()) && !_.isUndefined(db.postProgress.deref()[this.props.action])) {
-        if(db.postProgress.deref()[this.props.action] == 100)
-          this.props.finishCallback();
-        this.setState({uploadProgress: db.postProgress.deref()[this.props.action] < 100 ? db.postProgress.deref()[this.props.action] : undefined});
+      if(!_.isUndefined(db.postUpload.deref()) && !_.isUndefined(db.postUpload.deref()[this.props.action])) {
+        if(!_.isUndefined(this.props.multipleKey) && !_.isUndefined(db.postUpload.deref()[this.props.action][this.props.multipleKey])) {
+          if(db.postUpload.deref()[this.props.action][this.props.multipleKey]['progress'] == 100)
+            this.props.finishCallback();
+          this.setState({uploadProgress: db.postUpload.deref()[this.props.action][this.props.multipleKey]['progress'] < 100 ? db.postUpload.deref()[this.props.action][this.props.multipleKey]['progress'] : undefined});
+        } else {
+          if(db.postUpload.deref()[this.props.action]['progress'] == 100)
+            this.props.finishCallback();
+          this.setState({uploadProgress: db.postUpload.deref()[this.props.action]['progress'] < 100 ? db.postUpload.deref()[this.props.action]['progress'] : undefined});
+        }
       }
     }
     render() {
