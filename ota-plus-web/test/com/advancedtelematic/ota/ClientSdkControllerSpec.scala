@@ -1,13 +1,12 @@
 package com.advancedtelematic.ota
 
-import org.genivi.sota.data.{Device, DeviceGenerators, DeviceIdGenerators}
+import cats.syntax.show._
+import org.genivi.sota.data._
 import org.scalatest.Tag
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.http.Status
 import play.api.libs.ws.{WSClient, WSRequest}
-import Device._
-import cats.syntax.show._
 
 /**
   * Purpose of a tag: ScalaTest's command line options -n (include) and -l (exclude).
@@ -22,6 +21,8 @@ class ClientSdkControllerSpec extends PlaySpec
 
   import play.api.test.Helpers._
   import Generators._
+  import Device._
+  import UuidGenerator._
 
   override lazy val port = app.configuration.getString("test.webserver.port").map(_.toInt).getOrElse(9010)
 
@@ -30,7 +31,7 @@ class ClientSdkControllerSpec extends PlaySpec
     val attempts = 5
     val wsClient = app.injector.instanceOf[WSClient]
     forAll (minSuccessful(attempts)) {
-      (device: Device.Id, artifact: ArtifactType, arch: Architecture) =>
+      (device: Uuid, artifact: ArtifactType, arch: Architecture) =>
 
         def fullUri(suffix: String): WSRequest = {
           wsClient.url(s"http://localhost:$port/api/v1/$suffix")

@@ -5,7 +5,7 @@ import java.util.UUID
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.ota.device.Devices._
 import com.advancedtelematic.ota.vehicle.ClientInfo
-import org.genivi.sota.data.{Device, DeviceT, Namespace}
+import org.genivi.sota.data.{Device, DeviceT, Namespace, Uuid}
 import org.genivi.webserver.controllers.OtaPlusConfig
 import play.api.Configuration
 import play.api.libs.json._
@@ -94,7 +94,7 @@ class CoreApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPl
 class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
   private val devicesRequest = ApiRequest.base(devicesApiUri + "/api/v1/")
 
-  def createDevice(options: UserOptions, device: DeviceT): Future[Device.Id] = {
+  def createDevice(options: UserOptions, device: DeviceT): Future[Uuid] = {
     import com.advancedtelematic.ota.device.Devices.idReads
 
     devicesRequest("devices")
@@ -113,7 +113,7 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
   private val clientId: String     = conf.getString("authplus.client_id").get
   private val clientSecret: String = conf.getString("authplus.secret").get
 
-  def createClient(device: Device.Id)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
+  def createClient(device: Uuid)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
     val request = Json.obj(
         "grant_types" -> List("client_credentials"),
         "client_name" -> device.show,

@@ -97,9 +97,9 @@ define(function(require) {
           <div className="panel-subheading">
             {!_.isUndefined(this.props.device) ? 
               this.context.location.pathname.toLowerCase().split('/')[1] != 'productiondevicedetails' &&
-              (localStorage.getItem('firstProductionTestDevice') == this.props.device.id ||
-              localStorage.getItem('secondProductionTestDevice') == this.props.device.id ||
-              localStorage.getItem('thirdProductionTestDevice') == this.props.device.id) ?
+              (localStorage.getItem('firstProductionTestDevice') == this.props.device.uuid ||
+              localStorage.getItem('secondProductionTestDevice') == this.props.device.uuid ||
+              localStorage.getItem('thirdProductionTestDevice') == this.props.device.uuid) ?
                 <input type="checkbox" id="selectPackages" className="pull-left"/>
               : null
             : undefined}
