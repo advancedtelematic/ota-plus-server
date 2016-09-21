@@ -107,12 +107,12 @@ define(function(require) {
               });
           break;
           case 'add-package-to-blacklist':
-            sendRequest.doPost('/api/v1/blacklist/' + payload.name + '/' + payload.version, payload.data, {action: payload.actionType})
+            sendRequest.doPost('/api/v1/blacklist', payload.data, {action: payload.actionType})
               .success(function() {
               });
           break;
           case 'update-package-in-blacklist':
-            sendRequest.doPut('/api/v1/blacklist/' + payload.name + '/' + payload.version, payload.data, {action: payload.actionType})
+            sendRequest.doPut('/api/v1/blacklist', payload.data, {action: payload.actionType})
               .success(function() {
               });
           break;
