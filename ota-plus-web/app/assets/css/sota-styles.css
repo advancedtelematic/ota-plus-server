@@ -42,12 +42,6 @@ button.list-group-item:focus { background: transparent; }
 /* Navbar */
 .right-nav { -webkit-padding-start: 10px; margin-bottom: 0; }
 .right-nav li { margin: 10px 0 0 20px; display: inline-block; vertical-align: top; }
-.right-nav li#li-impactanalysis { margin: 6px 0 0 0; }
-.right-nav li#li-impactanalysis a { color: #fff; font-size: 15px; text-decoration: none; background: red; padding: 8px 13px; margin: 0; border-radius: 20px; display: inline-block; position: relative; transition: all 0.3s; }
-.right-nav li#li-impactanalysis a:after { background: red; width: 100%; height: 0; content: ''; display: block; position: absolute; left: 0; bottom: -10px; transition: all 0.2s ease-in; }
-.right-nav li#li-impactanalysis a.disabled { background: #ccc; }
-.right-nav li#li-impactanalysis a.disabled:after { background: #ccc; }
-.right-nav li#li-impactanalysis a:hover:after, .right-nav li#li-impactanalysis a.active:after { height: 5px; }
 .right-nav li#li-upload-nav-bar { margin: 10px 15px 0 0; }
 .right-nav li#li-upload-nav-bar #upload-nav-bar { display: inline-block; }
 
@@ -155,8 +149,9 @@ button.list-group-item:focus { background: transparent; }
 .package-version.package-blacklist .icon-exclamation { margin-top: 8px; margin-right: 5px; }
 .package-version.package-blacklist .btn-blacklist { border-left-color: #fff; }
 .package-version .btn-blacklist { height: 24px; padding: 0 25px; margin: 3px 0 0 6px; border-left: 2px solid #ddd; border-right: 2px solid #ddd; display: block; }
-.package-version .btn-blacklist.btn-edit-blacklist { background: url(/assets/img/icons/edit_black.png) no-repeat center; background-size: 22px 22px !important; }
-.package-version .btn-blacklist.btn-add-blacklist { background: url(/assets/img/icons/blacklist.png) no-repeat center; background-size: 18px 23px !important; }
+.package-version .btn-blacklist.btn-edit-blacklist { background: url(/assets/img/icons/ban_red.png) no-repeat center; background-size: 20px 20px !important; }
+.package-version .btn-blacklist.btn-add-blacklist { background: url(/assets/img/icons/ban_grey.png) no-repeat center; background-size: 20px 20px !important; }
+.package-version .btn-blacklist.btn-add-blacklist:hover { background: url(/assets/img/icons/ban_red.png) no-repeat center; }
 
 .package-statuses { font-size: 12px; margin-left: 10px; }
 .package-statuses .package-status-circle { color: #fff; font-size: 12px; line-height: 1.2em; vertical-align: top; }
@@ -349,6 +344,9 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 .darkgrey { color: #444; }
 .darkgrey:hover, .darkgrey:focus, .darkgrey:active { color: #444; }
+
+.lightgrey { color: #888; }
+.lightgrey:hover, .lightgrey:focus, .lightgrey:active { color: #888; }
 
 .blue { color: #96DED2; }
 .blue:hover, .blue:focus, .blue:active { color: #444; }
@@ -623,7 +621,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 .modal-open { overflow-x: auto; overflow-y: hidden; }
 
-.btn-confirm { color: #333; font-weight: bold; background: #96DED2; padding: 13px 60px; border-radius: 30px; }
+.btn-confirm { color: #333; font-size: 16px; font-weight: bold; background: #96DED2; padding: 13px 60px; border-radius: 30px; }
 
 /* Disabled nav responsive */
 .container > .navbar-header { margin: 0; }
@@ -730,3 +728,16 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 #modal-upload .modal-dialog .modal-content .modal-body .modal-desc .table-uploads { margin-bottom: 5px; }
 #modal-upload .modal-dialog .modal-content .modal-body .modal-desc .table-uploads > tbody > tr > td { padding: 8px 20px; border-bottom: 0; vertical-align: middle; }
 #modal-upload .modal-dialog .modal-content .modal-body .modal-desc .table-uploads #bar { width: 30px; height: 30px; }
+
+#link-impactanalysis .badge { font-size: 11px; background: red; padding-left: 8px; padding-right: 8px; position: absolute; top: 8px; left: 114px; }
+
+#modal-blacklist .modal-dialog { width: 520px; }
+#modal-blacklist .modal-dialog .modal-content .modal-header .modal-title img { vertical-align: bottom; }
+#modal-blacklist .modal-dialog .modal-content .modal-header.blacklist-header { background: red; }
+#modal-blacklist .modal-dialog .modal-content .modal-body { padding: 40px 60px 30px 60px; }
+
+#impact-tooltip { padding-top: 200px; }
+#impact-tooltip .modal-dialog { width: 684px; }
+#impact-tooltip .modal-dialog .modal-content .modal-body { line-height: 1.6em; padding: 35px 20px 20px 20px; }
+
+.underlined { text-decoration: underline; }
