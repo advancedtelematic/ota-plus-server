@@ -220,7 +220,9 @@ define(function(require) {
           : null}
           <VelocityTransitionGroup enter={{animation: Animations.down, complete: function() {window.location.href = logoutUrl}}}>
             {!this.state.hideAnimationDown ? 
-              <div className="door door-up tmp-disable-door-style"></div>
+              <div className="door door-up tmp-disable-door-style">
+                <i className="fa fa-circle-o-notch fa-spin fa-2x loader"></i>
+              </div>
             : null}
           </VelocityTransitionGroup>
           <div key={key} className={page}>
