@@ -115,11 +115,11 @@ define(function(require) {
                 </div>
                 {this.props.version.isBlackListed ?
                   <div className="pull-left">
-                    <button className="btn btn-blacklist btn-edit-blacklist" onClick={this.formBlacklist.bind(this, 'edit')}></button>
+                    <button className="btn btn-blacklist btn-edit-blacklist" onClick={this.formBlacklist.bind(this, 'edit')} title="Edit blacklisted package version"></button>
                   </div>
                 : 
                   <div className="pull-left">
-                    <button className="btn btn-blacklist btn-add-blacklist" onClick={this.formBlacklist.bind(this, 'add')}></button>
+                    <button className="btn btn-blacklist btn-add-blacklist" onClick={this.formBlacklist.bind(this, 'add')} title="Blacklist package version"></button>
                   </div>
                 }
                 
@@ -138,11 +138,11 @@ define(function(require) {
                 <div className="pull-left">
                 {this.props.version.isBlackListed ?
                   <div className="pull-left">
-                    <button className="btn btn-blacklist btn-edit-blacklist" onClick={this.formBlacklist.bind(this, 'edit')}></button>
+                    <button className="btn btn-blacklist btn-edit-blacklist" onClick={this.formBlacklist.bind(this, 'edit')} title="Edit blacklisted package version"></button>
                   </div>
                 : 
                   <div className="pull-left">
-                    <button className="btn btn-blacklist btn-add-blacklist" onClick={this.formBlacklist.bind(this, 'add')}></button>
+                    <button className="btn btn-blacklist btn-add-blacklist" onClick={this.formBlacklist.bind(this, 'add')} title="Blacklist package version"></button>
                   </div>
                 }
                 </div>

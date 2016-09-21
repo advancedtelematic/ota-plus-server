@@ -65,6 +65,7 @@ define(function(require) {
       var campaignsData = JSON.parse(localStorage.getItem('campaignsData'));
       var impactAnalysis = db.impactAnalysis.deref();
       var user = db.user.deref();
+      var impactedDevices = undefined;
       var barOptions = {
         strokeWidth: 16,
         easing: 'easeInOut',
@@ -73,6 +74,18 @@ define(function(require) {
         trailWidth: 16,
         svgStyle: null
       };
+      
+      if(!_.isUndefined(impactAnalysis)) {
+        impactedDevices = {};
+                        
+        _.each(impactAnalysis, function(impact) {
+          _.each(impact, function(pack, deviceUUID) {
+            impactedDevices[deviceUUID] = {
+              id: deviceUUID,
+            };
+          });          
+        });
+      }
       
       return (
         <nav className="navbar navbar-inverse navbar-fixed-top">
@@ -84,6 +97,23 @@ define(function(require) {
               <ul className="nav navbar-nav">
                 <li><IndexLink to="/" activeClassName="active" id="link-devices">Devices</IndexLink></li>
                 <li><Link to="/packages" activeClassName="active" id="link-packages">Packages</Link></li>
+                <li>
+                  <Link to="/impactanalysis" activeClassName="active" id="link-impactanalysis">
+                  {_.isUndefined(impactedDevices) ? 
+                    <span>
+                      <i className="fa fa-circle-o-notch fa-spin"></i> &nbsp;
+                    </span>
+                  : 
+                    !_.isEmpty(impactedDevices) ?
+                      <span className="badge">
+                        {Object.keys(impactedDevices).length}
+                      </span>
+                    :
+                      null
+                  }
+                  Impact analysis
+                </Link>
+                </li>
               </ul>
             </div>
             <ul className="right-nav pull-right">
@@ -98,16 +128,6 @@ define(function(require) {
                   </a>
                 </li>
               : undefined}
-              <li id="li-impactanalysis">
-                <Link to="/impactanalysis" activeClassName="active" id="link-impactanalysis" className={(_.isUndefined(impactAnalysis) || _.isEmpty(impactAnalysis) ? "disabled" : "")}>
-                  {_.isUndefined(impactAnalysis) ? 
-                    <span>
-                      <i className="fa fa-circle-o-notch fa-spin"></i> &nbsp;
-                    </span>
-                  : undefined}
-                  Threats
-                </Link>
-              </li>
               {campaignsData !== null && campaignsData.length > 0 ?
                 <li>
                   <a href="#" className="btn-campaigns" onClick={this.toggleCampaignPanel}>

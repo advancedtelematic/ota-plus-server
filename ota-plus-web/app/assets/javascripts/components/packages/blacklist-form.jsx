@@ -87,19 +87,19 @@ define(function(require) {
     }
     render() {
       return (
-        <div id="modal-blacklist" className="myModal small-margin">
+        <div id="modal-blacklist" className="myModal">
           <div className="modal-dialog">
             <div className="modal-content">
-              <div className="modal-header text-center">
+              <div className={"modal-header text-center" + (this.props.mode == 'add' ? ' blacklist-header' : '')}>
                 <h4 className="modal-title">
                   {this.props.mode == 'edit' ?
                     <div>
-                      <img src="/assets/img/icons/edit_white.png" className="blacklist-edit-icon" style={{width: '20px'}} alt="" /> &nbsp;
-                      Edit Blacklist
+                      <img src="/assets/img/icons/edit_white.png" className="blacklist-edit-icon" style={{width: '30px'}} alt="" />&nbsp;
+                      Edit blacklisted package
                     </div>
                   : 
                     <div>
-                      <img src="/assets/img/icons/blacklist_white.png" className="blacklist-icon" style={{width: '20px'}} alt="" /> &nbsp;
+                      <img src="/assets/img/icons/ban_white.png" className="blacklist-icon" style={{width: '30px'}} alt="" />&nbsp;
                       Blacklist
                     </div>
                   }
@@ -109,10 +109,25 @@ define(function(require) {
                 {!_.isUndefined(this.state.comment) ?
                   <form ref='form' onSubmit={this.handleSubmit} encType="multipart/form-data">
                     <Responses action={this.props.mode === 'edit' ?  'update-package-in-blacklist' : 'add-package-to-blacklist'} handledStatuses="error"/>
-                    <div className="row">
+                    
+                    {this.props.mode === 'add' ?
+                      <div className="row text-center">
+                        <div className="col-md-12">
+                          <p>You're about to <strong>blacklist</strong> the following package version:</p>
+                          <div className="font-20">{this.props.packageName}</div>
+                          <div className="font-20"><strong>v. {this.props.packageVersion}</strong></div>
+                          <p className="lightgrey margin-top-25">
+                            When you blacklist a package version, you can no longer install it on any devices. 
+                            It will also appear in the <strong>Impact analysis tab</strong>, showing which devices currently have it installed.
+                          </p>
+                        </div>
+                      </div>
+                    : null}
+                    
+                    <div className="row margin-top-15">
                       <div className="col-md-12">
                         <div className="form-group">
-                          <textarea className="form-control" rows="5" name="comment" ref="comment" placeholder="Comment here." defaultValue={this.state.comment}/>
+                          <input className="form-control" rows="5" name="comment" ref="comment" placeholder="Comment here." defaultValue={this.state.comment}/>
                         </div>
                       </div>
                     </div>
@@ -123,10 +138,10 @@ define(function(require) {
                 : undefined}
               </div>
               <div className="modal-footer">
-                <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.closeForm}>close</a>
+                <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.closeForm}>cancel</a>
                 {!_.isUndefined(this.state.comment) ?
                   <div>
-                    <button type="submit" className="btn btn-confirm pull-right" onClick={this.handleSubmit}>{this.props.mode == 'edit' ? 'Save comment' : 'confirm'}</button>
+                    <button type="submit" className="btn btn-confirm pull-right" onClick={this.handleSubmit}>{this.props.mode == 'edit' ? 'Save Comment' : 'Confirm'}</button>
                     {this.props.mode == 'edit' ?
                       <div className="pull-right width-full margin-top-15">
                         or <strong><a href="#" className="blue font-14" onClick={this.removeFromBlacklist}>Remove from Blacklist</a></strong>
