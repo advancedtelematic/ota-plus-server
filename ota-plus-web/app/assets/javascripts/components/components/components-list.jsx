@@ -18,7 +18,7 @@ define(function(require) {
         if(!_.isUndefined(data.id) && (!_.isUndefined(data.description) || !_.isUndefined(data.class))) {
           result = (
             <li>
-              <a href="#" data-id={data.id}>
+              <a href="#" data-id={data['id-nr']}>
                 <span className="components-menu-icon"></span>
                 {data.description ? data.description : data.class}
                 <i className="fa fa-info components-info-icon"></i>
@@ -44,8 +44,8 @@ define(function(require) {
             {_.map(data, function(child, i) {
               if(!_.isUndefined(child.id) && (!_.isUndefined(child.description) || !_.isUndefined(child.class))) {
                 return (
-                  <span key={"components-list-menu-" + child.id + "-" + child.class}>
-                    <a href="#" data-id={child.id}>
+                  <span key={"components-list-menu-" + child['id-nr'] + "-" + child.class}>
+                    <a href="#" data-id={child['id-nr']}>
                       <span className="components-menu-icon"></span>
                       {!_.isUndefined(child.description) ? child.description : child.class}
                       <i className="fa fa-info components-info-icon"></i>
