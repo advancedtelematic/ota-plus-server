@@ -41,45 +41,6 @@ extends Controller with ApiClientSupport {
     searchWith(req, coreApi.search)
   }
 
-  def search(): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
-    searchWith(req, devicesApi.search)
-  }
-
-  def get(id: Device.Id): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
-    val options = userOptions(req)
-    devicesApi.getDevice(options, id)
-  }
-
-  def fetchSystemInfo(id: Device.Id): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
-    val options = userOptions(req)
-    devicesApi.getSystemInfo(options, id)
-  }
-
-  def listGroupInfo(): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
-    val options = userOptions(req)
-    devicesApi.listGroupInfo(options)
-  }
-
-  def fetchGroupInfo(groupName: String): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
-    val options = userOptions(req)
-    devicesApi.fetchGroupInfo(options, groupName)
-  }
-
-  def createGroupInfo(groupName: String): Action[JsValue] = AuthenticatedApiAction.async(parse.json) { req =>
-    val options = userOptions(req)
-    devicesApi.createGroupInfo(options, groupName, req.body)
-  }
-
-  def updateGroupInfo(groupName: String): Action[JsValue] = AuthenticatedApiAction.async(parse.json) { req =>
-    val options = userOptions(req)
-    devicesApi.updateGroupInfo(options, groupName, req.body)
-  }
-
-  def deleteGroupInfo(groupName: String): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
-    val options = userOptions(req)
-    devicesApi.deleteGroupInfo(options, groupName)
-  }
-
   private[this] def userOptions(req: AuthenticatedRequest[_]): UserOptions = {
     val traceId = req.headers.get("x-ats-traceid")
     val namespace = req.session.get("username").asInstanceOf[Option[Namespace]]
