@@ -49,10 +49,10 @@ define(function(require) {
             sendRequest.doGet('/api/v1/device_data', {action: payload.actionType})
               .success(function(devices) {        
                 var device = _.find(devices, function(device) {
-                  return device.id == payload.device;
+                  return device.uuid == payload.device;
                 });
                 if (!_.isUndefined(device)) {
-                  sendRequest.doGet('/api/v1/resolver/devices/' + device.id + '/package', {action: payload.actionType})
+                  sendRequest.doGet('/api/v1/resolver/devices/' + device.uuid + '/package', {action: payload.actionType})
                     .success(function(packages) {
                       var list = _.map(packages, function(package) {
                         return {id: package}
@@ -67,10 +67,10 @@ define(function(require) {
             sendRequest.doGet('/api/v1/device_data', {action: payload.actionType})
               .success(function(devices) {
                 var device = _.find(devices, function(device) {
-                  return device.id == payload.device;
+                  return device.uuid == payload.device;
                 });
                 if (!_.isUndefined(device)) {
-                  sendRequest.doGet('/api/v1/resolver/devices/' + device.id + '/package' + query, {action: payload.actionType})
+                  sendRequest.doGet('/api/v1/resolver/devices/' + device.uuid + '/package' + query, {action: payload.actionType})
                     .success(function(packages) {
                       var list = _.map(packages, function(package) {
                         return {id: package}

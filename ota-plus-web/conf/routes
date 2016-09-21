@@ -9,13 +9,13 @@ GET     /                                        org.genivi.webserver.controller
 GET     /assets/*file                            controllers.Assets.versioned(path="/public", file: Asset)
 GET     /webjars/*file                           controllers.WebJarAssets.at(file)
 
-GET     /api/v1/client/:deviceId/:artifact/:arch org.genivi.webserver.controllers.ClientSdkController.downloadClientSdk(deviceId: Device.Id, artifact: ArtifactType, arch: Architecture)
+GET     /api/v1/client/:uuid/:artifact/:arch org.genivi.webserver.controllers.ClientSdkController.downloadClientSdk(uuid: Uuid, artifact: ArtifactType, arch: Architecture)
 
 POST    /api/v1/devices                          org.genivi.webserver.controllers.DeviceController.create()
-GET     /api/v1/devices/:deviceId/clientInfo     org.genivi.webserver.controllers.DeviceController.fetchClientInfo(deviceId: Device.Id)
+GET     /api/v1/devices/:uuid/clientInfo         org.genivi.webserver.controllers.DeviceController.fetchClientInfo(uuid: Uuid)
 GET     /api/v1/device_data                      org.genivi.webserver.controllers.DeviceController.listDeviceAttributes()
 
-GET     /api/v1/events/devices/:device           org.genivi.webserver.controllers.EventController.subDeviceSeen(device: Device.Id)
+GET     /api/v1/events/devices/:uuid             org.genivi.webserver.controllers.EventController.subDeviceSeen(uuid: Uuid)
 GET     /api/v1/events/devicecreated/:namespace  org.genivi.webserver.controllers.EventController.subDeviceCreated(namespace: Namespace)
 GET     /api/v1/events/devicedeleted/:namespace  org.genivi.webserver.controllers.EventController.subDeviceDeleted(namespace: Namespace)
 GET     /api/v1/events/packagecreated/:namespace org.genivi.webserver.controllers.EventController.subPackageCreated(namespace: Namespace)
