@@ -51,7 +51,7 @@ class Application @Inject() (ws: WSClient,
   private def apiByPath(path: String) : Option[String] = {
     val pathComponents = path.split("/").toList
 
-    val proxiedPrefixes = coreProxiedPrefixes orElse resolverProxiedPrefixes
+    val proxiedPrefixes = coreProxiedPrefixes orElse deviceRegistryProxiedPrefixes orElse resolverProxiedPrefixes
 
     proxiedPrefixes.lift(pathComponents)
   }
@@ -64,6 +64,10 @@ class Application @Inject() (ws: WSClient,
     case "history" :: _ => coreApiUri
     case "blacklist" :: _ => coreApiUri
     case "impact" :: _ => coreApiUri
+  }
+
+  private val deviceRegistryProxiedPrefixes: PartialFunction[List[String], String] = {
+    case "devices" :: _ => devicesApiUri
   }
 
   private val resolverProxiedPrefixes: PartialFunction[List[String], String] = {

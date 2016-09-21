@@ -92,11 +92,5 @@ class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results 
       contentAsString(result) must be("Core Search")
     }
 
-    "search forwards request to device registry" in {
-      val request = FakeRequest(GET, "/?deviceId=LOL").withAuthSession()
-      val result = call(controller.search(), request)
-
-      status(result) must be(200)
-    }
   }
 }
