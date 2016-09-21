@@ -94,40 +94,6 @@ class CoreApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPl
 class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
   private val devicesRequest = ApiRequest.base(devicesApiUri + "/api/v1/")
 
-  def getDevice(options: UserOptions, id: Device.Id): Future[Result] = {
-    devicesRequest("devices/" + id.show).withUserOptions(options).execResult(apiExec)
-  }
-
-  def getSystemInfo(options: UserOptions, id: Device.Id): Future[Result] = {
-    devicesRequest("devices/" + id.show + "/system_info").withUserOptions(options).execResult(apiExec)
-  }
-
-  def listGroupInfo(options: UserOptions): Future[Result] = {
-    devicesRequest(s"devices/group_info").withUserOptions(options).execResult(apiExec)
-  }
-
-  def fetchGroupInfo(options: UserOptions, groupName: String): Future[Result] = {
-    devicesRequest(s"devices/$groupName/group_info").withUserOptions(options).execResult(apiExec)
-  }
-
-  def createGroupInfo(options: UserOptions, groupName: String, body: JsValue): Future[Result] = {
-    devicesRequest(s"devices/$groupName/group_info")
-      .withUserOptions(options)
-      .transform(_.withMethod("POST").withBody(body))
-      .execResult(apiExec)
-  }
-
-  def updateGroupInfo(options: UserOptions, groupName: String, body: JsValue): Future[Result] = {
-    devicesRequest(s"devices/$groupName/group_info")
-      .withUserOptions(options)
-      .transform(_.withMethod("PUT").withBody(body))
-      .execResult(apiExec)
-  }
-
-  def deleteGroupInfo(options: UserOptions, groupName: String): Future[Result] = {
-    devicesRequest(s"devices/$groupName/group_info").withUserOptions(options).execResult(apiExec)
-  }
-
   def createDevice(options: UserOptions, device: DeviceT): Future[Device.Id] = {
     import com.advancedtelematic.ota.device.Devices.idReads
 
@@ -135,12 +101,6 @@ class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends Ot
       .withUserOptions(options)
       .transform(_.withMethod("POST").withBody(Json.toJson(device)))
       .execJson(apiExec)(idReads)
-  }
-
-  def search(options: UserOptions, params: Seq[(String, String)]): Future[Result] = {
-    val _params = params ++ options.namespace.map(n => "namespace" -> n.get.toString).toSeq
-
-    devicesRequest("devices").withUserOptions(options).transform(_.withQueryString(_params: _*)).execResult(apiExec)
   }
 }
 
