@@ -6,6 +6,7 @@ define(function(require) {
       SotaDispatcher = require('sota-dispatcher'),
       DevicesList = require('es6!./devices-list'),
       DevicesHeader = require('es6!./devices-header'),
+      NewDevice = require('es6!./new-device'),
       Loader = require('es6!../loader'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
       
@@ -24,8 +25,11 @@ define(function(require) {
         campaignsCount: 32,
         productionDevicesCount: 0,
         devicesListHeight: '400px',
+        isNewDeviceModalShown: false
       };
 
+      this.openNewDeviceModal = this.openNewDeviceModal.bind(this);
+      this.closeNewDeviceModal = this.closeNewDeviceModal.bind(this);
       this.changeFilter = this.changeFilter.bind(this);
       this.selectStatus = this.selectStatus.bind(this);
       this.selectSort = this.selectSort.bind(this);
@@ -109,6 +113,12 @@ define(function(require) {
         devicesListHeight: windowHeight - offsetTop - btnSectionsHeight
       });
     }
+    openNewDeviceModal() {
+      this.setState({isNewDeviceModalShown: true});
+    }
+    closeNewDeviceModal() {
+      this.setState({isNewDeviceModalShown: false});
+    }
     render() {
       var Devices = db.searchableDevicesWithComponents.deref();
       var SortedDevices;
@@ -146,7 +156,7 @@ define(function(require) {
           SortedDevices.push(Devices[key]);
         });
       }
-                        
+                  
       return (
         <div>
           <DevicesHeader
@@ -158,7 +168,8 @@ define(function(require) {
             selectedSortName={this.state.selectedSortName}
             selectStatus={this.selectStatus}
             selectSort={this.selectSort}
-            isTutorialShown={isTutorialShown}/>
+            isTutorialShown={isTutorialShown}
+            openNewDeviceModal={this.openNewDeviceModal}/>
           
           {areTestSettingsCorrect ?
             <button className="btn btn-full-section first" onClick={this.expandSection.bind(this, 'testDevices')}>
@@ -231,6 +242,13 @@ define(function(require) {
               : null}
             </div>
           : null}
+      
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isNewDeviceModalShown ?
+              <NewDevice 
+                closeNewDeviceModal={this.closeNewDeviceModal}/>
+            : undefined}
+          </VelocityTransitionGroup>
         </div>
       );
     }

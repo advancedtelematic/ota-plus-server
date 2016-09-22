@@ -26,17 +26,29 @@ define(function(require) {
     }
     render() {
       return (
-        <form ref='form' onSubmit={this.handleSubmit}>
-          <Responses action="create-device" />
-          <div className="form-group">
-            <label htmlFor="deviceName">{this.context.strings.devicename}</label>
-            <input type="text" className="form-control" name="deviceName"
-                   ref="deviceName" placeholder={this.context.strings.devicename}/>
+        <div id="modal-new-device" className="myModal" role="dialog">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="button" className="close" onClick={this.props.closeNewDeviceModal}></button>
+                <h4 className="modal-title">{this.context.strings.newdevice}</h4>
+              </div>
+              <div className="modal-body">
+                <form ref='form' onSubmit={this.handleSubmit}>
+                  <Responses action="create-device" />
+                  <div className="form-group">
+                    <label htmlFor="deviceName">{this.context.strings.devicename}</label>
+                    <input type="text" className="form-control" name="deviceName"
+                         ref="deviceName" placeholder={this.context.strings.devicename}/>
+                  </div>
+                  <div className="form-group text-right">
+                    <button type="submit" className="btn btn-grey">{this.context.strings.adddevice}</button>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
-          <div className="form-group text-right">
-            <button type="submit" className="btn btn-grey">{this.context.strings.adddevice}</button>
-          </div>
-        </form>
+        </div>
       );
     }
   };
