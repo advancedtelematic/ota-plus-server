@@ -78,10 +78,10 @@ define(function(require) {
       if(!_.isUndefined(impactAnalysis)) {
         impactedDevices = {};
                         
-        _.each(impactAnalysis, function(impact) {
-          _.each(impact, function(pack, deviceUUID) {
+        _.each(impactAnalysis, function(impact, deviceUUID) {
+          _.each(impact, function(pack) {
             impactedDevices[deviceUUID] = {
-              id: deviceUUID,
+              uuid: deviceUUID
             };
           });          
         });
