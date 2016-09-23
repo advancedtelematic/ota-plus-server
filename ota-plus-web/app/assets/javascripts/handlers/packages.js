@@ -124,6 +124,12 @@ define(function(require) {
                 db.impactAnalysis.reset(impact);                
               });
           break;
+          case 'get-impacted-devices-count':
+            sendRequest.doGet('/api/v1/blacklist/' + payload.name + '/' + payload.version + '/preview')
+              .success(function(impactedDevicesCount) {
+                db.impactedDevicesCount.reset(impactedDevicesCount);                
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));
