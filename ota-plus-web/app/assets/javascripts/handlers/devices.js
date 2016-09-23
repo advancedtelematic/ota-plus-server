@@ -46,7 +46,7 @@ define(function(require) {
                   });
                   
                   var newDevices = _.each(devices, function(device, index) {
-                    sendRequest.doGet('/api/v1/devices/' + device.id + '/system_info', {action: 'get-components-for-devices'})
+                    sendRequest.doGet('/api/v1/devices/' + device.uuid + '/system_info', {action: 'get-components-for-devices'})
                       .success(function(components) {
                         devices[index].components = components;
                       })
