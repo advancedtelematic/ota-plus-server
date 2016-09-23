@@ -1268,7 +1268,8 @@ a.close, button.close {
 
     .modal-dialog {
         width: 463px;
-        height: 240px;
+        min-height: 240px;
+        margin: 0 auto;
 
         .modal-content {
             border: 0;
@@ -2658,8 +2659,6 @@ hr.full-line {
 
     .modal-dialog {
         width: 684px;
-        height: auto;
-        margin: 0 auto;
 
         .modal-content {
             .modal-body {

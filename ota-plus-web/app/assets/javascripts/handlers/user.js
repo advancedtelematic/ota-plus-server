@@ -21,7 +21,7 @@ define(function(require) {
               });
           break;
           case 'change-password':
-            sendRequest.doPost('/user/change_password', null, {action: payload.actionType, contentType: 'text'})
+            sendRequest.doPost('/user/change_password', null, {action: payload.actionType, dataType: 'text'})
               .success(function() {
               });
           break;

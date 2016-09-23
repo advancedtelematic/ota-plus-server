@@ -34,9 +34,9 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
         type: type,
         url: url,
         headers: {'Csrf-Token': this.getCsrfToken()},
-        dataType: opts.contentType ? opts.contentType : 'json',
+        dataType: opts.dataType ? opts.dataType : 'json',
         data: JSON.stringify(data),
-        contentType: "application/json",
+        contentType: "application/json"
       }, opts));
       
       if(opts.notHandleAjaxActions) 

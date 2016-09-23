@@ -74,7 +74,7 @@ define(function(require) {
       var multipleKey = this.state.name + '-' + this.state.version;
       return (
         <div id="modal-add-package" className="myModal">
-          <div className="modal-dialog">
+          <div className="modal-dialog center-xy">
             <div className="modal-content">
               <form ref='form' onSubmit={this.handleSubmit} encType="multipart/form-data">
                 <div className="modal-header">
