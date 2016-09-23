@@ -99,10 +99,7 @@ define(function(require) {
           break;
           case 'get-blacklisted-package':
             sendRequest.doGet('/api/v1/blacklist/' + payload.name + '/' + payload.version, {action: payload.actionType})
-              .success(function(packages) {
-                var package = _.find(packages, function(package) {
-                  return package.packageId.name == payload.name && package.packageId.version == payload.version;
-                });
+              .success(function(package) {
                 db.blacklistedPackage.reset(package);
               });
           break;
