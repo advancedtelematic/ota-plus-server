@@ -85,9 +85,10 @@ define(function(require) {
     blacklistListener() {
       var postStatusAddPackageToBlacklist = db.postStatus.deref()['add-package-to-blacklist'];
       var postStatusRemovePackageFromBlacklist = db.postStatus.deref()['remove-package-from-blacklist'];
-      if(!_.isUndefined(postStatusAddPackageToBlacklist) && postStatusAddPackageToBlacklist.status === 'success')
-        this.props.closeForm();
-      else if(!_.isUndefined(postStatusRemovePackageFromBlacklist) && postStatusRemovePackageFromBlacklist.status === 'success')
+      var postStatusUpdatePackageInBlacklist = db.postStatus.deref()['update-package-in-blacklist'];
+      if(!_.isUndefined(postStatusAddPackageToBlacklist) && postStatusAddPackageToBlacklist.status === 'success' ||
+         !_.isUndefined(postStatusRemovePackageFromBlacklist) && postStatusRemovePackageFromBlacklist.status === 'success' ||
+         !_.isUndefined(postStatusUpdatePackageInBlacklist) && postStatusUpdatePackageInBlacklist.status === 'success')
         this.props.closeForm();
     }
     render() {
@@ -95,7 +96,7 @@ define(function(require) {
             
       return (
         <div id="modal-blacklist" className="myModal">
-          <div className="modal-dialog">
+          <div className="modal-dialog center-xy">
             <div className="modal-content">
               <div className={"modal-header text-center" + (this.props.mode == 'add' ? ' blacklist-header' : '')}>
                 <h4 className="modal-title">
