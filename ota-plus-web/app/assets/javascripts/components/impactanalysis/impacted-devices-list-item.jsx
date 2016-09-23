@@ -15,7 +15,6 @@ define(function(require) {
           <div className="impacted-device">
               <div className="device-icon"></div>
               <div className="title">{deviceName}</div>
-              <div className="subtitle">Available</div>
             </div>
         </Link>
       );
