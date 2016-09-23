@@ -19,6 +19,9 @@ define(function(require) {
       this.blacklistListener = this.blacklistListener.bind(this);
       
       db.postStatus.addWatch("poll-poststatus-blacklist", _.bind(this.blacklistListener, this, null));
+      db.impactedDevicesCount.addWatch("poll-impacted-devices-count-blacklist", _.bind(this.forceUpdate, this, null));
+      
+      SotaDispatcher.dispatch({actionType: 'get-impacted-devices-count', name: this.props.packageName, version: this.props.packageVersion});
       
       if(this.props.mode == 'edit') {
         SotaDispatcher.dispatch({actionType: 'get-blacklisted-package', name: this.props.packageName, version: this.props.packageVersion});
@@ -40,8 +43,10 @@ define(function(require) {
       db.postStatus.reset(postStatus);
       
       db.blacklistedPackage.reset();
+      db.impactedDevicesCount.reset();
       db.blacklistedPackage.removeWatch("poll-blacklisted-package");
       db.postStatus.removeWatch("poll-poststatus-blacklist");
+      db.impactedDevicesCount.removeWatch("poll-impacted-devices-count-blacklist");
     }
     setData() {
       if(!_.isUndefined(db.blacklistedPackage.deref()))
@@ -86,6 +91,8 @@ define(function(require) {
         this.props.closeForm();
     }
     render() {
+      var impactedDevicesCount = db.impactedDevicesCount.deref();
+            
       return (
         <div id="modal-blacklist" className="myModal">
           <div className="modal-dialog">
@@ -106,7 +113,7 @@ define(function(require) {
                 </h4>
               </div>
               <div className="modal-body">
-                {!_.isUndefined(this.state.comment) ?
+                {!_.isUndefined(this.state.comment) && !_.isUndefined(impactedDevicesCount) ?
                   <form ref='form' onSubmit={this.handleSubmit} encType="multipart/form-data">
                     <Responses action={this.props.mode === 'edit' ?  'update-package-in-blacklist' : 'add-package-to-blacklist'} handledStatuses="error"/>
                     
@@ -120,6 +127,16 @@ define(function(require) {
                             When you blacklist a package version, you can no longer install it on any devices. 
                             It will also appear in the <strong>Impact analysis tab</strong>, showing which devices currently have it installed.
                           </p>
+                          
+                          {impactedDevicesCount.affected_device_count ? 
+                            <p className="red font-14">
+                              <strong>
+                                Warning: the package version you are about to <br />
+                                blacklist is queued for installation on {impactedDevicesCount.affected_device_count} devices. <br />
+                                These updates will be cancelled automatically.
+                              </strong>
+                            </p>
+                          : null}
                         </div>
                       </div>
                     : null}
