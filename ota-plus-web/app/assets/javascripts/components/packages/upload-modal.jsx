@@ -12,8 +12,9 @@ define(function(require) {
       this.state = {
         data: !_.isUndefined(db.postUpload.deref()) ? db.postUpload.deref()['create-package'] : undefined,
         bars: undefined,
+        firstDataSet: false,
         lastUpdatedSecondsRemaining: null,
-        secondsRemaining: 0
+        secondsRemaining: 600
       };
       this.closeModal = this.closeModal.bind(this);
       this.cancelUpload = this.cancelUpload.bind(this);
@@ -49,24 +50,32 @@ define(function(require) {
     setData() {
       var postUpload = !_.isUndefined(db.postUpload.deref()) && !_.isUndefined(db.postUpload.deref()['create-package']) ? db.postUpload.deref()['create-package'] : undefined;
       var secondsRemaining = 0;
+      var firstUpdatedSecondsRemaining = this.state.firstUpdatedSecondsRemaining;
       var lastUpdatedSecondsRemaining = this.state.lastUpdatedSecondsRemaining;
       var currentTime = new Date().getTime();
       
-      if(lastUpdatedSecondsRemaining == null || currentTime - lastUpdatedSecondsRemaining > 15 * 1000) {
-        _.each(postUpload, function(upload, uploadKey) {
-          var uploadSize = upload.size/(1024*1024);
-          var uploadedSize = upload.uploaded/(1024*1024);
-          var uploadSpeed = !isNaN(upload.upSpeed) ? upload.upSpeed : 100;
-          var timeLeft = (upload.size - upload.uploaded) / (1024 * uploadSpeed);
-        
-          secondsRemaining = timeLeft > secondsRemaining ? timeLeft : secondsRemaining;
-        });
-                
+      if(firstUpdatedSecondsRemaining == null) {
         this.setState({
-          secondsRemaining: secondsRemaining,
-          lastUpdatedSecondsRemaining: currentTime
+          firstUpdatedSecondsRemaining: currentTime
         });
+      } else {
+        if(currentTime - lastUpdatedSecondsRemaining > 15 * 1000) {
+          _.each(postUpload, function(upload, uploadKey) {
+            var uploadSize = upload.size/(1024*1024);
+            var uploadedSize = upload.uploaded/(1024*1024);
+            var uploadSpeed = !isNaN(upload.upSpeed) ? upload.upSpeed : 100;
+            var timeLeft = (upload.size - upload.uploaded) / (1024 * uploadSpeed);
+        
+            secondsRemaining = timeLeft > secondsRemaining ? timeLeft : secondsRemaining;
+          });
+                
+          this.setState({
+            secondsRemaining: secondsRemaining,
+            lastUpdatedSecondsRemaining: currentTime,
+          });
+        }
       }
+      
       this.setState({
         data: postUpload
       });
