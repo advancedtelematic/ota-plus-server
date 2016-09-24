@@ -74,7 +74,11 @@ define(function(require) {
                 <button type="button" className="close" data-dismiss="modal" onClick={this.props.closeForm}></button>
                 <h4 className="modal-title">
                   <img src="/assets/img/icons/grid.png" className="create-group-icon" style={{width: '20px'}} alt="" /> &nbsp;
-                  Create a new Group
+                  {canCreateGroup ? 
+                    <span>Create a new Group</span>
+                  :
+                    <span>Could not create Smart Group</span>
+                  }
                 </h4>
               </div>
               {canCreateGroup ?
@@ -100,7 +104,7 @@ define(function(require) {
               :
                 <div>
                   <div className="modal-body">
-                    Group can not be created because at least one of chosen devices doesn't have components stuff.
+                    One of the devices you are trying to add to this Smart Group has not reported any hardware information yet. Smart Grouping automatically generates groups of similar devices, so it needs hardware information to work.
                   </div>
                   <div className="modal-footer">
                     <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.props.closeForm}>close</a>
