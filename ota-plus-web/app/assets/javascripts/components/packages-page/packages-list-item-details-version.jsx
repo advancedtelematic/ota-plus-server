@@ -100,12 +100,12 @@ define(function(require) {
             {this.props.version.isBlackListed ?
               <div>
                 <div className="pull-right">
-                  <button className="btn btn-blacklist btn-edit-blacklist" onClick={this.formBlacklist.bind(this, 'edit')} title="Edit blacklisted package version"></button>
+                  <button className="btn btn-blacklist btn-edit-blacklist" onClick={this.formBlacklist.bind(this, 'edit')} title="Edit blacklisted package version" id={"button-edit-blacklisted-package-" + this.props.version.id.name + "-" + this.props.version.id.version}></button>
                 </div>
               </div>
             : 
               <div className="pull-right">
-                <button className="btn btn-blacklist btn-add-blacklist" onClick={this.formBlacklist.bind(this, 'add')} title="Blacklist package version"></button>
+                <button className="btn btn-blacklist btn-add-blacklist" onClick={this.formBlacklist.bind(this, 'add')} title="Blacklist package version" id={"button-blacklist-package-" + this.props.version.id.name + "-" + this.props.version.id.version}></button>
               </div>
             }
             <div className="package-statuses pull-right">
