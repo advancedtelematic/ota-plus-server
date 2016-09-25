@@ -135,13 +135,15 @@ define(function(require) {
       this.setState({draggingId: null, draggingName: null, overId: null});
     }
     drop(e) {
+      if(e.preventDefault)
+        e.preventDefault();
       var draggingName = this.state.draggingName;
       var draggingId = this.state.draggingId;
       var dropName = e.currentTarget.dataset.name;
       var dropId = Number(e.currentTarget.dataset.id);
       var groupNames = [draggingName, dropName];
             
-      if(this.state.draggingId && this.state.draggingId !== dropId) {
+      if(this.state.draggingId !== null && this.state.draggingId !== dropId) {
         this.setState({
           groupNames: groupNames
         });
