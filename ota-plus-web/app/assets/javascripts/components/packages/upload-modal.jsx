@@ -59,20 +59,23 @@ define(function(require) {
           firstUpdatedSecondsRemaining: currentTime
         });
       } else {
-        if(currentTime - lastUpdatedSecondsRemaining > 15 * 1000) {
+        if(currentTime - lastUpdatedSecondsRemaining > 15 * 1000 || 1) {
           _.each(postUpload, function(upload, uploadKey) {
             var uploadSize = upload.size/(1024*1024);
-            var uploadedSize = upload.uploaded/(1024*1024);
+            var uploadedSize = !isNaN(upload.uploaded) ? upload.uploaded/(1024*1024) : 0;
             var uploadSpeed = !isNaN(upload.upSpeed) ? upload.upSpeed : 100;
             var timeLeft = (upload.size - upload.uploaded) / (1024 * uploadSpeed);
-        
+            timeLeft = isFinite(timeLeft) ? timeLeft : this.state.secondsRemaining;
+                    
             secondsRemaining = timeLeft > secondsRemaining ? timeLeft : secondsRemaining;
-          });
+          }, this);
                 
-          this.setState({
-            secondsRemaining: secondsRemaining,
-            lastUpdatedSecondsRemaining: currentTime,
-          });
+          if(isFinite(secondsRemaining)) {
+            this.setState({
+              secondsRemaining: secondsRemaining,
+              lastUpdatedSecondsRemaining: currentTime,
+            });
+          }
         }
       }
       
@@ -133,7 +136,7 @@ define(function(require) {
       var uploads = _.map(this.state.data, function(upload, uploadKey) {
         var key = "bar-" + uploadKey;
         var uploadSize = upload.size/(1024*1024);
-        var uploadedSize = upload.uploaded/(1024*1024);
+        var uploadedSize = !isNaN(upload.uploaded) ? upload.uploaded/(1024*1024) : 0;
         var uploadSpeed = !isNaN(upload.upSpeed) ? upload.upSpeed : 100;
         var statusShown;
                 
