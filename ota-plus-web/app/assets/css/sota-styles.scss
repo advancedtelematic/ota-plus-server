@@ -3276,9 +3276,41 @@ hr.full-line {
         border-right: 12px solid transparent;
         transition: all 0.2s ease-in;
     }
-    
+
     .group-inner-devices-list {
         height: 100%;
         overflow-y: auto;
+
+    }
+}
+
+.device-menu-dropdown {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    i {
+        &.fa-chevron-down {
+            text-shadow: 0 3px 15px rgba(0, 0, 0, 0.6);
+        }
+    }
+
+    ul {
+        left: 0;
+    }
+
+    .dropdown-menu {
+        min-width: 100px;
+        border-radius: 0;
+
+        li {
+            color: #444;
+            font-size: 12px;
+            padding: 2px 12px;
+
+            img {
+                vertical-align: top;
+            }
+        }
     }
 }

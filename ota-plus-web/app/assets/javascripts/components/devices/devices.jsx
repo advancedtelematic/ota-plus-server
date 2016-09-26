@@ -7,6 +7,7 @@ define(function(require) {
       DevicesList = require('es6!./devices-list'),
       DevicesHeader = require('es6!./devices-header'),
       NewDevice = require('es6!./new-device'),
+      RenameDevice = require('es6!./rename-device'),
       Loader = require('es6!../loader'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
       
@@ -25,11 +26,15 @@ define(function(require) {
         campaignsCount: 32,
         productionDevicesCount: 0,
         devicesListHeight: '400px',
-        isNewDeviceModalShown: false
+        isNewDeviceModalShown: false,
+        isRenameDeviceModalShown: false,
+        renamedDevice: null
       };
 
       this.openNewDeviceModal = this.openNewDeviceModal.bind(this);
       this.closeNewDeviceModal = this.closeNewDeviceModal.bind(this);
+      this.openEditDeviceModal = this.openEditDeviceModal.bind(this);
+      this.closeRenameDeviceModal = this.closeRenameDeviceModal.bind(this);
       this.changeFilter = this.changeFilter.bind(this);
       this.selectStatus = this.selectStatus.bind(this);
       this.selectSort = this.selectSort.bind(this);
@@ -119,6 +124,18 @@ define(function(require) {
     closeNewDeviceModal() {
       this.setState({isNewDeviceModalShown: false});
     }
+    openEditDeviceModal(device) {
+      this.setState({
+        isRenameDeviceModalShown: true,
+        renamedDevice: device
+      });
+    }
+    closeRenameDeviceModal() {
+      this.setState({
+        isRenameDeviceModalShown: false,
+        renamedDevice: null
+      });
+    }
     render() {
       var Devices = db.searchableDevicesWithComponents.deref();
       var SortedDevices;
@@ -200,7 +217,8 @@ define(function(require) {
                       <DevicesList
                         Devices={SortedDevices}
                         areProductionDevices={false}
-                        groups={db.groups.deref()}/>
+                        groups={db.groups.deref()}
+                        openEditDeviceModal={this.openEditDeviceModal}/>
                       {this.props.children}
                     </div>
                   </div>
@@ -247,6 +265,13 @@ define(function(require) {
             {this.state.isNewDeviceModalShown ?
               <NewDevice 
                 closeNewDeviceModal={this.closeNewDeviceModal}/>
+            : undefined}
+          </VelocityTransitionGroup>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isRenameDeviceModalShown ?
+              <RenameDevice 
+                device={this.state.renamedDevice}
+                closeRenameDeviceModal={this.closeRenameDeviceModal}/>
             : undefined}
           </VelocityTransitionGroup>
         </div>
