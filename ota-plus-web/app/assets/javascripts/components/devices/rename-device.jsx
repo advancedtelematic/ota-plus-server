@@ -8,11 +8,11 @@ define(function(require) {
       SotaDispatcher = require('sota-dispatcher'),
       Responses = require('../responses');
 
-  class NewDevice extends React.Component {
+  class RenameDevice extends React.Component {
     constructor(props) {
       super(props);
       this.handleSubmit = this.handleSubmit.bind(this);
-      this.closeNewDeviceModal = this.closeNewDeviceModal.bind(this);
+      this.closeRenameDeviceModal = this.closeRenameDeviceModal.bind(this);
     }
     handleSubmit(e) {
       e.preventDefault();
@@ -21,13 +21,14 @@ define(function(require) {
       payload.deviceId = payload.deviceName;
       payload.deviceType = 'Other';
       SotaDispatcher.dispatch({
-        actionType: 'create-device',
-        device: payload
+        actionType: 'edit-device',
+        device: payload,
+        uuid: this.props.device.uuid
       });
     }
-    closeNewDeviceModal(e) {
+    closeRenameDeviceModal(e) {
       e.preventDefault();
-      this.props.closeNewDeviceModal();
+      this.props.closeRenameDeviceModal();
     }
     render() {
       return (
@@ -35,21 +36,24 @@ define(function(require) {
           <div className="modal-dialog center-xy">
             <div className="modal-content">
               <div className="modal-header">
-                <button type="button" className="close" onClick={this.props.closeNewDeviceModal}></button>
-                <h4 className="modal-title">{this.context.strings.newdevice}</h4>
+                <button type="button" className="close" onClick={this.props.closeRenameDeviceModal}></button>
+                <h4 className="modal-title">
+                  <img src="/assets/img/icons/edit_white.png" className="blacklist-edit-icon" style={{width: '30px'}} alt="" />&nbsp;
+                  Rename device
+                </h4>
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
                 <div className="modal-body">
-                  <Responses action="create-device" />
+                  <Responses action="edit-device" />
                   <div className="form-group">
-                    <label htmlFor="deviceName">{this.context.strings.devicename}</label>
+                    <label htmlFor="deviceName">Name</label>
                     <input type="text" className="form-control" name="deviceName"
-                         ref="deviceName" placeholder={this.context.strings.devicename}/>
+                         ref="deviceName" defaultValue={this.props.device.deviceName}/>
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <a href="#" onClick={this.closeNewDeviceModal} className="darkgrey margin-top-20 pull-left">close</a>
-                  <button type="submit" className="btn btn-confirm pull-right">{this.context.strings.adddevice}</button>
+                  <a href="#" onClick={this.closeRenameDeviceModal} className="darkgrey margin-top-20 pull-left">close</a>
+                  <button type="submit" className="btn btn-confirm pull-right">Confirm</button>
                 </div>
               </form>
             </div>
@@ -59,9 +63,9 @@ define(function(require) {
     }
   };
 
-  NewDevice.contextTypes = {
+  RenameDevice.contextTypes = {
     strings: React.PropTypes.object.isRequired
   };
 
-  return NewDevice;
+  return RenameDevice;
 });

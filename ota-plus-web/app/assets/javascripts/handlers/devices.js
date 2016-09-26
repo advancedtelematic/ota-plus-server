@@ -29,6 +29,11 @@ define(function(require) {
                 location.hash = "#/devicedetails/" + id;
               });
             break;
+          case 'edit-device':
+            sendRequest.doPut('/api/v1/devices/' + payload.uuid, payload.device, {action: payload.actionType})
+              .success(function(id) {
+              });
+            break;
           case 'search-devices-by-regex':
             var query = payload.regex ? '&regex=' + payload.regex : '';
             sendRequest.doGet('/api/v1/device_data?status=true' + query, {action: payload.actionType})

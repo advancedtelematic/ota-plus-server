@@ -945,3 +945,10 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 .group-details-panel { background: rgba(0, 0, 0, 0.5); width: 100%; height: 205px; margin-left: -15px; float: left; position: relative; }
 .group-details-panel .arrow-pointer { width: 20px; position: absolute; top: -18px; left: 20px; border-bottom: 18px solid rgba(0, 0, 0, 0.5); border-left: 12px solid transparent; border-right: 12px solid transparent; transition: all 0.2s ease-in; }
 .group-details-panel .group-inner-devices-list { height: 100%; overflow-y: auto; }
+
+.device-menu-dropdown { position: absolute; top: 20px; right: 20px; }
+.device-menu-dropdown i.fa-chevron-down { text-shadow: 0 3px 15px rgba(0, 0, 0, 0.6); }
+.device-menu-dropdown ul { left: 0; }
+.device-menu-dropdown .dropdown-menu { min-width: 100px; border-radius: 0; }
+.device-menu-dropdown .dropdown-menu li { color: #444; font-size: 12px; padding: 2px 12px; }
+.device-menu-dropdown .dropdown-menu li img { vertical-align: top; }
