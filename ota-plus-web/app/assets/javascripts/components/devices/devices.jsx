@@ -8,6 +8,7 @@ define(function(require) {
       DevicesHeader = require('es6!./devices-header'),
       NewDevice = require('es6!./new-device'),
       RenameDevice = require('es6!./rename-device'),
+      RenameGroup = require('es6!../groups/rename-group'),
       Loader = require('es6!../loader'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
       
@@ -28,13 +29,17 @@ define(function(require) {
         devicesListHeight: '400px',
         isNewDeviceModalShown: false,
         isRenameDeviceModalShown: false,
-        renamedDevice: null
+        renamedDevice: null,
+        isRenameGroupModalShown: false,
+        renamedGroup: null,
       };
 
       this.openNewDeviceModal = this.openNewDeviceModal.bind(this);
       this.closeNewDeviceModal = this.closeNewDeviceModal.bind(this);
-      this.openEditDeviceModal = this.openEditDeviceModal.bind(this);
+      this.openRenameDeviceModal = this.openRenameDeviceModal.bind(this);
       this.closeRenameDeviceModal = this.closeRenameDeviceModal.bind(this);
+      this.openRenameGroupModal = this.openRenameGroupModal.bind(this);
+      this.closeRenameGroupModal = this.closeRenameGroupModal.bind(this);
       this.changeFilter = this.changeFilter.bind(this);
       this.selectStatus = this.selectStatus.bind(this);
       this.selectSort = this.selectSort.bind(this);
@@ -124,7 +129,7 @@ define(function(require) {
     closeNewDeviceModal() {
       this.setState({isNewDeviceModalShown: false});
     }
-    openEditDeviceModal(device) {
+    openRenameDeviceModal(device) {
       this.setState({
         isRenameDeviceModalShown: true,
         renamedDevice: device
@@ -134,6 +139,18 @@ define(function(require) {
       this.setState({
         isRenameDeviceModalShown: false,
         renamedDevice: null
+      });
+    }
+    openRenameGroupModal(groupName) {
+      this.setState({
+        isRenameGroupModalShown: true,
+        renamedGroup: groupName
+      });
+    }
+    closeRenameGroupModal() {
+      this.setState({
+        isRenameGroupModalShown: false,
+        renamedGroup: null
       });
     }
     render() {
@@ -218,7 +235,8 @@ define(function(require) {
                         Devices={SortedDevices}
                         areProductionDevices={false}
                         groups={db.groups.deref()}
-                        openEditDeviceModal={this.openEditDeviceModal}/>
+                        openRenameDeviceModal={this.openRenameDeviceModal}
+                        openRenameGroupModal={this.openRenameGroupModal}/>
                       {this.props.children}
                     </div>
                   </div>
@@ -272,6 +290,13 @@ define(function(require) {
               <RenameDevice 
                 device={this.state.renamedDevice}
                 closeRenameDeviceModal={this.closeRenameDeviceModal}/>
+            : undefined}
+          </VelocityTransitionGroup>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isRenameGroupModalShown ?
+              <RenameGroup
+                name={this.state.renamedGroup}
+                closeRenameGroupModal={this.closeRenameGroupModal}/>
             : undefined}
           </VelocityTransitionGroup>
         </div>

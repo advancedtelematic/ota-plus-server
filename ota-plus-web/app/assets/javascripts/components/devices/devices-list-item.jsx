@@ -12,7 +12,7 @@ define(function(require) {
     renameDevice(e) {
       e.preventDefault();
       e.stopPropagation();
-      this.props.openEditDeviceModal(this.props.device);
+      this.props.openRenameDeviceModal(this.props.device);
     }
     render() {
       const link = this.props.isProductionDevice ? 'productiondevicedetails/' + this.props.productionDeviceName : 'devicedetails/' + this.props.device.uuid;
@@ -47,16 +47,18 @@ define(function(require) {
               }
             </div>
             <div className="device-status-text">Device status: {deviceStatus}</div>
-            <div className="dropdown device-menu-dropdown pull-right">
-              <div data-toggle="dropdown">
-                <i className="fa fa-chevron-down" aria-hidden="true"></i>
+            {this.props.areActionButtonsShown ? 
+              <div className="dropdown device-menu-dropdown pull-right">
+                <div data-toggle="dropdown">
+                  <i className="fa fa-chevron-down" aria-hidden="true"></i>
+                </div>
+                <ul className="dropdown-menu">
+                  <li onClick={this.renameDevice}>
+                    <img src="/assets/img/icons/edit_black.png" alt="" style={{width: '15px'}}/> Rename
+                  </li>
+                </ul>
               </div>
-              <ul className="dropdown-menu">
-                <li onClick={this.renameDevice}>
-                  <img src="/assets/img/icons/edit_black.png" alt="" style={{width: '15px'}}/> Rename
-                </li>
-              </ul>
-            </div>
+            : null}
           </div>
         </Link>
       );
