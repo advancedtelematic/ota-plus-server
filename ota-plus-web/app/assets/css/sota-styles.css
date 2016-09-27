@@ -170,7 +170,7 @@ button.list-group-item:focus { background: transparent; }
 #queue-list, #history-list { width: 100%; padding: 20px; float: left; }
 #queue-list .list-group-item, #history-list .list-group-item { margin: 0 0 5px 0; }
 
-#queue-list .list-group-item { min-height: 40px; }
+#queue-list .list-group-item { height: auto; }
 #queue-list .list-group-item a { color: #555; }
 #queue-list .list-group-item.error { border-color: #ff0000; }
 #queue-list .list-group-item.error #queue-list .list-group-item.error.queue-item-name, #queue-list .list-group-item.error .list-group-item-text-right { color: #ff0000; }

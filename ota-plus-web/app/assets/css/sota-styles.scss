@@ -720,7 +720,7 @@ button {
 
 #queue-list {
     .list-group-item {
-        min-height: 40px;
+        height: auto;
 
         a {
             color: #555;

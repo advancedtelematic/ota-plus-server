@@ -48,19 +48,19 @@ define(function(require) {
             </div>
           </div>
           
-          {!_.isUndefined(this.props.package.status) && this.props.package.status == 'InFlight' ? 
-            <div className="width-100 pull-left lightgrey font-10">
-              <div>
-                Queued on: {new Date(this.props.package.createdAt).toDateString()} {new Date(this.props.package.createdAt).toLocaleTimeString()}
-              </div>
+          <div className="width-100 pull-left lightgrey font-10">
+            <div>
+              Queued on: {new Date(this.props.package.createdAt).toDateString()} {new Date(this.props.package.createdAt).toLocaleTimeString()}
+            </div>
+            {!_.isUndefined(this.props.package.status) && this.props.package.status == 'InFlight' ? 
               <div className="margin-top-5">
                 Installation started on: {new Date(this.props.package.updatedAt).toDateString()} {new Date(this.props.package.updatedAt).toLocaleTimeString()}
               </div>
-              <div className="margin-top-5">
-                Update identifier: {this.props.package.requestId}
-              </div>
+            : undefined}
+            <div className="margin-top-5">
+              Update identifier: {this.props.package.requestId}
             </div>
-          : undefined}
+          </div>
         </li>
       );
     }
