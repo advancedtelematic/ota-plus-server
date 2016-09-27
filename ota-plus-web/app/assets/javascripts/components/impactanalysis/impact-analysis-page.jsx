@@ -69,9 +69,6 @@ define(function(require) {
       var impactedPackages = undefined;
             
       if(!_.isUndefined(impactAnalysis)) {
-          console.log(impactAnalysis);
-          
-          
         impactedDevices = {};
         impactedPackages = {};
                         
