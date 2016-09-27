@@ -37,6 +37,7 @@ define(function(require) {
       this.refresh = this.refresh.bind(this);
       this.queueUpdated = this.queueUpdated.bind(this);
 
+      db.blacklistedPackages.addWatch("poll-blacklisted-packages-page", _.bind(this.refresh, this, null));
       db.searchablePackages.addWatch("poll-packages", _.bind(this.refresh, this, null));
       db.searchablePackagesForDevice.addWatch("poll-installed-packages", _.bind(this.refresh, this, null));
       db.packageQueueForDevice.addWatch("poll-queued-packages", _.bind(this.queueUpdated, this, null));
@@ -98,12 +99,14 @@ define(function(require) {
       db.searchablePackages.reset();
       db.searchablePackagesForDevice.reset();
       db.packageQueueForDevice.reset();
+      db.blacklistedPackages.removeWatch("poll-blacklisted-packages-page");
       db.searchablePackages.removeWatch("poll-packages");
       db.searchablePackagesForDevice.removeWatch("poll-installed-packages");
       db.packageQueueForDevice.removeWatch("poll-queued-packages");
       clearTimeout(this.state.timeout);
     }
     refreshData() {
+      SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
       SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device.uuid});
       SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
       SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.uuid, regex: this.props.filterValue});
@@ -113,6 +116,7 @@ define(function(require) {
     }
     queueUpdated() {
       if(JSON.stringify(this.state.tmpQueueData) !== JSON.stringify(db.packageQueueForDevice.deref())) {
+        SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
         SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
         SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.uuid, regex: this.props.filterValue});
       }
@@ -135,6 +139,7 @@ define(function(require) {
       var Packages = _.clone(db.searchablePackages.deref());
       var Installed = _.clone(db.searchablePackagesForDevice.deref());
       var Queued = _.clone(db.packageQueueForDevice.deref());
+      var BlackList = _.clone(db.blacklistedPackages.deref());
 
       var SortedPackages = undefined;
       var installedCount = 0;
@@ -144,14 +149,23 @@ define(function(require) {
       var selectedType = selectedType ? selectedType : this.props.selectedType;
       var selectedSort = selectedSort ? selectedSort : this.props.selectedSort;
             
-      if(!_.isUndefined(Packages) && !_.isUndefined(Installed) && !_.isUndefined(Queued)) {
+      if(!_.isUndefined(Packages) && !_.isUndefined(Installed) && !_.isUndefined(Queued) && !_.isUndefined(BlackList)) {
         _.each(Packages, function(obj, index){
           Packages[index].isManagedPackage = true;
+        });
+        
+        BlackList.forEach(function(blacklist, index){
+          Installed.forEach(function(installed, index) {
+            if(installed.id.name == blacklist.packageId.name && installed.id.version == blacklist.packageId.version) {
+              Installed[index]['isBlackListed'] = true;
+            }
+          });
         });
         
         switch(selectedType) {
           case 'all': 
             Installed.forEach(function(installed, index){
+
               Packages.push(installed);
             });
           break;
