@@ -27,7 +27,7 @@ define(function(require) {
     render() {
       return (
         <div id="modal-new-device" className="myModal" role="dialog">
-          <div className="modal-dialog">
+          <div className="modal-dialog center-xy">
             <div className="modal-content">
               <div className="modal-header">
                 <button type="button" className="close" onClick={this.props.closeNewDeviceModal}></button>

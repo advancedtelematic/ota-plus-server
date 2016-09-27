@@ -393,7 +393,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 /* Modals */
 .myModal { background-color: rgba(45, 50, 68, 0.8); width: 100vw; height: 100%; min-height: 100vh; padding: 100px 0 0 0; position: fixed; left: 0; top: 0; z-index: 1049; }
-.myModal .modal-dialog { width: 463px; height: 240px; }
+.myModal .modal-dialog { width: 463px; min-height: 240px; margin: 0 auto; }
 .myModal .modal-dialog .modal-content { border: 0; }
 .myModal .modal-dialog .modal-content .modal-header { color: #fff; text-align: center; background: #979797; border-top-left-radius: 5px; border-top-right-radius: 5px; }
 .myModal .modal-dialog .modal-content .modal-body { color: #444; padding: 60px 80px 20px 80px; }
@@ -753,7 +753,7 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 #modal-blacklist .modal-dialog .modal-content .modal-body { padding: 40px 60px 30px 60px; }
 
 #impact-tooltip { padding-top: 0; }
-#impact-tooltip .modal-dialog { width: 684px; height: auto; margin: 0 auto; }
+#impact-tooltip .modal-dialog { width: 684px; }
 #impact-tooltip .modal-dialog .modal-content .modal-body { line-height: 1.6em; padding: 35px 20px 20px 20px; }
 
 .underlined { text-decoration: underline; }
