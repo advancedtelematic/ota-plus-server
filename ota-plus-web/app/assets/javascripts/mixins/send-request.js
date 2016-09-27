@@ -76,8 +76,7 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
           var myXhr = $.ajaxSettings.xhr();
           if(myXhr.upload) {
             myXhr.upload.addEventListener('progress',function(evt) {
-              var endTime = (new Date()).getTime();
-              var uploaded = !_.isUndefined(postUpload[opts.action][uploadKey]['uploaded']) ? postUpload[opts.action][uploadKey]['uploaded'] : 0;
+              var endTime = new Date().getTime();
               var lastUpTime = !_.isUndefined(postUpload[opts.action][uploadKey]['lastUpTime']) ? postUpload[opts.action][uploadKey]['lastUpTime'] : endTime;
               var upSpeed = ((evt.loaded - postUpload[opts.action][uploadKey]['uploaded']) * 1000) / ((endTime - lastUpTime) * 1024);
               
@@ -86,6 +85,7 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
               postUpload[opts.action][uploadKey]['uploaded'] = evt.loaded;
               postUpload[opts.action][uploadKey]['lastUpTime'] = endTime;
               postUpload[opts.action][uploadKey]['upSpeed'] = upSpeed;
+              
               db.postUpload.reset(postUpload);
             }, false);
           }
