@@ -102,6 +102,12 @@ class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends Ot
       .transform(_.withMethod("POST").withBody(Json.toJson(device)))
       .execJson(apiExec)(idReads)
   }
+
+  def getDevice(options: UserOptions, id: Uuid): Future[Device] = {
+    devicesRequest("devices/" + id.show)
+      .withUserOptions(options)
+      .execJson(apiExec)(DeviceR)
+  }
 }
 
 /**

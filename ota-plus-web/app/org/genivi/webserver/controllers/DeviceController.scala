@@ -43,9 +43,7 @@ extends Controller with ApiClientSupport {
 
   private[this] def userOptions(req: AuthenticatedRequest[_]): UserOptions = {
     val traceId = req.headers.get("x-ats-traceid")
-    val namespace = req.session.get("username").asInstanceOf[Option[Namespace]]
-    // TODO: Switch back to access_token after https://advancedtelematic.atlassian.net/browse/PRO-858
-    UserOptions(Some(req.idToken.value), traceId, namespace)
+    UserOptions(Some(req.idToken.value), traceId, Some(req.namespace))
   }
 
   /**
@@ -85,13 +83,16 @@ extends Controller with ApiClientSupport {
     */
   def fetchClientInfo(device: Uuid) : Action[AnyContent] =
     AuthenticatedApiAction.async { implicit request =>
+      val options = userOptions(request)
       val fut = for (
         vMetadataOpt <- vehiclesStore.getVehicle(device);
         vMetadata <- vMetadataOpt match {
           case None => Future.failed[DeviceMetadata](NoSuchVinRegistered)
           case Some(vmeta) => Future.successful(vmeta)
         };
+        device <- devicesApi.getDevice(options, device);
         clientInfo <- authPlusApi.fetchClientInfo(vMetadata.clientInfo.clientId)
+          if device.namespace == request.namespace
       ) yield Ok(clientInfo)
 
       fut.recoverWith { case _ =>
