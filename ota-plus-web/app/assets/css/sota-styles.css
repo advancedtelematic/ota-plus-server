@@ -752,8 +752,8 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 #modal-blacklist .modal-dialog .modal-content .modal-header.blacklist-header { background: red; }
 #modal-blacklist .modal-dialog .modal-content .modal-body { padding: 40px 60px 30px 60px; }
 
-#impact-tooltip { padding-top: 200px; }
-#impact-tooltip .modal-dialog { width: 684px; }
+#impact-tooltip { padding-top: 0; }
+#impact-tooltip .modal-dialog { width: 684px; height: auto; margin: 0 auto; }
 #impact-tooltip .modal-dialog .modal-content .modal-body { line-height: 1.6em; padding: 35px 20px 20px 20px; }
 
 .underlined { text-decoration: underline; }

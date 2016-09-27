@@ -10,7 +10,7 @@ define(function(require) {
     render() {
       return (
         <div id="impact-tooltip" className="myModal">
-          <div className="modal-dialog">
+          <div className="center-xy modal-dialog">
             <div className="modal-content">
               <div className="modal-body font-14">
                 <div className="text-center">
