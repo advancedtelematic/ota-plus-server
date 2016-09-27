@@ -70,7 +70,7 @@ class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results 
 
   implicit class RequestSyntax[A](request: FakeRequest[A]) {
     def withAuthSession(): FakeRequest[A] =
-      request.withSession("id_token" -> "", "access_token" -> "", "auth_plus_access_token" -> "")
+      request.withSession("id_token" -> "", "access_token" -> "", "auth_plus_access_token" -> "", "namespace" -> "")
   }
 
   "DeviceController" should {
