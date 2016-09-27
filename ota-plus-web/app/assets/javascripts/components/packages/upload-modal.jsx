@@ -188,7 +188,7 @@ define(function(require) {
       return (
         <div id="modal-upload" className={"myModal" + (_.isUndefined(uploads) || _.isEmpty(uploads) ? ' hidden': '')}>
           {!_.isUndefined(uploads) && !_.isEmpty(uploads) ?
-            <div className="modal-dialog">
+            <div className="modal-dialog center-xy">
               <div className="modal-content">
                 <div className="modal-header">
                   <button type="button" className="close" data-dismiss="modal" onClick={this.props.closeModal}></button>

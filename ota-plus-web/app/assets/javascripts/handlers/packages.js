@@ -109,7 +109,7 @@ define(function(require) {
               });
           break;
           case 'update-package-in-blacklist':
-            sendRequest.doPut('/api/v1/blacklist', payload.data, {action: payload.actionType})
+            sendRequest.doPut('/api/v1/blacklist', payload.data, {action: payload.actionType, dataType: 'text'})
               .success(function() {
               });
           break;

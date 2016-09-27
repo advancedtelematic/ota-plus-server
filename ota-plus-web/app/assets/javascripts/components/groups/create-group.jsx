@@ -67,8 +67,8 @@ define(function(require) {
       var canCreateGroup = !_.isUndefined(firstDeviceData) && !_.isUndefined(firstDeviceData['components']) && !_.isUndefined(secondDeviceData) && !_.isUndefined(secondDeviceData['components']);
       
       return (
-        <div className="myModal" id="modal-create-group">
-          <div className="modal-dialog">
+        <div id="modal-create-group" className="myModal">
+          <div className="modal-dialog center-xy">
             <div className="modal-content">
               <div className="modal-header">
                 <button type="button" className="close" data-dismiss="modal" onClick={this.props.closeForm}></button>
