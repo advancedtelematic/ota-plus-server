@@ -20,6 +20,7 @@ GET     /api/v1/events/devicecreated/:namespace  org.genivi.webserver.controller
 GET     /api/v1/events/devicedeleted/:namespace  org.genivi.webserver.controllers.EventController.subDeviceDeleted(namespace: Namespace)
 GET     /api/v1/events/packagecreated/:namespace org.genivi.webserver.controllers.EventController.subPackageCreated(namespace: Namespace)
 GET     /api/v1/events/updatespec/:namespace     org.genivi.webserver.controllers.EventController.subUpdateSpec(namespace: Namespace)
+GET     /api/v1/events/devices/:uuid/ws          org.genivi.webserver.controllers.EventController.ws(uuid: Uuid)
 
 GET     /api/v1/*path                            org.genivi.webserver.controllers.Application.apiProxy(path: String)
 PUT     /api/v1/*path                            org.genivi.webserver.controllers.Application.apiProxy(path: String)
