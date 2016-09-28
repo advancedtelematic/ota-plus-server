@@ -192,7 +192,7 @@ define(function(require) {
               <div className="modal-content">
                 <div className="modal-header">
                   <button type="button" className="close" data-dismiss="modal" onClick={this.props.closeModal}></button>
-                  <h4 className="modal-title">{Object.keys(this.state.data).length} Packages Upload</h4>
+                  <h4 className="modal-title">Uploading {Object.keys(this.state.data).length} package{Object.keys(this.state.data).length > 1 ? "s" : ""}</h4>
                 </div>
                 <div className="modal-body">
                   <div className="modal-subheader">
