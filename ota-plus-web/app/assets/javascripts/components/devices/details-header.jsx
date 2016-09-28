@@ -11,7 +11,13 @@ define(function(require) {
       db.deviceSeen.addWatch("poll-deviceseen", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
-      window.deviceSeen = Events.deviceSeen;
+      var proto = (location.protocol == "http:") ? "ws://" : "wss://";
+      var port  = (location.protocol == "http:") ? "" : ":8080";
+      var ws = new WebSocket(proto + location.hostname + port + "/api/v1/events/devices/"
+                             + this.props.device.uuid + "/ws");
+      ws.onmessage = function(msg) {
+        Events.deviceSeen(JSON.parse(msg.data));
+      };
     }
     componentWillUnmount() {
       db.deviceSeen.removeWatch("poll-deviceseen");
@@ -71,7 +77,6 @@ define(function(require) {
                 Campaign wizard
               </Link>
             : null}
-            <iframe src={"/api/v1/events/devices/" + this.props.device.uuid} style={{display: 'none'}}></iframe>
         </div>
       );
     }
