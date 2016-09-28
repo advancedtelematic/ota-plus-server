@@ -12,7 +12,7 @@ define(function(require) {
     }
     componentDidMount() {
       var proto = (location.protocol == "http:") ? "ws://" : "wss://";
-      var port  = (location.protocol == "http:") ? "" : ":8080";
+      var port  = (location.protocol == "http:") ? location.port : ":8080";
       var ws = new WebSocket(proto + location.hostname + port + "/api/v1/events/devices/"
                              + this.props.device.uuid + "/ws");
       ws.onmessage = function(msg) {
