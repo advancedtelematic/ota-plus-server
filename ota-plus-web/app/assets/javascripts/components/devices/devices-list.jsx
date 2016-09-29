@@ -6,6 +6,7 @@ define(function(require) {
       Cookies = require('js-cookie'),
       DeviceListItem = require('es6!./devices-list-item'),
       DeviceListGroupItem = require('es6!./devices-list-groupitem'),
+      DevicesGroupDetailsPanel = require('es6!./devices-group-details-panel'),
       CreateGroup = require('es6!../groups/create-group');
 
   class DevicesList extends React.Component {
@@ -14,17 +15,20 @@ define(function(require) {
 
       this.state = {
         boxWidth: 320,
+        boxesPerRow: null,
         showForm: false,
         draggingId: null,
         draggingName: null,
         overId: null,
         groupNames: [],
         Groups: null,
-        Devices: null
+        Devices: null,
+        expandedGroupName: null
       };
       
       this.restoreGroups = this.restoreGroups.bind(this);
       this.checkIfComponentsMatch = this.checkIfComponentsMatch.bind(this);
+      this.expandGroup = this.expandGroup.bind(this);
       
       this.setBoxesWidth = this.setBoxesWidth.bind(this);
       this.openForm = this.openForm.bind(this);
@@ -83,7 +87,7 @@ define(function(require) {
               if(typeof groups[group.groupName] == 'undefined' || !groups[group.groupName] instanceof Array) {
                 groups[group.groupName] = [];
               }
-              groups[group.groupName].push(deviceIndex);
+              groups[group.groupName].push(device);
               delete devices[deviceIndex];
             }
           }
@@ -95,12 +99,19 @@ define(function(require) {
         Groups: groups
       });
     }
+    expandGroup(groupName) {
+      this.setState({
+        expandedGroupName: this.state.expandedGroupName !== groupName ? groupName : null
+      });
+    }
     setBoxesWidth() {
       var containerWidth = $('#devices-container').width();
       var minBoxWidth = 320;
       var howManyBoxesPerRow = Math.floor(containerWidth / minBoxWidth);
       this.setState({
-        boxWidth: containerWidth / howManyBoxesPerRow
+        boxWidth: containerWidth / howManyBoxesPerRow,
+        boxesPerRow: howManyBoxesPerRow,
+        groupPanelWidth: $('#devices-list').width()
       });
     }
     openForm() {
@@ -156,19 +167,52 @@ define(function(require) {
       var Devices = this.state.Devices;
       var Groups = this.state.Groups;
             
-      for(var i in Groups) {
+      var itemIndex = 1;
+      var rows = [];
+      var expandedItemIndex = null;
+      for(var groupName in Groups) {
+        var rowNo = Math.ceil(itemIndex/this.state.boxesPerRow);
+        var isLastItemInRow = itemIndex/this.state.boxesPerRow % 1 === 0;
+        
+        if(_.isUndefined(rows[rowNo]))
+          rows[rowNo] = [];
+        
+        rows[rowNo].push(groupName);
+        
         groups.push(
-          <span key={'group-' + i}>
+          <span key={'group-' + groupName}>
             <DeviceListGroupItem
-              devices={Groups[i]}
-              name={i}
-              width={this.state.boxWidth}/>
+              name={groupName}
+              width={this.state.boxWidth}
+              expandGroup={this.expandGroup}/>
           </span>
         );
+
+        if(this.state.expandedGroupName === groupName)
+          expandedItemIndex = itemIndex;
+
+        groups.push(
+          <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+            {rows[rowNo].indexOf(this.state.expandedGroupName) > -1 && isLastItemInRow ? 
+              <DevicesGroupDetailsPanel 
+                devices={Groups[this.state.expandedGroupName]}
+                width={this.state.groupPanelWidth}
+                boxWidth={this.state.boxWidth}
+                arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 53)}/>
+            : null}
+          </VelocityTransitionGroup>
+        );
+        itemIndex++;
       }
             
       var devices = _.map(Devices, function(device, i) {
         if(!_.isUndefined(device)) {
+          var rowNo = Math.ceil(itemIndex/this.state.boxesPerRow);
+          var isLastItemInRow = itemIndex/this.state.boxesPerRow % 1 === 0;
+          
+          if(_.isUndefined(rows[rowNo]))
+            rows[rowNo] = [];
+          
           var className = '';
           if(this.state.draggingId !== null) {
             if(this.state.draggingId !== i) {
@@ -177,7 +221,8 @@ define(function(require) {
               className = 'dragging';
             }
           }
-          return (
+                    
+          var returnedData = (
             <span data-id={i}
               data-name={device.deviceName}
               className={className}
@@ -194,6 +239,27 @@ define(function(require) {
                 isProductionDevice={this.props.areProductionDevices}
                 productionDeviceName={this.props.productionDeviceName}
                 width={this.state.boxWidth}/>
+            </span>
+          );
+          
+          var returnedPanelDetails = (
+            <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+              {rows[rowNo].indexOf(this.state.expandedGroupName) > -1 && isLastItemInRow ?
+                <DevicesGroupDetailsPanel 
+                  devices={Groups[this.state.expandedGroupName]}
+                  width={this.state.groupPanelWidth}
+                  boxWidth={this.state.boxWidth}
+                  arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 53)}/>
+              : null}
+            </VelocityTransitionGroup>
+          );
+    
+          itemIndex++;
+          
+          return (
+            <span>
+              {returnedData}
+              {returnedPanelDetails}
             </span>
           );
         }
