@@ -22,7 +22,7 @@ define(function(require) {
     render() {
       return (
         <div id="modal-campaign-cancel" className="myModal">
-          <div className="modal-dialog">
+          <div className="modal-dialog center-xy">
             <div className="modal-content">
               <div className="modal-header modal-header-red text-center">
                 <h4 className="modal-title">
