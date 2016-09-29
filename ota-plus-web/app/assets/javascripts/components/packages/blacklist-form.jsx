@@ -98,7 +98,7 @@ define(function(require) {
         <div id="modal-blacklist" className="myModal">
           <div className="modal-dialog center-xy">
             <div className="modal-content">
-              <div className={"modal-header text-center" + (this.props.mode == 'add' ? ' blacklist-header' : '')}>
+              <div className={"modal-header text-center" + (this.props.mode == 'add' ? ' modal-header-red' : '')}>
                 <h4 className="modal-title">
                   {this.props.mode == 'edit' ?
                     <div>

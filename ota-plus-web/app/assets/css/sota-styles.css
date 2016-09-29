@@ -209,7 +209,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .btn-orange { color: #fff !important; font-size: 10px; font-weight: bold; text-transform: uppercase; background: #FFA987; min-width: 78px; padding: 4px 15px; border-radius: 15px; }
 .btn-orange:hover { background: #C5795F; }
 
-.btn-red { color: #fff; font-weight: bold; background: #ef2f24; padding: 6px 30px; margin: 20px 0 0 0; border: 1px solid #888; border-radius: 15px; }
+.btn-red { color: #fff; font-size: 16px; background: #ff0000; padding: 15px 60px; margin: 20px 0 0 0; border: 0; border-radius: 30px; }
 .btn-red:hover, .btn-red:focus, .btn-red:active { color: #fff; }
 .btn-red:disabled { color: #555; font-weight: normal; background: #ddd; }
 
@@ -255,81 +255,161 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 .margin-top-5 { margin-top: 5px !important; }
 
+.margin-right-5 { margin-right: 5px !important; }
+
+.margin-bottom-5 { margin-bottom: 5px !important; }
+
 .margin-left-5 { margin-left: 5px !important; }
 
 .margin-top-10 { margin-top: 10px !important; }
+
+.margin-right-10 { margin-right: 10px !important; }
+
+.margin-bottom-10 { margin-bottom: 10px !important; }
 
 .margin-left-10 { margin-left: 10px !important; }
 
 .margin-top-15 { margin-top: 15px !important; }
 
+.margin-right-15 { margin-right: 15px !important; }
+
+.margin-bottom-15 { margin-bottom: 15px !important; }
+
 .margin-left-15 { margin-left: 15px !important; }
 
 .margin-top-20 { margin-top: 20px !important; }
+
+.margin-right-20 { margin-right: 20px !important; }
+
+.margin-bottom-20 { margin-bottom: 20px !important; }
 
 .margin-left-20 { margin-left: 20px !important; }
 
 .margin-top-25 { margin-top: 25px !important; }
 
+.margin-right-25 { margin-right: 25px !important; }
+
+.margin-bottom-25 { margin-bottom: 25px !important; }
+
 .margin-left-25 { margin-left: 25px !important; }
 
 .margin-top-30 { margin-top: 30px !important; }
+
+.margin-right-30 { margin-right: 30px !important; }
+
+.margin-bottom-30 { margin-bottom: 30px !important; }
 
 .margin-left-30 { margin-left: 30px !important; }
 
 .margin-top-35 { margin-top: 35px !important; }
 
+.margin-right-35 { margin-right: 35px !important; }
+
+.margin-bottom-35 { margin-bottom: 35px !important; }
+
 .margin-left-35 { margin-left: 35px !important; }
 
 .margin-top-40 { margin-top: 40px !important; }
+
+.margin-right-40 { margin-right: 40px !important; }
+
+.margin-bottom-40 { margin-bottom: 40px !important; }
 
 .margin-left-40 { margin-left: 40px !important; }
 
 .margin-top-45 { margin-top: 45px !important; }
 
+.margin-right-45 { margin-right: 45px !important; }
+
+.margin-bottom-45 { margin-bottom: 45px !important; }
+
 .margin-left-45 { margin-left: 45px !important; }
 
 .margin-top-50 { margin-top: 50px !important; }
+
+.margin-right-50 { margin-right: 50px !important; }
+
+.margin-bottom-50 { margin-bottom: 50px !important; }
 
 .margin-left-50 { margin-left: 50px !important; }
 
 .margin-top-55 { margin-top: 55px !important; }
 
+.margin-right-55 { margin-right: 55px !important; }
+
+.margin-bottom-55 { margin-bottom: 55px !important; }
+
 .margin-left-55 { margin-left: 55px !important; }
 
 .margin-top-60 { margin-top: 60px !important; }
+
+.margin-right-60 { margin-right: 60px !important; }
+
+.margin-bottom-60 { margin-bottom: 60px !important; }
 
 .margin-left-60 { margin-left: 60px !important; }
 
 .margin-top-65 { margin-top: 65px !important; }
 
+.margin-right-65 { margin-right: 65px !important; }
+
+.margin-bottom-65 { margin-bottom: 65px !important; }
+
 .margin-left-65 { margin-left: 65px !important; }
 
 .margin-top-70 { margin-top: 70px !important; }
+
+.margin-right-70 { margin-right: 70px !important; }
+
+.margin-bottom-70 { margin-bottom: 70px !important; }
 
 .margin-left-70 { margin-left: 70px !important; }
 
 .margin-top-75 { margin-top: 75px !important; }
 
+.margin-right-75 { margin-right: 75px !important; }
+
+.margin-bottom-75 { margin-bottom: 75px !important; }
+
 .margin-left-75 { margin-left: 75px !important; }
 
 .margin-top-80 { margin-top: 80px !important; }
+
+.margin-right-80 { margin-right: 80px !important; }
+
+.margin-bottom-80 { margin-bottom: 80px !important; }
 
 .margin-left-80 { margin-left: 80px !important; }
 
 .margin-top-85 { margin-top: 85px !important; }
 
+.margin-right-85 { margin-right: 85px !important; }
+
+.margin-bottom-85 { margin-bottom: 85px !important; }
+
 .margin-left-85 { margin-left: 85px !important; }
 
 .margin-top-90 { margin-top: 90px !important; }
+
+.margin-right-90 { margin-right: 90px !important; }
+
+.margin-bottom-90 { margin-bottom: 90px !important; }
 
 .margin-left-90 { margin-left: 90px !important; }
 
 .margin-top-95 { margin-top: 95px !important; }
 
+.margin-right-95 { margin-right: 95px !important; }
+
+.margin-bottom-95 { margin-bottom: 95px !important; }
+
 .margin-left-95 { margin-left: 95px !important; }
 
 .margin-top-100 { margin-top: 100px !important; }
+
+.margin-right-100 { margin-right: 100px !important; }
+
+.margin-bottom-100 { margin-bottom: 100px !important; }
 
 .margin-left-100 { margin-left: 100px !important; }
 
@@ -356,6 +436,8 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 .blue { color: #96DED2; }
 .blue:hover, .blue:focus, .blue:active { color: #96DED2; }
+
+.hover-red:hover { color: #ff0000; }
 
 /* Icons */
 .icon-info { margin: -2px 10px 0 0; float: left; }
@@ -397,6 +479,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .myModal .modal-dialog { width: 463px; min-height: 240px; margin: 0 auto; }
 .myModal .modal-dialog .modal-content { border: 0; }
 .myModal .modal-dialog .modal-content .modal-header { color: #fff; text-align: center; background: #979797; border-top-left-radius: 5px; border-top-right-radius: 5px; }
+.myModal .modal-dialog .modal-content .modal-header.modal-header-red { background: red; }
 .myModal .modal-dialog .modal-content .modal-body { color: #444; padding: 60px 80px 20px 80px; }
 .myModal.small-margin .modal-dialog .modal-content .modal-body { color: #444; padding: 20px 20px 20px 20px; }
 
@@ -750,7 +833,6 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 
 #modal-blacklist .modal-dialog { width: 520px; }
 #modal-blacklist .modal-dialog .modal-content .modal-header .modal-title img { vertical-align: bottom; }
-#modal-blacklist .modal-dialog .modal-content .modal-header.blacklist-header { background: red; }
 #modal-blacklist .modal-dialog .modal-content .modal-body { padding: 40px 60px 30px 60px; }
 
 #impact-tooltip { padding-top: 0; }
@@ -759,11 +841,24 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 
 .underlined { text-decoration: underline; }
 
-#campaigns-wrapper { background: #fff; }
+#campaigns-wrapper { background: #fff; overflow-y: auto; }
 #campaigns-wrapper .table > tbody > tr > td { border-bottom: 1px solid #ccc; padding-left: 15px; padding-right: 15px; vertical-align: middle; }
 #campaigns-wrapper .table > thead > tr > th { border-bottom: 1px solid #ccc; padding-left: 15px; padding-right: 15px; vertical-align: middle; }
 
 .progress-blue { height: 25px; background: #fff; padding: 0; border: 0; border-radius: 5px; -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25); -moz-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25); box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25); position: relative; }
 .progress-blue .progress-bar { background-color: #96DCD1; border-radius: 5px; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; }
-.progress-blue .progress-count { font-size: 12px; position: absolute; top: 4px; right: 25px; }
+.progress-blue .progress-count { font-size: 12px; position: absolute; top: 5px; right: 25px; }
 .progress-blue .progress-status { font-size: 12px; position: absolute; top: 0; right: 0; }
+
+#campaign .grey-header-icon { background-image: url(/assets/img/icons/campaign.png); }
+#campaign .group-icon { background-image: url(/assets/img/icons/group_large_grey.png); float: none; display: inline-block; vertical-align: middle; }
+#campaign .group-text { width: auto; margin: 0 0 0 15px; display: inline-block; vertical-align: middle; }
+#campaign .group-text .group-title { font-size: 14px; }
+#campaign .group-text .group-subtitle { color: #ccc; font-size: 11px; }
+
+.campaign-chart-inside { width: 48px; position: absolute; top: 47px; left: 36px; }
+
+.table.table-grey-header > thead > tr { background: #eee; }
+
+#modal-campaign-cancel .modal-dialog { width: 520px; }
+#modal-campaign-cancel .modal-dialog .modal-content .modal-body { padding: 40px 60px 30px 60px; }
