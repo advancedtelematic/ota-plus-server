@@ -889,12 +889,12 @@ a.close, button.close {
 
 .btn-red {
     color: #fff;
-    font-weight: bold;
-    background: #ef2f24;
-    padding: 6px 30px;
+    font-size: 16px;
+    background: #ff0000;
+    padding: 15px 60px;
     margin: 20px 0 0 0;
-    border: 1px solid #888;
-    border-radius: 15px;
+    border: 0;
+    border-radius: 30px;
 
     &:hover, &:focus, &:active {
         color: #fff;
@@ -1065,6 +1065,14 @@ a.close, button.close {
         margin-top: $i*5px !important;
     }
 
+    .margin-right-#{$i*5} {
+        margin-right: $i*5px !important;
+    }
+
+    .margin-bottom-#{$i*5} {
+        margin-bottom: $i*5px !important;
+    }
+
     .margin-left-#{$i*5} {
         margin-left: $i*5px !important;
     }
@@ -1090,7 +1098,7 @@ a.close, button.close {
 
 .black {
     color: #000;
-    
+
     &:hover, &:focus, &:active {
         color: #000;
     }
@@ -1125,6 +1133,12 @@ a.close, button.close {
 
     &:hover, &:focus, &:active {
         color: #96DED2;
+    }
+}
+
+.hover-red {
+    &:hover {
+        color: #ff0000;
     }
 }
 
@@ -1284,6 +1298,10 @@ a.close, button.close {
                 background: #979797;
                 border-top-left-radius: 5px;
                 border-top-right-radius: 5px;
+                
+                &.modal-header-red {
+                    background: red;
+                }
             }
 
             .modal-body {
@@ -2645,10 +2663,6 @@ hr.full-line {
                         vertical-align: bottom;
                     }
                 }
-
-                &.blacklist-header {
-                    background: red;
-                }
             }
 
             .modal-body {
@@ -2679,6 +2693,7 @@ hr.full-line {
 
 #campaigns-wrapper {
     background: #fff;
+    overflow-y: auto;
 
     .table {
         & > tbody  {
@@ -2691,7 +2706,7 @@ hr.full-line {
                 } 
             }
         }
-        
+
         & > thead  {
             & > tr {
                 & > th {
@@ -2727,7 +2742,7 @@ hr.full-line {
     .progress-count {
         font-size: 12px;
         position: absolute;
-        top: 4px;
+        top: 5px;
         right: 25px;
     }
 
@@ -2736,5 +2751,63 @@ hr.full-line {
         position: absolute;
         top: 0;
         right: 0;
+    }
+}
+
+#campaign {
+    .grey-header-icon {
+        background-image: url(/assets/img/icons/campaign.png);
+    }
+
+    .group-icon {
+        background-image: url(/assets/img/icons/group_large_grey.png);
+        float: none;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .group-text {
+        width: auto;
+        margin: 0 0 0 15px;
+        display: inline-block;
+        vertical-align: middle;
+
+        .group-title {
+            font-size: 14px;
+        }
+
+        .group-subtitle {
+            color: #ccc;
+            font-size: 11px;
+        }
+    }
+}
+
+.campaign-chart-inside {
+    width: 48px;
+    position: absolute;
+    top: 47px;
+    left: 36px;
+}
+
+.table {
+    &.table-grey-header {
+        & > thead {
+            & > tr {
+                background: #eee;
+            }
+        }
+    }
+}
+
+#modal-campaign-cancel {
+    .modal-dialog {
+        width: 520px;
+
+        .modal-content {
+            .modal-body {
+                padding: 40px 60px 30px 60px;
+            }
+        }
     }
 }
