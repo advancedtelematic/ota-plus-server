@@ -166,13 +166,13 @@ define(function(require) {
       var groups = [];
       var Devices = this.state.Devices;
       var Groups = this.state.Groups;
-            
+                  
       var itemIndex = 1;
       var rows = [];
       var expandedItemIndex = null;
       for(var groupName in Groups) {
         var rowNo = Math.ceil(itemIndex/this.state.boxesPerRow);
-        var isLastItemInRow = itemIndex/this.state.boxesPerRow % 1 === 0;
+        var isLastItemInRow = (itemIndex/this.state.boxesPerRow % 1 === 0 || (!Object.keys(Devices).length && itemIndex === Object.keys(Groups).length));
         
         if(_.isUndefined(rows[rowNo]))
           rows[rowNo] = [];
@@ -192,23 +192,26 @@ define(function(require) {
           expandedItemIndex = itemIndex;
 
         groups.push(
-          <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
-            {rows[rowNo].indexOf(this.state.expandedGroupName) > -1 && isLastItemInRow ? 
-              <DevicesGroupDetailsPanel 
-                devices={Groups[this.state.expandedGroupName]}
-                width={this.state.groupPanelWidth}
-                boxWidth={this.state.boxWidth}
-                arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 53)}/>
-            : null}
-          </VelocityTransitionGroup>
+          <span key={'group-panel-details-' + groupName}>
+            <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+              {rows[rowNo].indexOf(this.state.expandedGroupName) > -1 && isLastItemInRow ? 
+                <DevicesGroupDetailsPanel 
+                  devices={Groups[this.state.expandedGroupName]}
+                  width={this.state.groupPanelWidth}
+                  boxWidth={this.state.boxWidth}
+                  arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 53)}/>
+              : null}
+            </VelocityTransitionGroup>
+          </span>
         );
         itemIndex++;
       }
-            
+      
+      var devicesIndexItem = 1;
       var devices = _.map(Devices, function(device, i) {
         if(!_.isUndefined(device)) {
           var rowNo = Math.ceil(itemIndex/this.state.boxesPerRow);
-          var isLastItemInRow = itemIndex/this.state.boxesPerRow % 1 === 0;
+          var isLastItemInRow = itemIndex/this.state.boxesPerRow % 1 === 0 || Object.keys(Devices).length === devicesIndexItem;
           
           if(_.isUndefined(rows[rowNo]))
             rows[rowNo] = [];
@@ -227,13 +230,13 @@ define(function(require) {
               data-name={device.deviceName}
               className={className}
               key={"dnd-device-" + i}
-              draggable="true"
-              onDragEnd={this.dragEnd}
-              onDragOver={this.dragOver}
-              onDragLeave={this.dragLeave}
-              onDragStart={this.dragStart}
-              onDragEnter={this.dragEnter}
-              onDrop={this.drop}>
+              draggable={(!_.isUndefined(this.props.isDND) ? this.props.isDND : "true")}
+              onDragEnd={_.isUndefined(this.props.isDND) || this.props.isDND ? this.dragEnd : null}
+              onDragOver={_.isUndefined(this.props.isDND) || this.props.isDND ? this.dragOver : null}
+              onDragLeave={_.isUndefined(this.props.isDND) || this.props.isDND ? this.dragLeave : null}
+              onDragStart={_.isUndefined(this.props.isDND) || this.props.isDND ? this.dragStart : null}
+              onDragEnter={_.isUndefined(this.props.isDND) || this.props.isDND ? this.dragEnter : null}
+              onDrop={_.isUndefined(this.props.isDND) || this.props.isDND ? this.drop : null}>
               <DeviceListItem key={device.deviceName}
                 device={device}
                 isProductionDevice={this.props.areProductionDevices}
@@ -255,9 +258,10 @@ define(function(require) {
           );
     
           itemIndex++;
+          devicesIndexItem++;
           
           return (
-            <span>
+            <span key={"device-panel-details-" + i}>
               {returnedData}
               {returnedPanelDetails}
             </span>
@@ -268,7 +272,7 @@ define(function(require) {
       return (
         <div id="devices-list" className="height-100">
           <div id="devices-container" className="container position-relative height-100">
-            {devices.length > 0 ?
+            {devices.length > 0 || groups.length > 0 ?
               <div>
                 {groups}
                 {devices}
