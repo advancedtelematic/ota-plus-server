@@ -826,7 +826,7 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 .upload-bar { width: 30px; height: 30px; }
 
 #modal-upload { background: transparent; width: 600px; height: auto; min-height: auto; padding: 0; position: absolute; top: auto; right: 30px; bottom: 30px; left: auto; z-index: 1048; }
-#modal-upload .modal-dialog { width: 100%; height: auto; margin: 0; }
+#modal-upload .modal-dialog { width: 100%; min-height: 0; margin: 0; }
 #modal-upload .modal-dialog .modal-content .modal-body { padding: 0; }
 #modal-upload .modal-dialog .modal-content .modal-body .modal-subheader { background: #dedede; padding: 5px 20px; }
 #modal-upload .modal-dialog .modal-content .modal-body .modal-desc { max-height: 150px; padding: 0; overflow-y: auto; }
