@@ -16,6 +16,7 @@ define(function(require) {
         lastUpdatedSecondsRemaining: null,
         secondsRemaining: 600
       };
+      this.fixModalPosition = this.fixModalPosition.bind(this);
       this.closeModal = this.closeModal.bind(this);
       this.cancelUpload = this.cancelUpload.bind(this);
       this.removeFromList = this.removeFromList.bind(this);
@@ -26,26 +27,62 @@ define(function(require) {
       db.postStatus.addWatch("poll-response-add-package-modal", _.bind(this.handleResponse, this, null));
     }
     componentDidMount() {
+      window.addEventListener("resize", this.fixModalPosition);
+      
+      var modal = jQuery('#modal-upload');
+      var containment = jQuery('#app');
+      
       var positions = Cookies.getJSON('positions') || {};
-      if(!_.isUndefined(positions["modal-upload"])) {          
-        jQuery('#modal-upload').css(positions["modal-upload"]);
+      if(!_.isUndefined(positions["modal-upload"])) {
+        modal.css(positions["modal-upload"]);
       }
-      jQuery('#modal-upload').draggable({
+      
+      this.fixModalPosition();
+      
+      modal.draggable({
         containment: "#app",
         start: function (event, ui) {
           jQuery(this).css({
+            top: "auto",
             right: "auto",
-            bottom: "auto"
+          });
+        },
+        drag: function(event, ui) {
+          jQuery(this).css({
+            bottom: containment.height() - ui.position.top - $('#' + this.id).height()
           });
         },
         stop: function (event, ui) {
-          positions[this.id] = ui.position;
+          jQuery(this).css({
+            top: "auto"
+          });
+          positions[this.id] = {
+            left: ui.position.left,
+            bottom: (containment.height() - ui.position.top - $('#' + this.id).height())
+          };
           Cookies.set('positions', JSON.stringify(positions));
         }
       });
     }
     componentWillUnmount() {
+      window.removeEventListener("resize", this.fixModalPosition);
       db.postUpload.removeWatch("poll-upload-packages");
+    }
+    fixModalPosition() {
+      var modal = jQuery('#modal-upload');
+      var containment = jQuery('#app');
+      var positionLeft = Math.min(parseInt(modal.css('left')), containment.width() - modal.width());
+      var positionBottom = Math.min(parseInt(modal.css('bottom')), containment.height() - modal.height());
+      var positions = Cookies.getJSON('positions') || {};
+      
+      modal.css('left', positionLeft);
+      modal.css('bottom', positionBottom);
+      
+      positions["modal-upload"] = {
+        left: positionLeft,
+        bottom: positionBottom
+      };
+      Cookies.set('positions', JSON.stringify(positions));
     }
     setData() {
       var postUpload = !_.isUndefined(db.postUpload.deref()) && !_.isUndefined(db.postUpload.deref()['create-package']) ? db.postUpload.deref()['create-package'] : undefined;
@@ -59,7 +96,7 @@ define(function(require) {
           firstUpdatedSecondsRemaining: currentTime
         });
       } else {
-        if(currentTime - lastUpdatedSecondsRemaining > 15 * 1000 || 1) {
+        if(currentTime - lastUpdatedSecondsRemaining > 15 * 1000) {
           _.each(postUpload, function(upload, uploadKey) {
             var uploadSize = upload.size/(1024*1024);
             var uploadedSize = !isNaN(upload.uploaded) ? upload.uploaded/(1024*1024) : 0;
@@ -191,7 +228,7 @@ define(function(require) {
       return (
         <div id="modal-upload" className={"myModal" + (_.isUndefined(uploads) || _.isEmpty(uploads) ? ' hidden': '')}>
           {!_.isUndefined(uploads) && !_.isEmpty(uploads) ?
-            <div className="modal-dialog center-xy">
+            <div className="modal-dialog">
               <div className="modal-content">
                 <div className="modal-header">
                   <button type="button" className="close" data-dismiss="modal" onClick={this.props.closeModal}></button>
@@ -226,7 +263,7 @@ define(function(require) {
               </div>
             </div>
           : undefined}
-         </div>
+        </div>
       );
     }
   };
