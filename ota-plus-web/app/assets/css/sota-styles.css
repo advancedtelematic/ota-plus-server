@@ -81,7 +81,7 @@ button.list-group-item:focus { background: transparent; }
 .device-box .device-icon { margin-top: 20px; margin-left: 20px; }
 
 /* Device status */
-.device-status { background: url(/assets/img/icons/orange_questionmark.png) no-repeat; width: 24px; height: 24px; background-size: cover; margin: -2px 5px 0 0; display: inline-block; vertical-align: middle; }
+.device-status { background: url(/assets/img/icons/grey_questionmark.png) no-repeat; width: 25px; height: 25px; background-size: cover; margin: -2px 5px 0 0; display: inline-block; vertical-align: middle; }
 .device-status.device-status-Error { background-image: url(/assets/img/icons/red_cross.png); }
 .device-status.device-status-Outdated { background-image: url(/assets/img/icons/orange_exclamation.png); }
 .device-status.device-status-UpToDate { background-image: url(/assets/img/icons/green_tick.png); }
