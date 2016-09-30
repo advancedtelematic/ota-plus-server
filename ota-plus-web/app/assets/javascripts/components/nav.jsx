@@ -114,7 +114,6 @@ define(function(require) {
                     Impact analysis
                   </Link>
                 </li>
-                <li><Link to="/campaigns" activeClassName="active" id="link-campaigns">Campaigns</Link></li>
               </ul>
             </div>
             <ul className="right-nav pull-right">
