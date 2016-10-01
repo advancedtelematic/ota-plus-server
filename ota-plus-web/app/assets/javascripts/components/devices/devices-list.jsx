@@ -105,7 +105,7 @@ define(function(require) {
       });
     }
     setBoxesWidth() {
-      var containerWidth = $('#devices-container').width();
+      var containerWidth = $('#devices-container > div').width();
       var minBoxWidth = 320;
       var howManyBoxesPerRow = Math.floor(containerWidth / minBoxWidth);
       this.setState({
