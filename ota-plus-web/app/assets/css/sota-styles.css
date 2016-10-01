@@ -788,7 +788,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .impact-analysis .impact-analysis-blacklisted-packages { margin: 25px 0; }
 .impact-analysis .impact-analysis-blacklisted-packages .title { font-size: 16px; margin: 5px 20px 0 0; }
 .impact-analysis .impact-analysis-blacklisted-packages .impact-analysis-blacklisted-package { color: #444; background: #fff; padding: 5px 10px; margin: 0 10px; display: inline-block; -webkit-box-shadow: 0px 0px 13px 1px rgba(0, 0, 0, 0.45); -moz-box-shadow: 0px 0px 13px 1px rgba(0, 0, 0, 0.45); box-shadow: 0px 0px 13px 1px rgba(0, 0, 0, 0.45); border-radius: 3px; }
-.impact-analysis #impacted-devices-list { width: 100%; overflow-y: auto; float: left; }
+.impact-analysis #impacted-devices-list { width: 100%; overflow-y: scroll; float: left; }
 .impact-analysis .dots { background: url(/assets/img/icons/dots.png) no-repeat; background-size: cover; width: 20px; height: 5px; margin: 50px 20px 0 20px; float: left; opacity: 0.4; }
 
 hr.full-line { width: 100%; margin: 0; border-color: #222; }
