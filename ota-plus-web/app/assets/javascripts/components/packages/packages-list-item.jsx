@@ -6,32 +6,14 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.itemClick = this.itemClick.bind(this);
-      this.checkboxClick = this.checkboxClick.bind(this);
     }
     itemClick(e) {
-      if(e.target.className.indexOf('checkbox-impact') < 0) {
-        this.props.expandPackage(this.props.name);
-      }
-    }
-    checkboxClick(e) {
-      this.props.selectToAnalyse(this.props.name);
-
-      if($('.checkbox-impact:checked').length < $('.checkbox-impact').length) {
-        $('#selectPackages').prop('checked', false);
-      } else {
-        $('#selectPackages').prop('checked', true);
-      }
+      this.props.expandPackage(this.props.name);
     }
     render() {
       var packageName = this.props.name;
       return (
         <button type="button" className="list-group-item" onClick={this.itemClick} id={"button-package-" + this.props.name}>
-          {this.context.location.pathname.toLowerCase().split('/')[1] != 'productiondevicedetails' &&
-            (localStorage.getItem('firstProductionTestDevice') == this.props.deviceId ||
-            localStorage.getItem('secondProductionTestDevice') == this.props.deviceId ||
-            localStorage.getItem('thirdProductionTestDevice') == this.props.deviceId) ?
-            <input type="checkbox" className="checkbox-impact pull-left" onChange={this.checkboxClick}/>
-          : null}
           <div className="package-item-name pull-left">
             {packageName}
           </div>

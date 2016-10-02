@@ -284,7 +284,6 @@ define(function(require) {
                 <AddPackage
                   files={this.state.files}
                   closeForm={this.props.closeForm}
-                  focusPackage={this.props.focusPackage}
                   key="add-package"/>
               : null}
             </VelocityTransitionGroup>
