@@ -19,8 +19,8 @@ define(function(require) {
       var payload = serializeForm(this.refs.form);
       SotaDispatcher.dispatch({
         actionType: 'update-group',
-        name: this.props.group,
-        data: {name: payload.groupName}
+        name: this.props.name,
+        data: {groupName: payload.groupName}
       });
     }
     closeRenameGroupModal(e) {
@@ -45,7 +45,7 @@ define(function(require) {
                   <div className="form-group">
                     <label htmlFor="deviceName">Name</label>
                     <input type="text" className="form-control" name="groupName"
-                         ref="groupName" defaultValue={this.props.group}/>
+                         ref="groupName" defaultValue={this.props.name}/>
                   </div>
                 </div>
                 <div className="modal-footer">
