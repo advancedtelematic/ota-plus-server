@@ -8,29 +8,29 @@ define(function(require) {
       this.dispatchCallback = function(payload) {
         switch(payload.actionType) {
           case 'get-groups':
-            sendRequest.doGet('/api/v1/devices/group_info', {action: payload.actionType})
+            sendRequest.doGet('/api/v1/device_groups', {action: payload.actionType})
               .success(function(groups) {
                 db.groups.reset(groups);
               });
           break;
           case 'get-group':
-            sendRequest.doGet('/api/v1/devices/' + payload.name + '/group_info', {action: payload.actionType})
+            sendRequest.doGet('/api/v1/device_groups/' + payload.name, {action: payload.actionType})
               .success(function(group) {
                 db.group.reset(group);
               });
           break;
           case 'create-group':
-            sendRequest.doPost('/api/v1/devices/' + payload.name + '/group_info', payload.data, {action: payload.actionType})
+            sendRequest.doPost('/api/v1/device_groups/' + payload.name, payload.data, {action: payload.actionType})
               .success(function() {
               });
           break;
           case 'update-group':
-            sendRequest.doPut('/api/v1/devices/' + payload.name + '/group_info', payload.data, {action: payload.actionType})
+            sendRequest.doPut('/api/v1/device_groups/' + payload.name, payload.data, {action: payload.actionType})
               .success(function() {
               });
           break;
           case 'delete-group':
-            sendRequest.doDelete('/api/v1/devices/' + payload.name + '/group_info', null, {action: payload.actionType})
+            sendRequest.doDelete('/api/v1/device_groups/' + payload.name, null, {action: payload.actionType})
               .success(function() {
               });
           break;
