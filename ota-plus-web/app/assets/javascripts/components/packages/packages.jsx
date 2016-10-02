@@ -95,15 +95,6 @@ define(function(require) {
       return (
         <div id="packages">
           <div className="panel-subheading">
-            {!_.isUndefined(this.props.device) ? 
-              this.context.location.pathname.toLowerCase().split('/')[1] != 'productiondevicedetails' &&
-              (localStorage.getItem('firstProductionTestDevice') == this.props.device.uuid ||
-              localStorage.getItem('secondProductionTestDevice') == this.props.device.uuid ||
-              localStorage.getItem('thirdProductionTestDevice') == this.props.device.uuid) ?
-                <input type="checkbox" id="selectPackages" className="pull-left"/>
-              : null
-            : undefined}
-
             <SearchBar class="search-bar pull-left" inputId="search-packages-input" changeFilter={this.props.changeFilter}/>
 
             <div className="pull-right margin-left-15">
@@ -167,7 +158,6 @@ define(function(require) {
                 selectedType={this.state.selectedType}
                 filterValue={this.props.filterValue}
                 setPackagesStatistics={this.props.setPackagesStatistics}
-                countImpactAnalysisPackages={this.props.countImpactAnalysisPackages}
                 device={this.props.device}
                 onDrop={this.props.onDrop}
                 showBlacklistForm={this.props.showBlacklistForm}
