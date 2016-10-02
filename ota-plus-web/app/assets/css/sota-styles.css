@@ -103,7 +103,7 @@ button.list-group-item:focus { background: transparent; }
 .page-device-details .device-header { background: url(/assets/img/bg.jpg) no-repeat; background-attachment: fixed; background-size: cover; height: 80px; position: relative; z-index: 124; }
 .page-device-details .device-header .device-icon { width: 50px; height: 50px; display: inline-block; vertical-align: middle; margin: 15px 0 0 30px; float: none; }
 .page-device-details .device-header .device-name, .page-device-details .device-header .device-lastseen { width: auto; float: none; }
-.page-device-details .device-header-status { font-size: 16px; height: 34px; padding: 6px 10px 0 10px; margin: 25px 0 0 0; border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 15px; }
+.page-device-details .device-header-status { font-size: 16px; height: 35px; padding: 6px 10px 0 10px; margin: 25px 0 0 0; border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 15px; }
 .page-device-details .package-version .btn-blacklist { width: 45px; height: 32px; padding: 0 0 0 10px; margin: 0 0 0 10px; display: block; border-left: 1px solid #e1e1e1; border-right: 0; border-radius: 0; }
 .page-device-details .package-version.package-blacklist .btn-blacklist { border-left-color: #e1e1e1; }
 
