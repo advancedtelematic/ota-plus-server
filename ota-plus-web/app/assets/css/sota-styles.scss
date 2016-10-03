@@ -192,14 +192,9 @@ button {
 
 .device-name {
     font-size: 17px;
-    width: 230px;
+    width: 100%;
     float: left;
     @include textoverflow-ellipsis;
-}
-
-.device-lastseen {
-    width: 230px;
-    float: left;
 }
 
 .device-uuid {
@@ -212,10 +207,12 @@ button {
 
 .device-box, .group-box {
     color: #fff;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
     width: 25%;
     height: 100px;
     display: inline-block;
     position: relative;
+    border-radius: 10px;
 }
 
 .group-box {
@@ -256,7 +253,7 @@ button {
     }
 
     .device-desc {
-        width: 230px;
+        width: 62%;
         margin-left: 15px;
         margin-top: 20px;
         float: left;
@@ -310,6 +307,7 @@ button {
 /* Pages */
 
 .device-header-text {
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
     width: 700px;
     height: 45px;
     margin: 20px 0 0 10px;
@@ -392,7 +390,7 @@ button {
             float: none;
         }
 
-        .device-name, .device-lastseen {
+        .device-name {
             width: auto;
             float: none;
         }
@@ -3286,10 +3284,12 @@ hr.full-line {
 }
 
 .device-menu-dropdown {
+    text-shadow: none;
     position: absolute;
     top: 20px;
     right: 20px;
-
+    display: none;
+    
     i {
         &.fa-chevron-down {
             text-shadow: 0 3px 15px rgba(0, 0, 0, 0.6);
@@ -3311,6 +3311,20 @@ hr.full-line {
 
             img {
                 vertical-align: top;
+            }
+        }
+    }
+}
+
+.devices {
+    .group-box, .device-box {
+        transition: background-color 0.2s ease-in;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, .15);
+
+            .device-menu-dropdown {
+                display: block;
             }
         }
     }
