@@ -6,7 +6,7 @@ define(function(require) {
       SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       Loader = require('../loader'),
-      ResponsesCustomMsg = require('../responses-custom-msg');
+      Responses = require('../responses');
 
   class TestSettings extends React.Component {
     constructor(props) {
@@ -48,11 +48,11 @@ define(function(require) {
               {!_.isUndefined(user) ?
                 <div className="row">
                   <div className="col-lg-8 col-lg-offset-2">
-                    <ResponsesCustomMsg 
+                    <Responses 
                       action="update-user" 
                       successText="Profile has been updated." 
                       errorText="Error occured during profile update."/>
-                    <ResponsesCustomMsg 
+                    <Responses 
                       action="change-password" 
                       successText="An email with password resetting instructions has been sent to your email account." 
                       errorText="Error occured during password changing."/>
