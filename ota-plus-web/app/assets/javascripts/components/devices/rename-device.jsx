@@ -44,7 +44,9 @@ define(function(require) {
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
                 <div className="modal-body">
-                  <Responses action="edit-device" />
+                  <Responses 
+                    action="edit-device" 
+                    successText="Device name has been changed."/>
                   <div className="form-group">
                     <label htmlFor="deviceName">Name</label>
                     <input type="text" className="form-control" name="deviceName"
