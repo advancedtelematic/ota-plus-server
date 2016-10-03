@@ -25,6 +25,7 @@ define(function(require) {
           <div className="group-icon"></div>
           <div className="group-desc">
             <div className="group-name">{this.props.name}</div>
+            <div className="group-count">Devices in the group: {this.props.devicesCount}</div>
           </div>
           {this.props.areActionButtonsShown ? 
             <div className="dropdown device-menu-dropdown pull-right">

@@ -233,13 +233,18 @@ button {
     .group-desc {
         width: 230px;
         margin-left: 15px;
-        margin-top: 20px;
+        margin-top: 12px;
         float: left;
 
         .group-name {
             font-size: 18px;
             line-height: 1.5em;
             margin-top: 15px;
+        }
+        
+        .group-count {
+            font-size: 10px;
+            line-height: 1.6em;
         }
     }
 
