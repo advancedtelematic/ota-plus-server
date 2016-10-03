@@ -276,8 +276,8 @@ define(function(require) {
       }, this);
 
       return (
-        <div id="devices-list" className="height-100">
-          <div id="devices-container" className="container position-relative height-100">
+        <div id="devices-list">
+          <div id="devices-container" className="container">
             {devices.length > 0 || groups.length > 0 ?
               <div>
                 {groups}

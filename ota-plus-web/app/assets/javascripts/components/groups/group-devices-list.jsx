@@ -10,7 +10,7 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        boxWidth: 320,
+        boxWidth: 330,
       };
       this.setBoxesWidth = this.setBoxesWidth.bind(this);
     }
@@ -24,7 +24,7 @@ define(function(require) {
     }
     setBoxesWidth() {
       var containerWidth = $('#devices-container').width();
-      var minBoxWidth = 320;
+      var minBoxWidth = 330;
       var howManyBoxesPerRow = Math.floor(containerWidth / minBoxWidth);
       this.setState({
         boxWidth: containerWidth / howManyBoxesPerRow
@@ -47,8 +47,8 @@ define(function(require) {
       }
 
       return (
-        <div id="devices-list" className="height-100">
-          <div id="devices-container" className="container position-relative height-100">
+        <div id="devices-list">
+          <div id="devices-container" className="container">
             {devices}
           </div>
         </div>
