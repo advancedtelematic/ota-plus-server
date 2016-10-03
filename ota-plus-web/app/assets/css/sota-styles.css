@@ -35,6 +35,8 @@ button.list-group-item:focus { background: transparent; }
 /* Containers */
 #devices-container, #impacted-devices-container { padding: 0 15px !important; }
 
+#devices-container { height: 100%; position: relative; }
+
 #impacted-devices-container a { margin: 0 0 20px 0; display: inline-block; vertical-align: top; }
 
 .container { width: 100%; margin: 0 auto; }
@@ -57,18 +59,19 @@ button.list-group-item:focus { background: transparent; }
 
 @media (min-width: 768px) { .navbar > .container .navbar-brand { margin-left: 0; } }
 /* Device box */
-.device-icon, .group-icon { text-align: center; background: url(/assets/img/icons/device_small.png) no-repeat; background-size: cover; width: 60px; height: 60px; float: left; }
+.device-icon, .group-icon { text-align: center; background: url(/assets/img/icons/device_small.png) no-repeat; background-size: cover; width: 70px; height: 70px; float: left; }
 
 .device-name { font-size: 17px; width: 100%; float: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .device-uuid { font-size: 12px; width: 230px; margin: 5px 0 0 0; opacity: 0.5; float: left; }
 
-.device-box, .group-box { color: #fff; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4); width: 25%; height: 100px; display: inline-block; position: relative; border-radius: 10px; }
+.device-box, .group-box { color: #fff; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4); width: 25%; height: 100px; display: inline-block; position: relative; border-radius: 10px; transition: background-color 0.2s ease-in; }
+.device-box:hover, .group-box:hover { background-color: rgba(255, 255, 255, 0.15); }
 
 .group-box:hover, .group-box:active, .group-box:focus { color: #fff; }
 .group-box .group-desc { width: 230px; margin-left: 15px; margin-top: 20px; float: left; }
 .group-box .group-desc .group-name { font-size: 18px; line-height: 1.5em; margin-top: 15px; }
-.group-box .group-icon { background-image: url(/assets/img/icons/group_small.png); margin-top: 20px; margin-left: 20px; }
+.group-box .group-icon { background-image: url(/assets/img/icons/group_small.png); margin-top: 15px; margin-left: 15px; }
 
 .device-box:hover, .device-box:active, .device-box:focus { color: #fff; text-decoration: none; }
 .device-box .device-status { position: relative; top: -5px; left: 32px; }
@@ -76,7 +79,7 @@ button.list-group-item:focus { background: transparent; }
 .device-box .device-desc .device-name { font-size: 18px; line-height: 1.5em; }
 .device-box .device-desc .device-lastseen { font-size: 10px; line-height: 1.6em; }
 .device-box .device-desc .device-status-text { font-size: 10px; line-height: 1.6em; }
-.device-box .device-icon { margin-top: 20px; margin-left: 20px; }
+.device-box .device-icon { margin-top: 15px; margin-left: 15px; }
 
 /* Device status */
 .device-status { background: url(/assets/img/icons/grey_questionmark.png) no-repeat; width: 25px; height: 25px; background-size: cover; margin: -2px 5px 0 0; display: inline-block; vertical-align: middle; }
@@ -92,7 +95,7 @@ button.list-group-item:focus { background: transparent; }
 
 .page-home { height: 100vh; max-height: 100vh; background: url(/assets/img/bg.jpg) no-repeat; background-attachment: fixed; background-size: cover; overflow: hidden; }
 .page-home .devices { overflow-y: scroll; overflow-x: hidden; }
-.page-home #devices-list { width: 100%; padding: 20px 0 0 0; }
+.page-home #devices-list { width: 100%; height: 100%; padding: 20px 0 0 0; }
 .page-home #devices-bar { background: #666; width: 100%; height: 40px; min-width: 1348px; position: absolute; left: 0; z-index: 99; }
 .page-home #devices-bar .select-bar-status { margin-left: 152px; }
 .page-home #devices-bar .select-bar-sort { margin-left: 35px; }
@@ -787,6 +790,8 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .impact-analysis .impact-analysis-blacklisted-packages .title { font-size: 16px; margin: 5px 20px 0 0; }
 .impact-analysis .impact-analysis-blacklisted-packages .impact-analysis-blacklisted-package { color: #444; background: #fff; padding: 5px 10px; margin: 0 10px; display: inline-block; -webkit-box-shadow: 0px 0px 13px 1px rgba(0, 0, 0, 0.45); -moz-box-shadow: 0px 0px 13px 1px rgba(0, 0, 0, 0.45); box-shadow: 0px 0px 13px 1px rgba(0, 0, 0, 0.45); border-radius: 3px; }
 .impact-analysis #impacted-devices-list { width: 100%; overflow-y: scroll; float: left; }
+.impact-analysis #impacted-devices-list #devices-list { height: auto; float: left; }
+.impact-analysis #impacted-devices-list #devices-list #devices-container { height: auto; }
 .impact-analysis .dots { background: url(/assets/img/icons/dots.png) no-repeat; background-size: cover; width: 20px; height: 5px; margin: 50px 20px 0 20px; float: left; opacity: 0.4; }
 
 hr.full-line { width: 100%; margin: 0; border-color: #222; }
@@ -940,9 +945,18 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 .btn-checkbox.checked { color: #fff; font-size: 10px; background: #99DDD2; border-color: transparent; }
 .btn-checkbox.checked:hover, .btn-checkbox.checked:focus, .btn-checkbox.checked:active { color: #fff; }
 
-.group-details-panel { background: rgba(0, 0, 0, 0.5); width: 100%; height: 205px; margin-left: -15px; float: left; position: relative; }
-.group-details-panel .arrow-pointer { width: 20px; position: absolute; top: -18px; left: 20px; border-bottom: 18px solid rgba(0, 0, 0, 0.5); border-left: 12px solid transparent; border-right: 12px solid transparent; transition: all 0.2s ease-in; }
-.group-details-panel .group-inner-devices-list { height: 100%; overflow-y: auto; }
+.group-details-panel { width: 100%; margin-left: -15px; float: left; position: relative; top: -10px; }
+.group-details-panel .arrow-pointer { width: 20px; position: absolute; top: 0; left: 20px; border-bottom: 18px solid #fff; border-left: 12px solid transparent; border-right: 12px solid transparent; transition: all 0.2s ease-in; }
+.group-details-panel .group-inner-devices-list { background-image: white; background-image: -moz-linear-gradient(transparent 13px, #fff 18px); background-image: -webkit-linear-gradient(transparent 13px, #fff 18px); background-image: linear-gradient(transparent 13px, #fff 18px); height: 100%; padding: 30px 15px 10px 15px; }
+.group-details-panel .group-inner-devices-list:after { content: ''; background: url(/assets/img/shadow_bottom.png) repeat-x; width: 100%; height: 9px; position: absolute; left: 0; bottom: 0; }
+.group-details-panel .group-inner-devices-list .device-box { color: #444; text-shadow: none; }
+.group-details-panel .group-inner-devices-list .device-box:hover { background-color: rgba(0, 0, 0, 0.08); }
+.group-details-panel .group-inner-devices-list .device-box:hover .device-icon { background-image: url(/assets/img/icons/device_small.png); }
+.group-details-panel .group-inner-devices-list .device-box .device-status { left: 30px; }
+.group-details-panel .group-inner-devices-list .device-box .device-icon { margin-top: 20px; margin-left: 20px; background-image: url(/assets/img/icons/device_small_grey.png); width: 56px; height: 56px; transition: all 0.2s ease-in; }
+.group-details-panel .group-inner-devices-list .device-box .device-lastseen { opacity: 0.8; }
+.group-details-panel .group-inner-devices-list .device-box .device-status-text { opacity: 0.8; }
+.group-details-panel .group-inner-devices-list .device-box .device-menu-dropdown i.fa-chevron-down { text-shadow: none; }
 
 .device-menu-dropdown { text-shadow: none; position: absolute; top: 20px; right: 20px; display: none; }
 .device-menu-dropdown i.fa-chevron-down { text-shadow: 0 3px 15px rgba(0, 0, 0, 0.6); }
@@ -951,6 +965,4 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 .device-menu-dropdown .dropdown-menu li { color: #444; font-size: 12px; padding: 2px 12px; }
 .device-menu-dropdown .dropdown-menu li img { vertical-align: top; }
 
-.devices .group-box, .devices .device-box { transition: background-color 0.2s ease-in; }
-.devices .group-box:hover, .devices .device-box:hover { background-color: rgba(255, 255, 255, 0.15); }
 .devices .group-box:hover .device-menu-dropdown, .devices .device-box:hover .device-menu-dropdown { display: block; }
