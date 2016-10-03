@@ -178,11 +178,12 @@ define(function(require) {
           rows[rowNo] = [];
         
         rows[rowNo].push(groupName);
-        
+                                
         groups.push(
           <span key={'group-' + groupName}>
             <DeviceListGroupItem
               name={groupName}
+              devicesCount={Groups[groupName].length}
               width={this.state.boxWidth}
               expandGroup={this.expandGroup}
               openRenameGroupModal={this.props.openRenameGroupModal}
