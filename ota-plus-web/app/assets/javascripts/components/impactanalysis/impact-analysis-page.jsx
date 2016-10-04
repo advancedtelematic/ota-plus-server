@@ -110,7 +110,8 @@ define(function(require) {
                 Devices={impactedDevices}
                 groups={db.groups.deref()}
                 areProductionDevices={false}
-                isDND={false}/>
+                isDND={false}
+                areActionButtonsShown={false}/>
             : undefined}
             {_.isUndefined(impactedPackages) || _.isUndefined(impactedDevices) ?
               <Loader />

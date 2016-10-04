@@ -17,7 +17,9 @@ define(function(require) {
             device={device}
             isProductionDevice={false}
             productionDeviceName={null}
-            width={this.props.boxWidth}/>
+            width={this.props.boxWidth}
+            openRenameDeviceModal={this.props.openRenameDeviceModal}
+            areActionButtonsShown={this.props.areActionButtonsShown}/>
         );
       }, this);
       

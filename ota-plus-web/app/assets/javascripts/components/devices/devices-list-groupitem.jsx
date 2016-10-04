@@ -7,10 +7,17 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.expandGroup = this.expandGroup.bind(this);
+      this.renameGroup = this.renameGroup.bind(this);
     }
     expandGroup(e) {
       e.preventDefault();
-      this.props.expandGroup(this.props.name);
+      if(e.target.className.indexOf('fa') === -1)
+        this.props.expandGroup(this.props.name);      
+    }
+    renameGroup(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.props.openRenameGroupModal(this.props.name);
     }
     render() {
       return (
@@ -18,6 +25,17 @@ define(function(require) {
           <div className="group-icon"></div>
           <div className="group-desc">
             <div className="group-name">{this.props.name}</div>
+          </div>
+        
+          <div className="dropdown device-menu-dropdown pull-right">
+            <div data-toggle="dropdown">
+              <i className="fa fa-chevron-down" aria-hidden="true"></i>
+            </div>
+            <ul className="dropdown-menu">
+              <li onClick={this.renameGroup}>
+                <img src="/assets/img/icons/edit_black.png" alt="" style={{width: '15px'}}/> Rename
+              </li>
+            </ul>
           </div>
         </a>
       );

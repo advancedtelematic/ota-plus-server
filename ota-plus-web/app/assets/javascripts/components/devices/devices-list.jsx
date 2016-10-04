@@ -184,7 +184,8 @@ define(function(require) {
             <DeviceListGroupItem
               name={groupName}
               width={this.state.boxWidth}
-              expandGroup={this.expandGroup}/>
+              expandGroup={this.expandGroup}
+              openRenameGroupModal={this.props.openRenameGroupModal}/>
           </span>
         );
 
@@ -199,7 +200,8 @@ define(function(require) {
                   devices={Groups[this.state.expandedGroupName]}
                   width={this.state.groupPanelWidth}
                   boxWidth={this.state.boxWidth}
-                  arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 53)}/>
+                  arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 53)}
+                  areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
               : null}
             </VelocityTransitionGroup>
           </span>
@@ -242,7 +244,8 @@ define(function(require) {
                 isProductionDevice={this.props.areProductionDevices}
                 productionDeviceName={this.props.productionDeviceName}
                 width={this.state.boxWidth}
-                openEditDeviceModal={this.props.openEditDeviceModal}/>
+                openRenameDeviceModal={this.props.openRenameDeviceModal}
+                areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
             </span>
           );
           
@@ -253,11 +256,12 @@ define(function(require) {
                   devices={Groups[this.state.expandedGroupName]}
                   width={this.state.groupPanelWidth}
                   boxWidth={this.state.boxWidth}
-                  arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 53)}/>
+                  arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 53)}
+                  openRenameDeviceModal={this.props.openRenameDeviceModal}
+                  areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
               : null}
             </VelocityTransitionGroup>
           );
-    
           itemIndex++;
           devicesIndexItem++;
           
