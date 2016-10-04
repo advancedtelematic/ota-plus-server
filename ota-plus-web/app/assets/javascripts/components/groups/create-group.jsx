@@ -10,10 +10,7 @@ define(function(require) {
     constructor(props) {
       super(props);
       
-      this.state = {
-         
-      }
-      
+      this.closeForm = this.closeForm.bind(this);
       this.compareComponents = this.compareComponents.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -60,6 +57,10 @@ define(function(require) {
         data: commonData
       });
     }
+    closeForm(e) {
+      e.preventDefault();
+      this.props.closeForm();
+    }
     render() {
       var devices = db.searchableDevicesWithComponents.deref();
       var firstDeviceData = _.findWhere(devices, {deviceName: this.props.groupNames[0]});
@@ -97,7 +98,7 @@ define(function(require) {
                     </div>
                   </div>
                   <div className="modal-footer">
-                    <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.props.closeForm}>close</a>
+                    <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.closeForm}>close</a>
                     <button type="submit" className="btn btn-confirm pull-right" onClick={this.handleSubmit}>Create Group</button>
                   </div>
                 </form>
