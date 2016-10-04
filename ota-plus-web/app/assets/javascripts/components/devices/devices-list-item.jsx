@@ -1,11 +1,18 @@
 define(function(require) {
   var React = require('react'),
+      ReactDOM = require('react-dom'),
       Router = require('react-router'),
       Link = Router.Link;
 
   class DeviceListItem extends React.Component {
     constructor(props) {
       super(props);
+      this.renameDevice = this.renameDevice.bind(this);
+    }
+    renameDevice(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.props.openEditDeviceModal(this.props.device);
     }
     render() {
       const link = this.props.isProductionDevice ? 'productiondevicedetails/' + this.props.productionDeviceName : 'devicedetails/' + this.props.device.uuid;
@@ -40,6 +47,16 @@ define(function(require) {
               }
             </div>
             <div className="device-status-text">Device status: {deviceStatus}</div>
+            <div className="dropdown device-menu-dropdown pull-right">
+              <div data-toggle="dropdown">
+                <i className="fa fa-chevron-down" aria-hidden="true"></i>
+              </div>
+              <ul className="dropdown-menu">
+                <li onClick={this.renameDevice}>
+                  <img src="/assets/img/icons/edit_black.png" alt="" style={{width: '15px'}}/> Rename
+                </li>
+              </ul>
+            </div>
           </div>
         </Link>
       );
