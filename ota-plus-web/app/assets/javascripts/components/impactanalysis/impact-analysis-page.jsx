@@ -3,9 +3,10 @@ define(function(require) {
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
+      Loader = require('es6!../loader'),
       ImpactAnalysisHeader = require('es6!./impact-analysis-header'),
       BlacklistedPackagesList = require('es6!./blacklisted-packages-list'),
-      ImpactedDevicesList = require('es6!./impacted-devices-list'),
+      DevicesList = require('es6!./../devices/devices-list'),
       ImpactTooltip = require('es6!./impact-tooltip');
   
   class ImpactAnalysisPage extends React.Component {
@@ -20,11 +21,13 @@ define(function(require) {
       this.hideImpactTooltip = this.hideImpactTooltip.bind(this);
       this.setImpactedDevicesListHeight = this.setImpactedDevicesListHeight.bind(this);
       
-      SotaDispatcher.dispatch({actionType: 'get-devices'});
+      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex-with-components', regex: ''});
       SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
+      SotaDispatcher.dispatch({actionType: 'get-groups'});
       db.blacklistedPackages.addWatch("poll-blacklisted-packages", _.bind(this.forceUpdate, this, null));
       db.impactAnalysis.addWatch("poll-impact-analysis-page", _.bind(this.forceUpdate, this, null));
-      db.devices.addWatch("poll-devices-impact-analysis-page", _.bind(this.forceUpdate, this, null));
+      db.searchableDevicesWithComponents.addWatch("poll-devices-impact-analysis-page", _.bind(this.forceUpdate, this, null));
+      db.groups.addWatch("groups-impact-analysis-page", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
       var that = this;
@@ -42,11 +45,13 @@ define(function(require) {
     }
     componentWillUnmount(){
       clearInterval(this.state.intervalId);
-      db.devices.reset();
+      db.searchableDevicesWithComponents.reset();
       db.blacklistedPackages.reset();
+      db.groups.reset();
       db.blacklistedPackages.removeWatch("poll-blacklisted-packages");
       db.impactAnalysis.removeWatch("poll-impact-analysis-page");
-      db.devices.removeWatch("poll-devices-impact-analysis-page");
+      db.searchableDevicesWithComponents.removeWatch("poll-devices-impact-analysis-page");
+      db.groups.removeWatch("groups-impact-analysis-page");
       window.removeEventListener("resize", this.setImpactedDevicesListHeight);
     }
     setImpactedDevicesListHeight() {
@@ -64,11 +69,11 @@ define(function(require) {
     }
     render() {
       var impactAnalysis = db.impactAnalysis.deref();
-      var devices = db.devices.deref();
+      var devices = db.searchableDevicesWithComponents.deref();
       var impactedDevices = undefined;
       var impactedPackages = undefined;
             
-      if(!_.isUndefined(impactAnalysis)) {
+      if(!_.isUndefined(impactAnalysis) && !_.isUndefined(devices)) {
         impactedDevices = {};
         impactedPackages = {};
                         
@@ -82,13 +87,11 @@ define(function(require) {
             }
             var deviceData = _.findWhere(devices, {uuid: deviceUUID});
           
-            impactedDevices[deviceUUID] = {
-              uuid: deviceUUID,
-              deviceName: !_.isUndefined(deviceData) ? deviceData.deviceName : deviceUUID
-            };
+            impactedDevices[deviceUUID] = deviceData;
           });          
         });
       }
+            
       return (
         <div className="impact-analysis">
           <ImpactAnalysisHeader 
@@ -103,8 +106,14 @@ define(function(require) {
                 type="impacted"/>
             : undefined}
             {!_.isUndefined(impactedDevices) && !_.isEmpty(impactedDevices) ?
-              <ImpactedDevicesList 
-                devices={impactedDevices}/>
+              <DevicesList
+                Devices={impactedDevices}
+                groups={db.groups.deref()}
+                areProductionDevices={false}
+                isDND={false}/>
+            : undefined}
+            {_.isUndefined(impactedPackages) || _.isUndefined(impactedDevices) ?
+              <Loader />
             : undefined}
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
               {this.state.isImpactTooltipShown ?
