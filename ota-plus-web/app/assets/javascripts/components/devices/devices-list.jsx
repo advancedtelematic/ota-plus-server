@@ -241,7 +241,8 @@ define(function(require) {
                 device={device}
                 isProductionDevice={this.props.areProductionDevices}
                 productionDeviceName={this.props.productionDeviceName}
-                width={this.state.boxWidth}/>
+                width={this.state.boxWidth}
+                openEditDeviceModal={this.props.openEditDeviceModal}/>
             </span>
           );
           
