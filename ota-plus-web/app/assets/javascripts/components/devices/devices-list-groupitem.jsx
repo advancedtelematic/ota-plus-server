@@ -6,16 +6,20 @@ define(function(require) {
   class DeviceListGroupItem extends React.Component {
     constructor(props) {
       super(props);
+      this.expandGroup = this.expandGroup.bind(this);
+    }
+    expandGroup(e) {
+      e.preventDefault();
+      this.props.expandGroup(this.props.name);
     }
     render() {
-      const link = 'group/' + this.props.name;
       return (
-        <Link to={`${link}`} className="group-box" id={"link-group-" + this.props.name} style={{width: this.props.width}}>
+        <a href="#" className="group-box" id={"link-group-" + this.props.name} style={{width: this.props.width}} onClick={this.expandGroup}>
           <div className="group-icon"></div>
           <div className="group-desc">
             <div className="group-name">{this.props.name}</div>
           </div>
-        </Link>
+        </a>
       );
     }
   };

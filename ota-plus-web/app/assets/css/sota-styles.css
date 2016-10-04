@@ -949,3 +949,7 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 .btn-checkbox::before { height: 20px; display: block; width: 2px; background: #bbb; content: ''; position: absolute; top: 0; left: -13px; }
 .btn-checkbox.checked { color: #fff; font-size: 10px; background: #99DDD2; border-color: transparent; }
 .btn-checkbox.checked:hover, .btn-checkbox.checked:focus, .btn-checkbox.checked:active { color: #fff; }
+
+.group-details-panel { background: rgba(0, 0, 0, 0.5); width: 100%; height: 205px; margin-left: -15px; float: left; position: relative; }
+.group-details-panel .arrow-pointer { width: 20px; position: absolute; top: -18px; left: 20px; border-bottom: 18px solid rgba(0, 0, 0, 0.5); border-left: 12px solid transparent; border-right: 12px solid transparent; transition: all 0.2s ease-in; }
+.group-details-panel .group-inner-devices-list { height: 100%; overflow-y: auto; }
