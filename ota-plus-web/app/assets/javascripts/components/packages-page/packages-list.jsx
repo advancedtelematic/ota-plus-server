@@ -27,6 +27,8 @@ define(function(require) {
         blacklistedPackageVersion: null,
         blacklistMode: null,
         isBlacklistFormShown: false,
+        packagesShownStartIndex: 0,
+        packagesShownEndIndex: 50
       };
       
       this.refreshData = this.refreshData.bind(this);
@@ -54,6 +56,11 @@ define(function(require) {
       this.refreshData();
       ReactDOM.findDOMNode(this.refs.packagesList).addEventListener('scroll', this.packagesListScroll);
     }
+    componentDidUpdate(prevProps, prevState) {
+      if(this.props.packagesListHeight !== prevProps.packagesListHeight) {
+        this.packagesListScroll();
+      }
+    }
     componentWillUpdate(nextProps, nextState) {
       if(nextProps.filterValue != this.props.filterValue) {
         SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: nextProps.filterValue});
@@ -75,7 +82,7 @@ define(function(require) {
       clearInterval(this.state.tmpIntervalId);
     }
     generatePositions() {
-      var packagesListItems = ReactDOM.findDOMNode(this.refs.packagesList).children[0].children;
+      var packagesListItems = !_.isUndefined(ReactDOM.findDOMNode(this.refs.packagesList).children[0].children[0]) ? ReactDOM.findDOMNode(this.refs.packagesList).children[0].children[0].children : null;
       var wrapperPosition = ReactDOM.findDOMNode(this.refs.packagesList).getBoundingClientRect();
       var positions = [];
       _.each(packagesListItems, function(item) {
@@ -92,11 +99,14 @@ define(function(require) {
     packagesListScroll() {
       var scrollTop = this.refs.packagesList.scrollTop;
       var newFakeHeaderLetter = this.state.fakeHeaderLetter;
-      var headerHeight = ReactDOM.findDOMNode(this.refs.fakeHeader).offsetHeight;
+      var headerHeight = !_.isUndefined(this.refs.fakeHeader) ? this.refs.fakeHeader.offsetHeight : 28;
       var positions = this.generatePositions();
+      var wrapperPosition = ReactDOM.findDOMNode(this.refs.packagesList).getBoundingClientRect();
+      var beforeHeadersCount = 0;
       
       positions.every(function(position, index) {
         if(scrollTop >= position) {
+          beforeHeadersCount++;
           newFakeHeaderLetter = Object.keys(this.state.data)[index];
           return true;
         } else if(scrollTop >= position - headerHeight) {
@@ -105,12 +115,26 @@ define(function(require) {
         }
       }, this);
       
+      var packageDetailsOffset = 0;
+      var packageDetails = document.getElementsByClassName('package-details')[0];
+      if(!_.isUndefined(packageDetails))
+        var packageDetailsOffset = Math.min(Math.max(packageDetails.getBoundingClientRect().top - wrapperPosition.top, -packageDetails.offsetHeight), 0);
+    
+      var offset = 5;
+      var headersHeight = !_.isUndefined(document.getElementsByClassName('ioslist-group-header')[0]) ? document.getElementsByClassName('ioslist-group-header')[0].offsetHeight : 28;
+      var listItemHeight = !_.isUndefined(document.getElementsByClassName('list-group-item')[0]) ? document.getElementsByClassName('list-group-item')[0].offsetHeight - 1 : 39;
+      var packagesShownStartIndex = Math.floor((ReactDOM.findDOMNode(this.refs.packagesList).scrollTop - (beforeHeadersCount - 1) * headersHeight + packageDetailsOffset) / listItemHeight) - offset;
+      var packagesShownEndIndex = packagesShownStartIndex + Math.floor(ReactDOM.findDOMNode(this.refs.packagesList).offsetHeight / listItemHeight) + 2 * offset;     
+            
       this.setState({
         fakeHeaderTopPosition: scrollTop,
-        fakeHeaderLetter: newFakeHeaderLetter
+        fakeHeaderLetter: newFakeHeaderLetter,
+        packagesShownStartIndex: packagesShownStartIndex,
+        packagesShownEndIndex: packagesShownEndIndex
       });
     }
     startIntervalPackagesListScroll() {
+      clearInterval(this.state.tmpIntervalId);
       var that = this;
       var intervalId = setInterval(function() {
         that.packagesListScroll();
@@ -245,28 +269,37 @@ define(function(require) {
       return 0;
     }
     render() {
+      var packageIndex = -1;
       if(!_.isUndefined(this.state.data)) {
         var packages = _.map(this.state.data, function(packages, index) {
           var items = _.map(packages, function(pack, i) {
+            packageIndex++;
+            
             var that = this;
-          return (
-            <li key={'package-' + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
-              <PackagesListItem
-                key={'package-' + pack.packageName + '-items'}
-                name={pack.packageName}
-                expandPackage={this.expandPackage}
-                selected={this.state.expandedPackage == pack.packageName ? true : false}/>
-                <VelocityTransitionGroup enter={{animation: "slideDown", begin: function() {that.startIntervalPackagesListScroll()}, complete: function() {that.stopIntervalPackagesListScroll()}}} leave={{animation: "slideUp"}}>
-                  {this.state.expandedPackage == pack.packageName ?
-                    <PackageListItemDetails
-                      key={'package-' + pack.packageName + '-versions'}
-                      versions={pack.elements}
-                      packageName={pack.packageName}
-                      refresh={this.refreshData}
-                      showBlacklistForm={this.showBlacklistForm}/>
-                  : null}
-                </VelocityTransitionGroup>
-            </li>
+            
+            if(packageIndex >= this.state.packagesShownStartIndex && packageIndex <= this.state.packagesShownEndIndex)
+              return (
+                <li key={'package-' + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
+                  <PackagesListItem
+                    key={'package-' + pack.packageName + '-items'}
+                    name={pack.packageName}
+                    expandPackage={this.expandPackage}
+                    selected={this.state.expandedPackage == pack.packageName ? true : false}/>
+                    <VelocityTransitionGroup enter={{animation: "slideDown", begin: function() {that.startIntervalPackagesListScroll()}, complete: function() {that.stopIntervalPackagesListScroll()}}} leave={{animation: "slideUp"}}>
+                      {this.state.expandedPackage == pack.packageName ?
+                        <PackageListItemDetails
+                          key={'package-' + pack.packageName + '-versions'}
+                          versions={pack.elements}
+                          packageName={pack.packageName}
+                          refresh={this.refreshData}
+                          showBlacklistForm={this.showBlacklistForm}/>
+                      : null}
+                    </VelocityTransitionGroup>
+                </li>
+              );
+      
+            return (
+              <li key={'package-' + pack.packageName} className="list-group-item" >{packageIndex}</li>
             );
           }, this);
           return(
@@ -281,11 +314,11 @@ define(function(require) {
       }
       return (
         <div>
-          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-            <ul className="list-group" id="packages-list" style={{height: this.props.packagesListHeight}}>
-              <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true} className="dnd-zone" activeClassName="dnd-zone-active">
-                <div id="packages-list-inside">
-                  <div className="ioslist-wrapper" ref="packagesList">
+          <ul className="list-group" id="packages-list" style={{height: this.props.packagesListHeight}}>
+            <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true} className="dnd-zone" activeClassName="dnd-zone-active">
+              <div id="packages-list-inside">
+                <div className="ioslist-wrapper" ref="packagesList">
+                  <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
                     {!_.isUndefined(packages) ? 
                       packages.length ?
                         <div>
@@ -306,14 +339,15 @@ define(function(require) {
                           }
                         </div>
                     : undefined}
-                    {_.isUndefined(packages) ? 
-                      <Loader />
-                    : undefined}
-                  </div>
+                  </VelocityTransitionGroup>
+                  {_.isUndefined(packages) ? 
+                    <Loader />
+                  : undefined}
                 </div>
-              </Dropzone>
-            </ul>
-          </VelocityTransitionGroup>
+              </div>
+            </Dropzone>
+          </ul>
+          
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {this.state.isFormShown ?
               <AddPackage
