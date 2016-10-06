@@ -23,10 +23,10 @@
     "SERVICE_SCOPE": "public",
     "SERVICE_TYPE": "websockets",
     "SERVICE_IMAGE": "${IMAGE_ARTIFACT}",
-    "KINESIS_STREAM_NAME_SUFFIX": "${KINESIS_STREAM_NAME_SUFFIX}",
+    "KAFKA_TOPIC_SUFFIX": "${KAFKA_TOPIC_SUFFIX}",
     "SERVICE_HEALTH_CHECK": "curl --show-error --silent %<host>s:%<port>s/health",
     "PERSISTENCE_JOURNAL": "cassandra-journal",
-    "MESSAGING_MODE": "kinesis"
+    "MESSAGING_MODE": "${MESSAGING_MODE}"
   },
   "healthChecks": [{
     "protocol": "HTTP",
