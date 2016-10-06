@@ -44,11 +44,9 @@ define(function(require) {
       this.setPackagesStatistics = this.setPackagesStatistics.bind(this);
       this.setQueueStatistics = this.setQueueStatistics.bind(this);
       this.refreshData = this.refreshData.bind(this);
-      this.countImpactAnalysisPackages = this.countImpactAnalysisPackages.bind(this);
       this.openForm = this.openForm.bind(this);
       this.closeForm = this.closeForm.bind(this);
       this.onDrop = this.onDrop.bind(this);
-      this.focusPackage = this.focusPackage.bind(this);
       this.showBlacklistForm = this.showBlacklistForm.bind(this);
       this.closeBlacklistForm = this.closeBlacklistForm.bind(this);
       this.changeFilter = this.changeFilter.bind(this);
@@ -115,27 +113,6 @@ define(function(require) {
     }
     refreshData() {
       SotaDispatcher.dispatch({actionType: 'get-device', device: this.props.params.id});
-    }
-    countImpactAnalysisPackages(val) {
-      this.setState({
-        selectedImpactAnalysisPackagesCount: val
-      });
-    }
-    focusPackage(packageName) {
-      var tmpInterval = setInterval(function() {
-        var btn = $("#button-package-" + packageName);
-        if(btn.length) {
-          if(!btn.parent('li').hasClass('selected')) 
-            btn.click();
-                    
-          setTimeout(function() {     
-            $('.ioslist-wrapper').animate({
-              scrollTop: $('.ioslist-wrapper').scrollTop() + btn.offset().top - $('.ioslist-wrapper').offset().top - $('.ioslist-fake-header').outerHeight()
-            }, 300);
-          }, 600);
-          clearInterval(tmpInterval);
-        }
-      }, 100);
     }
     openForm() {
       this.setState({
@@ -240,7 +217,6 @@ define(function(require) {
                   <Packages
                     device={deviceWithStatus}
                     setPackagesStatistics={this.setPackagesStatistics}
-                    countImpactAnalysisPackages={this.countImpactAnalysisPackages}
                     openForm={this.openForm}
                     onDrop={this.onDrop}
                     showBlacklistForm={this.showBlacklistForm}
@@ -291,7 +267,6 @@ define(function(require) {
               <AddPackage
                 files={this.state.files}
                 closeForm={this.closeForm}
-                focusPackage={this.focusPackage}
                 key="add-package"/>
             : null}
           </VelocityTransitionGroup>
