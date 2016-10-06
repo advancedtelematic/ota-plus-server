@@ -185,7 +185,8 @@ define(function(require) {
               name={groupName}
               width={this.state.boxWidth}
               expandGroup={this.expandGroup}
-              openRenameGroupModal={this.props.openRenameGroupModal}/>
+              openRenameGroupModal={this.props.openRenameGroupModal}
+              areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
           </span>
         );
 
