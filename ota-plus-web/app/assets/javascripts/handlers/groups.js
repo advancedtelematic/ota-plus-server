@@ -29,6 +29,11 @@ define(function(require) {
               .success(function() {
               });
           break;
+          case 'rename-group':
+            sendRequest.doPut('/api/v1/device_groups/' + payload.uuid + '/rename?groupName=' + payload.groupName, payload.data, {action: payload.actionType})
+              .success(function() {
+              });
+          break;
           case 'delete-group':
             sendRequest.doDelete('/api/v1/device_groups/' + payload.name, null, {action: payload.actionType})
               .success(function() {
