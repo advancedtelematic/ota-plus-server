@@ -7,8 +7,6 @@ define(function(require) {
       PackageListItemDetails = require('es6!./packages-list-item-details'),
       Dropzone = require('es6!../../mixins/dropzone'),
       Loader = require('es6!../loader'),
-      jQuery = require('jquery'),
-      IOSList = require('ioslist'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       TutorialAddPackageFirstStep = require('es6!../tutorial/add-package-first-step'),
       TutorialAddPackageSecondStep = require('es6!../tutorial/add-package-second-step');
@@ -16,26 +14,27 @@ define(function(require) {
   class PackagesList extends React.Component {
     constructor(props) {
       super(props);
-      
-      var event = new CustomEvent("refreshList");
-      
       this.state = {
         data: undefined,
         expandedPackage: null,
         timeout: null,
-        iosListObj: null,
-        selectedToAnalyse: [],
+        fakeHeaderTopPosition: 0,
+        fakeHeaderLetter: null,
         tmpQueueData: undefined,
         selectedType: null,
-        event: event
       };
       this.refreshData = this.refreshData.bind(this);
+      this.refresh = this.refresh.bind(this);
+      this.setData = this.setData.bind(this);
+      this.prepareData = this.prepareData.bind(this);
       this.onDrop = this.onDrop.bind(this);
       this.expandPackage = this.expandPackage.bind(this);
-      this.selectToAnalyse = this.selectToAnalyse.bind(this);
-      this.updateListToAnalyse = this.updateListToAnalyse.bind(this);
-      this.refresh = this.refresh.bind(this);
       this.queueUpdated = this.queueUpdated.bind(this);
+      this.generatePositions = this.generatePositions.bind(this);
+      this.setFakeHeader = this.setFakeHeader.bind(this);
+      this.packagesListScroll = this.packagesListScroll.bind(this);
+      this.startIntervalPackagesListScroll = this.startIntervalPackagesListScroll.bind(this);
+      this.stopIntervalPackagesListScroll = this.stopIntervalPackagesListScroll.bind(this);
 
       db.blacklistedPackages.addWatch("poll-blacklisted-packages-page", _.bind(this.refresh, this, null));
       db.searchablePackages.addWatch("poll-packages", _.bind(this.refresh, this, null));
@@ -52,50 +51,30 @@ define(function(require) {
       if(this.props.showForm !== nextProps.showForm) {
         this.setState({showForm: nextProps.showForm});
       }
-            
       if(this.props.selectedStatus !== nextProps.selectedStatus || 
               this.props.selectedType !== nextProps.selectedType || 
               this.props.selectedSort !== nextProps.selectedSort) {
         this.setData(nextProps.selectedStatus, nextProps.selectedType, nextProps.selectedSort);
       }
       if(this.props.selectedType !== nextProps.selectedType) {
-        this.setState({selectedType: nextProps.selectedType});
-      }
-    }
-    componentDidUpdate(prevProps, prevState) {
-      if(!_.isUndefined(prevState.data) && Object.keys(prevState.data).length === 0 && !_.isUndefined(this.state.data) && Object.keys(this.state.data).length > 0) {
-        jQuery(ReactDOM.findDOMNode(this.refs.packagesList)).ioslist();
-      } else {
-        document.body.dispatchEvent(this.state.event);
+        this.setState({
+          selectedType: nextProps.selectedType,
+          fakeHeaderLetter: null
+        });
       }
     }
     componentDidMount() {
       var that = this;
       this.refreshData();
-
-      var tmpIntervalId = setInterval(function() {
-        var packagesListNode = ReactDOM.findDOMNode(that.refs.packagesList);
-        if(packagesListNode) {
-          var a = jQuery(packagesListNode).ioslist();
-          clearInterval(tmpIntervalId);
-        }
-      }, 500);
-      
-      $('#selectPackages').change(function() {
-        if($(this).prop('checked')) {
-          $('.checkbox-impact').each(function() {
-            $(this).prop('checked', 'checked');
-          });
-          that.updateListToAnalyse('selectAll');
-        } else {
-          $('.checkbox-impact').each(function() {
-            $(this).prop('checked', false);
-          });
-          that.updateListToAnalyse();
-        }
-      });
+      ReactDOM.findDOMNode(this.refs.packagesList).addEventListener('scroll', this.packagesListScroll);
+    }
+    componentDidUpdate(prevProps, prevState) {
+      if(this.props.selectedType !== prevProps.selectedType) {
+        ReactDOM.findDOMNode(this.refs.packagesList).scrollTop = 0;
+      }
     }
     componentWillUnmount() {
+      ReactDOM.findDOMNode(this.refs.packagesList).removeEventListener('scroll', this.packagesListScroll);
       db.searchablePackages.reset();
       db.searchablePackagesForDevice.reset();
       db.packageQueueForDevice.reset();
@@ -104,15 +83,54 @@ define(function(require) {
       db.searchablePackagesForDevice.removeWatch("poll-installed-packages");
       db.packageQueueForDevice.removeWatch("poll-queued-packages");
       clearTimeout(this.state.timeout);
+      clearInterval(this.state.tmpIntervalId);
     }
-    refreshData() {
-      SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
-      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device.uuid});
-      SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
-      SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.uuid, regex: this.props.filterValue});
+    generatePositions() {
+      var packagesListItems = ReactDOM.findDOMNode(this.refs.packagesList).children[0].children;
+      var wrapperPosition = ReactDOM.findDOMNode(this.refs.packagesList).getBoundingClientRect();
+      var positions = [];
+      _.each(packagesListItems, function(item) {
+        if(item.className.indexOf('ioslist-group-container') > -1) {
+          var header = item.getElementsByClassName('ioslist-group-header')[0];
+          positions.push(header.getBoundingClientRect().top - wrapperPosition.top + ReactDOM.findDOMNode(this.refs.packagesList).scrollTop);
+        }
+      }, this);
+      return positions;
     }
-    refresh() {
-      this.setData(this.props.selectedStatus, this.props.selectedType, this.props.selectedSort);
+    setFakeHeader(data) {
+      this.setState({fakeHeaderLetter: Object.keys(data)[0]});
+    }
+    packagesListScroll() {
+      var scrollTop = ReactDOM.findDOMNode(this.refs.packagesList).scrollTop;
+      var newFakeHeaderLetter = this.state.fakeHeaderLetter;
+      var headerHeight = this.refs.fakeHeader.offsetHeight;
+      var positions = this.generatePositions();
+      
+      positions.every(function(position, index) {
+        if(scrollTop >= position) {
+          newFakeHeaderLetter = Object.keys(this.state.data)[index];
+          return true;
+        } else if(scrollTop >= position - headerHeight) {
+          scrollTop -= scrollTop - (position - headerHeight);
+          return true;
+        }
+      }, this);
+      
+      this.setState({
+        fakeHeaderTopPosition: scrollTop,
+        fakeHeaderLetter: newFakeHeaderLetter
+      });
+    }
+    startIntervalPackagesListScroll() {
+      var that = this;
+      var intervalId = setInterval(function() {
+        that.packagesListScroll();
+      }, 10);
+      this.setState({tmpIntervalId: intervalId});
+    }
+    stopIntervalPackagesListScroll() {
+      clearInterval(this.state.tmpIntervalId);
+      this.setState({tmpIntervalId: null});
     }
     queueUpdated() {
       if(JSON.stringify(this.state.tmpQueueData) !== JSON.stringify(db.packageQueueForDevice.deref())) {
@@ -124,18 +142,27 @@ define(function(require) {
         tmpQueueData: db.packageQueueForDevice.deref()
       });
     }
+    refreshData() {
+      SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
+      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device.uuid});
+      SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
+      SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.uuid, regex: this.props.filterValue});
+    }
+    refresh() {
+      this.setData(this.props.selectedStatus, this.props.selectedType, this.props.selectedSort);
+    }
     setData(selectedStatus, selectedType, selectedSort) {
       var result = this.prepareData(selectedStatus, selectedType, selectedSort);
-      var data = result.data;
+      if(!_.isUndefined(result.data) && (_.isUndefined(this.state.data) || Object.keys(this.state.data)[0] !== Object.keys(result.data)[0]))
+        this.setFakeHeader(result.data);
+      
       this.props.setPackagesStatistics(result.statistics.installedCount, result.statistics.queuedCount);
       this.setState({
-        data: data
+        data: result.data
       });
     }
-    onDrop(files) {
-      this.props.onDrop(files);
-    }
     prepareData(selectedStatus, selectedType, selectedSort) {
+      var that = this;
       var Packages = _.clone(db.searchablePackages.deref());
       var Installed = _.clone(db.searchablePackagesForDevice.deref());
       var Queued = _.clone(db.packageQueueForDevice.deref());
@@ -165,7 +192,6 @@ define(function(require) {
         switch(selectedType) {
           case 'all': 
             Installed.forEach(function(installed, index){
-
               Packages.push(installed);
             });
           break;
@@ -244,6 +270,14 @@ define(function(require) {
 
           GroupedPackages[obj.id.name]['elements'].push(Packages[index]);
         });
+        
+        _.each(GroupedPackages, function(obj, index) {
+          GroupedPackages[index]['elements'] = obj['elements'].sort(function (a, b) {
+            var aVersion = a.id.version;
+            var bVersion = b.id.version;
+            return that.compareVersions(bVersion, aVersion);
+          });
+        });
 
         var SelectedPackages = {};
         switch(selectedStatus) {
@@ -289,6 +323,9 @@ define(function(require) {
     
       return {'data': SortedPackages, 'statistics': {'queuedCount': queuedCount, 'installedCount': installedCount}};
     }
+    onDrop(files) {
+      this.props.onDrop(files);
+    }
     expandPackage(name) {
       var expandedPackage = this.state.expandedPackage;
 
@@ -301,38 +338,6 @@ define(function(require) {
           expandedPackage: name
         });
       }
-    }
-    selectToAnalyse(name) {
-      var selectedToAnalyse = this.state.selectedToAnalyse;
-
-      var index = 0;
-      if(index = selectedToAnalyse.indexOf(name) > -1) {
-        selectedToAnalyse = selectedToAnalyse.filter(function(i) {
-          return i != name;
-        });
-      } else {
-        selectedToAnalyse.push(name);
-      }
-      this.setState({
-        selectedToAnalyse: selectedToAnalyse
-      });
-
-      this.props.countImpactAnalysisPackages(selectedToAnalyse.length);
-    }
-    updateListToAnalyse(action) {
-      var selectedToAnalyse = [];
-
-      if(action == 'selectAll') {
-        _.each(this.state.data, function(group, i) {
-          _.each(group, function(pack, j) {
-            selectedToAnalyse.push(pack.packageName);
-          });
-        });
-      }
-      this.setState({
-        selectedToAnalyse: selectedToAnalyse,
-      });
-      this.props.countImpactAnalysisPackages(selectedToAnalyse.length);
     }
     compareVersions(a, b) {
       if (a === b) {
@@ -358,10 +363,9 @@ define(function(require) {
       }
       return 0;
     }
-    render() {     
+    render() {
       if(!_.isUndefined(this.state.data)) {
         var packages = _.map(this.state.data, function(packages, index) {
-
           var items = _.map(packages, function(pack, i) {
             var that = this;
             var queuedPackage = '';
@@ -369,54 +373,45 @@ define(function(require) {
             var packageInfo = '';
             var mainLabel = '';
 
-            var versions = pack.elements;
-
-            var sortedElements = versions.sort(function (a, b) {
-              var aVersion = a.id.version;
-              var bVersion = b.id.version;
-              return that.compareVersions(bVersion, aVersion);
-            });
-
-            var tmp = _.find(sortedElements, function (i) {
+            var tmp = _.find(pack.elements, function (i) {
               return i.attributes.status == 'queued';
             });
             queuedPackage = (tmp !== undefined) ? tmp.id.version : '';
 
-            tmp = _.find(sortedElements, function (i) {
+            tmp = _.find(pack.elements, function (i) {
               return i.attributes.status == 'installed';
             });
             installedPackage = (tmp !== undefined) ? tmp.id.version : '';
 
-          return (
-            <li key={'package-' + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
-              <PackagesListItem
-                key={'package-' + pack.packageName + '-items'}
-                name={pack.packageName}
-                expandPackage={this.expandPackage}
-                queuedPackage={queuedPackage}
-                installedPackage={installedPackage}
-                isDebOrRpmPackage={pack.isDebOrRpmPackage}
-                isManagedPackage={pack.isManagedPackage}
-                packageInfo={packageInfo}
-                mainLabel={mainLabel}
-                selectToAnalyse={this.selectToAnalyse}
-                deviceId={this.props.device.uuid}
-                selected={this.state.expandedPackage == pack.packageName ? true : false}
-                isBlackListed={pack.isBlackListed}/>
-                <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
-                  {this.state.expandedPackage == pack.packageName ?
-                    <PackageListItemDetails
-                      key={'package-' + pack.packageName + '-versions'}
-                      versions={sortedElements}
-                      deviceId={this.props.device.uuid}
-                      packageName={pack.packageName}
-                      isQueued={pack.isQueued}
-                      refresh={this.refreshData}
-                      showBlacklistForm={this.props.showBlacklistForm}
-                      closeBlacklistForm={this.props.closeBlacklistForm}/>
-                  : null}
-                </VelocityTransitionGroup>
-            </li>
+            return (
+              <li key={'package-' + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
+                <PackagesListItem
+                  key={'package-' + pack.packageName + '-items'}
+                  name={pack.packageName}
+                  expandPackage={this.expandPackage}
+                  queuedPackage={queuedPackage}
+                  installedPackage={installedPackage}
+                  isDebOrRpmPackage={pack.isDebOrRpmPackage}
+                  isManagedPackage={pack.isManagedPackage}
+                  packageInfo={packageInfo}
+                  mainLabel={mainLabel}
+                  deviceId={this.props.device.uuid}
+                  selected={this.state.expandedPackage == pack.packageName ? true : false}
+                  isBlackListed={pack.isBlackListed}/>
+                  <VelocityTransitionGroup enter={{animation: "slideDown", begin: function() {that.startIntervalPackagesListScroll()}, complete: function() {that.stopIntervalPackagesListScroll()}}} leave={{animation: "slideUp"}}>
+                    {this.state.expandedPackage == pack.packageName ?
+                      <PackageListItemDetails
+                        key={'package-' + pack.packageName + '-versions'}
+                        versions={pack.elements}
+                        deviceId={this.props.device.uuid}
+                        packageName={pack.packageName}
+                        isQueued={pack.isQueued}
+                        refresh={this.refreshData}
+                        showBlacklistForm={this.props.showBlacklistForm}
+                        closeBlacklistForm={this.props.closeBlacklistForm}/>
+                    : null}
+                  </VelocityTransitionGroup>
+              </li>
             );
           }, this);
           return(
@@ -431,47 +426,45 @@ define(function(require) {
       }
       return (
         <div>
-          <div>
-            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-              {!_.isUndefined(packages) ? 
-                <ul className="list-group" id="packages-list" style={{height: this.props.packagesListHeight}}>
-                  <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true} className="dnd-zone" activeClassName="dnd-zone-active">
-                    {packages.length ?
-                      <div id="packages-list-inside" ref="packagesList">
-                        <h2 className="ioslist-fake-header"></h2>
-                        <div className="ioslist-wrapper">
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            <ul className="list-group" id="packages-list" style={{height: this.props.packagesListHeight}}>
+              <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true} className="dnd-zone" activeClassName="dnd-zone-active">
+                <div id="packages-list-inside">
+                  <div className="ioslist-wrapper" ref="packagesList">
+                    {!_.isUndefined(packages) ? 
+                      packages.length ?
+                        <div>
+                          <h2 className="ioslist-fake-header" style={{top: this.state.fakeHeaderTopPosition}} ref="fakeHeader">{this.state.fakeHeaderLetter}</h2>
                           {packages}
                         </div>
-                      </div>
-                    :
-                      <div className="height-100 position-relative text-center">
-                        {this.props.filterValue !== '' ? 
-                          <div className="center-xy padding-15">
-                            No matching packages found.
-                          </div>
-                        :
-                          this.state.selectedType === 'unmanaged' ? 
+                      :
+                        <div className="height-100 position-relative text-center">
+                          {this.props.filterValue !== '' ? 
                             <div className="center-xy padding-15">
-                              This device hasn’t reported any information about<br />
-                              its system-installed software packages yet.
+                              No matching packages found.
                             </div>
                           :
-                            <div className="center-xy padding-15">
-                              There are no packages managed by ATS Garage to<br />
-                              show. To add a new package, drag and drop it here. 
-                            </div>
-                        }
-                      </div>
-                    }
-                  </Dropzone>
-                </ul>
-              : undefined}
-            </VelocityTransitionGroup>
-            {_.isUndefined(packages) ? 
-              <Loader />
-            : undefined}
-          </div>
-            
+                            this.state.selectedType === 'unmanaged' ? 
+                              <div className="center-xy padding-15">
+                                This device hasn’t reported any information about<br />
+                                its system-installed software packages yet.
+                              </div>
+                            :
+                              <div className="center-xy padding-15">
+                                There are no packages managed by ATS Garage to<br />
+                                show. To add a new package, drag and drop it here. 
+                              </div>
+                          }
+                        </div>
+                    : undefined}
+                    {_.isUndefined(packages) ? 
+                      <Loader />
+                    : undefined}
+                  </div>
+                </div>
+              </Dropzone>
+            </ul>
+          </VelocityTransitionGroup>            
           {this.props.device.status !== 'NotSeen' 
                       && !_.isUndefined(db.searchablePackages.deref()) && !db.searchablePackages.deref().length ? 
             null

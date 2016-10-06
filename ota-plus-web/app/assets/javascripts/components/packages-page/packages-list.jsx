@@ -9,25 +9,20 @@ define(function(require) {
       Dropzone = require('es6!../../mixins/dropzone'),
       AddPackage = require('es6!../packages/add-package'),
       BlacklistForm = require('es6!../packages/blacklist-form'),
-      Loader = require('es6!../loader'),
-      jQuery = require('jquery'),
-      IOSList = require('ioslist');
+      Loader = require('es6!../loader');
   
   class PackagesList extends React.Component {
     constructor(props) {
       super(props);
-      
-      var event = new CustomEvent("refreshList");
-      
       this.state = {
         data: undefined,
         expandedPackage: null,
-        timeout: null,
         intervalId: null,
-        files: null,
+        tmpIntervalId: null,
+        fakeHeaderTopPosition: 0,
+        fakeHeaderLetter: null,
         isFormShown: this.props.isFormShown,
-        iosListObj: null,
-        event: event,
+        files: null,
         blacklistedPackageName: null,
         blacklistedPackageVersion: null,
         blacklistMode: null,
@@ -35,13 +30,29 @@ define(function(require) {
       };
       
       this.refreshData = this.refreshData.bind(this);
-      this.onDrop = this.onDrop.bind(this);
-      this.expandPackage = this.expandPackage.bind(this);
       this.refresh = this.refresh.bind(this);
+      this.setData = this.setData.bind(this);
+      this.prepareData = this.prepareData.bind(this);
+      this.onDrop = this.onDrop.bind(this);
       this.showBlacklistForm = this.showBlacklistForm.bind(this);
       this.closeBlacklistForm = this.closeBlacklistForm.bind(this);
+      this.expandPackage = this.expandPackage.bind(this);
+      this.generatePositions = this.generatePositions.bind(this);
+      this.setFakeHeader = this.setFakeHeader.bind(this);
+      this.packagesListScroll = this.packagesListScroll.bind(this);
+      this.startIntervalPackagesListScroll = this.startIntervalPackagesListScroll.bind(this);
+      this.stopIntervalPackagesListScroll = this.stopIntervalPackagesListScroll.bind(this);
       
       db.searchablePackages.addWatch("poll-packages", _.bind(this.refresh, this, null));      
+    }
+    componentDidMount() {
+      var that = this;
+      var intervalId = setInterval(function() {
+        that.refreshData();
+      }, 1000);
+      this.setState({intervalId: intervalId});
+      this.refreshData();
+      ReactDOM.findDOMNode(this.refs.packagesList).addEventListener('scroll', this.packagesListScroll);
     }
     componentWillUpdate(nextProps, nextState) {
       if(nextProps.filterValue != this.props.filterValue) {
@@ -52,39 +63,63 @@ define(function(require) {
       if(this.props.isFormShown !== nextProps.isFormShown) {
         this.setState({isFormShown: nextProps.isFormShown});
       }
-      
       if(this.props.selectedSort !== nextProps.selectedSort) {
         this.setData(nextProps.selectedSort);
       }
     }
-    componentDidUpdate(prevProps, prevState) {
-      if(!_.isUndefined(prevState.data) && Object.keys(prevState.data).length === 0 && !_.isUndefined(this.state.data) && Object.keys(this.state.data).length > 0) {
-        jQuery(ReactDOM.findDOMNode(this.refs.packagesList)).ioslist();
-      } else {
-        document.body.dispatchEvent(this.state.event);
-      }
+    componentWillUnmount() {
+      ReactDOM.findDOMNode(this.refs.packagesList).removeEventListener('scroll', this.packagesListScroll);
+      db.searchablePackages.reset();      
+      db.searchablePackages.removeWatch("poll-packages");
+      clearInterval(this.state.intervalId);
+      clearInterval(this.state.tmpIntervalId);
     }
-    componentDidMount() {
+    generatePositions() {
+      var packagesListItems = ReactDOM.findDOMNode(this.refs.packagesList).children[0].children;
+      var wrapperPosition = ReactDOM.findDOMNode(this.refs.packagesList).getBoundingClientRect();
+      var positions = [];
+      _.each(packagesListItems, function(item) {
+        if(item.className.indexOf('ioslist-group-container') > -1) {
+          var header = item.getElementsByClassName('ioslist-group-header')[0];
+          positions.push(header.getBoundingClientRect().top - wrapperPosition.top + ReactDOM.findDOMNode(this.refs.packagesList).scrollTop);
+        }
+      }, this);
+      return positions;
+    }
+    setFakeHeader(data) {
+      this.setState({fakeHeaderLetter: Object.keys(data)[0]});
+    }
+    packagesListScroll() {
+      var scrollTop = this.refs.packagesList.scrollTop;
+      var newFakeHeaderLetter = this.state.fakeHeaderLetter;
+      var headerHeight = ReactDOM.findDOMNode(this.refs.fakeHeader).offsetHeight;
+      var positions = this.generatePositions();
+      
+      positions.every(function(position, index) {
+        if(scrollTop >= position) {
+          newFakeHeaderLetter = Object.keys(this.state.data)[index];
+          return true;
+        } else if(scrollTop >= position - headerHeight) {
+          scrollTop -= scrollTop - (position - headerHeight);
+          return true;
+        }
+      }, this);
+      
+      this.setState({
+        fakeHeaderTopPosition: scrollTop,
+        fakeHeaderLetter: newFakeHeaderLetter
+      });
+    }
+    startIntervalPackagesListScroll() {
       var that = this;
       var intervalId = setInterval(function() {
-        that.refreshData();
-      }, 1000);
-      this.setState({intervalId: intervalId});
-      this.refreshData();
-
-      var tmpIntervalId = setInterval(function() {
-        var packagesListNode = ReactDOM.findDOMNode(that.refs.packagesList);
-        if(packagesListNode) {
-          var a = jQuery(packagesListNode).ioslist();
-          clearInterval(tmpIntervalId);
-        }
-      }, 30);
+        that.packagesListScroll();
+      }, 10);
+      this.setState({tmpIntervalId: intervalId});
     }
-    componentWillUnmount() {
-      db.searchablePackages.reset();
-      db.searchablePackages.removeWatch("poll-packages");
-      clearTimeout(this.state.timeout);
-      clearInterval(this.state.intervalId);
+    stopIntervalPackagesListScroll() {
+      clearInterval(this.state.tmpIntervalId);
+      this.setState({tmpIntervalId: null});
     }
     refreshData() {
       SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
@@ -94,18 +129,15 @@ define(function(require) {
     }
     setData(selectedSort) {
       var result = this.prepareData(selectedSort);
+      if(!_.isUndefined(result.data) && (_.isUndefined(this.state.data) || Object.keys(this.state.data)[0] !== Object.keys(result.data)[0]))
+        this.setFakeHeader(result.data);
+      
       this.setState({
         data: result.data
       });
     }
-    onDrop(files) {
-      this.setState({
-        files: files,
-      });
-      
-      this.props.openForm();
-    }
     prepareData(selectedSort) {
+      var that = this;
       var Packages = db.searchablePackages.deref();
 
       var SortedPackages = undefined;
@@ -124,8 +156,16 @@ define(function(require) {
             GroupedPackages[obj.id.name]['elements'] = [];
             GroupedPackages[obj.id.name]['packageName'] = obj.id.name;
           }
-                    
+          
           GroupedPackages[obj.id.name]['elements'].push(Packages[index]);
+        });
+
+        _.each(GroupedPackages, function(obj, index) {
+          GroupedPackages[index]['elements'] = obj['elements'].sort(function (a, b) {
+            var aVersion = a.id.version;
+            var bVersion = b.id.version;
+            return that.compareVersions(bVersion, aVersion);
+          });
         });
 
         SortedPackages = {};
@@ -144,21 +184,13 @@ define(function(require) {
           SortedPackages[firstLetter].push(GroupedPackages[key]);
         });
       }
-    
       return {'data': SortedPackages};
     }
-    expandPackage(name) {
-      var expandedPackage = this.state.expandedPackage;
-
-      if(expandedPackage == name) {
-        this.setState({
-          expandedPackage: null
-        });
-      } else {
-        this.setState({
-          expandedPackage: name
-        });
-      }
+    onDrop(files) {
+      this.setState({
+        files: files,
+      });
+      this.props.openForm();
     }
     showBlacklistForm(packageName, packageVersion, mode) {
       this.setState({
@@ -174,6 +206,19 @@ define(function(require) {
         blacklistedPackageName: null,
         blacklistedPackageVersion: null
       });
+    }
+    expandPackage(name) {
+      var expandedPackage = this.state.expandedPackage;
+
+      if(expandedPackage == name) {
+        this.setState({
+          expandedPackage: null
+        });
+      } else {
+        this.setState({
+          expandedPackage: name
+        });
+      }
     }
     compareVersions(a, b) {
       if (a === b) {
@@ -199,21 +244,11 @@ define(function(require) {
       }
       return 0;
     }
-    render() {        
+    render() {
       if(!_.isUndefined(this.state.data)) {
         var packages = _.map(this.state.data, function(packages, index) {
-
           var items = _.map(packages, function(pack, i) {
             var that = this;
-            var mainLabel = '';
-
-            var versions = pack.elements;
-
-            var sortedElements = versions.sort(function (a, b) {
-              var aVersion = a.id.version;
-              var bVersion = b.id.version;
-              return that.compareVersions(bVersion, aVersion);
-            });
           return (
             <li key={'package-' + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
               <PackagesListItem
@@ -221,11 +256,11 @@ define(function(require) {
                 name={pack.packageName}
                 expandPackage={this.expandPackage}
                 selected={this.state.expandedPackage == pack.packageName ? true : false}/>
-                <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+                <VelocityTransitionGroup enter={{animation: "slideDown", begin: function() {that.startIntervalPackagesListScroll()}, complete: function() {that.stopIntervalPackagesListScroll()}}} leave={{animation: "slideUp"}}>
                   {this.state.expandedPackage == pack.packageName ?
                     <PackageListItemDetails
                       key={'package-' + pack.packageName + '-versions'}
-                      versions={sortedElements}
+                      versions={pack.elements}
                       packageName={pack.packageName}
                       refresh={this.refreshData}
                       showBlacklistForm={this.showBlacklistForm}/>
@@ -246,58 +281,56 @@ define(function(require) {
       }
       return (
         <div>
-          <div>
-            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-              {!_.isUndefined(packages) ? 
-                <ul className="list-group" id="packages-list" style={{height: this.props.packagesListHeight}}>
-                  <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true} className="dnd-zone" activeClassName="dnd-zone-active">
-                    {packages.length ?
-                      <div id="packages-list-inside" ref="packagesList">
-                        <h2 className="ioslist-fake-header"></h2>
-                        <div className="ioslist-wrapper">
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            <ul className="list-group" id="packages-list" style={{height: this.props.packagesListHeight}}>
+              <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true} className="dnd-zone" activeClassName="dnd-zone-active">
+                <div id="packages-list-inside">
+                  <div className="ioslist-wrapper" ref="packagesList">
+                    {!_.isUndefined(packages) ? 
+                      packages.length ?
+                        <div>
+                          <h2 className="ioslist-fake-header" style={{top: this.state.fakeHeaderTopPosition}} ref="fakeHeader">{this.state.fakeHeaderLetter}</h2>
                           {packages}
                         </div>
-                      </div>
-                    :
-                      <div className="col-md-12 height-100 position-relative text-center">
-                        {this.props.filterValue !== '' ? 
-                          <div className="center-xy padding-15">
-                            No matching packages found.
-                          </div>
-                        :
-                          <div className="center-xy padding-15">
-                            There are no packages managed by ATS Garage to<br />
-                            show. To add a new package, drag and drop it here. 
-                          </div>
-                        }
-                      </div>
-                    }
-                  </Dropzone>
-                </ul>
-              : undefined}
-            </VelocityTransitionGroup>
-            {_.isUndefined(packages) ? 
-              <Loader />
-            : undefined}
-            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-              {this.state.isFormShown ?
-                <AddPackage
-                  files={this.state.files}
-                  closeForm={this.props.closeForm}
-                  focusPackage={this.props.focusPackage}
-                  key="add-package"/>
-              : null}
-            </VelocityTransitionGroup>
-            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-              {this.state.isBlacklistFormShown ?
-                <BlacklistForm
-                  mode={this.state.blacklistMode}
-                  packageName={this.state.blacklistedPackageName}
-                  packageVersion={this.state.blacklistedPackageVersion}
-                  closeForm={this.closeBlacklistForm}/>
-              : null}
-            </VelocityTransitionGroup>
-          </div>
+                      :
+                        <div className="col-md-12 height-100 position-relative text-center">
+                          {this.props.filterValue !== '' ? 
+                            <div className="center-xy padding-15">
+                              No matching packages found.
+                            </div>
+                          :
+                            <div className="center-xy padding-15">
+                              There are no packages managed by ATS Garage to<br />
+                              show. To add a new package, drag and drop it here. 
+                            </div>
+                          }
+                        </div>
+                    : undefined}
+                    {_.isUndefined(packages) ? 
+                      <Loader />
+                    : undefined}
+                  </div>
+                </div>
+              </Dropzone>
+            </ul>
+          </VelocityTransitionGroup>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isFormShown ?
+              <AddPackage
+                files={this.state.files}
+                closeForm={this.props.closeForm}
+                key="add-package"/>
+            : null}
+          </VelocityTransitionGroup>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isBlacklistFormShown ?
+              <BlacklistForm
+                mode={this.state.blacklistMode}
+                packageName={this.state.blacklistedPackageName}
+                packageVersion={this.state.blacklistedPackageVersion}
+                closeForm={this.closeBlacklistForm}/>
+            : null}
+          </VelocityTransitionGroup>
         </div>
       );
     }

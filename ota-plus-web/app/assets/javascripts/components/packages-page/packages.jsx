@@ -18,7 +18,6 @@ define(function(require) {
       this.changeFilter = this.changeFilter.bind(this);
       this.openForm = this.openForm.bind(this);
       this.closeForm = this.closeForm.bind(this);
-      this.focusPackage = this.focusPackage.bind(this);
       this.setPackagesListHeight = this.setPackagesListHeight.bind(this);
     }
     componentDidMount() {
@@ -37,22 +36,6 @@ define(function(require) {
       this.setState({
         isFormShown: false
       });
-    }
-    focusPackage(packageName) {
-      var tmpInterval = setInterval(function() {
-        var btn = $("#button-package-" + packageName);
-        if(btn.length) {
-          if(!btn.parent('li').hasClass('selected')) 
-            btn.click();
-                    
-          setTimeout(function() {     
-            $('.ioslist-wrapper').animate({
-              scrollTop: $('.ioslist-wrapper').scrollTop() + btn.offset().top - $('.ioslist-wrapper').offset().top - $('.ioslist-fake-header').outerHeight()
-            }, 300);
-          }, 500);
-          clearInterval(tmpInterval);
-        }
-      }, 100);
     }
     setPackagesListHeight() {
       var windowHeight = jQuery(window).height();
@@ -110,8 +93,7 @@ define(function(require) {
                   filterValue={this.state.filterValue}
                   isFormShown={this.state.isFormShown}
                   openForm={this.openForm}
-                  closeForm={this.closeForm}
-                  focusPackage={this.focusPackage}/>
+                  closeForm={this.closeForm}/>
               </div>
             </div>
             <div className="panel-footer"></div>
