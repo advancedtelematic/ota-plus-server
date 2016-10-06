@@ -141,10 +141,10 @@ define(function(require) {
         renamedDevice: null
       });
     }
-    openRenameGroupModal(groupName) {
+    openRenameGroupModal(group) {
       this.setState({
         isRenameGroupModalShown: true,
-        renamedGroup: groupName
+        renamedGroup: group
       });
     }
     closeRenameGroupModal() {
@@ -295,7 +295,7 @@ define(function(require) {
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {this.state.isRenameGroupModalShown ?
               <RenameGroup
-                name={this.state.renamedGroup}
+                group={this.state.renamedGroup}
                 closeRenameGroupModal={this.closeRenameGroupModal}/>
             : undefined}
           </VelocityTransitionGroup>

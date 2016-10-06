@@ -86,14 +86,16 @@ define(function(require) {
             if(correct) {
               if(typeof groups[group.groupName] == 'undefined' || !groups[group.groupName] instanceof Array) {
                 groups[group.groupName] = [];
+                groups[group.groupName].devices = [];
+                groups[group.groupName].info = group;
               }
-              groups[group.groupName].push(device);
+              groups[group.groupName].devices.push(device);
               delete devices[deviceIndex];
             }
           }
         });
       });
-            
+                       
       this.setState({
         Devices: devices,
         Groups: groups
@@ -182,8 +184,7 @@ define(function(require) {
         groups.push(
           <span key={'group-' + groupName}>
             <DeviceListGroupItem
-              name={groupName}
-              devicesCount={Groups[groupName].length}
+              group={Groups[groupName]}
               width={this.state.boxWidth}
               expandGroup={this.expandGroup}
               openRenameGroupModal={this.props.openRenameGroupModal}
@@ -199,7 +200,7 @@ define(function(require) {
             <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
               {rows[rowNo].indexOf(this.state.expandedGroupName) > -1 && isLastItemInRow ? 
                 <DevicesGroupDetailsPanel 
-                  devices={Groups[this.state.expandedGroupName]}
+                  devices={Groups[this.state.expandedGroupName].devices}
                   width={this.state.groupPanelWidth}
                   boxWidth={this.state.boxWidth}
                   arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 53)}
@@ -255,7 +256,7 @@ define(function(require) {
             <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
               {rows[rowNo].indexOf(this.state.expandedGroupName) > -1 && isLastItemInRow ?
                 <DevicesGroupDetailsPanel 
-                  devices={Groups[this.state.expandedGroupName]}
+                  devices={Groups[this.state.expandedGroupName].devices}
                   width={this.state.groupPanelWidth}
                   boxWidth={this.state.boxWidth}
                   arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 53)}
