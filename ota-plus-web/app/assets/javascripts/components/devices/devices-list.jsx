@@ -203,7 +203,7 @@ define(function(require) {
                   devices={Groups[this.state.expandedGroupName].devices}
                   width={this.state.groupPanelWidth}
                   boxWidth={this.state.boxWidth}
-                  arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 53)}
+                  arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 50)}
                   areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
               : null}
             </VelocityTransitionGroup>
@@ -259,7 +259,7 @@ define(function(require) {
                   devices={Groups[this.state.expandedGroupName].devices}
                   width={this.state.groupPanelWidth}
                   boxWidth={this.state.boxWidth}
-                  arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 53)}
+                  arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 50)}
                   openRenameDeviceModal={this.props.openRenameDeviceModal}
                   areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
               : null}
