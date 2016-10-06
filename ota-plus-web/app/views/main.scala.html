@@ -47,7 +47,7 @@
             requirejs.config({"paths": {"es6": ["@routes.Assets.versioned("js/es6")"]}});
             requirejs.config({"paths": {"Chartjs": ["https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min"]}});
             requirejs.config({"paths": {"react-chartjs": ["https://cdnjs.cloudflare.com/ajax/libs/react-chartjs/0.8.0/react-chartjs.min"]}});
-            
+            requirejs.config({"paths": {"bootstrap": ["/webjars/bootstrap/3.3.6/js/bootstrap"], "bootstrap-css": ["/webjars/bootstrap/3.3.6/css/bootstrap"]}, "shim": {"bootstrap": ["jquery"]}, "packages":[]});
             
             
             requirejs.config({
