@@ -18,10 +18,13 @@ define(function(require) {
         data: undefined,
         expandedPackage: null,
         timeout: null,
+        tmpIntervalId: null,
         fakeHeaderTopPosition: 0,
         fakeHeaderLetter: null,
         tmpQueueData: undefined,
         selectedType: null,
+        packagesShownStartIndex: 0,
+        packagesShownEndIndex: 50
       };
       this.refreshData = this.refreshData.bind(this);
       this.refresh = this.refresh.bind(this);
@@ -58,8 +61,7 @@ define(function(require) {
       }
       if(this.props.selectedType !== nextProps.selectedType) {
         this.setState({
-          selectedType: nextProps.selectedType,
-          fakeHeaderLetter: null
+          selectedType: nextProps.selectedType
         });
       }
     }
@@ -69,8 +71,11 @@ define(function(require) {
       ReactDOM.findDOMNode(this.refs.packagesList).addEventListener('scroll', this.packagesListScroll);
     }
     componentDidUpdate(prevProps, prevState) {
-      if(this.props.selectedType !== prevProps.selectedType) {
+      if(this.props.selectedType !== prevProps.selectedType || this.props.selectedStatus !== prevProps.selectedStatus) {
         ReactDOM.findDOMNode(this.refs.packagesList).scrollTop = 0;
+      }
+      if(this.props.packagesListHeight !== prevProps.packagesListHeight) {
+        this.packagesListScroll();
       }
     }
     componentWillUnmount() {
@@ -105,9 +110,12 @@ define(function(require) {
       var newFakeHeaderLetter = this.state.fakeHeaderLetter;
       var headerHeight = this.refs.fakeHeader.offsetHeight;
       var positions = this.generatePositions();
+      var wrapperPosition = ReactDOM.findDOMNode(this.refs.packagesList).getBoundingClientRect();
+      var beforeHeadersCount = 0;
       
       positions.every(function(position, index) {
         if(scrollTop >= position) {
+          beforeHeadersCount++;
           newFakeHeaderLetter = Object.keys(this.state.data)[index];
           return true;
         } else if(scrollTop >= position - headerHeight) {
@@ -116,12 +124,26 @@ define(function(require) {
         }
       }, this);
       
+      var packageDetailsOffset = 0;
+      var packageDetails = document.getElementsByClassName('package-details')[0];
+      if(!_.isUndefined(packageDetails))
+        var packageDetailsOffset = Math.min(Math.max(packageDetails.getBoundingClientRect().top - wrapperPosition.top, -packageDetails.offsetHeight), 0);
+
+      var offset = 5;
+      var headersHeight = !_.isUndefined(document.getElementsByClassName('ioslist-group-header')[0]) ? document.getElementsByClassName('ioslist-group-header')[0].offsetHeight : 28;
+      var listItemHeight = !_.isUndefined(document.getElementsByClassName('list-group-item')[0]) ? document.getElementsByClassName('list-group-item')[0].offsetHeight - 1 : 39;
+      var packagesShownStartIndex = Math.floor((ReactDOM.findDOMNode(this.refs.packagesList).scrollTop - (beforeHeadersCount - 1) * headersHeight + packageDetailsOffset) / listItemHeight) - offset;
+      var packagesShownEndIndex = packagesShownStartIndex + Math.floor(ReactDOM.findDOMNode(this.refs.packagesList).offsetHeight / listItemHeight) + 2 * offset;     
+      
       this.setState({
         fakeHeaderTopPosition: scrollTop,
-        fakeHeaderLetter: newFakeHeaderLetter
+        fakeHeaderLetter: newFakeHeaderLetter,
+        packagesShownStartIndex: packagesShownStartIndex,
+        packagesShownEndIndex: packagesShownEndIndex
       });
     }
     startIntervalPackagesListScroll() {
+      clearInterval(this.state.tmpIntervalId);
       var that = this;
       var intervalId = setInterval(function() {
         that.packagesListScroll();
@@ -364,9 +386,13 @@ define(function(require) {
       return 0;
     }
     render() {
+      var packageIndex = -1;
+      var packagesHiddenCount = 0;
       if(!_.isUndefined(this.state.data)) {
         var packages = _.map(this.state.data, function(packages, index) {
           var items = _.map(packages, function(pack, i) {
+            packageIndex++;
+            
             var that = this;
             var queuedPackage = '';
             var installedPackage = '';
@@ -383,35 +409,40 @@ define(function(require) {
             });
             installedPackage = (tmp !== undefined) ? tmp.id.version : '';
 
+            if(packageIndex >= this.state.packagesShownStartIndex && packageIndex <= this.state.packagesShownEndIndex)
+              return (
+                <li key={'package-' + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
+                  <PackagesListItem
+                    key={'package-' + pack.packageName + '-items'}
+                    name={pack.packageName}
+                    expandPackage={this.expandPackage}
+                    queuedPackage={queuedPackage}
+                    installedPackage={installedPackage}
+                    isDebOrRpmPackage={pack.isDebOrRpmPackage}
+                    isManagedPackage={pack.isManagedPackage}
+                    packageInfo={packageInfo}
+                    mainLabel={mainLabel}
+                    deviceId={this.props.device.uuid}
+                    selected={this.state.expandedPackage == pack.packageName ? true : false}
+                    isBlackListed={pack.isBlackListed}/>
+                    <VelocityTransitionGroup enter={{animation: "slideDown", begin: function() {that.startIntervalPackagesListScroll()}, complete: function() {that.stopIntervalPackagesListScroll()}}} leave={{animation: "slideUp"}}>
+                      {this.state.expandedPackage == pack.packageName ?
+                        <PackageListItemDetails
+                          key={'package-' + pack.packageName + '-versions'}
+                          versions={pack.elements}
+                          deviceId={this.props.device.uuid}
+                          packageName={pack.packageName}
+                          isQueued={pack.isQueued}
+                          refresh={this.refreshData}
+                          showBlacklistForm={this.props.showBlacklistForm}
+                          closeBlacklistForm={this.props.closeBlacklistForm}/>
+                      : null}
+                    </VelocityTransitionGroup>
+                </li>
+              );
+      
             return (
-              <li key={'package-' + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
-                <PackagesListItem
-                  key={'package-' + pack.packageName + '-items'}
-                  name={pack.packageName}
-                  expandPackage={this.expandPackage}
-                  queuedPackage={queuedPackage}
-                  installedPackage={installedPackage}
-                  isDebOrRpmPackage={pack.isDebOrRpmPackage}
-                  isManagedPackage={pack.isManagedPackage}
-                  packageInfo={packageInfo}
-                  mainLabel={mainLabel}
-                  deviceId={this.props.device.uuid}
-                  selected={this.state.expandedPackage == pack.packageName ? true : false}
-                  isBlackListed={pack.isBlackListed}/>
-                  <VelocityTransitionGroup enter={{animation: "slideDown", begin: function() {that.startIntervalPackagesListScroll()}, complete: function() {that.stopIntervalPackagesListScroll()}}} leave={{animation: "slideUp"}}>
-                    {this.state.expandedPackage == pack.packageName ?
-                      <PackageListItemDetails
-                        key={'package-' + pack.packageName + '-versions'}
-                        versions={pack.elements}
-                        deviceId={this.props.device.uuid}
-                        packageName={pack.packageName}
-                        isQueued={pack.isQueued}
-                        refresh={this.refreshData}
-                        showBlacklistForm={this.props.showBlacklistForm}
-                        closeBlacklistForm={this.props.closeBlacklistForm}/>
-                    : null}
-                  </VelocityTransitionGroup>
-              </li>
+              <li key={'package-' + pack.packageName} className="list-group-item" >{packageIndex}</li>
             );
           }, this);
           return(
