@@ -91,7 +91,7 @@ define(function(require) {
       clearInterval(this.state.tmpIntervalId);
     }
     generatePositions() {
-      var packagesListItems = ReactDOM.findDOMNode(this.refs.packagesList).children[0].children;
+      var packagesListItems = !_.isUndefined(ReactDOM.findDOMNode(this.refs.packagesList).children[0].children[0]) ? ReactDOM.findDOMNode(this.refs.packagesList).children[0].children[0].children : null;
       var wrapperPosition = ReactDOM.findDOMNode(this.refs.packagesList).getBoundingClientRect();
       var positions = [];
       _.each(packagesListItems, function(item) {
@@ -108,7 +108,7 @@ define(function(require) {
     packagesListScroll() {
       var scrollTop = ReactDOM.findDOMNode(this.refs.packagesList).scrollTop;
       var newFakeHeaderLetter = this.state.fakeHeaderLetter;
-      var headerHeight = this.refs.fakeHeader.offsetHeight;
+      var headerHeight = !_.isUndefined(this.refs.fakeHeader) ? this.refs.fakeHeader.offsetHeight : 28;
       var positions = this.generatePositions();
       var wrapperPosition = ReactDOM.findDOMNode(this.refs.packagesList).getBoundingClientRect();
       var beforeHeadersCount = 0;
@@ -387,7 +387,6 @@ define(function(require) {
     }
     render() {
       var packageIndex = -1;
-      var packagesHiddenCount = 0;
       if(!_.isUndefined(this.state.data)) {
         var packages = _.map(this.state.data, function(packages, index) {
           var items = _.map(packages, function(pack, i) {
@@ -457,11 +456,11 @@ define(function(require) {
       }
       return (
         <div>
-          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-            <ul className="list-group" id="packages-list" style={{height: this.props.packagesListHeight}}>
-              <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true} className="dnd-zone" activeClassName="dnd-zone-active">
-                <div id="packages-list-inside">
-                  <div className="ioslist-wrapper" ref="packagesList">
+          <ul className="list-group" id="packages-list" style={{height: this.props.packagesListHeight}}>
+            <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true} className="dnd-zone" activeClassName="dnd-zone-active">
+              <div id="packages-list-inside">
+                <div className="ioslist-wrapper" ref="packagesList">
+                  <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
                     {!_.isUndefined(packages) ? 
                       packages.length ?
                         <div>
@@ -488,14 +487,14 @@ define(function(require) {
                           }
                         </div>
                     : undefined}
-                    {_.isUndefined(packages) ? 
-                      <Loader />
-                    : undefined}
-                  </div>
+                  </VelocityTransitionGroup>
+                  {_.isUndefined(packages) ? 
+                    <Loader />
+                  : undefined}
                 </div>
-              </Dropzone>
-            </ul>
-          </VelocityTransitionGroup>            
+              </div>
+            </Dropzone>
+          </ul>
           {this.props.device.status !== 'NotSeen' 
                       && !_.isUndefined(db.searchablePackages.deref()) && !db.searchablePackages.deref().length ? 
             null
