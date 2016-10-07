@@ -36,6 +36,7 @@ define(function(require) {
     render() {
       var handledStatuses = this.props.handledStatuses || 'all';
       var postStatus;
+      var message = '';
       
       if(!_.isUndefined(this.props.multipleKey)) {
         postStatus = !_.isUndefined(db.postStatus.deref()[this.props.action]) && !_.isUndefined(db.postStatus.deref()[this.props.action][this.props.multipleKey]) && (handledStatuses === 'all' || (db.postStatus.deref()[this.props.action][this.props.multipleKey].status === handledStatuses)) ? db.postStatus.deref()[this.props.action][this.props.multipleKey] : null;
@@ -43,15 +44,21 @@ define(function(require) {
         postStatus = !_.isUndefined(db.postStatus.deref()[this.props.action]) && (handledStatuses === 'all' || (db.postStatus.deref()[this.props.action].status === handledStatuses)) ? db.postStatus.deref()[this.props.action] : null;
       }
       
+      if(postStatus !== null) {
+        if(postStatus.status == 'error' && this.props.errorText) {
+          message = this.props.errorText;
+        } else if(postStatus.status == 'success' && this.props.successText) {
+          message = this.props.successText;
+        } else {
+          message = typeof postStatus.response === 'string' ? postStatus.response : this.objToString(postStatus.response);
+        }
+      }
+      
       return (
         <div>
           {postStatus ?
             <div className={"alert alert-" + (postStatus.status == 'error' ? "danger" : "success")}>
-              {typeof postStatus.response === 'string' ?
-                postStatus.response
-              :
-                this.objToString(postStatus.response)
-              }
+              {message}
             </div>
           : null}
         </div>
