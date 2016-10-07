@@ -52,7 +52,7 @@ define(function(require) {
       this.changeFilter = this.changeFilter.bind(this);
 
       db.showDevice.reset();
-      SotaDispatcher.dispatch({actionType: 'get-device', device: this.props.params.id});
+      SotaDispatcher.dispatch({actionType: 'get-device', uuid: this.props.params.id});
       db.showDevice.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
@@ -112,7 +112,7 @@ define(function(require) {
       });
     }
     refreshData() {
-      SotaDispatcher.dispatch({actionType: 'get-device', device: this.props.params.id});
+      SotaDispatcher.dispatch({actionType: 'get-device', uuid: this.props.params.id});
     }
     openForm() {
       this.setState({

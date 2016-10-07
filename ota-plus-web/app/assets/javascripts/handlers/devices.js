@@ -15,11 +15,8 @@ define(function(require) {
               });
             break;
           case 'get-device':
-            sendRequest.doGet('/api/v1/device_data?status=true', {action: payload.actionType}) // TODO: more efficient querying
-              .success(function(devices) {
-                var device = _.find(devices, function(device) {
-                  return device.uuid == payload.device;
-                });
+            sendRequest.doGet('/api/v1/devices_info/' + payload.uuid + "?status=true", {action: payload.actionType})
+              .success(function(device) {
                 db.showDevice.reset(device);
               });
             break;
