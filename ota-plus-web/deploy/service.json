@@ -21,7 +21,7 @@
   "env": {
     "SERVICE_NAME": "${JOB_NAME}",
     "SERVICE_SCOPE": "public",
-    "SERVICE_TYPE": "http",
+    "SERVICE_TYPE": "websockets",
     "SERVICE_IMAGE": "${IMAGE_ARTIFACT}",
     "KINESIS_STREAM_NAME_SUFFIX": "${KINESIS_STREAM_NAME_SUFFIX}",
     "SERVICE_HEALTH_CHECK": "curl --show-error --silent %<host>s:%<port>s/health",

@@ -3,7 +3,8 @@ package com.advancedtelematic.api
 import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.stream.Materializer
-import akka.stream.scaladsl.Source
+import akka.stream.scaladsl.{Keep, Source}
+import akka.stream.testkit.scaladsl.{TestSink, TestSource}
 import akka.util.ByteString
 import cats.syntax.show._
 import com.advancedtelematic.ota.Messages.MessageWriters._
@@ -102,6 +103,18 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
 
       status(result) must be(OK)
       contentAsString(result).trim mustBe getDeviceSeenResponse(MessagingData.deviceSeenMessage)
+    }
+
+    "route DeviceSeens from web socket (flow) to client" in {
+      implicit val system = ActorSystem()
+      val flowUnderTest = controller.wsFlow(MessagingData.deviceUuid)
+      val (pub, sub) = TestSource.probe[JsValue]
+        .via(flowUnderTest)
+        .toMat(TestSink.probe[JsValue])(Keep.both)
+        .run()
+
+      sub.request(n = 1)
+      sub.expectNext(Json.toJson(MessagingData.deviceSeenMessage))
     }
 
     "route DeviceCreateds from akka bus to client" in {
