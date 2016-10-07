@@ -4,6 +4,7 @@ import javax.inject.{Inject, Singleton}
 
 import akka.actor.ActorSystem
 import akka.stream.Materializer
+import akka.stream.scaladsl.{Flow, Sink, Source}
 import com.advancedtelematic.ota.Messages.MessageWriters._
 import com.advancedtelematic.ota.Messages.WebMessageBusListenerActor
 import org.genivi.sota.data.{Device, Namespace, Uuid}
@@ -12,9 +13,12 @@ import org.genivi.sota.messaging.daemon.MessageBusListenerActor.Subscribe
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
 import play.api.http.ContentTypes
 import play.api.libs.Comet
+import play.api.libs.streams._
 import play.api.libs.json._
 import play.api.mvc._
+import play.api.mvc.WebSocket.FrameFormatter
 import play.api.Configuration
+import scala.concurrent.Future
 
 @Singleton
 class EventController @Inject()
@@ -35,7 +39,6 @@ class EventController @Inject()
     WebMessageBusListenerActor.props[PackageCreated],
     WebMessageBusListenerActor.props[UpdateSpec]
   ).foreach(p => system.actorOf(p) ! Subscribe)
-
 
   def subDeviceSeen(device: Uuid): Action[AnyContent] = Action {
     val deviceSeenSource = messageBusProvider.getSource[DeviceSeen]()
@@ -75,5 +78,28 @@ class EventController @Inject()
       .filter(usm => usm.namespace == namespace)
       .map(Json.toJson(_))
       via Comet.json("parent.updateSpec")).as(ContentTypes.HTML)
+  }
+
+  def ws(device: Uuid) = WebSocket.acceptOrResult[JsValue, JsValue] {
+    // TODO do sameOriginCheck
+    case request => {
+      val act = for {
+        idToken             <- request.session.get("id_token")
+        auth0AccessToken    <- request.session.get("access_token")
+        authPlusAccessToken <- request.session.get("auth_plus_access_token")
+        ns                  <- request.session.get("namespace")
+      } yield Right(wsFlow(device))
+
+      Future.successful{
+        act.getOrElse(Left(Forbidden("forbidden")))
+      }
+    }
+  }
+
+  def wsFlow(device: Uuid): Flow[JsValue, JsValue, _] = {
+    val deviceSeenSource    = messageBusProvider.getSource[DeviceSeen]()
+      .filter(_.uuid == device)
+      .map(Json.toJson(_))
+    Flow.fromSinkAndSource(Sink.ignore, deviceSeenSource)
   }
 }
