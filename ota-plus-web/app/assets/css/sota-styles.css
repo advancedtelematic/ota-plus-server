@@ -69,8 +69,9 @@ button.list-group-item:focus { background: transparent; }
 .device-box:hover, .group-box:hover { background-color: rgba(255, 255, 255, 0.15); }
 
 .group-box:hover, .group-box:active, .group-box:focus { color: #fff; }
-.group-box .group-desc { width: 230px; margin-left: 15px; margin-top: 20px; float: left; }
+.group-box .group-desc { width: 230px; margin-left: 15px; margin-top: 12px; float: left; }
 .group-box .group-desc .group-name { font-size: 18px; line-height: 1.5em; margin-top: 15px; }
+.group-box .group-desc .group-count { font-size: 10px; line-height: 1.6em; }
 .group-box .group-icon { background-image: url(/assets/img/icons/group_small.png); margin-top: 15px; margin-left: 15px; }
 
 .device-box:hover, .device-box:active, .device-box:focus { color: #fff; text-decoration: none; }
