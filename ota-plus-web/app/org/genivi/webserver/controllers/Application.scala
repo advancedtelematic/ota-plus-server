@@ -58,6 +58,7 @@ class Application @Inject() (ws: WSClient,
 
   private val coreProxiedPrefixes: PartialFunction[List[String], String] = {
     case "packages" :: _ => coreApiUri
+    case "devices_info" :: _ => coreApiUri
     case "device_updates" :: _ => coreApiUri
     case "vehicle_updates" :: _ => coreApiUri
     case "update_requests" :: _ => coreApiUri

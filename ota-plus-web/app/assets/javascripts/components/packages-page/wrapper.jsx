@@ -33,7 +33,7 @@ define(function(require) {
       clearInterval(this.state.intervalId);
     }
     refreshData() {
-      SotaDispatcher.dispatch({actionType: 'get-device', device: this.props.params.id});
+      SotaDispatcher.dispatch({actionType: 'get-device', uuid: this.props.params.id});
     }
     render() {
       const deviceWithStatus = db.showDevice.deref();
