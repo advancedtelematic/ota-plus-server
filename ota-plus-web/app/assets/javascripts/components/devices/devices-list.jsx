@@ -14,7 +14,7 @@ define(function(require) {
       super(props);
 
       this.state = {
-        boxWidth: 320,
+        boxWidth: 330,
         boxesPerRow: null,
         showForm: false,
         draggingId: null,
@@ -106,7 +106,7 @@ define(function(require) {
     }
     setBoxesWidth() {
       var containerWidth = $('#devices-container > div').width();
-      var minBoxWidth = 320;
+      var minBoxWidth = 330;
       var howManyBoxesPerRow = Math.floor(containerWidth / minBoxWidth);
       this.setState({
         boxWidth: containerWidth / howManyBoxesPerRow,
