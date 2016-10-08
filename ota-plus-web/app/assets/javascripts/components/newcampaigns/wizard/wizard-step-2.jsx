@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      SotaDispatcher = require('sota-dispatcher'),
       GroupsList = require('./wizard-step-2/groups-list');
 
   class WizardStep2 extends React.Component {
@@ -8,6 +9,12 @@ define(function(require) {
       this.setWizardData = this.setWizardData.bind(this);
     }
     setWizardData(chosenGroups) {
+      SotaDispatcher.dispatch({
+        actionType: 'set-groups-for-campaign',
+        uuid: this.props.campaignUUID,
+        data: chosenGroups
+      });
+        
       var data = {chosenGroups: chosenGroups};
       this.props.setWizardData(data);
       if(chosenGroups.length)

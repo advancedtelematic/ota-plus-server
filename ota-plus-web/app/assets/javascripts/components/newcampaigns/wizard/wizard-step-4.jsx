@@ -42,47 +42,6 @@ define(function(require) {
                 <div className="groups-wrapper-fade groups-wrapper-fade-top"></div>
                 <div className="groups-wrapper margin-top-5">
                   {groups}
-                  
-                  <div className="width-100 margin-top-10 pull-left"></div>
-                  <div className="col-xs-4">
-                    <GroupIcon name="Title 1" count="10.000.000" />
-                  </div>
-                  <div className="col-xs-4">
-                    <GroupIcon name="Title 2" count="2.220.332" />
-                  </div>
-                  <div className="col-xs-4">
-                    <GroupIcon name="Title 3" count="22.220.332" />
-                  </div>
-                  <div className="width-100 margin-top-10 pull-left"></div>
-                  <div className="col-xs-4">
-                    <GroupIcon name="Title 1" count="10.000.000" />
-                  </div>
-                  <div className="col-xs-4">
-                    <GroupIcon name="Title 2" count="2.220.332" />
-                  </div>
-                  <div className="col-xs-4">
-                    <GroupIcon name="Title 3" count="22.220.332" />
-                  </div>
-                  <div className="width-100 margin-top-10 pull-left"></div>
-                  <div className="col-xs-4">
-                    <GroupIcon name="Title 1" count="10.000.000" />
-                  </div>
-                  <div className="col-xs-4">
-                    <GroupIcon name="Title 2" count="2.220.332" />
-                  </div>
-                  <div className="col-xs-4">
-                    <GroupIcon name="Title 3" count="22.220.332" />
-                  </div>
-                  <div className="width-100 margin-top-10 pull-left"></div>
-                  <div className="col-xs-4">
-                    <GroupIcon name="Title 1" count="10.000.000" />
-                  </div>
-                  <div className="col-xs-4">
-                    <GroupIcon name="Title 2" count="2.220.332" />
-                  </div>
-                  <div className="col-xs-4">
-                    <GroupIcon name="Title 3" count="22.220.332" />
-                  </div>
                 </div>
                 <div className="groups-wrapper-fade groups-wrapper-fade-bottom"></div>
               </div>

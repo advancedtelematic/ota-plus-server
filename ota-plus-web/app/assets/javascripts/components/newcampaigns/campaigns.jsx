@@ -14,7 +14,8 @@ define(function(require) {
         filterValue: '',
         campaignsListHeight: '300px',
         isCreateModalShown: false,
-        isWizardShown: false
+        isWizardShown: false,
+        campaignUUID: null
       };
       
       this.setCampaignsListHeight = this.setCampaignsListHeight.bind(this);
@@ -60,10 +61,11 @@ define(function(require) {
         isWizardShown: false
       });
     }
-    switchToWizard() {
+    switchToWizard(campaignUUID) {
       this.setState({
         isCreateModalShown: false,
-        isWizardShown: true
+        isWizardShown: true,
+        campaignUUID : campaignUUID
       });
     }
     changeFilter(filter) {
@@ -97,6 +99,7 @@ define(function(require) {
             : null}
             {this.state.isWizardShown ?
               <CampaignWizard 
+                campaignUUID={this.state.campaignUUID}
                 closeWizard={this.closeWizard}/>
             : null}
           </VelocityTransitionGroup>

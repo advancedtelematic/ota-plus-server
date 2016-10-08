@@ -13,10 +13,30 @@ define(function(require) {
       super(props);
       this.closeModal = this.closeModal.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleResponse = this.handleResponse.bind(this);
+      
+      db.postStatus.addWatch("poll-response-create-new-campaign", _.bind(this.handleResponse, this, null));
+    }
+    componentWillUnmount() {
+      db.postStatus.removeWatch("poll-response-create-new-campaign");
     }
     handleSubmit(e) {
       e.preventDefault();
-      this.props.switchToWizard();
+      
+      var payload = serializeForm(this.refs.form);
+      SotaDispatcher.dispatch({
+        actionType: 'create-campaign',
+        data: {name: payload.name}
+      });
+    }
+    handleResponse() {
+      var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref()['create-campaign'] : undefined;
+      
+      if(!_.isUndefined(postStatus)) {
+        if(postStatus.status === 'success') {
+          this.props.switchToWizard(postStatus.response);
+        }
+      }
     }
     closeModal(e) {
       e.preventDefault();
@@ -36,10 +56,10 @@ define(function(require) {
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
                 <div className="modal-body">
-                  <Responses action="create-device" />
+                  <Responses action="create-campaign" />
                   <div className="form-group">
-                    <label htmlFor="deviceName">Name</label>
-                    <input type="text" className="form-control" name="deviceName" ref="deviceName"/>
+                    <label htmlFor="campaignName">Name</label>
+                    <input type="text" className="form-control" name="campaignName" ref="campaignName"/>
                   </div>
                 </div>
                 <div className="modal-footer">

@@ -97,6 +97,7 @@ define(function(require) {
               <ul className="nav navbar-nav">
                 <li><IndexLink to="/" activeClassName="active" id="link-devices">Devices</IndexLink></li>
                 <li><Link to="/packages" activeClassName="active" id="link-packages">Packages</Link></li>
+                <li><Link to="/campaigns" activeClassName="active" id="link-campaigns">Campaigns</Link></li>
                 <li>
                   <Link to="/impactanalysis" activeClassName="active" id="link-impactanalysis">
                     {_.isUndefined(impactedDevices) ? 

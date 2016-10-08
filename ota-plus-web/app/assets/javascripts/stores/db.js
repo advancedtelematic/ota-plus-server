@@ -31,6 +31,7 @@ define(function(require) {
       this.impactedDevicesCount = atom.createAtom();
       this.group = atom.createAtom();
       this.groups = atom.createAtom();
+      this.campaigns = atom.createAtom();
     }
 
     return DB;
