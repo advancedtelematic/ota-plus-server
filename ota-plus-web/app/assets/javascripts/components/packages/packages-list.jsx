@@ -433,8 +433,7 @@ define(function(require) {
                           packageName={pack.packageName}
                           isQueued={pack.isQueued}
                           refresh={this.refreshData}
-                          showBlacklistForm={this.props.showBlacklistForm}
-                          closeBlacklistForm={this.props.closeBlacklistForm}/>
+                          showBlacklistForm={this.props.showBlacklistForm}/>
                       : null}
                     </VelocityTransitionGroup>
                 </li>

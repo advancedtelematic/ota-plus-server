@@ -9,7 +9,6 @@ define(function(require) {
   class BlacklistForm extends React.Component {
     constructor(props) {
       super(props);
-      
       this.state = {};
       
       this.setData = this.setData.bind(this);
@@ -20,11 +19,8 @@ define(function(require) {
       
       db.postStatus.addWatch("poll-poststatus-blacklist", _.bind(this.blacklistListener, this, null));
       db.impactedDevicesCount.addWatch("poll-impacted-devices-count-blacklist", _.bind(this.forceUpdate, this, null));
-      
-      SotaDispatcher.dispatch({actionType: 'get-impacted-devices-count', name: this.props.packageName, version: this.props.packageVersion});
-      
+            
       if(this.props.mode == 'edit') {
-        SotaDispatcher.dispatch({actionType: 'get-blacklisted-package', name: this.props.packageName, version: this.props.packageVersion});
         db.blacklistedPackage.addWatch("poll-blacklisted-package", _.bind(this.setData, this, null));
       } else {
         this.state = {
@@ -32,16 +28,13 @@ define(function(require) {
         };
       }
     }
+    componentDidMount() {
+      SotaDispatcher.dispatch({actionType: 'get-impacted-devices-count', name: this.props.packageName, version: this.props.packageVersion});
+      if(this.props.mode == 'edit') {
+        SotaDispatcher.dispatch({actionType: 'get-blacklisted-package', name: this.props.packageName, version: this.props.packageVersion});
+      }
+    }
     componentWillUnmount() {
-      var postStatus = _.clone(db.postStatus.deref());
-      if(!_.isUndefined(postStatus['add-package-to-blacklist']))
-        delete postStatus['add-package-to-blacklist'];
-      if(!_.isUndefined(postStatus['update-package-in-blacklist']))
-        delete postStatus['update-package-in-blacklist'];
-      if(!_.isUndefined(postStatus['remove-package-from-blacklist']))
-        delete postStatus['remove-package-from-blacklist'];
-      db.postStatus.reset(postStatus);
-      
       db.blacklistedPackage.reset();
       db.impactedDevicesCount.reset();
       db.blacklistedPackage.removeWatch("poll-blacklisted-package");
