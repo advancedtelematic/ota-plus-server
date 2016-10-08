@@ -13,6 +13,12 @@ define(function(require) {
       super(props);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.closeRenameGroupModal = this.closeRenameGroupModal.bind(this);
+      this.renameGroupListener = this.renameGroupListener.bind(this);
+      
+      db.postStatus.addWatch("poll-poststatus-rename-group", _.bind(this.renameGroupListener, this, null));
+    }
+    componentWillUnmount() {
+      db.postStatus.removeWatch("poll-poststatus-rename-group");
     }
     handleSubmit(e) {
       e.preventDefault();
@@ -26,7 +32,16 @@ define(function(require) {
     }
     closeRenameGroupModal(e) {
       e.preventDefault();
-      this.props.closeRenameGroupModal();
+      this.props.closeRenameGroupModal(false);
+    }
+    renameGroupListener() {
+      var that = this;
+      var postStatusRenameGroup = db.postStatus.deref()['rename-group'];
+      if(!_.isUndefined(postStatusRenameGroup) && postStatusRenameGroup.status === 'success') {
+        setTimeout(function() {
+          that.props.closeRenameGroupModal(true);
+        }, 1);
+      }
     }
     render() {
       return (
