@@ -13,6 +13,12 @@ define(function(require) {
       super(props);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.closeRenameDeviceModal = this.closeRenameDeviceModal.bind(this);
+      this.renameDeviceListener = this.renameDeviceListener.bind(this);
+      
+      db.postStatus.addWatch("poll-poststatus-edit-device", _.bind(this.renameDeviceListener, this, null));
+    }
+    componentWillUnmount() {
+      db.postStatus.removeWatch("poll-poststatus-edit-device");
     }
     handleSubmit(e) {
       e.preventDefault();
@@ -28,7 +34,16 @@ define(function(require) {
     }
     closeRenameDeviceModal(e) {
       e.preventDefault();
-      this.props.closeRenameDeviceModal();
+      this.props.closeRenameDeviceModal(false);
+    }
+    renameDeviceListener() {
+      var that = this;
+      var postStatusRenameDevice = db.postStatus.deref()['edit-device'];
+      if(!_.isUndefined(postStatusRenameDevice) && postStatusRenameDevice.status === 'success') {
+        setTimeout(function() {
+          that.props.closeRenameDeviceModal(true);
+        }, 1);
+      }
     }
     render() {
       return (

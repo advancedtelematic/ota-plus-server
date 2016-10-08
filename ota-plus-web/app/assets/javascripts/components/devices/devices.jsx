@@ -135,7 +135,9 @@ define(function(require) {
         renamedDevice: device
       });
     }
-    closeRenameDeviceModal() {
+    closeRenameDeviceModal(ifRefreshDevicesList) {
+      if(ifRefreshDevicesList)
+        SotaDispatcher.dispatch({actionType: 'search-devices-by-regex-with-components', regex: this.state.filterValue});
       this.setState({
         isRenameDeviceModalShown: false,
         renamedDevice: null
