@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      SotaDispatcher = require('sota-dispatcher'),
       PackagesList = require('./wizard-step-1/packages-list');
 
   class WizardStep1 extends React.Component {
@@ -8,8 +9,12 @@ define(function(require) {
       this.setWizardData = this.setWizardData.bind(this);
     }
     setWizardData(packageName, packageVersion) {
-      var data = {packageName: packageName, packageVersion: packageVersion};
-      this.props.setWizardData(data);
+      SotaDispatcher.dispatch({
+        actionType: 'set-package-for-campaign',
+        uuid: this.props.campaignUUID,
+        data: {name: packageName, version: packageVersion}
+      });
+      this.props.setWizardData({packageName: packageName, packageVersion: packageVersion});
       this.props.markStepAsFinished();
     }
     render() {
