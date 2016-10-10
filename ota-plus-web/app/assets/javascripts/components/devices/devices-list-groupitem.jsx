@@ -12,20 +12,20 @@ define(function(require) {
     expandGroup(e) {
       e.preventDefault();
       if(e.target.className.indexOf('fa') === -1)
-        this.props.expandGroup(this.props.name);      
+        this.props.expandGroup(this.props.group.info.groupName);      
     }
     renameGroup(e) {
       e.preventDefault();
       e.stopPropagation();
-      this.props.openRenameGroupModal(this.props.name);
+      this.props.openRenameGroupModal(this.props.group.info);
     }
     render() {
       return (
-        <a href="#" className="group-box" id={"link-group-" + this.props.name} style={{width: this.props.width}} onClick={this.expandGroup}>
+        <a href="#" className="group-box" id={"link-group-" + this.props.group.info.groupName} style={{width: this.props.width}} onClick={this.expandGroup}>
           <div className="group-icon"></div>
           <div className="group-desc">
-            <div className="group-name">{this.props.name}</div>
-            <div className="group-count">Devices in the group: {this.props.devicesCount}</div>
+            <div className="group-name">{this.props.group.info.groupName}</div>
+            <div className="group-count">Devices in the group: {this.props.group.devices.length}</div>
           </div>
           {this.props.areActionButtonsShown ? 
             <div className="dropdown device-menu-dropdown pull-right">
