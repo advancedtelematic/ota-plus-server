@@ -88,8 +88,10 @@ define(function(require) {
       var postStatusUpdatePackageInBlacklist = db.postStatus.deref()['update-package-in-blacklist'];
       if(!_.isUndefined(postStatusAddPackageToBlacklist) && postStatusAddPackageToBlacklist.status === 'success' ||
          !_.isUndefined(postStatusRemovePackageFromBlacklist) && postStatusRemovePackageFromBlacklist.status === 'success' ||
-         !_.isUndefined(postStatusUpdatePackageInBlacklist) && postStatusUpdatePackageInBlacklist.status === 'success')
+         !_.isUndefined(postStatusUpdatePackageInBlacklist) && postStatusUpdatePackageInBlacklist.status === 'success') {
+        SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
         this.props.closeForm();
+      }
     }
     render() {
       var impactedDevicesCount = db.impactedDevicesCount.deref();
