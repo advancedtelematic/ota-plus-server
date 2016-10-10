@@ -12,15 +12,15 @@ define(function(require) {
   class GroupsList extends React.Component {
     constructor(props) {
       super(props);
-      
-      var event = new CustomEvent("refreshList");
-            
       this.state = {
         data: undefined,
         timeout: null,
         intervalId: null,
-        iosListObj: null,
-        event: event,
+        tmpIntervalId: null,
+        fakeHeaderTopPosition: 0,
+        fakeHeaderLetter: null,
+        groupsShownStartIndex: 0,
+        groupsShownEndIndex: 50,
         chosenGroups: this.props.wizardData !== null && !_.isUndefined(this.props.wizardData[1]) && !_.isUndefined(this.props.wizardData[1].chosenGroups) ? this.props.wizardData[1].chosenGroups : []
       };
       
@@ -29,23 +29,16 @@ define(function(require) {
       this.setData = this.setData.bind(this);
       this.prepareData = this.prepareData.bind(this);
       this.toggleGroup = this.toggleGroup.bind(this);
+      this.generatePositions = this.generatePositions.bind(this);
+      this.setFakeHeader = this.setFakeHeader.bind(this);
+      this.groupsListScroll = this.groupsListScroll.bind(this);
+      this.startIntervalGroupsListScroll = this.startIntervalGroupsListScroll.bind(this);
+      this.stopIntervalGroupsListScroll = this.stopIntervalGroupsListScroll.bind(this);
       
       SotaDispatcher.dispatch({actionType: 'get-groups'});
       SotaDispatcher.dispatch({actionType: 'search-devices-by-regex-with-components', regex: ''});
       db.groups.addWatch("groups-campaign", _.bind(this.setData, this, null));
       db.searchableDevicesWithComponents.addWatch("searchable-devices-with-components-campaign", _.bind(this.setData, this, null));      
-    }
-    componentWillUpdate(nextProps, nextState) {
-      if(nextProps.filterValue != this.props.filterValue) {
-        SotaDispatcher.dispatch({actionType: 'search-devices-by-regex-with-components', regex: nextProps.filterValue});
-      }
-    }
-    componentDidUpdate(prevProps, prevState) {
-      if(!_.isUndefined(prevState.data) && Object.keys(prevState.data).length === 0 && !_.isUndefined(this.state.data) && Object.keys(this.state.data).length > 0) {
-        jQuery(ReactDOM.findDOMNode(this.refs.devicesList)).ioslist();
-      } else {
-        document.body.dispatchEvent(this.state.event);
-      }
     }
     componentDidMount() {
       var that = this;
@@ -54,16 +47,20 @@ define(function(require) {
       }, 10000);
       this.setState({intervalId: intervalId});
       this.refreshData();
-
-      var tmpIntervalId = setInterval(function() {
-        var devicesListNode = ReactDOM.findDOMNode(that.refs.devicesList);
-        if(devicesListNode) {
-          var a = jQuery(devicesListNode).ioslist();
-          clearInterval(tmpIntervalId);
-        }
-      }, 30);
+      ReactDOM.findDOMNode(this.refs.groupsList).addEventListener('scroll', this.groupsListScroll);
+    }
+    componentWillUpdate(nextProps, nextState) {
+      if(nextProps.filterValue != this.props.filterValue) {
+        SotaDispatcher.dispatch({actionType: 'search-devices-by-regex-with-components', regex: nextProps.filterValue});
+      }
+    }
+    componentDidUpdate(prevProps, prevState) {
+      if(this.props.groupsListHeight !== prevProps.groupsListHeight) {
+        this.groupsListScroll();
+      }
     }
     componentWillUnmount() {
+      ReactDOM.findDOMNode(this.refs.groupsList).removeEventListener('scroll', this.groupsListScroll);
       db.groups.reset();
       db.groups.removeWatch("groups-campaign");
       db.searchableDevicesWithComponents.reset();
@@ -71,19 +68,78 @@ define(function(require) {
       clearTimeout(this.state.timeout);
       clearInterval(this.state.intervalId);
     }
+    generatePositions() {
+      var groupsListItems = !_.isUndefined(ReactDOM.findDOMNode(this.refs.groupsList).children[0].children[0]) ? ReactDOM.findDOMNode(this.refs.groupsList).children[0].children[0].children : null;
+      var wrapperPosition = ReactDOM.findDOMNode(this.refs.groupsList).getBoundingClientRect();
+      var positions = [];
+      _.each(groupsListItems, function(item) {
+        if(item.className.indexOf('ioslist-group-container') > -1) {
+          var header = item.getElementsByClassName('ioslist-group-header')[0];
+          positions.push(header.getBoundingClientRect().top - wrapperPosition.top + ReactDOM.findDOMNode(this.refs.groupsList).scrollTop);
+        }
+      }, this);
+      return positions;
+    }
+    setFakeHeader(data) {
+      this.setState({fakeHeaderLetter: Object.keys(data)[0]});
+    }
+    groupsListScroll() {
+      var scrollTop = this.refs.groupsList.scrollTop;
+      var newFakeHeaderLetter = this.state.fakeHeaderLetter;
+      var headerHeight = !_.isUndefined(this.refs.fakeHeader) ? this.refs.fakeHeader.offsetHeight : 28;
+      var positions = this.generatePositions();
+      var wrapperPosition = ReactDOM.findDOMNode(this.refs.groupsList).getBoundingClientRect();
+      var beforeHeadersCount = 0;
+      
+      positions.every(function(position, index) {
+        if(scrollTop >= position) {
+          beforeHeadersCount++;
+          newFakeHeaderLetter = Object.keys(this.state.data)[index];
+          return true;
+        } else if(scrollTop >= position - headerHeight) {
+          scrollTop -= scrollTop - (position - headerHeight);
+          return true;
+        }
+      }, this);
+          
+      var offset = 5;
+      var headersHeight = !_.isUndefined(document.getElementsByClassName('ioslist-group-header')[0]) ? document.getElementsByClassName('ioslist-group-header')[0].offsetHeight : 28;
+      var listItemHeight = !_.isUndefined(document.getElementsByClassName('list-group-item')[0]) ? document.getElementsByClassName('list-group-item')[0].offsetHeight - 1 : 39;
+      var groupsShownStartIndex = Math.floor((ReactDOM.findDOMNode(this.refs.groupsList).scrollTop - (beforeHeadersCount - 1) * headersHeight) / listItemHeight) - offset;
+      var groupsShownEndIndex = groupsShownEndIndex + Math.floor(ReactDOM.findDOMNode(this.refs.groupsList).offsetHeight / listItemHeight) + 2 * offset;     
+            
+      this.setState({
+        fakeHeaderTopPosition: scrollTop,
+        fakeHeaderLetter: newFakeHeaderLetter,
+        groupsShownStartIndex: groupsShownStartIndex,
+        groupsShownEndIndex: groupsShownEndIndex
+      });
+    }
+    startIntervalGroupsListScroll() {
+      clearInterval(this.state.tmpIntervalId);
+      var that = this;
+      var intervalId = setInterval(function() {
+        that.groupsListScroll();
+      }, 10);
+      this.setState({tmpIntervalId: intervalId});
+    }
+    stopIntervalGroupsListScroll() {
+      clearInterval(this.state.tmpIntervalId);
+      this.setState({tmpIntervalId: null});
+    }
     refreshData() {
       SotaDispatcher.dispatch({actionType: 'search-devices-by-regex-with-components', regex: this.props.filterValue});
     }
     setData() {
-      if(!_.isUndefined(db.groups.deref()) && !_.isUndefined(db.searchableDevicesWithComponents.deref()))
-        this.restoreGroups(db.searchableDevicesWithComponents.deref(), db.groups.deref());
-    }
-    choosePackage(name, version) {
-      this.setState({
-        chosenPackage: {name: name, version: version}
-      });
-      
-      this.props.setWizardData(name, version);
+      if(!_.isUndefined(db.groups.deref()) && !_.isUndefined(db.searchableDevicesWithComponents.deref())) {
+        var result = this.restoreGroups(db.searchableDevicesWithComponents.deref(), db.groups.deref());
+        if(!_.isUndefined(result.data) && (_.isUndefined(this.state.data) || Object.keys(this.state.data)[0] !== Object.keys(result.data)[0]))
+          this.setFakeHeader(result.data);
+        
+        this.setState({
+          data: result.data
+        });
+      }
     }
     checkIfComponentsMatch(data, common, isCorrect) {
       if (Object.keys(common).length !== _.union(Object.keys(data), Object.keys(common)).length) {
@@ -127,7 +183,7 @@ define(function(require) {
         });
       });
                         
-      this.prepareData(groups);
+      return this.prepareData(groups);
     }
     prepareData(groups) {
       var SortedGroups = {};
@@ -145,7 +201,7 @@ define(function(require) {
           SortedGroups[firstLetter][key] = groups[key];
         });
       }
-      this.setState({data: SortedGroups});
+      return {data: SortedGroups};
     }
     toggleGroup(groupName) {
       var chosenGroups = this.state.chosenGroups;
@@ -163,20 +219,28 @@ define(function(require) {
       this.props.setWizardData(chosenGroups);
     }
     render() {
+      var groupIndex = -1;
       if(!_.isUndefined(this.state.data)) {
         var groups = _.map(this.state.data, function(groups, index) {
           if(!_.isUndefined(groups)) {
             var items = [];
             for(var groupName in groups) {
+              groupIndex++;
               var isChosen = this.state.chosenGroups.indexOf(groupName) > -1 ? true : false;
-              items.push(
-                <li key={'package-' + groupName}>
-                  <GroupsListItem 
-                    name={groupName}
-                    toggleGroup={this.toggleGroup}
-                    isChosen={isChosen}/>
-                </li>
-              );
+              
+              if(groupIndex >= this.state.groupsShownStartIndex && groupIndex <= this.state.groupsShownEndIndex)
+                items.push(
+                  <li key={'group-' + groupName}>
+                    <GroupsListItem 
+                      name={groupName}
+                      toggleGroup={this.toggleGroup}
+                      isChosen={isChosen}/>
+                  </li>
+                );
+              else 
+                items.push(
+                  <li key={'group-' + groupName} className="list-group-item" >{groupIndex}</li>
+                );
             }
             return(
               <div className="ioslist-group-container" key={'list-group-container-' + index}>
@@ -191,37 +255,36 @@ define(function(require) {
       }
       return (
         <div>
-          <div>
-            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-              {!_.isUndefined(groups) ? 
-                <ul className="list-group ios-groups-list" id="packages-list">
-                  {groups.length ?
-                    <div id="packages-list-inside" ref="groupsList">
-                      <h2 className="ioslist-fake-header"></h2>
-                      <div className="ioslist-wrapper">
+          <ul className="list-group ios-groups-list" id="packages-list">
+            <div id="packages-list-inside">
+              <div className="ioslist-wrapper" ref="groupsList">
+                <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+                  {!_.isUndefined(groups) ? 
+                    groups.length ?
+                      <div>
+                        <h2 className="ioslist-fake-header" style={{top: this.state.fakeHeaderTopPosition}} ref="fakeHeader">{this.state.fakeHeaderLetter}</h2>
                         {groups}
                       </div>
-                    </div>
-                  :
-                    <div className="col-md-12 height-100 position-relative text-center">
-                      {this.props.filterValue !== '' ? 
-                        <div className="center-xy padding-15">
-                          No matching groups found.
-                        </div>
-                      :
-                        <div className="center-xy padding-15">
-                          There are no groups to choose. 
-                        </div>
-                      }
-                    </div>
-                  }
-                </ul>
-              : undefined}
-            </VelocityTransitionGroup>
-            {_.isUndefined(groups) ? 
-              <Loader />
-            : undefined}
-          </div>
+                    :
+                      <div className="col-md-12 height-100 position-relative text-center">
+                        {this.props.filterValue !== '' ? 
+                          <div className="center-xy padding-15">
+                            No matching groups found.
+                          </div>
+                        :
+                          <div className="center-xy padding-15">
+                            There are no groups to choose. 
+                          </div>
+                        }
+                      </div>
+                  : undefined}
+                </VelocityTransitionGroup>
+                {_.isUndefined(groups) ? 
+                  <Loader />
+                : undefined}
+              </div>
+            </div>
+          </ul>
         </div>
       );
     }
