@@ -8,18 +8,23 @@ define(function(require) {
   class DetailsHeader extends React.Component {
     constructor(props) {
       super(props);
+      this.state = {
+        eventDeviceSeen: null
+      };
       db.deviceSeen.addWatch("poll-deviceseen", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
       var proto = (location.protocol == "http:") ? "ws://" : "wss://";
-      var port  = (location.protocol == "http:") ? location.port : ":8080";
-      var ws = new WebSocket(proto + location.hostname + port + "/api/v1/events/devices/"
-                             + this.props.device.uuid + "/ws");
+      var port  = (location.protocol == "http:") ? ":" + location.port : ":8080";
+      var ws = new WebSocket(proto + location.hostname + port + "/api/v1/events/devices/" + this.props.device.uuid + "/ws");
+      
       ws.onmessage = function(msg) {
         Events.deviceSeen(JSON.parse(msg.data));
       };
+      this.setState({eventDeviceSeen: ws});
     }
     componentWillUnmount() {
+      this.state.eventDeviceSeen.close();
       db.deviceSeen.removeWatch("poll-deviceseen");
     }
     render() {
