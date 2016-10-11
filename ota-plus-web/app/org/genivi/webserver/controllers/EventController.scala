@@ -34,10 +34,10 @@ class EventController @Inject()
    */
   List(
     WebMessageBusListenerActor.props[DeviceSeen],
-    WebMessageBusListenerActor.props[DeviceCreated],
-    WebMessageBusListenerActor.props[DeviceDeleted],
-    WebMessageBusListenerActor.props[PackageCreated],
-    WebMessageBusListenerActor.props[UpdateSpec]
+    WebMessageBusListenerActor.props[DeviceCreated]
+//    WebMessageBusListenerActor.props[DeviceDeleted],
+//    WebMessageBusListenerActor.props[PackageCreated],
+//    WebMessageBusListenerActor.props[UpdateSpec]
   ).foreach(p => system.actorOf(p) ! Subscribe)
 
   private def subscribe[T](source: Source[T, _], callbackName: String)(implicit writes: Writes[T]) = {
