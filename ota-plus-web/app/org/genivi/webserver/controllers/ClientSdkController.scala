@@ -36,6 +36,31 @@ extends Controller with ApiClientSupport {
   private[this] object NoSuchVinRegistered extends Throwable with NoStackTrace
 
   /**
+    * Contact Auth+ to register for the first time the given [[Uuid]],
+    * to later persist (in cassandra-journal) the resulting [[DeviceMetadata]]
+    */
+  private def registerAuthPlusVehicle(device: Uuid): Future[DeviceMetadata] = {
+    for {
+      clientInfo <- authPlusApi.createClient(device)
+      vehicleMetadata = DeviceMetadata(device, clientInfo)
+      _ <- vehiclesStore.registerVehicle(vehicleMetadata)
+    } yield vehicleMetadata
+  }
+
+  /**
+    * Workaround to re-generate client credentials if previous client not found.
+    */
+  def getRegisterDevice(device: Uuid) : Future[DeviceMetadata] = {
+    for {
+        opt <- vehiclesStore.getVehicle(device)
+        devMeta <- opt match {
+          case Some(vmeta) => Future.successful(vmeta)
+          case None => registerAuthPlusVehicle(device)
+        }
+    } yield devMeta
+  }
+
+  /**
     * Send a pre-configured client configuration for the requested artifact (deb, rpm, toml).
     *
     * @param device UUID of device
@@ -46,11 +71,7 @@ extends Controller with ApiClientSupport {
     AuthenticatedApiAction.async { implicit request =>
       for (
         dev <- devicesApi.getDevice(UserOptions(Some(request.idToken.value)), device);
-        vMetadataOpt <- vehiclesStore.getVehicle(device) if dev.namespace == request.namespace;
-        vMetadata <- vMetadataOpt match {
-          case None => Future.failed[DeviceMetadata](NoSuchVinRegistered)
-          case Some(vmeta) => Future.successful(vmeta)
-        };
+        vMetadata <- getRegisterDevice(device) if dev.namespace == request.namespace;
         secret <- authPlusApi.fetchSecret(vMetadata.clientInfo.clientId);
         result <- preconfClient(vMetadata.uuid, artifact, arch, vMetadata.clientInfo.clientId, secret)
       ) yield result
