@@ -7,7 +7,7 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.{Flow, Sink, Source}
 import com.advancedtelematic.ota.Messages.MessageWriters._
 import com.advancedtelematic.ota.Messages.WebMessageBusListenerActor
-import org.genivi.sota.data.{Device, Namespace, Uuid}
+import org.genivi.sota.data.{Namespace, Uuid}
 import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, PackageCreated, UpdateSpec}
 import org.genivi.sota.messaging.daemon.MessageBusListenerActor.Subscribe
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
@@ -40,60 +40,49 @@ class EventController @Inject()
     WebMessageBusListenerActor.props[UpdateSpec]
   ).foreach(p => system.actorOf(p) ! Subscribe)
 
-  def subDeviceSeen(device: Uuid): Action[AnyContent] = Action {
-    val deviceSeenSource = messageBusProvider.getSource[DeviceSeen]()
-    Ok.chunked(deviceSeenSource
-      .filter(dsm => dsm.uuid == device)
+  private def subscribe[T](source: Source[T, _], callbackName: String)(implicit writes: Writes[T]) = {
+    Ok.chunked(
+      source
       .map(Json.toJson(_))
-      via Comet.json("parent.deviceSeen")).as(ContentTypes.HTML)
+      .via(Comet.json(callbackName)))
+      .as(ContentTypes.HTML)
+  }
+
+  def subDeviceSeen(device: Uuid): Action[AnyContent] = Action {
+    val deviceSeenSource = messageBusProvider.getSource[DeviceSeen]().filter(_.uuid == device)
+    subscribe(deviceSeenSource, "parent.deviceSeen")
   }
 
   def subDeviceCreated(namespace: Namespace): Action[AnyContent] = Action {
-    val deviceCreatedSource = messageBusProvider.getSource[DeviceCreated]()
-    Ok.chunked(deviceCreatedSource
-      .filter(dcm => dcm.namespace == namespace)
-      .map(Json.toJson(_))
-      via Comet.json("parent.deviceCreated")).as(ContentTypes.HTML)
+    val deviceCreatedSource = messageBusProvider.getSource[DeviceCreated]().filter(_.namespace == namespace)
+    subscribe(deviceCreatedSource, "parent.deviceCreated")
   }
 
   def subDeviceDeleted(namespace: Namespace): Action[AnyContent] = Action {
-    val deviceDeletedSource = messageBusProvider.getSource[DeviceDeleted]()
-    Ok.chunked(deviceDeletedSource
-      .filter(ddm => ddm.namespace == namespace)
-      .map(Json.toJson(_))
-      via Comet.json("parent.deviceDeleted")).as(ContentTypes.HTML)
+    val deviceDeletedSource = messageBusProvider.getSource[DeviceDeleted]().filter(_.namespace == namespace)
+    subscribe(deviceDeletedSource, "parent.deviceDeleted")
   }
 
   def subPackageCreated(namespace: Namespace): Action[AnyContent] = Action {
-    val packageCreatedSource = messageBusProvider.getSource[PackageCreated]()
-    Ok.chunked(packageCreatedSource
-      .filter(usm => usm.namespace == namespace)
-      .map(Json.toJson(_))
-      via Comet.json("parent.packageCreated")).as(ContentTypes.HTML)
+    val packageCreatedSource = messageBusProvider.getSource[PackageCreated]().filter(_.namespace == namespace)
+    subscribe(packageCreatedSource, "parent.packageCreated")
   }
 
   def subUpdateSpec(namespace: Namespace): Action[AnyContent] = Action {
-    val updateSpecSource = messageBusProvider.getSource[UpdateSpec]()
-    Ok.chunked(updateSpecSource
-      .filter(usm => usm.namespace == namespace)
-      .map(Json.toJson(_))
-      via Comet.json("parent.updateSpec")).as(ContentTypes.HTML)
+    val updateSpecSource = messageBusProvider.getSource[UpdateSpec]().filter(_.namespace == namespace)
+    subscribe(updateSpecSource, "parent.updateSpec")
   }
 
-  def ws(device: Uuid) = WebSocket.acceptOrResult[JsValue, JsValue] {
+  def ws(device: Uuid) = WebSocket.acceptOrResult[JsValue, JsValue] { request =>
     // TODO do sameOriginCheck
-    case request => {
-      val act = for {
-        idToken             <- request.session.get("id_token")
-        auth0AccessToken    <- request.session.get("access_token")
-        authPlusAccessToken <- request.session.get("auth_plus_access_token")
-        ns                  <- request.session.get("namespace")
-      } yield Right(wsFlow(device))
+    val act = for {
+      idToken             <- request.session.get("id_token")
+      auth0AccessToken    <- request.session.get("access_token")
+      authPlusAccessToken <- request.session.get("auth_plus_access_token")
+      ns                  <- request.session.get("namespace")
+    } yield Right(wsFlow(device))
 
-      Future.successful{
-        act.getOrElse(Left(Forbidden("forbidden")))
-      }
-    }
+    Future.successful(act.getOrElse(Left(Forbidden("forbidden"))))
   }
 
   def wsFlow(device: Uuid): Flow[JsValue, JsValue, _] = {
