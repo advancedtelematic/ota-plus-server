@@ -89,7 +89,9 @@ define(function(require) {
       if(!_.isUndefined(postStatusAddPackageToBlacklist) && postStatusAddPackageToBlacklist.status === 'success' ||
          !_.isUndefined(postStatusRemovePackageFromBlacklist) && postStatusRemovePackageFromBlacklist.status === 'success' ||
          !_.isUndefined(postStatusUpdatePackageInBlacklist) && postStatusUpdatePackageInBlacklist.status === 'success') {
-        SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
+        setTimeout(function() {
+          SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
+        }, 1);
         this.props.closeForm();
       }
     }
