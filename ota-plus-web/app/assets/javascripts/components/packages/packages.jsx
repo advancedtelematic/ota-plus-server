@@ -15,7 +15,7 @@ define(function(require) {
         selectedSort: 'asc',
         selectedSortName: 'A > Z',
         selectedType: 'managed',
-        selectedTypeName: 'Managed by ATS Garage',
+        selectedTypeName: 'Managed',
         packagesListHeight: '300px',
         alertHidden: false
       }
@@ -128,7 +128,7 @@ define(function(require) {
                 </button>
                 <ul className="dropdown-menu">
                   <li><a href="#" onClick={this.selectType.bind(this, 'all')}>All</a></li>
-                  <li><a href="#" onClick={this.selectType.bind(this, 'managed')}>Managed by ATS Garage</a></li>
+                  <li><a href="#" onClick={this.selectType.bind(this, 'managed')}>Managed</a></li>
                   <li><a href="#" onClick={this.selectType.bind(this, 'unmanaged')}>Unmanaged</a></li>
                 </ul>
               </div>
@@ -160,8 +160,7 @@ define(function(require) {
                 setPackagesStatistics={this.props.setPackagesStatistics}
                 device={this.props.device}
                 onDrop={this.props.onDrop}
-                showBlacklistForm={this.props.showBlacklistForm}
-                closeBlacklistForm={this.props.closeBlacklistForm}/>
+                showBlacklistForm={this.props.showBlacklistForm}/>
             : undefined}
           </div>
         </div>

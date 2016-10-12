@@ -220,7 +220,6 @@ define(function(require) {
                     openForm={this.openForm}
                     onDrop={this.onDrop}
                     showBlacklistForm={this.showBlacklistForm}
-                    closeBlacklistForm={this.closeBlacklistForm}
                     filterValue={this.state.filterValue}
                     changeFilter={this.changeFilter}/>
               </div>
@@ -276,9 +275,8 @@ define(function(require) {
                 mode={this.state.blacklistMode}
                 packageName={this.state.blacklistedPackageName}
                 packageVersion={this.state.blacklistedPackageVersion}
-                closeForm={this.closeBlacklistForm}
-                refreshData={this.refreshData}/>
-            : null}
+                closeForm={this.closeBlacklistForm}/>
+            : undefined}
           </VelocityTransitionGroup>
           {this.props.children}
         </div>
