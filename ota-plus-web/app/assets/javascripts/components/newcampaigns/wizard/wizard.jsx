@@ -130,6 +130,7 @@ define(function(require) {
               </div>
               <div className={"modal-body" + (this.state.currentStepId < 2 ? " nopadding" : "")}>
                 {React.createElement(currentStep.class, {
+                  campaignUUID: this.props.campaignUUID,
                   setWizardData: this.setWizardData,
                   wizardData: this.state.wizardData,
                   markStepAsFinished: this.markStepAsFinished,
