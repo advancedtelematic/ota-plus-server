@@ -149,7 +149,9 @@ define(function(require) {
         renamedGroup: group
       });
     }
-    closeRenameGroupModal() {
+    closeRenameGroupModal(ifRefreshGroupsList) {
+      if(ifRefreshGroupsList)
+        SotaDispatcher.dispatch({actionType: 'get-groups'});
       this.setState({
         isRenameGroupModalShown: false,
         renamedGroup: null
