@@ -20,7 +20,7 @@ define(function(require) {
               });
           break;
           case 'create-group':
-            sendRequest.doPost('/api/v1/device_groups/' + payload.name, payload.data, {action: payload.actionType})
+            sendRequest.doPost('/api/v1/device_groups/from_attributes', payload.data, {action: payload.actionType})
               .success(function() {
               });
           break;
