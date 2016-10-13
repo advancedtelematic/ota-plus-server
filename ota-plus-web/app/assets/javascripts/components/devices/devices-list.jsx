@@ -17,10 +17,9 @@ define(function(require) {
         boxWidth: 330,
         boxesPerRow: null,
         showForm: false,
-        draggingId: null,
-        draggingName: null,
-        overId: null,
-        groupNames: [],
+        draggingUUID: null,
+        overUUID: null,
+        groupDevices: [],
         Groups: null,
         Devices: null,
         expandedGroupName: null
@@ -128,8 +127,7 @@ define(function(require) {
     }
     dragStart(e) {
       this.setState({
-        draggingId: Number(e.currentTarget.dataset.id),
-        draggingName: e.currentTarget.dataset.name
+        draggingUUID: e.currentTarget.dataset.uuid,
       });
       e.dataTransfer.effectAllowed = 'move';
       e.dataTransfer.setData("text/html", null);
@@ -139,26 +137,24 @@ define(function(require) {
     }
     dragOver(e) {
       e.preventDefault();
-      this.setState({overId: Number(e.currentTarget.dataset.id)});
+      this.setState({overUUID: e.currentTarget.dataset.uuid});
     }
     dragLeave(e) {
-      this.setState({overId: null});
+      this.setState({overUUID: null});
     }
     dragEnd(e) {
-      this.setState({draggingId: null, draggingName: null, overId: null});
+      this.setState({draggingUUID: null, overUUID: null});
     }
-    drop(e) {
+    drop(e) {        
       if(e.preventDefault)
         e.preventDefault();
-      var draggingName = this.state.draggingName;
-      var draggingId = this.state.draggingId;
-      var dropName = e.currentTarget.dataset.name;
-      var dropId = Number(e.currentTarget.dataset.id);
-      var groupNames = [draggingName, dropName];
-            
-      if(this.state.draggingId !== null && this.state.draggingId !== dropId) {
+      var draggingUUID = this.state.draggingUUID;
+      var dropUUID = e.currentTarget.dataset.uuid;
+      var groupDevices = [draggingUUID, dropUUID];
+                        
+      if(this.state.draggingUUID !== null && this.state.draggingUUID !== dropUUID) {
         this.setState({
-          groupNames: groupNames
+          groupDevices: groupDevices
         });
         this.openForm();
       }   
@@ -222,19 +218,18 @@ define(function(require) {
             rows[rowNo] = [];
           
           var className = '';
-          if(this.state.draggingId !== null) {
-            if(this.state.draggingId !== i) {
-              className = this.state.overId === i ? 'droppable active' : 'droppable';
+          if(this.state.draggingUUID !== null) {
+            if(this.state.draggingUUID !== device.uuid) {
+              className = this.state.overUUID === device.uuid ? 'droppable active' : 'droppable';
             } else {
               className = 'dragging';
             }
           }
                     
           var returnedData = (
-            <span data-id={i}
-              data-name={device.deviceName}
+            <span data-uuid={device.uuid}
               className={className}
-              key={"dnd-device-" + i}
+              key={"dnd-device-" + device.uuid}
               draggable={(!_.isUndefined(this.props.isDND) ? this.props.isDND : "true")}
               onDragEnd={_.isUndefined(this.props.isDND) || this.props.isDND ? this.dragEnd : null}
               onDragOver={_.isUndefined(this.props.isDND) || this.props.isDND ? this.dragOver : null}
@@ -242,7 +237,7 @@ define(function(require) {
               onDragStart={_.isUndefined(this.props.isDND) || this.props.isDND ? this.dragStart : null}
               onDragEnter={_.isUndefined(this.props.isDND) || this.props.isDND ? this.dragEnter : null}
               onDrop={_.isUndefined(this.props.isDND) || this.props.isDND ? this.drop : null}>
-              <DeviceListItem key={device.deviceName}
+              <DeviceListItem key={device.uuid}
                 device={device}
                 isProductionDevice={this.props.areProductionDevices}
                 productionDeviceName={this.props.productionDeviceName}
@@ -299,7 +294,7 @@ define(function(require) {
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {this.state.showForm ?
               <CreateGroup
-                groupNames={this.state.groupNames}
+                groupDevices={this.state.groupDevices}
                 closeForm={this.closeForm}
                 key="create-group"/>
             : null}
