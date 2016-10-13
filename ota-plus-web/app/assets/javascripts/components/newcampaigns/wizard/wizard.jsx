@@ -1,6 +1,9 @@
 define(function(require) {
   var React = require('react'),
+      db = require('stores/db'),
+      SotaDispatcher = require('sota-dispatcher'),
       SearchBar = require('es6!../../searchbar'),
+      Loader = require('../../loader'),
       WizardStep1 = require('es6!./wizard-step-1'),
       WizardStep2 = require('es6!./wizard-step-2'),
       WizardStep3 = require('es6!./wizard-step-3'),
@@ -8,7 +11,7 @@ define(function(require) {
 
   class Wizard extends React.Component {
     constructor(props) {
-      super(props);
+      super(props);      
       this.state = {
         currentStepId: 0,
         wizardSteps: [
@@ -50,6 +53,14 @@ define(function(require) {
       this.markStepAsNotFinished = this.markStepAsNotFinished.bind(this);
       this.setWizardData = this.setWizardData.bind(this);
       this.changeFilter = this.changeFilter.bind(this);
+      this.setData = this.setData.bind(this);
+      
+      SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: this.props.campaignUUID});
+      db.campaign.addWatch("poll-campaign", _.bind(this.setData, this, null));
+    }
+    componentWillUnmount() {
+      db.campaign.reset();
+      db.campaign.removeWatch("poll-campaign");
     }
     closeWizard(e) {
       e.preventDefault();
@@ -104,6 +115,25 @@ define(function(require) {
     changeFilter(filterValue) {
       this.setState({filterValue: filterValue});
     }
+    setData() {
+      var campaign = db.campaign.deref();
+      if(!_.isUndefined(campaign)) {
+        var wizardData = [];
+        var wizardSteps = this.state.wizardSteps;
+        if(campaign.packageId) {
+          wizardSteps[0].isFinished = true;
+          wizardData[0] = {packageName: campaign.packageId.name, packageVersion: campaign.packageId.version};
+        }
+        
+        if(Object.keys(campaign.groups).length) {
+          wizardSteps[1].isFinished = true;
+          wizardData[1] = campaign.groups;
+        }
+        
+        this.setState({wizardData: wizardData});
+        this.setState({wizardSteps: wizardSteps});
+      }
+    }
     render() {
       var currentStep = this.state.wizardSteps[this.state.currentStepId];
       var stepsLine = _.map(this.state.wizardSteps, function(step, index) {
@@ -129,14 +159,19 @@ define(function(require) {
                 : null}
               </div>
               <div className={"modal-body" + (this.state.currentStepId < 2 ? " nopadding" : "")}>
-                {React.createElement(currentStep.class, {
-                  campaign: this.props.campaign,
-                  setWizardData: this.setWizardData,
-                  wizardData: this.state.wizardData,
-                  markStepAsFinished: this.markStepAsFinished,
-                  markStepAsNotFinished: this.markStepAsNotFinished,
-                  filterValue: this.state.filterValue,
-                })}
+                {!_.isUndefined(db.campaign.deref()) ? 
+                  React.createElement(currentStep.class, {
+                    campaign: db.campaign.deref(),
+                    setWizardData: this.setWizardData,
+                    wizardData: this.state.wizardData,
+                    markStepAsFinished: this.markStepAsFinished,
+                    markStepAsNotFinished: this.markStepAsNotFinished,
+                    filterValue: this.state.filterValue,
+                  })
+                : undefined}
+                {_.isUndefined(db.campaign.deref()) ? 
+                  <Loader />
+                : undefined}
               </div>
               <div className="modal-footer">
                 <div className="col-xs-2">

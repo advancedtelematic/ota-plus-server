@@ -15,7 +15,7 @@ define(function(require) {
         campaignsListHeight: '300px',
         isCreateModalShown: false,
         isWizardShown: false,
-        campaign: null
+        campaignUUID: null
       };
       
       this.setCampaignsListHeight = this.setCampaignsListHeight.bind(this);
@@ -54,7 +54,7 @@ define(function(require) {
       this.setState({
         isCreateModalShown: false,
         isWizardShown: true,
-        campaign : campaign
+        campaignUUID: campaign.id
       });
     }
     closeWizard() {
@@ -94,7 +94,7 @@ define(function(require) {
             : null}
             {this.state.isWizardShown ?
               <CampaignWizard 
-                campaign={this.state.campaign}
+                campaignUUID={this.state.campaignUUID}
                 closeWizard={this.closeWizard}/>
             : null}
           </VelocityTransitionGroup>
