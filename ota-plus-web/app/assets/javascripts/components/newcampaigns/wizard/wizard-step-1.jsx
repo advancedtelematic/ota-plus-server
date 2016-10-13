@@ -11,7 +11,7 @@ define(function(require) {
     setWizardData(packageName, packageVersion) {
       SotaDispatcher.dispatch({
         actionType: 'set-package-for-campaign',
-        uuid: this.props.campaignUUID,
+        uuid: this.props.campaign.id,
         data: {name: packageName, version: packageVersion}
       });
       this.props.setWizardData({packageName: packageName, packageVersion: packageVersion});

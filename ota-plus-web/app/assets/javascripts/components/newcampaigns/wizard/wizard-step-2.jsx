@@ -11,7 +11,7 @@ define(function(require) {
     setWizardData(chosenGroups) {
       SotaDispatcher.dispatch({
         actionType: 'set-groups-for-campaign',
-        uuid: this.props.campaignUUID,
+        uuid: this.props.campaign.id,
         data: chosenGroups
       });
         

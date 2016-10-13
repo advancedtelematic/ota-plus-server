@@ -357,11 +357,13 @@ define(function(require) {
             : null}
           </VelocityTransitionGroup>
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isBlacklistFormShown ?
               <BlacklistForm
                 mode={this.state.blacklistMode}
                 packageName={this.state.blacklistedPackageName}
                 packageVersion={this.state.blacklistedPackageVersion}
                 closeForm={this.closeBlacklistForm}/>
+            : null}
           </VelocityTransitionGroup>
         </div>
       );
