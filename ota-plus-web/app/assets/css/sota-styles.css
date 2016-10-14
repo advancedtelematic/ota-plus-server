@@ -947,8 +947,9 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 .btn-checkbox.checked:hover, .btn-checkbox.checked:focus, .btn-checkbox.checked:active { color: #fff; }
 
 .group-details-panel { width: 100%; margin-left: -15px; float: left; position: relative; top: -10px; }
-.group-details-panel .arrow-pointer { width: 20px; position: absolute; top: 0; left: 20px; border-bottom: 18px solid #fff; border-left: 12px solid transparent; border-right: 12px solid transparent; transition: all 0.2s ease-in; }
-.group-details-panel .group-inner-devices-list { background-image: white; background-image: -moz-linear-gradient(transparent 13px, #fff 18px); background-image: -webkit-linear-gradient(transparent 13px, #fff 18px); background-image: linear-gradient(transparent 13px, #fff 18px); height: 100%; padding: 30px 15px 10px 15px; }
+.group-details-panel .arrow-pointer { width: 31px; height: 21px; background: url(/assets/img/arrow.png) no-repeat; position: absolute; top: 0; z-index: 2; }
+.group-details-panel .group-inner-devices-list { background-image: -moz-linear-gradient(transparent 0, transparent 18px, #fff 18px, #fff 100%); background-image: -webkit-linear-gradient(transparent 0, transparent 18px, #fff 18px, #fff 100%); background-image: linear-gradient(transparent 0, transparent 18px, #fff 18px, #fff 100%); height: 100%; padding: 30px 15px 10px 15px; }
+.group-details-panel .group-inner-devices-list:before { content: ''; background: url(/assets/img/shadow_top.png) repeat-x; width: 100%; height: 9px; position: absolute; top: 15px; left: 0; }
 .group-details-panel .group-inner-devices-list:after { content: ''; background: url(/assets/img/shadow_bottom.png) repeat-x; width: 100%; height: 9px; position: absolute; left: 0; bottom: 0; }
 .group-details-panel .group-inner-devices-list .device-box { color: #444; text-shadow: none; }
 .group-details-panel .group-inner-devices-list .device-box:hover { background-color: rgba(0, 0, 0, 0.08); }
