@@ -10,7 +10,23 @@ define(function(require) {
           case 'get-groups':
             sendRequest.doGet('/api/v1/device_groups', {action: payload.actionType})
               .success(function(groups) {
-                db.groups.reset(groups);
+                if(Object.keys(groups).length) {
+                  var after = _.after(Object.keys(groups).length, function() {
+                    db.groups.reset(newGroups);
+                  });
+                  
+                  var newGroups = _.each(groups, function(group, index) {
+                    sendRequest.doGet('/api/v1/device_groups/' + group.id + '/devices', {action: 'get-devices-for-group'})
+                      .success(function(devices) {
+                        groups[index].devicesUUIDs = devices;
+                      })
+                      .always(function() {
+                        after();
+                      });
+                  });
+                } else {
+                  db.groups.reset(groups);
+                }
               });
           break;
           case 'get-group':
