@@ -107,8 +107,7 @@ class Application @Inject() (ws: WSClient,
       .withMethod(req.method)
       .withQueryString(req.queryString.mapValues(_.head).toSeq :_*)
       .withHeaders(toWsHeaders(req.headers).toSeq :_*)
-      .withHeaders(("Authorization", "Bearer " + req.idToken.value))
-      // TODO: Switch back to access_token after https://advancedtelematic.atlassian.net/browse/PRO-858
+      .withHeaders(("Authorization", "Bearer " + req.authPlusAccessToken.value))
 
     val wreq = req.body.asBytes() match {
       case Some(b) => w.withBody(b)

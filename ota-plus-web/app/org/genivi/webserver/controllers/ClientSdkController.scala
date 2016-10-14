@@ -70,7 +70,7 @@ extends Controller with ApiClientSupport {
   def downloadClientSdk(device: Uuid, artifact: ArtifactType, arch: Architecture) : Action[AnyContent] =
     AuthenticatedApiAction.async { implicit request =>
       for (
-        dev <- devicesApi.getDevice(UserOptions(Some(request.idToken.value)), device);
+        dev <- devicesApi.getDevice(UserOptions(Some(request.authPlusAccessToken.value)), device);
         vMetadata <- getRegisterDevice(device) if dev.namespace == request.namespace;
         secret <- authPlusApi.fetchSecret(vMetadata.clientInfo.clientId);
         result <- preconfClient(vMetadata.uuid, artifact, arch, vMetadata.clientInfo.clientId, secret)

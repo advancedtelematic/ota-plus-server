@@ -43,7 +43,7 @@ extends Controller with ApiClientSupport {
 
   private[this] def userOptions(req: AuthenticatedRequest[_]): UserOptions = {
     val traceId = req.headers.get("x-ats-traceid")
-    UserOptions(Some(req.idToken.value), traceId, Some(req.namespace))
+    UserOptions(Some(req.authPlusAccessToken.value), traceId, Some(req.namespace))
   }
 
   /**
