@@ -199,10 +199,6 @@ define(function(require) {
       var selectedSort = selectedSort ? selectedSort : this.props.selectedSort;
             
       if(!_.isUndefined(Packages) && !_.isUndefined(Installed) && !_.isUndefined(Queued) && !_.isUndefined(BlackList)) {
-        _.each(Packages, function(obj, index){
-          Packages[index].isManagedPackage = true;
-        });
-        
         BlackList.forEach(function(blacklist, index){
           Installed.forEach(function(installed, index) {
             if(installed.id.name == blacklist.packageId.name && installed.id.version == blacklist.packageId.version) {
@@ -228,7 +224,7 @@ define(function(require) {
           default:
           break;
         }
-                        
+                                
         var InstalledIds = new Object();
         _.each(Installed, function(obj, index){
           InstalledIds[obj.id.name+'_'+obj.id.version] = obj.id.name+'_'+obj.id.version;
@@ -246,9 +242,6 @@ define(function(require) {
           var isQueued = false;
           var isInstalled = false;
                     
-          var isDebOrRpmPackage = uri.toLowerCase().indexOf('.deb') > -1 || uri.toLowerCase().indexOf('.rpm') > -1 ? true : false;
-          var isManagedPackage = !_.isUndefined(obj.isManagedPackage) && obj.isManagedPackage ? true : false;
-
           if(objKey in InstalledIds) {
             Packages[index].attributes = {status: 'installed', string: 'Installed', label: 'label-success'};
             isInstalled = true;
@@ -265,8 +258,6 @@ define(function(require) {
             GroupedPackages[obj.id.name]['packageName'] = obj.id.name;
             GroupedPackages[obj.id.name]['isQueued'] = isQueued;
             GroupedPackages[obj.id.name]['isInstalled'] = isInstalled;
-            GroupedPackages[obj.id.name]['isDebOrRpmPackage'] = isDebOrRpmPackage;
-            GroupedPackages[obj.id.name]['isManagedPackage'] = isManagedPackage;
             GroupedPackages[obj.id.name]['isBlackListed'] = obj.isBlackListed && isInstalled ? true : false;
 
             isQueued ? queuedCount++ : null;
@@ -281,10 +272,6 @@ define(function(require) {
           if(!GroupedPackages[obj.id.name].isInstalled && isInstalled) {
             GroupedPackages[obj.id.name]['isInstalled'] = true;
             installedCount++;
-          }
-          
-          if(!GroupedPackages[obj.id.name].isDebOrRpmPackage && isDebOrRpmPackage) {
-            GroupedPackages[obj.id.name]['isDebOrRpmPackage'] = true;
           }
           
           if(!GroupedPackages[obj.id.name]['isBlackListed'] && obj.isBlackListed && isInstalled)
@@ -417,8 +404,6 @@ define(function(require) {
                     expandPackage={this.expandPackage}
                     queuedPackage={queuedPackage}
                     installedPackage={installedPackage}
-                    isDebOrRpmPackage={pack.isDebOrRpmPackage}
-                    isManagedPackage={pack.isManagedPackage}
                     packageInfo={packageInfo}
                     mainLabel={mainLabel}
                     deviceId={this.props.device.uuid}
