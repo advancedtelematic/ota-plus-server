@@ -15,7 +15,6 @@ define(function(require) {
       this.state = {
         data: undefined,
         timeout: null,
-        intervalId: null,
         tmpIntervalId: null,
         fakeHeaderTopPosition: 0,
         fakeHeaderLetter: null,
@@ -24,8 +23,6 @@ define(function(require) {
         chosenGroups: this.props.wizardData !== null && !_.isUndefined(this.props.wizardData[1]) && !_.isUndefined(this.props.wizardData[1].chosenGroups) ? this.props.wizardData[1].chosenGroups : []
       };
       
-      this.restoreGroups = this.restoreGroups.bind(this);
-      this.checkIfComponentsMatch = this.checkIfComponentsMatch.bind(this);
       this.setData = this.setData.bind(this);
       this.prepareData = this.prepareData.bind(this);
       this.toggleGroup = this.toggleGroup.bind(this);
@@ -36,22 +33,14 @@ define(function(require) {
       this.stopIntervalGroupsListScroll = this.stopIntervalGroupsListScroll.bind(this);
       
       SotaDispatcher.dispatch({actionType: 'get-groups'});
-      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex-with-components', regex: ''});
       db.groups.addWatch("groups-campaign", _.bind(this.setData, this, null));
-      db.searchableDevicesWithComponents.addWatch("searchable-devices-with-components-campaign", _.bind(this.setData, this, null));      
     }
     componentDidMount() {
-      var that = this;
-      var intervalId = setInterval(function() {
-        that.refreshData();
-      }, 10000);
-      this.setState({intervalId: intervalId});
-      this.refreshData();
       ReactDOM.findDOMNode(this.refs.groupsList).addEventListener('scroll', this.groupsListScroll);
     }
     componentWillUpdate(nextProps, nextState) {
       if(nextProps.filterValue != this.props.filterValue) {
-        SotaDispatcher.dispatch({actionType: 'search-devices-by-regex-with-components', regex: nextProps.filterValue});
+        //TODO: groups filtering
       }
     }
     componentDidUpdate(prevProps, prevState) {
@@ -63,10 +52,7 @@ define(function(require) {
       ReactDOM.findDOMNode(this.refs.groupsList).removeEventListener('scroll', this.groupsListScroll);
       db.groups.reset();
       db.groups.removeWatch("groups-campaign");
-      db.searchableDevicesWithComponents.reset();
-      db.searchableDevicesWithComponents.removeWatch("searchable-devices-with-components-campaign");
       clearTimeout(this.state.timeout);
-      clearInterval(this.state.intervalId);
     }
     generatePositions() {
       var groupsListItems = !_.isUndefined(ReactDOM.findDOMNode(this.refs.groupsList).children[0].children[0]) ? ReactDOM.findDOMNode(this.refs.groupsList).children[0].children[0].children : null;
@@ -103,11 +89,11 @@ define(function(require) {
       }, this);
           
       var offset = 5;
-      var headersHeight = !_.isUndefined(document.getElementsByClassName('ioslist-group-header')[0]) ? document.getElementsByClassName('ioslist-group-header')[0].offsetHeight : 28;
-      var listItemHeight = !_.isUndefined(document.getElementsByClassName('list-group-item')[0]) ? document.getElementsByClassName('list-group-item')[0].offsetHeight - 1 : 39;
+      var headersHeight = !_.isUndefined(document.getElementsByClassName('ioslist-group-header')[0]) ? document.getElementsByClassName('ioslist-group-header')[0].offsetHeight : 29;
+      var listItemHeight = !_.isUndefined(document.getElementsByClassName('list-group-item')[0]) ? document.getElementsByClassName('list-group-item')[0].offsetHeight - 1 : 94;
       var groupsShownStartIndex = Math.floor((ReactDOM.findDOMNode(this.refs.groupsList).scrollTop - (beforeHeadersCount - 1) * headersHeight) / listItemHeight) - offset;
-      var groupsShownEndIndex = groupsShownEndIndex + Math.floor(ReactDOM.findDOMNode(this.refs.groupsList).offsetHeight / listItemHeight) + 2 * offset;     
-            
+      var groupsShownEndIndex = groupsShownStartIndex + Math.floor(ReactDOM.findDOMNode(this.refs.groupsList).offsetHeight / listItemHeight) + 2 * offset;     
+
       this.setState({
         fakeHeaderTopPosition: scrollTop,
         fakeHeaderLetter: newFakeHeaderLetter,
@@ -127,13 +113,10 @@ define(function(require) {
       clearInterval(this.state.tmpIntervalId);
       this.setState({tmpIntervalId: null});
     }
-    refreshData() {
-      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex-with-components', regex: this.props.filterValue});
-    }
     setData() {
-      if(!_.isUndefined(db.groups.deref()) && !_.isUndefined(db.searchableDevicesWithComponents.deref())) {
-        var result = this.restoreGroups(db.searchableDevicesWithComponents.deref(), db.groups.deref());
-        if(!_.isUndefined(result.data) && (_.isUndefined(this.state.data) || Object.keys(this.state.data)[0] !== Object.keys(result.data)[0]))
+      if(!_.isUndefined(db.groups.deref())) {
+        var result = this.prepareData(db.groups.deref());
+        if(_.isUndefined(this.state.data) || Object.keys(this.state.data)[0] !== Object.keys(result.data)[0])
           this.setFakeHeader(result.data);
         
         this.setState({
@@ -141,64 +124,23 @@ define(function(require) {
         });
       }
     }
-    checkIfComponentsMatch(data, common, isCorrect) {
-      if (Object.keys(common).length !== _.union(Object.keys(data), Object.keys(common)).length) {
-        isCorrect = false;
-      } else {
-        for (var prop in common) {
-          if (common[prop] !== null) {
-            if (data.hasOwnProperty(prop)) {
-              if (typeof common[prop] == 'object') {
-                isCorrect = this.checkIfComponentsMatch(data[prop], common[prop], isCorrect);
-              } else if(common[prop] !== data[prop]) {
-		isCorrect = false;
-	      }
-            } else {
-              isCorrect = false;
-            }
-          }
-        }
-      }
-      return isCorrect;
-    }
-    restoreGroups(devices, groupsJSON) {
-      var that = this;
-      var groups = [];
-            
-      _.each(devices, function(device, deviceIndex) {
-        _.each(groupsJSON, function(group) {
-          var deviceComponents = _.clone(device.components);
-          var correct = true;
-          
-          if(!_.isUndefined(deviceComponents)) {
-            correct = that.checkIfComponentsMatch(deviceComponents, JSON.parse(group.groupInfo), correct);
-            if(correct) {
-              if(typeof groups[group.groupName] == 'undefined' || !groups[group.groupName] instanceof Array) {
-                groups[group.groupName] = [];
-              }
-              groups[group.groupName].push(deviceIndex);
-              delete devices[deviceIndex];
-            }
-          }
-        });
-      });
-                        
-      return this.prepareData(groups);
-    }
     prepareData(groups) {
       var SortedGroups = {};
-      
+            
       if(!_.isUndefined(groups)) {
-        Object.keys(groups).sort(function(a, b) {
-          return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? 1 : a.localeCompare(b);
-        }).forEach(function(key) {
-          var firstLetter = key.charAt(0).toUpperCase();
+        groups.sort(function(a, b) {
+          var aName = a.groupName;
+          var bName = b.groupName;
+          return (aName.charAt(0) % 1 === 0 && bName.charAt(0) % 1 !== 0) ? 1 : aName.localeCompare(bName);
+        }).forEach(function(group) {
+          var groupName = group.groupName;
+          var firstLetter = groupName.charAt(0).toUpperCase();
           firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
 
           if( typeof SortedGroups[firstLetter] == 'undefined' || !SortedGroups[firstLetter] instanceof Array ) {
              SortedGroups[firstLetter] = [];
           }
-          SortedGroups[firstLetter][key] = groups[key];
+          SortedGroups[firstLetter].push(group);
         });
       }
       return {data: SortedGroups};
@@ -223,26 +165,25 @@ define(function(require) {
       if(!_.isUndefined(this.state.data)) {
         var groups = _.map(this.state.data, function(groups, index) {
           if(!_.isUndefined(groups)) {
-            var items = [];
-            for(var groupName in groups) {
+            var items = _.map(groups, function(group, index) {
               groupIndex++;
-              var isChosen = this.state.chosenGroups.indexOf(groupName) > -1 ? true : false;
+              var isChosen = this.state.chosenGroups.indexOf(group.groupName) > -1 ? true : false;
               
               if(groupIndex >= this.state.groupsShownStartIndex && groupIndex <= this.state.groupsShownEndIndex)
-                items.push(
-                  <li key={'group-' + groupName}>
+                return (
+                  <li key={'group-' + group.groupName}>
                     <GroupsListItem 
-                      name={groupName}
+                      group={group}
                       toggleGroup={this.toggleGroup}
                       isChosen={isChosen}/>
                   </li>
                 );
               else 
-                items.push(
-                  <li key={'group-' + groupName} className="list-group-item" >{groupIndex}</li>
+                return (
+                  <li key={'group-' + group.groupName} className="list-group-item" >{groupIndex}</li>
                 );
-            }
-            return(
+            }, this);
+            return (
               <div className="ioslist-group-container" key={'list-group-container-' + index}>
                 <div className="ioslist-group-header">{index}</div>
                 <ul>

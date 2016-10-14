@@ -8,11 +8,11 @@ define(function(require) {
       this.toggleGroup = this.toggleGroup.bind(this);
     }
     toggleGroup(e) {
-      this.props.toggleGroup(this.props.name);
+      this.props.toggleGroup(this.props.group.groupName);
     }
     render() {
       return (
-        <button type="button" className={"list-group-item" + (this.props.isChosen ? " checked" : "")} onClick={this.toggleGroup} id={"button-group-" + this.props.name}>
+        <button type="button" className={"list-group-item" + (this.props.isChosen ? " checked" : "")} onClick={this.toggleGroup} id={"button-group-" + this.props.group.groupName}>
           <div className="pull-left">
             <div className={"btn-checkbox" + (this.props.isChosen ? " checked" : "")}>
               {this.props.isChosen ? 
@@ -23,8 +23,8 @@ define(function(require) {
           <div className="pull-left">
             <div className="group-icon"></div>
             <div className="group-text">
-              <div className="group-title">{this.props.name}</div>
-              <div className="group-subtitle">10.000.000 devices</div>
+              <div className="group-title">{this.props.group.groupName}</div>
+              <div className="group-subtitle">{Object.keys(this.props.group.devicesUUIDs).length} devices</div>
             </div>
           </div>
         </button>
