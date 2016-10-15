@@ -76,7 +76,7 @@ define(function(require) {
                 {packages.length > 0 ?
                   packages
                 :
-                  <div className="text-center center-xy">
+                  <div className="text-center center-xy padding-15">
                     Installation history is empty. <br />
                     The installation of the queued packages will start automatically when your device connects.
                   </div>

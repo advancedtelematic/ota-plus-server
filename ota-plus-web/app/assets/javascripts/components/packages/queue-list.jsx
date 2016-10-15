@@ -104,7 +104,7 @@ define(function(require) {
                     {packages}
                   </span>
                 :
-                  <div className="text-center center-xy">
+                  <div className="text-center center-xy padding-15">
                     Installation queue is empty. <br />
                     Click on a package you want to install and select a version to add it to the queue.
                   </div>

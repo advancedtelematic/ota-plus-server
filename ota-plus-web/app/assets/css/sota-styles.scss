@@ -241,7 +241,7 @@ button {
             line-height: 1.5em;
             margin-top: 15px;
         }
-        
+
         .group-count {
             font-size: 10px;
             line-height: 1.6em;
@@ -2363,17 +2363,21 @@ a.close, button.close {
 }
 
 .package-item-name {
-    width: 70%;
+    width: 60%;
+    @include textoverflow-ellipsis;
+}
+
+.package-item-status {
+    width: 40%;
+}
+
+.package-name {
+    max-width: 65%;
     @include textoverflow-ellipsis;
 }
 
 .package-item-details {
     width: 30%;
-
-    .package-name {
-        max-width: 50%;
-        @include textoverflow-ellipsis;
-    }
 }
 
 .queue-item-name {
@@ -2415,7 +2419,7 @@ a.close, button.close {
         #devices-list {
             height: auto;
             float: left;
-            
+
             #devices-container {
                 height: auto;
             }
