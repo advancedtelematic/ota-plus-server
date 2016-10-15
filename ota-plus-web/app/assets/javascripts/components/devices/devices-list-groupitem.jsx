@@ -24,7 +24,7 @@ define(function(require) {
         <a href="#" className="group-box" id={"link-group-" + this.props.group.groupName} style={{width: this.props.width}} onClick={this.expandGroup}>
           <div className="group-icon"></div>
           <div className="group-desc">
-            <div className="group-name">{this.props.group.groupName}</div>
+            <div className="group-name" title={this.props.group.groupName}>{this.props.group.groupName}</div>
             <div className="group-count">Devices in the group: {this.props.group.devices.length}</div>
           </div>
           {this.props.areActionButtonsShown ? 

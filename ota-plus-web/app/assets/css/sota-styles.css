@@ -70,7 +70,7 @@ button.list-group-item:focus { background: transparent; }
 
 .group-box:hover, .group-box:active, .group-box:focus { color: #fff; }
 .group-box .group-desc { width: 230px; margin-left: 15px; margin-top: 12px; float: left; }
-.group-box .group-desc .group-name { font-size: 18px; line-height: 1.5em; margin-top: 15px; }
+.group-box .group-desc .group-name { font-size: 18px; line-height: 1.5em; width: 100%; margin-top: 15px; float: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .group-box .group-desc .group-count { font-size: 10px; line-height: 1.6em; }
 .group-box .group-icon { background-image: url(/assets/img/icons/group_small.png); margin-top: 15px; margin-left: 15px; }
 

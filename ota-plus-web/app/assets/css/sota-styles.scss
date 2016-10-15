@@ -239,7 +239,10 @@ button {
         .group-name {
             font-size: 18px;
             line-height: 1.5em;
+            width: 100%;
             margin-top: 15px;
+            float: left;
+            @include textoverflow-ellipsis;
         }
 
         .group-count {
