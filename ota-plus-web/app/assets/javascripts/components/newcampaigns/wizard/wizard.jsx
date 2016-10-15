@@ -87,7 +87,13 @@ define(function(require) {
       return this.state.currentStepId == this.state.wizardSteps.length - 1;
     }
     finish() {
-      console.log('finish');
+      var startDate = this.state.wizardData[2].startDate;
+      var endDate = this.state.wizardData[2].endDate;
+      SotaDispatcher.dispatch({
+        actionType: 'launch-campaign',
+        uuid: db.campaign.deref().meta.id,
+        data: {startDate: startDate, endDate: endDate}
+      });
     }
     verifyIfPreviousStepsFinished(stepId) {
       if(_.find(this.state.wizardSteps, function(step, index) {
