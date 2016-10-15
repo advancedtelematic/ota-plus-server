@@ -38,7 +38,7 @@ define(function(require) {
             <div className={"device-status device-status-" + this.props.device.status}></div>
           </div>
           <div className="device-desc">
-            <div className="device-name">{deviceName}</div>
+            <div className="device-name" title={deviceName}>{deviceName}</div>
             <div className="device-lastseen">
               {this.props.device.status !== 'NotSeen' ?
                 <span>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
