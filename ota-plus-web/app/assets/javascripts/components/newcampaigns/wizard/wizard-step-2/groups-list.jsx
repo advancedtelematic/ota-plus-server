@@ -145,15 +145,15 @@ define(function(require) {
       }
       return {data: SortedGroups};
     }
-    toggleGroup(groupName) {
+    toggleGroup(groupUUID) {
       var chosenGroups = this.state.chosenGroups;
       var index = 0;
-      if(index = chosenGroups.indexOf(groupName) > -1) {
+      if(index = chosenGroups.indexOf(groupUUID) > -1) {
         chosenGroups = chosenGroups.filter(function(i) {
-          return i != groupName;
+          return i != groupUUID;
         });
       } else {
-        chosenGroups.push(groupName);
+        chosenGroups.push(groupUUID);
       }
       this.setState({
         chosenGroups: chosenGroups
@@ -167,7 +167,7 @@ define(function(require) {
           if(!_.isUndefined(groups)) {
             var items = _.map(groups, function(group, index) {
               groupIndex++;
-              var isChosen = this.state.chosenGroups.indexOf(group.groupName) > -1 ? true : false;
+              var isChosen = this.state.chosenGroups.indexOf(group.id) > -1 ? true : false;
               
               if(groupIndex >= this.state.groupsShownStartIndex && groupIndex <= this.state.groupsShownEndIndex)
                 return (
