@@ -3,8 +3,6 @@ define(function(require) {
       Router = require('react-router'),
       Link = Router.Link,
       IndexLink = Router.IndexLink,
-      ProgressBar = require('mixins/react-progressbar'),
-      Circle = ProgressBar.Circle,
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       LanguageSelector = require('es6!./translation/language-selector'),
@@ -21,10 +19,8 @@ define(function(require) {
       };
       this.toggleCampaignPanel = this.toggleCampaignPanel.bind(this);
       this.openUploadModal = this.openUploadModal.bind(this);
-      this.setUploadData = this.setUploadData.bind(this);
       db.user.addWatch("poll-user-nav", _.bind(this.forceUpdate, this, null));
       db.impactAnalysis.addWatch("poll-impact-analysis-nav", _.bind(this.forceUpdate, this, null));
-      db.postUpload.addWatch("poll-upload-nav", _.bind(this.setUploadData, this, null));
     }
     componentDidMount() {
       SotaDispatcher.dispatch({actionType: 'get-user'});
@@ -37,7 +33,6 @@ define(function(require) {
     componentWillUnmount() {
       db.user.removeWatch("poll-user-nav");
       db.impactAnalysis.removeWatch("poll-impact-analysis-nav");
-      db.postUpload.removeWatch("poll-upload-nav");
     }
     toggleCampaignPanel(e) {
       e.preventDefault();
@@ -46,20 +41,6 @@ define(function(require) {
     openUploadModal(e) {
       e.preventDefault();
       this.props.openUploadModal();
-    }
-    setUploadData() {
-      var data = !_.isUndefined(db.postUpload.deref()) ? db.postUpload.deref()['create-package'] : undefined;
-      
-      if(!_.isUndefined(data)) {
-        var totalUploadSize = 0;
-        var totalUploaded = 0;
-        _.each(data, function(upload, uploadKey) {
-          totalUploadSize += upload.size;
-          totalUploaded += upload.uploaded;
-        });
-        var uploadProgress = Math.round((totalUploaded/totalUploadSize) * 100);
-        this.setState({uploadProgress: (uploadProgress < 100 ? uploadProgress : undefined)});
-      }
     }
     render() {
       var campaignsData = JSON.parse(localStorage.getItem('campaignsData'));
@@ -118,17 +99,6 @@ define(function(require) {
               </ul>
             </div>
             <ul className="right-nav pull-right">
-              {!_.isUndefined(this.state.uploadProgress) ?
-                <li id="li-upload-nav-bar">
-                  <a href="#" id="upload-nav-bar" className="upload-bar" onClick={this.openUploadModal}>
-                    <Circle
-                      progress={this.state.uploadProgress/100}
-                      options={barOptions}
-                      initialAnimate={false}
-                      containerStyle={{width: '30px', height: '30px'}}/>
-                  </a>
-                </li>
-              : undefined}
               {campaignsData !== null && campaignsData.length > 0 ?
                 <li>
                   <a href="#" className="btn-campaigns" onClick={this.toggleCampaignPanel}>
