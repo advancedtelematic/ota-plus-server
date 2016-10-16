@@ -15,8 +15,8 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
         if(!_.isUndefined(opts.action) && !_.isUndefined(postStatus[opts.action]))
           delete postStatus[opts.action];
       } else {
-        var uploadData = opts.uploadData || {};
-        var key = _.map(uploadData, function(elem) {return elem;}).join("-");
+        var multipleData = opts.multipleData || {};
+        var key = _.map(multipleData, function(elem) {return elem;}).join("-");
         if(!_.isUndefined(opts.action) && !_.isUndefined(postStatus[opts.action]) && !_.isUndefined(postStatus[opts.action][key]))
           delete postStatus[opts.action][key];
       }
@@ -30,6 +30,11 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
       }
     },
     formAjax: function(type, url, data, opts) {
+      var multipleKey = undefined;
+      if(opts.multipleData) {
+        var multipleKey = _.map(opts.multipleData, function(elem) {return elem;}).join("-");
+      }
+            
       var ajaxReq = $.ajax(_.extend({
         type: type,
         url: url,
@@ -43,24 +48,24 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
         return ajaxReq;
       
       return ajaxReq.success(function(data) {
-        request.renderRequestSuccess(data, opts.action, 200);
+        request.renderRequestSuccess(data, opts.action, 200, multipleKey);
       })
       .error(function(xhr) {
         if (xhr.status==201) {
-          request.renderRequestSuccess(xhr, opts.action, 201); 
+          request.renderRequestSuccess(xhr, opts.action, 201, multipleKey); 
           return; 
         }
-        request.renderRequestError(xhr, opts.action);
+        request.renderRequestError(xhr, opts.action, multipleKey);
       });
     },
     formMultipart: function(type, url, data, opts) {
       var postUpload = (db.postUpload.deref() !== null && typeof db.postUpload.deref() === 'object') ? db.postUpload.deref() : {};
       postUpload[opts.action] = postUpload[opts.action] || {};
-      var uploadData = opts.uploadData || {};
-      var uploadKey =  _.map(uploadData, function(elem) {return elem;}).join("-");
+      var multipleData = opts.multipleData || {};
+      var multipleKey =  _.map(multipleData, function(elem) {return elem;}).join("-");
       
-      postUpload[opts.action][uploadKey] = {
-        data: uploadData,
+      postUpload[opts.action][multipleKey] = {
+        data: multipleData,
         size: data.get('file').size
       };
       
@@ -77,14 +82,14 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
           if(myXhr.upload) {
             myXhr.upload.addEventListener('progress',function(evt) {
               var endTime = new Date().getTime();
-              var lastUpTime = !_.isUndefined(postUpload[opts.action][uploadKey]['lastUpTime']) ? postUpload[opts.action][uploadKey]['lastUpTime'] : endTime;
-              var upSpeed = ((evt.loaded - postUpload[opts.action][uploadKey]['uploaded']) * 1000) / ((endTime - lastUpTime) * 1024);
+              var lastUpTime = !_.isUndefined(postUpload[opts.action][multipleKey]['lastUpTime']) ? postUpload[opts.action][multipleKey]['lastUpTime'] : endTime;
+              var upSpeed = ((evt.loaded - postUpload[opts.action][multipleKey]['uploaded']) * 1000) / ((endTime - lastUpTime) * 1024);
               
-              postUpload[opts.action][uploadKey]['progress'] = Math.round(evt.loaded / evt.total * 100);
-              postUpload[opts.action][uploadKey]['size'] = evt.total;
-              postUpload[opts.action][uploadKey]['uploaded'] = evt.loaded;
-              postUpload[opts.action][uploadKey]['lastUpTime'] = endTime;
-              postUpload[opts.action][uploadKey]['upSpeed'] = upSpeed;
+              postUpload[opts.action][multipleKey]['progress'] = Math.round(evt.loaded / evt.total * 100);
+              postUpload[opts.action][multipleKey]['size'] = evt.total;
+              postUpload[opts.action][multipleKey]['uploaded'] = evt.loaded;
+              postUpload[opts.action][multipleKey]['lastUpTime'] = endTime;
+              postUpload[opts.action][multipleKey]['upSpeed'] = upSpeed;
               
               db.postUpload.reset(postUpload);
             }, false);
@@ -93,21 +98,21 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
         }
       });
       
-      postUpload[opts.action][uploadKey]['request'] = ajaxReq;
+      postUpload[opts.action][multipleKey]['request'] = ajaxReq;
       db.postUpload.reset(postUpload);
       
       if(opts.notHandleAjaxActions)
         return ajaxReq;
       
       return ajaxReq.success(function(data) {
-        request.renderRequestSuccess(data, opts.action, 200, uploadKey);
+        request.renderRequestSuccess(data, opts.action, 200, multipleKey);
       })
       .error(function(xhr) {
         if (xhr.status==201) {
-          request.renderRequestSuccess(xhr, opts.action, 201, uploadKey); 
+          request.renderRequestSuccess(xhr, opts.action, 201, multipleKey); 
           return; 
         }
-        request.renderRequestError(xhr, opts.action, uploadKey);
+        request.renderRequestError(xhr, opts.action, multipleKey);
       });
     },
     doGet: function(url, opts) {

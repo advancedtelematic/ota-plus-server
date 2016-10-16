@@ -35,7 +35,6 @@ define(function(require) {
       TestSettings = require('es6!components/test-settings'),
       EditProfile = require('es6!components/user/edit-profile'),
       ImpactAnalysisPage = require('es6!components/impactanalysis/impact-analysis-page'),
-      Group = require('es6!components/groups/group'),
       UploadModal = require('es6!components/packages/upload-modal'),
       Campaigns = require('es6!components/newcampaigns/campaigns'),
       CampaignDetails = require('es6!components/newcampaigns/campaign-details');
@@ -104,7 +103,7 @@ define(function(require) {
       }, 200);
     }
     openDoor() {
-      if(!_.isUndefined(db.devices.deref()) && !_.isUndefined(db.searchableDevicesWithComponents.deref())) {
+      if(!_.isUndefined(db.devices.deref()) && !_.isUndefined(db.searchableDevices.deref())) {
         var that = this;
         db.devices.removeWatch("watch-devices");
         db.searchableDevices.removeWatch("watch-searchable-devices");
@@ -281,7 +280,6 @@ define(function(require) {
         <Route path="testsettings" component={TestSettings}/>
         <Route path="editprofile" component={EditProfile}/>
         <Route path="impactanalysis" component={ImpactAnalysisPage}/>
-        <Route path="group/:id" component={Group} />
         <Route path="campaigns" component={Campaigns}/>
         <Route path="campaigndetails/:id" component={CampaignDetails} />
       </Route>
