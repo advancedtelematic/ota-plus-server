@@ -2,13 +2,15 @@ package com.advancedtelematic.ota.Messages
 
 import cats.syntax.show._
 import com.advancedtelematic.ota.device.Devices._
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, PackageCreated, UpdateSpec}
+import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, PackageCreated,
+                                           PackageBlacklisted, UpdateSpec}
 import play.api.libs.json.{JsString, Writes, _}
 
 object MessageWriters {
 
   implicit val deviceSeenWrites = new Writes[DeviceSeen] {
     def writes(deviceMsg: DeviceSeen) = Json.obj(
+      "namespace" -> deviceMsg.namespace.get,
       "uuid" -> deviceMsg.uuid.show,
       "lastSeen" -> deviceMsg.lastSeen.toString
     )
@@ -17,6 +19,7 @@ object MessageWriters {
   implicit val deviceCreatedWrites = new Writes[DeviceCreated] {
     def writes(deviceMsg: DeviceCreated) = Json.obj(
       "namespace" -> deviceMsg.namespace.get,
+      "uuid" -> deviceMsg.uuid.show,
       "deviceName" -> deviceMsg.deviceName.show,
       "deviceId" -> deviceMsg.deviceId.map(d => JsString(d.show)),
       "deviceType" -> deviceMsg.deviceType
@@ -37,6 +40,13 @@ object MessageWriters {
       "description" -> Json.toJson(packageCreatedMsg.description.getOrElse("")),
       "vendor" -> Json.toJson(packageCreatedMsg.description.getOrElse("")),
       "signature" -> Json.toJson(packageCreatedMsg.description.getOrElse(""))
+    )
+  }
+
+  implicit val packageBlacklistedWrites = new Writes[PackageBlacklisted] {
+    def writes(packageBlacklistedMsg: PackageBlacklisted) = Json.obj(
+      "namespace" -> packageBlacklistedMsg.namespace.get,
+      "packageId" -> Json.toJson(packageBlacklistedMsg.packageId)
     )
   }
 
