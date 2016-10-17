@@ -22,7 +22,7 @@ html { height: 100%; min-height: 100%; }
 
 body { color: #fff; font: normal 13px AkkuratRegular; background: url(../img/bg.jpg) no-repeat; background-attachment: fixed; height: 100%; }
 body.login { background: url("../img/bg_login.jpg") top center no-repeat; background-size: cover; }
-body.login.tmp-disable-door-style { background: #7b7b7b; }
+body.otaplus { background: #7b7b7b; }
 
 a, a:hover, a:focus { color: #fff; text-decoration: none; }
 
@@ -99,7 +99,7 @@ body #a0-lock.a0-theme-default .a0-switch .a0-active { background-color: #444; }
 body #a0-lock.a0-theme-default .a0-btn-small.a0-back { left: 22px; }
 body #a0-lock.a0-theme-default .a0-panel { width: 100%; box-shadow: none; -webkit-box-shadow: none; }
 body #a0-lock.a0-theme-default .a0-panel .a0-avatar-guest { display: none !important; }
-body #a0-lock.a0-theme-default .a0-panel .a0-icon-container { color: #fff; background: #7b7b7b; }
+body #a0-lock.a0-theme-default .a0-panel .a0-icon-container { color: #fff; background: transparent; }
 body #a0-lock.a0-theme-default .a0-panel .a0-icon-container .a0-image img { height: 65px; }
 body #a0-lock.a0-theme-default .a0-panel .a0-icon-container h1 { display: none; }
 body #a0-lock.a0-theme-default .a0-panel .a0-forgot-pass { text-align: right; display: block; }
@@ -126,3 +126,4 @@ body #a0-lock.a0-theme-default .a0-panel .a0-forgot-pass { color: #fff; margin: 
 body #a0-lock.a0-theme-default .a0-panel .a0-forgot-pass:before { font-family: FontAwesome; content: "\f084"; }
 body #a0-lock.a0-theme-default .a0-panel .a0-footer { display: none; }
 body #a0-lock.a0-theme-default .a0-nocentrix .a0-panel .a0-mode-container { background: transparent; }
+body.otaplus #a0-lock.a0-theme-default .a0-panel .a0-icon-container { background: #7b7b7b; }
