@@ -167,9 +167,7 @@ define(function(require) {
           ],
         }),
       };
-      
-      var referrer = document.referrer.split('/')[3];
-      
+            
       var path = this.context.location.pathname.toLowerCase().split('/');
       var key = path[1] !== undefined ? path[1] : 'page';
       var page = '';
@@ -201,18 +199,16 @@ define(function(require) {
 
       return (
         <div>
-          {!_.isUndefined(path[1]) && path[1] == '' && referrer !== undefined && referrer == 'login' ?
-            <VelocityComponent animation={!this.state.hideAnimationUp ? Animations.up : null}>
-              <div className="door tmp-disable-door-style">
-                {this.state.hideAnimationUp ? 
-                  <i className="fa fa-circle-o-notch fa-spin fa-2x loader"></i>
-                : null}
-              </div>
-            </VelocityComponent>
-          : null}
+          <VelocityComponent animation={!this.state.hideAnimationUp ? Animations.up : null}>
+            <div className="door">
+              {this.state.hideAnimationUp ? 
+                <i className="fa fa-circle-o-notch fa-spin fa-2x loader"></i>
+              : null}
+            </div>
+          </VelocityComponent>
           <VelocityTransitionGroup enter={{animation: Animations.down, complete: function() {window.location.href = logoutUrl}}}>
             {!this.state.hideAnimationDown ? 
-              <div className="door door-up tmp-disable-door-style">
+              <div className="door door-up">
                 <i className="fa fa-circle-o-notch fa-spin fa-2x loader"></i>
               </div>
             : null}

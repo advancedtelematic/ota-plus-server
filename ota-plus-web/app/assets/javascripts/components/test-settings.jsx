@@ -15,6 +15,7 @@ define(function(require) {
       localStorage.setItem('firstProductionTestDevice', data.first_production_test_device);
       localStorage.setItem('secondProductionTestDevice', data.second_production_test_device);
       localStorage.setItem('thirdProductionTestDevice', data.third_production_test_device);
+      localStorage.setItem('themeMode', data.theme_mode);
     }
     render() {
       return (
@@ -41,6 +42,14 @@ define(function(require) {
                       <label>3rd test production device VIN</label>
                       <input type="text" className="form-control" name="third_production_test_device" placeholder="3rd test production device VIN" defaultValue={localStorage.getItem('thirdProductionTestDevice')}/>
                     </div>
+                    <div className="form-group">
+                      <label>Theme mode</label>
+                      <div>
+                        <input type="radio" name="theme_mode" value="atsgarage" defaultChecked={!localStorage.getItem('themeMode') || localStorage.getItem('themeMode') == 'atsgarage'} /> ATS Garage &nbsp;
+                        <input type="radio" name="theme_mode" value="otaplus" defaultChecked={localStorage.getItem('themeMode') == 'otaplus'}/> OTA Plus
+                      </div>
+                    </div>
+                    
                     <div className="form-group">
                       <button type="submit" className="btn btn-grey pull-right">Save changes</button>
                     </div>
