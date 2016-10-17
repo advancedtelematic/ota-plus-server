@@ -10,16 +10,30 @@ define(function(require) {
       super(props);
     }
     render() {
-      var link = 'campaigndetails/' + this.props.campaign.uuid;
+      var overallDevicesCount = 0;
+      var overallUpdatedDevicesCount = 0;
+      var overallFailedUpdates = 0;
+      var overallSuccessfulUpdates = 0;
+      
+      _.each(this.props.campaign.statistics, function(statistic) {
+        overallDevicesCount += statistic.deviceCount;
+        overallUpdatedDevicesCount += statistic.updatedDevices;
+        overallFailedUpdates += statistic.failedUpdates;
+        overallSuccessfulUpdates += statistic.successfulUpdates;
+      });
+              
+      var progress = Math.min(Math.round(overallUpdatedDevicesCount/Math.max(overallDevicesCount, 1) * 100), 100);
+              
+      var link = 'campaigndetails/' + this.props.campaign.id;
       var data = [
         {
-          value: this.props.campaign.failureRate,
+          value: overallFailedUpdates,
           color:"#FF0000",
           highlight: "#FF0000",
           label: "Failure rate"
         },
         {
-          value: this.props.campaign.successRate,
+          value: overallSuccessfulUpdates,
           color: "#96DCD1",
           highlight: "#96DCD1",
           label: "Success rate"
@@ -29,26 +43,34 @@ define(function(require) {
           <td className="font-14">
             <Link to={`${link}`} className="black">{this.props.campaign.name}</Link>
           </td>
-          <td>{this.props.campaign.start_date}</td>
-          <td>{this.props.campaign.end_date}</td>
+          <td>none</td>
+          <td>none</td>
           <td>
-            <div className="progress progress-blue">
-              <div className={"progress-bar" + (this.props.campaign.progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: this.props.campaign.progress + '%'}}></div>
-              <div className="progress-count">
-                {this.props.campaign.progress}%
+            {this.props.campaign.launched ? 
+              <div className="progress progress-blue">
+                <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}></div>
+                <div className="progress-count">
+                  {progress}%
+                </div>
+                <div className="progress-status">
+                  {progress == 100 ?
+                    <span className="fa-stack">
+                      <i className="fa fa-circle fa-stack-1x"></i>
+                      <i className="fa fa-check-circle fa-stack-1x fa-inverse"></i>
+                    </span>
+                  : null}
+                </div>
               </div>
-              <div className="progress-status">
-                {this.props.campaign.progress == 100 ?
-                  <span className="fa-stack">
-                    <i className="fa fa-circle fa-stack-1x"></i>
-                    <i className="fa fa-check-circle fa-stack-1x fa-inverse"></i>
-                  </span>
-                : null}
-              </div>
-            </div>
+            :
+              <span>Not launched yet</span>
+            }
           </td>
           <td>
-            <PieChart data={data} width="30" height="30"/>
+            {this.props.campaign.launched ? 
+              <PieChart data={data} width="30" height="30"/>
+            :
+              <a href="#" className="black" onClick={this.props.configureCampaign.bind(this, this.props.campaign)}>Configure</a>
+            }
           </td>
         </tr>
       );

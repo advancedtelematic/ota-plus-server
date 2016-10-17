@@ -10,13 +10,35 @@ define(function(require) {
           case 'get-campaigns':
             sendRequest.doGet('/api/v1/campaigns', {action: payload.actionType})
               .success(function(campaigns) {
-                db.campaigns.reset(campaigns);
+                if(Object.keys(campaigns).length) {
+                  var after = _.after(Object.keys(campaigns).length, function() {
+                    db.campaigns.reset(newCampaigns);
+                  });
+                  
+                  var newCampaigns = _.each(campaigns, function(campaign, index) {
+                    sendRequest.doGet('/api/v1/campaigns/' + campaign.id + '/statistics', {action: 'get-campaign-statistics'})
+                      .success(function(statistics) {
+                        campaigns[index].statistics = statistics;
+                      })
+                      .always(function() {
+                        after();
+                      });
+                  });
+                } else {
+                  db.campaigns.reset(campaigns);
+                }
               });
           break;
           case 'get-campaign':
             sendRequest.doGet('/api/v1/campaigns/' + payload.uuid, {action: payload.actionType})
               .success(function(campaign) {
                 db.campaign.reset(campaign);
+              });
+          break;
+          case 'get-campaign-statistics':
+            sendRequest.doGet('/api/v1/campaigns/' + payload.uuid + '/statistics', {action: payload.actionType})
+              .success(function(statistics) {
+                db.campaignStatistics.reset(statistics);
               });
           break;
           case 'create-campaign':
