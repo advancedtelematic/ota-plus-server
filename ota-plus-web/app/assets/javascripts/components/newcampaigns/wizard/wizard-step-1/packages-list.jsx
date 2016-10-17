@@ -143,7 +143,6 @@ define(function(require) {
         data: result.data
       });
     }
-    
     prepareData() {
       var that = this;
       var Packages = db.searchablePackages.deref();
