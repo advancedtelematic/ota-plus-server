@@ -182,6 +182,7 @@ define(function(require) {
                     devices={_.findWhere(Groups, {groupName: this.state.expandedGroupName}).devices}
                     width={this.state.groupPanelWidth}
                     boxWidth={this.state.boxWidth}
+                    openRenameDeviceModal={this.props.openRenameDeviceModal}
                     arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 50)}
                     areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
                 : null}
