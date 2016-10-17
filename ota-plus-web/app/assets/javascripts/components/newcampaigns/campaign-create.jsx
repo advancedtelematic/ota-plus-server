@@ -23,10 +23,9 @@ define(function(require) {
     handleSubmit(e) {
       e.preventDefault();
       
-      var payload = serializeForm(this.refs.form);
       SotaDispatcher.dispatch({
         actionType: 'create-campaign',
-        data: {name: payload.name}
+        data: {name: this.refs.campaignName.value}
       });
     }
     handleResponse() {
@@ -34,7 +33,10 @@ define(function(require) {
       
       if(!_.isUndefined(postStatus)) {
         if(postStatus.status === 'success') {
-          this.props.switchToWizard(postStatus.response);
+          setTimeout(function() {
+            SotaDispatcher.dispatch({actionType: 'get-campaigns'});
+          }, 1);
+          this.props.openWizard(postStatus.response);
         }
       }
     }
@@ -56,7 +58,7 @@ define(function(require) {
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
                 <div className="modal-body">
-                  <Responses action="create-campaign" />
+                  <Responses action="create-campaign" handledStatuses="error"/>
                   <div className="form-group">
                     <label htmlFor="campaignName">Name</label>
                     <input type="text" className="form-control" name="campaignName" ref="campaignName"/>

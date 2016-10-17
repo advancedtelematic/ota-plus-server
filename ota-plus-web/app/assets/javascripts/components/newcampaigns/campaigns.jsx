@@ -15,16 +15,15 @@ define(function(require) {
         campaignsListHeight: '300px',
         isCreateModalShown: false,
         isWizardShown: false,
-        campaignUUID: null
+        campaign: null
       };
       
       this.setCampaignsListHeight = this.setCampaignsListHeight.bind(this);
       this.changeFilter = this.changeFilter.bind(this);
       this.openCreateModal = this.openCreateModal.bind(this);
       this.closeCreateModal = this.closeCreateModal.bind(this);
-      this.openWizard = this.openWizard.bind(this);
       this.closeWizard = this.closeWizard.bind(this);
-      this.switchToWizard = this.switchToWizard.bind(this);
+      this.openWizard = this.openWizard.bind(this);
     }
     componentDidMount() {
       window.addEventListener("resize", this.setCampaignsListHeight);
@@ -51,21 +50,16 @@ define(function(require) {
         isCreateModalShown: false
       });
     }
-    openWizard() {
+    openWizard(campaign) {
       this.setState({
-        isWizardShown: true
+        isCreateModalShown: false,
+        isWizardShown: true,
+        campaign : campaign
       });
     }
     closeWizard() {
       this.setState({
         isWizardShown: false
-      });
-    }
-    switchToWizard(campaignUUID) {
-      this.setState({
-        isCreateModalShown: false,
-        isWizardShown: true,
-        campaignUUID : campaignUUID
       });
     }
     changeFilter(filter) {
@@ -87,7 +81,8 @@ define(function(require) {
               </div>
               <div id="campaigns-wrapper" style={{height: this.state.campaignsListHeight}}>
                 <CampaignsList 
-                  filterValue={this.state.filterValue}/>
+                  filterValue={this.state.filterValue}
+                  openWizard={this.openWizard}/>
               </div>
             </div>
           </div>
@@ -95,11 +90,11 @@ define(function(require) {
             {this.state.isCreateModalShown ?
               <CampaignCreate 
                 closeModal={this.closeCreateModal}
-                switchToWizard={this.switchToWizard}/>
+                openWizard={this.openWizard}/>
             : null}
             {this.state.isWizardShown ?
               <CampaignWizard 
-                campaignUUID={this.state.campaignUUID}
+                campaign={this.state.campaign}
                 closeWizard={this.closeWizard}/>
             : null}
           </VelocityTransitionGroup>
