@@ -1,6 +1,7 @@
 define(function(require) {
   var React = require('react'),
       db = require('stores/db'),
+      SotaDispatcher = require('sota-dispatcher'),
       CampaignsListItem = require('es6!./campaigns-list-item');
       
   class CampaignsList extends React.Component {
@@ -15,6 +16,9 @@ define(function(require) {
         failureRate2: 40,
         failureRate3: 10,
       };
+      this.configureCampaign = this.configureCampaign.bind(this);
+      SotaDispatcher.dispatch({actionType: 'get-campaigns'});
+      db.campaigns.addWatch("poll-campaigns", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
       var that = this;
@@ -32,8 +36,24 @@ define(function(require) {
     }
     componentWillUnmount() {
       clearInterval(this.state.intervalId);
+      db.campaigns.removeWatch("poll-campaigns");
+    }
+    configureCampaign(campaign, e) {
+      e.preventDefault();
+      this.props.openWizard(campaign);
     }
     render() {
+      var campaigns = _.map(db.campaigns.deref(), function(campaign, i) {
+        return (
+          <tr key={"campaign-" + campaign.name}>
+            <td>{campaign.name}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><a href="#" className="black" onClick={this.configureCampaign.bind(this, campaign)}>Configure</a></td>
+          </tr>
+        );
+      }, this);
       var campaign1 = {
         name: 'Campaign 01',
         start_date: 'Mon Aug 03 2016',
@@ -77,6 +97,7 @@ define(function(require) {
               </tr>
             </thead>
             <tbody>
+              {campaigns}
               <CampaignsListItem campaign={campaign1} />
               <CampaignsListItem campaign={campaign2} />
               <CampaignsListItem campaign={campaign3} />
