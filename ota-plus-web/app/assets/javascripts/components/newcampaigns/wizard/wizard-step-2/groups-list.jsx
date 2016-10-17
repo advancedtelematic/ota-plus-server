@@ -50,7 +50,6 @@ define(function(require) {
     }
     componentWillUnmount() {
       ReactDOM.findDOMNode(this.refs.groupsList).removeEventListener('scroll', this.groupsListScroll);
-      db.groups.reset();
       db.groups.removeWatch("groups-campaign");
       clearTimeout(this.state.timeout);
     }

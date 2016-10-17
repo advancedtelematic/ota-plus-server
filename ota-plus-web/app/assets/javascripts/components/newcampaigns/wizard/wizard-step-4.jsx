@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      db = require('stores/db'),
       GroupIcon = require('../../groups/group-icon');
 
   class WizardStep4 extends React.Component {
@@ -7,12 +8,15 @@ define(function(require) {
       super(props);
     }
     render() {
+      var groupsData = db.groups.deref();
+            
       var chosenGrups = this.props.wizardData[1].chosenGroups;
       var groups = [];
       for(var index in chosenGrups) {
+        var foundGroup = _.findWhere(groupsData, {id: chosenGrups[index]});
         groups.push(
-          <div className="col-xs-4" key={"chosen-group-" + chosenGrups[index]}>
-            <GroupIcon name={chosenGrups[index]} count="10.000.000" />
+          <div className="col-xs-4" key={"chosen-group-" + foundGroup.groupName}>
+            <GroupIcon name={foundGroup.groupName} count={Object.keys(foundGroup.devicesUUIDs).length} />
           </div>
         );
       }
@@ -56,7 +60,7 @@ define(function(require) {
                       <div><strong>Start Date</strong></div>
                     </div>
                     <div className="col-xs-6">
-                      {this.props.wizardData[2].startDate.format("ddd, D.MM.YYYY")}
+                      none
                     </div>
                   </div>
                 </div>
@@ -70,7 +74,7 @@ define(function(require) {
                       <div><strong>End Date</strong></div>
                     </div>
                     <div className="col-xs-6">
-                      {this.props.wizardData[2].endDate.format("ddd, D.MM.YYYY")}
+                      none
                     </div>
                   </div>
                 </div>
