@@ -12,7 +12,8 @@ import eu.timepit.refined.api.Refined
 import java.time.Instant
 import java.util.UUID
 import org.genivi.sota.data.{Device, Namespace, PackageId, Uuid}
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, PackageCreated, UpdateSpec}
+import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, PackageBlacklisted,
+                                           PackageCreated, UpdateSpec}
 import org.genivi.webserver.controllers.EventController
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -30,11 +31,11 @@ import Device._
 object MessagingData {
   val deviceUuid = Uuid(Refined.unsafeApply("77a1888b-9bc8-4673-8f23-a51240303db4"))
   val nonMatchingDeviceUuid = Uuid(Refined.unsafeApply("99a1888b-9bc8-4673-8f23-a51240303db4"))
-  val lastSeen = Instant.now()
-  val deviceSeenMessage = DeviceSeen(deviceUuid, lastSeen)
   val deviceName = DeviceName("testDevice")
   val namespace = Namespace("default")
   val invalidNamespace = Namespace("invalid")
+  val lastSeen = Instant.now()
+  val deviceSeenMessage = DeviceSeen(namespace, deviceUuid, lastSeen)
   val deviceId = Some(DeviceId("testVin"))
   val deviceType = DeviceType.Vehicle
   val packageId = PackageId(Refined.unsafeApply("ghc"), Refined.unsafeApply("1.0.0"))
@@ -42,6 +43,7 @@ object MessagingData {
   val deviceCreatedMessage = DeviceCreated(namespace, deviceUuid, deviceName, deviceId, deviceType)
   val deviceDeletedMessage = DeviceDeleted(namespace, deviceUuid)
   val updateSpecMessage = UpdateSpec(namespace, deviceUuid, packageUuid, "Finished")
+  val packageBlacklistedMessage = PackageBlacklisted(namespace, packageId)
   val packageCreatedMessage = PackageCreated(namespace, packageId, Some("description"), Some("ghc"), None)
 }
 
@@ -77,6 +79,8 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
         Source.single(MessagingData.deviceDeletedMessage).asInstanceOf[Source[T, NotUsed]]
       } else if(tag.runtimeClass.equals(classOf[UpdateSpec])) {
         Source.single(MessagingData.updateSpecMessage).asInstanceOf[Source[T, NotUsed]]
+      } else if(tag.runtimeClass.equals(classOf[PackageBlacklisted])) {
+        Source.single(MessagingData.packageBlacklistedMessage).asInstanceOf[Source[T, NotUsed]]
       } else if(tag.runtimeClass.equals(classOf[PackageCreated])) {
         Source.single(MessagingData.packageCreatedMessage).asInstanceOf[Source[T, NotUsed]]
       } else {
@@ -105,16 +109,25 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
       contentAsString(result).trim mustBe getDeviceSeenResponse(MessagingData.deviceSeenMessage)
     }
 
-    "route DeviceSeens from web socket (flow) to client" in {
+    "route web socket (flow) to client" in {
+      def mkJs[T](x: T)(implicit tag: ClassTag[T], tWrites: Writes[T]): JsValue = {
+        Json.obj("type" -> tag.runtimeClass.getSimpleName, "event" -> Json.toJson(x))
+      }
+
       implicit val system = ActorSystem()
-      val flowUnderTest = controller.wsFlow(MessagingData.deviceUuid)
+      val flowUnderTest = controller.wsFlow(MessagingData.namespace)
       val (pub, sub) = TestSource.probe[JsValue]
         .via(flowUnderTest)
         .toMat(TestSink.probe[JsValue])(Keep.both)
         .run()
 
-      sub.request(n = 1)
-      sub.expectNext(Json.toJson(MessagingData.deviceSeenMessage))
+      sub.request(n = 6)
+      sub.expectNextUnordered(mkJs(MessagingData.deviceSeenMessage),
+                              mkJs(MessagingData.deviceCreatedMessage),
+                              mkJs(MessagingData.deviceDeletedMessage),
+                              mkJs(MessagingData.updateSpecMessage),
+                              mkJs(MessagingData.packageBlacklistedMessage),
+                              mkJs(MessagingData.packageCreatedMessage))
     }
 
     "route DeviceCreateds from akka bus to client" in {
