@@ -701,7 +701,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 .vertical-align-middle { vertical-align: middle; }
 
-.door { background: url("../img/steel_doors.jpg") top center no-repeat; background-size: cover; width: 100%; height: 100%; position: fixed; left: 0; z-index: 99999; }
+.door { background: url("../img/steel_doors.jpg") top center no-repeat; background-size: cover; width: 100%; height: 100%; position: fixed; left: 0; z-index: 9998; }
 .door.door-up { top: -100%; }
 .door .loader { margin: -13px 0 0 -13px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
 
@@ -979,3 +979,8 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 .device-menu-dropdown .dropdown-menu li img { vertical-align: top; }
 
 .devices .group-box:hover .device-menu-dropdown, .devices .device-box:hover .device-menu-dropdown { display: block; }
+
+#requirejs-errors { color: #444; max-width: 98vw; background: #fff; border-radius: 5px; border: 1px solid #d66f6f; position: absolute; top: 20px; left: 20px; z-index: 9999; display: none; box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5); }
+#requirejs-errors .block-icon { color: #fff; font-size: 20px; background: #d66f6f; padding: 0 10px; display: table-cell; vertical-align: middle; }
+#requirejs-errors .block-text { padding: 15px; display: table-cell; }
+#requirejs-errors .close-error { color: #888; font-size: 15px; position: absolute; top: 6px; right: 10px; }
