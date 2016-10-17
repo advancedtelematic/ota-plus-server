@@ -32,6 +32,7 @@ define(function(require) {
       this.group = atom.createAtom();
       this.groups = atom.createAtom();
       this.campaigns = atom.createAtom();
+      this.campaign = atom.createAtom();
     }
 
     return DB;
