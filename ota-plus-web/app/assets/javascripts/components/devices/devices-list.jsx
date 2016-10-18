@@ -26,7 +26,6 @@ define(function(require) {
       };
       
       this.restoreGroups = this.restoreGroups.bind(this);
-      this.checkIfComponentsMatch = this.checkIfComponentsMatch.bind(this);
       this.expandGroup = this.expandGroup.bind(this);
       
       this.setBoxesWidth = this.setBoxesWidth.bind(this);
@@ -51,50 +50,29 @@ define(function(require) {
     componentWillUnmount() {
       window.removeEventListener("resize", this.setBoxesWidth);
     }
-    checkIfComponentsMatch(data, common, isCorrect) {
-      if (Object.keys(common).length !== _.union(Object.keys(data), Object.keys(common)).length) {
-        isCorrect = false;
-      } else {
-        for (var prop in common) {
-          if (common[prop] !== null) {
-            if (data.hasOwnProperty(prop)) {
-              if (typeof common[prop] == 'object') {
-                isCorrect = this.checkIfComponentsMatch(data[prop], common[prop], isCorrect);
-              } else if(common[prop] !== data[prop]) {
-		isCorrect = false;
-	      }
-            } else {
-              isCorrect = false;
-            }
-          }
-        }
-      }
-      return isCorrect;
-    }
-    restoreGroups(devices, groupsJSON) {
+    restoreGroups(devices, groupsInfo) {
       var that = this;
       var groups = [];
-            
-      _.each(devices, function(device, deviceIndex) {
-        _.each(groupsJSON, function(group) {
-          var deviceComponents = _.clone(device.components);
-          var correct = true;
-          
-          if(!_.isUndefined(deviceComponents)) {
-            correct = that.checkIfComponentsMatch(deviceComponents, JSON.parse(group.groupInfo), correct);
-            if(correct) {
-              if(typeof groups[group.groupName] == 'undefined' || !groups[group.groupName] instanceof Array) {
-                groups[group.groupName] = [];
-                groups[group.groupName].devices = [];
-                groups[group.groupName].info = group;
-              }
-              groups[group.groupName].devices.push(device);
-              delete devices[deviceIndex];
-            }
+      var groupedDevices = [];
+      
+      _.each(groupsInfo, function(group, index) {
+        groups[index] = group;
+        groups[index].devices = [];
+        _.each(group.devicesUUIDs, function(groupDevice) {
+          var foundDevice = _.findWhere(devices, {uuid: groupDevice});
+          if(foundDevice) {
+            groupedDevices.push(groupDevice);
+            groups[index].devices.push(foundDevice);
           }
         });
       });
-                       
+          
+      devices = _.filter(devices, function(device) { 
+        return !_.find(groupedDevices, function(groupedDevice) {
+          return groupedDevice === device.uuid;
+        }); 
+      });
+                        
       this.setState({
         Devices: devices,
         Groups: groups
@@ -168,19 +146,20 @@ define(function(require) {
       var itemIndex = 1;
       var rows = [];
       var expandedItemIndex = null;
-      for(var groupName in Groups) {
+                        
+      groups = _.map(Groups, function(group) {
         var rowNo = Math.ceil(itemIndex/this.state.boxesPerRow);
         var isLastItemInRow = (itemIndex/this.state.boxesPerRow % 1 === 0 || (!Object.keys(Devices).length && itemIndex === Object.keys(Groups).length));
         
         if(_.isUndefined(rows[rowNo]))
           rows[rowNo] = [];
         
-        rows[rowNo].push(groupName);
+        rows[rowNo].push(group.groupName);
                                 
-        groups.push(
-          <span key={'group-' + groupName}>
+        var deviceListGroupItem = (
+          <span key={'group-' + group.groupName}>
             <DeviceListGroupItem
-              group={Groups[groupName]}
+              group={group}
               width={this.state.boxWidth}
               expandGroup={this.expandGroup}
               openRenameGroupModal={this.props.openRenameGroupModal}
@@ -188,26 +167,30 @@ define(function(require) {
           </span>
         );
 
-        if(this.state.expandedGroupName === groupName)
+        if(this.state.expandedGroupName === group.groupName)
           expandedItemIndex = itemIndex;
 
-        groups.push(
-          <span key={'group-panel-details-' + groupName}>
-            <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
-              {rows[rowNo].indexOf(this.state.expandedGroupName) > -1 && isLastItemInRow ? 
-                <DevicesGroupDetailsPanel 
-                  devices={Groups[this.state.expandedGroupName].devices}
-                  width={this.state.groupPanelWidth}
-                  boxWidth={this.state.boxWidth}
-                  arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 53)}
-                  areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
-              : null}
-            </VelocityTransitionGroup>
+        itemIndex++;
+
+        return (
+          <span key={'group-panel-details-' + group.groupName}>
+            {deviceListGroupItem}
+            <span>
+              <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+                {rows[rowNo].indexOf(this.state.expandedGroupName) > -1 && isLastItemInRow ? 
+                  <DevicesGroupDetailsPanel 
+                    devices={_.findWhere(Groups, {groupName: this.state.expandedGroupName}).devices}
+                    width={this.state.groupPanelWidth}
+                    boxWidth={this.state.boxWidth}
+                    arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 53)}
+                    areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
+                : null}
+              </VelocityTransitionGroup>
+            </span>
           </span>
         );
-        itemIndex++;
-      }
-      
+      }, this);
+            
       var devicesIndexItem = 1;
       var devices = _.map(Devices, function(device, i) {
         if(!_.isUndefined(device)) {
@@ -251,7 +234,7 @@ define(function(require) {
             <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
               {rows[rowNo].indexOf(this.state.expandedGroupName) > -1 && isLastItemInRow ?
                 <DevicesGroupDetailsPanel 
-                  devices={Groups[this.state.expandedGroupName].devices}
+                  devices={_.findWhere(Groups, {groupName: this.state.expandedGroupName}).devices}
                   width={this.state.groupPanelWidth}
                   boxWidth={this.state.boxWidth}
                   arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 53)}
