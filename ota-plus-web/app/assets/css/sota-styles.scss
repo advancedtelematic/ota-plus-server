@@ -3290,23 +3290,30 @@ hr.full-line {
     top: -10px;
 
     .arrow-pointer {
-        width: 20px;
+        width: 31px;
+        height: 21px;
+        background: url(/assets/img/arrow.png) no-repeat;
         position: absolute;
         top: 0;
-        left: 20px;
-        border-bottom: 18px solid #fff;
-        border-left: 12px solid transparent;
-        border-right: 12px solid transparent;
-        transition: all 0.2s ease-in;
+        z-index: 2;
     }
 
     .group-inner-devices-list {
-        background-image: rgba(255,255,255,1.0);
-        background-image: -moz-linear-gradient(transparent 13px,  #fff 18px);
-        background-image: -webkit-linear-gradient(transparent 13px,  #fff 18px);
-        background-image: linear-gradient(transparent 13px,  #fff 18px);
+        background-image: -moz-linear-gradient(transparent 0, transparent 18px, #fff 18px, #fff 100%);
+        background-image: -webkit-linear-gradient(transparent 0, transparent 18px, #fff 18px, #fff 100%);
+        background-image: linear-gradient(transparent 0, transparent 18px, #fff 18px, #fff 100%);
         height: 100%;
         padding: 30px 15px 10px 15px;
+
+        &:before {
+            content: '';
+            background: url(/assets/img/shadow_top.png) repeat-x;
+            width: 100%;
+            height: 9px;
+            position: absolute;
+            top: 15px;
+            left: 0;
+        }
 
         &:after {
             content: '';
