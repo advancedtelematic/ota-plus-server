@@ -45,23 +45,7 @@ define(function(require) {
             var query = payload.regex ? '&regex=' + payload.regex : '';
             sendRequest.doGet('/api/v1/device_data?status=true' + query, {action: payload.actionType})
               .success(function(devices) {
-                if(Object.keys(devices).length) {                
-                  var after = _.after(Object.keys(devices).length, function() {
-                    db.searchableDevicesWithComponents.reset(newDevices);
-                  });
-                  
-                  var newDevices = _.each(devices, function(device, index) {
-                    sendRequest.doGet('/api/v1/devices/' + device.uuid + '/system_info', {action: 'get-components-for-devices'})
-                      .success(function(components) {
-                        devices[index].components = components;
-                      })
-                      .always(function() {
-                        after();
-                      });
-                  });
-                } else {
-                  db.searchableDevicesWithComponents.reset(devices);
-                }
+                db.searchableDevicesWithComponents.reset(devices);
               });
           break;
           case 'fetch-affected-devices':
