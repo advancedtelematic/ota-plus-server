@@ -46,7 +46,7 @@ define(function(require) {
               });
           break;
           case 'get-packages-for-device':
-            sendRequest.doGet('/api/v1/device_data', {action: payload.actionType})
+            sendRequest.doGet('/api/v1/devices_info', {action: payload.actionType})
               .success(function(devices) {        
                 var device = _.find(devices, function(device) {
                   return device.uuid == payload.device;
@@ -64,7 +64,7 @@ define(function(require) {
           break;
           case 'search-packages-for-device-by-regex':
             var query = payload.regex ? '?regex=' + payload.regex : '';
-            sendRequest.doGet('/api/v1/device_data', {action: payload.actionType})
+            sendRequest.doGet('/api/v1/devices_info', {action: payload.actionType})
               .success(function(devices) {
                 var device = _.find(devices, function(device) {
                   return device.uuid == payload.device;

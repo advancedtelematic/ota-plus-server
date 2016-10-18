@@ -9,7 +9,7 @@ define(function(require) {
       this.dispatchCallback = function(payload) {
         switch(payload.actionType) {
           case 'get-devices':
-            sendRequest.doGet('/api/v1/device_data?status=true', {action: payload.actionType})
+            sendRequest.doGet('/api/v1/devices_info?status=true', {action: payload.actionType})
               .success(function(devices) {
                 db.devices.reset(devices);
               });
@@ -33,14 +33,14 @@ define(function(require) {
             break;
           case 'search-devices-by-regex':
             var query = payload.regex ? '&regex=' + payload.regex : '';
-            sendRequest.doGet('/api/v1/device_data?status=true' + query, {action: payload.actionType})
+            sendRequest.doGet('/api/v1/devices_info?status=true' + query, {action: payload.actionType})
               .success(function(devices) {
                 db.searchableDevices.reset(devices);
               });
             break;
           case 'search-devices-by-regex-with-components':
             var query = payload.regex ? '&regex=' + payload.regex : '';
-            sendRequest.doGet('/api/v1/device_data?status=true' + query, {action: payload.actionType})
+            sendRequest.doGet('/api/v1/devices_info?status=true' + query, {action: payload.actionType})
               .success(function(devices) {
                 db.searchableDevicesWithComponents.reset(devices);
               });
@@ -124,7 +124,7 @@ define(function(require) {
             var devices = [];
 
             if(payload.regex.length >= 17) {
-              sendRequest.doGet('/api/v1/device_data?status=true', {action: payload.actionType})
+              sendRequest.doGet('/api/v1/devices_info?status=true', {action: payload.actionType})
               .success(function(data) {
                 devices = _.filter(data, function(device) {
                   return device.uuid == localStorage.getItem('firstProductionTestDevice');
@@ -138,7 +138,7 @@ define(function(require) {
             }
           break;
           case 'get-production-device':
-            sendRequest.doGet('/api/v1/device_data?status=true', {action: payload.actionType})
+            sendRequest.doGet('/api/v1/devices_info?status=true', {action: payload.actionType})
               .success(function(devices) {
                 db.showDevice.reset(_.find(devices, function(device) {
                   return device.uuid == localStorage.getItem('firstProductionTestDevice');
