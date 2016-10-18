@@ -83,13 +83,5 @@ class DeviceControllerSpec extends PlaySpec with OneServerPerSuite with Results 
       contentAsJson(result).as[Uuid].show must be("7d0e4c63-26ae-46b6-bbfe-78cb2ed3cf94")
     }
 
-    "listDeviceAttributes gets results from core" in {
-      val result = controller.listDeviceAttributes().apply(
-        emptyRequest.withAuthSession())
-
-      status(result) must be(200)
-      contentAsString(result) must be("Core Search")
-    }
-
   }
 }
