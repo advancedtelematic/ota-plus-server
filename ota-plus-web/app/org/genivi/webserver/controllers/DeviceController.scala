@@ -37,10 +37,6 @@ extends Controller with ApiClientSupport {
     requestCreate(req.body, userOptions(req))
   }
 
-  def listDeviceAttributes(): Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
-    searchWith(req, coreApi.search)
-  }
-
   private[this] def userOptions(req: AuthenticatedRequest[_]): UserOptions = {
     val traceId = req.headers.get("x-ats-traceid")
     UserOptions(Some(req.authPlusAccessToken.value), traceId, Some(req.namespace))

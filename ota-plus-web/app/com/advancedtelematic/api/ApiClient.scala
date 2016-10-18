@@ -78,15 +78,6 @@ trait ApiRequest { self =>
   }
 }
 
-/**
-  * Controllers extending [[ApiClientSupport]] access [[CoreApi]] endpoints using a singleton.
-  */
-class CoreApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
-  private val coreRequest = ApiRequest.base(coreApiUri + "/api/v1/")
-
-  def search(options: UserOptions, params: Seq[(String, String)]): Future[Result] =
-    coreRequest("devices").withUserOptions(options).transform(_.withQueryString(params: _*)).execResult(apiExec)
-}
 
 /**
   * Controllers extending [[ApiClientSupport]] access [[DevicesApi]] endpoints using a singleton.
