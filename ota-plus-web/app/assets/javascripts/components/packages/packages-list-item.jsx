@@ -15,10 +15,10 @@ define(function(require) {
       return (
         <button type="button" className="list-group-item" onClick={this.itemClick} id={"button-package-" + this.props.name}>
           <div className="package-item-name pull-left">
-            {packageName}
+            <span title={packageName}>{packageName}</span>
           </div>
 
-          <div className={(!this.props.queuedPackage && !this.props.selected ? "": "package-item-details ") + "pull-right"}>
+          <div className={(!this.props.queuedPackage && !this.props.selected ? "": "package-item-details ") + "package-item-status pull-right"}>
             <div className="package-statuses">
               {this.props.installedPackage ?
                 !this.props.selected ?
@@ -58,11 +58,6 @@ define(function(require) {
               : null}
             </div>
           </div>
-          {this.props.isBlackListed && this.props.installedPackage && !this.props.selected ?
-            <div className="pull-right">
-              
-            </div>
-          : null}
         </button>
       );
     }
