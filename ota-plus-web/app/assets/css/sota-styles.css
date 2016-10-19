@@ -778,10 +778,13 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
   100% { color: rgba(255, 255, 255, 0.5); text-shadow: 0.35em 0 0 rgba(255, 255, 255, 0), 0.7em 0 0 rgba(255, 255, 255, 0.5); } }
 .history-item-name { width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.package-item-name { width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.package-item-name { width: 60%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.package-item-status { width: 40%; }
+
+.package-name { max-width: 65%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .package-item-details { width: 30%; }
-.package-item-details .package-name { max-width: 50%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .queue-item-name { width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
