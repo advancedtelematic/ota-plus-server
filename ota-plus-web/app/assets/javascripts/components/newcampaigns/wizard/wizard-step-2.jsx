@@ -12,7 +12,7 @@ define(function(require) {
       SotaDispatcher.dispatch({
         actionType: 'set-groups-for-campaign',
         uuid: this.props.campaign.meta.id,
-        data: chosenGroups
+        data: {groups: chosenGroups}
       });
         
       var data = {chosenGroups: chosenGroups};
