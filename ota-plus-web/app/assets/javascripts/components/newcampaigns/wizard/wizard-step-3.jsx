@@ -8,8 +8,8 @@ define(function(require) {
       super(props);
       
       this.state = {
-        startDate:  this.props.wizardData !== null && !_.isUndefined(this.props.wizardData[2]) && !_.isUndefined(this.props.wizardData[2].startDate) ? this.props.wizardData[2].startDate : moment().startOf("day"),
-        endDate:  this.props.wizardData !== null && !_.isUndefined(this.props.wizardData[2]) && !_.isUndefined(this.props.wizardData[2].endDate) ? this.props.wizardData[2].endDate : moment().startOf("day").add(1, "d")
+        startDate:  this.props.wizardData !== null && !_.isUndefined(this.props.wizardData[2]) && !_.isUndefined(this.props.wizardData[2].startDate) ? this.props.wizardData[2].startDate : moment().utc().startOf("day"),
+        endDate:  this.props.wizardData !== null && !_.isUndefined(this.props.wizardData[2]) && !_.isUndefined(this.props.wizardData[2].endDate) ? this.props.wizardData[2].endDate : moment().utc().startOf("day").add(1, "d")
       };
       
       this.changeStartDate = this.changeStartDate.bind(this);
@@ -57,7 +57,7 @@ define(function(require) {
     nextDayEndDate() {
       this.changeEndDate({date: this.state.endDate.add(1, "d")});
     }
-    setWizardData(startDate, endDate) {
+    setWizardData(startDate, endDate) {        
       var data = {startDate: startDate, endDate: endDate};
       this.props.setWizardData(data);
       this.props.markStepAsFinished();
