@@ -8,7 +8,7 @@ define(function(require) {
       this.toggleGroup = this.toggleGroup.bind(this);
     }
     toggleGroup(e) {
-      this.props.toggleGroup(this.props.group.groupName);
+      this.props.toggleGroup(this.props.group.id);
     }
     render() {
       return (
