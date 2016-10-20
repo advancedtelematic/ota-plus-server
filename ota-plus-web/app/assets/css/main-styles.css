@@ -21,7 +21,7 @@ button:focus { outline: none; }
 html { height: 100%; min-height: 100%; }
 
 body { color: #fff; font: normal 13px AkkuratRegular; background: url(../img/bg.jpg) no-repeat; background-attachment: fixed; height: 100%; }
-body.login { background: url("../img/bg_login.jpg") top center no-repeat; background-size: cover; }
+body.login { background: url("../img/garage_door.jpg") top center no-repeat; background-size: cover; }
 body.otaplus { background: #7b7b7b; }
 
 a, a:hover, a:focus { color: #fff; text-decoration: none; }
@@ -97,7 +97,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 body #a0-lock.a0-theme-default .a0-switch span { color: #eee; }
 body #a0-lock.a0-theme-default .a0-switch .a0-active { background-color: #444; }
 body #a0-lock.a0-theme-default .a0-btn-small.a0-back { left: 22px; }
-body #a0-lock.a0-theme-default .a0-panel { width: 100%; box-shadow: none; -webkit-box-shadow: none; }
+body #a0-lock.a0-theme-default .a0-panel { background: rgba(0, 0, 0, 0.35); width: 100%; box-shadow: none; -webkit-box-shadow: none; }
 body #a0-lock.a0-theme-default .a0-panel .a0-avatar-guest { display: none !important; }
 body #a0-lock.a0-theme-default .a0-panel .a0-icon-container { color: #fff; background: transparent; }
 body #a0-lock.a0-theme-default .a0-panel .a0-icon-container .a0-image img { height: 65px; }

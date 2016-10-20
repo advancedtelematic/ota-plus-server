@@ -98,7 +98,7 @@ define(function(require) {
             <SearchBar class="search-bar pull-left" inputId="search-packages-input" changeFilter={this.props.changeFilter}/>
 
             <div className="pull-right margin-left-15">
-              <button onClick={this.props.openForm} className="btn btn-add pull-right" id="button-add-new-package">
+              <button onClick={this.props.openForm} className="btn btn-main btn-add pull-right" id="button-add-new-package">
                 <i className="fa fa-plus"></i> &nbsp; Add
               </button>
             </div>

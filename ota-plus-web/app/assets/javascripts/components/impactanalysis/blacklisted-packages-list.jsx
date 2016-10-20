@@ -57,10 +57,10 @@ define(function(require) {
                 : 
                   <div className="height-100 position-relative text-center">
                     <div className="center-xy padding-15">
-                      <div className="font-16">There are no blacklisted packages.</div>
+                      <div className="font-22">There are no blacklisted packages.</div>
                       <div className="margin-top-10">
-                        <a href="#" className="font-16 underlined" onClick={this.showImpactTooltip}>
-                          <strong>What is this?</strong>
+                        <a href="#" className="font-22" onClick={this.showImpactTooltip}>
+                          <span className="color-main"><strong>What is this?</strong></span>
                         </a>
                       </div>
                     </div>

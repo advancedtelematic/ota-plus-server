@@ -25,6 +25,15 @@ define(function(require) {
       this.setState({isSecondInfoShown: !this.state.isSecondInfoShown}); 
     }
     render() {
+      var storedThemeMode = localStorage.getItem('themeMode');
+      var theme = 'atsgarage';
+      switch(storedThemeMode) {
+        case 'otaplus': 
+          theme = 'otaplus';
+        break;
+        default:
+        break;
+      }
       return (
         <div id="tutorial-install-device" className="tutorial-overlay">
           <div className="pull-left width-full">
@@ -34,7 +43,7 @@ define(function(require) {
           <div className="inner-box pull-left width-full font-16">
             <div className="col-md-4">
               <div className="tutorial-img-box pull-left">
-                <img src="/assets/img/icons/1_download.png" className="tutorial-icon pull-left" alt="" />
+                <img src={"/assets/img/icons/icon_download_" + theme + ".png"} className="tutorial-icon pull-left" alt="" />
               </div>
               <div className="tutorial-desc-box pull-left">
                 <strong>1.</strong> Download the OTA Plus Client for your distro/system architecture
@@ -49,18 +58,10 @@ define(function(require) {
                     <tbody>
                       <tr>
                         <td>
-                          <a href={"/api/v1/client/" + this.props.deviceId + "/deb/32"} className="btn btn-orange" target="_blank">intel32</a>
+                          <a href={"/api/v1/client/" + this.props.deviceId + "/deb/64"} className="btn btn-main" target="_blank">intel64</a>
                         </td>
                         <td>
-                          <a href={"/api/v1/client/" + this.props.deviceId + "/rpm/32"} className="btn btn-orange" target="_blank">intel32</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <a href={"/api/v1/client/" + this.props.deviceId + "/deb/64"} className="btn btn-orange" target="_blank">intel64</a>
-                        </td>
-                        <td>
-                          <a href={"/api/v1/client/" + this.props.deviceId + "/rpm/64"} className="btn btn-orange" target="_blank">intel64</a>
+                          <a href={"/api/v1/client/" + this.props.deviceId + "/rpm/64"} className="btn btn-main" target="_blank">intel64</a>
                         </td>
                       </tr>
                     </tbody>
@@ -71,14 +72,14 @@ define(function(require) {
   
             <div className="col-md-4">
               <div className="tutorial-img-box pull-left">
-                <img src="/assets/img/icons/1_install.png" className="tutorial-icon pull-left" alt="" />
+                <img src={"/assets/img/icons/icon_install_" + theme + ".png"} className="tutorial-icon pull-left" alt="" />
               </div>
               <div className="tutorial-desc-box pull-left">
                 <div className="margin-top-10">
                   <strong>2.</strong> Copy the package to your <br /> device, and install it <br />using your package manager
                 </div>
-                <div className="margin-top-25 font-12 orange">
-                  <i className="fa fa-cog" aria-hidden="true"></i> <a href="#" onClick={this.toggleFirstInfo} className="orange">How do I do that?</a>
+                <div className={"margin-top-25 font-12 color-main"}>
+                  <i className="fa fa-cog" aria-hidden="true"></i> <a href="#" onClick={this.toggleFirstInfo} className="color-main">How do I do that?</a>
                 </div>
               
                 <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}} runOnMount={true}>
@@ -90,8 +91,8 @@ define(function(require) {
                   : null}
                 </VelocityTransitionGroup>
       
-                <div className="font-12 orange">
-                  <i className="fa fa-cog" aria-hidden="true"></i> <a href="#" onClick={this.toggleSecondInfo} className="orange">I use an init system other than systemd.</a>
+                <div className={"font-12 color-main"}>
+                  <i className="fa fa-cog" aria-hidden="true"></i> <a href="#" onClick={this.toggleSecondInfo} className="color-main">I use an init system other than systemd.</a>
                 </div>
                 <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}} runOnMount={true}>
                   {this.state.isSecondInfoShown ? 
@@ -106,7 +107,7 @@ define(function(require) {
   
             <div className="col-md-4">
               <div className="tutorial-img-box pull-left">
-                <img src="/assets/img/icons/1_success.png" className="tutorial-icon pull-left" alt="" />
+                <img src={"/assets/img/icons/icon_check_" + theme + ".png"} className="tutorial-icon pull-left" alt="" />
               </div>
               <div className="tutorial-desc-box pull-left">
                 <div className="margin-top-5">
@@ -121,9 +122,9 @@ define(function(require) {
           </div>
   
           <div className="margin-top-20 text-center pull-left width-full font-16">
-            <a href={"/api/v1/client/" + this.props.deviceId + "/toml/64"} className="orange" target="_blank">Download the unique credentials for this device</a>, 
+            <a href={"/api/v1/client/" + this.props.deviceId + "/toml/64"} className="color-main" target="_blank">Download the unique credentials for this device</a>, 
             and then&nbsp;
-            <a href={appUrl + "/assets/docs/client-install-guide.html"} className="orange" target="_blank">manually install the OTA client.</a>
+            <a href={appUrl + "/assets/docs/client-install-guide.html"} className="color-main" target="_blank">manually install the OTA client.</a>
           </div>
         </div>
       );
