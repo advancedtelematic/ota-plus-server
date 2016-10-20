@@ -67,15 +67,12 @@ define(function(require) {
         impactAnalysisIntervalId: null,
         hideAnimationUp: isHomePage,
         hideAnimationDown: true,
-        isUploadModalShown: true
       }
 
       this.changeLanguage = this.changeLanguage.bind(this);
       this.toggleCampaignPanel = this.toggleCampaignPanel.bind(this);
       this.logout = this.logout.bind(this);
       this.openDoor = this.openDoor.bind(this);
-      this.openUploadModal = this.openUploadModal.bind(this);
-      this.closeUploadModal = this.closeUploadModal.bind(this);
       
       if(isHomePage) {
         db.devices.addWatch("watch-devices", _.bind(this.openDoor, this, null));
@@ -111,12 +108,6 @@ define(function(require) {
           that.setState({hideAnimationUp: !that.state.hideAnimationUp});
         }, 300);
       }
-    }
-    openUploadModal() {
-      this.setState({isUploadModalShown: true});
-    }
-    closeUploadModal() {
-      this.setState({isUploadModalShown: false});
     }
     componentDidMount() {
       var that = this;
@@ -232,17 +223,13 @@ define(function(require) {
               changeLang={this.changeLanguage} 
               showCampaignPanel={this.state.showCampaignPanel} 
               toggleCampaignPanel={this.toggleCampaignPanel} 
-              openUploadModal={this.openUploadModal}
               logout={this.logout}/>
             <div className="page wrapper">
               {React.cloneElement(this.props.children, {showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
             </div>
             
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-              {this.state.isUploadModalShown ?
-                <UploadModal 
-                  closeModal={this.closeUploadModal}/>
-              : undefined}
+              <UploadModal />
             </VelocityTransitionGroup>
           </div>
         </div>

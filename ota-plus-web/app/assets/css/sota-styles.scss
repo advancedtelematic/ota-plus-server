@@ -2590,13 +2590,39 @@ hr.full-line {
     bottom: 30px;
     left: auto;
     z-index: 1048;
-
+    
+    &.minimized {
+        width: 400px;
+        
+        .modal-subheader {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+    }
+    
     .modal-dialog {
         width: 100%;
         min-height: 0;
         margin: 0;
 
         .modal-content {
+            
+            .modal-header {
+                padding: 15px 20px;
+                
+                .toggle-modal-size {
+                    position: absolute;
+                    top: 7px;
+                    right: 20px;
+                }
+                
+                .overall-progressbar {
+                    position: absolute;
+                    top: 12px;
+                    right: 90px;
+                }
+            }
+            
             .modal-body {
                 padding: 0;
 
