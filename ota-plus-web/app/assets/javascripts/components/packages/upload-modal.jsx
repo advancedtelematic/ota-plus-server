@@ -14,10 +14,16 @@ define(function(require) {
         bars: undefined,
         firstDataSet: false,
         lastUpdatedSecondsRemaining: null,
-        secondsRemaining: 600
+        secondsRemaining: 600,
+        overallUploadProgress: undefined,
+        overallUploadedSize: undefined,
+        overallUploadSize: undefined,
+        isModalMinimized: Cookies.get('isUploadMinimized') && Cookies.get('isUploadMinimized') === "true" ? true : false,
+        prevModalWidth: 0,
+        prevModalHeight: 0
       };
       this.fixModalPosition = this.fixModalPosition.bind(this);
-      this.closeModal = this.closeModal.bind(this);
+      this.toggleModalSize = this.toggleModalSize.bind(this);
       this.cancelUpload = this.cancelUpload.bind(this);
       this.removeFromList = this.removeFromList.bind(this);
       this.setData = this.setData.bind(this);
@@ -37,6 +43,7 @@ define(function(require) {
         modal.css(positions["modal-upload"]);
       }
       
+      this.setData();
       this.fixModalPosition();
       
       modal.draggable({
@@ -64,6 +71,17 @@ define(function(require) {
         }
       });
     }
+    componentDidUpdate(prevProps, prevState) {
+      if(prevState.isModalMinimized !== this.state.isModalMinimized) {
+        var modal = jQuery('#modal-upload');
+        var positionLeft = parseInt(modal.css('left'));
+        var positionBottom = parseInt(modal.css('bottom'));
+        positionLeft += this.state.prevModalWidth - modal.width();
+        positionBottom += this.state.prevModalHeight - modal.height();
+        modal.css({left: positionLeft, bottom: positionBottom});
+        this.fixModalPosition();                
+      }
+    }
     componentWillUnmount() {
       window.removeEventListener("resize", this.fixModalPosition);
       db.postUpload.removeWatch("poll-upload-packages");
@@ -71,8 +89,8 @@ define(function(require) {
     fixModalPosition() {
       var modal = jQuery('#modal-upload');
       var containment = jQuery('#app');
-      var positionLeft = Math.min(parseInt(modal.css('left')), containment.width() - modal.width());
-      var positionBottom = Math.min(parseInt(modal.css('bottom')), containment.height() - modal.height());
+      var positionLeft = Math.max(Math.min(parseInt(modal.css('left')), containment.width() - modal.width()), 0);
+      var positionBottom = Math.max(Math.min(parseInt(modal.css('bottom')), containment.height() - modal.height()), 0);
       var positions = Cookies.getJSON('positions') || {};
       
       modal.css('left', positionLeft);
@@ -84,13 +102,25 @@ define(function(require) {
       };
       Cookies.set('positions', JSON.stringify(positions));
     }
+    toggleModalSize(e) {
+      e.preventDefault();
+      var newValue = !this.state.isModalMinimized;
+      this.setState({
+        isModalMinimized: newValue,
+        prevModalWidth: jQuery('#modal-upload').width(),
+        prevModalHeight: jQuery('#modal-upload').height()
+      });
+      Cookies.set('isUploadMinimized', newValue);
+    }
     setData() {
       var postUpload = !_.isUndefined(db.postUpload.deref()) && !_.isUndefined(db.postUpload.deref()['create-package']) ? db.postUpload.deref()['create-package'] : undefined;
       var secondsRemaining = 0;
       var firstUpdatedSecondsRemaining = this.state.firstUpdatedSecondsRemaining;
       var lastUpdatedSecondsRemaining = this.state.lastUpdatedSecondsRemaining;
       var currentTime = new Date().getTime();
-      
+      var overallUploadSize = 0;
+      var overallUploadedSize = 0;
+            
       if(firstUpdatedSecondsRemaining == null) {
         this.setState({
           firstUpdatedSecondsRemaining: currentTime
@@ -116,12 +146,18 @@ define(function(require) {
         }
       }
       
-      this.setState({
-        data: postUpload
+      _.each(postUpload, function(upload, uploadKey) {
+        overallUploadSize += upload.size;
+        overallUploadedSize += upload.uploaded;
       });
-    }
-    closeModal(e) {
-      this.props.closeModal();
+      var overallUploadProgress = Math.round((overallUploadedSize/overallUploadSize) * 100);
+            
+      this.setState({
+        data: postUpload,
+        overallUploadProgress: (overallUploadProgress < 100 ? overallUploadProgress : undefined),
+        overallUploadedSize: overallUploadedSize,
+        overallUploadSize: overallUploadSize
+      });
     }
     cancelUpload(uploadKey, e) {
       e.preventDefault();
@@ -159,12 +195,14 @@ define(function(require) {
     }
     render() {
       var data = this.state.data;
+      var overallUploadedSize = !isNaN(this.state.overallUploadedSize) ? this.state.overallUploadedSize/(1024*1024) : 0;
+      var overallUploadSize = this.state.overallUploadSize/(1024*1024);
       var barOptions = {
-        strokeWidth: 16,
+        strokeWidth: 18,
         easing: 'easeInOut',
-        color: '#C5E5E2',
+        color: '#A7DCD4',
         trailColor: '#eee',
-        trailWidth: 16,
+        trailWidth: 18,
         svgStyle: null
       };
       
@@ -226,39 +264,72 @@ define(function(require) {
       }, this);
                         
       return (
-        <div id="modal-upload" className={"myModal" + (_.isUndefined(uploads) || _.isEmpty(uploads) ? ' hidden': '')}>
+        <div id="modal-upload" className={"myModal" + (_.isUndefined(uploads) || _.isEmpty(uploads) ? ' hidden': '') + (this.state.isModalMinimized ? ' minimized' : '')}>
           {!_.isUndefined(uploads) && !_.isEmpty(uploads) ?
             <div className="modal-dialog">
               <div className="modal-content">
                 <div className="modal-header">
-                  <button type="button" className="close" data-dismiss="modal" onClick={this.props.closeModal}></button>
-                  <h4 className="modal-title">Uploading {Object.keys(this.state.data).length} package{Object.keys(this.state.data).length > 1 ? "s" : ""}</h4>
+                  <a href="#" onClick={this.toggleModalSize}>
+                    {this.state.isModalMinimized ? 
+                      <i className="fa fa-angle-up fa-3x toggle-modal-size" aria-hidden="true"></i>
+                    :
+                      <i className="fa fa-angle-down fa-3x toggle-modal-size" aria-hidden="true"></i>
+                    }
+                  </a>
+                  <h4 className={"modal-title" + (this.state.isModalMinimized ? ' pull-left' : '')}>Uploading {Object.keys(this.state.data).length} package{Object.keys(this.state.data).length > 1 ? "s" : ""}</h4>
+                  {this.state.isModalMinimized && !_.isUndefined(this.state.overallUploadProgress) ? 
+                    <div className="overall-progressbar">
+                      <Circle
+                        progress={this.state.overallUploadProgress/100}
+                        options={_.extend(barOptions, {
+                          svgStyle: {
+                            '-webkit-filter': 'drop-shadow(rgba(0, 0, 0, 0.3) 0px 0px 4px)',
+                            filter: 'drop-shadow(rgba(0, 0, 0, 0.3) 0px 0px 4px)'
+                          }
+                        })}
+                        initialAnimate={false}
+                        containerStyle={{width: '30px', height: '30px'}}/>
+                    </div>
+                  : undefined}
                 </div>
                 <div className="modal-body">
                   <div className="modal-subheader">
-                    {secondsRemaining > 60 ? 
-                      <span>
-                        {Math.round(secondsRemaining/60)} Minutes left
-                      </span>
-                    : 
-                      secondsRemaining > 0 ?
-                        <span>
-                          {Math.round(secondsRemaining)} Seconds left
-                        </span>
-                      :
-                        <span>
-                          Upload is finished
-                        </span>
-                    }
+                    <div className="row">
+                      <div className="col-md-6">
+                        {secondsRemaining > 60 ? 
+                          <span>
+                            {Math.round(secondsRemaining/60)} Minutes left
+                          </span>
+                        : 
+                          secondsRemaining > 0 ?
+                            <span>
+                              {Math.round(secondsRemaining)} Seconds left
+                            </span>
+                          :
+                            <span>
+                              Upload is finished
+                            </span>
+                        }
+                      </div>
+                      <div className="col-md-6 text-right">
+                        {this.state.isModalMinimized ? 
+                          <span>
+                            {overallUploadedSize.toFixed(1)} MB of {overallUploadSize.toFixed(1)} MB
+                          </span>
+                        : undefined}
+                      </div>
+                    </div>
+                    
                   </div>
-        
-                  <div className="modal-desc">
-                    <table className="table table-uploads">
-                      <tbody>
-                        {uploads}
-                      </tbody>
-                    </table>
-                  </div>
+                  {!this.state.isModalMinimized ? 
+                    <div className="modal-desc">
+                      <table className="table table-uploads">
+                        <tbody>
+                          {uploads}
+                        </tbody>
+                      </table>
+                    </div>
+                  : undefined}
                 </div>
               </div>
             </div>
