@@ -38,13 +38,6 @@ define(function(require) {
                 db.searchableDevices.reset(devices);
               });
             break;
-          case 'search-devices-by-regex-with-components':
-            var query = payload.regex ? '&regex=' + payload.regex : '';
-            sendRequest.doGet('/api/v1/devices_info?status=true' + query, {action: payload.actionType})
-              .success(function(devices) {
-                db.searchableDevicesWithComponents.reset(devices);
-              });
-          break;
           case 'fetch-affected-devices':
             var affectedVinsUrl = '/api/v1/resolve/' + payload.name + "/" + payload.version;
 

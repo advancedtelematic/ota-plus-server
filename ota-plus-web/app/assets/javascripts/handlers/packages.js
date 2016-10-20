@@ -9,7 +9,7 @@ define(function(require) {
     var url = '/api/v1/packages/' + payload.package.name + '/' + payload.package.version +
       '?description=' + encodeURIComponent(payload.package.description) +
       '&vendor=' + encodeURIComponent(payload.package.vendor);
-    sendRequest.doPut(url, payload.data, {form: true, action: payload.actionType, multiple: true, uploadData: {name: payload.package.name, version: payload.package.version}})
+    sendRequest.doPut(url, payload.data, {form: true, action: payload.actionType, multiple: true, multipleData: {name: payload.package.name, version: payload.package.version}})
       .success(function() {
        
       });
