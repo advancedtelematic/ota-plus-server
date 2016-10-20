@@ -4,7 +4,9 @@ define(function(require) {
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       ProgressBar = require('mixins/react-progressbar'),
-      Circle = ProgressBar.Circle;
+      Circle = ProgressBar.Circle,
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
+      ConfirmationModal = require('../confirmation-modal');
   
   class UploadModal extends React.Component {
     constructor(props) {
@@ -19,10 +21,14 @@ define(function(require) {
         overallUploadSize: undefined,
         isModalMinimized: Cookies.get('isUploadMinimized') && Cookies.get('isUploadMinimized') === "true" ? true : false,
         prevModalWidth: 0,
-        prevModalHeight: 0
+        prevModalHeight: 0,
+        uploadKeyToCancel: null,
+        isUploadCancelModalShown: false
       };
       this.fixModalPosition = this.fixModalPosition.bind(this);
       this.toggleModalSize = this.toggleModalSize.bind(this);
+      this.showUploadCancelModal = this.showUploadCancelModal.bind(this);
+      this.closeUploadCancelModal = this.closeUploadCancelModal.bind(this);
       this.cancelUpload = this.cancelUpload.bind(this);
       this.removeFromList = this.removeFromList.bind(this);
       this.setData = this.setData.bind(this);
@@ -156,8 +162,21 @@ define(function(require) {
         overallUploadSize: overallUploadSize
       });
     }
-    cancelUpload(uploadKey, e) {
+    showUploadCancelModal(uploadKey, e) {
       e.preventDefault();
+      this.setState({
+        isUploadCancelModalShown: true,
+        uploadKeyToCancel: uploadKey
+      });
+    }
+    closeUploadCancelModal() {
+      this.setState({
+        isUploadCancelModalShown: false,
+        uploadKeyToCancel: null
+      });
+    }
+    cancelUpload() {
+      var uploadKey = this.state.uploadKeyToCancel;
       if(!_.isUndefined(db.postUpload.deref()) && !_.isUndefined(db.postUpload.deref()['create-package']) && !_.isUndefined(db.postUpload.deref()['create-package'][uploadKey])) {
         var postUpload = db.postUpload.deref();
         var uploadReq = !_.isUndefined(postUpload['create-package'][uploadKey].request) ? postUpload['create-package'][uploadKey].request : undefined;
@@ -168,6 +187,7 @@ define(function(require) {
         
         db.postUpload.reset(postUpload);
       }
+      this.closeUploadCancelModal();
     }
     removeFromList(uploadKey, e) {
       e.preventDefault();
@@ -253,7 +273,7 @@ define(function(require) {
               {!_.isUndefined(upload.status) && (upload.status === 'error' || upload.status === 'success') ?
                 <a href="#" className="darkgrey" onClick={this.removeFromList.bind(this, uploadKey)}>remove from list</a>
               :
-                <a href="#" className="darkgrey" onClick={this.cancelUpload.bind(this, uploadKey)}>cancel</a>
+                <a href="#" className="darkgrey" onClick={this.showUploadCancelModal.bind(this, uploadKey)}>cancel</a>
               }
             </td>
           </tr>
@@ -261,62 +281,74 @@ define(function(require) {
       }, this);
                         
       return (
-        <div id="modal-upload" className={"myModal" + (_.isUndefined(uploads) || _.isEmpty(uploads) ? ' hidden': '') + (this.state.isModalMinimized ? ' minimized' : '')}>
-          {!_.isUndefined(uploads) && !_.isEmpty(uploads) ?
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <a href="#" onClick={this.toggleModalSize}>
-                    {this.state.isModalMinimized ? 
-                      <i className="fa fa-angle-up fa-3x toggle-modal-size" aria-hidden="true"></i>
-                    :
-                      <i className="fa fa-angle-down fa-3x toggle-modal-size" aria-hidden="true"></i>
-                    }
-                  </a>
-                  <h4 className="modal-title">Uploading {Object.keys(this.state.data).length} package{Object.keys(this.state.data).length > 1 ? "s" : ""}</h4>
-                </div>
-                <div className="modal-body">
-                  <div className="modal-subheader">
-                    <div className="row">
-                      <div className="col-md-6">
-                        {secondsRemaining > 60 ? 
-                          <span>
-                            {Math.round(secondsRemaining/60)} Minutes left
-                          </span>
-                        : 
-                          secondsRemaining > 0 ?
-                            <span>
-                              {Math.round(secondsRemaining)} Seconds left
-                            </span>
-                          :
-                            <span>
-                              Upload is finished
-                            </span>
-                        }
-                      </div>
-                      <div className="col-md-6 text-right">
-                        {this.state.isModalMinimized ? 
-                          <span>
-                            {overallUploadedSize.toFixed(1)} MB of {overallUploadSize.toFixed(1)} MB
-                          </span>
-                        : undefined}
-                      </div>
-                    </div>
-                    
+        <div>
+          <div id="modal-upload" className={"myModal" + (_.isUndefined(uploads) || _.isEmpty(uploads) ? ' hidden': '') + (this.state.isModalMinimized ? ' minimized' : '')}>
+            {!_.isUndefined(uploads) && !_.isEmpty(uploads) ?
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <a href="#" onClick={this.toggleModalSize}>
+                      {this.state.isModalMinimized ? 
+                        <i className="fa fa-angle-up fa-3x toggle-modal-size" aria-hidden="true"></i>
+                      :
+                        <i className="fa fa-angle-down fa-3x toggle-modal-size" aria-hidden="true"></i>
+                      }
+                    </a>
+                    <h4 className="modal-title">Uploading {Object.keys(this.state.data).length} package{Object.keys(this.state.data).length > 1 ? "s" : ""}</h4>
                   </div>
-                  {!this.state.isModalMinimized ? 
-                    <div className="modal-desc">
-                      <table className="table table-uploads">
-                        <tbody>
-                          {uploads}
-                        </tbody>
-                      </table>
+                  <div className="modal-body">
+                    <div className="modal-subheader">
+                      <div className="row">
+                        <div className="col-md-6">
+                          {secondsRemaining > 60 ? 
+                            <span>
+                              {Math.round(secondsRemaining/60)} Minutes left
+                            </span>
+                          : 
+                            secondsRemaining > 0 ?
+                              <span>
+                                {Math.round(secondsRemaining)} Seconds left
+                              </span>
+                            :
+                              <span>
+                                Upload is finished
+                              </span>
+                          }
+                        </div>
+                        <div className="col-md-6 text-right">
+                          {this.state.isModalMinimized ? 
+                            <span>
+                              {overallUploadedSize.toFixed(1)} MB of {overallUploadSize.toFixed(1)} MB
+                            </span>
+                          : undefined}
+                        </div>
+                      </div>
                     </div>
-                  : undefined}
+                    {!this.state.isModalMinimized ? 
+                      <div className="modal-desc">
+                        <table className="table table-uploads">
+                          <tbody>
+                            {uploads}
+                          </tbody>
+                        </table>
+                      </div>
+                    : undefined}
+                  </div>
                 </div>
               </div>
-            </div>
-          : undefined}
+            : undefined}
+          </div>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isUploadCancelModalShown ?
+              <ConfirmationModal 
+                title="Cancel upload?"
+                description="Your upload is not complete. Would you like to cancel the upload?"
+                cancelAction={this.closeUploadCancelModal}
+                cancelText="Continue upload"
+                confirmAction={this.cancelUpload}
+                confirmText="Cancel upload"/>
+            : null}
+          </VelocityTransitionGroup>
         </div>
       );
     }

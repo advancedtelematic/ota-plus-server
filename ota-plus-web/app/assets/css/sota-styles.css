@@ -838,6 +838,8 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 #modal-upload .modal-dialog .modal-content .modal-body .modal-desc .table-uploads > tbody > tr > td { padding: 8px 20px; border-bottom: 0; vertical-align: middle; }
 #modal-upload .modal-dialog .modal-content .modal-body .modal-desc .table-uploads #bar { width: 30px; height: 30px; }
 
+#modal-confirmation .modal-dialog .modal-content .modal-body { padding: 40px 30px; }
+
 #link-impactanalysis .badge { font-size: 11px; background: red; padding-left: 8px; padding-right: 8px; position: absolute; top: 8px; left: 114px; }
 
 #modal-blacklist .modal-dialog { width: 520px; }
