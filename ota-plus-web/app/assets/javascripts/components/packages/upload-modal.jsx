@@ -166,7 +166,7 @@ define(function(require) {
       e.preventDefault();
       this.setState({
         isUploadCancelModalShown: true,
-        uploadKeyToCancel: uploadKey
+        uploadKeyToCancel: !_.isUndefined(uploadKey) ? uploadKey : null
       });
     }
     closeUploadCancelModal() {
@@ -177,14 +177,22 @@ define(function(require) {
     }
     cancelUpload() {
       var uploadKey = this.state.uploadKeyToCancel;
-      if(!_.isUndefined(db.postUpload.deref()) && !_.isUndefined(db.postUpload.deref()['create-package']) && !_.isUndefined(db.postUpload.deref()['create-package'][uploadKey])) {
+      
+      if(!_.isUndefined(db.postUpload.deref()) && !_.isUndefined(db.postUpload.deref()['create-package'])) {
         var postUpload = db.postUpload.deref();
-        var uploadReq = !_.isUndefined(postUpload['create-package'][uploadKey].request) ? postUpload['create-package'][uploadKey].request : undefined;
-        if(!_.isUndefined(uploadReq) && typeof uploadReq.abort() === 'function')
-          uploadReq.abort();
-        
-        delete postUpload['create-package'][uploadKey];
-        
+        if(uploadKey && !_.isUndefined(postUpload['create-package'][uploadKey])) {
+          var uploadReq = !_.isUndefined(postUpload['create-package'][uploadKey].request) ? postUpload['create-package'][uploadKey].request : undefined;
+          if(!_.isUndefined(uploadReq) && typeof uploadReq.abort() === 'function')
+            uploadReq.abort();
+          delete postUpload['create-package'][uploadKey];
+        } else if(!uploadKey) {
+          _.each(postUpload['create-package'], function(upload) {
+            var uploadReq = !_.isUndefined(upload.request) ? upload.request : undefined;
+            if(!_.isUndefined(uploadReq) && typeof uploadReq.abort() === 'function')
+              uploadReq.abort();
+          });
+          delete postUpload['create-package'];
+        }
         db.postUpload.reset(postUpload);
       }
       this.closeUploadCancelModal();
@@ -320,7 +328,9 @@ define(function(require) {
                             <span>
                               {overallUploadedSize.toFixed(1)} MB of {overallUploadSize.toFixed(1)} MB
                             </span>
-                          : undefined}
+                          : 
+                            <a href="#" className="black" onClick={this.showUploadCancelModal.bind(this, undefined)}>Cancel all</a>
+                          }
                         </div>
                       </div>
                     </div>
@@ -340,13 +350,22 @@ define(function(require) {
           </div>
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {this.state.isUploadCancelModalShown ?
-              <ConfirmationModal 
-                title="Cancel upload?"
-                description="Your upload is not complete. Would you like to cancel the upload?"
-                cancelAction={this.closeUploadCancelModal}
-                cancelText="Continue upload"
-                confirmAction={this.cancelUpload}
-                confirmText="Cancel upload"/>
+              this.state.uploadKeyToCancel ?
+                <ConfirmationModal 
+                  title="Cancel upload?"
+                  description="Your upload is not complete. Would you like to cancel the upload?"
+                  cancelAction={this.closeUploadCancelModal}
+                  cancelText="Continue upload"
+                  confirmAction={this.cancelUpload}
+                  confirmText="Cancel upload"/>
+              :
+                <ConfirmationModal 
+                  title="Cancel all uploads?"
+                  description="Your uploads are not complete. Would you like to cancel all ongoing uploads?"
+                  cancelAction={this.closeUploadCancelModal}
+                  cancelText="Continue uploads"
+                  confirmAction={this.cancelUpload}
+                  confirmText="Cancel uploads"/>
             : null}
           </VelocityTransitionGroup>
         </div>
