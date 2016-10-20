@@ -2660,6 +2660,16 @@ hr.full-line {
     }
 }
 
+#modal-confirmation {
+    .modal-dialog {
+        .modal-content {
+            .modal-body {
+                padding: 40px 30px;
+            }
+        }
+    }
+}
+
 #link-impactanalysis {
     .badge {
         font-size: 11px;
