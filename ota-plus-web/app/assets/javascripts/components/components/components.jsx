@@ -26,7 +26,7 @@ define(function(require) {
       this.handleMenu = this.handleMenu.bind(this);
       db.components.addWatch("poll-components-list", _.bind(this.forceUpdate, this, null));
       db.postStatus.addWatch("poll-components-list-post-status", _.bind(this.checkPostStatus, this, null));
-      SotaDispatcher.dispatch({actionType: 'get-components', device: this.props.deviceId});
+      SotaDispatcher.dispatch({actionType: 'get-components', uuid: this.props.deviceId});
     }
     componentDidMount() {
       window.addEventListener("resize", this.setComponentsListHeight);

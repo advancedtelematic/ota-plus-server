@@ -12,7 +12,6 @@ define(function(require) {
       this.packageHistoryForDevice = atom.createAtom();
       this.packageQueueForDevice = atom.createAtom();
       this.searchableDevices = atom.createAtom();
-      this.searchableDevicesWithComponents = atom.createAtom();
       this.searchablePackages = atom.createAtom();
       this.postStatus = atom.createAtom({});
       this.postUpload = atom.createAtom();
@@ -24,6 +23,7 @@ define(function(require) {
       
       this.user = atom.createAtom();
       this.components = atom.createAtom();
+      this.componentsForSelectedDevices = atom.createAtom();
       this.deviceSeen = atom.createAtom();
       this.blacklistedPackage = atom.createAtom();
       this.blacklistedPackages = atom.createAtom();

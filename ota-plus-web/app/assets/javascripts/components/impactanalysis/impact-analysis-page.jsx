@@ -21,12 +21,12 @@ define(function(require) {
       this.hideImpactTooltip = this.hideImpactTooltip.bind(this);
       this.setImpactedDevicesListHeight = this.setImpactedDevicesListHeight.bind(this);
       
-      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex-with-components', regex: ''});
+      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: ''});
       SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
       SotaDispatcher.dispatch({actionType: 'get-groups'});
       db.blacklistedPackages.addWatch("poll-blacklisted-packages", _.bind(this.forceUpdate, this, null));
       db.impactAnalysis.addWatch("poll-impact-analysis-page", _.bind(this.forceUpdate, this, null));
-      db.searchableDevicesWithComponents.addWatch("poll-devices-impact-analysis-page", _.bind(this.forceUpdate, this, null));
+      db.searchableDevices.addWatch("poll-devices-impact-analysis-page", _.bind(this.forceUpdate, this, null));
       db.groups.addWatch("groups-impact-analysis-page", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
@@ -45,12 +45,12 @@ define(function(require) {
     }
     componentWillUnmount(){
       clearInterval(this.state.intervalId);
-      db.searchableDevicesWithComponents.reset();
+      db.searchableDevices.reset();
       db.blacklistedPackages.reset();
       db.groups.reset();
       db.blacklistedPackages.removeWatch("poll-blacklisted-packages");
       db.impactAnalysis.removeWatch("poll-impact-analysis-page");
-      db.searchableDevicesWithComponents.removeWatch("poll-devices-impact-analysis-page");
+      db.searchableDevices.removeWatch("poll-devices-impact-analysis-page");
       db.groups.removeWatch("groups-impact-analysis-page");
       window.removeEventListener("resize", this.setImpactedDevicesListHeight);
     }
@@ -69,7 +69,7 @@ define(function(require) {
     }
     render() {
       var impactAnalysis = db.impactAnalysis.deref();
-      var devices = db.searchableDevicesWithComponents.deref();
+      var devices = db.searchableDevices.deref();
       var impactedDevices = undefined;
       var impactedPackages = undefined;
             

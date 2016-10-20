@@ -47,13 +47,13 @@ define(function(require) {
       this.setDevicesListHeight = this.setDevicesListHeight.bind(this);
 
       db.devices.reset();
-      db.searchableDevicesWithComponents.reset();
+      db.searchableDevices.reset();
       db.searchableProductionDevices.reset();
       SotaDispatcher.dispatch({actionType: 'get-devices'});
-      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex-with-components', regex: ''});
+      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: ''});
       SotaDispatcher.dispatch({actionType: 'get-groups'});
       db.devices.addWatch("devices", _.bind(this.forceUpdate, this, null));
-      db.searchableDevicesWithComponents.addWatch("searchable-devices-with-components", _.bind(this.forceUpdate, this, null));
+      db.searchableDevices.addWatch("searchable-devices", _.bind(this.forceUpdate, this, null));
       db.searchableProductionDevices.addWatch("searchable-production-devices", _.bind(this.forceUpdate, this, null));
       db.groups.addWatch("groups", _.bind(this.forceUpdate, this, null));
     }
@@ -93,9 +93,9 @@ define(function(require) {
     }
     componentWillUnmount(){
       db.devices.reset();
-      db.searchableDevicesWithComponents.reset();
+      db.searchableDevices.reset();
       db.devices.removeWatch("devices");
-      db.searchableDevicesWithComponents.removeWatch("searchable-devices-with-components");
+      db.searchableDevices.removeWatch("searchable-devices");
       db.searchableProductionDevices.removeWatch("searchable-production-devices");
       db.groups.removeWatch("groups");
       clearInterval(this.state.intervalId);
@@ -103,7 +103,7 @@ define(function(require) {
     }
     refreshData(filterValue) {
       SotaDispatcher.dispatch({actionType: 'get-devices'});
-      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex-with-components', regex: (typeof filterValue !== 'undefined' ? filterValue : this.state.filterValue)});
+      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: (typeof filterValue !== 'undefined' ? filterValue : this.state.filterValue)});
       SotaDispatcher.dispatch({actionType: 'search-production-devices', regex: (typeof filterValue !== 'undefined' ? filterValue : this.state.filterValue)});
       SotaDispatcher.dispatch({actionType: 'get-groups'});
     }
@@ -137,7 +137,7 @@ define(function(require) {
     }
     closeRenameDeviceModal(ifRefreshDevicesList) {
       if(ifRefreshDevicesList)
-        SotaDispatcher.dispatch({actionType: 'search-devices-by-regex-with-components', regex: this.state.filterValue});
+        SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: this.state.filterValue});
       this.setState({
         isRenameDeviceModalShown: false,
         renamedDevice: null
@@ -158,7 +158,7 @@ define(function(require) {
       });
     }
     render() {
-      var Devices = db.searchableDevicesWithComponents.deref();
+      var Devices = db.searchableDevices.deref();
       var SortedDevices;
       var selectedStatus = this.state.selectedStatus;
       var selectedSort = this.state.selectedSort;
