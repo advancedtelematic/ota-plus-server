@@ -16,12 +16,12 @@
 *:focus { outline: none !important; }
 
 @font-face { font-family: "AkkuratRegular"; src: url(../fonts/Akkurat-Regular.otf); }
-body { color: #fff; font: normal 13px "AkkuratRegular"; }
+body { color: #fff; font: normal 13px "AkkuratRegular"; background: #202020; }
 
 a, a:hover { color: #fff; transition: color 0.2s ease-in; }
 
 button:focus { outline: none; }
-button.list-group-item:focus { background: transparent; }
+button.list-group-item:focus { background: inherit; }
 
 .btn { transition: all 0.3s ease-in !important; }
 .btn:active { -webkit-box-shadow: none; box-shadow: none; }
@@ -30,7 +30,7 @@ button.list-group-item:focus { background: transparent; }
 
 #app { min-width: 1348px; }
 
-.page { padding-top: 50px; overflow: hidden; }
+.page { height: 100vh; max-height: 100vh; background: url(/assets/img/bg.jpg) no-repeat; background-attachment: fixed; background-size: cover; padding-top: 50px; overflow: hidden; }
 
 /* Containers */
 #devices-container, #impacted-devices-container { padding: 0 15px !important; }
@@ -55,7 +55,7 @@ button.list-group-item:focus { background: transparent; }
 .navbar-inverse #navbar { margin: 0 0 0 30px; }
 .navbar-inverse .navbar-nav > li > a { color: #888; font-size: 15px; height: 51px; padding-left: 7px; padding-right: 7px; margin: 0 10px; transition: all 0.2s ease-in; }
 .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus, .navbar-inverse .navbar-nav > li > a:active { color: #555; }
-.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a.active { border-bottom: 5px solid #FB9773; }
+.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a.active { border-bottom: 5px solid #9ce2d8; }
 
 @media (min-width: 768px) { .navbar > .container .navbar-brand { margin-left: 0; } }
 /* Device box */
@@ -94,7 +94,6 @@ button.list-group-item:focus { background: transparent; }
 .device-header-text .device-name { font-size: 22px; }
 .device-header-text .device-lastseen { font-size: 14px; margin: 0; opacity: 0.5; }
 
-.page-home { height: 100vh; max-height: 100vh; background: url(/assets/img/bg.jpg) no-repeat; background-attachment: fixed; background-size: cover; overflow: hidden; }
 .page-home .devices { overflow-y: scroll; overflow-x: hidden; }
 .page-home #devices-list { width: 100%; height: 100%; padding: 20px 0 0 0; }
 .page-home #devices-bar { background: #666; width: 100%; height: 40px; min-width: 1348px; position: absolute; left: 0; z-index: 99; }
@@ -181,8 +180,9 @@ button.list-group-item:focus { background: transparent; }
 #history-list .list-group-item-text-right { color: #979797; }
 #history-list .btn-action { border-left-color: #b7b7b7; }
 
-#packages-wrapper { background: #fff; }
 #packages-wrapper #packages-list-inside { width: 100%; height: 100%; overflow: visible; position: relative; zoom: 1; }
+
+#packages-list { position: relative; }
 
 #packages-list, #queue-wrapper { width: 100% !important; overflow-x: hidden; overflow-y: hidden; margin: 0; }
 #packages-list .list-group, #queue-wrapper .list-group { margin: 0; }
@@ -192,8 +192,10 @@ button.list-group-item:focus { background: transparent; }
 .log-code { color: #fff; font-size: 11px; font-family: Courier New; background: #333; padding: 15px; margin: 10px 0 10px -15px; }
 
 /* Buttons */
-.btn-add { color: #fff; font-size: 12px; text-transform: uppercase; background: #ffa987; padding: 5px 16px 5px 16px; margin: 6px 0 0 0; border-radius: 15px; }
-.btn-add:hover, .btn-add:focus, .btn-add:active { color: #fff; background: #bd7861; }
+.btn-main { color: #444 !important; font-size: 10px; font-weight: bold; text-transform: uppercase; background: #9ce2d8; min-width: 78px; padding: 4px 15px; border-radius: 15px; }
+.btn-main:hover, .btn-main:focus, .btn-main:active { background: #7de9da; }
+
+.btn-add { font-size: 12px; text-transform: uppercase; padding: 5px 16px 5px 16px; margin: 6px 0 0 0; border-radius: 15px; }
 
 .btn-black { color: #fff; font-size: 12px; background: #202020; padding: 0 10px; border: 1px solid #fff; border-radius: 15px; }
 .btn-black:hover, .btn-black:focus, .btn-black:active { color: #fff; }
@@ -207,9 +209,6 @@ button.list-group-item:focus { background: transparent; }
 
 a.close, button.close { width: 24px; height: 24px; background: url(/assets/img/icons/close.png) no-repeat; border: 0; border-radius: 0; opacity: 0.8; }
 a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:focus, button.close:active { opacity: 1; }
-
-.btn-orange { color: #fff !important; font-size: 10px; font-weight: bold; text-transform: uppercase; background: #FFA987; min-width: 78px; padding: 4px 15px; border-radius: 15px; }
-.btn-orange:hover { background: #C5795F; }
 
 .btn-red { color: #fff; font-size: 16px; background: #ff0000; padding: 13px 50px; margin: 20px 0 0 0; border: 0; border-radius: 30px; }
 .btn-red:hover, .btn-red:focus, .btn-red:active { color: #fff; }
@@ -233,9 +232,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .accept-button, .cancel-button { opacity: 0.6; }
 .accept-button:hover, .cancel-button:hover { opacity: 1; }
 
-.btn-history { color: #fff; font-size: 12px; background: #ffa987; padding: 5px 16px 4px 16px; margin: 6px 0 0 0; border-radius: 15px; }
-.btn-history:hover, .btn-history:active { color: #fff; background: #bd7861; }
-.btn-history:focus { color: #fff; }
+.btn-history { font-size: 12px; padding: 5px 16px 4px 16px; margin: 6px 0 0 0; border-radius: 15px; }
 
 .btn-full-section { text-align: left; background: rgba(0, 0, 0, 0.5); width: 100%; border-radius: 0; }
 .btn-full-section:hover, .btn-full-section:focus, .btn-full-section:active { color: #fff; }
@@ -420,11 +417,16 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .margin-left-100 { margin-left: 100px !important; }
 
 /* Colors */
+.white { color: #fff; }
+
 .green { color: green; }
 
 .red { color: #ff0000; }
 
 .orange { color: #FB9773 !important; }
+
+.mint { color: #9ce2d8 !important; }
+.mint:hover, .mint:focus, .mint:active { color: #7de9da; }
 
 .brown { color: #66493E; }
 
@@ -444,6 +446,9 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .blue:hover, .blue:focus, .blue:active { color: #96DED2; }
 
 .hover-red:hover { color: #ff0000; }
+
+.color-main { color: #9ce2d8 !important; }
+.color-main:hover, .color-main:focus, .color-main:active { color: #7de9da !important; }
 
 /* Icons */
 .icon-info { margin: -2px 10px 0 0; float: left; }
@@ -472,7 +477,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 /* D&D */
 .dnd-zone { width: 100%; height: 100%; }
 .dnd-zone.dnd-zone-active { border: 2px dashed #FB9773; }
-.dnd-zone.dnd-zone-active:after { color: #555; font-size: 20px; text-align: center; content: "DROP TO CREATE PACKAGE"; background: rgba(255, 255, 255, 0.85); width: 320px; padding: 30px; margin-left: -160px; margin-top: -40px; border: 1px solid #ccc; position: absolute; top: 50%; left: 50%; border-radius: 15px; z-index: 999; }
+.dnd-zone.dnd-zone-active:after { color: #fff; font-size: 20px; line-height: 85vh; text-align: center; content: "DROP TO CREATE PACKAGE"; background: rgba(50, 50, 50, 0.95); width: 100%; height: 100%; border: 2px dashed #9ce2d8; position: absolute; top: 0; left: 0; z-index: 999; }
 
 .list-group-dnd li { cursor: move; }
 
@@ -701,26 +706,24 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 .vertical-align-middle { vertical-align: middle; }
 
-.door { background: url("../img/steel_doors.jpg") top center no-repeat; background-size: cover; width: 100%; height: 100%; position: fixed; left: 0; z-index: 9998; }
+.door { background: url("../img/garage_door.jpg") top center no-repeat; background-size: cover; width: 100%; height: 100%; position: fixed; left: 0; z-index: 9998; }
 .door.door-up { top: -100%; }
 .door .loader { margin: -13px 0 0 -13px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
 
-.otaplus .door { background: #7b7b7b; }
-
 #components { position: relative; }
-#components #components-overlay { width: 150vw; height: 100%; background: rgba(251, 151, 115, 0.3); position: absolute; left: 100%; top: 0; z-index: 120; }
+#components #components-overlay { width: 150vw; height: 100%; background: rgba(100, 100, 100, 0.5); position: absolute; left: 100%; top: 0; z-index: 120; }
 #components #components-overlay .table > tbody > tr > td, #components #components-overlay .table > tbody > tr > th { padding: 2px 15px; border: 0; }
-#components #components-overlay .components-details { color: #fff; background: #FB9773; width: 900px; height: 100%; padding: 10px 20px; position: relative; overflow-y: scroll; }
+#components #components-overlay .components-details { color: #fff; background: rgba(150, 150, 150, 0.95); width: 900px; height: 100%; padding: 10px 20px; position: relative; overflow-y: scroll; }
 #components #components-overlay .components-details .btn-close-components { background: transparent; width: 25px; border: 0; position: absolute; top: 10px; right: 10px; }
 #components #components-overlay .components-details .components-details-header { width: 200px; padding-left: 20px; padding-bottom: 10px; margin-left: -20px; border-bottom: 1px solid #fff; }
 #components #components-list { background: #fff; width: 100%; height: 100%; position: absolute; z-index: 121; left: 0; overflow-y: scroll; }
 #components #components-list.components-list-shadow { -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); }
 #components #components-list #components-menu li a { color: #555; font-size: 14px; text-decoration: none; width: 100%; padding: 10px 15px; display: block; border-bottom: 1px solid #ddd; }
 #components #components-list #components-menu li a:hover { background: #eee; }
-#components #components-list #components-menu li a:hover .components-info-icon { border: 1px solid #FB9773; padding: 2px 6px; border-radius: 15px; display: block; }
+#components #components-list #components-menu li a:hover .components-info-icon { border: 1px solid #888; padding: 2px 6px; border-radius: 15px; display: block; }
 #components #components-list #components-menu li a.selected { font-weight: bold; background: #eee; }
-#components #components-list #components-menu li a .fa-chevron-down, #components #components-list #components-menu li a .fa-chevron-right { color: #FB9773; font-size: 10px; width: 15px; }
-#components #components-list #components-menu li a .components-info-icon { color: #FB9773; float: right; display: none; }
+#components #components-list #components-menu li a .fa-chevron-down, #components #components-list #components-menu li a .fa-chevron-right { color: #9ce2d8; font-size: 10px; width: 15px; }
+#components #components-list #components-menu li a .components-info-icon { color: #888; float: right; display: none; }
 #components #components-list #components-menu li ul { display: none; }
 
 #panel-heading-components { position: relative; z-index: 122; }
@@ -731,7 +734,8 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 .modal-open { overflow-x: auto; overflow-y: hidden; }
 
-.btn-confirm { color: #333; font-size: 16px; font-weight: bold; background: #96DED2; padding: 13px 50px; border-radius: 30px; }
+.btn-confirm { color: #333; font-size: 16px; font-weight: bold; background: #9ce2d8; padding: 13px 50px; border-radius: 30px; }
+.btn-confirm:hover, .btn-confirm:active, .btn-confirm:focus { background: #7de9da; }
 
 /* Disabled nav responsive */
 .container > .navbar-header { margin: 0; }
@@ -750,9 +754,11 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 
 .navbar-right { float: right !important; }
 
-#components-column { z-index: 121; -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); }
+#components-column { background: #fff; z-index: 121; -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); }
 
-#packages-column { z-index: 120; -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); }
+#packages-column { background: #fff; z-index: 120; -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7); }
+
+#queue-column { background: red; height: 100%; }
 
 .height-100 { height: 100%; }
 
@@ -853,7 +859,7 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 
 .underlined { text-decoration: underline; }
 
-#campaigns-wrapper { background: #fff; overflow-y: auto; }
+#campaigns-wrapper { overflow-y: auto; }
 #campaigns-wrapper .table > tbody > tr > td { border-bottom: 1px solid #ccc; padding-left: 15px; padding-right: 15px; vertical-align: middle; }
 #campaigns-wrapper .table > thead > tr > th { border-bottom: 1px solid #ccc; padding-left: 15px; padding-right: 15px; vertical-align: middle; }
 
@@ -958,7 +964,7 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 .btn-checkbox.checked:hover, .btn-checkbox.checked:focus, .btn-checkbox.checked:active { color: #fff; }
 
 .group-details-panel { width: 100%; margin-left: -15px; float: left; position: relative; top: -10px; }
-.group-details-panel .arrow-pointer { width: 31px; height: 21px; background: url(/assets/img/arrow.png) no-repeat; position: absolute; top: 0; z-index: 2; }
+.group-details-panel .arrow-pointer { width: 31px; height: 21px; background: url(/assets/img/arrow.png) no-repeat; position: absolute; top: 0; z-index: 2; transition: all 0.2s ease-in; }
 .group-details-panel .group-inner-devices-list { background-image: -moz-linear-gradient(transparent 0, transparent 18px, #fff 18px, #fff 100%); background-image: -webkit-linear-gradient(transparent 0, transparent 18px, #fff 18px, #fff 100%); background-image: linear-gradient(transparent 0, transparent 18px, #fff 18px, #fff 100%); height: 100%; padding: 30px 15px 10px 15px; }
 .group-details-panel .group-inner-devices-list:before { content: ''; background: url(/assets/img/shadow_top.png) repeat-x; width: 100%; height: 9px; position: absolute; top: 15px; left: 0; }
 .group-details-panel .group-inner-devices-list:after { content: ''; background: url(/assets/img/shadow_bottom.png) repeat-x; width: 100%; height: 9px; position: absolute; left: 0; bottom: 0; }
@@ -984,3 +990,20 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 #requirejs-errors .block-icon { color: #fff; font-size: 20px; background: #d66f6f; padding: 0 10px; display: table-cell; vertical-align: middle; }
 #requirejs-errors .block-text { padding: 15px; display: table-cell; }
 #requirejs-errors .close-error { color: #888; font-size: 15px; position: absolute; top: 6px; right: 10px; }
+
+.otaplus .page { background-image: url(/assets/img/bg_otaplus.jpg); }
+.otaplus .page-device-details .device-header { background-image: url(/assets/img/bg_otaplus.jpg); }
+.otaplus .door { background: #7b7b7b; }
+.otaplus .btn-main { color: #fff !important; background: #FB9773; }
+.otaplus .btn-main:hover, .otaplus .btn-main:focus, .otaplus .btn-main:active { background: #C5795F; }
+.otaplus .color-main { color: #FB9773 !important; }
+.otaplus .color-main:hover, .otaplus .color-main:focus, .otaplus .color-main:active { color: #FB9773 !important; }
+.otaplus .navbar-inverse .navbar-nav > li > a:hover, .otaplus .navbar-inverse .navbar-nav > li > a.active { border-color: #FB9773; }
+.otaplus .dnd-zone.dnd-zone-active { border-color: 2px dashed #FB9773; }
+.otaplus #components #components-overlay { background: rgba(251, 151, 115, 0.3); }
+.otaplus #components #components-overlay .components-details { background: #FB9773; }
+.otaplus #components #components-list #components-menu li a:hover .components-info-icon { border-color: #FB9773; }
+.otaplus #components #components-list #components-menu li a .fa-chevron-down, .otaplus #components #components-list #components-menu li a .fa-chevron-right { color: #FB9773; }
+.otaplus #components #components-list #components-menu li a .components-info-icon { color: #FB9773; }
+
+.with-background { background: #fff; }

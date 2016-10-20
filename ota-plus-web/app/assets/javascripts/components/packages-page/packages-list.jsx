@@ -317,7 +317,7 @@ define(function(require) {
           <ul className="list-group" id="packages-list" style={{height: this.props.packagesListHeight}}>
             <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true} className="dnd-zone" activeClassName="dnd-zone-active">
               <div id="packages-list-inside">
-                <div className="ioslist-wrapper" ref="packagesList">
+                <div className={"ioslist-wrapper" + (!_.isUndefined(packages) && packages.length ? " with-background" : "")} ref="packagesList">
                   <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
                     {!_.isUndefined(packages) ? 
                       packages.length ?
@@ -327,21 +327,23 @@ define(function(require) {
                         </div>
                       :
                         <div className="col-md-12 height-100 position-relative text-center">
-                          {this.props.filterValue !== '' ? 
-                            <div className="center-xy padding-15">
-                              No matching packages found.
-                            </div>
-                          :
-                            <div className="center-xy padding-15">
-                              There are no packages managed by ATS Garage to<br />
-                              show. To add a new package, drag and drop it here. 
-                            </div>
-                          }
+                          <div className="center-xy padding-15">
+                            <span className="font-24 white">
+                              {this.props.filterValue !== '' ? 
+                                <span>No matching packages found.</span>
+                              :
+                                <span>
+                                  There are no packages. <br />
+                                  To add a new package drag & drop it here.
+                                </span>
+                              }
+                            </span>
+                          </div>
                         </div>
                     : undefined}
                   </VelocityTransitionGroup>
                   {_.isUndefined(packages) ? 
-                    <Loader />
+                    <Loader className="white"/>
                   : undefined}
                 </div>
               </div>
