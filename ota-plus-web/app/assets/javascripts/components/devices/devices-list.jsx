@@ -147,7 +147,7 @@ define(function(require) {
       var rows = [];
       var expandedItemIndex = null;
                         
-      groups = _.map(Groups, function(group) {
+      _.each(Groups, function(group) {
         var rowNo = Math.ceil(itemIndex/this.state.boxesPerRow);
         var isLastItemInRow = (itemIndex/this.state.boxesPerRow % 1 === 0 || (!Object.keys(Devices).length && itemIndex === Object.keys(Groups).length));
         
@@ -172,10 +172,11 @@ define(function(require) {
 
         itemIndex++;
 
-        return (
-          <span key={'group-panel-details-' + group.groupName}>
-            {deviceListGroupItem}
-            <span>
+        groups.push(deviceListGroupItem);
+
+        if(isLastItemInRow)
+          groups.push(
+            <div key={'group-panel-details-' + group.groupName}>
               <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
                 {rows[rowNo].indexOf(this.state.expandedGroupName) > -1 && isLastItemInRow ? 
                   <DevicesGroupDetailsPanel 
@@ -187,13 +188,12 @@ define(function(require) {
                     areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
                 : null}
               </VelocityTransitionGroup>
-            </span>
-          </span>
-        );
+            </div>
+          );
       }, this);
             
       var devicesIndexItem = 1;
-      var devices = _.map(Devices, function(device, i) {
+      _.each(Devices, function(device, i) {
         if(!_.isUndefined(device)) {
           var rowNo = Math.ceil(itemIndex/this.state.boxesPerRow);
           var isLastItemInRow = itemIndex/this.state.boxesPerRow % 1 === 0 || Object.keys(Devices).length === devicesIndexItem;
@@ -210,7 +210,7 @@ define(function(require) {
             }
           }
                     
-          var returnedData = (
+          var returnedDevice = (
             <span data-uuid={device.uuid}
               className={className}
               key={"dnd-device-" + device.uuid}
@@ -231,28 +231,27 @@ define(function(require) {
             </span>
           );
           
-          var returnedPanelDetails = (
-            <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
-              {rows[rowNo].indexOf(this.state.expandedGroupName) > -1 && isLastItemInRow ?
-                <DevicesGroupDetailsPanel 
-                  devices={_.findWhere(Groups, {groupName: this.state.expandedGroupName}).devices}
-                  width={this.state.groupPanelWidth}
-                  boxWidth={this.state.boxWidth}
-                  arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 50)}
-                  openRenameDeviceModal={this.props.openRenameDeviceModal}
-                  areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
-              : null}
-            </VelocityTransitionGroup>
-          );
           itemIndex++;
           devicesIndexItem++;
           
-          return (
-            <span key={"device-panel-details-" + i}>
-              {returnedData}
-              {returnedPanelDetails}
-            </span>
-          );
+          devices.push(returnedDevice);
+          
+          if(isLastItemInRow)
+            devices.push(
+              <div key={"device-panel-details-" + i}>
+                <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+                  {rows[rowNo].indexOf(this.state.expandedGroupName) > -1 && isLastItemInRow ?
+                    <DevicesGroupDetailsPanel 
+                      devices={_.findWhere(Groups, {groupName: this.state.expandedGroupName}).devices}
+                      width={this.state.groupPanelWidth}
+                      boxWidth={this.state.boxWidth}
+                      arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 50)}
+                      openRenameDeviceModal={this.props.openRenameDeviceModal}
+                      areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
+                  : null}
+                </VelocityTransitionGroup>
+              </div>
+            );
         }
       }, this);
 
