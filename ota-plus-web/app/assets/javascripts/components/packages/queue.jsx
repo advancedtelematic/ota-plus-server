@@ -63,7 +63,7 @@ define(function(require) {
       clearInterval(this.state.intervalId);
     }
     refreshData() {
-      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device.uuid});
+      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.deviceId});
     }
     toggleQueueHistory() {
       this.setState({
@@ -80,7 +80,7 @@ define(function(require) {
     unblockQueue() {
       SotaDispatcher.dispatch({
         actionType: 'unblock-queue',
-        device: this.props.device.uuid
+        device: this.props.deviceId
       });
     }
     setQueueListHeight() {

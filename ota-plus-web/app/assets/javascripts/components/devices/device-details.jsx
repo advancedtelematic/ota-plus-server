@@ -214,14 +214,14 @@ define(function(require) {
                 </div>
               </div>
               <div className="panel-body">
-                  <Packages
-                    device={deviceWithStatus}
-                    setPackagesStatistics={this.setPackagesStatistics}
-                    openForm={this.openForm}
-                    onDrop={this.onDrop}
-                    showBlacklistForm={this.showBlacklistForm}
-                    filterValue={this.state.filterValue}
-                    changeFilter={this.changeFilter}/>
+                <Packages
+                  device={deviceWithStatus}
+                  setPackagesStatistics={this.setPackagesStatistics}
+                  openForm={this.openForm}
+                  onDrop={this.onDrop}
+                  showBlacklistForm={this.showBlacklistForm}
+                  filterValue={this.state.filterValue}
+                  changeFilter={this.changeFilter}/>
               </div>
               <div className="panel-footer" style={{position: 'relative'}}>
                 <VelocityComponent animation={this.state.selectedImpactAnalysisPackagesCount ? animateLeftPosition('15px') : animateLeftPosition('-250px')}>
@@ -249,6 +249,7 @@ define(function(require) {
               </div>
               <div className="panel-body">
                 <PackagesQueue
+                  deviceId={this.props.params.id}
                   textPackagesHistory={this.state.textPackagesHistory}
                   isPackagesHistoryShown={this.state.isPackagesHistoryShown}
                   toggleQueueHistory={this.toggleQueueHistory}
