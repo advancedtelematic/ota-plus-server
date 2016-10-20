@@ -15,7 +15,6 @@ define(function(require) {
         firstDataSet: false,
         lastUpdatedSecondsRemaining: null,
         secondsRemaining: 600,
-        overallUploadProgress: undefined,
         overallUploadedSize: undefined,
         overallUploadSize: undefined,
         isModalMinimized: Cookies.get('isUploadMinimized') && Cookies.get('isUploadMinimized') === "true" ? true : false,
@@ -150,11 +149,9 @@ define(function(require) {
         overallUploadSize += upload.size;
         overallUploadedSize += upload.uploaded;
       });
-      var overallUploadProgress = Math.round((overallUploadedSize/overallUploadSize) * 100);
             
       this.setState({
         data: postUpload,
-        overallUploadProgress: (overallUploadProgress < 100 ? overallUploadProgress : undefined),
         overallUploadedSize: overallUploadedSize,
         overallUploadSize: overallUploadSize
       });
@@ -276,21 +273,7 @@ define(function(require) {
                       <i className="fa fa-angle-down fa-3x toggle-modal-size" aria-hidden="true"></i>
                     }
                   </a>
-                  <h4 className={"modal-title" + (this.state.isModalMinimized ? ' pull-left' : '')}>Uploading {Object.keys(this.state.data).length} package{Object.keys(this.state.data).length > 1 ? "s" : ""}</h4>
-                  {this.state.isModalMinimized && !_.isUndefined(this.state.overallUploadProgress) ? 
-                    <div className="overall-progressbar">
-                      <Circle
-                        progress={this.state.overallUploadProgress/100}
-                        options={_.extend(barOptions, {
-                          svgStyle: {
-                            '-webkit-filter': 'drop-shadow(rgba(0, 0, 0, 0.3) 0px 0px 4px)',
-                            filter: 'drop-shadow(rgba(0, 0, 0, 0.3) 0px 0px 4px)'
-                          }
-                        })}
-                        initialAnimate={false}
-                        containerStyle={{width: '30px', height: '30px'}}/>
-                    </div>
-                  : undefined}
+                  <h4 className="modal-title">Uploading {Object.keys(this.state.data).length} package{Object.keys(this.state.data).length > 1 ? "s" : ""}</h4>
                 </div>
                 <div className="modal-body">
                   <div className="modal-subheader">
