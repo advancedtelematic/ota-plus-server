@@ -652,6 +652,14 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 #tutorial-add-new-device .logo { width: 50px; margin-right: 20px; vertical-align: bottom; }
 @media (min-width: 1570px) { #tutorial-add-new-device { top: 55px; } }
 
+#tutorial-install-device-wrapper { position: relative; }
+#tutorial-install-device-wrapper #tutorial-install-device { width: 1300px; padding: 30px; float: left; border-radius: 15px; }
+#tutorial-install-device-wrapper #tutorial-install-device .tutorial-icon { margin: 0 20px 0 0; }
+#tutorial-install-device-wrapper #tutorial-install-device .inner-box { margin: 30px 0; }
+#tutorial-install-device-wrapper #tutorial-install-device .or-text { color: #888; font-size: 10px; margin: 0 10px; }
+#tutorial-install-device-wrapper #tutorial-install-device .tutorial-img-box { width: 100px; }
+#tutorial-install-device-wrapper #tutorial-install-device .tutorial-desc-box { width: 250px; }
+
 .tutorial-add-package { width: 350px; float: none; z-index: 111; }
 .tutorial-add-package .circle { font-size: 20px !important; width: 40px !important; height: 40px !important; margin-top: 2px !important; }
 
