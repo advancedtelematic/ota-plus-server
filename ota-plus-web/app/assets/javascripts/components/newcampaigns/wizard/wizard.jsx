@@ -26,11 +26,6 @@ define(function(require) {
             isFinished: false
           },
           {
-            class: WizardStep3,
-            title: 'Options',
-            isFinished: false
-          },
-          {
             class: WizardStep4,
             title: 'Summary',
             finishButtonLabel: 'Launch',
@@ -48,6 +43,7 @@ define(function(require) {
       this.nextStep = this.nextStep.bind(this);
       this.jumpToStep = this.jumpToStep.bind(this);
       this.finish = this.finish.bind(this);
+      this.handleResponse = this.handleResponse.bind(this);
       this.verifyIfPreviousStepsFinished = this.verifyIfPreviousStepsFinished.bind(this);
       this.markStepAsFinished = this.markStepAsFinished.bind(this);
       this.markStepAsNotFinished = this.markStepAsNotFinished.bind(this);
@@ -57,10 +53,15 @@ define(function(require) {
       
       SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: this.props.campaignUUID});
       db.campaign.addWatch("poll-campaign", _.bind(this.setData, this, null));
+      
+      db.postStatus.addWatch("poll-response-launch-campaign", _.bind(this.handleResponse, this, null));
     }
     componentWillUnmount() {
+      db.searchablePackages.reset();
+      db.groups.reset();
       db.campaign.reset();
       db.campaign.removeWatch("poll-campaign");
+      db.postStatus.removeWatch("poll-response-launch-campaign");
     }
     closeWizard(e) {
       e.preventDefault();
@@ -87,13 +88,22 @@ define(function(require) {
       return this.state.currentStepId == this.state.wizardSteps.length - 1;
     }
     finish() {
-      var startDate = this.state.wizardData[2].startDate;
-      var endDate = this.state.wizardData[2].endDate;
       SotaDispatcher.dispatch({
         actionType: 'launch-campaign',
         uuid: db.campaign.deref().meta.id,
-        data: {startDate: startDate, endDate: endDate}
       });
+    }
+    handleResponse() {
+      var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref()['launch-campaign'] : undefined;
+      
+      if(!_.isUndefined(postStatus)) {
+        if(postStatus.status === 'success') {
+          setTimeout(function() {
+            SotaDispatcher.dispatch({actionType: 'get-campaigns'});
+          }, 1);
+          this.props.closeWizard();
+        }
+      }
     }
     verifyIfPreviousStepsFinished(stepId) {
       if(_.find(this.state.wizardSteps, function(step, index) {
@@ -132,10 +142,13 @@ define(function(require) {
         }
         
         if(Object.keys(campaign.groups).length) {
+          wizardData[1] = {chosenGroups: []};
+          _.each(campaign.groups, function(group) {
+            wizardData[1].chosenGroups.push(group.group);
+          });
           wizardSteps[1].isFinished = true;
-          wizardData[1] = campaign.groups;
         }
-        
+                
         this.setState({wizardData: wizardData});
         this.setState({wizardSteps: wizardSteps});
       }
