@@ -65,8 +65,7 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
       var multipleKey =  _.map(multipleData, function(elem) {return elem;}).join("-");
       
       postUpload[opts.action][multipleKey] = {
-        data: multipleData,
-        size: data.get('file').size
+        data: multipleData
       };
       
       var ajaxReq =  $.ajax({
