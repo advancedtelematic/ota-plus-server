@@ -12,43 +12,45 @@ define(function(require) {
     }
     cancelCampaignForGroup(e) {
       e.preventDefault();
-      this.props.cancelCampaignForGroup(this.props.campaign.uuid);
+      this.props.cancelCampaignForGroup(this.props.campaignGroup.group);
     }
     render() {
-      var link = 'campaigndetails/' + this.props.campaign.uuid;
+      var statistics = this.props.campaignGroup.statistics;
+      var progress = Math.min(Math.round(statistics.updatedDevices/Math.max(statistics.deviceCount, 1) * 100), 100);
       var data = [
         {
-          value: this.props.campaign.failureRate,
+          value: statistics.failedUpdates,
           color:"#FF0000",
           highlight: "#FF0000",
           label: "Failure rate"
         },
         {
-          value: this.props.campaign.successRate,
+          value: statistics.successfulUpdates,
           color: "#96DCD1",
           highlight: "#96DCD1",
           label: "Success rate"
         }];
+        
       return (
         <tr>
           <td>
             <div className="group-icon"></div>
             <div className="group-text">
               <div className="group-title">All good now</div>
-              <div className="group-subtitle">{this.props.campaign.count} devices</div>
+              <div className="group-subtitle">{statistics.deviceCount} devices</div>
             </div>
           </td>
           <td>
             <div className="col-md-4 margin-top-5">
-              <span className="lightgrey">{Math.round(this.props.campaign.progress/100*this.props.campaign.count)} of {this.props.campaign.count} Devices</span>
+              <span className="lightgrey">{statistics.updatedDevices} of {statistics.deviceCount} Devices</span>
             </div>
             <div className="progress progress-blue">
-              <div className={"progress-bar" + (this.props.campaign.progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: this.props.campaign.progress + '%'}}></div>
+              <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}></div>
               <div className="progress-count">
-                {this.props.campaign.progress}%
+                {progress}%
               </div>
               <div className="progress-status">
-                {this.props.campaign.progress == 100 ?
+                {progress == 100 ?
                   <span className="fa-stack">
                     <i className="fa fa-circle fa-stack-1x"></i>
                     <i className="fa fa-check-circle fa-stack-1x fa-inverse"></i>
@@ -62,8 +64,8 @@ define(function(require) {
               <PieChart data={data} width="50" height="50"/>
             </div>
             <div className="pull-left margin-top-20 margin-left-20">
-              <span className={this.props.campaign.failureRate == 0 ? "lightgrey" : ""}>
-                {this.props.campaign.failureRate} % failure rate
+              <span className={statistics.failedUpdates == 0 ? "lightgrey" : ""}>
+                {Math.round(statistics.failedUpdates/Math.max(statistics.deviceCount, 1)*100)} % failure rate
               </span>
             </div>
           </td>

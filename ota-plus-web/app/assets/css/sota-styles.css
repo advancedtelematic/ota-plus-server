@@ -905,7 +905,7 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 #modal-campaign-create .modal-dialog .modal-content .modal-body .groups-wrapper { height: 180px; padding: 20px 0 20px 0; position: relative; overflow-y: auto; }
 #modal-campaign-create .modal-dialog .modal-content .modal-body .groups-wrapper .group-icon { width: 40px; height: 40px; }
 #modal-campaign-create .modal-dialog .modal-content .modal-body .groups-wrapper-fade { width: 92%; height: 40px; position: absolute; }
-#modal-campaign-create .modal-dialog .modal-content .modal-body .groups-wrapper-fade.groups-wrapper-fade-top { background: linear-gradient(to bottom, white 20%, rgba(255, 255, 255, 0) 100%); top: 40px; z-index: 2; }
+#modal-campaign-create .modal-dialog .modal-content .modal-body .groups-wrapper-fade.groups-wrapper-fade-top { background: linear-gradient(to bottom, white 20%, rgba(255, 255, 255, 0) 100%); top: 32px; z-index: 2; }
 #modal-campaign-create .modal-dialog .modal-content .modal-body .groups-wrapper-fade.groups-wrapper-fade-bottom { background: linear-gradient(to top, white 20%, rgba(255, 255, 255, 0) 100%); bottom: 20px; z-index: 2; }
 #modal-campaign-create .modal-dialog .modal-content .modal-body .ioslist-group-header, #modal-campaign-create .modal-dialog .modal-content .modal-body .ioslist-fake-header { padding-left: 30px; padding-right: 30px; }
 #modal-campaign-create .modal-dialog .modal-content .modal-body .ioslist-wrapper .list-group-item { padding-left: 30px; padding-right: 30px; }

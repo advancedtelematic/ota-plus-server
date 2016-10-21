@@ -62,7 +62,6 @@ define(function(require) {
     }
     componentWillUnmount() {
       ReactDOM.findDOMNode(this.refs.packagesList).removeEventListener('scroll', this.packagesListScroll);
-      db.searchablePackages.reset();
       db.searchablePackages.removeWatch("poll-packages-campaign");
       clearTimeout(this.state.timeout);
       clearInterval(this.state.intervalId);
