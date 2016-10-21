@@ -3,32 +3,26 @@ define(function(require) {
       Router = require('react-router'),
       Link = Router.Link,
       db = require('stores/db'),
-      Events = require('../../handlers/events');
+      Events = require('handlers/events');
 
   class DetailsHeader extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {
-        eventDeviceSeen: null
-      };
       db.deviceSeen.addWatch("poll-deviceseen", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
-      var proto = (location.protocol == "http:") ? "ws://" : "wss://";
-      var port  = (location.protocol == "http:") ? ":" + location.port : ":8080";
-      var ws = new WebSocket(proto + location.hostname + port + "/api/v1/events/ws");
-      var devUuid = this.props.device.uuid;
-      
+      var ws = this.props.websocket;
+      var deviceUUID = this.props.device.uuid;
+            
       ws.onmessage = function(msg) {
-        var js = JSON.parse(msg.data);
-        if (js.type == "DeviceSeen" && js.event.uuid == devUuid) {
-          Events.deviceSeen(js.event);
+        var eventObj = JSON.parse(msg.data);
+        if(eventObj.type == "DeviceSeen" && eventObj.event.uuid == deviceUUID) {
+          Events.deviceSeen(eventObj.event);
         }
       };
-      this.setState({eventDeviceSeen: ws});
     }
     componentWillUnmount() {
-      this.state.eventDeviceSeen.close();
+      db.deviceSeen.reset();
       db.deviceSeen.removeWatch("poll-deviceseen");
     }
     render() {

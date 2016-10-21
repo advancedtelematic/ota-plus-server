@@ -23,7 +23,7 @@ define(function(require) {
           case 'create-device':
             sendRequest.doPost('/api/v1/devices', payload.device, {action: payload.actionType})
               .success(function(id) {
-                location.hash = "#/devicedetails/" + id;
+                location.hash = "/#/devicedetails/" + id;
               });
             break;
           case 'edit-device':

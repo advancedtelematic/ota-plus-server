@@ -181,6 +181,7 @@ define(function(require) {
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
               {!_.isUndefined(deviceWithStatus) ? 
                 <DetailsHeader
+                  websocket={this.props.websocket}
                   device={deviceWithStatus}
                   duplicatingInProgress={this.state.duplicatingInProgress}/>
               : undefined}
