@@ -107,7 +107,7 @@ define(function(require) {
             : undefined}
             {!_.isUndefined(impactedDevices) && !_.isEmpty(impactedDevices) ?
               <DevicesList
-                Devices={impactedDevices}
+                devices={impactedDevices}
                 groups={db.groups.deref()}
                 areProductionDevices={false}
                 isDND={false}

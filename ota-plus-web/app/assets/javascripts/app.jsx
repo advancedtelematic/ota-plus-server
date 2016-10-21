@@ -60,8 +60,13 @@ define(function(require) {
       var path = this.props.location.pathname.toLowerCase().split('/');
       var isHomePage = path[0] == '' && path[1] == '' ? true : false;
 
+      var proto = (location.protocol == "http:") ? "ws://" : "wss://";
+      var port  = (location.protocol == "http:") ? ":" + location.port : ":8080";
+      var websocket = new WebSocket(proto + location.hostname + port + "/api/v1/events/ws");
+
       this.state = {
         currentLang: currentLang,
+        websocket: websocket,
         showCampaignPanel: false,
         intervalId: null,
         impactAnalysisIntervalId: null,
@@ -147,6 +152,7 @@ define(function(require) {
     componentWillUnmount() {
       clearInterval(this.state.intervalId);
       clearInterval(this.state.impactAnalysisIntervalId);
+      this.state.websocket.close();
     }
     render() {
       var Animations = {
@@ -218,7 +224,7 @@ define(function(require) {
               toggleCampaignPanel={this.toggleCampaignPanel} 
               logout={this.logout}/>
             <div className="page wrapper">
-              {React.cloneElement(this.props.children, {showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
+              {React.cloneElement(this.props.children, {websocket: this.state.websocket, showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
             </div>
             
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
