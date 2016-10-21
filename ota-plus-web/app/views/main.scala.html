@@ -21,6 +21,14 @@
             <i class="fa fa-circle-o-notch fa-spin fa-2x loader"></i>
         </div>
     </div>
+      
+    <div id="requirejs-errors">
+      <div class="block-icon">
+        <i class="fa fa-exclamation-circle"></i>
+      </div>
+      <div class="block-text"></div>
+      <a href="#" class="close-error" onClick="hideError()"><i class="fa fa-times"></i></a>
+    </div>
 
     <script>
         var appUrl = location.protocol+'//'+location.host;
@@ -34,6 +42,12 @@
       @Html(org.webjars.RequireJS.getSetupJavaScript(routes.WebJarAssets.at("").url))
     </script>
     <script>        
+        var errorContainer = document.getElementById("requirejs-errors");
+        
+        function hideError() {
+          errorContainer.style.display = 'none';
+        }
+        
 	cachedCallback = require.callback;
 	require = {
 	  callback: function() {
@@ -55,17 +69,21 @@
             requirejs.config({"paths": {"react-chartjs": ["https://cdnjs.cloudflare.com/ajax/libs/react-chartjs/0.8.0/react-chartjs.min"]}});
             requirejs.config({"paths": {"bootstrap": ["/webjars/bootstrap/3.3.6/js/bootstrap"], "bootstrap-css": ["/webjars/bootstrap/3.3.6/css/bootstrap"]}, "shim": {"bootstrap": ["jquery"]}, "packages":[]});
             
-            
             requirejs.config({
-    es6: {
-      fileExtension: '.jsx' // put in .jsx for JSX transformation
-    },
-    babel: {
-      presets: ['es2015'],
-      plugins: ['transform-react-jsx']
-    }
-  });
-            
+              es6: {
+                fileExtension: '.jsx'
+              },
+              babel: {
+                presets: ['es2015'],
+                plugins: ['transform-react-jsx']
+              }
+            });  
+      
+            requirejs.onError = function (err) {
+              errorContainer.style.display = 'table';
+              errorContainer.getElementsByClassName('block-text')[0].innerHTML = "<div><strong>Oops! Something went wrong.</strong></div><div>You need to reload application. If the problem repeats please contact ATS Garage administrator.</div>";
+              throw err;
+            };
 	  }
 	}
     </script>
