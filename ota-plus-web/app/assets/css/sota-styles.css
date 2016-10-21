@@ -94,11 +94,11 @@ button.list-group-item:focus { background: inherit; }
 .device-header-text .device-name { font-size: 22px; }
 .device-header-text .device-lastseen { font-size: 14px; margin: 0; opacity: 0.5; }
 
-.page-home .devices { overflow-y: scroll; overflow-x: hidden; }
-.page-home #devices-list { width: 100%; height: 100%; padding: 20px 0 0 0; }
-.page-home #devices-bar { background: #666; width: 100%; height: 40px; min-width: 1348px; position: absolute; left: 0; z-index: 99; }
-.page-home #devices-bar .select-bar-status { margin-left: 152px; }
-.page-home #devices-bar .select-bar-sort { margin-left: 35px; }
+.page-home .devices, .page-impact-analysis .devices { overflow-y: scroll; overflow-x: hidden; }
+.page-home #devices-list, .page-impact-analysis #devices-list { width: 100%; height: 100%; padding: 20px 0 0 0; }
+.page-home #devices-bar, .page-impact-analysis #devices-bar { background: #666; width: 100%; height: 40px; min-width: 1348px; position: absolute; left: 0; z-index: 99; }
+.page-home #devices-bar .select-bar-status, .page-impact-analysis #devices-bar .select-bar-status { margin-left: 152px; }
+.page-home #devices-bar .select-bar-sort, .page-impact-analysis #devices-bar .select-bar-sort { margin-left: 35px; }
 
 .page-device-details { background: url(/assets/img/bg.jpg) no-repeat; background-attachment: fixed; background-size: cover; max-height: 100vh; overflow: hidden; }
 .page-device-details .device-header { background: url(/assets/img/bg.jpg) no-repeat; background-attachment: fixed; background-size: cover; height: 80px; position: relative; z-index: 124; }
