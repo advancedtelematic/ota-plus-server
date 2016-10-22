@@ -11,6 +11,8 @@
 .ats-button.bordered { background: transparent; border: 2px solid #fff; }
 .ats-button.bordered:hover { color: #ffaa88; border-color: #ffaa88; }
 
+.loading-text { font-size: 20px; margin: 0 0 10px 0; }
+
 * { text-decoration: none; padding: 0; margin: 0; list-style: none; }
 
 *:focus { outline: none !important; }
