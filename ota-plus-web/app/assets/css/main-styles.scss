@@ -1,5 +1,7 @@
 $color_blue: #A6E6DF;
 $color_red: #d66f6f;
+$color-mint: #9ce2d8;
+$color-mint-active: #7de9da;
 $footer_panel_bg_color: #282828;
 
 @import "common.scss";
@@ -77,6 +79,10 @@ a, a:hover, a:focus {
 
 .login {
     #ats-page {
+        background-image: -o-radial-gradient(circle, #fff, transparent 550px);
+        background-image: -moz-radial-gradient(circle, #fff, transparent 550px);
+        background-image: -webkit-radial-gradient(circle, #fff, transparent 550px);
+        background-repeat: no-repeat;
         height: 100%;
         position: relative;
 
@@ -245,22 +251,37 @@ body {
         &.a0-theme-default {
             .a0-switch {
                 span {
-                    color: #eee;
+                    color: #444;
+                    background-color: #fff;
+                    transition: all 0.3s ease-in;
+
+                    &:hover {
+                        background-color: #eee;
+                    }
+
                 }
 
                 .a0-active {
                     background-color: #444;
+
+                    &:hover {
+                        background-color: #222;
+                    }
                 }
             }
 
             .a0-btn-small {
                 &.a0-back {
+                    background: #ccc;
+                    top: 140px;
                     left: 22px;
+                    border-color: #ccc;
+                    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.5);
+                    box-shadow: 0 1px 3px rgba(0,0,0,.5);
                 }
             }
 
             .a0-panel {
-                background: rgba(0,0,0,0.35);
                 width: 100%;
                 box-shadow: none;
                 -webkit-box-shadow: none;
@@ -275,7 +296,7 @@ body {
 
                     .a0-image {
                         img {
-                            height: 65px;
+                            height: 85px;
                         }
                     }
 
@@ -299,7 +320,7 @@ body {
                 }
 
                 .a0-bg-gradient {
-                    background: transparent;
+                    opacity: 0;
                 }
 
                 .a0-error, .a0-success {
@@ -343,11 +364,15 @@ body {
                 .a0-email, .a0-password {
                     .a0-input-box {
                         border-radius: 12px;
-                        border: 2px solid rgba(255, 255, 255, 0.2);
+                        border: 2px solid rgba(0, 0, 0, 0.2);
                         -moz-background-clip: padding;
                         -webkit-background-clip: padding;
                         background-clip: padding-box;
                         margin: 15px 0;
+
+                        &:hover, &:active, &:focus {
+                            border-color: rgba(0, 0, 0, 0.4);
+                        }
 
                         &.a0-error-input {
                             border-color: #d66f6f;
@@ -366,7 +391,7 @@ body {
                 }
 
                 .a0-separator {
-                    color: #fff;
+                    color: #444;
                     margin: 15px 0;
                 }
 
@@ -388,7 +413,7 @@ body {
                         text-align: center;
                         text-decoration: none;
                         letter-spacing: 0px;
-                        background: rgba(255,170,136,1.0) !important;
+                        background: $color-mint !important;
                         width: 100%;
                         padding: 15px;
                         transition: all 0.5s ease;
@@ -398,8 +423,10 @@ body {
                         position: static;
 
                         &:hover {
-                            background: rgba(255,170,136,1.0);
                             text-decoration: none;
+                            background: $color-mint-active !important;
+                            -webkit-box-shadow: none;
+                            box-shadow: none;
                         }
                     }
                 }
@@ -409,7 +436,7 @@ body {
                 }
 
                 .a0-forgot-pass {
-                    color: #fff;
+                    color: #444;
                     margin: 10px 0;
 
                     &:before {
