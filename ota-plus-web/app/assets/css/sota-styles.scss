@@ -133,6 +133,18 @@ button {
                 display: inline-block;
             }
         }
+
+        &.text-link {
+            a {
+                font-size: 12px;
+                padding: 10px 0 0 0;
+                display: inline-block;
+                
+                &:hover {
+                    color: $color-mint-active;
+                }
+            }
+        }
     }
 }
 
@@ -1908,7 +1920,7 @@ a.close, button.close {
 
 #tutorial-install-device-wrapper {
     position: relative;
-    
+
     #tutorial-install-device {
         width: 1300px;
         padding: 30px;
@@ -3602,6 +3614,18 @@ hr.full-line {
         a {
             &:hover {
                 color: $color-orange;
+            }
+        }
+    }
+
+    .right-nav {
+        li {
+            &.text-link {
+                a {
+                    &:hover {
+                        color: $color-orange;
+                    }
+                }
             }
         }
     }
