@@ -205,7 +205,9 @@ define(function(require) {
           <VelocityComponent animation={!this.state.hideAnimationUp ? Animations.up : null}>
             <div className="door">
               {this.state.hideAnimationUp ? 
-                <i className="fa fa-circle-o-notch fa-spin fa-2x loader darkgrey"></i>
+                <div className="loader darkgrey text-center">
+                  <div className="loading-text">Ready!</div>
+                </div>
               : null}
             </div>
           </VelocityComponent>
