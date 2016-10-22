@@ -52,8 +52,11 @@ define(function(require) {
       return (
         <div id="tutorial-install-device-wrapper" style={{height: this.state.tutorialHeight}}>
           <div id="tutorial-install-device" className="center-xy">
-            <div className="pull-left width-full">
-              <span className="font-24"><strong>Install your device</strong></span>
+            <div className="pull-left width-full text-center">
+              <span className="font-24 white">Device never seen online. You need to install the client on your device.</span>
+            </div>
+            <div className="pull-left width-full margin-top-70">
+              <span className="font-18"><strong>How to install your device:</strong></span>
             </div>
   
             <div className="inner-box pull-left width-full font-16">
