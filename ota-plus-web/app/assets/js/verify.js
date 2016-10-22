@@ -6,10 +6,11 @@
     var pluginName = "verify",
             defaults = {
                 verifyModalId: 'verifyModal',
-                verifyHeaderText: 'Unsupported screen size',
-                verifyBodyText: 'Sorry, but your screen size is not supported in ATS Garage.',
+                verifyHeaderText: 'Tip!',
+                verifyBodyText: 'ATS Garage works best in a browser window that is at least <strong>1366 x 768</strong>. You can still use it at a smaller size, but we recommend using a desktop browser for the best experience.',
                 verifyMinWidth: 1024,
-                verifyMinHeight: 768
+                verifyMinHeight: 768,
+                cookieKey: 'dontShowVerifyModal'
             };
 
     function Plugin(element, options) {
@@ -26,24 +27,45 @@
             var verifyModalId = this.options.verifyModalId;
             var verifyMinWidth = this.options.verifyMinWidth;
             var verifyMinHeight = this.options.verifyMinHeight;
+            var cookieKey = this.options.cookieKey;
             
             function toggleModal(verifyModalId, minWidth, minHeight) {
                 var windowWidth = $(window).width();
                 var windowHeight = $(window).height();
+                var cookieVal = getCookie() === 'true' ? true : false;
 
-                if (windowWidth < minWidth || windowHeight < minHeight) {
+                if (!cookieVal && (windowWidth < minWidth || windowHeight < minHeight)) {
                     $('#' + verifyModalId).modal();
                 } else {
                     $('#' + verifyModalId).modal('hide');
                 }
             }
+            
+            function setCookie(value) {
+                var expires = new Date();
+                expires.setTime(expires.getTime() + (1 * 24 * 60 * 60 * 1000));
+                document.cookie = cookieKey + '=' + value + ';expires=' + expires.toUTCString();
+            }
+            
+            function getCookie() {
+                var keyValue = document.cookie.match('(^|;) ?' + cookieKey + '=([^;]*)(;|$)');
+                return keyValue ? keyValue[2] : null;
+            }
 
-            this.$elem.after('<div id=' + verifyModalId + ' class="modal fade" role="dialog"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"></button><h4 class="modal-title"><i class="fa fa-warning"></i> ' + this.options.verifyHeaderText + ' </div><div class="modal-body"><p> ' + this.options.verifyBodyText + ' </div></div></div></div>');
+            this.$elem.after('<div id=' + verifyModalId + ' class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h4 class="modal-title"><i class="fa fa-lightbulb-o" aria-hidden="true"></i> ' + this.options.verifyHeaderText + ' </div><div class="modal-body"> ' + this.options.verifyBodyText + ' </div><div class="modal-footer"><div class="margin-top-10 pull-left"><input type="checkbox" name="verify_modal_dismiss" /> ' +  "Don't" + ' show this again</div> <div class="pull-right"><button type="button" id="close-verify-modal" class="btn btn-confirm" aria-label="Close">OK</button></div></div></div></div></div></div>');
             
             toggleModal(verifyModalId, verifyMinWidth, verifyMinHeight);
 
             $(window).resize(function () {
                 toggleModal(verifyModalId, verifyMinWidth, verifyMinHeight);
+            });
+            
+            $('#close-verify-modal').click(function() {
+                var dontShowAgain = $('input[name="verify_modal_dismiss"]').prop('checked');
+                if(dontShowAgain) {
+                  setCookie(true);
+                }
+                $('#' + verifyModalId).modal('hide');
             });
         }
     };
