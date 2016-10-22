@@ -29,14 +29,17 @@ define(function(require) {
       });
     }
     handleResponse() {
-      var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref()['create-campaign'] : undefined;
+      var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
       
-      if(!_.isUndefined(postStatus)) {
-        if(postStatus.status === 'success') {
+      if(!_.isUndefined(postStatus['create-campaign'])) {
+        if(postStatus['create-campaign'].status === 'success') {
+          var response = postStatus['create-campaign'].response;
           setTimeout(function() {
             SotaDispatcher.dispatch({actionType: 'get-campaigns'});
           }, 1);
-          this.props.openWizard(postStatus.response);
+          delete postStatus['create-campaign'];
+          db.postStatus.reset(postStatus);
+          this.props.openWizard(response);
         }
       }
     }
