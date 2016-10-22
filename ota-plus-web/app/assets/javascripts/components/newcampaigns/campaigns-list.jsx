@@ -25,8 +25,14 @@ define(function(require) {
       this.props.openWizard(campaignUUID);
     }
     setData() {
-      if(!_.isUndefined(db.campaigns.deref())) {
-        this.setState({data: db.campaigns.deref()});
+      var campaigns = db.campaigns.deref();
+      if(!_.isUndefined(campaigns)) {
+        campaigns.sort(function(a, b) {
+          var aName = a.name;
+          var bName = b.name;
+          return (aName.charAt(0) % 1 === 0 && bName.charAt(0) % 1 !== 0) ? 1 : aName.localeCompare(bName);
+        });
+        this.setState({data: campaigns});
       }
     }
     render() {
