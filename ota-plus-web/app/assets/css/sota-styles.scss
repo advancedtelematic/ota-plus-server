@@ -1771,7 +1771,7 @@ a.close, button.close {
         text-transform: uppercase;
 
         &:hover {
-            color: #FFA987;
+            color: $color-mint-active;
         }
     }
 }
@@ -3583,6 +3583,14 @@ hr.full-line {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    .profile-links {
+        a {
+            &:hover {
+                color: $color-orange;
             }
         }
     }
