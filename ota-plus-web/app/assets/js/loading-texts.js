@@ -27,7 +27,7 @@
         wrapper.innerHTML = '<span class="counting">' + textsArray[0] + '</span>';
 
         var intervalId = setInterval(function () {
-            if (curIndex === textsArray.length) {
+            if (curIndex === textsArray.length - 1) {
                 clearInterval(intervalId);
             }
             wrapper.innerHTML = '<span class="counting">' + textsArray[curIndex] + '</span>';
