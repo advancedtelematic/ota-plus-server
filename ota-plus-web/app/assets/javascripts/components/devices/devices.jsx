@@ -229,7 +229,7 @@ define(function(require) {
     render() {
       const devices = this.state.devicesData;
       const searchableDevices = this.state.searchableDevicesData;
-      const searchableProductionDevicesData = this.state.searchableProductionDevicesData;
+      const searchableProductionDevices = this.state.searchableProductionDevicesData;
       const groups = this.state.groupsData;
             
       var isDevicesListEmpty = (_.isUndefined(devices) || devices.length) ? false : true;
@@ -237,7 +237,7 @@ define(function(require) {
       var productionDevicesCount = 0;
       var totalProductionDevicesCount = 15382448;
       if(this.state.filterValue.length >= 17) {
-        productionDevicesCount = !_.isUndefined(searchableProductionDevicesData) ? searchableProductionDevicesData.length : 0;
+        productionDevicesCount = !_.isUndefined(searchableProductionDevices) ? searchableProductionDevices.length : 0;
       } else {
         productionDevicesCount = this.state.filterValue.length > 0 ? this.state.filterValue.length == 16 ? 25 : Math.round(totalProductionDevicesCount / (this.state.filterValue.length * 3499)) : totalProductionDevicesCount;
       }
