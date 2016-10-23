@@ -70,7 +70,7 @@ define(function(require) {
             </div>
           </td>
           <td>
-            <a href="#" className="darkgrey hover-red" title="Cancel the Campaign for this group" onClick={this.cancelCampaignForGroup}><strong>Cancel</strong></a>
+            <a href="#" className="darkgrey hover-red hidden" title="Cancel the Campaign for this group" onClick={this.cancelCampaignForGroup}><strong>Cancel</strong></a>
           </td>
         </tr>
       );
