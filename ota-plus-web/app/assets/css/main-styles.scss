@@ -79,9 +79,9 @@ a, a:hover, a:focus {
 
 .login {
     #ats-page {
-        background-image: -o-radial-gradient(circle, #fff, transparent 550px);
-        background-image: -moz-radial-gradient(circle, #fff, transparent 550px);
-        background-image: -webkit-radial-gradient(circle, #fff, transparent 550px);
+        background-image: -o-radial-gradient(circle, #fff, rgba(255,255,255,0) 550px);
+        background-image: -moz-radial-gradient(circle, #fff, rgba(255,255,255,0) 550px);
+        background-image: -webkit-radial-gradient(circle, #fff, rgba(255,255,255,0) 550px);
         background-repeat: no-repeat;
         height: 100%;
         position: relative;
