@@ -93,7 +93,7 @@ define(function(require) {
                   <Link to="/impactanalysis" activeClassName="active" id="link-impactanalysis">
                     {_.isUndefined(impactedDevices) ? 
                       <span>
-                        <i className="fa fa-circle-o-notch fa-spin"></i> &nbsp;
+                        <i className="fa fa-square-o fa-spin"></i> &nbsp;
                       </span>
                     : 
                       !_.isEmpty(impactedDevices) ?

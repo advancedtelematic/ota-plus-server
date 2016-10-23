@@ -263,7 +263,7 @@ define(function(require) {
         } else {
           statusShown = (
             <span>
-              <i className="fa fa-circle-o-notch fa-spin"></i> &nbsp;
+              <i className="fa fa-square-o fa-spin"></i> &nbsp;
               <span className="counting black">Processing</span>
             </span>
           );

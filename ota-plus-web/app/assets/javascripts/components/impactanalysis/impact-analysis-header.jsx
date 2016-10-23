@@ -24,7 +24,7 @@ define(function(require) {
                   :
                     <span>No impacted devices</span>
                 :
-                  <span><i className="fa fa-circle-o-notch fa-spin"></i> impact analysis</span>
+                  <span><i className="fa fa-square-o fa-spin"></i> impact analysis</span>
                 }
               </div>
             </div>
