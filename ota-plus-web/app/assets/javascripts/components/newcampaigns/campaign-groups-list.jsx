@@ -12,7 +12,7 @@ define(function(require) {
       db.groups.addWatch("poll-campaign-details-groups", _.bind(this.forceUpdate, this, null));
     }
     componentWillUnmount() {
-      db.groups.addWatch("poll-campaign-details-groups");
+      db.groups.removeWatch("poll-campaign-details-groups");
     }
     render() {
       var groupsData = db.groups.deref();
