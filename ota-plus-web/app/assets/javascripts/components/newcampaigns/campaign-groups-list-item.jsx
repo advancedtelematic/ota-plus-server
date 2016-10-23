@@ -36,7 +36,7 @@ define(function(require) {
           <td>
             <div className="group-icon"></div>
             <div className="group-text">
-              <div className="group-title">All good now</div>
+              <div className="group-title">{this.props.groupName}</div>
               <div className="group-subtitle">{statistics.deviceCount} devices</div>
             </div>
           </td>
