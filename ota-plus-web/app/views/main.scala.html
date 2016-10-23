@@ -7,13 +7,13 @@
 <html lang="en">
   <head>
     <title>ATS Garage</title>
-    <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
+    <link rel="stylesheet" href='@routes.Assets.versioned("css/font-awesome.min.css")'>
+    <link rel="stylesheet" href='@routes.Assets.versioned("css/bootstrap-datetimepicker.min.css")'>
     <link rel="stylesheet" href='@routes.Assets.versioned("css/jquery.ioslist.css")'>
-    <link rel='stylesheet' href='@routes.Assets.versioned("css/sota-styles.css")'>
-    <script src='@routes.Assets.versioned("js/define-theme.js")' type='text/javascript'></script>
-    <script src='@routes.Assets.versioned("js/loading-texts.js")' type='text/javascript'></script>
+    <link rel="stylesheet" href='@routes.Assets.versioned("css/sota-styles.css")'>
+    <script type="text/javascript" src='@routes.Assets.versioned("js/define-theme.js")'></script>
+    <script type="text/javascript" src='@routes.Assets.versioned("js/loading-texts.js")'></script>
   </head>
   <body>
     <div id="app"></div>
@@ -41,18 +41,15 @@
         var appDoorElement = document.getElementById("app-door");
         appElement.classList.add(defineTheme());
         appDoorElement.classList.add(defineTheme());
-        var loadingText = new LoadingTexts({wrapper: "loading-text"});
-    </script>
-    <script>
-      @Html(org.webjars.RequireJS.getSetupJavaScript(routes.WebJarAssets.at("").url))
-    </script>
-    <script>        
+        var loadingText = new LoadingTexts({wrapper: "loading-text"});        
+        
         var errorContainer = document.getElementById("requirejs-errors");
         
         function hideError() {
           errorContainer.style.display = 'none';
         }
         
+        @Html(org.webjars.RequireJS.getSetupJavaScript(routes.WebJarAssets.at("").url))
 	cachedCallback = require.callback;
 	require = {
 	  callback: function() {
@@ -60,18 +57,18 @@
 	    requirejs.config({"paths": {"lodash": ["/webjars/lodash/3.10.1/lodash"]}});
 	    requirejs.config({"paths": {"react": ["/webjars/react/0.14.7/react-with-addons"]}});
 	    requirejs.config({"paths": {"react-dom": ["/webjars/react/0.14.7/react-dom"]}});
-	    requirejs.config({"paths": {"react-router": ["https://cdnjs.cloudflare.com/ajax/libs/react-router/2.4.0/ReactRouter.min"]}});
-            requirejs.config({"paths": {"moment": ["https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min"]}});
-            requirejs.config({"paths": {"bootstrap-datetimepicker": ["https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min"]}});
+	    requirejs.config({"paths": {"react-router": ["@routes.Assets.versioned("js/ReactRouter.min")"]}});
+            requirejs.config({"paths": {"moment": ["@routes.Assets.versioned("js/moment.min")"]}});
+            requirejs.config({"paths": {"bootstrap-datetimepicker": ["@routes.Assets.versioned("js/bootstrap-datetimepicker.min")"]}});
             requirejs.config({"paths": {"ioslist": ["@routes.Assets.versioned("js/jquery.ioslist.min")"]}});
             requirejs.config({"paths": {"velocity": ["@routes.Assets.versioned("js/velocity.min")"]}});
             requirejs.config({"paths": {"velocity-ui": ["@routes.Assets.versioned("js/velocity.ui.min")"]}});
-            requirejs.config({"paths": {"jquery-ui": ["https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min"]}});
-            requirejs.config({"paths": {"progressbar-js": ["https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/1.0.1/progressbar.min"]}});
-            requirejs.config({"paths": {"babel": ["https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.10.3/babel.min"]}});
+            requirejs.config({"paths": {"jquery-ui": ["@routes.Assets.versioned("js/jquery-ui.min")"]}});
+            requirejs.config({"paths": {"progressbar-js": ["@routes.Assets.versioned("js/progressbar.min")"]}});
+            requirejs.config({"paths": {"babel": ["@routes.Assets.versioned("js/babel.min")"]}});
             requirejs.config({"paths": {"es6": ["@routes.Assets.versioned("js/es6")"]}});
-            requirejs.config({"paths": {"Chartjs": ["https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min"]}});
-            requirejs.config({"paths": {"react-chartjs": ["https://cdnjs.cloudflare.com/ajax/libs/react-chartjs/0.8.0/react-chartjs.min"]}});
+            requirejs.config({"paths": {"Chartjs": ["@routes.Assets.versioned("js/Chart.min")"]}});
+            requirejs.config({"paths": {"react-chartjs": ["@routes.Assets.versioned("js/react-chartjs.min")"]}});
             requirejs.config({"paths": {"bootstrap": ["/webjars/bootstrap/3.3.6/js/bootstrap"], "bootstrap-css": ["/webjars/bootstrap/3.3.6/css/bootstrap"]}, "shim": {"bootstrap": ["jquery"]}, "packages":[]});
             
             requirejs.config({
@@ -93,7 +90,6 @@
 	}
     </script>
     <script data-main="@routes.Assets.versioned("javascripts/react-app.js")" src="@routes.WebJarAssets.at(WebJarAssets.locate("require.min.js"))"></script>
-
     @CSRF.formField
   </body>
 </html>
