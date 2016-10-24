@@ -82,7 +82,7 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
   }
 
   def authorizationFailed(error: String, errorDescription: String): Result = {
-    Redirect(routes.LoginController.authorizationError()).flashing("authzError" -> errorDescription)
+    Redirect(routes.LoginController.authorizationError()).flashing("authzError" -> error)
   }
 
   private[this] def exchangeIdTokenForAssertion(idToken: IdToken): AsyncDescribedComputation[JwtAssertion] = {
