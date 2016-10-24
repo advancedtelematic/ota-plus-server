@@ -16,10 +16,14 @@ define(function(require) {
     componentDidMount() {
       var proto = (location.protocol == "http:") ? "ws://" : "wss://";
       var port  = (location.protocol == "http:") ? ":" + location.port : ":8080";
-      var ws = new WebSocket(proto + location.hostname + port + "/api/v1/events/devices/" + this.props.device.uuid + "/ws");
+      var ws = new WebSocket(proto + location.hostname + port + "/api/v1/events/ws");
+      var devUuid = this.props.device.uuid;
       
       ws.onmessage = function(msg) {
-        Events.deviceSeen(JSON.parse(msg.data));
+        var js = JSON.parse(msg.data);
+        if (js.type == "DeviceSeen" && js.event.uuid == devUuid) {
+          Events.deviceSeen(js.event);
+        }
       };
       this.setState({eventDeviceSeen: ws});
     }
