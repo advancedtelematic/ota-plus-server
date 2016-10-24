@@ -11,7 +11,6 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        filterValue: '',
         campaignsListHeight: '300px',
         isCreateModalShown: false,
         isWizardShown: false,
@@ -19,7 +18,6 @@ define(function(require) {
       };
       
       this.setCampaignsListHeight = this.setCampaignsListHeight.bind(this);
-      this.changeFilter = this.changeFilter.bind(this);
       this.openCreateModal = this.openCreateModal.bind(this);
       this.closeCreateModal = this.closeCreateModal.bind(this);
       this.closeWizard = this.closeWizard.bind(this);
@@ -62,26 +60,20 @@ define(function(require) {
         isWizardShown: false
       });
     }
-    changeFilter(filter) {
-      this.setState({filterValue: filter});
-    }
     render() {
       return (
         <div>
           <div className="panel panel-ats">
             <div className="panel-body">
               <div className="panel-subheading">
-                <SearchBar class="search-bar pull-left" inputId="search-campaigns-input" changeFilter={this.changeFilter}/>
-
                 <div className="pull-right margin-left-15">
-                  <button onClick={this.openCreateModal} className="btn btn-add pull-right" id="button-add-new-campaign">
+                  <button onClick={this.openCreateModal} className="btn btn-main btn-add pull-right" id="button-add-new-campaign">
                     <i className="fa fa-plus"></i> &nbsp; Create new
                   </button>
                 </div>
               </div>
               <div id="campaigns-wrapper" style={{height: this.state.campaignsListHeight}}>
                 <CampaignsList 
-                  filterValue={this.state.filterValue}
                   openWizard={this.openWizard}/>
               </div>
             </div>

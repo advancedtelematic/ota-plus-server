@@ -68,11 +68,21 @@ define(function(require) {
         });
       }
       
+      var storedThemeMode = localStorage.getItem('themeMode');
+      var theme = 'atsgarage';
+      switch(storedThemeMode) {
+        case 'otaplus': 
+          theme = 'otaplus';
+        break;
+        default:
+        break;
+      }
+      
       return (
         <nav className="navbar navbar-inverse navbar-fixed-top">
           <div className="container">
             <div className="navbar-header">
-              <Link to="/" className="navbar-brand"><img src="/assets/img/atsgarage.png" id="logo" alt=""/></Link>
+              <Link to="/" className="navbar-brand"><img src={"/assets/img/" + theme + ".png"} id="logo" alt=""/></Link>
             </div>
             <div id="navbar" className="pull-left">
               <ul className="nav navbar-nav">

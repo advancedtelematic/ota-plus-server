@@ -95,7 +95,7 @@ define(function(require) {
       return (
         <div id="queue">
           <div className="panel-subheading">
-            <button onClick={this.toggleQueueHistory} className="btn btn-history pull-right" id="button-toggle-queue-history">{this.props.textPackagesHistory}</button>
+            <button onClick={this.toggleQueueHistory} className="btn btn-main btn-history pull-right" id="button-toggle-queue-history">{this.props.textPackagesHistory}</button>
           </div>
           <div className={"alert alert-ats alert-dismissible" + (this.state.alertHidden ? " hidden" : '')} role="alert">
             <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true"></span></button>

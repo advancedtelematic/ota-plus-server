@@ -37,22 +37,34 @@ define(function(require) {
             configureCampaign={this.configureCampaign}/>
         );
       }, this);
+            
       return (
-        <div>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Status</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {campaigns}
-            </tbody>
-          </table>
+        <div className={"height-100" + (!_.isUndefined(db.campaigns.deref()) && campaigns.length ? " with-background" : "")}>
+          {!_.isUndefined(db.campaigns.deref()) ? 
+            campaigns.length ? 
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {campaigns}
+                </tbody>
+              </table>
+            :
+              <div className="col-md-12 height-100 position-relative text-center">
+                <div className="center-xy padding-15">
+                  <span className="font-24 white">
+                    There are no campaigns.
+                  </span>
+                </div>
+              </div>
+          : undefined}
         </div>
       );
     }

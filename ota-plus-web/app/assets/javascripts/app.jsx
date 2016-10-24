@@ -175,12 +175,6 @@ define(function(require) {
       if(path[1] !== undefined) {
         switch(path[1]) {
           case '':
-          case 'testsettings': 
-          case 'editprofile':
-          case 'impactanalysis':
-          case 'campaigns':
-          case 'campaigndetails':
-          case 'group':
             page = 'page-home';
           break;
           case 'devicedetails':
@@ -202,14 +196,14 @@ define(function(require) {
           <VelocityComponent animation={!this.state.hideAnimationUp ? Animations.up : null}>
             <div className="door">
               {this.state.hideAnimationUp ? 
-                <i className="fa fa-circle-o-notch fa-spin fa-2x loader"></i>
+                <i className="fa fa-circle-o-notch fa-spin fa-2x loader darkgrey"></i>
               : null}
             </div>
           </VelocityComponent>
           <VelocityTransitionGroup enter={{animation: Animations.down, complete: function() {window.location.href = logoutUrl}}}>
             {!this.state.hideAnimationDown ? 
               <div className="door door-up">
-                <i className="fa fa-circle-o-notch fa-spin fa-2x loader"></i>
+                <i className="fa fa-circle-o-notch fa-spin fa-2x loader darkgrey"></i>
               </div>
             : null}
           </VelocityTransitionGroup>

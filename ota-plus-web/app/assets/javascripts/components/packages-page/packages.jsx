@@ -39,11 +39,10 @@ define(function(require) {
     }
     setPackagesListHeight() {
       var windowHeight = jQuery(window).height();
-      var footerHeight = jQuery('.panel-footer').outerHeight();
       var offsetTop = jQuery('#packages-wrapper').offset().top;
             
       this.setState({
-        packagesListHeight: windowHeight - offsetTop - footerHeight
+        packagesListHeight: windowHeight - offsetTop
       });
     }
     changeFilter(filter) {
@@ -81,7 +80,7 @@ define(function(require) {
                     </div>
                   </div>
           
-                  <button onClick={this.openForm} className="btn btn-add pull-right" id="button-add-new-package">
+                  <button onClick={this.openForm} className="btn btn-main btn-add pull-right" id="button-add-new-package">
                     <i className="fa fa-plus"></i> &nbsp; Add new package
                   </button>
                 </div>
@@ -96,7 +95,6 @@ define(function(require) {
                   closeForm={this.closeForm}/>
               </div>
             </div>
-            <div className="panel-footer"></div>
           </div>
         </div>
       );
