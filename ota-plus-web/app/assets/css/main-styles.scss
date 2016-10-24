@@ -40,7 +40,7 @@ body {
     height: 100%;
 
     &.login {
-        background: url('../img/bg_login.jpg') top center no-repeat;
+        background: url('../img/garage_door.jpg') top center no-repeat;
         background-size: cover;
     }
 
@@ -260,6 +260,7 @@ body {
             }
 
             .a0-panel {
+                background: rgba(0,0,0,0.35);
                 width: 100%;
                 box-shadow: none;
                 -webkit-box-shadow: none;

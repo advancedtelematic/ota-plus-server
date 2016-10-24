@@ -2,8 +2,7 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       Link = Router.Link,
-      SearchBar = require('es6!../searchbar'),
-      TutorialAddNewDevice = require('es6!../tutorial/add-new-device');
+      SearchBar = require('es6!../searchbar');
         
   class DevicesHeader extends React.Component {
     constructor(props) {
@@ -46,12 +45,11 @@ define(function(require) {
               </div>
             </div>
 
-            <button type="button" onClick={this.props.openNewDeviceModal} className="btn btn-add pull-right">
-              <i className="fa fa-plus"></i> &nbsp; Add new device
-            </button>
-            {this.props.isTutorialShown ? 
-              <TutorialAddNewDevice />
-            : null}
+            {!this.props.isDevicesListEmpty ?
+              <button type="button" onClick={this.props.openNewDeviceModal} className="btn btn-main btn-add pull-right">
+                <i className="fa fa-plus"></i> &nbsp; Add new device
+              </button>
+            : undefined}
           </div>
         </div>
       );

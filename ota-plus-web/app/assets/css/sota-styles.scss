@@ -5,9 +5,12 @@ $font-family: "AkkuratRegular";
 $color-blue: #A6E6DF;
 $color-red: #d66f6f;
 $color-orange: #FB9773;
+$color-orange-active: #C5795F;
 $color-brown: #66493E;
 $color-darkgrey: #444;
 $color-lightgrey: #888;
+$color-mint: #9ce2d8;
+$color-mint-active: #7de9da;
 
 @import "common.scss";
 
@@ -36,6 +39,7 @@ $color-lightgrey: #888;
 body {
     color: #fff;
     font: normal $font-size $font-family;
+    background: #202020;
 }
 
 a, a:hover {
@@ -50,7 +54,7 @@ button {
 
     &.list-group-item {
         &:focus {
-            background: transparent;
+            background: inherit;
         }
     }
 }
@@ -78,7 +82,12 @@ button {
 }
 
 .page {
-    padding-top: 50px;
+    height: 100vh;
+    max-height: 100vh;
+    background: url(/assets/img/bg.jpg) no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    padding-top: 50px; 
     overflow: hidden;
 }
 
@@ -170,7 +179,7 @@ button {
                 }
 
                 &:hover, &.active {
-                    border-bottom: 5px solid $color-orange;
+                    border-bottom: 5px solid $color-mint;
                 }
             }
         }
@@ -348,13 +357,6 @@ button {
 }
 
 .page-home {
-    height: 100vh;
-    max-height: 100vh;
-    background: url(/assets/img/bg.jpg) no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    overflow: hidden;
-
     .devices {
         overflow-y: scroll;
         overflow-x: hidden;
@@ -768,8 +770,6 @@ button {
 }
 
 #packages-wrapper {
-    background: #fff;
-
     #packages-list-inside {
         width: 100%;
         height: 100%;
@@ -777,6 +777,10 @@ button {
         position: relative;
         zoom: 1;
     }
+}
+
+#packages-list {
+    position: relative;
 }
 
 #packages-list, #queue-wrapper {
@@ -807,19 +811,28 @@ button {
 
 /* Buttons */
 
-.btn-add {
-    color: #fff;
-    font-size: 12px;
+.btn-main {
+    color: $color-darkgrey !important;
+    font-size: 10px;
+    font-weight: bold;
     text-transform: uppercase;
-    background: #ffa987;
-    padding: 5px 16px 5px 16px;
-    margin: 6px 0 0 0;
+    background: $color-mint;
+    min-width: 78px;
+    padding: 4px 15px;
     border-radius: 15px;
 
     &:hover, &:focus, &:active {
-        color: #fff;
-        background: #bd7861;
+        background: $color-mint-active;
     }
+}
+
+
+.btn-add {
+    font-size: 12px;
+    text-transform: uppercase;
+    padding: 5px 16px 5px 16px;
+    margin: 6px 0 0 0;
+    border-radius: 15px;
 }
 
 .btn-black {
@@ -886,21 +899,6 @@ a.close, button.close {
 
     &:hover, &:focus, &:active {
         opacity: 1;
-    }
-}
-
-.btn-orange {
-    color: #fff !important;
-    font-size: 10px;
-    font-weight: bold;
-    text-transform: uppercase;
-    background: #FFA987;
-    min-width: 78px;
-    padding: 4px 15px;
-    border-radius: 15px;
-
-    &:hover {
-        background: #C5795F;
     }
 }
 
@@ -989,21 +987,10 @@ a.close, button.close {
 }
 
 .btn-history {
-    color: #fff;
     font-size: 12px;
-    background: #ffa987;
     padding: 5px 16px 4px 16px;
     margin: 6px 0 0 0;
     border-radius: 15px;
-
-    &:hover, &:active {
-        color: #fff;
-        background: #bd7861;
-    }
-
-    &:focus {
-        color: #fff;
-    }
 }
 
 .btn-full-section {
@@ -1105,6 +1092,10 @@ a.close, button.close {
 
 /* Colors */
 
+.white {
+    color: #fff;
+}
+
 .green {
     color: green;
 }
@@ -1115,6 +1106,14 @@ a.close, button.close {
 
 .orange {
     color: $color-orange !important;
+}
+
+.mint {
+    color: $color-mint !important;
+
+    &:hover, &:focus, &:active {
+        color: $color-mint-active;
+    }
 }
 
 .brown {
@@ -1164,6 +1163,14 @@ a.close, button.close {
 .hover-red {
     &:hover {
         color: #ff0000;
+    }
+}
+
+.color-main {
+    color: $color-mint !important;
+
+    &:hover, &:focus, &:active {
+        color: $color-mint-active !important;
     }
 }
 
@@ -1262,20 +1269,18 @@ a.close, button.close {
         border: 2px dashed #FB9773;
 
         &:after {
-            color: #555;
+            color: #fff;
             font-size: 20px;
+            line-height: 85vh;
             text-align: center;
             content: "DROP TO CREATE PACKAGE";
-            background: rgba(255,255,255,0.85);
-            width: 320px;
-            padding: 30px;
-            margin-left: -160px;
-            margin-top: -40px;
-            border: 1px solid #ccc;
+            background: rgba(50, 50, 50, 0.95);
+            width: 100%;
+            height: 100%;
+            border: 2px dashed $color-mint;
             position: absolute;
-            top: 50%;
-            left: 50%;
-            border-radius: 15px;
+            top: 0;
+            left: 0;
             z-index: 999;
         }
     }
@@ -2057,7 +2062,7 @@ a.close, button.close {
 }
 
 .door {
-    background: url('../img/steel_doors.jpg') top center no-repeat;
+    background: url('../img/garage_door.jpg') top center no-repeat;
     background-size: cover;
     width: 100%;
     height: 100%;
@@ -2078,19 +2083,13 @@ a.close, button.close {
     }
 }
 
-.otaplus {
-    .door {
-        background: #7b7b7b;
-    }
-}
-
 #components {
     position: relative;
 
     #components-overlay {
         width: 150vw;
         height: 100%;
-        background: rgba(251, 151, 115, 0.3);
+        background: rgba(100, 100, 100, 0.5);
         position: absolute;
         left: 100%;
         top: 0;
@@ -2109,7 +2108,7 @@ a.close, button.close {
 
         .components-details {
             color: #fff;
-            background: $color-orange;
+            background: rgba(150,150,150,0.95);
             width: 900px;
             height: 100%;
             padding: 10px 20px;
@@ -2166,7 +2165,7 @@ a.close, button.close {
                         background: #eee;
 
                         .components-info-icon {
-                            border: 1px solid $color-orange;
+                            border: 1px solid $color-lightgrey;
                             padding: 2px 6px;
                             border-radius: 15px;
                             display: block;
@@ -2179,13 +2178,13 @@ a.close, button.close {
                     }
 
                     .fa-chevron-down, .fa-chevron-right {
-                        color: $color-orange;
+                        color: $color-mint;
                         font-size: 10px;
                         width: 15px;
                     }
 
                     .components-info-icon {
-                        color: $color-orange;
+                        color: $color-lightgrey;
                         float: right;
                         display: none;
                     }
@@ -2220,9 +2219,13 @@ a.close, button.close {
     color: #333;
     font-size: 16px;
     font-weight: bold;
-    background: #96DED2;
+    background: $color-mint;
     padding: 13px 50px;
     border-radius: 30px;
+
+    &:hover, &:active, &:focus {
+        background: $color-mint-active;
+    }
 }
 
 /* Disabled nav responsive */
@@ -2261,6 +2264,7 @@ a.close, button.close {
 }
 
 #components-column {
+    background: #fff;
     z-index: 121;
     -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
     -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
@@ -2268,10 +2272,16 @@ a.close, button.close {
 }
 
 #packages-column {
+    background: #fff;
     z-index: 120;
     -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
     -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
     box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
+}
+
+#queue-column {
+    background: red;
+    height: 100%;
 }
 
 .height-100 {
@@ -2724,7 +2734,6 @@ hr.full-line {
 }
 
 #campaigns-wrapper {
-    background: #fff;
     overflow-y: auto;
 
     .table {
@@ -3341,6 +3350,7 @@ hr.full-line {
         position: absolute;
         top: 0;
         z-index: 2;
+        transition: all 0.2s ease-in;
     }
 
     .group-inner-devices-list {
@@ -3484,7 +3494,7 @@ hr.full-line {
         padding: 15px;
         display: table-cell;
     }
-    
+
     .close-error {
         color: $color-lightgrey;
         font-size: 15px;
@@ -3492,4 +3502,92 @@ hr.full-line {
         top: 6px;
         right: 10px;
     }
+}
+
+.otaplus {
+    .page {
+        background-image: url(/assets/img/bg_otaplus.jpg);
+    }
+
+    .page-device-details  {
+        .device-header {
+            background-image: url(/assets/img/bg_otaplus.jpg);
+        }
+    }
+
+    .door {
+        background: #7b7b7b;
+    }
+
+    .btn-main {
+        color: #fff !important;
+        background: $color-orange;
+
+        &:hover, &:focus, &:active {
+            background: $color-orange-active;
+        }
+    }
+
+    .color-main {
+        color: $color-orange !important;
+
+        &:hover, &:focus, &:active {
+            color: $color-orange !important;
+        }
+    }
+
+    .navbar-inverse {
+        .navbar-nav {
+            > li {
+                > a {
+                    &:hover, &.active {
+                        border-color: $color-orange;
+                    }
+                }
+            }
+
+        }
+    }
+
+    .dnd-zone {
+        &.dnd-zone-active {
+            border-color: 2px dashed $color-orange;
+        }
+    }
+
+    #components {
+        #components-overlay {
+            background: rgba(251, 151, 115, 0.3);
+
+            .components-details {
+                background: $color-orange;
+            }
+        }
+
+        #components-list {
+            #components-menu {
+                li {
+                    a {
+                        &:hover {
+                            .components-info-icon {
+                                border-color: $color-orange;
+                            }
+                        }
+
+                        .fa-chevron-down, .fa-chevron-right {
+                            color: $color-orange;
+                        }
+
+                        .components-info-icon {
+                            color: $color-orange;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.with-background {
+    background: #fff;
 }

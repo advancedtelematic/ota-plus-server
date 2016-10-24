@@ -266,11 +266,16 @@ define(function(require) {
               </div>
             :
               <div className="col-md-12 text-center center-xy">
-                <br />
-                {this.props.areProductionDevices ?
-                  <span><i className="fa fa-warning"></i> Sorry, there are too many devices to show.</span>
+                {this.props.isDevicesListEmpty ?
+                  <span>
+                    <div className="font-24">Welcome to ATS Garage.</div>
+                    <button className="btn btn-confirm margin-top-20" onClick={this.props.openNewDeviceModal}>Add new device</button>
+                  </span>
                 :
-                  <span><i className="fa fa-warning"></i> Sorry, there are no devices to show.</span>
+                  this.props.areProductionDevices ?
+                    <span className="font-24">Oops, there are too many devices to show.</span>
+                  :
+                    <span className="font-24">Oops, there are no devices to show.</span>
                 }
               </div>
             }

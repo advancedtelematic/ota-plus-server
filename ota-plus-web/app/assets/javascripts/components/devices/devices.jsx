@@ -163,7 +163,7 @@ define(function(require) {
       var selectedStatus = this.state.selectedStatus;
       var selectedSort = this.state.selectedSort;
 
-      var isTutorialShown = (this.props.location.pathname.indexOf('newdevice') > -1 || _.isUndefined(db.devices.deref()) || db.devices.deref().length) ? false : true;
+      var isDevicesListEmpty = (_.isUndefined(db.devices.deref()) || db.devices.deref().length) ? false : true;
       
       var productionDevicesCount = 0;
       var totalProductionDevicesCount = 15382448;
@@ -206,7 +206,7 @@ define(function(require) {
             selectedSortName={this.state.selectedSortName}
             selectStatus={this.selectStatus}
             selectSort={this.selectSort}
-            isTutorialShown={isTutorialShown}
+            isDevicesListEmpty={isDevicesListEmpty}
             openNewDeviceModal={this.openNewDeviceModal}/>
           
           {areTestSettingsCorrect ?
@@ -239,6 +239,8 @@ define(function(require) {
                         Devices={SortedDevices}
                         areProductionDevices={false}
                         groups={db.groups.deref()}
+                        isDevicesListEmpty={isDevicesListEmpty}
+                        openNewDeviceModal={this.openNewDeviceModal}
                         openRenameDeviceModal={this.openRenameDeviceModal}
                         openRenameGroupModal={this.openRenameGroupModal}/>
                       {this.props.children}

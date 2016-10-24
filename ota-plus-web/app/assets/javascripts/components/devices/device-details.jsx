@@ -238,7 +238,7 @@ define(function(require) {
               </div>
             </div>
           </div>
-          <div className="col-xs-4 nopadding">
+          <div id="queue-column" className="col-xs-4 nopadding">
             <div className="panel panel-ats">
               <div className="panel-heading">
                 <div className="panel-heading-left pull-left">
