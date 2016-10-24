@@ -21,9 +21,14 @@
                 <div class="row">
                     <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
                         <div class="ats-header text-center">
-                           @if(flash.get("authzError").isDefined) {
-                           <p>@flash("authzError")</p>
-                           }
+                          @flash.get("authzError") match {
+                            case Some("unauthorized") => {
+                            <p>Your account has not been activated. Please confirm your email.</p>
+                            }
+                            case _ => {
+                            <p>We cannot log you in at this time. Please contact us for support.</p>
+                            }
+                          }
                         </div>
                     </div>
                 </div>
