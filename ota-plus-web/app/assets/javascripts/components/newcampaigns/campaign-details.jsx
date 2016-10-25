@@ -143,7 +143,7 @@ define(function(require) {
               </div>
             </div>
             <div className="panel-body">
-              <div id="campaigns-wrapper" style={{height: this.state.campaignDetailsHeight}}>
+              <div id="campaigns-wrapper" className="with-background" style={{height: this.state.campaignDetailsHeight}}>
                 {!_.isUndefined(campaign) ?
                   <div>
                     <div className="container">
