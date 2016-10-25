@@ -186,6 +186,9 @@ define(function(require) {
           case 'packages':
             page = 'page-packages';
           break;
+          case 'impactanalysis':
+            page = 'page-impact-analysis';
+          break;
           default:
           break;
         }
