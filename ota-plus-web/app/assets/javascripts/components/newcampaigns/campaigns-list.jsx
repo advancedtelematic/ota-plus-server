@@ -2,6 +2,7 @@ define(function(require) {
   var React = require('react'),
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
+      Loader = require('es6!../loader'),
       CampaignsListItem = require('es6!./campaigns-list-item');
       
   class CampaignsList extends React.Component {
@@ -65,6 +66,9 @@ define(function(require) {
                 </div>
               </div>
           : undefined}
+          {_.isUndefined(db.campaigns.deref()) ?
+            <Loader className="white" />
+          : null}
         </div>
       );
     }

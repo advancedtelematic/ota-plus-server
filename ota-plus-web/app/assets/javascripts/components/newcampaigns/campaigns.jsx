@@ -48,11 +48,11 @@ define(function(require) {
         isCreateModalShown: false
       });
     }
-    openWizard(campaign) {
+    openWizard(campaignUUID) {
       this.setState({
         isCreateModalShown: false,
         isWizardShown: true,
-        campaignUUID: campaign.id
+        campaignUUID: campaignUUID
       });
     }
     closeWizard() {
