@@ -43,7 +43,7 @@ docker run \
   -e DEVICE_REGISTRY_DB_MIGRATE='true' \
   -e NATS_HOST='nats' \
   -e NATS_PORT=4222 \
-  -e AUTH_PROTOCOL=${AUTH_PROTOCOL-'oauth.idtoken'} \
+  -e AUTH_PROTOCOL=${AUTH_PROTOCOL-'oauth.accesstoken'} \
   advancedtelematic/sota-device_registry:$DEVICE_REGISTRY_DOCKER_TAG
 
 RESOLVER_DOCKER_TAG=${RESOLVER_TAG-latest}
@@ -62,7 +62,7 @@ docker run \
   -e RESOLVER_DB_MIGRATE='true' \
   -e PACKAGES_VERSION_FORMAT='.+' \
   -e rootLevel='DEBUG' \
-  -e AUTH_PROTOCOL=${AUTH_PROTOCOL-'oauth.idtoken'} \
+  -e AUTH_PROTOCOL=${AUTH_PROTOCOL-'oauth.accesstoken'} \
   advancedtelematic/sota-resolver:$RESOLVER_DOCKER_TAG
 
 CORE_DOCKER_TAG=${CORE_TAG-latest}
@@ -87,7 +87,8 @@ docker run \
   -e CORE_INTERACTION_PROTOCOL='none' \
   -e PACKAGES_VERSION_FORMAT='.+' \
   -e rootLevel='DEBUG' \
-  -e AUTH_PROTOCOL=${AUTH_PROTOCOL-'oauth.idtoken'} \
+  -e AUTH_PROTOCOL=${AUTH_PROTOCOL-'oauth.accesstoken'} \
+  -e AUTH_VERIFICATION=${AUTH_VERIFICATION-'none'} \
   advancedtelematic/sota-core:$CORE_DOCKER_TAG
 
 $(dirname "$0")/start-ota-plus-web.sh
