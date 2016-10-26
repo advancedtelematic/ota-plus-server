@@ -39,13 +39,12 @@ define(function(require) {
       this.drop = this.drop.bind(this);
     }
     componentDidMount() {
-      var that = this;
       this.setBoxesWidth();
       window.addEventListener("resize", this.setBoxesWidth);
-      this.restoreGroups(this.props.Devices, this.props.groups);
+      this.restoreGroups(this.props.devices, this.props.groups);
     }
     componentWillReceiveProps(nextProps) {
-      this.restoreGroups(nextProps.Devices, nextProps.groups);
+      this.restoreGroups(nextProps.devices, nextProps.groups);
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setBoxesWidth);

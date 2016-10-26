@@ -15,7 +15,6 @@ define(function(require) {
       this.searchablePackages = atom.createAtom();
       this.postStatus = atom.createAtom({});
       this.postUpload = atom.createAtom();
-      this.postRequest = atom.createAtom();
       
       this.searchableProductionDevices = atom.createAtom([]);
       this.installationLogForDevice = atom.createAtom();
@@ -24,7 +23,6 @@ define(function(require) {
       this.user = atom.createAtom();
       this.components = atom.createAtom();
       this.componentsForSelectedDevices = atom.createAtom();
-      this.deviceSeen = atom.createAtom();
       this.blacklistedPackage = atom.createAtom();
       this.blacklistedPackages = atom.createAtom();
       this.impactAnalysis = atom.createAtom();
@@ -34,6 +32,14 @@ define(function(require) {
       this.campaigns = atom.createAtom();
       this.campaign = atom.createAtom();
       this.campaignStatistics = atom.createAtom();
+      
+      //Events
+      this.deviceSeen = atom.createAtom();
+      this.deviceCreated = atom.createAtom();
+      this.deviceDeleted = atom.createAtom();
+      this.packageCreated = atom.createAtom();
+      this.packageBlacklisted = atom.createAtom();
+      this.updateSpec = atom.createAtom();
     }
 
     return DB;
