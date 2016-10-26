@@ -46,7 +46,13 @@ trait ApiRequest { self =>
   def build: WSClient => WSRequest
 
   def withUserOptions(userOptions: UserOptions): ApiRequest = {
-    self.withToken(userOptions.token).withTraceId(userOptions.traceId)
+    self.withNamespace(userOptions.namespace).withToken(userOptions.token).withTraceId(userOptions.traceId)
+  }
+
+  def withNamespace(ns: Option[Namespace]): ApiRequest = {
+    ns map { n =>
+      transform(_.withHeaders("x-ats-namespace" -> n.get))
+    } getOrElse self
   }
 
   def withTraceId(traceId: Option[String]): ApiRequest = {
