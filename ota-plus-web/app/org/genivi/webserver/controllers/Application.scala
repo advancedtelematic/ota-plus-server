@@ -90,24 +90,16 @@ class Application @Inject() (ws: WSClient,
    * @return The proxied request
    */
   private def proxyTo(apiUri: String, req: AuthenticatedRequest[RawBuffer]) : Future[Result] = {
-    def toWsHeaders(hdrs0: Headers): Map[String, String] = {
-      // destination for the outgoing request, including port
-      val dest = {
-        val destURI = java.net.URI.create(apiUri)
-        val portIfAny = if (destURI.getPort == -1) "" else s":${destURI.getPort}"
-        destURI.getHost + portIfAny
-      }
-      val hdrs1 = hdrs0.remove("Host").add("Host" -> dest)
-      hdrs1.toMap.map {
-        case(name, values) => name -> values.head
-      }
-    }
+
+    val allowedHeaders = Seq("content-type", "x-ats-traceid")
+    def passHeaders(hdrs: Headers) = hdrs.toSimpleMap.filter(h => allowedHeaders.contains(h._1.toLowerCase)) +
+          ("x-ats-namespace" -> req.namespace.get)
 
     val w = ws.url(apiUri + req.path)
       .withFollowRedirects(false)
       .withMethod(req.method)
       .withQueryString(req.queryString.mapValues(_.head).toSeq :_*)
-      .withHeaders(toWsHeaders(req.headers).toSeq :_*)
+      .withHeaders(passHeaders(req.headers).toSeq :_*)
       .withHeaders(("Authorization", "Bearer " + req.authPlusAccessToken.value))
 
     val wreq = req.body.asBytes() match {
