@@ -16,6 +16,11 @@ define(function(require) {
       SotaDispatcher.dispatch({actionType: 'get-campaigns'});
       db.campaigns.addWatch("poll-campaigns", _.bind(this.setData, this, null));
     }
+    componentWillReceiveProps(nextProps) {
+      if(nextProps.filterValue != this.props.filterValue || nextProps.selectedSort != this.props.selectedSort) {
+        this.setData(nextProps.filterValue, nextProps.selectedSort);
+      }
+    }
     componentWillUnmount() {
       db.campaigns.reset();
       db.campaigns.removeWatch("poll-campaigns");
@@ -24,14 +29,24 @@ define(function(require) {
       e.preventDefault();
       this.props.openWizard(campaignUUID);
     }
-    setData() {
+    setData(filterValue = null, selectedSort) {
       var campaigns = db.campaigns.deref();
       if(!_.isUndefined(campaigns)) {
+        if(filterValue) {            
+          campaigns = _.filter(campaigns, function(campaign) {
+            return campaign.name.indexOf(filterValue) > -1;
+          });
+        }
+          
         campaigns.sort(function(a, b) {
           var aName = a.name;
           var bName = b.name;
-          return (aName.charAt(0) % 1 === 0 && bName.charAt(0) % 1 !== 0) ? 1 : aName.localeCompare(bName);
+          if(selectedSort !== 'undefined' && selectedSort == 'desc')
+            return (aName.charAt(0) % 1 === 0 && bName.charAt(0) % 1 !== 0) ? -1 : bName.localeCompare(aName);
+          else
+            return (aName.charAt(0) % 1 === 0 && bName.charAt(0) % 1 !== 0) ? 1 : aName.localeCompare(bName);
         });
+        
         this.setState({data: campaigns});
       }
     }
