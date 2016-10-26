@@ -15,7 +15,7 @@ define(function(require) {
       this.props.openRenameDeviceModal(this.props.device);
     }
     render() {
-      const link = this.props.isProductionDevice ? 'productiondevicedetails/' + this.props.productionDeviceName : 'devicedetails/' + this.props.device.uuid;
+      const link = this.props.isProductionDevice ? 'productiondevicedetails/' + this.props.productionDeviceName : '/devicedetails/' + this.props.device.uuid;
       const lastSeenDate = new Date(this.props.device.lastSeen);
       var deviceName = this.props.device.deviceName;
       var deviceStatus = 'Status unknown';
