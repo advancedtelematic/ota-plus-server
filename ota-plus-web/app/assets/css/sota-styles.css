@@ -866,6 +866,8 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 .underlined { text-decoration: underline; }
 
 #campaigns-wrapper { overflow-y: auto; }
+#campaigns-wrapper .campaigns-section-header { color: #202020; font-size: 13px; font-weight: bold; background: #D3D3D3; width: 100%; height: 28px; padding: 7px 15px; margin: 0; border-bottom: 1px solid #bbb; }
+#campaigns-wrapper .table { margin-bottom: 0; }
 #campaigns-wrapper .table > tbody > tr > td { border-bottom: 1px solid #ccc; padding-left: 15px; padding-right: 15px; vertical-align: middle; }
 #campaigns-wrapper .table > thead > tr > th { border-bottom: 1px solid #ccc; padding-left: 15px; padding-right: 15px; vertical-align: middle; }
 
@@ -1015,3 +1017,5 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 .otaplus .right-nav li.text-link a:hover { color: #FB9773; }
 
 .with-background { background: #fff; }
+
+.campaigns-list-inner { width: 100%; padding: 15px; }
