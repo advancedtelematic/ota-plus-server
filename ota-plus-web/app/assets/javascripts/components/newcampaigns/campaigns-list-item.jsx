@@ -41,7 +41,11 @@ define(function(require) {
       return (
         <tr>
           <td className="font-14">
-            <Link to={`${link}`} className="black">{this.props.campaign.name}</Link>
+            {this.props.campaign.launched ? 
+              <Link to={`${link}`} className="black">{this.props.campaign.name}</Link>
+            :
+              this.props.campaign.name
+            }
           </td>
           <td>none</td>
           <td>none</td>
