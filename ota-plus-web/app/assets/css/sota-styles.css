@@ -1019,3 +1019,7 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 .with-background { background: #fff; }
 
 .campaigns-list-inner { width: 100%; padding: 15px; }
+
+.page-client-apps .grey-header .btn-add { margin: 26px 0 0 0; }
+.page-client-apps #clients-wrapper { width: 100%; overflow-y: scroll; float: left; }
+.page-client-apps .table { color: #222; background-color: #fff; }
