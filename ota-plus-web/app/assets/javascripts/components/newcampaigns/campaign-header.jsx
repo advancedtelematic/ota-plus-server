@@ -11,7 +11,7 @@ define(function(require) {
     render() {
       return (
         <div className="col-md-12">
-          <Link to="/"><img src="/assets/img/icons/back.png" className="icon-back" alt=""/></Link>
+          <Link to="campaigns"><img src="/assets/img/icons/back.png" className="icon-back" alt=""/></Link>
           <div className="grey-header-icon"></div>
           <div className="grey-header-text">
             <div className="grey-header-title">Campaign {this.props.name}</div>
