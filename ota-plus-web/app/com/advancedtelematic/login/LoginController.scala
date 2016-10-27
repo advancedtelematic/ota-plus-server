@@ -4,12 +4,10 @@ import akka.NotUsed
 import org.genivi.sota.data.Namespace
 import com.advancedtelematic.AuthenticatedAction
 import com.advancedtelematic.api.{UnexpectedResponse, MalformedResponse}
-import com.advancedtelematic.{AuthPlusAccessToken, Auth0AccessToken, JwtAssertion, IdToken}
-import com.advancedtelematic.api.AuthPlusApi
+import com.advancedtelematic.{AuthPlusConfig, AuthPlusAccessToken, Auth0AccessToken, JwtAssertion, IdToken}
 import javax.inject.{Inject, Singleton}
 
 import com.advancedtelematic.api.ApiClientExec
-import org.asynchttpclient.uri.Uri
 import org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 import play.api.Logger
 import play.api.http.{HeaderNames, MimeTypes}
@@ -245,17 +243,5 @@ object Auth0Config {
       authPlusClientId <- configuration.getString("auth0.authPlusClientId")
       dbConnection     <- configuration.getString("auth0.dbConnection")
     } yield Auth0Config(clientSecret, clientId, callbackUrl, domain, authPlusClientId, dbConnection)
-  }
-}
-
-final case class AuthPlusConfig(uri: Uri, clientId: String, clientSecret: String)
-object AuthPlusConfig {
-  def apply(conf: Configuration): Option[AuthPlusConfig] = {
-    for {
-      _conf        <- conf.getConfig("authplus")
-      clientId     <- _conf.getString("client_id")
-      clientSecret <- _conf.getString("secret")
-      authPlusHost <- _conf.getString("host").map(Uri.create)
-    } yield AuthPlusConfig(authPlusHost, clientId, clientSecret)
   }
 }
