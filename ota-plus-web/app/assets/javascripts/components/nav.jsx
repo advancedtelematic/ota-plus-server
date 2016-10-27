@@ -116,6 +116,9 @@ define(function(require) {
                   </a>
                 </li>
               : null}
+              <li className="text-link">
+                <a href="mailto:support@atsgarage.com">NEED SUPPORT?</a>
+              </li>
               <li className="dropdown" id="menuLogin">
                 <a className="dropdown-toggle btn-profile" href="#" data-toggle="dropdown">
                   {!_.isUndefined(user) && user.picture ? 
