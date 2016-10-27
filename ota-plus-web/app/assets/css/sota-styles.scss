@@ -1492,16 +1492,27 @@ a.close, button.close {
 }
 
 #verifyModal {
-    padding: 200px 0 0 0;
-
-    .modal-title {
-        color: #FB9773;
-        text-align: center;
-    }
-
-    .modal-body {
+    .modal-dialog {
         font-size: 13px;
-        text-align: center;
+        width: 470px;
+        
+        .modal-content {
+            .modal-header {
+                text-align: center;
+                background: $color-mint;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+            }
+            
+            .modal-body {
+                text-align: justify;
+                padding: 25px;
+            }
+            
+            .modal-footer {
+                padding: 15px 25px;
+            }
+        }
     }
 }
 

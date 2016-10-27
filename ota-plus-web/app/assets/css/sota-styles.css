@@ -521,9 +521,10 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .rightPanel .campaign-box .campaign-box-inner { padding: 5px; }
 .rightPanel .campaign-box .campaign-box-inner a { color: #555; }
 
-#verifyModal { padding: 200px 0 0 0; }
-#verifyModal .modal-title { color: #FB9773; text-align: center; }
-#verifyModal .modal-body { font-size: 13px; text-align: center; }
+#verifyModal .modal-dialog { font-size: 13px; width: 470px; }
+#verifyModal .modal-dialog .modal-content .modal-header { text-align: center; background: #9ce2d8; border-top-left-radius: 6px; border-top-right-radius: 6px; }
+#verifyModal .modal-dialog .modal-content .modal-body { text-align: justify; padding: 25px; }
+#verifyModal .modal-dialog .modal-content .modal-footer { padding: 15px 25px; }
 
 .form-subtitle { color: #222; font-size: 14px; font-weight: bold; margin: 15px 0 15px 0; position: relative; }
 .form-subtitle:after { content: ""; display: inline-block; height: 1px; vertical-align: middle; width: 100%; margin-right: -100%; margin-left: 10px; border-top: 3px solid #ddd; }
