@@ -13,12 +13,16 @@
     <link rel="stylesheet" href='@routes.Assets.versioned("css/jquery.ioslist.css")'>
     <link rel='stylesheet' href='@routes.Assets.versioned("css/sota-styles.css")'>
     <script src='@routes.Assets.versioned("js/define-theme.js")' type='text/javascript'></script>
+    <script src='@routes.Assets.versioned("js/loading-texts.js")' type='text/javascript'></script>
   </head>
   <body>
     <div id="app"></div>
     <div id="app-door">
         <div class="door">
-            <i class="fa fa-circle-o-notch fa-spin fa-2x loader darkgrey"></i>
+            <div class="loader darkgrey text-center">
+                <div id="loading-text" class="loading-text"></div>
+                <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
+            </div>
         </div>
     </div>
       
@@ -37,6 +41,7 @@
         var appDoorElement = document.getElementById("app-door");
         appElement.classList.add(defineTheme());
         appDoorElement.classList.add(defineTheme());
+        var loadingText = new LoadingTexts({wrapper: "loading-text"});
     </script>
     <script>
       @Html(org.webjars.RequireJS.getSetupJavaScript(routes.WebJarAssets.at("").url))
