@@ -574,7 +574,7 @@ a.close:hover, a.close:focus, a.close:active, button.close:hover, button.close:f
 .dropdown.open .btn-profile { opacity: 0.8; }
 
 .profile-links a { color: #707070; font-size: 12px; line-height: 25px; text-transform: uppercase; }
-.profile-links a:hover { color: #FFA987; }
+.profile-links a:hover { color: #9ce2d8; }
 
 /* Impact analysis */
 .checkbox-impact { margin: 2px 5px 0 0 !important; -ms-transform: scale(1.3); -moz-transform: scale(1.3); -webkit-transform: scale(1.3); -o-transform: scale(1.3); }
@@ -1006,5 +1006,6 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 .otaplus #components #components-list #components-menu li a:hover .components-info-icon { border-color: #FB9773; }
 .otaplus #components #components-list #components-menu li a .fa-chevron-down, .otaplus #components #components-list #components-menu li a .fa-chevron-right { color: #FB9773; }
 .otaplus #components #components-list #components-menu li a .components-info-icon { color: #FB9773; }
+.otaplus .profile-links a:hover { color: #FB9773; }
 
 .with-background { background: #fff; }
