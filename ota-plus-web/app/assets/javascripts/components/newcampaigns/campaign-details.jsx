@@ -193,7 +193,7 @@ define(function(require) {
                         cancelCampaignForGroup={this.cancelCampaignForGroup}/>
                     
                       <div className="container margin-bottom-15">
-                        <button className="btn btn-red pull-right margin-right-40" title="Cancel the Campaign for all groups" onClick={this.cancelCampaign}>CANCEL ALL</button>
+                        <button className="btn btn-red pull-right margin-right-40 hidden" title="Cancel the Campaign for all groups" onClick={this.cancelCampaign}>CANCEL ALL</button>
                       </div>
                     </div>
                   </div>
