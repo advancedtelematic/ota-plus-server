@@ -40,7 +40,7 @@ define(function(require) {
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
                 <div className="modal-body">
-                  <Responses action="create-device" />
+                  <Responses action="create-device" handledStatuses="error"/>
                   <div className="form-group">
                     <label htmlFor="deviceName">{this.context.strings.devicename}</label>
                     <input type="text" className="form-control" name="deviceName"
