@@ -1,6 +1,7 @@
 define(function(require) {
   var React = require('react'),
       db = require('stores/db'),
+      SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       SearchBar = require('es6!../searchbar'),
       CampaignsList = require('es6!./campaigns-list'),
@@ -64,14 +65,19 @@ define(function(require) {
         isCreateModalShown: false
       });
     }
-    openWizard(campaignUUID) {
+    openWizard(campaignUUID, ifRefreshData = false) {
+      if(ifRefreshData) 
+        SotaDispatcher.dispatch({actionType: 'get-campaigns'});
       this.setState({
         isCreateModalShown: false,
         isWizardShown: true,
-        campaignUUID: campaignUUID
+        campaignUUID: campaignUUID,
+        
       });
     }
-    closeWizard() {
+    closeWizard(ifRefreshData = false) {
+      if(ifRefreshData) 
+        SotaDispatcher.dispatch({actionType: 'get-campaigns'});
       this.setState({
         isWizardShown: false
       });

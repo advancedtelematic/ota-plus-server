@@ -30,16 +30,13 @@ define(function(require) {
     }
     handleResponse() {
       var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
-      
       if(!_.isUndefined(postStatus['create-campaign'])) {
         if(postStatus['create-campaign'].status === 'success') {
+          db.postStatus.removeWatch("poll-response-create-new-campaign");
           var response = postStatus['create-campaign'].response;
-          setTimeout(function() {
-            SotaDispatcher.dispatch({actionType: 'get-campaigns'});
-          }, 1);
           delete postStatus['create-campaign'];
           db.postStatus.reset(postStatus);
-          this.props.openWizard(response);
+          this.props.openWizard(response, true);
         }
       }
     }
