@@ -40,10 +40,10 @@ define(function(require) {
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setCampaignDetailsHeight);
-      db.campaign.reset();
-      db.campaignStatistics.reset();
       db.campaign.removeWatch("poll-campaign");
       db.campaignStatistics.removeWatch("poll-campaign");
+      db.campaign.reset();
+      db.campaignStatistics.reset();
     }
     setCampaignDetailsHeight() {
       var windowHeight = jQuery(window).height();
@@ -79,6 +79,7 @@ define(function(require) {
         var overallUpdatedDevicesCount = 0;
         var overallFailedUpdates = 0;
         var overallSuccessfulUpdates = 0;
+        var overallCancelledUpdates = 0;
         
         _.each(campaign.groups, function(group, index) {
           campaign.groups[index]['statistics'] = _.findWhere(db.campaignStatistics.deref(), {updateId: group.updateRequest});
@@ -89,12 +90,14 @@ define(function(require) {
           overallUpdatedDevicesCount += statistic.updatedDevices;
           overallFailedUpdates += statistic.failedUpdates;
           overallSuccessfulUpdates += statistic.successfulUpdates;
+          overallCancelledUpdates += statistic.cancelledUpdates;
         });
         
         campaign.overallDevicesCount = overallDevicesCount;
         campaign.overallUpdatedDevicesCount = overallUpdatedDevicesCount;
         campaign.overallFailedUpdates = overallFailedUpdates;
         campaign.overallSuccessfulUpdates = overallSuccessfulUpdates;
+        campaign.overallCancelledUpdates = overallCancelledUpdates;
         
         this.setState({data: campaign});
       }
@@ -117,6 +120,12 @@ define(function(require) {
             color: "#96DCD1",
             highlight: "#96DCD1",
             label: "Success rate"
+          },
+          {
+            value: campaign.overallCancelledUpdates,
+            color: "#CCCCCC",
+            highlight: "#CCCCCC",
+            label: "Cancelled rate"
           }
         ];
         
