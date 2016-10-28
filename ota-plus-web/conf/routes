@@ -12,7 +12,6 @@ GET     /webjars/*file                           controllers.WebJarAssets.at(fil
 GET     /api/v1/client/:uuid/:artifact/:arch org.genivi.webserver.controllers.ClientSdkController.downloadClientSdk(uuid: Uuid, artifact: ArtifactType, arch: Architecture)
 
 POST    /api/v1/devices                          org.genivi.webserver.controllers.DeviceController.create()
-GET     /api/v1/devices/:uuid/clientInfo         org.genivi.webserver.controllers.DeviceController.fetchClientInfo(uuid: Uuid)
 
 GET     /api/v1/events/ws                        org.genivi.webserver.controllers.EventController.ws()
 
