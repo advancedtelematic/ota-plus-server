@@ -87,6 +87,7 @@ define(function(require) {
               </div>
               <div id="packages-wrapper" style={{height: this.state.packagesListHeight}}>
                 <PackagesList 
+                  websocket={this.props.websocket}
                   packagesListHeight={this.state.packagesListHeight}
                   selectedSort={this.state.selectedSort}
                   filterValue={this.state.filterValue}
