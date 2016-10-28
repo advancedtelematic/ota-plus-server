@@ -37,7 +37,7 @@ a, a:hover, a:focus { color: #fff; text-decoration: none; }
 
 .underlined { text-decoration: underline; }
 
-.login #ats-page { background-image: -o-radial-gradient(circle, #fff, transparent 550px); background-image: -moz-radial-gradient(circle, #fff, transparent 550px); background-image: -webkit-radial-gradient(circle, #fff, transparent 550px); background-repeat: no-repeat; height: 100%; position: relative; }
+.login #ats-page { background-image: -o-radial-gradient(circle, #fff, rgba(255, 255, 255, 0) 550px); background-image: -moz-radial-gradient(circle, #fff, rgba(255, 255, 255, 0) 550px); background-image: -webkit-radial-gradient(circle, #fff, rgba(255, 255, 255, 0) 550px); background-repeat: no-repeat; height: 100%; position: relative; }
 .login #ats-page .container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
 .modal { padding: 100px 0 0 0; }
