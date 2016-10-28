@@ -71,7 +71,7 @@ define(function(require) {
           </td>
           <td>
             {this.props.campaign.launched ? 
-              <PieChart data={data} width="30" height="30"/>
+              <PieChart data={data} width="30" height="30" options={{showTooltips: false}}/>
             :
               <a href="#" className="black" onClick={this.props.configureCampaign.bind(this, this.props.campaign.id)}>Configure</a>
             }

@@ -179,7 +179,7 @@ define(function(require) {
                             <div className="font-18">Failure rate</div>
                             <div className="col-md-10 col-md-offset-2">
                               <div className="position-relative">
-                                <DoughnutChart data={failureRateData} options={{percentageInnerCutout: 40}} width="120" height="120"/>
+                                <DoughnutChart data={failureRateData} options={{percentageInnerCutout: 40}} width="120" height="120" options={{showTooltips: false}}/>
                                 <div className="campaign-chart-inside font-18 text-center"><strong>{Math.round(campaign.overallFailedUpdates/Math.max(campaign.overallUpdatedDevicesCount, 1) * 100)}%</strong></div>
                               </div>
                             </div>
