@@ -74,27 +74,4 @@ extends Controller with ApiClientSupport {
       _ <- vehiclesStore.registerVehicle(vehicleMetadata)
     } yield vehicleMetadata
   }
-
-  /**
-    * Contact Auth+ to fetch the ClientInfo for the given device.
-    */
-  def fetchClientInfo(device: Uuid) : Action[AnyContent] =
-    authAction.AuthenticatedApiAction.async { implicit request =>
-      val options = userOptions(request)
-      val fut = for (
-        vMetadataOpt <- vehiclesStore.getVehicle(device);
-        vMetadata <- vMetadataOpt match {
-          case None => Future.failed[DeviceMetadata](NoSuchVinRegistered)
-          case Some(vmeta) => Future.successful(vmeta)
-        };
-        device <- devicesApi.getDevice(options, device);
-        clientInfo <- authPlusApi.fetchClientInfo(vMetadata.clientInfo.clientId)
-          if device.namespace == request.namespace
-      ) yield Ok(clientInfo)
-
-      fut.recoverWith { case _ =>
-        Future.successful( BadRequest(s"No device has been registered with this app for UUID ${device.show}") )
-      }
-    }
-
 }
