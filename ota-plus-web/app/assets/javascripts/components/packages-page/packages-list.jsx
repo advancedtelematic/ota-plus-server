@@ -3,6 +3,7 @@ define(function(require) {
       ReactDOM = require('react-dom'),
       SotaDispatcher = require('sota-dispatcher'),
       db = require('stores/db'),
+      Events = require('handlers/events'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       PackagesListItem = require('es6!./packages-list-item'),
       PackageListItemDetails = require('es6!./packages-list-item-details'),
@@ -15,9 +16,9 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        data: undefined,
+        searchablePackagesData: undefined,
+        searchablePackagesDataNotChanged: undefined,
         expandedPackage: null,
-        intervalId: null,
         tmpIntervalId: null,
         fakeHeaderTopPosition: 0,
         fakeHeaderLetter: null,
@@ -31,10 +32,8 @@ define(function(require) {
         packagesShownEndIndex: 50
       };
       
-      this.refreshData = this.refreshData.bind(this);
-      this.refresh = this.refresh.bind(this);
-      this.setData = this.setData.bind(this);
-      this.prepareData = this.prepareData.bind(this);
+      this.setSearchablePackagesData = this.setSearchablePackagesData.bind(this);
+      this.groupAndSortPackages = this.groupAndSortPackages.bind(this);
       this.onDrop = this.onDrop.bind(this);
       this.showBlacklistForm = this.showBlacklistForm.bind(this);
       this.closeBlacklistForm = this.closeBlacklistForm.bind(this);
@@ -44,17 +43,22 @@ define(function(require) {
       this.packagesListScroll = this.packagesListScroll.bind(this);
       this.startIntervalPackagesListScroll = this.startIntervalPackagesListScroll.bind(this);
       this.stopIntervalPackagesListScroll = this.stopIntervalPackagesListScroll.bind(this);
+      this.handlePackageCreated = this.handlePackageCreated.bind(this);
       
-      db.searchablePackages.addWatch("poll-packages", _.bind(this.refresh, this, null));      
+      SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
+      db.searchablePackages.addWatch("poll-packages", _.bind(this.setSearchablePackagesData, this, null));
+      db.packageCreated.addWatch("package-created", _.bind(this.handlePackageCreated, this, null));
     }
     componentDidMount() {
-      var that = this;
-      var intervalId = setInterval(function() {
-        that.refreshData();
-      }, 1000);
-      this.setState({intervalId: intervalId});
-      this.refreshData();
       ReactDOM.findDOMNode(this.refs.packagesList).addEventListener('scroll', this.packagesListScroll);
+      
+      var ws = this.props.websocket;
+      ws.onmessage = function(msg) {
+        var eventObj = JSON.parse(msg.data);
+        if(eventObj.type == "PackageCreated") {
+          Events.packageCreated(eventObj.event);
+        }
+      };
     }
     componentDidUpdate(prevProps, prevState) {
       if(this.props.packagesListHeight !== prevProps.packagesListHeight) {
@@ -71,14 +75,13 @@ define(function(require) {
         this.setState({isFormShown: nextProps.isFormShown});
       }
       if(this.props.selectedSort !== nextProps.selectedSort) {
-        this.setData(nextProps.selectedSort);
+        this.setSearchablePackagesData(nextProps.selectedSort);
       }
     }
     componentWillUnmount() {
       ReactDOM.findDOMNode(this.refs.packagesList).removeEventListener('scroll', this.packagesListScroll);
       db.searchablePackages.reset();      
       db.searchablePackages.removeWatch("poll-packages");
-      clearInterval(this.state.intervalId);
       clearInterval(this.state.tmpIntervalId);
     }
     generatePositions() {
@@ -93,8 +96,8 @@ define(function(require) {
       }, this);
       return positions;
     }
-    setFakeHeader(data) {
-      this.setState({fakeHeaderLetter: Object.keys(data)[0]});
+    setFakeHeader(header) {
+      this.setState({fakeHeaderLetter: header});
     }
     packagesListScroll() {
       var scrollTop = this.refs.packagesList.scrollTop;
@@ -107,7 +110,7 @@ define(function(require) {
       positions.every(function(position, index) {
         if(scrollTop >= position) {
           beforeHeadersCount++;
-          newFakeHeaderLetter = Object.keys(this.state.data)[index];
+          newFakeHeaderLetter = Object.keys(this.state.searchablePackagesData)[index];
           return true;
         } else if(scrollTop >= position - headerHeight) {
           scrollTop -= scrollTop - (position - headerHeight);
@@ -145,70 +148,58 @@ define(function(require) {
       clearInterval(this.state.tmpIntervalId);
       this.setState({tmpIntervalId: null});
     }
-    refreshData() {
-      SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
-    }
-    refresh() {
-      this.setData(this.props.selectedSort);
-    }
-    setData(selectedSort) {
-      var result = this.prepareData(selectedSort);
-      if(!_.isUndefined(result.data) && (_.isUndefined(this.state.data) || Object.keys(this.state.data)[0] !== Object.keys(result.data)[0]))
-        this.setFakeHeader(result.data);
-      
+    setSearchablePackagesData(selectedSort = this.props.selectedSort) {
+      var searchablePackages = db.searchablePackages.deref();
+      if(!_.isUndefined(searchablePackages)) {
+        searchablePackages = this.groupAndSortPackages(searchablePackages, selectedSort);
+        if(_.isUndefined(this.state.searchablePackagesData) || Object.keys(this.state.searchablePackagesData)[0] !== Object.keys(searchablePackages)[0])
+          this.setFakeHeader(Object.keys(searchablePackages)[0]);
+      }
       this.setState({
-        data: result.data
+        searchablePackagesData: searchablePackages,
+        searchablePackagesDataNotChanged: db.searchablePackages.deref()
       });
     }
-    prepareData(selectedSort) {
+    groupAndSortPackages(packages, selectedSort = this.props.selectedSort) {
       var that = this;
-      var Packages = db.searchablePackages.deref();
-
-      var SortedPackages = undefined;
+      var groupedPackages = {};
+      var sortedPackages = {};
       var installedCount = 0;
       var queuedCount = 0;
-      
-      var selectedSort = selectedSort ? selectedSort : this.props.selectedSort;
-      
-      if(!_.isUndefined(Packages)) {
-        var GroupedPackages = {};
-        _.each(Packages, function(obj, index){
-          var objKey = obj.id.name+'_'+obj.id.version;
-          
-          if( typeof GroupedPackages[obj.id.name] == 'undefined' || !GroupedPackages[obj.id.name] instanceof Array ) {
-            GroupedPackages[obj.id.name] = new Object();
-            GroupedPackages[obj.id.name]['elements'] = [];
-            GroupedPackages[obj.id.name]['packageName'] = obj.id.name;
-          }
-          
-          GroupedPackages[obj.id.name]['elements'].push(Packages[index]);
-        });
+            
+      _.each(packages, function(obj, index){
+        var objKey = obj.id.name+'_'+obj.id.version;
+        if(_.isUndefined(groupedPackages[obj.id.name]) || !groupedPackages[obj.id.name] instanceof Array ) {
+          groupedPackages[obj.id.name] = new Object();
+          groupedPackages[obj.id.name]['elements'] = [];
+          groupedPackages[obj.id.name]['packageName'] = obj.id.name;
+        }
+        groupedPackages[obj.id.name]['elements'].push(packages[index]);
+      });
 
-        _.each(GroupedPackages, function(obj, index) {
-          GroupedPackages[index]['elements'] = obj['elements'].sort(function (a, b) {
-            var aVersion = a.id.version;
-            var bVersion = b.id.version;
-            return that.compareVersions(bVersion, aVersion);
-          });
+      _.each(groupedPackages, function(obj, index) {
+        groupedPackages[index]['elements'] = obj['elements'].sort(function (a, b) {
+          var aVersion = a.id.version;
+          var bVersion = b.id.version;
+          return that.compareVersions(bVersion, aVersion);
         });
+      });
 
-        SortedPackages = {};
-        Object.keys(GroupedPackages).sort(function(a, b) {
-          if(selectedSort !== 'undefined' && selectedSort == 'desc')
-            return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? -1 : b.localeCompare(a);
-          else
-            return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? 1 : a.localeCompare(b);
-        }).forEach(function(key) {
-          var firstLetter = key.charAt(0).toUpperCase();
-          firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
+      Object.keys(groupedPackages).sort(function(a, b) {
+        if(selectedSort !== 'undefined' && selectedSort == 'desc')
+          return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? -1 : b.localeCompare(a);
+        else
+          return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? 1 : a.localeCompare(b);
+      }).forEach(function(key) {
+        var firstLetter = key.charAt(0).toUpperCase();
+        firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
 
-          if( typeof SortedPackages[firstLetter] == 'undefined' || !SortedPackages[firstLetter] instanceof Array ) {
-             SortedPackages[firstLetter] = [];
-          }
-          SortedPackages[firstLetter].push(GroupedPackages[key]);
-        });
-      }
-      return {'data': SortedPackages};
+        if( typeof sortedPackages[firstLetter] == 'undefined' || !sortedPackages[firstLetter] instanceof Array ) {
+           sortedPackages[firstLetter] = [];
+        }
+        sortedPackages[firstLetter].push(groupedPackages[key]);
+      });
+      return sortedPackages;
     }
     onDrop(files) {
       this.setState({
@@ -268,10 +259,28 @@ define(function(require) {
       }
       return 0;
     }
+    handlePackageCreated() {
+      var packageCreated = db.packageCreated.deref();
+      if(!_.isUndefined(packageCreated)) {
+        var searchablePackagesNotChanged = this.state.searchablePackagesDataNotChanged;
+        
+        //TMP: TO REMOVE WHEN API FIELD IS ADDED
+        var idArray = packageCreated.packageId.split("-");
+        packageCreated.id = {name: idArray[0], version: idArray[1]};
+        //
+        
+        searchablePackagesNotChanged.push(packageCreated);
+        this.setState({
+          searchablePackagesData: this.groupAndSortPackages(searchablePackagesNotChanged, this.props.selectedSort),
+          searchablePackagesDataNotChanged: searchablePackagesNotChanged
+        });
+        db.packageCreated.reset();
+      }
+    }
     render() {
       var packageIndex = -1;
-      if(!_.isUndefined(this.state.data)) {
-        var packages = _.map(this.state.data, function(packages, index) {
+      if(!_.isUndefined(this.state.searchablePackagesData)) {
+        var packages = _.map(this.state.searchablePackagesData, function(packages, index) {
           var items = _.map(packages, function(pack, i) {
             packageIndex++;
             
@@ -291,7 +300,6 @@ define(function(require) {
                           key={'package-' + pack.packageName + '-versions'}
                           versions={pack.elements}
                           packageName={pack.packageName}
-                          refresh={this.refreshData}
                           showBlacklistForm={this.showBlacklistForm}/>
                       : null}
                     </VelocityTransitionGroup>
