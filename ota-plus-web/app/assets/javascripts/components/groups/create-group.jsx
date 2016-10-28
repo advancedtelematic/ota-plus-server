@@ -49,12 +49,12 @@ define(function(require) {
          !_.isUndefined(postStatus['get-components-for-selected-devices'][this.props.groupDevices[1]])) {
         this.setState({areAllComponentsRequestsDone: true});
       }
-      
     }
     render() {        
       var components = db.componentsForSelectedDevices.deref();
-      var canCreateGroup = !_.isUndefined(components) && !_.isUndefined(components[this.props.groupDevices[0]]) && !_.isUndefined(components[this.props.groupDevices[1]]);
-      
+      var canCreateGroup = !_.isUndefined(components) && !_.isUndefined(components[this.props.groupDevices[0]]) && Object.keys(components[this.props.groupDevices[0]]).length && 
+                           !_.isUndefined(components[this.props.groupDevices[1]]) && Object.keys(components[this.props.groupDevices[1]]).length;
+            
       return (
         <div id="modal-create-group" className="myModal">
           <div className="modal-dialog center-xy">
