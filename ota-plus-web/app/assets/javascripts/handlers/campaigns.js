@@ -66,6 +66,16 @@ define(function(require) {
               .success(function() {
               });
           break;
+          case 'cancel-campaign-for-request':
+            sendRequest.doPut('/api/v1/update_requests/' + payload.uuid + '/cancel', null, {action: payload.actionType})
+              .success(function() {
+              });
+          break;
+          case 'cancel-campaign':
+            sendRequest.doPut('/api/v1/campaigns/' + payload.uuid + '/cancel', null, {action: payload.actionType})
+              .success(function() {
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));

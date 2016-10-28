@@ -10,6 +10,7 @@ define(function(require) {
       CampaignHeader = require('es6!./campaign-header'),
       CampaignGroupsList = require('es6!./campaign-groups-list'),
       CampaignCancelModal = require('es6!./campaign-cancel-modal'),
+      CampaignCancelGroupModal = require('es6!./campaign-cancel-group-modal'),
       Loader = require('es6!../loader');
       
   class CampaignDetails extends React.Component {
@@ -18,14 +19,16 @@ define(function(require) {
       this.state = {
         data: undefined,
         campaignDetailsHeight: '300px',
-        campaignUuidToCancel: null,
-        isCampaignCancelModalShown: false
+        campaignToCancel: null,
+        campaignGroupToCancel: null,
+        isCampaignCancelModalShown: false,
+        isCampaignCancelGroupModalShown: false
       };
       this.setCampaignDetailsHeight = this.setCampaignDetailsHeight.bind(this);
-      this.cancelCampaignForGroup = this.cancelCampaignForGroup.bind(this);
       this.cancelCampaign = this.cancelCampaign.bind(this);
-      this.showCampaignCancelModal = this.showCampaignCancelModal.bind(this);
+      this.cancelCampaignForGroup = this.cancelCampaignForGroup.bind(this);
       this.closeCampaignCancelModal = this.closeCampaignCancelModal.bind(this);
+      this.closeCampaignCancelGroupModal = this.closeCampaignCancelGroupModal.bind(this);
       this.setData = this.setData.bind(this);
       
       SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: this.props.params.id});
@@ -52,23 +55,42 @@ define(function(require) {
       this.setState({
         campaignDetailsHeight: windowHeight - offsetTop
       });
-    }
-    cancelCampaignForGroup(uuid) {
-      this.showCampaignCancelModal(uuid);
-    }
+    }    
     cancelCampaign() {
-      console.log('cancel whole campaign');
-    }
-    showCampaignCancelModal(uuid) {
       this.setState({
         isCampaignCancelModalShown: true,
-        campaignUuidToCancel: uuid
+        campaignToCancel: this.state.data
       });
     }
-    closeCampaignCancelModal() {
+    cancelCampaignForGroup(campaignGroup, groupName) {
+      campaignGroup.meta = this.state.data.meta;
+      campaignGroup.groupName = groupName;
+      
+      this.setState({
+        isCampaignCancelGroupModalShown: true,
+        campaignGroupToCancel: campaignGroup
+      });
+    }
+    closeCampaignCancelModal(ifRefreshData = false) {
+      if(ifRefreshData) {
+        SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: this.props.params.id});
+        SotaDispatcher.dispatch({actionType: 'get-campaign-statistics', uuid: this.props.params.id});
+      }
+        
       this.setState({
         isCampaignCancelModalShown: false,
-        campaignUuidToCancel: null
+        campaignDetailsToCancel: null
+      });
+    }
+    closeCampaignCancelGroupModal(ifRefreshData = false) {
+      if(ifRefreshData) {
+        SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: this.props.params.id});
+        SotaDispatcher.dispatch({actionType: 'get-campaign-statistics', uuid: this.props.params.id});
+      }
+        
+      this.setState({
+        isCampaignCancelGroupModalShown: false,
+        campaignGroupToCancel: null
       });
     }
     setData() {      
@@ -201,8 +223,10 @@ define(function(require) {
                         groups={campaign.groups}
                         cancelCampaignForGroup={this.cancelCampaignForGroup}/>
                     
-                      <div className="container margin-bottom-15">
-                        <button className="btn btn-red pull-right margin-right-40 hidden" title="Cancel the Campaign for all groups" onClick={this.cancelCampaign}>CANCEL ALL</button>
+                      <div className="row">
+                        {campaign.overallUpdatedDevicesCount !== campaign.overallDevicesCount ?
+                          <button className="btn btn-red pull-right margin-bottom-15 margin-right-40" title="Cancel the Campaign for all groups" onClick={this.cancelCampaign}>CANCEL ALL</button>
+                        : null}
                       </div>
                     </div>
                   </div>
@@ -217,7 +241,14 @@ define(function(require) {
             {this.state.isCampaignCancelModalShown ?
               <CampaignCancelModal
                 closeForm={this.closeCampaignCancelModal} 
-                campaignUuid={this.state.campaignUuidToCancel}/>
+                campaign={this.state.campaignToCancel}/>
+            : null}
+          </VelocityTransitionGroup>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isCampaignCancelGroupModalShown ?
+              <CampaignCancelGroupModal
+                closeForm={this.closeCampaignCancelGroupModal} 
+                group={this.state.campaignGroupToCancel}/>
             : null}
           </VelocityTransitionGroup>
         </div>
