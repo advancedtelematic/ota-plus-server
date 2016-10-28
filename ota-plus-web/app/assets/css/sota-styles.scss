@@ -207,7 +207,7 @@ button {
 
 /* Device box */
 
-.device-icon, .group-icon {
+.device-icon, .group-icon, .campaign-icon {
     text-align: center;
     background: url(/assets/img/icons/device_small.png) no-repeat;
     background-size: cover;
@@ -2839,6 +2839,13 @@ hr.full-line {
         display: inline-block;
         vertical-align: middle;
     }
+    
+    .campaign-icon {
+        background-image: url(/assets/img/icons/campaign.png);
+        float: none;
+        display: inline-block;
+        vertical-align: middle;
+    }
 
     .group-text {
         width: auto;
@@ -3650,6 +3657,7 @@ hr.full-line {
 }
 
 .campaigns-list-inner {
+    background: #fff;
     width: 100%;
     padding: 15px;
 }

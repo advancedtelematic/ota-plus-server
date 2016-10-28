@@ -12,7 +12,7 @@ define(function(require) {
     }
     cancelCampaignForGroup(e) {
       e.preventDefault();
-      this.props.cancelCampaignForGroup(this.props.campaignGroup.group);
+      this.props.cancelCampaignForGroup(this.props.campaignGroup, this.props.groupName);
     }
     render() {
       var statistics = this.props.campaignGroup.statistics;
@@ -76,7 +76,9 @@ define(function(require) {
             </div>
           </td>
           <td>
-            <a href="#" className="darkgrey hover-red hidden" title="Cancel the Campaign for this group" onClick={this.cancelCampaignForGroup}><strong>Cancel</strong></a>
+            {statistics.updatedDevices !== statistics.deviceCount ?
+              <a href="#" className="darkgrey hover-red" title="Cancel the Campaign for this group" onClick={this.cancelCampaignForGroup}><strong>Cancel</strong></a>
+            : null}
           </td>
         </tr>
       );
