@@ -14,12 +14,14 @@ define(function(require) {
       var overallUpdatedDevicesCount = 0;
       var overallFailedUpdates = 0;
       var overallSuccessfulUpdates = 0;
+      var overallCancelledUpdates = 0;
       
       _.each(this.props.campaign.statistics, function(statistic) {
         overallDevicesCount += statistic.deviceCount;
         overallUpdatedDevicesCount += statistic.updatedDevices;
         overallFailedUpdates += statistic.failedUpdates;
         overallSuccessfulUpdates += statistic.successfulUpdates;
+        overallCancelledUpdates += statistic.cancelledUpdates;
       });
               
       var progress = Math.min(Math.round(overallUpdatedDevicesCount/Math.max(overallDevicesCount, 1) * 100), 100);
@@ -37,6 +39,12 @@ define(function(require) {
           color: "#96DCD1",
           highlight: "#96DCD1",
           label: "Success rate"
+        },
+        {
+          value: overallCancelledUpdates,
+          color: "#CCCCCC",
+          highlight: "#CCCCCC",
+          label: "Cancelled rate"
         }];
       return (
         <tr>

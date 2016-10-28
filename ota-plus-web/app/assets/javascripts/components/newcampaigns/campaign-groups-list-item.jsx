@@ -29,6 +29,12 @@ define(function(require) {
           color: "#96DCD1",
           highlight: "#96DCD1",
           label: "Success rate"
+        },
+        {
+          value: statistics.cancelledUpdates,
+          color: "#CCCCCC",
+          highlight: "#CCCCCC",
+          label: "Cancelled rate"
         }];
         
       return (
@@ -65,7 +71,7 @@ define(function(require) {
             </div>
             <div className="pull-left margin-top-20 margin-left-20">
               <span className={statistics.failedUpdates == 0 ? "lightgrey" : ""}>
-                {Math.round(statistics.failedUpdates/Math.max(statistics.deviceCount, 1)*100)} % failure rate
+                {Math.round(statistics.failedUpdates/Math.max(statistics.updatedDevices, 1)*100)} % failure rate
               </span>
             </div>
           </td>
