@@ -61,7 +61,7 @@ define(function(require) {
           </td>
           <td>
             <div className="pull-left margin-left-30">
-              <PieChart data={data} width="50" height="50"/>
+              <PieChart data={data} width="50" height="50" options={{showTooltips: false}}/>
             </div>
             <div className="pull-left margin-top-20 margin-left-20">
               <span className={statistics.failedUpdates == 0 ? "lightgrey" : ""}>
