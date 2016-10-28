@@ -2839,7 +2839,7 @@ hr.full-line {
         display: inline-block;
         vertical-align: middle;
     }
-    
+
     .campaign-icon {
         background-image: url(/assets/img/icons/campaign.png);
         float: none;
@@ -3072,6 +3072,17 @@ hr.full-line {
                         width: 40px;
                         height: 40px;
                     }
+
+                    .group-text {
+                        width: 70%;
+
+                        .group-title {
+                            width: 100%;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+                    }
                 }
 
                 .groups-wrapper-fade {
@@ -3179,6 +3190,11 @@ hr.full-line {
         width: 100%;
         padding: 20px;
         float: left;
+    }
+
+    .section-header {
+        position: relative;
+        z-index: 3;
     }
 }
 
@@ -3674,7 +3690,7 @@ hr.full-line {
         overflow-y: scroll;
         float: left;
     }
-    
+
     .table {
         color: #222;
         background-color: #fff;
