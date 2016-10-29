@@ -100,7 +100,7 @@ body #a0-lock.a0-theme-default .a0-switch span { color: #444; background-color: 
 body #a0-lock.a0-theme-default .a0-switch span:hover { background-color: #eee; }
 body #a0-lock.a0-theme-default .a0-switch .a0-active { background-color: #444; }
 body #a0-lock.a0-theme-default .a0-switch .a0-active:hover { background-color: #222; }
-body #a0-lock.a0-theme-default .a0-btn-small.a0-back { background: #ccc; top: 140px; left: 22px; border-color: #ccc; -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); }
+body #a0-lock.a0-theme-default .a0-btn-small.a0-back { background: #ccc; top: 130px; left: 22px; border-color: #ccc; -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); }
 body #a0-lock.a0-theme-default .a0-panel { width: 100%; box-shadow: none; -webkit-box-shadow: none; }
 body #a0-lock.a0-theme-default .a0-panel .a0-avatar-guest { display: none !important; }
 body #a0-lock.a0-theme-default .a0-panel .a0-icon-container { color: #fff; background: transparent; }
@@ -113,7 +113,7 @@ body #a0-lock.a0-theme-default .a0-panel .a0-bg-gradient { opacity: 0; }
 body #a0-lock.a0-theme-default .a0-panel .a0-error, body #a0-lock.a0-theme-default .a0-panel .a0-success { font: 400 17px Arial; text-align: center; padding: 25px 30px; margin: 0 15px; margin-bottom: 20px; border-radius: 12px; position: absolute; left: 0; right: 0; bottom: 100%; z-index: 999; }
 body #a0-lock.a0-theme-default .a0-panel .a0-error { background: #d66f6f; }
 body #a0-lock.a0-theme-default .a0-panel .a0-success { background: #7ED321; }
-body #a0-lock.a0-theme-default .a0-panel .a0-instructions { color: #fff; padding: 0 25px; }
+body #a0-lock.a0-theme-default .a0-panel .a0-instructions { color: #444; padding: 0 35px; }
 body #a0-lock.a0-theme-default .a0-panel .a0-mode { background: transparent; }
 body #a0-lock.a0-theme-default .a0-panel .a0-mode form .a0-body-content { padding: 0 20px; background: transparent; }
 body #a0-lock.a0-theme-default .a0-panel .a0-email .a0-input-box, body #a0-lock.a0-theme-default .a0-panel .a0-password .a0-input-box { border-radius: 12px; border: 2px solid rgba(0, 0, 0, 0.2); -moz-background-clip: padding; -webkit-background-clip: padding; background-clip: padding-box; margin: 15px 0; }
