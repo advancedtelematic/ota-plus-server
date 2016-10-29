@@ -13,8 +13,9 @@ define(function(require) {
       this.state = {
         name: undefined,
         version: undefined,
-        isButtonDisabled: false,
+        isButtonDisabled: true,
       };
+      this.toggleButtonState = this.toggleButtonState.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleResponse = this.handleResponse.bind(this);
       this.closeForm = this.closeForm.bind(this);      
@@ -24,6 +25,18 @@ define(function(require) {
     componentWillUnmount() {
       db.postStatus.removeWatch("poll-response-add-package");
       db.postUpload.removeWatch("poll-response-upload-package");
+    }
+    toggleButtonState() {
+      var form = serializeForm(this.refs.form);
+      var file = this.props.files && !_.isUndefined(this.props.files[0]) ? this.props.files[0] : undefined;
+      if(!_.isUndefined($('.file-upload')[0]) && !_.isUndefined($('.file-upload')[0].files) && !_.isUndefined($('.file-upload')[0].files[0])) {
+        file = $('.file-upload')[0].files[0];
+      }
+      
+      if(form.name !== '' && form.version !== '' && file)
+        this.setState({isButtonDisabled: false});
+      else 
+        this.setState({isButtonDisabled: true});
     }
     handleSubmit(e) {
       e.preventDefault();
@@ -90,13 +103,13 @@ define(function(require) {
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="name">Package Name</label>
-                        <input type="text" className="form-control" name="name" ref="name" placeholder="Package Name"/>
+                        <input type="text" className="form-control" name="name" ref="name" placeholder="Package Name" onChange={this.toggleButtonState}/>
                       </div>
                     </div>
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="version">Version</label>
-                        <input type="text" className="form-control" name="version" ref="version" placeholder="1.0.0"/>
+                        <input type="text" className="form-control" name="version" ref="version" placeholder="1.0.0" onChange={this.toggleButtonState}/>
                       </div>
                     </div>
                   </div>
@@ -121,7 +134,7 @@ define(function(require) {
                         {this.props.files && this.props.files.length > 0 ? 
                           <div> {this.props.files.map((file) => <div key={file.name}>{file.name} </div> )} </div> 
                         : 
-                          <input type="file" className="file-upload" name="file" />
+                          <input type="file" className="file-upload" name="file" onChange={this.toggleButtonState}/>
                         }
                       </div>
                     </div>
