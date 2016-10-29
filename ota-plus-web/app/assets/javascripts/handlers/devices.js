@@ -17,7 +17,7 @@ define(function(require) {
           case 'get-device':
             sendRequest.doGet('/api/v1/devices_info/' + payload.uuid + "?status=true", {action: payload.actionType})
               .success(function(device) {
-                db.showDevice.reset(device);
+                db.device.reset(device);
               });
             break;
           case 'create-device':
@@ -133,7 +133,7 @@ define(function(require) {
           case 'get-production-device':
             sendRequest.doGet('/api/v1/devices_info?status=true', {action: payload.actionType})
               .success(function(devices) {
-                db.showDevice.reset(_.find(devices, function(device) {
+                db.device.reset(_.find(devices, function(device) {
                   return device.uuid == localStorage.getItem('firstProductionTestDevice');
                 }));
               });
