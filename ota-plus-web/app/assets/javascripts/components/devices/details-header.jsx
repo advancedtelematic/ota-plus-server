@@ -2,30 +2,13 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       Link = Router.Link,
-      db = require('stores/db'),
-      Events = require('handlers/events');
+      db = require('stores/db');
 
   class DetailsHeader extends React.Component {
     constructor(props) {
       super(props);
-      db.deviceSeen.addWatch("poll-deviceseen", _.bind(this.forceUpdate, this, null));
     }
-    componentDidMount() {
-      var ws = this.props.websocket;
-      var deviceUUID = this.props.device.uuid;
-            
-      ws.onmessage = function(msg) {
-        var eventObj = JSON.parse(msg.data);
-        if(eventObj.type == "DeviceSeen" && eventObj.event.uuid == deviceUUID) {
-          Events.deviceSeen(eventObj.event);
-        }
-      };
-    }
-    componentWillUnmount() {
-      db.deviceSeen.reset();
-      db.deviceSeen.removeWatch("poll-deviceseen");
-    }
-    render() {
+    render() {      
       var deviceName = this.props.device.deviceName;
       var lastSeenDate = new Date(this.props.device.lastSeen);
       var deviceStatus = 'Status unknown';
@@ -44,7 +27,6 @@ define(function(require) {
       }
       
       var isTestDevice = localStorage.getItem('firstProductionTestDevice') === this.props.device.uuid || localStorage.getItem('secondProductionTestDevice') === this.props.device.uuid || localStorage.getItem('thirdProductionTestDevice') === this.props.device.uuid ? true : false;
-      lastSeenDate = !_.isUndefined(db.deviceSeen.deref()) ? new Date(db.deviceSeen.deref().lastSeen) : lastSeenDate;
       
       return (
         
