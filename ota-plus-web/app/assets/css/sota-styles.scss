@@ -2677,6 +2677,7 @@ hr.full-line {
                         & > tbody {
                             & > tr {
                                 & > td {
+                                    white-space: nowrap;
                                     padding: 8px 20px;
                                     border-bottom: 0;
                                     vertical-align: middle;

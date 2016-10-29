@@ -16,7 +16,7 @@ define(function(require) {
         bars: undefined,
         firstDataSet: false,
         lastUpdatedSecondsRemaining: null,
-        secondsRemaining: 600,
+        secondsRemaining: Math.random() * (900 - 600) + 600,
         overallUploadedSize: undefined,
         overallUploadSize: undefined,
         isModalMinimized: Cookies.get('isUploadMinimized') && Cookies.get('isUploadMinimized') === "true" ? true : false,
@@ -32,6 +32,8 @@ define(function(require) {
       this.cancelUpload = this.cancelUpload.bind(this);
       this.removeFromList = this.removeFromList.bind(this);
       this.setData = this.setData.bind(this);
+      this.convertTimeToUnits = this.convertTimeToUnits.bind(this);
+      this.convertBytesToUnits = this.convertBytesToUnits.bind(this);
       this.handleResponse = this.handleResponse.bind(this);
       
       db.postUpload.addWatch("poll-upload-packages", _.bind(this.setData, this, null));
@@ -176,7 +178,7 @@ define(function(require) {
       });
     }
     cancelUpload() {
-      var uploadKey = this.state.uploadKeyToCancel;
+      var uploadKey = this.state.uploadKeyToCancel;      
       
       if(!_.isUndefined(db.postUpload.deref()) && !_.isUndefined(db.postUpload.deref()['create-package'])) {
         var postUpload = db.postUpload.deref();
@@ -205,6 +207,23 @@ define(function(require) {
         db.postUpload.reset(postUpload);
       }
     }
+    convertTimeToUnits(seconds) {
+      if(seconds <= 60)
+        return Math.round(seconds) + " Seconds";
+      else if(seconds <= 3600)
+        return Math.round(seconds/60) + " Minutes";
+      else
+        return Math.round(seconds/3600) + " Hours";
+    }
+    convertBytesToUnits(megabytes) {
+      megabytes = parseFloat(megabytes);
+      if(megabytes <= 1)
+        return (megabytes*1024).toFixed(1) + " KB";
+      else if(megabytes < 1024)
+        return megabytes.toFixed(1) + "MB";
+      else
+        return (megabytes/1024).toFixed(1) + "GB";
+    }
     handleResponse() {
       var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref()['create-package'] : undefined;
       var postUpload = !_.isUndefined(db.postUpload.deref()) ? db.postUpload.deref() : undefined;
@@ -222,6 +241,7 @@ define(function(require) {
       var data = this.state.data;
       var overallUploadedSize = !isNaN(this.state.overallUploadedSize) ? this.state.overallUploadedSize/(1024*1024) : 0;
       var overallUploadSize = this.state.overallUploadSize/(1024*1024);
+      var isUploadFinished = overallUploadedSize === overallUploadSize;
       var barOptions = {
         strokeWidth: 18,
         easing: 'easeInOut',
@@ -271,13 +291,15 @@ define(function(require) {
         
         return (
           <tr key={key}>
-            <td>{upload.data.name}</td>
-            <td>{upload.data.version}</td>
-            <td>{uploadedSize.toFixed(1)} MB of {uploadSize.toFixed(1)} MB</td>
-            <td>
+            <td className="col-xs-3">{upload.data.name}</td>
+            <td className="col-xs-2">{upload.data.version}</td>
+            <td className="col-xs-4">
+               {this.convertBytesToUnits(uploadedSize)} of {this.convertBytesToUnits(uploadSize)}
+            </td>
+            <td className="col-xs-1">
               {statusShown}
             </td>
-            <td>
+            <td className="col-xs-2">
               {!_.isUndefined(upload.status) && (upload.status === 'error' || upload.status === 'success') ?
                 <a href="#" className="darkgrey" onClick={this.removeFromList.bind(this, uploadKey)}>remove from list</a>
               :
@@ -308,28 +330,25 @@ define(function(require) {
                     <div className="modal-subheader">
                       <div className="row">
                         <div className="col-md-6">
-                          {secondsRemaining > 60 ? 
+                          {isUploadFinished ?
                             <span>
-                              {Math.round(secondsRemaining/60)} Minutes left
+                              Upload is finished
                             </span>
-                          : 
-                            secondsRemaining > 0 ?
-                              <span>
-                                {Math.round(secondsRemaining)} Seconds left
-                              </span>
-                            :
-                              <span>
-                                Upload is finished
-                              </span>
+                          :
+                            <span>
+                              {this.convertTimeToUnits(secondsRemaining)} left
+                            </span>
                           }
                         </div>
                         <div className="col-md-6 text-right">
                           {this.state.isModalMinimized ? 
                             <span>
-                              {overallUploadedSize.toFixed(1)} MB of {overallUploadSize.toFixed(1)} MB
+                              {this.convertBytesToUnits(overallUploadedSize)} of {this.convertBytesToUnits(overallUploadSize)}
                             </span>
                           : 
-                            <a href="#" className="black" onClick={this.showUploadCancelModal.bind(this, undefined)}>Cancel all</a>
+                            !isUploadFinished ? 
+                              <a href="#" className="black" onClick={this.showUploadCancelModal.bind(this, undefined)}>Cancel all</a>
+                            : null
                           }
                         </div>
                       </div>
