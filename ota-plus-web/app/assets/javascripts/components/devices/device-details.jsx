@@ -199,97 +199,101 @@ define(function(require) {
               <Loader />
             : undefined}
           </div>
-          {!_.isUndefined(deviceWithStatus) && deviceWithStatus.status != "NotSeen" ?
-            <div>
-              <div id="components-column" className="col-xs-2 nopadding">
-                <div className="panel panel-ats">
-                  <div className="panel-heading" id="panel-heading-components">
-                    <div className="panel-heading-left pull-left">
-                      Components
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {!_.isUndefined(deviceWithStatus) && deviceWithStatus.status != "NotSeen" ?
+              <div>
+                <div id="components-column" className="col-xs-2 nopadding">
+                  <div className="panel panel-ats">
+                    <div className="panel-heading" id="panel-heading-components">
+                      <div className="panel-heading-left pull-left">
+                        Components
+                      </div>
+                    </div>
+                    <div className="panel-body">
+                      <Components deviceId={deviceWithStatus.uuid}/>
                     </div>
                   </div>
-                  <div className="panel-body">
-                    <Components deviceId={deviceWithStatus.uuid}/>
-                  </div>
                 </div>
-              </div>
-              <div id="packages-column" className="col-xs-6 nopadding">
-                <div className="panel panel-ats">
-                  <div className="panel-heading">
-                    <div className="panel-heading-left pull-left">
-                      {this.context.strings.packages}
+                <div id="packages-column" className="col-xs-6 nopadding">
+                  <div className="panel panel-ats">
+                    <div className="panel-heading">
+                      <div className="panel-heading-left pull-left">
+                        {this.context.strings.packages}
+                      </div>
+                    </div>
+                    <div className="panel-body">
+                      <Packages
+                        device={deviceWithStatus}
+                        setPackagesStatistics={this.setPackagesStatistics}
+                        openForm={this.openForm}
+                        onDrop={this.onDrop}
+                        showBlacklistForm={this.showBlacklistForm}
+                        filterValue={this.state.filterValue}
+                        changeFilter={this.changeFilter}/>
+                    </div>
+                    <div className="panel-footer" style={{position: 'relative'}}>
+                      <VelocityComponent animation={this.state.selectedImpactAnalysisPackagesCount ? animateLeftPosition('15px') : animateLeftPosition('-250px')}>
+                        <Link to={`devicedetails/${this.props.params.id}/impactanalysis/${this.state.selectedImpactAnalysisPackagesCount}`} className="btn btn-black btn-impact-analysis pull-left">
+                          Impact analysis
+                        </Link>
+                      </VelocityComponent>
+                      <VelocityComponent animation={this.state.selectedImpactAnalysisPackagesCount ? animateLeftPosition('140px') : animateLeftPosition('15px')}>
+                        <span className="packages-statistics">
+                          {this.state.installedPackagesCount} installed, &nbsp;
+                          {this.state.queuedPackagesCount} queued
+                        </span>
+                     </VelocityComponent>
                     </div>
                   </div>
-                  <div className="panel-body">
-                    <Packages
-                      device={deviceWithStatus}
-                      setPackagesStatistics={this.setPackagesStatistics}
-                      openForm={this.openForm}
-                      onDrop={this.onDrop}
-                      showBlacklistForm={this.showBlacklistForm}
-                      filterValue={this.state.filterValue}
-                      changeFilter={this.changeFilter}/>
-                  </div>
-                  <div className="panel-footer" style={{position: 'relative'}}>
-                    <VelocityComponent animation={this.state.selectedImpactAnalysisPackagesCount ? animateLeftPosition('15px') : animateLeftPosition('-250px')}>
-                      <Link to={`devicedetails/${this.props.params.id}/impactanalysis/${this.state.selectedImpactAnalysisPackagesCount}`} className="btn btn-black btn-impact-analysis pull-left">
-                        Impact analysis
-                      </Link>
-                    </VelocityComponent>
-                    <VelocityComponent animation={this.state.selectedImpactAnalysisPackagesCount ? animateLeftPosition('140px') : animateLeftPosition('15px')}>
-                      <span className="packages-statistics">
-                        {this.state.installedPackagesCount} installed, &nbsp;
-                        {this.state.queuedPackagesCount} queued
-                      </span>
-                    </VelocityComponent>
-                  </div>
                 </div>
-              </div>
-              <div id="queue-column" className="col-xs-4 nopadding">
-                <div className="panel panel-ats">
-                  <div className="panel-heading">
-                    <div className="panel-heading-left pull-left">
-                      {this.context.strings.queue}
+                <div id="queue-column" className="col-xs-4 nopadding">
+                  <div className="panel panel-ats">
+                    <div className="panel-heading">
+                      <div className="panel-heading-left pull-left">
+                        {this.context.strings.queue}
+                      </div>
+                    </div>
+                    <div className="panel-body">
+                      <PackagesQueue
+                        deviceId={this.props.params.id}
+                        textPackagesHistory={this.state.textPackagesHistory}
+                        isPackagesHistoryShown={this.state.isPackagesHistoryShown}
+                        toggleQueueHistory={this.toggleQueueHistory}
+                        reviewFailedInstall={this.reviewFailedInstall}
+                        setQueueStatistics={this.setQueueStatistics}
+                        device={deviceWithStatus}/>
+                    </div>
+                    <div className="panel-footer">
+                      {this.state.queueCount} packages in queue
                     </div>
                   </div>
-                  <div className="panel-body">
-                    <PackagesQueue
-                      deviceId={this.props.params.id}
-                      textPackagesHistory={this.state.textPackagesHistory}
-                      isPackagesHistoryShown={this.state.isPackagesHistoryShown}
-                      toggleQueueHistory={this.toggleQueueHistory}
-                      reviewFailedInstall={this.reviewFailedInstall}
-                      setQueueStatistics={this.setQueueStatistics}
-                      device={deviceWithStatus}/>
-                  </div>
-                  <div className="panel-footer">
-                    {this.state.queueCount} packages in queue
-                  </div>
                 </div>
+                <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+                  {this.state.isFormShown ?
+                    <AddPackage
+                      files={this.state.files}
+                      closeForm={this.closeForm}
+                      key="add-package"/>
+                  : null}
+                </VelocityTransitionGroup>
+                <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+                  {this.state.isBlacklistFormShown ?
+                    <BlacklistForm
+                      mode={this.state.blacklistMode}
+                      packageName={this.state.blacklistedPackageName}
+                      packageVersion={this.state.blacklistedPackageVersion}
+                      closeForm={this.closeBlacklistForm}/>
+                  : undefined}
+                </VelocityTransitionGroup>
+                {this.props.children}
               </div>
-              <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-                {this.state.isFormShown ?
-                  <AddPackage
-                    files={this.state.files}
-                    closeForm={this.closeForm}
-                    key="add-package"/>
-                : null}
-              </VelocityTransitionGroup>
-              <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-                {this.state.isBlacklistFormShown ?
-                  <BlacklistForm
-                    mode={this.state.blacklistMode}
-                    packageName={this.state.blacklistedPackageName}
-                    packageVersion={this.state.blacklistedPackageVersion}
-                    closeForm={this.closeBlacklistForm}/>
-                : undefined}
-              </VelocityTransitionGroup>
-              {this.props.children}
-            </div>
-          : undefined}
-          {!_.isUndefined(deviceWithStatus) && deviceWithStatus.status == "NotSeen" ?
-            <TutorialInstallDevice deviceUUID={deviceWithStatus.uuid}/>
-          : null}
+            : undefined}
+          </VelocityTransitionGroup>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {!_.isUndefined(deviceWithStatus) && deviceWithStatus.status == "NotSeen" ?
+              <TutorialInstallDevice deviceUUID={deviceWithStatus.uuid}/>
+            : null}
+          </VelocityTransitionGroup>
         </div>
       );
     }
