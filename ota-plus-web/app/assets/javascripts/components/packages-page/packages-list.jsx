@@ -30,7 +30,7 @@ define(function(require) {
         packagesShownStartIndex: 0,
         packagesShownEndIndex: 50
       };
-      
+      this.refreshSearchablePackagesData = this.refreshSearchablePackagesData.bind(this);
       this.setSearchablePackagesData = this.setSearchablePackagesData.bind(this);
       this.groupAndSortPackages = this.groupAndSortPackages.bind(this);
       this.onDrop = this.onDrop.bind(this);
@@ -46,7 +46,7 @@ define(function(require) {
       this.handlePackageBlacklisted = this.handlePackageBlacklisted.bind(this);
       
       SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
-      db.searchablePackages.addWatch("poll-packages", _.bind(this.setSearchablePackagesData, this, null));
+      db.searchablePackages.addWatch("poll-packages", _.bind(this.refreshSearchablePackagesData, this, null));
       db.packageCreated.addWatch("package-created", _.bind(this.handlePackageCreated, this, null));
       db.packageBlacklisted.addWatch("package-blacklisted", _.bind(this.handlePackageBlacklisted, this, null));
     }
@@ -142,6 +142,9 @@ define(function(require) {
     stopIntervalPackagesListScroll() {
       clearInterval(this.state.tmpIntervalId);
       this.setState({tmpIntervalId: null});
+    }
+    refreshSearchablePackagesData() {
+      this.setSearchablePackagesData(this.props.selectedSort);
     }
     setSearchablePackagesData(selectedSort = this.props.selectedSort) {
       var searchablePackages = db.searchablePackages.deref();
@@ -264,8 +267,14 @@ define(function(require) {
         //
         
         searchablePackagesNotChanged.push(packageCreated);
+        
+        var searchablePackages = this.groupAndSortPackages(searchablePackagesNotChanged, this.props.selectedSort);
+        
+        if(_.isUndefined(this.state.searchablePackagesData) || Object.keys(this.state.searchablePackagesData)[0] !== Object.keys(searchablePackages)[0])
+          this.setFakeHeader(Object.keys(searchablePackages)[0]);
+        
         this.setState({
-          searchablePackagesData: this.groupAndSortPackages(searchablePackagesNotChanged, this.props.selectedSort),
+          searchablePackagesData: searchablePackages,
           searchablePackagesDataNotChanged: searchablePackagesNotChanged
         });
         db.packageCreated.reset();
@@ -284,6 +293,7 @@ define(function(require) {
           searchablePackagesData: this.groupAndSortPackages(searchablePackagesNotChanged, this.props.selectedSort),
           searchablePackagesDataNotChanged: searchablePackagesNotChanged
         });
+        db.packageBlacklisted.reset();
       }
     }
     render() {
