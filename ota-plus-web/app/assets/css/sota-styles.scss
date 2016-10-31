@@ -2773,7 +2773,7 @@ hr.full-line {
 
     .table {
         margin-bottom: 0;
-        
+
         & > tbody  {
             & > tr {
                 & > td {
@@ -3652,4 +3652,23 @@ hr.full-line {
 .campaigns-list-inner {
     width: 100%;
     padding: 15px;
+}
+
+.page-client-apps {
+    .grey-header {
+        .btn-add {
+            margin: 26px 0 0 0;
+        }
+    }
+
+    #clients-wrapper {
+        width: 100%;
+        overflow-y: scroll;
+        float: left;
+    }
+    
+    .table {
+        color: #222;
+        background-color: #fff;
+    }
 }
