@@ -10,55 +10,44 @@ define(function(require) {
       super(props);
     }
     render() {
-      var overallDevicesCount = 0;
-      var overallUpdatedDevicesCount = 0;
-      var overallFailedUpdates = 0;
-      var overallSuccessfulUpdates = 0;
-      var overallCancelledUpdates = 0;
+      var campaign = this.props.campaign;
+      if(campaign.launched) {
+        var progress = Math.min(Math.round(campaign.summary.overallUpdatedDevicesCount/Math.max(campaign.summary.overallDevicesCount, 1) * 100), 100);
+        var data = [
+          {
+            value: campaign.summary.overallFailedUpdates,
+            color:"#FF0000",
+            highlight: "#FF0000",
+            label: "Failure rate"
+          },
+          {
+            value: campaign.summary.overallSuccessfulUpdates,
+            color: "#96DCD1",
+            highlight: "#96DCD1",
+            label: "Success rate"
+          },
+          {
+            value: campaign.summary.overallCancelledUpdates,
+            color: "#CCCCCC",
+            highlight: "#CCCCCC",
+            label: "Cancelled rate"
+          }];
+      }
+      var link = 'campaigndetails/' + campaign.id;
       
-      _.each(this.props.campaign.statistics, function(statistic) {
-        overallDevicesCount += statistic.deviceCount;
-        overallUpdatedDevicesCount += statistic.updatedDevices;
-        overallFailedUpdates += statistic.failedUpdates;
-        overallSuccessfulUpdates += statistic.successfulUpdates;
-        overallCancelledUpdates += statistic.cancelledUpdates;
-      });
-              
-      var progress = Math.min(Math.round(overallUpdatedDevicesCount/Math.max(overallDevicesCount, 1) * 100), 100);
-              
-      var link = 'campaigndetails/' + this.props.campaign.id;
-      var data = [
-        {
-          value: overallFailedUpdates,
-          color:"#FF0000",
-          highlight: "#FF0000",
-          label: "Failure rate"
-        },
-        {
-          value: overallSuccessfulUpdates,
-          color: "#96DCD1",
-          highlight: "#96DCD1",
-          label: "Success rate"
-        },
-        {
-          value: overallCancelledUpdates,
-          color: "#CCCCCC",
-          highlight: "#CCCCCC",
-          label: "Cancelled rate"
-        }];
       return (
         <tr>
           <td className="font-14">
-            {this.props.campaign.launched ? 
-              <Link to={`${link}`} className="black">{this.props.campaign.name}</Link>
+            {campaign.launched ? 
+              <Link to={`${link}`} className="black">{campaign.name}</Link>
             :
-              this.props.campaign.name
+              campaign.name
             }
           </td>
           <td>none</td>
           <td>none</td>
-          <td>
-            {this.props.campaign.launched ? 
+          {campaign.launched ? 
+            <td>
               <div className="progress progress-blue">
                 <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}></div>
                 <div className="progress-count">
@@ -73,15 +62,13 @@ define(function(require) {
                   : null}
                 </div>
               </div>
-            :
-              <span>Not launched yet</span>
-            }
-          </td>
+            </td>
+          : null}
           <td>
-            {this.props.campaign.launched ? 
+            {campaign.launched ? 
               <PieChart data={data} width="30" height="30" options={{showTooltips: false}}/>
             :
-              <a href="#" className="black" onClick={this.props.configureCampaign.bind(this, this.props.campaign.id)}>Configure</a>
+              <a href="#" className="black" onClick={this.props.configureCampaign.bind(this, campaign.id)}>Configure</a>
             }
           </td>
         </tr>
