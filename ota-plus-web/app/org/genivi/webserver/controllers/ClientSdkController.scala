@@ -49,7 +49,7 @@ extends Controller with ApiClientSupport {
   }
 
   /**
-    * Workaround to re-generate client credentials if previous client not found.
+    * Generate client credentials for a device if it has not been generated before.
     */
   def getRegisterDevice(device: Uuid) : Future[DeviceMetadata] = {
     for {
