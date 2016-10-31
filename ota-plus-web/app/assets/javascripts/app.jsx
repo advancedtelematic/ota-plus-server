@@ -195,6 +195,9 @@ define(function(require) {
           case 'impactanalysis':
             page = 'page-impact-analysis';
           break;
+          case 'campaigns':
+            page = 'page-campaigns';
+          break;
           default:
           break;
         }
