@@ -37,7 +37,8 @@ define(function(require) {
       ImpactAnalysisPage = require('es6!components/impactanalysis/impact-analysis-page'),
       UploadModal = require('es6!components/packages/upload-modal'),
       Campaigns = require('es6!components/newcampaigns/campaigns'),
-      CampaignDetails = require('es6!components/newcampaigns/campaign-details');
+      CampaignDetails = require('es6!components/newcampaigns/campaign-details'),
+      ClientApps = require('es6!components/clientapps/client-apps');
 
   const languages = {
     en: 'en'
@@ -198,6 +199,9 @@ define(function(require) {
           case 'campaigns':
             page = 'page-campaigns';
           break;
+          case 'clientapps':
+            page = 'page-client-apps';
+          break;
           default:
           break;
         }
@@ -273,6 +277,7 @@ define(function(require) {
         <Route path="impactanalysis" component={ImpactAnalysisPage}/>
         <Route path="campaigns" component={Campaigns}/>
         <Route path="campaigndetails/:id" component={CampaignDetails} />
+        <Route path="clientapps/f708f064faaf32a43e4d3c784e6af9eac6d9b20e0da02616378748834f5a37ee" component={ClientApps} />
       </Route>
     </Route>
   );
