@@ -141,8 +141,9 @@ define(function(require) {
   
             <div className="margin-top-20 text-center pull-left width-full font-16">
               <a href={"/api/v1/client/" + this.props.deviceUUID + "/toml/64"} className="color-main" target="_blank">Download the unique credentials for this device</a>, 
-              and then&nbsp;
-              <a href="http://advancedtelematic.github.io/rvi_sota_server/cli/client-startup-and-configuration.html" className="color-main" target="_blank">manually install the OTA client.</a>
+              and then manually <a href="http://advancedtelematic.github.io/rvi_sota_server/cli/building-the-sota-client.html" className="color-main" target="_blank">build</a> 
+              and <a href="http://advancedtelematic.github.io/rvi_sota_server/cli/client-startup-and-configuration.html" className="color-main" target="_blank">install</a> the 
+              <a href="https://github.com/advancedtelematic/rvi_sota_client" className="color-main" target="_blank">open source OTA client</a>.
             </div>
           </div>
         </div>
