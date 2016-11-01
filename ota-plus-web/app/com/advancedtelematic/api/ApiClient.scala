@@ -9,7 +9,7 @@ import org.genivi.sota.data.{Device, DeviceT, Namespace, Uuid}
 import org.genivi.webserver.controllers.OtaPlusConfig
 import play.api.Configuration
 import play.api.libs.json._
-import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
+import play.api.libs.ws.{WSAuthScheme, WSClient, WSRequest, WSResponse}
 import play.api.mvc.Result
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -24,8 +24,11 @@ case class RemoteApiError(result: Result, msg: String = "") extends Exception(ms
 
 case class RemoteApiParseError(msg: String) extends Exception(msg) with NoStackTrace
 
+case class UserPass(user: String, pass: String)
+
 object ApiRequest {
   case class UserOptions(token: Option[String] = None,
+                         authuser: Option[UserPass] = None,
                          traceId: Option[String] = None,
                          namespace: Option[Namespace] = None)
 
@@ -46,7 +49,16 @@ trait ApiRequest { self =>
   def build: WSClient => WSRequest
 
   def withUserOptions(userOptions: UserOptions): ApiRequest = {
-    self.withNamespace(userOptions.namespace).withToken(userOptions.token).withTraceId(userOptions.traceId)
+    self.withAuth(userOptions.authuser)
+      .withNamespace(userOptions.namespace)
+      .withToken(userOptions.token)
+      .withTraceId(userOptions.traceId)
+  }
+
+  def withAuth(auth: Option[UserPass]): ApiRequest = {
+    auth map { u =>
+      transform(_.withAuth(u.user, u.pass, WSAuthScheme.BASIC))
+    } getOrElse self
   }
 
   def withNamespace(ns: Option[Namespace]): ApiRequest = {
@@ -103,9 +115,11 @@ class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends Ot
   */
 class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
 
-  private val authPlusRequest      = ApiRequest.base(authPlusApiUri + "/")
   private val clientId: String     = conf.getString("authplus.client_id").get
   private val clientSecret: String = conf.getString("authplus.secret").get
+
+  private val authPlusRequest = ApiRequest.base(authPlusApiUri + "/")
+    .andThen(_.withAuth(Some(UserPass(clientId, clientSecret))))
 
   def createClient(device: Uuid)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
     val request = Json.obj(
