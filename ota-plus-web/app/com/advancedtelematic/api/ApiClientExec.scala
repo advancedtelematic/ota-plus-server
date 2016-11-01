@@ -4,16 +4,17 @@ import javax.inject.Inject
 
 import com.fasterxml.jackson.core.JsonParseException
 import play.api.http.HttpEntity
-import play.api.libs.json.{JsError, JsSuccess, Reads}
+import play.api.libs.json.{JsError, JsSuccess, JsValue, Reads}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.{ResponseHeader, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 
 class ApiClientExec @Inject()(wsClient: WSClient)(implicit ec: ExecutionContext) {
   def runApiResult(request: WSClient => WSRequest): Future[Result] = {
-    runSafe(request).map(toResult)
+    run(request(wsClient)).map(toResult)
   }
 
   def runApiJson[T](request: WSClient => WSRequest)(implicit ev: Reads[T]): Future[T] = {
@@ -30,6 +31,13 @@ class ApiClientExec @Inject()(wsClient: WSClient)(implicit ec: ExecutionContext)
         case t: JsonParseException =>
           Future.failed(RemoteApiParseError(t.getMessage))
       }
+  }
+
+  def runApiJsonValue(request: WSClient => WSRequest) : Future[JsValue] = {
+    runSafe(request).flatMap { wresp =>
+      val t: Try[JsValue] = Try(wresp.json)
+      Future.fromTry(t)
+    }
   }
 
   def runSafe(request: WSClient => WSRequest): Future[WSResponse] = {

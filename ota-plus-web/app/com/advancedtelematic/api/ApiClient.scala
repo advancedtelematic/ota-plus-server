@@ -2,6 +2,7 @@ package com.advancedtelematic.api
 
 import java.util.UUID
 
+import com.advancedtelematic.IdToken
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.ota.device.Devices._
 import com.advancedtelematic.ota.vehicle.ClientInfo
@@ -91,6 +92,10 @@ trait ApiRequest { self =>
     apiExec.runApiResult(build)
   }
 
+  def execJsonValue(apiExec: ApiClientExec): Future[JsValue] = {
+    apiExec.runApiJsonValue(build)
+  }
+
   def execJson[T](apiExec: ApiClientExec)(implicit ev: Reads[T]): Future[T] = {
     apiExec.runApiJson[T](build)
   }
@@ -121,14 +126,34 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
   private val authPlusRequest = ApiRequest.base(authPlusApiUri + "/")
     .andThen(_.withAuth(Some(UserPass(clientId, clientSecret))))
 
+  def createClient(body: JsValue)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
+    authPlusRequest("clients").transform(_.withBody(body).withMethod("POST")).execJson(apiExec)(ev)
+  }
+
   def createClient(device: Uuid)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
-    val request = Json.obj(
+    val body = Json.obj(
         "grant_types" -> List("client_credentials"),
         "client_name" -> device.show,
         "scope"       -> s"ota-core.${device.show}.write ota-core.${device.show}.read"
     )
+    createClient(body)
+  }
 
-    authPlusRequest("clients").transform(_.withBody(request).withMethod("POST")).execJson(apiExec)(ev)
+  def createClientForUser(ns: Namespace, clientName: String)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
+    val body = Json.obj(
+        "grant_types" -> List("client_credentials"),
+        "client_name" -> clientName,
+        "scope"       -> s"namespace.${ns.get}"
+    )
+    createClient(body)
+  }
+
+  def getClient(clientId: Uuid)(implicit ec: ExecutionContext): Future[Result] = {
+    authPlusRequest(s"clients/${clientId.underlying.get}").transform(_.withMethod("GET")).execResult(apiExec)
+  }
+
+  def getClientJsValue(clientId: Uuid)(implicit ec: ExecutionContext): Future[JsValue] = {
+    authPlusRequest(s"clients/${clientId.underlying.get}").transform(_.withMethod("GET")).execJsonValue(apiExec)
   }
 
 
@@ -141,11 +166,7 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
     * </ul>
     */
   def fetchClientInfo(clientID: UUID)(implicit ec: ExecutionContext): Future[JsValue] = {
-    authPlusRequest(s"clients/${clientID.toString}").transform(_.withMethod("GET")).execResponse(apiExec).flatMap {
-      wresp =>
-        val t2: Try[JsValue] = Try(wresp.json)
-        Future.fromTry(t2)
-    }
+    authPlusRequest(s"clients/${clientID.toString}").transform(_.withMethod("GET")).execJsonValue(apiExec)
   }
 
   def fetchSecret(clientID: UUID)(implicit ec: ExecutionContext): Future[String] = {
@@ -153,6 +174,33 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
       val t2: Try[String] = Try((parsed \ "client_secret").validate[String].get)
       Future.fromTry(t2)
     }
+  }
+
+}
+
+class Auth0Api(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
+
+  private val domain: String       = conf.getString("auth0.domain").get
+  private val auth0Request         = ApiRequest.base(s"https://${domain}/")
+  private val auth0RequestUserData = ApiRequest.base(s"https://${domain}/api/v2/users/")
+
+  def getUserMetadata(userId: String, idToken: IdToken, key: String)
+  (implicit ec: ExecutionContext) : Future[JsValue] = {
+    auth0RequestUserData(userId)
+      .withToken(idToken.value)
+      .transform(_.withMethod("GET"))
+      .execJsonValue(apiExec)
+      .flatMap { value =>
+        Future.fromTry(Try((value \ "user_metadata" \ key).validate[JsValue].get))
+      }
+  }
+
+  def saveUserMetadata(userId: String, idToken: IdToken, key: String, value: JsValue) : Future[Result] = {
+    val body = Json.obj("user_metadata" -> Json.obj(key -> value))
+    auth0RequestUserData(userId)
+      .withToken(idToken.value)
+      .transform(_.withMethod("PATCH").withBody(body))
+      .execResult(apiExec)
   }
 
 }
