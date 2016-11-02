@@ -49,6 +49,7 @@ define(function(require) {
           Cookies.set('alerts', alertCookie);
         }, 200);
       });
+      this.setPackagesListHeight();
       window.addEventListener("resize", this.setPackagesListHeight);
     }
     componentWillUnmount() {
