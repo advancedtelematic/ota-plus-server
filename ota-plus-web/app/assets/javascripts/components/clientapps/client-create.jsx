@@ -11,10 +11,31 @@ define(function(require) {
   class ClientCreate extends React.Component {
     constructor(props) {
       super(props);
-      this.closeModal = this.closeModal.bind(this);      
+      this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleResponse = this.handleResponse.bind(this);
+      this.closeModal = this.closeModal.bind(this);
+      db.postStatus.addWatch("poll-response-create-new-client", _.bind(this.handleResponse, this, null));
+    }
+    componentWillUnmount() {
+      db.postStatus.removeWatch("poll-response-create-new-client");
     }
     handleSubmit(e) {
       e.preventDefault();
+      SotaDispatcher.dispatch({
+        actionType: 'create-client',
+        data: {client_name: this.refs.clientName.value}
+      });
+    }
+    handleResponse() {        
+      var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
+      if(!_.isUndefined(postStatus['create-client'])) {
+        if(postStatus['create-client'].status === 'success') {
+          db.postStatus.removeWatch("poll-response-create-new-client");
+          delete postStatus['create-client'];
+          db.postStatus.reset(postStatus);
+          this.props.closeModal(true);
+        }
+      }
     }
     closeModal(e) {
       e.preventDefault();
@@ -34,10 +55,10 @@ define(function(require) {
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
                 <div className="modal-body">
-                  <Responses action="create-campaign" handledStatuses="error"/>
+                  <Responses action="create-client" handledStatuses="error"/>
                   <div className="form-group">
-                    <label htmlFor="campaignName">Name</label>
-                    <input type="text" className="form-control" name="campaignName" ref="campaignName"/>
+                    <label htmlFor="clientName">Name</label>
+                    <input type="text" className="form-control" name="clientName" ref="clientName"/>
                   </div>
                 </div>
                 <div className="modal-footer">

@@ -72,6 +72,7 @@ define(function(require) {
 
       this.changeLanguage = this.changeLanguage.bind(this);
       this.toggleCampaignPanel = this.toggleCampaignPanel.bind(this);
+      this.handleLogout = this.handleLogout.bind(this);
       this.logout = this.logout.bind(this);
       this.openDoor = this.openDoor.bind(this);
       
@@ -79,9 +80,8 @@ define(function(require) {
         db.devices.addWatch("watch-devices", _.bind(this.openDoor, this, null));
         db.searchableDevices.addWatch("watch-searchable-devices", _.bind(this.openDoor, this, null));
       }
-      
+      db.logout.addWatch("watch-logout", _.bind(this.handleLogout, this, null));
       SotaDispatcher.dispatch({actionType: 'impact-analysis'});
-      
       WebsocketHandler.init();      
     }
     changeLanguage(value) {
@@ -94,6 +94,14 @@ define(function(require) {
       this.setState({
         showCampaignPanel: !this.state.showCampaignPanel
       });
+    }
+    handleLogout() {
+      if(!_.isUndefined(db.logout.deref()) && db.logout.deref()) {
+        var that = this;
+        setTimeout(function() {
+          that.setState({hideAnimationDown: !that.state.hideAnimationDown});
+        }, 200);
+      }
     }
     logout(e) {
       e.preventDefault();
@@ -118,6 +126,7 @@ define(function(require) {
       jQuery(function () {
         jQuery('body').verify({verifyMinWidth: 1366, verifyMinHeight: 0});
       });
+      
       var intervalId = setInterval(function() {
         var campaignsData = JSON.parse(localStorage.getItem('campaignsData'));
         if(campaignsData !== null && campaignsData.length > 0) {

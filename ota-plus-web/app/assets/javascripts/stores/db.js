@@ -3,6 +3,7 @@ define(function(require) {
 
   var DB = (function() {
     function DB() {
+      this.logout = atom.createAtom();
       this.devices = atom.createAtom();
       this.showPackage = atom.createAtom();
       this.device = atom.createAtom();
@@ -32,6 +33,8 @@ define(function(require) {
       this.campaigns = atom.createAtom();
       this.campaign = atom.createAtom();
       this.campaignStatistics = atom.createAtom();
+      this.client = atom.createAtom();
+      this.clients = atom.createAtom();
       
       //Events
       this.deviceSeen = atom.createAtom();
