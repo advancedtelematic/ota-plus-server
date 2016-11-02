@@ -73,10 +73,12 @@ define(function(require) {
     }
     closeCampaignCancelModal(ifRefreshData = false) {
       if(ifRefreshData) {
-        SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: this.props.params.id});
-        SotaDispatcher.dispatch({actionType: 'get-campaign-statistics', uuid: this.props.params.id});
+        var that = this;
+        setTimeout(function() {
+          SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: that.props.params.id});
+          SotaDispatcher.dispatch({actionType: 'get-campaign-statistics', uuid: that.props.params.id});
+        }, 1);
       }
-        
       this.setState({
         isCampaignCancelModalShown: false,
         campaignDetailsToCancel: null
@@ -84,10 +86,12 @@ define(function(require) {
     }
     closeCampaignCancelGroupModal(ifRefreshData = false) {
       if(ifRefreshData) {
-        SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: this.props.params.id});
-        SotaDispatcher.dispatch({actionType: 'get-campaign-statistics', uuid: this.props.params.id});
+        var that = this;
+        setTimeout(function() {
+          SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: that.props.params.id});
+          SotaDispatcher.dispatch({actionType: 'get-campaign-statistics', uuid: that.props.params.id});
+        }, 1);
       }
-        
       this.setState({
         isCampaignCancelGroupModalShown: false,
         campaignGroupToCancel: null
