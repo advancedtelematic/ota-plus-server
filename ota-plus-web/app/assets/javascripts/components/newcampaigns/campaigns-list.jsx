@@ -134,7 +134,7 @@ define(function(require) {
               <div className="height-100 with-background">
                 <div className="campaigns-section-header">Draft campaigns</div>
                 {draftCampaigns.length ? 
-                  <table className="table">
+                  <table className="table with-background">
                     <thead>
                       <tr>
                         <th className="col-md-3">Name</th>
@@ -158,7 +158,7 @@ define(function(require) {
                 }
                 <div className="campaigns-section-header">Running campaigns</div>
                 {runningCampaigns.length ? 
-                  <table className="table">
+                  <table className="table with-background">
                     <thead>
                       <tr>
                         <th className="col-md-3">Name</th>
@@ -183,7 +183,7 @@ define(function(require) {
                 }
                 <div className="campaigns-section-header">Finished campaigns</div>
                 {finishedCampaigns.length ? 
-                  <table className="table">
+                  <table className="table with-background">
                     <thead>
                       <tr>
                         <th className="col-md-3">Name</th>
