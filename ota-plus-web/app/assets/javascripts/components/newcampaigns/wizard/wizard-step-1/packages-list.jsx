@@ -43,10 +43,6 @@ define(function(require) {
     }
     componentDidMount() {
       var that = this;
-      var intervalId = setInterval(function() {
-        that.refreshData();
-      }, 1000);
-      this.setState({intervalId: intervalId});
       this.refreshData();
       ReactDOM.findDOMNode(this.refs.packagesList).addEventListener('scroll', this.packagesListScroll);
     }
@@ -64,7 +60,6 @@ define(function(require) {
       ReactDOM.findDOMNode(this.refs.packagesList).removeEventListener('scroll', this.packagesListScroll);
       db.searchablePackages.removeWatch("poll-packages-campaign");
       clearTimeout(this.state.timeout);
-      clearInterval(this.state.intervalId);
     }
     generatePositions() {
       var packagesListItems = !_.isUndefined(ReactDOM.findDOMNode(this.refs.packagesList).children[0].children[0]) ? ReactDOM.findDOMNode(this.refs.packagesList).children[0].children[0].children : null;

@@ -9,22 +9,13 @@ define(function(require) {
   class HistoryList extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {
-        intervalId: null
-      }
-      this.refreshData = this.refreshData.bind(this);
-      
       SotaDispatcher.dispatch({actionType: "get-package-history-for-device", device: this.props.deviceId});
       SotaDispatcher.dispatch({actionType: "get-installation-log-for-device", device: this.props.deviceId});
       db.packageHistoryForDevice.addWatch("poll-packages-history-for-device", _.bind(this.forceUpdate, this, null));
       db.installationLogForDevice.addWatch("poll-installation-log-for-device", _.bind(this.forceUpdate, this, null));
+      db.deviceSeen.addWatch("poll-deviceseen-history", _.bind(this.handleDeviceSeen, this, null));
     }
     componentDidMount() {
-      var that = this;
-      var intervalId = setInterval(function() {
-        that.refreshData();
-      }, 1000);
-      this.setState({intervalId: intervalId});
       this.props.setQueueListHeight();
     }
     componentWillUnmount() {
@@ -32,11 +23,14 @@ define(function(require) {
       db.installationLogForDevice.reset();
       db.packageHistoryForDevice.removeWatch("poll-packages-history-for-device");
       db.installationLogForDevice.removeWatch("poll-installation-log-for-device");
-      clearInterval(this.state.intervalId);
+      db.deviceSeen.removeWatch("poll-deviceseen-history");
     }
-    refreshData() {
-      SotaDispatcher.dispatch({actionType: "get-package-history-for-device", device: this.props.deviceId});
-      SotaDispatcher.dispatch({actionType: "get-installation-log-for-device", device: this.props.deviceId});
+    handleDeviceSeen() {
+      var deviceSeen = db.deviceSeen.deref();
+      if(!_.isUndefined(deviceSeen) && this.props.deviceId === deviceSeen.uuid) {
+        SotaDispatcher.dispatch({actionType: "get-package-history-for-device", device: this.props.deviceId});
+        SotaDispatcher.dispatch({actionType: "get-installation-log-for-device", device: this.props.deviceId});
+      }
     }
     render() {
       var Packages = db.packageHistoryForDevice.deref();

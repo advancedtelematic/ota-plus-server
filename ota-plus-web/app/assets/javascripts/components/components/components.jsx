@@ -14,18 +14,19 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
+        componentsData: undefined,
         detailsShown: false,
         detailsId: null,
-        isComponentsListEmpty: null,
         componentsListHeight: '400px'
       };
+      this.setComponentsData = this.setComponentsData.bind(this);
       this.showDetails = this.showDetails.bind(this);
       this.closeDetails = this.closeDetails.bind(this);
       this.setComponentsListHeight = this.setComponentsListHeight.bind(this);
-      this.checkPostStatus = this.checkPostStatus.bind(this);
       this.handleMenu = this.handleMenu.bind(this);
-      db.components.addWatch("poll-components-list", _.bind(this.forceUpdate, this, null));
-      db.postStatus.addWatch("poll-components-list-post-status", _.bind(this.checkPostStatus, this, null));
+      this.handleDeviceSeen = this.handleDeviceSeen.bind(this);
+      db.components.addWatch("poll-components-list", _.bind(this.setComponentsData, this, null));
+      db.deviceSeen.addWatch("poll-deviceseen-components", _.bind(this.handleDeviceSeen, this, null));
       SotaDispatcher.dispatch({actionType: 'get-components', uuid: this.props.deviceId});
     }
     componentDidMount() {
@@ -35,8 +36,11 @@ define(function(require) {
     componentWillUnmount() {
       db.components.reset();
       db.components.removeWatch("poll-components-list");
-      db.postStatus.removeWatch("poll-components-list-post-status");
+      db.deviceSeen.removeWatch("poll-deviceseen-components");
       window.removeEventListener("resize", this.setComponentsListHeight);
+    }
+    setComponentsData() {
+      this.setState({componentsData: db.components.deref()});
     }
     setComponentsListHeight() {
       var windowHeight = jQuery(window).height();
@@ -63,13 +67,6 @@ define(function(require) {
         detailsShown: false,
         detailsId: null
       });
-    }
-    checkPostStatus() {
-      var postStatus = db.postStatus.deref()['get-components'];
-      if(!_.isUndefined(db.postStatus.deref()['get-components'])) {
-        if(postStatus.code == '404')
-          this.setState({isComponentsListEmpty: true});
-      }
     }
     handleMenu() {
       var that = this;
@@ -125,6 +122,12 @@ define(function(require) {
       
       MenuTree.walk();  
     }
+    handleDeviceSeen() {
+      var deviceSeen = db.deviceSeen.deref();
+      if(!_.isUndefined(deviceSeen) && this.props.deviceId === deviceSeen.uuid) {
+        SotaDispatcher.dispatch({actionType: 'get-components', uuid: this.props.deviceId});
+      }
+    }
     render() {
       function animateLeftPosition(left, opacity, action) {
         return VelocityHelpers.registerEffect("transition."+action, {
@@ -140,31 +143,30 @@ define(function(require) {
       return (
         <div id="components" style={{height: this.state.componentsListHeight}}>
           <div id="components-list">
-            {this.state.isComponentsListEmpty === null ?
-              <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-                {!_.isUndefined(db.components.deref()) ? 
+            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+              {!_.isUndefined(this.state.componentsData) ? 
+                Object.keys(this.state.componentsData).length ?
                   <ul id="components-menu">
                     <ComponentsList
                       data={db.components.deref()}
                       mainLevel={true}
                       handleMenu={this.handleMenu}/>
                   </ul>
-                : undefined}
-                {_.isUndefined(db.components.deref()) ? 
-                  <Loader />
-                : undefined}
-              </VelocityTransitionGroup>
-            : 
-              <div className="height-100 position-relative text-center">
-                <div className="center-xy padding-15">
-                  This device hasn’t reported any information about
-                  its hardware or system components yet.
-                </div>
-              </div>
-            }
+                :
+                  <div className="height-100 position-relative text-center">
+                    <div className="center-xy padding-15">
+                      This device hasn’t reported any information about
+                      its hardware or system components yet.
+                    </div>
+                  </div>
+              : undefined}
+            </VelocityTransitionGroup>
+            {_.isUndefined(db.components.deref()) ? 
+              <Loader />
+            : undefined}
           </div>
           
-          {!_.isUndefined(db.components.deref()) ? 
+          {!_.isUndefined(this.state.componentsData) ? 
             <VelocityComponent animation={this.state.detailsShown ? 'fadeIn' : 'fadeOut'}>
               <ComponentsOverlay
                 data={db.components.deref()}
