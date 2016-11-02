@@ -23,7 +23,7 @@ define(function(require) {
           <div className="pull-left">
             <div className="group-icon"></div>
             <div className="group-text">
-              <div className="group-title">{this.props.group.groupName}</div>
+              <div className="group-title" title={this.props.group.groupName}>{this.props.group.groupName}</div>
               <div className="group-subtitle">{Object.keys(this.props.group.devicesUUIDs).length} devices</div>
             </div>
           </div>
