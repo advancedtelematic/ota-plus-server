@@ -66,18 +66,23 @@ define(function(require) {
       });
     }
     openWizard(campaignUUID, ifRefreshData = false) {
-      if(ifRefreshData) 
-        SotaDispatcher.dispatch({actionType: 'get-campaigns'});
+      if(ifRefreshData) {
+        setTimeout(function() {
+          SotaDispatcher.dispatch({actionType: 'get-campaigns'});
+        }, 1);
+      }
       this.setState({
         isCreateModalShown: false,
         isWizardShown: true,
-        campaignUUID: campaignUUID,
-        
+        campaignUUID: campaignUUID
       });
     }
     closeWizard(ifRefreshData = false) {
-      if(ifRefreshData) 
-        SotaDispatcher.dispatch({actionType: 'get-campaigns'});
+      if(ifRefreshData) {
+        setTimeout(function() {
+          SotaDispatcher.dispatch({actionType: 'get-campaigns'});
+        }, 1);
+      }
       this.setState({
         isWizardShown: false
       });
