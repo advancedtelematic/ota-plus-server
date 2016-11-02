@@ -63,7 +63,7 @@ button.list-group-item:focus { background: inherit; }
 
 @media (min-width: 768px) { .navbar > .container .navbar-brand { margin-left: 0; } }
 /* Device box */
-.device-icon, .group-icon { text-align: center; background: url(/assets/img/icons/device_small.png) no-repeat; background-size: cover; width: 70px; height: 70px; float: left; }
+.device-icon, .group-icon, .campaign-icon { text-align: center; background: url(/assets/img/icons/device_small.png) no-repeat; background-size: cover; width: 70px; height: 70px; float: left; }
 
 .device-name { font-size: 17px; width: 100%; float: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
@@ -877,6 +877,7 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 .progress-blue .progress-status { font-size: 12px; position: absolute; top: 0; right: 0; }
 
 #campaign .group-icon, #modal-campaign-create .group-icon { background-image: url(/assets/img/icons/group_large_grey.png); float: none; display: inline-block; vertical-align: middle; }
+#campaign .campaign-icon, #modal-campaign-create .campaign-icon { background-image: url(/assets/img/icons/campaign.png); float: none; display: inline-block; vertical-align: middle; }
 #campaign .group-text, #modal-campaign-create .group-text { width: auto; margin: 0 0 0 15px; display: inline-block; vertical-align: middle; }
 #campaign .group-text .group-title, #modal-campaign-create .group-text .group-title { font-size: 14px; }
 #campaign .group-text .group-subtitle, #modal-campaign-create .group-text .group-subtitle { color: #ccc; font-size: 11px; }
@@ -1018,7 +1019,7 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 
 .with-background { background: #fff; }
 
-.campaigns-list-inner { width: 100%; padding: 15px; }
+.campaigns-list-inner { background: #fff; width: 100%; padding: 15px; }
 
 .page-client-apps .grey-header .btn-add { margin: 26px 0 0 0; }
 .page-client-apps #clients-wrapper { width: 100%; overflow-y: scroll; float: left; }
