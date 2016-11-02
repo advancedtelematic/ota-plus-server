@@ -51,10 +51,11 @@ define(function(require) {
       this.changeFilter = this.changeFilter.bind(this);
       this.setData = this.setData.bind(this);
       
-      SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: this.props.campaignUUID});
       db.campaign.addWatch("poll-campaign", _.bind(this.setData, this, null));
-      
       db.postStatus.addWatch("poll-response-launch-campaign", _.bind(this.handleResponse, this, null));
+    }
+    componentDidMount() {
+      SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: this.props.campaignUUID});
     }
     componentWillUnmount() {
       db.searchablePackages.reset();
@@ -95,13 +96,10 @@ define(function(require) {
     }
     handleResponse() {
       var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref()['launch-campaign'] : undefined;
-      
       if(!_.isUndefined(postStatus)) {
         if(postStatus.status === 'success') {
-          setTimeout(function() {
-            SotaDispatcher.dispatch({actionType: 'get-campaigns'});
-          }, 1);
-          this.props.closeWizard();
+          db.postStatus.removeWatch("poll-response-launch-campaign");
+          this.props.closeWizard(true);
         }
       }
     }

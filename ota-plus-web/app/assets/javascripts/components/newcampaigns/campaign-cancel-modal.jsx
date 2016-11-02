@@ -29,12 +29,9 @@ define(function(require) {
     }
     handleResponse() {
       var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
-      
       if(!_.isUndefined(postStatus['cancel-campaign'])) {
         if(postStatus['cancel-campaign'].status === 'success') {
-          setTimeout(function() {
-            SotaDispatcher.dispatch({actionType: 'get-campaigns'});
-          }, 1);
+          db.postStatus.removeWatch("poll-response-cancel-campaign");
           delete postStatus['cancel-campaign'];
           db.postStatus.reset(postStatus);
           this.props.closeForm(true);
