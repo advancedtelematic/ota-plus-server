@@ -919,6 +919,8 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 #modal-campaign-create .modal-dialog .modal-content .modal-body .width-half { width: 49.8%; }
 #modal-campaign-create .modal-dialog .modal-content .modal-body .groups-wrapper { height: 180px; padding: 20px 0 20px 0; position: relative; overflow-y: auto; }
 #modal-campaign-create .modal-dialog .modal-content .modal-body .groups-wrapper .group-icon { width: 40px; height: 40px; }
+#modal-campaign-create .modal-dialog .modal-content .modal-body .groups-wrapper .group-text { width: 70%; }
+#modal-campaign-create .modal-dialog .modal-content .modal-body .groups-wrapper .group-text .group-title { width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #modal-campaign-create .modal-dialog .modal-content .modal-body .groups-wrapper-fade { width: 92%; height: 40px; position: absolute; }
 #modal-campaign-create .modal-dialog .modal-content .modal-body .groups-wrapper-fade.groups-wrapper-fade-top { background: linear-gradient(to bottom, white 20%, rgba(255, 255, 255, 0) 100%); top: 32px; z-index: 2; }
 #modal-campaign-create .modal-dialog .modal-content .modal-body .groups-wrapper-fade.groups-wrapper-fade-bottom { background: linear-gradient(to top, white 20%, rgba(255, 255, 255, 0) 100%); bottom: 20px; z-index: 2; }
@@ -938,6 +940,7 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 .box-bordered { background: #fff; width: 100%; float: left; border: 1px solid #eee; }
 .box-bordered.box-height-full { height: 460px; }
 .box-bordered .inner { width: 100%; padding: 20px; float: left; }
+.box-bordered .section-header { position: relative; z-index: 3; }
 
 .width-half { width: 50%; }
 
