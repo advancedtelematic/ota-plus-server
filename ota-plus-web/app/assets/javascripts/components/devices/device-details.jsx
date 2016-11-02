@@ -160,7 +160,6 @@ define(function(require) {
         this.setState({
           deviceData: device
         });
-        db.device.reset();
       }
     }
     render() {
