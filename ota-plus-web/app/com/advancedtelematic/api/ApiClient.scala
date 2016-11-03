@@ -91,15 +91,6 @@ trait ApiRequest { self =>
 class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
   private val devicesRequest = ApiRequest.base(devicesApiUri + "/api/v1/")
 
-  def createDevice(options: UserOptions, device: DeviceT): Future[Uuid] = {
-    import com.advancedtelematic.ota.device.Devices.idReads
-
-    devicesRequest("devices")
-      .withUserOptions(options)
-      .transform(_.withMethod("POST").withBody(Json.toJson(device)))
-      .execJson(apiExec)(idReads)
-  }
-
   def getDevice(options: UserOptions, id: Uuid): Future[Device] = {
     devicesRequest("devices/" + id.show)
       .withUserOptions(options)

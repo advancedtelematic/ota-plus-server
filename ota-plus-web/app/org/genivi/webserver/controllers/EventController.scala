@@ -51,31 +51,6 @@ class EventController @Inject()
       .as(ContentTypes.HTML)
   }
 
-  def subDeviceSeen(device: Uuid): Action[AnyContent] = Action {
-    val deviceSeenSource = messageBusProvider.getSource[DeviceSeen]().filter(_.uuid == device)
-    subscribe(deviceSeenSource, "parent.deviceSeen")
-  }
-
-  def subDeviceCreated(namespace: Namespace): Action[AnyContent] = Action {
-    val deviceCreatedSource = messageBusProvider.getSource[DeviceCreated]().filter(_.namespace == namespace)
-    subscribe(deviceCreatedSource, "parent.deviceCreated")
-  }
-
-  def subDeviceDeleted(namespace: Namespace): Action[AnyContent] = Action {
-    val deviceDeletedSource = messageBusProvider.getSource[DeviceDeleted]().filter(_.namespace == namespace)
-    subscribe(deviceDeletedSource, "parent.deviceDeleted")
-  }
-
-  def subPackageCreated(namespace: Namespace): Action[AnyContent] = Action {
-    val packageCreatedSource = messageBusProvider.getSource[PackageCreated]().filter(_.namespace == namespace)
-    subscribe(packageCreatedSource, "parent.packageCreated")
-  }
-
-  def subUpdateSpec(namespace: Namespace): Action[AnyContent] = Action {
-    val updateSpecSource = messageBusProvider.getSource[UpdateSpec]().filter(_.namespace == namespace)
-    subscribe(updateSpecSource, "parent.updateSpec")
-  }
-
   def ws() = WebSocket.acceptOrResult[JsValue, JsValue] { request =>
     // TODO do sameOriginCheck
     val act = for {
