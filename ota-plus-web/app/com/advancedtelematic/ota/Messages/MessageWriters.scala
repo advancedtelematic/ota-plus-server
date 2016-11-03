@@ -44,6 +44,7 @@ object MessageWriters {
   implicit val packageCreatedWrites = new Writes[PackageCreated] {
     def writes(packageCreatedMsg: PackageCreated) = Json.obj(
       "namespace" -> packageCreatedMsg.namespace.get,
+      "id" -> Json.toJson(packageCreatedMsg.packageId),
       "packageId" -> Json.toJson(packageCreatedMsg.packageId),
       "description" -> Json.toJson(packageCreatedMsg.description.getOrElse("")),
       "vendor" -> Json.toJson(packageCreatedMsg.description.getOrElse("")),
@@ -54,6 +55,7 @@ object MessageWriters {
   implicit val packageBlacklistedWrites = new Writes[PackageBlacklisted] {
     def writes(packageBlacklistedMsg: PackageBlacklisted) = Json.obj(
       "namespace" -> packageBlacklistedMsg.namespace.get,
+      "id" -> Json.toJson(packageBlacklistedMsg.packageId),
       "packageId" -> Json.toJson(packageBlacklistedMsg.packageId)
     )
   }
