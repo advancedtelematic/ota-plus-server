@@ -848,7 +848,7 @@ hr.full-line { width: 100%; margin: 0; border-color: #222; }
 #modal-upload .modal-dialog .modal-content .modal-body .modal-subheader { background: #dedede; padding: 5px 20px; }
 #modal-upload .modal-dialog .modal-content .modal-body .modal-desc { max-height: 150px; padding: 0; overflow-y: auto; }
 #modal-upload .modal-dialog .modal-content .modal-body .modal-desc .table-uploads { margin-bottom: 5px; }
-#modal-upload .modal-dialog .modal-content .modal-body .modal-desc .table-uploads > tbody > tr > td { padding: 8px 20px; border-bottom: 0; vertical-align: middle; }
+#modal-upload .modal-dialog .modal-content .modal-body .modal-desc .table-uploads > tbody > tr > td { white-space: nowrap; padding: 8px 20px; border-bottom: 0; vertical-align: middle; }
 #modal-upload .modal-dialog .modal-content .modal-body .modal-desc .table-uploads #bar { width: 30px; height: 30px; }
 
 #modal-confirmation .modal-dialog .modal-content .modal-body { padding: 40px 30px; }
