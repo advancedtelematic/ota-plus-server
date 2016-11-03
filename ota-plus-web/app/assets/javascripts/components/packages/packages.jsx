@@ -13,7 +13,6 @@ define(function(require) {
         selectedStatus: 'all',
         selectedStatusName: 'All',
         selectedSort: 'asc',
-        selectedSortName: 'A > Z',
         selectedType: 'managed',
         selectedTypeName: 'Managed',
         packagesListHeight: '300px',
@@ -69,8 +68,7 @@ define(function(require) {
 
       var name = jQuery(e.target).text();
       this.setState({
-        selectedSort: sort,
-        selectedSortName: name
+        selectedSort: sort
       });
     }
     selectType(type, e) {
@@ -96,6 +94,14 @@ define(function(require) {
         <div id="packages">
           <div className="panel-subheading">
             <SearchBar class="search-bar pull-left" inputId="search-packages-input" changeFilter={this.props.changeFilter}/>
+
+            <div className="sort-text pull-left">
+              {this.state.selectedSort == 'asc' ? 
+                <a href="#" onClick={this.selectSort.bind(this, 'desc')} id="link-sort-packages-desc"><i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z</a>
+              :
+                <a href="#" onClick={this.selectSort.bind(this, 'asc')} id="link-sort-packages-asc"><i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A</a>
+              }
+            </div>
 
             <div className="pull-right margin-left-15">
               <button onClick={this.props.openForm} className="btn btn-main btn-add pull-right" id="button-add-new-package">
@@ -132,15 +138,7 @@ define(function(require) {
                   <li><a href="#" onClick={this.selectType.bind(this, 'unmanaged')}>Unmanaged</a></li>
                 </ul>
               </div>
-            </div>
-            
-            <div className="sort-text pull-right">
-              {this.state.selectedSort == 'asc' ? 
-                <a href="#" onClick={this.selectSort.bind(this, 'desc')} id="link-sort-packages-desc"><i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z</a>
-              :
-                <a href="#" onClick={this.selectSort.bind(this, 'asc')} id="link-sort-packages-asc"><i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A</a>
-              }
-            </div>
+            </div>            
           </div>
 
           <div className={"alert alert-ats alert-dismissible" + (this.state.alertHidden ? " hidden" : '')} role="alert">

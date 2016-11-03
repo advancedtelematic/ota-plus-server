@@ -14,7 +14,6 @@ define(function(require) {
       this.state = {
         filterValue: '',
         selectedSort: 'asc',
-        selectedSortName: 'A > Z',
         campaignsListHeight: '300px',
         isCreateModalShown: false,
         isWizardShown: false,
@@ -43,8 +42,7 @@ define(function(require) {
 
       var name = jQuery(e.target).text();
       this.setState({
-        selectedSort: sort,
-        selectedSortName: name
+        selectedSort: sort
       });
     }
     setCampaignsListHeight() {
@@ -96,23 +94,17 @@ define(function(require) {
                 <div className="pull-left">
                   <SearchBar class="search-bar pull-left" inputId="search-campaigns-input" changeFilter={this.changeFilter}/>
                 </div>
+                <div className="sort-text pull-left">
+                  {this.state.selectedSort == 'asc' ? 
+                    <a href="#" onClick={this.selectSort.bind(this, 'desc')} id="link-sort-packages-desc"><i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z</a>
+                  :
+                    <a href="#" onClick={this.selectSort.bind(this, 'asc')} id="link-sort-packages-asc"><i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A</a>
+                  }
+                  </div>
                 <div className="pull-right margin-left-15">
                   <button onClick={this.openCreateModal} className="btn btn-main btn-add pull-right" id="button-add-new-campaign">
-                    <i className="fa fa-plus"></i> &nbsp; Create new
+                    <i className="fa fa-plus"></i> &nbsp; Add new campaign
                   </button>
-                </div>
-                <div className="select-bar select-bar-sort margin-left-40 pull-left">
-                  <div className="select-bar-text">Sort by</div>
-                  <div className="btn-group">
-                    <button type="button" className="btn btn-grey dropdown-toggle" id="dropdown-devices-sortby" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <span className="pull-left">{this.state.selectedSortName} &nbsp;</span>
-                      <span className="fa fa-angle-down pull-right"></span>
-                    </button>
-                    <ul className="dropdown-menu">
-                      <li><a href="#" onClick={this.selectSort.bind(this, 'asc')} id="link-sort-devices-asc">A &gt; Z</a></li>
-                      <li><a href="#" onClick={this.selectSort.bind(this, 'desc')} id="link-sort-devices-desc">Z &gt; A</a></li>
-                    </ul>
-                  </div>
                 </div>
               </div>
               <div id="campaigns-wrapper" style={{height: this.state.campaignsListHeight}}>
