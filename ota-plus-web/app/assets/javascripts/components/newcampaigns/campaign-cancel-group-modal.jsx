@@ -39,14 +39,13 @@ define(function(require) {
     }
     render() {
       var group = this.props.group;
-      var campaign = this.props.campaign;
       return (
         <div id="modal-campaign-cancel" className="myModal">
           <div className="modal-dialog center-xy">
             <div className="modal-content">
               <div className="modal-header modal-header-red text-center">
                 <h4 className="modal-title">
-                  You're about to cancel {campaign.meta.name} for group {group.groupName}
+                  You're about to cancel {group.meta.name} for group {group.groupName}
                 </h4>
               </div>
               <div className="modal-body">
