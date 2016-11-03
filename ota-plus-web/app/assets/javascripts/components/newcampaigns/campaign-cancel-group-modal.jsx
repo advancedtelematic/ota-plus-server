@@ -9,11 +9,10 @@ define(function(require) {
       super(props);
       this.closeForm = this.closeForm.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
-      this.handleResponse = this.handleResponse.bind(this);
-      db.postStatus.addWatch("poll-response-cancel-campaign-for-request", _.bind(this.handleResponse, this, null));
+      db.postStatus.addWatch("poll-cancel-campaign-for-request", _.bind(this.handleResponse, this, null));
     }
     componentWillUnmount() {
-      db.postStatus.removeWatch("poll-response-cancel-campaign-for-request");
+      db.postStatus.removeWatch("poll-cancel-campaign-for-request");
     }
     closeForm(e) {
       e.preventDefault();
@@ -31,7 +30,7 @@ define(function(require) {
       var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
       if(!_.isUndefined(postStatus['cancel-campaign-for-request'])) {
         if(postStatus['cancel-campaign-for-request'].status === 'success') {
-          db.postStatus.removeWatch("poll-response-cancel-campaign-for-request");
+          db.postStatus.removeWatch("poll-cancel-campaign-for-request");
           delete postStatus['cancel-campaign-for-request'];
           db.postStatus.reset(postStatus);
           this.props.closeForm(true);
