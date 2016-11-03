@@ -4,7 +4,6 @@ define(function(require) {
       Link = Router.Link,
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
-      Events = require('handlers/events'),
       DevicesList = require('es6!./devices-list'),
       DevicesHeader = require('es6!./devices-header'),
       NewDevice = require('es6!./new-device'),
@@ -77,18 +76,6 @@ define(function(require) {
       setTimeout(function() {
         that.setDevicesListHeight();
       }, 1);
-            
-      var ws = this.props.websocket;
-            
-      ws.onmessage = function(msg) {
-        var eventObj = JSON.parse(msg.data);
-                
-        if(eventObj.type == "DeviceSeen") {
-          Events.deviceSeen(eventObj.event);
-        } else if(eventObj.type == "DeviceCreated") {
-          Events.deviceCreated(eventObj.event);
-        }
-      };
     }
     componentWillUnmount(){
       db.devices.reset();

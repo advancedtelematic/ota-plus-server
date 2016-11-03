@@ -5,7 +5,7 @@ define(function(require) {
     function DB() {
       this.devices = atom.createAtom();
       this.showPackage = atom.createAtom();
-      this.showDevice = atom.createAtom();
+      this.device = atom.createAtom();
       this.packages = atom.createAtom([]);
       this.packagesForDevice = atom.createAtom();
       this.searchablePackagesForDevice = atom.createAtom();

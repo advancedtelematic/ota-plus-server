@@ -28,7 +28,7 @@ define(function(require) {
         data: {name: this.refs.campaignName.value}
       });
     }
-    handleResponse() {
+    handleResponse() {        
       var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
       if(!_.isUndefined(postStatus['create-campaign'])) {
         if(postStatus['create-campaign'].status === 'success') {
