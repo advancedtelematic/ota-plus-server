@@ -116,12 +116,10 @@ define(function(require) {
                 </div>
               </div>
               <div id="campaigns-wrapper" style={{height: this.state.campaignsListHeight}}>
-                <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}} runOnMount={true}>
-                  <CampaignsList 
-                    openWizard={this.openWizard}
-                    filterValue={this.state.filterValue}
-                    selectedSort={this.state.selectedSort}/>
-                </VelocityTransitionGroup>
+                <CampaignsList 
+                  openWizard={this.openWizard}
+                  filterValue={this.state.filterValue}
+                  selectedSort={this.state.selectedSort}/>
               </div>
             </div>
           </div>

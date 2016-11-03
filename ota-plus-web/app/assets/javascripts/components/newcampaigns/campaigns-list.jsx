@@ -2,6 +2,7 @@ define(function(require) {
   var React = require('react'),
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       Loader = require('es6!../loader'),
       CampaignsListItem = require('es6!./campaigns-list-item');
       
@@ -128,94 +129,96 @@ define(function(require) {
       }, this);
             
       return (
-         <div className="height-100">
-          {!_.isUndefined(db.campaigns.deref()) ? 
-            db.campaigns.deref().length ?
-              <div className="height-100 with-background">
-                <div className="campaigns-section-header">Draft campaigns</div>
-                {draftCampaigns.length ? 
-                  <table className="table with-background">
-                    <thead>
-                      <tr>
-                        <th className="col-md-3">Name</th>
-                        <th className="col-md-2">Start Date</th>
-                        <th className="col-md-2">End Date</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {draftCampaigns}
-                    </tbody>
-                  </table>
-                :
-                  <div className="campaigns-list-inner">
-                    {this.props.filterValue != '' ?
-                      <span>No matching draft campaigns.</span>
-                    :
-                      <span>No draft campaigns.</span>
-                    }
-                  </div>
-                }
-                <div className="campaigns-section-header">Running campaigns</div>
-                {runningCampaigns.length ? 
-                  <table className="table with-background">
-                    <thead>
-                      <tr>
-                        <th className="col-md-3">Name</th>
-                        <th className="col-md-2">Start Date</th>
-                        <th className="col-md-2">End Date</th>
-                        <th className="col-md-3">Status</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {runningCampaigns}
-                    </tbody>
-                  </table>
-                :
-                  <div className="campaigns-list-inner">
-                    {this.props.filterValue != '' ?
-                      <span>No matching running campaigns.</span>
-                    :
-                      <span>No running campaigns.</span>
-                    }
-                  </div>
-                }
-                <div className="campaigns-section-header">Finished campaigns</div>
-                {finishedCampaigns.length ? 
-                  <table className="table with-background">
-                    <thead>
-                      <tr>
-                        <th className="col-md-3">Name</th>
-                        <th className="col-md-2">Start Date</th>
-                        <th className="col-md-2">End Date</th>
-                        <th className="col-md-3">Status</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {finishedCampaigns}
-                    </tbody>
-                  </table>
-                :
-                  <div className="campaigns-list-inner">
-                    {this.props.filterValue != '' ?
-                      <span>No matching finished campaigns.</span>
-                    :
-                      <span>No finished campaigns.</span>
-                    }
-                  </div>
-                }              
-              </div>
-            :
-              <div className="col-md-12 height-100 position-relative text-center">
-                <div className="center-xy padding-15">
-                  <span className="font-24 white">
-                    There are no campaigns.
-                  </span>
+        <div className="height-100">
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {!_.isUndefined(db.campaigns.deref()) ? 
+              db.campaigns.deref().length ?
+                <div className="height-100 with-background">
+                  <div className="campaigns-section-header">Draft campaigns</div>
+                  {draftCampaigns.length ? 
+                    <table className="table with-background">
+                      <thead>
+                        <tr>
+                          <th className="col-md-3">Name</th>
+                          <th className="col-md-2">Start Date</th>
+                          <th className="col-md-2">End Date</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {draftCampaigns}
+                      </tbody>
+                    </table>
+                  :
+                    <div className="campaigns-list-inner">
+                      {this.props.filterValue != '' ?
+                        <span>No matching draft campaigns.</span>
+                      :
+                        <span>No draft campaigns.</span>
+                      }
+                    </div>
+                  }
+                  <div className="campaigns-section-header">Running campaigns</div>
+                  {runningCampaigns.length ? 
+                    <table className="table with-background">
+                      <thead>
+                        <tr>
+                          <th className="col-md-3">Name</th>
+                          <th className="col-md-2">Start Date</th>
+                          <th className="col-md-2">End Date</th>
+                          <th className="col-md-3">Status</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {runningCampaigns}
+                      </tbody>
+                    </table>
+                  :
+                    <div className="campaigns-list-inner">
+                      {this.props.filterValue != '' ?
+                        <span>No matching running campaigns.</span>
+                      :
+                        <span>No running campaigns.</span>
+                      }
+                    </div>
+                  }
+                  <div className="campaigns-section-header">Finished campaigns</div>
+                  {finishedCampaigns.length ? 
+                    <table className="table with-background">
+                      <thead>
+                        <tr>
+                          <th className="col-md-3">Name</th>
+                          <th className="col-md-2">Start Date</th>
+                          <th className="col-md-2">End Date</th>
+                          <th className="col-md-3">Status</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {finishedCampaigns}
+                      </tbody>
+                    </table>
+                  :
+                    <div className="campaigns-list-inner">
+                      {this.props.filterValue != '' ?
+                        <span>No matching finished campaigns.</span>
+                      :
+                        <span>No finished campaigns.</span>
+                      }
+                    </div>
+                  }              
                 </div>
-              </div>
-          : undefined}
+              :
+                <div className="col-md-12 height-100 position-relative text-center">
+                  <div className="center-xy padding-15">
+                    <span className="font-24 white">
+                      There are no campaigns.
+                    </span>
+                  </div>
+                </div>
+            : undefined}
+          </VelocityTransitionGroup>
           {_.isUndefined(db.campaigns.deref()) ?
             <Loader className="white" />
           : null}
