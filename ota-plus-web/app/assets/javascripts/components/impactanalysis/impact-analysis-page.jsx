@@ -33,6 +33,7 @@ define(function(require) {
       SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: ''});
       SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
       SotaDispatcher.dispatch({actionType: 'get-groups'});
+      SotaDispatcher.dispatch({actionType: 'impact-analysis'});
       db.blacklistedPackages.addWatch("poll-blacklisted-packages", _.bind(this.setBlacklistedPackagesData, this, null));
       db.searchableDevices.addWatch("poll-devices-impact-analysis-page", _.bind(this.setSearchableDevicesData, this, null));
       db.groups.addWatch("groups-impact-analysis-page", _.bind(this.setGroupsData, this, null));
