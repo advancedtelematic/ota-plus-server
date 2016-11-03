@@ -101,7 +101,7 @@ define(function(require) {
           db.postStatus.removeWatch("poll-launch-campaign");
           delete postStatus['launch-campaign'];
           db.postStatus.reset(postStatus);
-          this.props.closeWizard(true);
+          this.context.history.pushState(null, `campaigndetails/${db.campaign.deref().meta.id}`);
         }
       }
     }
@@ -217,5 +217,11 @@ define(function(require) {
       );
     }
   }
+  
+  Wizard.contextTypes = {
+    history: React.PropTypes.object.isRequired,
+    strings: React.PropTypes.object.isRequired,
+  };
+  
   return Wizard;
 });
