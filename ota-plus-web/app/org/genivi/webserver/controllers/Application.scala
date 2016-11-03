@@ -9,7 +9,7 @@ import com.advancedtelematic.login.Auth0Config
 import javax.inject.{Inject, Named, Singleton}
 
 import com.advancedtelematic.ota.vehicle.Vehicles
-import com.advancedtelematic.{AuthenticatedAction, AuthenticatedApiAction, AuthenticatedRequest}
+import com.advancedtelematic.{AuthenticatedAction, AuthenticatedRequest, AuthPlusAuthentication}
 import org.slf4j.LoggerFactory
 import play.api._
 import play.api.http.HttpEntity
@@ -27,6 +27,7 @@ import scala.concurrent.Future
 class Application @Inject() (ws: WSClient,
                              val messagesApi: MessagesApi,
                              val conf: Configuration,
+                             val authAction: AuthPlusAuthentication,
                              @Named("vehicles-store") vehiclesStore: Vehicles)
   extends Controller with I18nSupport with OtaPlusConfig {
 
@@ -127,7 +128,7 @@ class Application @Inject() (ws: WSClient,
    * @param path Path of the request
    * @return
    */
-  def apiProxy(path: String) : Action[RawBuffer] = AuthenticatedApiAction.async(parse.raw) { req =>
+  def apiProxy(path: String) : Action[RawBuffer] = authAction.AuthenticatedApiAction.async(parse.raw) { req =>
     apiByPath(path) match {
       case Some(p) => proxyTo(p, req)
       case None => Future.successful(NotFound("Could not proxy request to requested path"))
