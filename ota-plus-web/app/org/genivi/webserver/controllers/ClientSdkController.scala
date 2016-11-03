@@ -3,7 +3,7 @@ package org.genivi.webserver.controllers
 import javax.inject.{Inject, Named, Singleton}
 
 import akka.actor.ActorSystem
-import com.advancedtelematic.{AuthenticatedApiAction, AuthenticatedRequest}
+import com.advancedtelematic.{AuthPlusAuthentication, AuthenticatedRequest}
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.ota.vehicle.{DeviceMetadata, Vehicles}
@@ -22,6 +22,7 @@ import scala.util.{Failure, Try}
 class ClientSdkController @Inject() (system: ActorSystem,
                                      val ws: WSClient,
                                      val conf: Configuration,
+                                     val authAction: AuthPlusAuthentication,
                                      val clientExec: ApiClientExec,
                                      @Named("vehicles-store") vehiclesStore: Vehicles)
 extends Controller with ApiClientSupport {
@@ -68,7 +69,7 @@ extends Controller with ApiClientSupport {
     * @param arch either "32" or "64"
     */
   def downloadClientSdk(device: Uuid, artifact: ArtifactType, arch: Architecture) : Action[AnyContent] =
-    AuthenticatedApiAction.async { implicit request =>
+    authAction.AuthenticatedApiAction.async { implicit request =>
       for (
         dev <- devicesApi.getDevice(
           UserOptions(Some(request.authPlusAccessToken.value), namespace = Some(request.namespace)), device);

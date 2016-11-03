@@ -1,6 +1,6 @@
 package org.genivi.webserver.controllers
 
-import com.advancedtelematic.{AuthenticatedApiAction, AuthenticatedRequest}
+import com.advancedtelematic.{AuthPlusAuthentication, AuthenticatedRequest}
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.ota.device.Devices._
@@ -24,6 +24,7 @@ import cats.syntax.show.toShowOps
 @Singleton
 class DeviceController @Inject() (val ws: WSClient,
                                   val conf: Configuration,
+                                  val authAction: AuthPlusAuthentication,
                                   val clientExec: ApiClientExec,
                                   @Named("vehicles-store") vehiclesStore: Vehicles)
                                  (implicit ec: ExecutionContext)
@@ -33,7 +34,7 @@ extends Controller with ApiClientSupport {
 
   private[this] object NoSuchVinRegistered extends Throwable with NoStackTrace
 
-  def create(): Action[DeviceT] = AuthenticatedApiAction.async(parse.json[DeviceT]) { req =>
+  def create(): Action[DeviceT] = authAction.AuthenticatedApiAction.async(parse.json[DeviceT]) { req =>
     requestCreate(req.body, userOptions(req))
   }
 
@@ -78,7 +79,7 @@ extends Controller with ApiClientSupport {
     * Contact Auth+ to fetch the ClientInfo for the given device.
     */
   def fetchClientInfo(device: Uuid) : Action[AnyContent] =
-    AuthenticatedApiAction.async { implicit request =>
+    authAction.AuthenticatedApiAction.async { implicit request =>
       val options = userOptions(request)
       val fut = for (
         vMetadataOpt <- vehiclesStore.getVehicle(device);
