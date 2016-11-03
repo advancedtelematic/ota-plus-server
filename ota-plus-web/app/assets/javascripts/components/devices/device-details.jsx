@@ -155,6 +155,7 @@ define(function(require) {
     handleDeviceSeen() {
       var deviceSeen = db.deviceSeen.deref();
       if(!_.isUndefined(deviceSeen) && this.props.params.id === deviceSeen.uuid) {
+        SotaDispatcher.dispatch({actionType: 'get-device', uuid: this.props.params.id});
         var device = this.state.deviceData;
         device.lastSeen = deviceSeen.lastSeen;
         this.setState({
