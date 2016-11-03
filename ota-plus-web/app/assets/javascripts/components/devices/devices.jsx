@@ -51,11 +51,12 @@ define(function(require) {
       this.refreshData = this.refreshData.bind(this);
       this.setDevicesListHeight = this.setDevicesListHeight.bind(this);
       this.filterAndSortDevices = this.filterAndSortDevices.bind(this);
-
       this.setDevicesData = this.setDevicesData.bind(this);
       this.setSearchableDevicesData = this.setSearchableDevicesData.bind(this);
       this.setSearchableProductionDevicesData = this.setSearchableProductionDevicesData.bind(this);
       this.setGroupsData = this.setGroupsData.bind(this);
+      this.handleDeviceCreated = this.handleDeviceCreated.bind(this);
+      this.handleDeviceSeen = this.handleDeviceSeen.bind(this);
 
       db.devices.reset();
       db.searchableDevices.reset();
@@ -68,6 +69,7 @@ define(function(require) {
       db.searchableProductionDevices.addWatch("searchable-production-devices", _.bind(this.setSearchableProductionDevicesData, this, null));
       db.groups.addWatch("groups", _.bind(this.setGroupsData, this, null));
       db.deviceCreated.addWatch("device-created", _.bind(this.handleDeviceCreated, this, null));
+      db.deviceSeen.addWatch("device-seen", _.bind(this.handleDeviceSeen, this, null));
     }
     componentDidMount() {
       var that = this;
@@ -80,7 +82,10 @@ define(function(require) {
             
       ws.onmessage = function(msg) {
         var eventObj = JSON.parse(msg.data);
-        if(eventObj.type == "DeviceCreated") {
+                
+        if(eventObj.type == "DeviceSeen") {
+          Events.deviceSeen(eventObj.event);
+        } else if(eventObj.type == "DeviceCreated") {
           Events.deviceCreated(eventObj.event);
         }
       };
@@ -96,6 +101,7 @@ define(function(require) {
       db.searchableProductionDevices.removeWatch("searchable-production-devices");
       db.groups.removeWatch("groups");
       db.deviceCreated.removeWatch("device-created");
+      db.deviceSeen.removeWatch("device-seen");
       window.removeEventListener("resize", this.setDevicesListHeight);
     }
     refreshData(filterValue) {
@@ -224,6 +230,28 @@ define(function(require) {
           searchableDevicesData: this.filterAndSortDevices(searchableDevices, this.state.selectedStatus, this.state.selectedSort)
         });
         db.deviceCreated.reset();
+      }
+    }
+    handleDeviceSeen() {
+      var deviceSeen = db.deviceSeen.deref();
+      if(!_.isUndefined(deviceSeen)) {          
+        var searchableDevices = this.state.searchableDevicesData;
+        var searchableDevicesNotFilteredOrSorted = this.state.searchableDevicesDataNotFilteredOrSorted;
+        _.each(searchableDevices, function(device, index) {
+          if(device.uuid === deviceSeen.uuid) {
+            searchableDevices[index].lastSeen = deviceSeen.lastSeen;
+          }
+        });
+        _.each(searchableDevicesNotFilteredOrSorted, function(device, index) {
+          if(device.uuid === deviceSeen.uuid) {
+            searchableDevicesNotFilteredOrSorted[index].lastSeen = deviceSeen.lastSeen;
+          }
+        });
+        this.setState({
+          searchableDevicesData: searchableDevices,
+          searchableDevicesDataNotFilteredOrSorted: searchableDevicesNotFilteredOrSorted
+        });  
+        db.deviceSeen.reset();
       }
     }
     render() {
