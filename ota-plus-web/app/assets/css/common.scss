@@ -2,6 +2,8 @@ $color_blue: #A6E6DF;
 $color_red: #d66f6f;
 $color-orange: #FB9773;
 $color-brown: #66493E;
+$color-mint: #9ce2d8;
+$color-mint-active: #7de9da;
 
 .ats {
     &-header {
@@ -47,38 +49,41 @@ $color-brown: #66493E;
         font-size: 19px;
         text-align: center;
         text-decoration: none;
-        background: rgba(255,170,136,0.5);
+        background-color: $color-mint;
         width: 100%;
         padding: 15px;
-        transition: all 0.5s ease;
+        transition: all 0.3s ease-in;
         border: 0;
         border-radius: 25px;
         display: block;
 
-        &:hover {
-            background: rgba(255,170,136,1.0);
+        &:hover, &:focus, &:active {
+            background-color: $color-mint-active;
             text-decoration: none;
         }
 
         &[disabled] {
-            background: #b7b7b7;
+            transition: all 0.3s ease-in;
+            background-color: #b7b7b7;
         }
 
         &.grey {
-            background: rgba(183,183,183,0.5);
+            transition: all 0.3s ease-in;
+            background-color: rgba(183,183,183,0.5) !important;
 
-            &:hover {
-                background: rgba(183,183,183,1.0);
+            &:hover, &:focus, &:active {
+                background-color: rgba(183,183,183,1.0) !important;
             }
         }
 
         &.bordered {
-            background: transparent;
+            transition: all 0.3s ease-in;
+            background-color: transparent;
             border: 2px solid #fff;
 
-            &:hover {
-                color: #ffaa88;
-                border-color: #ffaa88;
+            &:hover, &:focus, &:active {
+                color: $color-mint-active;
+                border-color: $color-mint-active;
             }
         }
     }
@@ -87,4 +92,26 @@ $color-brown: #66493E;
 .loading-text {
     font-size: 20px;
     margin: 0 0 10px 0;
+}
+
+.otaplus {
+    .ats {
+        &-button {
+            background: rgba(255,170,136,1.0);
+
+            &:hover, &:focus, &:active {
+                background: rgba(255,170,136,0.5);
+            }
+
+            &.bordered {
+                background-color: transparent;
+                
+                &:hover, &:focus, &:active {
+                    color: #ffaa88;
+                    border-color: #ffaa88;
+                }
+            }
+        }
+    }
+
 }

@@ -48,9 +48,6 @@ define(function(require) {
               <Link to="editprofile" id="link-editprofile">Edit profile</Link>
             </div>
             <div>
-              <a href="#" id="link-upgradeplan">Upgrade plan</a>
-            </div>
-            <div>
               <a href="#" onClick={this.props.logout} id="link-signout">Sign out</a>
             </div>
           </div>

@@ -60,15 +60,6 @@ define(function(require) {
                       <div className="form-group">
                         <input className="form-control" type="text" name="fullname" placeholder="full name" id="fullname" ref="username" defaultValue={user.fullName}/>
                       </div>
-                      <div className="form-group">
-                        <input className="form-control" type="text" name="company" placeholder="institution or company" id="company" disabled/>
-                      </div>
-                      <div className="form-group">
-                        <input className="form-control" type="email" name="email" placeholder="email address" id="email" disabled/>
-                      </div>
-                      <div className="form-group">
-                        <input className="form-control" type="text" name="phone" placeholder="phone number" id="phone" disabled/>
-                      </div>
                       <div className="form-group margin-top-30">
                         <button type="submit" className="ats-button" onClick={this.handleSubmit}>Save</button>
                       </div>
