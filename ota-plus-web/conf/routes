@@ -11,14 +11,6 @@ GET     /webjars/*file                           controllers.WebJarAssets.at(fil
 
 GET     /api/v1/client/:uuid/:artifact/:arch org.genivi.webserver.controllers.ClientSdkController.downloadClientSdk(uuid: Uuid, artifact: ArtifactType, arch: Architecture)
 
-POST    /api/v1/devices                          org.genivi.webserver.controllers.DeviceController.create()
-GET     /api/v1/devices/:uuid/clientInfo         org.genivi.webserver.controllers.DeviceController.fetchClientInfo(uuid: Uuid)
-
-GET     /api/v1/events/devices/:uuid             org.genivi.webserver.controllers.EventController.subDeviceSeen(uuid: Uuid)
-GET     /api/v1/events/devicecreated/:namespace  org.genivi.webserver.controllers.EventController.subDeviceCreated(namespace: Namespace)
-GET     /api/v1/events/devicedeleted/:namespace  org.genivi.webserver.controllers.EventController.subDeviceDeleted(namespace: Namespace)
-GET     /api/v1/events/packagecreated/:namespace org.genivi.webserver.controllers.EventController.subPackageCreated(namespace: Namespace)
-GET     /api/v1/events/updatespec/:namespace     org.genivi.webserver.controllers.EventController.subUpdateSpec(namespace: Namespace)
 GET     /api/v1/events/ws                        org.genivi.webserver.controllers.EventController.ws()
 
 GET     /api/v1/*path                            org.genivi.webserver.controllers.Application.apiProxy(path: String)

@@ -101,13 +101,6 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
   val emptyRequest = FakeRequest().withBody(RawBuffer(0, ByteString()))
 
   "EventController" should {
-    "route DeviceSeens from akka bus to client" in {
-      val request = FakeRequest(GET, s"/events/devices/${MessagingData.deviceUuid}")
-      val result = call(controller.subDeviceSeen(MessagingData.deviceUuid), request)
-
-      status(result) must be(OK)
-      contentAsString(result).trim mustBe getDeviceSeenResponse(MessagingData.deviceSeenMessage)
-    }
 
     "route web socket (flow) to client" in {
       def mkJs[T](x: T)(implicit tag: ClassTag[T], tWrites: Writes[T]): JsValue = {
@@ -128,38 +121,6 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
                               mkJs(MessagingData.updateSpecMessage),
                               mkJs(MessagingData.packageBlacklistedMessage),
                               mkJs(MessagingData.packageCreatedMessage))
-    }
-
-    "route DeviceCreateds from akka bus to client" in {
-      val request = FakeRequest(GET, s"/events/devicecreated/${MessagingData.namespace}")
-      val result = call(controller.subDeviceCreated(MessagingData.namespace), request)
-
-      status(result) must be(OK)
-      contentAsString(result).trim mustBe getDeviceCreatedResponse(MessagingData.deviceCreatedMessage)
-    }
-
-    "route DeviceDeleteds from akka bus to client" in {
-      val request = FakeRequest(GET, s"/events/devicedeleted/${MessagingData.namespace}")
-      val result = call(controller.subDeviceDeleted(MessagingData.namespace), request)
-
-      status(result) must be(OK)
-      contentAsString(result).trim mustBe getDeviceDeletedResponse(MessagingData.deviceDeletedMessage)
-    }
-
-    "route PackageCreated from akka bus to client" in {
-      val request = FakeRequest(GET, s"/events/packagecreated/${MessagingData.namespace}")
-      val result = call(controller.subPackageCreated(MessagingData.namespace), request)
-
-      status(result) must be(OK)
-      contentAsString(result).trim mustBe getPackageCreatedResponse(MessagingData.packageCreatedMessage)
-    }
-
-    "route UpdateSpecs from akka bus to client" in {
-      val request = FakeRequest(GET, s"/events/updatespec/${MessagingData.namespace}")
-      val result = call(controller.subUpdateSpec(MessagingData.namespace), request)
-
-      status(result) must be(OK)
-      contentAsString(result).trim mustBe getUpdateSpecResponse(MessagingData.updateSpecMessage)
     }
   }
 
