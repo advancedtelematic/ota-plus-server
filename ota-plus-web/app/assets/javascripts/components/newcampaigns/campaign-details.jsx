@@ -17,7 +17,7 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        data: undefined,
+        campaignData: undefined,
         campaignDetailsHeight: '300px',
         campaignToCancel: null,
         campaignGroupToCancel: null,
@@ -29,12 +29,14 @@ define(function(require) {
       this.cancelCampaignForGroup = this.cancelCampaignForGroup.bind(this);
       this.closeCampaignCancelModal = this.closeCampaignCancelModal.bind(this);
       this.closeCampaignCancelGroupModal = this.closeCampaignCancelGroupModal.bind(this);
-      this.setData = this.setData.bind(this);
+      this.setCampaignData = this.setCampaignData.bind(this);
+      this.handleDeviceSeen = this.handleDeviceSeen.bind(this);
       
       SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: this.props.params.id});
-      db.campaign.addWatch("poll-campaign", _.bind(this.setData, this, null));
       SotaDispatcher.dispatch({actionType: 'get-campaign-statistics', uuid: this.props.params.id});
-      db.campaignStatistics.addWatch("poll-campaign-statistics", _.bind(this.setData, this, null));
+      db.campaign.addWatch("poll-campaign", _.bind(this.setCampaignData, this, null));
+      db.campaignStatistics.addWatch("poll-campaign-statistics", _.bind(this.setCampaignData, this, null));
+      db.deviceSeen.addWatch("poll-deviceseen-campaign-details", _.bind(this.handleDeviceSeen, this, null));
     }
     componentDidMount() {
       var that = this;
@@ -45,6 +47,7 @@ define(function(require) {
       window.removeEventListener("resize", this.setCampaignDetailsHeight);
       db.campaign.removeWatch("poll-campaign");
       db.campaignStatistics.removeWatch("poll-campaign");
+      db.deviceSeen.removeWatch("poll-deviceseen-campaign-details");
       db.campaign.reset();
       db.campaignStatistics.reset();
     }
@@ -59,11 +62,11 @@ define(function(require) {
     cancelCampaign() {
       this.setState({
         isCampaignCancelModalShown: true,
-        campaignToCancel: this.state.data
+        campaignToCancel: this.state.campaignData
       });
     }
     cancelCampaignForGroup(campaignGroup, groupName) {
-      campaignGroup.meta = this.state.data.meta;
+      campaignGroup.meta = this.state.campaignData.meta;
       campaignGroup.groupName = groupName;
       
       this.setState({
@@ -97,7 +100,7 @@ define(function(require) {
         campaignGroupToCancel: null
       });
     }
-    setData() {      
+    setCampaignData() {      
       if(!_.isUndefined(db.campaign.deref()) && !_.isUndefined(db.campaignStatistics.deref())) {
         var campaign = db.campaign.deref();  
         var campaignStatistics = db.campaignStatistics.deref();
@@ -125,11 +128,18 @@ define(function(require) {
         campaign.overallSuccessfulUpdates = overallSuccessfulUpdates;
         campaign.overallCancelledUpdates = overallCancelledUpdates;
         
-        this.setState({data: campaign});
+        this.setState({campaignData: campaign});
+      }
+    }
+    handleDeviceSeen() {
+      var deviceSeen = db.deviceSeen.deref();
+      if(!_.isUndefined(deviceSeen) && !_.isUndefined(this.state.campaignData)) {
+        SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: this.props.params.id});
+        SotaDispatcher.dispatch({actionType: 'get-campaign-statistics', uuid: this.props.params.id});
       }
     }
     render() {
-      var campaign = this.state.data;
+      var campaign = this.state.campaignData;
       var failureRateData = [];
       var progress = 0;
       
