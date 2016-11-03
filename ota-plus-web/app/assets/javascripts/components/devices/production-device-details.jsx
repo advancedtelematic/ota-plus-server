@@ -29,9 +29,9 @@ define(function(require) {
       this.setQueueStatistics = this.setQueueStatistics.bind(this);
       this.refreshData = this.refreshData.bind(this);
       
-      db.showDevice.reset();
+      db.device.reset();
       SotaDispatcher.dispatch({actionType: 'get-production-device'});
-      db.showDevice.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
+      db.device.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
       var that = this;
@@ -48,8 +48,8 @@ define(function(require) {
       }
     }
     componentWillUnmount(){
-      db.showDevice.reset();
-      db.showDevice.removeWatch("poll-device");
+      db.device.reset();
+      db.device.removeWatch("poll-device");
       clearInterval(this.state.intervalId);
     }
     toggleQueueHistory() {
@@ -74,7 +74,7 @@ define(function(require) {
     }
     render() {
       // TODO: might be initialized empty
-      const deviceWithStatus = db.showDevice.deref();
+      const deviceWithStatus = db.device.deref();
 
       return (
         <div>

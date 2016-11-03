@@ -21,13 +21,13 @@ define(function(require) {
     constructor(props, context) {
       super(props, context);
       this.state = {
+        deviceData: undefined,
         filterValue: '',
         isPackagesHistoryShown: false,
         textPackagesHistory: context.strings.viewhistory,
         installedPackagesCount: 0,
         queuedPackagesCount: 0,
         queueCount: 0,
-        intervalId: null,
         timeoutIntervalId: null,
         duplicatingInProgress: (this.props.params.action == 'synchronising' && this.props.params.vin2) ? true : false,
         duplicatingTimeout: 2000,
@@ -39,28 +39,26 @@ define(function(require) {
         blacklistMode: null,
         isBlacklistFormShown: false,
       }
+      this.setDeviceData = this.setDeviceData.bind(this);
       this.toggleQueueHistory = this.toggleQueueHistory.bind(this);
       this.reviewFailedInstall = this.reviewFailedInstall.bind(this);
       this.setPackagesStatistics = this.setPackagesStatistics.bind(this);
       this.setQueueStatistics = this.setQueueStatistics.bind(this);
-      this.refreshData = this.refreshData.bind(this);
       this.openForm = this.openForm.bind(this);
       this.closeForm = this.closeForm.bind(this);
       this.onDrop = this.onDrop.bind(this);
       this.showBlacklistForm = this.showBlacklistForm.bind(this);
       this.closeBlacklistForm = this.closeBlacklistForm.bind(this);
       this.changeFilter = this.changeFilter.bind(this);
+      this.handleDeviceSeen = this.handleDeviceSeen.bind(this);
 
-      db.showDevice.reset();
+      db.device.reset();
       SotaDispatcher.dispatch({actionType: 'get-device', uuid: this.props.params.id});
-      db.showDevice.addWatch("poll-device", _.bind(this.forceUpdate, this, null));
+      db.device.addWatch("poll-device", _.bind(this.setDeviceData, this, null));
+      db.deviceSeen.addWatch("poll-deviceseen", _.bind(this.handleDeviceSeen, this, null));
     }
     componentDidMount() {
       var that = this;
-      var intervalId = setInterval(function() {
-        that.refreshData();
-      }, 1000);
-      this.setState({intervalId: intervalId});
 
       if(this.state.duplicatingInProgress) {
         var that = this;
@@ -69,7 +67,6 @@ define(function(require) {
             duplicatingInProgress: false,
           });
         }, 10000);
-
         this.setState({
           timeoutIntervalId: timeoutIntervalId
         });
@@ -83,10 +80,15 @@ define(function(require) {
       }
     }
     componentWillUnmount() {
-      db.showDevice.reset();
-      db.showDevice.removeWatch("poll-device");
-      clearInterval(this.state.intervalId);
+      db.device.reset();
+      db.device.removeWatch("poll-device");
+      db.deviceSeen.removeWatch("poll-deviceseen");
       clearTimeout(this.state.timeoutIntervalId);
+    }
+    setDeviceData() {
+      if(!_.isUndefined(db.device.deref())) {
+        this.setState({deviceData: db.device.deref()});
+      }
     }
     toggleQueueHistory() {
       this.setState({
@@ -110,9 +112,6 @@ define(function(require) {
       this.setState({
         queueCount: queued,
       });
-    }
-    refreshData() {
-      SotaDispatcher.dispatch({actionType: 'get-device', uuid: this.props.params.id});
     }
     openForm() {
       this.setState({
@@ -153,8 +152,19 @@ define(function(require) {
     changeFilter(filter) {
       this.setState({filterValue: filter});
     }
+    handleDeviceSeen() {
+      var deviceSeen = db.deviceSeen.deref();
+      if(!_.isUndefined(deviceSeen) && this.props.params.id === deviceSeen.uuid) {
+        var device = this.state.deviceData;
+        device.lastSeen = deviceSeen.lastSeen;
+        this.setState({
+          deviceData: device
+        });
+        db.device.reset();
+      }
+    }
     render() {
-      const deviceWithStatus = db.showDevice.deref();
+      const deviceWithStatus = this.state.deviceData;
 
       function animateLeftPosition(left) {
         return VelocityHelpers.registerEffect({
@@ -181,7 +191,6 @@ define(function(require) {
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
               {!_.isUndefined(deviceWithStatus) ? 
                 <DetailsHeader
-                  websocket={this.props.websocket}
                   device={deviceWithStatus}
                   duplicatingInProgress={this.state.duplicatingInProgress}/>
               : undefined}

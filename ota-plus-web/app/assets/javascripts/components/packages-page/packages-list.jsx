@@ -3,7 +3,6 @@ define(function(require) {
       ReactDOM = require('react-dom'),
       SotaDispatcher = require('sota-dispatcher'),
       db = require('stores/db'),
-      Events = require('handlers/events'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       PackagesListItem = require('es6!./packages-list-item'),
       PackageListItemDetails = require('es6!./packages-list-item-details'),
@@ -53,16 +52,6 @@ define(function(require) {
     }
     componentDidMount() {
       ReactDOM.findDOMNode(this.refs.packagesList).addEventListener('scroll', this.packagesListScroll);
-      
-      var ws = this.props.websocket;
-      ws.onmessage = function(msg) {
-        var eventObj = JSON.parse(msg.data);
-        if(eventObj.type == "PackageCreated") {
-          Events.packageCreated(eventObj.event);
-        } else if(eventObj.type == "PackageBlacklisted") {
-          Events.packageBlacklisted(eventObj.event);
-        }
-      };
     }
     componentDidUpdate(prevProps, prevState) {
       if(this.props.packagesListHeight !== prevProps.packagesListHeight) {
@@ -271,8 +260,7 @@ define(function(require) {
         var searchablePackagesNotChanged = this.state.searchablePackagesDataNotChanged;
         
         //TMP: TO REMOVE WHEN API FIELD IS ADDED
-        var idArray = packageCreated.packageId.split("-");
-        packageCreated.id = {name: idArray[0], version: idArray[1]};
+        packageCreated.id = packageCreated.packageId;
         //
         
         searchablePackagesNotChanged.push(packageCreated);
