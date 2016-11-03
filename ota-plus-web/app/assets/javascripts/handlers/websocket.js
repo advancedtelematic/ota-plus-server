@@ -1,12 +1,16 @@
 define(function (require) {
     var db = require('../stores/db'),
-        SotaDispatcher = require('sota-dispatcher');
+            SotaDispatcher = require('sota-dispatcher');
 
     var WebsocketHandler = (function () {
         this.init = function () {
             var proto = (location.protocol == "http:") ? "ws://" : "wss://";
             var port = (location.protocol == "http:") ? ":" + location.port : ":8080";
             this.websocket = new WebSocket(proto + location.hostname + port + "/api/v1/events/ws");
+
+            this.websocket.onopen = function () {
+                console.log("WEBSOCKET: OPEN");
+            };
 
             this.websocket.onmessage = function (msg) {
                 var eventObj = JSON.parse(msg.data);
@@ -31,6 +35,16 @@ define(function (require) {
                         console.log('Unhandled event type: ' + eventObj.type);
                         break;
                 }
+            };
+
+            this.websocket.onclose = function (msg) {
+                console.log('WEBSOCKET: CLOSE');
+                console.log(msg);
+            };
+
+            this.websocket.onerror = function (msg) {
+                console.log('WEBSOCKET: ERROR');
+                console.log(msg);
             };
         };
 
