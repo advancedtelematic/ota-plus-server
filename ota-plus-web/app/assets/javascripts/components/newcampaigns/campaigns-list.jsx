@@ -10,27 +10,30 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        data: undefined
+        campaignsData: undefined
       };
       this.configureCampaign = this.configureCampaign.bind(this);
-      this.setData = this.setData.bind(this);
+      this.setCampaignsData = this.setCampaignsData.bind(this);
+      this.handleDeviceSeen = this.handleDeviceSeen.bind(this);
       SotaDispatcher.dispatch({actionType: 'get-campaigns'});
-      db.campaigns.addWatch("poll-campaigns", _.bind(this.setData, this, null));
+      db.campaigns.addWatch("poll-campaigns", _.bind(this.setCampaignsData, this, null));
+      db.deviceSeen.addWatch("poll-deviceseen-campaigns-list", _.bind(this.handleDeviceSeen, this, null));
     }
     componentWillReceiveProps(nextProps) {
       if(nextProps.filterValue != this.props.filterValue || nextProps.selectedSort != this.props.selectedSort) {
-        this.setData(nextProps.filterValue, nextProps.selectedSort);
+        this.setCampaignsData(nextProps.filterValue, nextProps.selectedSort);
       }
     }
     componentWillUnmount() {
-      db.campaigns.reset();
       db.campaigns.removeWatch("poll-campaigns");
+      db.deviceSeen.removeWatch("poll-deviceseen-campaigns-list");
+      db.campaigns.reset();
     }
     configureCampaign(campaignUUID, e) {
       e.preventDefault();
       this.props.openWizard(campaignUUID);
     }
-    setData(filterValue = null, selectedSort) {
+    setCampaignsData(filterValue = null, selectedSort) {
       var campaigns = db.campaigns.deref();
       if(!_.isUndefined(campaigns)) {
         if(filterValue) {            
@@ -84,7 +87,13 @@ define(function(require) {
           }
         });
         
-        this.setState({data: campaigns, campaigns: groupedCampaigns});
+        this.setState({campaignsData: campaigns, campaigns: groupedCampaigns});
+      }
+    }
+    handleDeviceSeen() {
+      var deviceSeen = db.deviceSeen.deref();
+      if(!_.isUndefined(deviceSeen) && !_.isUndefined(this.state.campaignsData)) {
+        SotaDispatcher.dispatch({actionType: 'get-campaigns'});
       }
     }
     render() {
@@ -119,7 +128,7 @@ define(function(require) {
         }, this);
       }
       
-      var campaigns = _.map(this.state.data, function(campaign, i) {
+      var campaigns = _.map(this.state.campaignsData, function(campaign, i) {
         return (
           <CampaignsListItem 
             key={"campaign-" + campaign.name}
