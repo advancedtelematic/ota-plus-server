@@ -179,6 +179,7 @@ define(function(require) {
             </div>
             <div className="panel-body">
               <div id="campaigns-wrapper" className="with-background" style={{height: this.state.campaignDetailsHeight}}>
+                <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
                 {!_.isUndefined(campaign) ?
                   <div>
                     <div className="container">
@@ -235,6 +236,7 @@ define(function(require) {
                     </div>
                   </div>
                 : undefined}
+                </VelocityTransitionGroup>
               </div>
               {_.isUndefined(campaign) ? 
                 <Loader />
