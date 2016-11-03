@@ -138,16 +138,20 @@ define(function(require) {
         blacklistMode: mode
       });
     }
-    closeBlacklistForm() {
-      var that = this;
+    closeBlacklistForm(ifRefreshData = false) {
+      if(ifRefreshData) {
+        var that = this;
+        setTimeout(function() {
+          SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: that.state.filterValue});
+          SotaDispatcher.dispatch({actionType: 'get-device', uuid: that.props.params.id});
+          SotaDispatcher.dispatch({actionType: "get-package-queue-for-device", device: that.props.params.id});
+        }, 1);
+      }
       this.setState({
         isBlacklistFormShown: false,
         blacklistedPackageName: null,
         blacklistedPackageVersion: null
       });
-      setTimeout(function() {
-        SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: that.state.filterValue});
-      }, 1);
     }
     changeFilter(filter) {
       this.setState({filterValue: filter});

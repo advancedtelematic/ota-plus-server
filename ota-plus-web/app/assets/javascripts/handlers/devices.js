@@ -98,7 +98,8 @@ define(function(require) {
           case 'install-package-for-device':
             sendRequest.doPost('/api/v1/device_updates/' + payload.device, payload.data, {action: payload.actionType})
               .success(function() {
-                SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: payload.device});
+                SotaDispatcher.dispatch({actionType: "get-package-queue-for-device", device: payload.device});
+                SotaDispatcher.dispatch({actionType: 'get-device', uuid: payload.device});
               });
             break;
           case 'reorder-queue-for-device':
@@ -111,6 +112,7 @@ define(function(require) {
             sendRequest.doPut('/api/v1/device_updates/' + payload.device + '/' + payload.updateid + '/cancelupdate', null, {action: payload.actionType})
               .success(function() {
                 SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: payload.device});
+                SotaDispatcher.dispatch({actionType: 'get-device', uuid: payload.device});
               });
           break;
           case 'search-production-devices':
