@@ -100,19 +100,23 @@ define(function(require) {
             <BlacklistedPackagesList 
               packages={db.blacklistedPackages.deref()}
               showImpactTooltip={this.showImpactTooltip}/>
-            {!_.isUndefined(impactedPackages) && !_.isEmpty(impactedPackages) ? 
-              <BlacklistedPackagesList 
-                packages={impactedPackages}
-                type="impacted"/>
-            : undefined}
-            {!_.isUndefined(impactedDevices) && !_.isEmpty(impactedDevices) ?
-              <DevicesList
-                devices={impactedDevices}
-                groups={db.groups.deref()}
-                areProductionDevices={false}
-                isDND={false}
-                areActionButtonsShown={false}/>
-            : undefined}
+            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+              {!_.isUndefined(impactedPackages) && !_.isEmpty(impactedPackages) ? 
+                <BlacklistedPackagesList 
+                  packages={impactedPackages}
+                  type="impacted"/>
+              : undefined}
+            </VelocityTransitionGroup>
+            <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+              {!_.isUndefined(impactedDevices) && !_.isEmpty(impactedDevices) ?
+                <DevicesList
+                  devices={impactedDevices}
+                  groups={db.groups.deref()}
+                  areProductionDevices={false}
+                  isDND={false}
+                  areActionButtonsShown={false}/>
+              : undefined}
+            </VelocityTransitionGroup>
             {_.isUndefined(impactedPackages) || _.isUndefined(impactedDevices) ?
               <Loader />
             : undefined}
