@@ -11,7 +11,6 @@ define(function(require) {
       this.state = {
         filterValue: '',
         selectedSort: 'asc',
-        selectedSortName: 'A > Z',
         packagesListHeight: '300px',
         isFormShown: false
       }
@@ -53,8 +52,7 @@ define(function(require) {
 
       var name = jQuery(e.target).text();
       this.setState({
-        selectedSort: sort,
-        selectedSortName: name
+        selectedSort: sort
       });
     }
     render() {
@@ -66,18 +64,12 @@ define(function(require) {
                 <div className="container">
                   <SearchBar class="search-bar pull-left" inputId="search-packages-input" changeFilter={this.changeFilter}/>
                   
-                  <div className="select-bar pull-left margin-left-100">
-                    <div className="select-bar-text">Sort by</div>
-                    <div className="btn-group">
-                      <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span className="pull-left">{this.state.selectedSortName} &nbsp;</span>
-                        <span className="fa fa-angle-down pull-right"></span>
-                      </button>
-                      <ul className="dropdown-menu">
-                        <li><a href="#" onClick={this.selectSort.bind(this, 'asc')} id="link-sort-packages-asc">A &gt; Z</a></li>
-                        <li><a href="#" onClick={this.selectSort.bind(this, 'desc')} id="link-sort-packages-desc">Z &gt; A</a></li>
-                      </ul>
-                    </div>
+                  <div className="sort-text pull-left">
+                    {this.state.selectedSort == 'asc' ? 
+                      <a href="#" onClick={this.selectSort.bind(this, 'desc')} id="link-sort-packages-desc"><i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z</a>
+                    :
+                      <a href="#" onClick={this.selectSort.bind(this, 'asc')} id="link-sort-packages-asc"><i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A</a>
+                    }
                   </div>
           
                   <button onClick={this.openForm} className="btn btn-main btn-add pull-right" id="button-add-new-package">

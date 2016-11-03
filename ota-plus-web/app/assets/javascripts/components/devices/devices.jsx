@@ -25,7 +25,6 @@ define(function(require) {
         selectedStatus: 'All',
         selectedStatusName: 'All',
         selectedSort: 'asc',
-        selectedSortName: 'A > Z',
         expandedSectionName: 'testDevices',
         packagesCount: 67,
         campaignsCount: 32,
@@ -130,8 +129,7 @@ define(function(require) {
       e.preventDefault();
       this.setState({
         searchableDevicesData: this.filterAndSortDevices(this.state.searchableDevicesDataNotFilteredOrSorted, this.state.selectedStatus, sort),
-        selectedSort: sort,
-        selectedSortName: jQuery(e.target).text()
+        selectedSort: sort
       });
     }
     expandSection(sectionName, e) {
@@ -269,7 +267,6 @@ define(function(require) {
             selectedStatus={this.state.selectedStatus}
             selectedStatusName={this.state.selectedStatusName}
             selectedSort={this.state.selectedSort}
-            selectedSortName={this.state.selectedSortName}
             selectStatus={this.selectStatus}
             selectSort={this.selectSort}
             isDevicesListEmpty={isDevicesListEmpty}
