@@ -44,10 +44,12 @@ define(function(require) {
       this.startIntervalPackagesListScroll = this.startIntervalPackagesListScroll.bind(this);
       this.stopIntervalPackagesListScroll = this.stopIntervalPackagesListScroll.bind(this);
       this.handlePackageCreated = this.handlePackageCreated.bind(this);
+      this.handlePackageBlacklisted = this.handlePackageBlacklisted.bind(this);
       
       SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
       db.searchablePackages.addWatch("poll-packages", _.bind(this.setSearchablePackagesData, this, null));
       db.packageCreated.addWatch("package-created", _.bind(this.handlePackageCreated, this, null));
+      db.packageBlacklisted.addWatch("package-blacklisted", _.bind(this.handlePackageBlacklisted, this, null));
     }
     componentDidMount() {
       ReactDOM.findDOMNode(this.refs.packagesList).addEventListener('scroll', this.packagesListScroll);
@@ -57,6 +59,8 @@ define(function(require) {
         var eventObj = JSON.parse(msg.data);
         if(eventObj.type == "PackageCreated") {
           Events.packageCreated(eventObj.event);
+        } else if(eventObj.type == "PackageBlacklisted") {
+          Events.packageBlacklisted(eventObj.event);
         }
       };
     }
@@ -82,6 +86,8 @@ define(function(require) {
       ReactDOM.findDOMNode(this.refs.packagesList).removeEventListener('scroll', this.packagesListScroll);
       db.searchablePackages.reset();      
       db.searchablePackages.removeWatch("poll-packages");
+      db.packageCreated.removeWatch("package-created");
+      db.packageBlacklisted.removeWatch("package-blacklisted");
       clearInterval(this.state.tmpIntervalId);
     }
     generatePositions() {
@@ -275,6 +281,21 @@ define(function(require) {
           searchablePackagesDataNotChanged: searchablePackagesNotChanged
         });
         db.packageCreated.reset();
+      }
+    }
+    handlePackageBlacklisted() {
+      var packageBlacklisted = db.packageBlacklisted.deref();
+      if(!_.isUndefined(packageBlacklisted)) {
+        var searchablePackagesNotChanged = this.state.searchablePackagesDataNotChanged;
+        _.each(searchablePackagesNotChanged, function(pack, index) {
+          if(pack.id.name === packageBlacklisted.packageId.name && pack.id.version === packageBlacklisted.packageId.version) {
+            searchablePackagesNotChanged[index].isBlackListed = true;
+          }
+        });
+        this.setState({
+          searchablePackagesData: this.groupAndSortPackages(searchablePackagesNotChanged, this.props.selectedSort),
+          searchablePackagesDataNotChanged: searchablePackagesNotChanged
+        });
       }
     }
     render() {
