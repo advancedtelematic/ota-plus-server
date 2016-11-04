@@ -125,7 +125,7 @@ define(function(require) {
               </div>
             </div>
     
-             <div className="select-bar pull-right margin-left-15">
+             <div className="select-bar pull-right">
               <div className="select-bar-text">Type</div>
               <div className="btn-group">
                 <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
