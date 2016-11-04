@@ -10,5 +10,8 @@ trait ApiClientSupport {
 
   val authPlusApi = new AuthPlusApi(conf, clientExec)
 
+  val auth0Api = new Auth0Api(conf, clientExec)
+
   val devicesApi = new DevicesApi(conf, clientExec)
+
 }

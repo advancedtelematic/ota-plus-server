@@ -2,6 +2,7 @@ package com.advancedtelematic.api
 
 import java.util.UUID
 
+import com.advancedtelematic.IdToken
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.ota.device.Devices._
 import com.advancedtelematic.ota.vehicle.ClientInfo
@@ -9,7 +10,7 @@ import org.genivi.sota.data.{Device, DeviceT, Namespace, Uuid}
 import org.genivi.webserver.controllers.OtaPlusConfig
 import play.api.Configuration
 import play.api.libs.json._
-import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
+import play.api.libs.ws.{WSAuthScheme, WSClient, WSRequest, WSResponse}
 import play.api.mvc.Result
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -24,8 +25,11 @@ case class RemoteApiError(result: Result, msg: String = "") extends Exception(ms
 
 case class RemoteApiParseError(msg: String) extends Exception(msg) with NoStackTrace
 
+case class UserPass(user: String, pass: String)
+
 object ApiRequest {
   case class UserOptions(token: Option[String] = None,
+                         authuser: Option[UserPass] = None,
                          traceId: Option[String] = None,
                          namespace: Option[Namespace] = None)
 
@@ -46,7 +50,16 @@ trait ApiRequest { self =>
   def build: WSClient => WSRequest
 
   def withUserOptions(userOptions: UserOptions): ApiRequest = {
-    self.withNamespace(userOptions.namespace).withToken(userOptions.token).withTraceId(userOptions.traceId)
+    self.withAuth(userOptions.authuser)
+      .withNamespace(userOptions.namespace)
+      .withToken(userOptions.token)
+      .withTraceId(userOptions.traceId)
+  }
+
+  def withAuth(auth: Option[UserPass]): ApiRequest = {
+    auth map { u =>
+      transform(_.withAuth(u.user, u.pass, WSAuthScheme.BASIC))
+    } getOrElse self
   }
 
   def withNamespace(ns: Option[Namespace]): ApiRequest = {
@@ -79,6 +92,10 @@ trait ApiRequest { self =>
     apiExec.runApiResult(build)
   }
 
+  def execJsonValue(apiExec: ApiClientExec): Future[JsValue] = {
+    apiExec.runApiJsonValue(build)
+  }
+
   def execJson[T](apiExec: ApiClientExec)(implicit ev: Reads[T]): Future[T] = {
     apiExec.runApiJson[T](build)
   }
@@ -103,18 +120,40 @@ class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends Ot
   */
 class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
 
-  private val authPlusRequest      = ApiRequest.base(authPlusApiUri + "/")
   private val clientId: String     = conf.getString("authplus.client_id").get
   private val clientSecret: String = conf.getString("authplus.secret").get
 
+  private val authPlusRequest = ApiRequest.base(authPlusApiUri + "/")
+    .andThen(_.withAuth(Some(UserPass(clientId, clientSecret))))
+
+  def createClient(body: JsValue)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
+    authPlusRequest("clients").transform(_.withBody(body).withMethod("POST")).execJson(apiExec)(ev)
+  }
+
   def createClient(device: Uuid)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
-    val request = Json.obj(
+    val body = Json.obj(
         "grant_types" -> List("client_credentials"),
         "client_name" -> device.show,
         "scope"       -> s"ota-core.${device.show}.write ota-core.${device.show}.read"
     )
+    createClient(body)
+  }
 
-    authPlusRequest("clients").transform(_.withBody(request).withMethod("POST")).execJson(apiExec)(ev)
+  def createClientForUser(ns: Namespace, clientName: String)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
+    val body = Json.obj(
+        "grant_types" -> List("client_credentials"),
+        "client_name" -> clientName,
+        "scope"       -> s"namespace.${ns.get}"
+    )
+    createClient(body)
+  }
+
+  def getClient(clientId: Uuid)(implicit ec: ExecutionContext): Future[Result] = {
+    authPlusRequest(s"clients/${clientId.underlying.get}").transform(_.withMethod("GET")).execResult(apiExec)
+  }
+
+  def getClientJsValue(clientId: Uuid)(implicit ec: ExecutionContext): Future[JsValue] = {
+    authPlusRequest(s"clients/${clientId.underlying.get}").transform(_.withMethod("GET")).execJsonValue(apiExec)
   }
 
 
@@ -127,11 +166,7 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
     * </ul>
     */
   def fetchClientInfo(clientID: UUID)(implicit ec: ExecutionContext): Future[JsValue] = {
-    authPlusRequest(s"clients/${clientID.toString}").transform(_.withMethod("GET")).execResponse(apiExec).flatMap {
-      wresp =>
-        val t2: Try[JsValue] = Try(wresp.json)
-        Future.fromTry(t2)
-    }
+    authPlusRequest(s"clients/${clientID.toString}").transform(_.withMethod("GET")).execJsonValue(apiExec)
   }
 
   def fetchSecret(clientID: UUID)(implicit ec: ExecutionContext): Future[String] = {
@@ -139,6 +174,33 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
       val t2: Try[String] = Try((parsed \ "client_secret").validate[String].get)
       Future.fromTry(t2)
     }
+  }
+
+}
+
+class Auth0Api(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
+
+  private val domain: String       = conf.getString("auth0.domain").get
+  private val auth0Request         = ApiRequest.base(s"https://${domain}/")
+  private val auth0RequestUserData = ApiRequest.base(s"https://${domain}/api/v2/users/")
+
+  def getUserMetadata(userId: String, idToken: IdToken, key: String)
+  (implicit ec: ExecutionContext) : Future[JsValue] = {
+    auth0RequestUserData(userId)
+      .withToken(idToken.value)
+      .transform(_.withMethod("GET"))
+      .execJsonValue(apiExec)
+      .flatMap { value =>
+        Future.fromTry(Try((value \ "user_metadata" \ key).validate[JsValue].get))
+      }
+  }
+
+  def saveUserMetadata(userId: String, idToken: IdToken, key: String, value: JsValue) : Future[Result] = {
+    val body = Json.obj("user_metadata" -> Json.obj(key -> value))
+    auth0RequestUserData(userId)
+      .withToken(idToken.value)
+      .transform(_.withMethod("PATCH").withBody(body))
+      .execResult(apiExec)
   }
 
 }
