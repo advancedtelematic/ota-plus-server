@@ -406,6 +406,14 @@ button {
     max-height: 100vh;
     overflow: hidden;
 
+    .dnd-zone {
+        &.dnd-zone-active {
+            &:after {
+                line-height: 65vh;
+            }
+        }
+    }
+    
     .device-header {
         background: url(/assets/img/bg.jpg) no-repeat;
         background-attachment: fixed;

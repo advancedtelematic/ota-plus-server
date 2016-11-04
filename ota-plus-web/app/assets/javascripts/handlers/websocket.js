@@ -21,6 +21,7 @@ define(function (require) {
                         break;
                     case "PackageCreated":
                         db.packageCreated.reset(data);
+                        break;
                     case "PackageBlacklisted":
                         db.packageBlacklisted.reset(data);
                         break;
@@ -30,8 +31,8 @@ define(function (require) {
                 }
             };
         };
-        
-        this.destroy = function() {
+
+        this.destroy = function () {
             this.websocket.close();
         };
     });
