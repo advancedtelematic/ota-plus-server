@@ -49,10 +49,6 @@ define(function(require) {
         }, 200);
       });
       window.addEventListener("resize", this.setQueueListHeight);
-      setTimeout(function() {
-        that.setQueueListHeight();
-      }, 1);
-      
       var intervalId = setInterval(function() {
         that.refreshData();
       }, 1000);
@@ -122,12 +118,14 @@ define(function(require) {
                 <QueueList
                   key="queue-list"
                   deviceId={this.props.device.uuid}
-                  setQueueStatistics={this.props.setQueueStatistics}/>
+                  setQueueStatistics={this.props.setQueueStatistics}
+                  setQueueListHeight={this.setQueueListHeight}/>
               :
                 <HistoryList
                   key="history-list"
                   deviceId={this.props.device.uuid}
-                  isFirstFailedExpanded={this.state.isFirstFailedExpanded}/>
+                  isFirstFailedExpanded={this.state.isFirstFailedExpanded}
+                  setQueueListHeight={this.setQueueListHeight}/>
             : undefined}
           </div>
         </div>

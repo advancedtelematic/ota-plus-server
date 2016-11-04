@@ -50,7 +50,6 @@ define(function(require) {
         }, 200);
       });
       window.addEventListener("resize", this.setPackagesListHeight);
-      this.setPackagesListHeight();
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setPackagesListHeight);
@@ -152,6 +151,7 @@ define(function(require) {
           <div id="packages-wrapper" style={{height: this.state.packagesListHeight}}>
             {!_.isUndefined(this.props.device) ?
               <PackagesList
+                setPackagesListHeight={this.setPackagesListHeight}
                 packagesListHeight={this.state.packagesListHeight}
                 selectedStatus={this.state.selectedStatus}
                 selectedSort={this.state.selectedSort}
