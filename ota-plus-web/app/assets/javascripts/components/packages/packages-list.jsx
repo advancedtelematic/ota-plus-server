@@ -15,9 +15,9 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        data: undefined,
+        packagesData: undefined,
+        packagesDataNotFiltered: undefined,
         expandedPackage: null,
-        timeout: null,
         tmpIntervalId: null,
         fakeHeaderTopPosition: 0,
         fakeHeaderLetter: null,
@@ -26,10 +26,10 @@ define(function(require) {
         packagesShownStartIndex: 0,
         packagesShownEndIndex: 50
       };
-      this.refreshData = this.refreshData.bind(this);
-      this.refresh = this.refresh.bind(this);
-      this.setData = this.setData.bind(this);
-      this.prepareData = this.prepareData.bind(this);
+      this.refreshPackagesData = this.refreshPackagesData.bind(this);
+      this.setPackagesData = this.setPackagesData.bind(this);
+      this.prepareInitialData = this.prepareInitialData.bind(this);
+      this.applyFilters = this.applyFilters.bind(this);
       this.onDrop = this.onDrop.bind(this);
       this.expandPackage = this.expandPackage.bind(this);
       this.queueUpdated = this.queueUpdated.bind(this);
@@ -38,11 +38,19 @@ define(function(require) {
       this.packagesListScroll = this.packagesListScroll.bind(this);
       this.startIntervalPackagesListScroll = this.startIntervalPackagesListScroll.bind(this);
       this.stopIntervalPackagesListScroll = this.stopIntervalPackagesListScroll.bind(this);
+      this.handlePackageCreated = this.handlePackageCreated.bind(this);
+      this.handlePackageBlacklisted = this.handlePackageBlacklisted.bind(this);
 
-      db.blacklistedPackages.addWatch("poll-blacklisted-packages-page", _.bind(this.refresh, this, null));
-      db.searchablePackages.addWatch("poll-packages", _.bind(this.refresh, this, null));
-      db.searchablePackagesForDevice.addWatch("poll-installed-packages", _.bind(this.refresh, this, null));
+      db.blacklistedPackages.addWatch("poll-blacklisted-packages-page", _.bind(this.refreshPackagesData, this, null));
+      db.searchablePackages.addWatch("poll-packages", _.bind(this.refreshPackagesData, this, null));
+      db.searchablePackagesForDevice.addWatch("poll-installed-packages", _.bind(this.refreshPackagesData, this, null));
       db.packageQueueForDevice.addWatch("poll-queued-packages", _.bind(this.queueUpdated, this, null));
+      db.packageCreated.addWatch("package-created", _.bind(this.handlePackageCreated, this, null));
+      db.packageBlacklisted.addWatch("package-blacklisted", _.bind(this.handlePackageBlacklisted, this, null));
+      SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
+      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device.uuid});
+      SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
+      SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.uuid, regex: this.props.filterValue});
     }
     componentWillUpdate(nextProps, nextState) {
       if(nextProps.filterValue != this.props.filterValue) {
@@ -55,19 +63,12 @@ define(function(require) {
         this.setState({showForm: nextProps.showForm});
       }
       if(this.props.selectedStatus !== nextProps.selectedStatus || 
-              this.props.selectedType !== nextProps.selectedType || 
-              this.props.selectedSort !== nextProps.selectedSort) {
-        this.setData(nextProps.selectedStatus, nextProps.selectedType, nextProps.selectedSort);
-      }
-      if(this.props.selectedType !== nextProps.selectedType) {
-        this.setState({
-          selectedType: nextProps.selectedType
-        });
+         this.props.selectedType !== nextProps.selectedType || 
+         this.props.selectedSort !== nextProps.selectedSort) {
+        this.setPackagesData(nextProps.selectedStatus, nextProps.selectedType, nextProps.selectedSort);
       }
     }
     componentDidMount() {
-      var that = this;
-      this.refreshData();
       ReactDOM.findDOMNode(this.refs.packagesList).addEventListener('scroll', this.packagesListScroll);
     }
     componentDidUpdate(prevProps, prevState) {
@@ -87,7 +88,8 @@ define(function(require) {
       db.searchablePackages.removeWatch("poll-packages");
       db.searchablePackagesForDevice.removeWatch("poll-installed-packages");
       db.packageQueueForDevice.removeWatch("poll-queued-packages");
-      clearTimeout(this.state.timeout);
+      db.packageCreated.removeWatch("package-created");
+      db.packageBlacklisted.removeWatch("package-blacklisted");
       clearInterval(this.state.tmpIntervalId);
     }
     generatePositions() {
@@ -102,8 +104,8 @@ define(function(require) {
       }, this);
       return positions;
     }
-    setFakeHeader(data) {
-      this.setState({fakeHeaderLetter: Object.keys(data)[0]});
+    setFakeHeader(header) {
+      this.setState({fakeHeaderLetter: header});
     }
     packagesListScroll() {
       var scrollTop = ReactDOM.findDOMNode(this.refs.packagesList).scrollTop;
@@ -116,7 +118,7 @@ define(function(require) {
       positions.every(function(position, index) {
         if(scrollTop >= position) {
           beforeHeadersCount++;
-          newFakeHeaderLetter = Object.keys(this.state.data)[index];
+          newFakeHeaderLetter = Object.keys(this.state.packagesData)[index];
           return true;
         } else if(scrollTop >= position - headerHeight) {
           scrollTop -= scrollTop - (position - headerHeight);
@@ -164,173 +166,177 @@ define(function(require) {
         tmpQueueData: db.packageQueueForDevice.deref()
       });
     }
-    refreshData() {
-      SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
-      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device.uuid});
-      SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
-      SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.uuid, regex: this.props.filterValue});
+    refreshPackagesData() {
+      this.setPackagesData(this.props.selectedStatus, this.props.selectedType, this.props.selectedSort);
     }
-    refresh() {
-      this.setData(this.props.selectedStatus, this.props.selectedType, this.props.selectedSort);
-    }
-    setData(selectedStatus, selectedType, selectedSort) {
-      var result = this.prepareData(selectedStatus, selectedType, selectedSort);
-      if(!_.isUndefined(result.data) && (_.isUndefined(this.state.data) || Object.keys(this.state.data)[0] !== Object.keys(result.data)[0]))
-        this.setFakeHeader(result.data);
-      
-      this.props.setPackagesStatistics(result.statistics.installedCount, result.statistics.queuedCount);
-      this.setState({
-        data: result.data
-      });
-    }
-    prepareData(selectedStatus, selectedType, selectedSort) {
-      var that = this;
-      var Packages = _.clone(db.searchablePackages.deref());
-      var Installed = _.clone(db.searchablePackagesForDevice.deref());
-      var Queued = _.clone(db.packageQueueForDevice.deref());
-      var BlackList = _.clone(db.blacklistedPackages.deref());
-
-      var SortedPackages = undefined;
-      var installedCount = 0;
-      var queuedCount = 0;
-
-      var selectedStatus = selectedStatus ? selectedStatus : this.props.selectedStatus;
-      var selectedType = selectedType ? selectedType : this.props.selectedType;
-      var selectedSort = selectedSort ? selectedSort : this.props.selectedSort;
+    setPackagesData(selectedStatus = this.props.selectedStatus, selectedType = this.props.selectedType, selectedSort = this.props.selectedSort) {
+      var packages = undefined;
+      var initialPackagesData = this.prepareInitialData();
             
-      if(!_.isUndefined(Packages) && !_.isUndefined(Installed) && !_.isUndefined(Queued) && !_.isUndefined(BlackList)) {
-        BlackList.forEach(function(blacklist, index){
-          Installed.forEach(function(installed, index) {
+      if(!_.isUndefined(initialPackagesData)) {
+        var packages = this.applyFilters(initialPackagesData, selectedStatus, selectedType, selectedSort);
+        
+        if(!_.isUndefined(packages.packagesData) && (_.isUndefined(this.state.packagesData) || Object.keys(this.state.packagesData)[0] !== Object.keys(packages.packagesData)[0]))
+          this.setFakeHeader(Object.keys(packages.packagesData)[0]);
+        
+        this.props.setPackagesStatistics(packages.statistics.installedCount, packages.statistics.queuedCount);
+        
+        this.setState({
+          packagesData: packages.packagesData,
+          packagesDataNotFiltered: initialPackagesData
+        });
+      }
+    }
+    prepareInitialData() {
+      var packages = _.clone(db.searchablePackages.deref());
+      var installedPackages = _.clone(db.searchablePackagesForDevice.deref());
+      var queuedPackages = _.clone(db.packageQueueForDevice.deref());
+      var blacklistedPackages = _.clone(db.blacklistedPackages.deref());
+      var result = undefined;
+            
+      if(!_.isUndefined(packages) && !_.isUndefined(installedPackages) && !_.isUndefined(queuedPackages) && !_.isUndefined(blacklistedPackages)) {
+        blacklistedPackages.forEach(function(blacklist, index) {
+          installedPackages.forEach(function(installed, index) {
             if(installed.id.name == blacklist.packageId.name && installed.id.version == blacklist.packageId.version) {
-              Installed[index]['isBlackListed'] = true;
+              installedPackages[index]['isBlackListed'] = true;
             }
           });
         });
         
-        switch(selectedType) {
-          case 'all': 
-            Installed.forEach(function(installed, index){
-              Packages.push(installed);
-            });
-          break;
-          case 'unmanaged':
-            Packages.forEach(function(obj) {
-              Installed = Installed.filter(function(res){
-                return (res.id.name != obj.id.name && res.id.version != obj.id.version);
-              });
-            });
-            Packages = Installed;
-          break;
-          default:
-          break;
-        }
-                                
-        var InstalledIds = new Object();
-        _.each(Installed, function(obj, index){
-          InstalledIds[obj.id.name+'_'+obj.id.version] = obj.id.name+'_'+obj.id.version;
-        });
-
-        var QueuedIds = new Object();
-        _.each(Queued, function(obj, index){
-          QueuedIds[obj.packageId.name+'_'+obj.packageId.version] = obj.packageId.name+'_'+obj.packageId.version;
-        });
-
-        var GroupedPackages = {};
-        _.each(Packages, function(obj, index){
-          var uri = !_.isUndefined(obj.uri) && !_.isUndefined(obj.uri.uri) ? obj.uri.uri : '';
-          var objKey = obj.id.name+'_'+obj.id.version;
-          var isQueued = false;
-          var isInstalled = false;
-                    
-          if(objKey in InstalledIds) {
-            Packages[index].attributes = {status: 'installed', string: 'Installed', label: 'label-success'};
-            isInstalled = true;
-          } else if(objKey in QueuedIds) {
-            Packages[index].attributes = {status: 'queued', string: 'Queued', label: 'label-info'};
-            isQueued = true;
-          } else {
-            Packages[index].attributes = {status: 'notinstalled', string: 'Not installed', label: 'label-danger'};
-          }
-
-          if( typeof GroupedPackages[obj.id.name] == 'undefined' || !GroupedPackages[obj.id.name] instanceof Array ) {
-            GroupedPackages[obj.id.name] = new Object();
-            GroupedPackages[obj.id.name]['elements'] = [];
-            GroupedPackages[obj.id.name]['packageName'] = obj.id.name;
-            GroupedPackages[obj.id.name]['isQueued'] = isQueued;
-            GroupedPackages[obj.id.name]['isInstalled'] = isInstalled;
-            GroupedPackages[obj.id.name]['isBlackListed'] = obj.isBlackListed && isInstalled ? true : false;
-
-            isQueued ? queuedCount++ : null;
-            isInstalled ? installedCount++ : null;
-          }
-
-          if(!GroupedPackages[obj.id.name].isQueued && isQueued) {
-            GroupedPackages[obj.id.name]['isQueued'] = true;
-            queuedCount++;
-          }
-
-          if(!GroupedPackages[obj.id.name].isInstalled && isInstalled) {
-            GroupedPackages[obj.id.name]['isInstalled'] = true;
-            installedCount++;
-          }
-          
-          if(!GroupedPackages[obj.id.name]['isBlackListed'] && obj.isBlackListed && isInstalled)
-            GroupedPackages[obj.id.name]['isBlackListed'] = true;
-
-          GroupedPackages[obj.id.name]['elements'].push(Packages[index]);
+        installedPackages.forEach(function(installed, index) {
+          installed.type = 'unmanaged';
+          packages.push(installed);
         });
         
-        _.each(GroupedPackages, function(obj, index) {
-          GroupedPackages[index]['elements'] = obj['elements'].sort(function (a, b) {
-            var aVersion = a.id.version;
-            var bVersion = b.id.version;
-            return that.compareVersions(bVersion, aVersion);
+        result = packages;
+      }
+      return result;
+    }
+    applyFilters(packages, selectedStatus = this.props.selectedStatus, selectedType = this.props.selectedType, selectedSort = this.props.selectedSort) {
+      var that = this;
+      var sortedPackages = undefined;
+      var installedPackages = _.clone(db.searchablePackagesForDevice.deref());
+      var queuedPackages = _.clone(db.packageQueueForDevice.deref());
+      var installedCount = 0;
+      var queuedCount = 0;
+        
+      switch(selectedType) {
+        case 'unmanaged':
+          packages = packages.filter(function(pack) {
+            return pack.type === 'unmanaged';
           });
-        });
+        break;
+        case 'managed':
+          packages = packages.filter(function(pack) {
+            return (_.isUndefined(pack.type) || pack.type !== 'unmanaged');
+          });
+        break;
+        default:
+        break;
+      }
+      
+      var installedIds = new Object();
+      _.each(installedPackages, function(obj, index) {
+        installedIds[obj.id.name + '_' + obj.id.version] = obj.id.name + '_' + obj.id.version;
+      });
 
-        var SelectedPackages = {};
-        switch(selectedStatus) {
-          case 'installed':
-            _.each(GroupedPackages, function(obj, key) {
-              if(obj.isInstalled)
-                SelectedPackages[key] = GroupedPackages[key];
-            });
-          break;
-          case 'queued':
-            _.each(GroupedPackages, function(obj, key) {
-              if(obj.isQueued)
-                SelectedPackages[key] = GroupedPackages[key];
-            });
-          break;
-          case 'uninstalled':
-            _.each(GroupedPackages, function(obj, key) {
-              if(!obj.isInstalled && !obj.isQueued)
-                SelectedPackages[key] = GroupedPackages[key];
-            });
-          break;
-          default:
-            SelectedPackages = GroupedPackages;
-          break;
+      var queuedIds = new Object();
+      _.each(queuedPackages, function(obj, index) {
+        queuedIds[obj.packageId.name + '_' + obj.packageId.version] = obj.packageId.name + '_' + obj.packageId.version;
+      });
+
+      var groupedPackages = {};
+      _.each(packages, function(obj, index) {
+        var uri = !_.isUndefined(obj.uri) && !_.isUndefined(obj.uri.uri) ? obj.uri.uri : '';
+        var objKey = obj.id.name + '_' + obj.id.version;
+        var isQueued = false;
+        var isInstalled = false;
+                    
+        if(objKey in installedIds) {
+          packages[index].attributes = {status: 'installed', string: 'Installed', label: 'label-success'};
+          isInstalled = true;
+        } else if(objKey in queuedIds) {
+          packages[index].attributes = {status: 'queued', string: 'Queued', label: 'label-info'};
+          isQueued = true;
+        } else {
+          packages[index].attributes = {status: 'notinstalled', string: 'Not installed', label: 'label-danger'};
         }
 
-        SortedPackages = {};
-        Object.keys(SelectedPackages).sort(function(a, b) {
-          if(selectedSort !== 'undefined' && selectedSort == 'desc')
-            return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? -1 : b.localeCompare(a);
-          else
-            return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? 1 : a.localeCompare(b);
-        }).forEach(function(key) {
-          var firstLetter = key.charAt(0).toUpperCase();
-          firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
+        if(_.isUndefined(groupedPackages[obj.id.name]) || !groupedPackages[obj.id.name] instanceof Array ) {
+          groupedPackages[obj.id.name] = new Object();
+          groupedPackages[obj.id.name]['elements'] = [];
+          groupedPackages[obj.id.name]['packageName'] = obj.id.name;
+          groupedPackages[obj.id.name]['isQueued'] = isQueued;
+          groupedPackages[obj.id.name]['isInstalled'] = isInstalled;
+          groupedPackages[obj.id.name]['isBlackListed'] = obj.isBlackListed && isInstalled ? true : false;
+        }
 
-          if( typeof SortedPackages[firstLetter] == 'undefined' || !SortedPackages[firstLetter] instanceof Array ) {
-             SortedPackages[firstLetter] = [];
-          }
-          SortedPackages[firstLetter].push(SelectedPackages[key]);
+        if(!groupedPackages[obj.id.name].isQueued && isQueued) {
+          groupedPackages[obj.id.name]['isQueued'] = true;
+        }
+        if(!groupedPackages[obj.id.name].isInstalled && isInstalled) {
+          groupedPackages[obj.id.name]['isInstalled'] = true;
+        }
+        if(!groupedPackages[obj.id.name]['isBlackListed'] && obj.isBlackListed && isInstalled)
+          groupedPackages[obj.id.name]['isBlackListed'] = true;
+
+        groupedPackages[obj.id.name]['elements'].push(packages[index]);
+      });
+        
+      _.each(groupedPackages, function(obj, index) {
+        groupedPackages[index]['elements'] = obj['elements'].sort(function (a, b) {
+          var aVersion = a.id.version;
+          var bVersion = b.id.version;
+          return that.compareVersions(bVersion, aVersion);
         });
+      });
+
+      var selectedPackages = {};
+      switch(selectedStatus) {
+        case 'installed':
+          _.each(groupedPackages, function(obj, key) {
+            if(obj.isInstalled)
+              selectedPackages[key] = groupedPackages[key];
+          });
+        break;
+        case 'queued':
+          _.each(groupedPackages, function(obj, key) {
+            if(obj.isQueued)
+              selectedPackages[key] = groupedPackages[key];
+          });
+        break;
+        case 'uninstalled':
+          _.each(groupedPackages, function(obj, key) {
+            if(!obj.isInstalled && !obj.isQueued)
+              selectedPackages[key] = groupedPackages[key];
+          });
+        break;
+        default:
+          selectedPackages = groupedPackages;
+        break;
       }
+      
+      _.each(selectedPackages, function(pack, index) {
+        pack.isQueued ? queuedCount++ : null;
+        pack.isInstalled ? installedCount++ : null;
+      });
+
+      sortedPackages = {};
+      Object.keys(selectedPackages).sort(function(a, b) {
+        if(selectedSort !== 'undefined' && selectedSort == 'desc')
+          return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? -1 : b.localeCompare(a);
+        else
+          return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? 1 : a.localeCompare(b);
+      }).forEach(function(key) {
+        var firstLetter = key.charAt(0).toUpperCase();
+        firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
+        if(_.isUndefined(sortedPackages[firstLetter]) || !sortedPackages[firstLetter] instanceof Array ) {
+           sortedPackages[firstLetter] = [];
+        }
+        sortedPackages[firstLetter].push(selectedPackages[key]);
+      });
     
-      return {'data': SortedPackages, 'statistics': {'queuedCount': queuedCount, 'installedCount': installedCount}};
+      return {'packagesData': sortedPackages, 'statistics': {'queuedCount': queuedCount, 'installedCount': installedCount}};
     }
     onDrop(files) {
       this.props.onDrop(files);
@@ -372,10 +378,54 @@ define(function(require) {
       }
       return 0;
     }
+    handlePackageCreated() {
+      var packageCreated = db.packageCreated.deref();
+      if(!_.isUndefined(packageCreated)) {
+        var packagesNotChanged = this.state.packagesDataNotFiltered;
+        
+        //TMP: TO REMOVE WHEN API FIELD IS ADDED
+        packageCreated.id = packageCreated.packageId;
+        //
+        
+        packagesNotChanged.push(packageCreated);
+        
+        var packages = this.applyFilters(packagesNotChanged, this.props.selectedStatus, this.props.selectedType, this.props.selectedSort);
+        
+        if(!_.isUndefined(packages.packagesData) && (_.isUndefined(this.state.packagesData) || Object.keys(this.state.packagesData)[0] !== Object.keys(packages.packagesData)[0]))
+          this.setFakeHeader(Object.keys(packages.packagesData)[0]);
+        
+        this.props.setPackagesStatistics(packages.statistics.installedCount, packages.statistics.queuedCount);
+        
+        this.setState({
+          packagesDataNotFiltered: packagesNotChanged,
+          packagesData: packages.packagesData
+        });
+        db.packageCreated.reset();
+      }
+    }
+    handlePackageBlacklisted() {
+      var packageBlacklisted = db.packageBlacklisted.deref();
+      if(!_.isUndefined(packageBlacklisted)) {
+        var packagesNotChanged = this.state.packagesDataNotFiltered;
+        _.each(packagesNotChanged, function(pack, index) {
+          if(pack.id.name === packageBlacklisted.packageId.name && pack.id.version === packageBlacklisted.packageId.version) {
+            packagesNotChanged[index].isBlackListed = true;
+          }
+        });
+        
+        var packages = this.applyFilters(packagesNotChanged, this.props.selectedStatus, this.props.selectedType, this.props.selectedSort);
+        
+        this.setState({
+          packagesDataNotFiltered: packagesNotChanged,
+          packagesData: packages.packagesData
+        });
+        db.packageBlacklisted.reset();
+      }
+    }
     render() {
       var packageIndex = -1;
-      if(!_.isUndefined(this.state.data)) {
-        var packages = _.map(this.state.data, function(packages, index) {
+      if(!_.isUndefined(this.state.packagesData)) {
+        var packages = _.map(this.state.packagesData, function(packages, index) {
           var items = _.map(packages, function(pack, i) {
             packageIndex++;
             
@@ -417,7 +467,6 @@ define(function(require) {
                           deviceId={this.props.device.uuid}
                           packageName={pack.packageName}
                           isQueued={pack.isQueued}
-                          refresh={this.refreshData}
                           showBlacklistForm={this.props.showBlacklistForm}/>
                       : null}
                     </VelocityTransitionGroup>
@@ -458,7 +507,7 @@ define(function(require) {
                               No matching packages found.
                             </div>
                           :
-                            this.state.selectedType === 'unmanaged' ? 
+                            this.props.selectedType === 'unmanaged' ? 
                               <div className="center-xy padding-15">
                                 This device hasn’t reported any information about<br />
                                 its system-installed software packages yet.
