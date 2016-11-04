@@ -117,8 +117,8 @@ define(function(require) {
             var deviceData = _.findWhere(this.state.searchableDevicesData, {uuid: deviceUUID});
           
             impactedDevices[deviceUUID] = deviceData;
-          });          
-        });
+          }, this);          
+        }, this);
       }
             
       return (
