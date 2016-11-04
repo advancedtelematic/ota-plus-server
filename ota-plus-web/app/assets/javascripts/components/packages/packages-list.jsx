@@ -69,6 +69,7 @@ define(function(require) {
       }
     }
     componentDidMount() {
+      this.props.setPackagesListHeight();
       ReactDOM.findDOMNode(this.refs.packagesList).addEventListener('scroll', this.packagesListScroll);
     }
     componentDidUpdate(prevProps, prevState) {

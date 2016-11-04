@@ -22,6 +22,9 @@ define(function(require) {
       
       db.packageQueueForDevice.addWatch("poll-queued-packages-queue-list", _.bind(this.setData, this, null));
     }
+    componentDidMount() {
+      this.props.setQueueListHeight();
+    }
     componentWillUnmount() {
       db.packageQueueForDevice.removeWatch("poll-queued-packages-queue-list");
     }

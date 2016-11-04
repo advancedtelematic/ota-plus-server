@@ -25,6 +25,7 @@ define(function(require) {
         that.refreshData();
       }, 1000);
       this.setState({intervalId: intervalId});
+      this.props.setQueueListHeight();
     }
     componentWillUnmount() {
       db.packageHistoryForDevice.reset();
