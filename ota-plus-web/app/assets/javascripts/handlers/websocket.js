@@ -1,5 +1,6 @@
 define(function (require) {
-    var db = require('../stores/db');
+    var db = require('../stores/db'),
+        SotaDispatcher = require('sota-dispatcher');
 
     var WebsocketHandler = (function () {
         this.init = function () {
@@ -14,6 +15,7 @@ define(function (require) {
 
                 switch (type) {
                     case "DeviceSeen":
+                        SotaDispatcher.dispatch({actionType: 'impact-analysis'});
                         db.deviceSeen.reset(data);
                         break;
                     case "DeviceCreated":

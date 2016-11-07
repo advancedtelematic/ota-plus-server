@@ -13,21 +13,32 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        intervalId: null,
+        blacklistedPackagesData: undefined,
+        searchableDevicesData: undefined,
+        groupsData: undefined,
+        impactAnalysisData: undefined,
         impactedDevicesListHeight: '400px',
         isImpactTooltipShown: false
       };
+      this.setBlacklistedPackagesData = this.setBlacklistedPackagesData.bind(this);
+      this.setSearchableDevicesData = this.setSearchableDevicesData.bind(this);
+      this.setGroupsData = this.setGroupsData.bind(this);
+      this.setImpactAnalysisData = this.setImpactAnalysisData.bind(this);
       this.showImpactTooltip = this.showImpactTooltip.bind(this);
       this.hideImpactTooltip = this.hideImpactTooltip.bind(this);
       this.setImpactedDevicesListHeight = this.setImpactedDevicesListHeight.bind(this);
+      this.handleDeviceCreated = this.handleDeviceCreated.bind(this);
+      this.handlePackageBlacklisted = this.handlePackageBlacklisted.bind(this);
       
       SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: ''});
       SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
       SotaDispatcher.dispatch({actionType: 'get-groups'});
-      db.blacklistedPackages.addWatch("poll-blacklisted-packages", _.bind(this.forceUpdate, this, null));
-      db.impactAnalysis.addWatch("poll-impact-analysis-page", _.bind(this.forceUpdate, this, null));
-      db.searchableDevices.addWatch("poll-devices-impact-analysis-page", _.bind(this.forceUpdate, this, null));
-      db.groups.addWatch("groups-impact-analysis-page", _.bind(this.forceUpdate, this, null));
+      db.blacklistedPackages.addWatch("poll-blacklisted-packages", _.bind(this.setBlacklistedPackagesData, this, null));
+      db.searchableDevices.addWatch("poll-devices-impact-analysis-page", _.bind(this.setSearchableDevicesData, this, null));
+      db.groups.addWatch("groups-impact-analysis-page", _.bind(this.setGroupsData, this, null));
+      db.impactAnalysis.addWatch("poll-impact-analysis-page", _.bind(this.setImpactAnalysisData, this, null));
+      db.deviceCreated.addWatch("poll-device-created-impact-analysis-page", _.bind(this.handleDeviceCreated, this, null));
+      db.packageBlacklisted.addWatch("poll-package-blacklisted-impact-analysis-page", _.bind(this.handlePackageBlacklisted, this, null));
     }
     componentDidMount() {
       var that = this;
@@ -35,16 +46,8 @@ define(function(require) {
       setTimeout(function() {
         that.setImpactedDevicesListHeight();
       }, 1);
-      
-      var intervalId = setInterval(function() {
-        SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
-      }, 1000);
-      this.setState({
-        intervalId: intervalId
-      });
     }
     componentWillUnmount(){
-      clearInterval(this.state.intervalId);
       db.searchableDevices.reset();
       db.blacklistedPackages.reset();
       db.groups.reset();
@@ -52,7 +55,21 @@ define(function(require) {
       db.impactAnalysis.removeWatch("poll-impact-analysis-page");
       db.searchableDevices.removeWatch("poll-devices-impact-analysis-page");
       db.groups.removeWatch("groups-impact-analysis-page");
+      db.deviceCreated.removeWatch("poll-device-created-impact-analysis-page");
+      db.packageBlacklisted.removeWatch("poll-package-blacklisted-impact-analysis-page");
       window.removeEventListener("resize", this.setImpactedDevicesListHeight);
+    }
+    setBlacklistedPackagesData() {
+      this.setState({blacklistedPackagesData: db.blacklistedPackages.deref()});
+    }
+    setSearchableDevicesData() {
+      this.setState({searchableDevicesData: db.searchableDevices.deref()});
+    }
+    setGroupsData() {
+      this.setState({groupsData: db.groups.deref()});
+    }
+    setImpactAnalysisData() {
+      this.setState({impactAnalysisData: db.impactAnalysis.deref()});
     }
     setImpactedDevicesListHeight() {
       var windowHeight = jQuery(window).height();
@@ -67,17 +84,28 @@ define(function(require) {
     hideImpactTooltip() {
       this.setState({isImpactTooltipShown: false});
     }
+    handleDeviceCreated() {
+      var deviceCreated = db.deviceCreated.deref();
+      if(!_.isUndefined(deviceCreated)) {
+        SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: ''});
+        SotaDispatcher.dispatch({actionType: 'get-groups'});
+      }
+    }
+    handlePackageBlacklisted() {
+      var packageBlacklisted = db.packageBlacklisted.deref();
+      if(!_.isUndefined(packageBlacklisted)) {
+        SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
+      }  
+    }
     render() {
-      var impactAnalysis = db.impactAnalysis.deref();
-      var devices = db.searchableDevices.deref();
       var impactedDevices = undefined;
       var impactedPackages = undefined;
             
-      if(!_.isUndefined(impactAnalysis) && !_.isUndefined(devices)) {
+      if(!_.isUndefined(this.state.impactAnalysisData) && !_.isUndefined(this.state.searchableDevicesData)) {
         impactedDevices = {};
         impactedPackages = {};
                         
-        _.each(impactAnalysis, function(impact, deviceUUID) {
+        _.each(this.state.impactAnalysisData, function(impact, deviceUUID) {
           _.each(impact, function(pack) {
             impactedPackages[pack.name + '-' + pack.version] = {
               packageId: {
@@ -85,7 +113,7 @@ define(function(require) {
                 version: pack.version
               }
             }
-            var deviceData = _.findWhere(devices, {uuid: deviceUUID});
+            var deviceData = _.findWhere(this.state.searchableDevicesData, {uuid: deviceUUID});
           
             impactedDevices[deviceUUID] = deviceData;
           });          
@@ -98,7 +126,7 @@ define(function(require) {
             impactedDevices={impactedDevices}/>
           <div id="impacted-devices-list" style={{height: this.state.impactedDevicesListHeight}}>
             <BlacklistedPackagesList 
-              packages={db.blacklistedPackages.deref()}
+              packages={this.state.blacklistedPackagesData}
               showImpactTooltip={this.showImpactTooltip}/>
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
               {!_.isUndefined(impactedPackages) && !_.isEmpty(impactedPackages) ? 
@@ -111,7 +139,7 @@ define(function(require) {
               {!_.isUndefined(impactedDevices) && !_.isEmpty(impactedDevices) ?
                 <DevicesList
                   devices={impactedDevices}
-                  groups={db.groups.deref()}
+                  groups={this.state.groupsData}
                   areProductionDevices={false}
                   isDND={false}
                   areActionButtonsShown={false}/>

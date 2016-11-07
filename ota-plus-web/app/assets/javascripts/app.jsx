@@ -65,7 +65,6 @@ define(function(require) {
         currentLang: currentLang,
         showCampaignPanel: false,
         intervalId: null,
-        impactAnalysisIntervalId: null,
         hideAnimationUp: isHomePage,
         hideAnimationDown: true,
       }
@@ -147,19 +146,13 @@ define(function(require) {
         }
       }, 5000);
       
-      var impactAnalysisIntervalId = setInterval(function() {
-        SotaDispatcher.dispatch({actionType: 'impact-analysis'});
-      }, 1000);
-      
       this.setState({
-        intervalId: intervalId,
-        impactAnalysisIntervalId: impactAnalysisIntervalId
+        intervalId: intervalId
       });
     }
     componentWillUnmount() {
       WebsocketHandler.destroy();
       clearInterval(this.state.intervalId);
-      clearInterval(this.state.impactAnalysisIntervalId);
     }
     render() {
       var Animations = {
