@@ -122,7 +122,7 @@ define(function(require) {
       var headersHeight = !_.isUndefined(document.getElementsByClassName('ioslist-group-header')[0]) ? document.getElementsByClassName('ioslist-group-header')[0].offsetHeight : 28;
       var listItemHeight = !_.isUndefined(document.getElementsByClassName('list-group-item')[0]) ? document.getElementsByClassName('list-group-item')[0].offsetHeight - 1 : 39;
       var packagesShownStartIndex = Math.floor((ReactDOM.findDOMNode(this.refs.packagesList).scrollTop - (beforeHeadersCount - 1) * headersHeight + packageDetailsOffset) / listItemHeight) - offset;
-      var packagesShownEndIndex = packagesShownStartIndex + Math.floor(ReactDOM.findDOMNode(this.refs.packagesList).offsetHeight / listItemHeight) + 2 * offset;     
+      var packagesShownEndIndex = packagesShownStartIndex + Math.floor(this.props.packagesListHeight / listItemHeight) + 2 * offset;     
             
       this.setState({
         fakeHeaderTopPosition: scrollTop,
