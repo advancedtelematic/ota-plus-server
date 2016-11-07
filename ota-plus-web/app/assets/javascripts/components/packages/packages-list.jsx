@@ -21,7 +21,6 @@ define(function(require) {
         tmpIntervalId: null,
         fakeHeaderTopPosition: 0,
         fakeHeaderLetter: null,
-        tmpQueueData: undefined,
         selectedType: null,
         packagesShownStartIndex: 0,
         packagesShownEndIndex: 50
@@ -32,7 +31,7 @@ define(function(require) {
       this.applyFilters = this.applyFilters.bind(this);
       this.onDrop = this.onDrop.bind(this);
       this.expandPackage = this.expandPackage.bind(this);
-      this.queueUpdated = this.queueUpdated.bind(this);
+      this.handleDeviceSeen = this.handleDeviceSeen.bind(this);
       this.generatePositions = this.generatePositions.bind(this);
       this.setFakeHeader = this.setFakeHeader.bind(this);
       this.packagesListScroll = this.packagesListScroll.bind(this);
@@ -44,7 +43,7 @@ define(function(require) {
       db.blacklistedPackages.addWatch("poll-blacklisted-packages-page", _.bind(this.refreshPackagesData, this, null));
       db.searchablePackages.addWatch("poll-packages", _.bind(this.refreshPackagesData, this, null));
       db.searchablePackagesForDevice.addWatch("poll-installed-packages", _.bind(this.refreshPackagesData, this, null));
-      db.packageQueueForDevice.addWatch("poll-queued-packages", _.bind(this.queueUpdated, this, null));
+      db.deviceSeen.addWatch("poll-deviceseen-packages", _.bind(this.handleDeviceSeen, this, null));
       db.packageCreated.addWatch("package-created", _.bind(this.handlePackageCreated, this, null));
       db.packageBlacklisted.addWatch("package-blacklisted", _.bind(this.handlePackageBlacklisted, this, null));
       SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
@@ -85,9 +84,9 @@ define(function(require) {
       db.searchablePackagesForDevice.reset();
       db.packageQueueForDevice.reset();
       db.blacklistedPackages.removeWatch("poll-blacklisted-packages-page");
-      db.searchablePackages.removeWatch("poll-packages");
+      db.searchablePackages.removeWatch("poll-packages")
       db.searchablePackagesForDevice.removeWatch("poll-installed-packages");
-      db.packageQueueForDevice.removeWatch("poll-queued-packages");
+      db.deviceSeen.removeWatch("poll-deviceseen-packages");
       db.packageCreated.removeWatch("package-created");
       db.packageBlacklisted.removeWatch("package-blacklisted");
       clearInterval(this.state.tmpIntervalId);
@@ -156,15 +155,13 @@ define(function(require) {
       clearInterval(this.state.tmpIntervalId);
       this.setState({tmpIntervalId: null});
     }
-    queueUpdated() {
-      if(JSON.stringify(this.state.tmpQueueData) !== JSON.stringify(db.packageQueueForDevice.deref())) {
+    handleDeviceSeen() {
+      var deviceSeen = db.deviceSeen.deref();
+      if(!_.isUndefined(deviceSeen) && this.props.device.uuid === deviceSeen.uuid) {
         SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
         SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
         SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.uuid, regex: this.props.filterValue});
       }
-      this.setState({
-        tmpQueueData: db.packageQueueForDevice.deref()
-      });
     }
     refreshPackagesData() {
       this.setPackagesData(this.props.selectedStatus, this.props.selectedType, this.props.selectedSort);

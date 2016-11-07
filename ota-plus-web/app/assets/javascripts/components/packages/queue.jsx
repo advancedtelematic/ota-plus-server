@@ -1,6 +1,7 @@
 define(function(require) {
   var React = require('react'),
       Cookies = require('js-cookie'),
+      db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       QueueList = require('es6!./queue-list'),
@@ -25,11 +26,12 @@ define(function(require) {
       if(!_.isUndefined(alertCookie.queue) && alertCookie.queue === 'closed')
         this.state.alertHidden = true;
       
-      this.refreshData = this.refreshData.bind(this);
       this.toggleQueueHistory = this.toggleQueueHistory.bind(this);
       this.reviewFailedInstall = this.reviewFailedInstall.bind(this);
       this.unblockQueue = this.unblockQueue.bind(this);
       this.setQueueListHeight = this.setQueueListHeight.bind(this);
+      this.handleDeviceSeen = this.handleDeviceSeen.bind(this);
+      db.deviceSeen.addWatch("poll-deviceseen-queue", _.bind(this.handleDeviceSeen, this, null));
     }
     componentDidMount() {
       var that = this;
@@ -49,17 +51,11 @@ define(function(require) {
         }, 200);
       });
       window.addEventListener("resize", this.setQueueListHeight);
-      var intervalId = setInterval(function() {
-        that.refreshData();
-      }, 1000);
-      this.setState({intervalId: intervalId});
+      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.deviceId});
     }
     componentWillUnmount() {
+      db.deviceSeen.removeWatch("poll-deviceseen-queue");
       window.removeEventListener("resize", this.setQueueListHeight);
-      clearInterval(this.state.intervalId);
-    }
-    refreshData() {
-      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.deviceId});
     }
     toggleQueueHistory() {
       this.setState({
@@ -86,6 +82,12 @@ define(function(require) {
       this.setState({
         queueListHeight: windowHeight - offsetTop - footerHeight
       });
+    }
+    handleDeviceSeen() {
+      var deviceSeen = db.deviceSeen.deref();
+      if(!_.isUndefined(deviceSeen) && this.props.deviceId === deviceSeen.uuid) {
+        SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.deviceId});
+      }
     }
     render() {
       return (
