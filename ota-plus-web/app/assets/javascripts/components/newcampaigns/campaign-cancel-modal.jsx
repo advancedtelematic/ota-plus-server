@@ -9,11 +9,10 @@ define(function(require) {
       super(props);
       this.closeForm = this.closeForm.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
-      this.handleResponse = this.handleResponse.bind(this);
-      db.postStatus.addWatch("poll-response-cancel-campaign", _.bind(this.handleResponse, this, null));
+      db.postStatus.addWatch("poll-cancel-campaign", _.bind(this.handleResponse, this, null));
     }
     componentWillUnmount() {
-      db.postStatus.removeWatch("poll-response-cancel-campaign");
+      db.postStatus.removeWatch("poll-cancel-campaign");
     }
     closeForm(e) {
       e.preventDefault();
@@ -31,7 +30,7 @@ define(function(require) {
       var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
       if(!_.isUndefined(postStatus['cancel-campaign'])) {
         if(postStatus['cancel-campaign'].status === 'success') {
-          db.postStatus.removeWatch("poll-response-cancel-campaign");
+          db.postStatus.removeWatch("poll-cancel-campaign");
           delete postStatus['cancel-campaign'];
           db.postStatus.reset(postStatus);
           this.props.closeForm(true);
@@ -40,7 +39,6 @@ define(function(require) {
     }
     render() {
       var campaign = this.props.campaign;
-      console.log(campaign);
       return (
         <div id="modal-campaign-cancel" className="myModal">
           <div className="modal-dialog center-xy">
