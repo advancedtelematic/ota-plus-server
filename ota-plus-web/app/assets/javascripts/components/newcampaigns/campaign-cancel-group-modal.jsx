@@ -39,13 +39,14 @@ define(function(require) {
     }
     render() {
       var group = this.props.group;
+      var campaign = this.props.campaign;
       return (
         <div id="modal-campaign-cancel" className="myModal">
           <div className="modal-dialog center-xy">
             <div className="modal-content">
               <div className="modal-header modal-header-red text-center">
                 <h4 className="modal-title">
-                  You're about to cancel Campaign for group {group.groupName}
+                  You're about to cancel {campaign.meta.name} for group {group.groupName}
                 </h4>
               </div>
               <div className="modal-body">
@@ -60,7 +61,7 @@ define(function(require) {
                       </div>
                     </div>
                     <div className="margin-top-25">
-                      <p>This Campaign will not be installable anymore for chosen group.</p>
+                      <p>This campaign will not be installable anymore for devices in group {group.groupName}, and all devices in the group will be moved to <strong>Finished</strong>.</p>
                     </div>
                   </div>
                 </div>
