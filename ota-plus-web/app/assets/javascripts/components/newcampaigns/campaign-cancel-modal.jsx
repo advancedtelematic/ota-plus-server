@@ -45,7 +45,7 @@ define(function(require) {
             <div className="modal-content">
               <div className="modal-header modal-header-red text-center">
                 <h4 className="modal-title">
-                  You're about to cancel Campaign
+                  You're about to cancel a campaign
                 </h4>
               </div>
               <div className="modal-body">
@@ -55,13 +55,12 @@ define(function(require) {
                     <div>
                       <div className="campaign-icon"></div>
                       <div className="group-text text-left">
-                        <div className="group-title">Campaign {campaign.meta.name}</div>
-                        <div className="group-subtitle">{campaign.overallDevicesCount} devices</div>
+                        <div className="group-title">{campaign.meta.name}</div>
+                        <div className="group-subtitle">{campaign.overallDevicesCount} affected devices</div>
                       </div>
                     </div>
                     <div className="margin-top-25">
-                      <p>This Campaign will not be installable anymore.</p>
-                      <p>You can find this Campaign in <strong>Trash</strong> at any time.</p>
+                      <p>This campaign will not be executed on any further devices, and will be moved to <strong>Finished</strong>.</p>
                     </div>
                   </div>
                 </div>
