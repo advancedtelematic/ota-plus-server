@@ -16,13 +16,16 @@ define(function(require) {
                   });
                   
                   var newCampaigns = _.each(campaigns, function(campaign, index) {
-                    sendRequest.doGet('/api/v1/campaigns/' + campaign.id + '/statistics', {action: 'get-campaign-statistics'})
-                      .success(function(statistics) {
-                        campaigns[index].statistics = statistics;
-                      })
-                      .always(function() {
-                        after();
-                      });
+                    if(campaign.launched)
+                      sendRequest.doGet('/api/v1/campaigns/' + campaign.id + '/statistics', {action: 'get-campaign-statistics'})
+                        .success(function(statistics) {
+                          campaigns[index].statistics = statistics;
+                        })
+                        .always(function() {
+                          after();
+                        });
+                    else
+                      after();
                   });
                 } else {
                   db.campaigns.reset(campaigns);
