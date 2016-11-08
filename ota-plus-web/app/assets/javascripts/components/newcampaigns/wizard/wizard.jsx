@@ -52,7 +52,7 @@ define(function(require) {
       this.setData = this.setData.bind(this);
       
       db.campaign.addWatch("poll-campaign", _.bind(this.setData, this, null));
-      db.postStatus.addWatch("poll-response-launch-campaign", _.bind(this.handleResponse, this, null));
+      db.postStatus.addWatch("poll-launch-campaign", _.bind(this.handleResponse, this, null));
     }
     componentDidMount() {
       SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: this.props.campaignUUID});
@@ -62,7 +62,7 @@ define(function(require) {
       db.groups.reset();
       db.campaign.reset();
       db.campaign.removeWatch("poll-campaign");
-      db.postStatus.removeWatch("poll-response-launch-campaign");
+      db.postStatus.removeWatch("poll-launch-campaign");
     }
     closeWizard(e) {
       e.preventDefault();
@@ -98,7 +98,9 @@ define(function(require) {
       var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref()['launch-campaign'] : undefined;
       if(!_.isUndefined(postStatus)) {
         if(postStatus.status === 'success') {
-          db.postStatus.removeWatch("poll-response-launch-campaign");
+          db.postStatus.removeWatch("poll-launch-campaign");
+          delete postStatus['launch-campaign'];
+          db.postStatus.reset(postStatus);
           this.props.closeWizard(true);
         }
       }

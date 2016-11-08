@@ -15,10 +15,10 @@ define(function(require) {
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleResponse = this.handleResponse.bind(this);
       
-      db.postStatus.addWatch("poll-response-create-new-campaign", _.bind(this.handleResponse, this, null));
+      db.postStatus.addWatch("poll-create-new-campaign", _.bind(this.handleResponse, this, null));
     }
     componentWillUnmount() {
-      db.postStatus.removeWatch("poll-response-create-new-campaign");
+      db.postStatus.removeWatch("poll-create-new-campaign");
     }
     handleSubmit(e) {
       e.preventDefault();
@@ -32,7 +32,7 @@ define(function(require) {
       var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
       if(!_.isUndefined(postStatus['create-campaign'])) {
         if(postStatus['create-campaign'].status === 'success') {
-          db.postStatus.removeWatch("poll-response-create-new-campaign");
+          db.postStatus.removeWatch("poll-create-new-campaign");
           var response = postStatus['create-campaign'].response;
           delete postStatus['create-campaign'];
           db.postStatus.reset(postStatus);
