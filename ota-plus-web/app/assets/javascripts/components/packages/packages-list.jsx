@@ -43,6 +43,7 @@ define(function(require) {
       db.blacklistedPackages.addWatch("poll-blacklisted-packages-page", _.bind(this.refreshPackagesData, this, null));
       db.searchablePackages.addWatch("poll-packages", _.bind(this.refreshPackagesData, this, null));
       db.searchablePackagesForDevice.addWatch("poll-installed-packages", _.bind(this.refreshPackagesData, this, null));
+      db.packageQueueForDevice.addWatch("poll-queue-packages", _.bind(this.refreshPackagesData, this, null));
       db.deviceSeen.addWatch("poll-deviceseen-packages", _.bind(this.handleDeviceSeen, this, null));
       db.packageCreated.addWatch("package-created", _.bind(this.handlePackageCreated, this, null));
       db.packageBlacklisted.addWatch("package-blacklisted", _.bind(this.handlePackageBlacklisted, this, null));
@@ -86,6 +87,7 @@ define(function(require) {
       db.blacklistedPackages.removeWatch("poll-blacklisted-packages-page");
       db.searchablePackages.removeWatch("poll-packages")
       db.searchablePackagesForDevice.removeWatch("poll-installed-packages");
+      db.packageQueueForDevice.removeWatch("poll-queue-packages");
       db.deviceSeen.removeWatch("poll-deviceseen-packages");
       db.packageCreated.removeWatch("package-created");
       db.packageBlacklisted.removeWatch("package-blacklisted");

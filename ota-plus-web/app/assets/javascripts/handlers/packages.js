@@ -114,7 +114,7 @@ define(function(require) {
               });
           break;
           case 'remove-package-from-blacklist':
-            sendRequest.doDelete('/api/v1/blacklist/' + payload.name + '/' + payload.version, null, {action: payload.actionType})
+            sendRequest.doDelete('/api/v1/blacklist/' + payload.name + '/' + payload.version, null, {action: payload.actionType, dataType: 'text'})
               .success(function() {
               });
           break;

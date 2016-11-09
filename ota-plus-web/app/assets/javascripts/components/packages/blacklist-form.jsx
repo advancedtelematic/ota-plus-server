@@ -73,19 +73,24 @@ define(function(require) {
     removeFromBlacklist(e) {
       e.preventDefault();
       SotaDispatcher.dispatch({actionType: 'remove-package-from-blacklist', name: this.props.packageName, version: this.props.packageVersion});
-      this.props.closeForm();
     }
     blacklistListener() {
-      var postStatusAddPackageToBlacklist = db.postStatus.deref()['add-package-to-blacklist'];
-      var postStatusRemovePackageFromBlacklist = db.postStatus.deref()['remove-package-from-blacklist'];
-      var postStatusUpdatePackageInBlacklist = db.postStatus.deref()['update-package-in-blacklist'];
+      var postStatus = db.postStatus.deref();
+      var postStatusAddPackageToBlacklist = postStatus['add-package-to-blacklist'];
+      var postStatusRemovePackageFromBlacklist = postStatus['remove-package-from-blacklist'];
+      var postStatusUpdatePackageInBlacklist = postStatus['update-package-in-blacklist'];
       if(!_.isUndefined(postStatusAddPackageToBlacklist) && postStatusAddPackageToBlacklist.status === 'success' ||
          !_.isUndefined(postStatusRemovePackageFromBlacklist) && postStatusRemovePackageFromBlacklist.status === 'success' ||
          !_.isUndefined(postStatusUpdatePackageInBlacklist) && postStatusUpdatePackageInBlacklist.status === 'success') {
-        setTimeout(function() {
-          SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
-        }, 1);
-        this.props.closeForm();
+        if(!_.isUndefined(postStatus['add-package-to-blacklist']))
+          delete postStatus['add-package-to-blacklist'];
+        if(!_.isUndefined(postStatus['remove-package-from-blacklist']))
+          delete postStatus['remove-package-from-blacklist'];
+        if(!_.isUndefined(postStatus['update-package-in-blacklist']))
+          delete postStatus['update-package-in-blacklist'];
+         
+        db.postStatus.reset(postStatus);
+        this.props.closeForm(true);
       }
     }
     render() {
