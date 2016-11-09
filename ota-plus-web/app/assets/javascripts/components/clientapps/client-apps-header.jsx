@@ -19,7 +19,7 @@ define(function(require) {
             </div>
     
             <button onClick={this.props.openCreateModal} className="btn btn-main btn-add pull-right" id="button-add-new-client">
-              <i className="fa fa-plus"></i> &nbsp; Create new
+              <i className="fa fa-plus"></i> &nbsp; Add new client
             </button>
           </div>
         </div>

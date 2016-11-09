@@ -87,7 +87,7 @@ button {
     background: url(/assets/img/bg.jpg) no-repeat;
     background-attachment: fixed;
     background-size: cover;
-    padding-top: 50px; 
+    padding-top: 51px; 
     overflow: hidden;
 }
 
@@ -508,6 +508,10 @@ button {
         background: #666;
         height: 40px;
         padding: 0 15px;
+        
+        .btn-main {
+            font-weight: normal;
+        }
     }
 
     .panel-body {
@@ -850,7 +854,7 @@ button {
 .btn-add {
     font-size: 12px;
     text-transform: uppercase;
-    padding: 5px 16px 5px 16px;
+    padding: 5px 16px 4px 16px;
     margin: 6px 0 0 0;
     border-radius: 15px;
 }
@@ -1008,7 +1012,6 @@ a.close, button.close {
 
 .btn-history {
     font-size: 12px;
-    padding: 5px 16px 4px 16px;
     margin: 6px 0 0 0;
     border-radius: 15px;
 }
@@ -1213,7 +1216,7 @@ a.close, button.close {
 
 .search-bar {
     width: 284px;
-    margin: 9px 0 0 0;
+    margin: 6px 0 0 0;
 
     .input-group-addon {
         padding: 0 10px;
@@ -1231,11 +1234,10 @@ a.close, button.close {
     }
 
     .form-control, .input-group-addon {
-        color: #979797;
+        color: $color-darkgrey;
         font-size: 12px;
-        font-weight: bold;
-        background: #707070;
-        height: 24px;
+        background: #fff;
+        height: 28px;
     }
 }
 
@@ -1254,7 +1256,7 @@ a.close, button.close {
 }
 
 .sort-text {
-    margin: 11px 0 0 0;
+    margin: 13px 15px 0 15px;
 
     a {
         color: #fff;
@@ -3045,18 +3047,6 @@ hr.full-line {
                     position: absolute;
                     top: 6px;
                     right: 30px;
-
-                    .form-control {
-                        color: #fff;
-                        background: transparent;
-                        border-color: #eee;
-                    }
-
-                    .input-group-addon {
-                        color: #fff;
-                        background: transparent;
-                        border-color: #eee;
-                    }
                 }
             }
 
@@ -3700,5 +3690,11 @@ hr.full-line {
     .table {
         color: #222;
         background-color: #fff;
+    }
+}
+
+#devices-bar {
+    .btn-main {
+        font-weight: normal;
     }
 }
