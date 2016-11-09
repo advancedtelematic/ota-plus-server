@@ -31,7 +31,7 @@
         <i class="fa fa-exclamation-circle"></i>
       </div>
       <div class="block-text"></div>
-      <a href="#" class="close-error" onClick="hideError()"><i class="fa fa-times"></i></a>
+      <a href="#" class="close-error" onClick="hideError(event)"><i class="fa fa-times"></i></a>
     </div>
 
     <script>
@@ -45,7 +45,8 @@
         
         var errorContainer = document.getElementById("requirejs-errors");
         
-        function hideError() {
+        function hideError(e) {
+          e.preventDefault();
           errorContainer.style.display = 'none';
         }
         

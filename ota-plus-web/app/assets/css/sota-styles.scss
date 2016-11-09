@@ -3830,3 +3830,171 @@ hr.full-line {
     text-align: center;
     padding: 30px 0;
 }
+
+.label {
+    &.label-mint {
+        background: $color-mint;
+
+        a {
+            color: #fff;
+
+            &:hover, &:focus, &:active {
+                color: #fff;
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+.packagel-status-label {
+    margin: 0 0 0 10px;
+}
+
+#modal-package-status {
+    .modal-dialog {
+        width: 900px;
+        min-height: 0;
+
+        .modal-content {
+            width: 100%;
+            float: left;
+
+            .modal-header {
+                background: #222;
+                border: 0;
+
+                button {
+                    &.close {
+                        background-image: url(/assets/img/icons/close_white.png);
+                        margin: 0;
+                    }
+                }
+
+                .modal-title {
+                    .icon {
+                        width: 26px;
+                        margin: -5px 0 0 0;
+                    }
+                }
+            }
+
+            .modal-body {
+                height: 500px;
+                padding: 0;
+
+                .column-filter {
+                    width: 30%;
+                    float: left;
+
+                    .filter-header {
+                        color: #fff;
+                        font-size: 16px;
+                        background: #666;
+                        width: 100%;
+                        padding: 6px 15px;
+                        float: left;
+                    }
+
+                    .filter-subheader {
+                        font-size: 13px;
+                        font-weight: bold;
+                        width: 100%;
+                        padding: 5px 35px 5px 15px;
+                        border-bottom: 1px solid #ddd;
+                        border-right: 1px solid #ddd;
+                        float: left;
+
+                        a {
+                            color: #444;
+
+                            &:hover, &:focus, &:active {
+                                color: #444;
+                            }
+                        }
+                    }
+
+                    .filter-groups {
+                        width: 100%;
+                        height: 450px;
+                        float: left;
+                        overflow-y: scroll;
+
+                        .list-group-item {
+                            border-top: 0;
+                            border-left: 0;
+                            border-right: 0;
+                            border-radius: 0;
+
+                            &.checked {
+                                background: #F7F7F7;
+                            }
+
+                            .btn-checkbox {
+                                width: 20px;
+                                height: 20px;
+                                margin: 10px 10px 0 0;
+
+                                i {
+                                    &.fa-check {
+                                        padding: 4px;
+                                    }
+                                }
+
+                                &:before {
+                                    display: none;
+                                }
+
+                            }
+
+                            .group-icon {
+                                background-image: url(/assets/img/icons/group_large_grey.png);
+                                width: 40px;
+                                height: 40px;
+                            }
+
+                            .group-text {
+                                width: auto;
+                                margin: 5px 0 0 15px;
+                                display: inline-block;
+
+                                .group-title {
+                                    font-size: 14px;
+                                }
+
+                                .group-subtitle {
+                                    color: #ccc;
+                                    font-size: 11px;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .column-stats {
+                    text-align: center;
+                    width: 70%;
+                    padding: 80px 0;
+                    float: left;
+
+                    ul {
+                        margin: 30px 0 0 0;
+
+                        li {
+                            padding: 10px;
+                            display: inline-block;
+
+                            .color-box {
+                                width: 25px;
+                                height: 20px;
+                                margin: 0 5px 0 0;
+                                border-radius: 4px;
+                                display: inline-block;
+                                vertical-align: bottom;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

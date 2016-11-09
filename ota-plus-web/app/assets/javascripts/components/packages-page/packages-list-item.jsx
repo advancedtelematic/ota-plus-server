@@ -6,9 +6,16 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.itemClick = this.itemClick.bind(this);
+      this.showStatus = this.showStatus.bind(this);
     }
     itemClick(e) {
-      this.props.expandPackage(this.props.name);
+      if(e.target.tagName.toLowerCase() !== 'a') {
+        this.props.expandPackage(this.props.name);
+      }
+    }
+    showStatus(e) {
+      e.preventDefault();
+      this.props.showPackageStatusForm(this.props.name);
     }
     render() {
       return (
@@ -16,6 +23,11 @@ define(function(require) {
           <div className="pull-left">
             <span className="package-name">{this.props.name}</span>
           </div>
+          {this.props.selected ?
+            <label className="label label-mint packagel-status-label">
+              <a href="#" onClick={this.showStatus}>Status</a>
+            </label>
+          : null}
         </button>
       );
     }

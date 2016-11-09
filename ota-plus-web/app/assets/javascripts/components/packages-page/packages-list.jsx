@@ -9,6 +9,7 @@ define(function(require) {
       Dropzone = require('es6!../../mixins/dropzone'),
       AddPackage = require('es6!../packages/add-package'),
       BlacklistForm = require('es6!../packages/blacklist-form'),
+      PackageStatusForm = require('es6!./status/status-form'),
       Loader = require('es6!../loader');
   
   class PackagesList extends React.Component {
@@ -27,8 +28,10 @@ define(function(require) {
         blacklistedPackageVersion: null,
         blacklistMode: null,
         isBlacklistFormShown: false,
+        chosenStatusPackageName: null,
         packagesShownStartIndex: 0,
-        packagesShownEndIndex: 50
+        packagesShownEndIndex: 50,
+        isPackageStatusFormShown: false,
       };
       this.refreshSearchablePackagesData = this.refreshSearchablePackagesData.bind(this);
       this.setSearchablePackagesData = this.setSearchablePackagesData.bind(this);
@@ -36,6 +39,8 @@ define(function(require) {
       this.onDrop = this.onDrop.bind(this);
       this.showBlacklistForm = this.showBlacklistForm.bind(this);
       this.closeBlacklistForm = this.closeBlacklistForm.bind(this);
+      this.showPackageStatusForm = this.showPackageStatusForm.bind(this);
+      this.closePackageStatusForm = this.closePackageStatusForm.bind(this);
       this.expandPackage = this.expandPackage.bind(this);
       this.generatePositions = this.generatePositions.bind(this);
       this.setFakeHeader = this.setFakeHeader.bind(this);
@@ -226,6 +231,18 @@ define(function(require) {
         blacklistedPackageVersion: null
       });
     }
+    showPackageStatusForm(packageName) {
+      this.setState({
+        isPackageStatusFormShown: true,
+        chosenStatusPackageName: packageName
+      });
+    }
+    closePackageStatusForm() {
+      this.setState({
+        isPackageStatusFormShown: false,
+        chosenStatusPackageName: null
+      });
+    }
     expandPackage(name) {
       var expandedPackage = this.state.expandedPackage;
 
@@ -318,6 +335,7 @@ define(function(require) {
                     key={'package-' + pack.packageName + '-items'}
                     name={pack.packageName}
                     expandPackage={this.expandPackage}
+                    showPackageStatusForm={this.showPackageStatusForm}
                     selected={this.state.expandedPackage == pack.packageName ? true : false}/>
                     <VelocityTransitionGroup enter={{animation: "slideDown", begin: function() {that.startIntervalPackagesListScroll()}, complete: function() {that.stopIntervalPackagesListScroll()}}} leave={{animation: "slideUp"}}>
                       {this.state.expandedPackage == pack.packageName ?
@@ -398,6 +416,13 @@ define(function(require) {
                 packageName={this.state.blacklistedPackageName}
                 packageVersion={this.state.blacklistedPackageVersion}
                 closeForm={this.closeBlacklistForm}/>
+            : null}
+          </VelocityTransitionGroup>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isPackageStatusFormShown ?
+              <PackageStatusForm 
+                packageName={this.state.chosenStatusPackageName}
+                closeForm={this.closePackageStatusForm}/>
             : null}
           </VelocityTransitionGroup>
         </div>
