@@ -1,10 +1,1 @@
-.ioslist-wrapper { width: 100%; height: 100%; position: absolute; overflow-x: hidden; overflow-y: auto; }
-.ioslist-group-container { min-height: 1px; padding: 27px 0 0 0; margin: 0; overflow: hidden; position: relative; }
-.ioslist-group-container.ioslist-animated .ioslist-group-header { bottom: 0; top: auto; }
-.ioslist-group-header, .ioslist-fake-header { color: #202020; font-size: 13px; font-weight: bold; background: #D3D3D3; height: 28px; padding: 7px 15px; margin: 0; border-bottom: 1px solid #bbb; position: absolute; z-index: 2; }
-[data-ios="true"] .ioslist-group-header, [data-ios="true"] .ioslist-fake-header { width: 288px; }
-.ioslist-group-header { width: 100%; min-height: 1px; top: 0; bottom: auto; }
-.ioslist-fake-header { width: 100%; z-index: 97; }
-.ioslist-fake-header.ioslist-hidden { visibility: hidden; }
-.ioslist ul { list-style: none; margin: 0; padding: 0; }
-.ioslist ul li { margin: 0; }
+.ioslist-wrapper{width:100%;height:100%;position:absolute;overflow-x:hidden;overflow-y:auto}.ioslist-group-container{min-height:1px;padding:27px 0 0 0;margin:0;overflow:hidden;position:relative}.ioslist-group-container.ioslist-animated .ioslist-group-header{bottom:0;top:auto}.ioslist-group-header,.ioslist-fake-header{color:#202020;font-size:13px;font-weight:bold;background:#D3D3D3;height:28px;padding:7px 15px;margin:0;border-bottom:1px solid #bbb;position:absolute;z-index:2}[data-ios="true"] .ioslist-group-header,[data-ios="true"] .ioslist-fake-header{width:288px}.ioslist-group-header{width:100%;min-height:1px;top:0;bottom:auto}.ioslist-fake-header{width:100%;z-index:97}.ioslist-fake-header.ioslist-hidden{visibility:hidden}.ioslist ul{list-style:none;margin:0;padding:0}.ioslist ul li{margin:0}
