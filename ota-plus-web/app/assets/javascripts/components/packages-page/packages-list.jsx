@@ -213,7 +213,13 @@ define(function(require) {
         blacklistMode: mode
       });
     }
-    closeBlacklistForm() {
+    closeBlacklistForm(ifRefreshData = false) {
+      if(ifRefreshData) {
+        var that = this;
+        setTimeout(function() {
+          SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: that.props.filterValue});
+        }, 1);
+      }
       this.setState({
         isBlacklistFormShown: false,
         blacklistedPackageName: null,

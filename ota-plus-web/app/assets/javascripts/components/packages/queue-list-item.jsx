@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       Router = require('react-router'),
       Link = Router.Link;

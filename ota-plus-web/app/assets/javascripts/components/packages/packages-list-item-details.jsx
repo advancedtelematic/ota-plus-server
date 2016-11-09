@@ -1,13 +1,12 @@
 define(function(require) {
   var React = require('react'),
+      db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       PackagesListItemDetailsVersion = require('es6!./packages-list-item-details-version');
 
   class PackageListItemDetails extends React.Component {
     constructor(props) {
       super(props);
-
-      this.refreshData = this.refreshData.bind(this);
       this.installPackage = this.installPackage.bind(this);
     }
     installPackage(packageName, packageVersion, e) {
@@ -23,11 +22,6 @@ define(function(require) {
         data: data,
         device: this.props.deviceId
       });
-
-      this.refreshData();
-    }
-    refreshData() {
-      SotaDispatcher.dispatch({actionType: "get-package-queue-for-device", device: this.props.deviceId});
     }
     render() {
       var versions = _.map(this.props.versions, function(version, i) {
