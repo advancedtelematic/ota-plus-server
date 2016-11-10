@@ -3,6 +3,7 @@ define(function (require) {
             SotaDispatcher = require('sota-dispatcher');
 
     var WebsocketHandler = (function () {
+        var base = this;
         this.init = function () {
             var proto = (location.protocol == "http:") ? "ws://" : "wss://";
             var port = (location.protocol == "http:") ? ":" + location.port : ":8080";
@@ -39,7 +40,9 @@ define(function (require) {
 
             this.websocket.onclose = function (msg) {
                 console.log('WEBSOCKET: CLOSE');
-                console.log(msg);
+                if (msg.code === 1006) {
+                    base.init();
+                }
             };
 
             this.websocket.onerror = function (msg) {
