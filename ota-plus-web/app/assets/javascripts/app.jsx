@@ -123,7 +123,7 @@ define(function(require) {
       var that = this;
       
       jQuery(function () {
-        jQuery('body').verify({verifyMinWidth: 1366, verifyMinHeight: 0});
+        jQuery('body').verify({verifyMinWidth: 1280, verifyMinHeight: 0});
       });
       
       var intervalId = setInterval(function() {
