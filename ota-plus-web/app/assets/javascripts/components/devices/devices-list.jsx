@@ -5,32 +5,19 @@ define(function(require) {
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       Cookies = require('js-cookie'),
       DeviceListItem = require('es6!./devices-list-item'),
-      DeviceListGroupItem = require('es6!./devices-list-groupitem'),
-      DevicesGroupDetailsPanel = require('es6!./devices-group-details-panel'),
-      CreateGroup = require('es6!../groups/create-group');
+      DeviceListGroupItem = require('es6!./devices-list-groupitem');
 
   class DevicesList extends React.Component {
     constructor(props) {
       super(props);
-
       this.state = {
         boxWidth: 340,
         boxesPerRow: null,
-        showForm: false,
         draggingUUID: null,
         overUUID: null,
-        groupDevices: [],
-        Groups: null,
-        Devices: null,
-        expandedGroupName: null
+        Devices: null
       };
-      
-      this.restoreGroups = this.restoreGroups.bind(this);
-      this.expandGroup = this.expandGroup.bind(this);
-      
       this.setBoxesWidth = this.setBoxesWidth.bind(this);
-      this.openForm = this.openForm.bind(this);
-      this.closeForm = this.closeForm.bind(this);      
       this.dragStart = this.dragStart.bind(this);
       this.dragEnter = this.dragEnter.bind(this);
       this.dragEnd = this.dragEnd.bind(this);
@@ -41,46 +28,9 @@ define(function(require) {
     componentDidMount() {
       this.setBoxesWidth();
       window.addEventListener("resize", this.setBoxesWidth);
-      this.restoreGroups(this.props.devices, this.props.groups);
-    }
-    componentWillReceiveProps(nextProps) {
-      this.restoreGroups(nextProps.devices, nextProps.groups);
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setBoxesWidth);
-    }
-    restoreGroups(devices, groupsInfo) {
-      var that = this;
-      var groups = [];
-      var groupedDevices = [];
-      
-      _.each(groupsInfo, function(group, index) {
-        groups[index] = group;
-        groups[index].devices = [];
-        _.each(group.devicesUUIDs, function(groupDevice) {
-          var foundDevice = _.findWhere(devices, {uuid: groupDevice});
-          if(foundDevice) {
-            groupedDevices.push(groupDevice);
-            groups[index].devices.push(foundDevice);
-          }
-        });
-      });
-          
-      devices = _.filter(devices, function(device) { 
-        return !_.find(groupedDevices, function(groupedDevice) {
-          return groupedDevice === device.uuid;
-        }); 
-      });
-                        
-      this.setState({
-        Devices: devices,
-        Groups: groups
-      });
-    }
-    expandGroup(groupName) {
-      this.setState({
-        expandedGroupName: this.state.expandedGroupName !== groupName ? groupName : null
-      });
     }
     setBoxesWidth() {
       var containerWidth = $('#devices-container > div').width();
@@ -89,17 +39,6 @@ define(function(require) {
       this.setState({
         boxWidth: containerWidth / howManyBoxesPerRow,
         boxesPerRow: howManyBoxesPerRow,
-        groupPanelWidth: $('#devices-list').width()
-      });
-    }
-    openForm() {
-      this.setState({
-        showForm: true
-      });
-    }
-    closeForm() {
-      this.setState({
-        showForm: false
       });
     }
     dragStart(e) {
@@ -127,79 +66,18 @@ define(function(require) {
         e.preventDefault();
       var draggingUUID = this.state.draggingUUID;
       var dropUUID = e.currentTarget.dataset.uuid;
-      var groupDevices = [draggingUUID, dropUUID];
+      var groupedDevices = [draggingUUID, dropUUID];
                         
       if(this.state.draggingUUID !== null && this.state.draggingUUID !== dropUUID) {
-        this.setState({
-          groupDevices: groupDevices
-        });
-        this.openForm();
+        this.props.openNewSmartGroupModal(groupedDevices);
       }   
     }
     render() {        
       var devices = [];
-      var groups = [];
-      var Devices = this.state.Devices;
-      var Groups = this.state.Groups;
+      var Devices = this.props.devices;
                   
-      var itemIndex = 1;
-      var rows = [];
-      var expandedItemIndex = null;
-                        
-      _.each(Groups, function(group) {
-        var rowNo = Math.ceil(itemIndex/this.state.boxesPerRow);
-        var isLastItemInRow = (itemIndex/this.state.boxesPerRow % 1 === 0 || (!Object.keys(Devices).length && itemIndex === Object.keys(Groups).length));
-        
-        if(_.isUndefined(rows[rowNo]))
-          rows[rowNo] = [];
-        
-        rows[rowNo].push(group.groupName);
-                                
-        var deviceListGroupItem = (
-          <span key={'group-' + group.groupName}>
-            <DeviceListGroupItem
-              group={group}
-              width={this.state.boxWidth}
-              expandGroup={this.expandGroup}
-              openRenameGroupModal={this.props.openRenameGroupModal}
-              areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
-          </span>
-        );
-
-        if(this.state.expandedGroupName === group.groupName)
-          expandedItemIndex = itemIndex;
-
-        itemIndex++;
-
-        groups.push(deviceListGroupItem);
-
-        if(isLastItemInRow)
-          groups.push(
-            <div key={'group-panel-details-' + group.groupName}>
-              <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
-                {rows[rowNo].indexOf(this.state.expandedGroupName) > -1 && isLastItemInRow ? 
-                  <DevicesGroupDetailsPanel 
-                    devices={_.findWhere(Groups, {groupName: this.state.expandedGroupName}).devices}
-                    width={this.state.groupPanelWidth}
-                    boxWidth={this.state.boxWidth}
-                    openRenameDeviceModal={this.props.openRenameDeviceModal}
-                    arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 50)}
-                    areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
-                : null}
-              </VelocityTransitionGroup>
-            </div>
-          );
-      }, this);
-            
-      var devicesIndexItem = 1;
       _.each(Devices, function(device, i) {
         if(!_.isUndefined(device)) {
-          var rowNo = Math.ceil(itemIndex/this.state.boxesPerRow);
-          var isLastItemInRow = itemIndex/this.state.boxesPerRow % 1 === 0 || Object.keys(Devices).length === devicesIndexItem;
-          
-          if(_.isUndefined(rows[rowNo]))
-            rows[rowNo] = [];
-          
           var className = '';
           if(this.state.draggingUUID !== null) {
             if(this.state.draggingUUID !== device.uuid) {
@@ -209,7 +87,7 @@ define(function(require) {
             }
           }
                     
-          var returnedDevice = (
+          devices.push(
             <span data-uuid={device.uuid}
               className={className}
               key={"dnd-device-" + device.uuid}
@@ -229,37 +107,21 @@ define(function(require) {
                 areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
             </span>
           );
-          
-          itemIndex++;
-          devicesIndexItem++;
-          
-          devices.push(returnedDevice);
-          
-          if(isLastItemInRow)
-            devices.push(
-              <div key={"device-panel-details-" + i}>
-                <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
-                  {rows[rowNo].indexOf(this.state.expandedGroupName) > -1 && isLastItemInRow ?
-                    <DevicesGroupDetailsPanel 
-                      devices={_.findWhere(Groups, {groupName: this.state.expandedGroupName}).devices}
-                      width={this.state.groupPanelWidth}
-                      boxWidth={this.state.boxWidth}
-                      arrowLeftPosition={(((expandedItemIndex - 1) % this.state.boxesPerRow) * this.state.boxWidth + 50)}
-                      openRenameDeviceModal={this.props.openRenameDeviceModal}
-                      areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
-                  : null}
-                </VelocityTransitionGroup>
-              </div>
-            );
         }
       }, this);
+
+      var button = (
+        <div className="add-device-btn-wrapper" style={{width: this.state.boxWidth}}>
+          <button type="button" className="btn btn-rect" onClick={this.props.openNewDeviceModal}><i className="fa fa-plus"></i> Add new Device</button>
+        </div>
+      );
 
       return (
         <div id="devices-list">
           <div id="devices-container" className="container">
-            {devices.length > 0 || groups.length > 0 ?
+            {devices.length > 0 ?
               <div>
-                {groups}
+                {button}
                 {devices}
               </div>
             :
@@ -278,14 +140,6 @@ define(function(require) {
               </div>
             }
           </div>
-          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-            {this.state.showForm ?
-              <CreateGroup
-                groupDevices={this.state.groupDevices}
-                closeForm={this.closeForm}
-                key="create-group"/>
-            : null}
-          </VelocityTransitionGroup>
         </div>
       );
     }

@@ -7,60 +7,73 @@ define(function(require) {
       Cookies = require('js-cookie'),
       Responses = require('../responses');
   
-  class CreateGroup extends React.Component {
+  class NewSmartGroup extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
         areAllComponentsRequestsDone: false
       };
-      this.closeForm = this.closeForm.bind(this);
+      this.closeModal = this.closeModal.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleResponse = this.handleResponse.bind(this);
       this.checkPostStatus = this.checkPostStatus.bind(this);
       db.componentsForSelectedDevices.reset();
-      SotaDispatcher.dispatch({actionType: 'get-components-for-selected-devices', uuid: this.props.groupDevices[0]});
-      SotaDispatcher.dispatch({actionType: 'get-components-for-selected-devices', uuid: this.props.groupDevices[1]});
+      SotaDispatcher.dispatch({actionType: 'get-components-for-selected-devices', uuid: this.props.groupedDevices[0]});
+      SotaDispatcher.dispatch({actionType: 'get-components-for-selected-devices', uuid: this.props.groupedDevices[1]});
       db.componentsForSelectedDevices.addWatch("poll-components-for-selected-devices", _.bind(this.forceUpdate, this, null));
       db.postStatus.addWatch("poll-components-for-devices-post-status", _.bind(this.checkPostStatus, this, null));
+      db.postStatus.addWatch("poll-create-smart-group", _.bind(this.handleResponse, this, null));
     }
     componentWillUnmount() {
       db.componentsForSelectedDevices.removeWatch("poll-components-for-selected-devices");
       db.postStatus.removeWatch("poll-components-for-devices-post-status");
+      db.postStatus.removeWatch("poll-create-smart-group");
     }
     handleSubmit(e) {
       e.preventDefault();
-            
       SotaDispatcher.dispatch({
-        actionType: 'create-group',
+        actionType: 'create-smart-group',
         data: {
-          device1: this.props.groupDevices[0],
-          device2: this.props.groupDevices[1],
+          device1: this.props.groupedDevices[0],
+          device2: this.props.groupedDevices[1],
           groupName: this.refs.groupName.value
         }
       });
     }
-    closeForm(e) {
+    handleResponse() {
+      var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
+      if(!_.isUndefined(postStatus['create-smart-group'])) {
+        if(postStatus['create-smart-group'].status === 'success') {
+          db.postStatus.removeWatch("poll-create-smart-group");
+          delete postStatus['create-smart-group'];
+          db.postStatus.reset(postStatus);
+          this.props.closeModal(true);
+        }
+      }
+    }
+    closeModal(e) {
       e.preventDefault();
-      this.props.closeForm();
+      this.props.closeModal();
     }
     checkPostStatus() {
       var postStatus = db.postStatus.deref();
       if(!_.isUndefined(postStatus) && !_.isUndefined(postStatus['get-components-for-selected-devices']) && 
-         !_.isUndefined(postStatus['get-components-for-selected-devices'][this.props.groupDevices[0]]) && 
-         !_.isUndefined(postStatus['get-components-for-selected-devices'][this.props.groupDevices[1]])) {
+         !_.isUndefined(postStatus['get-components-for-selected-devices'][this.props.groupedDevices[0]]) && 
+         !_.isUndefined(postStatus['get-components-for-selected-devices'][this.props.groupedDevices[1]])) {
         this.setState({areAllComponentsRequestsDone: true});
       }
     }
     render() {        
       var components = db.componentsForSelectedDevices.deref();
-      var canCreateGroup = !_.isUndefined(components) && !_.isUndefined(components[this.props.groupDevices[0]]) && Object.keys(components[this.props.groupDevices[0]]).length && 
-                           !_.isUndefined(components[this.props.groupDevices[1]]) && Object.keys(components[this.props.groupDevices[1]]).length;
+      var canCreateGroup = !_.isUndefined(components) && !_.isUndefined(components[this.props.groupedDevices[0]]) && Object.keys(components[this.props.groupedDevices[0]]).length && 
+                           !_.isUndefined(components[this.props.groupedDevices[1]]) && Object.keys(components[this.props.groupedDevices[1]]).length;
             
       return (
         <div id="modal-create-group" className="myModal">
           <div className="modal-dialog center-xy">
             <div className="modal-content">
               <div className="modal-header">
-                <button type="button" className="close" data-dismiss="modal" onClick={this.props.closeForm}></button>
+                <button type="button" className="close" data-dismiss="modal" onClick={this.props.closeModal}></button>
                 <h4 className="modal-title">
                   <img src="/assets/img/icons/grid.png" className="create-group-icon" style={{width: '20px'}} alt="" /> &nbsp;
                   {!this.state.areAllComponentsRequestsDone || canCreateGroup ? 
@@ -73,7 +86,7 @@ define(function(require) {
               {canCreateGroup ?
                 <form ref='form' onSubmit={this.handleSubmit} encType="multipart/form-data" className="form-horizontal">
                   <div className="modal-body">
-                    <Responses action="create-package" handledStatuses="error"/>
+                    <Responses action="create-smart-group" handledStatuses="error"/>
                     <div className="row">
                       <div className="col-md-12">
                         <div className="form-group">
@@ -86,7 +99,7 @@ define(function(require) {
                     </div>
                   </div>
                   <div className="modal-footer">
-                    <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.closeForm}>close</a>
+                    <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.closeModal}>close</a>
                     <button type="submit" className="btn btn-confirm pull-right" onClick={this.handleSubmit}>Create Group</button>
                   </div>
                 </form>
@@ -102,7 +115,7 @@ define(function(require) {
                     }
                   </div>
                   <div className="modal-footer">
-                    <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.props.closeForm}>close</a>
+                    <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.props.closeModal}>close</a>
                   </div>
                 </div>
               }
@@ -113,10 +126,10 @@ define(function(require) {
     }
   };
 
-  CreateGroup.contextTypes = {
+  NewSmartGroup.contextTypes = {
     history: React.PropTypes.object.isRequired,
     strings: React.PropTypes.object.isRequired,
   };
 
-  return CreateGroup;
+  return NewSmartGroup;
 });
