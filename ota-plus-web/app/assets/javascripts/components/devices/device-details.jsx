@@ -206,7 +206,7 @@ define(function(require) {
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {!_.isUndefined(deviceWithStatus) && deviceWithStatus.status != "NotSeen" ?
               <div>
-                <div id="components-column" className="col-xs-2 nopadding">
+                <div id="components-column">
                   <div className="panel panel-ats">
                     <div className="panel-heading" id="panel-heading-components">
                       <div className="panel-heading-left pull-left">
@@ -218,7 +218,7 @@ define(function(require) {
                     </div>
                   </div>
                 </div>
-                <div id="packages-column" className="col-xs-6 nopadding">
+                <div id="packages-column">
                   <div className="panel panel-ats">
                     <div className="panel-heading">
                       <div className="panel-heading-left pull-left">
@@ -250,7 +250,7 @@ define(function(require) {
                     </div>
                   </div>
                 </div>
-                <div id="queue-column" className="col-xs-4 nopadding">
+                <div id="queue-column">
                   <div className="panel panel-ats">
                     <div className="panel-heading">
                       <div className="panel-heading-left pull-left">

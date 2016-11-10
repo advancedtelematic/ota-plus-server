@@ -13,14 +13,13 @@ define(function(require) {
       this.state = {
         data: undefined,
       }
-     
       this.sort = this.sort.bind(this);
       this.dragStart = this.dragStart.bind(this);
       this.dragEnd = this.dragEnd.bind(this);
       this.dragOver = this.dragOver.bind(this);
       this.setData = this.setData.bind(this);
-      
       db.packageQueueForDevice.addWatch("poll-queued-packages-queue-list", _.bind(this.setData, this, null));
+      SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.deviceId});
     }
     componentDidMount() {
       this.props.setQueueListHeight();

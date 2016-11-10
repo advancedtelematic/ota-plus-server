@@ -7,7 +7,7 @@
             defaults = {
                 verifyModalId: 'verifyModal',
                 verifyHeaderText: 'Tip!',
-                verifyBodyText: 'ATS Garage works best in a browser window that is at least <strong>1366 x 768</strong>. You can still use it at a smaller size, but we recommend using a desktop browser for the best experience.',
+                verifyBodyText: 'ATS Garage works best in a browser window that is at least <strong>1280 x 768</strong>. You can still use it at a smaller size, but we recommend using a desktop browser for the best experience.',
                 verifyMinWidth: 1024,
                 verifyMinHeight: 768,
                 cookieKey: 'dontShowVerifyModal'
