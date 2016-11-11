@@ -59,7 +59,7 @@ extends Controller with ApiClientSupport {
     val result = for {
       clientName <- (request.body \ "client_name").validate[String].toXor
     } yield for {
-      clientInfo <- authPlusApi.createClientForUser(request.namespace, clientName)
+      clientInfo <- authPlusApi.createClientForUser(request.namespace, clientName, request.authPlusAccessToken)
       clientIds <- addClientId(request.namespace, request.idToken, Uuid.fromJava(clientInfo.clientId))
     } yield Created(Json.toJson(clientIds))
 
