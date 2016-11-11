@@ -2,7 +2,7 @@ package com.advancedtelematic.api
 
 import java.util.UUID
 
-import com.advancedtelematic.IdToken
+import com.advancedtelematic.{AuthPlusAccessToken, IdToken}
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.ota.device.Devices._
 import com.advancedtelematic.ota.vehicle.ClientInfo
@@ -124,28 +124,31 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
   private val clientSecret: String = conf.getString("authplus.secret").get
 
   private val authPlusRequest = ApiRequest.base(authPlusApiUri + "/")
-    .andThen(_.withAuth(Some(UserPass(clientId, clientSecret))))
 
-  def createClient(body: JsValue)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
-    authPlusRequest("clients").transform(_.withBody(body).withMethod("POST")).execJson(apiExec)(ev)
+  def createClient(body: JsValue, token: AuthPlusAccessToken)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
+    authPlusRequest("clients")
+      .withToken(token.value)
+      .transform(_.withBody(body).withMethod("POST"))
+      .execJson(apiExec)(ev)
   }
 
-  def createClient(device: Uuid)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
+  def createClient(device: Uuid, token: AuthPlusAccessToken)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
     val body = Json.obj(
         "grant_types" -> List("client_credentials"),
         "client_name" -> device.show,
         "scope"       -> s"ota-core.${device.show}.write ota-core.${device.show}.read"
     )
-    createClient(body)
+    createClient(body, token)
   }
 
-  def createClientForUser(ns: Namespace, clientName: String)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
+  def createClientForUser(ns: Namespace, clientName: String, token: AuthPlusAccessToken)(implicit ev: Reads[ClientInfo])
+    : Future[ClientInfo] = {
     val body = Json.obj(
         "grant_types" -> List("client_credentials"),
         "client_name" -> clientName,
         "scope"       -> s"namespace.${ns.get}"
     )
-    createClient(body)
+    createClient(body, token)
   }
 
   def getClient(clientId: Uuid)(implicit ec: ExecutionContext): Future[Result] = {
@@ -165,12 +168,15 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
     *   <li>the web-app persisted the association DeviceID -> ClientID</li>
     * </ul>
     */
-  def fetchClientInfo(clientID: UUID)(implicit ec: ExecutionContext): Future[JsValue] = {
-    authPlusRequest(s"clients/${clientID.toString}").transform(_.withMethod("GET")).execJsonValue(apiExec)
+  def fetchClientInfo(clientID: UUID, token: AuthPlusAccessToken)(implicit ec: ExecutionContext): Future[JsValue] = {
+    authPlusRequest(s"clients/${clientID.toString}")
+      .withToken(token.value)
+      .transform(_.withMethod("GET"))
+      .execJsonValue(apiExec)
   }
 
-  def fetchSecret(clientID: UUID)(implicit ec: ExecutionContext): Future[String] = {
-    fetchClientInfo(clientID).flatMap { parsed =>
+  def fetchSecret(clientID: UUID, token: AuthPlusAccessToken)(implicit ec: ExecutionContext): Future[String] = {
+    fetchClientInfo(clientID, token).flatMap { parsed =>
       val t2: Try[String] = Try((parsed \ "client_secret").validate[String].get)
       Future.fromTry(t2)
     }
