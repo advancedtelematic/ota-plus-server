@@ -3,7 +3,7 @@ package org.genivi.webserver.controllers
 import javax.inject.{Inject, Named, Singleton}
 
 import akka.actor.ActorSystem
-import com.advancedtelematic.{AuthPlusAuthentication, AuthenticatedRequest}
+import com.advancedtelematic.{AuthPlusAuthentication, AuthPlusAccessToken, AuthenticatedRequest}
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.ota.vehicle.{DeviceMetadata, Vehicles}
@@ -40,9 +40,9 @@ extends Controller with ApiClientSupport {
     * Contact Auth+ to register for the first time the given [[Uuid]],
     * to later persist (in cassandra-journal) the resulting [[DeviceMetadata]]
     */
-  private def registerAuthPlusVehicle(device: Uuid): Future[DeviceMetadata] = {
+  private def registerAuthPlusVehicle(device: Uuid, token: AuthPlusAccessToken): Future[DeviceMetadata] = {
     for {
-      clientInfo <- authPlusApi.createClient(device)
+      clientInfo <- authPlusApi.createClient(device, token)
       vehicleMetadata = DeviceMetadata(device, clientInfo)
       _ <- vehiclesStore.registerVehicle(vehicleMetadata)
     } yield vehicleMetadata
@@ -51,12 +51,12 @@ extends Controller with ApiClientSupport {
   /**
     * Generate client credentials for a device if it has not been generated before.
     */
-  def getRegisterDevice(device: Uuid) : Future[DeviceMetadata] = {
+  def getRegisterDevice(device: Uuid, token: AuthPlusAccessToken) : Future[DeviceMetadata] = {
     for {
         opt <- vehiclesStore.getVehicle(device)
         devMeta <- opt match {
           case Some(vmeta) => Future.successful(vmeta)
-          case None => registerAuthPlusVehicle(device)
+          case None => registerAuthPlusVehicle(device, token)
         }
     } yield devMeta
   }
@@ -73,8 +73,8 @@ extends Controller with ApiClientSupport {
       for (
         dev <- devicesApi.getDevice(
           UserOptions(Some(request.authPlusAccessToken.value), namespace = Some(request.namespace)), device);
-        vMetadata <- getRegisterDevice(device) if dev.namespace == request.namespace;
-        secret <- authPlusApi.fetchSecret(vMetadata.clientInfo.clientId);
+        vMetadata <- getRegisterDevice(device, request.authPlusAccessToken) if dev.namespace == request.namespace;
+        secret <- authPlusApi.fetchSecret(vMetadata.clientInfo.clientId, request.authPlusAccessToken);
         result <- preconfClient(vMetadata.uuid, artifact, arch, vMetadata.clientInfo.clientId, secret)
       ) yield result
     }
