@@ -13,21 +13,23 @@ define(function(require) {
       this.state = {
         boxWidth: 340,
         boxesPerRow: null,
-        draggingUUID: null,
         overUUID: null,
         Devices: null
       };
       this.setBoxesWidth = this.setBoxesWidth.bind(this);
-      this.dragStart = this.dragStart.bind(this);
-      this.dragEnter = this.dragEnter.bind(this);
-      this.dragEnd = this.dragEnd.bind(this);
-      this.dragOver = this.dragOver.bind(this);
-      this.dragLeave = this.dragLeave.bind(this);
-      this.drop = this.drop.bind(this);
+      this.onDragEnter = this.onDragEnter.bind(this);
+      this.onDragLeave = this.onDragLeave.bind(this);
+      this.onDragOver = this.onDragOver.bind(this);
+      this.onDrop = this.onDrop.bind(this);
     }
     componentDidMount() {
       this.setBoxesWidth();
       window.addEventListener("resize", this.setBoxesWidth);
+    }
+    componentWillReceiveProps(nextProps) {
+      if(!nextProps.draggingDeviceUUID && this.props.draggingDeviceUUID !== nextProps.draggingDeviceUUID) {
+        this.setState({overUUID: null});
+      }
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setBoxesWidth);
@@ -41,46 +43,36 @@ define(function(require) {
         boxesPerRow: howManyBoxesPerRow,
       });
     }
-    dragStart(e) {
-      this.setState({
-        draggingUUID: e.currentTarget.dataset.uuid,
-      });
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData("text/html", null);
-    }
-    dragEnter(e) {
+    onDragEnter(e) {
       e.preventDefault();
     }
-    dragOver(e) {
+    onDragLeave(e) {
+      this.setState({overUUID: null});
+    }
+    onDragOver(e) {
       e.preventDefault();
       this.setState({overUUID: e.currentTarget.dataset.uuid});
     }
-    dragLeave(e) {
-      this.setState({overUUID: null});
-    }
-    dragEnd(e) {
-      this.setState({draggingUUID: null, overUUID: null});
-    }
-    drop(e) {        
+    onDrop(e) {
       if(e.preventDefault)
         e.preventDefault();
-      var draggingUUID = this.state.draggingUUID;
+      var draggingUUID = this.props.draggingDeviceUUID;
       var dropUUID = e.currentTarget.dataset.uuid;
       var groupedDevices = [draggingUUID, dropUUID];
                         
-      if(this.state.draggingUUID !== null && this.state.draggingUUID !== dropUUID) {
+      if(draggingUUID !== null && draggingUUID !== dropUUID) {
         this.props.openNewSmartGroupModal(groupedDevices);
-      }   
+      }
     }
-    render() {        
+    render() {
       var devices = [];
       var Devices = this.props.devices;
                   
       _.each(Devices, function(device, i) {
         if(!_.isUndefined(device)) {
           var className = '';
-          if(this.state.draggingUUID !== null) {
-            if(this.state.draggingUUID !== device.uuid) {
+          if(this.props.draggingDeviceUUID !== null) {
+            if(this.props.draggingDeviceUUID !== device.uuid) {
               className = this.state.overUUID === device.uuid ? 'droppable active' : 'droppable';
             } else {
               className = 'dragging';
@@ -92,12 +84,12 @@ define(function(require) {
               className={className}
               key={"dnd-device-" + device.uuid}
               draggable={(!_.isUndefined(this.props.isDND) ? this.props.isDND : "true")}
-              onDragEnd={_.isUndefined(this.props.isDND) || this.props.isDND ? this.dragEnd : null}
-              onDragOver={_.isUndefined(this.props.isDND) || this.props.isDND ? this.dragOver : null}
-              onDragLeave={_.isUndefined(this.props.isDND) || this.props.isDND ? this.dragLeave : null}
-              onDragStart={_.isUndefined(this.props.isDND) || this.props.isDND ? this.dragStart : null}
-              onDragEnter={_.isUndefined(this.props.isDND) || this.props.isDND ? this.dragEnter : null}
-              onDrop={_.isUndefined(this.props.isDND) || this.props.isDND ? this.drop : null}>
+              onDragStart={_.isUndefined(this.props.isDND) || this.props.isDND ? this.props.onDeviceDragStart : null}
+              onDragEnd={_.isUndefined(this.props.isDND) || this.props.isDND ? this.props.onDeviceDragEnd : null}
+              onDragEnter={_.isUndefined(this.props.isDND) || this.props.isDND ? this.onDragEnter : null}
+              onDragLeave={_.isUndefined(this.props.isDND) || this.props.isDND ? this.onDragLeave : null}
+              onDragOver={_.isUndefined(this.props.isDND) || this.props.isDND ? this.onDragOver : null}
+              onDrop={_.isUndefined(this.props.isDND) || this.props.isDND ? this.onDrop : null}>
               <DeviceListItem key={device.uuid}
                 device={device}
                 isProductionDevice={this.props.areProductionDevices}
