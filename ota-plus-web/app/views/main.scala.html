@@ -72,6 +72,7 @@
             requirejs.config({"paths": {"bootstrap": ["/webjars/bootstrap/3.3.6/js/bootstrap"], "bootstrap-css": ["/webjars/bootstrap/3.3.6/css/bootstrap"]}, "shim": {"bootstrap": ["jquery"]}, "packages":[]});
             
             requirejs.config({
+              waitSeconds: 60,
               es6: {
                 fileExtension: '.jsx'
               },
