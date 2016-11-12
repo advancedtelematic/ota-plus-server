@@ -46,7 +46,7 @@ define(function(require) {
                 <span>Never seen online</span>
               }
             </div>
-            <div className="device-status-text">Device status: {deviceStatus}</div>
+            <div className="device-status-text">{this.props.device.groupName ? "Group: " + this.props.device.groupName : "Ungrouped"}</div>
             {this.props.areActionButtonsShown ? 
               <div className="dropdown device-menu-dropdown pull-right">
                 <div data-toggle="dropdown">
