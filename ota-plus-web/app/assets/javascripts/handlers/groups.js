@@ -41,7 +41,7 @@ define(function(require) {
               });
           break;
           case 'create-manual-group':
-            sendRequest.doPut('/api/v1/device_groups?groupName=' + payload.name, null, {action: payload.actionType})
+            sendRequest.doPost('/api/v1/device_groups?groupName=' + payload.name, null, {action: payload.actionType})
               .success(function() {
               });
           break;
@@ -62,6 +62,11 @@ define(function(require) {
           break;
           case 'add-device-to-group':
             sendRequest.doPost('/api/v1/device_groups/' + payload.uuid + '/devices/' + payload.deviceId, null, {action: payload.actionType})
+              .success(function() {
+              });
+          break;
+          case 'remove-device-from-group':
+            sendRequest.doDelete('/api/v1/device_groups/' + payload.uuid + '/devices/' + payload.deviceId, null, {action: payload.actionType})
               .success(function() {
               });
           break;

@@ -466,6 +466,12 @@ button {
                         font-size: 12px;
                     }
                 }
+                
+                .group-pointer {
+                    position: absolute;
+                    top: 25px;
+                    right: 15px;
+                }
             }
         }
     }
@@ -983,10 +989,11 @@ button {
 }
 
 .btn-rect {
-    color: #fff;
+    color: #9ce2d8;
     font-size: 22px;
-    background: #9ce2d8;
-    padding: 12px 30px;
+    background: transparent;
+    padding: 14px 35px;
+    border: 2px dashed #9ce2d8;
     border-radius: 5px;
 
     &:hover, &:focus, &:active {
@@ -2587,6 +2594,13 @@ a.close, button.close {
             #devices-container {
                 height: auto;
             }
+        }
+    }
+
+    .device-box {
+        &:hover, &:focus, &:active {
+            cursor: hand;
+            cursor: pointer;
         }
     }
 

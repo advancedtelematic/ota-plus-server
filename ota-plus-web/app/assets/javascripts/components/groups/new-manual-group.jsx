@@ -30,9 +30,20 @@ define(function(require) {
       var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
       if(!_.isUndefined(postStatus['create-manual-group'])) {
         if(postStatus['create-manual-group'].status === 'success') {
+          var groupUUID = postStatus['create-manual-group'].response;
           db.postStatus.removeWatch("poll-create-manual-group");
           delete postStatus['create-manual-group'];
           db.postStatus.reset(postStatus);
+          if(this.props.deviceUUID !== null) {
+            var that = this;
+            setTimeout(function() {
+              SotaDispatcher.dispatch({
+                actionType: 'add-device-to-group',
+                uuid: groupUUID,
+                deviceId: that.props.deviceUUID
+              });
+            }, 1);
+          }
           this.props.closeModal(true);
         }
       }

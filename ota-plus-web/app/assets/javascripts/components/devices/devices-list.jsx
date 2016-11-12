@@ -14,7 +14,8 @@ define(function(require) {
         boxWidth: 340,
         boxesPerRow: null,
         overUUID: null,
-        Devices: null
+        Devices: null,
+        areSmartGroupsEnabled: false
       };
       this.setBoxesWidth = this.setBoxesWidth.bind(this);
       this.onDragEnter = this.onDragEnter.bind(this);
@@ -39,7 +40,7 @@ define(function(require) {
       var minBoxWidth = 340;
       var howManyBoxesPerRow = Math.floor(containerWidth / minBoxWidth);
       this.setState({
-        boxWidth: containerWidth / howManyBoxesPerRow,
+        boxWidth: Math.floor(containerWidth / howManyBoxesPerRow) - 2,
         boxesPerRow: howManyBoxesPerRow,
       });
     }
@@ -56,22 +57,24 @@ define(function(require) {
     onDrop(e) {
       if(e.preventDefault)
         e.preventDefault();
-      var draggingUUID = this.props.draggingDeviceUUID;
-      var dropUUID = e.currentTarget.dataset.uuid;
-      var groupedDevices = [draggingUUID, dropUUID];
+      if(this.state.areSmartGroupsEnabled) {
+        var draggingUUID = this.props.draggingDeviceUUID;
+        var dropUUID = e.currentTarget.dataset.uuid;
+        var groupedDevices = [draggingUUID, dropUUID];
                         
-      if(draggingUUID !== null && draggingUUID !== dropUUID) {
-        this.props.openNewSmartGroupModal(groupedDevices);
+        if(draggingUUID !== null && draggingUUID !== dropUUID) {
+          this.props.openNewSmartGroupModal(groupedDevices);
+        }
       }
     }
     render() {
       var devices = [];
       var Devices = this.props.devices;
-                  
+            
       _.each(Devices, function(device, i) {
         if(!_.isUndefined(device)) {
           var className = '';
-          if(this.props.draggingDeviceUUID !== null) {
+          if(this.state.areSmartGroupsEnabled && this.props.draggingDeviceUUID !== null && this.props.isDND) {
             if(this.props.draggingDeviceUUID !== device.uuid) {
               className = this.state.overUUID === device.uuid ? 'droppable active' : 'droppable';
             } else {
@@ -102,7 +105,7 @@ define(function(require) {
         }
       }, this);
 
-      var button = (
+      var addDeviceButton = (
         <div className="add-device-btn-wrapper" style={{width: this.state.boxWidth}}>
           <button type="button" className="btn btn-rect" onClick={this.props.openNewDeviceModal}><i className="fa fa-plus"></i> Add new Device</button>
         </div>
@@ -113,22 +116,29 @@ define(function(require) {
           <div id="devices-container" className="container">
             {devices.length > 0 ?
               <div>
-                {button}
+                {_.isUndefined(this.props.isDND) || this.props.isDND ?
+                  addDeviceButton
+                : null}
                 {devices}
               </div>
             :
-              <div className="col-md-12 text-center center-xy">
-                {this.props.isDevicesListEmpty ?
-                  <span>
-                    <div className="font-24">Welcome to ATS Garage.</div>
-                    <button className="btn btn-confirm margin-top-20" onClick={this.props.openNewDeviceModal}>Add new device</button>
-                  </span>
-                :
-                  this.props.areProductionDevices ?
-                    <span className="font-24">Oops, there are too many devices to show.</span>
+              <div>
+                {!this.props.isDevicesListEmpty && !this.props.areProductionDevices && (_.isUndefined(this.props.isDND) || this.props.isDND) ?
+                  addDeviceButton
+                : null}
+                <div className="col-md-12 text-center center-xy">
+                  {this.props.isDevicesListEmpty ?
+                    <span>
+                      <div className="font-24">Welcome to ATS Garage.</div>
+                      <button className="btn btn-confirm margin-top-20" onClick={this.props.openNewDeviceModal}>Add new device</button>
+                    </span>
                   :
-                    <span className="font-24">Oops, there are no devices to show.</span>
-                }
+                    this.props.areProductionDevices ?
+                      <span className="font-24">Oops, there are too many devices to show.</span>
+                    :
+                      <span className="font-24">Oops, there are no devices to show.</span>
+                  }
+                </div>
               </div>
             }
           </div>

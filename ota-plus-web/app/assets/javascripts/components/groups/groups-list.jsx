@@ -24,26 +24,30 @@ define(function(require) {
       db.postStatus.addWatch("poll-add-device-to-group", _.bind(this.handleResponse, this, null));
     }
     componentDidMount() {
-      this.prepareGroups(this.props.groups, this.props.devices);
+      this.prepareGroups(this.props.groups, this.props.devices, false);
     }
     componentWillReceiveProps(nextProps) {
       if(!nextProps.draggingDeviceUUID && this.props.draggingDeviceUUID !== nextProps.draggingDeviceUUID) {
         this.setState({overGroupUUID: null});
       }
-      if(!_.isEqual(this.props.devices, nextProps.devices) || !_.isEqual(this.props.groups, nextProps.groups)) {
-        this.prepareGroups(nextProps.groups, nextProps.devices);
+      if(!_.isEqual(this.props.devices, nextProps.devices) || !_.isEqual(this.props.groups, nextProps.groups) || this.props.isFiltered !== nextProps.isFiltered) {
+        this.prepareGroups(nextProps.groups, nextProps.devices, nextProps.isFiltered);
       }
     }
     componentWillUnmount() {
       db.postStatus.removeWatch("poll-add-device-to-group");
     }
-    prepareGroups(groupsData, devicesData) {
+    prepareGroups(groupsData, devicesData, isFiltered = false) {
       var devicesUUIDs = _.pluck(devicesData, 'uuid');
       var newGroups = _.clone(groupsData);
       _.each(newGroups, function(group, index) {
-        group.devicesFilteredUUIDs = _.filter(group.devicesUUIDs, function(device) {
-          return (devicesUUIDs.indexOf(device) > -1);
-        });
+        if(isFiltered) {
+          group.devicesFilteredUUIDs = _.filter(group.devicesUUIDs, function(device) {
+            return (devicesUUIDs.indexOf(device) > -1);
+          });
+        } else {
+          group.devicesFilteredUUIDs = group.devicesUUIDs;
+        }
       });
       this.setState({groupsData: newGroups});
     }
@@ -57,15 +61,24 @@ define(function(require) {
     onDrop(e) {
       if(e.preventDefault)
         e.preventDefault();
-      var draggingUUID = this.props.draggingDeviceUUID;
-      var dropUUID = e.currentTarget.dataset.groupuuid;
-      
-      if(draggingUUID !== null && dropUUID !== null) {
+      var draggingDeviceUUID = this.props.draggingDeviceUUID;
+      var dropGroupUUID = e.currentTarget.dataset.groupuuid;
+      var foundDevice = _.findWhere(this.props.devices, {uuid: draggingDeviceUUID});
+                          
+      if(draggingDeviceUUID !== null && dropGroupUUID !== null) {
         SotaDispatcher.dispatch({
-          actionType: 'add-device-to-group',
-          uuid: dropUUID,
-          deviceId: draggingUUID
+          actionType: 'remove-device-from-group',
+          uuid: foundDevice.groupUUID,
+          deviceId: foundDevice.uuid
         });
+          
+        setTimeout(function() {
+          SotaDispatcher.dispatch({
+            actionType: 'add-device-to-group',
+            uuid: dropGroupUUID,
+            deviceId: draggingDeviceUUID
+          });
+        }, 300);
       }
     }
     handleResponse() {
@@ -73,6 +86,14 @@ define(function(require) {
       if(!_.isUndefined(postStatus['add-device-to-group'])) {
         if(postStatus['add-device-to-group'].status === 'success') {
           delete postStatus['add-device-to-group'];
+          db.postStatus.reset(postStatus);
+          setTimeout(function() {
+            SotaDispatcher.dispatch({actionType: 'get-groups'});
+          }, 1);
+        }
+      } else if(!_.isUndefined(postStatus['remove-device-from-group'])) {
+        if(postStatus['remove-device-from-group'].status === 'success') {
+          delete postStatus['remove-device-from-group'];
           db.postStatus.reset(postStatus);
           setTimeout(function() {
             SotaDispatcher.dispatch({actionType: 'get-groups'});
@@ -87,7 +108,7 @@ define(function(require) {
       }
         
       var groups = _.map(this.state.groupsData, function(group, index) {
-        if(!_.isUndefined(group) && Object.keys(group.devicesFilteredUUIDs).length) {
+        if(!_.isUndefined(group) && (!this.props.isFiltered || Object.keys(group.devicesFilteredUUIDs).length)) {
           var groupClassName = (this.state.overGroupUUID !== null && group.id == this.state.overGroupUUID) ? className + " active" : className;
           return (
             <li 

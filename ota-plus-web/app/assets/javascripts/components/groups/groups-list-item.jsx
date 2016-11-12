@@ -8,7 +8,7 @@ define(function(require) {
     }
     render() {
       return (
-        <button type="button" className={"list-group-item " + this.props.groupClassName + (this.props.isSelected ? " checked" : "")} onClick={this.props.selectGroup.bind(this, {name: this.props.group.groupName, type: 'real'})} id={"button-group-" + this.props.group.groupName}>
+        <button type="button" className={"list-group-item " + this.props.groupClassName + (this.props.isSelected ? " checked" : "")} onClick={this.props.selectGroup.bind(this, {name: this.props.group.groupName, type: 'real', uuid: this.props.group.id})} id={"button-group-" + this.props.group.groupName}>
           <div className="pull-left">
             <div className="group-icon"></div>
             <div className="group-text">
@@ -16,6 +16,11 @@ define(function(require) {
               <div className="group-subtitle">{Object.keys(this.props.group.devicesFilteredUUIDs).length} devices</div>
             </div>
           </div>
+          {this.props.isSelected ? 
+            <div className="group-pointer">
+              <i className="fa fa-angle-right fa-3x"></i>
+            </div>
+          : null}
         </button>
       );
     }
