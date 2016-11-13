@@ -28,7 +28,7 @@ define(function(require) {
             <div className="group-count">Devices in the group: {this.props.group.devices.length}</div>
           </div>
           {this.props.areActionButtonsShown ? 
-            <div className="dropdown device-menu-dropdown pull-right">
+            <div className="dropdown action-menu-dropdown pull-right">
               <div data-toggle="dropdown">
                 <i className="fa fa-chevron-down" aria-hidden="true"></i>
               </div>
