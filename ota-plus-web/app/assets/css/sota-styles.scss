@@ -423,6 +423,17 @@ button {
                     height: 94px;
                     transition: all 0.3s ease-in;
 
+                    .action-menu-dropdown {
+                        top: 10px;
+                        right: 10px;
+                    }
+                    
+                    &:hover {
+                        .action-menu-dropdown {
+                            display: block;
+                        }
+                    }
+
                     &.droppable {
                         border: 2px dashed $color-mint;
 
@@ -438,7 +449,6 @@ button {
                 }
 
                 button.list-group-item {
-
                     &.checked {
                         background-color: #f5f5f5;
                     }
@@ -3602,7 +3612,7 @@ hr.full-line {
                 opacity: 0.8;
             }
 
-            .device-menu-dropdown {                
+            .action-menu-dropdown {                
                 i {
                     &.fa-chevron-down {
                         text-shadow: none;
@@ -3614,7 +3624,7 @@ hr.full-line {
     }
 }
 
-.device-menu-dropdown {
+.action-menu-dropdown {
     text-shadow: none;
     position: absolute;
     top: 20px;
@@ -3624,12 +3634,6 @@ hr.full-line {
     &:hover {
         cursor: pointer;
         cursor: hand;
-    }
-
-    i {
-        &.fa-chevron-down {
-            text-shadow: 0 3px 15px rgba(0, 0, 0, 0.6);
-        }
     }
 
     ul {
@@ -3653,9 +3657,9 @@ hr.full-line {
 }
 
 .devices {
-    .group-box, .device-box {
+    .device-box {
         &:hover {
-            .device-menu-dropdown {
+            .action-menu-dropdown {
                 display: block;
             }
         }
@@ -3960,7 +3964,6 @@ hr.full-line {
                                 &:before {
                                     display: none;
                                 }
-
                             }
 
                             .group-icon {
