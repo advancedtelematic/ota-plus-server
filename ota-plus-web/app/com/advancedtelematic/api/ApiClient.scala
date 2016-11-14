@@ -2,7 +2,7 @@ package com.advancedtelematic.api
 
 import java.util.UUID
 
-import com.advancedtelematic.{AuthPlusAccessToken, IdToken}
+import com.advancedtelematic.{Auth0AccessToken, AuthPlusAccessToken, IdToken}
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.ota.device.Devices._
 import com.advancedtelematic.ota.vehicle.ClientInfo
@@ -215,4 +215,10 @@ class Auth0Api(val conf: Configuration, val apiExec: ApiClientExec) extends OtaP
       .execResult(apiExec)
   }
 
+  def getUserInfo(token: Auth0AccessToken) : Future[JsValue] = {
+    auth0Request("userinfo")
+      .withToken(token.value)
+      .transform(_.withMethod("GET"))
+      .execJsonValue(apiExec)
+  }
 }

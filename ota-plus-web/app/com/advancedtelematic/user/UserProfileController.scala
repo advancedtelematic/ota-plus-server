@@ -6,6 +6,7 @@ import javax.inject.{Inject, Singleton}
 import cats.data.Xor
 import com.advancedtelematic.jws.CompactSerialization
 import com.advancedtelematic.{Auth0AccessToken, AuthenticatedAction, IdToken}
+import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport, RemoteApiError}
 import com.advancedtelematic.login.Auth0Config
 import org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 import play.api.{Configuration, Logger}
@@ -32,8 +33,12 @@ object UserProfile {
 }
 
 @Singleton
-class UserProfileController @Inject()(conf: Configuration, wsClient: WSClient)(implicit exec: ExecutionContext)
-    extends Controller {
+class UserProfileController @Inject()(
+  val conf: Configuration,
+  val ws: WSClient,
+  val clientExec: ApiClientExec)
+  (implicit exec: ExecutionContext)
+  extends Controller with ApiClientSupport {
 
   implicit class JsResultOps[T](res: JsResult[T]) {
 
@@ -49,14 +54,18 @@ class UserProfileController @Inject()(conf: Configuration, wsClient: WSClient)(i
   private[this] val ManagementAccessToken = conf.getString("auth0.userUpdateToken").get
 
   def queryUserProfile[A](request: AuthenticatedRequest[A]): Future[UserProfile] =
-    getUser(request.auth0AccessToken).map(UserProfile.FromUserInfoReads.reads).flatMap[UserProfile] {
+    auth0Api.getUserInfo(request.auth0AccessToken).map(UserProfile.FromUserInfoReads.reads).flatMap[UserProfile] {
       case JsSuccess(profile, _) =>
         Future.successful(profile)
       case JsError(errors) =>
         Future.failed(new Throwable(errors.toString()))
     }
   def getUserProfile: Action[AnyContent] = AuthenticatedAction.async { request =>
-    queryUserProfile(request).map(x => Ok(Json.toJson(x)))
+    queryUserProfile(request)
+      .map(x => Ok(Json.toJson(x)))
+      .recover {
+        case e: RemoteApiError => e.result
+      }
   }
 
   private[this] def userIdFromToken(idToken: IdToken): String Xor UserId = {
@@ -83,7 +92,7 @@ class UserProfileController @Inject()(conf: Configuration, wsClient: WSClient)(i
   val changePassword: Action[AnyContent] = AuthenticatedAction.async { request =>
     for {
       email <- getEmail(request)
-      response <- wsClient
+      response <- ws
                    .url(s"https://${auth0Config.domain}/dbconnections/change_password")
                    .post(
                      Json.obj("client_id"  -> auth0Config.clientId,
@@ -105,7 +114,7 @@ class UserProfileController @Inject()(conf: Configuration, wsClient: WSClient)(i
       newName <- (request.body \ "name").validate[String].toXor
       userId  <- userIdFromToken(request.idToken)
     } yield
-      wsClient
+      ws
         .url(s"https://${auth0Config.domain}/api/v2/users/${userId.id}")
         .withHeaders("Authorization"       -> s"Bearer $ManagementAccessToken")
         .withBody(Json.obj("user_metadata" -> Json.obj("name" -> newName)))
@@ -128,12 +137,4 @@ class UserProfileController @Inject()(conf: Configuration, wsClient: WSClient)(i
     }
   }
 
-  private[this] def getUser(accessToken: Auth0AccessToken): Future[JsValue] = {
-    val userResponse = wsClient
-      .url(String.format("https://%s/userinfo", auth0Config.domain))
-      .withQueryString("access_token" -> accessToken.value)
-      .get()
-
-    userResponse.flatMap(response => Future.successful(response.json))
-  }
 }
