@@ -4,7 +4,7 @@ import akka.actor.ActorSystem
 import cats.data.Xor
 import javax.inject.{Inject, Singleton}
 
-import com.advancedtelematic.{AuthPlusAuthentication, IdToken}
+import com.advancedtelematic.{AuthPlusAuthentication, AuthPlusAccessToken, IdToken}
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import org.genivi.sota.data.{Namespace, Uuid}
 
@@ -67,21 +67,21 @@ extends Controller with ApiClientSupport {
   }
 
   def getClient(clientId: Uuid) : Action[AnyContent] = authAction.AuthenticatedApiAction.async { implicit request =>
-    authPlusApi.getClient(clientId)
+    authPlusApi.getClient(clientId, request.authPlusAccessToken)
   }
 
-  def getClients(clientIds: Seq[Uuid]) : Future[Seq[JsValue]] = {
+  def getClients(clientIds: Seq[Uuid], token: AuthPlusAccessToken) : Future[Seq[JsValue]] = {
 
     def toFutureTry[T](f: Future[T]): Future[Try[T]] = f.map(Success(_)).recover({ case e => Failure(e) })
 
-    val clients = clientIds.map(authPlusApi.getClientJsValue).map(toFutureTry)
+    val clients = clientIds.map(id => authPlusApi.getClientJsValue(id, token)).map(toFutureTry)
     Future.sequence(clients).map(_.filter(_.isSuccess).map(_.get))
   }
 
   def getClients() : Action[AnyContent] = authAction.AuthenticatedApiAction.async { implicit request =>
     for {
       clientIds <- getClientIds(request.namespace, request.idToken)
-      clients <- getClients(clientIds)
+      clients <- getClients(clientIds, request.authPlusAccessToken)
     } yield Ok(Json.toJson(clients))
   }
 

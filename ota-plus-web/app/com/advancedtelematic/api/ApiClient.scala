@@ -151,12 +151,18 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
     createClient(body, token)
   }
 
-  def getClient(clientId: Uuid)(implicit ec: ExecutionContext): Future[Result] = {
-    authPlusRequest(s"clients/${clientId.underlying.get}").transform(_.withMethod("GET")).execResult(apiExec)
+  def getClient(clientId: Uuid, token: AuthPlusAccessToken)(implicit ec: ExecutionContext): Future[Result] = {
+    authPlusRequest(s"clients/${clientId.underlying.get}")
+      .withToken(token.value)
+      .transform(_.withMethod("GET"))
+      .execResult(apiExec)
   }
 
-  def getClientJsValue(clientId: Uuid)(implicit ec: ExecutionContext): Future[JsValue] = {
-    authPlusRequest(s"clients/${clientId.underlying.get}").transform(_.withMethod("GET")).execJsonValue(apiExec)
+  def getClientJsValue(clientId: Uuid, token: AuthPlusAccessToken)(implicit ec: ExecutionContext): Future[JsValue] = {
+    authPlusRequest(s"clients/${clientId.underlying.get}")
+      .withToken(token.value)
+      .transform(_.withMethod("GET"))
+      .execJsonValue(apiExec)
   }
 
 
