@@ -421,8 +421,9 @@ button {
 
                 .list-group-item {
                     height: 94px;
-                    transition: all 0.3s ease-in;
-
+                    transition: background-color 0.3s ease-in;
+                    border-radius: 0;
+                    
                     .action-menu-dropdown {
                         top: 10px;
                         right: 10px;
@@ -435,11 +436,10 @@ button {
                     }
 
                     &.droppable {
-                        border: 2px dashed $color-mint;
-
                         &.active {
                             color: #888;
                             background: #eee;
+                            border: 2px dashed $color-mint;
                         }
                     }
 
