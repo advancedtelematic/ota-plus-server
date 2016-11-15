@@ -14,7 +14,7 @@ define(function(require) {
             <div className="modal-content">
               <div className="modal-body font-14">
                 <div className="text-center">
-                  With ATS Garage, you can <strong>blacklist</strong> problem packages, ensuring they <br />won't get install on any of your devices.
+                  With ATS Garage, you can <strong>blacklist</strong> problem packages, ensuring they <br />won't get installed on any of your devices.
                 </div>
                 <div className="text-center margin-top-20">
                   On the <strong>Impact analysis tab</strong>, you can view which of your devices already <br /> 
