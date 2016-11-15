@@ -47,16 +47,7 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
       if(opts.notHandleAjaxActions) 
         return ajaxReq;
       
-      return ajaxReq.success(function(data) {
-        request.renderRequestSuccess(data, opts.action, 200, multipleKey);
-      })
-      .error(function(xhr) {
-        if (xhr.status==201) {
-          request.renderRequestSuccess(xhr, opts.action, 201, multipleKey); 
-          return; 
-        }
-        request.renderRequestError(xhr, opts.action, multipleKey);
-      });
+      return this.doAjaxReq(ajaxReq, opts, multipleKey);
     },
     formMultipart: function(type, url, data, opts) {
       var postUpload = (db.postUpload.deref() !== null && typeof db.postUpload.deref() === 'object') ? db.postUpload.deref() : {};
@@ -103,16 +94,27 @@ define(['jquery', 'underscore', '../stores/db', '../handlers/request'], function
       if(opts.notHandleAjaxActions)
         return ajaxReq;
       
-      return ajaxReq.success(function(data) {
-        request.renderRequestSuccess(data, opts.action, 200, multipleKey);
-      })
-      .error(function(xhr) {
-        if (xhr.status==201) {
-          request.renderRequestSuccess(xhr, opts.action, 201, multipleKey); 
-          return; 
-        }
-        request.renderRequestError(xhr, opts.action, multipleKey);
-      });
+      return this.doAjaxReq(ajaxReq, opts, multipleKey);
+    },
+    doAjaxReq: function(ajaxReq, opts, multipleKey) {
+      return ajaxReq
+        .success(function(data) {
+          request.renderRequestSuccess(data, opts.action, 200, multipleKey);
+        })
+        .error(function(xhr) {
+          switch (xhr.status) {
+            case 201:
+              request.renderRequestSuccess(xhr, opts.action, 201, multipleKey); 
+              break;
+            case 401:
+            case 403:
+              db.logout.reset(true);
+              break;
+            default:
+              request.renderRequestError(xhr, opts.action, multipleKey);
+              break;
+          }
+        });
     },
     doGet: function(url, opts) {
       return this.send("GET", url, undefined, opts);

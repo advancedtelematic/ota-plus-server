@@ -12,11 +12,6 @@ define(function(require) {
             sendRequest.doGet('/api/v1/clients', {action: payload.actionType})
               .success(function(clients) {
                 db.clients.reset(clients);
-              })
-              .error(function(xhr, ajaxOptions, thrownError) {
-                if(xhr.status == 401) {
-                  db.logout.reset(true);
-                }
               });
           break;
           case 'get-client':
