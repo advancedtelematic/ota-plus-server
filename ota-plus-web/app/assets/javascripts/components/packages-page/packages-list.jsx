@@ -47,6 +47,7 @@ define(function(require) {
       this.packagesListScroll = this.packagesListScroll.bind(this);
       this.startIntervalPackagesListScroll = this.startIntervalPackagesListScroll.bind(this);
       this.stopIntervalPackagesListScroll = this.stopIntervalPackagesListScroll.bind(this);
+      this.highlightPackage = this.highlightPackage.bind(this);
       this.handlePackageCreated = this.handlePackageCreated.bind(this);
       this.handlePackageBlacklisted = this.handlePackageBlacklisted.bind(this);
       
@@ -145,6 +146,8 @@ define(function(require) {
       this.setState({tmpIntervalId: intervalId});
     }
     stopIntervalPackagesListScroll() {
+      if(!_.isUndefined(this.props.highlightedName))
+        jQuery('#button-package-' + this.props.highlightedName).offset().top;
       clearInterval(this.state.tmpIntervalId);
       this.setState({tmpIntervalId: null});
     }
@@ -281,6 +284,13 @@ define(function(require) {
       }
       return 0;
     }
+    highlightPackage() {
+      var element = jQuery('#button-package-' + this.props.highlightedName);
+      if(!_.isUndefined(this.props.highlightedName) && !_.isUndefined(element)) {
+        this.refs.packagesList.scrollTop = element.offset().top;
+        this.expandPackage(this.props.highlightedName);
+      }
+    }
     handlePackageCreated() {
       var packageCreated = db.packageCreated.deref();
       if(!_.isUndefined(packageCreated)) {
@@ -322,6 +332,7 @@ define(function(require) {
     }
     render() {
       var packageIndex = -1;
+      var that = this;
       if(!_.isUndefined(this.state.searchablePackagesData)) {
         var packages = _.map(this.state.searchablePackagesData, function(packages, index) {
           var items = _.map(packages, function(pack, i) {
@@ -370,7 +381,7 @@ define(function(require) {
             <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true} className="dnd-zone" activeClassName="dnd-zone-active">
               <div id="packages-list-inside">
                 <div className={"ioslist-wrapper" + (!_.isUndefined(packages) && packages.length ? " with-background" : "")} ref="packagesList">
-                  <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+                  <VelocityTransitionGroup enter={{animation: "fadeIn", complete: function() {that.highlightPackage()}}} leave={{animation: "fadeOut"}}>
                     {!_.isUndefined(packages) ? 
                       packages.length ?
                         <div>

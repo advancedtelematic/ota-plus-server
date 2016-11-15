@@ -85,7 +85,8 @@ define(function(require) {
                   isFormShown={this.state.isFormShown}
                   openForm={this.openForm}
                   closeForm={this.closeForm}
-                  hasBetaAccess={this.props.hasBetaAccess}/>
+                  hasBetaAccess={this.props.hasBetaAccess}
+                  highlightedName={this.props.params.highlightedName}/>
               </div>
             </div>
           </div>
