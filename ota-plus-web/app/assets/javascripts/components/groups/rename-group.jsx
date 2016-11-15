@@ -13,12 +13,11 @@ define(function(require) {
       super(props);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.closeRenameGroupModal = this.closeRenameGroupModal.bind(this);
-      this.renameGroupListener = this.renameGroupListener.bind(this);
-      
-      db.postStatus.addWatch("poll-poststatus-rename-group", _.bind(this.renameGroupListener, this, null));
+      this.handleResponse = this.handleResponse.bind(this);
+      db.postStatus.addWatch("poll-rename-group", _.bind(this.handleResponse, this, null));
     }
     componentWillUnmount() {
-      db.postStatus.removeWatch("poll-poststatus-rename-group");
+      db.postStatus.removeWatch("poll-rename-group");
     }
     handleSubmit(e) {
       e.preventDefault();
@@ -34,10 +33,16 @@ define(function(require) {
       e.preventDefault();
       this.props.closeRenameGroupModal();
     }
-    renameGroupListener() {
-      var postStatusRenameGroup = db.postStatus.deref()['rename-group'];
-      if(!_.isUndefined(postStatusRenameGroup) && postStatusRenameGroup.status === 'success') {
-        this.props.closeRenameGroupModal(true);
+    handleResponse() {
+      var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
+      if(!_.isUndefined(postStatus['rename-group']) && postStatus['rename-group'].status === 'success') {
+        var that = this;
+        db.postStatus.removeWatch("poll-rename-group");
+        delete postStatus['rename-group'];
+        db.postStatus.reset(postStatus);
+        setTimeout(function() {
+          that.props.closeRenameGroupModal(true);
+        }, 1);
       }
     }
     render() {
@@ -54,7 +59,7 @@ define(function(require) {
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
                 <div className="modal-body">
-                  <Responses action="rename-group" />
+                  <Responses action="rename-group" handledStatuses="error"/>
                   <div className="form-group">
                     <label htmlFor="groupName">Name</label>
                     <input type="text" className="form-control" name="groupName"
