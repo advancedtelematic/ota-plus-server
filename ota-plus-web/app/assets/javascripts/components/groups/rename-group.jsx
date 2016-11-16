@@ -32,15 +32,12 @@ define(function(require) {
     }
     closeRenameGroupModal(e) {
       e.preventDefault();
-      this.props.closeRenameGroupModal(false);
+      this.props.closeRenameGroupModal();
     }
     renameGroupListener() {
-      var that = this;
       var postStatusRenameGroup = db.postStatus.deref()['rename-group'];
       if(!_.isUndefined(postStatusRenameGroup) && postStatusRenameGroup.status === 'success') {
-        setTimeout(function() {
-          that.props.closeRenameGroupModal(true);
-        }, 1);
+        this.props.closeRenameGroupModal(true);
       }
     }
     render() {
@@ -59,7 +56,7 @@ define(function(require) {
                 <div className="modal-body">
                   <Responses action="rename-group" />
                   <div className="form-group">
-                    <label htmlFor="deviceName">Name</label>
+                    <label htmlFor="groupName">Name</label>
                     <input type="text" className="form-control" name="groupName"
                          ref="groupName" defaultValue={this.props.group.groupName}/>
                   </div>

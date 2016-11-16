@@ -38,12 +38,6 @@ define(function(require) {
                 </ul>
               </div>
             </div>
-
-            {!this.props.isDevicesListEmpty ?
-              <button type="button" onClick={this.props.openNewDeviceModal} className="btn btn-main btn-add pull-right">
-                <i className="fa fa-plus"></i> &nbsp; Add new device
-              </button>
-            : undefined}
           </div>
         </div>
       );

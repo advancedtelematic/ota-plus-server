@@ -98,6 +98,7 @@ button {
 }
 
 #devices-container {
+    color: #fff;
     height: 100%;
     position: relative;
 }
@@ -282,6 +283,7 @@ button {
 .device-box {
     &:hover, &:active, &:focus {
         color: #fff;
+        cursor: move;
         text-decoration: none;
     }
 
@@ -399,6 +401,68 @@ button {
     }
 }
 
+.page-home {
+    #groups-column {
+        width: 20%;
+        float: left;
+        position: relative;
+        z-index: 1;
+        -webkit-box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.7);
+        -moz-box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.7);
+        box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.7);
+
+        .groups-wrapper {
+            background: #fff;
+
+            #groups-list {
+                width: 100%;
+                float: left;
+                border-top: 1px solid #ddd;
+                overflow-y: scroll;
+
+                .list-group-item {
+                    height: 94px;
+                    margin-top: -1px;
+                }
+
+                button.list-group-item {
+                    &.checked {
+                        background-color: #f5f5f5;
+                    }
+                }
+
+                .group-icon {
+                    background-image: url(/assets/img/icons/group_large_grey.png);
+                    float: none;
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+
+                .group-text {
+                    width: auto;
+                    margin: 0 0 0 15px;
+                    display: inline-block;
+                    vertical-align: middle;
+
+                    .group-title {
+                        font-size: 20px;
+                    }
+
+                    .group-subtitle {
+                        color: #ccc;
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+    }
+
+    #devices-column {
+        width: 80%;
+        float: left;
+    }
+}
+
 .page-device-details {
     background: url(/assets/img/bg.jpg) no-repeat;
     background-attachment: fixed;
@@ -508,7 +572,7 @@ button {
         background: #666;
         height: 40px;
         padding: 0 15px;
-        
+
         .btn-main {
             font-weight: normal;
         }
@@ -902,6 +966,19 @@ button {
         .fa.fa-angle-down {
             font-size: 14px;
         }
+    }
+}
+
+.btn-rect {
+    color: #fff;
+    font-size: 22px;
+    background: #9ce2d8;
+    padding: 12px 30px;
+    border-radius: 5px;
+
+    &:hover, &:focus, &:active {
+        color: #fff;
+        background: $color-mint-active;
     }
 }
 
@@ -2320,7 +2397,7 @@ a.close, button.close {
     -webkit-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
     -moz-box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
     box-shadow: 4px 0px 4px -1px rgba(150, 150, 150, 0.7);
-    
+
     @media (max-width: 1366px) {
         width: 55%;
     }
@@ -2333,10 +2410,10 @@ a.close, button.close {
     padding: 0;
     float: left;
     position: relative;
-    
+
     @media (max-width: 1366px) {
         width: 28.33333333%;
-        
+
         .history-item-name {
             width: 30%;
         }
@@ -3723,4 +3800,15 @@ hr.full-line {
     .btn-main {
         font-weight: normal;
     }
+}
+
+.add-device-btn-wrapper {
+    vertical-align: top;
+    padding: 20px 0 0 15px;
+    display: inline-block;
+}
+
+.add-group-btn-wrapper {
+    text-align: center;
+    padding: 30px 0;
 }
