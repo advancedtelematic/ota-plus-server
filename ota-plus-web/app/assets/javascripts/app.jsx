@@ -96,10 +96,7 @@ define(function(require) {
     }
     handleLogout() {
       if(!_.isUndefined(db.logout.deref()) && db.logout.deref()) {
-        var that = this;
-        setTimeout(function() {
-          that.setState({hideAnimationDown: !that.state.hideAnimationDown});
-        }, 200);
+        window.location.href = logoutUrl;
       }
     }
     logout(e) {
