@@ -493,8 +493,6 @@ define(function(require) {
                             <DevicesList
                               devices={searchableDevices}
                               areProductionDevices={false}
-                              groups={groups}
-                              selectedGroup={this.state.selectedGroup}
                               isDevicesListEmpty={isDevicesListEmpty}
                               openNewDeviceModal={this.openNewDeviceModal}
                               openRenameDeviceModal={this.openRenameDeviceModal}
