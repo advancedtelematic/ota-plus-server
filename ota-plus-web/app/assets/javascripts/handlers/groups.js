@@ -35,8 +35,13 @@ define(function(require) {
                 db.group.reset(group);
               });
           break;
-          case 'create-group':
+          case 'create-smart-group':
             sendRequest.doPost('/api/v1/device_groups/from_attributes', payload.data, {action: payload.actionType})
+              .success(function() {
+              });
+          break;
+          case 'create-manual-group':
+            sendRequest.doPut('/api/v1/device_groups?groupName=' + payload.name, null, {action: payload.actionType})
               .success(function() {
               });
           break;
