@@ -194,17 +194,18 @@ define(function(require) {
       var result = undefined;
             
       if(!_.isUndefined(packages) && !_.isUndefined(installedPackages) && !_.isUndefined(queuedPackages) && !_.isUndefined(blacklistedPackages)) {
-        blacklistedPackages.forEach(function(blacklist, index) {
-          installedPackages.forEach(function(installed, index) {
-            if(installed.id.name == blacklist.packageId.name && installed.id.version == blacklist.packageId.version) {
-              installedPackages[index]['isBlackListed'] = true;
-            }
-          });
-        });
-        
         installedPackages.forEach(function(installed, index) {
           installed.type = 'unmanaged';
+          installed.isBlackListed = false;
           packages.push(installed);
+        });
+        
+        blacklistedPackages.forEach(function(blacklist, index) {
+          packages.forEach(function(installed, index) {
+            if(installed.id.name == blacklist.packageId.name && installed.id.version == blacklist.packageId.version) {
+              packages[index]['isBlackListed'] = true;
+            }
+          });
         });
         
         result = packages;

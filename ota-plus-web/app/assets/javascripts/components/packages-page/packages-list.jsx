@@ -223,6 +223,7 @@ define(function(require) {
         var that = this;
         setTimeout(function() {
           SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: that.props.filterValue});
+          SotaDispatcher.dispatch({actionType: 'impact-analysis'});
         }, 1);
       }
       this.setState({
