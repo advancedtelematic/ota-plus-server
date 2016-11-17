@@ -7,7 +7,6 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        overGroupName: null,
         artificialGroupsData: {
           all: {
             groupName: 'all',
@@ -61,15 +60,18 @@ define(function(require) {
     }
     onDragOver(e) {
       e.preventDefault();
-      this.setState({overGroupName: e.currentTarget.dataset.groupname});
+      this.props.onGroupDragOver({
+        id: e.currentTarget.dataset.groupname,
+        type: 'artificial'
+      });
     }
     onDragLeave(e) {
-      this.setState({overGroupName: null});
+      this.props.onGroupDragOver(null);
     }
     onDrop(e) {
       if(e.preventDefault)
         e.preventDefault();
-      var draggingDeviceUUID = this.props.draggingDeviceUUID;
+      var draggingDeviceUUID = (this.props.draggingDevice !== null ? this.props.draggingDevice.uuid : null);
       var dropGroupName = e.currentTarget.dataset.groupname;
       var foundDevice = _.findWhere(this.props.devices, {uuid: draggingDeviceUUID});
       if(draggingDeviceUUID !== null && dropGroupName == 'ungrouped') {
@@ -80,11 +82,11 @@ define(function(require) {
         });
       }
     }
-    render() {
+    render() {        
       var groups = _.map(this.state.artificialGroupsData, function(group, index) {
         var groupClassName = '';
-        if(this.props.draggingDeviceUUID !== null && group.isDND) {
-          groupClassName = (this.state.overGroupName !== null && group.groupName == this.state.overGroupName) ? "droppable active" : "droppable";
+        if(this.props.draggingDevice !== null && group.isDND) {
+          groupClassName = (!this.props.isDraggingOverButton && (_.isUndefined(this.props.draggingDevice.groupUUID) && this.props.draggingOverGroup === null || this.props.draggingOverGroup !== null && this.props.draggingOverGroup.type == 'artificial' && group.groupName == this.props.draggingOverGroup.id)) ? "droppable active" : "droppable";
         }
         var isSelected = (this.props.selectedGroup.type == 'artificial' && group.groupName == this.props.selectedGroup.name);
         return (

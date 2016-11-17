@@ -418,6 +418,10 @@ button {
                 width: 100%;
                 float: left;
                 overflow-y: scroll;
+                
+                &.droppable {
+                    border: 2px dashed $color-mint;
+                }
 
                 .list-group-item {
                     height: 94px;
