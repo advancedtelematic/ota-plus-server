@@ -16,7 +16,6 @@ define(function(require) {
     }
     handleSubmit(e) {
       e.preventDefault();
-
       var payload = serializeForm(this.refs.form);
       payload.deviceId = payload.deviceName;
       payload.deviceType = 'Other';

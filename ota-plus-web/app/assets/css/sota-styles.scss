@@ -417,19 +417,32 @@ button {
             #groups-list {
                 width: 100%;
                 float: left;
-                border-top: 1px solid #ddd;
                 overflow-y: scroll;
 
                 .list-group-item {
                     height: 94px;
-                    margin-top: -1px;
+                    transition: all 0.3s ease-in;
+
+                    &.droppable {
+                        border: 2px dashed $color-mint;
+
+                        &.active {
+                            color: #888;
+                            background: #eee;
+                        }
+                    }
+
+                    &:last-child {
+                        margin-bottom: -1px;
+                    }
                 }
 
                 button.list-group-item {
+
                     &.checked {
                         background-color: #f5f5f5;
                     }
-                }
+                }                
 
                 .group-icon {
                     background-image: url(/assets/img/icons/group_large_grey.png);
@@ -3572,7 +3585,7 @@ hr.full-line {
                 opacity: 0.8;
             }
 
-            .device-menu-dropdown {
+            .device-menu-dropdown {                
                 i {
                     &.fa-chevron-down {
                         text-shadow: none;
@@ -3590,6 +3603,11 @@ hr.full-line {
     top: 20px;
     right: 20px;
     display: none;
+
+    &:hover {
+        cursor: pointer;
+        cursor: hand;
+    }
 
     i {
         &.fa-chevron-down {
