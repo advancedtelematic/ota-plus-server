@@ -60,6 +60,11 @@ define(function(require) {
               .success(function() {
               });
           break;
+          case 'add-device-to-group':
+            sendRequest.doPost('/api/v1/device_groups/' + payload.uuid + '/devices/' + payload.deviceId, null, {action: payload.actionType})
+              .success(function() {
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));

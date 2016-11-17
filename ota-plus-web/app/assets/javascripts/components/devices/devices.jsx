@@ -30,6 +30,7 @@ define(function(require) {
       this.state = {
         devicesData: undefined,
         searchableDevicesData: undefined,
+        searchableDevicesDataNotFilteredByGroup: undefined,
         searchableDevicesDataNotFilteredOrSorted: undefined,
         searchableProductionDevicesData: undefined,
         groupsData: undefined,
@@ -52,7 +53,8 @@ define(function(require) {
         isNewManualGroupModalShown: false,
         isRenameGroupModalShown: false,
         renamedGroup: null,
-        groupedDevices: []
+        groupedDevices: [],
+        draggingDeviceUUID: null
       };
 
       this.openNewDeviceModal = this.openNewDeviceModal.bind(this);
@@ -72,11 +74,14 @@ define(function(require) {
       this.refreshData = this.refreshData.bind(this);
       this.setListsHeight = this.setListsHeight.bind(this);
       this.filterAndSortDevices = this.filterAndSortDevices.bind(this);
+      this.filterDevicesByGroup = this.filterDevicesByGroup.bind(this);
       this.setDevicesData = this.setDevicesData.bind(this);
       this.setSearchableDevicesAndGroupsData = this.setSearchableDevicesAndGroupsData.bind(this);
       this.setSearchableProductionDevicesData = this.setSearchableProductionDevicesData.bind(this);
       this.handleDeviceCreated = this.handleDeviceCreated.bind(this);
       this.handleDeviceSeen = this.handleDeviceSeen.bind(this);
+      this.onDeviceDragStart = this.onDeviceDragStart.bind(this);
+      this.onDeviceDragEnd = this.onDeviceDragEnd.bind(this);
 
       db.devices.reset();
       db.searchableDevices.reset();
@@ -122,7 +127,24 @@ define(function(require) {
       this.setState({filterValue: filter});
       this.refreshData(filter);
     }
-    filterAndSortDevices(devices, groups, selectedStatus, selectedSort, selectedGroup = {name: '', type: ''}) {        
+    filterAndSortDevices(devices, selectedStatus, selectedSort) {
+      devices = devices.filter(function (device) {
+        return (selectedStatus === 'All' || selectedStatus === device.status);
+      });
+      var sortedDevices = [];
+      Object.keys(devices).sort(function(a, b) {
+        var aName = devices[a].deviceName;
+        var bName = devices[b].deviceName;
+        if(!_.isUndefined(selectedSort) && selectedSort == 'desc')
+          return bName.localeCompare(aName);
+        else
+          return aName.localeCompare(bName);
+      }).forEach(function(key) {
+        sortedDevices.push(devices[key]);
+      });
+      return sortedDevices;
+    }
+    filterDevicesByGroup(devices, groups, selectedGroup = {name: '', type: ''}) {
       if(selectedGroup.type == 'real') {
         var foundGroup = _.findWhere(groups, {groupName: selectedGroup.name});
         if(!_.isUndefined(foundGroup)) {
@@ -143,35 +165,26 @@ define(function(require) {
           });
         });
       }
-        
-      devices = devices.filter(function (device) {
-        return (selectedStatus === 'All' || selectedStatus === device.status);
-      });
-      var sortedDevices = [];
-      Object.keys(devices).sort(function(a, b) {
-        var aName = devices[a].deviceName;
-        var bName = devices[b].deviceName;
-        if(!_.isUndefined(selectedSort) && selectedSort == 'desc')
-          return bName.localeCompare(aName);
-        else
-          return aName.localeCompare(bName);
-      }).forEach(function(key) {
-        sortedDevices.push(devices[key]);
-      });
-      return sortedDevices;
+      return devices;
     }
     selectStatus(status, e) {
       e.preventDefault();
+      var devicesFilteredAndSorted = this.filterAndSortDevices(this.state.searchableDevicesDataNotFilteredOrSorted, status, this.state.selectedSort);
+      var devicesFilteredByGroup = this.filterDevicesByGroup(devicesFilteredAndSorted, this.state.groupsData, this.state.selectedGroup);
       this.setState({
-        searchableDevicesData: this.filterAndSortDevices(this.state.searchableDevicesDataNotFilteredOrSorted, this.state.groupsData, status, this.state.selectedSort, this.state.selectedGroup),
+        searchableDevicesData: devicesFilteredByGroup,
+        searchableDevicesDataNotFilteredByGroup: devicesFilteredAndSorted,
         selectedStatus: status,
         selectedStatusName: jQuery(e.target).text()
       });
     }
     selectSort(sort, e) {
       e.preventDefault();
+      var devicesFilteredAndSorted = this.filterAndSortDevices(this.state.searchableDevicesDataNotFilteredOrSorted, this.state.selectedStatus, sort);
+      var devicesFilteredByGroup = this.filterDevicesByGroup(devicesFilteredAndSorted, this.state.groupsData, this.state.selectedGroup);
       this.setState({
-        searchableDevicesData: this.filterAndSortDevices(this.state.searchableDevicesDataNotFilteredOrSorted, this.state.groupsData, this.state.selectedStatus, sort, this.state.selectedGroup),
+        searchableDevicesData: devicesFilteredByGroup,
+        searchableDevicesDataNotFilteredByGroup: devicesFilteredAndSorted,
         selectedSort: sort
       });
     }
@@ -254,9 +267,11 @@ define(function(require) {
     selectGroup(groupObj) {
       var selectedGroup = (_.isEqual(groupObj, this.state.selectedGroup) ? {name: '', type: ''} : groupObj);
       Cookies.set('selectedGroup', selectedGroup);
+      var devicesFilteredAndSorted = this.filterAndSortDevices(this.state.searchableDevicesDataNotFilteredOrSorted, this.state.selectedStatus, this.state.selectedSort);
+      var devicesFilteredByGroup = this.filterDevicesByGroup(devicesFilteredAndSorted, this.state.groupsData, selectedGroup);
       this.setState({
         selectedGroup: selectedGroup,
-        searchableDevicesData: this.filterAndSortDevices(this.state.searchableDevicesDataNotFilteredOrSorted, this.state.groupsData, this.state.selectedStatus, this.state.selectedSort, selectedGroup)
+        searchableDevicesData: devicesFilteredByGroup
       });
     }
     setDevicesData() {
@@ -266,12 +281,14 @@ define(function(require) {
       var searchableDevices = db.searchableDevices.deref();
       var groups = db.groups.deref();
       if(!_.isUndefined(searchableDevices) && !_.isUndefined(groups)) {
-        var searchableDevicesNotFilteredOrSorted = this.filterAndSortDevices(searchableDevices, groups, 'All', 'asc', {name: '', type: ''});
-        searchableDevices = this.filterAndSortDevices(searchableDevices, groups, this.state.selectedStatus, this.state.selectedSort, this.state.selectedGroup);
+        var searchableDevicesNotFilteredOrSorted = this.filterAndSortDevices(searchableDevices, 'All', 'asc', {name: '', type: ''});
+        var searchableDevicesFilteredAndSorted = this.filterAndSortDevices(searchableDevices, this.state.selectedStatus, this.state.selectedSort);
+        var searchableDevicesFilteredByGroup = this.filterDevicesByGroup(searchableDevicesFilteredAndSorted, groups, this.state.selectedGroup);
         this.setState({
-          searchableDevicesData: searchableDevices,
-          groupsData: groups,
-          searchableDevicesDataNotFilteredOrSorted: searchableDevicesNotFilteredOrSorted
+          searchableDevicesData: searchableDevicesFilteredByGroup,
+          searchableDevicesDataNotFilteredByGroup: searchableDevicesFilteredAndSorted,
+          searchableDevicesDataNotFilteredOrSorted: searchableDevicesNotFilteredOrSorted,
+          groupsData: groups
         });
       }
     }
@@ -282,14 +299,18 @@ define(function(require) {
       var deviceCreated = db.deviceCreated.deref();
       if(!_.isUndefined(deviceCreated)) {
         var devices = this.state.devicesData;
-        var searchableDevices = this.state.searchableDevicesData;
+        var searchableDevicesDataNotFilteredOrSorted = this.state.searchableDevicesDataNotFilteredOrSorted;
         var selectedStatus = this.state.selectedStatus;
         var selectedSort = this.state.selectedSort;
         devices.push(deviceCreated);
-        searchableDevices.push(deviceCreated);
+        searchableDevicesDataNotFilteredOrSorted.push(deviceCreated);
+        
+        var devicesFilteredOrSorted = this.filterAndSortDevices(searchableDevicesDataNotFilteredOrSorted, this.state.selectedStatus, this.state.selectedSort);
+        var devicesFilteredByGroup = this.filterDevicesByGroup(devicesFilteredOrSorted, this.state.groupsData, this.state.selectedGroup);
         this.setState({
           devicesData: devices,
-          searchableDevicesData: this.filterAndSortDevices(searchableDevices, this.state.groupsData, this.state.selectedStatus, this.state.selectedSort, this.state.selectedGroup)
+          searchableDevicesData: devicesFilteredByGroup,
+          searchableDevicesDataNotFilteredByGroup: devicesFilteredOrSorted,
         });
         db.deviceCreated.reset();
       }
@@ -298,6 +319,7 @@ define(function(require) {
       var deviceSeen = db.deviceSeen.deref();
       if(!_.isUndefined(deviceSeen)) {          
         var searchableDevices = this.state.searchableDevicesData;
+        var searchableDevicesNotFilteredByGroup = this.state.searchableDevicesDataNotFilteredByGroup;
         var searchableDevicesNotFilteredOrSorted = this.state.searchableDevicesDataNotFilteredOrSorted;
         _.each(searchableDevices, function(device, index) {
           if(device.uuid === deviceSeen.uuid) {
@@ -309,16 +331,32 @@ define(function(require) {
             searchableDevicesNotFilteredOrSorted[index].lastSeen = deviceSeen.lastSeen;
           }
         });
+        _.each(searchableDevicesNotFilteredByGroup, function(device, index) {
+          if(device.uuid === deviceSeen.uuid) {
+            searchableDevicesNotFilteredByGroup[index].lastSeen = deviceSeen.lastSeen;
+          }
+        });
         this.setState({
           searchableDevicesData: searchableDevices,
+          searchableDevicesDataNotFilteredByGroup: searchableDevicesNotFilteredByGroup,
           searchableDevicesDataNotFilteredOrSorted: searchableDevicesNotFilteredOrSorted
         });  
         db.deviceSeen.reset();
       }
     }
+    onDeviceDragStart(e) {
+      var deviceUUID = e.currentTarget.dataset.uuid;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData("deviceUUID", deviceUUID);
+      this.setState({draggingDeviceUUID: deviceUUID});
+    }
+    onDeviceDragEnd(e) {
+      this.setState({draggingDeviceUUID: null});
+    }
     render() {
       const devices = this.state.devicesData;
       const searchableDevices = this.state.searchableDevicesData;
+      const searchableDevicesDataNotFilteredByGroup = this.state.searchableDevicesDataNotFilteredByGroup;
       const searchableProductionDevices = this.state.searchableProductionDevicesData;
       const groups = this.state.groupsData;
             
@@ -335,7 +373,6 @@ define(function(require) {
       var areTestSettingsCorrect = localStorage.getItem('firstProductionTestDevice') && localStorage.getItem('firstProductionTestDevice') !== '' && 
                                    localStorage.getItem('secondProductionTestDevice') && localStorage.getItem('secondProductionTestDevice') !== '' && 
                                    localStorage.getItem('thirdProductionTestDevice') && localStorage.getItem('thirdProductionTestDevice') !== '' ? true : false;
-                        
       return (
         <div>
           <div id="groups-column">
@@ -352,25 +389,31 @@ define(function(require) {
                   </div>
               
                   <div id="groups-list" style={{height: this.state.groupsListHeight}}>
-                    <GroupsArtificial
-                      selectGroup={this.selectGroup}
-                      selectedGroup={this.state.selectedGroup}/>
-                  
                     <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-                      {!_.isUndefined(groups) ?
-                        groups.length ?
-                          <GroupsList 
+                      {!_.isUndefined(groups) && !_.isUndefined(searchableDevicesDataNotFilteredByGroup) ?
+                        <div>
+                          <GroupsArtificial
                             groups={groups}
-                            groupsListHeight={this.state.groupsListHeight}
+                            devices={this.state.searchableDevicesDataNotFilteredByGroup}
                             selectGroup={this.selectGroup}
                             selectedGroup={this.state.selectedGroup}/>
-                        :
-                          <span>There are no groups</span>
+                          {groups.length ?
+                            <GroupsList 
+                              groups={groups}
+                              devices={searchableDevicesDataNotFilteredByGroup}
+                              groupsListHeight={this.state.groupsListHeight}
+                              selectGroup={this.selectGroup}
+                              selectedGroup={this.state.selectedGroup}
+                              draggingDeviceUUID={this.state.draggingDeviceUUID}/>
+                          :
+                            <span>There are no groups</span>
+                          }
+                        </div>
                       : undefined}
                     </VelocityTransitionGroup>
-                    {_.isUndefined(groups) ?
+                    {_.isUndefined(groups) || _.isUndefined(searchableDevicesDataNotFilteredByGroup) ?
                       <Loader />
-                    : null}
+                    : undefined}
                   </div>
                 </div>
               </div>
@@ -413,9 +456,7 @@ define(function(require) {
                   </button>
                 : null}
                 <div style={{paddingTop: !areTestSettingsCorrect ? '40px' : 0}}>
-                  {_.isUndefined(searchableDevices) || _.isUndefined(groups) ?
-                    <Loader />
-                  :
+                  {!_.isUndefined(searchableDevices) && !_.isUndefined(groups) ?
                     <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}} runOnMount={true}>
                       {this.state.expandedSectionName == 'testDevices' ? 
                         <div>
@@ -428,13 +469,19 @@ define(function(require) {
                               openNewDeviceModal={this.openNewDeviceModal}
                               openRenameDeviceModal={this.openRenameDeviceModal}
                               openNewSmartGroupModal={this.openNewSmartGroupModal}
-                              openRenameGroupModal={this.openRenameGroupModal}/>
+                              openRenameGroupModal={this.openRenameGroupModal}
+                              draggingDeviceUUID={this.state.draggingDeviceUUID}
+                              onDeviceDragStart={this.onDeviceDragStart}
+                              onDeviceDragEnd={this.onDeviceDragEnd}/>
                             {this.props.children}
                           </div>
                         </div>
                       : undefined}
                     </VelocityTransitionGroup>
-                  }
+                  : undefined}
+                  {_.isUndefined(searchableDevices) || _.isUndefined(groups) ?
+                    <Loader />
+                  : undefined}
                 </div>
                 {areTestSettingsCorrect ?
                   <div>
