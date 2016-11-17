@@ -145,6 +145,8 @@ define(function(require) {
           SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: that.state.filterValue});
           SotaDispatcher.dispatch({actionType: 'get-device', uuid: that.props.params.id});
           SotaDispatcher.dispatch({actionType: "get-package-queue-for-device", device: that.props.params.id});
+          SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
+          SotaDispatcher.dispatch({actionType: 'impact-analysis'});
         }, 1);
       }
       this.setState({
