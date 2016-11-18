@@ -141,12 +141,12 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
     createClient(body, token)
   }
 
-  def createClientForUser(ns: Namespace, clientName: String, token: AuthPlusAccessToken)(implicit ev: Reads[ClientInfo])
+  def createClientForUser(clientName: String, scope: String, token: AuthPlusAccessToken)(implicit ev: Reads[ClientInfo])
     : Future[ClientInfo] = {
     val body = Json.obj(
         "grant_types" -> List("client_credentials"),
         "client_name" -> clientName,
-        "scope"       -> s"namespace.${ns.get}"
+        "scope"       -> scope
     )
     createClient(body, token)
   }
