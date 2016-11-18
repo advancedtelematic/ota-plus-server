@@ -53,13 +53,24 @@ extends Controller with ApiClientSupport {
       res.fold(err => Xor.left[String, T](Json.stringify(JsError.toJson(err))), Xor.Right.apply)
   }
 
+  import scala.collection.JavaConversions._
+  private val validScopes: Set[String] = conf.getStringList("api.scopes").get.toSet
+
+  def toScope(str: String) : String Xor String = {
+    if (str.split(" ").forall { s => validScopes.contains(s) }) Xor.right(str)
+    else Xor.left(s"Invalid scope: $str")
+  }
+
   def createClient() : Action[JsValue] =
       authAction.AuthenticatedApiAction.async(BodyParsers.parse.json) { implicit request =>
 
     val result = for {
       clientName <- (request.body \ "client_name").validate[String].toXor
+      scopeStr <- (request.body \ "scope").validate[String].toXor
+      scope <- toScope(scopeStr)
     } yield for {
-      clientInfo <- authPlusApi.createClientForUser(request.namespace, clientName, request.authPlusAccessToken)
+      clientInfo <- authPlusApi.createClientForUser(
+        clientName, s"namespace.${request.namespace.get} ${scope}", request.authPlusAccessToken)
       clientIds <- addClientId(request.namespace, request.idToken, Uuid.fromJava(clientInfo.clientId))
     } yield Created(Json.toJson(clientIds))
 
