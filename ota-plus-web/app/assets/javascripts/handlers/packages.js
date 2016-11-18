@@ -130,6 +130,18 @@ define(function(require) {
                 db.impactedDevicesCount.reset(impactedDevicesCount);                
               });
           break;
+          case 'get-affected-devices':
+            sendRequest.doPost('/api/v1/resolver/packages/affected', payload.data, {action: payload.actionType})
+              .success(function(vehicles) {
+                db.affectedDevices.reset(vehicles);
+              });
+          break;
+          case 'get-package-stats':
+            sendRequest.doGet('/api/v1/resolver/package_stats/' + payload.packageName, {action: payload.actionType})
+              .success(function(packageStats) {
+                db.packageStats.reset(packageStats);
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));

@@ -35,6 +35,8 @@ define(function(require) {
       this.campaignStatistics = atom.createAtom();
       this.client = atom.createAtom();
       this.clients = atom.createAtom();
+      this.affectedDevices = atom.createAtom();
+      this.packageStats = atom.createAtom();
       
       //Events
       this.deviceSeen = atom.createAtom();
