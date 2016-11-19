@@ -9,9 +9,7 @@ define(function(require) {
       this.showStatus = this.showStatus.bind(this);
     }
     itemClick(e) {
-      if(e.target.tagName.toLowerCase() !== 'a') {
-        this.props.expandPackage(this.props.name);
-      }
+      this.props.expandPackage(this.props.name);
     }
     showStatus(e) {
       e.preventDefault();
@@ -19,16 +17,18 @@ define(function(require) {
     }
     render() {
       return (
-        <button type="button" className="list-group-item" onClick={this.itemClick} id={"button-package-" + this.props.name}>
-          <div className="pull-left">
-            <span className="package-name">{this.props.name}</span>
-          </div>
+        <div className="list-group-item-wrapper">
+          <button type="button" className="list-group-item" onClick={this.itemClick} id={"button-package-" + this.props.name}>
+            <div className="pull-left">
+              <span className="package-name">{this.props.name}</span>
+            </div>
+          </button>
           {this.props.selected ?
-            <label className="label label-mint packagel-status-label">
-              <a href="#" onClick={this.showStatus}>Status</a>
+            <label className="label label-mint package-stats-button-label">
+              <a href="#" onClick={this.showStatus} id={"package-stats-button-" + this.props.name}>Status</a>
             </label>
           : null}
-        </button>
+        </div>
       );
     }
   };
