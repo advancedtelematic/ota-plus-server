@@ -17,6 +17,7 @@ define(function(require) {
         isFiltered: false,
       };
       this.prepareGroups = this.prepareGroups.bind(this);
+      this.renameGroup = this.renameGroup.bind(this);
       this.onDragOver = this.onDragOver.bind(this);
       this.onDragLeave = this.onDragLeave.bind(this);
       this.onDrop = this.onDrop.bind(this);
@@ -52,6 +53,10 @@ define(function(require) {
         groupsData: groupsData,
         isFiltered: isFiltered
       });
+    }
+    renameGroup(group, e) {
+      e.preventDefault();
+      this.props.openRenameGroupModal(group);
     }
     onDragOver(e) {
       e.preventDefault();
@@ -117,6 +122,7 @@ define(function(require) {
           var groupClassName = (!this.props.isDraggingOverButton && (this.props.draggingDevice !== null && this.props.draggingOverGroup === null && this.props.draggingDevice.groupUUID == group.id || this.props.draggingOverGroup !== null && group.id == this.props.draggingOverGroup.id)) ? className + " active" : className;
           return (
             <li 
+              className="list-group-item-wrapper"
               key={'group-' + group.groupName}
               onDragOver={this.onDragOver}
               onDragLeave={this.onDragLeave}
@@ -126,8 +132,17 @@ define(function(require) {
                 group={group}
                 selectGroup={this.props.selectGroup}
                 isSelected={(this.props.selectedGroup.name == group.groupName && this.props.selectedGroup.type == 'real')}
-                openRenameGroupModal={this.props.openRenameGroupModal}
                 groupClassName={groupClassName}/>
+              <div className="dropdown action-menu-dropdown pull-right">
+                <div data-toggle="dropdown">
+                  <i className="fa fa-chevron-down" aria-hidden="true"></i>
+                </div>
+                <ul className="dropdown-menu">
+                  <li onClick={this.renameGroup.bind(this, group)}>
+                    <img src="/assets/img/icons/edit_black.png" alt="" style={{width: '15px'}}/> Rename
+                  </li>
+                </ul>
+              </div>
             </li>
           );
         }
