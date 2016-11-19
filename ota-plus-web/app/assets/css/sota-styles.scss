@@ -423,15 +423,10 @@ button {
                     border: 2px dashed $color-mint;
                 }
 
-                .list-group-item {
-                    height: 94px;
-                    transition: background-color 0.3s ease-in;
-                    border-radius: 0;
-
-                    .action-menu-dropdown {
-                        top: 10px;
-                        right: 10px;
-                    }
+                .list-group-item-wrapper {
+                    width: 100%;
+                    float: left;
+                    position: relative;
 
                     &:hover {
                         .action-menu-dropdown {
@@ -439,16 +434,27 @@ button {
                         }
                     }
 
-                    &.droppable {
-                        &.active {
-                            color: #888;
-                            background: #eee;
-                            border: 2px dashed $color-mint;
-                        }
+                    .action-menu-dropdown {
+                        top: 10px;
+                        right: 10px;
                     }
 
-                    &:last-child {
-                        margin-bottom: -1px;
+                    .list-group-item {
+                        height: 94px;
+                        transition: background-color 0.3s ease-in;
+                        border-radius: 0;
+
+                        &.droppable {
+                            &.active {
+                                color: #888;
+                                background: #eee;
+                                border: 2px dashed $color-mint;
+                            }
+                        }
+
+                        &:last-child {
+                            margin-bottom: -1px;
+                        }
                     }
                 }
 

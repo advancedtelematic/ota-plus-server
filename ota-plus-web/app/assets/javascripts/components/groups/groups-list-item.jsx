@@ -6,16 +6,11 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.selectGroup = this.selectGroup.bind(this);
-      this.renameGroup = this.renameGroup.bind(this);
     }
     selectGroup(e) {
       e.preventDefault();
       if(e.target.className.indexOf('fa') === -1 && e.target.tagName.toLowerCase() !== 'li' && e.target.tagName.toLowerCase() !== 'span')
         this.props.selectGroup({name: this.props.group.groupName, type: 'real', uuid: this.props.group.id});
-    }
-    renameGroup(e) {
-      e.preventDefault();
-      this.props.openRenameGroupModal(this.props.group);
     }
     render() {
       return (
@@ -30,16 +25,6 @@ define(function(require) {
               <i className="fa fa-angle-right fa-3x"></i>
             </div>
           : null}
-          <div className="dropdown action-menu-dropdown pull-right">
-            <div data-toggle="dropdown">
-              <i className="fa fa-chevron-down" aria-hidden="true"></i>
-            </div>
-            <ul className="dropdown-menu">
-              <li onClick={this.renameGroup}>
-                <img src="/assets/img/icons/edit_black.png" alt="" style={{width: '15px'}}/> Rename
-              </li>
-            </ul>
-          </div>
         </button>
       );
     }
