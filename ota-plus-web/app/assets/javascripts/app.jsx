@@ -41,7 +41,8 @@ define(function(require) {
       Campaigns = require('es6!components/newcampaigns/campaigns'),
       CampaignDetails = require('es6!components/newcampaigns/campaign-details'),
       ClientApps = require('es6!components/clientapps/client-apps'),
-      TreeHub = require('es6!components/treehub/treehub');
+      TreeHub = require('es6!components/treehub/treehub'),
+      Provisioning = require('es6!components/provisioning/provisioning');
 
   const languages = {
     en: 'en'
@@ -273,6 +274,7 @@ define(function(require) {
         <Route path="campaigndetails/:id" component={CampaignDetails} />
         <Route path="clientapps/f708f064faaf32a43e4d3c784e6af9eac6d9b20e0da02616378748834f5a37ee" component={ClientApps} />
         <Route path="treehub" component={TreeHub} />
+        <Route path="provisioning" component={Provisioning} />
       </Route>
     </Route>
   );

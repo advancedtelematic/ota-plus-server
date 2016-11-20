@@ -109,6 +109,9 @@ define(function(require) {
                 {this.props.hasBetaAccess ?
                   <li><Link to="/treehub" activeClassName="active" id="link-treehub">TreeHub</Link></li>
                 : null}
+                {this.props.hasBetaAccess ?
+                  <li><Link to="/provisioning" activeClassName="active" id="link-provisioning">Provisioning</Link></li>
+                : null}
               </ul>
             </div>
             <ul className="right-nav pull-right">
