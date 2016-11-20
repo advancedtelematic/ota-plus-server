@@ -36,6 +36,8 @@ define(function(require) {
       var Packages = db.packageHistoryForDevice.deref();
       var AllInstallationsLog = db.installationLogForDevice.deref();
       
+      console.log(Packages);
+      
       if(!_.isUndefined(Packages) && !_.isUndefined(AllInstallationsLog)) {
         Packages.sort(function(a, b) {
           var dateCompared = new Date(b.completionTime) - new Date(a.completionTime);
@@ -55,7 +57,7 @@ define(function(require) {
 
           return (
             <HistoryListItem 
-              key={pack.packageId.name + '-' + pack.packageId.version + '-' + pack.id} 
+              key={pack.updateId}
               package={pack}
               installationLog={installationLog !== undefined ? installationLog : []}
               isLogShown={isLogShown}
