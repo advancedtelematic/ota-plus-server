@@ -31,12 +31,18 @@ define(function(require) {
             isQueued={this.props.isQueued}
             installPackage={this.installPackage}
             showBlacklistForm={this.props.showBlacklistForm}
-            key={'package-' + this.props.packageName + '-' + version.id.version}/>
+            key={'package-' + this.props.packageName + '-' + version.id.version}
+            isAutoInstallEnabled={this.props.isAutoInstallEnabled}/>
         );
       }, this);
 
       return (
         <div className="package-details">
+          {this.props.hasBetaAccess && this.props.isAutoInstallEnabled ? 
+            <div className="info-auto-update">
+              Automatic update activated. The latest version of this package will automatically be installed on this device.
+            </div>
+          : null}
           <ul>
             {versions}
           </ul>

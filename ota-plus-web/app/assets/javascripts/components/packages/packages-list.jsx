@@ -31,6 +31,7 @@ define(function(require) {
       this.applyFilters = this.applyFilters.bind(this);
       this.onDrop = this.onDrop.bind(this);
       this.expandPackage = this.expandPackage.bind(this);
+      this.toggleAutoInstall = this.toggleAutoInstall.bind(this);
       this.handleDeviceSeen = this.handleDeviceSeen.bind(this);
       this.generatePositions = this.generatePositions.bind(this);
       this.setFakeHeader = this.setFakeHeader.bind(this);
@@ -39,18 +40,22 @@ define(function(require) {
       this.stopIntervalPackagesListScroll = this.stopIntervalPackagesListScroll.bind(this);
       this.handlePackageCreated = this.handlePackageCreated.bind(this);
       this.handlePackageBlacklisted = this.handlePackageBlacklisted.bind(this);
+      this.handleAutoUpdate = this.handleAutoUpdate.bind(this);
 
       db.blacklistedPackages.addWatch("poll-blacklisted-packages-page", _.bind(this.refreshPackagesData, this, null));
       db.searchablePackages.addWatch("poll-packages", _.bind(this.refreshPackagesData, this, null));
       db.searchablePackagesForDevice.addWatch("poll-installed-packages", _.bind(this.refreshPackagesData, this, null));
       db.packageQueueForDevice.addWatch("poll-queue-packages", _.bind(this.refreshPackagesData, this, null));
+      db.autoInstallPackagesForDevice.addWatch("poll-auto-install-packages-for-device", _.bind(this.refreshPackagesData, this, null));
       db.deviceSeen.addWatch("poll-deviceseen-packages", _.bind(this.handleDeviceSeen, this, null));
       db.packageCreated.addWatch("package-created", _.bind(this.handlePackageCreated, this, null));
       db.packageBlacklisted.addWatch("package-blacklisted", _.bind(this.handlePackageBlacklisted, this, null));
+      db.postStatus.addWatch("poll-auto-update", _.bind(this.handleAutoUpdate, this, null));
       SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
       SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device.uuid});
       SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
       SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.uuid, regex: this.props.filterValue});
+      SotaDispatcher.dispatch({actionType: 'get-auto-install-packages-for-device', device: this.props.device.uuid});
     }
     componentWillUpdate(nextProps, nextState) {
       if(nextProps.filterValue != this.props.filterValue) {
@@ -84,13 +89,16 @@ define(function(require) {
       db.searchablePackages.reset();
       db.searchablePackagesForDevice.reset();
       db.packageQueueForDevice.reset();
+      db.autoInstallPackagesForDevice.reset();
       db.blacklistedPackages.removeWatch("poll-blacklisted-packages-page");
       db.searchablePackages.removeWatch("poll-packages")
       db.searchablePackagesForDevice.removeWatch("poll-installed-packages");
       db.packageQueueForDevice.removeWatch("poll-queue-packages");
+      db.autoInstallPackagesForDevice.removeWatch("poll-auto-install-packages-for-device");
       db.deviceSeen.removeWatch("poll-deviceseen-packages");
       db.packageCreated.removeWatch("package-created");
       db.packageBlacklisted.removeWatch("package-blacklisted");
+      db.postStatus.removeWatch("poll-auto-update");
       clearInterval(this.state.tmpIntervalId);
     }
     generatePositions() {
@@ -191,19 +199,27 @@ define(function(require) {
       var installedPackages = _.clone(db.searchablePackagesForDevice.deref());
       var queuedPackages = _.clone(db.packageQueueForDevice.deref());
       var blacklistedPackages = _.clone(db.blacklistedPackages.deref());
+      var autoInstallPackagesForDevice = _.clone(db.autoInstallPackagesForDevice.deref());
+            
       var result = undefined;
             
-      if(!_.isUndefined(packages) && !_.isUndefined(installedPackages) && !_.isUndefined(queuedPackages) && !_.isUndefined(blacklistedPackages)) {
+      if(!_.isUndefined(packages) && !_.isUndefined(installedPackages) && !_.isUndefined(queuedPackages) && !_.isUndefined(blacklistedPackages) && !_.isUndefined(autoInstallPackagesForDevice)) {
         installedPackages.forEach(function(installed, index) {
           installed.type = 'unmanaged';
           installed.isBlackListed = false;
           packages.push(installed);
         });
-        
-        blacklistedPackages.forEach(function(blacklist, index) {
-          packages.forEach(function(installed, index) {
+                
+        packages.forEach(function(installed, packageIndex) {
+          packages[packageIndex]['isAutoInstallEnabled'] = false;
+          blacklistedPackages.forEach(function(blacklist, blacklistIndex) {
             if(installed.id.name == blacklist.packageId.name && installed.id.version == blacklist.packageId.version) {
-              packages[index]['isBlackListed'] = true;
+              packages[packageIndex]['isBlackListed'] = true;
+            }
+          });
+          autoInstallPackagesForDevice.forEach(function(autoInstallPackage, autoInstallPackageIndex) {
+            if(installed.id.name == autoInstallPackage) {
+              packages[packageIndex]['isAutoInstallEnabled'] = true;
             }
           });
         });
@@ -269,6 +285,7 @@ define(function(require) {
           groupedPackages[obj.id.name]['isQueued'] = isQueued;
           groupedPackages[obj.id.name]['isInstalled'] = isInstalled;
           groupedPackages[obj.id.name]['isBlackListed'] = obj.isBlackListed && isInstalled ? true : false;
+          groupedPackages[obj.id.name]['isAutoInstallEnabled'] = !_.isUndefined(obj.isAutoInstallEnabled) ? obj.isAutoInstallEnabled : false;
         }
 
         if(!groupedPackages[obj.id.name].isQueued && isQueued) {
@@ -279,7 +296,7 @@ define(function(require) {
         }
         if(!groupedPackages[obj.id.name]['isBlackListed'] && obj.isBlackListed && isInstalled)
           groupedPackages[obj.id.name]['isBlackListed'] = true;
-
+      
         groupedPackages[obj.id.name]['elements'].push(packages[index]);
       });
         
@@ -354,6 +371,13 @@ define(function(require) {
         });
       }
     }
+    toggleAutoInstall(packageName, isAutoInstallEnabled = false) {
+      SotaDispatcher.dispatch({
+        actionType: isAutoInstallEnabled ? 'disable-package-auto-install-for-device' : 'enable-package-auto-install-for-device',
+        packageName: packageName,
+        device: this.props.device.uuid
+      });
+    }
     compareVersions(a, b) {
       if (a === b) {
        return 0;
@@ -422,6 +446,25 @@ define(function(require) {
         db.packageBlacklisted.reset();
       }
     }
+    handleAutoUpdate() {
+      var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
+      if(!_.isUndefined(postStatus['enable-package-auto-install-for-device']) && postStatus['enable-package-auto-install-for-device'].status === 'success') {
+        var that = this;
+        delete postStatus['enable-package-auto-install-for-device'];
+        db.postStatus.reset(postStatus);
+        setTimeout(function() {
+          SotaDispatcher.dispatch({actionType: 'get-auto-install-packages-for-device', device: that.props.device.uuid});
+        }, 1);
+      }
+      if(!_.isUndefined(postStatus['disable-package-auto-install-for-device']) && postStatus['disable-package-auto-install-for-device'].status === 'success') {
+        var that = this;
+        delete postStatus['disable-package-auto-install-for-device'];
+        db.postStatus.reset(postStatus);
+        setTimeout(function() {
+          SotaDispatcher.dispatch({actionType: 'get-auto-install-packages-for-device', device: that.props.device.uuid});
+        }, 1);
+      }
+    }
     render() {
       var packageIndex = -1;
       if(!_.isUndefined(this.state.packagesData)) {
@@ -430,8 +473,8 @@ define(function(require) {
             packageIndex++;
             
             var that = this;
-            var queuedPackage = '';
-            var installedPackage = '';
+            var queuedPackage;
+            var installedPackage;
             var packageInfo = '';
             var mainLabel = '';
 
@@ -457,8 +500,11 @@ define(function(require) {
                     packageInfo={packageInfo}
                     mainLabel={mainLabel}
                     deviceId={this.props.device.uuid}
-                    selected={this.state.expandedPackage == pack.packageName ? true : false}
-                    isBlackListed={pack.isBlackListed}/>
+                    isSelected={this.state.expandedPackage == pack.packageName}
+                    isBlackListed={pack.isBlackListed}
+                    isAutoInstallEnabled={!_.isUndefined(pack.isAutoInstallEnabled) ? pack.isAutoInstallEnabled : false}
+                    toggleAutoInstall={this.toggleAutoInstall}
+                    hasBetaAccess={this.props.hasBetaAccess}/>
                     <VelocityTransitionGroup enter={{animation: "slideDown", begin: function() {that.startIntervalPackagesListScroll()}, complete: function() {that.stopIntervalPackagesListScroll()}}} leave={{animation: "slideUp"}}>
                       {this.state.expandedPackage == pack.packageName ?
                         <PackageListItemDetails
@@ -467,7 +513,9 @@ define(function(require) {
                           deviceId={this.props.device.uuid}
                           packageName={pack.packageName}
                           isQueued={pack.isQueued}
-                          showBlacklistForm={this.props.showBlacklistForm}/>
+                          isAutoInstallEnabled={!_.isUndefined(pack.isAutoInstallEnabled) ? pack.isAutoInstallEnabled : false}
+                          showBlacklistForm={this.props.showBlacklistForm}
+                          hasBetaAccess={this.props.hasBetaAccess}/>
                       : null}
                     </VelocityTransitionGroup>
                 </li>
