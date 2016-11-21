@@ -1,24 +1,31 @@
 define(function(require) {
   var React = require('react'),
-      ReactDOM = require('react-dom');
+      ReactDOM = require('react-dom'),
+      SotaDispatcher = require('sota-dispatcher');
 
   class GroupsArtificial extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
+        overGroupName: null,
         artificialGroupsData: {
           all: {
             groupName: 'all',
             devicesCount: null,
-            friendlyName: 'All devices'
+            friendlyName: 'All devices',
+            isDND: false
           },
           ungrouped: {
             groupName: 'ungrouped',
             devicesCount: null,
-            friendlyName: 'Ungrouped devices'
+            friendlyName: 'Ungrouped devices',
+            isDND: true
           }
         }
       };
+      this.onDragOver = this.onDragOver.bind(this);
+      this.onDragLeave = this.onDragLeave.bind(this);
+      this.onDrop = this.onDrop.bind(this);
       this.prepareGroups = this.prepareGroups.bind(this);
     }
     componentDidMount() {
@@ -52,17 +59,54 @@ define(function(require) {
         artificialGroupsData: artificialGroupsData
       });
     }
+    onDragOver(e) {
+      e.preventDefault();
+      this.setState({overGroupName: e.currentTarget.dataset.groupname});
+    }
+    onDragLeave(e) {
+      this.setState({overGroupName: null});
+    }
+    onDrop(e) {
+      if(e.preventDefault)
+        e.preventDefault();
+      var draggingDeviceUUID = this.props.draggingDeviceUUID;
+      var dropGroupName = e.currentTarget.dataset.groupname;
+      var foundDevice = _.findWhere(this.props.devices, {uuid: draggingDeviceUUID});
+      if(draggingDeviceUUID !== null && dropGroupName == 'ungrouped') {
+        SotaDispatcher.dispatch({
+          actionType: 'remove-device-from-group',
+          uuid: foundDevice.groupUUID,
+          deviceId: foundDevice.uuid
+        });
+      }
+    }
     render() {
-      var selectedArtificialGroupName = (this.props.selectedGroup.type == 'artificial' ? this.props.selectedGroup.name : null);
       var groups = _.map(this.state.artificialGroupsData, function(group, index) {
+        var groupClassName = '';
+        if(this.props.draggingDeviceUUID !== null && group.isDND) {
+          groupClassName = (this.state.overGroupName !== null && group.groupName == this.state.overGroupName) ? "droppable active" : "droppable";
+        }
+        var isSelected = (this.props.selectedGroup.type == 'artificial' && group.groupName == this.props.selectedGroup.name);
         return (
-          <button key={"button-artificial-group-" + group.groupName} type="button" className={"list-group-item " + (selectedArtificialGroupName == group.groupName ? " checked" : "")} onClick={this.props.selectGroup.bind(this, {name: group.groupName, type: 'artificial'})} id={"button-artificial-group-" + group.groupName}>
-            <div className="pull-left">
-              <div className="group-text">
-                <div className="group-title" title={group.friendlyName}>{group.friendlyName}</div>
-                <div className="group-subtitle">{group.devicesCount} devices</div>
-              </div>
+          <button 
+            key={"button-artificial-group-" + group.groupName} 
+            type="button" 
+            className={"list-group-item " + groupClassName + " " + (isSelected  ? " checked" : "") } 
+            onClick={this.props.selectGroup.bind(this, {name: group.groupName, type: 'artificial'})} 
+            id={"button-artificial-group-" + group.groupName}
+            onDragOver={group.isDND ? this.onDragOver : null}
+            onDragLeave={group.isDND ? this.onDragLeave : null}
+            onDrop={group.isDND ? this.onDrop : null}
+            data-groupname={group.groupName}>
+            <div className="group-text">
+              <div className="group-title" title={group.friendlyName}>{group.friendlyName}</div>
+              <div className="group-subtitle">{group.devicesCount} devices</div>
             </div>
+            {isSelected ? 
+              <div className="group-pointer">
+                <i className="fa fa-angle-right fa-3x"></i>
+              </div>
+            : null}
           </button>
         );
       }, this);

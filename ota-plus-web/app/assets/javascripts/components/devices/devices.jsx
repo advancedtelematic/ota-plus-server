@@ -13,6 +13,7 @@ define(function(require) {
       RenameDevice = require('es6!./rename-device'),
       NewSmartGroup = require('es6!../groups/new-smart-group'),
       NewManualGroup = require('es6!../groups/new-manual-group'),
+      NewManualGroupButton = require('es6!../groups/new-manual-group-button'),
       RenameGroup = require('es6!../groups/rename-group'),
       Loader = require('es6!../loader'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
@@ -24,7 +25,7 @@ define(function(require) {
       try {
         selectedGroupCookie = JSON.parse(Cookies.get('selectedGroup'));
       } catch (e) {
-        selectedGroupCookie = {name: 'all', type: 'artificial'};
+        selectedGroupCookie = {name: 'all', type: 'artificial', uuid: ''};
       }
             
       this.state = {
@@ -51,6 +52,7 @@ define(function(require) {
         renamedDevice: null,
         isNewSmartGroupModalShown: false,
         isNewManualGroupModalShown: false,
+        newManualGroupSelectedDeviceUUID: null,
         isRenameGroupModalShown: false,
         renamedGroup: null,
         groupedDevices: [],
@@ -127,7 +129,7 @@ define(function(require) {
       this.setState({filterValue: filter});
       this.refreshData(filter);
     }
-    filterAndSortDevices(devices, selectedStatus, selectedSort) {
+    filterAndSortDevices(devices, groups, selectedStatus, selectedSort) {
       devices = devices.filter(function (device) {
         return (selectedStatus === 'All' || selectedStatus === device.status);
       });
@@ -142,9 +144,21 @@ define(function(require) {
       }).forEach(function(key) {
         sortedDevices.push(devices[key]);
       });
+            
+      _.each(sortedDevices, function(device, index) {
+        sortedDevices[index].groupName = null;
+        sortedDevices[index].groupUUID = null;
+        _.each(groups, function(group) {
+          if(group.devicesUUIDs.indexOf(device.uuid) > -1) {
+            sortedDevices[index].groupName = group.groupName;
+            sortedDevices[index].groupUUID = group.id;
+          }
+        });
+      })
+      
       return sortedDevices;
     }
-    filterDevicesByGroup(devices, groups, selectedGroup = {name: '', type: ''}) {
+    filterDevicesByGroup(devices, groups, selectedGroup = {name: '', type: '', uuid: ''}) {
       if(selectedGroup.type == 'real') {
         var foundGroup = _.findWhere(groups, {groupName: selectedGroup.name});
         if(!_.isUndefined(foundGroup)) {
@@ -154,7 +168,7 @@ define(function(require) {
         }
       } else if(selectedGroup.type == 'artificial' && selectedGroup.name == 'ungrouped') {
         var discardedDeviceUUIDs = [];
-        _.each(this.state.groupsData, function(group) {
+        _.each(groups, function(group) {
           _.each(group.devicesUUIDs, function(uuid) {
             if(discardedDeviceUUIDs.indexOf(uuid) < 0) {
               devices = _.reject(devices, function(device) {
@@ -169,7 +183,7 @@ define(function(require) {
     }
     selectStatus(status, e) {
       e.preventDefault();
-      var devicesFilteredAndSorted = this.filterAndSortDevices(this.state.searchableDevicesDataNotFilteredOrSorted, status, this.state.selectedSort);
+      var devicesFilteredAndSorted = this.filterAndSortDevices(this.state.searchableDevicesDataNotFilteredOrSorted, this.state.groupsData, status, this.state.selectedSort);
       var devicesFilteredByGroup = this.filterDevicesByGroup(devicesFilteredAndSorted, this.state.groupsData, this.state.selectedGroup);
       this.setState({
         searchableDevicesData: devicesFilteredByGroup,
@@ -180,7 +194,7 @@ define(function(require) {
     }
     selectSort(sort, e) {
       e.preventDefault();
-      var devicesFilteredAndSorted = this.filterAndSortDevices(this.state.searchableDevicesDataNotFilteredOrSorted, this.state.selectedStatus, sort);
+      var devicesFilteredAndSorted = this.filterAndSortDevices(this.state.searchableDevicesDataNotFilteredOrSorted, this.state.groupsData, this.state.selectedStatus, sort);
       var devicesFilteredByGroup = this.filterDevicesByGroup(devicesFilteredAndSorted, this.state.groupsData, this.state.selectedGroup);
       this.setState({
         searchableDevicesData: devicesFilteredByGroup,
@@ -242,13 +256,19 @@ define(function(require) {
         isNewSmartGroupModalShown: false
       });
     }
-    openNewManualGroupModal() {
-      this.setState({isNewManualGroupModalShown: true});
+    openNewManualGroupModal(deviceUUID = null) {
+      this.setState({
+        isNewManualGroupModalShown: true,
+        newManualGroupSelectedDeviceUUID: deviceUUID
+      });
     }
     closeNewManualGroupModal(ifRefreshGroupsList = false) {
       if(ifRefreshGroupsList)
         SotaDispatcher.dispatch({actionType: 'get-groups'});
-      this.setState({isNewManualGroupModalShown: false});
+      this.setState({
+        isNewManualGroupModalShown: false,
+        newManualGroupSelectedDeviceUUID: null
+      });
     }
     openRenameGroupModal(group) {
       this.setState({
@@ -265,9 +285,9 @@ define(function(require) {
       });
     }
     selectGroup(groupObj) {
-      var selectedGroup = (_.isEqual(groupObj, this.state.selectedGroup) ? {name: '', type: ''} : groupObj);
+      var selectedGroup = (_.isEqual(groupObj, this.state.selectedGroup) ? {name: '', type: '', uuid: ''} : groupObj);
       Cookies.set('selectedGroup', selectedGroup);
-      var devicesFilteredAndSorted = this.filterAndSortDevices(this.state.searchableDevicesDataNotFilteredOrSorted, this.state.selectedStatus, this.state.selectedSort);
+      var devicesFilteredAndSorted = this.filterAndSortDevices(this.state.searchableDevicesDataNotFilteredOrSorted, this.state.groupsData, this.state.selectedStatus, this.state.selectedSort);
       var devicesFilteredByGroup = this.filterDevicesByGroup(devicesFilteredAndSorted, this.state.groupsData, selectedGroup);
       this.setState({
         selectedGroup: selectedGroup,
@@ -281,8 +301,8 @@ define(function(require) {
       var searchableDevices = db.searchableDevices.deref();
       var groups = db.groups.deref();
       if(!_.isUndefined(searchableDevices) && !_.isUndefined(groups)) {
-        var searchableDevicesNotFilteredOrSorted = this.filterAndSortDevices(searchableDevices, 'All', 'asc', {name: '', type: ''});
-        var searchableDevicesFilteredAndSorted = this.filterAndSortDevices(searchableDevices, this.state.selectedStatus, this.state.selectedSort);
+        var searchableDevicesNotFilteredOrSorted = this.filterAndSortDevices(searchableDevices, groups, 'All', 'asc', {name: '', type: '', uuid: ''});
+        var searchableDevicesFilteredAndSorted = this.filterAndSortDevices(searchableDevices, groups, this.state.selectedStatus, this.state.selectedSort);
         var searchableDevicesFilteredByGroup = this.filterDevicesByGroup(searchableDevicesFilteredAndSorted, groups, this.state.selectedGroup);
         this.setState({
           searchableDevicesData: searchableDevicesFilteredByGroup,
@@ -305,7 +325,7 @@ define(function(require) {
         devices.push(deviceCreated);
         searchableDevicesDataNotFilteredOrSorted.push(deviceCreated);
         
-        var devicesFilteredOrSorted = this.filterAndSortDevices(searchableDevicesDataNotFilteredOrSorted, this.state.selectedStatus, this.state.selectedSort);
+        var devicesFilteredOrSorted = this.filterAndSortDevices(searchableDevicesDataNotFilteredOrSorted, this.state.groupsData, this.state.selectedStatus, this.state.selectedSort);
         var devicesFilteredByGroup = this.filterDevicesByGroup(devicesFilteredOrSorted, this.state.groupsData, this.state.selectedGroup);
         this.setState({
           devicesData: devices,
@@ -359,7 +379,7 @@ define(function(require) {
       const searchableDevicesDataNotFilteredByGroup = this.state.searchableDevicesDataNotFilteredByGroup;
       const searchableProductionDevices = this.state.searchableProductionDevicesData;
       const groups = this.state.groupsData;
-            
+                           
       var isDevicesListEmpty = (_.isUndefined(devices) || devices.length) ? false : true;
       
       var productionDevicesCount = 0;
@@ -385,7 +405,9 @@ define(function(require) {
               <div className="panel-body">
                 <div className="groups-wrapper" style={{height: this.state.groupsWrapperHeight}}>
                   <div className="add-group-btn-wrapper">
-                    <button type="button" className="btn btn-rect" onClick={this.openNewManualGroupModal}><i className="fa fa-plus"></i> Add new Group</button>
+                    <NewManualGroupButton
+                      draggingDeviceUUID={this.state.draggingDeviceUUID}
+                      openNewManualGroupModal={this.openNewManualGroupModal}/>
                   </div>
               
                   <div id="groups-list" style={{height: this.state.groupsListHeight}}>
@@ -394,13 +416,15 @@ define(function(require) {
                         <div>
                           <GroupsArtificial
                             groups={groups}
-                            devices={this.state.searchableDevicesDataNotFilteredByGroup}
+                            devices={searchableDevicesDataNotFilteredByGroup}
                             selectGroup={this.selectGroup}
-                            selectedGroup={this.state.selectedGroup}/>
+                            selectedGroup={this.state.selectedGroup}
+                            draggingDeviceUUID={this.state.draggingDeviceUUID}/>
                           {groups.length ?
                             <GroupsList 
                               groups={groups}
                               devices={searchableDevicesDataNotFilteredByGroup}
+                              isFiltered={this.state.filterValue != ''}
                               groupsListHeight={this.state.groupsListHeight}
                               selectGroup={this.selectGroup}
                               selectedGroup={this.state.selectedGroup}
@@ -465,6 +489,7 @@ define(function(require) {
                               devices={searchableDevices}
                               areProductionDevices={false}
                               groups={groups}
+                              selectedGroup={this.state.selectedGroup}
                               isDevicesListEmpty={isDevicesListEmpty}
                               openNewDeviceModal={this.openNewDeviceModal}
                               openRenameDeviceModal={this.openRenameDeviceModal}
@@ -524,6 +549,7 @@ define(function(require) {
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {this.state.isNewDeviceModalShown ?
               <NewDevice 
+                selectedGroup={this.state.selectedGroup}
                 closeNewDeviceModal={this.closeNewDeviceModal}/>
             : undefined}
           </VelocityTransitionGroup>
@@ -545,6 +571,7 @@ define(function(require) {
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {this.state.isNewManualGroupModalShown ?
               <NewManualGroup
+                deviceUUID={this.state.newManualGroupSelectedDeviceUUID}
                 closeModal={this.closeNewManualGroupModal}/>
             : undefined}
           </VelocityTransitionGroup>

@@ -12,7 +12,12 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleResponse = this.handleResponse.bind(this);
       this.closeNewDeviceModal = this.closeNewDeviceModal.bind(this);
+      db.postStatus.addWatch("poll-create-device", _.bind(this.handleResponse, this, null));
+    }
+    componentWillUnmount() {
+      db.postStatus.removeWatch("poll-create-device");
     }
     handleSubmit(e) {
       e.preventDefault();
@@ -24,18 +29,45 @@ define(function(require) {
         device: payload
       });
     }
+    handleResponse() {
+      var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
+      if(!_.isUndefined(postStatus['create-device'])) {
+        if(postStatus['create-device'].status === 'success') {
+          var deviceUUID = postStatus['create-device'].response;
+          db.postStatus.removeWatch("poll-create-device");
+          delete postStatus['create-device'];
+          db.postStatus.reset(postStatus);
+          if(this.props.selectedGroup.type == 'real') {
+            var that = this;
+            setTimeout(function() {
+              SotaDispatcher.dispatch({
+                actionType: 'add-device-to-group',
+                uuid: that.props.selectedGroup.uuid,
+                deviceId: deviceUUID
+              });
+            }, 1);
+          }
+        }
+      }
+    }
     closeNewDeviceModal(e) {
       e.preventDefault();
       this.props.closeNewDeviceModal();
     }
     render() {
+      var selectedGroup = this.props.selectedGroup;
       return (
         <div id="modal-new-device" className="myModal" role="dialog">
           <div className="modal-dialog center-xy">
             <div className="modal-content">
               <div className="modal-header">
                 <button type="button" className="close" onClick={this.props.closeNewDeviceModal}></button>
-                <h4 className="modal-title">{this.context.strings.newdevice}</h4>
+                <h4 className="modal-title">
+                  {this.context.strings.newdevice}
+                  {selectedGroup.type == 'real' ?
+                    <span> in the {selectedGroup.name} group</span>
+                  : null}
+                </h4>
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
                 <div className="modal-body">
