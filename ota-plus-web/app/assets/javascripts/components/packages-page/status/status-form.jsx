@@ -98,7 +98,9 @@ define(function(require) {
       var legend = _.map(stats, function(stat) {
         return (
           <li key={"color-" + stat.label + "-" + stat.color}>
-            <div className="color-box" style={{backgroundColor: stat.color}}></div> {stat.label}
+            <div className="color-box" style={{backgroundColor: stat.color}}></div> 
+            <div className="version-box">{stat.label}</div>
+            <div className="devices-count-box">{stat.value} Devices</div>
           </li>
         );
       }, this);
