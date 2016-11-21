@@ -81,6 +81,7 @@ define(function(require) {
         db.searchableDevices.addWatch("watch-searchable-devices", _.bind(this.openDoor, this, null));
       }
       db.logout.addWatch("watch-logout", _.bind(this.handleLogout, this, null));
+      db.hasBetaAccess.addWatch("has-beta-access", _.bind(this.forceUpdate, this, null));
       SotaDispatcher.dispatch({actionType: 'impact-analysis'});
       WebsocketHandler.init();      
     }
@@ -231,9 +232,10 @@ define(function(require) {
               changeLang={this.changeLanguage} 
               showCampaignPanel={this.state.showCampaignPanel} 
               toggleCampaignPanel={this.toggleCampaignPanel} 
-              logout={this.logout}/>
+              logout={this.logout}
+              hasBetaAccess={db.hasBetaAccess.deref()}/>
             <div className="page wrapper">
-              {React.cloneElement(this.props.children, {showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel})}
+              {React.cloneElement(this.props.children, {showCampaignPanel: this.state.showCampaignPanel, toggleCampaignPanel: this.toggleCampaignPanel, hasBetaAccess: db.hasBetaAccess.deref()})}
             </div>
             
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
@@ -248,16 +250,6 @@ define(function(require) {
   App.contextTypes = {
     location: React.PropTypes.object,
     router: React.PropTypes.object,
-  };
-
-  var wrapComponent = function wrapComponent(Component, props) {
-    return class wrapComponentClass extends React.Component {
-      render() {
-        return (
-          <Component {...this.props} {...props} params={this.props.params}/>
-        )
-      }
-    }
   };
 
   var routes = (

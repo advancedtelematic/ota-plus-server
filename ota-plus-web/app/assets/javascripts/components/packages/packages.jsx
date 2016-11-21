@@ -125,7 +125,7 @@ define(function(require) {
               </div>
             </div>
     
-             <div className="select-bar pull-right">
+            <div className="select-bar pull-right">
               <div className="select-bar-text">Type</div>
               <div className="btn-group">
                 <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -138,7 +138,7 @@ define(function(require) {
                   <li><a href="#" onClick={this.selectType.bind(this, 'unmanaged')}>Unmanaged</a></li>
                 </ul>
               </div>
-            </div>            
+            </div>
           </div>
 
           <div className={"alert alert-ats alert-dismissible" + (this.state.alertHidden ? " hidden" : '')} role="alert">
@@ -159,7 +159,8 @@ define(function(require) {
                 setPackagesStatistics={this.props.setPackagesStatistics}
                 device={this.props.device}
                 onDrop={this.props.onDrop}
-                showBlacklistForm={this.props.showBlacklistForm}/>
+                showBlacklistForm={this.props.showBlacklistForm}
+                hasBetaAccess={this.props.hasBetaAccess}/>
             : undefined}
           </div>
         </div>

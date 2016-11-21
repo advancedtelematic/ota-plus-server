@@ -235,7 +235,8 @@ define(function(require) {
                         onDrop={this.onDrop}
                         showBlacklistForm={this.showBlacklistForm}
                         filterValue={this.state.filterValue}
-                        changeFilter={this.changeFilter}/>
+                        changeFilter={this.changeFilter}
+                        hasBetaAccess={this.props.hasBetaAccess}/>
                     </div>
                     <div className="panel-footer" style={{position: 'relative'}}>
                       <VelocityComponent animation={this.state.selectedImpactAnalysisPackagesCount ? animateLeftPosition('15px') : animateLeftPosition('-250px')}>

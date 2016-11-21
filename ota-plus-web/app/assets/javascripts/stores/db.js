@@ -22,6 +22,7 @@ define(function(require) {
       this.installationLogForUpdateId = atom.createAtom();
       
       this.user = atom.createAtom();
+      this.hasBetaAccess = atom.createAtom();
       this.components = atom.createAtom();
       this.componentsForSelectedDevices = atom.createAtom();
       this.blacklistedPackage = atom.createAtom();
@@ -37,6 +38,8 @@ define(function(require) {
       this.clients = atom.createAtom();
       this.affectedDevices = atom.createAtom();
       this.packageStats = atom.createAtom();
+      this.autoInstallDevicesForPackage = atom.createAtom();
+      this.autoInstallPackagesForDevice = atom.createAtom();
       
       //Events
       this.deviceSeen = atom.createAtom();
