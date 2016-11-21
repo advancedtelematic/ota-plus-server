@@ -47,6 +47,7 @@ define(function(require) {
         groupsWrapperHeight: '400px',
         groupsListHeight: '400px',
         devicesListHeight: '400px',
+        devicesColumnWidth: '930px',
         isNewDeviceModalShown: false,
         isRenameDeviceModalShown: false,
         renamedDevice: null,
@@ -74,7 +75,7 @@ define(function(require) {
       this.selectStatus = this.selectStatus.bind(this);
       this.selectSort = this.selectSort.bind(this);
       this.refreshData = this.refreshData.bind(this);
-      this.setListsHeight = this.setListsHeight.bind(this);
+      this.setElementsSize = this.setElementsSize.bind(this);
       this.filterAndSortDevices = this.filterAndSortDevices.bind(this);
       this.filterDevicesByGroup = this.filterDevicesByGroup.bind(this);
       this.setDevicesData = this.setDevicesData.bind(this);
@@ -100,9 +101,9 @@ define(function(require) {
     }
     componentDidMount() {
       var that = this;
-      window.addEventListener("resize", this.setListsHeight);
+      window.addEventListener("resize", this.setElementsSize);
       setTimeout(function() {
-        that.setListsHeight();
+        that.setElementsSize();
       }, 1);
     }
     componentWillUnmount(){
@@ -117,7 +118,7 @@ define(function(require) {
       db.groups.removeWatch("groups");
       db.deviceCreated.removeWatch("device-created");
       db.deviceSeen.removeWatch("device-seen");
-      window.removeEventListener("resize", this.setListsHeight);
+      window.removeEventListener("resize", this.setElementsSize);
     }
     refreshData(filterValue) {
       SotaDispatcher.dispatch({actionType: 'get-devices'});
@@ -210,17 +211,20 @@ define(function(require) {
     numberWithDots(x) {
       return !_.isUndefined(x) ? x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : '';
     }
-    setListsHeight() {
+    setElementsSize() {
+      var windowWidth = jQuery(window).width();
       var windowHeight = jQuery(window).height();
       var offsetTopGroupsWrapper = jQuery('.groups-wrapper').offset().top;
       var offsetTopGroupsList = jQuery('#groups-list').offset().top;
       var offsetTopDevicesBar = jQuery('#devices-bar').offset().top + jQuery('#devices-bar').height();
       var btnSectionsHeight = jQuery('.btn-full-section').length ? 4 * 34 : 0;
+      var groupsColumnWidth = jQuery('#groups-column').width();
       
       this.setState({
         groupsWrapperHeight: windowHeight - offsetTopGroupsWrapper,
         groupsListHeight: windowHeight - offsetTopGroupsList,
-        devicesListHeight: windowHeight - offsetTopDevicesBar - btnSectionsHeight
+        devicesListHeight: windowHeight - offsetTopDevicesBar - btnSectionsHeight,
+        devicesColumnWidth: windowWidth - groupsColumnWidth
       });
     }
     openNewDeviceModal() {
@@ -443,7 +447,7 @@ define(function(require) {
               </div>
             </div>
           </div>
-          <div id="devices-column">
+          <div id="devices-column" style={{width: this.state.devicesColumnWidth}}>
             <div className="panel panel-ats">
               <div className="panel-heading">
                 <div className="panel-heading-left pull-left">
@@ -505,7 +509,7 @@ define(function(require) {
                     </VelocityTransitionGroup>
                   : undefined}
                   {_.isUndefined(searchableDevices) || _.isUndefined(groups) ?
-                    <Loader />
+                    <Loader className="white"/>
                   : undefined}
                 </div>
                 {areTestSettingsCorrect ?
