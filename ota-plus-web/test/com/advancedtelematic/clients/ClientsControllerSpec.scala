@@ -69,7 +69,9 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
     "create a client" in {
       val request = FakeRequest(POST, "/")
         .withAuthSession(userIdWithNoClients)
-        .withBody(Json.obj("client_name" -> "Test Client"))
+        .withBody(Json.obj(
+          "client_name" -> "Test Client",
+          "scope" -> "https://www.atsgarage.com/api/packages"))
       val result = call(controller.createClient(), request)
 
       status(result) must be(201)

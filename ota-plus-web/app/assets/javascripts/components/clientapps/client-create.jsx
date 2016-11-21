@@ -23,7 +23,10 @@ define(function(require) {
       e.preventDefault();
       SotaDispatcher.dispatch({
         actionType: 'create-client',
-        data: {client_name: this.refs.clientName.value}
+        data: {
+          client_name: this.refs.clientName.value,
+          scope: "https://www.atsgarage.com/api/packages"
+        }
       });
     }
     handleResponse() {        
