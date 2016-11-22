@@ -432,6 +432,7 @@ define(function(require) {
                               groupsListHeight={this.state.groupsListHeight}
                               selectGroup={this.selectGroup}
                               selectedGroup={this.state.selectedGroup}
+                              openRenameGroupModal={this.openRenameGroupModal}
                               draggingDeviceUUID={this.state.draggingDeviceUUID}/>
                           :
                             <span>There are no groups</span>
@@ -498,7 +499,6 @@ define(function(require) {
                               openNewDeviceModal={this.openNewDeviceModal}
                               openRenameDeviceModal={this.openRenameDeviceModal}
                               openNewSmartGroupModal={this.openNewSmartGroupModal}
-                              openRenameGroupModal={this.openRenameGroupModal}
                               draggingDeviceUUID={this.state.draggingDeviceUUID}
                               onDeviceDragStart={this.onDeviceDragStart}
                               onDeviceDragEnd={this.onDeviceDragEnd}/>
