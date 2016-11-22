@@ -121,6 +121,7 @@ define(function(require) {
                 group={group}
                 selectGroup={this.props.selectGroup}
                 isSelected={(this.props.selectedGroup.name == group.groupName && this.props.selectedGroup.type == 'real')}
+                openRenameGroupModal={this.props.openRenameGroupModal}
                 groupClassName={groupClassName}/>
             </li>
           );
