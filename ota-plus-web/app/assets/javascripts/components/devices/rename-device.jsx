@@ -13,16 +13,14 @@ define(function(require) {
       super(props);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.closeRenameDeviceModal = this.closeRenameDeviceModal.bind(this);
-      this.renameDeviceListener = this.renameDeviceListener.bind(this);
-      
-      db.postStatus.addWatch("poll-poststatus-edit-device", _.bind(this.renameDeviceListener, this, null));
+      this.handleResponse = this.handleResponse.bind(this);
+      db.postStatus.addWatch("poll-edit-device", _.bind(this.handleResponse, this, null));
     }
     componentWillUnmount() {
-      db.postStatus.removeWatch("poll-poststatus-edit-device");
+      db.postStatus.removeWatch("poll-edit-device");
     }
     handleSubmit(e) {
       e.preventDefault();
-
       var payload = serializeForm(this.refs.form);
       payload.deviceId = payload.deviceName;
       payload.deviceType = 'Other';
@@ -36,10 +34,13 @@ define(function(require) {
       e.preventDefault();
       this.props.closeRenameDeviceModal(false);
     }
-    renameDeviceListener() {
-      var that = this;
-      var postStatusRenameDevice = db.postStatus.deref()['edit-device'];
-      if(!_.isUndefined(postStatusRenameDevice) && postStatusRenameDevice.status === 'success') {
+    handleResponse() {
+      var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
+      if(!_.isUndefined(postStatus['edit-device']) && postStatus['edit-device'].status === 'success') {
+        var that = this;
+        db.postStatus.removeWatch("poll-edit-device");
+        delete postStatus['edit-device'];
+        db.postStatus.reset(postStatus);
         setTimeout(function() {
           that.props.closeRenameDeviceModal(true);
         }, 1);
@@ -59,9 +60,7 @@ define(function(require) {
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
                 <div className="modal-body">
-                  <Responses 
-                    action="edit-device" 
-                    successText="Device name has been changed."/>
+                  <Responses action="edit-device" handledStatuses="error"/>
                   <div className="form-group">
                     <label htmlFor="deviceName">Name</label>
                     <input type="text" className="form-control" name="deviceName"

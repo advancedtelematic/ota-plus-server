@@ -42,13 +42,14 @@ define(function(require) {
     }
     handleResponse() {
       var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
-      if(!_.isUndefined(postStatus['create-smart-group'])) {
-        if(postStatus['create-smart-group'].status === 'success') {
-          db.postStatus.removeWatch("poll-create-smart-group");
-          delete postStatus['create-smart-group'];
-          db.postStatus.reset(postStatus);
-          this.props.closeModal(true);
-        }
+      if(!_.isUndefined(postStatus['create-smart-group']) && postStatus['create-smart-group'].status === 'success') {
+        var that = this;
+        db.postStatus.removeWatch("poll-create-smart-group");
+        delete postStatus['create-smart-group'];
+        db.postStatus.reset(postStatus);
+        setTimeout(function() {
+          that.props.closeModal(true);
+        }, 1);
       }
     }
     closeModal(e) {
