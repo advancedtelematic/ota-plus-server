@@ -99,8 +99,8 @@ define(function(require) {
         return (
           <li key={"color-" + stat.label + "-" + stat.color}>
             <div className="color-box" style={{backgroundColor: stat.color}}></div> 
-            <div className="version-box">{stat.label}</div>
-            <div className="devices-count-box">{stat.value} Devices</div>
+            <div className="title-box">{stat.label}</div>
+            <div className="subtitle-box">{stat.value} Devices</div>
           </li>
         );
       }, this);
@@ -132,7 +132,7 @@ define(function(require) {
                     </div>
                   </div>
                 : null}
-                <div className="column-stats" style={!this.state.isFilteringEnabled ? {width: "100%"} : null}>
+                <div className="chart-stats" style={!this.state.isFilteringEnabled ? {width: "100%"} : null}>
                   <DoughnutChart data={stats} width="250" height="250" options={{
                       percentageInnerCutout: 60, 
                       segmentStrokeWidth: 5, 

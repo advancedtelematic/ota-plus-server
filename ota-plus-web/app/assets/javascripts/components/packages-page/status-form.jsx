@@ -64,7 +64,7 @@ define(function(require) {
                    grupy
                  </div>
                </div>
-               <div className="column-stats">
+               <div className="chart-stats">
                  <DoughnutChart data={data} width="250" height="250" options={{percentageInnerCutout: 60, segmentStrokeWidth: 5, showTooltips: false}}/>
                </div>
               </div>
