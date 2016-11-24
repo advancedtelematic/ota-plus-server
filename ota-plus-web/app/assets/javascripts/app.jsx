@@ -97,7 +97,7 @@ define(function(require) {
     }
     handleLogout() {
       if(!_.isUndefined(db.logout.deref()) && db.logout.deref()) {
-        window.location.href = logoutUrl;
+        window.location.replace(logoutUrl);
       }
     }
     logout(e) {
