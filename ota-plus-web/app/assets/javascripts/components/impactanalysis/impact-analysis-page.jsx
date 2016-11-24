@@ -102,9 +102,21 @@ define(function(require) {
       var impactedDevices = undefined;
       var impactedPackages = undefined;
             
-      if(!_.isUndefined(this.state.impactAnalysisData) && !_.isUndefined(this.state.searchableDevicesData)) {
+      if(!_.isUndefined(this.state.impactAnalysisData) && !_.isUndefined(this.state.searchableDevicesData) && !_.isUndefined(this.state.groupsData)) {
         impactedDevices = {};
         impactedPackages = {};
+        var devicesWithGroup = this.state.searchableDevicesData;
+                        
+        _.each(devicesWithGroup, function(device, index) {
+          devicesWithGroup[index].groupName = null;
+          devicesWithGroup[index].groupUUID = null;
+          _.each(this.state.groupsData, function(group) {
+            if(group.devicesUUIDs.indexOf(device.uuid) > -1) {
+              devicesWithGroup[index].groupName = group.groupName;
+              devicesWithGroup[index].groupUUID = group.id;
+            }
+          });
+        }, this);
                         
         _.each(this.state.impactAnalysisData, function(impact, deviceUUID) {
           _.each(impact, function(pack) {
@@ -114,7 +126,7 @@ define(function(require) {
                 version: pack.version
               }
             }
-            var deviceData = _.findWhere(this.state.searchableDevicesData, {uuid: deviceUUID});
+            var deviceData = _.findWhere(devicesWithGroup, {uuid: deviceUUID});
           
             impactedDevices[deviceUUID] = deviceData;
           }, this);          
@@ -140,7 +152,6 @@ define(function(require) {
               {!_.isUndefined(impactedDevices) && !_.isEmpty(impactedDevices) ?
                 <DevicesList
                   devices={impactedDevices}
-                  groups={this.state.groupsData}
                   areProductionDevices={false}
                   isDND={false}
                   areActionButtonsShown={false}/>
