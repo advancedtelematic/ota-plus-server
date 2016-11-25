@@ -12,10 +12,9 @@ define(function(require) {
               .success(function(groups) {
                 if(Object.keys(groups).length) {
                   var after = _.after(Object.keys(groups).length, function() {
-                    db.groups.reset(newGroups);
+                    db.groups.reset(groups);
                   });
-                  
-                  var newGroups = _.each(groups, function(group, index) {
+                  _.each(groups, function(group, index) {
                     sendRequest.doGet('/api/v1/device_groups/' + group.id + '/devices', {action: 'get-devices-for-group'})
                       .success(function(devices) {
                         groups[index].devicesUUIDs = devices;

@@ -12,10 +12,9 @@ define(function(require) {
               .success(function(campaigns) {
                 if(Object.keys(campaigns).length) {
                   var after = _.after(Object.keys(campaigns).length, function() {
-                    db.campaigns.reset(newCampaigns);
+                    db.campaigns.reset(campaigns);
                   });
-                  
-                  var newCampaigns = _.each(campaigns, function(campaign, index) {
+                  _.each(campaigns, function(campaign, index) {
                     if(campaign.launched)
                       sendRequest.doGet('/api/v1/campaigns/' + campaign.id + '/statistics', {action: 'get-campaign-statistics'})
                         .success(function(statistics) {
