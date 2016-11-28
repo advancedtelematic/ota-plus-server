@@ -90,26 +90,27 @@ define(function(require) {
         }
         var isSelected = (this.props.selectedGroup.type == 'artificial' && group.groupName == this.props.selectedGroup.name);
         return (
-          <button 
-            key={"button-artificial-group-" + group.groupName} 
-            type="button" 
-            className={"list-group-item " + groupClassName + " " + (isSelected  ? " checked" : "") } 
-            onClick={this.props.selectGroup.bind(this, {name: group.groupName, type: 'artificial'})} 
-            id={"button-artificial-group-" + group.groupName}
-            onDragOver={group.isDND ? this.onDragOver : null}
-            onDragLeave={group.isDND ? this.onDragLeave : null}
-            onDrop={group.isDND ? this.onDrop : null}
-            data-groupname={group.groupName}>
-            <div className="group-text">
-              <div className="group-title" title={group.friendlyName}>{group.friendlyName}</div>
-              <div className="group-subtitle">{group.devicesCount} devices</div>
-            </div>
-            {isSelected ? 
-              <div className="group-pointer">
-                <i className="fa fa-angle-right fa-3x"></i>
+          <div className="list-group-item-wrapper" key={"artificial-group-" + group.groupName}>
+            <button 
+              type="button" 
+              className={"list-group-item " + groupClassName + " " + (isSelected  ? " checked" : "") } 
+              onClick={this.props.selectGroup.bind(this, {name: group.groupName, type: 'artificial'})} 
+              id={"button-artificial-group-" + group.groupName}
+              onDragOver={group.isDND ? this.onDragOver : null}
+              onDragLeave={group.isDND ? this.onDragLeave : null}
+              onDrop={group.isDND ? this.onDrop : null}
+             data-groupname={group.groupName}>
+              <div className="group-text">
+                <div className="group-title" title={group.friendlyName}>{group.friendlyName}</div>
+                <div className="group-subtitle">{group.devicesCount} devices</div>
               </div>
-            : null}
-          </button>
+              {isSelected ? 
+                <div className="group-pointer">
+                  <i className="fa fa-angle-right fa-3x"></i>
+                </div>
+              : null}
+            </button>
+          </div>
         );
       }, this);
       

@@ -418,20 +418,15 @@ button {
                 width: 100%;
                 float: left;
                 overflow-y: scroll;
-                
+
                 &.droppable {
                     border: 2px dashed $color-mint;
                 }
 
-                .list-group-item {
-                    height: 94px;
-                    transition: background-color 0.3s ease-in;
-                    border-radius: 0;
-                    
-                    .action-menu-dropdown {
-                        top: 10px;
-                        right: 10px;
-                    }
+                .list-group-item-wrapper {
+                    width: 100%;
+                    float: left;
+                    position: relative;
 
                     &:hover {
                         .action-menu-dropdown {
@@ -439,16 +434,27 @@ button {
                         }
                     }
 
-                    &.droppable {
-                        &.active {
-                            color: #888;
-                            background: #eee;
-                            border: 2px dashed $color-mint;
-                        }
+                    .action-menu-dropdown {
+                        top: 10px;
+                        right: 10px;
                     }
 
-                    &:last-child {
-                        margin-bottom: -1px;
+                    .list-group-item {
+                        height: 94px;
+                        transition: background-color 0.3s ease-in;
+                        border-radius: 0;
+
+                        &.droppable {
+                            &.active {
+                                color: #888;
+                                background: #eee;
+                                border: 2px dashed $color-mint;
+                            }
+                        }
+
+                        &:last-child {
+                            margin-bottom: -1px;
+                        }
                     }
                 }
 
@@ -615,6 +621,25 @@ button {
 }
 
 .page-packages {
+    .list-group-item-wrapper {
+        width: 100%;
+        float: left;
+        position: relative;
+
+        .list-group-item {
+            margin-bottom: -1px;
+        }
+
+        .package-stats-button-label {
+            font-size: 12px;
+            font-weight: normal;
+            padding: 5px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    }
+
     .package-statuses {
         margin-right: 10px;
     }
@@ -1418,16 +1443,16 @@ a.close, button.close {
     .btn-grey {
         min-width: 90px;
     }
-    
+
     .btn-group {
-        
+
         & > .dropdown-toggle {
             &:not(:first-child) {
                 border-top-left-radius: 15px;
                 border-bottom-left-radius: 15px;
             }
         }
-        
+
         & > .btn-grey {
             float: none;
         }
@@ -3879,10 +3904,10 @@ hr.full-line {
         background: $color-mint;
 
         a {
-            color: #fff;
+            color: $color-darkgrey;
 
             &:hover, &:focus, &:active {
-                color: #fff;
+                color: $color-darkgrey;
                 text-decoration: none;
             }
         }
@@ -4054,7 +4079,7 @@ hr.full-line {
         float: left;
         position: relative;
         z-index: 1;
-        
+
         .panel-subheading {
             .select-bar {
                 margin-left: 10px;
