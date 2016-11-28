@@ -57,7 +57,9 @@ define(function(require) {
         isRenameGroupModalShown: false,
         renamedGroup: null,
         groupedDevices: [],
-        draggingDeviceUUID: null
+        draggingDevice: null,
+        draggingOverGroup: null,
+        isDraggingOverButton: false
       };
 
       this.openNewDeviceModal = this.openNewDeviceModal.bind(this);
@@ -85,6 +87,8 @@ define(function(require) {
       this.handleDeviceSeen = this.handleDeviceSeen.bind(this);
       this.onDeviceDragStart = this.onDeviceDragStart.bind(this);
       this.onDeviceDragEnd = this.onDeviceDragEnd.bind(this);
+      this.onGroupDragOver = this.onGroupDragOver.bind(this);
+      this.toggleDraggingOverButton = this.toggleDraggingOverButton.bind(this);
 
       db.devices.reset();
       db.searchableDevices.reset();
@@ -369,12 +373,30 @@ define(function(require) {
     }
     onDeviceDragStart(e) {
       var deviceUUID = e.currentTarget.dataset.uuid;
+      var deviceGroupUUID = e.currentTarget.dataset.groupuuid;
+                  
       e.dataTransfer.effectAllowed = 'move';
       e.dataTransfer.setData("deviceUUID", deviceUUID);
-      this.setState({draggingDeviceUUID: deviceUUID});
+      
+      this.setState({
+        draggingDevice: {
+          uuid: deviceUUID,
+          groupUUID: deviceGroupUUID
+        }
+      });
     }
     onDeviceDragEnd(e) {
-      this.setState({draggingDeviceUUID: null});
+      this.setState({
+        draggingDevice: null,
+        draggingOverGroup: null,
+        isDraggingOverButton: false
+      });
+    }
+    onGroupDragOver(group = null) {
+      this.setState({draggingOverGroup: group});
+    }
+    toggleDraggingOverButton(isDragging = false) {
+      this.setState({isDraggingOverButton: isDragging});
     }
     render() {
       const devices = this.state.devicesData;
@@ -409,7 +431,9 @@ define(function(require) {
                 <div className="groups-wrapper" style={{height: this.state.groupsWrapperHeight}}>
                   <div className="add-group-btn-wrapper">
                     <NewManualGroupButton
-                      draggingDeviceUUID={this.state.draggingDeviceUUID}
+                      draggingDevice={this.state.draggingDevice}
+                      isDraggingOverButton={this.state.isDraggingOverButton}
+                      toggleDraggingOverButton={this.toggleDraggingOverButton}
                       openNewManualGroupModal={this.openNewManualGroupModal}/>
                   </div>
               
@@ -422,7 +446,10 @@ define(function(require) {
                             devices={searchableDevicesDataNotFilteredByGroup}
                             selectGroup={this.selectGroup}
                             selectedGroup={this.state.selectedGroup}
-                            draggingDeviceUUID={this.state.draggingDeviceUUID}/>
+                            draggingDevice={this.state.draggingDevice}
+                            draggingOverGroup={this.state.draggingOverGroup}
+                            onGroupDragOver={this.onGroupDragOver}
+                            isDraggingOverButton={this.state.isDraggingOverButton}/>
                           {groups.length ?
                             <GroupsList 
                               groups={groups}
@@ -432,7 +459,10 @@ define(function(require) {
                               selectGroup={this.selectGroup}
                               selectedGroup={this.state.selectedGroup}
                               openRenameGroupModal={this.openRenameGroupModal}
-                              draggingDeviceUUID={this.state.draggingDeviceUUID}/>
+                              draggingDevice={this.state.draggingDevice}
+                              draggingOverGroup={this.state.draggingOverGroup}
+                              onGroupDragOver={this.onGroupDragOver}
+                              isDraggingOverButton={this.state.isDraggingOverButton}/>
                           :
                             <span>There are no groups</span>
                           }
