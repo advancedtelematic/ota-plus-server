@@ -289,12 +289,11 @@ define(function(require) {
       });
     }
     selectGroup(groupObj) {
-      var selectedGroup = (_.isEqual(groupObj, this.state.selectedGroup) ? {name: '', type: '', uuid: ''} : groupObj);
-      Cookies.set('selectedGroup', selectedGroup);
+      Cookies.set('selectedGroup', groupObj);
       var devicesFilteredAndSorted = this.filterAndSortDevices(this.state.searchableDevicesDataNotFilteredOrSorted, this.state.groupsData, this.state.selectedStatus, this.state.selectedSort);
-      var devicesFilteredByGroup = this.filterDevicesByGroup(devicesFilteredAndSorted, this.state.groupsData, selectedGroup);
+      var devicesFilteredByGroup = this.filterDevicesByGroup(devicesFilteredAndSorted, this.state.groupsData, groupObj);
       this.setState({
-        selectedGroup: selectedGroup,
+        selectedGroup: groupObj,
         searchableDevicesData: devicesFilteredByGroup
       });
     }
