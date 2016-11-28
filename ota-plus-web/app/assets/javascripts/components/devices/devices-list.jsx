@@ -81,9 +81,10 @@ define(function(require) {
               className = 'dragging';
             }
           }
-                    
           devices.push(
-            <span data-uuid={device.uuid}
+            <span 
+              data-uuid={device.uuid}
+              data-groupuuid={device.groupUUID}
               className={className}
               key={"dnd-device-" + device.uuid}
               draggable={(!_.isUndefined(this.props.isDND) ? this.props.isDND : "true")}

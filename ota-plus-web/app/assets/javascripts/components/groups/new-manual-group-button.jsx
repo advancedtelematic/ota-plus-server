@@ -7,29 +7,26 @@ define(function(require) {
   class NewManualGroupButton extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {
-        overButton: false
-      };
       this.onDragOver = this.onDragOver.bind(this);
       this.onDragLeave = this.onDragLeave.bind(this);
       this.onDrop = this.onDrop.bind(this);
     }
     onDragOver(e) {
       e.preventDefault();
-      this.setState({overButton: true});
+      this.props.toggleDraggingOverButton(true);
     }
     onDragLeave(e) {
-      this.setState({overButton: false});
+      this.props.toggleDraggingOverButton(false);
     }
     onDrop(e) {
       if(e.preventDefault)
         e.preventDefault();
-      this.props.openNewManualGroupModal(this.props.draggingDeviceUUID);
+      this.props.openNewManualGroupModal(this.props.draggingDevice.uuid);
     }
     render() {
       var buttonClassName = '';
-      if(this.props.draggingDeviceUUID !== null) {
-        buttonClassName = this.state.overButton ? ' droppable active' : ' droppable';
+      if(this.props.draggingDevice && this.props.draggingDevice.uuid !== null) {
+        buttonClassName = this.props.isDraggingOverButton ? ' droppable active' : ' droppable';
       }
       return (
         <button 

@@ -14,7 +14,7 @@ define(function(require) {
       super(props);
       this.state = {
         groupsData: undefined,
-        overGroupUUID: null
+        isFiltered: false,
       };
       this.prepareGroups = this.prepareGroups.bind(this);
       this.onDragOver = this.onDragOver.bind(this);
@@ -27,11 +27,10 @@ define(function(require) {
       this.prepareGroups(this.props.groups, this.props.devices, false);
     }
     componentWillReceiveProps(nextProps) {
-      if(!nextProps.draggingDeviceUUID && this.props.draggingDeviceUUID !== nextProps.draggingDeviceUUID) {
-        this.setState({overGroupUUID: null});
-      }
-      if(!_.isEqual(this.props.devices, nextProps.devices) || !_.isEqual(this.props.groups, nextProps.groups) || this.props.isFiltered !== nextProps.isFiltered) {
-        this.prepareGroups(nextProps.groups, nextProps.devices, nextProps.isFiltered);
+      if(!_.isEqual(this.props.devices, nextProps.devices) || !_.isEqual(this.props.groups, nextProps.groups) || 
+         this.props.isFiltered !== nextProps.isFiltered || !_.isEqual(this.props.draggingDevice, nextProps.draggingDevice)) {
+        var isFiltered = nextProps.draggingDevice !== null ? false : nextProps.isFiltered;
+        this.prepareGroups(nextProps.groups, nextProps.devices, isFiltered);
       }
     }
     componentWillUnmount() {
@@ -39,8 +38,8 @@ define(function(require) {
     }
     prepareGroups(groupsData, devicesData, isFiltered = false) {
       var devicesUUIDs = _.pluck(devicesData, 'uuid');
-      var newGroups = _.clone(groupsData);
-      _.each(newGroups, function(group, index) {
+      
+      _.each(groupsData, function(group, index) {
         if(isFiltered) {
           group.devicesFilteredUUIDs = _.filter(group.devicesUUIDs, function(device) {
             return (devicesUUIDs.indexOf(device) > -1);
@@ -49,19 +48,25 @@ define(function(require) {
           group.devicesFilteredUUIDs = group.devicesUUIDs;
         }
       });
-      this.setState({groupsData: newGroups});
+      this.setState({
+        groupsData: groupsData,
+        isFiltered: isFiltered
+      });
     }
     onDragOver(e) {
       e.preventDefault();
-      this.setState({overGroupUUID: e.currentTarget.dataset.groupuuid});
+      this.props.onGroupDragOver({
+        id: e.currentTarget.dataset.groupuuid,
+        type: 'real'
+      });
     }
     onDragLeave(e) {
-      this.setState({overGroupUUID: null});
+      this.props.onGroupDragOver(null);
     }
     onDrop(e) {
       if(e.preventDefault)
         e.preventDefault();
-      var draggingDeviceUUID = this.props.draggingDeviceUUID;
+      var draggingDeviceUUID = this.props.draggingDevice.uuid;
       var dropGroupUUID = e.currentTarget.dataset.groupuuid;
       var foundDevice = _.findWhere(this.props.devices, {uuid: draggingDeviceUUID});
                           
@@ -103,13 +108,13 @@ define(function(require) {
     }
     render() {        
       var className = '';
-      if(this.props.draggingDeviceUUID !== null) {
+      if(this.props.draggingDevice !== null) {
         className = 'droppable';
       }
-        
+              
       var groups = _.map(this.state.groupsData, function(group, index) {
-        if(!_.isUndefined(group) && (!this.props.isFiltered || Object.keys(group.devicesFilteredUUIDs).length)) {
-          var groupClassName = (this.state.overGroupUUID !== null && group.id == this.state.overGroupUUID) ? className + " active" : className;
+        if(!_.isUndefined(group) && (!this.state.isFiltered || Object.keys(group.devicesFilteredUUIDs).length)) {
+          var groupClassName = (!this.props.isDraggingOverButton && (this.props.draggingDevice !== null && this.props.draggingOverGroup === null && this.props.draggingDevice.groupUUID == group.id || this.props.draggingOverGroup !== null && group.id == this.props.draggingOverGroup.id)) ? className + " active" : className;
           return (
             <li 
               key={'group-' + group.groupName}
