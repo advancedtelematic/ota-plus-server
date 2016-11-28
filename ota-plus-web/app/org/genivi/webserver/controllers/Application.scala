@@ -67,6 +67,7 @@ class Application @Inject() (ws: WSClient,
     case "blacklist" :: _ => coreApiUri
     case "impact" :: _ => coreApiUri
     case "campaigns" :: _ => coreApiUri
+    case "auto_install" :: _ => coreApiUri
   }
 
   private val deviceRegistryProxiedPrefixes: PartialFunction[List[String], String] = {
