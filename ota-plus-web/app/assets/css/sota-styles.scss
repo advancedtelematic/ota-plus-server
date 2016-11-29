@@ -402,106 +402,110 @@ button {
 }
 
 .page-home {
-    #groups-column {
-        width: 350px;
-        float: left;
+    #home-content {
         position: relative;
-        z-index: 1;
-        -webkit-box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.7);
-        -moz-box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.7);
-        box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.7);
+        
+        #groups-column {
+            width: 350px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            -webkit-box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.7);
+            -moz-box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.7);
+            box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.7);
 
-        .groups-wrapper {
-            background: #fff;
+            .groups-wrapper {
+                background: #fff;
 
-            #groups-list {
-                width: 100%;
-                float: left;
-                overflow-y: scroll;
-
-                &.droppable {
-                    border: 2px dashed $color-mint;
-                }
-
-                .list-group-item-wrapper {
+                #groups-list {
                     width: 100%;
                     float: left;
-                    position: relative;
+                    overflow-y: scroll;
 
-                    &:hover {
-                        .action-menu-dropdown {
-                            display: block;
-                        }
+                    &.droppable {
+                        border: 2px dashed $color-mint;
                     }
 
-                    .action-menu-dropdown {
-                        top: 10px;
-                        right: 10px;
-                    }
+                    .list-group-item-wrapper {
+                        width: 100%;
+                        float: left;
+                        position: relative;
 
-                    .list-group-item {
-                        height: 94px;
-                        transition: background-color 0.3s ease-in;
-                        border-radius: 0;
-
-                        &.droppable {
-                            &.active {
-                                color: #888;
-                                background: #eee;
-                                border: 2px dashed $color-mint;
+                        &:hover {
+                            .action-menu-dropdown {
+                                display: block;
                             }
                         }
 
-                        &:last-child {
-                            margin-bottom: -1px;
+                        .action-menu-dropdown {
+                            top: 10px;
+                            right: 10px;
+                        }
+
+                        .list-group-item {
+                            height: 94px;
+                            transition: background-color 0.3s ease-in;
+                            border-radius: 0;
+
+                            &.droppable {
+                                &.active {
+                                    color: #888;
+                                    background: #eee;
+                                    border: 2px dashed $color-mint;
+                                }
+                            }
+
+                            &:last-child {
+                                margin-bottom: -1px;
+                            }
                         }
                     }
-                }
 
-                button.list-group-item {
-                    &.checked {
-                        background-color: #f5f5f5;
-                    }
-                }                
+                    button.list-group-item {
+                        &.checked {
+                            background-color: #f5f5f5;
+                        }
+                    }                
 
-                .group-icon {
-                    background-image: url(/assets/img/icons/group_large_grey.png);
-                    float: none;
-                    display: inline-block;
-                    vertical-align: middle;
-                }
-
-                .group-text {
-                    width: 62%;
-                    margin: 0 0 0 15px;
-                    display: inline-block;
-                    vertical-align: middle;
-
-                    .group-title {
-                        font-size: 20px;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
+                    .group-icon {
+                        background-image: url(/assets/img/icons/group_large_grey.png);
+                        float: none;
+                        display: inline-block;
+                        vertical-align: middle;
                     }
 
-                    .group-subtitle {
-                        color: #ccc;
-                        font-size: 12px;
-                    }
-                }
+                    .group-text {
+                        width: 62%;
+                        margin: 0 0 0 15px;
+                        display: inline-block;
+                        vertical-align: middle;
 
-                .group-pointer {
-                    position: absolute;
-                    top: 25px;
-                    right: 15px;
+                        .group-title {
+                            font-size: 20px;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+
+                        .group-subtitle {
+                            color: #ccc;
+                            font-size: 12px;
+                        }
+                    }
+
+                    .group-pointer {
+                        position: absolute;
+                        top: 25px;
+                        right: 15px;
+                    }
                 }
             }
         }
-    }
 
-    #devices-column {
-        width: 80%;
-        float: left;
+        #devices-column {
+            margin-left: 350px;
+        }
     }
 }
 
@@ -2447,9 +2451,10 @@ a.close, button.close {
 .page-packages .panel-subheading {
     padding: 0;
 }
+
 .modal-open {
-    overflow-x: auto;
-    overflow-y: hidden;
+    padding-right: inherit !important;
+    overflow: hidden;
 }
 
 .btn-confirm {
