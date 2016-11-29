@@ -11,8 +11,7 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        boxWidth: 340,
-        boxesPerRow: null,
+        boxWidth: 350,
         overUUID: null,
         Devices: null,
         areSmartGroupsEnabled: false
@@ -36,12 +35,11 @@ define(function(require) {
       window.removeEventListener("resize", this.setBoxesWidth);
     }
     setBoxesWidth() {
-      var containerWidth = $('#devices-container > div').width();
-      var minBoxWidth = 340;
+      var containerWidth = $('#devices-container > div').innerWidth();
+      var minBoxWidth = 350;
       var howManyBoxesPerRow = Math.floor(containerWidth / minBoxWidth);
       this.setState({
-        boxWidth: Math.floor(containerWidth / howManyBoxesPerRow) - 2,
-        boxesPerRow: howManyBoxesPerRow,
+        boxWidth: Math.floor(containerWidth / howManyBoxesPerRow) - 5,
       });
     }
     onDragEnter(e) {

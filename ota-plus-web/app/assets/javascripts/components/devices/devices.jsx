@@ -44,10 +44,9 @@ define(function(require) {
         packagesCount: 67,
         campaignsCount: 32,
         productionDevicesCount: 0,
-        groupsWrapperHeight: '400px',
-        groupsListHeight: '400px',
-        devicesListHeight: '400px',
-        devicesColumnWidth: '930px',
+        groupsWrapperHeight: 400,
+        groupsListHeight: 400,
+        devicesListHeight: 400,
         isNewDeviceModalShown: false,
         isRenameDeviceModalShown: false,
         renamedDevice: null,
@@ -222,13 +221,11 @@ define(function(require) {
       var offsetTopGroupsList = jQuery('#groups-list').offset().top;
       var offsetTopDevicesBar = jQuery('#devices-bar').offset().top + jQuery('#devices-bar').height();
       var btnSectionsHeight = jQuery('.btn-full-section').length ? 4 * 34 : 0;
-      var groupsColumnWidth = jQuery('#groups-column').width();
       
       this.setState({
         groupsWrapperHeight: windowHeight - offsetTopGroupsWrapper,
         groupsListHeight: windowHeight - offsetTopGroupsList,
         devicesListHeight: windowHeight - offsetTopDevicesBar - btnSectionsHeight,
-        devicesColumnWidth: windowWidth - groupsColumnWidth
       });
     }
     openNewDeviceModal() {
@@ -419,7 +416,7 @@ define(function(require) {
                                    localStorage.getItem('secondProductionTestDevice') && localStorage.getItem('secondProductionTestDevice') !== '' && 
                                    localStorage.getItem('thirdProductionTestDevice') && localStorage.getItem('thirdProductionTestDevice') !== '' ? true : false;
       return (
-        <div>
+        <div id="home-content">
           <div id="groups-column">
             <div className="panel panel-ats">
               <div className="panel-heading">
@@ -477,7 +474,7 @@ define(function(require) {
               </div>
             </div>
           </div>
-          <div id="devices-column" style={{width: this.state.devicesColumnWidth}}>
+          <div id="devices-column">
             <div className="panel panel-ats">
               <div className="panel-heading">
                 <div className="panel-heading-left pull-left">
