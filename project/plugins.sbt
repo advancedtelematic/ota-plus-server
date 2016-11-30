@@ -1,7 +1,8 @@
 logLevel := Level.Warn
 
 resolvers ++= Seq(
-  "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
+  "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/",
+  "Madoushi sbt-plugins" at "https://dl.bintray.com/madoushi/sbt-plugins/"
 )
 
 addSbtPlugin("io.spray" % "sbt-revolver" % "0.8.0")
@@ -29,3 +30,5 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.0")
 addSbtPlugin("com.github.ddispaltro" % "sbt-reactjs" % "0.5.2")
 
 addSbtPlugin("com.geirsson" % "sbt-scalafmt" % "0.2.10")
+
+addSbtPlugin("org.madoushi.sbt" % "sbt-sass" % "0.9.3")
