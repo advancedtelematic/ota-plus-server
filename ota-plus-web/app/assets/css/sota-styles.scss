@@ -2973,6 +2973,12 @@ hr.full-line {
     }
 }
 
+#treehub-tooltip {
+    .modal-dialog {
+        width: 600px;
+    }
+}
+
 .underlined {
     text-decoration: underline;
 }
