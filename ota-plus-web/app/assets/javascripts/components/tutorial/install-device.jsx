@@ -10,7 +10,7 @@ define(function(require) {
       this.state = {
         isFirstInfoShown: false,
         isSecondInfoShown: false,
-        tutorialHeight: '300px'
+        tutorialHeight: 300
       };
       this.toggleFirstInfo = this.toggleFirstInfo.bind(this);
       this.toggleSecondInfo = this.toggleSecondInfo.bind(this);
@@ -33,10 +33,8 @@ define(function(require) {
     }
     setTutorialHeight() {
       var windowHeight = jQuery(window).height();
-      var offsetTop = jQuery('#tutorial-install-device').offset().top;
-            
       this.setState({
-        tutorialHeight: windowHeight - offsetTop
+        tutorialHeight: windowHeight - jQuery('.device-header').offset().top - jQuery('.device-header').height()
       });
     }
     render() {

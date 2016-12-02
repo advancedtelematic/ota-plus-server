@@ -149,6 +149,22 @@ define(function(require) {
               .success(function(result) {
               });
           break;
+          case 'get-auto-install-packages-for-device':
+            sendRequest.doGet('/api/v1/auto_install?device=' + payload.device, {action: payload.actionType})
+              .success(function(autoInstallPackagesForDevice) {
+                db.autoInstallPackagesForDevice.reset(autoInstallPackagesForDevice);
+              });
+          break;
+          case 'enable-package-auto-install-for-device':
+            sendRequest.doPut('/api/v1/auto_install/' + payload.packageName + '/' + payload.device, null, {action: payload.actionType})
+              .success(function() {
+              });
+          break;
+          case 'disable-package-auto-install-for-device':
+            sendRequest.doDelete('/api/v1/auto_install/' + payload.packageName + '/' + payload.device, null, {action: payload.actionType})
+              .success(function() {
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));
