@@ -84,7 +84,8 @@ define(function(require) {
                   filterValue={this.state.filterValue}
                   isFormShown={this.state.isFormShown}
                   openForm={this.openForm}
-                  closeForm={this.closeForm}/>
+                  closeForm={this.closeForm}
+                  hasBetaAccess={this.props.hasBetaAccess}/>
               </div>
             </div>
           </div>
