@@ -423,7 +423,8 @@ define(function(require) {
             {this.state.isPackageStatusFormShown ?
               <PackageStatusForm 
                 packageName={this.state.chosenStatusPackageName}
-                closeForm={this.closePackageStatusForm}/>
+                closeForm={this.closePackageStatusForm}
+                hasBetaAccess={this.props.hasBetaAccess}/>
             : null}
           </VelocityTransitionGroup>
         </div>
