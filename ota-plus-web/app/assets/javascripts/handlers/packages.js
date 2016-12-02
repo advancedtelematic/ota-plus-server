@@ -142,6 +142,17 @@ define(function(require) {
                 db.packageStats.reset(packageStats);
               });
           break;
+          case 'get-auto-install-devices-for-package':
+            sendRequest.doGet('/api/v1/auto_install/' + payload.packageName, {action: payload.actionType})
+              .success(function(autoInstallDevicesForPackage) {
+                db.autoInstallDevicesForPackage.reset(autoInstallDevicesForPackage);
+              });
+          break;
+          case 'disable-package-auto-install':
+            sendRequest.doDelete('/api/v1/auto_install/' + payload.packageName, null, {action: payload.actionType})
+              .success(function() {
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));

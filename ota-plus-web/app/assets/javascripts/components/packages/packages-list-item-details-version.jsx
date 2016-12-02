@@ -149,8 +149,8 @@ define(function(require) {
         
                 <div className="package-version-right pull-right">
                   {!this.props.isQueued ? 
-                    <button className="btn btn-action btn-install pull-right" id={"button-install-package-" + this.props.version.id.name + "-" + this.props.version.id.version} onClick={this.props.installPackage.bind(this, this.props.version.id.name, this.props.version.id.version)} disabled={this.props.version.isBlackListed}>
-                      {this.props.version.isBlackListed ? 
+                    <button className="btn btn-action btn-install pull-right" id={"button-install-package-" + this.props.version.id.name + "-" + this.props.version.id.version} onClick={this.props.installPackage.bind(this, this.props.version.id.name, this.props.version.id.version)} disabled={this.props.isAutoInstallEnabled || this.props.version.isBlackListed}>
+                      {this.props.isAutoInstallEnabled || this.props.version.isBlackListed ? 
                         <span className="text-stroke">Install</span> 
                       :
                         <span>Install</span>

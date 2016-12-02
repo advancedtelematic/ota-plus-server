@@ -37,7 +37,7 @@ define(function(require) {
               : null}
             </VelocityTransitionGroup>
             
-            {React.cloneElement(this.props.children, {params: this.props.params, filterValue: this.props.filterValue})}
+            {React.cloneElement(this.props.children, {params: this.props.params, filterValue: this.props.filterValue, hasBetaAccess: this.props.hasBetaAccess})}
           </div>
         );
       }
