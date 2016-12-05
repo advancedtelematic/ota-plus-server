@@ -155,7 +155,8 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
       for {
         status  <- checkStatusOk(response)
         json    <- \/.fromTryCatchNonFatal { response.json } ~>? "Parse response to json"
-        idToken <- (json \ "id_token").asOpt[String].map(IdToken.apply) ~>? "Read id_token from response"
+        idToken <- (json \ "id_token").asOpt[String]
+                     .flatMap(IdToken.fromTokenValue(_).toOption) ~>? "Read id_token from response"
         accessToken <- (response.json \ "access_token")
                         .asOpt[String]
                         .map(Auth0AccessToken.apply) ~>? "Read access token from response"

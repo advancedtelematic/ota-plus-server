@@ -1,9 +1,10 @@
 package com.advancedtelematic.clients
 
 import akka.stream.Materializer
-import mockws.{MockWS, Route}
+import com.advancedtelematic.Tokens
+import mockws.{ MockWS, Route }
 import org.genivi.sota.data.Uuid
-import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
+import org.scalatestplus.play.{ OneServerPerSuite, PlaySpec }
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json._
@@ -12,37 +13,37 @@ import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-
 class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results {
 
-  val userId = "auth0|userid1"
-  val clientId = Uuid.generate()
+  val userId    = "auth0|userid1"
+  val clientId  = Uuid.generate()
   val clientIds = Seq(clientId.underlying.get)
 
   val auth0Domain = "auth0test"
-  val auth0Url = s"https://$auth0Domain/api/v2/users/$userId"
-  def auth0UserMetadata(value: JsValue) = Json.obj("user_metadata" -> value)
+  val auth0Url    = s"https://$auth0Domain/api/v2/users/$userId"
+  def auth0UserMetadata(value: JsValue): JsValue =
+    Json.obj("user_metadata" -> value, "email" -> "", "picture" -> "", "name" -> "")
 
-  val authPlusUri = "http://localhost:9001/clients"
+  val authPlusUri       = "http://localhost:9001/clients"
   val authPlusClientUri = s"$authPlusUri/${clientId.underlying.get}"
   val authPlusClient = Json.obj(
-    "client_id" -> clientId.underlying.get,
-    "client_name" -> "Test Client",
-    "registration_client_uri" -> authPlusClientUri,
+    "client_id"                 -> clientId.underlying.get,
+    "client_name"               -> "Test Client",
+    "registration_client_uri"   -> authPlusClientUri,
     "registration_access_token" -> "something")
 
-  val userIdWithNoClients = "auth0|useridwithnoclients"
+  val userIdWithNoClients   = "auth0|useridwithnoclients"
   val auth0UrlWithNoClients = s"https://auth0test/api/v2/users/$userIdWithNoClients"
 
   val mockClient = MockWS {
     case (GET, `auth0Url`) =>
-        Action { Ok(auth0UserMetadata(Json.obj("client_ids" -> Json.toJson(clientIds)))) }
+      Action { Ok(auth0UserMetadata(Json.obj("client_ids" -> Json.toJson(clientIds)))) }
     case (PATCH, `auth0Url`) =>
-        Action { Ok(auth0UserMetadata(Json.obj("client_ids" -> Json.toJson(clientIds)))) }
+      Action { Ok(auth0UserMetadata(Json.obj("client_ids" -> Json.toJson(clientIds)))) }
     case (GET, `auth0UrlWithNoClients`) =>
-        Action { Ok(auth0UserMetadata(Json.obj("no_client_ids" -> ""))) }
+      Action { Ok(auth0UserMetadata(Json.obj("no_client_ids" -> ""))) }
     case (PATCH, `auth0UrlWithNoClients`) =>
-        Action { Ok(auth0UserMetadata(Json.obj("client_ids" -> Json.toJson(clientIds)))) }
+      Action { Ok(auth0UserMetadata(Json.obj("client_ids" -> Json.toJson(clientIds)))) }
     case (POST, `authPlusUri`) =>
       Action { Ok(authPlusClient) }
     case (GET, `authPlusClientUri`) =>
@@ -62,16 +63,18 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
 
   implicit class RequestSyntax[A](request: FakeRequest[A]) {
     def withAuthSession(ns: String): FakeRequest[A] =
-      request.withSession("id_token" -> "", "access_token" -> "", "auth_plus_access_token" -> "", "namespace" -> ns)
+      request.withSession(
+        "id_token"               -> Tokens.identityTokenFor(ns).value,
+        "access_token"           -> "",
+        "auth_plus_access_token" -> "",
+        "namespace"              -> ns)
   }
 
   "ClientsController" should {
     "create a client" in {
       val request = FakeRequest(POST, "/")
         .withAuthSession(userIdWithNoClients)
-        .withBody(Json.obj(
-          "client_name" -> "Test Client",
-          "scope" -> "https://www.atsgarage.com/api/packages"))
+        .withBody(Json.obj("client_name" -> "Test Client", "scope" -> "https://www.atsgarage.com/api/packages"))
       val result = call(controller.createClient(), request)
 
       status(result) must be(201)
@@ -80,7 +83,7 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
 
     "return info for a valid clientId" in {
       val request = FakeRequest(POST, "/").withAuthSession(userId)
-      val result = call(controller.getClient(clientId), request)
+      val result  = call(controller.getClient(clientId), request)
 
       status(result) must be(200)
       contentAsJson(result) must be(authPlusClient)
@@ -88,14 +91,14 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
 
     "return 404 for an invalid clientId" in {
       val request = FakeRequest(POST, "/").withAuthSession(userId)
-      val result = call(controller.getClient(Uuid.generate()), request)
+      val result  = call(controller.getClient(Uuid.generate()), request)
 
       status(result) must be(404)
     }
 
     "return all clients" in {
       val request = FakeRequest(POST, "/").withAuthSession(userId)
-      val result = call(controller.getClients(), request)
+      val result  = call(controller.getClients(), request)
 
       status(result) must be(200)
       contentAsJson(result).as[Seq[JsValue]] must be(Seq(authPlusClient))
@@ -103,11 +106,10 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
 
     "return no clients for user with no clients" in {
       val request = FakeRequest(POST, "/").withAuthSession(userIdWithNoClients)
-      val result = call(controller.getClients(), request)
+      val result  = call(controller.getClients(), request)
 
       status(result) must be(200)
       contentAsJson(result).as[Seq[JsValue]] must be(Seq.empty)
     }
   }
 }
-

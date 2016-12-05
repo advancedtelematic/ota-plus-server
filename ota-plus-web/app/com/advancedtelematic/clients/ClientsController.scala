@@ -32,20 +32,20 @@ extends Controller with ApiClientSupport {
 
   import com.advancedtelematic.ota.device.Devices._
 
-  def getClientIds(ns: Namespace, idToken: IdToken) : Future[Seq[Uuid]] = {
-    auth0Api.getUserMetadata(ns.get, idToken, metadata_key) map { value =>
+  def getClientIds(idToken: IdToken) : Future[Seq[Uuid]] = {
+    auth0Api.getUserMetadata(idToken, metadata_key) map { value =>
       value.as[Seq[Uuid]]
     } recover {
       case e: java.util.NoSuchElementException => Seq.empty
     }
   }
 
-  def addClientId(ns: Namespace, idToken: IdToken, clientId: Uuid) : Future[Seq[Uuid]] = {
-    for {
-      ids <- getClientIds(ns, idToken)
-      clientIds = ids :+ clientId
-      result <- auth0Api.saveUserMetadata(ns.get, idToken, metadata_key, Json.toJson(clientIds))
-    } yield clientIds
+  def addClientId(idToken: IdToken, clientId: Uuid) : Future[Seq[Uuid]] = {
+        for {
+          ids <- getClientIds(idToken)
+          clientIds = ids :+ clientId
+          _ <- auth0Api.saveUserMetadata(idToken, metadata_key, Json.toJson(clientIds))
+        } yield clientIds
   }
 
   implicit class JsResultOps[T](res: JsResult[T]) {
@@ -70,8 +70,8 @@ extends Controller with ApiClientSupport {
       scope <- toScope(scopeStr)
     } yield for {
       clientInfo <- authPlusApi.createClientForUser(
-        clientName, s"namespace.${request.namespace.get} ${scope}", request.authPlusAccessToken)
-      clientIds <- addClientId(request.namespace, request.idToken, Uuid.fromJava(clientInfo.clientId))
+        clientName, s"namespace.${request.namespace.get} $scope", request.authPlusAccessToken)
+      clientIds <- addClientId(request.idToken, Uuid.fromJava(clientInfo.clientId))
     } yield Created(Json.toJson(clientIds))
 
     result.fold(err => Future.successful(BadRequest(err)), r => r)
@@ -91,7 +91,7 @@ extends Controller with ApiClientSupport {
 
   def getClients() : Action[AnyContent] = authAction.AuthenticatedApiAction.async { implicit request =>
     for {
-      clientIds <- getClientIds(request.namespace, request.idToken)
+      clientIds <- getClientIds(request.idToken)
       clients <- getClients(clientIds, request.authPlusAccessToken)
     } yield Ok(Json.toJson(clients))
   }
