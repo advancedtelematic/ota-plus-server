@@ -1,10 +1,10 @@
 package com.advancedtelematic.login
 
+import com.advancedtelematic.Tokens
 import mockws.MockWS
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.play._
 import play.api.Application
-import play.api.data.Form
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
@@ -49,35 +49,7 @@ class LoginSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAll {
 
   lazy val namespace : String = "LoginSpec"
 
-  lazy val idToken : String = {
-    import com.advancedtelematic.json.signature.JcaSupport._
-    import com.advancedtelematic.jwa.HS256
-    import com.advancedtelematic.jws.{CompactSerialization, JwsPayload}
-    import com.advancedtelematic.jwt._
-    import java.time.Instant
-    import java.time.temporal.ChronoUnit
-    import java.util.UUID
-    import javax.crypto.SecretKey
-    import javax.crypto.spec.SecretKeySpec
-    import scala.util.Random
-
-    val token = JsonWebToken(
-      TokenId("LoginSpec"),
-      Issuer("LoginSpec"),
-      ClientId(UUID.randomUUID()),
-      Subject(namespace),
-      Audience(Set.empty),
-      Instant.now.minusSeconds(1),
-      Instant.now.plus(1, ChronoUnit.HOURS),
-      Scope(Set.empty)
-    )
-
-    val HmacKeySize = 32
-    val bytes = Array.fill[Byte](HmacKeySize)(Random.nextInt().toByte)
-    val key: SecretKey = new SecretKeySpec(bytes, "HmacSHA256")
-    val keyInfo = HS256.signingKey(key).toOption.get
-    CompactSerialization(HS256.withKey(JwsPayload(token), keyInfo)).value
-  }
+  lazy val idToken : String = Tokens.identityTokenFor(namespace).value
 
   val mockClient = MockWS {
     case ("POST", `tokenEndpointUrl`) =>

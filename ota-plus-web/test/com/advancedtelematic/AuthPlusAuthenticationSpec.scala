@@ -53,7 +53,7 @@ class AuthPlusAuthenticationSpec extends PlaySpec with OneServerPerSuite with Re
 
   implicit class RequestSyntax[A](request: FakeRequest[A]) {
     def withAuthSession(token: String): FakeRequest[A] =
-      request.withSession("id_token" -> "", "access_token" -> "", "auth_plus_access_token" -> token, "namespace" -> "")
+      request.withSession("id_token" -> Tokens.identityTokenFor("test").value, "access_token" -> "", "auth_plus_access_token" -> token, "namespace" -> "")
   }
 
   "AuthPlusAuthentication" should {

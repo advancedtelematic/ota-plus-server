@@ -16,10 +16,15 @@ GET     /api/v1/clients/:uuid                    com.advancedtelematic.clients.C
 
 GET     /api/v1/events/ws                        org.genivi.webserver.controllers.EventController.ws()
 
+GET     /api/v1/provisioning/status              com.advancedtelematic.ProvisioningController.provisioningStatus
+GET     /api/v1/provisioning                     com.advancedtelematic.ProvisioningController.provisioningInfo
+PUT     /api/v1/provisioning/activate            com.advancedtelematic.ProvisioningController.activateAutoProvisioning
+
 GET     /api/v1/*path                            org.genivi.webserver.controllers.Application.apiProxy(path: String)
 PUT     /api/v1/*path                            org.genivi.webserver.controllers.Application.apiProxy(path: String)
 POST    /api/v1/*path                            org.genivi.webserver.controllers.Application.apiProxy(path: String)
 DELETE  /api/v1/*path                            org.genivi.webserver.controllers.Application.apiProxy(path: String)
+
 
 GET     /login                                   com.advancedtelematic.login.LoginController.login
 GET     /logout                                  com.advancedtelematic.login.LoginController.logout
