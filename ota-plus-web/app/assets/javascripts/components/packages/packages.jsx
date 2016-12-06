@@ -159,8 +159,7 @@ define(function(require) {
                 setPackagesStatistics={this.props.setPackagesStatistics}
                 device={this.props.device}
                 onDrop={this.props.onDrop}
-                showBlacklistForm={this.props.showBlacklistForm}
-                hasBetaAccess={this.props.hasBetaAccess}/>
+                showBlacklistForm={this.props.showBlacklistForm}/>
             : undefined}
           </div>
         </div>
