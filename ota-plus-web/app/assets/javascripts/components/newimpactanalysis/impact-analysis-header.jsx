@@ -14,7 +14,11 @@ define(function(require) {
             <div className="grey-header-text">
               <div className="grey-header-title">Impact analyser</div>
               <div className="grey-header-subtitle">
-                <span>Impact: 53.092.232 Devices in 15 Groups</span>
+                {!_.isUndefined(this.props.deviceCount) && !_.isUndefined(this.props.groupCount) ? 
+                  <span>Impact: {this.props.deviceCount} Devices in {this.props.groupCount} Groups</span>
+                :
+                  <span><i className="fa fa-square-o fa-spin"></i> impact analysis</span>
+                }
               </div>
             </div>
           </div>
