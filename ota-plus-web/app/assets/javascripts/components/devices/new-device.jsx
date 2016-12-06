@@ -64,7 +64,7 @@ define(function(require) {
                 <button type="button" className="close" onClick={this.props.closeNewDeviceModal}></button>
                 <h4 className="modal-title">
                   {this.context.strings.newdevice}
-                  {selectedGroup.type == 'real' ?
+                  {selectedGroup && selectedGroup.type == 'real' ?
                     <span> in the {selectedGroup.name} group</span>
                   : null}
                 </h4>

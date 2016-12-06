@@ -42,7 +42,8 @@ define(function(require) {
       CampaignDetails = require('es6!components/newcampaigns/campaign-details'),
       ClientApps = require('es6!components/clientapps/client-apps'),
       TreeHub = require('es6!components/treehub/treehub'),
-      Provisioning = require('es6!components/provisioning/provisioning');
+      Provisioning = require('es6!components/provisioning/provisioning'),
+      HomePage = require('es6!components/homepage/home-page');
 
   const languages = {
     en: 'en'
@@ -182,7 +183,7 @@ define(function(require) {
       if(path[1] !== undefined) {
         switch(path[1]) {
           case '':
-            page = 'page-home';
+            page = 'page-devices';
           break;
           case 'devicedetails':
             page = 'page-device-details';
@@ -204,6 +205,9 @@ define(function(require) {
           break;
           case 'clientapps':
             page = 'page-client-apps';
+          break;
+          case 'homepage':
+            page = 'page-home';
           break;
           default:
           break;
@@ -265,7 +269,7 @@ define(function(require) {
           <Route path=":action/:vin2" />
         </Route>
         <Route path="productiondevicedetails/:id" component={ProductionDeviceDetails}/>
-        <Route path="packages" component={Packages}/>
+        <Route path="packages(/:highlightedName)" component={Packages}/>
         <Route path="testsettings" component={TestSettings}/>
         <Route path="editprofile" component={EditProfile}/>
         <Route path="impactanalysis" component={ImpactAnalysisPage}/>
@@ -275,6 +279,7 @@ define(function(require) {
         <Route path="clientapps/f708f064faaf32a43e4d3c784e6af9eac6d9b20e0da02616378748834f5a37ee" component={ClientApps} />
         <Route path="treehub" component={TreeHub} />
         <Route path="provisioning" component={Provisioning} />
+        <Route path="homepage" component={HomePage}/>
       </Route>
     </Route>
   );
