@@ -97,6 +97,27 @@ define(function(require) {
                 db.blacklistedPackages.reset(packages);
               });
           break;
+          case 'get-blacklisted-packages-with-stats':
+            sendRequest.doGet('/api/v1/blacklist')
+              .success(function(packages) {
+                if(Object.keys(packages).length) {
+                  var after = _.after(Object.keys(packages).length, function() {
+                    db.blacklistedPackagesWithStats.reset(packages);
+                  });
+                  _.each(packages, function(pack, index) {
+                    sendRequest.doGet('/api/v1/device_count/' + pack.packageId.name + '/' + pack.packageId.version, {action: 'get-package-version-stats'})
+                      .success(function(statistics) {
+                        packages[index].statistics = statistics;
+                      })
+                      .always(function() {
+                        after();
+                      });
+                  });
+                } else {
+                  db.blacklistedPackagesWithStats.reset(packages);
+                }
+              });
+          break;
           case 'get-blacklisted-package':
             sendRequest.doGet('/api/v1/blacklist/' + payload.name + '/' + payload.version, {action: payload.actionType})
               .success(function(package) {

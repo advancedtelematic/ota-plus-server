@@ -8,15 +8,15 @@ define(function(require) {
     render() {
       var versions = _.map(this.props.versions, function(version, i) {
         return (
-          <li key={"blacklisted-package-version-" + version.version}>
+          <li key={"blacklisted-package-version-" + version.packageId.version}>
             <div className="column column-first">
-              {version.version}
+              {version.packageId.version}
             </div>
             <div className="column column-second">
-              {version.devicesCount}
+              {version.statistics.deviceCount}
             </div>
             <div className="column column-third">
-              {version.groupsCount}
+              {Object.keys(version.statistics.groupIds).length}
             </div>
           </li>
         );

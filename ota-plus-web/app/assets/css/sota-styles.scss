@@ -4144,6 +4144,7 @@ hr.full-line {
     }
 
     #packages-column {
+        background: #fff;
         width: 400px;
         float: left;
         position: relative;
@@ -4166,7 +4167,6 @@ hr.full-line {
 }
 
 #blacklisted-packages {
-    background: #fff;
     position: relative;
     overflow-y: auto;
     -webkit-box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.3);

@@ -5,40 +5,6 @@ define(function(require) {
   class ImpactAnalysisChart extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {
-        packageStatsData: [
-          {
-            percent: 50,
-            packageName: 'Anti-lock breaking system',
-            devicesCount: '20.000',
-            groupsCount: '20'
-          },
-          {
-            percent: 20,
-            packageName: 'Bluetooth',
-            devicesCount: '20.000',
-            groupsCount: '20'
-          },
-          {
-            percent: 15,
-            packageName: 'Nano',
-            devicesCount: '20.000',
-            groupsCount: '20'
-          },
-          {
-            percent: 10,
-            packageName: 'System',
-            devicesCount: '20.000',
-            groupsCount: '20'
-          },
-          {
-            percent: 10,
-            packageName: 'Sports suspension',
-            devicesCount: '20.000',
-            groupsCount: '20'
-          },
-        ]
-      };
     }
     render() {
       var availableColors = [
@@ -48,30 +14,34 @@ define(function(require) {
         '#9B9B9B',
         '#4A4A4A'
       ];
+      var groupedStatsName = 'Other';
+      var colorIndex = -1;
       var stats = [];
-      var legend = [];
-      _.each(this.state.packageStatsData, function(pack, index) {
+      _.each(this.props.packages, function(pack, index) {
         if(index < availableColors.length) {
+          colorIndex++;
           stats.push(
             {
-              value: pack.percent,
-              color: availableColors[index],
-              highlight: availableColors[index],
-              label: pack.packageName,
-              packageData: pack
+              value: pack.deviceCount,
+              groupIds: pack.groupIds,
+              color: availableColors[colorIndex],
+              highlight: availableColors[colorIndex],
+              label: (index === availableColors.length - 1 ? groupedStatsName : pack.packageName)
             }
           );
+        } else if(index >= availableColors.length) {
+          stats[availableColors.length - 1].value = pack.deviceCount + stats[availableColors.length - 1].value;
+          stats[availableColors.length - 1].groupIds = _.union(pack.groupIds, stats[availableColors.length - 1].groupIds);
         }
       }, this);
       
-      _.each(stats, function(stat) {
-        legend.push(
-          <li key={"stats-" + stat.packageData.packageName}>
+      var legend = _.map(stats, function(stat) {
+        return (
+          <li key={"color-" + stat.label + "-" + stat.color}>
             <div className="color-box" style={{backgroundColor: stat.color}}></div> 
-            <div className="title-box">{stat.packageData.percent}%</div>
-            <div className="subtitle-box">{stat.packageData.packageName}</div>
-            <div className="subtitle-box">{stat.packageData.devicesCount} Devices</div>
-            <div className="subtitle-box">{stat.packageData.groupsCount} Groups</div>
+            <div className="title-box">{stat.label}</div>
+            <div className="subtitle-box">{stat.value} Devices</div>
+            <div className="subtitle-box">{Object.keys(stat.groupIds).length} Groups</div>
           </li>
         );
       }, this);
