@@ -160,7 +160,22 @@ define(function(require) {
           case 'get-package-stats':
             sendRequest.doGet('/api/v1/resolver/package_stats/' + payload.packageName, {action: payload.actionType})
               .success(function(packageStats) {
-                db.packageStats.reset(packageStats);
+                if(Object.keys(packageStats).length) {
+                  var after = _.after(Object.keys(packageStats).length, function() {
+                    db.packageStats.reset(packageStats);
+                  });
+                  _.each(packageStats, function(pack, index) {                      
+                    sendRequest.doGet('/api/v1/device_count/' + payload.packageName + '/' + pack.packageVersion, {action: 'get-package-version-stats'})
+                      .success(function(statistics) {
+                        packageStats[index].groupIds = statistics.groupIds;
+                      })
+                      .always(function() {
+                        after();
+                      });
+                  });
+                } else {
+                  db.packageStats.reset(packageStats);
+                }
               });
           break;
           case 'get-auto-install-devices-for-package':
