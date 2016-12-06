@@ -929,7 +929,29 @@ button {
 
 .list-group-item-text-right {
     color: #555;
+    text-align: right;
+    width: 30%;
     margin: 0 10px 0 10px;
+
+    @media (max-width: 1350px) {
+        width: 25%;
+    }
+
+    .history-item-status {
+        @media (max-width: 1500px) {
+            display: none;
+        }
+    }
+
+    .queue-item-version {
+        width: 100%;
+        @include textoverflow-ellipsis;
+    }
+
+    .history-item-version {
+        max-width: 40%;
+        @include textoverflow-ellipsis;
+    }
 }
 
 #packages {
@@ -2637,7 +2659,7 @@ a.close, button.close {
 }
 
 .queue-item-name {
-    width: 40%;
+    width: 30%;
     @include textoverflow-ellipsis;
 }
 
@@ -4120,7 +4142,7 @@ hr.full-line {
             margin: 0;
         }
     }
-    
+
     #packages-column {
         width: 400px;
         float: left;
@@ -4331,7 +4353,7 @@ hr.full-line {
         &:hover, &:focus, &:active {
             background: #eee;
         }
-        
+
         .device-icon {
             background-image: url(/assets/img/icons/device_large.png);
         }
@@ -4352,7 +4374,7 @@ hr.full-line {
             }
         }
     }
-    
+
     .table {
         margin: 0;
 
@@ -4363,7 +4385,7 @@ hr.full-line {
                 }
             }
         }
-        
+
         & > tbody {
             & > tr {
                 & > td {

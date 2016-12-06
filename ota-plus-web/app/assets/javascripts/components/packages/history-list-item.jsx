@@ -48,11 +48,15 @@ define(function(require) {
           <button onClick={this.toggleLog} className="btn btn-action pull-right">log</button>
   
           <div className="list-group-item-text-right pull-right">
+            <span className="history-item-status pull-right" title={status}>&nbsp;{status}</span>
+            <div className="history-item-version pull-right" title={this.props.package.packageId.version}>{this.props.package.packageId.version}</div>
+            <span className="pull-right">v.&nbsp;</span>
+            <span className="pull-right">
               <span className="fa-stack package-status-icon">
                 <i className="fa fa-circle fa-stack-1x"></i>
                 <i className={"fa fa-check-circle fa-stack-1x " + iconClass} aria-hidden="true"></i>
-              </span>&nbsp;
-              v. {this.props.package.packageId.version} {status}
+              </span>
+            </span>
           </div>
   
           <VelocityTransitionGroup enter={{animation: "fadeIn"}}>
