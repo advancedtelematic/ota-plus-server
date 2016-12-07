@@ -503,8 +503,7 @@ define(function(require) {
                     isSelected={this.state.expandedPackage == pack.packageName}
                     isBlackListed={pack.isBlackListed}
                     isAutoInstallEnabled={!_.isUndefined(pack.isAutoInstallEnabled) ? pack.isAutoInstallEnabled : false}
-                    toggleAutoInstall={this.toggleAutoInstall}
-                    hasBetaAccess={this.props.hasBetaAccess}/>
+                    toggleAutoInstall={this.toggleAutoInstall}/>
                     <VelocityTransitionGroup enter={{animation: "slideDown", begin: function() {that.startIntervalPackagesListScroll()}, complete: function() {that.stopIntervalPackagesListScroll()}}} leave={{animation: "slideUp"}}>
                       {this.state.expandedPackage == pack.packageName ?
                         <PackageListItemDetails
@@ -514,8 +513,7 @@ define(function(require) {
                           packageName={pack.packageName}
                           isQueued={pack.isQueued}
                           isAutoInstallEnabled={!_.isUndefined(pack.isAutoInstallEnabled) ? pack.isAutoInstallEnabled : false}
-                          showBlacklistForm={this.props.showBlacklistForm}
-                          hasBetaAccess={this.props.hasBetaAccess}/>
+                          showBlacklistForm={this.props.showBlacklistForm}/>
                       : null}
                     </VelocityTransitionGroup>
                 </li>

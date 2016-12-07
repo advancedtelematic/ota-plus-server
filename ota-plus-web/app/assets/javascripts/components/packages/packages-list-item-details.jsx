@@ -38,7 +38,7 @@ define(function(require) {
 
       return (
         <div className="package-details">
-          {this.props.hasBetaAccess && this.props.isAutoInstallEnabled ? 
+          {this.props.isAutoInstallEnabled ? 
             <div className="info-auto-update">
               Automatic update activated. The latest version of this package will automatically be installed on this device.
             </div>
