@@ -3,13 +3,6 @@
  * License: MPL-2.0
  */
 
-import cats.syntax.show._
-import com.advancedtelematic.json.signature.JcaSupport._
-import com.advancedtelematic.jwa.HS256
-import com.advancedtelematic.jws.{CompactSerialization, JwsPayload}
-import com.advancedtelematic.jwt._
-import com.advancedtelematic.ota.device.Devices._
-import io.circe.Decoder
 import java.io.File
 import java.security.InvalidParameterException
 import java.time.Instant
@@ -17,22 +10,28 @@ import java.time.temporal.ChronoUnit
 import java.util.UUID
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
+
+import cats.syntax.show._
+import com.advancedtelematic.Tokens
+import com.advancedtelematic.json.signature.JcaSupport._
+import com.advancedtelematic.jwa.HS256
+import com.advancedtelematic.jws.{CompactSerialization, JwsPayload}
+import com.advancedtelematic.jwt._
+import com.advancedtelematic.ota.device.Devices._
 import org.asynchttpclient.AsyncHttpClient
 import org.asynchttpclient.request.body.multipart.FilePart
 import org.genivi.sota.data.{Device, Uuid}
 import org.scalatest.Tag
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatestplus.play._
-import play.api.Configuration
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
-import play.api.libs.ws.{WS, WSClient, WSResponse}
 import play.api.libs.ws.{WSClient, WSResponse}
-import play.api.mvc.{Cookie, Cookies}
 import play.api.mvc.{Cookies, Session}
 import play.api.test.Helpers._
 import play.filters.csrf.CSRF
+
 import scala.util.Random
 
 
@@ -90,7 +89,7 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
   )(PackageId.apply _)
 
   import Method._
-  def apiUri(path: String) = s"http://$webserverHost:$port/api/v1/" + path
+  def apiUri(path: String): String = s"http://$webserverHost:$port/api/v1/" + path
 
   def makeRequest(path: String, method: Method) : WSResponse = {
     val req =
@@ -119,11 +118,11 @@ class APIFunTests extends PlaySpec with OneServerPerSuite with GeneratorDrivenPr
     }
   }
 
-  def makeCookie(session: (String, String)*) =
+  def makeCookie(session: (String, String)*): String =
     Cookies.encodeCookieHeader(Seq(Session.encodeAsCookie(Session(session.toMap))))
 
   lazy val sessionCookie = makeCookie(
-    "id_token" -> oauthToken,
+    "id_token" -> Tokens.identityTokenFor(namespace.underlying).value,
     "access_token" -> oauthToken,
     "auth_plus_access_token" -> oauthToken,
     "namespace" -> namespace.underlying,
