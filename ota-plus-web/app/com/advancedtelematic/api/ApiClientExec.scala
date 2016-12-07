@@ -49,6 +49,11 @@ class ApiClientExec @Inject()(wsClient: WSClient)(implicit ec: ExecutionContext)
       }
   }
 
+  def runUnsafe(request: WSClient => WSRequest): Future[WSResponse] = {
+    run(request(wsClient))
+      .recoverWith { case t => Future.failed(RemoteApiIOError(t)) }
+  }
+
   protected def run(request: WSRequest): Future[WSResponse] = {
     request.execute
   }
