@@ -44,7 +44,7 @@ define(function(require) {
                           <i className="fa fa-check-circle fa-stack-1x green" aria-hidden="true"></i>
                         </span>
                       }
-                      {this.props.hasBetaAccess && this.props.isAutoInstallEnabled ?
+                      {this.props.isAutoInstallEnabled ?
                         <span className="pull-right">
                           <label className="label label-success label-auto-update">Auto</label>
                         </span>
@@ -60,7 +60,7 @@ define(function(require) {
                           <i className="fa fa-circle fa-stack-1x"></i>
                           <i className="fa fa-dot-circle-o fa-stack-1x orange" aria-hidden="true"></i>
                         </span>
-                        {this.props.hasBetaAccess && this.props.isAutoInstallEnabled ? 
+                        {this.props.isAutoInstallEnabled ? 
                           <span className="pull-right">
                             <label className="label label-success label-auto-update">Auto</label>
                           </span>
@@ -69,7 +69,7 @@ define(function(require) {
                     : 
                       <span>
                         <span className="package-status-label-uninstalled pull-right">Uninstalled</span>
-                        {this.props.hasBetaAccess && this.props.isAutoInstallEnabled ? 
+                        {this.props.isAutoInstallEnabled ? 
                           <span className="pull-right">
                             <label className="label label-success label-auto-update">Auto</label>
                           </span>
@@ -79,7 +79,7 @@ define(function(require) {
               </div>
             </div>
           </button>
-          {this.props.hasBetaAccess && this.props.isSelected ?
+          {this.props.isSelected ?
             <div className="auto-update-toggle">
               Automatic update
               <div className={"switch" + (this.state.isAutoInstallEnabled ? " switchOn" : "")} onClick={this.props.toggleAutoInstall.bind(this, this.props.name, this.state.isAutoInstallEnabled)}></div>
