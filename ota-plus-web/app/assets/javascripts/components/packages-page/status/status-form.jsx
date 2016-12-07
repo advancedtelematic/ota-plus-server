@@ -7,6 +7,8 @@ define(function(require) {
       DoughnutChart = require('react-chartjs').Doughnut,
       GroupsList = require('es6!./groups-list');
 
+  const isFilteringEnabled = false;
+
   class StatusForm extends React.Component {
     constructor(props, context) {
       super(props, context);
@@ -116,7 +118,7 @@ define(function(require) {
                 </h4>
               </div>
               <div className="modal-body">
-                {this.props.hasBetaAccess ? 
+                {isFilteringEnabled && this.props.hasBetaAccess ? 
                   <div className="column-filter">
                     <div className="filter-header">Filter</div>
                     <div className="filter-subheader">
@@ -131,7 +133,7 @@ define(function(require) {
                     </div>
                   </div>
                 : null}
-                <div className="chart-stats" style={!this.props.hasBetaAccess ? {width: "100%"} : null}>
+                <div className="chart-stats" style={!isFilteringEnabled || !this.props.hasBetaAccess ? {width: "100%"} : null}>
                   <DoughnutChart data={stats} width="250" height="250" options={{
                       percentageInnerCutout: 60, 
                       segmentStrokeWidth: 5, 
