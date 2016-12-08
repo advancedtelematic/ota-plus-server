@@ -85,6 +85,7 @@ define(function(require) {
           stats.push(
             {
               value: version.installedCount,
+              groupIds: version.groupIds,
               color: availableColors[colorIndex],
               highlight: availableColors[colorIndex],
               label: (index === availableColors.length - 1 ? groupedStatsName : "v. " + version.packageVersion)
@@ -92,7 +93,8 @@ define(function(require) {
           );
         } else if(index >= availableColors.length) {
           var previousCount = stats[availableColors.length - 1].value;
-          stats[availableColors.length - 1].value = version.installedCount + previousCount;
+          stats[availableColors.length - 1].value = version.deviceCount + stats[availableColors.length - 1].value;
+          stats[availableColors.length - 1].groupIds = _.union(version.groupIds, stats[availableColors.length - 1].groupIds);
         }
       }, this);
       
@@ -102,6 +104,7 @@ define(function(require) {
             <div className="color-box" style={{backgroundColor: stat.color}}></div> 
             <div className="title-box">{stat.label}</div>
             <div className="subtitle-box">{stat.value} Devices</div>
+            <div className="subtitle-box">{Object.keys(stat.groupIds).length} Groups</div>
           </li>
         );
       }, this);
