@@ -8,42 +8,6 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        blacklistedPackagesData: [
-          {
-            packageName: 'nano1',
-            devicesCount: '20.000',
-            groupsCount: '15',
-            versions: [
-              {
-                version: '1.0.0',
-                devicesCount: '10.000',
-                groupsCount: '10'
-              },
-              {
-                version: '1.0.1',
-                devicesCount: '10.000',
-                groupsCount: '10'
-              }
-            ]
-          },
-          {
-            packageName: 'nano2',
-            devicesCount: '20.000',
-            groupsCount: '15',
-            versions: [
-              {
-                version: '1.0.0',
-                devicesCount: '10.000',
-                groupsCount: '10'
-              },
-              {
-                version: '1.0.1',
-                devicesCount: '10.000',
-                groupsCount: '10'
-              }
-            ]
-          }
-        ],
         headerTopPosition: 0,
         expandedPackage: null
       };
@@ -68,7 +32,7 @@ define(function(require) {
       });
     }
     render() {
-      var packages = _.map(this.state.blacklistedPackagesData, function(pack) {
+      var packages = _.map(this.props.packages, function(pack) {
         return (
           <li key={"blacklisted-package-" + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
             <button className="list-group-item" onClick={this.togglePackage.bind(this, pack.packageName)}>
@@ -76,17 +40,17 @@ define(function(require) {
                 {pack.packageName}
               </div>
               <div className="column column-second">
-                {pack.devicesCount}
+                {pack.deviceCount}
               </div>
               <div className="column column-third">
-                {pack.groupsCount}
+                {Object.keys(pack.groupIds).length}
               </div>
             </button>
             <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
               {this.state.expandedPackage == pack.packageName ?
                 <ImpactAnalysisBlacklistedPackagesVersions
                   key={'blacklisted-package-' + pack.packageName + '-versions'}
-                  versions={pack.versions}/>
+                  versions={pack.elements}/>
               : null}
             </VelocityTransitionGroup>
           </li>

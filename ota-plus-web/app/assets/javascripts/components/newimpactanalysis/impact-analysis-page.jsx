@@ -12,13 +12,21 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
+        blacklistedPackagesData: undefined,
         blacklistedPackagesListHeight: 300,
         chartColumnSize: {width: 880, height: 300},
-        isImpactTooltipShown: false
+        isImpactTooltipShown: false,
+        groupCount: undefined
       };
+      this.setBlacklistedPackagesData = this.setBlacklistedPackagesData.bind(this);
+      this.setImpactAnalysisData = this.setImpactAnalysisData.bind(this);
       this.setElementsSize = this.setElementsSize.bind(this);
       this.showImpactTooltip = this.showImpactTooltip.bind(this);
       this.hideImpactTooltip = this.hideImpactTooltip.bind(this);
+      SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages-with-stats'});
+      SotaDispatcher.dispatch({actionType: 'impact-analysis'});
+      db.blacklistedPackagesWithStats.addWatch("poll-blacklisted-packages-with-stats", _.bind(this.setBlacklistedPackagesData, this, null));
+      db.impactAnalysis.addWatch("poll-new-impact-analysis-page", _.bind(this.setImpactAnalysisData, this, null));
     }
     componentDidMount() {
       var that = this;
@@ -27,8 +35,49 @@ define(function(require) {
         that.setElementsSize();
       }, 1);
     }
-    componentWillUnmount(){
+    componentWillUnmount() {
       window.removeEventListener("resize", this.setElementsSize);
+      db.blacklistedPackagesWithStats.removeWatch("poll-blacklisted-packages-with-stats");
+      db.impactAnalysis.removeWatch("poll-new-impact-analysis-page");
+      db.blacklistedPackagesWithStats.reset();
+      db.impactAnalysis.reset();
+    }
+    setBlacklistedPackagesData() {
+      var blacklistedPackages = db.blacklistedPackagesWithStats.deref();
+      var groupedPackages = {};
+      var groups = [];
+      if(!_.isUndefined(blacklistedPackages)) {
+        _.each(blacklistedPackages, function(obj, index){
+          if(_.isUndefined(groupedPackages[obj.packageId.name]) || !groupedPackages[obj.packageId.name] instanceof Array ) {
+            groupedPackages[obj.packageId.name] = new Object();
+            groupedPackages[obj.packageId.name] = {
+              elements: [],
+              packageName: obj.packageId.name,
+              deviceCount: 0,
+              groupIds: []
+            };
+          }
+          groupedPackages[obj.packageId.name].deviceCount += obj.statistics.deviceCount;
+          groupedPackages[obj.packageId.name].groupIds = _.union(groupedPackages[obj.packageId.name].groupIds, obj.statistics.groupIds);
+          groupedPackages[obj.packageId.name].elements.push(blacklistedPackages[index]);
+          groups = _.union(groupedPackages[obj.packageId.name].groupIds, groups);
+        });
+        _.each(groupedPackages, function(obj, index) {
+          groupedPackages[index].elements = _.sortBy(obj.elements, function(element) {
+            return element.statistics.deviceCount;
+          }).reverse();
+        });
+        groupedPackages = _.sortBy(groupedPackages, function(element) {
+          return element.deviceCount;
+        }).reverse();
+        this.setState({
+          blacklistedPackagesData: groupedPackages,
+          groupCount: Object.keys(groups).length
+        });
+      }
+    }
+    setImpactAnalysisData() {
+      this.setState({impactAnalysisData: db.impactAnalysis.deref()});
     }
     setElementsSize() {
       var windowWidth = jQuery(window).width();
@@ -37,7 +86,7 @@ define(function(require) {
         width: windowWidth - $('#packages-column').width(),
         height: windowHeight - $('#chart-column').offset().top
       };
-      var blacklistedPackagesListHeight = windowHeight - $('#blacklisted-packages').offset().top;
+      var blacklistedPackagesListHeight = windowHeight - $('#packages-column').offset().top;
       this.setState({
         blacklistedPackagesListHeight: blacklistedPackagesListHeight,
         chartColumnSize: chartColumnSize,
@@ -52,7 +101,9 @@ define(function(require) {
     render() {
       return (
         <div>
-          <ImpactAnalysisHeader />
+          <ImpactAnalysisHeader 
+            deviceCount={(!_.isUndefined(this.state.impactAnalysisData) ? Object.keys(this.state.impactAnalysisData).length : undefined)}
+            groupCount={this.state.groupCount}/>
           <div className="panel panel-ats">
             <div className="panel-heading">
               <div className="panel-heading-left pull-left">
@@ -61,12 +112,28 @@ define(function(require) {
             </div>
             <div className="panel-body">
               <div id="packages-column">
-                <ImpactAnalysisBlacklistedPackages 
-                  blacklistedPackagesListHeight={this.state.blacklistedPackagesListHeight}/>
+                <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+                  {!_.isUndefined(this.state.blacklistedPackagesData) ?
+                    <ImpactAnalysisBlacklistedPackages 
+                      blacklistedPackagesListHeight={this.state.blacklistedPackagesListHeight}
+                      packages={this.state.blacklistedPackagesData}/>
+                  : undefined}
+                </VelocityTransitionGroup>
+                {_.isUndefined(this.state.blacklistedPackagesData) ?
+                  <Loader />
+                : undefined}
               </div>
       
               <div id="chart-column" style={this.state.chartColumnSize}>
-                <ImpactAnalysisChart />
+                <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+                  {!_.isUndefined(this.state.blacklistedPackagesData) ?    
+                    <ImpactAnalysisChart 
+                      packages={this.state.blacklistedPackagesData}/>
+                  : undefined}
+                </VelocityTransitionGroup>
+                {_.isUndefined(this.state.blacklistedPackagesData) ?
+                  <Loader />
+                : undefined}
               </div>
             </div>
           </div>
