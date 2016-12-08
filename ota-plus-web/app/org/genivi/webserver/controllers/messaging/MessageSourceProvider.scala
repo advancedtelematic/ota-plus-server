@@ -19,7 +19,7 @@ class EventBusActorListener extends MessageSourceProvider {
       if(system.eventStream.subscribe(ref, tag.runtimeClass)) {
         system.log.info(s"Successfully subscribed to ${tag.runtimeClass.getSimpleName} events")
       } else {
-        system.log.error(s"Filed to subscribe to Akka EventBus for message type ${tag.runtimeClass.getSimpleName}")
+        system.log.error(s"Failed to subscribe to Akka EventBus for message type ${tag.runtimeClass.getSimpleName}")
       }
       ref
     }

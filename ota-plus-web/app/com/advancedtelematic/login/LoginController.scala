@@ -221,7 +221,7 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
 
     import cats.data.Xor
     NsFromToken.parseToken(token.value) match {
-      case Xor.Right(t) => success(Namespace(nsFromToken.namespace(t)), "Extracted namspace")
+      case Xor.Right(t) => success(nsFromToken.toNamespaceScope(t).namespace, "Extracted namespace")
       case Xor.Left(msg) => failure(msg) ~~ UnexpectedToken(token, msg)
     }
   }
