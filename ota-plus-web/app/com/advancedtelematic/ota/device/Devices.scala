@@ -45,7 +45,8 @@ object Devices {
       (__ \ "deviceName").read[DeviceName] and
       (__ \ "deviceId").readNullable[DeviceId] and
       (__ \ "deviceType").read[DeviceType] and
-      (__ \ "lastSeen").readNullable[Instant]
+      (__ \ "lastSeen").readNullable[Instant] and
+      (__ \ "createdAt").read[Instant]
     )(Device.apply _)}
 
 
@@ -69,7 +70,8 @@ object Devices {
       (__ \ "deviceName").write[DeviceName] and
       (__ \ "deviceId").writeNullable[DeviceId] and
       (__ \ "deviceType").write[DeviceType] and
-      (__ \ "lastSeen").writeNullable[Instant]
+      (__ \ "lastSeen").writeNullable[Instant] and
+      (__ \ "createdAt").write[Instant]
     )(unlift(Device.unapply))
 }
 
