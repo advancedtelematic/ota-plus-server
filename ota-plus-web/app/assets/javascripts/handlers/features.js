@@ -14,8 +14,12 @@ define(function(require) {
               });
           break;
           case 'enable-treehub-feature':
-            sendRequest.doPut('/api/v1/features/treehub', null, {action: payload.actionType})
+            sendRequest.doPut('/api/v1/features/treehub', null, {action: payload.actionType, dataType: 'text'})
               .success(function() {
+                setTimeout(function() {
+                  SotaDispatcher.dispatch({actionType: 'get-features'});
+                  SotaDispatcher.dispatch({actionType: 'get-treehub-json'});
+                }, 1);
               });
           break;
           case 'get-treehub-json':
