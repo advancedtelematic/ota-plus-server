@@ -39,12 +39,23 @@ define(function(require) {
       if(!_.isUndefined(this.state.campaignsData)) {
         campaigns = _.map(this.state.campaignsData, function(campaign) {
           return (
-            <tr key={campaign.id}>
-              <td>{campaign.name}</td>
-              <td>none</td>
-              <td>none</td>
-              <td><a href="#" className="black" onClick={this.props.configureCampaign.bind(this, campaign.id)}>Configure</a></td>
-            </tr>
+            <a href="#" 
+              className="element-box" 
+              onClick={this.props.configureCampaign.bind(this, campaign.id)} 
+              title={campaign.name}
+              id={"link-campaignwizard-" + campaign.id} 
+              key={"link-campaignwizard-" + campaign.id}>
+              <div className="element-icon"></div>
+              <div className="element-desc">
+                <div className="element-title">{campaign.name}</div>
+                <div className="element-subtitle">
+                  Start date: none
+                </div>
+                <div className="element-subtitle">
+                  End date: none
+                </div>
+              </div>
+            </a>
           );
         }, this);
       }
@@ -52,37 +63,11 @@ define(function(require) {
         <div style={{height: this.props.listHeight}}>
           {!_.isUndefined(this.state.campaignsData) ?
             this.state.campaignsData.length ?
-              <table className="table">
-                <thead>
-                  <tr>
-                    <td>Name</td>
-                    <td>Start Date</td>
-                    <td>End Date</td>
-                    <td></td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {campaigns}
-                </tbody>
-              </table>
+              campaigns
             :
-              <div className="height-100">
-                <div className="table-empty-wrapper">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <td>Name</td>
-                        <td>Start Date</td>
-                        <td>End Date</td>
-                        <td></td>
-                      </tr>
-                    </thead>
-                  </table>
-                </div>
-                <div className="col-md-12 height-100 position-relative text-center">
-                  <div className="center-xy padding-15">
-                    <button type="submit" className="btn btn-confirm btn-small" onClick={this.props.openNewCampaignModal}><i className="fa fa-plus"></i> ADD NEW CAMPAIGN</button>
-                  </div>
+              <div className="col-md-12 height-100 position-relative text-center">
+                <div className="center-xy padding-15">
+                  <button type="submit" className="btn btn-confirm btn-small" onClick={this.props.openNewCampaignModal}><i className="fa fa-plus"></i> ADD NEW CAMPAIGN</button>
                 </div>
               </div>
           : undefined}

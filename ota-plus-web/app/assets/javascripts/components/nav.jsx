@@ -2,7 +2,6 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       Link = Router.Link,
-      IndexLink = Router.IndexLink,
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       LanguageSelector = require('es6!./translation/language-selector'),
@@ -86,7 +85,7 @@ define(function(require) {
             </div>
             <div id="navbar" className="pull-left">
               <ul className="nav navbar-nav">
-                <li><IndexLink to="/" activeClassName="active" id="link-devices">Devices</IndexLink></li>
+                <li><Link to="/devices" activeClassName="active" id="link-devices">Devices</Link></li>
                 <li><Link to="/packages" activeClassName="active" id="link-packages">Packages</Link></li>
                 <li><Link to="/campaigns" activeClassName="active" id="link-campaigns">Campaigns</Link></li>
                 <li>
