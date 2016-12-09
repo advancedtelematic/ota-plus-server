@@ -1,14 +1,21 @@
 define(function(require) {
-  var React = require('react');
+  var React = require('react'),
+      SotaDispatcher = require('sota-dispatcher');
 
   class ProvisioningTooltip extends React.Component {
     constructor(props) {
       super(props);
       this.closeModal = this.closeModal.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
     }
     closeModal(e) {
       e.preventDefault();
       this.props.hideProvisioningTooltip();
+    }
+    handleSubmit() {
+      SotaDispatcher.dispatch({
+        actionType: 'activate-provisioning-feature'
+      });
     }
     render() {
       return (
@@ -22,7 +29,7 @@ define(function(require) {
               </div>
               <div className="modal-footer">
                 <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.closeModal}>later</a>
-                <button type="button" className="btn btn-confirm pull-right">Get started now!</button>
+                <button type="button" className="btn btn-confirm pull-right" onClick={this.handleSubmit}>Get started now!</button>
               </div>
             </div>
           </div>
