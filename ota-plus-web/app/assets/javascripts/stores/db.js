@@ -41,6 +41,8 @@ define(function(require) {
       this.packageStats = atom.createAtom();
       this.autoInstallDevicesForPackage = atom.createAtom();
       this.autoInstallPackagesForDevice = atom.createAtom();
+      this.provisioningStatus = atom.createAtom();
+      this.provisioningDetails = atom.createAtom();
       
       //Events
       this.deviceSeen = atom.createAtom();
