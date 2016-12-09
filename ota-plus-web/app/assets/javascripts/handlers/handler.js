@@ -9,7 +9,8 @@ define(function(require) {
       componentsHandler = require('./components'),
       groupsHandler = require('./groups'),
       campaignsHandler = require('./campaigns'),
-      clientsHandler = require('./clients');
+      clientsHandler = require('./clients'),
+      featuresHandler = require('./features');
 
   var Handler = (function() {
       this.dispatchCallback = function(payload) {
