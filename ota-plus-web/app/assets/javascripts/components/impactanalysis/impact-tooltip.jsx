@@ -1,7 +1,5 @@
 define(function(require) {
-  var React = require('react'),
-      Router = require('react-router'),
-      _ = require('underscore');
+  var React = require('react');
 
   class ImpactTooltip extends React.Component {
     constructor(props) {
