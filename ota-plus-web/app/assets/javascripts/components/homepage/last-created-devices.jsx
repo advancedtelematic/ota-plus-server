@@ -1,5 +1,7 @@
 define(function(require) {
   var React = require('react'),
+      Router = require('react-router'),
+      Link = Router.Link,
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       Loader = require('es6!../loader'),
@@ -35,14 +37,44 @@ define(function(require) {
       var devices = [];
       if(!_.isUndefined(this.state.devicesData)) {
         devices = _.map(this.state.devicesData, function(device) {
+          var link = 'devicedetails/' + device.uuid;
+          var lastSeenDate = new Date(device.lastSeen);
+          var deviceStatus = 'Status unknown';
+          switch(device.status) {
+            case 'UpToDate':
+              deviceStatus = 'Device synchronized';
+            break;
+            case 'Outdated':
+              deviceStatus = 'Device unsynchronized';
+            break;
+            case 'Error':
+              deviceStatus = 'Installation error';
+            break;
+            default:
+            break;
+          }
           return (
-            <DeviceListItem key={device.uuid}
-              device={device}
-              isProductionDevice={false}
-              productionDeviceName={null}
-              width="100%"
-              openRenameDeviceModal={null}
-              areActionButtonsShown={false}/>
+            <Link 
+              to={`${link}`} 
+              className="element-box" 
+              title={device.deviceName}
+              id={"link-devicedetails-" + device.uuid} 
+              key={"link-devicedetails-" + device.uuid}>
+              <div className="element-icon"></div>
+              <div className="element-desc">
+                <div className="element-title">{device.deviceName}</div>
+                <div className="element-subtitle">
+                  {device.status !== 'NotSeen' ?
+                    <span>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
+                  :
+                    <span>Never seen online</span>
+                  }
+                </div>
+                <div className="element-subtitle">
+                  Device Status: {deviceStatus}
+                </div>
+              </div>
+            </Link>
           );
         }, this);
       }
