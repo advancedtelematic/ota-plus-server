@@ -24,6 +24,30 @@ define(function(require) {
                 db.treehubJson.reset(treehubJson);
               });
           break;
+          case 'get-provisioning-status':
+            sendRequest.doGet('/api/v1/provisioning/status', {action: payload.actionType})
+              .success(function(provisioningStatus) {
+                db.provisioningStatus.reset(provisioningStatus);
+                if(provisioningStatus.active)
+                  setTimeout(function() {
+                    SotaDispatcher.dispatch({actionType: 'get-provisioning-details'});
+                  }, 1);
+              });
+          break;
+          case 'get-provisioning-details':
+            sendRequest.doGet('/api/v1/provisioning', {action: payload.actionType})
+              .success(function(provisioningDetails) {
+                db.provisioningDetails.reset(provisioningDetails);
+              });
+          break;
+          case 'activate-provisioning-feature':
+            sendRequest.doPut('/api/v1/provisioning/activate', null, {action: payload.actionType})
+              .success(function() {
+                setTimeout(function() {
+                  SotaDispatcher.dispatch({actionType: 'get-provisioning-status'});
+                }, 1);
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));
