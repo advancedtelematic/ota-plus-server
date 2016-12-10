@@ -85,9 +85,5 @@ define(function(require) {
     }
   };
 
-  NewManualGroup.contextTypes = {
-    strings: React.PropTypes.object.isRequired
-  };
-
   return NewManualGroup;
 });

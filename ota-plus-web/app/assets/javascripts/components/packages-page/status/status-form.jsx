@@ -154,9 +154,5 @@ define(function(require) {
     }
   };
 
-  StatusForm.contextTypes = {
-    strings: React.PropTypes.object.isRequired
-  };
-
   return StatusForm;
 });

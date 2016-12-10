@@ -76,9 +76,5 @@ define(function(require) {
     }
   };
 
-  ClientCreate.contextTypes = {
-    strings: React.PropTypes.object.isRequired
-  };
-
   return ClientCreate;
 });

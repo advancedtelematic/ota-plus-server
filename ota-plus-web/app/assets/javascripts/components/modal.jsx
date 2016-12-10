@@ -17,7 +17,7 @@ define(function(require) {
               <div className="modal-content">
                 <div className="modal-header">
                   <button type="button" className="close" onClick={this.close}></button>
-                  <h4 className="modal-title">{this.context.strings[vars.TitleVar]}</h4>
+                  <h4 className="modal-title">{vars.TitleVar}</h4>
                 </div>
                 <div className="modal-body">
                   <Component {...this.props} />
@@ -32,7 +32,6 @@ define(function(require) {
     ModalClass.contextTypes = {
       router: React.PropTypes.object.isRequired,
       history: React.PropTypes.object.isRequired,
-      strings: React.PropTypes.object.isRequired
     };
     
     return ModalClass;

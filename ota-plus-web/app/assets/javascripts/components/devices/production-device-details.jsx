@@ -17,7 +17,7 @@ define(function(require) {
       super(props, context);
       this.state = {
         isPackagesHistoryShown: false,
-        textPackagesHistory: context.strings.viewhistory,
+        textPackagesHistory: 'View history',
         installedPackagesCount: 0,
         queuedPackagesCount: 0,
         queueCount: 0,
@@ -40,13 +40,6 @@ define(function(require) {
       }, 1000);
       this.setState({intervalId: intervalId});
     }
-    componentWillUpdate(nextProps, nextState, nextContext) {
-      if(nextContext.strings != this.context.strings) {
-        this.setState({
-          textPackagesHistory: nextState.isPackagesHistoryShown ? nextContext.strings.hidehistory : nextContext.strings.viewhistory
-        });
-      }
-    }
     componentWillUnmount(){
       db.device.reset();
       db.device.removeWatch("poll-device");
@@ -55,7 +48,7 @@ define(function(require) {
     toggleQueueHistory() {
       this.setState({
         isPackagesHistoryShown: !this.state.isPackagesHistoryShown,
-        textPackagesHistory: (this.state.isPackagesHistoryShown) ? this.context.strings.viewhistory : this.context.strings.hidehistory,
+        textPackagesHistory: (this.state.isPackagesHistoryShown) ? 'View history' : 'Hide history',
       });
     }
     setPackagesStatistics(installed, queued) {
@@ -94,7 +87,7 @@ define(function(require) {
             <div className="panel panel-ats">
               <div className="panel-heading">
                 <div className="panel-heading-left pull-left">
-                  {this.context.strings.packages}
+                  Packages
                 </div>
               </div>
               <div className="panel-body">
@@ -114,7 +107,7 @@ define(function(require) {
             <div className="panel panel-ats">
               <div className="panel-heading">
                 <div className="panel-heading-left pull-left">
-                  {this.context.strings.queue}
+                  Queue
                 </div>
                 <div className="panel-heading-right pull-right">
                 </div>
@@ -137,10 +130,6 @@ define(function(require) {
         </div>
       );
     }
-  };
-
-  ProductionDeviceDetails.contextTypes = {
-    strings: React.PropTypes.object.isRequired
   };
 
   return ProductionDeviceDetails;

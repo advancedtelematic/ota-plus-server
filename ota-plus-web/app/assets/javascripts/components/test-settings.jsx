@@ -63,9 +63,5 @@ define(function(require) {
     }
   };
 
-  TestSettings.contextTypes = {
-    strings: React.PropTypes.object.isRequired
-  };
-
   return TestSettings;
 });

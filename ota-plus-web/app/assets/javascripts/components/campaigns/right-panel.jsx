@@ -26,7 +26,7 @@ define(function(require) {
                       <a href="#" type="button" onClick={this.close}>
                         <img src="/assets/img/icons/wireless2.png" className="icon-campaigns pull-right" alt=""/>
                       </a>
-                      <h4 className="modal-title">{this.context.strings.ongoingcampaigns}</h4>
+                      <h4 className="modal-title">Ongoing update campaigns</h4>
                     </div>
                     <div className="modal-body">
                       <Campaigns />
@@ -42,10 +42,6 @@ define(function(require) {
         );
       }
     }
-    
-    RightPanel.contextTypes = {
-      strings: React.PropTypes.object.isRequired
-    };
 
   return RightPanel;
 });

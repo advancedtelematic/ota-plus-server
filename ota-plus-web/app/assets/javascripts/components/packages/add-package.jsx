@@ -154,7 +154,7 @@ define(function(require) {
 
   AddPackage.contextTypes = {
     history: React.PropTypes.object.isRequired,
-    strings: React.PropTypes.object.isRequired,
+    
   };
 
   return AddPackage;
