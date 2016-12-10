@@ -1603,13 +1603,13 @@ a.close, button.close {
 
         .modal-content {
             border: 0;
+            border-radius: 0;
 
             .modal-header {
                 color: #fff;
                 text-align: center;
-                background: #979797;
-                border-top-left-radius: 5px;
-                border-top-right-radius: 5px;
+                background: #4B5151;
+                border: 0;
 
                 &.modal-header-red {
                     background: red;
