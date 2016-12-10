@@ -137,7 +137,7 @@ define(function(require) {
               :
                 <div className="impact-analysis-empty" style={{height: this.state.contentHeight}}>
                   <div className="center-xy padding-15">
-                    <div className="font-22">There are no blacklisted packages.</div>
+                    <div className="font-22">You don't have any blacklisted packages.</div>
                     <div className="margin-top-10">
                       <a href="#" className="font-22" onClick={this.showImpactTooltip}>
                         <span className="color-main"><strong>What is this?</strong></span>
