@@ -220,7 +220,6 @@ define(function(require) {
   
   Wizard.contextTypes = {
     history: React.PropTypes.object.isRequired,
-    
   };
   
   return Wizard;
