@@ -4,8 +4,8 @@ define(function(require) {
       _ = require('underscore'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       Cookies = require('js-cookie'),
-      DeviceListItem = require('es6!./devices-list-item'),
-      DeviceListGroupItem = require('es6!./devices-list-groupitem');
+      DeviceListItem = require('./devices-list-item'),
+      DeviceListGroupItem = require('./devices-list-groupitem');
 
   class DevicesList extends React.Component {
     constructor(props) {
@@ -85,7 +85,7 @@ define(function(require) {
               data-groupuuid={device.groupUUID}
               className={className}
               key={"dnd-device-" + device.uuid}
-              draggable={(!_.isUndefined(this.props.isDND) ? this.props.isDND : "true")}
+              draggable={!_.isUndefined(this.props.isDND) ? this.props.isDND : "true"}
               onDragStart={_.isUndefined(this.props.isDND) || this.props.isDND ? this.props.onDeviceDragStart : null}
               onDragEnd={_.isUndefined(this.props.isDND) || this.props.isDND ? this.props.onDeviceDragEnd : null}
               onDragEnter={_.isUndefined(this.props.isDND) || this.props.isDND ? this.onDragEnter : null}

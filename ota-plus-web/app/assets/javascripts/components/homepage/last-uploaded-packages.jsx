@@ -4,7 +4,7 @@ define(function(require) {
       Link = Router.Link,
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
-      Loader = require('es6!../loader');
+      Loader = require('../loader');
 
   class LastUploadedPackages extends React.Component {
     constructor(props) {

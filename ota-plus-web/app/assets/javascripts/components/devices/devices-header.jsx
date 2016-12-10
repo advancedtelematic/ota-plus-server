@@ -2,7 +2,7 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       Link = Router.Link,
-      SearchBar = require('es6!../searchbar');
+      SearchBar = require('../searchbar');
         
   class DevicesHeader extends React.Component {
     constructor(props) {

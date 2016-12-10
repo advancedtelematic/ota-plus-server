@@ -3,8 +3,8 @@ define(function(require) {
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      Loader = require('es6!../loader'),
-      CampaignsListItem = require('es6!./campaigns-list-item');
+      Loader = require('../loader'),
+      CampaignsListItem = require('./campaigns-list-item');
       
   class CampaignsList extends React.Component {
     constructor(props) {
@@ -33,7 +33,7 @@ define(function(require) {
       e.preventDefault();
       this.props.openWizard(campaignUUID);
     }
-    setCampaignsData(filterValue = null, selectedSort) {
+    setCampaignsData(filterValue, selectedSort) {
       var campaigns = db.campaigns.deref();
       if(!_.isUndefined(campaigns)) {
         if(filterValue) {            

@@ -4,8 +4,8 @@ define(function(require) {
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      QueueList = require('es6!./queue-list'),
-      HistoryList = require('es6!./history-list');
+      QueueList = require('./queue-list'),
+      HistoryList = require('./history-list');
 
   class QueueWrapper extends React.Component {
     constructor(props) {

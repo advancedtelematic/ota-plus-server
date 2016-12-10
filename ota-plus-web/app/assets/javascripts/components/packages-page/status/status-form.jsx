@@ -5,7 +5,7 @@ define(function(require) {
       db = require('stores/db'),
       Link = Router.Link,
       DoughnutChart = require('react-chartjs').Doughnut,
-      GroupsList = require('es6!./groups-list');
+      GroupsList = require('./groups-list');
 
   const isFilteringEnabled = false;
 

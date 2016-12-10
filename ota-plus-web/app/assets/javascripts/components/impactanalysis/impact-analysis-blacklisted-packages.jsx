@@ -2,7 +2,7 @@ define(function(require) {
   var React = require('react'),
       ReactDOM = require('react-dom'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      ImpactAnalysisBlacklistedPackagesVersions = require('es6!./impact-analysis-blacklisted-packages-versions');
+      ImpactAnalysisBlacklistedPackagesVersions = require('./impact-analysis-blacklisted-packages-versions');
       
   class ImpactAnalysisBlacklistedPackages extends React.Component {
     constructor(props) {

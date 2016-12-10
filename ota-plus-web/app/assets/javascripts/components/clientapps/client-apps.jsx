@@ -3,9 +3,9 @@ define(function(require) {
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      Loader = require('es6!../loader'),
-      ClientAppsHeader = require('es6!./client-apps-header'),
-      ClientCreate = require('es6!./client-create');
+      Loader = require('../loader'),
+      ClientAppsHeader = require('./client-apps-header'),
+      ClientCreate = require('./client-create');
 
   class ClientsApps extends React.Component {
     constructor(props) {

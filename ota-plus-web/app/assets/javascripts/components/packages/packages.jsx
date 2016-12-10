@@ -2,8 +2,8 @@ define(function(require) {
   var React = require('react'),
       Cookies = require('js-cookie'),
       db = require('stores/db'),
-      PackagesList = require('es6!./packages-list'),
-      SearchBar = require('es6!../searchbar');
+      PackagesList = require('./packages-list'),
+      SearchBar = require('../searchbar');
 
   class Packages extends React.Component {
     constructor(props) {
