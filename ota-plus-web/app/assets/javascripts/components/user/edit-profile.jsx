@@ -7,8 +7,7 @@ define(function(require) {
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       Loader = require('../loader'),
       Responses = require('../responses'),
-      ReactI18next = require('reactI18next'),
-      translate = ReactI18next.translate;
+      ReactI18next = require('reactI18next');
 
   class TestSettings extends React.Component {
     constructor(props) {
@@ -86,5 +85,5 @@ define(function(require) {
     }
   };
 
-  return translate()(TestSettings);
+  return ReactI18next.translate()(TestSettings);
 });

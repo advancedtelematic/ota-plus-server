@@ -1,4 +1,14 @@
 {
+    "common": {
+        "device": "device",
+        "device_plural": "devices",
+        "deviceWithCount": "{{count}} device",
+        "deviceWithCount_plural": "{{count}} devices",
+        "group": "group",
+        "group_plural": "groups",
+        "groupWithCount": "{{count}} group",
+        "groupWithCount_plural": "{{count}} groups"
+    },
     "editprofile": {
         "title": "Edit profile"
     }
