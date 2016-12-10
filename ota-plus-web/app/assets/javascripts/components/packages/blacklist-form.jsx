@@ -179,7 +179,7 @@ define(function(require) {
 
   BlacklistForm.contextTypes = {
     history: React.PropTypes.object.isRequired,
-    strings: React.PropTypes.object.isRequired,
+    
   };
 
   return BlacklistForm;

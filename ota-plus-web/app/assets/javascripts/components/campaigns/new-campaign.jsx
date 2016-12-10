@@ -304,7 +304,6 @@ define(function(require) {
 
   NewCampaign.contextTypes = {
     history: React.PropTypes.object.isRequired,
-    strings: React.PropTypes.object.isRequired,
   };
 
   return NewCampaign;

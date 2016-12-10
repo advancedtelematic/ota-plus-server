@@ -78,9 +78,5 @@ define(function(require) {
     }
   };
 
-  RenameGroup.contextTypes = {
-    strings: React.PropTypes.object.isRequired
-  };
-
   return RenameGroup;
 });

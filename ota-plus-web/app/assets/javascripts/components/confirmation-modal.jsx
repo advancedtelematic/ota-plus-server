@@ -45,7 +45,7 @@ define(function(require) {
 
   ConfirmationModal.contextTypes = {
     history: React.PropTypes.object.isRequired,
-    strings: React.PropTypes.object.isRequired,
+    
   };
 
   return ConfirmationModal;

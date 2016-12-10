@@ -67,15 +67,15 @@
             requirejs.config({"paths": {"jquery-ui": ["@routes.Assets.versioned("js/jquery-ui.min")"]}});
             requirejs.config({"paths": {"progressbar-js": ["@routes.Assets.versioned("js/progressbar.min")"]}});
             requirejs.config({"paths": {"babel": ["@routes.Assets.versioned("js/babel.min")"]}});
-            requirejs.config({"paths": {"es6": ["@routes.Assets.versioned("js/es6")"]}});
             requirejs.config({"paths": {"Chartjs": ["@routes.Assets.versioned("js/Chart.min")"]}});
             requirejs.config({"paths": {"react-chartjs": ["@routes.Assets.versioned("js/react-chartjs.min")"]}});
             requirejs.config({"paths": {"bootstrap": ["/webjars/bootstrap/3.3.6/js/bootstrap"], "bootstrap-css": ["/webjars/bootstrap/3.3.6/css/bootstrap"]}, "shim": {"bootstrap": ["jquery"]}, "packages":[]});
-            requirejs.config({"paths": {"react-intl": ["/webjars/react-intl/2.1.3/src/react-intl"]}});
+            requirejs.config({"paths": {"i18nextXHRBackend": ["@routes.Assets.versioned("js/i18nextXHRBackend.min")"]}});
+            requirejs.config({"paths": {"i18next": ["https://cdnjs.cloudflare.com/ajax/libs/i18next/4.1.1/i18next.min"]}});
+            requirejs.config({"paths": {"i18nextBrowserLanguageDetector": ["@routes.Assets.versioned("js/i18nextBrowserLanguageDetector.min")"]}});
+            requirejs.config({"paths": {"reactI18next": ["@routes.Assets.versioned("js/react-i18next.min")"]}});
             requirejs.config({
               waitSeconds: 60,
-          
-            
             });  
       
             requirejs.onError = function (err) {
