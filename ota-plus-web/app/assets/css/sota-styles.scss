@@ -4177,6 +4177,13 @@ hr.full-line {
         position: relative;
         overflow: hidden;
     }
+    
+    .impact-analysis-empty {
+        text-align: center;
+        width: 100%;
+        float: left;
+        position: relative;
+    }
 }
 
 #blacklisted-packages {
