@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      ReactI18next = require('reactI18next'),
       Router = require('react-router'),
       Link = Router.Link,
       SotaDispatcher = require('sota-dispatcher'),
@@ -139,6 +140,7 @@ define(function(require) {
       }
     }
     render() {
+      const { t } = this.props;
       var campaign = this.state.campaignData;
       var failureRateData = [];
       var progress = 0;
@@ -200,7 +202,7 @@ define(function(require) {
                           </div>
                           <div className="margin-top-50">
                             <div className="col-md-3 margin-top-5">
-                              <span className="lightgrey">{campaign.overallUpdatedDevicesCount} of {campaign.overallDevicesCount} Devices</span>
+                              <span className="lightgrey">{campaign.overallUpdatedDevicesCount} of {t('common.deviceWithCount', {count: campaign.overallDevicesCount})}</span>
                             </div>
                             <div className="col-md-8">
                               <div className="progress progress-blue">
@@ -272,5 +274,5 @@ define(function(require) {
     }
   };
 
-  return CampaignDetails;
+  return ReactI18next.translate()(CampaignDetails);
 });

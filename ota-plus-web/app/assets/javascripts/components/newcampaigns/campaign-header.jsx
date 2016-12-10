@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      ReactI18next = require('reactI18next'),
       Router = require('react-router'),
       Link = Router.Link,
       db = require('stores/db');
@@ -9,6 +10,7 @@ define(function(require) {
       super(props);
     }
     render() {
+      const { t } = this.props;
       return (
         <div className="col-md-12">
           <Link to="campaigns"><img src="/assets/img/icons/back.png" className="icon-back" alt=""/></Link>
@@ -16,7 +18,7 @@ define(function(require) {
           <div className="grey-header-text">
             <div className="grey-header-title">Campaign {this.props.name}</div>
             <div className="grey-header-subtitle">
-              {this.props.devicesCount} devices
+              {t('common.deviceWithCount', {count: this.props.devicesCount})}
             </div>
           </div>
         </div>
@@ -24,5 +26,5 @@ define(function(require) {
     }
   };
 
-  return CampaignHeader;
+  return ReactI18next.translate()(CampaignHeader);
 });

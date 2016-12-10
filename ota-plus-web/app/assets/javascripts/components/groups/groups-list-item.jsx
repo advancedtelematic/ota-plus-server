@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      ReactI18next = require('reactI18next'),
       ReactDOM = require('react-dom');
 
   class GroupsListItem extends React.Component {
@@ -13,12 +14,13 @@ define(function(require) {
         this.props.selectGroup({name: this.props.group.groupName, type: 'real', uuid: this.props.group.id});
     }
     render() {
+      const { t } = this.props;
       return (
         <button type="button" className={"list-group-item " + this.props.groupClassName + (this.props.isSelected ? " checked" : "")} onClick={this.selectGroup} id={"button-group-" + this.props.group.groupName}>
           <div className="group-icon"></div>
           <div className="group-text">
             <div className="group-title" title={this.props.group.groupName}>{this.props.group.groupName}</div>
-            <div className="group-subtitle">{Object.keys(this.props.group.devicesFilteredUUIDs).length} devices</div>
+            <div className="group-subtitle">{t('common.deviceWithCount', {count: Object.keys(this.props.group.devicesFilteredUUIDs).length})}</div>
           </div>
           {this.props.isSelected ? 
             <div className="group-pointer">
@@ -34,5 +36,5 @@ define(function(require) {
     location: React.PropTypes.object,
   };
 
-  return GroupsListItem;
+  return ReactI18next.translate()(GroupsListItem);
 });
