@@ -2,15 +2,15 @@ define(function(require) {
   var React = require('react'),
       SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      HomePageHeader = require('es6!./home-page-header'),
-      LastCreatedDevices = require('es6!./last-created-devices'),
-      LastUploadedPackages = require('es6!./last-uploaded-packages'),
-      OngoingDraftCampaigns = require('es6!./ongoing-draft-campaigns'),
-      LastRunningCampaigns = require('es6!./last-running-campaigns'),
-      NewDevice = require('es6!../devices/new-device'),
-      NewPackage = require('es6!../packages/add-package'),
-      NewCampaign = require('es6!../newcampaigns/campaign-create'),
-      CampaignWizard = require('es6!../newcampaigns/wizard/wizard');
+      HomePageHeader = require('./home-page-header'),
+      LastCreatedDevices = require('./last-created-devices'),
+      LastUploadedPackages = require('./last-uploaded-packages'),
+      OngoingDraftCampaigns = require('./ongoing-draft-campaigns'),
+      LastRunningCampaigns = require('./last-running-campaigns'),
+      NewDevice = require('../devices/new-device'),
+      NewPackage = require('../packages/add-package'),
+      NewCampaign = require('../newcampaigns/campaign-create'),
+      CampaignWizard = require('../newcampaigns/wizard/wizard');
 
   class HomePage extends React.Component {
     constructor(props) {

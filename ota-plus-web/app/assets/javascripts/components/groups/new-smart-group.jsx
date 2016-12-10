@@ -3,7 +3,7 @@ define(function(require) {
       db = require('stores/db'),
       serializeForm = require('../../mixins/serialize-form'),
       SotaDispatcher = require('sota-dispatcher'),
-      Loader = require('es6!../loader'),
+      Loader = require('../loader'),
       Cookies = require('js-cookie'),
       Responses = require('../responses');
   

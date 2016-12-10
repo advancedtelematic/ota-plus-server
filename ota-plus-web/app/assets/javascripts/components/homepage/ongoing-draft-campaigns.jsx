@@ -2,7 +2,7 @@ define(function(require) {
   var React = require('react'),
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
-      Loader = require('es6!../loader');
+      Loader = require('../loader');
 
   class OngoingDraftCampaigns extends React.Component {
     constructor(props) {

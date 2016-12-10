@@ -3,13 +3,13 @@ define(function(require) {
       ReactDOM = require('react-dom'),
       SotaDispatcher = require('sota-dispatcher'),
       db = require('stores/db'),
-      PackagesListItem = require('es6!./packages-list-item'),
-      PackageListItemDetails = require('es6!./packages-list-item-details'),
-      Dropzone = require('es6!../../mixins/dropzone'),
-      Loader = require('es6!../loader'),
+      PackagesListItem = require('./packages-list-item'),
+      PackageListItemDetails = require('./packages-list-item-details'),
+      Dropzone = require('../../mixins/dropzone'),
+      Loader = require('../loader'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      TutorialAddPackageFirstStep = require('es6!../tutorial/add-package-first-step'),
-      TutorialAddPackageSecondStep = require('es6!../tutorial/add-package-second-step');
+      TutorialAddPackageFirstStep = require('../tutorial/add-package-first-step'),
+      TutorialAddPackageSecondStep = require('../tutorial/add-package-second-step');
   
   class PackagesList extends React.Component {
     constructor(props) {
@@ -176,7 +176,11 @@ define(function(require) {
     refreshPackagesData() {
       this.setPackagesData(this.props.selectedStatus, this.props.selectedType, this.props.selectedSort);
     }
-    setPackagesData(selectedStatus = this.props.selectedStatus, selectedType = this.props.selectedType, selectedSort = this.props.selectedSort) {
+    setPackagesData(selectedStatus, selectedType, selectedSort) {
+      selectedStatus = selectedStatus || this.props.selectedStatus;
+      selectedType = selectedType || this.props.selectedType;
+      selectedSort = selectedSort || this.props.selectedSort;
+    
       var packages = undefined;
       var initialPackagesData = this.prepareInitialData();
             
@@ -228,7 +232,11 @@ define(function(require) {
       }
       return result;
     }
-    applyFilters(packages, selectedStatus = this.props.selectedStatus, selectedType = this.props.selectedType, selectedSort = this.props.selectedSort) {
+    applyFilters(packages, selectedStatus, selectedType, selectedSort) {
+      selectedStatus = selectedStatus || this.props.selectedStatus;
+      selectedType = selectedType || this.props.selectedType;
+      selectedSort = selectedSort || this.props.selectedSort;
+    
       var that = this;
       var sortedPackages = undefined;
       var installedPackages = _.clone(db.searchablePackagesForDevice.deref());

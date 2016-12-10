@@ -1,6 +1,6 @@
 define(function(require) {
   var React = require('react'),
-      Campaign = require('es6!./campaign');
+      Campaign = require('./campaign');
   
   class Campaigns extends React.Component {
     constructor(props) {

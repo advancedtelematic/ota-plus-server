@@ -59,6 +59,9 @@ libraryDependencies ++= Seq (
 
 enablePlugins(PlayScala, SbtWeb, Versioning.Plugin)
 
+ReactJsKeys.harmony := true
+ReactJsKeys.es6module := true
+
 Versioning.settings
 
 Release.settings

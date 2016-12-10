@@ -2,12 +2,12 @@ define(function(require) {
   var React = require('react'),
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
-      SearchBar = require('es6!../../searchbar'),
+      SearchBar = require('../../searchbar'),
       Loader = require('../../loader'),
-      WizardStep1 = require('es6!./wizard-step-1'),
-      WizardStep2 = require('es6!./wizard-step-2'),
-      WizardStep3 = require('es6!./wizard-step-3'),
-      WizardStep4 = require('es6!./wizard-step-4');
+      WizardStep1 = require('./wizard-step-1'),
+      WizardStep2 = require('./wizard-step-2'),
+      WizardStep3 = require('./wizard-step-3'),
+      WizardStep4 = require('./wizard-step-4');
 
   class Wizard extends React.Component {
     constructor(props) {

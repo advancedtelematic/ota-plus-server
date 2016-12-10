@@ -1,7 +1,7 @@
 define(function(require) {
   var React = require('react'),
       SotaDispatcher = require('sota-dispatcher'),
-      PackagesListItemDetailsVersion = require('es6!./packages-list-item-details-version');
+      PackagesListItemDetailsVersion = require('./packages-list-item-details-version');
 
   class PackageListItemDetails extends React.Component {
     constructor(props) {
