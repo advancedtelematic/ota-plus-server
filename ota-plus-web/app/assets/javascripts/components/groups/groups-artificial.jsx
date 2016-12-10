@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      ReactI18next = require('reactI18next'),
       ReactDOM = require('react-dom'),
       SotaDispatcher = require('sota-dispatcher');
 
@@ -82,7 +83,8 @@ define(function(require) {
         });
       }
     }
-    render() {        
+    render() {
+      const { t } = this.props;
       var groups = _.map(this.state.artificialGroupsData, function(group, index) {
         var groupClassName = '';
         if(this.props.draggingDevice !== null && group.isDND) {
@@ -102,7 +104,7 @@ define(function(require) {
              data-groupname={group.groupName}>
               <div className="group-text">
                 <div className="group-title" title={group.friendlyName}>{group.friendlyName}</div>
-                <div className="group-subtitle">{group.devicesCount} devices</div>
+                <div className="group-subtitle">{t('common.deviceWithCount', {count: group.devicesCount})}</div>
               </div>
               {isSelected ? 
                 <div className="group-pointer">
@@ -126,5 +128,5 @@ define(function(require) {
     location: React.PropTypes.object,
   };
 
-  return GroupsArtificial;
+  return ReactI18next.translate()(GroupsArtificial);
 });

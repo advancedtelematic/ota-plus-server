@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      ReactI18next = require('reactI18next'),
       Router = require('react-router'),
       Link = Router.Link,
       db = require('stores/db'),
@@ -15,6 +16,7 @@ define(function(require) {
       this.props.cancelCampaignForGroup(this.props.campaignGroup, this.props.groupName);
     }
     render() {
+      const { t } = this.props;
       var statistics = this.props.campaignGroup.statistics;
       var progress = Math.min(Math.round(statistics.updatedDevices/Math.max(statistics.deviceCount, 1) * 100), 100);
       var data = [
@@ -43,12 +45,12 @@ define(function(require) {
             <div className="group-icon"></div>
             <div className="group-text">
               <div className="group-title">{this.props.groupName}</div>
-              <div className="group-subtitle">{statistics.deviceCount} devices</div>
+              <div className="group-subtitle">{t('common.deviceWithCount', {count: statistics.deviceCount})}</div>
             </div>
           </td>
           <td>
             <div className="col-md-4 margin-top-5">
-              <span className="lightgrey">{statistics.updatedDevices} of {statistics.deviceCount} Devices</span>
+              <span className="lightgrey">{statistics.updatedDevices} of {t('common.deviceWithCount', {count: statistics.deviceCount})} </span>
             </div>
             <div className="progress progress-blue">
               <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}></div>
@@ -85,5 +87,5 @@ define(function(require) {
     }
   };
 
-  return CampaignGroupsListItem;
+  return ReactI18next.translate()(CampaignGroupsListItem);
 });
