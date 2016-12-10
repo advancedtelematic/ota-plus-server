@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      ReactI18next = require('reactI18next'),
       DoughnutChart = require('react-chartjs').Doughnut;
       
   class ImpactAnalysisChart extends React.Component {
@@ -7,6 +8,7 @@ define(function(require) {
       super(props);
     }
     render() {
+      const { t } = this.props;
       var availableColors = [
         '#1D5E6F',
         '#9DDDD4',
@@ -40,8 +42,8 @@ define(function(require) {
           <li key={"color-" + stat.label + "-" + stat.color}>
             <div className="color-box" style={{backgroundColor: stat.color}}></div> 
             <div className="title-box">{stat.label}</div>
-            <div className="subtitle-box">{stat.value} Devices</div>
-            <div className="subtitle-box">{Object.keys(stat.groupIds).length} Groups</div>
+            <div className="subtitle-box">{t('common.deviceWithCount', {count: stat.value})}</div>
+            <div className="subtitle-box">{t('common.groupWithCount', {count: Object.keys(stat.groupIds).length})}</div>
           </li>
         );
       }, this);
@@ -61,5 +63,5 @@ define(function(require) {
     }
   };
 
-  return ImpactAnalysisChart;
+  return ReactI18next.translate()(ImpactAnalysisChart);
 });
