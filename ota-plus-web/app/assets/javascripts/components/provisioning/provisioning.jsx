@@ -34,6 +34,10 @@ define(function(require) {
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setProvisioningContentHeight);
+      db.provisioningStatus.removeWatch("poll-provisioning-status");
+      db.provisioningDetails.removeWatch("poll-provisioning-details");
+      db.provisioningStatus.reset();
+      db.provisioningDetails.reset();
     }
     setProvisioningContentHeight() {
       var windowHeight = jQuery(window).height();
