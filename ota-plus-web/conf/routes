@@ -20,6 +20,10 @@ GET     /api/v1/provisioning/status              com.advancedtelematic.Provision
 GET     /api/v1/provisioning                     com.advancedtelematic.ProvisioningController.provisioningInfo
 PUT     /api/v1/provisioning/activate            com.advancedtelematic.ProvisioningController.activateAutoProvisioning
 
+GET     /api/v1/features                         com.advancedtelematic.user.UserProfileController.getFeatures
+PUT     /api/v1/features/:feature                com.advancedtelematic.user.UserProfileController.activateFeature(feature: FeatureName)
+GET     /api/v1/features/:feature/client         com.advancedtelematic.user.UserProfileController.getConfig(feature: FeatureName)
+
 GET     /api/v1/*path                            org.genivi.webserver.controllers.Application.apiProxy(path: String)
 PUT     /api/v1/*path                            org.genivi.webserver.controllers.Application.apiProxy(path: String)
 POST    /api/v1/*path                            org.genivi.webserver.controllers.Application.apiProxy(path: String)
