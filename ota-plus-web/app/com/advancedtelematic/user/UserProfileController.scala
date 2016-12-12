@@ -66,8 +66,11 @@ class UserProfileController @Inject()(
     queryUserProfile(request)
       .map(x => Ok(Json.toJson(x)))
       .recover {
-        case e: RemoteApiError => e.result
+        case e: RemoteApiError => e.result.header.status match {
+          case Unauthorized.header.status => Forbidden.sendEntity(e.result.body)
+          case _ => e.result
       }
+    }
   }
 
   private[this] def userIdFromToken(idToken: IdToken): String Xor UserId = {
