@@ -1,27 +1,26 @@
 package com.advancedtelematic.api
 
-import java.util.UUID
-
 import akka.Done
-import com.advancedtelematic.{ Auth0AccessToken, AuthPlusAccessToken, IdToken }
+import cats.syntax.show.toShowOps
 import com.advancedtelematic.api.ApiRequest.UserOptions
+import com.advancedtelematic.login.Auth0Config
 import com.advancedtelematic.ota.device.Devices._
 import com.advancedtelematic.ota.vehicle.ClientInfo
+import com.advancedtelematic.user.{ UserId, UserProfile }
+import com.advancedtelematic.{ Auth0AccessToken, AuthPlusAccessToken, IdToken }
+import java.util.UUID
+import org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 import org.genivi.sota.data.{ Device, DeviceT, Namespace, Uuid }
+import org.genivi.webserver.controllers.FeatureName
 import org.genivi.webserver.controllers.OtaPlusConfig
-import play.api.{ Configuration, Logger }
 import play.api.libs.json._
 import play.api.libs.ws.{ WSAuthScheme, WSClient, WSRequest, WSResponse }
 import play.api.mvc.Result
-
+import play.api.{ Configuration, Logger }
 import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.control.NoStackTrace
-import cats.syntax.show.toShowOps
-import com.advancedtelematic.login.Auth0Config
-import com.advancedtelematic.user.{ UserId, UserProfile }
-import org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
-
 import scala.util.Try
+import scala.util.control.NoStackTrace
+
 
 case class RemoteApiIOError(cause: Throwable) extends Exception(cause) with NoStackTrace
 
@@ -30,6 +29,8 @@ case class RemoteApiError(result: Result, msg: String = "") extends Exception(ms
 case class RemoteApiParseError(msg: String) extends Exception(msg) with NoStackTrace
 
 case class UserPass(user: String, pass: String)
+
+case class Feature(feature: FeatureName, client_id: Option[Uuid], enabled: Boolean)
 
 object ApiRequest {
   case class UserOptions(token: Option[String] = None,
@@ -250,4 +251,60 @@ class Auth0Api(val conf: Configuration, val apiExec: ApiClientExec) extends OtaP
         }
       }
   }
+}
+
+class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
+
+  import play.api.libs.functional.syntax._
+
+  private val userProfileRequest = ApiRequest.base(userProfileApiUri + "/api/v1/")
+
+  implicit val featureNameR: Reads[FeatureName] = Reads.StringReads.map(FeatureName)
+  implicit val featureNameW: Writes[FeatureName] = Writes.StringWrites.contramap(_.get)
+  implicit val featureR: Reads[Feature] = {(
+    (__ \ "feature").read[FeatureName] and
+    (__ \ "client_id").readNullable[Uuid] and
+    (__ \ "enabled").read[Boolean]
+  )(Feature.apply _)}
+
+  def createProfile(userId: UserId)
+                   (implicit executionContext: ExecutionContext): Future[Done] = {
+    val requestBody = Json.obj("user_id" -> userId.id)
+
+    userProfileRequest("users")
+      .transform(_.withMethod("POST").withBody(requestBody))
+      .execResponse(apiExec)
+      .flatMap { response =>
+        if (response.status == ResponseStatusCodes.OK_200) {
+          Future.successful(Done)
+        } else {
+          Future.failed(UnexpectedResponse(response))
+        }
+      }
+  }
+
+  def getFeature(userId: UserId, feature: FeatureName): Future[Feature] =
+    userProfileRequest("users/" + userId.id + "/features/" + feature.get).execJson[Feature](apiExec)
+
+  def getFeatures(userId: UserId): Future[Seq[FeatureName]] =
+    userProfileRequest("users/" + userId.id + "/features").execJson[Seq[FeatureName]](apiExec)
+
+  def activateFeature(userId: UserId, feature: FeatureName, clientId: Uuid)
+                     (implicit executionContext: ExecutionContext): Future[Done] = {
+    val requestBody = Json.obj("feature" -> feature.get, "client_id" -> clientId)
+
+    val activate = userProfileRequest(s"users/${userId.id}/features")
+      .transform(_.withMethod("POST").withBody(requestBody))
+      .execResponse(apiExec)
+
+    activate.flatMap { response => response.status match {
+      case 201 => Future.successful(Done)
+      case 404 => for {
+        _ <- createProfile(userId)
+        _ <- activate
+      } yield Done
+      case _ => Future.failed(UnexpectedResponse(response))
+    }}
+  }
+
 }

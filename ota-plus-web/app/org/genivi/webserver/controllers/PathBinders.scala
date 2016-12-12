@@ -10,6 +10,7 @@ import eu.timepit.refined.refineV
 import eu.timepit.refined.string._
 import org.genivi.sota.data.Device._
 import org.genivi.sota.data.{Device, Namespace, Uuid}
+import play.api.mvc.PathBindable
 
 /**
   * Implicits that allow giving custom param-types in the method signatures in the routes file.
@@ -22,14 +23,14 @@ object PathBinders {
     * Path binder to convert a String (eg, from a route path)
     * to a Uuid wrapped in a Right (if valid, Left otherwise).
     */
-  implicit object bindableDeviceUuid extends play.api.mvc.PathBindable[Uuid] {
+  implicit object bindableDeviceUuid extends PathBindable[Uuid] {
     def bind(key: String, value: String): Either[String, Uuid] = {
       refineV[Uuid.Valid](value).right.map(Uuid(_))
     }
     def unbind(key: String, value: Uuid): String = value.show
   }
 
-  implicit object bindableNamespace extends play.api.mvc.PathBindable[Namespace] {
+  implicit object bindableNamespace extends PathBindable[Namespace] {
     def bind(key: String, value: String): Either[String, Namespace] = {
       Right(Namespace(value))
     }
@@ -40,7 +41,7 @@ object PathBinders {
     * Path binder to convert a String (eg, from a route path)
     * to a ArtifactType wrapped in a Right (if valid, Left otherwise).
     */
-  implicit object bindableArtifactType extends play.api.mvc.PathBindable[ArtifactType] {
+  implicit object bindableArtifactType extends PathBindable[ArtifactType] {
     def bind(key: String, value: String): Either[String, ArtifactType] = {
       value match {
         case Debian.fileExtension => Right(Debian)
@@ -57,7 +58,7 @@ object PathBinders {
     * Path binder to convert a String (eg, from a route path)
     * to a Architecture wrapped in a Right (if valid, Left otherwise).
     */
-  implicit object bindableArchitecture extends play.api.mvc.PathBindable[Architecture] {
+  implicit object bindableArchitecture extends PathBindable[Architecture] {
     def bind(key: String, value: String): Either[String, Architecture] = {
       value match {
         case "32" => Right(Architecture(32))
@@ -68,6 +69,13 @@ object PathBinders {
     def unbind(key: String, value: Architecture): String = value.toString()
   }
 
+  implicit object bindableFeature extends PathBindable[FeatureName] {
+    def bind(key: String, value: String): Either[String, FeatureName] = {
+      Right(FeatureName(value))
+    }
+    def unbind(key: String, value: FeatureName): String = value.get
+  }
+
 }
 
 trait ArtifactType {
@@ -75,14 +83,17 @@ trait ArtifactType {
   val contentType: String
   override final def toString: String = fileExtension
 }
+
 object Debian extends ArtifactType {
   val fileExtension: String = "deb"
   val contentType: String = "application/vnd.debian.binary-package"
 }
+
 object RPM extends ArtifactType {
   val fileExtension: String = "rpm"
   val contentType: String = "application/x-redhat-package-manager"
 }
+
 object Toml extends ArtifactType {
   val fileExtension: String = "toml"
   val contentType: String = "text/plain"
@@ -95,3 +106,5 @@ case class Architecture(bits: Int) {
   }
   override def toString: String = bits.toString
 }
+
+final case class FeatureName(get: String)
