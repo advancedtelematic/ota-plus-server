@@ -14,4 +14,6 @@ trait ApiClientSupport {
 
   val devicesApi = new DevicesApi(conf, clientExec)
 
+  val userProfileApi = new UserProfileApi(conf, clientExec)
+
 }

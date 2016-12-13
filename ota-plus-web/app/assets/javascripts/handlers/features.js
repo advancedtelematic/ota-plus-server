@@ -14,12 +14,12 @@ define(function(require) {
               });
           break;
           case 'enable-treehub-feature':
-            sendRequest.doPut('/api/v1/features/ostreehub', null, {action: payload.actionType})
+            sendRequest.doPut('/api/v1/features/treehub', null, {action: payload.actionType})
               .success(function() {
               });
           break;
           case 'get-treehub-json':
-            sendRequest.doGet('/api/v1/features/ostreehub/client', {action: payload.actionType})
+            sendRequest.doGet('/api/v1/features/treehub/client', {action: payload.actionType})
               .success(function(treehubJson) {
                 db.treehubJson.reset(treehubJson);
               });
