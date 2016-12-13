@@ -5,8 +5,8 @@ define(function(require) {
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       Loader = require('es6!../loader'),
       ImpactAnalysisHeader = require('es6!./impact-analysis-header'),
-      BlacklistedPackagesList = require('es6!./blacklisted-packages-list'),
-      DevicesList = require('es6!./../devices/devices-list'),
+      ImpactAnalysisBlacklistedPackages = require('es6!./impact-analysis-blacklisted-packages'),
+      ImpactAnalysisChart = require('es6!./impact-analysis-chart'),
       ImpactTooltip = require('es6!./impact-tooltip');
   
   class ImpactAnalysisPage extends React.Component {
@@ -14,159 +14,149 @@ define(function(require) {
       super(props);
       this.state = {
         blacklistedPackagesData: undefined,
-        searchableDevicesData: undefined,
-        groupsData: undefined,
-        impactAnalysisData: undefined,
-        impactedDevicesListHeight: '400px',
-        isImpactTooltipShown: false
+        contentHeight: 300,
+        chartColumnSize: {width: 880, height: 300},
+        isImpactTooltipShown: false,
+        groupCount: undefined
       };
       this.setBlacklistedPackagesData = this.setBlacklistedPackagesData.bind(this);
-      this.setSearchableDevicesData = this.setSearchableDevicesData.bind(this);
-      this.setGroupsData = this.setGroupsData.bind(this);
       this.setImpactAnalysisData = this.setImpactAnalysisData.bind(this);
+      this.setElementsSize = this.setElementsSize.bind(this);
       this.showImpactTooltip = this.showImpactTooltip.bind(this);
       this.hideImpactTooltip = this.hideImpactTooltip.bind(this);
-      this.setImpactedDevicesListHeight = this.setImpactedDevicesListHeight.bind(this);
-      this.handleDeviceCreated = this.handleDeviceCreated.bind(this);
-      this.handlePackageBlacklisted = this.handlePackageBlacklisted.bind(this);
-      
-      SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: ''});
-      SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
-      SotaDispatcher.dispatch({actionType: 'get-groups'});
+      SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages-with-stats'});
       SotaDispatcher.dispatch({actionType: 'impact-analysis'});
-      db.blacklistedPackages.addWatch("poll-blacklisted-packages", _.bind(this.setBlacklistedPackagesData, this, null));
-      db.searchableDevices.addWatch("poll-devices-impact-analysis-page", _.bind(this.setSearchableDevicesData, this, null));
-      db.groups.addWatch("groups-impact-analysis-page", _.bind(this.setGroupsData, this, null));
+      db.blacklistedPackagesWithStats.addWatch("poll-blacklisted-packages-with-stats", _.bind(this.setBlacklistedPackagesData, this, null));
       db.impactAnalysis.addWatch("poll-impact-analysis-page", _.bind(this.setImpactAnalysisData, this, null));
-      db.deviceCreated.addWatch("poll-device-created-impact-analysis-page", _.bind(this.handleDeviceCreated, this, null));
-      db.packageBlacklisted.addWatch("poll-package-blacklisted-impact-analysis-page", _.bind(this.handlePackageBlacklisted, this, null));
     }
     componentDidMount() {
-      var that = this;
-      window.addEventListener("resize", this.setImpactedDevicesListHeight);
-      setTimeout(function() {
-        that.setImpactedDevicesListHeight();
-      }, 1);
+      window.addEventListener("resize", this.setElementsSize);
     }
-    componentWillUnmount(){
-      db.searchableDevices.reset();
-      db.blacklistedPackages.reset();
-      db.groups.reset();
-      db.blacklistedPackages.removeWatch("poll-blacklisted-packages");
+    componentDidUpdate(prevProps, prevState) {
+      if(_.isUndefined(prevState.blacklistedPackagesData) && !_.isUndefined(this.state.blacklistedPackagesData)) {
+        var that = this;
+        setTimeout(function() {
+          that.setElementsSize(_.isEmpty(that.state.blacklistedPackagesData));
+        }, 1);
+      }
+    }
+    componentWillUnmount() {
+      window.removeEventListener("resize", this.setElementsSize);
+      db.blacklistedPackagesWithStats.removeWatch("poll-blacklisted-packages-with-stats");
       db.impactAnalysis.removeWatch("poll-impact-analysis-page");
-      db.searchableDevices.removeWatch("poll-devices-impact-analysis-page");
-      db.groups.removeWatch("groups-impact-analysis-page");
-      db.deviceCreated.removeWatch("poll-device-created-impact-analysis-page");
-      db.packageBlacklisted.removeWatch("poll-package-blacklisted-impact-analysis-page");
-      window.removeEventListener("resize", this.setImpactedDevicesListHeight);
+      db.blacklistedPackagesWithStats.reset();
+      db.impactAnalysis.reset();
     }
     setBlacklistedPackagesData() {
-      this.setState({blacklistedPackagesData: db.blacklistedPackages.deref()});
-    }
-    setSearchableDevicesData() {
-      this.setState({searchableDevicesData: db.searchableDevices.deref()});
-    }
-    setGroupsData() {
-      this.setState({groupsData: db.groups.deref()});
+      var blacklistedPackages = db.blacklistedPackagesWithStats.deref();
+      var groupedPackages = {};
+      var groups = [];
+      if(!_.isUndefined(blacklistedPackages)) {
+        _.each(blacklistedPackages, function(obj, index){
+          if(_.isUndefined(groupedPackages[obj.packageId.name]) || !groupedPackages[obj.packageId.name] instanceof Array ) {
+            groupedPackages[obj.packageId.name] = new Object();
+            groupedPackages[obj.packageId.name] = {
+              elements: [],
+              packageName: obj.packageId.name,
+              deviceCount: 0,
+              groupIds: []
+            };
+          }
+          groupedPackages[obj.packageId.name].deviceCount += !_.isUndefined(obj.statistics.deviceCount) ? obj.statistics.deviceCount : 0;
+          if(!_.isUndefined(obj.statistics.groupIds))
+            groupedPackages[obj.packageId.name].groupIds = _.union(groupedPackages[obj.packageId.name].groupIds, obj.statistics.groupIds);
+          groupedPackages[obj.packageId.name].elements.push(blacklistedPackages[index]);
+          groups = _.union(groupedPackages[obj.packageId.name].groupIds, groups);
+        });
+        _.each(groupedPackages, function(obj, index) {
+          groupedPackages[index].elements = _.sortBy(obj.elements, function(element) {
+            return element.statistics.deviceCount;
+          }).reverse();
+        });
+        groupedPackages = _.sortBy(groupedPackages, function(element) {
+          return element.deviceCount;
+        }).reverse();
+        this.setState({
+          blacklistedPackagesData: groupedPackages,
+          groupCount: Object.keys(groups).length
+        });
+      }
     }
     setImpactAnalysisData() {
       this.setState({impactAnalysisData: db.impactAnalysis.deref()});
     }
-    setImpactedDevicesListHeight() {
+    setElementsSize(isEmptyList = false) {
+      var windowWidth = jQuery(window).width();
       var windowHeight = jQuery(window).height();
-      var offsetTop = jQuery('#impacted-devices-list').offset().top
+      var chartColumnSize = {};
+      if(!isEmptyList) {
+        chartColumnSize = {
+          width: windowWidth - $('#packages-column').width(),
+          height: windowHeight - $('#chart-column').offset().top
+        };
+      }
+      var contentHeight = windowHeight - $('.grey-header').offset().top - $('.grey-header').outerHeight();
       this.setState({
-        impactedDevicesListHeight: windowHeight - offsetTop
+        contentHeight: contentHeight,
+        chartColumnSize: chartColumnSize
       });
     }
-    showImpactTooltip() {
+    showImpactTooltip(e) {
+      e.preventDefault();
       this.setState({isImpactTooltipShown: true});
     }
     hideImpactTooltip() {
       this.setState({isImpactTooltipShown: false});
     }
-    handleDeviceCreated() {
-      var deviceCreated = db.deviceCreated.deref();
-      if(!_.isUndefined(deviceCreated)) {
-        SotaDispatcher.dispatch({actionType: 'search-devices-by-regex', regex: ''});
-        SotaDispatcher.dispatch({actionType: 'get-groups'});
-      }
-    }
-    handlePackageBlacklisted() {
-      var packageBlacklisted = db.packageBlacklisted.deref();
-      if(!_.isUndefined(packageBlacklisted)) {
-        SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
-      }  
-    }
     render() {
-      var impactedDevices = undefined;
-      var impactedPackages = undefined;
-            
-      if(!_.isUndefined(this.state.impactAnalysisData) && !_.isUndefined(this.state.searchableDevicesData) && !_.isUndefined(this.state.groupsData)) {
-        impactedDevices = {};
-        impactedPackages = {};
-        var devicesWithGroup = this.state.searchableDevicesData;
-                        
-        _.each(devicesWithGroup, function(device, index) {
-          devicesWithGroup[index].groupName = null;
-          devicesWithGroup[index].groupUUID = null;
-          _.each(this.state.groupsData, function(group) {
-            if(group.devicesUUIDs.indexOf(device.uuid) > -1) {
-              devicesWithGroup[index].groupName = group.groupName;
-              devicesWithGroup[index].groupUUID = group.id;
-            }
-          });
-        }, this);
-                        
-        _.each(this.state.impactAnalysisData, function(impact, deviceUUID) {
-          _.each(impact, function(pack) {
-            impactedPackages[pack.name + '-' + pack.version] = {
-              packageId: {
-                name: pack.name,
-                version: pack.version
-              }
-            }
-            var deviceData = _.findWhere(devicesWithGroup, {uuid: deviceUUID});
-          
-            impactedDevices[deviceUUID] = deviceData;
-          }, this);          
-        }, this);
-      }
-            
       return (
-        <div className="impact-analysis">
+        <div>
           <ImpactAnalysisHeader 
-            impactedDevices={impactedDevices}/>
-          <div id="impacted-devices-list" style={{height: this.state.impactedDevicesListHeight}}>
-            <BlacklistedPackagesList 
-              packages={this.state.blacklistedPackagesData}
-              showImpactTooltip={this.showImpactTooltip}/>
-            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-              {!_.isUndefined(impactedPackages) && !_.isEmpty(impactedPackages) ? 
-                <BlacklistedPackagesList 
-                  packages={impactedPackages}
-                  type="impacted"/>
-              : undefined}
-            </VelocityTransitionGroup>
-            <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
-              {!_.isUndefined(impactedDevices) && !_.isEmpty(impactedDevices) ?
-                <DevicesList
-                  devices={impactedDevices}
-                  areProductionDevices={false}
-                  isDND={false}
-                  areActionButtonsShown={false}/>
-              : undefined}
-            </VelocityTransitionGroup>
-            {_.isUndefined(impactedPackages) || _.isUndefined(impactedDevices) ?
-              <Loader />
+            deviceCount={(!_.isUndefined(this.state.impactAnalysisData) ? Object.keys(this.state.impactAnalysisData).length : undefined)}
+            groupCount={this.state.groupCount}/>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {!_.isUndefined(this.state.blacklistedPackagesData) ? 
+              !_.isEmpty(this.state.blacklistedPackagesData) ?
+                <div className="panel panel-ats">
+                  <div className="panel-heading">
+                    <div className="panel-heading-left pull-left">
+                      Blacklisted Packages
+                    </div>
+                  </div>
+                  <div className="panel-body">
+                    <div id="packages-column">
+                      <ImpactAnalysisBlacklistedPackages 
+                        blacklistedPackagesListHeight={this.state.contentHeight}
+                        packages={this.state.blacklistedPackagesData}/>
+                    </div>
+                    <div id="chart-column" style={this.state.chartColumnSize}>
+                      <ImpactAnalysisChart 
+                        packages={this.state.blacklistedPackagesData}/>
+                    </div>
+                  </div>
+                </div>
+              :
+                <div className="impact-analysis-empty" style={{height: this.state.contentHeight}}>
+                  <div className="center-xy padding-15">
+                    <div className="font-22">There are no blacklisted packages.</div>
+                    <div className="margin-top-10">
+                      <a href="#" className="font-22" onClick={this.showImpactTooltip}>
+                        <span className="color-main"><strong>What is this?</strong></span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
             : undefined}
-            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-              {this.state.isImpactTooltipShown ?
-                <ImpactTooltip 
-                  hideImpactTooltip={this.hideImpactTooltip}/>
-              : undefined}
-            </VelocityTransitionGroup>
-          </div>
+          </VelocityTransitionGroup>
+          {_.isUndefined(this.state.blacklistedPackagesData) ? 
+            <Loader />
+          : undefined}
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isImpactTooltipShown ?
+              <ImpactTooltip 
+                hideImpactTooltip={this.hideImpactTooltip}/>
+            : undefined}
+          </VelocityTransitionGroup>
         </div>
       );
     }
