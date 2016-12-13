@@ -1,8 +1,5 @@
 define(function(require) {
-  var React = require('react'),
-      Router = require('react-router'),
-      Link = Router.Link,
-      db = require('stores/db');
+  var React = require('react');
       
   class ImpactAnalysisHeader extends React.Component {
     constructor(props) {
@@ -13,16 +10,12 @@ define(function(require) {
       return (
         <div className="grey-header">      
           <div className="col-md-12">
-            <Link to="/"><img src="/assets/img/icons/back.png" className="icon-back" alt=""/></Link>
             <div className="grey-header-icon"></div>
             <div className="grey-header-text">
               <div className="grey-header-title">Impact analyser</div>
               <div className="grey-header-subtitle">
-                {!_.isUndefined(impactedDevices) ? 
-                  Object.keys(impactedDevices).length ?
-                    <span>Impact: {Object.keys(impactedDevices).length} Devices</span>
-                  :
-                    <span>No impacted devices</span>
+                {!_.isUndefined(this.props.deviceCount) && !_.isUndefined(this.props.groupCount) ? 
+                  <span>Impact: {this.props.deviceCount} Devices in {this.props.groupCount} Groups</span>
                 :
                   <span><i className="fa fa-square-o fa-spin"></i> impact analysis</span>
                 }

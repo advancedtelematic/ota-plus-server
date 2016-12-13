@@ -36,7 +36,6 @@ define(function(require) {
       TestSettings = require('es6!components/test-settings'),
       EditProfile = require('es6!components/user/edit-profile'),
       ImpactAnalysisPage = require('es6!components/impactanalysis/impact-analysis-page'),
-      NewImpactAnalysisPage = require('es6!components/newimpactanalysis/impact-analysis-page'),
       UploadModal = require('es6!components/packages/upload-modal'),
       Campaigns = require('es6!components/newcampaigns/campaigns'),
       CampaignDetails = require('es6!components/newcampaigns/campaign-details'),
@@ -196,9 +195,6 @@ define(function(require) {
           case 'impactanalysis':
             page = 'page-impact-analysis';
           break;
-          case 'newimpactanalysis':
-            page = 'page-new-impact-analysis';
-          break;
           case 'campaigns':
             page = 'page-campaigns';
           break;
@@ -270,7 +266,7 @@ define(function(require) {
         <Route path="testsettings" component={TestSettings}/>
         <Route path="editprofile" component={EditProfile}/>
         <Route path="impactanalysis" component={ImpactAnalysisPage}/>
-        <Route path="newimpactanalysis" component={NewImpactAnalysisPage}/>
+        <Route path="impactanalysis" component={ImpactAnalysisPage}/>
         <Route path="campaigns" component={Campaigns}/>
         <Route path="campaigndetails/:id" component={CampaignDetails} />
         <Route path="clientapps/f708f064faaf32a43e4d3c784e6af9eac6d9b20e0da02616378748834f5a37ee" component={ClientApps} />
