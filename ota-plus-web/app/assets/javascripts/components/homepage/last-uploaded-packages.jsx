@@ -37,10 +37,20 @@ define(function(require) {
         packages = _.map(this.state.packagesData, function(pack) {
           var link = 'packages/' + pack.id.name;
           return (
-            <tr key={pack.uuid}>
-              <td><Link to={`${link}`} className="black">{pack.id.name}</Link></td>
-              <td className="text-right">{pack.id.version}</td>
-            </tr>
+            <Link 
+              to={`${link}`} 
+              className="element-box" 
+              title={pack.id.name + ' v. ' + pack.id.version}
+              id={"link-packages-" + pack.uuid} 
+              key={"link-packages-" + pack.uuid}>
+              <div className="element-icon"></div>
+              <div className="element-desc">
+                <div className="element-title">{pack.id.name}</div>
+                <div className="element-subtitle">
+                  {pack.id.version}
+                </div>
+              </div>
+            </Link>
           );
         }, this);
       }
@@ -48,33 +58,11 @@ define(function(require) {
         <div style={{height: this.props.listHeight}}>
           {!_.isUndefined(this.state.packagesData) ?
             this.state.packagesData.length ?
-              <table className="table">
-                <thead>
-                  <tr>
-                    <td>Name</td>
-                    <td className="text-right">Version</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {packages}
-                </tbody>
-              </table>
+              packages
             :
-              <div className="height-100">
-                <div className="table-empty-wrapper">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <td>Name</td>
-                        <td className="text-right">Version</td>
-                      </tr>
-                    </thead>
-                  </table>
-                </div>
-                <div className="col-md-12 height-100 position-relative text-center">
-                  <div className="center-xy padding-15">
-                    <button type="submit" className="btn btn-confirm btn-small" onClick={this.props.openNewPackageModal}><i className="fa fa-plus"></i> ADD NEW PACKAGE</button>
-                  </div>
+              <div className="col-md-12 height-100 position-relative text-center">
+                <div className="center-xy padding-15">
+                  <button type="submit" className="btn btn-confirm btn-small" onClick={this.props.openNewPackageModal}><i className="fa fa-plus"></i> ADD NEW PACKAGE</button>
                 </div>
               </div>
           : undefined}
