@@ -6,14 +6,15 @@ define(function(require) {
       Loader = require('es6!../loader'),
       ImpactAnalysisHeader = require('es6!./impact-analysis-header'),
       ImpactAnalysisBlacklistedPackages = require('es6!./impact-analysis-blacklisted-packages'),
-      ImpactAnalysisChart = require('es6!./impact-analysis-chart');
+      ImpactAnalysisChart = require('es6!./impact-analysis-chart'),
+      ImpactTooltip = require('es6!./impact-tooltip');
   
   class ImpactAnalysisPage extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
         blacklistedPackagesData: undefined,
-        blacklistedPackagesListHeight: 300,
+        contentHeight: 300,
         chartColumnSize: {width: 880, height: 300},
         isImpactTooltipShown: false,
         groupCount: undefined
@@ -29,11 +30,15 @@ define(function(require) {
       db.impactAnalysis.addWatch("poll-new-impact-analysis-page", _.bind(this.setImpactAnalysisData, this, null));
     }
     componentDidMount() {
-      var that = this;
       window.addEventListener("resize", this.setElementsSize);
-      setTimeout(function() {
-        that.setElementsSize();
-      }, 1);
+    }
+    componentDidUpdate(prevProps, prevState) {
+      if(_.isUndefined(prevState.blacklistedPackagesData) && !_.isUndefined(this.state.blacklistedPackagesData)) {
+        var that = this;
+        setTimeout(function() {
+          that.setElementsSize(_.isEmpty(that.state.blacklistedPackagesData));
+        }, 1);
+      }
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setElementsSize);
@@ -57,8 +62,9 @@ define(function(require) {
               groupIds: []
             };
           }
-          groupedPackages[obj.packageId.name].deviceCount += obj.statistics.deviceCount;
-          groupedPackages[obj.packageId.name].groupIds = _.union(groupedPackages[obj.packageId.name].groupIds, obj.statistics.groupIds);
+          groupedPackages[obj.packageId.name].deviceCount += !_.isUndefined(obj.statistics.deviceCount) ? obj.statistics.deviceCount : 0;
+          if(!_.isUndefined(obj.statistics.groupIds))
+            groupedPackages[obj.packageId.name].groupIds = _.union(groupedPackages[obj.packageId.name].groupIds, obj.statistics.groupIds);
           groupedPackages[obj.packageId.name].elements.push(blacklistedPackages[index]);
           groups = _.union(groupedPackages[obj.packageId.name].groupIds, groups);
         });
@@ -79,20 +85,24 @@ define(function(require) {
     setImpactAnalysisData() {
       this.setState({impactAnalysisData: db.impactAnalysis.deref()});
     }
-    setElementsSize() {
+    setElementsSize(isEmptyList = false) {
       var windowWidth = jQuery(window).width();
       var windowHeight = jQuery(window).height();
-      var chartColumnSize = {
-        width: windowWidth - $('#packages-column').width(),
-        height: windowHeight - $('#chart-column').offset().top
-      };
-      var blacklistedPackagesListHeight = windowHeight - $('#packages-column').offset().top;
+      var chartColumnSize = {};
+      if(!isEmptyList) {
+        chartColumnSize = {
+          width: windowWidth - $('#packages-column').width(),
+          height: windowHeight - $('#chart-column').offset().top
+        };
+      }
+      var contentHeight = windowHeight - $('.grey-header').offset().top - $('.grey-header').outerHeight();
       this.setState({
-        blacklistedPackagesListHeight: blacklistedPackagesListHeight,
-        chartColumnSize: chartColumnSize,
+        contentHeight: contentHeight,
+        chartColumnSize: chartColumnSize
       });
     }
-    showImpactTooltip() {
+    showImpactTooltip(e) {
+      e.preventDefault();
       this.setState({isImpactTooltipShown: true});
     }
     hideImpactTooltip() {
@@ -104,39 +114,49 @@ define(function(require) {
           <ImpactAnalysisHeader 
             deviceCount={(!_.isUndefined(this.state.impactAnalysisData) ? Object.keys(this.state.impactAnalysisData).length : undefined)}
             groupCount={this.state.groupCount}/>
-          <div className="panel panel-ats">
-            <div className="panel-heading">
-              <div className="panel-heading-left pull-left">
-                Blacklisted Packages
-              </div>
-            </div>
-            <div className="panel-body">
-              <div id="packages-column">
-                <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-                  {!_.isUndefined(this.state.blacklistedPackagesData) ?
-                    <ImpactAnalysisBlacklistedPackages 
-                      blacklistedPackagesListHeight={this.state.blacklistedPackagesListHeight}
-                      packages={this.state.blacklistedPackagesData}/>
-                  : undefined}
-                </VelocityTransitionGroup>
-                {_.isUndefined(this.state.blacklistedPackagesData) ?
-                  <Loader />
-                : undefined}
-              </div>
-      
-              <div id="chart-column" style={this.state.chartColumnSize}>
-                <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-                  {!_.isUndefined(this.state.blacklistedPackagesData) ?    
-                    <ImpactAnalysisChart 
-                      packages={this.state.blacklistedPackagesData}/>
-                  : undefined}
-                </VelocityTransitionGroup>
-                {_.isUndefined(this.state.blacklistedPackagesData) ?
-                  <Loader />
-                : undefined}
-              </div>
-            </div>
-          </div>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {!_.isUndefined(this.state.blacklistedPackagesData) ? 
+              !_.isEmpty(this.state.blacklistedPackagesData) ?
+                <div className="panel panel-ats">
+                  <div className="panel-heading">
+                    <div className="panel-heading-left pull-left">
+                      Blacklisted Packages
+                    </div>
+                  </div>
+                  <div className="panel-body">
+                    <div id="packages-column">
+                      <ImpactAnalysisBlacklistedPackages 
+                        blacklistedPackagesListHeight={this.state.contentHeight}
+                        packages={this.state.blacklistedPackagesData}/>
+                    </div>
+                    <div id="chart-column" style={this.state.chartColumnSize}>
+                      <ImpactAnalysisChart 
+                        packages={this.state.blacklistedPackagesData}/>
+                    </div>
+                  </div>
+                </div>
+              :
+                <div className="impact-analysis-empty" style={{height: this.state.contentHeight}}>
+                  <div className="center-xy padding-15">
+                    <div className="font-22">There are no blacklisted packages.</div>
+                    <div className="margin-top-10">
+                      <a href="#" className="font-22" onClick={this.showImpactTooltip}>
+                        <span className="color-main"><strong>What is this?</strong></span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+            : undefined}
+          </VelocityTransitionGroup>
+          {_.isUndefined(this.state.blacklistedPackagesData) ? 
+            <Loader />
+          : undefined}
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isImpactTooltipShown ?
+              <ImpactTooltip 
+                hideImpactTooltip={this.hideImpactTooltip}/>
+            : undefined}
+          </VelocityTransitionGroup>
         </div>
       );
     }

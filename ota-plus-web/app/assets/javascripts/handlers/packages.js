@@ -105,6 +105,7 @@ define(function(require) {
                     db.blacklistedPackagesWithStats.reset(packages);
                   });
                   _.each(packages, function(pack, index) {
+                    packages[index].statistics = [];
                     sendRequest.doGet('/api/v1/device_count/' + pack.packageId.name + '/' + pack.packageId.version, {action: 'get-package-version-stats'})
                       .success(function(statistics) {
                         packages[index].statistics = statistics;
