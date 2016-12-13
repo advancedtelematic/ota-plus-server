@@ -69,7 +69,7 @@ define(function(require) {
         currentLang: currentLang,
         showCampaignPanel: false,
         intervalId: null,
-        hideAnimationUp: isHomePage,
+        hideAnimationUp: false,
         hideAnimationDown: true,
       }
 
@@ -79,10 +79,6 @@ define(function(require) {
       this.logout = this.logout.bind(this);
       this.openDoor = this.openDoor.bind(this);
       
-      if(isHomePage) {
-        db.devices.addWatch("watch-devices", _.bind(this.openDoor, this, null));
-        db.searchableDevices.addWatch("watch-searchable-devices", _.bind(this.openDoor, this, null));
-      }
       db.logout.addWatch("watch-logout", _.bind(this.handleLogout, this, null));
       db.hasBetaAccess.addWatch("has-beta-access", _.bind(this.forceUpdate, this, null));
       SotaDispatcher.dispatch({actionType: 'impact-analysis'});
@@ -183,6 +179,9 @@ define(function(require) {
       if(path[1] !== undefined) {
         switch(path[1]) {
           case '':
+            page = 'page-home';
+          break;
+          case 'devices':
             page = 'page-devices';
           break;
           case 'devicedetails':
@@ -205,9 +204,6 @@ define(function(require) {
           break;
           case 'clientapps':
             page = 'page-client-apps';
-          break;
-          case 'homepage':
-            page = 'page-home';
           break;
           default:
           break;
@@ -261,8 +257,9 @@ define(function(require) {
   var routes = (
     <Route component={Translate(App)} path="/" ignoreScrollBehavior={true}>
       <Route component={RightPanel}>
-        <IndexRoute component={Devices}/>
-        <Route path="/" component={Devices}/>
+        <IndexRoute component={HomePage}/>
+        <Route path="/" component={HomePage}/>
+        <Route path="devices" component={Devices}/>
         <Route path="devicedetails/:id" component={DeviceDetails}>
           <Route path="impactanalysis/:count" component={Modal(ImpactAnalysis, {TitleVar: "impactanalysis", modalId: 'modal-impact-analysis'})}/>
           <Route path="newcampaign" component={Modal(NewCampaign, {TitleVar: "newcampaign", modalId: 'modal-new-campaign'})}/>
@@ -279,7 +276,6 @@ define(function(require) {
         <Route path="clientapps/f708f064faaf32a43e4d3c784e6af9eac6d9b20e0da02616378748834f5a37ee" component={ClientApps} />
         <Route path="treehub" component={TreeHub} />
         <Route path="provisioning" component={Provisioning} />
-        <Route path="homepage" component={HomePage}/>
       </Route>
     </Route>
   );

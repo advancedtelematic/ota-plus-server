@@ -2,6 +2,7 @@ define(function(require) {
   var React = require('react'),
       SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
+      HomePageHeader = require('es6!./home-page-header'),
       LastCreatedDevices = require('es6!./last-created-devices'),
       LastUploadedPackages = require('es6!./last-uploaded-packages'),
       OngoingDraftCampaigns = require('es6!./ongoing-draft-campaigns'),
@@ -43,10 +44,11 @@ define(function(require) {
     }
     setElementsSize() {
       var wrapperHeight = $('.wrapper').height();
+      var headerHeight = $('.grey-header').outerHeight();
       var firstLineBoxesPadding = $('.first-line .home-box').outerHeight() - $('.first-line .home-box').height();
       var secondLineBoxesPadding = $('.second-line .home-box').outerHeight() - $('.second-line .home-box').height();
       var panelHeadingHeight = $('.panel-heading').outerHeight();
-      var heightAvailableForBoxesBody = wrapperHeight - firstLineBoxesPadding - secondLineBoxesPadding - 2 * panelHeadingHeight;
+      var heightAvailableForBoxesBody = wrapperHeight - headerHeight - firstLineBoxesPadding - secondLineBoxesPadding - 2 * panelHeadingHeight;
       var firstLineBoxesBodyHeight = 0.6 * heightAvailableForBoxesBody;
       var secondLineBoxesBodyHeight = heightAvailableForBoxesBody - firstLineBoxesBodyHeight;
       this.setState({
@@ -101,9 +103,10 @@ define(function(require) {
     render() {
       return (
         <div>
+          <HomePageHeader /> 
           <div className="first-line">
             <div id="box-last-created-devices" className="home-box">
-              <div className="panel panel-ats">
+              <div className="panel panel-ats panel-ats-light">
                 <div className="panel-heading">
                   <div className="panel-heading-left">
                     Last created devices
@@ -117,7 +120,7 @@ define(function(require) {
               </div>
             </div>
             <div id="box-last-uploaded-packages" className="home-box">
-              <div className="panel panel-ats">
+              <div className="panel panel-ats panel-ats-light">
                 <div className="panel-heading">
                   <div className="panel-heading-left">
                     Last uploaded packages
@@ -131,7 +134,7 @@ define(function(require) {
               </div>
             </div>
             <div id="box-ongoing-draft-campaigns" className="home-box">
-              <div className="panel panel-ats">
+              <div className="panel panel-ats panel-ats-light">
                 <div className="panel-heading">
                   <div className="panel-heading-left">
                     Ongoing draft campaigns
@@ -148,7 +151,7 @@ define(function(require) {
           </div>
           <div className="second-line">
             <div id="box-last-running-campaigns" className="home-box">
-              <div className="panel panel-ats">
+              <div className="panel panel-ats panel-ats-light">
                 <div className="panel-heading">
                   <div className="panel-heading-left">
                     Last running campaigns progress

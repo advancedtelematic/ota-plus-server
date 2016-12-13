@@ -39,14 +39,16 @@ define(function(require) {
               overallSuccessfulUpdates += statistic.successfulUpdates;
               overallCancelledUpdates += statistic.cancelledUpdates;
             });
-            campaign.summary = {
-              overallDevicesCount: overallDevicesCount,
-              overallUpdatedDevicesCount: overallUpdatedDevicesCount,
-              overallFailedUpdates: overallFailedUpdates,
-              overallSuccessfulUpdates: overallSuccessfulUpdates,
-              overallCancelledUpdates: overallCancelledUpdates
-            };
-            newCampaigns.push(campaign);
+            if(overallDevicesCount !== overallUpdatedDevicesCount) {
+              campaign.summary = {
+                overallDevicesCount: overallDevicesCount,
+                overallUpdatedDevicesCount: overallUpdatedDevicesCount,
+                overallFailedUpdates: overallFailedUpdates,
+                overallSuccessfulUpdates: overallSuccessfulUpdates,
+                overallCancelledUpdates: overallCancelledUpdates
+              };
+              newCampaigns.push(campaign);
+            }
           }
         });
         newCampaigns = _.sortBy(newCampaigns, function(campaign) {
