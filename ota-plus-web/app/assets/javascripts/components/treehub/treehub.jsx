@@ -1,8 +1,8 @@
 define(function(require) {
   var React = require('react'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      TreeHubTooltip = require('es6!./treehub-tooltip'),
-      NoAccess = require('es6!../noaccess');
+      TreeHubTooltip = require('./treehub-tooltip'),
+      NoAccess = require('../noaccess');
 
   class TreeHub extends React.Component {
     constructor(props) {

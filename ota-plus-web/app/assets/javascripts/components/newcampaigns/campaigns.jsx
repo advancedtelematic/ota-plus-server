@@ -3,11 +3,11 @@ define(function(require) {
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      SearchBar = require('es6!../searchbar'),
-      CampaignsList = require('es6!./campaigns-list'),
-      CampaignCreate = require('es6!./campaign-create'),
-      CampaignWizard = require('es6!./wizard/wizard');
-
+      SearchBar = require('../searchbar'),
+      CampaignsList = require('./campaigns-list'),
+      CampaignCreate = require('./campaign-create'),
+      CampaignWizard = require('./wizard/wizard');
+      
   class Campaigns extends React.Component {
     constructor(props) {
       super(props);

@@ -1,7 +1,7 @@
 define(function(require) {
   var React = require('react'),
       SotaDispatcher = require('sota-dispatcher'),
-      HistoryListItemLog = require('es6!./history-list-item-log'),
+      HistoryListItemLog = require('./history-list-item-log'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
 
   class HistoryListItem extends React.Component {

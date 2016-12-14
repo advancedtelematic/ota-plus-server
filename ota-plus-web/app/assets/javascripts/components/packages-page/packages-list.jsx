@@ -4,13 +4,13 @@ define(function(require) {
       SotaDispatcher = require('sota-dispatcher'),
       db = require('stores/db'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      PackagesListItem = require('es6!./packages-list-item'),
-      PackageListItemDetails = require('es6!./packages-list-item-details'),
-      Dropzone = require('es6!../../mixins/dropzone'),
-      AddPackage = require('es6!../packages/add-package'),
-      BlacklistForm = require('es6!../packages/blacklist-form'),
-      PackageStatusForm = require('es6!./status/status-form'),
-      Loader = require('es6!../loader');
+      PackagesListItem = require('./packages-list-item'),
+      PackageListItemDetails = require('./packages-list-item-details'),
+      Dropzone = require('../../mixins/dropzone'),
+      AddPackage = require('../packages/add-package'),
+      BlacklistForm = require('../packages/blacklist-form'),
+      PackageStatusForm = require('./status/status-form'),
+      Loader = require('../loader');
   
   class PackagesList extends React.Component {
     constructor(props) {

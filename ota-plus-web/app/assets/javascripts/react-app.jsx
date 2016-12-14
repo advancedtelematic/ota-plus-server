@@ -1,4 +1,4 @@
-require(['es6!./app', 'jquery', 'jquery-ui'], function(app, jQuery, jQueryUI) {    
+require(['./app', 'jquery', 'jquery-ui'], function(app, jQuery, jQueryUI) {    
   if( typeof window.CustomEvent !== "function" ) {
     function CustomEvent ( event, params ) {
       params = params || { bubbles: false, cancelable: false, detail: undefined };

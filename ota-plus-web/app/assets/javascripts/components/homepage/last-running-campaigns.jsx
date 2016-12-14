@@ -5,8 +5,8 @@ define(function(require) {
       PieChart = require('react-chartjs').Pie,
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
-      Loader = require('es6!../loader'),
-      CampaignsListItem = require('es6!../newcampaigns/campaigns-list-item');
+      Loader = require('../loader'),
+      CampaignsListItem = require('../newcampaigns/campaigns-list-item');
 
   class LastRunningCampaigns extends React.Component {
     constructor(props) {

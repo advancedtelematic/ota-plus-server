@@ -71,16 +71,11 @@
             requirejs.config({"paths": {"Chartjs": ["@routes.Assets.versioned("js/Chart.min")"]}});
             requirejs.config({"paths": {"react-chartjs": ["@routes.Assets.versioned("js/react-chartjs.min")"]}});
             requirejs.config({"paths": {"bootstrap": ["/webjars/bootstrap/3.3.6/js/bootstrap"], "bootstrap-css": ["/webjars/bootstrap/3.3.6/css/bootstrap"]}, "shim": {"bootstrap": ["jquery"]}, "packages":[]});
-            
+            requirejs.config({"paths": {"react-intl": ["/webjars/react-intl/2.1.3/src/react-intl"]}});
             requirejs.config({
               waitSeconds: 60,
-              es6: {
-                fileExtension: '.jsx'
-              },
-              babel: {
-                presets: ['es2015'],
-                plugins: ['transform-react-jsx']
-              }
+          
+            
             });  
       
             requirejs.onError = function (err) {

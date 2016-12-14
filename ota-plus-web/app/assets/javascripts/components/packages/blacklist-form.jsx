@@ -4,7 +4,7 @@ define(function(require) {
       serializeForm = require('../../mixins/serialize-form'),
       SotaDispatcher = require('sota-dispatcher'),
       Responses = require('../responses'),
-      Loader = require('es6!../loader');
+      Loader = require('../loader');
   
   class BlacklistForm extends React.Component {
     constructor(props) {

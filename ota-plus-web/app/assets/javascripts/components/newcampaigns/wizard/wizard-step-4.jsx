@@ -3,7 +3,7 @@ define(function(require) {
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       GroupIcon = require('../../groups/group-icon'),
-      Loader = require('es6!../../loader'),
+      Loader = require('../../loader'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
 
   class WizardStep4 extends React.Component {
