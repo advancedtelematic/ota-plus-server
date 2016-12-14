@@ -106,7 +106,7 @@ class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient,
     ))
 
     val featureConfig = feature match {
-      case FeatureName("treehub") => Json.obj("treehub" -> Json.obj("server" -> treehub))
+      case FeatureName("treehub") => Json.obj("ostree" -> Json.obj("server" -> treehub))
       case FeatureName(x) => Json.obj(x -> Json.obj())
     }
 
