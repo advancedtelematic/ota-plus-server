@@ -3,11 +3,11 @@ define(function(require) {
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      Loader = require('es6!../loader'),
-      ImpactAnalysisHeader = require('es6!./impact-analysis-header'),
-      ImpactAnalysisBlacklistedPackages = require('es6!./impact-analysis-blacklisted-packages'),
-      ImpactAnalysisChart = require('es6!./impact-analysis-chart'),
-      ImpactTooltip = require('es6!./impact-tooltip');
+      Loader = require('../loader'),
+      ImpactAnalysisHeader = require('./impact-analysis-header'),
+      ImpactAnalysisBlacklistedPackages = require('./impact-analysis-blacklisted-packages'),
+      ImpactAnalysisChart = require('./impact-analysis-chart'),
+      ImpactTooltip = require('./impact-tooltip');
   
   class ImpactAnalysisPage extends React.Component {
     constructor(props) {
@@ -112,7 +112,7 @@ define(function(require) {
       return (
         <div>
           <ImpactAnalysisHeader 
-            deviceCount={(!_.isUndefined(this.state.impactAnalysisData) ? Object.keys(this.state.impactAnalysisData).length : undefined)}
+            deviceCount={!_.isUndefined(this.state.impactAnalysisData) ? Object.keys(this.state.impactAnalysisData).length : undefined}
             groupCount={this.state.groupCount}/>
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {!_.isUndefined(this.state.blacklistedPackagesData) ? 

@@ -4,8 +4,8 @@ define(function(require) {
       SotaDispatcher = require('sota-dispatcher'),
       db = require('stores/db'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      PackagesListItem = require('es6!./packages-list-item'),
-      PackageListItemDetails = require('es6!./packages-list-item-details'),
+      PackagesListItem = require('./packages-list-item'),
+      PackageListItemDetails = require('./packages-list-item-details'),
       Loader = require('../../../loader');
 
   class PackagesList extends React.Component {

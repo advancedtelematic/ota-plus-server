@@ -131,7 +131,7 @@ define(function(require) {
               <GroupsListItem 
                 group={group}
                 selectGroup={this.props.selectGroup}
-                isSelected={(this.props.selectedGroup.name == group.groupName && this.props.selectedGroup.type == 'real')}
+                isSelected={this.props.selectedGroup.name == group.groupName && this.props.selectedGroup.type == 'real'}
                 groupClassName={groupClassName}/>
               <div className="dropdown action-menu-dropdown pull-right">
                 <div data-toggle="dropdown">

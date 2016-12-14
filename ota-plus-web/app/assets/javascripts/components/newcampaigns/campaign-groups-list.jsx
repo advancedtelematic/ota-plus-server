@@ -2,8 +2,8 @@ define(function(require) {
   var React = require('react'),
       SotaDispatcher = require('sota-dispatcher'),
       db = require('stores/db'),
-      CampaignGroupsListItem = require('es6!./campaign-groups-list-item'),
-      Loader = require('es6!../loader');
+      CampaignGroupsListItem = require('./campaign-groups-list-item'),
+      Loader = require('../loader');
       
   class CampaignGroupsList extends React.Component {
     constructor(props) {

@@ -2,8 +2,8 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       Link = Router.Link,
-      SearchBar = require('es6!../searchbar'),
-      PackagesList = require('es6!./packages-list');
+      SearchBar = require('../searchbar'),
+      PackagesList = require('./packages-list');
 
   class Packages extends React.Component {
     constructor(props, context) {

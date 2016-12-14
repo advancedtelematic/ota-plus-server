@@ -7,11 +7,11 @@ define(function(require) {
       PieChart = require('react-chartjs').Pie,
       DoughnutChart = require('react-chartjs').Doughnut,
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      CampaignHeader = require('es6!./campaign-header'),
-      CampaignGroupsList = require('es6!./campaign-groups-list'),
-      CampaignCancelModal = require('es6!./campaign-cancel-modal'),
-      CampaignCancelGroupModal = require('es6!./campaign-cancel-group-modal'),
-      Loader = require('es6!../loader');
+      CampaignHeader = require('./campaign-header'),
+      CampaignGroupsList = require('./campaign-groups-list'),
+      CampaignCancelModal = require('./campaign-cancel-modal'),
+      CampaignCancelGroupModal = require('./campaign-cancel-group-modal'),
+      Loader = require('../loader');
       
   class CampaignDetails extends React.Component {
     constructor(props) {

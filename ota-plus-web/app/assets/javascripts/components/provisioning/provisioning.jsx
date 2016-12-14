@@ -3,9 +3,9 @@ define(function(require) {
       SotaDispatcher = require('sota-dispatcher'),
       db = require('stores/db'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      ProvisioningTooltip = require('es6!./provisioning-tooltip'),
-      NoAccess = require('es6!../noaccess'),
-      Loader = require('es6!../loader');
+      ProvisioningTooltip = require('./provisioning-tooltip'),
+      NoAccess = require('../noaccess'),
+      Loader = require('../loader');
 
   class Provisioning extends React.Component {
     constructor(props) {
