@@ -80,12 +80,14 @@ class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient,
       }
   }
 
+  val apiDomain = conf.getString("api.domain")
+
   def activateFeature(feature: FeatureName): Action[AnyContent] = AuthenticatedAction.async { request =>
     val userId = request.idToken.userId
     val token = request.authPlusAccessToken
 
     for {
-      clientInfo <- authPlusApi.createClientForUser(feature.get, "", token)
+      clientInfo <- authPlusApi.createClientForUser(feature.get, s"$apiDomain/${feature.get}", token)
       clientId = Uuid.fromJava(clientInfo.clientId)
       _ <- userProfileApi.activateFeature(userId, feature, clientId)
     } yield Ok(EmptyContent())
