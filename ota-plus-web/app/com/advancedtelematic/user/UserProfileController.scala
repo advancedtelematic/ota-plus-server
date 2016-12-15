@@ -97,31 +97,16 @@ class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient,
   def getConfig(feature: FeatureName): Action[AnyContent] = AuthenticatedAction.async { request =>
     val userId = request.idToken.userId
     val token = request.authPlusAccessToken
-    val authPlus = conf.getString("authplus.host")
-    val treehub = conf.getString("treehub.host")
 
-    def authConfig(client: Uuid, secret: String) = Json.obj("oauth2" -> Json.obj(
-      "server" -> authPlus,
-      "client_id" -> client.show,
-      "client_secret" -> secret
-    ))
-
-    val featureConfig = feature match {
-      case FeatureName("treehub") => Json.obj("treehub" -> Json.obj("server" -> treehub))
-      case FeatureName(x) => Json.obj(x -> Json.obj())
-    }
-
-    val action = userProfileApi.getFeature(userId, feature).flatMap { f =>
+    userProfileApi.getFeature(userId, feature).flatMap { f =>
       f.client_id match {
         case Some(id) => for {
           secret <- authPlusApi.fetchSecret(id.toJava, token)
-          _ <- userProfileApi.activateFeature(userId, feature, id)
-        } yield authConfig(id, secret)
-        case None => Future.successful(Json.obj())
+          result <- buildSrvApi.download(feature.get, id, secret)
+        } yield result
+        case None => Future.successful(NotFound)
       }
     }
-
-    action.map(r => Ok(r ++ featureConfig))
   }
 
 }

@@ -12,6 +12,8 @@ trait ApiClientSupport {
 
   val auth0Api = new Auth0Api(conf, clientExec)
 
+  val buildSrvApi = new BuildSrvApi(conf, clientExec)
+
   val devicesApi = new DevicesApi(conf, clientExec)
 
   val userProfileApi = new UserProfileApi(conf, clientExec)
