@@ -129,7 +129,7 @@ define(function(require) {
 
   NewSmartGroup.contextTypes = {
     history: React.PropTypes.object.isRequired,
-    strings: React.PropTypes.object.isRequired,
+    
   };
 
   return NewSmartGroup;

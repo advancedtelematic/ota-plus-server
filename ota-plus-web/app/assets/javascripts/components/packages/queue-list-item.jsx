@@ -32,7 +32,7 @@ define(function(require) {
             :
               <span>
                 <span className="drag-bar pull-right"><i className="fa fa-bars"></i></span>
-                <button className="btn btn-action pull-right" onClick={this.cancelUpdate} id="button-cancel-update">{this.context.strings.cancel}</button>
+                <button className="btn btn-action pull-right" onClick={this.cancelUpdate} id="button-cancel-update">Cancel</button>
                 {this.props.status == 'error' ?
                   <button className="btn btn-action pull-right">retry</button>
                 : null}
@@ -70,7 +70,7 @@ define(function(require) {
   };
 
   QueueListItem.contextTypes = {
-    strings: React.PropTypes.object.isRequired,
+    
   };
 
   return QueueListItem;

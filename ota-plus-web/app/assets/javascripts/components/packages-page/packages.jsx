@@ -95,9 +95,5 @@ define(function(require) {
     }
   };
 
-  Packages.contextTypes = {
-    strings: React.PropTypes.object.isRequired
-  };
-
   return Packages;
 });

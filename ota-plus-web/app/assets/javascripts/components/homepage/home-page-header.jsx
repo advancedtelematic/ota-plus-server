@@ -1,6 +1,6 @@
 define(function(require) {
   var React = require('react');
-      
+            
   class HomePageHeader extends React.Component {
     constructor(props) {
       super(props);

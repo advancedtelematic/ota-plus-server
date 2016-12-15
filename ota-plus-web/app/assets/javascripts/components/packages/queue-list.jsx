@@ -122,9 +122,5 @@ define(function(require) {
     }
   };
 
-  QueueList.contextTypes = {
-    strings: React.PropTypes.object.isRequired
-  };
-
   return QueueList;
 });

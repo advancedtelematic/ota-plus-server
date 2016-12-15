@@ -63,7 +63,7 @@ define(function(require) {
               <div className="modal-header">
                 <button type="button" className="close" onClick={this.props.closeNewDeviceModal}></button>
                 <h4 className="modal-title">
-                  {this.context.strings.newdevice}
+                  New device
                   {selectedGroup && selectedGroup.type == 'real' ?
                     <span> in the {selectedGroup.name} group</span>
                   : null}
@@ -73,14 +73,14 @@ define(function(require) {
                 <div className="modal-body">
                   <Responses action="create-device" handledStatuses="error"/>
                   <div className="form-group">
-                    <label htmlFor="deviceName">{this.context.strings.devicename}</label>
+                    <label htmlFor="deviceName">Device name</label>
                     <input type="text" className="form-control" name="deviceName"
-                         ref="deviceName" placeholder={this.context.strings.devicename}/>
+                         ref="deviceName" placeholder="Device name"/>
                   </div>
                 </div>
                 <div className="modal-footer">
                   <a href="#" onClick={this.closeNewDeviceModal} className="darkgrey margin-top-20 pull-left">close</a>
-                  <button type="submit" className="btn btn-confirm pull-right">{this.context.strings.adddevice}</button>
+                  <button type="submit" className="btn btn-confirm pull-right">Add device</button>
                 </div>
               </form>
             </div>
@@ -88,10 +88,6 @@ define(function(require) {
         </div>
       );
     }
-  };
-
-  NewDevice.contextTypes = {
-    strings: React.PropTypes.object.isRequired
   };
 
   return NewDevice;
