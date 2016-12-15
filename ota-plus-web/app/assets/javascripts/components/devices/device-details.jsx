@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      ReactI18next = require('reactI18next'),
       Router = require('react-router'),
       Link = Router.Link,
       db = require('stores/db'),
@@ -164,7 +165,7 @@ define(function(require) {
     }
     render() {
       const deviceWithStatus = this.state.deviceData;
-
+      const { t } = this.props;
       function animateLeftPosition(left) {
         return VelocityHelpers.registerEffect({
           defaultDuration: 100,
@@ -264,7 +265,7 @@ define(function(require) {
                         device={deviceWithStatus}/>
                     </div>
                     <div className="panel-footer">
-                      {this.state.queueCount} packages in queue
+                      {t('common.packageWithCount', {count: this.state.queueCount})} in queue
                     </div>
                   </div>
                 </div>
@@ -299,5 +300,5 @@ define(function(require) {
     }
   };
 
-  return DeviceDetails;
+  return ReactI18next.translate()(DeviceDetails);
 });
