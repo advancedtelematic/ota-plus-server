@@ -6,7 +6,9 @@ define(function(require) {
       SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       Loader = require('../loader'),
-      Responses = require('../responses');
+      Responses = require('../responses'),
+      ReactI18next = require('reactI18next'),
+      translate = ReactI18next.translate;
 
   class TestSettings extends React.Component {
     constructor(props) {
@@ -35,14 +37,14 @@ define(function(require) {
         actionType: 'change-password',
       });
     }
-    render() {
+    render() {    
       var user = db.user.deref();
-      
+      const { t } = this.props;
       return (
         <div className="row margin-top-70 ats">
           <div className="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
             <div className="ats-header text-center">
-              <p>Edit profile</p>
+              <p>{t('editprofile.title')}</p>
             </div>
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
               {!_.isUndefined(user) ?
@@ -84,9 +86,5 @@ define(function(require) {
     }
   };
 
-  TestSettings.contextTypes = {
-    strings: React.PropTypes.object.isRequired
-  };
-
-  return TestSettings;
+  return translate()(TestSettings);
 });

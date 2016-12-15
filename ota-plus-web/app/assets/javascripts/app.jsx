@@ -8,6 +8,9 @@ define(function(require) {
       Link = ReactRouter.Link,
       IndexRoute = ReactRouter.IndexRoute,
       HashHistory = ReactRouter.hashHistory,
+      ReactI18next = require('reactI18next'),
+      I18nextProvider = ReactI18next.I18nextProvider,
+      i18n = require('./i18n'),
       db = require('stores/db'),
       Handler = require('handlers/handler'),
       VelocityUI = require('velocity-ui'),
@@ -22,7 +25,6 @@ define(function(require) {
 
   /* Components*/
   var Nav = require('components/nav'),
-      Translate = require('components/translation/translate'),
       Devices = require('components/devices/devices'),
       DeviceDetails = require('components/devices/device-details'),
       ProductionDeviceDetails = require('components/devices/production-device-details'),
@@ -41,38 +43,23 @@ define(function(require) {
       CampaignDetails = require('components/newcampaigns/campaign-details'),
       ClientApps = require('components/clientapps/client-apps'),
       TreeHub = require('components/treehub/treehub'),
-      Provisioning = require('components/provisioning/provisioning'), 
+      Provisioning = require('components/provisioning/provisioning'),
       HomePage = require('components/homepage/home-page');
-
-  const languages = {
-    en: 'en'
-  };
 
   class App extends React.Component {
     constructor(props) {
       super(props);
-      var currentLang = 'en';
-      if(localStorage.getItem('currentLang') && localStorage.getItem('currentLang') in languages) {
-        currentLang = localStorage.getItem('currentLang');
-      } else {
-        var browserLang = (navigator.language || navigator.userLanguage);
-        if(browserLang && browserLang in languages) {
-          currentLang = browserLang;
-        }
-      }
       
       var path = this.props.location.pathname.toLowerCase().split('/');
       var isHomePage = path[0] == '' && path[1] == '' ? true : false;
 
       this.state = {
-        currentLang: currentLang,
         showCampaignPanel: false,
         intervalId: null,
         hideAnimationUp: false,
         hideAnimationDown: true,
       }
 
-      this.changeLanguage = this.changeLanguage.bind(this);
       this.toggleCampaignPanel = this.toggleCampaignPanel.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
       this.logout = this.logout.bind(this);
@@ -82,12 +69,6 @@ define(function(require) {
       db.hasBetaAccess.addWatch("has-beta-access", _.bind(this.forceUpdate, this, null));
       SotaDispatcher.dispatch({actionType: 'impact-analysis'});
       WebsocketHandler.init();      
-    }
-    changeLanguage(value) {
-      localStorage.setItem('currentLang', value);
-      this.setState({
-        currentLang: value
-      });
     }
     toggleCampaignPanel() {
       this.setState({
@@ -226,8 +207,6 @@ define(function(require) {
           </VelocityTransitionGroup>
           <div key={key} className={page}>
             <Nav 
-              currentLang={this.state.currentLang} 
-              changeLang={this.changeLanguage} 
               showCampaignPanel={this.state.showCampaignPanel} 
               toggleCampaignPanel={this.toggleCampaignPanel} 
               logout={this.logout}
@@ -251,7 +230,7 @@ define(function(require) {
   };
 
   var routes = (
-    <Route component={Translate(App)} path="/" ignoreScrollBehavior={true}>
+    <Route component={App} path="/" ignoreScrollBehavior={true}>
       <Route component={RightPanel}>
         <IndexRoute component={HomePage}/>
         <Route path="/" component={HomePage}/>
@@ -279,9 +258,11 @@ define(function(require) {
   return {
     run() {
       ReactDOM.render(
-        <Router history={HashHistory}>
-          {routes}
-        </Router>,
+        <I18nextProvider i18n={i18n}>
+          <Router history={HashHistory}>
+            {routes}
+          </Router>
+        </I18nextProvider>,
         document.getElementById('app')
       );
 

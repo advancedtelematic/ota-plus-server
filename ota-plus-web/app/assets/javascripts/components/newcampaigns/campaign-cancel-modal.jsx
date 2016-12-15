@@ -80,7 +80,7 @@ define(function(require) {
 
   CampaignCancelModal.contextTypes = {
     history: React.PropTypes.object.isRequired,
-    strings: React.PropTypes.object.isRequired,
+    
   };
 
   return CampaignCancelModal;

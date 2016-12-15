@@ -76,9 +76,5 @@ define(function(require) {
     }
   };
 
-  CampaignCreate.contextTypes = {
-    strings: React.PropTypes.object.isRequired
-  };
-
   return CampaignCreate;
 });

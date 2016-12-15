@@ -42,9 +42,5 @@ define(function(require) {
     }
   };
 
-  NewManualGroupButton.contextTypes = {
-    strings: React.PropTypes.object.isRequired
-  };
-
   return NewManualGroupButton;
 });

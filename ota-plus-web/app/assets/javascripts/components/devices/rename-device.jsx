@@ -79,9 +79,5 @@ define(function(require) {
     }
   };
 
-  RenameDevice.contextTypes = {
-    strings: React.PropTypes.object.isRequired
-  };
-
   return RenameDevice;
 });
