@@ -100,7 +100,7 @@ define(function(require) {
       e.preventDefault();
       this.openCampaignWizard(campaignUUID);
     }
-    render() {
+    render() {    
       return (
         <div>
           <HomePageHeader /> 
@@ -195,6 +195,10 @@ define(function(require) {
         </div>
       );
     }
+  };
+  
+  HomePage.contextTypes = {
+    location: React.PropTypes.object,
   };
 
   return HomePage;

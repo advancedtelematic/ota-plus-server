@@ -15,6 +15,7 @@ define(function(require) {
         campaignsData: undefined
       };
       this.setCampaignsData = this.setCampaignsData.bind(this);
+      this.goToCampaignDetails = this.goToCampaignDetails.bind(this);
       db.campaigns.addWatch("homepage-running-campaigns", _.bind(this.setCampaignsData, this, null));
     }
     componentWillUnmount() {
@@ -59,6 +60,10 @@ define(function(require) {
         });
       }
     }
+    goToCampaignDetails(e) {
+      var id = e.currentTarget.dataset.id;
+      this.context.history.pushState(null, `campaigndetails/${id}`);
+    }
     render() {
       var campaigns = [];  
       if(!_.isUndefined(this.state.campaignsData)) {
@@ -84,10 +89,9 @@ define(function(require) {
               label: "Cancelled rate"
             }];
         
-          var link = 'campaigndetails/' + campaign.id;
           return (
-            <tr key={campaign.id}>
-              <td><Link to={`${link}`} className="black">{campaign.name}</Link></td>
+            <tr key={campaign.id} data-id={campaign.id} onClick={this.goToCampaignDetails}>
+              <td>{campaign.name}</td>
               <td>none</td>
               <td>none</td>
               <td>
@@ -163,6 +167,10 @@ define(function(require) {
   
   LastRunningCampaigns.propTypes = {
     listHeight: React.PropTypes.number.isRequired,
+  };
+  
+  LastRunningCampaigns.contextTypes = {
+    history: React.PropTypes.object.isRequired,
   };
   
   return LastRunningCampaigns;

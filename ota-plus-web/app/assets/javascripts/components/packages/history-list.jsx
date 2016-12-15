@@ -35,9 +35,7 @@ define(function(require) {
     render() {
       var Packages = db.packageHistoryForDevice.deref();
       var AllInstallationsLog = db.installationLogForDevice.deref();
-      
-      console.log(Packages);
-      
+            
       if(!_.isUndefined(Packages) && !_.isUndefined(AllInstallationsLog)) {
         Packages.sort(function(a, b) {
           var dateCompared = new Date(b.completionTime) - new Date(a.completionTime);

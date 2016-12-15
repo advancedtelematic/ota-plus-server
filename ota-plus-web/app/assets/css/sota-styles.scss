@@ -4375,11 +4375,12 @@ hr.full-line {
 
     .table {
         margin: 0;
-
+        
         & > thead {
             & > tr {
                 & > td {
                     padding: 8px 20px;
+                    vertical-align: middle;
                 }
             }
         }
@@ -4388,6 +4389,7 @@ hr.full-line {
             & > tr {
                 & > td {
                     padding: 8px 20px;
+                    vertical-align: middle;
                 }
             }
         }
@@ -4486,6 +4488,17 @@ hr.full-line {
     .element-box {
         .element-icon {
             background-image: url(/assets/img/icons/campaign_icon.png);
+        }
+    }
+}
+
+#box-last-running-campaigns {
+    .table {
+        tbody {
+            tr {
+                cursor: pointer;
+                cursor: hand;
+            }
         }
     }
 }
