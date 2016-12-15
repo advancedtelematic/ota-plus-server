@@ -275,7 +275,7 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
       .transform(_.withMethod("POST").withBody(requestBody))
       .execResponse(apiExec)
       .flatMap { response =>
-        if (response.status == ResponseStatusCodes.OK_200) {
+        if (response.status == 201) {
           Future.successful(Done)
         } else {
           Future.failed(UnexpectedResponse(response))
