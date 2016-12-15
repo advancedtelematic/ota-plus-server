@@ -45,7 +45,6 @@ define(function(require) {
       db.blacklistedPackagesWithStats.removeWatch("poll-blacklisted-packages-with-stats");
       db.impactAnalysis.removeWatch("poll-impact-analysis-page");
       db.blacklistedPackagesWithStats.reset();
-      db.impactAnalysis.reset();
     }
     setBlacklistedPackagesData() {
       var blacklistedPackages = db.blacklistedPackagesWithStats.deref();
