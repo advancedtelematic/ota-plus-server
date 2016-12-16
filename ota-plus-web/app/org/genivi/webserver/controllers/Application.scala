@@ -52,9 +52,16 @@ class Application @Inject() (ws: WSClient,
   private def apiByPath(path: String) : Option[String] = {
     val pathComponents = path.split("/").toList
 
-    val proxiedPrefixes = coreProxiedPrefixes orElse deviceRegistryProxiedPrefixes orElse resolverProxiedPrefixes
+    val proxiedPrefixes = coreProxiedPrefixes orElse
+      deviceRegistryProxiedPrefixes orElse
+      resolverProxiedPrefixes orElse
+      auditorProxiedPrefixes
 
     proxiedPrefixes.lift(pathComponents)
+  }
+
+  private val auditorProxiedPrefixes: PartialFunction[List[String], String] = {
+    case "auditor" :: "devices_seen_in" :: _ => auditorApiUri
   }
 
   private val coreProxiedPrefixes: PartialFunction[List[String], String] = {
