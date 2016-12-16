@@ -12,6 +12,9 @@ define(function(require) {
         <div id="impact-tooltip" className="myModal">
           <div className="modal-dialog center-xy">
             <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">Blacklist</h4>
+              </div>
               <div className="modal-body font-14">
                 <div className="text-center">
                   With ATS Garage, you can <strong>blacklist</strong> problem packages, ensuring they <br />won't get installed on any of your devices.

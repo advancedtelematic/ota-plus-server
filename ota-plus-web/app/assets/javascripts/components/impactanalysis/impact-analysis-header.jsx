@@ -13,7 +13,7 @@ define(function(require) {
           <div className="col-md-12">
             <div className="grey-header-icon"></div>
             <div className="grey-header-text">
-              <div className="grey-header-title">Impact analyser</div>
+              <div className="grey-header-title">Impact analysis</div>
               <div className="grey-header-subtitle">
                 {!_.isUndefined(this.props.deviceCount) && !_.isUndefined(this.props.groupCount) ? 
                   <span>Impact: {t('common.deviceWithCount', {count: this.props.deviceCount})} in {t('common.groupWithCount', {count: this.props.groupCount})}</span>
