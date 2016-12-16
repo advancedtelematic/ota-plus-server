@@ -1,7 +1,11 @@
 package com.advancedtelematic.api
 
 import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.model.Uri.NamedHost
+import akka.http.scaladsl.model.Uri.{NamedHost, Path}
+import akka.stream.scaladsl.Source
+import akka.util.ByteString
+import java.time.Instant
+import java.util.UUID
 import org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 import play.api.Configuration
 import play.api.libs.json._
@@ -21,6 +25,34 @@ object CryptAccountInfo {
 
 }
 
+final case class SerialNumber(data: String) extends AnyVal
+
+object SerialNumber {
+  import play.api.libs.functional.syntax._
+
+  implicit val SerialNumberReads: Reads[SerialNumber] = Reads.StringReads.map(SerialNumber.apply)
+  implicit val SerialNumberWrites: Writes[SerialNumber] = Writes.StringWrites.contramap(_.data)
+}
+
+final case class DeviceRegistrationCredentials(uuid: UUID,
+                                               description: String,
+                                               validFrom: Instant,
+                                               validUntil: Instant)
+
+object DeviceRegistrationCredentials {
+  import play.api.libs.functional.syntax._
+
+  implicit val PathReads: Reads[Path] = Reads.StringReads.map(Path.apply(_))
+  implicit val PathWrites: Writes[Path] = Writes.StringWrites.contramap(_.toString)
+
+  implicit val FormatInstance: Format[DeviceRegistrationCredentials] =
+    ((__ \ "uuid").format[UUID] and
+     (__ \ "description").format[String] and
+     (__ \ "validFrom").format[Instant] and
+     (__ \ "validUntil").format[Instant]
+    )(DeviceRegistrationCredentials.apply, unlift(DeviceRegistrationCredentials.unapply))
+}
+
 class CryptApi(conf: Configuration, val apiExec: ApiClientExec)(implicit exec: ExecutionContext) {
   import org.asynchttpclient.util.HttpConstants.Methods._
 
@@ -30,24 +62,51 @@ class CryptApi(conf: Configuration, val apiExec: ApiClientExec)(implicit exec: E
     baseUri(s"/accounts/$accountName").transform(_.withMethod(PUT)).execJson[CryptAccountInfo](apiExec)
   }
 
-  def getAccountInfo(accountName: String): Future[Option[CryptAccountInfo]] = {
+  def getAccount[T](accountName: String, parseT: JsValue => JsResult[T]): Future[Option[T]] = {
     baseUri(s"/accounts/$accountName")
       .transform(_.withMethod(GET))
       .execResponse(apiExec)
-      .flatMap[Option[CryptAccountInfo]] { response =>
-        response.status match {
-          case ResponseStatusCodes.OK_200 =>
-            response.json.validate[CryptAccountInfo] match {
-              case JsSuccess(x, _) => Future.successful(Some(x))
-              case JsError(errors) =>
-                Future.failed(MalformedResponse(errors.toString(), response))
-            }
-          case StatusCodes.NotFound.intValue =>
-            Future.successful(None)
+      .flatMap[Option[T]] { response =>
+      response.status match {
+        case ResponseStatusCodes.OK_200 =>
+          parseT(response.json) match {
+            case JsSuccess(x, _) => Future.successful(Some(x))
+            case JsError(errors) =>
+              Future.failed(MalformedResponse(errors.toString(), response))
+          }
+        case StatusCodes.NotFound.intValue =>
+          Future.successful(None)
 
-          case _ =>
-            Future.failed(UnexpectedResponse(response))
-        }
+        case _ =>
+          Future.failed(UnexpectedResponse(response))
       }
+    }
+  }
+
+  def getAccountInfo(accountName: String): Future[Option[CryptAccountInfo]] = {
+    getAccount(accountName, _.validate[CryptAccountInfo])
+  }
+
+  def getCredentials(accountName: String): Future[Option[Seq[DeviceRegistrationCredentials]]] = {
+    getAccount(accountName, x =>
+      (x \ "deviceregistrationcredentials").validate[Map[String, DeviceRegistrationCredentials]])
+      .map(_.map(_.values.toSeq))
+  }
+
+  def credentialsRegistration(accountName: String,
+                              description: String,
+                              ttl: Long): Future[DeviceRegistrationCredentials] = {
+    val requestBody = Json.obj("description" -> description, "ttl" -> ttl)
+    baseUri(s"/accounts/$accountName/credentials/registration")
+      .transform(_.withMethod(POST))
+      .transform(_.withBody(requestBody))
+      .execJson[DeviceRegistrationCredentials](apiExec)
+  }
+
+  def downloadCredentials(accountName: String, id: UUID): Future[Source[ByteString, _]] = {
+    baseUri(s"/accounts/$accountName/credentials/registration/$id")
+      .transform(_.withMethod(GET))
+      .execResult(apiExec)
+      .map(_.body.dataStream)
   }
 }
