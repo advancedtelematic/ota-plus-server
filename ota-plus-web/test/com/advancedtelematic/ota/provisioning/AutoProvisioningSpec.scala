@@ -1,6 +1,9 @@
 package com.advancedtelematic.ota.provisioning
 
+import akka.util.ByteString
 import com.advancedtelematic.Tokens
+import java.time.{Instant, LocalDate, ZoneOffset}
+import java.time.temporal.ChronoField
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{ Millis, Seconds, Span }
 import org.scalatestplus.play.{ OneServerPerSuite, PlaySpec }
@@ -113,6 +116,46 @@ class AutoProvisioningSpec extends PlaySpec with OneServerPerSuite with ScalaFut
       response.status mustBe OK
       (response.json \ "subject").as[String] mustEqual MockCrypt.TestAccount.name
       (response.json \ "hostName").asOpt[String] mustBe defined
+    }
+  }
+
+  "POST /api/v1/provisioning/credentials/registration" should {
+    "respond with 200 and json" in {
+      val untilDate = LocalDate.now().plusDays(2)
+      val description = "simple description"
+      val response = WsTestClient.withClient { wsClient =>
+        wsClient
+          .url(s"http://$endpointAddress/api/v1/provisioning/credentials/registration")
+          .withFollowRedirects(false)
+          .withHeaders("Cookie" -> makeSessionCookie(MockCrypt.TestAccount.name), "Csrf-Token" -> csrfToken)
+          .post(Json.obj("description" -> description, "until" -> Json.toJson(untilDate)))
+          .futureValue
+      }
+      response.status mustBe OK
+      (response.json \ "uuid").as[String] mustEqual MockCrypt.TestDeviceUuid
+      (response.json \ "description").as[String] mustEqual description
+      (response.json \ "validFrom").as[Instant] mustEqual MockCrypt.now
+      val validUntilResp = (response.json \ "validUntil").as[Instant].getLong(ChronoField.INSTANT_SECONDS)
+
+      val untilTime = untilDate.plusDays(1).atStartOfDay(ZoneOffset.UTC)
+      validUntilResp must be >= untilTime.getLong(ChronoField.INSTANT_SECONDS)
+      validUntilResp must be <= untilTime.plusHours(1).getLong(ChronoField.INSTANT_SECONDS)
+    }
+  }
+
+  "GET /api/v1/provisioning/credentials/registration/uuid" should {
+    "respond with 200 and file" in {
+      val response = WsTestClient.withClient { wsClient =>
+        wsClient
+          .url(s"http://$endpointAddress/api/v1/provisioning/credentials/registration/${MockCrypt.TestDeviceUuid}")
+          .withFollowRedirects(false)
+          .withHeaders("Cookie" -> makeSessionCookie(MockCrypt.TestAccount.name), "Csrf-Token" -> csrfToken)
+          .get()
+          .futureValue
+      }
+      response.status mustBe OK
+      response.header("Content-Type") mustBe Some("application/x-pkcs12")
+      response.bodyAsBytes mustBe ByteString("file-content")
     }
   }
 }
