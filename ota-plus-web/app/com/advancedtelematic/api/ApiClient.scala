@@ -269,7 +269,11 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
 
   def createProfile(userId: UserId)
                    (implicit executionContext: ExecutionContext): Future[Done] = {
-    val requestBody = Json.obj("user_id" -> userId.id)
+    val requestBody = Json.obj(
+      "user_id" -> userId.id,
+      "applications" -> Seq.empty[String],
+      "features" -> Seq.empty[FeatureName]
+    )
 
     userProfileRequest("users")
       .transform(_.withMethod("POST").withBody(requestBody))
