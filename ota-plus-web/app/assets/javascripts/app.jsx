@@ -182,6 +182,9 @@ define(function(require) {
           case 'clientapps':
             page = 'page-client-apps';
           break;
+          case 'treehub':
+            page = 'page-treehub';
+          break;
           default:
           break;
         }

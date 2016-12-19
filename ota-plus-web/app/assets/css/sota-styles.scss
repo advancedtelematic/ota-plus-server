@@ -77,7 +77,7 @@ button {
     border: 1px solid #ddd;
     -webkit-box-shadow: none;
     box-shadow: none;
-    
+
     &:focus {
         border-color: #ccc;
         outline: 0;
@@ -646,14 +646,14 @@ button {
             background-image: url(/assets/img/icons/black/packages.png);
         }
     }
-    
+
     .packages-empty {
         text-align: center;
         width: 100%;
         float: left;
         position: relative;
     }
-    
+
     .list-group-item-wrapper {
         width: 100%;
         float: left;
@@ -1638,7 +1638,7 @@ a.close, button.close {
                 &.modal-header-red {
                     background: red;
                 }
-                
+
                 .close {
                     margin: 2px 0 0 0;
                 }
@@ -2835,7 +2835,7 @@ hr.full-line {
 }
 
 .grey-header {
-    background: rgba(0,0,0,0.5);
+    background: rgba(255,255,255,0.08);
     width: 100%;
     padding: 20px 0;
     float: left;
@@ -4550,4 +4550,80 @@ hr.full-line {
 .create-campaign-icon {
     width: 30px;
     vertical-align: bottom;
+}
+
+.page-treehub {
+    .grey-header {
+        .grey-header-icon {
+            background-image: url(/assets/img/icons/black/treehub.png);
+        }
+    }
+
+    .treehub-disabled {
+        text-align: center;
+        width: 100%;
+        float: left;
+        position: relative;
+    }
+
+    .treehub-enabled {
+        line-height: 1.7em;
+        width: 100%;
+        float: left;
+        position: relative;
+
+        .panel-grey {
+            width: 310px;
+            margin: 0 20px;
+            display: inline-block;
+            vertical-align: top;
+            
+            .panel-heading {
+                height: 55px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                
+                img {
+                    width: 45px;
+                }
+            }
+            
+            .panel-body {
+                font-size: 16px;
+                line-height: 1.7em;
+                height: 160px;
+                position: relative;
+                
+                .btn {
+                    position: absolute;
+                    left: 50%;
+                    bottom: 20px;
+                    transform: translate(-50%, 0);
+                }
+            }
+        }
+    }
+}
+
+.panel-grey {
+    background: transparent;
+    width: 100%;
+    margin-bottom: 0;
+    border: 0;
+    position: relative;
+
+    .panel-heading {
+        color: #fff;
+        text-align: center;
+        background: #4B5151;
+        height: 50px;
+        padding: 10px 15px;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .panel-body {
+        color: #444;
+        background: #fff;
+    }
 }
