@@ -61,21 +61,21 @@ define(function(require) {
                 <button type="button" className="close" onClick={this.props.closeModal}></button>
                 <h4 className="modal-title">
                   <img src="/assets/img/icons/grid.png" className="create-group-icon" style={{width: '20px'}} alt="" /> &nbsp;
-                  Create manual group
+                  Add new group
                 </h4>
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
                 <div className="modal-body">
                   <Responses action="create-manual-group" handledStatuses="error"/>
                   <div className="form-group">
-                    <label htmlFor="groupName">Name</label>
+                    <label htmlFor="groupName">Group name</label>
                     <input type="text" className="form-control" name="groupName"
-                         ref="groupName"/>
+                      placeholder="Group name" ref="groupName"/>
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <a href="#" onClick={this.closeModal} className="darkgrey margin-top-20 pull-left">close</a>
-                  <button type="submit" className="btn btn-confirm pull-right">Confirm</button>
+                  <a href="#" onClick={this.closeModal} className="darkgrey margin-top-20 pull-left">Cancel</a>
+                  <button type="submit" className="btn btn-confirm pull-right">Add group</button>
                 </div>
               </form>
             </div>

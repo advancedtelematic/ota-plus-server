@@ -34,6 +34,13 @@ define(function(require) {
       }
       return (
         <Link to={`${link}`} className="device-box" id={"link-devicedetails-" + this.props.device.uuid} style={{width: this.props.width}}>
+          <div className="device-actions">
+            <ul>
+              <li onClick={this.renameDevice}>
+                <img src="/assets/img/icons/edit_white.png" alt="" />
+              </li>
+            </ul>
+          </div>
           <div className="device-icon">
             <div className={"device-status device-status-" + this.props.device.status}></div>
           </div>
@@ -41,24 +48,12 @@ define(function(require) {
             <div className="device-name" title={deviceName}>{deviceName}</div>
             <div className="device-lastseen">
               {this.props.device.status !== 'NotSeen' ?
-                <span>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
+                <span>Last seen: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
               :
                 <span>Never seen online</span>
               }
             </div>
             <div className="device-status-text">{this.props.device.groupName ? "Group: " + this.props.device.groupName : "Ungrouped"}</div>
-            {this.props.areActionButtonsShown ? 
-              <div className="dropdown action-menu-dropdown pull-right">
-                <div data-toggle="dropdown">
-                  <i className="fa fa-chevron-down" aria-hidden="true"></i>
-                </div>
-                <ul className="dropdown-menu">
-                  <li onClick={this.renameDevice}>
-                    <img src="/assets/img/icons/edit_black.png" alt="" style={{width: '15px'}}/> Rename
-                  </li>
-                </ul>
-              </div>
-            : null}
           </div>
         </Link>
       );

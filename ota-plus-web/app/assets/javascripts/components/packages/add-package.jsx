@@ -92,7 +92,7 @@ define(function(require) {
               <form ref='form' onSubmit={this.handleSubmit} encType="multipart/form-data">
                 <div className="modal-header">
                   <button type="button" className="close" data-dismiss="modal" onClick={this.props.closeForm}></button>
-                <h4 className="modal-title">New package</h4>
+                <h4 className="modal-title">Add new package</h4>
                 </div>
                 <div className="modal-body">
                   <Responses 
@@ -102,8 +102,8 @@ define(function(require) {
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="name">Package Name</label>
-                        <input type="text" className="form-control" name="name" ref="name" placeholder="Package Name" onChange={this.toggleButtonState}/>
+                        <label htmlFor="name">Package name</label>
+                        <input type="text" className="form-control" name="name" ref="name" placeholder="Package name" onChange={this.toggleButtonState}/>
                       </div>
                     </div>
                     <div className="col-md-6">
@@ -130,7 +130,7 @@ define(function(require) {
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="binary">Package Binary</label>
+                        <label htmlFor="binary">Package binary</label>
                         {this.props.files && this.props.files.length > 0 ? 
                           <div> {this.props.files.map((file) => <div key={file.name}>{file.name} </div> )} </div> 
                         : 
@@ -142,7 +142,7 @@ define(function(require) {
                 </div>
                 <div className="modal-footer">
                   <a href="#" onClick={this.closeForm} className="darkgrey margin-top-20 pull-left">Cancel</a>
-                  <button type="submit" className="btn btn-confirm pull-right" disabled={this.state.isButtonDisabled}>Create package</button>
+                  <button type="submit" className="btn btn-confirm pull-right" disabled={this.state.isButtonDisabled}>Add package</button>
                 </div>
               </form>
             </div>

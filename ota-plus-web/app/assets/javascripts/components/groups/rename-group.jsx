@@ -54,7 +54,7 @@ define(function(require) {
                 <button type="button" className="close" onClick={this.props.closeRenameGroupModal}></button>
                 <h4 className="modal-title">
                   <img src="/assets/img/icons/edit_white.png" className="blacklist-edit-icon" style={{width: '30px'}} alt="" />&nbsp;
-                  Rename group
+                  Rename group - {this.props.group.groupName}
                 </h4>
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
@@ -67,7 +67,7 @@ define(function(require) {
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <a href="#" onClick={this.closeRenameGroupModal} className="darkgrey margin-top-20 pull-left">close</a>
+                  <a href="#" onClick={this.closeRenameGroupModal} className="darkgrey margin-top-20 pull-left">Cancel</a>
                   <button type="submit" className="btn btn-confirm pull-right">Confirm</button>
                 </div>
               </form>

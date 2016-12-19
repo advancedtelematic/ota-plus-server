@@ -63,7 +63,7 @@ define(function(require) {
               <div className="modal-header">
                 <button type="button" className="close" onClick={this.props.closeNewDeviceModal}></button>
                 <h4 className="modal-title">
-                  New device
+                  Add new device
                   {selectedGroup && selectedGroup.type == 'real' ?
                     <span> in the {selectedGroup.name} group</span>
                   : null}
@@ -79,7 +79,7 @@ define(function(require) {
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <a href="#" onClick={this.closeNewDeviceModal} className="darkgrey margin-top-20 pull-left">close</a>
+                  <a href="#" onClick={this.closeNewDeviceModal} className="darkgrey margin-top-20 pull-left">Cancel</a>
                   <button type="submit" className="btn btn-confirm pull-right">Add device</button>
                 </div>
               </form>

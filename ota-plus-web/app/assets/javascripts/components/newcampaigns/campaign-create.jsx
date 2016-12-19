@@ -61,7 +61,7 @@ define(function(require) {
                   <Responses action="create-campaign" handledStatuses="error"/>
                   <div className="form-group">
                     <label htmlFor="campaignName">Campaign name</label>
-                    <input type="text" className="form-control" name="campaignName" ref="campaignName"/>
+                    <input type="text" className="form-control" name="campaignName" placeholder="Campaign name" ref="campaignName"/>
                   </div>
                 </div>
                 <div className="modal-footer">
