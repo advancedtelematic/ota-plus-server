@@ -641,6 +641,19 @@ button {
 }
 
 .page-packages {
+    .grey-header {
+        .grey-header-icon {
+            background-image: url(/assets/img/icons/black/packages.png);
+        }
+    }
+    
+    .packages-empty {
+        text-align: center;
+        width: 100%;
+        float: left;
+        position: relative;
+    }
+    
     .list-group-item-wrapper {
         width: 100%;
         float: left;
@@ -3010,7 +3023,7 @@ hr.full-line {
     }
 }
 
-#impact-tooltip, #campaign-tooltip {
+#impact-tooltip, #campaign-tooltip, #package-tooltip {
     padding-top: 0;
 
     .modal-dialog {
