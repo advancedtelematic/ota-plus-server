@@ -13,7 +13,7 @@ define(function(require) {
     }
     showStatus(e) {
       e.preventDefault();
-      this.props.showPackageStatusForm(this.props.name);
+      this.props.showPackageStatusModal(this.props.name);
     }
     render() {
       return (
