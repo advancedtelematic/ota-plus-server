@@ -1,6 +1,7 @@
 {
   "id": "${JOB_NAME}",
   "uris": ["/root/docker.tar.gz"],
+  "constraints": [["rack_id", "CLUSTER", "stateless"]],
   "cpus": 0.2,
   "mem": 1024.0,
   "instances": 1,
