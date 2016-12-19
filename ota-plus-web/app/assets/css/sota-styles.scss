@@ -70,10 +70,11 @@ button {
 
 .form-control {
     font-size: 13px;
-    background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#1a000000',GradientType=0 ); /* IE6-9 */
+    background: rgb(255,255,255); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(234,234,234,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(234,234,234,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(234,234,234,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eaeaea',GradientType=0 ); /* IE6-9 */
     border: 1px solid #ddd;
     -webkit-box-shadow: none;
     box-shadow: none;
@@ -214,11 +215,17 @@ button {
 
 .device-icon, .group-icon, .campaign-icon {
     text-align: center;
-    background: url(/assets/img/icons/device_small.png) no-repeat;
+    background-color: #fff;
+    background-repeat: no-repeat;
     background-size: cover;
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
     float: left;
+}
+
+.device-icon {
+    background-image: url(/assets/img/icons/black/devices.png);
 }
 
 .device-name {
@@ -285,6 +292,8 @@ button {
 }
 
 .device-box {
+    overflow: hidden;
+
     &:hover, &:active, &:focus {
         color: #fff;
         cursor: move;
@@ -320,7 +329,7 @@ button {
     }
 
     .device-icon {
-        margin-top: 15px;
+        margin-top: 20px;
         margin-left: 15px;
     }
 }
@@ -403,10 +412,10 @@ button {
             margin-left: 35px;
         }
     }
-}
 
-.page-devices {
     #home-content {
+        width: 100%;
+        float: left;
         position: relative;
 
         #groups-column {
@@ -421,6 +430,7 @@ button {
 
             .groups-wrapper {
                 background: #fff;
+                border-top: 1px solid #eee;
 
                 #groups-list {
                     width: 100%;
@@ -436,19 +446,9 @@ button {
                         float: left;
                         position: relative;
 
-                        &:hover {
-                            .action-menu-dropdown {
-                                display: block;
-                            }
-                        }
-
-                        .action-menu-dropdown {
-                            top: 10px;
-                            right: 10px;
-                        }
-
                         .list-group-item {
                             height: 94px;
+                            padding: 0;
                             transition: background-color 0.3s ease-in;
                             border-radius: 0;
 
@@ -470,13 +470,14 @@ button {
                         &.checked {
                             background-color: #f5f5f5;
                         }
-                    }                
+                    }
 
                     .group-icon {
                         background-image: url(/assets/img/icons/group_large_grey.png);
                         float: none;
                         display: inline-block;
                         vertical-align: middle;
+                        border: 2px solid #ddd;
                     }
 
                     .group-text {
@@ -484,6 +485,7 @@ button {
                         margin: 0 0 0 15px;
                         display: inline-block;
                         vertical-align: middle;
+                        transition: all 0.2s ease-in;
 
                         .group-title {
                             font-size: 20px;
@@ -503,12 +505,99 @@ button {
                         top: 25px;
                         right: 15px;
                     }
+
+                    .real-groups {
+                        .group-actions {
+                            color: #fff;
+                            text-align: center;
+                            background: #4B5151;
+                            width: 60px;
+                            height: 100%;
+                            margin-left: -60px;
+                            margin-right: 15px;
+                            display: inline-block;
+                            vertical-align: middle;
+                            transition: all 0.2s ease-in;
+
+                            ul {
+                                height: 100%;
+                                margin: 0;
+
+                                li {
+                                    line-height: 92px;
+                                    height: 100%;
+                                    display: block;
+
+                                    img {
+                                        width: 20px;
+                                    }
+                                }
+                            }
+                        }
+
+                        .list-group-item-wrapper {
+                            &:hover {
+                                .group-actions {
+                                    margin-left: 0;
+                                }
+
+                                .group-text {
+                                    width: 45%;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
 
         #devices-column {
             margin-left: 350px;
+
+            .device-box {
+                .device-actions {
+                    color: #fff;
+                    text-align: center;
+                    cursor: hand;
+                    cursor: pointer;
+                    background: #4B5151;
+                    width: 60px;
+                    height: 100%;
+                    margin-left: -60px;
+                    float: left;
+                    display: block;
+                    transition: all 0.2s ease-in;
+
+                    ul {
+                        height: 100%;
+                        margin: 0;
+
+                        li {
+                            line-height: 92px;
+                            height: 100%;
+                            display: block;
+
+                            img {
+                                width: 20px;
+                            }
+                        }
+                    }
+                }
+
+                .device-desc {
+                    transition: all 0.2s ease-in;
+                }
+
+                &:hover {
+                    .device-actions {
+                        margin-left: 0;
+                    }
+
+                    .device-desc {
+                        width: 55%;
+                    }
+                }
+            }
         }
     }
 }
@@ -1286,8 +1375,9 @@ a.close, button.close {
 }
 
 .btn-full-section {
+    color: #fff;
     text-align: left;
-    background: rgba(0,0,0,0.5);
+    background: rgba(255,255,255,0.1);
     width: 100%;
     border-radius: 0;
 
@@ -1692,12 +1782,6 @@ a.close, button.close {
             min-height: 0;
             padding: 40px 100px 20px 100px;
         }
-    }
-}
-
-#modal-create-group {
-    .modal-body {
-        padding: 40px 25px 20px 25px;
     }
 }
 
@@ -3023,7 +3107,7 @@ hr.full-line {
     }
 }
 
-#impact-tooltip, #campaign-tooltip, #package-tooltip {
+#impact-tooltip, #campaign-tooltip, #package-tooltip, #devices-tooltip {
     padding-top: 0;
 
     .modal-dialog {
@@ -3673,95 +3757,6 @@ hr.full-line {
     }
 }
 
-.group-details-panel {
-    width: 100%;
-    margin-left: -15px;
-    float: left;
-    position: relative;
-    top: -10px;
-
-    .arrow-pointer {
-        width: 31px;
-        height: 21px;
-        background: url(/assets/img/arrow.png) no-repeat;
-        position: absolute;
-        top: 0;
-        z-index: 2;
-        transition: all 0.2s ease-in;
-    }
-
-    .group-inner-devices-list {
-        background-image: -moz-linear-gradient(transparent 0, transparent 18px, #fff 18px, #fff 100%);
-        background-image: -webkit-linear-gradient(transparent 0, transparent 18px, #fff 18px, #fff 100%);
-        background-image: linear-gradient(transparent 0, transparent 18px, #fff 18px, #fff 100%);
-        height: 100%;
-        padding: 30px 15px 10px 15px;
-
-        &:before {
-            content: '';
-            background: url(/assets/img/shadow_top.png) repeat-x;
-            width: 100%;
-            height: 9px;
-            position: absolute;
-            top: 15px;
-            left: 0;
-        }
-
-        &:after {
-            content: '';
-            background: url(/assets/img/shadow_bottom.png) repeat-x;
-            width: 100%;
-            height: 9px;
-            position: absolute;
-            left: 0;
-            bottom: 0;
-        }
-
-        .device-box {
-            color: #444;
-            text-shadow: none;
-
-            &:hover {
-                background-color: rgba(0, 0, 0, 0.08);
-
-                .device-icon {
-                    background-image: url(/assets/img/icons/device_small.png);
-                }
-            }
-
-            .device-status {
-                left: 30px;
-            }
-
-            .device-icon {
-                margin-top: 20px;
-                margin-left: 20px;
-                background-image: url(/assets/img/icons/device_small_grey.png);
-                width: 56px;
-                height: 56px;
-                transition: all 0.2s ease-in;
-            }
-
-            .device-lastseen {
-                opacity: 0.8;
-            }
-
-            .device-status-text {
-                opacity: 0.8;
-            }
-
-            .action-menu-dropdown {                
-                i {
-                    &.fa-chevron-down {
-                        text-shadow: none;
-                    }
-                }
-            }
-        }
-
-    }
-}
-
 .action-menu-dropdown {
     text-shadow: none;
     position: absolute;
@@ -3789,16 +3784,6 @@ hr.full-line {
 
             img {
                 vertical-align: top;
-            }
-        }
-    }
-}
-
-.devices {
-    .device-box {
-        &:hover {
-            .action-menu-dropdown {
-                display: block;
             }
         }
     }
@@ -4458,11 +4443,14 @@ hr.full-line {
 
     .element-icon {
         text-align: center;
+        background-color: #fff;
+        background-repeat: no-repeat;
         background-size: cover;
         width: 60px;
         height: 60px;
         margin-top: 10px;
         margin-left: 35px;
+        border-radius: 10px;
         float: left;
     }
 
@@ -4490,7 +4478,8 @@ hr.full-line {
 #box-last-created-devices {
     .element-box {
         .element-icon {
-            background-image: url(/assets/img/icons/device_icon.png);
+            background-image: url(/assets/img/icons/black/devices.png);
+            border: 2px solid #ddd;
         }
     }
 }
@@ -4498,7 +4487,8 @@ hr.full-line {
 #box-last-uploaded-packages {
     .element-box {
         .element-icon {
-            background-image: url(/assets/img/icons/package_icon.png);
+            background-image: url(/assets/img/icons/black/packages.png);
+            border: 2px solid #ddd;
         }
 
         .element-desc {
@@ -4516,7 +4506,8 @@ hr.full-line {
 #box-ongoing-draft-campaigns {
     .element-box {
         .element-icon {
-            background-image: url(/assets/img/icons/campaign_icon.png);
+            background-image: url(/assets/img/icons/black/campaigns.png);
+            border: 2px solid #ddd;
         }
     }
 }
@@ -4577,23 +4568,23 @@ hr.full-line {
             margin: 0 20px;
             display: inline-block;
             vertical-align: top;
-            
+
             .panel-heading {
                 height: 55px;
                 padding-top: 5px;
                 padding-bottom: 5px;
-                
+
                 img {
                     width: 45px;
                 }
             }
-            
+
             .panel-body {
                 font-size: 16px;
                 line-height: 1.7em;
                 height: 160px;
                 position: relative;
-                
+
                 .btn {
                     position: absolute;
                     left: 50%;
@@ -4625,5 +4616,13 @@ hr.full-line {
     .panel-body {
         color: #444;
         background: #fff;
+    }
+}
+
+.page-devices {
+    .grey-header {
+        .grey-header-icon {
+            background-image: url(/assets/img/icons/black/devices.png);
+        }
     }
 }

@@ -158,7 +158,7 @@ define(function(require) {
                 : undefined}
               </div>
               <div className="modal-footer">
-                <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.closeForm}>cancel</a>
+                <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.closeForm}>Cancel</a>
                 {!_.isUndefined(this.state.comment) ?
                   <div>
                     <button type="submit" className="btn btn-confirm pull-right" onClick={this.handleSubmit}>{this.props.mode == 'edit' ? 'Save Comment' : 'Confirm'}</button>

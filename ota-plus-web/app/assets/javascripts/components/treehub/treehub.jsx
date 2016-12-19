@@ -127,7 +127,11 @@ define(function(require) {
                     </div>
                   </div>
               : 
-                <Loader />
+                <div className="treehub-disabled" style={{height: this.state.contentHeight}}>
+                  <div className="center-xy padding-15">
+                    <Loader />
+                  </div>
+                </div>
               }
             </VelocityTransitionGroup>
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>

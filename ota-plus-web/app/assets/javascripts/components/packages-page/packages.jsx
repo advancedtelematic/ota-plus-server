@@ -272,9 +272,7 @@ define(function(require) {
         db.packageBlacklisted.reset();
       }
     }
-    render() {
-      console.log(this.state.searchablePackagesData);
-    
+    render() {    
       return (
         <div>
           <PackagesHeader 
@@ -333,7 +331,11 @@ define(function(require) {
             : undefined}
           </VelocityTransitionGroup>
           {_.isUndefined(db.searchablePackages.deref()) ? 
-            <Loader />
+            <div className="packages-empty" style={{height: this.state.contentHeight}}>
+              <div className="center-xy padding-15">
+                <Loader />
+              </div>
+            </div>
           : undefined}
           
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>

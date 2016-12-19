@@ -78,9 +78,9 @@ define(function(require) {
                 <h4 className="modal-title">
                   <img src="/assets/img/icons/grid.png" className="create-group-icon" style={{width: '20px'}} alt="" /> &nbsp;
                   {!this.state.areAllComponentsRequestsDone || canCreateGroup ? 
-                    <span>Create a new Group</span>
+                    <span>Add new smart group</span>
                   :
-                    <span>Could not create Smart Group</span>
+                    <span>Could not create smart group</span>
                   }
                 </h4>
               </div>
@@ -91,17 +91,17 @@ define(function(require) {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="form-group">
-                          <label className="col-sm-3 control-label">Group Name</label>
+                          <label className="col-sm-3 control-label">Group name</label>
                           <div className="col-sm-9">
-                            <input className="form-control" name="groupName" ref="groupName"/>
+                            <input className="form-control" name="groupName" placeholder="Group name" ref="groupName"/>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="modal-footer">
-                    <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.closeModal}>close</a>
-                    <button type="submit" className="btn btn-confirm pull-right" onClick={this.handleSubmit}>Create Group</button>
+                    <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.closeModal}>Cancel</a>
+                    <button type="submit" className="btn btn-confirm pull-right" onClick={this.handleSubmit}>Add smart group</button>
                   </div>
                 </form>
               :
@@ -116,7 +116,7 @@ define(function(require) {
                     }
                   </div>
                   <div className="modal-footer">
-                    <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.props.closeModal}>close</a>
+                    <a href="#" className="darkgrey margin-top-20 pull-left" onClick={this.props.closeModal}>Cancel</a>
                   </div>
                 </div>
               }

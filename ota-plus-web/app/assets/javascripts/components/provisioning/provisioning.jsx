@@ -95,7 +95,11 @@ define(function(require) {
                   </div>
                 </div>
             : 
-              <Loader />
+              <div className="height-100 position-relative text-center">
+                <div className="center-xy padding-15">
+                  <Loader />
+                </div>
+              </div>
           :
             <NoAccess />
           }

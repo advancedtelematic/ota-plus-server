@@ -4,8 +4,7 @@ define(function(require) {
       Link = Router.Link,
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
-      Loader = require('../loader'),
-      DeviceListItem = require('../devices/devices-list-item');
+      Loader = require('../loader');
 
   class LastCreatedDevices extends React.Component {
     constructor(props) {
