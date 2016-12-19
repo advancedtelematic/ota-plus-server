@@ -141,7 +141,7 @@ define(function(require) {
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <a href="#" onClick={this.closeForm} className="darkgrey margin-top-20 pull-left">close</a>
+                  <a href="#" onClick={this.closeForm} className="darkgrey margin-top-20 pull-left">Cancel</a>
                   <button type="submit" className="btn btn-confirm pull-right" disabled={this.state.isButtonDisabled}>Create package</button>
                 </div>
               </form>

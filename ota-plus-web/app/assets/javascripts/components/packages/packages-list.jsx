@@ -40,7 +40,7 @@ define(function(require) {
       this.stopIntervalPackagesListScroll = this.stopIntervalPackagesListScroll.bind(this);
       this.handlePackageCreated = this.handlePackageCreated.bind(this);
       this.handlePackageBlacklisted = this.handlePackageBlacklisted.bind(this);
-      this.handleAutoUpdate = this.handleAutoUpdate.bind(this);
+      this.handlePostStatus = this.handlePostStatus.bind(this);
 
       db.blacklistedPackages.addWatch("poll-blacklisted-packages-page", _.bind(this.refreshPackagesData, this, null));
       db.searchablePackages.addWatch("poll-packages", _.bind(this.refreshPackagesData, this, null));
@@ -50,7 +50,7 @@ define(function(require) {
       db.deviceSeen.addWatch("poll-deviceseen-packages", _.bind(this.handleDeviceSeen, this, null));
       db.packageCreated.addWatch("package-created", _.bind(this.handlePackageCreated, this, null));
       db.packageBlacklisted.addWatch("package-blacklisted", _.bind(this.handlePackageBlacklisted, this, null));
-      db.postStatus.addWatch("poll-auto-update", _.bind(this.handleAutoUpdate, this, null));
+      db.postStatus.addWatch("poll-poststatus-packages-list", _.bind(this.handlePostStatus, this, null));
       SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages'});
       SotaDispatcher.dispatch({actionType: 'get-package-queue-for-device', device: this.props.device.uuid});
       SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.props.filterValue});
@@ -98,7 +98,7 @@ define(function(require) {
       db.deviceSeen.removeWatch("poll-deviceseen-packages");
       db.packageCreated.removeWatch("package-created");
       db.packageBlacklisted.removeWatch("package-blacklisted");
-      db.postStatus.removeWatch("poll-auto-update");
+      db.postStatus.removeWatch("poll-poststatus-packages-list");
       clearInterval(this.state.tmpIntervalId);
     }
     generatePositions() {
@@ -347,19 +347,27 @@ define(function(require) {
       });
 
       sortedPackages = {};
+      var specialGroup = {'#' : []};
       Object.keys(selectedPackages).sort(function(a, b) {
         if(selectedSort !== 'undefined' && selectedSort == 'desc')
-          return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? -1 : b.localeCompare(a);
+          return b.localeCompare(a);
         else
-          return (a.charAt(0) % 1 === 0 && b.charAt(0) % 1 !== 0) ? 1 : a.localeCompare(b);
+          return a.localeCompare(b);
       }).forEach(function(key) {
         var firstLetter = key.charAt(0).toUpperCase();
         firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-        if(_.isUndefined(sortedPackages[firstLetter]) || !sortedPackages[firstLetter] instanceof Array ) {
+        if(firstLetter != '#' && _.isUndefined(sortedPackages[firstLetter]) || !sortedPackages[firstLetter] instanceof Array ) {
            sortedPackages[firstLetter] = [];
         }
-        sortedPackages[firstLetter].push(selectedPackages[key]);
+        if(firstLetter != '#')
+          sortedPackages[firstLetter].push(selectedPackages[key]);
+        else
+          specialGroup['#'].push(selectedPackages[key]);
       });
+    
+      if(!_.isEmpty(specialGroup['#'])) {
+        sortedPackages = (selectedSort !== 'undefined' && selectedSort == 'desc' ? Object.assign(specialGroup, sortedPackages) : Object.assign(sortedPackages, specialGroup));
+      }
     
       return {'packagesData': sortedPackages, 'statistics': {'queuedCount': queuedCount, 'installedCount': installedCount}};
     }
@@ -454,10 +462,10 @@ define(function(require) {
         db.packageBlacklisted.reset();
       }
     }
-    handleAutoUpdate() {
+    handlePostStatus() {
       var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
+      var that = this;
       if(!_.isUndefined(postStatus['enable-package-auto-install-for-device']) && postStatus['enable-package-auto-install-for-device'].status === 'success') {
-        var that = this;
         delete postStatus['enable-package-auto-install-for-device'];
         db.postStatus.reset(postStatus);
         setTimeout(function() {
@@ -465,7 +473,6 @@ define(function(require) {
         }, 1);
       }
       if(!_.isUndefined(postStatus['disable-package-auto-install-for-device']) && postStatus['disable-package-auto-install-for-device'].status === 'success') {
-        var that = this;
         delete postStatus['disable-package-auto-install-for-device'];
         db.postStatus.reset(postStatus);
         setTimeout(function() {

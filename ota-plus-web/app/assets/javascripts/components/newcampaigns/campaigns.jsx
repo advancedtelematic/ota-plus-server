@@ -49,9 +49,7 @@ define(function(require) {
       db.campaigns.removeWatch("poll-campaigns");
       db.deviceSeen.removeWatch("poll-deviceseen-campaigns");
     }
-    setCampaignsData(filterValue, selectedSort) {
-      console.log(db.campaigns.deref());
-    
+    setCampaignsData(filterValue, selectedSort) {    
       var campaigns = db.campaigns.deref();
       if(!_.isUndefined(campaigns)) {
         if(filterValue) {            
@@ -161,9 +159,7 @@ define(function(require) {
         SotaDispatcher.dispatch({actionType: 'get-campaigns'});
       }
     }
-    render() {
-      console.log(this.state.campaignsData);
-    
+    render() {    
       return (
         <div>
           <CampaignsHeader 
