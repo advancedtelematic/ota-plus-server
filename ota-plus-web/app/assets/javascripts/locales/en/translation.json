@@ -11,7 +11,11 @@
         "package": "package",
         "package_plural": "packages",
         "packageWithCount": "{{count}} package",
-        "packageWithCount_plural": "{{count}} packages"
+        "packageWithCount_plural": "{{count}} packages",
+        "campaign": "campaign",
+        "campaign_plural": "campaigns",
+        "campaignWithCount": "{{count}} campaign",
+        "campaignWithCount_plural": "{{count}} campaigns"
     },
     "editprofile": {
         "title": "Edit profile"
