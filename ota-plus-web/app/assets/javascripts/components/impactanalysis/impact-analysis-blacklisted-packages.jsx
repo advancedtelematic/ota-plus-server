@@ -8,6 +8,7 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
+        blacklistedPackagesWrapperHeight: this.props.contentHeight,
         headerTopPosition: 0,
         expandedPackage: null
       };
@@ -16,6 +17,11 @@ define(function(require) {
     }
     componentDidMount() {
       ReactDOM.findDOMNode(this.refs.packagesList).addEventListener('scroll', this.packagesListScroll);
+      this.setState({blacklistedPackagesWrapperHeight: this.props.contentHeight - jQuery('.panel-heading').height()});
+    }
+    componentWillReceiveProps(nextProps) {
+      if(nextProps.contentHeight !== this.props.contentHeight)
+        this.setState({blacklistedPackagesWrapperHeight: nextProps.contentHeight - jQuery('.panel-heading').height()});
     }
     componentWillUnmount() {
       ReactDOM.findDOMNode(this.refs.packagesList).removeEventListener('scroll', this.packagesListScroll);
@@ -58,15 +64,17 @@ define(function(require) {
       }, this);
             
       return (
-        <div id="blacklisted-packages" style={{height: this.props.blacklistedPackagesListHeight}} ref="packagesList">     
-          <div className="list-header" style={{top: this.state.headerTopPosition}}>
-            <div className="column column-first">Package</div>
-            <div className="column column-second">Devices</div>
-            <div className="column column-third">Groups</div>
+        <div id="packages-column" style={{height: this.state.blacklistedPackagesWrapperHeight}}>
+          <div id="blacklisted-packages" className="height-100" ref="packagesList">     
+            <div className="list-header" style={{top: this.state.headerTopPosition}}>
+              <div className="column column-first">Package</div>
+              <div className="column column-second">Devices</div>
+              <div className="column column-third">Groups</div>
+            </div>
+            <ul>
+              {packages}
+            </ul>
           </div>
-          <ul>
-            {packages}
-          </ul>
         </div>
       );
     }
