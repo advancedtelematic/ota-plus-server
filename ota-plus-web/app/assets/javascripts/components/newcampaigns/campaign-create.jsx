@@ -52,21 +52,21 @@ define(function(require) {
               <div className="modal-header">
                 <button type="button" className="close" onClick={this.props.closeModal}></button>
                 <h4 className="modal-title">
-                  <i className="fa fa-plus"></i> &nbsp;
-                  Create new Campaign
+                  <img src="/assets/img/icons/white/campaigns.png" className="create-campaign-icon" alt="" /> &nbsp;
+                  Add new Campaign
                 </h4>
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
                 <div className="modal-body">
                   <Responses action="create-campaign" handledStatuses="error"/>
                   <div className="form-group">
-                    <label htmlFor="campaignName">Name</label>
+                    <label htmlFor="campaignName">Campaign name</label>
                     <input type="text" className="form-control" name="campaignName" ref="campaignName"/>
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <a href="#" onClick={this.closeModal} className="darkgrey margin-top-20 pull-left">close</a>
-                  <button type="submit" className="btn btn-confirm pull-right">Confirm</button>
+                  <a href="#" onClick={this.closeModal} className="darkgrey margin-top-20 pull-left">Cancel</a>
+                  <button type="submit" className="btn btn-confirm pull-right">Add campaign</button>
                 </div>
               </form>
             </div>

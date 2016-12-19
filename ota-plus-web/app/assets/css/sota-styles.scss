@@ -69,6 +69,15 @@ button {
 }
 
 .form-control {
+    font-size: 13px;
+    background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#1a000000',GradientType=0 ); /* IE6-9 */
+    border: 1px solid #ddd;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    
     &:focus {
         border-color: #ccc;
         outline: 0;
@@ -1609,10 +1618,16 @@ a.close, button.close {
                 color: #fff;
                 text-align: center;
                 background: #4B5151;
+                height: 50px;
+                padding: 10px 15px;
                 border: 0;
 
                 &.modal-header-red {
                     background: red;
+                }
+                
+                .close {
+                    margin: 2px 0 0 0;
                 }
             }
 
@@ -1640,7 +1655,7 @@ a.close, button.close {
     z-index: 1049;
 }
 
-#modal-add-package, #modal-new-campaign, #modal-impact-analysis {
+#modal-add-package, #modal-impact-analysis {
     .modal-dialog {
         width: 640px;
 
@@ -1658,10 +1673,11 @@ a.close, button.close {
 
 #modal-new-campaign {
     .modal-dialog {
-        width: 440px;
+        width: 540px;
 
         .modal-body {
             min-height: 0;
+            padding: 40px 100px 20px 100px;
         }
     }
 }
@@ -2808,18 +2824,19 @@ hr.full-line {
 .grey-header {
     background: rgba(0,0,0,0.5);
     width: 100%;
-    padding: 30px 0;
+    padding: 20px 0;
     float: left;
 
     .grey-header-icon {
         text-align: center;
-        background: url(/assets/img/icons/impact_analysis.png) no-repeat;
+        background-color: #fff;
+        background-repeat: no-repeat;
         background-size: cover;
-        width: 80px;
-        height: 80px;
+        width: 60px;
+        height: 60px;
         display: inline-block;
         vertical-align: middle;
-        margin: 0 0 0 30px;
+        border-radius: 10px;
     }
 
     .icon-back {
@@ -2993,7 +3010,7 @@ hr.full-line {
     }
 }
 
-#impact-tooltip {
+#impact-tooltip, #campaign-tooltip {
     padding-top: 0;
 
     .modal-dialog {
@@ -4147,7 +4164,7 @@ hr.full-line {
 .page-impact-analysis {
     .grey-header {
         .grey-header-icon {
-            margin: 0;
+            background-image: url(/assets/img/icons/black/impact.png);
         }
     }
 
@@ -4172,7 +4189,7 @@ hr.full-line {
         position: relative;
         overflow: hidden;
     }
-    
+
     .impact-analysis-empty {
         text-align: center;
         width: 100%;
@@ -4309,10 +4326,11 @@ hr.full-line {
     }
 
     .grey-header {
-        background: rgba(0,0,0,0.8);
+        background-image: url(/assets/img/bg.jpg);     
+        background-repeat: no-repeat;
 
         .grey-header-icon {
-            background-image: url(/assets/img/icons/homepage.png);
+            background-image: url(/assets/img/icons/black/home.png);
         }
     }
 
@@ -4375,7 +4393,7 @@ hr.full-line {
 
     .table {
         margin: 0;
-        
+
         & > thead {
             & > tr {
                 & > td {
@@ -4474,7 +4492,7 @@ hr.full-line {
 
         .element-desc {
             margin-top: 20px;
-            
+
             .element-subtitle {
                 color: #444;
                 font-size: 14px;
@@ -4501,4 +4519,24 @@ hr.full-line {
             }
         }
     }
+}
+
+.page-campaigns {
+    .grey-header {
+        .grey-header-icon {
+            background-image: url(/assets/img/icons/black/campaigns.png);
+        }
+    }
+
+    .campaigns-empty {
+        text-align: center;
+        width: 100%;
+        float: left;
+        position: relative;
+    }
+}
+
+.create-campaign-icon {
+    width: 30px;
+    vertical-align: bottom;
 }

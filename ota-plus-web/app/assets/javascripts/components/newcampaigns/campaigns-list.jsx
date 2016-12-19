@@ -10,99 +10,29 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        campaignsData: undefined
+        campaignsData: undefined,
+        campaignsWrapperHeight: this.props.contentHeight
       };
       this.configureCampaign = this.configureCampaign.bind(this);
-      this.setCampaignsData = this.setCampaignsData.bind(this);
-      this.handleDeviceSeen = this.handleDeviceSeen.bind(this);
-      SotaDispatcher.dispatch({actionType: 'get-campaigns'});
-      db.campaigns.addWatch("poll-campaigns", _.bind(this.setCampaignsData, this, null));
-      db.deviceSeen.addWatch("poll-deviceseen-campaigns-list", _.bind(this.handleDeviceSeen, this, null));
+    }
+    componentDidMount() {
+      this.setState({campaignsWrapperHeight: this.props.contentHeight - jQuery('.panel-subheading').height()});
     }
     componentWillReceiveProps(nextProps) {
-      if(nextProps.filterValue != this.props.filterValue || nextProps.selectedSort != this.props.selectedSort) {
-        this.setCampaignsData(nextProps.filterValue, nextProps.selectedSort);
-      }
-    }
-    componentWillUnmount() {
-      db.campaigns.removeWatch("poll-campaigns");
-      db.deviceSeen.removeWatch("poll-deviceseen-campaigns-list");
-      db.campaigns.reset();
+      if(nextProps.contentHeight != this.props.contentHeight)
+        this.setState({campaignsWrapperHeight: nextProps.contentHeight - jQuery('.panel-subheading').height()});
     }
     configureCampaign(campaignUUID, e) {
       e.preventDefault();
       this.props.openWizard(campaignUUID);
-    }
-    setCampaignsData(filterValue, selectedSort) {
-      var campaigns = db.campaigns.deref();
-      if(!_.isUndefined(campaigns)) {
-        if(filterValue) {            
-          campaigns = _.filter(campaigns, function(campaign) {
-            return campaign.name.indexOf(filterValue) > -1;
-          });
-        }
-          
-        campaigns.sort(function(a, b) {
-          var aName = a.name;
-          var bName = b.name;
-          if(selectedSort !== 'undefined' && selectedSort == 'desc')
-            return (aName.charAt(0) % 1 === 0 && bName.charAt(0) % 1 !== 0) ? -1 : bName.localeCompare(aName);
-          else
-            return (aName.charAt(0) % 1 === 0 && bName.charAt(0) % 1 !== 0) ? 1 : aName.localeCompare(bName);
-        });
-        
-        var groupedCampaigns = {draft: [], running: [], finished: []};
-        
-        _.each(campaigns, function(campaign) {
-          if(!campaign.launched) {
-            groupedCampaigns.draft.push(campaign); 
-          } else {
-            var overallDevicesCount = 0;
-            var overallUpdatedDevicesCount = 0;
-            var overallFailedUpdates = 0;
-            var overallSuccessfulUpdates = 0;
-            var overallCancelledUpdates = 0;
-            
-            _.each(campaign.statistics, function(statistic) {
-              overallDevicesCount += statistic.deviceCount;
-              overallUpdatedDevicesCount += statistic.updatedDevices;
-              overallFailedUpdates += statistic.failedUpdates;
-              overallSuccessfulUpdates += statistic.successfulUpdates;
-              overallCancelledUpdates += statistic.cancelledUpdates;
-            });
-            
-            campaign.summary = {
-              overallDevicesCount: overallDevicesCount,
-              overallUpdatedDevicesCount: overallUpdatedDevicesCount,
-              overallFailedUpdates: overallFailedUpdates,
-              overallSuccessfulUpdates: overallSuccessfulUpdates,
-              overallCancelledUpdates: overallCancelledUpdates
-            };
-            
-            if(overallUpdatedDevicesCount < overallDevicesCount) {
-              groupedCampaigns.running.push(campaign);
-            } else {
-              groupedCampaigns.finished.push(campaign);
-            }
-          }
-        });
-        
-        this.setState({campaignsData: campaigns, campaigns: groupedCampaigns});
-      }
-    }
-    handleDeviceSeen() {
-      var deviceSeen = db.deviceSeen.deref();
-      if(!_.isUndefined(deviceSeen) && !_.isUndefined(this.state.campaignsData)) {
-        SotaDispatcher.dispatch({actionType: 'get-campaigns'});
-      }
     }
     render() {
       var draftCampaigns = [];
       var runningCampaigns = [];
       var finishedCampaigns = [];
       
-      if(!_.isUndefined(this.state.campaigns)) {
-        draftCampaigns = _.map(this.state.campaigns.draft, function(campaign, i) {
+      if(!_.isUndefined(this.props.campaigns)) {
+        draftCampaigns = _.map(this.props.campaigns.draft, function(campaign, i) {
           return (
             <CampaignsListItem 
               key={"campaign-" + campaign.name}
@@ -111,7 +41,7 @@ define(function(require) {
           );
         }, this);
         
-        runningCampaigns = _.map(this.state.campaigns.running, function(campaign, i) {
+        runningCampaigns = _.map(this.props.campaigns.running, function(campaign, i) {
           return (
             <CampaignsListItem 
               key={"campaign-" + campaign.name}
@@ -119,7 +49,7 @@ define(function(require) {
           );
         }, this);
         
-        finishedCampaigns = _.map(this.state.campaigns.finished, function(campaign, i) {
+        finishedCampaigns = _.map(this.props.campaigns.finished, function(campaign, i) {
           return (
             <CampaignsListItem 
               key={"campaign-" + campaign.name}
@@ -128,7 +58,7 @@ define(function(require) {
         }, this);
       }
       
-      var campaigns = _.map(this.state.campaignsData, function(campaign, i) {
+      var campaigns = _.map(this.props.campaignsData, function(campaign, i) {
         return (
           <CampaignsListItem 
             key={"campaign-" + campaign.name}
@@ -138,7 +68,7 @@ define(function(require) {
       }, this);
             
       return (
-        <div className="height-100">
+        <div id="campaigns-wrapper" style={{height: this.state.campaignsWrapperHeight}}>
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {!_.isUndefined(db.campaigns.deref()) ? 
               db.campaigns.deref().length ?
@@ -219,18 +149,9 @@ define(function(require) {
                   }              
                 </div>
               :
-                <div className="col-md-12 height-100 position-relative text-center">
-                  <div className="center-xy padding-15">
-                    <span className="font-24 white">
-                      There are no campaigns.
-                    </span>
-                  </div>
-                </div>
+                null
             : undefined}
           </VelocityTransitionGroup>
-          {_.isUndefined(db.campaigns.deref()) ?
-            <Loader className="white" />
-          : null}
         </div>
       );
     }
