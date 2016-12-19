@@ -92,9 +92,6 @@ define(function(require) {
                   <div className="center-xy padding-15">
                     <p className="font-22">My personal server name:</p>
                     <pre>{this.state.provisioningDetails.hostName}</pre>
-                    <p></p>
-                    <p className="font-22">Test it:</p>
-                    <pre>openssl s_client -connect {this.state.provisioningDetails.hostName}:8000 -servername {this.state.provisioningDetails.hostName}  2&gt;&amp;1 | grep "subject="</pre>
                   </div>
                 </div>
             : 
