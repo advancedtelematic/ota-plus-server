@@ -15,13 +15,12 @@ define(function(require) {
       this.state = {
         blacklistedPackagesData: undefined,
         contentHeight: 300,
-        chartColumnSize: {width: 880, height: 300},
         isImpactTooltipShown: false,
         groupCount: undefined
       };
       this.setBlacklistedPackagesData = this.setBlacklistedPackagesData.bind(this);
       this.setImpactAnalysisData = this.setImpactAnalysisData.bind(this);
-      this.setElementsSize = this.setElementsSize.bind(this);
+      this.setContentHeight = this.setContentHeight.bind(this);
       this.showImpactTooltip = this.showImpactTooltip.bind(this);
       this.hideImpactTooltip = this.hideImpactTooltip.bind(this);
       SotaDispatcher.dispatch({actionType: 'get-blacklisted-packages-with-stats'});
@@ -30,18 +29,11 @@ define(function(require) {
       db.impactAnalysis.addWatch("poll-impact-analysis-page", _.bind(this.setImpactAnalysisData, this, null));
     }
     componentDidMount() {
-      window.addEventListener("resize", this.setElementsSize);
-    }
-    componentDidUpdate(prevProps, prevState) {
-      if(_.isUndefined(prevState.blacklistedPackagesData) && !_.isUndefined(this.state.blacklistedPackagesData)) {
-        var that = this;
-        setTimeout(function() {
-          that.setElementsSize(_.isEmpty(that.state.blacklistedPackagesData));
-        }, 1);
-      }
+      window.addEventListener("resize", this.setContentHeight);
+      this.setContentHeight();
     }
     componentWillUnmount() {
-      window.removeEventListener("resize", this.setElementsSize);
+      window.removeEventListener("resize", this.setContentHeight);
       db.blacklistedPackagesWithStats.removeWatch("poll-blacklisted-packages-with-stats");
       db.impactAnalysis.removeWatch("poll-impact-analysis-page");
       db.blacklistedPackagesWithStats.reset();
@@ -84,21 +76,12 @@ define(function(require) {
     setImpactAnalysisData() {
       this.setState({impactAnalysisData: db.impactAnalysis.deref()});
     }
-    setElementsSize(isEmptyList = false) {
-      var windowWidth = jQuery(window).width();
+    setContentHeight() {
       var windowHeight = jQuery(window).height();
-      var chartColumnSize = {};
-      if(!isEmptyList) {
-        chartColumnSize = {
-          width: windowWidth - $('#packages-column').width(),
-          height: windowHeight - $('#chart-column').offset().top
-        };
-      }
-      var contentHeight = windowHeight - $('.grey-header').offset().top - $('.grey-header').outerHeight();
       this.setState({
-        contentHeight: contentHeight,
-        chartColumnSize: chartColumnSize
+        contentHeight: windowHeight - $('.grey-header').offset().top - $('.grey-header').outerHeight()
       });
+      console.log(windowHeight - $('.grey-header').offset().top - $('.grey-header').outerHeight());
     }
     showImpactTooltip(e) {
       e.preventDefault();
@@ -123,15 +106,12 @@ define(function(require) {
                     </div>
                   </div>
                   <div className="panel-body">
-                    <div id="packages-column">
-                      <ImpactAnalysisBlacklistedPackages 
-                        blacklistedPackagesListHeight={this.state.contentHeight}
-                        packages={this.state.blacklistedPackagesData}/>
-                    </div>
-                    <div id="chart-column" style={this.state.chartColumnSize}>
-                      <ImpactAnalysisChart 
-                        packages={this.state.blacklistedPackagesData}/>
-                    </div>
+                    <ImpactAnalysisBlacklistedPackages 
+                      packages={this.state.blacklistedPackagesData}
+                      contentHeight={this.state.contentHeight}/>
+                    <ImpactAnalysisChart 
+                      packages={this.state.blacklistedPackagesData}
+                      contentHeight={this.state.contentHeight}/>
                   </div>
                 </div>
               :

@@ -6,6 +6,16 @@ define(function(require) {
   class ImpactAnalysisChart extends React.Component {
     constructor(props) {
       super(props);
+      this.state = {
+        chartWrapperHeight: this.props.contentHeight
+      };
+    }
+    componentDidMount() {
+      this.setState({chartWrapperHeight: this.props.contentHeight - jQuery('.panel-heading').height()});
+    }
+    componentWillReceiveProps(nextProps) {
+      if(nextProps.contentHeight !== this.props.contentHeight)
+        this.setState({chartWrapperHeight: nextProps.contentHeight - jQuery('.panel-heading').height()});
     }
     render() {
       const { t } = this.props;
@@ -49,15 +59,17 @@ define(function(require) {
       }, this);
       
       return (
-        <div className="chart-stats center-xy">
-          <DoughnutChart data={stats} width="300" height="300" options={{
-              percentageInnerCutout: 65, 
-              segmentStrokeWidth: 5, 
-              showTooltips: true,
-            }}/>
-          <ul>
-            {legend}
-          </ul>
+        <div id="chart-column" style={{height: this.state.chartWrapperHeight}}>
+          <div className="height-100 center-xy text-center">
+            <DoughnutChart data={stats} width="300" height="300" options={{
+                percentageInnerCutout: 65, 
+                segmentStrokeWidth: 5, 
+                showTooltips: true,
+              }}/>
+            <ul>
+              {legend}
+            </ul>
+          </div>
         </div>
       );
     }
