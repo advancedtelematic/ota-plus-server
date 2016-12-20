@@ -12,7 +12,7 @@ define(function(require) {
         campaignsData: undefined,
         campaignsWrapperHeight: this.props.contentHeight
       };
-      this.configureCampaign = this.configureCampaign.bind(this);
+      this.goToCampaignDetails = this.goToCampaignDetails.bind(this);
     }
     componentDidMount() {
       this.setState({campaignsWrapperHeight: this.props.contentHeight - jQuery('.panel-subheading').height()});
@@ -21,9 +21,8 @@ define(function(require) {
       if(nextProps.contentHeight != this.props.contentHeight)
         this.setState({campaignsWrapperHeight: nextProps.contentHeight - jQuery('.panel-subheading').height()});
     }
-    configureCampaign(campaignUUID, e) {
-      e.preventDefault();
-      this.props.openWizard(campaignUUID);
+    goToCampaignDetails(campaignUUID) {
+      this.context.history.pushState(null, `campaigndetails/${campaignUUID}`);
     }
     render() {
       var draftCampaigns = [];
@@ -36,7 +35,8 @@ define(function(require) {
             <CampaignsListItem 
               key={"campaign-" + campaign.name}
               campaign={campaign}
-              configureCampaign={this.configureCampaign}/>
+              configureCampaign={this.props.openWizard}
+              openRenameModal={this.props.openRenameModal}/>
           );
         }, this);
         
@@ -44,7 +44,9 @@ define(function(require) {
           return (
             <CampaignsListItem 
               key={"campaign-" + campaign.name}
-              campaign={campaign}/>
+              campaign={campaign}
+              goToCampaignDetails={this.goToCampaignDetails}
+              openRenameModal={this.props.openRenameModal}/>
           );
         }, this);
         
@@ -52,23 +54,15 @@ define(function(require) {
           return (
             <CampaignsListItem 
               key={"campaign-" + campaign.name}
-              campaign={campaign}/>
+              campaign={campaign}
+              goToCampaignDetails={this.goToCampaignDetails}
+              openRenameModal={this.props.openRenameModal}/>
           );
         }, this);
       }
-      
-      var campaigns = _.map(this.props.campaignsData, function(campaign, i) {
-        return (
-          <CampaignsListItem 
-            key={"campaign-" + campaign.name}
-            campaign={campaign}
-            configureCampaign={this.configureCampaign}/>
-        );
-      }, this);
             
       return (
-        <div id="campaigns-wrapper" style={{height: this.state.campaignsWrapperHeight}}>
-          <div className="height-100 with-background">
+          <div className="with-background" style={{height: this.state.campaignsWrapperHeight}}>
             <div className="campaigns-section-header">Draft campaigns</div>
             {draftCampaigns.length ? 
               <table className="table with-background">
@@ -144,9 +138,12 @@ define(function(require) {
               </div>
             }
           </div>
-        </div>
       );
     }
+  };
+  
+  CampaignsList.contextTypes = {
+    history: React.PropTypes.object.isRequired,
   };
 
   return CampaignsList;
