@@ -78,6 +78,11 @@ define(function(require) {
               .success(function() {
               });
           break;
+          case 'rename-campaign':
+            sendRequest.doPut('/api/v1/campaigns/' + payload.uuid + '/name', payload.data, {action: payload.actionType})
+              .success(function() {
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));
