@@ -110,7 +110,7 @@ define(function(require) {
                             I'm new to Yocto/Open Embedded. <br />
                             Show me how to start a project <br />
                             from scratch.
-                            <Link to="/" className="btn btn-confirm btn-small">Start</Link>
+                            <Link to="http://docs.atsgarage.com/ostree/starting-a-new-ostreeenabled-yocto-project.html" className="btn btn-confirm btn-small">Start</Link>
                           </div>
                         </div>
                         <div className="panel panel-grey">
@@ -120,7 +120,7 @@ define(function(require) {
                           <div className="panel-body">
                             I have an existing Yocto project <br />
                             that I want to OTA-enable.
-                            <Link to="/" className="btn btn-confirm btn-small">Start</Link>
+                            <Link to="http://docs.atsgarage.com/ostree/adding-ostree-to-your-existing-yocto-project.html" className="btn btn-confirm btn-small">Start</Link>
                           </div>
                         </div>
                       </div>
