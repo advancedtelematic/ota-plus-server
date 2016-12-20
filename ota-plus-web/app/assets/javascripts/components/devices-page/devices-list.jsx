@@ -12,7 +12,6 @@ define(function(require) {
       this.state = {
         boxWidth: 350,
         overUUID: null,
-        Devices: null,
         areSmartGroupsEnabled: false
       };
       this.setBoxesWidth = this.setBoxesWidth.bind(this);
