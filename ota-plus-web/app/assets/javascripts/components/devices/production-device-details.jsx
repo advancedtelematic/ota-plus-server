@@ -71,18 +71,9 @@ define(function(require) {
 
       return (
         <div>
-          <div className="device-header">
-            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-              {!_.isUndefined(deviceWithStatus) ? 
-                <ProductionDetailsHeader
-                  device={deviceWithStatus}
-                  id={this.props.params.id}/>
-              : undefined}
-            </VelocityTransitionGroup>
-            {_.isUndefined(deviceWithStatus) ? 
-              <Loader />
-            : undefined}
-          </div>
+          <ProductionDetailsHeader
+            device={deviceWithStatus}
+            id={this.props.params.id}/>
           <div className="col-md-6 nopadding border-right-2">
             <div className="panel panel-ats">
               <div className="panel-heading">
