@@ -31,7 +31,6 @@ define(function(require) {
       Packages = require('components/packages-page/packages'),
       Modal = require('components/modal'),
       ImpactAnalysis = require('components/devices/impact-analysis'),
-      Profile = require('components/profile'),
       RightPanel = require('components/campaigns/right-panel'),
       NewCampaign = require('components/campaigns/new-campaign'),
       Campaigns = require('components/campaigns/campaigns'),
@@ -44,7 +43,8 @@ define(function(require) {
       ClientApps = require('components/clientapps/client-apps'),
       TreeHub = require('components/treehub/treehub'),
       Provisioning = require('components/provisioning/provisioning'),
-      HomePage = require('components/homepage/home-page');
+      HomePage = require('components/homepage/home-page'),
+      Usage = require('components/usage/usage');
 
   class App extends React.Component {
     constructor(props) {
@@ -179,6 +179,8 @@ define(function(require) {
             page = 'page-treehub'; break;
           case 'provisioning':
             page = 'page-provisioning'; break;
+          case 'usage':
+            page = 'page-usage'; break;
           default:
           break;
         }
@@ -248,6 +250,7 @@ define(function(require) {
         <Route path="clientapps/f708f064faaf32a43e4d3c784e6af9eac6d9b20e0da02616378748834f5a37ee" component={ClientApps} />
         <Route path="treehub" component={TreeHub} />
         <Route path="provisioning" component={Provisioning} />
+        <Route path="usage" component={Usage} />
       </Route>
     </Route>
   );

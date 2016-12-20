@@ -4758,6 +4758,75 @@ hr.full-line {
     }
 }
 
+.page-usage {
+    .grey-header {
+        .grey-header-icon {
+            background-image: url(/assets/img/icons/black/usage.png);
+        }
+    }
+
+    #usage {
+        width: 100%;
+        float: left;
+
+        #calendar-section {
+            background: #FAFAFA;
+            width: 300px;
+            padding: 20px 30px;
+            float: left;
+            border-right: 1px solid #ccc;
+
+            .calendar-title {
+                color: #444;
+                font-size: 16px;
+                margin: 20px 2.5%;
+            }
+        }
+
+        #overview-section {
+            background: #fff;
+            padding: 25px 35px;
+            margin-left: 300px;
+            overflow-y: auto;
+
+            .overview-inner {
+                width: 100%;
+                float: left;
+
+                .overview-title {
+                    color: $color-darkgrey;
+                }
+
+                .panel-grey {
+                    .panel-heading {
+                        font-size: 16px;
+                    }
+
+                    .panel-body {
+                        text-align: center;
+                        background: #FAFAFA;
+                        min-height: 300px;
+                        position: relative;
+                        
+                        .devices-count {
+                            font-size: 26px;
+                            margin: 10px 0 0 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.page-devices {
+    .grey-header {
+        .grey-header-icon {
+            background-image: url(/assets/img/icons/black/devices.png);
+        }
+    }
+}
+
 .panel-grey {
     background: transparent;
     width: 100%;
@@ -4767,10 +4836,11 @@ hr.full-line {
 
     .panel-heading {
         color: #fff;
+        line-height: 50px;
         text-align: center;
         background: #4B5151;
         height: 50px;
-        padding: 10px 15px;
+        padding: 0 15px;
         border: 0;
         border-radius: 0;
     }
@@ -4778,14 +4848,6 @@ hr.full-line {
     .panel-body {
         color: #444;
         background: #fff;
-    }
-}
-
-.page-devices {
-    .grey-header {
-        .grey-header-icon {
-            background-image: url(/assets/img/icons/black/devices.png);
-        }
     }
 }
 
@@ -4798,5 +4860,69 @@ hr.full-line {
 
     .fa-angle-down {
         top: -5px;
+    }
+}
+
+.months-calendar {
+    color: #888;
+
+    .year-chooser {
+        background: #4B5151;
+        padding: 12px 5px;
+        margin: 0 2.5%;
+
+        .select-year {
+            font-size: 20px;
+            text-align: center;
+            background: transparent;
+            width: 20%;
+            border: 0;
+            display: inline-block;
+            transition: color 0.2s ease-in;
+
+            &:hover, &:focus, &:active {
+                color: #fff;
+            }
+        }
+
+        .current-year {
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            width: 60%;
+            display: inline-block;
+        }
+    }
+
+    .months {
+        margin: 10px 0 0 0;
+
+        li {
+            width: 20%;
+            margin: 2.5%;
+            display: inline-block;
+
+            button {
+                text-align: center;
+                text-transform: uppercase;
+                background: transparent;
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                display: block;
+                transition: all 0.3s ease-in;
+
+                &:hover, &:focus, &:active {
+                    background: #eee;
+                }
+            }
+
+            &.selected {
+                button {
+                    color: $color-darkgrey;
+                    background: $color-mint;
+                }
+            }
+        }
     }
 }
