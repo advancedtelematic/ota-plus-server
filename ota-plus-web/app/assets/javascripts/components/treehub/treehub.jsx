@@ -1,24 +1,27 @@
 define(function(require) {
   var React = require('react'),
+      Router = require('react-router'),
+      Link = Router.Link,
       SotaDispatcher = require('sota-dispatcher'),
       db = require('stores/db'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      TreeHubTooltip = require('./treehub-tooltip'),
+      TreehubTooltip = require('./treehub-tooltip'),
+      TreehubHeader = require('./treehub-header'),
       NoAccess = require('../noaccess'),
       Loader = require('../loader');
 
-  class TreeHub extends React.Component {
+  class Treehub extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
         features: undefined,
         treehubJson: undefined,
-        treeHubContentHeight: 300,
-        isTreeHubTooltipShown: false
+        contentHeight: 300,
+        isTreehubTooltipShown: false
       };
-      this.setTreeHubContentHeight = this.setTreeHubContentHeight.bind(this);
-      this.showTreeHubTooltip = this.showTreeHubTooltip.bind(this);
-      this.hideTreeHubTooltip = this.hideTreeHubTooltip.bind(this);
+      this.setContentHeight = this.setContentHeight.bind(this);
+      this.showTreehubTooltip = this.showTreehubTooltip.bind(this);
+      this.hideTreehubTooltip = this.hideTreehubTooltip.bind(this);
       this.handleFeatures = this.handleFeatures.bind(this);
       this.handleTreehubJson = this.handleTreehubJson.bind(this);
       SotaDispatcher.dispatch({actionType: 'get-features'});
@@ -27,32 +30,35 @@ define(function(require) {
       db.treehubJson.addWatch("poll-treehub-json", _.bind(this.handleTreehubJson, this, null));
     }
     componentDidMount() {
-      var that = this;
-      window.addEventListener("resize", this.setTreeHubContentHeight);
-      setTimeout(function() {
-        that.setTreeHubContentHeight();
-      }, 1);
+      window.addEventListener("resize", this.setContentHeight);
+      this.setContentHeight();
+    }
+    componentDidUpdate(prevProps, prevState) {
+      if(prevProps.hasBetaAccess !== this.props.hasBetaAccess) {
+        this.setContentHeight();
+      }
     }
     componentWillUnmount() {
-      window.removeEventListener("resize", this.setTreeHubContentHeight);
+      window.removeEventListener("resize", this.setContentHeight);
       db.features.removeWatch("poll-features");
       db.treehubJson.removeWatch("poll-treehub-json");
       db.features.reset();
       db.treehubJson.reset();
     }
-    setTreeHubContentHeight() {
-      var windowHeight = jQuery(window).height();
-      var offsetTop = jQuery('#treehub').offset().top
-      this.setState({
-        treeHubContentHeight: windowHeight - offsetTop
-      });
+    setContentHeight() {    
+      if(this.props.hasBetaAccess) {
+        var windowHeight = jQuery(window).height();
+        this.setState({
+          contentHeight: windowHeight - jQuery('.grey-header').offset().top - jQuery('.grey-header').outerHeight()
+        });
+      }
     }
-    showTreeHubTooltip(e) {
+    showTreehubTooltip(e) {
       if(e) e.preventDefault();
-      this.setState({isTreeHubTooltipShown: true});
+      this.setState({isTreehubTooltipShown: true});
     }
-    hideTreeHubTooltip() {
-      this.setState({isTreeHubTooltipShown: false});
+    hideTreehubTooltip() {
+      this.setState({isTreehubTooltipShown: false});
     }
     handleFeatures() {
       var features = db.features.deref();
@@ -66,47 +72,75 @@ define(function(require) {
         this.setState({treehubJson: treehubJson});
       }
     }
-    render() {    
+    render() {
       return (
-        <div id="treehub" style={{height: this.state.treeHubContentHeight}}>
-          {this.props.hasBetaAccess ?
-            !_.isUndefined(this.state.features) && (this.state.features.indexOf('ostreehub') < 0 || !_.isUndefined(this.state.treehubJson)) ?
-              this.state.features.indexOf('treehub') < 0 ?
-                <div className="height-100 position-relative text-center">
-                  <div className="center-xy padding-15">
-                    <div className="font-22">TreeHub not activated.</div>
-                    <div className="margin-top-10">
-                      <a href="#" className="font-22" onClick={this.showTreeHubTooltip}>
-                        <span className="color-main"><strong>What is this?</strong></span>
-                      </a>
+        this.props.hasBetaAccess ?
+          <div>
+            <TreehubHeader />
+            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+              {!_.isUndefined(this.state.features) && (this.state.features.indexOf('treehub') < 0 || !_.isUndefined(this.state.treehubJson)) ?
+                this.state.features.indexOf('treehub') < 0 ?
+                  <div className="treehub-disabled" style={{height: this.state.contentHeight}}>
+                    <div className="center-xy padding-15">
+                      <div className="font-22">Treehub not activated.</div>
+                      <div className="margin-top-10">
+                        <a href="#" className="font-18" onClick={this.showTreehubTooltip}>
+                          <span className="color-main"><strong>What is this?</strong></span>
+                        </a>
+                      </div>
                     </div>
                   </div>
-                  <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-                    {this.state.isTreeHubTooltipShown ?
-                      <TreeHubTooltip 
-                        hideTreeHubTooltip={this.hideTreeHubTooltip}/>
-                    : undefined}
-                  </VelocityTransitionGroup>
-                </div>
+                : 
+                  <div className="treehub-enabled" style={{height: this.state.contentHeight}}>
+                    <div className="center-xy text-center padding-15">
+                      <span className="font-22"><strong>Welcome to TreeHub,</strong></span><br />
+                      the future of embedded device version management.<br />
+                      The first thing you'll need to do is add OSTree support into your project.<br /><br />
+                      Download your credentials and start pushing your images to TreeHub.
+                      <div className="margin-top-20">
+                        <a href={"data:text/json;charset=utf-8,"+ encodeURIComponent(JSON.stringify(this.state.treehubJson))} download="treehub.json" className="btn btn-confirm">Download</a>
+                      </div>
+                      
+                      <div className="margin-top-40">
+                        <div className="panel panel-grey">
+                          <div className="panel-heading">
+                            <img src="/assets/img/icons/white/treehub_leaf.png" alt=""/>
+                          </div>
+                          <div className="panel-body">
+                            I'm new to Yocto/Open Embedded. <br />
+                            Show me how to start a project <br />
+                            from scratch.
+                            <Link to="/" className="btn btn-confirm btn-small">Start</Link>
+                          </div>
+                        </div>
+                        <div className="panel panel-grey">
+                          <div className="panel-heading">
+                            <img src="/assets/img/icons/white/treehub_tree.png" alt=""/>
+                          </div>
+                          <div className="panel-body">
+                            I have an existing Yocto project <br />
+                            that I want to OTA-enable.
+                            <Link to="/" className="btn btn-confirm btn-small">Start</Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
               : 
-                <div className="height-100 position-relative text-center">
-                  <div className="center-xy padding-15">
-                    <div className="font-20">
-                      Download my TreeHub configuration file.
-                    </div>
-                    <div className="margin-top-20">
-                      <a href={"data:text/json;charset=utf-8,"+ encodeURIComponent(JSON.stringify(this.state.treehubJson))} download="treehub.json" className="btn btn-confirm">Download</a>
-                    </div>
-                  </div>
-                </div>
-            : 
-              <Loader />
-          :  
-            <NoAccess />
-          }
-        </div>
+                <Loader />
+              }
+            </VelocityTransitionGroup>
+            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+              {this.state.isTreehubTooltipShown ?
+                <TreehubTooltip 
+                  hideTreehubTooltip={this.hideTreehubTooltip}/>
+              : undefined}
+            </VelocityTransitionGroup>
+          </div>
+        :
+          <NoAccess />
       );
     }
   }
-  return TreeHub;
+  return Treehub;
 });
