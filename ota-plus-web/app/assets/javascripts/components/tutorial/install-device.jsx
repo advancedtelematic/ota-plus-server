@@ -2,18 +2,18 @@ define(function(require) {
   var React = require('react'),
       Router = require('react-router'),
       Link = Router.Link,
-      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
+      ModalTooltip = require('../modal-tooltip');
         
   class InstallDevice extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        isFirstInfoShown: false,
-        isSecondInfoShown: false,
+        shownTooltipInfoName: null,
         tutorialHeight: 300
       };
-      this.toggleFirstInfo = this.toggleFirstInfo.bind(this);
-      this.toggleSecondInfo = this.toggleSecondInfo.bind(this);
+      this.showTooltipInfo = this.showTooltipInfo.bind(this);
+      this.hideTooltipInfo = this.hideTooltipInfo.bind(this);
       this.setTutorialHeight = this.setTutorialHeight.bind(this);
     }
     componentDidMount() {
@@ -23,13 +23,13 @@ define(function(require) {
     componentWillUnmount() {
       window.removeEventListener("resize", this.setTutorialHeight);
     }
-    toggleFirstInfo(e) {
-      e.preventDefault();
-      this.setState({isFirstInfoShown: !this.state.isFirstInfoShown}); 
+    showTooltipInfo(name, e) {
+      if(e) e.preventDefault();
+      this.setState({shownTooltipInfoName: name});
     }
-    toggleSecondInfo(e) {
-      e.preventDefault();
-      this.setState({isSecondInfoShown: !this.state.isSecondInfoShown}); 
+    hideTooltipInfo(e) {
+      if(e) e.preventDefault();
+      this.setState({shownTooltipInfoName: null});
     }
     setTutorialHeight() {
       var windowHeight = jQuery(window).height();
@@ -38,112 +38,123 @@ define(function(require) {
       });
     }
     render() {
-      var storedThemeMode = localStorage.getItem('themeMode');
-      var theme = 'atsgarage';
-      switch(storedThemeMode) {
-        case 'otaplus': 
-          theme = 'otaplus';
-        break;
-        default:
-        break;
-      }
+      var copyProcessTooltipContent = (
+        <div className="text-center">
+          For debian packages, you can install from the command line with <br />
+          <pre>dpkg -i ota-plus-client-[version].deb</pre> <br /><br />
+          RPM packages can be installed from the command line with <br />
+          <pre>rpm -i ota-plus-client-[version].rpm</pre>
+        </div>
+      );
+      var otherSystemTooltipContent = (
+        <div className="text-center">
+          The pre-built packages register the OTA Plus Client to start with systemd. <br /><br />
+          If you use another init system, you'll need to install ota-plus-client manually.
+        </div>
+      );
       return (
-        <div id="tutorial-install-device-wrapper" style={{height: this.state.tutorialHeight}}>
-          <div id="tutorial-install-device" className="center-xy">
-            <div className="pull-left width-full text-center">
-              <span className="font-24 white">Device never seen online. You need to install the client on your device.</span>
-            </div>
-            <div className="pull-left width-full margin-top-70">
-              <span className="font-18"><strong>How to install your device:</strong></span>
-            </div>
-  
-            <div className="inner-box pull-left width-full font-16">
-              <div className="col-md-4">
-                <div className="tutorial-img-box pull-left">
-                  <img src={"/assets/img/icons/icon_download_" + theme + ".png"} className="tutorial-icon pull-left" alt="" />
-                </div>
-                <div className="tutorial-desc-box pull-left">
-                  <strong>1.</strong> Download the OTA Plus Client for your distro/system architecture
-                  <div className="margin-top-25">
-                    <table className="table table-bordered table-striped table-condensed text-center">
-                      <thead>
-                        <tr>
-                          <th>DEB</th>
-                          <th>RPM</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <a href={"/api/v1/client/" + this.props.deviceUUID + "/deb/64"} className="btn btn-main" target="_blank">intel64</a>
-                          </td>
-                          <td>
-                            <a href={"/api/v1/client/" + this.props.deviceUUID + "/rpm/64"} className="btn btn-main" target="_blank">intel64</a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="tutorial-img-box pull-left">
-                  <img src={"/assets/img/icons/icon_install_" + theme + ".png"} className="tutorial-icon pull-left" alt="" />
-                </div>
-                <div className="tutorial-desc-box pull-left">
-                  <div className="margin-top-10">
-                    <strong>2.</strong> Copy the package to your <br /> device, and install it <br />using your package manager
-                  </div>
-                  <div className={"margin-top-25 font-12 color-main"}>
-                    <i className="fa fa-cog" aria-hidden="true"></i> <a href="#" onClick={this.toggleFirstInfo} className="color-main">How do I do that?</a>
-                  </div>
+        <div>
+          <div className="tutorial-install-device" style={{height: this.state.tutorialHeight}}>
+            <div className="center-xy text-center">
+              <div className="font-24 white"><strong>Device never seen online.</strong></div>
+              <div className="font-16">You need to install the client on your device.</div>
               
-                  <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}} runOnMount={true}>
-                    {this.state.isFirstInfoShown ? 
-                      <div className="font-12 pull-left">
-                        For debian packages, you can install from the command line with `dpkg -i ota-plus-client-[version].deb`. <br />
-                        RPM packages can be installed from the command line with `rpm -i ota-plus-client-[version].rpm`.
+              <div className="inner">
+                <div className="common-steps">
+                  <div className="steps-row">
+                    <div className="lane first-lane">
+                      <div className="step first-step">
+                        <div className="lane-name">
+                          Fast Lane
+                        </div>
+                        <div className="step-inner">
+                          <div className="step-no">1.</div>
+                          <div className="step-desc">
+                            Download the OTA Plus Client for<br />
+                            your distro/system architecture.
+                            <div className="margin-top-20">
+                              <a href={"/api/v1/client/" + this.props.deviceUUID + "/deb/64"} className="btn btn-confirm btn-ota-client" target="_blank">DEB Intel 64</a>
+                              <a href={"/api/v1/client/" + this.props.deviceUUID + "/rpm/64"} className="btn btn-confirm btn-ota-client" target="_blank">RPM Intel 64</a>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    : null}
-                  </VelocityTransitionGroup>
-      
-                  <div className={"font-12 color-main"}>
-                    <i className="fa fa-cog" aria-hidden="true"></i> <a href="#" onClick={this.toggleSecondInfo} className="color-main">I use an init system other than systemd.</a>
+                      <div className="step second-step">
+                        <div className="step-inner">
+                          <div className="step-no">2.</div>
+                          <div className="step-desc">
+                            Copy the Package to your device, and  <br />
+                            install it using your package manager.
+                            <div className="margin-top-20"><a href="#" onClick={this.showTooltipInfo.bind(this, 'copy_process')} className="font-12 color-main"><i className="fa fa-cog" aria-hidden="true"></i> How do I do that?</a></div>
+                            <div><a href="#" onClick={this.showTooltipInfo.bind(this, 'other_system')} className="font-12 color-main"><i className="fa fa-cog" aria-hidden="true"></i> I use an init system other than systemd.</a></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}} runOnMount={true}>
-                    {this.state.isSecondInfoShown ? 
-                      <div className="font-12">
-                        The pre-built packages register the OTA Plus Client to start with systemd. <br />
-                        If you use another init system, you'll need to install ota-plus-client manually.
+                  <div className="step-divider">
+                    or
+                  </div>
+                  <div className="steps-row">
+                    <div className="lane second-lane">
+                      <div className="step first-step">
+                        <div className="lane-name">
+                          Nerd Lane
+                        </div>
+                        <div className="step-inner">
+                          <div className="step-no">1.</div>
+                          <div className="step-desc">
+                            Download the unique<br />
+                            credentials for this device.
+                            <div className="margin-top-20">
+                              <a href={"/api/v1/client/" + this.props.deviceUUID + "/toml/64"} className="btn btn-confirm" target="_blank">Download</a>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    : null}
-                  </VelocityTransitionGroup>
+                      <div className="step second-step">
+                        <div className="step-inner">
+                          <div className="step-no">2.</div>
+                          <div className="step-desc">
+                            Manually build and install the<br />
+                            open source OTA client.
+                            <div className="margin-top-20"><a href="http://advancedtelematic.github.io/rvi_sota_server/cli/building-the-sota-client.html" className="font-12 color-main" target="_blank"><i className="fa fa-cog" aria-hidden="true"></i> How to build manually?</a></div>
+                            <div><a href="http://advancedtelematic.github.io/rvi_sota_server/cli/client-startup-and-configuration.html" className="font-12 color-main" target="_blank"><i className="fa fa-cog" aria-hidden="true"></i> How to install the client?</a></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="last-step">
+                  <div className="center-xy">
+                    <img src="/assets/img/icons/check.png" alt="" />
+                    <div className="margin-top-20">
+                      Your new device should now <br />
+                      appear online!
+                    </div>
+                  </div>
                 </div>
               </div>
-  
-              <div className="col-md-4">
-                <div className="tutorial-img-box pull-left">
-                  <img src={"/assets/img/icons/icon_check_" + theme + ".png"} className="tutorial-icon pull-left" alt="" />
-                </div>
-                <div className="tutorial-desc-box pull-left">
-                  <div className="margin-top-5">
-                    <strong>3.</strong> Your new device should <br />now appear online!
-                  </div>
-                </div>
-              </div>
-            </div>
-  
-            <div className="text-center font-20">
-              - or -
-            </div>
-  
-            <div className="margin-top-20 text-center pull-left width-full font-16">
-              <a href={"/api/v1/client/" + this.props.deviceUUID + "/toml/64"} className="color-main" target="_blank">Download the unique credentials for this device</a>, 
-              and then manually <a href="http://advancedtelematic.github.io/rvi_sota_server/cli/building-the-sota-client.html" className="color-main" target="_blank">build</a>&nbsp;
-              and <a href="http://advancedtelematic.github.io/rvi_sota_server/cli/client-startup-and-configuration.html" className="color-main" target="_blank">install</a> the&nbsp;
-              <a href="https://github.com/advancedtelematic/rvi_sota_client" className="color-main" target="_blank">open source OTA client</a>.
             </div>
           </div>
+          
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.shownTooltipInfoName === 'copy_process' ?
+              <ModalTooltip 
+                title="How to copy the Package to your device"
+                body={copyProcessTooltipContent}
+                confirmButtonAction={this.hideTooltipInfo}/>
+            : undefined}
+          </VelocityTransitionGroup>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.shownTooltipInfoName === 'other_system' ?
+              <ModalTooltip 
+                title="How to use init system other than systemd"
+                body={otherSystemTooltipContent}
+                confirmButtonAction={this.hideTooltipInfo}/>
+            : undefined}
+          </VelocityTransitionGroup>
         </div>
       );
     }

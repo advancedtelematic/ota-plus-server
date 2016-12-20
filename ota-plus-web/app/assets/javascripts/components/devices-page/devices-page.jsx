@@ -8,7 +8,7 @@ define(function(require) {
       DevicesPageHeader = require('./devices-page-header'),
       GroupsSection = require('./groups-section'),
       DevicesSection = require('./devices-section'),
-      DevicesTooltip = require('./devices-tooltip'),
+      ModalTooltip = require('../modal-tooltip'),
       NewDevice = require('../devices/new-device'),
       RenameDevice = require('../devices/rename-device'),
       NewSmartGroup = require('../groups/new-smart-group'),
@@ -104,6 +104,11 @@ define(function(require) {
       setTimeout(function() {
         that.setContentHeight();
       }, 1);
+    }
+    componentDidUpdate(prevProps, prevState) {
+      if (!_.isEqual(this.state.searchableDevicesData, prevState.searchableDevicesData)) {
+        $('[data-toggle="device-tooltip"]').tooltip();
+      }
     }
     componentWillUnmount(){
       db.devices.reset();
@@ -382,7 +387,14 @@ define(function(require) {
     toggleDraggingOverButton(isDragging = false) {
       this.setState({isDraggingOverButton: isDragging});
     }
-    render() {    
+    render() {
+      var tooltipContent = (
+        <div className="text-center margin-top-20">
+          ATS Garage helps you manage your embedded devices. <br /><br />
+          To get started, you'll need to create a device and install the ATS Garage client on it.
+        </div>
+      );
+    
       return (
         <div>
           <DevicesPageHeader 
@@ -486,9 +498,11 @@ define(function(require) {
             : undefined}
           </VelocityTransitionGroup>
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-            {this.state.isDevicesTooltipShown ?
-              <DevicesTooltip 
-                hideDevicesTooltip={this.hideDevicesTooltip}/>
+            {this.state.isDevicesTooltipShown ?                
+              <ModalTooltip 
+                title="Devices"
+                body={tooltipContent}
+                confirmButtonAction={this.hideDevicesTooltip}/>
             : undefined}
           </VelocityTransitionGroup>
         </div>
