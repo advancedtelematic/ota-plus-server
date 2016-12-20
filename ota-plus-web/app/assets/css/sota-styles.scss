@@ -1734,6 +1734,14 @@ a.close, button.close {
                 .close {
                     margin: 2px 0 0 0;
                 }
+
+                a {
+                    color: #fff;
+
+                    &:hover, &:focus, &:active {
+                        color: #fff;
+                    }
+                }
             }
 
             .modal-body {
@@ -4735,5 +4743,17 @@ hr.full-line {
         .grey-header-icon {
             background-image: url(/assets/img/icons/black/devices.png);
         }
+    }
+}
+
+.close-x {
+    font-size: 13px;
+    position: absolute;
+    top: 16px;
+    right: 15px;
+    -webkit-text-stroke: 1px #fff;
+
+    .fa-angle-down {
+        top: -5px;
     }
 }
