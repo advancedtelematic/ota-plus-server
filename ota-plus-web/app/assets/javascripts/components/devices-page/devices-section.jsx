@@ -58,7 +58,8 @@ define(function(require) {
                 selectedSort={this.props.selectedSort}
                 selectStatus={this.props.selectStatus}
                 selectSort={this.props.selectSort}
-                changeFilter={this.props.changeFilter}/>
+                changeFilter={this.props.changeFilter}
+                openNewDeviceModal={this.props.openNewDeviceModal}/>
           
               {this.state.areTestSettingsCorrect ?
                 <button className="btn btn-full-section first" onClick={this.expandSection.bind(this, 'testDevices')}>
@@ -78,7 +79,6 @@ define(function(require) {
                         <DevicesList
                           devices={this.props.searchableDevices}
                           areProductionDevices={false}
-                          openNewDeviceModal={this.props.openNewDeviceModal}
                           openRenameDeviceModal={this.props.openRenameDeviceModal}
                           openNewSmartGroupModal={this.props.openNewSmartGroupModal}
                           draggingDeviceUUID={this.props.draggingDeviceUUID}
