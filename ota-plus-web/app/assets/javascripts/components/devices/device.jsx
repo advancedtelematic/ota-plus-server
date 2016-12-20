@@ -187,18 +187,9 @@ define(function(require) {
               </div>
             : null}
           </VelocityTransitionGroup>
-          <div className="device-header">
-            <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-              {!_.isUndefined(deviceWithStatus) ? 
-                <DeviceHeader
-                  device={deviceWithStatus}
-                  duplicatingInProgress={this.state.duplicatingInProgress}/>
-              : undefined}
-            </VelocityTransitionGroup>
-            {_.isUndefined(deviceWithStatus) ? 
-              <Loader />
-            : undefined}
-          </div>
+          <DeviceHeader
+            device={deviceWithStatus}
+            duplicatingInProgress={this.state.duplicatingInProgress}/>
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {!_.isUndefined(deviceWithStatus) && deviceWithStatus.status != "NotSeen" ?
               <div>

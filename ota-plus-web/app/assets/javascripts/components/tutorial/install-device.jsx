@@ -34,7 +34,7 @@ define(function(require) {
     setTutorialHeight() {
       var windowHeight = jQuery(window).height();
       this.setState({
-        tutorialHeight: windowHeight - jQuery('.device-header').offset().top - jQuery('.device-header').height()
+        tutorialHeight: windowHeight - jQuery('.grey-header').offset().top - jQuery('.grey-header').outerHeight()
       });
     }
     render() {
