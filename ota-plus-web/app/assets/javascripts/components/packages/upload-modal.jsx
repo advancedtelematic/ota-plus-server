@@ -31,6 +31,7 @@ define(function(require) {
       this.closeUploadCancelModal = this.closeUploadCancelModal.bind(this);
       this.cancelUpload = this.cancelUpload.bind(this);
       this.removeFromList = this.removeFromList.bind(this);
+      this.handleClose = this.handleClose.bind(this);
       this.setData = this.setData.bind(this);
       this.convertTimeToUnits = this.convertTimeToUnits.bind(this);
       this.convertBytesToUnits = this.convertBytesToUnits.bind(this);
@@ -165,7 +166,7 @@ define(function(require) {
       });
     }
     showUploadCancelModal(uploadKey, e) {
-      e.preventDefault();
+      if(e) e.preventDefault();
       this.setState({
         isUploadCancelModalShown: true,
         uploadKeyToCancel: !_.isUndefined(uploadKey) ? uploadKey : null
@@ -205,6 +206,14 @@ define(function(require) {
         var postUpload = db.postUpload.deref();        
         delete postUpload['create-package'][uploadKey];
         db.postUpload.reset(postUpload);
+      }
+    }
+    handleClose(e) {
+      e.preventDefault();
+      if(this.state.overallUploadedSize !== this.state.overallUploadSize) {
+        this.showUploadCancelModal(undefined, null);
+      } else {
+        this.cancelUpload();
       }
     }
     convertTimeToUnits(seconds) {
@@ -303,7 +312,7 @@ define(function(require) {
               {!_.isUndefined(upload.status) && (upload.status === 'error' || upload.status === 'success') ?
                 <a href="#" className="darkgrey" onClick={this.removeFromList.bind(this, uploadKey)}>remove from list</a>
               :
-                <a href="#" className="darkgrey" onClick={this.showUploadCancelModal.bind(this, uploadKey)}>cancel</a>
+                <a href="#" className="darkgrey" onClick={this.showUploadCancelModal.bind(this, uploadKey)} title="Cancel upload">cancel</a>
               }
             </td>
           </tr>
@@ -317,13 +326,14 @@ define(function(require) {
               <div className="modal-dialog">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <a href="#" onClick={this.toggleModalSize}>
+                    <a href="#" onClick={this.toggleModalSize} title="Toggle upload box size">
                       {this.state.isModalMinimized ? 
                         <i className="fa fa-angle-up fa-3x toggle-modal-size" aria-hidden="true"></i>
                       :
                         <i className="fa fa-angle-down fa-3x toggle-modal-size" aria-hidden="true"></i>
                       }
                     </a>
+                    <a href="#" onClick={this.handleClose} className="pull-right" title="Close"><i className="fa fa-close close-upload-modal" aria-hidden="true"></i></a>
                     <h4 className="modal-title">Uploading {Object.keys(this.state.data).length} package{Object.keys(this.state.data).length > 1 ? "s" : ""}</h4>
                   </div>
                   <div className="modal-body">
@@ -347,7 +357,7 @@ define(function(require) {
                             </span>
                           : 
                             !isUploadFinished ? 
-                              <a href="#" className="black" onClick={this.showUploadCancelModal.bind(this, undefined)}>Cancel all</a>
+                              <a href="#" className="black" onClick={this.showUploadCancelModal.bind(this, undefined)} title="Cancel all uploads">Cancel all</a>
                             : null
                           }
                         </div>
