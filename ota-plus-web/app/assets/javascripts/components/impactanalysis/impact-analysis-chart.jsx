@@ -60,7 +60,7 @@ define(function(require) {
       
       return (
         <div id="chart-column" style={{height: this.state.chartWrapperHeight}}>
-          <div className="height-100 center-xy text-center">
+          <div className="chart-stats center-xy">
             <DoughnutChart data={stats} width="300" height="300" options={{
                 percentageInnerCutout: 65, 
                 segmentStrokeWidth: 5, 
