@@ -3,7 +3,8 @@ define(function(require) {
       Router = require('react-router'),
       Link = Router.Link,
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      ModalTooltip = require('../modal-tooltip');
+      ModalTooltip = require('../modal-tooltip'),
+      UniqueCredentialsTooltip = require('./unique-credentials-tooltip');
         
   class InstallDevice extends React.Component {
     constructor(props) {
@@ -107,7 +108,7 @@ define(function(require) {
                             Download the unique<br />
                             credentials for this device.
                             <div className="margin-top-20">
-                              <a href={"/api/v1/client/" + this.props.deviceUUID + "/toml/64"} className="btn btn-confirm" target="_blank">Download</a>
+                              <a href="#" onClick={this.showTooltipInfo.bind(this, 'unique_credentials')} className="btn btn-confirm" target="_blank">Download</a>
                             </div>
                           </div>
                         </div>
@@ -155,9 +156,20 @@ define(function(require) {
                 confirmButtonAction={this.hideTooltipInfo}/>
             : undefined}
           </VelocityTransitionGroup>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.shownTooltipInfoName === 'unique_credentials' ?
+              <UniqueCredentialsTooltip 
+                deviceUUID={this.props.deviceUUID}
+                closeModal={this.hideTooltipInfo}/>
+            : undefined}
+          </VelocityTransitionGroup>
         </div>
       );
     }
+  };
+  
+  InstallDevice.propTypes = {
+    deviceUUID: React.PropTypes.string.isRequired
   };
 
   return InstallDevice;
