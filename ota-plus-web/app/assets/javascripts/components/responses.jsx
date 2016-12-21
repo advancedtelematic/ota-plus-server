@@ -11,17 +11,17 @@ define(function(require) {
     }
     componentWillUnmount() {
       db.postStatus.removeWatch("poll-response-" + this.props.action);
-      
-      var postStatus = _.clone(db.postStatus.deref());
-      
-      if(!_.isUndefined(this.props.multipleKey)) {
-        if(!_.isUndefined(postStatus[this.props.action]) && !_.isUndefined(postStatus[this.props.action][this.props.multipleKey]))
-          delete postStatus[this.props.action][this.props.multipleKey];
-        db.postStatus.reset(postStatus);
-      } else {
-        if(!_.isUndefined(postStatus[this.props.action]))
-          delete postStatus[this.props.action];
-        db.postStatus.reset(postStatus);
+      if(this.props.ifUnmount) {
+        var postStatus = _.clone(db.postStatus.deref());
+        if(!_.isUndefined(this.props.multipleKey)) {
+          if(!_.isUndefined(postStatus[this.props.action]) && !_.isUndefined(postStatus[this.props.action][this.props.multipleKey]))
+            delete postStatus[this.props.action][this.props.multipleKey];
+          db.postStatus.reset(postStatus);
+        } else {
+          if(!_.isUndefined(postStatus[this.props.action]))
+            delete postStatus[this.props.action];
+          db.postStatus.reset(postStatus);
+        }
       }
     }
     objToString(obj) {
@@ -65,5 +65,20 @@ define(function(require) {
       );
     }
   }
+  
+  Responses.propTypes = {
+    action: React.PropTypes.string.isRequired,
+    multipleKey: React.PropTypes.string,
+    handledStatuses: React.PropTypes.string,
+    errorText: React.PropTypes.string,
+    successText: React.PropTypes.string,
+    ifUnmount: React.PropTypes.bool
+  };
+  
+  Responses.defaultProps = {
+    handledStatuses: 'all',
+    ifUnmount: true
+  };
+  
   return Responses;
 });
