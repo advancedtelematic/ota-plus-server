@@ -68,6 +68,7 @@ define(function(require) {
       db.logout.addWatch("watch-logout", _.bind(this.handleLogout, this, null));
       db.hasBetaAccess.addWatch("has-beta-access", _.bind(this.forceUpdate, this, null));
       SotaDispatcher.dispatch({actionType: 'impact-analysis'});
+      SotaDispatcher.dispatch({actionType: 'get-features'});
       WebsocketHandler.init();      
     }
     toggleCampaignPanel() {

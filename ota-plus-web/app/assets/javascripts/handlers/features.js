@@ -11,6 +11,8 @@ define(function(require) {
             sendRequest.doGet('/api/v1/features', {action: payload.actionType})
               .success(function(features) {
                 db.features.reset(features);
+                var hasBetaAccess = features.indexOf('beta') > -1;
+                db.hasBetaAccess.reset(hasBetaAccess);
               });
           break;
           case 'enable-treehub-feature':
