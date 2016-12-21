@@ -4,8 +4,7 @@ define(function(require) {
       _ = require('underscore'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       Cookies = require('js-cookie'),
-      DeviceListItem = require('./devices-list-item'),
-      DeviceListGroupItem = require('./devices-list-groupitem');
+      DeviceListItem = require('./devices-list-item');
 
   class DevicesList extends React.Component {
     constructor(props) {
@@ -66,10 +65,9 @@ define(function(require) {
       }
     }
     render() {
-      var devices = [];
-      var Devices = this.props.devices;
-            
-      _.each(Devices, function(device, i) {
+      const devices = this.props.devices;
+      var devicesList = [];
+      _.each(devices, function(device, i) {
         if(!_.isUndefined(device)) {
           var className = '';
           if(this.state.areSmartGroupsEnabled && this.props.draggingDeviceUUID !== null && this.props.isDND) {
@@ -79,7 +77,7 @@ define(function(require) {
               className = 'dragging';
             }
           }
-          devices.push(
+          devicesList.push(
             <span 
               data-uuid={device.uuid}
               data-groupuuid={device.groupUUID}
@@ -97,8 +95,7 @@ define(function(require) {
                 isProductionDevice={this.props.areProductionDevices}
                 productionDeviceName={this.props.productionDeviceName}
                 width={this.state.boxWidth}
-                openRenameDeviceModal={this.props.openRenameDeviceModal}
-                areActionButtonsShown={!_.isUndefined(this.props.areActionButtonsShown) ? this.props.areActionButtonsShown : true}/>
+                openRenameDeviceModal={this.props.openRenameDeviceModal}/>
             </span>
           );
         }
@@ -113,29 +110,23 @@ define(function(require) {
       return (
         <div id="devices-list">
           <div id="devices-container" className="container">
-            {devices.length > 0 ?
+            {devicesList.length > 0 ?
               <div>
-                {_.isUndefined(this.props.isDND) || this.props.isDND ?
+                {!this.props.areProductionDevices && (_.isUndefined(this.props.isDND) || this.props.isDND) ?
                   addDeviceButton
                 : null}
-                {devices}
+                {devicesList}
               </div>
             :
               <div>
-                {!this.props.isDevicesListEmpty && !this.props.areProductionDevices && (_.isUndefined(this.props.isDND) || this.props.isDND) ?
+                {!this.props.areProductionDevices && (_.isUndefined(this.props.isDND) || this.props.isDND) ?
                   addDeviceButton
                 : null}
                 <div className="col-md-12 text-center center-xy">
-                  {this.props.isDevicesListEmpty ?
-                    <span>
-                      <div className="font-24">Welcome to ATS Garage.</div>
-                      <button className="btn btn-confirm margin-top-20" onClick={this.props.openNewDeviceModal}>Add new device</button>
-                    </span>
+                  {this.props.areProductionDevices ?
+                    <span className="font-24">Oops, there are too many devices to show.</span>
                   :
-                    this.props.areProductionDevices ?
-                      <span className="font-24">Oops, there are too many devices to show.</span>
-                    :
-                      <span className="font-24">Oops, there are no devices to show.</span>
+                    <span className="font-24">Oops, there are no devices to show.</span>
                   }
                 </div>
               </div>

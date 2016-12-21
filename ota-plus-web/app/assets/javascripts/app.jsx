@@ -25,8 +25,8 @@ define(function(require) {
 
   /* Components*/
   var Nav = require('components/nav'),
-      Devices = require('components/devices/devices'),
-      DeviceDetails = require('components/devices/device-details'),
+      DevicesPage = require('components/devices-page/devices-page'),
+      DeviceDetails = require('components/devices/device'),
       ProductionDeviceDetails = require('components/devices/production-device-details'),
       Packages = require('components/packages-page/packages'),
       Modal = require('components/modal'),
@@ -237,7 +237,7 @@ define(function(require) {
       <Route component={RightPanel}>
         <IndexRoute component={HomePage}/>
         <Route path="/" component={HomePage}/>
-        <Route path="devices" component={Devices}/>
+        <Route path="devices" component={DevicesPage}/>
         <Route path="devicedetails/:id" component={DeviceDetails}>
           <Route path="impactanalysis/:count" component={Modal(ImpactAnalysis, {TitleVar: "impactanalysis", modalId: 'modal-impact-analysis'})}/>
           <Route path="newcampaign" component={Modal(NewCampaign, {TitleVar: "newcampaign", modalId: 'modal-new-campaign'})}/>

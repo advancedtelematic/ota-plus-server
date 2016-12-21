@@ -5,7 +5,7 @@ define(function(require) {
       Link = Router.Link,
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
-      DetailsHeader = require('./details-header'),
+      DeviceHeader = require('./device-header'),
       PackagesQueue = require('../packages/queue'),
       Packages = require('../packages/packages'),
       TutorialInstallDevice = require('../tutorial/install-device'),
@@ -190,7 +190,7 @@ define(function(require) {
           <div className="device-header">
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
               {!_.isUndefined(deviceWithStatus) ? 
-                <DetailsHeader
+                <DeviceHeader
                   device={deviceWithStatus}
                   duplicatingInProgress={this.state.duplicatingInProgress}/>
               : undefined}
