@@ -1964,13 +1964,13 @@ a.close, button.close {
 
 /* New campaign form */
 
+.form-row-title {
+    padding: 6px 0 0 0;
+}
+
 #form-new-campaign {
     .row {
         margin: 0 0 5px 0;
-    }
-
-    .form-row-title {
-        padding: 6px 0 0 0;
     }
 
     .form-control {
