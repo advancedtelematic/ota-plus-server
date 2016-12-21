@@ -4,6 +4,7 @@ define(function(require) {
       SotaDispatcher = require('sota-dispatcher'),
       db = require('stores/db'),
       PackagesListItem = require('./packages-list-item'),
+      PackagesListItemOnDevice = require('./packages-list-item-ondevice'),
       PackageListItemDetails = require('./packages-list-item-details'),
       Dropzone = require('../../mixins/dropzone'),
       Loader = require('../loader'),
@@ -209,7 +210,7 @@ define(function(require) {
             
       if(!_.isUndefined(packages) && !_.isUndefined(installedPackages) && !_.isUndefined(queuedPackages) && !_.isUndefined(blacklistedPackages) && !_.isUndefined(autoInstallPackagesForDevice)) {
         installedPackages.forEach(function(installed, index) {
-          installed.type = 'unmanaged';
+          installed.type = 'ondevice';
           installed.isBlackListed = false;
           packages.push(installed);
         });
@@ -238,6 +239,7 @@ define(function(require) {
       selectedSort = selectedSort || this.props.selectedSort;
     
       var that = this;
+      var selectedPackages = {};
       var sortedPackages = undefined;
       var installedPackages = _.clone(db.searchablePackagesForDevice.deref());
       var queuedPackages = _.clone(db.packageQueueForDevice.deref());
@@ -245,107 +247,111 @@ define(function(require) {
       var queuedCount = 0;
         
       switch(selectedType) {
-        case 'unmanaged':
+        case 'ondevice':
           packages = packages.filter(function(pack) {
-            return pack.type === 'unmanaged';
+            return pack.type === 'ondevice';
           });
         break;
-        case 'managed':
+        case 'ingarage':
           packages = packages.filter(function(pack) {
-            return (_.isUndefined(pack.type) || pack.type !== 'unmanaged');
+            return (_.isUndefined(pack.type) || pack.type !== 'ondevice');
           });
         break;
         default:
         break;
       }
-      
-      var installedIds = new Object();
-      _.each(installedPackages, function(obj, index) {
-        installedIds[obj.id.name + '_' + obj.id.version] = obj.id.name + '_' + obj.id.version;
-      });
 
-      var queuedIds = new Object();
-      _.each(queuedPackages, function(obj, index) {
-        queuedIds[obj.packageId.name + '_' + obj.packageId.version] = obj.packageId.name + '_' + obj.packageId.version;
-      });
-
-      var groupedPackages = {};
-      _.each(packages, function(obj, index) {
-        var uri = !_.isUndefined(obj.uri) && !_.isUndefined(obj.uri.uri) ? obj.uri.uri : '';
-        var objKey = obj.id.name + '_' + obj.id.version;
-        var isQueued = false;
-        var isInstalled = false;
-                    
-        if(objKey in installedIds) {
-          packages[index].attributes = {status: 'installed', string: 'Installed', label: 'label-success'};
-          isInstalled = true;
-        } else if(objKey in queuedIds) {
-          packages[index].attributes = {status: 'queued', string: 'Queued', label: 'label-info'};
-          isQueued = true;
-        } else {
-          packages[index].attributes = {status: 'notinstalled', string: 'Not installed', label: 'label-danger'};
-        }
-
-        if(_.isUndefined(groupedPackages[obj.id.name]) || !groupedPackages[obj.id.name] instanceof Array ) {
-          groupedPackages[obj.id.name] = new Object();
-          groupedPackages[obj.id.name]['elements'] = [];
-          groupedPackages[obj.id.name]['packageName'] = obj.id.name;
-          groupedPackages[obj.id.name]['isQueued'] = isQueued;
-          groupedPackages[obj.id.name]['isInstalled'] = isInstalled;
-          groupedPackages[obj.id.name]['isBlackListed'] = obj.isBlackListed && isInstalled ? true : false;
-          groupedPackages[obj.id.name]['isAutoInstallEnabled'] = !_.isUndefined(obj.isAutoInstallEnabled) ? obj.isAutoInstallEnabled : false;
-        }
-
-        if(!groupedPackages[obj.id.name].isQueued && isQueued) {
-          groupedPackages[obj.id.name]['isQueued'] = true;
-        }
-        if(!groupedPackages[obj.id.name].isInstalled && isInstalled) {
-          groupedPackages[obj.id.name]['isInstalled'] = true;
-        }
-        if(!groupedPackages[obj.id.name]['isBlackListed'] && obj.isBlackListed && isInstalled)
-          groupedPackages[obj.id.name]['isBlackListed'] = true;
-      
-        groupedPackages[obj.id.name]['elements'].push(packages[index]);
-      });
-        
-      _.each(groupedPackages, function(obj, index) {
-        groupedPackages[index]['elements'] = obj['elements'].sort(function (a, b) {
-          var aVersion = a.id.version;
-          var bVersion = b.id.version;
-          return that.compareVersions(bVersion, aVersion);
+      if(selectedType === 'ingarage') {
+        var installedIds = new Object();
+        _.each(installedPackages, function(obj, index) {
+          installedIds[obj.id.name + '_' + obj.id.version] = obj.id.name + '_' + obj.id.version;
         });
-      });
 
-      var selectedPackages = {};
-      switch(selectedStatus) {
-        case 'installed':
-          _.each(groupedPackages, function(obj, key) {
-            if(obj.isInstalled)
-              selectedPackages[key] = groupedPackages[key];
+        var queuedIds = new Object();
+        _.each(queuedPackages, function(obj, index) {
+          queuedIds[obj.packageId.name + '_' + obj.packageId.version] = obj.packageId.name + '_' + obj.packageId.version;
+        });
+      
+        var groupedPackages = {};
+        _.each(packages, function(obj, index) {
+          var objKey = obj.id.name + '_' + obj.id.version;
+          var isQueued = false;
+          var isInstalled = false;
+          
+          if(objKey in installedIds) {
+            packages[index].attributes = {status: 'installed'};
+            isInstalled = true;
+          } else if(objKey in queuedIds) {
+            packages[index].attributes = {status: 'queued'};
+            isQueued = true;
+          } else {
+            packages[index].attributes = {status: 'notinstalled'};
+          }
+
+          if(_.isUndefined(groupedPackages[obj.id.name]) || !groupedPackages[obj.id.name] instanceof Object ) {
+            groupedPackages[obj.id.name] = {
+              elements: [],
+              packageName: obj.id.name,
+              isQueued: isQueued,
+              isInstalled: isInstalled,
+              isBlackListed: obj.isBlackListed && isInstalled ? true : false,
+              isAutoInstallEnabled: !_.isUndefined(obj.isAutoInstallEnabled) ? obj.isAutoInstallEnabled : false
+            };
+          }
+
+          if(!groupedPackages[obj.id.name].isQueued && isQueued)
+            groupedPackages[obj.id.name]['isQueued'] = true;
+          if(!groupedPackages[obj.id.name].isInstalled && isInstalled)
+            groupedPackages[obj.id.name]['isInstalled'] = true;
+          if(!groupedPackages[obj.id.name]['isBlackListed'] && obj.isBlackListed && isInstalled)
+            groupedPackages[obj.id.name]['isBlackListed'] = true;
+      
+          groupedPackages[obj.id.name]['elements'].push(packages[index]);
+        });
+        
+        _.each(groupedPackages, function(obj, index) {
+          groupedPackages[index]['elements'] = obj['elements'].sort(function (a, b) {
+            var aVersion = a.id.version;
+            var bVersion = b.id.version;
+            return that.compareVersions(bVersion, aVersion);
           });
-        break;
-        case 'queued':
-          _.each(groupedPackages, function(obj, key) {
-            if(obj.isQueued)
-              selectedPackages[key] = groupedPackages[key];
-          });
-        break;
-        case 'uninstalled':
-          _.each(groupedPackages, function(obj, key) {
-            if(!obj.isInstalled && !obj.isQueued)
-              selectedPackages[key] = groupedPackages[key];
-          });
-        break;
-        default:
-          selectedPackages = groupedPackages;
-        break;
+        });
+
+        switch(selectedStatus) {
+          case 'installed':
+            _.each(groupedPackages, function(obj, key) {
+              if(obj.isInstalled)
+                selectedPackages[key] = groupedPackages[key];
+            });
+          break;
+          case 'queued':
+            _.each(groupedPackages, function(obj, key) {
+              if(obj.isQueued)
+                selectedPackages[key] = groupedPackages[key];
+            });
+          break;
+          case 'uninstalled':
+            _.each(groupedPackages, function(obj, key) {
+              if(!obj.isInstalled && !obj.isQueued)
+                selectedPackages[key] = groupedPackages[key];
+            });
+          break;
+          default:
+            selectedPackages = groupedPackages;
+          break;
+        }
+      
+        _.each(selectedPackages, function(pack, index) {
+          pack.isQueued ? queuedCount++ : null;
+          pack.isInstalled ? installedCount++ : null;
+        });
+      } else {
+        _.each(packages, function(obj, index) {
+          var objKey = obj.id.name + '_' + obj.id.version;
+          selectedPackages[objKey] = obj;
+        });
       }
       
-      _.each(selectedPackages, function(pack, index) {
-        pack.isQueued ? queuedCount++ : null;
-        pack.isInstalled ? installedCount++ : null;
-      });
-
       sortedPackages = {};
       var specialGroup = {'#' : []};
       Object.keys(selectedPackages).sort(function(a, b) {
@@ -486,57 +492,63 @@ define(function(require) {
         var packages = _.map(this.state.packagesData, function(packages, index) {
           var items = _.map(packages, function(pack, i) {
             packageIndex++;
-            
-            var that = this;
-            var queuedPackage;
-            var installedPackage;
-            var packageInfo = '';
-            var mainLabel = '';
-
-            var tmp = _.find(pack.elements, function (i) {
-              return i.attributes.status == 'queued';
-            });
-            queuedPackage = (tmp !== undefined) ? tmp.id.version : '';
-
-            tmp = _.find(pack.elements, function (i) {
-              return i.attributes.status == 'installed';
-            });
-            installedPackage = (tmp !== undefined) ? tmp.id.version : '';
-
-            if(packageIndex >= this.state.packagesShownStartIndex && packageIndex <= this.state.packagesShownEndIndex)
+            if(this.props.selectedType === 'ingarage') {
+              var that = this;
+              var queuedPackage;
+              var installedPackage;
+              var packageInfo = '';
+              var mainLabel = '';
+              var tmp = _.find(pack.elements, function (i) {
+                return i.attributes.status == 'queued';
+              });
+              queuedPackage = (tmp !== undefined) ? tmp.id.version : '';
+              tmp = _.find(pack.elements, function (i) {
+               return i.attributes.status == 'installed';
+              });
+              installedPackage = (tmp !== undefined) ? tmp.id.version : '';
+              
+              return (packageIndex >= this.state.packagesShownStartIndex && packageIndex <= this.state.packagesShownEndIndex) ?
+                (
+                  <li key={'package-' + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
+                    <PackagesListItem
+                      key={'package-' + pack.packageName + '-items'}
+                      name={pack.packageName}
+                      expandPackage={this.expandPackage}
+                      queuedPackage={queuedPackage}
+                      installedPackage={installedPackage}
+                      packageInfo={packageInfo}
+                      mainLabel={mainLabel}
+                      deviceId={this.props.device.uuid}
+                      isSelected={this.state.expandedPackage == pack.packageName}
+                      isBlackListed={pack.isBlackListed}
+                      isAutoInstallEnabled={!_.isUndefined(pack.isAutoInstallEnabled) ? pack.isAutoInstallEnabled : false}
+                      toggleAutoInstall={this.toggleAutoInstall}/>
+                      <VelocityTransitionGroup enter={{animation: "slideDown", begin: function() {that.startIntervalPackagesListScroll()}, complete: function() {that.stopIntervalPackagesListScroll()}}} leave={{animation: "slideUp"}}>
+                        {this.state.expandedPackage == pack.packageName ?
+                          <PackageListItemDetails
+                            key={'package-' + pack.packageName + '-versions'}
+                            versions={pack.elements}
+                            deviceId={this.props.device.uuid}
+                            packageName={pack.packageName}
+                            isQueued={pack.isQueued}
+                            isAutoInstallEnabled={!_.isUndefined(pack.isAutoInstallEnabled) ? pack.isAutoInstallEnabled : false}
+                            showBlacklistForm={this.props.showBlacklistForm}/>
+                        : null}
+                      </VelocityTransitionGroup>
+                  </li>
+                )
+              :
+                <li key={'package-' + pack.packageName} className="list-group-item" ></li>
+            } else
               return (
-                <li key={'package-' + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
-                  <PackagesListItem
-                    key={'package-' + pack.packageName + '-items'}
-                    name={pack.packageName}
-                    expandPackage={this.expandPackage}
-                    queuedPackage={queuedPackage}
-                    installedPackage={installedPackage}
-                    packageInfo={packageInfo}
-                    mainLabel={mainLabel}
-                    deviceId={this.props.device.uuid}
-                    isSelected={this.state.expandedPackage == pack.packageName}
-                    isBlackListed={pack.isBlackListed}
-                    isAutoInstallEnabled={!_.isUndefined(pack.isAutoInstallEnabled) ? pack.isAutoInstallEnabled : false}
-                    toggleAutoInstall={this.toggleAutoInstall}/>
-                    <VelocityTransitionGroup enter={{animation: "slideDown", begin: function() {that.startIntervalPackagesListScroll()}, complete: function() {that.stopIntervalPackagesListScroll()}}} leave={{animation: "slideUp"}}>
-                      {this.state.expandedPackage == pack.packageName ?
-                        <PackageListItemDetails
-                          key={'package-' + pack.packageName + '-versions'}
-                          versions={pack.elements}
-                          deviceId={this.props.device.uuid}
-                          packageName={pack.packageName}
-                          isQueued={pack.isQueued}
-                          isAutoInstallEnabled={!_.isUndefined(pack.isAutoInstallEnabled) ? pack.isAutoInstallEnabled : false}
-                          showBlacklistForm={this.props.showBlacklistForm}/>
-                      : null}
-                    </VelocityTransitionGroup>
+                <li key={'package-' + pack.id.name} className="list-group-item">
+                  {packageIndex >= this.state.packagesShownStartIndex && packageIndex <= this.state.packagesShownEndIndex ?
+                    <PackagesListItemOnDevice
+                      package={pack}
+                      showBlacklistForm={this.props.showBlacklistForm}/>
+                  : null}
                 </li>
               );
-      
-            return (
-              <li key={'package-' + pack.packageName} className="list-group-item" >{packageIndex}</li>
-            );
           }, this);
           return(
             <div className="ioslist-group-container" key={'list-group-container-' + index}>
@@ -568,7 +580,7 @@ define(function(require) {
                               No matching packages found.
                             </div>
                           :
-                            this.props.selectedType === 'unmanaged' ? 
+                            this.props.selectedType === 'ondevice' ? 
                               <div className="center-xy padding-15">
                                 This device hasn’t reported any information about<br />
                                 its system-installed software packages yet.
