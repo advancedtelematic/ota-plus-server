@@ -19,6 +19,7 @@ define(function(require) {
         secondsRemaining: Math.random() * (900 - 600) + 600,
         overallUploadedSize: undefined,
         overallUploadSize: undefined,
+        isWholeProcessFinished: false,
         isModalMinimized: Cookies.get('isUploadMinimized') && Cookies.get('isUploadMinimized') === "true" ? true : false,
         prevModalWidth: 0,
         prevModalHeight: 0,
@@ -128,6 +129,7 @@ define(function(require) {
       var currentTime = new Date().getTime();
       var overallUploadSize = 0;
       var overallUploadedSize = 0;
+      var isWholeProcessFinished = true;
             
       if(firstUpdatedSecondsRemaining == null) {
         this.setState({
@@ -153,16 +155,19 @@ define(function(require) {
           }
         }
       }
-      
+            
       _.each(postUpload, function(upload, uploadKey) {
+        if(_.isUndefined(upload.status) || upload.status === 'error')
+          isWholeProcessFinished = false,
         overallUploadSize += upload.size;
         overallUploadedSize += upload.uploaded;
       });
-            
+                        
       this.setState({
         data: postUpload,
         overallUploadedSize: overallUploadedSize,
-        overallUploadSize: overallUploadSize
+        overallUploadSize: overallUploadSize,
+        isWholeProcessFinished: isWholeProcessFinished
       });
     }
     showUploadCancelModal(uploadKey, e) {
@@ -210,7 +215,7 @@ define(function(require) {
     }
     handleClose(e) {
       e.preventDefault();
-      if(this.state.overallUploadedSize !== this.state.overallUploadSize) {
+      if(!this.state.isWholeProcessFinished) {
         this.showUploadCancelModal(undefined, null);
       } else {
         this.cancelUpload();
@@ -236,7 +241,7 @@ define(function(require) {
     handleResponse() {
       var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref()['create-package'] : undefined;
       var postUpload = !_.isUndefined(db.postUpload.deref()) ? db.postUpload.deref() : undefined;
-      
+                  
       _.each(this.state.data, function(upload, uploadKey) {
         if(!_.isUndefined(postStatus) && !_.isUndefined(postStatus[uploadKey]) && _.isUndefined(upload.state)) {
           if(postStatus[uploadKey].status === 'success' || postStatus[uploadKey].status === 'error') {
@@ -246,11 +251,11 @@ define(function(require) {
         }
       }, this);
     }
-    render() {
+    render() {    
       var data = this.state.data;
       var overallUploadedSize = !isNaN(this.state.overallUploadedSize) ? this.state.overallUploadedSize/(1024*1024) : 0;
       var overallUploadSize = this.state.overallUploadSize/(1024*1024);
-      var isUploadFinished = overallUploadedSize === overallUploadSize;
+      var isUploadFinished = this.state.overallUploadSize === this.state.overallUploadedSize;
       var barOptions = {
         strokeWidth: 18,
         easing: 'easeInOut',
@@ -322,7 +327,7 @@ define(function(require) {
       return (
         <div>
           <div id="modal-upload" className={"myModal" + (_.isUndefined(uploads) || _.isEmpty(uploads) ? ' hidden': '') + (this.state.isModalMinimized ? ' minimized' : '')}>
-            {!_.isUndefined(uploads) && !_.isEmpty(uploads) ?
+            {!_.isUndefined(uploads) && !_.isEmpty(uploads) && !this.state.isWholeProcessFinished ?
               <div className="modal-dialog">
                 <div className="modal-content">
                   <div className="modal-header">
@@ -361,7 +366,7 @@ define(function(require) {
                               {this.convertBytesToUnits(overallUploadedSize)} of {this.convertBytesToUnits(overallUploadSize)}
                             </span>
                           : 
-                            !isUploadFinished ? 
+                            !this.state.isUploadFinished ?
                               <a href="#" className="black" onClick={this.showUploadCancelModal.bind(this, undefined)} title="Cancel all uploads">Cancel all</a>
                             : null
                           }
