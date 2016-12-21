@@ -94,22 +94,23 @@ define(function(require) {
                 <i className="fa fa-plus"></i> &nbsp; Add new package
               </button>
             </div>
-    
-            <div className="select-bar pull-right margin-left-15">
-              <div className="select-bar-text">Status</div>
-              <div className="btn-group">
-                <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span className="pull-left">{this.state.selectedStatusName} &nbsp;</span>
-                  <span className="fa fa-angle-down pull-right"></span>
-                </button>
-                <ul className="dropdown-menu">
-                  <li><a href="#" onClick={this.selectStatus.bind(this, 'all')}>All</a></li>
-                  <li><a href="#" onClick={this.selectStatus.bind(this, 'installed')}>Installed</a></li>
-                  <li><a href="#" onClick={this.selectStatus.bind(this, 'queued')}>Queued</a></li>
-                  <li><a href="#" onClick={this.selectStatus.bind(this, 'uninstalled')}>Uninstalled</a></li>
-                </ul>
+            {this.props.selectedType == 'ingarage' ?
+              <div className="select-bar pull-right margin-left-15">
+                <div className="select-bar-text">Status</div>
+                <div className="btn-group">
+                  <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span className="pull-left">{this.state.selectedStatusName} &nbsp;</span>
+                    <span className="fa fa-angle-down pull-right"></span>
+                  </button>
+                  <ul className="dropdown-menu">
+                    <li><a href="#" onClick={this.selectStatus.bind(this, 'all')}>All</a></li>
+                    <li><a href="#" onClick={this.selectStatus.bind(this, 'installed')}>Installed</a></li>
+                    <li><a href="#" onClick={this.selectStatus.bind(this, 'queued')}>Queued</a></li>
+                    <li><a href="#" onClick={this.selectStatus.bind(this, 'uninstalled')}>Uninstalled</a></li>
+                  </ul>
+                </div>
               </div>
-            </div>
+            : null}
           </div>
 
           <div className={"alert alert-ats alert-dismissible" + (this.state.alertHidden ? " hidden" : '')} role="alert">
