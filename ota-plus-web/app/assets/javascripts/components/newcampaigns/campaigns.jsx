@@ -40,10 +40,10 @@ define(function(require) {
       this.closeRenameModal = this.closeRenameModal.bind(this);
       this.showCampaignTooltip = this.showCampaignTooltip.bind(this);
       this.hideCampaignTooltip = this.hideCampaignTooltip.bind(this);
-      this.handleDeviceSeen = this.handleDeviceSeen.bind(this);
+      this.handleUpdateSpec = this.handleUpdateSpec.bind(this);
       SotaDispatcher.dispatch({actionType: 'get-campaigns'});
       db.campaigns.addWatch("poll-campaigns", _.bind(this.setCampaignsData, this, null));
-      db.deviceSeen.addWatch("poll-deviceseen-campaigns", _.bind(this.handleDeviceSeen, this, null));
+      db.updateSpec.addWatch("poll-updatespec-campaigns", _.bind(this.handleUpdateSpec, this, null));
     }
     componentDidMount() {
       window.addEventListener("resize", this.setContentHeight);
@@ -52,7 +52,7 @@ define(function(require) {
     componentWillUnmount() {
       window.removeEventListener("resize", this.setContentHeight);
       db.campaigns.removeWatch("poll-campaigns");
-      db.deviceSeen.removeWatch("poll-deviceseen-campaigns");
+      db.updateSpec.removeWatch("poll-updatespec-campaigns");
       db.campaigns.reset();
     }
     setCampaignsData(filterValue, selectedSort) {    
@@ -180,9 +180,9 @@ define(function(require) {
     hideCampaignTooltip() {
       this.setState({isCampaignTooltipShown: false});
     }
-    handleDeviceSeen() {
-      var deviceSeen = db.deviceSeen.deref();
-      if(!_.isUndefined(deviceSeen)) {
+    handleUpdateSpec() {
+      var updateSpec = db.updateSpec.deref();
+      if(!_.isUndefined(updateSpec)) {
         SotaDispatcher.dispatch({actionType: 'get-campaigns'});
       }
     }

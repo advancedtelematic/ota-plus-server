@@ -32,6 +32,8 @@ define(function (require) {
                     case "PackageBlacklisted":
                         db.packageBlacklisted.reset(data);
                         break;
+                    case "UpdateSpec":
+                        db.updateSpec.reset(data);
                     default:
                         console.log('Unhandled event type: ' + eventObj.type);
                         break;
