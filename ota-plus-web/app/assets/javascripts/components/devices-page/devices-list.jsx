@@ -33,7 +33,7 @@ define(function(require) {
       window.removeEventListener("resize", this.setBoxesWidth);
     }
     setBoxesWidth() {
-      var containerWidth = $('#devices-container').width();
+      var containerWidth = $('.intend-container').width();
       var minBoxWidth = 350;
       var howManyBoxesPerRow = Math.floor(containerWidth / minBoxWidth);
       this.setState({
@@ -102,7 +102,7 @@ define(function(require) {
 
       return (
         <div id="devices-list">
-          <div id="devices-container" className="container">
+          <div className="container intend-container">
             {devicesList.length > 0 ?
               devicesList
             :
