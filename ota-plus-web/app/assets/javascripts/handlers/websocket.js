@@ -34,6 +34,7 @@ define(function (require) {
                         break;
                     case "UpdateSpec":
                         db.updateSpec.reset(data);
+                        break;
                     default:
                         console.log('Unhandled event type: ' + eventObj.type);
                         break;
