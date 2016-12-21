@@ -8,19 +8,14 @@ define(function(require) {
   class Packages extends React.Component {
     constructor(props) {
       super(props);
-      
       this.state = {
         selectedStatus: 'all',
         selectedStatusName: 'All',
         selectedSort: 'asc',
-        selectedType: 'managed',
-        selectedTypeName: 'Managed',
         packagesListHeight: '300px',
         alertHidden: false
       }
-      
       Cookies.set('alerts', {'packages': 'closed', 'queue': 'closed'});
-      
       var alertCookie;
       try {
         alertCookie = JSON.parse(Cookies.get('alerts'));
@@ -71,15 +66,6 @@ define(function(require) {
         selectedSort: sort
       });
     }
-    selectType(type, e) {
-      e.preventDefault();
-
-      var name = jQuery(e.target).text();
-      this.setState({
-        selectedType: type,
-        selectedTypeName: name
-      });
-    }
     setPackagesListHeight() {
       var windowHeight = jQuery(window).height();
       var footerHeight = jQuery('.panel-footer').outerHeight();
@@ -105,7 +91,7 @@ define(function(require) {
 
             <div className="pull-right margin-left-15">
               <button onClick={this.props.openForm} className="btn btn-main btn-add pull-right" id="button-add-new-package">
-                <i className="fa fa-plus"></i> &nbsp; Add
+                <i className="fa fa-plus"></i> &nbsp; Add new package
               </button>
             </div>
     
@@ -124,21 +110,6 @@ define(function(require) {
                 </ul>
               </div>
             </div>
-    
-            <div className="select-bar pull-right">
-              <div className="select-bar-text">Type</div>
-              <div className="btn-group">
-                <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span className="pull-left">{this.state.selectedTypeName} &nbsp;</span>
-                  <span className="fa fa-angle-down pull-right"></span>
-                </button>
-                <ul className="dropdown-menu">
-                  <li><a href="#" onClick={this.selectType.bind(this, 'all')}>All</a></li>
-                  <li><a href="#" onClick={this.selectType.bind(this, 'managed')}>Managed</a></li>
-                  <li><a href="#" onClick={this.selectType.bind(this, 'unmanaged')}>Unmanaged</a></li>
-                </ul>
-              </div>
-            </div>
           </div>
 
           <div className={"alert alert-ats alert-dismissible" + (this.state.alertHidden ? " hidden" : '')} role="alert">
@@ -154,7 +125,7 @@ define(function(require) {
                 packagesListHeight={this.state.packagesListHeight}
                 selectedStatus={this.state.selectedStatus}
                 selectedSort={this.state.selectedSort}
-                selectedType={this.state.selectedType}
+                selectedType={this.props.selectedType}
                 filterValue={this.props.filterValue}
                 setPackagesStatistics={this.props.setPackagesStatistics}
                 device={this.props.device}
