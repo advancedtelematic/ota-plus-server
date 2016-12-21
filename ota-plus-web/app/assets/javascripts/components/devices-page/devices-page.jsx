@@ -5,15 +5,14 @@ define(function(require) {
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       Cookies = require('js-cookie'),
-      DevicesList = require('./devices-list'),
-      DevicesHeader = require('./devices-header'),
-      GroupsArtificial = require('../groups/groups-artificial'),
-      GroupsList = require('../groups/groups-list'),
-      NewDevice = require('./new-device'),
-      RenameDevice = require('./rename-device'),
+      DevicesPageHeader = require('./devices-page-header'),
+      GroupsSection = require('./groups-section'),
+      DevicesSection = require('./devices-section'),
+      DevicesTooltip = require('./devices-tooltip'),
+      NewDevice = require('../devices/new-device'),
+      RenameDevice = require('../devices/rename-device'),
       NewSmartGroup = require('../groups/new-smart-group'),
       NewManualGroup = require('../groups/new-manual-group'),
-      NewManualGroupButton = require('../groups/new-manual-group-button'),
       RenameGroup = require('../groups/rename-group'),
       Loader = require('../loader'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
@@ -40,13 +39,7 @@ define(function(require) {
         selectedStatus: 'All',
         selectedStatusName: 'All',
         selectedSort: 'asc',
-        expandedSectionName: 'testDevices',
-        packagesCount: 67,
-        campaignsCount: 32,
-        productionDevicesCount: 0,
-        groupsWrapperHeight: 400,
-        groupsListHeight: 400,
-        devicesListHeight: 400,
+        contentHeight: 300,
         isNewDeviceModalShown: false,
         isRenameDeviceModalShown: false,
         renamedDevice: null,
@@ -58,9 +51,10 @@ define(function(require) {
         groupedDevices: [],
         draggingDevice: null,
         draggingOverGroup: null,
-        isDraggingOverButton: false
+        isDraggingOverButton: false,
+        isDevicesTooltipShown: false,
       };
-
+      
       this.openNewDeviceModal = this.openNewDeviceModal.bind(this);
       this.closeNewDeviceModal = this.closeNewDeviceModal.bind(this);
       this.openRenameDeviceModal = this.openRenameDeviceModal.bind(this);
@@ -71,12 +65,14 @@ define(function(require) {
       this.closeNewManualGroupModal = this.closeNewManualGroupModal.bind(this);
       this.openRenameGroupModal = this.openRenameGroupModal.bind(this);
       this.closeRenameGroupModal = this.closeRenameGroupModal.bind(this);
+      this.showDevicesTooltip = this.showDevicesTooltip.bind(this);
+      this.hideDevicesTooltip = this.hideDevicesTooltip.bind(this);
       this.selectGroup = this.selectGroup.bind(this);
       this.changeFilter = this.changeFilter.bind(this);
       this.selectStatus = this.selectStatus.bind(this);
       this.selectSort = this.selectSort.bind(this);
       this.refreshData = this.refreshData.bind(this);
-      this.setElementsSize = this.setElementsSize.bind(this);
+      this.setContentHeight = this.setContentHeight.bind(this);
       this.filterAndSortDevices = this.filterAndSortDevices.bind(this);
       this.filterDevicesByGroup = this.filterDevicesByGroup.bind(this);
       this.setDevicesData = this.setDevicesData.bind(this);
@@ -104,9 +100,9 @@ define(function(require) {
     }
     componentDidMount() {
       var that = this;
-      window.addEventListener("resize", this.setElementsSize);
+      window.addEventListener("resize", this.setContentHeight);
       setTimeout(function() {
-        that.setElementsSize();
+        that.setContentHeight();
       }, 1);
     }
     componentWillUnmount(){
@@ -121,7 +117,7 @@ define(function(require) {
       db.groups.removeWatch("groups");
       db.deviceCreated.removeWatch("device-created");
       db.deviceSeen.removeWatch("device-seen");
-      window.removeEventListener("resize", this.setElementsSize);
+      window.removeEventListener("resize", this.setContentHeight);
     }
     refreshData(filterValue) {
       SotaDispatcher.dispatch({actionType: 'get-devices'});
@@ -206,26 +202,10 @@ define(function(require) {
         selectedSort: sort
       });
     }
-    expandSection(sectionName, e) {
-      this.setState({
-        expandedSectionName: (this.state.expandedSectionName == sectionName) ? null : sectionName
-      });
-    }
-    numberWithDots(x) {
-      return !_.isUndefined(x) ? x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : '';
-    }
-    setElementsSize() {
-      var windowWidth = jQuery(window).width();
+    setContentHeight() {
       var windowHeight = jQuery(window).height();
-      var offsetTopGroupsWrapper = jQuery('.groups-wrapper').offset().top;
-      var offsetTopGroupsList = jQuery('#groups-list').offset().top;
-      var offsetTopDevicesBar = jQuery('#devices-bar').offset().top + jQuery('#devices-bar').height();
-      var btnSectionsHeight = jQuery('.btn-full-section').length ? 4 * 34 : 0;
-      
       this.setState({
-        groupsWrapperHeight: windowHeight - offsetTopGroupsWrapper,
-        groupsListHeight: windowHeight - offsetTopGroupsList,
-        devicesListHeight: windowHeight - offsetTopDevicesBar - btnSectionsHeight,
+        contentHeight: windowHeight - jQuery('.grey-header').offset().top - jQuery('.grey-header').outerHeight()
       });
     }
     openNewDeviceModal() {
@@ -288,6 +268,13 @@ define(function(require) {
         isRenameGroupModalShown: false,
         renamedGroup: null
       });
+    }
+    showDevicesTooltip(e) {
+      e.preventDefault();
+      this.setState({isDevicesTooltipShown: true});
+    }
+    hideDevicesTooltip() {
+      this.setState({isDevicesTooltipShown: false});
     }
     selectGroup(groupObj) {
       Cookies.set('selectedGroup', groupObj);
@@ -395,185 +382,73 @@ define(function(require) {
     toggleDraggingOverButton(isDragging = false) {
       this.setState({isDraggingOverButton: isDragging});
     }
-    render() {
-      const devices = this.state.devicesData;
-      const searchableDevices = this.state.searchableDevicesData;
-      const searchableDevicesDataNotFilteredByGroup = this.state.searchableDevicesDataNotFilteredByGroup;
-      const searchableProductionDevices = this.state.searchableProductionDevicesData;
-      const groups = this.state.groupsData;
-                           
-      var isDevicesListEmpty = (_.isUndefined(devices) || devices.length) ? false : true;
-      
-      var productionDevicesCount = 0;
-      var totalProductionDevicesCount = 15382448;
-      if(this.state.filterValue.length >= 17) {
-        productionDevicesCount = !_.isUndefined(searchableProductionDevices) ? searchableProductionDevices.length : 0;
-      } else {
-        productionDevicesCount = this.state.filterValue.length > 0 ? this.state.filterValue.length == 16 ? 25 : Math.round(totalProductionDevicesCount / (this.state.filterValue.length * 3499)) : totalProductionDevicesCount;
-      }
-      
-      var areTestSettingsCorrect = localStorage.getItem('firstProductionTestDevice') && localStorage.getItem('firstProductionTestDevice') !== '' && 
-                                   localStorage.getItem('secondProductionTestDevice') && localStorage.getItem('secondProductionTestDevice') !== '' && 
-                                   localStorage.getItem('thirdProductionTestDevice') && localStorage.getItem('thirdProductionTestDevice') !== '' ? true : false;
+    render() {    
       return (
-        <div id="home-content">
-          <div id="groups-column">
-            <div className="panel panel-ats">
-              <div className="panel-heading">
-                <div className="panel-heading-left pull-left">
-                  Groups
+        <div>
+          <DevicesPageHeader 
+            deviceCount={!_.isUndefined(this.state.searchableDevicesData) ? Object.keys(this.state.searchableDevicesData).length : undefined}/>
+          <div id="home-content" style={{height: this.state.contentHeight}}>
+            {!_.isUndefined(this.state.devicesData) && !_.isUndefined(this.state.searchableDevicesData) && !_.isUndefined(this.state.groupsData) ?
+              !_.isEmpty(this.state.devicesData) ?
+                <div>
+                  <GroupsSection 
+                    groups={this.state.groupsData}
+                    devices={this.state.searchableDevicesDataNotFilteredByGroup}
+                    contentHeight={this.state.contentHeight}
+                    filterValue={this.state.filterValue}
+                    draggingDevice={this.state.draggingDevice}
+                    isDraggingOverButton={this.state.isDraggingOverButton}
+                    draggingOverGroup={this.state.draggingOverGroup}
+                    selectedGroup={this.state.selectedGroup}
+                    openNewManualGroupModal={this.openNewManualGroupModal}
+                    onGroupDragOver={this.onGroupDragOver}
+                    selectGroup={this.selectGroup}
+                    toggleDraggingOverButton={this.toggleDraggingOverButton}
+                    openRenameGroupModal={this.openRenameGroupModal}/>
+                  <DevicesSection 
+                    groups={this.state.groupsData}
+                    devices={this.state.devicesData}
+                    searchableDevices={this.state.searchableDevicesData}
+                    productionDevices={this.state.searchableProductionDevicesData}
+                    contentHeight={this.state.contentHeight}
+                    draggingDeviceUUID={this.state.draggingDeviceUUID}
+                    filterValue={this.state.filterValue}
+                    selectedStatus={this.state.selectedStatus}
+                    selectedStatusName={this.state.selectedStatusName}
+                    selectedSort={this.state.selectedSort}
+                    selectStatus={this.selectStatus}
+                    selectSort={this.selectSort}
+                    changeFilter={this.changeFilter}
+                    openNewDeviceModal={this.openNewDeviceModal}
+                    openRenameDeviceModal={this.openRenameDeviceModal}
+                    openNewSmartGroupModal={this.openNewSmartGroupModal}
+                    onDeviceDragStart={this.onDeviceDragStart}
+                    onDeviceDragEnd={this.onDeviceDragEnd}/>
+                </div>
+              : 
+                <div className="height-100 position-relative text-center">
+                  <div className="center-xy padding-15">
+                    <div className="font-22 white">You haven't created any devices yet.</div>
+                    <div>
+                      <button className="btn btn-confirm margin-top-20" onClick={this.openNewDeviceModal}><i className="fa fa-plus"></i> ADD NEW DEVICE</button>
+                    </div>
+                    <div className="margin-top-10">
+                      <a href="#" className="font-18" onClick={this.showDevicesTooltip}>
+                        <span className="color-main"><strong>What is this?</strong></span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+            : undefined}
+            {_.isUndefined(this.state.devicesData) ? 
+              <div className="height-100 position-relative text-center">
+                <div className="center-xy padding-15">
+                  <Loader />
                 </div>
               </div>
-              <div className="panel-body">
-                <div className="groups-wrapper" style={{height: this.state.groupsWrapperHeight}}>
-                  <div className="add-group-btn-wrapper">
-                    <NewManualGroupButton
-                      draggingDevice={this.state.draggingDevice}
-                      isDraggingOverButton={this.state.isDraggingOverButton}
-                      toggleDraggingOverButton={this.toggleDraggingOverButton}
-                      openNewManualGroupModal={this.openNewManualGroupModal}/>
-                  </div>
-              
-                  <div id="groups-list" style={{height: this.state.groupsListHeight}}>
-                    <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-                      {!_.isUndefined(groups) && !_.isUndefined(searchableDevicesDataNotFilteredByGroup) ?
-                        <div>
-                          <GroupsArtificial
-                            groups={groups}
-                            devices={searchableDevicesDataNotFilteredByGroup}
-                            selectGroup={this.selectGroup}
-                            selectedGroup={this.state.selectedGroup}
-                            draggingDevice={this.state.draggingDevice}
-                            draggingOverGroup={this.state.draggingOverGroup}
-                            onGroupDragOver={this.onGroupDragOver}
-                            isDraggingOverButton={this.state.isDraggingOverButton}/>
-                          {groups.length ?
-                            <GroupsList 
-                              groups={groups}
-                              devices={searchableDevicesDataNotFilteredByGroup}
-                              isFiltered={this.state.filterValue != ''}
-                              groupsListHeight={this.state.groupsListHeight}
-                              selectGroup={this.selectGroup}
-                              selectedGroup={this.state.selectedGroup}
-                              openRenameGroupModal={this.openRenameGroupModal}
-                              draggingDevice={this.state.draggingDevice}
-                              draggingOverGroup={this.state.draggingOverGroup}
-                              onGroupDragOver={this.onGroupDragOver}
-                              isDraggingOverButton={this.state.isDraggingOverButton}/>
-                          :
-                            <span>There are no groups</span>
-                          }
-                        </div>
-                      : undefined}
-                    </VelocityTransitionGroup>
-                    {_.isUndefined(groups) || _.isUndefined(searchableDevicesDataNotFilteredByGroup) ?
-                      <Loader />
-                    : undefined}
-                  </div>
-                </div>
-              </div>
-            </div>
+            : undefined}
           </div>
-          <div id="devices-column">
-            <div className="panel panel-ats">
-              <div className="panel-heading">
-                <div className="panel-heading-left pull-left">
-                  Devices
-                </div>
-              </div>
-              <div className="panel-body">
-                <DevicesHeader
-                  changeFilter={this.changeFilter}
-                  filterValue={this.state.filterValue}
-                  selectedStatus={this.state.selectedStatus}
-                  selectedStatusName={this.state.selectedStatusName}
-                  selectedSort={this.state.selectedSort}
-                  selectStatus={this.selectStatus}
-                  selectSort={this.selectSort}
-                  isDevicesListEmpty={isDevicesListEmpty}/>
-          
-                {areTestSettingsCorrect ?
-                  <button className="btn btn-full-section first" onClick={this.expandSection.bind(this, 'testDevices')}>
-                    <i className={(this.state.expandedSectionName == 'testDevices') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> &nbsp;
-                    TEST DEVICES &nbsp;
-                    {!_.isUndefined(searchableDevices) ?
-                      <span>
-                        (
-                          {this.numberWithDots(searchableDevices.length)} 
-                          {!_.isUndefined(devices) ?
-                            <span>
-                              &nbsp;out of {this.numberWithDots(devices.length)}
-                            </span>
-                          : null}
-                        )
-                      </span>
-                    : null}
-                  </button>
-                : null}
-                <div style={{paddingTop: !areTestSettingsCorrect ? '40px' : 0}}>
-                  {!_.isUndefined(searchableDevices) && !_.isUndefined(groups) ?
-                    <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}} runOnMount={true}>
-                      {this.state.expandedSectionName == 'testDevices' ? 
-                        <div>
-                          <div className="devices" style={{height: this.state.devicesListHeight}}>
-                            <DevicesList
-                              devices={searchableDevices}
-                              areProductionDevices={false}
-                              isDevicesListEmpty={isDevicesListEmpty}
-                              openNewDeviceModal={this.openNewDeviceModal}
-                              openRenameDeviceModal={this.openRenameDeviceModal}
-                              openNewSmartGroupModal={this.openNewSmartGroupModal}
-                              draggingDeviceUUID={this.state.draggingDeviceUUID}
-                              onDeviceDragStart={this.onDeviceDragStart}
-                              onDeviceDragEnd={this.onDeviceDragEnd}/>
-                            {this.props.children}
-                          </div>
-                        </div>
-                      : undefined}
-                    </VelocityTransitionGroup>
-                  : undefined}
-                  {_.isUndefined(searchableDevices) || _.isUndefined(groups) ?
-                    <Loader className="white"/>
-                  : undefined}
-                </div>
-                {areTestSettingsCorrect ?
-                  <div>
-                    <button className="btn btn-full-section" onClick={this.expandSection.bind(this, 'productionDevices')}>
-                      <i className={(this.state.expandedSectionName == 'productionDevices') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> PRODUCTION DEVICES ({this.numberWithDots(productionDevicesCount)} out of {this.numberWithDots(totalProductionDevicesCount)})
-                    </button>
-                    <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
-                      {this.state.expandedSectionName == 'productionDevices' ?
-                        <div>
-                          <div className="devices" style={{height: this.state.devicesListHeight}}>
-                            <DevicesList
-                              devices={searchableProductionDevices}
-                              areProductionDevices={true}
-                              productionDeviceName={this.state.filterValue}/>
-                            {this.props.children}
-                          </div>
-                        </div>
-                      : null}
-                    </VelocityTransitionGroup>
-
-                    <button className="btn btn-full-section" onClick={this.expandSection.bind(this, 'packages')}>
-                      <i className={(this.state.expandedSectionName == 'packages') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> PACKAGES ({this.state.filterValue.length  == 0 ? this.numberWithDots(this.state.packagesCount) : this.state.filterValue.length == 1 ? 1 : this.state.filterValue.length == 2 ? 0 : 0} out of {this.numberWithDots(this.state.packagesCount)})
-                    </button>
-                    {this.state.expandedSectionName == 'packages' ?
-                      <div></div>
-                    : null}
-
-                    <button className="btn btn-full-section" onClick={this.expandSection.bind(this, 'campaigns')}>
-                      <i className={(this.state.expandedSectionName == 'campaigns') ? "fa fa-chevron-circle-down" : "fa fa-chevron-circle-right"} aria-hidden="true"></i> CAMPAIGNS ({this.state.filterValue.length  == 0 ? this.numberWithDots(this.state.campaignsCount) : this.state.filterValue.length == 1 ? 1 : this.state.filterValue.length == 2 ? 0 : 0} out of {this.numberWithDots(this.state.campaignsCount)})
-                    </button>
-                    {this.state.expandedSectionName == 'campaigns' ?
-                      <div></div>
-                    : null}
-                  </div>
-                : null}
-              </div>
-            </div>
-          </div>
-      
+            
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {this.state.isNewDeviceModalShown ?
               <NewDevice 
@@ -608,6 +483,12 @@ define(function(require) {
               <RenameGroup
                 group={this.state.renamedGroup}
                 closeRenameGroupModal={this.closeRenameGroupModal}/>
+            : undefined}
+          </VelocityTransitionGroup>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isDevicesTooltipShown ?
+              <DevicesTooltip 
+                hideDevicesTooltip={this.hideDevicesTooltip}/>
             : undefined}
           </VelocityTransitionGroup>
         </div>

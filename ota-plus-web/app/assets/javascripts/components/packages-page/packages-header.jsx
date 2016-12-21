@@ -18,7 +18,7 @@ define(function(require) {
                 {!_.isUndefined(this.props.packageCount) ? 
                   <span>{t('common.packageWithCount', {count: this.props.packageCount})}</span>
                 :
-                  <span><i className="fa fa-square-o fa-spin"></i> package counting</span>
+                  <span><i className="fa fa-square-o fa-spin"></i> packages counting</span>
                 }
               </div>
             </div>

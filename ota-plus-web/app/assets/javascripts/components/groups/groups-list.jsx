@@ -132,23 +132,14 @@ define(function(require) {
                 group={group}
                 selectGroup={this.props.selectGroup}
                 isSelected={this.props.selectedGroup.name == group.groupName && this.props.selectedGroup.type == 'real'}
+                renameGroup={this.renameGroup}
                 groupClassName={groupClassName}/>
-              <div className="dropdown action-menu-dropdown pull-right">
-                <div data-toggle="dropdown">
-                  <i className="fa fa-chevron-down" aria-hidden="true"></i>
-                </div>
-                <ul className="dropdown-menu">
-                  <li onClick={this.renameGroup.bind(this, group)}>
-                    <img src="/assets/img/icons/edit_black.png" alt="" style={{width: '15px'}}/> Rename
-                  </li>
-                </ul>
-              </div>
             </li>
           );
         }
       }, this);
       return (
-        <div>
+        <div className="real-groups">
           {groups}
         </div>
       );

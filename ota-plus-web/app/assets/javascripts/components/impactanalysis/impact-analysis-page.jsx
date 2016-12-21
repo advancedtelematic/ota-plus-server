@@ -81,7 +81,6 @@ define(function(require) {
       this.setState({
         contentHeight: windowHeight - $('.grey-header').offset().top - $('.grey-header').outerHeight()
       });
-      console.log(windowHeight - $('.grey-header').offset().top - $('.grey-header').outerHeight());
     }
     showImpactTooltip(e) {
       e.preventDefault();
@@ -128,7 +127,11 @@ define(function(require) {
             : undefined}
           </VelocityTransitionGroup>
           {_.isUndefined(this.state.blacklistedPackagesData) ? 
-            <Loader />
+            <div className="impact-analysis-empty" style={{height: this.state.contentHeight}}>
+              <div className="center-xy padding-15">
+                <Loader />
+              </div>
+            </div>
           : undefined}
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {this.state.isImpactTooltipShown ?

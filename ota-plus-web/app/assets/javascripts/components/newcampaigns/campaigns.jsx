@@ -215,7 +215,11 @@ define(function(require) {
             : undefined}
           </VelocityTransitionGroup>
           {_.isUndefined(this.state.campaignsData) ? 
-            <Loader />
+            <div className="campaigns-empty" style={{height: this.state.contentHeight}}>
+              <div className="center-xy padding-15">
+                <Loader />
+              </div>
+            </div>
           : undefined}
           
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
