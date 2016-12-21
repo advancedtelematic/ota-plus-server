@@ -22,7 +22,7 @@ define(function(require) {
         isNewPackageModalShown: false,
         isNewCampaignModalShown: false,
         isCampaignWizardShown: false,
-        campaignUUID: null
+        actionCampaign: null
       };
       this.setElementsSize = this.setElementsSize.bind(this);
       this.openNewDeviceModal = this.openNewDeviceModal.bind(this);
@@ -74,7 +74,7 @@ define(function(require) {
     closeNewCampaignModal() {
       this.setState({isNewCampaignModalShown: false});
     }
-    openCampaignWizard(campaignUUID, ifRefreshData = false) {
+    openCampaignWizard(actionCampaign, ifRefreshData = false) {
       if(ifRefreshData) {
         setTimeout(function() {
           SotaDispatcher.dispatch({actionType: 'get-campaigns'});
@@ -83,7 +83,7 @@ define(function(require) {
       this.setState({
         isNewCampaignModalShown: false,
         isCampaignWizardShown: true,
-        campaignUUID: campaignUUID
+        actionCampaign: actionCampaign
       });
     }
     closeCampaignWizard(ifRefreshData = false) {
@@ -98,7 +98,7 @@ define(function(require) {
     }
     configureCampaign(campaignUUID, e) {
       e.preventDefault();
-      this.openCampaignWizard(campaignUUID);
+      this.openCampaignWizard({id: campaignUUID});
     }
     render() {    
       return (
@@ -188,7 +188,7 @@ define(function(require) {
             : null}
             {this.state.isCampaignWizardShown ?
               <CampaignWizard 
-                campaignUUID={this.state.campaignUUID}
+                campaignUUID={this.state.actionCampaign.id}
                 closeWizard={this.closeCampaignWizard}/>
             : null}
           </VelocityTransitionGroup>
