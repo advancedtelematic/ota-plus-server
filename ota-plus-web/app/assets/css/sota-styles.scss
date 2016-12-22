@@ -443,7 +443,7 @@ button {
                             &:hover, &:focus, &:active {
                                 background: #eee;
                             }
-                            
+
                             &.droppable {
                                 &.active {
                                     color: #888;
@@ -3245,6 +3245,10 @@ hr.full-line {
                     padding-left: 15px;
                     padding-right: 15px;
                     vertical-align: middle;
+
+                    &.progress-cell {
+                        padding-right: 65px;
+                    }
                 }
             }
         }
@@ -4664,9 +4668,16 @@ hr.full-line {
                         margin-left: -15px;
                     }
 
-                    & > td:not(:first-child) {
-                        padding-left: 65px !important;
+                    & > td {
+                        &:not(:first-child) {
+                            padding-left: 65px !important;
+                        }
+
+                        &.progress-cell {
+                            padding-right: 25px !important;
+                        }
                     }
+
                 }
 
                 &.actions-active {
@@ -4674,8 +4685,14 @@ hr.full-line {
                         width: 70px;
                     }
 
-                    & > td:not(:first-child) {
-                        padding-left: 85px !important;
+                    & > td { 
+                        &:not(:first-child) {
+                            padding-left: 85px !important;
+                        }
+                        
+                        &.progress-cell {
+                            padding-right: 0px !important;
+                        }
                     }
 
                     ul {
