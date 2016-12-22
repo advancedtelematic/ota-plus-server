@@ -8,14 +8,18 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.renameDevice = this.renameDevice.bind(this);
+      this.goToDetailsPage = this.goToDetailsPage.bind(this);
     }
     renameDevice(e) {
       e.preventDefault();
       e.stopPropagation();
       this.props.openRenameDeviceModal(this.props.device);
     }
-    render() {
+    goToDetailsPage() {
       const link = this.props.isProductionDevice ? 'productiondevicedetails/' + this.props.productionDeviceName : '/devicedetails/' + this.props.device.uuid;
+      this.context.history.pushState(null, link);
+    }
+    render() {
       const lastSeenDate = new Date(this.props.device.lastSeen);
       var deviceName = this.props.device.deviceName;
       var deviceStatus = 'Status unknown';
@@ -33,7 +37,7 @@ define(function(require) {
         break;
       }
       return (
-        <Link to={`${link}`} className="common-box" id={"link-devicedetails-" + this.props.device.uuid} style={{width: this.props.width}}>
+        <div onClick={this.goToDetailsPage} className="common-box" id={"link-devicedetails-" + this.props.device.uuid} style={{width: this.props.width}}>
           <div className="common-box-actions">
             <ul>
               <li onClick={this.renameDevice} title="Rename device" data-toggle="device-tooltip" data-placement="right">
@@ -55,9 +59,13 @@ define(function(require) {
             </div>
             <div className="common-box-subtitle">{this.props.device.groupName ? "Group: " + this.props.device.groupName : "Ungrouped"}</div>
           </div>
-        </Link>
+        </div>
       );
     }
+  };
+  
+  DeviceListItem.contextTypes = {
+    history: React.PropTypes.object.isRequired,
   };
 
   return DeviceListItem;
