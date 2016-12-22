@@ -10,7 +10,9 @@ define(function(require) {
     }
     selectGroup(e) {
       e.preventDefault();
-      if(e.target.className.indexOf('fa') === -1 && e.target.tagName.toLowerCase() !== 'li' && e.target.tagName.toLowerCase() !== 'span')
+      var className = e.target.className;
+      var tagName = e.target.tagName.toLowerCase();
+      if(className.indexOf('fa') === -1 && tagName !== 'li' && tagName !== 'span' && tagName !== 'img')
         this.props.selectGroup({name: this.props.group.groupName, type: 'real', uuid: this.props.group.id});
     }
     render() {

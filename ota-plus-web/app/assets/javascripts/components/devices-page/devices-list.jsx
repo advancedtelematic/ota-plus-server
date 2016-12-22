@@ -101,34 +101,18 @@ define(function(require) {
         }
       }, this);
 
-      var addDeviceButton = (
-        <div className="add-device-btn-wrapper" style={{width: this.state.boxWidth}}>
-          <button type="button" className="btn btn-rect" onClick={this.props.openNewDeviceModal}><i className="fa fa-plus"></i> Add new Device</button>
-        </div>
-      );
-
       return (
         <div id="devices-list">
           <div id="devices-container" className="container">
             {devicesList.length > 0 ?
-              <div>
-                {!this.props.areProductionDevices && (_.isUndefined(this.props.isDND) || this.props.isDND) ?
-                  addDeviceButton
-                : null}
-                {devicesList}
-              </div>
+              devicesList
             :
-              <div>
-                {!this.props.areProductionDevices && (_.isUndefined(this.props.isDND) || this.props.isDND) ?
-                  addDeviceButton
-                : null}
-                <div className="col-md-12 text-center center-xy">
-                  {this.props.areProductionDevices ?
-                    <span className="font-24">Oops, there are too many devices to show.</span>
-                  :
-                    <span className="font-24">Oops, there are no devices to show.</span>
-                  }
-                </div>
+              <div className="col-md-12 text-center center-xy">
+                {this.props.areProductionDevices ?
+                  <span className="font-24">Oops, there are too many devices to show.</span>
+                :
+                  <span className="font-24">Oops, there are no devices to show.</span>
+                }
               </div>
             }
           </div>
