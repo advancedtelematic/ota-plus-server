@@ -1,5 +1,6 @@
 define(function(require) {
   var React = require('react'),
+      db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
       HomePageHeader = require('./home-page-header'),
@@ -34,6 +35,8 @@ define(function(require) {
       this.openCampaignWizard = this.openCampaignWizard.bind(this);
       this.closeCampaignWizard = this.closeCampaignWizard.bind(this);
       this.configureCampaign = this.configureCampaign.bind(this);
+      this.handleUpdateSpec = this.handleUpdateSpec.bind(this);
+      db.updateSpec.addWatch("homepage-updatespec-campaigns", _.bind(this.handleUpdateSpec, this, null));
     }
     componentDidMount() {
       this.setElementsSize();
@@ -41,6 +44,7 @@ define(function(require) {
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setElementsSize);
+      db.updateSpec.removeWatch("homepage-updatespec-campaigns");
     }
     setElementsSize() {
       var wrapperHeight = $('.wrapper').height();
@@ -99,6 +103,12 @@ define(function(require) {
     configureCampaign(campaignUUID, e) {
       e.preventDefault();
       this.openCampaignWizard({id: campaignUUID});
+    }
+    handleUpdateSpec() {
+      var updateSpec = db.updateSpec.deref();
+      if(!_.isUndefined(updateSpec)) {
+        SotaDispatcher.dispatch({actionType: 'get-campaigns'});
+      }
     }
     render() {    
       return (
