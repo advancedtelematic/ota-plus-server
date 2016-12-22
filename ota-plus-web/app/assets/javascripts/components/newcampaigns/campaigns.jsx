@@ -9,6 +9,7 @@ define(function(require) {
       CampaignsList = require('./campaigns-list'),
       CampaignCreate = require('./campaign-create'),
       CampaignWizard = require('./wizard/wizard'),
+      CampaignRename = require('./campaign-rename'),
       CampaignTooltip = require('./campaign-tooltip');
       
   class Campaigns extends React.Component {
@@ -23,7 +24,8 @@ define(function(require) {
         contentHeight: 300,
         isCreateModalShown: false,
         isWizardShown: false,
-        campaignUUID: null,
+        isRenameModalShown: false,
+        actionCampaign: null,
         isCampaignTooltipShown: false,
       };
       this.setCampaignsData = this.setCampaignsData.bind(this);
@@ -33,6 +35,8 @@ define(function(require) {
       this.closeCreateModal = this.closeCreateModal.bind(this);
       this.closeWizard = this.closeWizard.bind(this);
       this.openWizard = this.openWizard.bind(this);
+      this.openRenameModal = this.openRenameModal.bind(this);
+      this.closeRenameModal = this.closeRenameModal.bind(this);
       this.showCampaignTooltip = this.showCampaignTooltip.bind(this);
       this.hideCampaignTooltip = this.hideCampaignTooltip.bind(this);
       this.handleDeviceSeen = this.handleDeviceSeen.bind(this);
@@ -124,7 +128,7 @@ define(function(require) {
         isCreateModalShown: false
       });
     }
-    openWizard(campaignUUID, ifRefreshData = false) {
+    openWizard(campaign, ifRefreshData = false) {
       if(ifRefreshData) {
         setTimeout(function() {
           SotaDispatcher.dispatch({actionType: 'get-campaigns'});
@@ -133,7 +137,7 @@ define(function(require) {
       this.setState({
         isCreateModalShown: false,
         isWizardShown: true,
-        campaignUUID: campaignUUID
+        actionCampaign: campaign
       });
     }
     closeWizard(ifRefreshData = false) {
@@ -143,7 +147,25 @@ define(function(require) {
         }, 1);
       }
       this.setState({
-        isWizardShown: false
+        isWizardShown: false,
+        actionCampaign: null
+      });
+    }
+    openRenameModal(campaign) {
+      this.setState({
+        isRenameModalShown: true,
+        actionCampaign: campaign
+      });
+    }
+    closeRenameModal(ifRefreshData = false) {
+      if(ifRefreshData) {
+        setTimeout(function() {
+          SotaDispatcher.dispatch({actionType: 'get-campaigns'});
+        }, 1);
+      }
+      this.setState({
+        isRenameModalShown: false,
+        actionCampaign: null
       });
     }
     showCampaignTooltip(e) {
@@ -190,11 +212,12 @@ define(function(require) {
                       <CampaignsList 
                         campaigns={this.state.campaigns}
                         campaignsData={this.state.campaignsData}
-                        openWizard={this.openWizard}
-                        filterValue={this.state.filterValue}
+                        contentHeight={this.state.contentHeight}
                         selectedSort={this.state.selectedSort}
+                        filterValue={this.state.filterValue}
+                        openWizard={this.openWizard}
                         openCreateModal={this.openCreateModal}
-                        contentHeight={this.state.contentHeight}/>
+                        openRenameModal={this.openRenameModal}/>
                     </div>
                   </div>
                 </div>
@@ -230,9 +253,16 @@ define(function(require) {
             : null}
             {this.state.isWizardShown ?
               <CampaignWizard 
-                campaignUUID={this.state.campaignUUID}
+                campaignUUID={this.state.actionCampaign.id}
                 closeWizard={this.closeWizard}/>
             : null}
+          </VelocityTransitionGroup>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isRenameModalShown ?
+              <CampaignRename 
+                closeModal={this.closeRenameModal}
+                campaign={this.state.actionCampaign}/>
+            : undefined}
           </VelocityTransitionGroup>
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {this.state.isCampaignTooltipShown ?

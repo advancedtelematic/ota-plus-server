@@ -61,7 +61,7 @@ define(function(require) {
                 <div className="modal-body">
                   <Responses action="rename-group" handledStatuses="error"/>
                   <div className="form-group">
-                    <label htmlFor="groupName">Name</label>
+                    <label htmlFor="groupName">New group name</label>
                     <input type="text" className="form-control" name="groupName"
                          ref="groupName" defaultValue={this.props.group.groupName}/>
                   </div>

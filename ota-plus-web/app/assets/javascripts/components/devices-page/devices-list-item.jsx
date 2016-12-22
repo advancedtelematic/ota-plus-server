@@ -36,7 +36,7 @@ define(function(require) {
         <Link to={`${link}`} className="device-box" id={"link-devicedetails-" + this.props.device.uuid} style={{width: this.props.width}}>
           <div className="device-actions">
             <ul>
-              <li onClick={this.renameDevice}>
+              <li onClick={this.renameDevice} title="Rename device">
                 <img src="/assets/img/icons/edit_white.png" alt="" />
               </li>
             </ul>

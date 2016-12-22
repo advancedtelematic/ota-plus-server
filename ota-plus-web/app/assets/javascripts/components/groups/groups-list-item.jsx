@@ -19,7 +19,7 @@ define(function(require) {
         <button type="button" className={"list-group-item " + this.props.groupClassName + (this.props.isSelected ? " checked" : "")} onClick={this.selectGroup} id={"button-group-" + this.props.group.groupName}>
           <div className="group-actions">
             <ul>
-              <li onClick={this.props.renameGroup.bind(this, this.props.group)}>
+              <li onClick={this.props.renameGroup.bind(this, this.props.group)} title="Rename group">
                 <img src="/assets/img/icons/edit_white.png" alt="" />
               </li>
             </ul>
