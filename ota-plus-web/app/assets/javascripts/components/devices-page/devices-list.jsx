@@ -102,15 +102,15 @@ define(function(require) {
 
       return (
         <div id="devices-list">
-          <div className="container intend-container">
+          <div className="container intend-container height-100">
             {devicesList.length > 0 ?
               devicesList
             :
               <div className="col-md-12 text-center center-xy">
                 {this.props.areProductionDevices ?
-                  <span className="font-24">Oops, there are too many devices to show.</span>
+                  <span className="font-24 white">Oops, there are too many devices to show.</span>
                 :
-                  <span className="font-24">Oops, there are no devices to show.</span>
+                  <span className="font-24 white">Oops, there are no devices to show.</span>
                 }
               </div>
             }
