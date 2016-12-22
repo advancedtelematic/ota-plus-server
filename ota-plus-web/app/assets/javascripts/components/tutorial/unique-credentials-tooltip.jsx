@@ -40,7 +40,7 @@ define(function(require) {
                     <div className="form-row-title">Polling interval:</div>
                   </div>
                   <div className="col-md-6">
-                    <input type="number" className="form-control" defaultValue="60" min="10" name="polling_interval" ref="pollingInterval" />
+                    <input type="number" className="form-control" defaultValue="60" min="10" name="polling_interval" ref="pollingInterval" onKeyDown={function(e) {e.preventDefault();return false;}}/>
                   </div>
                 </div>
               </div>
