@@ -370,6 +370,7 @@ define(function(require) {
       });
     }
     onDeviceDragEnd(e) {
+        console.log('end');
       this.setState({
         draggingDevice: null,
         draggingOverGroup: null,
@@ -418,7 +419,7 @@ define(function(require) {
                     searchableDevices={this.state.searchableDevicesData}
                     productionDevices={this.state.searchableProductionDevicesData}
                     contentHeight={this.state.contentHeight}
-                    draggingDeviceUUID={this.state.draggingDeviceUUID}
+                    draggingDevice={this.state.draggingDevice}
                     filterValue={this.state.filterValue}
                     selectedStatus={this.state.selectedStatus}
                     selectedStatusName={this.state.selectedStatusName}

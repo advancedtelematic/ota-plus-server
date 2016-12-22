@@ -81,7 +81,7 @@ define(function(require) {
                           areProductionDevices={false}
                           openRenameDeviceModal={this.props.openRenameDeviceModal}
                           openNewSmartGroupModal={this.props.openNewSmartGroupModal}
-                          draggingDeviceUUID={this.props.draggingDeviceUUID}
+                          draggingDevice={this.props.draggingDevice}
                           onDeviceDragStart={this.props.onDeviceDragStart}
                           onDeviceDragEnd={this.props.onDeviceDragEnd}/>
                       </div>
