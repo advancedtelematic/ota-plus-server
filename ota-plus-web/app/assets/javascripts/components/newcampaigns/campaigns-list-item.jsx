@@ -8,6 +8,26 @@ define(function(require) {
   class CampaignsListItem extends React.Component {
     constructor(props) {
       super(props);
+      this.state = {
+        isMouseOverActions: false,
+      };
+      this.campaignClick = this.campaignClick.bind(this);
+      this.actionsMouseEnter = this.actionsMouseEnter.bind(this);
+      this.actionsMouseLeave = this.actionsMouseLeave.bind(this);
+    }
+    campaignClick(e) {
+      if(e.currentTarget.className.indexOf('actions-active') === -1)
+        this.props.campaign.launched ? this.props.goToCampaignDetails(this.props.campaign.id) : this.props.configureCampaign(this.props.campaign);
+    }
+    actionsMouseEnter() {
+      this.setState({
+        isMouseOverActions: true
+      });
+    }
+    actionsMouseLeave() {
+      this.setState({
+        isMouseOverActions: false
+      });
     }
     render() {
       var campaign = this.props.campaign;
@@ -33,16 +53,18 @@ define(function(require) {
             label: "Cancelled rate"
           }];
       }
-      var link = 'campaigndetails/' + campaign.id;
-      
       return (
-        <tr>
-          <td className="font-14">
-            {campaign.launched ? 
-              <Link to={`${link}`} className="black">{campaign.name}</Link>
-            :
-              campaign.name
-            }
+        <tr className={this.state.isMouseOverActions ? "actions-active" : ""} onClick={this.campaignClick}>
+          <td>
+            <div className="campaign-actions" onMouseEnter={this.actionsMouseEnter} onMouseLeave={this.actionsMouseLeave}>
+              <ul>
+                <li title="Rename campaign" onClick={this.props.openRenameModal.bind(this, campaign)}>
+                  <img src="/assets/img/icons/edit_white.png" alt="" />
+                  <div>Rename</div>
+                </li>
+              </ul>
+            </div>
+            {campaign.name}
           </td>
           <td>none</td>
           <td>none</td>
@@ -67,9 +89,7 @@ define(function(require) {
           <td>
             {campaign.launched ? 
               <PieChart data={data} width="30" height="30" options={{showTooltips: false}}/>
-            :
-              <a href="#" className="black" onClick={this.props.configureCampaign.bind(this, campaign.id)}>Configure</a>
-            }
+            : null}
           </td>
         </tr>
       );
