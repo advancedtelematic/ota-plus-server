@@ -302,6 +302,31 @@ button {
                 img {
                     width: 20px;
                 }
+
+                div {
+                    font-size: 11px;
+                    margin: 0 0 0 3px;
+                    transition: opacity 0.2s ease-in;
+                    display: inline-block;
+                    vertical-align: sub;
+                    opacity: 0;
+                }
+            }
+        }
+    }
+
+    &.actions-active {
+        .common-box-actions {
+            width: 90px;
+        }
+
+        ul {
+            li {
+                width: 100%;
+
+                div {
+                    opacity: 1;
+                }
             }
         }
     }
@@ -313,6 +338,12 @@ button {
 
         .common-box-desc {
             width: 55%;
+        }
+        
+        &.actions-active {
+            .common-box-desc {
+                width: 45%;
+            }
         }
     }
 }
@@ -519,9 +550,35 @@ button {
                                     line-height: 92px;
                                     height: 100%;
                                     display: block;
+                                    transition: all 0.2s ease-in;
 
                                     img {
                                         width: 20px;
+                                    }
+
+                                    div {
+                                        font-size: 11px;
+                                        margin: 0 0 0 3px;
+                                        transition: opacity 0.2s ease-in;
+                                        display: inline-block;
+                                        vertical-align: sub;
+                                        opacity: 0;
+                                    }
+                                }
+                            }
+                        }
+
+                        .actions-active {
+                            .group-actions {
+                                width: 90px;
+                            }
+
+                            ul {
+                                li {
+                                    width: 100%;
+
+                                    div {
+                                        opacity: 1;
                                     }
                                 }
                             }
@@ -535,6 +592,12 @@ button {
 
                                 .group-text {
                                     width: 45%;
+                                }
+
+                                .actions-active {
+                                    .group-text {
+                                        width: 37%;
+                                    }
                                 }
                             }
                         }
@@ -560,6 +623,8 @@ button {
                     top: -5px;
                     left: 32px;
                 }
+
+
             }
         }
     }
@@ -625,7 +690,7 @@ button {
             font-size: 12px;
             position: absolute;
             top: 10px;
-            right: 10px;
+            right: 15px;
         }
     }
 
@@ -4689,7 +4754,7 @@ hr.full-line {
                         &:not(:first-child) {
                             padding-left: 85px !important;
                         }
-                        
+
                         &.progress-cell {
                             padding-right: 0px !important;
                         }
