@@ -9,7 +9,6 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        campaignsData: undefined,
         campaignsWrapperHeight: this.props.contentHeight
       };
       this.goToCampaignDetails = this.goToCampaignDetails.bind(this);
