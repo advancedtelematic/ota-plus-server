@@ -60,7 +60,8 @@ define(function(require) {
               </div>
               <div id="overview-section" className="height-100">
                 <UsageOverviewSection 
-                  month={this.state.month}/>
+                  month={this.state.month}
+                  year={this.state.year}/>
               </div>
             </div>
           </div>

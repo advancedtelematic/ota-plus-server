@@ -165,6 +165,12 @@ define(function(require) {
               .success(function() {
               });
           break;
+          case 'get-active-devices-per-month':
+            sendRequest.doGet('/api/v1/auditor/devices_seen_in/' + payload.year + '/' + payload.month, {action: payload.actionType})
+              .success(function(activeDevicesPerMonth) {
+                db.activeDevicesPerMonth.reset(activeDevicesPerMonth);
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));
