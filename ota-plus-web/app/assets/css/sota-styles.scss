@@ -339,7 +339,7 @@ button {
         .common-box-desc {
             width: 55%;
         }
-        
+
         &.actions-active {
             .common-box-desc {
                 width: 45%;
@@ -750,6 +750,12 @@ button {
         }
 
         .devices-status-switch {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
             float: right;
 
             .switch {
@@ -2950,7 +2956,7 @@ a.close, button.close {
 }
 
 .package-item-name {
-    width: 60%;
+    width: 50%;
     @include textoverflow-ellipsis;
 }
 
