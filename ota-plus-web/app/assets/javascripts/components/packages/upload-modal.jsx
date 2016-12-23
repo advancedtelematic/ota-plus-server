@@ -333,7 +333,12 @@ define(function(require) {
                         <i className="fa fa-angle-down fa-3x toggle-modal-size" aria-hidden="true"></i>
                       }
                     </a>
-                    <a href="#" onClick={this.handleClose} className="pull-right" title="Close"><i className="fa fa-close close-upload-modal" aria-hidden="true"></i></a>
+                    <a href="#" onClick={this.handleClose} title="Close">
+                      <span className="fa-stack close-x">
+                        <i className="fa fa-angle-down fa-stack-2x"></i>
+                        <i className="fa fa-angle-up fa-stack-2x"></i>
+                      </span>
+                    </a>
                     <h4 className="modal-title">Uploading {Object.keys(this.state.data).length} package{Object.keys(this.state.data).length > 1 ? "s" : ""}</h4>
                   </div>
                   <div className="modal-body">
