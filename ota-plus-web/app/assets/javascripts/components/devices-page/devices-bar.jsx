@@ -1,7 +1,5 @@
 define(function(require) {
   var React = require('react'),
-      Router = require('react-router'),
-      Link = Router.Link,
       SearchBar = require('../searchbar');
         
   class DevicesHeader extends React.Component {
@@ -38,6 +36,9 @@ define(function(require) {
                 </ul>
               </div>
             </div>
+            <button className="btn btn-main btn-add pull-right" onClick={this.props.openNewDeviceModal}>
+              <i className="fa fa-plus"></i> &nbsp; Add new device
+            </button>
           </div>
         </div>
       );
