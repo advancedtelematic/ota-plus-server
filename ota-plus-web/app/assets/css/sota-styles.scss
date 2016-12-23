@@ -285,7 +285,7 @@ button {
     }
 
     .group-icon {
-        background-image: url(/assets/img/icons/group_small.png);
+        background-image: url(/assets/img/icons/groups.png);
         margin-top: 15px;
         margin-left: 15px;
     }
@@ -450,6 +450,8 @@ button {
                             height: 94px;
                             padding: 0;
                             transition: background-color 0.3s ease-in;
+                            border-left: 0;
+                            border-right: 0;
                             border-radius: 0;
 
                             &.droppable {
@@ -473,7 +475,7 @@ button {
                     }
 
                     .group-icon {
-                        background-image: url(/assets/img/icons/group_large_grey.png);
+                        background-image: url(/assets/img/icons/groups.png);
                         float: none;
                         display: inline-block;
                         vertical-align: middle;
@@ -2961,7 +2963,7 @@ hr.full-line {
 
 .group {
     .grey-header-icon {
-        background-image: url(/assets/img/icons/group_large.png);
+        background-image: url(/assets/img/icons/groups.png);
     }
 
     #group-devices-list {
@@ -3216,7 +3218,7 @@ hr.full-line {
 
 #campaign, #modal-campaign-create {
     .group-icon {
-        background-image: url(/assets/img/icons/group_large_grey.png);
+        background-image: url(/assets/img/icons/groups.png);
         float: none;
         display: inline-block;
         vertical-align: middle;
@@ -3974,12 +3976,6 @@ hr.full-line {
     }
 }
 
-.add-device-btn-wrapper {
-    vertical-align: top;
-    padding: 20px 0 0 15px;
-    display: inline-block;
-}
-
 .add-group-btn-wrapper {
     text-align: center;
     padding: 30px 0;
@@ -4110,7 +4106,7 @@ hr.full-line {
                             }
 
                             .group-icon {
-                                background-image: url(/assets/img/icons/group_large_grey.png);
+                                background-image: url(/assets/img/icons/groups.png);
                                 width: 40px;
                                 height: 40px;
                             }
