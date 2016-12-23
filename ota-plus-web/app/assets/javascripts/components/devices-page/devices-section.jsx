@@ -75,16 +75,15 @@ define(function(require) {
                 <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}} runOnMount={true}>
                   {this.state.expandedSectionName == 'testDevices' ? 
                     <div>
-                      <div className="devices" style={{height: this.state.devicesListHeight}}>
-                        <DevicesList
-                          devices={this.props.searchableDevices}
-                          areProductionDevices={false}
-                          openRenameDeviceModal={this.props.openRenameDeviceModal}
-                          openNewSmartGroupModal={this.props.openNewSmartGroupModal}
-                          draggingDevice={this.props.draggingDevice}
-                          onDeviceDragStart={this.props.onDeviceDragStart}
-                          onDeviceDragEnd={this.props.onDeviceDragEnd}/>
-                      </div>
+                      <DevicesList
+                        devices={this.props.searchableDevices}
+                        areProductionDevices={false}
+                        openRenameDeviceModal={this.props.openRenameDeviceModal}
+                        openNewSmartGroupModal={this.props.openNewSmartGroupModal}
+                        draggingDevice={this.props.draggingDevice}
+                        onDeviceDragStart={this.props.onDeviceDragStart}
+                        onDeviceDragEnd={this.props.onDeviceDragEnd}
+                        devicesListHeight={this.state.devicesListHeight}/>
                     </div>
                   : undefined}
                 </VelocityTransitionGroup>
