@@ -398,15 +398,12 @@ button {
 }
 
 .page-devices {
-    .devices {
-        overflow-y: scroll;
-        overflow-x: hidden;
-    }
-
     #devices-list {
         width: 100%;
         height: 100%;
         padding: 20px 0 0 0;
+        overflow-y: scroll;
+        overflow-x: hidden;
     }
 
     #devices-bar {
