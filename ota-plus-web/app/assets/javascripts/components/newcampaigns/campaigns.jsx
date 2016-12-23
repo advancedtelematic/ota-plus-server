@@ -16,9 +16,8 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        campaigns: undefined,
         campaignsData: undefined,
-        campaignsDataNotChanged: undefined,
+        campaignCount: undefined,
         filterValue: '',
         selectedSort: 'asc',
         contentHeight: 300,
@@ -52,6 +51,7 @@ define(function(require) {
       window.removeEventListener("resize", this.setContentHeight);
       db.campaigns.removeWatch("poll-campaigns");
       db.deviceSeen.removeWatch("poll-deviceseen-campaigns");
+      db.campaigns.reset();
     }
     setCampaignsData(filterValue, selectedSort) {    
       var campaigns = db.campaigns.deref();
@@ -100,7 +100,10 @@ define(function(require) {
             }
           }
         });
-        this.setState({campaignsData: campaigns, campaigns: groupedCampaigns});
+        this.setState({
+          campaignsData: groupedCampaigns,
+          campaignCount: Object.keys(campaigns).length
+        });
       }
     }
     changeFilter(filter) {
@@ -128,7 +131,7 @@ define(function(require) {
         isCreateModalShown: false
       });
     }
-    openWizard(campaign, ifRefreshData = false) {
+    openWizard(campaign, ifRefreshData = false) {    
       if(ifRefreshData) {
         setTimeout(function() {
           SotaDispatcher.dispatch({actionType: 'get-campaigns'});
@@ -177,7 +180,7 @@ define(function(require) {
     }
     handleDeviceSeen() {
       var deviceSeen = db.deviceSeen.deref();
-      if(!_.isUndefined(deviceSeen) && !_.isUndefined(this.props.campaignsData)) {
+      if(!_.isUndefined(deviceSeen)) {
         SotaDispatcher.dispatch({actionType: 'get-campaigns'});
       }
     }
@@ -185,10 +188,10 @@ define(function(require) {
       return (
         <div>
           <CampaignsHeader 
-            campaignCount={!_.isUndefined(this.state.campaignsData) ? Object.keys(this.state.campaignsData).length : undefined}/>
+            campaignCount={this.state.campaignCount}/>
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-            {!_.isUndefined(db.campaigns.deref()) ? 
-              !_.isEmpty(db.campaigns.deref()) ?
+            {!_.isUndefined(this.state.campaignCount) ? 
+              this.state.campaignCount ?
                 <div className="panel panel-ats" style={{height: this.state.contentHeight}}>
                   <div className="panel-body">
                     <div className="panel-subheading">
@@ -210,8 +213,7 @@ define(function(require) {
                     </div>
                     <div id="campaigns-wrapper">
                       <CampaignsList 
-                        campaigns={this.state.campaigns}
-                        campaignsData={this.state.campaignsData}
+                        campaigns={this.state.campaignsData}
                         contentHeight={this.state.contentHeight}
                         selectedSort={this.state.selectedSort}
                         filterValue={this.state.filterValue}

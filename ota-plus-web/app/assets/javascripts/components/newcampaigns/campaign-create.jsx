@@ -14,7 +14,6 @@ define(function(require) {
       this.closeModal = this.closeModal.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleResponse = this.handleResponse.bind(this);
-      
       db.postStatus.addWatch("poll-create-new-campaign", _.bind(this.handleResponse, this, null));
     }
     componentWillUnmount() {
@@ -22,7 +21,6 @@ define(function(require) {
     }
     handleSubmit(e) {
       e.preventDefault();
-      
       SotaDispatcher.dispatch({
         actionType: 'create-campaign',
         data: {name: this.refs.campaignName.value}
@@ -36,7 +34,7 @@ define(function(require) {
           var response = postStatus['create-campaign'].response;
           delete postStatus['create-campaign'];
           db.postStatus.reset(postStatus);
-          this.props.openWizard(response, true);
+          this.props.openWizard({id: response}, true);
         }
       }
     }
