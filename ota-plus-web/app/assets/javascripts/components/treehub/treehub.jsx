@@ -87,7 +87,7 @@ define(function(require) {
           <div>
             <TreehubHeader />
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-              {!_.isUndefined(this.state.features) && (this.state.features.indexOf('treehub') < 0) ?
+              {!_.isUndefined(this.state.features) ?
                 this.state.features.indexOf('treehub') < 0 ?
                   <div className="treehub-disabled" style={{height: this.state.contentHeight}}>
                     <div className="center-xy padding-15">
@@ -109,7 +109,6 @@ define(function(require) {
                       <div className="margin-top-20">
                         <a href="/api/v1/features/treehub/client" className="btn btn-confirm" target="_blank">Download</a>
                       </div>
-                      
                       <div className="margin-top-40">
                         <div className="panel panel-grey">
                           <div className="panel-heading">
@@ -135,14 +134,15 @@ define(function(require) {
                       </div>
                     </div>
                   </div>
-              : 
-                <div className="treehub-disabled" style={{height: this.state.contentHeight}}>
-                  <div className="center-xy padding-15">
-                    <Loader />
-                  </div>
-                </div>
-              }
+              : undefined}
             </VelocityTransitionGroup>
+            {_.isUndefined(this.state.features) ? 
+              <div className="treehub-disabled" style={{height: this.state.contentHeight}}>
+                <div className="center-xy padding-15">
+                  <Loader />
+                </div>
+              </div>
+            : undefined}
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
               {this.state.isTreehubTooltipShown ?
                 <ModalTooltip 
