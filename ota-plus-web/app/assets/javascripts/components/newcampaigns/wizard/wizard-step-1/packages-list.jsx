@@ -31,7 +31,6 @@ define(function(require) {
       this.setData = this.setData.bind(this);
       this.prepareData = this.prepareData.bind(this);
       this.expandPackage = this.expandPackage.bind(this);
-      this.compareVersions = this.compareVersions.bind(this);
       this.choosePackage = this.choosePackage.bind(this);
       this.generatePositions = this.generatePositions.bind(this);
       this.setFakeHeader = this.setFakeHeader.bind(this);
@@ -155,16 +154,13 @@ define(function(require) {
             GroupedPackages[obj.id.name]['elements'] = [];
             GroupedPackages[obj.id.name]['packageName'] = obj.id.name;
           }
-                    
           GroupedPackages[obj.id.name]['elements'].push(Packages[index]);
         });
         
         _.each(GroupedPackages, function(obj, index) {
-          GroupedPackages[index]['elements'] = obj['elements'].sort(function (a, b) {
-            var aVersion = a.id.version;
-            var bVersion = b.id.version;
-            return that.compareVersions(bVersion, aVersion);
-          });
+          GroupedPackages[index]['elements'] = _.sortBy(obj['elements'], function(pack) {
+            return pack.createdAt;
+          }).reverse();
         });
 
         SortedPackages = {};
@@ -195,30 +191,6 @@ define(function(require) {
           expandedPackage: name
         });
       }
-    }
-    compareVersions(a, b) {
-      if (a === b) {
-       return 0;
-      }
-      var a_components = a.split(".");
-      var b_components = b.split(".");
-      var len = Math.min(a_components.length, b_components.length);
-
-      for (var i = 0; i < len; i++) {
-        if (parseInt(a_components[i]) > parseInt(b_components[i])) {
-          return 1;
-        }
-        if (parseInt(a_components[i]) < parseInt(b_components[i])) {
-          return -1;
-        }
-      }
-      if (a_components.length > b_components.length) {
-        return 1;
-      }
-      if (a_components.length < b_components.length) {
-        return -1;
-      }
-      return 0;
     }
     choosePackage(name, version) {
       this.setState({
