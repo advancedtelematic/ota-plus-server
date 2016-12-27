@@ -33,11 +33,11 @@ define(function(require) {
       window.removeEventListener("resize", this.setBoxesWidth);
     }
     setBoxesWidth() {
-      var containerWidth = $('#devices-container > div').innerWidth();
+      var containerWidth = $('#devices-container').width();
       var minBoxWidth = 350;
       var howManyBoxesPerRow = Math.floor(containerWidth / minBoxWidth);
       this.setState({
-        boxWidth: Math.floor(containerWidth / howManyBoxesPerRow) - 5,
+        boxWidth: Math.floor(containerWidth / howManyBoxesPerRow),
       });
     }
     onDragEnter(e) {
