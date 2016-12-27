@@ -9,7 +9,7 @@ GET     /                                        org.genivi.webserver.controller
 GET     /assets/*file                            controllers.Assets.versioned(path="/public", file: Asset)
 GET     /webjars/*file                           controllers.WebJarAssets.at(file)
 
-GET     /api/v1/client/:uuid/:artifact/:arch org.genivi.webserver.controllers.ClientSdkController.downloadClientSdk(uuid: Uuid, artifact: ArtifactType, arch: Architecture)
+GET     /api/v1/device_client/:uuid/:artifact    org.genivi.webserver.controllers.ClientSdkController.deviceClientDownload(uuid: Uuid, artifact: ArtifactType)
 POST    /api/v1/clients                          com.advancedtelematic.clients.ClientsController.createClient
 GET     /api/v1/clients                          com.advancedtelematic.clients.ClientsController.getClients
 GET     /api/v1/clients/:uuid                    com.advancedtelematic.clients.ClientsController.getClient(uuid: Uuid)

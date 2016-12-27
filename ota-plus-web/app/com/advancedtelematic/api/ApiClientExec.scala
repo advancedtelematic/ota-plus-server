@@ -5,8 +5,9 @@ import javax.inject.Inject
 import com.fasterxml.jackson.core.JsonParseException
 import play.api.http.HttpEntity
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Reads}
-import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
+import play.api.libs.ws.{StreamedResponse, WSClient, WSRequest, WSResponse}
 import play.api.mvc.{ResponseHeader, Result}
+import play.api.mvc.Results.Ok
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -40,6 +41,23 @@ class ApiClientExec @Inject()(wsClient: WSClient)(implicit ec: ExecutionContext)
     }
   }
 
+  def runStreamedResult(request: WSClient => WSRequest): Future[Result] = {
+    request(wsClient).stream().map {
+      case StreamedResponse(resp, body) =>
+        val contentType = resp.headers.get("Content-Type").flatMap(_.headOption)
+          .getOrElse("application/octet-stream")
+
+        // If there's a content length, send that, otherwise return the body chunked
+        val resultBody = resp.headers.get("Content-Length") match {
+          case Some(Seq(length)) =>
+            HttpEntity.Streamed(body, Some(length.toLong), Some(contentType))
+          case _ =>
+            Ok.chunked(body).as(contentType).body
+        }
+        Result(toResultHeader(resp.status, resp.headers), resultBody)
+    }
+  }
+
   def runSafe(request: WSClient => WSRequest): Future[WSResponse] = {
     run(request(wsClient))
       .recoverWith { case t => Future.failed(RemoteApiIOError(t)) }
@@ -63,13 +81,16 @@ class ApiClientExec @Inject()(wsClient: WSClient)(implicit ec: ExecutionContext)
   }
 
   private val toResult: WSResponse => Result = { resp =>
-    val resultHeaders = resp.allHeaders
-      .filterNot { case (k, v) => k == "Content-Length" }
-      .mapValues(_.head)
-
     Result(
-      header = ResponseHeader(resp.status, resultHeaders),
+      header = toResultHeader(resp.status, resp.allHeaders),
       body = HttpEntity.Strict(resp.bodyAsBytes, None)
+    )
+  }
+
+  private val toResultHeader: (Int, Map[String, Seq[String]]) => ResponseHeader = { (status, headers) =>
+    ResponseHeader(
+      status,
+      headers.filterNot { case (k, v) => k == "Content-Length" }.mapValues(_.head)
     )
   }
 }

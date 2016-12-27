@@ -74,8 +74,8 @@ define(function(require) {
                             Download the OTA Plus Client for<br />
                             your distro/system architecture.
                             <div className="margin-top-20">
-                              <a href={"/api/v1/client/" + this.props.deviceUUID + "/deb/64"} className="btn btn-confirm btn-ota-client" target="_blank">DEB Intel 64</a>
-                              <a href={"/api/v1/client/" + this.props.deviceUUID + "/rpm/64"} className="btn btn-confirm btn-ota-client" target="_blank">RPM Intel 64</a>
+                              <a href={"/api/v1/device_client/" + this.props.deviceUUID + "/deb?package_manager=deb"} className="btn btn-confirm btn-ota-client" target="_blank">DEB Intel 64</a>
+                              <a href={"/api/v1/device_client/" + this.props.deviceUUID + "/rpm?package_manager=rpm"} className="btn btn-confirm btn-ota-client" target="_blank">RPM Intel 64</a>
                             </div>
                           </div>
                         </div>

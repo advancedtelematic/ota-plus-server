@@ -10,7 +10,7 @@ define(function(require) {
     handleDownload() {
       var packageManager = this.refs.packageManager.value;
       var pollingInterval = this.refs.pollingInterval.value;
-      var link = "/api/v1/client/" + this.props.deviceUUID + "/toml/64?package_manager=" + packageManager + "&polling_interval=" + pollingInterval;
+      var link = "/api/v1/device_client/" + this.props.deviceUUID + "/toml?package_manager=" + packageManager + "&polling_sec=" + pollingInterval;
       window.open(link, '_blank');
     }
     render() {
