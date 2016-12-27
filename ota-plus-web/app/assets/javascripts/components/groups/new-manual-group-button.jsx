@@ -32,7 +32,7 @@ define(function(require) {
         <button 
           type="button" 
           className={"btn btn-rect" + buttonClassName} 
-          onClick={this.props.openNewManualGroupModal}
+          onClick={this.props.openNewManualGroupModal.bind(this, null)}
           onDragOver={this.onDragOver}
           onDragLeave={this.onDragLeave}
           onDrop={this.onDrop}>

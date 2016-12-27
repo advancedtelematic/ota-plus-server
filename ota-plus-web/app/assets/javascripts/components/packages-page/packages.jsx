@@ -11,7 +11,7 @@ define(function(require) {
       AddPackage = require('../packages/add-package'),
       BlacklistForm = require('../packages/blacklist-form'),
       PackageStatusForm = require('./status/status-form'),
-      PackageTooltip = require('./package-tooltip'),
+      ModalTooltip = require('../modal-tooltip'),
       Dropzone = require('../../mixins/dropzone'),
       Loader = require('../loader');
 
@@ -272,7 +272,18 @@ define(function(require) {
         db.packageBlacklisted.reset();
       }
     }
-    render() {    
+    render() {
+      var tooltipContent = (
+        <div className="text-center margin-top-20">
+          <strong>Packages</strong> are how ATS Garage represents software updates. A package might be <br />
+          a traditional linux package like a .deb or .rpm, a custom file format passed off to a <br />
+          processing script on your device, a simple metadata file informing a target device <br />
+          what it should do, or even a complete filesystem image. <br /><br />
+          The easiest way to get started is to use deb or rpm packages. <br />
+          However, the most powerful features of ATS Garage require a bit more setup. If you want to <br />
+          use custom update handlers or do incremental full-filesystem updates, we've got you covered.
+        </div>
+      );    
       return (
         <div>
           <PackagesHeader 
@@ -365,8 +376,10 @@ define(function(require) {
           </VelocityTransitionGroup>
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {this.state.isPackageTooltipShown ?
-              <PackageTooltip 
-                hidePackageTooltip={this.hidePackageTooltip}/>
+              <ModalTooltip 
+                title="Packages"
+                body={tooltipContent}
+                confirmButtonAction={this.hidePackageTooltip}/>
             : undefined}
           </VelocityTransitionGroup>
         </div>

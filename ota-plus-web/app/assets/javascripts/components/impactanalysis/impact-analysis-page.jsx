@@ -7,7 +7,7 @@ define(function(require) {
       ImpactAnalysisHeader = require('./impact-analysis-header'),
       ImpactAnalysisBlacklistedPackages = require('./impact-analysis-blacklisted-packages'),
       ImpactAnalysisChart = require('./impact-analysis-chart'),
-      ImpactTooltip = require('./impact-tooltip');
+      ModalTooltip = require('../modal-tooltip');
   
   class ImpactAnalysisPage extends React.Component {
     constructor(props) {
@@ -90,6 +90,22 @@ define(function(require) {
       this.setState({isImpactTooltipShown: false});
     }
     render() {
+      var tooltipContent = (
+        <div className="text-center">
+          <div>
+            With ATS Garage, you can <strong>blacklist</strong> problem packages, ensuring they <br />won't get installed on any of your devices.
+          </div>
+          <div className="margin-top-20">
+            On the <strong>Impact analysis tab</strong>, you can view which of your devices already <br /> 
+            have the blacklisted version of the package installed, letting you <br />
+            proactively troubleshoot and update those devices to a fixed version, <br />
+            or roll them back to an older version.
+          </div>
+          <div className="margin-top-20">
+            <img src="/assets/img/impact_tooltip.jpg" alt="" />
+          </div>
+        </div>
+      );
       return (
         <div>
           <ImpactAnalysisHeader 
@@ -135,8 +151,10 @@ define(function(require) {
           : undefined}
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {this.state.isImpactTooltipShown ?
-              <ImpactTooltip 
-                hideImpactTooltip={this.hideImpactTooltip}/>
+              <ModalTooltip 
+                title="Blacklist"
+                body={tooltipContent}
+                confirmButtonAction={this.hideImpactTooltip}/>
             : undefined}
           </VelocityTransitionGroup>
         </div>
