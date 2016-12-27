@@ -27,6 +27,11 @@ define(function(require) {
     componentDidMount() {
       this.prepareGroups(this.props.groups, this.props.devices, false);
     }
+    componentDidUpdate(prevProps, prevState) {
+      if (!_.isEqual(this.state.groupsData, prevState.groupsData)) {
+        $('[data-toggle="group-tooltip"]').tooltip();
+      }
+    }
     componentWillReceiveProps(nextProps) {
       if(!_.isEqual(this.props.devices, nextProps.devices) || !_.isEqual(this.props.groups, nextProps.groups) || 
          this.props.isFiltered !== nextProps.isFiltered || !_.isEqual(this.props.draggingDevice, nextProps.draggingDevice)) {

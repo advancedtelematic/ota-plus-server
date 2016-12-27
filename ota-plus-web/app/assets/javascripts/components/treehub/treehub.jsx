@@ -5,7 +5,7 @@ define(function(require) {
       SotaDispatcher = require('sota-dispatcher'),
       db = require('stores/db'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
-      TreehubTooltip = require('./treehub-tooltip'),
+      ModalTooltip = require('../modal-tooltip'),
       TreehubHeader = require('./treehub-header'),
       NoAccess = require('../noaccess'),
       Loader = require('../loader');
@@ -22,6 +22,7 @@ define(function(require) {
       this.setContentHeight = this.setContentHeight.bind(this);
       this.showTreehubTooltip = this.showTreehubTooltip.bind(this);
       this.hideTreehubTooltip = this.hideTreehubTooltip.bind(this);
+      this.activateTreehub = this.activateTreehub.bind(this);
       this.handleFeatures = this.handleFeatures.bind(this);
       this.handleTreehubJson = this.handleTreehubJson.bind(this);
       SotaDispatcher.dispatch({actionType: 'get-features'});
@@ -57,8 +58,15 @@ define(function(require) {
       if(e) e.preventDefault();
       this.setState({isTreehubTooltipShown: true});
     }
-    hideTreehubTooltip() {
+    hideTreehubTooltip(e) {
+      if(e) e.preventDefault();
       this.setState({isTreehubTooltipShown: false});
+    }
+    activateTreehub() {
+      SotaDispatcher.dispatch({
+        actionType: 'enable-treehub-feature'
+      });
+      this.hideTreehubTooltip();
     }
     handleFeatures() {
       var features = db.features.deref();
@@ -73,6 +81,20 @@ define(function(require) {
       }
     }
     render() {
+      var tooltipContent = (
+        <div className="text-center">
+          With ATS Garage, OSTree, and Treehub, you can have incredibly fast 
+          and efficient atomic differential updates to your embedded devices
+          --it's like Git (and GitHub) for your embedded filesystems. You even 
+          get versioning on the device, so you can instantly switch between
+          different firmware releases without having to re-flash or re-download anything.
+          <br /><br />
+          Sound exciting? Click the switch to enable, and then start reading 
+          the docs to learn how to <strong>integrate Treehub into your existing 
+          OpenEmbedded/Yocto project </strong>, or how to <strong>start a new project from scratch on a Raspberry Pi</strong>.
+        </div>
+      );
+    
       return (
         this.props.hasBetaAccess ?
           <div>
@@ -136,8 +158,14 @@ define(function(require) {
             </VelocityTransitionGroup>
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
               {this.state.isTreehubTooltipShown ?
-                <TreehubTooltip 
-                  hideTreehubTooltip={this.hideTreehubTooltip}/>
+                <ModalTooltip 
+                  title="TreeHub"
+                  body={tooltipContent}
+                  isCloseButtonShown={true}
+                  closeButtonLabel="Later"
+                  closeButtonAction={this.hideTreehubTooltip}
+                  confirmButtonLabel="Get started now!"
+                  confirmButtonAction={this.activateTreehub}/>
               : undefined}
             </VelocityTransitionGroup>
           </div>
