@@ -11,6 +11,7 @@ $color-darkgrey: #444;
 $color-lightgrey: #888;
 $color-mint: #9ce2d8;
 $color-mint-active: #7de9da;
+$color-lightmint: #A7D5CB;
 
 @import "common.scss";
 
@@ -103,27 +104,14 @@ button {
 
 /* Containers */
 
-#devices-container, #impacted-devices-container {
-    padding: 0 15px !important;
-}
-
-#devices-container {
-    color: #fff;
-    height: 100%;
-    position: relative;
-}
-
-#impacted-devices-container {
-    a {
-        margin: 0 0 20px 0;
-        display: inline-block;
-        vertical-align: top;
-    }
-}
-
 .container {
     width: 100%;
     margin: 0 auto;
+}
+
+.intend-container {
+    padding: 0 15px !important;
+    position: relative;
 }
 
 /* Navbar */
@@ -213,7 +201,7 @@ button {
 
 /* Device box */
 
-.device-icon, .group-icon, .campaign-icon {
+.common-box-icon, .group-icon, .campaign-icon {
     text-align: center;
     background-color: #fff;
     background-repeat: no-repeat;
@@ -222,10 +210,6 @@ button {
     height: 60px;
     border-radius: 10px;
     float: left;
-}
-
-.device-icon {
-    background-image: url(/assets/img/icons/black/devices.png);
 }
 
 .device-name {
@@ -243,94 +227,93 @@ button {
     float: left;
 }
 
-.device-box, .group-box {
+.common-box {
     color: #fff;
     text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+    background: transparent;
     width: 25%;
     height: 100px;
     display: inline-block;
     position: relative;
     border-radius: 10px;
+    border: 0;
     transition: background-color 0.2s ease-in;
+    overflow: hidden;
 
     &:hover {
         background-color: rgba(255, 255, 255, .15);
     }
-}
-
-.group-box {
-    &:hover, &:active, &:focus {
-        color: #fff;
-    }
-
-    .group-desc {
-        width: 230px;
-        margin-left: 15px;
-        margin-top: 12px;
-        float: left;
-
-        .group-name {
-            font-size: 18px;
-            line-height: 1.5em;
-            width: 100%;
-            margin-top: 15px;
-            float: left;
-            @include textoverflow-ellipsis;
-        }
-
-        .group-count {
-            font-size: 10px;
-            line-height: 1.6em;
-        }
-    }
-
-    .group-icon {
-        background-image: url(/assets/img/icons/groups.png);
-        margin-top: 15px;
-        margin-left: 15px;
-    }
-}
-
-.device-box {
-    overflow: hidden;
 
     &:hover, &:active, &:focus {
         color: #fff;
-        cursor: move;
         text-decoration: none;
     }
 
-    .device-status {
-        position: relative;
-        top: -5px;
-        left: 32px;
+    .common-box-icon {
+        margin: 0 0 0 15px;
+        display: inline-block;
+        vertical-align: middle;
+        float: none;
     }
 
-    .device-desc {
+    .common-box-desc {
+        text-align: left;
         width: 62%;
         margin-left: 15px;
-        margin-top: 20px;
-        float: left;
+        display: inline-block;
+        vertical-align: middle;
+        transition: all 0.2s ease-in;
 
-        .device-name {
+        .common-box-title {
             font-size: 18px;
             line-height: 1.5em;
+            @include textoverflow-ellipsis;
         }
 
-        .device-lastseen {
+        .common-box-subtitle {
             font-size: 10px;
             line-height: 1.6em;
-        }
-
-        .device-status-text {
-            font-size: 10px;
-            line-height: 1.6em;
+            @include textoverflow-ellipsis;
         }
     }
 
-    .device-icon {
-        margin-top: 20px;
-        margin-left: 15px;
+    .common-box-actions {
+        color: #fff;
+        text-align: center;
+        cursor: hand;
+        cursor: pointer;
+        background: #4B5151;
+        width: 60px;
+        height: 100%;
+        margin-left: -60px;
+        display: inline-block;
+        vertical-align: middle;
+        transition: all 0.2s ease-in;
+
+        ul {
+            height: 100%;
+            margin: 0;
+
+            li {
+                line-height: 92px;
+                height: 100%;
+                display: block;
+
+                img {
+                    width: 20px;
+                }
+            }
+        }
+    }
+
+    &:hover {
+        .common-box-actions {
+            margin-left: 0;
+        }
+
+        .common-box-desc {
+            width: 55%;
+        }
     }
 }
 
@@ -556,48 +539,19 @@ button {
         #devices-column {
             margin-left: 350px;
 
-            .device-box {
-                .device-actions {
-                    color: #fff;
-                    text-align: center;
-                    cursor: hand;
-                    cursor: pointer;
-                    background: #4B5151;
-                    width: 60px;
-                    height: 100%;
-                    margin-left: -60px;
-                    float: left;
-                    display: block;
-                    transition: all 0.2s ease-in;
-
-                    ul {
-                        height: 100%;
-                        margin: 0;
-
-                        li {
-                            line-height: 92px;
-                            height: 100%;
-                            display: block;
-
-                            img {
-                                width: 20px;
-                            }
-                        }
-                    }
+            .common-box {
+                &:hover, &:focus, &:active {
+                    cursor: move;
                 }
 
-                .device-desc {
-                    transition: all 0.2s ease-in;
+                .common-box-icon {
+                    background-image: url(/assets/img/icons/black/devices.png);
                 }
 
-                &:hover {
-                    .device-actions {
-                        margin-left: 0;
-                    }
-
-                    .device-desc {
-                        width: 55%;
-                    }
+                .device-status {
+                    position: relative;
+                    top: -5px;
+                    left: 32px;
                 }
             }
         }
@@ -1503,6 +1457,10 @@ a.close, button.close {
     &:hover, &:focus, &:active {
         color: $color-mint-active;
     }
+}
+
+.lightmint {
+    color: $color-lightmint;
 }
 
 .brown {
@@ -2901,61 +2859,6 @@ a.close, button.close {
     text-decoration: line-through;
 }
 
-.impact-analysis {
-    .impact-analysis-blacklisted-packages {
-        margin: 25px 0;
-
-        .title {
-            font-size: 16px;
-            margin: 5px 20px 0 0;
-        }
-
-        .impact-analysis-blacklisted-package {
-            color: #444;
-            background: #fff;
-            padding: 5px 10px;
-            margin: 0 10px;
-            display: inline-block;
-            -webkit-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.45);
-            -moz-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.45);
-            box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.45);
-            border-radius: 3px;
-        }
-    }
-
-    #impacted-devices-list {
-        width: 100%;
-        overflow-y: scroll;
-        float: left;
-
-        #devices-list {
-            height: auto;
-            float: left;
-
-            #devices-container {
-                height: auto;
-            }
-        }
-    }
-
-    .device-box {
-        &:hover, &:focus, &:active {
-            cursor: hand;
-            cursor: pointer;
-        }
-    }
-
-    .dots {
-        background: url(/assets/img/icons/dots.png) no-repeat;
-        background-size: cover;
-        width: 20px;
-        height: 5px;
-        margin: 50px 20px 0 20px;
-        float: left;
-        opacity: 0.4;
-    }
-}
-
 hr.full-line {
     width: 100%;
     margin: 0;
@@ -2977,16 +2880,16 @@ hr.full-line {
 }
 
 .dragging {
-    .device-box:after {
+    .common-box:after {
         content: "";
-        display: block;
+        background-color: rgba(0, 0, 0, .5);
+        width: 100%;
         height: 100%;
-        position: absolute;
         padding: 40px 0 0 0;
+        display: block;
+        position: absolute;
         top: 0px;
         left: 0;
-        width: 100%;
-        background-color: rgba(0, 0, 0, .5);
         border: 1px dashed #ccc;
         border-radius: 10px;
         transition: all 0.2s ease-in;
@@ -2994,31 +2897,31 @@ hr.full-line {
 }
 
 .droppable {
-    .device-box:after {
+    .common-box:after {
         content: "";
-        display: block;
+        background-color: rgba(0, 0, 0, .2);
+        width: 100%;
         height: 100%;
+        display: block;
         position: absolute;
         padding: 40px 0 0 0;
         top: 0px;
         left: 0;
-        width: 100%;
-        background-color: rgba(0, 0, 0, .2);
         border: 1px dashed #ccc;
         border-radius: 10px;
         transition: all 0.2s ease-in;
     }
 
     &.active {
-        .device-box:after {
+        .common-box:after {
             content: "";
-            display: block;
+            background-color: rgba(255, 255, 255, .1);
+            width: 100%;
             height: 100%;
+            display: block;
             position: absolute;
             top: 0px;
             left: 0;
-            width: 100%;
-            background-color: rgba(255, 255, 255, .1);
             border: 1px dashed #ccc;
             border-radius: 10px;
             transition: all 0.2s ease-in;
@@ -4538,12 +4441,6 @@ hr.full-line {
     }
 }
 
-#provisioning {
-    pre {
-        display: inline-block;
-    }
-}
-
 .element-box {
     background-repeat: no-repeat;
     width: 100%;
@@ -4815,6 +4712,48 @@ hr.full-line {
                     transform: translate(-50%, 0);
                 }
             }
+        }
+    }
+}
+
+.page-provisioning {
+    .grey-header {
+        .grey-header-icon {
+            background-image: url(/assets/img/icons/black/provisioning.png);
+        }
+    }
+
+    .provisioning-disabled {
+        text-align: center;
+        width: 100%;
+        float: left;
+        position: relative;
+    }
+
+    .provisioning-enabled {
+        line-height: 1.7em;
+        width: 100%;
+        float: left;
+        position: relative;
+    }
+
+    .provisioning-footer {
+        background: #222;
+        width: 100%;
+        height: 40px;
+        padding: 10px 15px;
+        float: left;
+        position: fixed;
+        bottom: 0;
+    }
+
+    #provisioning-list {
+        width: 100%;
+        padding: 20px 0 0 0;
+        float: left;
+
+        .common-box-icon {
+            background-image: url(/assets/img/icons/black/key.png);
         }
     }
 }

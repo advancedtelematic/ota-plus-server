@@ -94,7 +94,6 @@ define(function(require) {
           OpenEmbedded/Yocto project </strong>, or how to <strong>start a new project from scratch on a Raspberry Pi</strong>.
         </div>
       );
-    
       return (
         this.props.hasBetaAccess ?
           <div>

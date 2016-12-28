@@ -158,33 +158,26 @@ define(function(require) {
 
       if(path[1] !== undefined) {
         switch(path[1]) {
-          case '':
-            page = 'page-home';
-          break;
+          case '': 
+            page = 'page-home'; break;
           case 'devices':
-            page = 'page-devices';
-          break;
+            page = 'page-devices'; break;
           case 'devicedetails':
-            page = 'page-device-details';
-          break;
+            page = 'page-device-details'; break;
           case 'productiondevicedetails':
-            page = 'page-device-details';
-          break;
+            page = 'page-device-details'; break;
           case 'packages':
-            page = 'page-packages';
-          break;
+            page = 'page-packages'; break;
           case 'impactanalysis':
-            page = 'page-impact-analysis';
-          break;
+            page = 'page-impact-analysis'; break;
           case 'campaigns':
-            page = 'page-campaigns';
-          break;
+            page = 'page-campaigns'; break;
           case 'clientapps':
-            page = 'page-client-apps';
-          break;
+            page = 'page-client-apps'; break;
           case 'treehub':
-            page = 'page-treehub';
-          break;
+            page = 'page-treehub'; break;
+          case 'provisioning':
+            page = 'page-provisioning'; break;
           default:
           break;
         }
