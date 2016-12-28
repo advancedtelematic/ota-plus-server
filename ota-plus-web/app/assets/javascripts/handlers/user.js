@@ -12,10 +12,6 @@ define(function(require) {
             sendRequest.doGet('/user/profile', {action: payload.actionType})
               .success(function(user) {
                 db.user.reset(user);
-                if(!_.isUndefined(user) && !_.isUndefined(user.scope)) {
-                  var hasAccess = user.scope === "https://www.atsgarage.com/api/beta";
-                  db.hasBetaAccess.reset(hasAccess);
-                }
               });
           break;
           case 'update-user':
