@@ -98,7 +98,8 @@ define(function(require) {
                   <Responses 
                     action="create-package" 
                     multipleKey={multipleKey} 
-                    handledStatuses="error"/>
+                    handledStatuses="error"
+                    ifUnmount={false}/>
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-group">
