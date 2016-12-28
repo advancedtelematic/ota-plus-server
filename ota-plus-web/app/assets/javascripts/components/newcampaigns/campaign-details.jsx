@@ -31,13 +31,13 @@ define(function(require) {
       this.closeCampaignCancelModal = this.closeCampaignCancelModal.bind(this);
       this.closeCampaignCancelGroupModal = this.closeCampaignCancelGroupModal.bind(this);
       this.setCampaignData = this.setCampaignData.bind(this);
-      this.handleDeviceSeen = this.handleDeviceSeen.bind(this);
+      this.handleUpdateSpec = this.handleUpdateSpec.bind(this);
       
       SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: this.props.params.id});
       SotaDispatcher.dispatch({actionType: 'get-campaign-statistics', uuid: this.props.params.id});
       db.campaign.addWatch("poll-campaign", _.bind(this.setCampaignData, this, null));
       db.campaignStatistics.addWatch("poll-campaign-statistics", _.bind(this.setCampaignData, this, null));
-      db.deviceSeen.addWatch("poll-deviceseen-campaign-details", _.bind(this.handleDeviceSeen, this, null));
+      db.updateSpec.addWatch("poll-updatespec-campaign-details", _.bind(this.handleUpdateSpec, this, null));
     }
     componentDidMount() {
       var that = this;
@@ -48,7 +48,7 @@ define(function(require) {
       window.removeEventListener("resize", this.setCampaignDetailsHeight);
       db.campaign.removeWatch("poll-campaign");
       db.campaignStatistics.removeWatch("poll-campaign");
-      db.deviceSeen.removeWatch("poll-deviceseen-campaign-details");
+      db.updateSpec.removeWatch("poll-updatespec-campaign-details");
       db.campaign.reset();
       db.campaignStatistics.reset();
     }
@@ -132,9 +132,9 @@ define(function(require) {
         this.setState({campaignData: campaign});
       }
     }
-    handleDeviceSeen() {
-      var deviceSeen = db.deviceSeen.deref();
-      if(!_.isUndefined(deviceSeen) && !_.isUndefined(this.state.campaignData)) {
+    handleUpdateSpec() {
+      var updateSpec = db.updateSpec.deref();
+      if(!_.isUndefined(updateSpec) && !_.isUndefined(this.state.campaignData)) {
         SotaDispatcher.dispatch({actionType: 'get-campaign', uuid: this.props.params.id});
         SotaDispatcher.dispatch({actionType: 'get-campaign-statistics', uuid: this.props.params.id});
       }
