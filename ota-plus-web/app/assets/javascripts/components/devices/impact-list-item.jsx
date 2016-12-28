@@ -11,8 +11,8 @@ define(function(require) {
       var deviceUuid = this.props.deviceId;
       deviceUuid = deviceUuid.substring(0, 8);
       return (
-        <Link to={`devicedetails/${this.props.deviceId}`} className="device-box">
-          <div className="device-icon"></div>
+        <Link to={`devicedetails/${this.props.deviceId}`} className="common-box device-box">
+          <div className="common-box-icon"></div>
           <div className="device-desc">
             <div className="device-name">
               {deviceUuid}

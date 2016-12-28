@@ -33,27 +33,27 @@ define(function(require) {
         break;
       }
       return (
-        <Link to={`${link}`} className="device-box" id={"link-devicedetails-" + this.props.device.uuid} style={{width: this.props.width}}>
-          <div className="device-actions">
+        <Link to={`${link}`} className="common-box" id={"link-devicedetails-" + this.props.device.uuid} style={{width: this.props.width}}>
+          <div className="common-box-actions">
             <ul>
               <li onClick={this.renameDevice} title="Rename device" data-toggle="device-tooltip" data-placement="right">
                 <img src="/assets/img/icons/edit_white.png" alt="" />
               </li>
             </ul>
           </div>
-          <div className="device-icon">
+          <div className="common-box-icon">
             <div className={"device-status device-status-" + this.props.device.status}></div>
           </div>
-          <div className="device-desc">
-            <div className="device-name" title={deviceName}>{deviceName}</div>
-            <div className="device-lastseen">
+          <div className="common-box-desc">
+            <div className="common-box-title" title={deviceName}>{deviceName}</div>
+            <div className="common-box-subtitle">
               {this.props.device.status !== 'NotSeen' ?
                 <span>Last seen: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
               :
                 <span>Never seen online</span>
               }
             </div>
-            <div className="device-status-text">{this.props.device.groupName ? "Group: " + this.props.device.groupName : "Ungrouped"}</div>
+            <div className="common-box-subtitle">{this.props.device.groupName ? "Group: " + this.props.device.groupName : "Ungrouped"}</div>
           </div>
         </Link>
       );
