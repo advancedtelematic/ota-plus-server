@@ -34,7 +34,6 @@ define(function(require) {
         db.postStatus.removeWatch("poll-create-manual-group");
         delete postStatus['create-manual-group'];
         db.postStatus.reset(postStatus);
-                
         if(this.props.deviceUUID !== null) {
           setTimeout(function() {
             SotaDispatcher.dispatch({
