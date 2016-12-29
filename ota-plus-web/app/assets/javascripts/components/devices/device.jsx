@@ -24,6 +24,7 @@ define(function(require) {
       this.state = {
         deviceData: undefined,
         filterValue: '',
+        selectedType: 'ingarage',
         isPackagesHistoryShown: false,
         textPackagesHistory: 'View history',
         installedPackagesCount: 0,
@@ -51,6 +52,7 @@ define(function(require) {
       this.showBlacklistForm = this.showBlacklistForm.bind(this);
       this.closeBlacklistForm = this.closeBlacklistForm.bind(this);
       this.changeFilter = this.changeFilter.bind(this);
+      this.selectType = this.selectType.bind(this);
       this.handleDeviceSeen = this.handleDeviceSeen.bind(this);
 
       db.device.reset();
@@ -152,6 +154,10 @@ define(function(require) {
     changeFilter(filter) {
       this.setState({filterValue: filter});
     }
+    selectType(type, e) {
+      e.preventDefault();
+      this.setState({selectedType: type});
+    }
     handleDeviceSeen() {
       var deviceSeen = db.deviceSeen.deref();
       if(!_.isUndefined(deviceSeen) && this.props.params.id === deviceSeen.uuid) {
@@ -197,7 +203,7 @@ define(function(require) {
                   <div className="panel panel-ats">
                     <div className="panel-heading" id="panel-heading-components">
                       <div className="panel-heading-left pull-left">
-                        Components
+                        Hardware
                       </div>
                     </div>
                     <div className="panel-body">
@@ -209,7 +215,12 @@ define(function(require) {
                   <div className="panel panel-ats">
                     <div className="panel-heading">
                       <div className="panel-heading-left pull-left">
-                        Packages
+                        Software
+                      </div>
+                      <div className="devices-status-switch">
+                        <div className={"switch-text" + (this.state.selectedType === 'ondevice' ? " selected" : "")}>On device</div>
+                        <div className={"switch" + (this.state.selectedType === 'ingarage' ? " switchOn" : "")} onClick={this.selectType.bind(this, (this.state.selectedType === 'ingarage' ? 'ondevice' : 'ingarage'))}></div>
+                        <div className={"switch-text" + (this.state.selectedType === 'ingarage' ? " selected" : "")}>In Garage</div>
                       </div>
                     </div>
                     <div className="panel-body">
@@ -220,7 +231,9 @@ define(function(require) {
                         onDrop={this.onDrop}
                         showBlacklistForm={this.showBlacklistForm}
                         filterValue={this.state.filterValue}
+                        selectedType={this.state.selectedType}
                         changeFilter={this.changeFilter}
+                        selectType={this.selectType}
                         hasBetaAccess={this.props.hasBetaAccess}/>
                     </div>
                     <div className="panel-footer" style={{position: 'relative'}}>
