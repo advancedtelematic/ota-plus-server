@@ -98,6 +98,10 @@ trait ApiRequest { self =>
     apiExec.runApiResult(build)
   }
 
+  def execStreamedResult(apiExec: ApiClientExec): Future[Result] = {
+    apiExec.runStreamedResult(build)
+  }
+
   def execJsonValue(apiExec: ApiClientExec): Future[JsValue] = {
     apiExec.runApiJsonValue(build)
   }
@@ -317,6 +321,16 @@ class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
 
   private val buildSrvRequest = ApiRequest.base(buildSrvApiUri + "/")
 
+  def download(artifact_type: String, params: Map[String, Seq[String]])
+    (implicit ec: ExecutionContext) : Future[Result] = {
+
+    buildSrvRequest(s"api/v1/artifacts/$artifact_type/download")
+      .transform(
+        _.withMethod("POST")
+          .withBody(params))
+      .execStreamedResult(apiExec)
+  }
+
   def download(artifact_type: String, clientId: Uuid, clientSecret: String)
     (implicit ec: ExecutionContext) : Future[Result] = {
 
@@ -324,6 +338,6 @@ class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
       .transform(
         _.withMethod("POST")
           .withBody(Map("client_id" -> Seq(clientId.underlying.get), "client_secret" -> Seq(clientSecret))))
-      .execResult(apiExec)
+      .execStreamedResult(apiExec)
   }
 }
