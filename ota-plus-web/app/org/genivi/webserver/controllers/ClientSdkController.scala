@@ -33,9 +33,6 @@ extends Controller with ApiClientSupport {
 
   val logger = Logger(this.getClass)
 
-  private[this] object ConfigParameterNotFound extends Throwable with NoStackTrace
-  private[this] object NoSuchVinRegistered extends Throwable with NoStackTrace
-
   /**
     * Contact Auth+ to register for the first time the given [[Uuid]],
     * to later persist (in cassandra-journal) the resulting [[DeviceMetadata]]
@@ -66,93 +63,22 @@ extends Controller with ApiClientSupport {
     *
     * @param device UUID of device
     * @param artifact one of "deb", "rpm", "toml"
-    * @param arch either "32" or "64"
     */
-  def downloadClientSdk(device: Uuid, artifact: ArtifactType, arch: Architecture) : Action[AnyContent] =
+  def deviceClientDownload(device: Uuid, artifact: ArtifactType) : Action[AnyContent] =
     authAction.AuthenticatedApiAction.async { implicit request =>
       for (
         dev <- devicesApi.getDevice(
           UserOptions(Some(request.authPlusAccessToken.value), namespace = Some(request.namespace)), device);
         vMetadata <- getRegisterDevice(device, request.authPlusAccessToken) if dev.namespace == request.namespace;
         secret <- authPlusApi.fetchSecret(vMetadata.clientInfo.clientId, request.authPlusAccessToken);
-        result <- preconfClient(vMetadata.uuid, artifact, arch, vMetadata.clientInfo.clientId, secret)
+        result <- buildSrvApi.download(s"sota_client_${artifact.toString}", Map(
+          "device_uuid" -> Seq(device.underlying.get),
+          "client_id" -> Seq(vMetadata.clientInfo.clientId.toString),
+          "client_secret" -> Seq(secret),
+          "package_manager" -> request.queryString.get("package_manager").getOrElse(Seq("off")),
+          "polling_sec" -> request.queryString.get("polling_sec").getOrElse(Seq("10")),
+          "filename" -> Seq(s"sota_client_${device.underlying.get}.${artifact.fileExtension}")
+        ))
       ) yield result
     }
-
-  /**
-    * The url to use to request a pre-configured client, obtained by filling-in placeholders.
-    */
-  private def sdkUrl(
-                      device: Uuid,
-                      artifact: ArtifactType, arch: Architecture,
-                      clientID: java.util.UUID, secret: String
-                    ): Try[Uri] = {
-
-    def placedholderFiller(uri: String): String = {
-      val replacements = Seq(
-        "[vin]"         -> device.show,
-        "[packagetype]" -> artifact.toString(),
-        "[arch]"        -> arch.toString(),
-        "[client_id]"   -> clientID.toString(),
-        "[secret]"      -> secret
-      )
-      replacements.foldLeft(uri) { case (res: String, fromTo: (String, String)) => res.replace(fromTo._1, fromTo._2) }
-    }
-
-    val buildserviceEndpoint = for (
-      host <- conf.getString("buildservice.api.host");
-      query <- conf.getString("buildservice.api.query").map( placedholderFiller )
-    ) yield host + query
-
-    buildserviceEndpoint
-      .map( url => Try(Uri.create(url)) )
-      .getOrElse( Failure(ConfigParameterNotFound) )
-  }
-
-  /**
-    * Contact Build Service to obtain a pre-configured client
-    */
-  private def preconfClient(device: Uuid,
-                            artifact: ArtifactType, arch: Architecture,
-                            clientID: java.util.UUID, secret: String): Future[Result] = {
-    Future.fromTry(sdkUrl(device, artifact, arch, clientID, secret))
-      .flatMap(streamPackageFromBuildService(device, artifact, arch))
-      .recover {
-        case NonFatal(t) =>
-          logger.error("Failed to stream sdk from build service", t)
-          InternalServerError
-      }
-  }
-
-  /**
-    * Requests client sdk package from the build service and streams response to the requester.
-    */
-  private def streamPackageFromBuildService(device: Uuid, artifact: ArtifactType, arch: Architecture)
-                                           (url: Uri): Future[Result] = {
-    val futureResponse = ws.url(url.toUrl).withMethod("POST").stream
-    futureResponse.map { streamedResp =>
-      val statusResp = streamedResp.headers.status
-      if (statusResp == 200) {
-        val body = streamedResp.body
-        // If there's a content length, send that, otherwise return the body chunked
-        val ourResponse = streamedResp.headers.headers.get("Content-Length") match {
-          case Some(Seq(length)) if Try ( Integer.parseInt(length) ).isSuccess =>
-            val entity = HttpEntity.Streamed(
-              body,
-              Some(Integer.parseInt(length)),
-              Some(artifact.contentType)
-            )
-            Ok.sendEntity(entity)
-          case _ =>
-            Ok.chunked(body).as(artifact.contentType)
-        }
-        val suggestedFilename = s"ota-plus-sdk-${device.show}-$artifact-$arch.${artifact.fileExtension}"
-        ourResponse.withHeaders(CONTENT_DISPOSITION -> s"attachment; filename=$suggestedFilename")
-      } else {
-        logger.error(s"Unexpected response status from build service: $statusResp")
-        BadGateway
-      }
-    }
-  }
-
 }
