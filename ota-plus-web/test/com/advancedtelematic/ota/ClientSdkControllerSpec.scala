@@ -8,13 +8,6 @@ import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.http.Status
 import play.api.libs.ws.{WSClient, WSRequest}
 
-/**
-  * Purpose of a tag: ScalaTest's command line options -n (include) and -l (exclude).
-  * For example, Integration runs only those tests tagged "APITests".
-  * Other tags in use: "BrowserTests" and so on.
-  */
-object APITests extends Tag("APITests")
-
 class ClientSdkControllerSpec extends PlaySpec
     with OneServerPerSuite
     with GeneratorDrivenPropertyChecks with DeviceIdGenerators with DeviceGenerators {
@@ -26,7 +19,7 @@ class ClientSdkControllerSpec extends PlaySpec
 
   override lazy val port = app.configuration.getString("test.webserver.port").map(_.toInt).getOrElse(9010)
 
-  "test download a preconfigured client" taggedAs APITests ignore { // TODO PRO-341
+  "test download a preconfigured client" ignore { // TODO PRO-341
     import org.genivi.webserver.controllers.{Architecture, ArtifactType}
     val attempts = 5
     val wsClient = app.injector.instanceOf[WSClient]
