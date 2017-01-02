@@ -18,7 +18,7 @@ define(function(require) {
     render() {
       const { t } = this.props;
       return (
-        <button type="button" className={"list-group-item " + this.props.groupClassName + (this.props.isSelected ? " checked" : "")} onClick={this.selectGroup} id={"button-group-" + this.props.group.groupName}>
+        <div className={"list-group-item " + this.props.groupClassName + (this.props.isSelected ? " checked" : "")} onClick={this.selectGroup} id={"button-group-" + this.props.group.groupName}>
           <div className="group-actions">
             <ul>
               <li onClick={this.props.renameGroup.bind(this, this.props.group)} title="Rename group" data-toggle="group-tooltip" data-placement="right">
@@ -36,7 +36,7 @@ define(function(require) {
               <i className="fa fa-angle-right fa-3x"></i>
             </div>
           : null}
-        </button>
+        </div>
       );
     }
   };
