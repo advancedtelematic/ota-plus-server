@@ -69,7 +69,7 @@ define(function(require) {
           <td>none</td>
           <td>none</td>
           {campaign.launched ? 
-            <td>
+            <td className="progress-cell">
               <div className="progress progress-blue">
                 <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}></div>
                 <div className="progress-count">
