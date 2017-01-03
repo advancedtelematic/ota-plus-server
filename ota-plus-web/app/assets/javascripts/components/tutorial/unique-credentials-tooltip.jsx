@@ -30,7 +30,7 @@ define(function(require) {
                     <select className="form-control" name="package_manager" ref="packageManager">
                       <option value="deb">Debian</option>
                       <option value="rpm">RPM</option>
-                      <option value="ostree">OSTree</option>
+                      <option value="ostree" selected>OSTree</option>
                       <option value="off">Off</option>
                     </select>
                   </div>
