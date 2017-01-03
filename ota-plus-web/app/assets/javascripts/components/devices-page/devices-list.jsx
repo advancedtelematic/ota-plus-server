@@ -25,7 +25,7 @@ define(function(require) {
       window.addEventListener("resize", this.setBoxesWidth);
     }
     componentWillReceiveProps(nextProps) {
-      if(!nextProps.draggingDeviceUUID && this.props.draggingDeviceUUID !== nextProps.draggingDeviceUUID) {
+      if(nextProps.draggingDevice === null || !_.isEqual(this.props.draggingDevice, nextProps.draggingDevice)) {
         this.setState({overUUID: null});
       }
     }
@@ -54,13 +54,15 @@ define(function(require) {
       if(e.preventDefault)
         e.preventDefault();
       if(this.state.areSmartGroupsEnabled) {
-        var draggingUUID = this.props.draggingDeviceUUID;
+        var draggingUUID = this.props.draggingDevice.uuid;
         var dropUUID = e.currentTarget.dataset.uuid;
         var groupedDevices = [draggingUUID, dropUUID];
                         
         if(draggingUUID !== null && draggingUUID !== dropUUID) {
           this.props.openNewSmartGroupModal(groupedDevices);
         }
+      } else {
+        this.props.onDeviceDragEnd();
       }
     }
     render() {
@@ -69,12 +71,15 @@ define(function(require) {
       _.each(devices, function(device, i) {
         if(!_.isUndefined(device)) {
           var className = '';
-          if(this.state.areSmartGroupsEnabled && this.props.draggingDeviceUUID !== null && this.props.isDND) {
-            if(this.props.draggingDeviceUUID !== device.uuid) {
+          if(this.state.areSmartGroupsEnabled && !_.isUndefined(this.props.draggingDevice.uuid) && this.props.isDND) {
+            if(this.props.draggingDevice.uuid !== device.uuid) {
               className = this.state.overUUID === device.uuid ? 'droppable active' : 'droppable';
             } else {
               className = 'dragging';
             }
+          }
+          if(this.props.draggingDevice !== null && !_.isUndefined(this.props.draggingDevice.uuid) && this.props.draggingDevice.uuid === device.uuid) {
+            className = 'dragging';
           }
           devicesList.push(
             <span 
