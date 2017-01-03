@@ -360,7 +360,7 @@ define(function(require) {
       var deviceGroupUUID = e.currentTarget.dataset.groupuuid;
                   
       e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData("deviceUUID", deviceUUID);
+      e.dataTransfer.setData("text", deviceUUID);
       
       this.setState({
         draggingDevice: {
