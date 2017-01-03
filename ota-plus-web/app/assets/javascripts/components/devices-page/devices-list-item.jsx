@@ -7,8 +7,13 @@ define(function(require) {
   class DeviceListItem extends React.Component {
     constructor(props) {
       super(props);
+      this.state = {
+        isMouseOverActions: false,
+      };
       this.renameDevice = this.renameDevice.bind(this);
       this.goToDetailsPage = this.goToDetailsPage.bind(this);
+      this.actionsMouseEnter = this.actionsMouseEnter.bind(this);
+      this.actionsMouseLeave = this.actionsMouseLeave.bind(this);
     }
     renameDevice(e) {
       e.preventDefault();
@@ -18,6 +23,16 @@ define(function(require) {
     goToDetailsPage() {
       const link = this.props.isProductionDevice ? 'productiondevicedetails/' + this.props.productionDeviceName : '/devicedetails/' + this.props.device.uuid;
       this.context.history.pushState(null, link);
+    }
+    actionsMouseEnter() {
+      this.setState({
+        isMouseOverActions: true
+      });
+    }
+    actionsMouseLeave() {
+      this.setState({
+        isMouseOverActions: false
+      });
     }
     render() {
       const lastSeenDate = new Date(this.props.device.lastSeen);
@@ -37,16 +52,17 @@ define(function(require) {
         break;
       }
       return (
-        <div onClick={this.goToDetailsPage} className="common-box" id={"link-devicedetails-" + this.props.device.uuid} style={{width: this.props.width}}>
-          <div className="common-box-actions">
+        <div onClick={this.goToDetailsPage} className={"common-box" + (this.state.isMouseOverActions ? " actions-active" : "")} id={"link-devicedetails-" + this.props.device.uuid} style={{width: this.props.width}}>
+          <div className="common-box-actions" onMouseEnter={this.actionsMouseEnter} onMouseLeave={this.actionsMouseLeave}>
             <ul>
               <li onClick={this.renameDevice} title="Rename device" data-toggle="device-tooltip" data-placement="right">
                 <img src="/assets/img/icons/edit_white.png" alt="" />
+                <div>Rename</div>
               </li>
             </ul>
           </div>
           <div className="common-box-icon">
-            <div className={"device-status device-status-" + this.props.device.status}></div>
+            <div className={"device-status device-status-" + this.props.device.status} title={deviceStatus}></div>
           </div>
           <div className="common-box-desc">
             <div className="common-box-title" title={deviceName}>{deviceName}</div>

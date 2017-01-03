@@ -6,7 +6,12 @@ define(function(require) {
   class GroupsListItem extends React.Component {
     constructor(props) {
       super(props);
+      this.state = {
+        isMouseOverActions: false,
+      };
       this.selectGroup = this.selectGroup.bind(this);
+      this.actionsMouseEnter = this.actionsMouseEnter.bind(this);
+      this.actionsMouseLeave = this.actionsMouseLeave.bind(this);
     }
     selectGroup(e) {
       e.preventDefault();
@@ -15,14 +20,25 @@ define(function(require) {
       if(className.indexOf('fa') === -1 && tagName !== 'li' && tagName !== 'span' && tagName !== 'img')
         this.props.selectGroup({name: this.props.group.groupName, type: 'real', uuid: this.props.group.id});
     }
+    actionsMouseEnter() {
+      this.setState({
+        isMouseOverActions: true
+      });
+    }
+    actionsMouseLeave() {
+      this.setState({
+        isMouseOverActions: false
+      });
+    }
     render() {
       const { t } = this.props;
       return (
-        <div className={"list-group-item " + this.props.groupClassName + (this.props.isSelected ? " checked" : "")} onClick={this.selectGroup} id={"button-group-" + this.props.group.groupName}>
-          <div className="group-actions">
+        <div className={"list-group-item " + this.props.groupClassName + (this.props.isSelected ? " checked" : "") + (this.state.isMouseOverActions ? " actions-active" : "")} onClick={this.selectGroup} id={"button-group-" + this.props.group.groupName}>
+          <div className="group-actions" onMouseEnter={this.actionsMouseEnter} onMouseLeave={this.actionsMouseLeave}>
             <ul>
-              <li onClick={this.props.renameGroup.bind(this, this.props.group)} title="Rename group" data-toggle="group-tooltip" data-placement="right">
+              <li onClick={this.props.renameGroup.bind(this, this.props.group)} title="Rename group">
                 <img src="/assets/img/icons/edit_white.png" alt="" />
+                <div>Rename</div>
               </li>
             </ul>
           </div>

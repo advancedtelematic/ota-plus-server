@@ -105,11 +105,6 @@ define(function(require) {
         that.setContentHeight();
       }, 1);
     }
-    componentDidUpdate(prevProps, prevState) {
-      if (!_.isEqual(this.state.searchableDevicesData, prevState.searchableDevicesData)) {
-        $('[data-toggle="device-tooltip"]').tooltip();
-      }
-    }
     componentWillUnmount(){
       db.devices.reset();
       db.searchableDevices.reset();
