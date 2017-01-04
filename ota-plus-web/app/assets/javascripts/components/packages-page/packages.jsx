@@ -136,11 +136,9 @@ define(function(require) {
       });
 
       _.each(groupedPackages, function(obj, index) {
-        groupedPackages[index]['elements'] = obj['elements'].sort(function (a, b) {
-          var aVersion = a.id.version;
-          var bVersion = b.id.version;
-          return that.compareVersions(bVersion, aVersion);
-        });
+        groupedPackages[index]['elements'] = _.sortBy(obj['elements'], function(pack) {
+          return pack.createdAt;
+        }).reverse();
       });
 
       var specialGroup = {'#' : []};
@@ -179,30 +177,6 @@ define(function(require) {
     }
     hidePackageTooltip() {
       this.setState({isPackageTooltipShown: false});
-    }
-    compareVersions(a, b) {
-      if (a === b) {
-       return 0;
-      }
-      var a_components = a.split(".");
-      var b_components = b.split(".");
-      var len = Math.min(a_components.length, b_components.length);
-
-      for (var i = 0; i < len; i++) {
-        if (parseInt(a_components[i]) > parseInt(b_components[i])) {
-          return 1;
-        }
-        if (parseInt(a_components[i]) < parseInt(b_components[i])) {
-          return -1;
-        }
-      }
-      if (a_components.length > b_components.length) {
-        return 1;
-      }
-      if (a_components.length < b_components.length) {
-        return -1;
-      }
-      return 0;
     }
     showBlacklistModal(packageName, packageVersion, mode) {
       this.setState({
