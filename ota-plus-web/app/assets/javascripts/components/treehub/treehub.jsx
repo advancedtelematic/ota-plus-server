@@ -15,7 +15,6 @@ define(function(require) {
       super(props);
       this.state = {
         features: undefined,
-        treehubJson: undefined,
         contentHeight: 300,
         isTreehubTooltipShown: false
       };
@@ -24,11 +23,8 @@ define(function(require) {
       this.hideTreehubTooltip = this.hideTreehubTooltip.bind(this);
       this.activateTreehub = this.activateTreehub.bind(this);
       this.handleFeatures = this.handleFeatures.bind(this);
-      this.handleTreehubJson = this.handleTreehubJson.bind(this);
       SotaDispatcher.dispatch({actionType: 'get-features'});
-      SotaDispatcher.dispatch({actionType: 'get-treehub-json'});
       db.features.addWatch("poll-features", _.bind(this.handleFeatures, this, null));
-      db.treehubJson.addWatch("poll-treehub-json", _.bind(this.handleTreehubJson, this, null));
     }
     componentDidMount() {
       window.addEventListener("resize", this.setContentHeight);
@@ -42,9 +38,7 @@ define(function(require) {
     componentWillUnmount() {
       window.removeEventListener("resize", this.setContentHeight);
       db.features.removeWatch("poll-features");
-      db.treehubJson.removeWatch("poll-treehub-json");
       db.features.reset();
-      db.treehubJson.reset();
     }
     setContentHeight() {    
       if(this.props.hasBetaAccess) {
@@ -74,12 +68,6 @@ define(function(require) {
         this.setState({features: features});
       }
     }
-    handleTreehubJson() {
-      var treehubJson = db.treehubJson.deref();
-      if(!_.isUndefined(treehubJson)) {
-        this.setState({treehubJson: treehubJson});
-      }
-    }
     render() {
       var tooltipContent = (
         <div className="text-center">
@@ -99,7 +87,7 @@ define(function(require) {
           <div>
             <TreehubHeader />
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-              {!_.isUndefined(this.state.features) && (this.state.features.indexOf('treehub') < 0 || !_.isUndefined(this.state.treehubJson)) ?
+              {!_.isUndefined(this.state.features) && (this.state.features.indexOf('treehub') < 0) ?
                 this.state.features.indexOf('treehub') < 0 ?
                   <div className="treehub-disabled" style={{height: this.state.contentHeight}}>
                     <div className="center-xy padding-15">
@@ -119,7 +107,7 @@ define(function(require) {
                       The first thing you'll need to do is add OSTree support into your project.<br /><br />
                       Download your credentials and start pushing your images to TreeHub.
                       <div className="margin-top-20">
-                        <a href={"data:text/json;charset=utf-8,"+ encodeURIComponent(JSON.stringify(this.state.treehubJson))} download="treehub.json" className="btn btn-confirm">Download</a>
+                        <a href="/api/v1/features/treehub/client" className="btn btn-confirm" target="_blank">Download</a>
                       </div>
                       
                       <div className="margin-top-40">
