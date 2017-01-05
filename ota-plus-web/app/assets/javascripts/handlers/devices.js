@@ -171,6 +171,12 @@ define(function(require) {
                 db.activeDevicesPerMonth.reset(activeDevicesPerMonth);
               });
           break;
+          case 'get-activated-devices-per-period':
+            sendRequest.doGet('/api/v1/active_device_count?start=' + encodeURIComponent(payload.start) + '&end=' + encodeURIComponent(payload.end), {action: payload.actionType})
+              .success(function(activatedDevicesPerPeriod) {
+                db.activatedDevicesPerPeriod.reset({"deviceCount":Math.random()});
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));
