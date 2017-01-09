@@ -174,7 +174,7 @@ define(function(require) {
           case 'get-activated-devices-per-period':
             sendRequest.doGet('/api/v1/active_device_count?start=' + encodeURIComponent(payload.start) + '&end=' + encodeURIComponent(payload.end), {action: payload.actionType})
               .success(function(activatedDevicesPerPeriod) {
-                db.activatedDevicesPerPeriod.reset({"deviceCount":Math.random()});
+                db.activatedDevicesPerPeriod.reset(activatedDevicesPerPeriod);
               });
           break;
         }
