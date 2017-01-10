@@ -55,7 +55,8 @@ class Application @Inject() (ws: WSClient,
     val proxiedPrefixes = coreProxiedPrefixes orElse
       deviceRegistryProxiedPrefixes orElse
       resolverProxiedPrefixes orElse
-      auditorProxiedPrefixes
+      auditorProxiedPrefixes orElse
+      userProfileProxiedPrefixes
 
     proxiedPrefixes.lift(pathComponents)
   }
@@ -91,6 +92,10 @@ class Application @Inject() (ws: WSClient,
     case "components" :: _ => resolverApiUri
     case "resolve" :: _ => resolverApiUri
     case "package_filters" :: _ => resolverApiUri
+  }
+
+  private val userProfileProxiedPrefixes: PartialFunction[List[String], String] = {
+    case "users" :: _ => userProfileApiUri
   }
 
   /**
