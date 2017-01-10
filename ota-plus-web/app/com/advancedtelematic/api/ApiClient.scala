@@ -315,6 +315,10 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
     }}
   }
 
+  def updateBillingInfo[T](userId: UserId, body: String)
+                          (implicit executionContext: ExecutionContext): Future[Result] =
+    userProfileRequest(s"users/${userId.id}/billing_info")
+      .transform(_.withMethod("POST").withBody(body)).execResult(apiExec)
 }
 
 class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
