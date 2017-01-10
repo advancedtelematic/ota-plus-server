@@ -11,6 +11,8 @@ docker run \
   -e JWKS_URI=${JWKS_URI} \
   -e JWT_ASSERTION_AUD=${JWT_ASSERTION_AUD} \
   -e JWT_ASSERTION_ISSUER=${JWT_ASSERTION_ISSUER} \
+  -e PERSISTENCE_JOURNAL="inmemory-journal" \
+  -e SNAPSHOT_STORE="inmemory-snapshot-store" \
   advancedtelematic/auth-plus:latest
 
 sleep 20
