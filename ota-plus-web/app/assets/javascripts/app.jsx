@@ -44,7 +44,8 @@ define(function(require) {
       TreeHub = require('components/treehub/treehub'),
       Provisioning = require('components/provisioning/provisioning'),
       HomePage = require('components/homepage/home-page'),
-      Usage = require('components/usage/usage');
+      Usage = require('components/usage/usage'),
+      Billing = require('components/billing/billing');
 
   class App extends React.Component {
     constructor(props) {
@@ -181,6 +182,8 @@ define(function(require) {
             page = 'page-provisioning'; break;
           case 'usage':
             page = 'page-usage'; break;
+          case 'billing':
+            page = 'page-billing'; break;
           default:
           break;
         }
@@ -251,6 +254,7 @@ define(function(require) {
         <Route path="treehub" component={TreeHub} />
         <Route path="provisioning" component={Provisioning} />
         <Route path="usage" component={Usage} />
+        <Route path="billing" component={Billing} />
       </Route>
     </Route>
   );
