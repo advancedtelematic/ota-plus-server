@@ -394,7 +394,7 @@ define(function(require) {
       return (
         <div>
           <DevicesPageHeader 
-            deviceCount={!_.isUndefined(this.state.searchableDevicesData) ? Object.keys(this.state.searchableDevicesData).length : undefined}/>
+            deviceCount={!_.isUndefined(this.state.devicesData) ? Object.keys(this.state.devicesData).length : undefined}/>
           <div id="home-content" style={{height: this.state.contentHeight}}>
             {!_.isUndefined(this.state.devicesData) && !_.isUndefined(this.state.searchableDevicesData) && !_.isUndefined(this.state.groupsData) ?
               !_.isEmpty(this.state.devicesData) ?
