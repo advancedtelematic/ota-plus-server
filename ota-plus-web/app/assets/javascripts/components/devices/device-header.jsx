@@ -8,6 +8,10 @@ define(function(require) {
     constructor(props) {
       super(props);
     }
+    goBack(e) {
+      e.preventDefault();
+      this.context.router.goBack();
+    }
     render() {
       const device = this.props.device;
       if(!_.isUndefined(device)) {
@@ -35,7 +39,7 @@ define(function(require) {
       return (
         <div className="grey-header">
           <div className="col-md-12">
-            <Link to="/"><img src="/assets/img/icons/back.png" className="icon-back" alt=""/></Link>
+            <a href="#" onClick={this.goBack.bind(this)}><img src="/assets/img/icons/back.png" className="icon-back" alt=""/></a>
             <div className="grey-header-icon"></div>
             <VelocityTransitionGroup enter={{animation: 'fadeIn', display: 'inline-block'}} leave={{animation: 'fadeOut', display: 'inline-block'}}>
               {!_.isUndefined(device) ?
@@ -100,6 +104,10 @@ define(function(require) {
         </div>
       );
     }
+  };
+  
+  DetailsHeader.contextTypes = {
+    router: React.PropTypes.func.isRequired
   };
 
   return DetailsHeader;
