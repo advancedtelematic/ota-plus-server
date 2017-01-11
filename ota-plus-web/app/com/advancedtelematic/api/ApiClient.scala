@@ -301,15 +301,15 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
                      (implicit executionContext: ExecutionContext): Future[Done] = {
     val requestBody = Json.obj("feature" -> feature.get, "client_id" -> clientId)
 
-    val activate = userProfileRequest(s"users/${userId.id}/features")
+    def activate() = userProfileRequest(s"users/${userId.id}/features")
       .transform(_.withMethod("POST").withBody(requestBody))
       .execResponse(apiExec)
 
-    activate.flatMap { response => response.status match {
+    activate().flatMap { response => response.status match {
       case 201 => Future.successful(Done)
       case 404 => for {
         _ <- createProfile(userId)
-        _ <- activate
+        _ <- activate()
       } yield Done
       case _ => Future.failed(UnexpectedResponse(response))
     }}
