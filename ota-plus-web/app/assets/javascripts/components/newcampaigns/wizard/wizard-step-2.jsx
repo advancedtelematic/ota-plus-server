@@ -26,7 +26,6 @@ define(function(require) {
       return (
         <div>
           <GroupsList 
-            filterValue={this.props.filterValue}
             wizardData={this.props.wizardData}
             setWizardData={this.setWizardData}/>
         </div>
