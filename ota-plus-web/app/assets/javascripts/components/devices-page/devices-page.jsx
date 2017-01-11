@@ -370,7 +370,6 @@ define(function(require) {
       });
     }
     onDeviceDragEnd(e) {
-        console.log('end');
       this.setState({
         draggingDevice: null,
         draggingOverGroup: null,
