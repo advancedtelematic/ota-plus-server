@@ -9,11 +9,15 @@ define(function(require) {
     constructor(props) {
       super(props);
     }
+    goBack(e) {
+      e.preventDefault();
+      this.context.router.goBack();
+    }
     render() {
       const { t } = this.props;
       return (
         <div className="col-md-12">
-          <Link to="campaigns"><img src="/assets/img/icons/back.png" className="icon-back" alt=""/></Link>
+          <a href="#" onClick={this.goBack.bind(this)}><img src="/assets/img/icons/back.png" className="icon-back" alt=""/></a>
           <div className="grey-header-icon"></div>
           <div className="grey-header-text">
             <div className="grey-header-title">Campaign {this.props.name}</div>
@@ -24,6 +28,10 @@ define(function(require) {
         </div>
       );
     }
+  };
+  
+  CampaignHeader.contextTypes = {
+    router: React.PropTypes.object.isRequired
   };
 
   return ReactI18next.translate()(CampaignHeader);
