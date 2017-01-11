@@ -23,8 +23,8 @@ define(function(require) {
     }
     componentWillReceiveProps(nextProps) {
       if(nextProps.year !== this.props.year || nextProps.month !== this.props.month) {
-        var startTime = moment([nextProps.year, nextProps.month]).add(-1,"month").format();
-        var endTime = moment([nextProps.year, nextProps.month]).format();
+        var startTime = moment([nextProps.year, nextProps.month - 1]).format();
+        var endTime = moment([nextProps.year, nextProps.month - 1]).add(1, "months").format();
         this.setState({
           activeDevicesPerMonthData: undefined,
           activatedDevicesPerPeriodData: undefined,
