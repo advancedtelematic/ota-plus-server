@@ -272,7 +272,7 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
   )(Feature.apply _)}
 
   def createProfile(userId: UserId)
-                   (implicit executionContext: ExecutionContext): Future[Done] = {
+                   (implicit executionContext: ExecutionContext): Future[Option[Done]] = {
     val requestBody = Json.obj(
       "user_id" -> userId.id,
       "applications" -> Seq.empty[String],
@@ -283,10 +283,10 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
       .transform(_.withMethod("POST").withBody(requestBody))
       .execResponse(apiExec)
       .flatMap { response =>
-        if (response.status == 201) {
-          Future.successful(Done)
-        } else {
-          Future.failed(UnexpectedResponse(response))
+        response.status match {
+          case 201 => Future.successful(Some(Done))
+          case 409 => Future.successful(None)
+          case _   => Future.failed(UnexpectedResponse(response))
         }
       }
   }
