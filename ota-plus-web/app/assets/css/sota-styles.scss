@@ -5079,3 +5079,107 @@ hr.full-line {
         }
     }
 }
+
+.page-billing {
+    #billing {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        .grey-header {
+            .grey-header-icon {
+                background-image: url(/assets/img/icons/black/billing.png);
+            }
+        }
+
+        .billing-content {
+            background: #fff;
+            width: 100%;
+            padding: 15px 0;
+            float: left;
+            flex: 1;
+            overflow: auto;
+
+            .billing-plans {
+                width: 740px;
+                height: 100%;
+                margin: 0 auto;
+
+                .billing-plan {
+                    color: $color-darkgrey;
+                    width: 300px;
+                    height: 100%;
+                    margin: 0 10px;
+                    float: left;
+                    display: flex;
+                    flex-direction: column;
+
+                    .billing-plan-header {
+                        color: #fff;
+                        font-size: 16px;
+                        line-height: 50px;
+                        text-align: center;
+                        text-transform: uppercase;
+                        background: #9B9B9B;
+                        height: 50px;
+                        padding: 0 20px;
+                    }
+
+                    .billing-plan-body {
+                        background: #FAFAFA;
+                        padding: 20px 40px;
+                        flex: 1;
+
+                        ul.billing-features {
+                            li {
+                                line-height: 30px;
+                                padding-left: 40px;
+                                position: relative;
+
+                                &:after {
+                                    background: transparent url(/assets/img/icons/accept_grey.png) no-repeat;
+                                    display: block;
+                                    content: "";
+                                    width: 24px;
+                                    height: 19px;
+                                    position: absolute;
+                                    top: 5px;
+                                    left: 0;
+                                }
+                            }
+                        }
+
+                        .billing-price {
+                            font-size: 70px;
+                            line-height: 1.0em;
+                            text-align: center;
+                            margin: 20px 0 0 0;
+                        }
+
+                        hr {
+                            margin-bottom: 35px;
+                        }
+                    }
+
+                    &.billing-plan-premium {
+                        width: 400px;
+
+                        .billing-plan-header {
+                            background: #83D060;
+                        }
+
+                        .billing-plan-body {
+                            hr {
+                                margin-bottom: 5px;
+                            }
+
+                            .btn {
+                                margin: 20px 0 0 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
