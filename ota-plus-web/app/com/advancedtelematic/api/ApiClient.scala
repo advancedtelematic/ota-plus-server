@@ -32,6 +32,9 @@ case class UserPass(user: String, pass: String)
 
 case class Feature(feature: FeatureName, client_id: Option[Uuid], enabled: Boolean)
 
+case class AppMetadata(signedUp: Option[Boolean])
+
+
 object ApiRequest {
   case class UserOptions(token: Option[String] = None,
                          authuser: Option[UserPass] = None,
@@ -202,6 +205,20 @@ class Auth0Api(val conf: Configuration, val apiExec: ApiClientExec) extends OtaP
   private val domain: String       = auth0Config.domain
   private val auth0Request         = ApiRequest.base(s"https://$domain/")
   private val auth0RequestUserData = ApiRequest.base(s"https://$domain/api/v2/users/")
+
+  implicit val appMetadataR: Reads[AppMetadata] =
+    (__ \ "signed_up").readNullable[Boolean].map(AppMetadata(_))
+
+  def getAppMetadata(idToken: IdToken)(implicit ec: ExecutionContext): Future[AppMetadata] =
+    auth0RequestUserData(idToken.userId.id)
+      .withToken(idToken.value)
+      .transform(_.withMethod("GET"))
+      .execJsonValue(apiExec)
+      .map(value => (value \ "app_metadata").validate[AppMetadata])
+      .flatMap {
+        case JsSuccess(metadata, _) => Future.successful(metadata)
+        case JsError(errors)        => Future.failed(new Throwable(errors.toString()))
+      }
 
   def getUserMetadata(idToken: IdToken, key: String)(implicit ec: ExecutionContext): Future[JsValue] = {
     auth0RequestUserData(idToken.userId.id)

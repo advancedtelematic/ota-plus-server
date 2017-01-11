@@ -7,7 +7,7 @@ import com.advancedtelematic.api.{UnexpectedResponse, MalformedResponse}
 import com.advancedtelematic.{AuthPlusConfig, AuthPlusAccessToken, Auth0AccessToken, JwtAssertion, IdToken}
 import javax.inject.{Inject, Singleton}
 
-import com.advancedtelematic.api.ApiClientExec
+import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 import play.api.Logger
 import play.api.http.{HeaderNames, MimeTypes}
@@ -31,10 +31,15 @@ final case class UnexpectedToken(token: IdToken, msg: String) extends Throwable 
   * Handles just login/authentication
   */
 @Singleton
-class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesApi, wsClient: WSClient)(
-    implicit context: ExecutionContext)
+class LoginController @Inject()(
+  val conf: Configuration,
+  val messagesApi: MessagesApi,
+  val ws: WSClient,
+  val clientExec: ApiClientExec)
+  (implicit context: ExecutionContext)
     extends Controller
-    with I18nSupport {
+    with I18nSupport
+    with ApiClientSupport {
 
   import com.advancedtelematic.logging.OtaLogTreeSyntax._
   import scalaz.syntax.id._
@@ -55,11 +60,11 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
   }
 
   def logout: Action[AnyContent] = AuthenticatedAction { implicit req =>
-    wsClient.url(s"${authPlusConfig.uri}/revoke")
+    ws.url(s"${authPlusConfig.uri}/revoke")
       .withAuth(authPlusConfig.clientId, authPlusConfig.clientSecret, WSAuthScheme.BASIC)
       .post(Map("token" -> Seq(req.authPlusAccessToken.value)))
       .onComplete {
-        case Success(response) if response.status == ResponseStatusCodes.OK_200 => 
+        case Success(response) if response.status == ResponseStatusCodes.OK_200 =>
           log.debug(s"Access token '${req.authPlusAccessToken.value}' revoked.")
 
         case Success(response) =>
@@ -95,7 +100,7 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
 
     val computation = for {
       endpoint <- s"https://${auth0Config.domain}/delegation" ~> ("Endpoint: " + _) |> AsyncDescribedComputation.lift
-      response <- wsClient
+      response <- ws
                    .url(endpoint)
                    .post(
                        Json.obj("client_id"  -> auth0Config.clientId,
@@ -107,7 +112,7 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
                    .describe("Send request.")
       token <- processResponse(response) |> AsyncDescribedComputation.lift
     } yield token
-    computation.run.map("Exchenge id_token for jwt assertion" ~< _) |> AsyncDescribedComputation.apply
+    computation.run.map("Exchange id_token for jwt assertion" ~< _) |> AsyncDescribedComputation.apply
   }
 
   val callback: Action[AnyContent] = Action.async { request =>
@@ -132,10 +137,20 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
           ns <- extractNsFromToken(idToken) |> AsyncDescribedComputation.lift
         } yield (idToken, accessToken, authPlusAccessToken, ns)
 
-        tokens.run
-          .map("Processing authorization callback" ~< _)
-          .foreach(computation => log.info(computation.run.written.shows))
+        val actions = tokens.flatMap { case (token, _, _, _) =>
+          auth0Api.getAppMetadata(token).map(_.signedUp match {
+            case Some(true) =>
+              userProfileApi
+                .createProfile(token.userId)
+                .map(_ => () ~> "Sign-up: creating profile.")
+            case _ =>
+              Future.successful(() ~> "User already registered.")
+          }).flatMap(identity) |> AsyncDescribedComputation.apply
+        }
 
+        actions.run
+          .map("Processing authorization callback." ~< _)
+          .foreach(computation => log.info(computation.run.written.shows))
 
         tokens.run.map(_.fold[Result](_ => Redirect(routes.LoginController.login()), {
           case (idToken, auth0AccessToken, authPlusAccessToken, ns) =>
@@ -165,7 +180,7 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
     val tokensCalculation = for {
       tokenEndpoint <- AsyncDescribedComputation.lift(
                           s"https://${auth0Config.domain}/oauth/token" ~> ("Token endpoint " + _))
-      response <- wsClient
+      response <- ws
                    .url(tokenEndpoint)
                    .withHeaders(HeaderNames.ACCEPT -> MimeTypes.JSON)
                    .post(
@@ -205,7 +220,7 @@ class LoginController @Inject()(conf: Configuration, val messagesApi: MessagesAp
 
     val tokensEndpoint = s"${authPlusConfig.uri}/token"
     (for {
-      response <- wsClient
+      response <- ws
                    .url(tokensEndpoint)
                    .withHeaders(HeaderNames.ACCEPT -> MimeTypes.JSON)
                    .withAuth(authPlusConfig.clientId, authPlusConfig.clientSecret, WSAuthScheme.BASIC)
