@@ -60,7 +60,7 @@ define(function(require) {
               <div className="modal-header">
                 <button type="button" className="close" onClick={this.props.closeModal}></button>
                 <h4 className="modal-title">
-                  <img src="/assets/img/icons/grid.png" className="create-group-icon" style={{width: '20px'}} alt="" /> &nbsp;
+                  <img src="/assets/img/icons/groups.png" className="create-group-icon" style={{width: '20px'}} alt="" /> &nbsp;
                   Add new group
                 </h4>
               </div>
