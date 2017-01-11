@@ -4485,7 +4485,7 @@ hr.full-line {
 
     .home-box {
         width: 33.33333333333%;
-        padding: 20px;
+        padding: 40px 20px;
         float: left;
 
         .panel {
@@ -4577,10 +4577,10 @@ hr.full-line {
     background-repeat: no-repeat;
     width: 100%;
     height: 80px;
-    margin: 0 0 -5px 0;
+    margin: 0 0 -6px 0;
     display: inline-block;
     position: relative;
-    border-bottom: 1px solid #ddd;
+    border: 1px solid #eee;
     transition: background-color 0.2s ease-in;
 
     &:hover, &:active, &:focus {
@@ -4661,11 +4661,13 @@ hr.full-line {
 
 #box-last-running-campaigns {
     .table {
+        width: 99.99%;
+        
         tbody {
             tr {
                 cursor: pointer;
                 cursor: hand;
-
+                border: 1px solid #eee;
 
                 td {
                     transition: all 0.2s ease-in;
