@@ -466,6 +466,7 @@ button {
                             border-left: 0;
                             border-right: 0;
                             border-radius: 0;
+                            overflow: hidden;
 
                             &:hover, &:focus, &:active {
                                 background: #eee;
