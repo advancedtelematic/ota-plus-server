@@ -25,7 +25,7 @@
             </div>
         </div>
     </div>
-      
+
     <div id="requirejs-errors">
       <div class="block-icon">
         <i class="fa fa-exclamation-circle"></i>
@@ -41,29 +41,30 @@
         var appDoorElement = document.getElementById("app-door");
         appElement.classList.add(defineTheme());
         appDoorElement.classList.add(defineTheme());
-        var loadingText = new LoadingTexts({wrapper: "loading-text"});        
-        
+        var loadingText = new LoadingTexts({wrapper: "loading-text"});
+
         var errorContainer = document.getElementById("requirejs-errors");
-        
+
         function hideError(e) {
           e.preventDefault();
           errorContainer.style.display = 'none';
         }
-        
+
         @Html(org.webjars.RequireJS.getSetupJavaScript(routes.WebJarAssets.at("").url))
-	cachedCallback = require.callback;
-	require = {
-	  callback: function() {
-	    cachedCallback()
-	    requirejs.config({"paths": {"lodash": ["/webjars/lodash/3.10.1/lodash"]}});
-	    requirejs.config({"paths": {"react": ["/webjars/react/0.14.7/react-with-addons"]}});
-	    requirejs.config({"paths": {"react-dom": ["/webjars/react/0.14.7/react-dom"]}});
-	    requirejs.config({"paths": {"react-router": ["@routes.Assets.versioned("js/ReactRouter.min")"]}});
+        cachedCallback = require.callback;
+        require = {
+          callback: function() {
+            cachedCallback()
+            requirejs.config({"paths": {"lodash": ["/webjars/lodash/3.10.1/lodash"]}});
+            requirejs.config({"paths": {"react": ["/webjars/react/0.14.7/react-with-addons"]}});
+            requirejs.config({"paths": {"react-dom": ["/webjars/react/0.14.7/react-dom"]}});
+            requirejs.config({"paths": {"react-router": ["@routes.Assets.versioned("js/ReactRouter.min")"]}});
             requirejs.config({"paths": {"moment": ["@routes.Assets.versioned("js/moment.min")"]}});
             requirejs.config({"paths": {"bootstrap-datetimepicker": ["@routes.Assets.versioned("js/bootstrap-datetimepicker.min")"]}});
             requirejs.config({"paths": {"ioslist": ["@routes.Assets.versioned("js/jquery.ioslist.min")"]}});
             requirejs.config({"paths": {"velocity": ["@routes.Assets.versioned("js/velocity.min")"]}});
             requirejs.config({"paths": {"velocity-ui": ["@routes.Assets.versioned("js/velocity.ui.min")"]}});
+            requirejs.config({"paths": {"jquery": ["@routes.Assets.versioned("js/jquery.min")"]}});
             requirejs.config({"paths": {"jquery-ui": ["@routes.Assets.versioned("js/jquery-ui.min")"]}});
             requirejs.config({"paths": {"progressbar-js": ["@routes.Assets.versioned("js/progressbar.min")"]}});
             requirejs.config({"paths": {"babel": ["@routes.Assets.versioned("js/babel.min")"]}});
@@ -76,15 +77,15 @@
             requirejs.config({"paths": {"reactI18next": ["@routes.Assets.versioned("js/react-i18next.min")"]}});
             requirejs.config({
               waitSeconds: 60,
-            });  
-      
+            });
+
             requirejs.onError = function (err) {
               errorContainer.style.display = 'table';
               errorContainer.getElementsByClassName('block-text')[0].innerHTML = "<div><strong>Oops! Something went wrong.</strong></div><div>You need to reload application. If the problem repeats please contact ATS Garage administrator.</div>";
               throw err;
             };
-	  }
-	}
+          }
+        }
     </script>
     <script data-main="@routes.Assets.versioned("javascripts/react-app.js")" src="@routes.WebJarAssets.at(WebJarAssets.locate("require.min.js"))"></script>
     @CSRF.formField
