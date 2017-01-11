@@ -224,6 +224,7 @@ define(function(require) {
         if(_.isUndefined(this.state.searchablePackagesData) || Object.keys(this.state.searchablePackagesData)[0] !== Object.keys(searchablePackages)[0])
           this.setFakeHeader(Object.keys(searchablePackages)[0]);
         this.setState({
+          areInitPackagesFound: true,
           searchablePackagesData: searchablePackages,
           searchablePackagesDataNotChanged: searchablePackagesNotChanged
         });
