@@ -91,11 +91,11 @@ define(function(require) {
               <table className="table with-background">
                 <thead>
                   <tr>
-                    <th className="col-md-3">Name</th>
+                    <th className="col-md-4">Name</th>
                     <th className="col-md-2">Start Date</th>
                     <th className="col-md-2">End Date</th>
                     <th className="col-md-3">Status</th>
-                    <th></th>
+                    <th className="col-md-1 text-right"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -116,11 +116,11 @@ define(function(require) {
               <table className="table with-background">
                 <thead>
                   <tr>
-                    <th className="col-md-3">Name</th>
+                    <th className="col-md-4">Name</th>
                     <th className="col-md-2">Start Date</th>
                     <th className="col-md-2">End Date</th>
                     <th className="col-md-3">Status</th>
-                    <th></th>
+                    <th className="col-md-1 text-right"></th>
                   </tr>
                 </thead>
                 <tbody>
