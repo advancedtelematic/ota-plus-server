@@ -106,7 +106,7 @@ define(function(require) {
       var searchablePackages = db.searchablePackages.deref();
       if(!_.isUndefined(searchablePackages)) {
         if(_.isUndefined(this.state.searchablePackagesData))
-          this.setState({c: Object.keys(searchablePackages).length > 0});
+          this.setState({areInitPackagesFound: Object.keys(searchablePackages).length > 0});
       
         searchablePackages = this.groupAndSortPackages(searchablePackages, selectedSort);
         if(_.isUndefined(this.state.searchablePackagesData) || Object.keys(this.state.searchablePackagesData)[0] !== Object.keys(searchablePackages)[0])
