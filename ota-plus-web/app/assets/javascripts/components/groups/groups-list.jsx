@@ -76,11 +76,12 @@ define(function(require) {
       var foundDevice = _.findWhere(this.props.devices, {uuid: draggingDeviceUUID});
                           
       if(draggingDeviceUUID !== null && dropGroupUUID !== null) {
-        SotaDispatcher.dispatch({
-          actionType: 'remove-device-from-group',
-          uuid: foundDevice.groupUUID,
-          deviceId: foundDevice.uuid
-        });
+        if(foundDevice.groupUUID !== null)
+          SotaDispatcher.dispatch({
+            actionType: 'remove-device-from-group',
+            uuid: foundDevice.groupUUID,
+            deviceId: foundDevice.uuid
+          });
           
         setTimeout(function() {
           SotaDispatcher.dispatch({
