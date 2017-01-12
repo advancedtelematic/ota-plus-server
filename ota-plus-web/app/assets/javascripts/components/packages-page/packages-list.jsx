@@ -138,7 +138,8 @@ define(function(require) {
                       key={'package-' + pack.packageName + '-versions'}
                       versions={pack.elements}
                       packageName={pack.packageName}
-                      showBlacklistForm={this.props.showBlacklistModal}/>
+                      showBlacklistForm={this.props.showBlacklistModal}
+                      queryPackagesData={this.props.queryPackagesData}/>
                   : null}
                 </VelocityTransitionGroup>
               </li>

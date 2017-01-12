@@ -32,7 +32,8 @@ define(function(require) {
             installPackage={this.installPackage}
             showBlacklistForm={this.props.showBlacklistForm}
             key={'package-' + this.props.packageName + '-' + version.id.version}
-            isAutoInstallEnabled={this.props.isAutoInstallEnabled}/>
+            isAutoInstallEnabled={this.props.isAutoInstallEnabled}
+            queryPackagesData={this.props.queryPackagesData}/>
         );
       }, this);
 

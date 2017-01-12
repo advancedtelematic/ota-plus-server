@@ -116,7 +116,7 @@ define(function(require) {
   };
   
   DetailsHeader.contextTypes = {
-    router: React.PropTypes.func.isRequired
+    router: React.PropTypes.object.isRequired
   };
 
   return DetailsHeader;
