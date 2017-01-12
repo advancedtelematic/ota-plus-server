@@ -19,7 +19,7 @@ define(function(require) {
           <div className="package-right-box pull-right text-right">
             <div className="package-statuses pull-right">
               <div className="package-version-name pull-left">
-                v. {pack.id.version}
+                {pack.id.version}
               </div>
               <div className="pull-right">
                 {pack.isBlackListed ?
