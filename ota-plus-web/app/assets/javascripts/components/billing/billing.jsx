@@ -6,6 +6,7 @@ define(function(require) {
       BillingPremium = require('./billing-premium'),
       BillingQuote = require('./billing-quote'),
       BillingPlans = require('./billing-plans'),
+      Loader = require('../loader'),
       NoAccess = require('../noaccess');
 
   class Billing extends React.Component {
@@ -16,22 +17,29 @@ define(function(require) {
     render() {
       const user = db.user.deref();
       return (
-        this.props.hasBetaAccess && !_.isUndefined(user) ?
-          <div id="billing">
-            <BillingHeader />
-            <div className="billing-content">
-              {user.plan == "premium" ? 
-                <BillingPremium />
-              : 
-                user.plan == "quote" ?
-                  <BillingQuote />
-                :
-                  <BillingPlans />
-              }
-            </div>
-          </div>
-        :
-          <NoAccess />
+        <span>
+          <VelocityTransitionGroup enter={{animation: "fadeIn", display: "flex"}} leave={{animation: "fadeOut", display: "flex"}} runOnMount={true}>
+            {this.props.hasBetaAccess && !_.isUndefined(user) ?
+              <div className="content-wrapper">
+                <BillingHeader />
+                <div className="billing-content">
+                  {user.plan == "premium" ? 
+                    <BillingPremium />
+                  : 
+                    user.plan == "quote" ?
+                      <BillingQuote />
+                    :
+                      <BillingPlans 
+                        user={user}/>
+                  }
+                </div>
+              </div>
+            : <NoAccess />}
+          </VelocityTransitionGroup>
+          {_.isUndefined(user) ?
+            <Loader />
+          : undefined}
+        </span>
       );
     }
   }

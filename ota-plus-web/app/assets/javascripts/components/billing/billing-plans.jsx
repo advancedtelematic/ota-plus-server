@@ -1,12 +1,23 @@
 define(function(require) {
-  var React = require('react');
+  var React = require('react'),
+      SotaDispatcher = require('sota-dispatcher'),
+      VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
       
   class BillingPlans extends React.Component {
     constructor(props) {
       super(props);
     }
-    handleSubmit() {
-      
+    handleSubmit(e) {
+      e.preventDefault();
+      const user = this.props.user;
+      var data = {
+        name: user.fullName,
+        plan: "premium"
+      };
+      SotaDispatcher.dispatch({
+        actionType: 'update-user',
+        data: data
+      });
     }
     render() {
       return (
@@ -53,6 +64,10 @@ define(function(require) {
         </div>
       );
     }
+  };
+
+  BillingPlans.propTypes = {
+    user: React.PropTypes.object.isRequired
   };
 
   return BillingPlans;

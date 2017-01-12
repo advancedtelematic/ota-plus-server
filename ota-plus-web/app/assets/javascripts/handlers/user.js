@@ -20,6 +20,11 @@ define(function(require) {
                 db.user.reset(user);
               });
           break;
+          case 'update-user-billing':
+            sendRequest.doPut('/users/' + payload.userId + '/billing_info', payload.data, {action: payload.actionType})
+              .success(function(user) {
+              });
+          break;
           case 'change-password':
             sendRequest.doPost('/user/change_password', null, {action: payload.actionType, dataType: 'text'})
               .success(function() {
