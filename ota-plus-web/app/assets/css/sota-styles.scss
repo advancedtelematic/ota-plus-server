@@ -649,7 +649,7 @@ button {
         }
 
         .grey-header-text {
-            width: 30%;
+            width: 25%;
 
             .grey-header-title {
                 width: 100%;
@@ -663,7 +663,8 @@ button {
     }
 
     .device-header-status {
-        font-size: 16px;
+        color: #ddd;
+        font-size: 12px;
         height: 35px;
         padding: 6px 10px 0 10px;
         margin: 13px 0 0 0;
@@ -673,9 +674,19 @@ button {
     }
 
     .device-header-dates {
-        color: #bbb;
+        color: #ddd;
+        font-size: 12px;
         margin: 15px 20px 0 0;
         float: right;
+
+        .device-header-date {
+            margin: 0 10px;
+            display: inline-block;
+
+            .device-header-date-desc {
+                margin-top: 3px;
+            }
+        }
     }
 
     .list-group-item-wrapper {

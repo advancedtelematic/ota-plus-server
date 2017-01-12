@@ -44,14 +44,7 @@ define(function(require) {
             <VelocityTransitionGroup enter={{animation: 'fadeIn', display: 'inline-block'}} leave={{animation: 'fadeOut', display: 'inline-block'}}>
               {!_.isUndefined(device) ?
                 <div className="grey-header-text">
-                  <div className="grey-header-title">{deviceName}</div>
-                  <div className="grey-header-subtitle">
-                    {device.status !== 'NotSeen' ?
-                      <span>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
-                    :
-                      <span>Never seen online</span>
-                    }
-                  </div>
+                  <div className="grey-header-title" title={deviceName}>{deviceName}</div>
                 </div>
               : undefined}
             </VelocityTransitionGroup>
@@ -87,15 +80,31 @@ define(function(require) {
             <VelocityTransitionGroup enter={{animation: 'fadeIn'}} leave={{animation: 'fadeOut'}}>
               {!_.isUndefined(device) ?
                 <div className="device-header-dates">
-                  <div>
-                    <i className="fa fa-calendar text-success" aria-hidden="true"></i> Created date: {createdDate.toDateString() + ' ' + createdDate.toLocaleTimeString()}
+                  <div className="device-header-date">
+                    <span className="lightgrey">Created</span>
+                    <div className="device-header-date-desc">
+                      {createdDate.toDateString() + ' ' + createdDate.toLocaleTimeString()}
+                    </div>
                   </div>
-                  <div>
-                    {device.activatedAt !== null ?
-                      <span><i className="fa fa-times-circle-o text-success" aria-hidden="true"></i> Activated date: {activatedDate.toDateString() + ' ' + activatedDate.toLocaleTimeString()}</span>
-                    :
-                      <span><i className="fa fa-times-circle-o text-danger" aria-hidden="true"></i> Device not activated</span>
-                    }
+                  <div className="device-header-date">
+                    <span className="lightgrey">Activated</span>
+                    <div className="device-header-date-desc">
+                      {device.activatedAt !== null ?
+                        <span>{activatedDate.toDateString() + ' ' + activatedDate.toLocaleTimeString()}</span>
+                      :
+                        <span>Device not activated</span>
+                      }
+                    </div>
+                  </div>
+                  <div className="device-header-date">
+                    <span className="lightgrey">Last seen online</span>
+                    <div className="device-header-date-desc">
+                      {device.status !== 'NotSeen' ?
+                        <span>{lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
+                      :
+                        <span>Never seen online</span>
+                      }
+                    </div>
                   </div>
                 </div>
               : undefined}
