@@ -177,6 +177,13 @@ define(function(require) {
                 db.activatedDevicesPerPeriod.reset(activatedDevicesPerPeriod);
               });
           break;
+          case 'get-total-activated-devices':
+            var start = new Date(0).toISOString();
+            sendRequest.doGet('/api/v1/active_device_count?start=' + encodeURIComponent(start) + '&end=' + encodeURIComponent(payload.end), {action: payload.actionType})
+              .success(function(totalActivatedDevices) {
+                db.totalActivatedDevices.reset(totalActivatedDevices);
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));
