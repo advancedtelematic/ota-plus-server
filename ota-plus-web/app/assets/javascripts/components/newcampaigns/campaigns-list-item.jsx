@@ -86,7 +86,7 @@ define(function(require) {
               </div>
             </td>
           : null}
-          <td>
+          <td className="text-right">
             {campaign.launched ? 
               <PieChart data={data} width="30" height="30" options={{showTooltips: false}}/>
             : null}
