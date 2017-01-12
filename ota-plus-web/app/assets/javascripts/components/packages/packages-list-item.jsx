@@ -34,7 +34,6 @@ define(function(require) {
                         </span>
                         <span className="pull-right">queued</span>
                         <span className="package-name pull-right" title={this.props.queuedPackage}>{this.props.queuedPackage}&nbsp;</span>
-                        <span className="pull-right">v.&nbsp;</span>
                         <span className="fa-stack package-status-circle pull-right">
                           <i className="fa fa-circle fa-stack-1x"></i>
                           <i className="fa fa-dot-circle-o fa-stack-1x orange" aria-hidden="true"></i>

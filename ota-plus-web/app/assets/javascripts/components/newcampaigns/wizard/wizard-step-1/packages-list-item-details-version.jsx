@@ -32,7 +32,7 @@ define(function(require) {
                 </div>
               }
               <div className="pull-right">
-                v. <span title={this.props.version.id.version}>{this.props.version.id.version}</span>
+                <span title={this.props.version.id.version}>{this.props.version.id.version}</span>
               </div>
             </div>
           </div>
