@@ -38,11 +38,6 @@ define(function(require) {
     componentDidMount() {
       ReactDOM.findDOMNode(this.refs.groupsList).addEventListener('scroll', this.groupsListScroll);
     }
-    componentWillUpdate(nextProps, nextState) {
-      if(nextProps.filterValue != this.props.filterValue) {
-        //TODO: groups filtering
-      }
-    }
     componentDidUpdate(prevProps, prevState) {
       if(this.props.groupsListHeight !== prevProps.groupsListHeight) {
         this.groupsListScroll();
@@ -207,15 +202,9 @@ define(function(require) {
                       </div>
                     :
                       <div className="col-md-12 height-100 position-relative text-center">
-                        {this.props.filterValue !== '' ? 
-                          <div className="center-xy padding-15">
-                            No matching groups found.
-                          </div>
-                        :
-                          <div className="center-xy padding-15">
-                            There are no groups to choose. 
-                          </div>
-                        }
+                        <div className="center-xy padding-15">
+                          There are no groups to choose. 
+                        </div>
                       </div>
                   : undefined}
                 </VelocityTransitionGroup>
