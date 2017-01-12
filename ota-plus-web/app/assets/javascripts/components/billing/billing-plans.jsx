@@ -6,7 +6,7 @@ define(function(require) {
       super(props);
     }
     handleSubmit() {
-      e
+      
     }
     render() {
       return (
