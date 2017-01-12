@@ -1,6 +1,7 @@
 define(function(require) {
   var React = require('react'),
-      SotaDispatcher = require('sota-dispatcher');
+      SotaDispatcher = require('sota-dispatcher'),
+      db = require('stores/db');
 
   class PackagesListItemDetailsVersion extends React.Component {
     constructor(props) {
@@ -16,14 +17,18 @@ define(function(require) {
       this.disableEditField = this.disableEditField.bind(this);
       this.changeCommentFieldLength = this.changeCommentFieldLength.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleResponse = this.handleResponse.bind(this);
+      db.postStatus.addWatch("poll-update-package-details", _.bind(this.handleResponse, this, null));
     }
     componentWillReceiveProps(nextProps) {
-      if(nextProps.version.description !== this.props.version.description) {
+      if(nextProps.version.description !== this.props.version.description)
         this.setState({
           comment: nextProps.version.description,
           commentTmp: nextProps.version.description
         });
     }
+    componentWillUnmount() {
+      db.postStatus.removeWatch("poll-update-package-details");
     }
     enableEditField(e) {
       e.preventDefault();
@@ -64,6 +69,17 @@ define(function(require) {
         version: this.props.version.id.version,
         data: {"description": this.refs.comment.value}
       });
+    }
+    handleResponse() {
+      var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
+      if(!_.isUndefined(postStatus['update-package-details']) && postStatus['update-package-details'].status === 'success') {
+        var that = this;
+        delete postStatus['update-package-details'];
+        db.postStatus.reset(postStatus);
+        setTimeout(function() {
+          that.props.queryPackagesData();
+        }, 1);
+      }
     }
     formBlacklist(action, e) {
       this.props.showBlacklistForm(this.props.version.id.name, this.props.version.id.version, action);
