@@ -89,7 +89,7 @@ class CryptApi(conf: Configuration, val apiExec: ApiClientExec)(implicit exec: E
 
   def getCredentials(accountName: String): Future[Option[Seq[DeviceRegistrationCredentials]]] = {
     getAccount(accountName, x =>
-      (x \ "deviceregistrationcredentials").validate[Map[String, DeviceRegistrationCredentials]])
+      (x \ "deviceRegistrationCredentials").validate[Map[String, DeviceRegistrationCredentials]])
       .map(_.map(_.values.toSeq))
   }
 
