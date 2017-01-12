@@ -54,6 +54,7 @@ define(function(require) {
       this.expandPackage = this.expandPackage.bind(this);
       this.handlePackageCreated = this.handlePackageCreated.bind(this);
       this.handlePackageBlacklisted = this.handlePackageBlacklisted.bind(this);
+      this.queryPackagesData = this.queryPackagesData.bind(this);
       SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: ''});
       db.searchablePackages.addWatch("poll-packages", _.bind(this.refreshSearchablePackagesData, this, null));
       db.packageCreated.addWatch("package-created", _.bind(this.handlePackageCreated, this, null));
@@ -247,6 +248,9 @@ define(function(require) {
         db.packageBlacklisted.reset();
       }
     }
+    queryPackagesData() {
+      SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.state.filterValue});
+    }
     render() {
       var tooltipContent = (
         <div className="text-center margin-top-20">
@@ -294,7 +298,8 @@ define(function(require) {
                         showBlacklistModal={this.showBlacklistModal}
                         expandedPackageName={this.state.expandedPackageName}
                         expandPackage={this.expandPackage}
-                        onFileDrop={this.onFileDrop}/>
+                        onFileDrop={this.onFileDrop}
+                        queryPackagesData={this.queryPackagesData}/>
                     </div>
                   </div>
                 </div>
