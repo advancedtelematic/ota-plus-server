@@ -40,7 +40,7 @@ define(function(require) {
             <Link 
               to={`${link}`} 
               className="element-box" 
-              title={pack.id.name + ' v. ' + pack.id.version}
+              title={pack.id.name + ' ' + pack.id.version}
               id={"link-packages-" + pack.uuid} 
               key={"link-packages-" + pack.uuid}>
               <div className="element-icon"></div>

@@ -127,7 +127,7 @@ define(function(require) {
                     </div>
                   }
                 
-                  v. <span title={this.props.version.id.version}>{this.props.version.id.version}</span>
+                  <span title={this.props.version.id.version}>{this.props.version.id.version}</span>
                 </div>
                 {this.props.version.isBlackListed ?
                   <div className="pull-left">
@@ -148,7 +148,7 @@ define(function(require) {
             :
               <div className="package-statuses pull-right">
                 <div className="package-version-name pull-left">
-                  v. <span title={this.props.version.id.version}>{this.props.version.id.version}</span>
+                  <span title={this.props.version.id.version}>{this.props.version.id.version}</span>
                 </div>
                 
                 <div className="pull-left">

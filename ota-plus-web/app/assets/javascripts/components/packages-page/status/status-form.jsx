@@ -88,7 +88,7 @@ define(function(require) {
               groupIds: version.groupIds,
               color: availableColors[colorIndex],
               highlight: availableColors[colorIndex],
-              label: (index === availableColors.length - 1 ? groupedStatsName : "v. " + version.packageVersion)
+              label: (index === availableColors.length - 1 ? groupedStatsName : " " + version.packageVersion)
             }
           );
         } else if(index >= availableColors.length) {

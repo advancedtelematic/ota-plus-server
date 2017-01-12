@@ -46,7 +46,7 @@ define(function(require) {
                             {this.props.wizardData[0].packageName}
                           </div>
                           <div className="col-xs-5">
-                            <strong>v. {this.props.wizardData[0].packageVersion}</strong>
+                            <strong>{this.props.wizardData[0].packageVersion}</strong>
                           </div>
                         </div>
                       </div>

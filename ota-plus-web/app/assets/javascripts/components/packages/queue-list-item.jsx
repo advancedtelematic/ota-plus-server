@@ -46,7 +46,7 @@ define(function(require) {
                 </span>
               : null}
               <div className="queue-item-version pull-right" title={this.props.package.packageId.version}>
-                <strong>v. {this.props.package.packageId.version}</strong>
+                <strong>{this.props.package.packageId.version}</strong>
               </div>
             </div>
           </div>
