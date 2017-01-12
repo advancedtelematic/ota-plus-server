@@ -42,6 +42,7 @@ define(function(require) {
       this.handlePackageCreated = this.handlePackageCreated.bind(this);
       this.handlePackageBlacklisted = this.handlePackageBlacklisted.bind(this);
       this.handlePostStatus = this.handlePostStatus.bind(this);
+      this.queryPackagesData = this.queryPackagesData.bind(this);
 
       db.blacklistedPackages.addWatch("poll-blacklisted-packages-page", _.bind(this.refreshPackagesData, this, null));
       db.searchablePackages.addWatch("poll-packages", _.bind(this.refreshPackagesData, this, null));
@@ -460,6 +461,10 @@ define(function(require) {
         }, 1);
       }
     }
+    queryPackagesData() {
+      SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: this.state.filterValue});
+      SotaDispatcher.dispatch({actionType: 'search-packages-for-device-by-regex', device: this.props.device.uuid, regex: this.state.filterValue});
+    }
     render() {
       var packageIndex = -1;
       if(!_.isUndefined(this.state.packagesData)) {
@@ -506,7 +511,8 @@ define(function(require) {
                             packageName={pack.packageName}
                             isQueued={pack.isQueued}
                             isAutoInstallEnabled={!_.isUndefined(pack.isAutoInstallEnabled) ? pack.isAutoInstallEnabled : false}
-                            showBlacklistForm={this.props.showBlacklistForm}/>
+                            showBlacklistForm={this.props.showBlacklistForm}
+                            queryPackagesData={this.queryPackagesData}/>
                         : null}
                       </VelocityTransitionGroup>
                   </li>
