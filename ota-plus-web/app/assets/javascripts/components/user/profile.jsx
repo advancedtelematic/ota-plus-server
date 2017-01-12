@@ -51,6 +51,9 @@ define(function(require) {
               <Link to="/usage" id="link-usage">Usage</Link>
             </div>
             <div>
+              <Link to="/billing" id="link-billing">Billing</Link>
+            </div>
+            <div>
               <a href="#" onClick={this.props.logout} id="link-signout">Sign out</a>
             </div>
           </div>

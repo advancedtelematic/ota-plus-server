@@ -16,7 +16,7 @@ define(function(require) {
       }
       render() {
         return (
-          <div>
+          <div className="height-100">
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
               {this.props.showCampaignPanel ?
               <div className="rightPanel" role="dialog">
