@@ -18,18 +18,21 @@ define(function(require) {
           {
             class: WizardStep1,
             title: 'Select Package',
-            isFinished: false
+            isFinished: false,
+            isSearchBarShown: true
           },
           {
             class: WizardStep2,
             title: 'Select Group(s)',
-            isFinished: false
+            isFinished: false,
+            isSearchBarShown: false
           },
           {
             class: WizardStep4,
             title: 'Summary',
             finishButtonLabel: 'Launch',
-            isFinished: true
+            isFinished: true,
+            isSearchBarShown: false
           },
         ],
         wizardData: null,
@@ -42,6 +45,7 @@ define(function(require) {
       this.prevStep = this.prevStep.bind(this);
       this.nextStep = this.nextStep.bind(this);
       this.jumpToStep = this.jumpToStep.bind(this);
+      this.isSearchBarShown = this.isSearchBarShown.bind(this);
       this.finish = this.finish.bind(this);
       this.handleResponse = this.handleResponse.bind(this);
       this.verifyIfPreviousStepsFinished = this.verifyIfPreviousStepsFinished.bind(this);
@@ -81,6 +85,9 @@ define(function(require) {
       
       if(stepId < this.state.currentStepId || this.verifyIfPreviousStepsFinished(stepId - 1))
         this.setState({currentStepId: stepId});
+    }
+    isSearchBarShown() {
+      return this.state.wizardSteps[this.state.currentStepId].isSearchBarShown;
     }
     isFirstStep() {
       return this.state.currentStepId == 0;
@@ -170,7 +177,7 @@ define(function(require) {
             <div className="modal-content">
               <div className="modal-header">
                 <h4 className="modal-title">{currentStep.title}</h4>
-                {this.state.currentStepId < 2 ? 
+                {this.isSearchBarShown() ? 
                   <SearchBar 
                     class="search-bar pull-left" 
                     inputId="search-groups-input" 
