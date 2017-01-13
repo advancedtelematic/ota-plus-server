@@ -21,17 +21,19 @@ define(function(require) {
               <div className="package-statuses pull-right">
                 {!this.props.isSelected ?
                   this.props.installedPackage ?
-                    <span>
+                    this.props.isAutoInstallEnabled ?
                       <span className="pull-right">
-                        <label className={"label label-auto-update" + (this.props.isAutoInstallEnabled ? " active" : "")}>Auto</label>
+                        <label className="label label-auto-update">Auto</label>
                       </span>
-                    </span>
+                    : null
                   : 
                     this.props.queuedPackage ?
                       <span>
-                        <span className="pull-right">
-                          <label className={"label label-auto-update" + (this.props.isAutoInstallEnabled ? " active" : "")}>Auto</label>
-                        </span>
+                        {this.props.isAutoInstallEnabled ?
+                          <span className="pull-right">
+                            <label className="label label-auto-update">Auto</label>
+                          </span>
+                        : null}
                         <span className="pull-right">queued</span>
                         <span className="package-name pull-right" title={this.props.queuedPackage}>{this.props.queuedPackage}&nbsp;</span>
                         <span className="fa-stack package-status-circle pull-right">
@@ -40,11 +42,11 @@ define(function(require) {
                         </span>
                       </span>
                     : 
-                      <span>
+                      this.props.isAutoInstallEnabled ?
                         <span className="pull-right">
-                          <label className={"label label-auto-update" + (this.props.isAutoInstallEnabled ? " active" : "")}>Auto</label>
+                          <label className="label label-auto-update">Auto</label>
                         </span>
-                      </span>
+                      : null
                 : null}
               </div>
             </div>
