@@ -168,23 +168,12 @@ define(function(require) {
             page = 'page-device-details'; break;
           case 'productiondevicedetails':
             page = 'page-device-details'; break;
-          case 'packages':
-            page = 'page-packages'; break;
           case 'impactanalysis':
             page = 'page-impact-analysis'; break;
-          case 'campaigns':
-            page = 'page-campaigns'; break;
           case 'clientapps':
             page = 'page-client-apps'; break;
-          case 'treehub':
-            page = 'page-treehub'; break;
-          case 'provisioning':
-            page = 'page-provisioning'; break;
-          case 'usage':
-            page = 'page-usage'; break;
-          case 'billing':
-            page = 'page-billing'; break;
           default:
+            page = 'page-' + path[1]; break;
           break;
         }
       }

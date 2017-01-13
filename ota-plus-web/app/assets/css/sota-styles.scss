@@ -21,6 +21,15 @@ $color-lightmint: #A7D5CB;
     text-overflow: ellipsis;
 }
 
+@mixin content-flex {
+    background: #fff;
+    width: 100%;
+    padding: 15px 0;
+    float: left;
+    flex: 1;
+    overflow-y: auto;
+}
+
 * {
     text-decoration: none;
     padding: 0;
@@ -849,7 +858,7 @@ button {
             position: absolute;
             top: 10px;
             right: 10px;
-            
+
             &:hover, &:focus, &:active {
                 background-color: $color-mint-active;
                 transition: all 0.3s ease-in;
@@ -4679,7 +4688,7 @@ hr.full-line {
 #box-last-running-campaigns {
     .table {
         width: 99.99%;
-        
+
         tbody {
             tr {
                 cursor: pointer;
@@ -4996,6 +5005,8 @@ hr.full-line {
     width: 100%;
     margin-bottom: 0;
     border: 0;
+    box-shadow: none;
+    -webkit-box-shadow: none;
     position: relative;
 
     .panel-heading {
@@ -5091,118 +5102,176 @@ hr.full-line {
     }
 }
 
+.content-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 .page-billing {
-    #billing {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-
-        .grey-header {
-            .grey-header-icon {
-                background-image: url(/assets/img/icons/black/billing.png);
-            }
+    .grey-header {
+        .grey-header-icon {
+            background-image: url(/assets/img/icons/black/billing.png);
         }
+    }
 
-        .billing-content {
-            background: #fff;
-            width: 100%;
-            padding: 15px 0;
-            float: left;
-            flex: 1;
-            overflow: auto;
+    .billing-content {
+        @include content-flex;
 
-            .billing-plans {
-                width: 740px;
+        .billing-plans {
+            width: 740px;
+            height: 100%;
+            margin: 0 auto;
+
+            .billing-plan {
+                color: $color-darkgrey;
+                width: 300px;
                 height: 100%;
-                margin: 0 auto;
+                margin: 0 10px;
+                float: left;
+                display: flex;
+                flex-direction: column;
 
-                .billing-plan {
-                    color: $color-darkgrey;
-                    width: 300px;
-                    height: 100%;
-                    margin: 0 10px;
-                    float: left;
-                    display: flex;
-                    flex-direction: column;
+                .billing-plan-header {
+                    color: #fff;
+                    font-size: 16px;
+                    line-height: 50px;
+                    text-align: center;
+                    text-transform: uppercase;
+                    background: #9B9B9B;
+                    height: 50px;
+                    padding: 0 20px;
+                }
+
+                .billing-plan-body {
+                    background: #FAFAFA;
+                    padding: 20px 40px;
+                    flex: 1;
+
+                    ul.billing-features {
+                        li {
+                            line-height: 30px;
+                            padding-left: 40px;
+                            position: relative;
+
+                            &:after {
+                                background: transparent url(/assets/img/icons/accept_grey.png) no-repeat;
+                                display: block;
+                                content: "";
+                                width: 24px;
+                                height: 19px;
+                                position: absolute;
+                                top: 5px;
+                                left: 0;
+                            }
+                        }
+                    }
+
+                    .billing-price {
+                        font-size: 70px;
+                        line-height: 1.0em;
+                        text-align: center;
+                        margin: 20px 0 0 0;
+                    }
+
+                    hr {
+                        margin-bottom: 35px;
+                    }
+                }
+
+                &.billing-plan-premium {
+                    width: 400px;
 
                     .billing-plan-header {
-                        color: #fff;
-                        font-size: 16px;
-                        line-height: 50px;
-                        text-align: center;
-                        text-transform: uppercase;
-                        background: #9B9B9B;
-                        height: 50px;
-                        padding: 0 20px;
+                        background: #83D060;
                     }
 
                     .billing-plan-body {
-                        background: #FAFAFA;
-                        padding: 20px 40px;
-                        flex: 1;
-
-                        ul.billing-features {
-                            li {
-                                line-height: 30px;
-                                padding-left: 40px;
-                                position: relative;
-
-                                &:after {
-                                    background: transparent url(/assets/img/icons/accept_grey.png) no-repeat;
-                                    display: block;
-                                    content: "";
-                                    width: 24px;
-                                    height: 19px;
-                                    position: absolute;
-                                    top: 5px;
-                                    left: 0;
-                                }
-                            }
+                        hr {
+                            margin-bottom: 5px;
                         }
 
-                        .billing-price {
-                            font-size: 70px;
-                            line-height: 1.0em;
-                            text-align: center;
+                        .btn {
                             margin: 20px 0 0 0;
                         }
-
-                        hr {
-                            margin-bottom: 35px;
-                        }
-                    }
-
-                    &.billing-plan-premium {
-                        width: 400px;
-
-                        .billing-plan-header {
-                            background: #83D060;
-                        }
-
-                        .billing-plan-body {
-                            hr {
-                                margin-bottom: 5px;
-                            }
-
-                            .btn {
-                                margin: 20px 0 0 0;
-                            }
-                        }
                     }
                 }
+            }
 
-                &#billing-plans-quote {
-                    .billing-plan {
-                        width: 100%;
-                    }
+            &#billing-plans-quote {
+                .billing-plan {
+                    width: 100%;
                 }
+            }
 
-                &#billing-plans-premium {
-                    .billing-plan {
-                        width: 100%;
+            &#billing-plans-premium {
+                .billing-plan {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+.page-editprofile {
+    .grey-header {
+        .grey-header-icon {
+            background-image: url(/assets/img/icons/black/profile.png);
+        }
+    }
+
+    .edit-profile-content {
+        @include content-flex;
+
+        .edit-profile-content-left {
+            color: $color-darkgrey;
+            text-align: center;
+            background: #FAFAFA;
+            width: 350px;
+            padding: 60px 15px;
+            margin: 0 15px;
+            float: left;
+
+            .profile-icon {
+                width: 90px;
+                height: 90px;
+                border-radius: 90px;
+            }
+
+            .profile-name {
+                font-size: 20px;
+                font-weight: bold;
+                margin: 30px 0 0 0;
+            }
+
+            .profile-email {
+                font-size: 14px;
+            }
+
+            hr {
+                border-color: #ccc;
+            }
+        }
+
+        .edit-profile-content-right {
+            background: #FAFAFA;
+            height: 100%;
+            padding: 15px;
+            margin: 0 15px 0 380px;
+
+            .panel {
+                &.panel-grey {
+                    .panel-heading {
+                        font-size: 18px;
+                        text-transform: uppercase;
+                    }
+
+                    .panel-body {
+                        padding: 40px 60px;
                     }
                 }
             }
         }
     }
 }
+
