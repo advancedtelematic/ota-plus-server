@@ -25,7 +25,6 @@ define(function(require) {
               <div className="btn-group">
                 <button type="button" className="btn btn-grey dropdown-toggle" id="dropdown-devices-status" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span className="pull-left">{this.props.selectedStatusName} &nbsp;</span>
-                  <span className="fa fa-angle-down pull-right"></span>
                 </button>
                 <ul className="dropdown-menu">
                   <li><a href="#" onClick={this.props.selectStatus.bind(this, 'All')}>All</a></li>
