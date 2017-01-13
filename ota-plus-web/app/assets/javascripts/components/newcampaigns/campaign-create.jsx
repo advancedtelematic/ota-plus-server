@@ -50,7 +50,7 @@ define(function(require) {
               <div className="modal-header">
                 <h4 className="modal-title">
                   <img src="/assets/img/icons/white/campaigns.png" className="create-campaign-icon" alt="" /> &nbsp;
-                  Add new Campaign
+                  Add new campaign
                 </h4>
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
