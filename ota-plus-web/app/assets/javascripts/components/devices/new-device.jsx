@@ -61,7 +61,6 @@ define(function(require) {
           <div className="modal-dialog center-xy">
             <div className="modal-content">
               <div className="modal-header">
-                <button type="button" className="close" onClick={this.props.closeNewDeviceModal}></button>
                 <h4 className="modal-title">
                   Add new device
                   {selectedGroup && selectedGroup.type == 'real' ?

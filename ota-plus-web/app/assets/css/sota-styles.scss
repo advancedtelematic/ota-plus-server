@@ -792,7 +792,7 @@ button {
                     &:before {
                         background-color: #96DED2 !important;
                     }
-                    
+
                     &:after {
                         left: 27px !important;
                     }
@@ -3372,6 +3372,7 @@ hr.full-line {
     .group-icon {
         background-image: url(/assets/img/icons/groups.png);
         float: none;
+        border: 1px solid #ddd;
         display: inline-block;
         vertical-align: middle;
     }
@@ -3638,6 +3639,7 @@ hr.full-line {
                     .list-group-item {
                         padding-left: 30px;
                         padding-right: 30px;
+                        transition: background-color 0.3s ease-in;
                     }
                 }
 
