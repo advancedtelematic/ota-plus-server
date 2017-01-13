@@ -52,7 +52,6 @@ define(function(require) {
           <div className="modal-dialog center-xy">
             <div className="modal-content">
               <div className="modal-header">
-                <button type="button" className="close" onClick={this.props.closeRenameDeviceModal}></button>
                 <h4 className="modal-title">
                   <img src="/assets/img/icons/edit_white.png" className="blacklist-edit-icon" style={{width: '30px'}} alt="" />&nbsp;
                   Rename device - {this.props.device.deviceName}
