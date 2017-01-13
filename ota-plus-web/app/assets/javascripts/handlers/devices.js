@@ -32,7 +32,7 @@ define(function(require) {
               });
             break;
           case 'search-devices-by-regex':
-            var query = payload.regex ? '&regex=' + payload.regex : '';
+            var query = payload.regex ? '&regex=(?i)' + payload.regex : '';
             sendRequest.doGet('/api/v1/devices_info?status=true' + query, {action: payload.actionType})
               .success(function(devices) {
                 db.searchableDevices.reset(devices);
