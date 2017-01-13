@@ -1344,16 +1344,6 @@ button {
         background: linear-gradient(to top, rgba(254,254,254,1) 0%,rgba(243,243,243,1) 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3f3f3', endColorstr='#fefefe',GradientType=0 );
     }
-
-    &.dropdown-toggle {
-        color: #888;
-        font-size: 12px;
-        padding: 4px 10px 5px 10px;
-
-        .fa.fa-angle-down {
-            font-size: 14px;
-        }
-    }
 }
 
 .btn-rect {
@@ -1723,11 +1713,11 @@ a.close, button.close {
     }
 
     .btn-grey {
+        font-weight: normal;
         min-width: 90px;
     }
 
     .btn-group {
-
         & > .dropdown-toggle {
             &:not(:first-child) {
                 border-top-left-radius: 15px;
@@ -1737,6 +1727,31 @@ a.close, button.close {
 
         & > .btn-grey {
             float: none;
+
+            &.dropdown-toggle {
+                color: #888;
+                font-size: 12px;
+                padding: 5px 10px 4px 10px;
+                position: relative;
+
+                &:after {
+                    content: '\f107';
+                    font-family: FontAwesome;
+                    position: absolute;
+                    top: 5px;
+                    right: 10px;
+                }
+            }
+        }
+
+        &.open {
+            & > .btn-grey {
+                &.dropdown-toggle {
+                    &:after {
+                        content: '\f106';
+                    }
+                }
+            }
         }
     }
 }
