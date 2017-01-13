@@ -437,7 +437,7 @@ define(function(require) {
                   <div className="center-xy padding-15">
                     <div className="font-22 white">You haven't created any devices yet.</div>
                     <div>
-                      <button className="btn btn-confirm margin-top-20" onClick={this.openNewDeviceModal}><i className="fa fa-plus"></i> ADD NEW DEVICE</button>
+                      <button className="btn btn-confirm margin-top-20" onClick={this.openNewDeviceModal}><i className="fa fa-plus"></i> Add new device</button>
                     </div>
                     <div className="margin-top-10">
                       <a href="#" className="font-18" onClick={this.showDevicesTooltip}>
