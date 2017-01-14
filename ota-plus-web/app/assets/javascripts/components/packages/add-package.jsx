@@ -91,8 +91,7 @@ define(function(require) {
             <div className="modal-content">
               <form ref='form' onSubmit={this.handleSubmit} encType="multipart/form-data">
                 <div className="modal-header">
-                  <button type="button" className="close" data-dismiss="modal" onClick={this.props.closeForm}></button>
-                <h4 className="modal-title">Add new package</h4>
+                  <h4 className="modal-title">Add new package</h4>
                 </div>
                 <div className="modal-body">
                   <Responses 

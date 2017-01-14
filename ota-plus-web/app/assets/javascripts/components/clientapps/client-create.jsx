@@ -50,7 +50,6 @@ define(function(require) {
           <div className="modal-dialog center-xy">
             <div className="modal-content">
               <div className="modal-header">
-                <button type="button" className="close" onClick={this.props.closeModal}></button>
                 <h4 className="modal-title">
                   <i className="fa fa-plus"></i> &nbsp;
                   Create new Client
