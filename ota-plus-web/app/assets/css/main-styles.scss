@@ -79,18 +79,30 @@ a, a:hover, a:focus {
 
 .login {
     #ats-page {
-        background-image: -o-radial-gradient(circle, #fff, rgba(255,255,255,0) 550px);
-        background-image: -moz-radial-gradient(circle, #fff, rgba(255,255,255,0) 550px);
-        background-image: -webkit-radial-gradient(circle, #fff, rgba(255,255,255,0) 550px);
-        background-repeat: no-repeat;
+        min-height: 600px;
         height: 100%;
         position: relative;
 
         .container {
+            padding: 0 0 60px 0;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+
+            .login-content {
+                width: 450px;
+                margin: 0 auto;
+
+                .terms-of-service-text {
+                    color: #fff;
+                    text-align: center;
+                    opacity: 0.4;
+                    width: 100%;
+                    margin: 20px 0 0 0;
+                    float: left;
+                }
+            }
         }
     }
 }
@@ -248,32 +260,47 @@ a.close, button.close {
 
 body {
     #a0-lock {
+        font-family: AkkuratRegular;
+        width: 350px;
+        margin: 0 auto;
+        position: relative;
+
         &.a0-theme-default {
+            font-family: AkkuratRegular;
+
+            .a0-panel {
+                * {
+                    font-family: AkkuratRegular;
+                }
+            }
+
             .a0-switch {
+                border: 0;
+
                 span {
-                    color: #444;
-                    background-color: #fff;
+                    color: #ddd;
+                    font-size: 16px;
+                    text-transform: none;
+                    background-color: transparent;
+                    width: 100%;
+                    padding: 0;
                     transition: all 0.3s ease-in;
 
                     &:hover {
-                        background-color: #eee;
+                        color: $color-mint;
+                        background-color: transparent;
                     }
-
                 }
 
                 .a0-active {
-                    background-color: #444;
-
-                    &:hover {
-                        background-color: #222;
-                    }
+                    display: none;
                 }
             }
 
             .a0-btn-small {
                 &.a0-back {
-                    background: #ccc;
-                    top: 130px;
+                    background: rgba(255,255,255,0.7);
+                    top: 190px;
                     left: 22px;
                     border-color: #ccc;
                     -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.5);
@@ -296,12 +323,12 @@ body {
 
                     .a0-image {
                         img {
-                            height: 85px;
+                            height: 65px;
                         }
                     }
 
                     h1 {
-                        display: none;
+                        margin: 25px 0;
                     }
                 }
 
@@ -346,8 +373,12 @@ body {
                 }
 
                 .a0-instructions {
-                    color: #444;
+                    color: #fff;
                     padding: 0 35px;
+
+                    span {
+                        display: none;
+                    }
                 }
 
                 .a0-mode {
@@ -357,6 +388,27 @@ body {
                         .a0-body-content {
                             padding: 0 20px;
                             background: transparent;
+
+                            .a0-last-time {
+                                color: #fff;
+                            }
+
+                            .a0-collapse-social, .a0-collapse-social-signup {
+                                width: 100%;
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+
+                                .a0-separator {
+                                    margin: -90px 0 0 0;
+                                }
+                            }
+                        }
+                    }
+
+                    &.a0-signup {
+                        .a0-separator {
+                            padding: 0 10px;
                         }
                     }
                 }
@@ -364,14 +416,15 @@ body {
                 .a0-email, .a0-password {
                     .a0-input-box {
                         border-radius: 12px;
-                        border: 2px solid rgba(0, 0, 0, 0.2);
+                        border: 2px solid rgba(255,255,255,0.4);
                         -moz-background-clip: padding;
                         -webkit-background-clip: padding;
                         background-clip: padding-box;
+                        padding-left: 0;
                         margin: 15px 0;
 
                         &:hover, &:active, &:focus {
-                            border-color: rgba(0, 0, 0, 0.4);
+                            border-color: rgba(255,255,255,0.6);
                         }
 
                         &.a0-error-input {
@@ -379,19 +432,22 @@ body {
                         }
 
                         i {
-                            top: 18px;
+                            display: none;
                         }
 
                     }
 
                     input {
-                        font-size: 14px;
+                        font: bold 16px AkkuratRegular;
+                        text-align: center;
                         height: 50px;
                     }
                 }
 
                 .a0-separator {
-                    color: #444;
+                    color: #fff;
+                    text-transform: none;
+                    opacity: 0.4;
                     margin: 15px 0;
                 }
 
@@ -409,7 +465,9 @@ body {
 
                 button {
                     &.a0-primary {
+                        color: #444;
                         font-size: 17px;
+                        font-weight: normal;
                         text-align: center;
                         text-decoration: none;
                         letter-spacing: 0px;
@@ -436,13 +494,16 @@ body {
                 }
 
                 .a0-forgot-pass {
-                    color: #444;
                     margin: 10px 0;
 
                     &:before {
                         font-family: FontAwesome;
                         content: "\f084";
                     }
+                }
+
+                .a0-all, .a0-forgot-pass {
+                    color: #fff;
                 }
 
                 .a0-footer {
@@ -454,6 +515,7 @@ body {
                 .a0-panel {
                     .a0-mode-container {
                         background: transparent;
+                        height: 320px !important;
                     }
                 }
             }
