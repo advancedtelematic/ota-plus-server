@@ -789,6 +789,10 @@ button {
                 }
 
                 &.switchOn {
+                    &:before {
+                        background-color: #96DED2 !important;
+                    }
+                    
                     &:after {
                         left: 27px !important;
                     }
@@ -991,11 +995,11 @@ button {
     float: left;
 
     .info-auto-update {
-        color: #444;
+        color: #fff;
         font-size: 12px;
         text-align: center;
         width: 100%;
-        background: #96DED2;
+        background: #338003;
         padding: 10px;
         float: left;
     }
@@ -1155,8 +1159,8 @@ button {
     width: 30%;
     margin: 0 10px 0 10px;
 
-    @media (max-width: 1350px) {
-        width: 25%;
+    @media (max-width: 1400px) {
+        width: 20%;
     }
 
     .history-item-status {
@@ -1183,6 +1187,7 @@ button {
         padding-top: 12px;
         padding-right: 15px;
         border-left: 0;
+        transition: background-color 0.3s ease-in;
 
         &:last-child {
             margin-bottom: -1px;
@@ -4144,21 +4149,17 @@ hr.full-line {
     }
 
     &.label-auto-update {
-        color: #444;
-        font-size: 12px;
+        color: #fff;
+        font-size: 11px;
         font-weight: normal;
         cursor: pointer;
         cursor: hand;
-        background: #ccc;
-        padding: 2px 20px;
-        margin: -2px 0 0 0;
+        background: #338003;
+        padding: 2px 10px;
+        margin: -1px 0 0 10px;
         display: inline-block;
         vertical-align: top;
         border-radius: 10px;
-
-        &.active {
-            background: #95DED0;
-        }
     }
 }
 
@@ -4470,7 +4471,7 @@ hr.full-line {
 
     &.switchOn {
         &:before {
-            background: #94DED2 !important;
+            background: #338003 !important;
         }
 
         &:after {
@@ -4478,6 +4479,7 @@ hr.full-line {
         }
 
         .switch-status {
+            color: #fff;
             left: 8px;
         }
     }
