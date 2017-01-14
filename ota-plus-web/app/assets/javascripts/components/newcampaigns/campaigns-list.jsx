@@ -67,9 +67,10 @@ define(function(require) {
               <table className="table with-background">
                 <thead>
                   <tr>
-                    <th className="col-md-3">Name</th>
+                    <th className="col-md-4">Name</th>
                     <th className="col-md-2">Start date</th>
                     <th className="col-md-2">End date</th>
+                    <th></th>
                     <th></th>
                   </tr>
                 </thead>
