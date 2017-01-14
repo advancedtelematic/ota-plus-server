@@ -27,18 +27,18 @@ define(function(require) {
                successText="Profile has been updated." 
                errorText="Error occured during profile update."/>
             </div>
-            <form ref="form" onSubmit={this.handleSubmit.bind(this)} id="form-personal-settings">
+            <form ref="form" onSubmit={this.handleSubmit.bind(this)} id="form-billing-information">
               <div>
-                <div className="col-xs-6">
-                  <div className="form-group">
-                    <label htmlFor="input-user-name">User name</label>
-                    <input type="text" className="form-control" name="nickname" id="input-user-name" required/>
-                  </div>
-                </div>
                 <div className="col-xs-6">
                   <div className="form-group">
                     <label htmlFor="input-company-name">Company name</label>
                     <input type="text" className="form-control" name="company" id="input-company-name" required/>
+                  </div>
+                </div>
+                <div className="col-xs-6">
+                  <div className="form-group">
+                    <label htmlFor="input-Email">Email</label>
+                    <input type="text" className="form-control" name="Email" id="input-Email" required/>
                   </div>
                 </div>
               </div>
@@ -89,12 +89,6 @@ define(function(require) {
                   <div className="form-group">
                     <label htmlFor="input-vat-number">Intracom VAT number</label>
                     <input type="text" className="form-control" name="vat_number" id="input-vat-number" required/>
-                  </div>
-                </div>
-                <div className="col-xs-6">
-                  <div className="form-group">
-                    <label htmlFor="input-Email">Email</label>
-                    <input type="text" className="form-control" name="Email" id="input-Email" required/>
                   </div>
                 </div>
               </div>

@@ -95,6 +95,14 @@ button {
         -webkit-box-shadow: none;
         box-shadow: none;
     }
+
+    &:disabled {
+        background: rgb(255,255,255); /* Old browsers */
+        background: -moz-linear-gradient(top,  rgba(200,200,200,1) 0%, rgba(214,214,214,1) 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  rgba(200,200,200,1) 0%,rgba(214,214,214,1) 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  rgba(200,200,200,1) 0%,rgba(214,214,214,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ddd',GradientType=0 ); /* IE6-9 */
+    }
 }
 
 #app {
@@ -5264,15 +5272,14 @@ hr.full-line {
         .edit-profile-content-left {
             color: $color-darkgrey;
             text-align: center;
-            background: #FAFAFA;
             width: 350px;
-            padding: 60px 15px;
             margin: 0 15px;
             float: left;
 
             .profile-icon {
                 width: 90px;
                 height: 90px;
+                margin: 20px 0;
                 border-radius: 90px;
             }
 
@@ -5292,21 +5299,20 @@ hr.full-line {
         }
 
         .edit-profile-content-right {
-            background: #FAFAFA;
-            height: 100%;
-            padding: 15px;
             margin: 0 15px 0 380px;
+        }
 
-            .panel {
-                &.panel-grey {
-                    .panel-heading {
-                        font-size: 18px;
-                        text-transform: uppercase;
-                    }
+        .panel {
+            &.panel-grey {
+                .panel-heading {
+                    font-size: 18px;
+                    text-transform: uppercase;
+                }
 
-                    .panel-body {
-                        padding: 40px 60px;
-                    }
+                .panel-body {
+                    background: #FAFAFA;
+                    padding: 40px 60px;
+                    position: relative;
                 }
             }
         }
