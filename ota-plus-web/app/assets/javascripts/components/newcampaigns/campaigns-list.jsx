@@ -68,8 +68,8 @@ define(function(require) {
                 <thead>
                   <tr>
                     <th className="col-md-3">Name</th>
-                    <th className="col-md-2">Start Date</th>
-                    <th className="col-md-2">End Date</th>
+                    <th className="col-md-2">Start date</th>
+                    <th className="col-md-2">End date</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -92,8 +92,8 @@ define(function(require) {
                 <thead>
                   <tr>
                     <th className="col-md-4">Name</th>
-                    <th className="col-md-2">Start Date</th>
-                    <th className="col-md-2">End Date</th>
+                    <th className="col-md-2">Start date</th>
+                    <th className="col-md-2">End date</th>
                     <th className="col-md-3">Status</th>
                     <th className="col-md-1 text-right"></th>
                   </tr>
@@ -117,8 +117,8 @@ define(function(require) {
                 <thead>
                   <tr>
                     <th className="col-md-4">Name</th>
-                    <th className="col-md-2">Start Date</th>
-                    <th className="col-md-2">End Date</th>
+                    <th className="col-md-2">Start date</th>
+                    <th className="col-md-2">End date</th>
                     <th className="col-md-3">Status</th>
                     <th className="col-md-1 text-right"></th>
                   </tr>

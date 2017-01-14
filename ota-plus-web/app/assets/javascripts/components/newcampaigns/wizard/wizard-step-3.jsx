@@ -70,7 +70,7 @@ define(function(require) {
               <div className="inner">
                 <div className="row">
                   <div className="col-xs-6 col-xs-offset-2">
-                    <div><strong>Start Date</strong></div>
+                    <div><strong>Start date</strong></div>
                     <div className="calendar-switcher">
                       <i className="fa fa-angle-left" onClick={this.previousDayStartDate}></i>
                       <span>{this.state.startDate.format("ddd, D.MM.YYYY")}</span>
@@ -93,7 +93,7 @@ define(function(require) {
               <div className="inner">
                 <div className="row">
                   <div className="col-xs-6 col-xs-offset-2">
-                    <div><strong>End Date</strong></div>
+                    <div><strong>End date</strong></div>
                     <div className="calendar-switcher">
                       <i className="fa fa-angle-left" onClick={this.previousDayEndDate}></i>
                       <span>{this.state.endDate.format("ddd, D.MM.YYYY")}</span>

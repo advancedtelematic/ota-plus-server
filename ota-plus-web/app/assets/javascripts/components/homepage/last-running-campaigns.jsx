@@ -125,8 +125,8 @@ define(function(require) {
                 <thead>
                   <tr>
                     <td>Name</td>
-                    <td>Start Date</td>
-                    <td>End Date</td>
+                    <td>Start date</td>
+                    <td>End date</td>
                     <td>Status</td>
                     <td></td>
                   </tr>
@@ -142,8 +142,8 @@ define(function(require) {
                     <thead>
                       <tr>
                         <td>Name</td>
-                        <td>Start Date</td>
-                        <td>End Date</td>
+                        <td>Start date</td>
+                        <td>End date</td>
                         <td>Status</td>
                         <td></td>
                       </tr>
@@ -152,7 +152,7 @@ define(function(require) {
                 </div>
                 <div className="col-md-12 height-100 position-relative text-center">
                   <div className="center-xy padding-15">
-                    <span className="font-18">No running Campaigns.</span>
+                    <span className="font-18">No running campaigns.</span>
                   </div>
                 </div>
               </div>

@@ -70,7 +70,7 @@ define(function(require) {
                   }
                 </div>
                 <div className="element-subtitle">
-                  Device Status: {deviceStatus}
+                  Device status: {deviceStatus}
                 </div>
               </div>
             </Link>
@@ -85,7 +85,7 @@ define(function(require) {
             :
               <div className="col-md-12 height-100 position-relative text-center">
                 <div className="center-xy padding-15">
-                  <button type="submit" className="btn btn-confirm btn-small" onClick={this.props.openNewDeviceModal}><i className="fa fa-plus"></i> ADD NEW DEVICE</button>
+                  <button type="submit" className="btn btn-confirm btn-small" onClick={this.props.openNewDeviceModal}><i className="fa fa-plus"></i> Add new device</button>
                 </div>
               </div>
           : undefined}
