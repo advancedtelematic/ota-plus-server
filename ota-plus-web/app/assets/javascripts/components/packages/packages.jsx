@@ -100,7 +100,6 @@ define(function(require) {
                 <div className="btn-group">
                   <button type="button" className="btn btn-grey dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span className="pull-left">{this.state.selectedStatusName} &nbsp;</span>
-                    <span className="fa fa-angle-down pull-right"></span>
                   </button>
                   <ul className="dropdown-menu">
                     <li><a href="#" onClick={this.selectStatus.bind(this, 'all')}>All</a></li>
