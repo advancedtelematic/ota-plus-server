@@ -1292,7 +1292,6 @@ button {
     color: $color-darkgrey !important;
     font-size: 10px;
     font-weight: bold;
-    text-transform: uppercase;
     background: $color-mint;
     min-width: 78px;
     padding: 4px 15px;
@@ -1306,7 +1305,7 @@ button {
 
 .btn-add {
     font-size: 12px;
-    text-transform: uppercase;
+    text-transform: none;
     padding: 5px 16px 4px 16px;
     margin: 6px 0 0 0;
     border-radius: 15px;

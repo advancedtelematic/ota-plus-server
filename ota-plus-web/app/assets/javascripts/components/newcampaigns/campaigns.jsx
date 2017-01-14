@@ -242,7 +242,7 @@ define(function(require) {
                   <div className="center-xy padding-15">
                     <div className="font-22 white">You haven't created any update campaigns yet.</div>
                     <div>
-                      <button className="btn btn-confirm margin-top-20" onClick={this.openCreateModal}><i className="fa fa-plus"></i> ADD NEW CAMPAIGN</button>
+                      <button className="btn btn-confirm margin-top-20" onClick={this.openCreateModal}><i className="fa fa-plus"></i> Add new campaign</button>
                     </div>
                     <div className="margin-top-10">
                       <a href="#" className="font-18" onClick={this.showCampaignTooltip}>

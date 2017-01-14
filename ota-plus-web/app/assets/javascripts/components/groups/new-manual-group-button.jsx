@@ -36,7 +36,7 @@ define(function(require) {
           onDragOver={this.onDragOver}
           onDragLeave={this.onDragLeave}
           onDrop={this.onDrop}>
-          <i className="fa fa-plus"></i> Add new Group
+          <i className="fa fa-plus"></i> Add new group
         </button>
       );
     }
