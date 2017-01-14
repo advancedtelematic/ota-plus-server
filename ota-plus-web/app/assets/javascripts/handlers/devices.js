@@ -3,7 +3,8 @@ define(function(require) {
       _ = require('underscore'),
       db = require('../stores/db'),
       checkExists = require('../mixins/check-exists'),
-      sendRequest = require('../mixins/send-request');
+      sendRequest = require('../mixins/send-request'),
+      moment = require('moment');
       
   var Handler = (function() {
       this.dispatchCallback = function(payload) {
@@ -165,24 +166,40 @@ define(function(require) {
               .success(function() {
               });
           break;
-          case 'get-active-devices-per-month':
-            sendRequest.doGet('/api/v1/auditor/devices_seen_in/' + payload.year + '/' + payload.month, {action: payload.actionType})
-              .success(function(activeDevicesPerMonth) {
-                db.activeDevicesPerMonth.reset(activeDevicesPerMonth);
+          case 'get-usage-per-month':
+            var startTime = payload.startTime;
+            var endTime = payload.endTime;
+            var usageTypesCount = 3;
+            var objKey = startTime.format('YYYY') + '' + startTime.format('MM');
+            var usagePerMonth = {};
+            usagePerMonth[objKey] = {};
+            var after = _.after(usageTypesCount, function() {
+              db.usagePerMonth.reset(usagePerMonth);
+            });
+            
+            sendRequest.doGet('/api/v1/auditor/devices_seen_in/' + startTime.format('YYYY') + '/' + startTime.format('M'), {action: payload.actionType})
+              .success(function(activeDevices) {       
+                usagePerMonth[objKey].activeDevices = activeDevices;
+              })
+              .always(function() {
+                after();
               });
-          break;
-          case 'get-activated-devices-per-period':
-            sendRequest.doGet('/api/v1/active_device_count?start=' + encodeURIComponent(payload.start) + '&end=' + encodeURIComponent(payload.end), {action: payload.actionType})
-              .success(function(activatedDevicesPerPeriod) {
-                db.activatedDevicesPerPeriod.reset(activatedDevicesPerPeriod);
+              
+            sendRequest.doGet('/api/v1/active_device_count?start=' + encodeURIComponent(startTime.toISOString()) + '&end=' + encodeURIComponent(endTime.toISOString()), {action: payload.actionType})
+              .success(function(activatedDevices) {
+                usagePerMonth[objKey].activatedDevices = activatedDevices;
+              })
+              .always(function() {
+                after();
               });
-          break;
-          case 'get-total-activated-devices':
-            var start = new Date(0).toISOString();
-            sendRequest.doGet('/api/v1/active_device_count?start=' + encodeURIComponent(start) + '&end=' + encodeURIComponent(payload.end), {action: payload.actionType})
+              
+            sendRequest.doGet('/api/v1/active_device_count?start=' + encodeURIComponent(new Date(0).toISOString()) + '&end=' + encodeURIComponent(endTime.toISOString()), {action: payload.actionType})
               .success(function(totalActivatedDevices) {
-                db.totalActivatedDevices.reset(totalActivatedDevices);
-              });
+                usagePerMonth[objKey].totalActivatedDevices = totalActivatedDevices;
+              })
+              .always(function() {
+                after();
+              }); 
           break;
         }
       };
