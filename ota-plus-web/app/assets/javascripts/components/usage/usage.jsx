@@ -1,74 +1,59 @@
 define(function(require) {
   var React = require('react'),
-      moment = require('moment'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group'),
+      db = require('stores/db'),
+      SotaDispatcher = require('sota-dispatcher'),
+      moment = require('moment'),
       UsageHeader = require('./usage-header'),
-      UsageCalendarSection = require('./usage-calendar-section'),
-      UsageOverviewSection = require('./usage-overview-section'),
-      NoAccess = require('../noaccess');
+      UsageDetails = require('./usage-details'),
+      Loader = require('../loader');
 
   class Usage extends React.Component {
     constructor(props) {
+      var startTime = moment([2017,0,1]);
+      var endTime = moment();
+      var monthsCount = endTime.diff(startTime, 'months');
       super(props);
       this.state = {
-        contentHeight: 300,
-        month: parseInt(moment().format('MM')),
-        year: parseInt(moment().format('YYYY'))
+        usageData: undefined,
+        monthsCount: monthsCount + 1
       };
-      this.setContentHeight = this.setContentHeight.bind(this);
-      this.selectMonth = this.selectMonth.bind(this);
-      this.selectYear = this.selectYear.bind(this);
-    }
-    componentDidMount() {
-      window.addEventListener("resize", this.setContentHeight);
-      this.setContentHeight();
-    }
-    componentDidUpdate(prevProps, prevState) {
-      if(prevProps.hasBetaAccess !== this.props.hasBetaAccess) {
-        this.setContentHeight();
+      this.handleUsageData = this.handleUsageData.bind(this);
+      for(var i = 0; i <= monthsCount; i++) {
+        var startTimeTmp = moment(startTime).add(i, 'months');
+        var endTimeTmp = moment(startTimeTmp).add(1, 'months');
+        SotaDispatcher.dispatch({actionType: 'get-usage-per-month', startTime: startTimeTmp, endTime: endTimeTmp});
       }
+      db.usagePerMonth.addWatch("poll-usage", _.bind(this.handleUsageData, this, null));
     }
     componentWillUnmount() {
-      window.removeEventListener("resize", this.setContentHeight);
+      db.usagePerMonth.removeWatch("poll-usage");
     }
-    setContentHeight() {
-      if(this.props.hasBetaAccess) {
-        var windowHeight = jQuery(window).height();
-        this.setState({
-          contentHeight: windowHeight - jQuery('.grey-header').offset().top - jQuery('.grey-header').outerHeight()
-        });
+    handleUsageData() {
+      const usagePerMonth = db.usagePerMonth.deref();
+      if(!_.isUndefined(usagePerMonth)) {
+        var usage = this.state.usageData || {};
+        this.setState({usageData: _.extend(usage, usagePerMonth)});
       }
-    }
-    selectMonth(month) {
-      this.setState({month: month});
-    }
-    selectYear(year) {
-      this.setState({year: year});
     }
     render() {
       return (
-        this.props.hasBetaAccess ?
-          <div>
+        <VelocityTransitionGroup enter={{animation: "fadeIn", display: "flex"}} leave={{animation: "fadeOut", display: "flex"}} runOnMount={true}>
+          <div className="content-wrapper">
             <UsageHeader />
-            <div id="usage" style={{height: this.state.contentHeight}}>
-              <div id="calendar-section" className="height-100">
-                <UsageCalendarSection 
-                  month={this.state.month}
-                  year={this.state.year}
-                  selectMonth={this.selectMonth}
-                  selectYear={this.selectYear}/>
-              </div>
-              <div id="overview-section" className="height-100">
-                <UsageOverviewSection 
-                  month={this.state.month}
-                  year={this.state.year}/>
-              </div>
+            <div className="usage-content">
+              {!_.isUndefined(this.state.usageData) && Object.keys(this.state.usageData).length === this.state.monthsCount ? 
+                <UsageDetails usage={this.state.usageData}/>
+              : undefined}
+              {_.isUndefined(this.state.usageData) || Object.keys(this.state.usageData).length !== this.state.monthsCount ?
+                <Loader className="black center-xy"/>
+              : null}
             </div>
           </div>
-        :
-          <NoAccess />
+        </VelocityTransitionGroup>
       );
     }
   }
+  
   return Usage;
 });

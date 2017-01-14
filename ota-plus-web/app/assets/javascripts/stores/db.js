@@ -45,9 +45,7 @@ define(function(require) {
       this.provisioningDetails = atom.createAtom();
       this.features = atom.createAtom();
       this.treehubJson = atom.createAtom();
-      this.activeDevicesPerMonth = atom.createAtom();
-      this.activatedDevicesPerPeriod = atom.createAtom();
-      this.totalActivatedDevices = atom.createAtom();
+      this.usagePerMonth = atom.createAtom();
       
       //Events
       this.deviceSeen = atom.createAtom();

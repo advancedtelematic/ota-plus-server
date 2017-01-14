@@ -14,6 +14,9 @@ define(function(require) {
       super(props);
       db.user.addWatch("poll-user-billing-page", _.bind(this.forceUpdate, this, null));
     }
+    componentWillUnmount() {
+      db.user.removeWatch("poll-user-billing-page");
+    }
     render() {
       const user = db.user.deref();
       return (
