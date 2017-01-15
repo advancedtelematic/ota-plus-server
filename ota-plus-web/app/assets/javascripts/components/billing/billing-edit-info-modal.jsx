@@ -1,6 +1,7 @@
 define(function(require) {
   var React = require('react'),
       serializeForm = require('mixins/serialize-form'),
+      db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
       BillingEditInfoForm = require('./billing-edit-info-form'),
       Responses = require('../responses');
@@ -8,6 +9,11 @@ define(function(require) {
   class BillingEditInfoModal extends React.Component {
     constructor(props) {
       super(props);
+      this.handleResponse = this.handleResponse.bind(this);
+      db.postStatus.addWatch("poll-update-user-billing", _.bind(this.handleResponse, this, null));
+    }
+    componentWillUnmount() {
+      db.postStatus.removeWatch("poll-update-user-billing");
     }
     handleSubmit(e) {
       e.preventDefault();
@@ -18,6 +24,17 @@ define(function(require) {
         data: data,
         setQuote: true
       });
+    }
+    handleResponse() {        
+      var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
+      if(!_.isUndefined(postStatus['update-user-billing'])) {
+        if(postStatus['update-user-billing'].status === 'success') {
+          db.postStatus.removeWatch("poll-update-user-billing");
+          delete postStatus['update-user-billing'];
+          db.postStatus.reset(postStatus);
+          this.props.closeModal();
+        }
+      }
     }
     render() {
       return (
