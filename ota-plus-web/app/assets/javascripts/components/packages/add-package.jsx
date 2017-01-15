@@ -19,12 +19,12 @@ define(function(require) {
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleResponse = this.handleResponse.bind(this);
       this.closeForm = this.closeForm.bind(this);      
-      db.postStatus.addWatch("poll-response-add-package", _.bind(this.handleResponse, this, null));
-      db.postUpload.addWatch("poll-response-upload-package", _.bind(this.handleResponse, this, null));
+      db.postStatus.addWatch("poll-add-package", _.bind(this.handleResponse, this, null));
+      db.postUpload.addWatch("poll-upload-package", _.bind(this.handleResponse, this, null));
     }
     componentWillUnmount() {
-      db.postStatus.removeWatch("poll-response-add-package");
-      db.postUpload.removeWatch("poll-response-upload-package");
+      db.postStatus.removeWatch("poll-add-package");
+      db.postUpload.removeWatch("poll-upload-package");
     }
     toggleButtonState() {
       var form = serializeForm(this.refs.form);
