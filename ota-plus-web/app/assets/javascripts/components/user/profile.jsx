@@ -54,6 +54,9 @@ define(function(require) {
               <Link to="/billing" id="link-billing">Billing</Link>
             </div>
             <div>
+              <a href="http://atsgarage.com/en/terms-conditions.html" target="_blank">Terms of use</a>
+            </div>
+            <div className="margin-top-10">
               <a href="#" onClick={this.props.logout} id="link-signout">Sign out</a>
             </div>
           </div>
