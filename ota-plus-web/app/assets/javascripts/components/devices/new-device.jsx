@@ -63,9 +63,6 @@ define(function(require) {
               <div className="modal-header">
                 <h4 className="modal-title">
                   Add new device
-                  {selectedGroup && selectedGroup.type == 'real' ?
-                    <span> in the {selectedGroup.name} group</span>
-                  : null}
                 </h4>
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
