@@ -93,8 +93,8 @@ define(function(require) {
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.fixModalPosition);
-      db.postUpload.addWatch("poll-upload-packages-modal");
-      db.postStatus.addWatch("poll-add-package-modal");
+      db.postUpload.removeWatch("poll-upload-packages-modal");
+      db.postStatus.removeWatch("poll-add-package-modal");
     }
     fixModalPosition() {
       var modal = jQuery('#modal-upload');
