@@ -319,10 +319,14 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
     }}
   }
 
-  def updateBillingInfo[T](userId: UserId, body: JsValue)
+  def updateBillingInfo[T](userId: UserId, query: Map[String,Seq[String]], body: JsValue)
                           (implicit executionContext: ExecutionContext): Future[Result] =
     userProfileRequest(s"users/${userId.id}/billing_info")
-      .transform(_.withMethod("PUT").withBody(body)).execResult(apiExec)
+      .transform(
+        _.withMethod("PUT")
+          .withQueryString(query.mapValues(_.head).toSeq :_*)
+          .withBody(body))
+      .execResult(apiExec)
 }
 
 class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
