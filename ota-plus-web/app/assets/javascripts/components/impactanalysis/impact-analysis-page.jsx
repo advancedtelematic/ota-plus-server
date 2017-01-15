@@ -115,11 +115,6 @@ define(function(require) {
             {!_.isUndefined(this.state.blacklistedPackagesData) ? 
               !_.isEmpty(this.state.blacklistedPackagesData) ?
                 <div className="panel panel-ats">
-                  <div className="panel-heading">
-                    <div className="panel-heading-left pull-left">
-                      Blacklisted Packages
-                    </div>
-                  </div>
                   <div className="panel-body">
                     <ImpactAnalysisBlacklistedPackages 
                       packages={this.state.blacklistedPackagesData}
