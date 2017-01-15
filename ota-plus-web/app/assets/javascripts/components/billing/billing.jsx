@@ -6,16 +6,30 @@ define(function(require) {
       BillingPremium = require('./billing-premium'),
       BillingQuote = require('./billing-quote'),
       BillingPlans = require('./billing-plans'),
+      BillingEditInfoModal = require('./billing-edit-info-modal'),
       Loader = require('../loader'),
       NoAccess = require('../noaccess');
 
   class Billing extends React.Component {
     constructor(props) {
       super(props);
+      this.state = {
+        isBillingEditInfoModalShown: false
+      };
+      this.openBillingEditInfoModal = this.openBillingEditInfoModal.bind(this);
+      this.closeBillingEditInfoModal = this.closeBillingEditInfoModal.bind(this);
       db.user.addWatch("poll-user-billing-page", _.bind(this.forceUpdate, this, null));
     }
     componentWillUnmount() {
       db.user.removeWatch("poll-user-billing-page");
+    }
+    openBillingEditInfoModal(e) {
+      if(e) e.preventDefault();
+      this.setState({isBillingEditInfoModalShown: true});
+    }
+    closeBillingEditInfoModal(e) {
+      if(e) e.preventDefault();
+      this.setState({isBillingEditInfoModalShown: false});
     }
     render() {
       const user = db.user.deref();
@@ -33,7 +47,8 @@ define(function(require) {
                       <BillingQuote />
                     :
                       <BillingPlans 
-                        user={user}/>
+                        user={user}
+                        openBillingEditInfoModal={this.openBillingEditInfoModal}/>
                   }
                 </div>
               </div>
@@ -42,6 +57,12 @@ define(function(require) {
           {_.isUndefined(user) ?
             <Loader />
           : undefined}
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.isBillingEditInfoModalShown ?
+              <BillingEditInfoModal
+                closeModal={this.closeBillingEditInfoModal}/>
+            : undefined}
+          </VelocityTransitionGroup>
         </span>
       );
     }
