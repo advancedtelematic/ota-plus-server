@@ -8,7 +8,7 @@ define(function(require) {
     constructor(props) {
       super(props);
       this.state = {
-        blacklistedPackagesWrapperHeight: this.props.contentHeight,
+        blacklistedPackagesListHeight: this.props.contentHeight,
         headerTopPosition: 0,
         expandedPackage: null
       };
@@ -17,11 +17,11 @@ define(function(require) {
     }
     componentDidMount() {
       ReactDOM.findDOMNode(this.refs.packagesList).addEventListener('scroll', this.packagesListScroll);
-      this.setState({blacklistedPackagesWrapperHeight: this.props.contentHeight - jQuery('.panel-heading').height()});
+      this.setState({blacklistedPackagesListHeight: this.props.contentHeight - jQuery('.blacklisted-packages-heading').outerHeight()});
     }
     componentWillReceiveProps(nextProps) {
       if(nextProps.contentHeight !== this.props.contentHeight)
-        this.setState({blacklistedPackagesWrapperHeight: nextProps.contentHeight - jQuery('.panel-heading').height()});
+        this.setState({blacklistedPackagesListHeight: nextProps.contentHeight - jQuery('.blacklisted-packages-heading').outerHeight()});
     }
     componentWillUnmount() {
       ReactDOM.findDOMNode(this.refs.packagesList).removeEventListener('scroll', this.packagesListScroll);
@@ -41,7 +41,7 @@ define(function(require) {
       var packages = _.map(this.props.packages, function(pack) {
         return (
           <li key={"blacklisted-package-" + pack.packageName} className={this.state.expandedPackage == pack.packageName ? 'selected' : null}>
-            <button className="list-group-item" onClick={this.togglePackage.bind(this, pack.packageName)}>
+            <button className="list-group-item" onClick={this.togglePackage.bind(this, pack.packageName)} title={pack.packageName}>
               <div className="column column-first">
                 {pack.packageName}
               </div>
@@ -64,8 +64,11 @@ define(function(require) {
       }, this);
             
       return (
-        <div id="packages-column" style={{height: this.state.blacklistedPackagesWrapperHeight}}>
-          <div id="blacklisted-packages" className="height-100" ref="packagesList">     
+        <div id="packages-column">
+          <div className="blacklisted-packages-heading">
+            Blacklisted packages
+          </div>
+          <div id="blacklisted-packages" style={{height: this.state.blacklistedPackagesListHeight}} ref="packagesList">
             <div className="list-header" style={{top: this.state.headerTopPosition}}>
               <div className="column column-first">Package</div>
               <div className="column column-second">Devices</div>
