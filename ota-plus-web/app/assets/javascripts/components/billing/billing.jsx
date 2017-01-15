@@ -50,7 +50,7 @@ define(function(require) {
       return (
         <span>
           <VelocityTransitionGroup enter={{animation: "fadeIn", display: "flex"}} leave={{animation: "fadeOut", display: "flex"}} runOnMount={true}>
-            {this.props.hasBetaAccess && !_.isUndefined(user) ?
+            {!_.isUndefined(user) ?
               <div className="content-wrapper">
                 <BillingHeader />
                 <div className="billing-content">
