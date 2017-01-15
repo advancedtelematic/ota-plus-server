@@ -5,7 +5,7 @@ define(function(require) {
       BillingHeader = require('./billing-header'),
       BillingPremium = require('./billing-premium'),
       BillingQuote = require('./billing-quote'),
-      BillingPlans = require('./billing-plans'),
+      BillingFree = require('./billing-free'),
       BillingEditInfoModal = require('./billing-edit-info-modal'),
       Loader = require('../loader'),
       NoAccess = require('../noaccess');
@@ -33,6 +33,20 @@ define(function(require) {
     }
     render() {
       const user = db.user.deref();
+      const billingInfo = !_.isUndefined(user) && !_.isUndefined(user.profile) && _.isObject(user.profile.billingInfo) ? 
+        user.profile.billingInfo 
+      : 
+        {
+          company: null,
+          lastname: null,
+          firstname: null,
+          email: null,
+          address: null,
+          postal_code: null,
+          city: null,
+          country: null,
+          vat_number: null
+        };
       return (
         <span>
           <VelocityTransitionGroup enter={{animation: "fadeIn", display: "flex"}} leave={{animation: "fadeOut", display: "flex"}} runOnMount={true}>
@@ -40,14 +54,14 @@ define(function(require) {
               <div className="content-wrapper">
                 <BillingHeader />
                 <div className="billing-content">
-                  {user.plan == "premium" ? 
-                    <BillingPremium />
+                  {user.profile.plan == "premium" ? 
+                    <BillingPremium 
+                      billingInfo={billingInfo}/>
                   : 
-                    user.plan == "quote" ?
+                    user.profile.plan == "quote" ?
                       <BillingQuote />
                     :
-                      <BillingPlans 
-                        user={user}
+                      <BillingFree 
                         openBillingEditInfoModal={this.openBillingEditInfoModal}/>
                   }
                 </div>
@@ -60,7 +74,8 @@ define(function(require) {
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {this.state.isBillingEditInfoModalShown ?
               <BillingEditInfoModal
-                closeModal={this.closeBillingEditInfoModal}/>
+                closeModal={this.closeBillingEditInfoModal}
+                billingInfo={billingInfo}/>
             : undefined}
           </VelocityTransitionGroup>
         </span>
