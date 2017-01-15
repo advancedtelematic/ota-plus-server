@@ -27,9 +27,6 @@
                         <div class="ats-header text-center">
                             <div id="widget-container"></div>
                         </div>
-                        <div class="terms-of-service-text">
-                            By clicking "Start now!" I agree to ATS Garage's Terms of Service.
-                        </div>
                     </div>
                 </div>
             </div>
@@ -69,6 +66,9 @@
                             action: "Start now!",
                             signupText: "Not registered yet? Sign up here.",
                             signinText: "Already registered? Login here."
+                        },
+                        newReset: {
+                            headerText: "Please enter your email address. We will send you a link to reset your password."
                         }
                     }
                 });
@@ -79,6 +79,10 @@
                 });
                 lock.on('signin ready', function () {
                     $(".a0-forgot-pass").detach().appendTo('.bottom-content');
+                });
+                lock.on('signup ready', function () {
+                    var link = $("<div class='terms-conditions'>By registering I agree to <a href='http://atsgarage.com/en/terms-conditions.html' target='_blank'>ATS Garage's Terms of Use.</a></div>");
+                    link.appendTo('.bottom-content');
                 });
             });
 

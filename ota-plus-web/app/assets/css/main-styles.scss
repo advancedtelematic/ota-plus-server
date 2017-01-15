@@ -89,15 +89,6 @@ a, a:hover, a:focus {
             .login-content {
                 width: 450px;
                 margin: 0 auto;
-
-                .terms-of-service-text {
-                    color: #fff;
-                    text-align: center;
-                    opacity: 0.4;
-                    width: 100%;
-                    margin: 20px 0 0 0;
-                    float: left;
-                }
             }
         }
     }
@@ -296,7 +287,7 @@ body {
             .a0-btn-small {
                 &.a0-back {
                     background: rgba(255,255,255,0.7);
-                    top: 190px;
+                    top: 170px;
                     left: 22px;
                     border-color: #ccc;
                     -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.5);
@@ -434,7 +425,7 @@ body {
                     }
 
                     input {
-                        font: bold 16px AkkuratRegular;
+                        font: normal 16px AkkuratRegular;
                         text-align: center;
                         height: 50px;
                     }
@@ -456,6 +447,16 @@ body {
                         &:after {
                             display: none;
                         }
+                    }
+                }
+
+                .terms-conditions {
+                    color: #fff;
+                    opacity: 0.9;
+
+                    a {
+                        font-weight: normal;
+                        text-decoration: underline;
                     }
                 }
 
