@@ -5256,9 +5256,22 @@ hr.full-line {
             }
 
             &#billing-plans-premium {
+                width: 100%;
+                padding: 0 15px;
+
                 .billing-plan {
-                    width: 100%;
-                }
+                    margin: 0;
+                    float: left;
+
+                    &.billing-plan-premium {
+                        width: 40%;
+                    }
+
+                    &.billing-plan-premium-form {
+                        width: 60%;
+                        padding-left: 15px;
+                    }    
+                }         
             }
         }
     }

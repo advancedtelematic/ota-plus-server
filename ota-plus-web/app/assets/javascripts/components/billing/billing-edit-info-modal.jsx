@@ -2,6 +2,7 @@ define(function(require) {
   var React = require('react'),
       serializeForm = require('mixins/serialize-form'),
       SotaDispatcher = require('sota-dispatcher'),
+      BillingEditInfoForm = require('./billing-edit-info-form'),
       Responses = require('../responses');
 
   class BillingEditInfoModal extends React.Component {
@@ -11,6 +12,7 @@ define(function(require) {
     handleSubmit(e) {
       e.preventDefault();
       var data = serializeForm(this.refs.form);
+      data.plan = 'quote';
       SotaDispatcher.dispatch({
         actionType: 'update-user-billing',
         data: data
@@ -28,72 +30,10 @@ define(function(require) {
                 <div className="modal-body">
                   <Responses 
                     action="update-user-billing" 
-                    successText="Profile has been updated." 
-                    errorText="Error occured during profile update."/>
-                  <div className="row">
-                    <div className="col-xs-6">
-                      <div className="form-group">
-                        <label htmlFor="input-company-name">Company name</label>
-                        <input type="text" className="form-control" name="company" id="input-company-name" required/>
-                      </div>
-                    </div>
-                    <div className="col-xs-6">
-                      <div className="form-group">
-                        <label htmlFor="input-Email">Email</label>
-                        <input type="text" className="form-control" name="email" id="input-Email" required/>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-xs-6">
-                      <div className="form-group">
-                        <label htmlFor="input-first-name">First name</label>
-                        <input type="text" className="form-control" name="firstname" id="input-first-name" required/>
-                      </div>
-                    </div>
-                    <div className="col-xs-6">
-                      <div className="form-group">
-                        <label htmlFor="input-last-name">Last name</label>
-                          <input type="text" className="form-control" name="lastname" id="input-last-name" required/>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-xs-6">
-                      <div className="form-group">
-                        <label htmlFor="input-address">Address</label>
-                        <input type="text" className="form-control" name="address" id="input-address" required/>
-                      </div>
-                    </div>
-                    <div className="col-xs-6">
-                      <div className="form-group">
-                        <label htmlFor="input-city">City</label>
-                        <input type="text" className="form-control" name="city" id="input-city" required/>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-xs-6">
-                      <div className="form-group">
-                        <label htmlFor="input-postal-code">Postal code</label>
-                        <input type="text" className="form-control" name="postal_code" id="input-postal-code" required/>
-                      </div>
-                    </div>
-                    <div className="col-xs-6">
-                      <div className="form-group">
-                        <label htmlFor="input-country">Country</label>
-                        <input type="text" className="form-control" name="country" id="input-country" required/>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-xs-6">
-                      <div className="form-group">
-                        <label htmlFor="input-vat-number">Intracom VAT number</label>
-                        <input type="text" className="form-control" name="vat_number" id="input-vat-number" required/>
-                      </div>
-                    </div>
-                  </div>
+                    successText="We have received your plan upgrade request." 
+                    errorText="Error occured during plan upgrading."/>
+                  <BillingEditInfoForm 
+                    billingInfo={this.props.billingInfo}/>
                 </div> 
                 <div className="modal-footer">
                   <a href="#" onClick={this.props.closeModal} className="darkgrey margin-top-20 pull-left">Cancel</a>
@@ -105,6 +45,11 @@ define(function(require) {
         </div>
       );
     }
+  };
+
+  BillingEditInfoModal.propTypes = {
+    closeModal: React.PropTypes.func.isRequired,
+    billingInfo: React.PropTypes.object.isRequired
   };
 
   return BillingEditInfoModal;
