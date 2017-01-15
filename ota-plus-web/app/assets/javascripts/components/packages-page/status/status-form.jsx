@@ -21,9 +21,11 @@ define(function(require) {
       this.selectAllGroups = this.selectAllGroups.bind(this);
       this.clearSelectedGroups = this.clearSelectedGroups.bind(this);
       this.toggleGroup = this.toggleGroup.bind(this);
-      this.filterPackageVersions = this.filterPackageVersions.bind(this);
       SotaDispatcher.dispatch({actionType: 'get-package-stats', packageName: this.props.packageName});
       db.packageStats.addWatch("poll-package-stats", _.bind(this.setData, this, null));
+    }
+    componentWillUnmount() {
+      db.packageStats.removeWatch("poll-package-stats");
     }
     setData() {
       var packageStats = db.packageStats.deref();
@@ -64,9 +66,6 @@ define(function(require) {
       this.setState({
         selectedGroups: selectedGroups
       });
-    }
-    filterPackageVersions() {
-      
     }
     render() {
       var availableColors = [
