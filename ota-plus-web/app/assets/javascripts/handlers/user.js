@@ -26,6 +26,7 @@ define(function(require) {
               query += '?plan=quote';
             sendRequest.doPut(query, payload.data, {action: payload.actionType})
               .success(function() {
+                SotaDispatcher.dispatch({actionType: 'get-user'});
               });
           break;
           case 'change-password':
