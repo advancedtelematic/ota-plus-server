@@ -15,7 +15,8 @@ define(function(require) {
       data.plan = 'quote';
       SotaDispatcher.dispatch({
         actionType: 'update-user-billing',
-        data: data
+        data: data,
+        setQuote: true
       });
     }
     render() {
