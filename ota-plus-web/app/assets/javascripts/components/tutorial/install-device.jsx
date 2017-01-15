@@ -53,6 +53,14 @@ define(function(require) {
           If you use another init system, you'll need to <a href="http://docs.atsgarage.com/start-manual/install-and-configure-the-ats-garage-client.html">install ota-plus-client manually</a>.
         </div>
       );
+      var buildDeviceTooltipContent = (
+        <div className="text-center">
+          <span className="font-16"><strong>The credentials file should be placed in /sysroot/boot/sota.toml.</strong></span> <br /><br />
+          For a step-by-step guide to building your first linux <br />
+          distro with Yocto, read the guide <br />
+          <a href="http://docs.atsgarage.com/start-yocto/ your-first-ostreeenabled-yocto-project.html">http://docs.atsgarage.com/start-yocto/ your-first-ostreeenabled-yocto-project.html</a>
+        </div>
+      );
       return (
         <div>
           <div className="tutorial-install-device" style={{height: this.state.tutorialHeight}}>
@@ -66,7 +74,39 @@ define(function(require) {
                     <div className="lane first-lane">
                       <div className="step first-step">
                         <div className="lane-name">
-                          Fast Lane
+                          Yocto + TreeHub
+                        </div>
+                        <div className="step-inner">
+                          <div className="step-no">1.</div>
+                          <div className="step-desc">
+                            Download the unique<br />
+                            credentials for this device.
+                            <div className="margin-top-20">
+                              <a href="#" onClick={this.showTooltipInfo.bind(this, 'unique_credentials')} className="btn btn-confirm" target="_blank">Download</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="step second-step">
+                        <div className="step-inner">
+                          <div className="step-no">2.</div>
+                          <div className="step-desc">
+                            Build your device image <br />
+                            and add the credentials to it. 
+                            <div className="margin-top-20"><a href="#" onClick={this.showTooltipInfo.bind(this, 'build_device')} className="font-12 color-main"><i className="fa fa-cog" aria-hidden="true"></i> How do I do that?</a></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="step-divider">
+                    or
+                  </div>
+                  <div className="steps-row">
+                    <div className="lane second-lane">
+                      <div className="step first-step">
+                        <div className="lane-name">
+                          Quickstart
                         </div>
                         <div className="step-inner">
                           <div className="step-no">1.</div>
@@ -88,39 +128,6 @@ define(function(require) {
                             install it using your package manager.
                             <div className="margin-top-20"><a href="#" onClick={this.showTooltipInfo.bind(this, 'copy_process')} className="font-12 color-main"><i className="fa fa-cog" aria-hidden="true"></i> How do I do that?</a></div>
                             <div><a href="#" onClick={this.showTooltipInfo.bind(this, 'other_system')} className="font-12 color-main"><i className="fa fa-cog" aria-hidden="true"></i> I use an init system other than systemd.</a></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="step-divider">
-                    or
-                  </div>
-                  <div className="steps-row">
-                    <div className="lane second-lane">
-                      <div className="step first-step">
-                        <div className="lane-name">
-                          Nerd Lane
-                        </div>
-                        <div className="step-inner">
-                          <div className="step-no">1.</div>
-                          <div className="step-desc">
-                            Download the unique<br />
-                            credentials for this device.
-                            <div className="margin-top-20">
-                              <a href="#" onClick={this.showTooltipInfo.bind(this, 'unique_credentials')} className="btn btn-confirm" target="_blank">Download</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="step second-step">
-                        <div className="step-inner">
-                          <div className="step-no">2.</div>
-                          <div className="step-desc">
-                            Manually build and install the<br />
-                            open source OTA client.
-                            <div className="margin-top-20"><a href="http://advancedtelematic.github.io/rvi_sota_server/cli/building-the-sota-client.html" className="font-12 color-main" target="_blank"><i className="fa fa-cog" aria-hidden="true"></i> How to build manually?</a></div>
-                            <div><a href="http://advancedtelematic.github.io/rvi_sota_server/cli/client-startup-and-configuration.html" className="font-12 color-main" target="_blank"><i className="fa fa-cog" aria-hidden="true"></i> How to install the client?</a></div>
                           </div>
                         </div>
                       </div>
@@ -161,6 +168,14 @@ define(function(require) {
               <UniqueCredentialsTooltip 
                 deviceUUID={this.props.deviceUUID}
                 closeModal={this.hideTooltipInfo}/>
+            : undefined}
+          </VelocityTransitionGroup>
+          <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+            {this.state.shownTooltipInfoName === 'build_device' ?
+              <ModalTooltip 
+                title="How to build device"
+                body={buildDeviceTooltipContent}
+                confirmButtonAction={this.hideTooltipInfo}/>
             : undefined}
           </VelocityTransitionGroup>
         </div>
