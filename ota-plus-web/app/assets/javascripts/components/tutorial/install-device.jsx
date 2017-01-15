@@ -50,7 +50,7 @@ define(function(require) {
       var otherSystemTooltipContent = (
         <div className="text-center">
           The pre-built packages register the OTA Plus Client to start with systemd. <br /><br />
-          If you use another init system, you'll need to <a href="http://docs.atsgarage.com/start-manual/install-and-configure-the-ats-garage-client.html">install ota-plus-client manually</a>.
+          If you use another init system, you'll need to <a href="http://docs.atsgarage.com/start-manual/install-and-configure-the-ats-garage-client.html" className="blue">install ota-plus-client manually</a>.
         </div>
       );
       var buildDeviceTooltipContent = (
@@ -58,7 +58,7 @@ define(function(require) {
           <span className="font-16"><strong>The credentials file should be placed in /sysroot/boot/sota.toml.</strong></span> <br /><br />
           For a step-by-step guide to building your first linux <br />
           distro with Yocto, read the guide <br />
-          <a href="http://docs.atsgarage.com/start-yocto/ your-first-ostreeenabled-yocto-project.html">http://docs.atsgarage.com/start-yocto/ your-first-ostreeenabled-yocto-project.html</a>
+          <a href="http://docs.atsgarage.com/start-yocto/ your-first-ostreeenabled-yocto-project.html" className="blue">http://docs.atsgarage.com/start-yocto/ your-first-ostreeenabled-yocto-project.html</a>
         </div>
       );
       return (
