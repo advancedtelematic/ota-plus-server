@@ -183,7 +183,7 @@ define(function(require) {
           <VelocityComponent animation={!this.state.hideAnimationUp ? Animations.up : null}>
             <div className="door">
               {this.state.hideAnimationUp ? 
-                <div className="loader darkgrey text-center">
+                <div className="loader text-center">
                   <div className="loading-text">Ready!</div>
                 </div>
               : null}
@@ -192,7 +192,7 @@ define(function(require) {
           <VelocityTransitionGroup enter={{animation: Animations.down, complete: function() {window.location.href = logoutUrl}}}>
             {!this.state.hideAnimationDown ? 
               <div className="door door-up">
-                <i className="fa fa-square-o fa-spin fa-2x loader darkgrey"></i>
+                <i className="fa fa-square-o fa-spin fa-2x loader"></i>
               </div>
             : null}
           </VelocityTransitionGroup>
