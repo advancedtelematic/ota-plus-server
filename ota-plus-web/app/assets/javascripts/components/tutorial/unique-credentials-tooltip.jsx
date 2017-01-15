@@ -12,6 +12,7 @@ define(function(require) {
       var pollingInterval = this.refs.pollingInterval.value;
       var link = "/api/v1/device_client/" + this.props.deviceUUID + "/toml?package_manager=" + packageManager + "&polling_sec=" + pollingInterval;
       window.open(link, '_blank');
+      this.props.closeModal();
     }
     render() {
       return (
