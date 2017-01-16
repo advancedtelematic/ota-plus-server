@@ -917,10 +917,6 @@ button {
         background: #666;
         height: 40px;
         padding: 0 15px;
-
-        .btn-main {
-            font-weight: normal;
-        }
     }
 
     .panel-body {
@@ -1299,7 +1295,6 @@ button {
 .btn-main {
     color: $color-darkgrey !important;
     font-size: 10px;
-    font-weight: bold;
     background: $color-mint;
     min-width: 78px;
     padding: 4px 15px;
@@ -1335,7 +1330,6 @@ button {
 .btn-grey {
     color: #202020;
     font-size: 10px;
-    font-weight: 600;
     text-align: left;
     background: rgb(254,254,254);
     background: -moz-linear-gradient(top, rgba(254,254,254,1) 0%, rgba(243,243,243,1) 100%);
@@ -1518,7 +1512,6 @@ a.close, button.close {
 
 .btn-black-big {
     color: #fff;
-    font-weight: bold;
     background: #222;
     padding: 6px 50px;
     margin: 20px 0 0 0;
@@ -1721,7 +1714,6 @@ a.close, button.close {
     }
 
     .btn-grey {
-        font-weight: normal;
         min-width: 90px;
     }
 
@@ -2854,7 +2846,6 @@ a.close, button.close {
 .btn-confirm {
     color: #333;
     font-size: 16px;
-    font-weight: bold;
     background: $color-mint;
     padding: 13px 50px;
     border-radius: 30px;
@@ -4144,12 +4135,6 @@ hr.full-line {
     .table {
         color: #222;
         background-color: #fff;
-    }
-}
-
-#devices-bar {
-    .btn-main {
-        font-weight: normal;
     }
 }
 
