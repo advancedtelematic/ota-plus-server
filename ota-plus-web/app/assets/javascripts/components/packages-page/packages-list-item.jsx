@@ -23,7 +23,7 @@ define(function(require) {
               <span className="package-name">{this.props.name}</span>
             </div>
           </button>
-          {this.props.selected ?
+          {!this.props.isOndevicesList && this.props.selected ?
             <label className="label label-mint package-stats-button-label">
               <a href="#" onClick={this.showStatus} id={"package-stats-button-" + this.props.name}>Status</a>
             </label>

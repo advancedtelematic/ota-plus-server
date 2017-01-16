@@ -22,8 +22,10 @@ define(function(require) {
         areInitPackagesFound: undefined,
         searchablePackagesData: undefined,
         searchablePackagesDataNotChanged: undefined,
+        ondevicesPackagesData: undefined,
         filterValue: '',
         selectedSort: 'asc',
+        selectedType: 'ingarage',
         contentHeight: 300,
         isCreateModalShown: false,
         isBlacklistModalShown: false,
@@ -37,9 +39,12 @@ define(function(require) {
         expandedPackageName: null
       };
       this.changeFilter = this.changeFilter.bind(this);
+      this.selectType = this.selectType.bind(this);
       this.setContentHeight = this.setContentHeight.bind(this);
       this.refreshSearchablePackagesData = this.refreshSearchablePackagesData.bind(this);
       this.setSearchablePackagesData = this.setSearchablePackagesData.bind(this);
+      this.refreshOndevicesPackagesData = this.refreshOndevicesPackagesData.bind(this);
+      this.setOndevicesPackagesData = this.setOndevicesPackagesData.bind(this);
       this.groupAndSortPackages = this.groupAndSortPackages.bind(this);
       this.setFakeHeader = this.setFakeHeader.bind(this);
       this.onFileDrop = this.onFileDrop.bind(this);
@@ -56,7 +61,9 @@ define(function(require) {
       this.handlePackageBlacklisted = this.handlePackageBlacklisted.bind(this);
       this.queryPackagesData = this.queryPackagesData.bind(this);
       SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: ''});
+      SotaDispatcher.dispatch({actionType: 'get-ondevices-packages'});
       db.searchablePackages.addWatch("poll-packages", _.bind(this.refreshSearchablePackagesData, this, null));
+      db.ondevicesPackages.addWatch("poll-ondevices-packages", _.bind(this.refreshOndevicesPackagesData, this, null));
       db.packageCreated.addWatch("package-created", _.bind(this.handlePackageCreated, this, null));
       db.packageBlacklisted.addWatch("package-blacklisted", _.bind(this.handlePackageBlacklisted, this, null));
     }
@@ -66,8 +73,10 @@ define(function(require) {
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setContentHeight);
-      db.searchablePackages.reset();      
+      db.searchablePackages.reset();
+      db.ondevicesPackages.reset();
       db.searchablePackages.removeWatch("poll-packages");
+      db.ondevicesPackages.removeWatch("poll-ondevices-packages");
       db.packageCreated.removeWatch("package-created");
       db.packageBlacklisted.removeWatch("package-blacklisted");
       db.postStatus.removeWatch("poll-poststatus-packages-page");
@@ -94,10 +103,15 @@ define(function(require) {
       this.setState({filterValue: filter});
       SotaDispatcher.dispatch({actionType: 'search-packages-by-regex', regex: filter});
     }
+    selectType(type, e) {
+      e.preventDefault();
+      this.setState({selectedType: type});
+    }
     selectSort(sort, e) {
       e.preventDefault();
       this.setState({selectedSort: sort});
       this.setSearchablePackagesData(sort);
+      this.setOndevicesPackagesData(sort);
     }
     refreshSearchablePackagesData() {
       this.setSearchablePackagesData();
@@ -110,12 +124,27 @@ define(function(require) {
           this.setState({areInitPackagesFound: Object.keys(searchablePackages).length > 0});
       
         searchablePackages = this.groupAndSortPackages(searchablePackages, selectedSort);
-        if(_.isUndefined(this.state.searchablePackagesData) || Object.keys(this.state.searchablePackagesData)[0] !== Object.keys(searchablePackages)[0])
+        if(this.state.selectedType === 'ingarage' && (_.isUndefined(this.state.searchablePackagesData) || Object.keys(this.state.searchablePackagesData)[0] !== Object.keys(searchablePackages)[0]))
           this.setFakeHeader(Object.keys(searchablePackages)[0]);
       }
       this.setState({
         searchablePackagesData: searchablePackages,
         searchablePackagesDataNotChanged: db.searchablePackages.deref()
+      });
+    }
+    refreshOndevicesPackagesData() {
+      this.setOndevicesPackagesData();
+    }
+    setOndevicesPackagesData(selectedSort) {
+      selectedSort = selectedSort || this.state.selectedSort;
+      var ondevicesPackages = db.ondevicesPackages.deref();
+      if(!_.isUndefined(ondevicesPackages)) {
+        ondevicesPackages = this.groupAndSortPackages(ondevicesPackages, selectedSort);
+        if(this.state.selectedType === 'ondevices' && (_.isUndefined(this.state.ondevicesPackagesData) || Object.keys(this.state.ondevicesPackagesData)[0] !== Object.keys(ondevicesPackages)[0]))
+          this.setFakeHeader(Object.keys(ondevicesPackages)[0]);
+      }
+      this.setState({
+        ondevicesPackagesData: ondevicesPackages,
       });
     }
     groupAndSortPackages(packages, selectedSort) {
@@ -274,7 +303,10 @@ define(function(require) {
                   <div className="panel-body">
                     <div className="panel-subheading">
                       <div className="container">
-                        <SearchBar class="search-bar pull-left" inputId="search-packages-input" changeFilter={this.changeFilter}/>
+                        <SearchBar class="search-bar pull-left" 
+                          inputId="search-packages-input" 
+                          changeFilter={this.changeFilter}
+                          isDisabled={this.state.selectedType === 'ondevices'}/>
                         <div className="sort-text pull-left">
                           {this.state.selectedSort == 'asc' ? 
                             <a href="#" onClick={this.selectSort.bind(this, 'desc')} id="link-sort-packages-desc"><i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z</a>
@@ -282,24 +314,43 @@ define(function(require) {
                             <a href="#" onClick={this.selectSort.bind(this, 'asc')} id="link-sort-packages-asc"><i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A</a>
                           }
                         </div>
+                        <div className="devices-status-switch">
+                          <div className={"switch-text" + (this.state.selectedType === 'ondevices' ? " selected" : "")}>On device</div>
+                          <div className={"switch" + (this.state.selectedType === 'ingarage' ? " switchOn" : "")} onClick={this.selectType.bind(this, (this.state.selectedType === 'ingarage' ? 'ondevices' : 'ingarage'))}></div>
+                          <div className={"switch-text" + (this.state.selectedType === 'ingarage' ? " selected" : "")}>In Garage</div>
+                        </div>
                         <button onClick={this.openCreateModal} className="btn btn-main btn-add pull-right" id="button-add-new-package">
                           <i className="fa fa-plus"></i> &nbsp; Add new package
                         </button>
                       </div>
                     </div>
                     <div id="packages-wrapper" style={{height: this.state.contentHeight}}>
-                      <PackagesList 
-                        searchablePackagesData={this.state.searchablePackagesData}
-                        contentHeight={this.state.contentHeight}
-                        fakeHeaderLetter={this.state.fakeHeaderLetter}
-                        selectedSort={this.state.selectedSort}
-                        highlightedName={this.props.params.highlightedName}
-                        showPackageStatusModal={this.showPackageStatusModal}
-                        showBlacklistModal={this.showBlacklistModal}
-                        expandedPackageName={this.state.expandedPackageName}
-                        expandPackage={this.expandPackage}
-                        onFileDrop={this.onFileDrop}
-                        queryPackagesData={this.queryPackagesData}/>
+                      {this.state.selectedType === 'ingarage' ?
+                        <PackagesList 
+                          searchablePackagesData={this.state.searchablePackagesData}
+                          contentHeight={this.state.contentHeight}
+                          fakeHeaderLetter={this.state.fakeHeaderLetter}
+                          selectedSort={this.state.selectedSort}
+                          highlightedName={this.props.params.highlightedName}
+                          showPackageStatusModal={this.showPackageStatusModal}
+                          showBlacklistModal={this.showBlacklistModal}
+                          expandedPackageName={this.state.expandedPackageName}
+                          expandPackage={this.expandPackage}
+                          onFileDrop={this.onFileDrop}
+                          queryPackagesData={this.queryPackagesData}
+                          isOndevicesList={false}
+                          selectedType={this.state.selectedType}/>
+                      : 
+                        <PackagesList 
+                          searchablePackagesData={this.state.ondevicesPackagesData}
+                          contentHeight={this.state.contentHeight}
+                          fakeHeaderLetter={this.state.fakeHeaderLetter}
+                          selectedSort={this.state.selectedSort}
+                          expandedPackageName={this.state.expandedPackageName}
+                          expandPackage={this.expandPackage}
+                          isOndevicesList={true}
+                          selectedType={this.state.selectedType}/>
+                      }
                     </div>
                   </div>
                 </div>

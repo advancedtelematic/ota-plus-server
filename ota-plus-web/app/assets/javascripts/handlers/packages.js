@@ -45,6 +45,15 @@ define(function(require) {
                 db.searchablePackages.reset(packages);
               });
           break;
+          case 'get-ondevices-packages':
+            sendRequest.doGet('/api/v1/device_packages', {action: payload.actionType})
+              .success(function(packages) {
+                var list = _.map(packages.values, function(package) {
+                  return {id: package}
+                });
+                db.ondevicesPackages.reset(list);
+              });
+          break;
           case 'get-packages-for-device':
             sendRequest.doGet('/api/v1/devices_info', {action: payload.actionType})
               .success(function(devices) {        
