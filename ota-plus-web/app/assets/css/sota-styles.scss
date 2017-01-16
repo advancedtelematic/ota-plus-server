@@ -784,53 +784,6 @@ button {
         @media (max-width: 1366px) {
             width: 55%;
         }
-
-        .devices-status-switch {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            float: right;
-
-            .switch {
-                margin-top: 7px;
-                height: 20px;
-
-                &:before {
-                    height: 20px;
-                }
-
-                &:after {
-                    width: 20px;
-                    height: 20px;
-                }
-
-                &.switchOn {
-                    &:before {
-                        background-color: #96DED2 !important;
-                    }
-
-                    &:after {
-                        left: 27px !important;
-                    }
-                }
-            }
-
-            .switch-text {
-                font-size: 14px;
-                font-weight: normal;
-                text-transform: none;
-                margin: 0 8px;
-                display: inline-block;
-                vertical-align: sub;
-
-                &.selected {
-                    font-weight: bold;
-                }
-            }
-        }
     }
 
     #queue-column {
@@ -847,6 +800,54 @@ button {
             .history-item-name {
                 width: 30%;
             }
+        }
+    }
+}
+
+.devices-status-switch {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin: 3px 0 0 0;
+    float: right;
+
+    .switch {
+        margin-top: 5px;
+        height: 20px;
+
+        &:before {
+            height: 20px;
+        }
+
+        &:after {
+            width: 20px;
+            height: 20px;
+        }
+
+        &.switchOn {
+            &:before {
+                background-color: #96DED2 !important;
+            }
+
+            &:after {
+                left: 27px !important;
+            }
+        }
+    }
+
+    .switch-text {
+        font-size: 14px;
+        font-weight: normal;
+        text-transform: none;
+        margin: 0 8px;
+        display: inline-block;
+        vertical-align: sub;
+
+        &.selected {
+            font-weight: bold;
         }
     }
 }
@@ -889,8 +890,18 @@ button {
         }
     }
 
+    .list-group-item {
+        height: 41px;
+    }
+
     .package-statuses {
         margin-right: 10px;
+    }
+
+    .devices-status-switch {
+        color: #fff;
+        margin: 6px 0 0 0;
+        float: left;
     }
 }
 

@@ -89,35 +89,38 @@ define(function(require) {
       return (
         <li className={"package-version " + (this.props.version.isBlackListed ? "package-blacklist" : "")}>
           <div className="package-left-box pull-left">
-            <form>
-              <fieldset>
-                <input className="input-comment" name="comment" value={this.state.commentTmp} type="text" placeholder="Comment here." ref="comment" onKeyUp={this.changeCommentFieldLength} onChange={this.changeCommentFieldLength} onFocus={this.enableEditField} />
-                {this.state.commentFieldLength > 0 && this.state.activeEditField ?
-                  <div className="pull-right">
-                    <a href="#" className="cancel-button pull-right" onClick={this.disableEditField}>
-                      <img src="/assets/img/icons/close_icon.png" alt="" />
-                    </a>
-                    &nbsp;
-                    <a href="#" className="accept-button pull-right" onClick={this.handleSubmit}>
-                      <img src="/assets/img/icons/accept_icon.png" alt="" />
-                    </a>
-                  </div>
-                : null}
-              </fieldset>
-            </form>
+            {!this.props.isOndevicesList ?
+              <form>
+                <fieldset>
+                  <input className="input-comment" name="comment" value={this.state.commentTmp} type="text" placeholder="Comment here." ref="comment" onKeyUp={this.changeCommentFieldLength} onChange={this.changeCommentFieldLength} onFocus={this.enableEditField} />
+                  {this.state.commentFieldLength > 0 && this.state.activeEditField ?
+                    <div className="pull-right">
+                      <a href="#" className="cancel-button pull-right" onClick={this.disableEditField}>
+                        <img src="/assets/img/icons/close_icon.png" alt="" />
+                      </a>
+                      &nbsp;
+                      <a href="#" className="accept-button pull-right" onClick={this.handleSubmit}>
+                        <img src="/assets/img/icons/accept_icon.png" alt="" />
+                      </a>
+                    </div>
+                  : null}
+                </fieldset>
+              </form>
+            : null}
           </div>
           <div className="package-right-box pull-right text-right">
-            {this.props.version.isBlackListed ?
-              <div>
-                <div className="pull-right">
-                  <button className="btn btn-blacklist btn-edit-blacklist" onClick={this.formBlacklist.bind(this, 'edit')} title="Edit blacklisted package version" id={"button-edit-blacklisted-package-" + this.props.version.id.name + "-" + this.props.version.id.version}></button>
+            {!this.props.isOndevicesList ? 
+              this.props.version.isBlackListed ?
+                <div>
+                  <div className="pull-right">
+                    <button className="btn btn-blacklist btn-edit-blacklist" onClick={this.formBlacklist.bind(this, 'edit')} title="Edit blacklisted package version" id={"button-edit-blacklisted-package-" + this.props.version.id.name + "-" + this.props.version.id.version}></button>
+                  </div>
                 </div>
-              </div>
-            : 
-              <div className="pull-right">
-                <button className="btn btn-blacklist btn-add-blacklist" onClick={this.formBlacklist.bind(this, 'add')} title="Blacklist package version" id={"button-blacklist-package-" + this.props.version.id.name + "-" + this.props.version.id.version}></button>
-              </div>
-            }
+              : 
+                <div className="pull-right">
+                  <button className="btn btn-blacklist btn-add-blacklist" onClick={this.formBlacklist.bind(this, 'add')} title="Blacklist package version" id={"button-blacklist-package-" + this.props.version.id.name + "-" + this.props.version.id.version}></button>
+                </div>
+            : null}
             <div className="package-statuses pull-right">
               <div className="package-version-name pull-right">
                 <span title={this.props.version.id.version}>{this.props.version.id.version}</span>
