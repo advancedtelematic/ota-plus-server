@@ -7,18 +7,6 @@ define(function(require) {
     constructor(props) {
       super(props);
     }
-    handleSubmit(e) {
-      e.preventDefault();
-      const user = this.props.user;
-      var data = {
-        name: user.fullName,
-        plan: "premium"
-      };
-      SotaDispatcher.dispatch({
-        actionType: 'update-user',
-        data: data
-      });
-    }
     render() {
       return (
         <div className="billing-plans">
@@ -57,7 +45,7 @@ define(function(require) {
                 per device (after the first 20 devices)
               </div>
               <div className="text-center">
-                <button className="btn btn-confirm" onClick={this.handleSubmit.bind(this)}>Upgrade</button>
+                <button className="btn btn-confirm" onClick={this.props.openBillingEditInfoModal}>Upgrade</button>
               </div>
             </div>
           </div>
