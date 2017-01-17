@@ -26,8 +26,8 @@ define(function(require) {
             <div className="billing-plan-header">Current</div>
             <div className="billing-plan-body">
               <ul className="billing-features">
-                <li>10 devices</li>
-                <li>No support</li>
+                <li>20 devices</li>
+                <li>Community support</li>
                 <li>Limited campaigns</li>
               </ul>
               <div className="billing-price">
@@ -35,9 +35,9 @@ define(function(require) {
               </div>
               <hr />
               <div className="text-center">
-                The <strong>BASIC</strong> account provides <br />
-                only an update for 10 devices <br />
-                and no additional services.
+                The <strong>FREE</strong> account allows up <br />
+                to 20 active devices per month,<br />
+                with community support only.
               </div>
             </div>
           </div>
@@ -50,11 +50,11 @@ define(function(require) {
                 <li>Unlimited campaigns</li>
               </ul>
               <div className="billing-price">
-                0,99 €
+                0.99 €
               </div>
               <hr />
               <div className="lightgrey text-center">
-                per device
+                per device (after the first 20 devices)
               </div>
               <div className="text-center">
                 <button className="btn btn-confirm" onClick={this.handleSubmit.bind(this)}>Upgrade</button>
