@@ -1,6 +1,7 @@
 define(function(require) {
   var React = require('react'),
-      SotaDispatcher = require('sota-dispatcher');
+      SotaDispatcher = require('sota-dispatcher'),
+      limitToNumbersRange = require('utils/utils').limitToNumbersRange;
 
   class UniqueCredentialsTooltip extends React.Component {
     constructor(props) {
@@ -28,10 +29,10 @@ define(function(require) {
                     <div className="form-row-title">Package manager:</div>
                   </div>
                   <div className="col-md-6">
-                    <select className="form-control" name="package_manager" ref="packageManager">
+                    <select className="form-control" name="package_manager" ref="packageManager" defaultValue="ostree">
                       <option value="deb">Debian</option>
                       <option value="rpm">RPM</option>
-                      <option value="ostree" selected>OSTree</option>
+                      <option value="ostree">OSTree</option>
                       <option value="off">Off</option>
                     </select>
                   </div>
@@ -41,7 +42,7 @@ define(function(require) {
                     <div className="form-row-title">Polling interval:</div>
                   </div>
                   <div className="col-md-6">
-                    <input type="number" className="form-control" defaultValue="60" min="10" name="polling_interval" ref="pollingInterval" onKeyDown={function(e) {e.preventDefault();return false;}}/>
+                    <input type="number" className="form-control" defaultValue="60" min="10" name="polling_interval" ref="pollingInterval" onBlur={limitToNumbersRange.bind(this, 10, null)}/>
                   </div>
                 </div>
               </div>
