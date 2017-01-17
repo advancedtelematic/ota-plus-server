@@ -97,7 +97,10 @@ define(function(require) {
         isCreateModalShown: true
       });
     }
-    closeCreateModal() {
+    closeCreateModal(ifRefreshList = false) {
+      if(ifRefreshList) {
+        SotaDispatcher.dispatch({actionType: 'get-provisioning-credentials'});
+      }
       this.setState({
         isCreateModalShown: false
       });

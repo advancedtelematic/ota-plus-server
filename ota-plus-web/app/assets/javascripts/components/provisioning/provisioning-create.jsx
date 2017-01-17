@@ -10,6 +10,8 @@ define(function(require) {
       super(props);
       this.closeModal = this.closeModal.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleResponse = this.handleResponse.bind(this);
+      db.postStatus.addWatch("poll-add-provisioning-credential", _.bind(this.handleResponse, this, null));
     }
     componentDidMount() {
       jQuery(this.refs.validUntilGroup).datetimepicker({
@@ -17,10 +19,33 @@ define(function(require) {
          defaultDate: new Date()
       });
     }
+    componentWillUnmount() {
+      db.postStatus.removeWatch("poll-add-provisioning-credential");
+    }
     handleSubmit(e) {
       e.preventDefault();
-      var deviceName = this.refs.deviceName;
-      var validUntil = moment(jQuery(this.refs.validUntil).val(), "DD/MM/YYYY").unix();
+      var data = {
+        description: this.refs.deviceName.value,
+        until: moment(jQuery(this.refs.validUntil).val(), "DD/MM/YYYY").format('YYYY-MM-DD')
+      };
+      SotaDispatcher.dispatch({
+        actionType: 'add-provisioning-credential',
+        data: data
+      });
+    }
+    handleResponse() {        
+      var postStatus = !_.isUndefined(db.postStatus.deref()) ? db.postStatus.deref() : undefined;
+      if(!_.isUndefined(postStatus['add-provisioning-credential'])) {
+        if(postStatus['add-provisioning-credential'].status === 'success') {
+          db.postStatus.removeWatch("poll-add-provisioning-credential");
+          var response = postStatus['add-provisioning-credential'].response;
+          delete postStatus['add-provisioning-credential'];
+          db.postStatus.reset(postStatus);
+          setTimeout(function() {
+            this.props.closeModal(true);
+          }.bind(this), 1);
+        }
+      }
     }
     closeModal(e) {
       e.preventDefault();
@@ -39,6 +64,9 @@ define(function(require) {
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
                 <div className="modal-body">
+                  <Responses 
+                    action="add-provisioning-credential" 
+                    handledStatuses="error"/>
                   <div className="form-group">
                     <label htmlFor="deviceName">Device name</label>
                     <input type="text" className="form-control" name="deviceName" placeholder="Device name" ref="deviceName"/>
