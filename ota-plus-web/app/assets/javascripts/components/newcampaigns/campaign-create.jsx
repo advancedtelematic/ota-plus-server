@@ -16,6 +16,11 @@ define(function(require) {
       this.handleResponse = this.handleResponse.bind(this);
       db.postStatus.addWatch("poll-create-new-campaign", _.bind(this.handleResponse, this, null));
     }
+    componentDidMount() {
+      setTimeout(function() {
+        this.refs.campaignName.focus();
+      }.bind(this), 100);
+    }
     componentWillUnmount() {
       db.postStatus.removeWatch("poll-create-new-campaign");
     }

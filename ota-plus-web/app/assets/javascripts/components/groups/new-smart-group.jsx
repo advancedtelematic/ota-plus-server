@@ -24,6 +24,11 @@ define(function(require) {
       db.postStatus.addWatch("poll-components-for-devices-post-status", _.bind(this.checkPostStatus, this, null));
       db.postStatus.addWatch("poll-create-smart-group", _.bind(this.handleResponse, this, null));
     }
+    componentDidMount() {
+      setTimeout(function() {
+        this.refs.groupName.focus();
+      }.bind(this), 100);
+    }
     componentWillUnmount() {
       db.componentsForSelectedDevices.removeWatch("poll-components-for-selected-devices");
       db.postStatus.removeWatch("poll-components-for-devices-post-status");

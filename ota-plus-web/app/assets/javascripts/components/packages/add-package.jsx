@@ -22,6 +22,11 @@ define(function(require) {
       db.postStatus.addWatch("poll-add-package", _.bind(this.handleResponse, this, null));
       db.postUpload.addWatch("poll-upload-package", _.bind(this.handleResponse, this, null));
     }
+    componentDidMount() {
+      setTimeout(function() {
+        this.refs.packageName.focus();
+      }.bind(this), 100);
+    }
     componentWillUnmount() {
       db.postStatus.removeWatch("poll-add-package");
       db.postUpload.removeWatch("poll-upload-package");
@@ -103,13 +108,13 @@ define(function(require) {
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="name">Package name</label>
-                        <input type="text" className="form-control" name="name" ref="name" placeholder="Package name" onChange={this.toggleButtonState}/>
+                        <input type="text" className="form-control" name="name" ref="packageName" placeholder="Package name" onChange={this.toggleButtonState}/>
                       </div>
                     </div>
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="version">Version</label>
-                        <input type="text" className="form-control" name="version" ref="version" placeholder="1.0.0" onChange={this.toggleButtonState}/>
+                        <input type="text" className="form-control" name="version" placeholder="1.0.0" onChange={this.toggleButtonState}/>
                       </div>
                     </div>
                   </div>
@@ -117,13 +122,13 @@ define(function(require) {
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="description">Description</label>
-                        <input type="text" className="form-control" name="description" ref="description" placeholder="Description text"/>
+                        <input type="text" className="form-control" name="description" placeholder="Description text"/>
                       </div>
                     </div>
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="vendor">Vendor</label>
-                        <input type="text" className="form-control" name="vendor" ref="vendor" placeholder="Vendor name"/>
+                        <input type="text" className="form-control" name="vendor" placeholder="Vendor name"/>
                       </div>
                     </div>
                   </div>
