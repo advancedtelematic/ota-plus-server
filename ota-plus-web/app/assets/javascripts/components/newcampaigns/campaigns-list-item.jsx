@@ -68,8 +68,8 @@ define(function(require) {
           </td>
           <td>none</td>
           <td>none</td>
-          {campaign.launched ? 
-            <td className="progress-cell">
+          <td className="progress-cell">
+            {campaign.launched ? 
               <div className="progress progress-blue">
                 <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}></div>
                 <div className="progress-count">
@@ -84,8 +84,8 @@ define(function(require) {
                   : null}
                 </div>
               </div>
-            </td>
-          : null}
+            : null}
+          </td>
           <td className="text-right">
             {campaign.launched ? 
               <PieChart data={data} width="30" height="30" options={{showTooltips: false}}/>
