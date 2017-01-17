@@ -16,6 +16,11 @@ define(function(require) {
       this.closeModal = this.closeModal.bind(this);
       db.postStatus.addWatch("poll-create-manual-group", _.bind(this.handleResponse, this, null));
     }
+    componentDidMount() {
+      setTimeout(function() {
+        this.refs.groupName.focus();
+      }.bind(this), 100);
+    }
     componentWillUnmount() {
       db.postStatus.removeWatch("poll-create-manual-group");
     }
