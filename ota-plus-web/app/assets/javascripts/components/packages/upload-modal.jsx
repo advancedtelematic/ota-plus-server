@@ -38,8 +38,8 @@ define(function(require) {
       this.convertBytesToUnits = this.convertBytesToUnits.bind(this);
       this.handleResponse = this.handleResponse.bind(this);
       
-      db.postUpload.addWatch("poll-upload-packages", _.bind(this.setData, this, null));
-      db.postStatus.addWatch("poll-response-add-package-modal", _.bind(this.handleResponse, this, null));
+      db.postUpload.addWatch("poll-upload-packages-modal", _.bind(this.setData, this, null));
+      db.postStatus.addWatch("poll-add-package-modal", _.bind(this.handleResponse, this, null));
     }
     componentDidMount() {
       window.addEventListener("resize", this.fixModalPosition);
@@ -93,7 +93,8 @@ define(function(require) {
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.fixModalPosition);
-      db.postUpload.removeWatch("poll-upload-packages");
+      db.postUpload.addWatch("poll-upload-packages-modal");
+      db.postStatus.addWatch("poll-add-package-modal");
     }
     fixModalPosition() {
       var modal = jQuery('#modal-upload');
