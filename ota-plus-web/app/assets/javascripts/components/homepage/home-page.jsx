@@ -178,7 +178,7 @@ define(function(require) {
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {this.state.isNewDeviceModalShown ?
               <NewDevice 
-                selectedGroup={null}
+                selectedGroup={{type: 'artificial', name: 'ungrouped'}}
                 closeNewDeviceModal={this.closeNewDeviceModal}/>
             : undefined}
           </VelocityTransitionGroup>
