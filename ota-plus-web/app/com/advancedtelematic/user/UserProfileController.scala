@@ -15,7 +15,7 @@ import play.api.mvc.{Action, AnyContent, BodyParsers, Controller}
 import scala.concurrent.{ExecutionContext, Future}
 
 
-final case class UserProfile(fullName: String, email: String, picture: String)
+final case class UserProfile(fullName: String, email: String, picture: String, profile: Option[JsValue])
 
 final case class UserId(id: String) extends AnyVal
 
@@ -24,7 +24,9 @@ object UserProfile {
   val FromUserInfoReads: Reads[UserProfile] =
     (((__ \ "user_metadata" \ "name").read[String] | (__ \ "name").read[String]) and
       (__ \ "email").read[String] and
-      (__ \ "picture").read[String])(UserProfile.apply _)
+      (__ \ "picture").read[String] and
+      ((__ \ "user_metadata" \ "profile").readNullable[JsValue] |
+        Reads.pure(Option.empty[JsValue])))(UserProfile.apply _)
 
   implicit val FormatInstance: Format[UserProfile] = Json.format[UserProfile]
 }
@@ -39,7 +41,12 @@ class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient,
   import org.genivi.webserver.controllers.FeatureName
 
   def getUserProfile: Action[AnyContent] = AuthenticatedAction.async { request =>
-    auth0Api.queryUserProfile(request.auth0AccessToken).map(x => Ok(Json.toJson(x))).recover {
+    val fut = for {
+      user <- auth0Api.queryUserProfile(request.auth0AccessToken)
+      profile <- userProfileApi.getUser(request.idToken.userId)
+    } yield Ok(Json.toJson(user.copy(profile = Some(profile))))
+
+    fut.recover {
       case e: RemoteApiError => e.result.header.status match {
         case Unauthorized.header.status => Forbidden.sendEntity(e.result.body)
         case _ => e.result

@@ -291,6 +291,9 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
       }
   }
 
+  def getUser(userId: UserId): Future[JsValue] =
+    userProfileRequest("users/" + userId.id).execJsonValue(apiExec)
+
   def getFeature(userId: UserId, feature: FeatureName): Future[Feature] =
     userProfileRequest("users/" + userId.id + "/features/" + feature.get).execJson[Feature](apiExec)
 
