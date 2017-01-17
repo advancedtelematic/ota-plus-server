@@ -43,7 +43,7 @@ define(function(require) {
             }
             <form ref="form" onSubmit={this.handleSubmit.bind(this)} id="form-personal-information">
               <div className="form-group text-left">
-                <label htmlFor="input-name">User name</label>
+                <label htmlFor="input-name">Display name</label>
                 <input type="text" className="form-control" name="name" id="input-name" defaultValue={user.fullName} required/>
               </div>
               <div className="form-group text-left">

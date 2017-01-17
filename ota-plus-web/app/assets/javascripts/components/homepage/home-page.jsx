@@ -119,7 +119,7 @@ define(function(require) {
               <div className="panel panel-ats panel-ats-light">
                 <div className="panel-heading">
                   <div className="panel-heading-left">
-                    Last created devices
+                    Recently created devices
                   </div>
                 </div>
                 <div className="panel-body">
@@ -133,7 +133,7 @@ define(function(require) {
               <div className="panel panel-ats panel-ats-light">
                 <div className="panel-heading">
                   <div className="panel-heading-left">
-                    Last uploaded packages
+                    Recently uploaded packages
                   </div>
                 </div>
                 <div className="panel-body">
@@ -147,7 +147,7 @@ define(function(require) {
               <div className="panel panel-ats panel-ats-light">
                 <div className="panel-heading">
                   <div className="panel-heading-left">
-                    Ongoing draft campaigns
+                    Draft campaigns
                   </div>
                 </div>
                 <div className="panel-body">
@@ -164,7 +164,7 @@ define(function(require) {
               <div className="panel panel-ats panel-ats-light">
                 <div className="panel-heading">
                   <div className="panel-heading-left">
-                    Last running campaigns progress
+                    Active campaigns
                   </div>
                 </div>
                 <div className="panel-body">
