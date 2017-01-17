@@ -2044,6 +2044,12 @@ a.close, button.close {
     }
 }
 
+#modal-billing-edit-info {
+    .modal-dialog {
+        width: 700px;
+    }
+}
+
 .form-subtitle {
     color: #222;
     font-size: 14px;
@@ -5254,12 +5260,11 @@ hr.full-line {
     .edit-profile-content {
         @include content-flex;
 
-        .edit-profile-content-left {
+        .edit-profile-content-user {
             color: $color-darkgrey;
             text-align: center;
             width: 350px;
-            margin: 0 15px;
-            float: left;
+            margin: 0 auto;
 
             .profile-icon {
                 width: 90px;
@@ -5281,10 +5286,6 @@ hr.full-line {
             hr {
                 border-color: #ccc;
             }
-        }
-
-        .edit-profile-content-right {
-            margin: 0 15px 0 380px;
         }
 
         .panel {

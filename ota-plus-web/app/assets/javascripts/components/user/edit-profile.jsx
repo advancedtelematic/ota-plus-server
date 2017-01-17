@@ -6,8 +6,7 @@ define(function(require) {
       Loader = require('../loader'),
       ReactI18next = require('reactI18next'),
       EditProfileHeader = require('./edit-profile-header'),
-      EditProfileInfo = require('./edit-profile-info'),
-      EditProfileBilling = require('./edit-profile-billing');
+      EditProfileInfo = require('./edit-profile-info');
 
   class EditProfile extends React.Component {
     constructor(props) {
@@ -42,14 +41,10 @@ define(function(require) {
               <div className="content-wrapper">
                 <EditProfileHeader />
                 <div className="edit-profile-content">
-                  <div className="edit-profile-content-left">
+                  <div className="edit-profile-content-user">
                      <EditProfileInfo 
                       user={user}/>
                    </div>
-                   <div className="edit-profile-content-right">
-                    <EditProfileBilling 
-                      user={user}/>
-                  </div>
                 </div>
               </div>
             : undefined}
