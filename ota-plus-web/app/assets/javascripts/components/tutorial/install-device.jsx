@@ -50,7 +50,7 @@ define(function(require) {
       var otherSystemTooltipContent = (
         <div className="text-center">
           The pre-built packages register the OTA Plus Client to start with systemd. <br /><br />
-          If you use another init system, you'll need to install ota-plus-client manually.
+          If you use another init system, you'll need to <a href="http://docs.atsgarage.com/start-manual/install-and-configure-the-ats-garage-client.html">install ota-plus-client manually</a>.
         </div>
       );
       return (
@@ -151,7 +151,7 @@ define(function(require) {
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
             {this.state.shownTooltipInfoName === 'other_system' ?
               <ModalTooltip 
-                title="How to use init system other than systemd"
+                title="How to configure other init systems"
                 body={otherSystemTooltipContent}
                 confirmButtonAction={this.hideTooltipInfo}/>
             : undefined}
