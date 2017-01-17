@@ -15,7 +15,7 @@ import play.api.mvc.{Action, AnyContent, BodyParsers, Controller}
 import scala.concurrent.{ExecutionContext, Future}
 
 
-final case class UserProfile(fullName: String, email: String, picture: String, scope: Option[String])
+final case class UserProfile(fullName: String, email: String, picture: String)
 
 final case class UserId(id: String) extends AnyVal
 
@@ -24,9 +24,7 @@ object UserProfile {
   val FromUserInfoReads: Reads[UserProfile] =
     (((__ \ "user_metadata" \ "name").read[String] | (__ \ "name").read[String]) and
       (__ \ "email").read[String] and
-      (__ \ "picture").read[String] and
-      ((__ \ "user_metadata" \ "scope_beta").readNullable[String] |
-        Reads.pure(Option.empty[String])))(UserProfile.apply _)
+      (__ \ "picture").read[String])(UserProfile.apply _)
 
   implicit val FormatInstance: Format[UserProfile] = Json.format[UserProfile]
 }
