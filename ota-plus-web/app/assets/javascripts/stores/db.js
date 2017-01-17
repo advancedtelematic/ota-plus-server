@@ -44,6 +44,7 @@ define(function(require) {
       this.autoInstallPackagesForDevice = atom.createAtom();
       this.provisioningStatus = atom.createAtom();
       this.provisioningDetails = atom.createAtom();
+      this.provisioningCredentials = atom.createAtom();
       this.features = atom.createAtom();
       this.treehubJson = atom.createAtom();
       this.usagePerMonth = atom.createAtom();
