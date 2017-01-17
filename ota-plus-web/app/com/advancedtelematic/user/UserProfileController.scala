@@ -67,8 +67,8 @@ class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient,
     }
   }
 
-  def updateBillingInfo(): Action[AnyContent] = AuthenticatedAction.async { request =>
-    userProfileApi.updateBillingInfo(request.idToken.userId, request.body.toString)
+  def updateBillingInfo(): Action[JsValue] = AuthenticatedAction.async(BodyParsers.parse.json) { request =>
+    userProfileApi.updateBillingInfo(request.idToken.userId, request.body)
   }
 
   implicit val featureW: Writes[FeatureName] = Writes.StringWrites.contramap(_.get)
