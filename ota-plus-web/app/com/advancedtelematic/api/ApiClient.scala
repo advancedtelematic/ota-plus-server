@@ -315,7 +315,7 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
     }}
   }
 
-  def updateBillingInfo[T](userId: UserId, body: String)
+  def updateBillingInfo[T](userId: UserId, body: JsValue)
                           (implicit executionContext: ExecutionContext): Future[Result] =
     userProfileRequest(s"users/${userId.id}/billing_info")
       .transform(_.withMethod("PUT").withBody(body)).execResult(apiExec)
