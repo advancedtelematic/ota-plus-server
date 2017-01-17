@@ -21,8 +21,8 @@ define(function(require) {
               });
           break;
           case 'update-user-billing':
-            sendRequest.doPut('/users/' + payload.userId + '/billing_info', payload.data, {action: payload.actionType})
-              .success(function(user) {
+            sendRequest.doPut('/user/profile/billing_info', payload.data, {action: payload.actionType})
+              .success(function() {
               });
           break;
           case 'change-password':

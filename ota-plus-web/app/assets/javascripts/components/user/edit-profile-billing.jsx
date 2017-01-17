@@ -38,7 +38,7 @@ define(function(require) {
                 <div className="col-xs-6">
                   <div className="form-group">
                     <label htmlFor="input-Email">Email</label>
-                    <input type="text" className="form-control" name="Email" id="input-Email" required/>
+                    <input type="text" className="form-control" name="email" id="input-Email" required/>
                   </div>
                 </div>
               </div>
@@ -74,7 +74,7 @@ define(function(require) {
                 <div className="col-xs-6">
                   <div className="form-group">
                     <label htmlFor="input-postal-code">Postal code</label>
-                    <input type="text" className="form-control" name="postalCode" id="input-postal-code" required/>
+                    <input type="text" className="form-control" name="postal_code" id="input-postal-code" required/>
                   </div>
                 </div>
                 <div className="col-xs-6">

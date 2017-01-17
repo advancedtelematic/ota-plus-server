@@ -11,7 +11,6 @@ define(function(require) {
       e.preventDefault();
       const user = this.props.user;
       var data = {
-        name: user.fullName,
         plan: "premium"
       };
       SotaDispatcher.dispatch({
