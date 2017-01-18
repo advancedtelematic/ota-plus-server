@@ -323,10 +323,9 @@ button {
                 div {
                     font-size: 11px;
                     margin: 0 0 0 3px;
-                    transition: opacity 0.2s ease-in;
-                    display: inline-block;
+                    transition: all 0.2s ease-in;
+                    display: none;
                     vertical-align: sub;
-                    opacity: 0;
                 }
             }
         }
@@ -342,7 +341,7 @@ button {
                 width: 100%;
 
                 div {
-                    opacity: 1;
+                    display: inline-block;
                 }
             }
         }
@@ -421,6 +420,13 @@ button {
         padding: 20px 0 0 0;
         overflow-y: scroll;
         overflow-x: hidden;
+
+        & > .container {
+            & > span {
+                height: 100px;
+                display: inline-block;
+            }
+        }
     }
 
     #devices-bar {
