@@ -2,9 +2,9 @@ package com.advancedtelematic.login
 
 import akka.{Done, NotUsed}
 import org.genivi.sota.data.Namespace
-import com.advancedtelematic.AuthenticatedAction
+import com.advancedtelematic._
 import com.advancedtelematic.api.{UnexpectedResponse, MalformedResponse}
-import com.advancedtelematic.{AuthPlusConfig, AuthPlusAccessToken, Auth0AccessToken, JwtAssertion, IdToken}
+import com.advancedtelematic.user.UserId
 import javax.inject.{Inject, Singleton}
 
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
@@ -115,6 +115,14 @@ class LoginController @Inject()(
     computation.run.map("Exchange id_token for jwt assertion" ~< _) |> AsyncDescribedComputation.apply
   }
 
+  def provisionUser(user: UserId): AsyncDescribedComputation[Boolean] =
+    userProfileApi.createProfile(user).map {
+      case Some(Done) => true  ~> "Sign-up: creating profile."
+      case None       => false ~> "User already registered."
+    }.recover {
+      case err        => false ~> ("User profile error: " + err.getMessage)
+    } |> AsyncDescribedComputation.apply
+
   val callback: Action[AnyContent] = Action.async { request =>
     request
       .getQueryString("error")
@@ -135,18 +143,10 @@ class LoginController @Inject()(
           assertion           <- exchangeIdTokenForAssertion(idToken)
           authPlusAccessToken <- requestAuthPlusAccessToken(assertion)
           ns <- extractNsFromToken(idToken) |> AsyncDescribedComputation.lift
+          _ <- provisionUser(idToken.userId)
         } yield (idToken, accessToken, authPlusAccessToken, ns)
 
-        val actions =
-          tokens.flatMap { case (token, _, _, _) =>
-            (userProfileApi
-              .createProfile(token.userId).map {
-                case Some(Done) => () ~> "Sign-up: creating profile."
-                case None       => () ~> "User already registered."
-              }) |> AsyncDescribedComputation.apply
-          }
-
-        actions.run
+        tokens.run
           .map("Processing authorization callback" ~< _)
           .foreach(computation => log.info(computation.run.written.shows))
 
