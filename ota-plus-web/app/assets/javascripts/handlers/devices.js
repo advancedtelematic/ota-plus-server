@@ -39,21 +39,6 @@ define(function(require) {
                 db.searchableDevices.reset(devices);
               });
             break;
-          case 'get-vehicles-for-package':
-            sendRequest.doGet('/api/v1/resolver/devices?packageName=' + payload.name + '&packageVersion=' + payload.version, {action: payload.actionType})
-              .success(function(vehicles) {
-                var list = _.map(vehicles, function(vehicle) {
-                  return vehicle.vin;
-                });
-                db.vehiclesForPackage.reset(list);
-              });
-            break;
-          case 'get-vehicles-wholedata-for-package':
-              sendRequest.doGet('/api/v1/resolver/devices?packageName=' + payload.name + '&packageVersion=' + payload.version, {action: payload.actionType})
-              .success(function(vehicles) {
-                db.vehiclesWholeDataForPackage.reset(vehicles);
-              });
-            break;
           case 'get-package-queue-for-device':
             if (!_.isUndefined(payload.device)) {
               sendRequest.doGet('/api/v1/device_updates/' + payload.device + '/queued', {action: payload.actionType})
@@ -68,25 +53,8 @@ define(function(require) {
                 db.packageHistoryForDevice.reset(packages);
               });
             break;
-          case 'list-components-on-device':
-            sendRequest.doGet('/api/v1/resolver/devices/' + payload.id + '/component', {action: payload.actionType})
-              .success(function(components) {
-                db.componentsOnVin.reset(components);
-              });
-            break;
-          case 'add-component-to-device':
-            sendRequest.doPut('/api/v1/resolver/devices/' + payload.device + '/component/' + payload.partNumber, null, {action: payload.actionType})
-              .success(function() {
-                SotaDispatcher.dispatch({actionType: 'list-components-on-device', device: payload.device});
-              });
-            break;
           case 'sync-packages-for-device':
             sendRequest.doPut('/api/v1/device_updates/' + payload.device + '/sync', null, {action: payload.actionType});
-            break;
-          case 'add-packages-to-device':
-            sendRequest.doPut('/api/v1/resolver/devices/' + payload.id + '/packages', payload.packages, {action: payload.actionType})
-              .success(function() {
-              });
             break;
           case 'install-package-for-device':
             sendRequest.doPost('/api/v1/device_updates/' + payload.device, payload.data, {action: payload.actionType})

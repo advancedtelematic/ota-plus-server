@@ -54,23 +54,6 @@ define(function(require) {
                 db.ondevicesPackages.reset(list);
               });
           break;
-          case 'get-packages-for-device':
-            sendRequest.doGet('/api/v1/devices_info', {action: payload.actionType})
-              .success(function(devices) {        
-                var device = _.find(devices, function(device) {
-                  return device.uuid == payload.device;
-                });
-                if (!_.isUndefined(device)) {
-                  sendRequest.doGet('/api/v1/resolver/devices/' + device.uuid + '/package', {action: payload.actionType})
-                    .success(function(packages) {
-                      var list = _.map(packages, function(package) {
-                        return {id: package}
-                      });
-                      db.packagesForDevice.reset(list);
-                    });
-                }
-              });
-          break;
           case 'search-packages-for-device-by-regex':
             var query = payload.regex ? '?regex=' + payload.regex : '';
             sendRequest.doGet('/api/v1/devices_info', {action: payload.actionType})
@@ -159,12 +142,6 @@ define(function(require) {
             sendRequest.doGet('/api/v1/blacklist/' + payload.name + '/' + payload.version + '/preview')
               .success(function(impactedDevicesCount) {
                 db.impactedDevicesCount.reset(impactedDevicesCount);                
-              });
-          break;
-          case 'get-affected-devices':
-            sendRequest.doPost('/api/v1/resolver/packages/affected', payload.data, {action: payload.actionType})
-              .success(function(vehicles) {
-                db.affectedDevices.reset(vehicles);
               });
           break;
           case 'get-package-stats':
