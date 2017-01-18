@@ -56,10 +56,10 @@ define(function(require) {
           break;
           case 'search-packages-for-device-by-regex':
             var query = payload.regex ? '?regex=' + payload.regex : '';
-            sendRequest.doGet('/api/v1/resolver/devices/' + payload.device + '/package' + query, {action: payload.actionType})
+            sendRequest.doGet('/api/v1/devices/' + payload.device + '/packages' + query, {action: payload.actionType})
               .success(function(packages) {
-                var list = _.map(packages, function(package) {
-                  return {id: package}
+                var list = _.map(packages, function(entry) {
+                  return {id: entry.packageId}
                 });
                 db.searchablePackagesForDevice.reset(list);
               });
@@ -137,16 +137,18 @@ define(function(require) {
               });
           break;
           case 'get-package-stats':
-            sendRequest.doGet('/api/v1/resolver/package_stats/' + payload.packageName, {action: payload.actionType})
-              .success(function(packageStats) {
-                if(Object.keys(packageStats).length) {
-                  var after = _.after(Object.keys(packageStats).length, function() {
+            sendRequest.doGet('/api/v1/package_stats/' + payload.packageName, {action: payload.actionType})
+              .success(function(result) {
+                packageStats = result.values;
+                if(packageStats.length) {
+                  var after = _.after(packageStats.length, function() {
                     db.packageStats.reset(packageStats);
                   });
-                  _.each(packageStats, function(pack, index) {                      
+                  _.each(packageStats, function(pack, index) {
                     sendRequest.doGet('/api/v1/device_count/' + payload.packageName + '/' + pack.packageVersion, {action: 'get-package-version-stats'})
                       .success(function(statistics) {
                         packageStats[index].groupIds = statistics.groupIds;
+                        packageStats[index].installedCount = statistics.deviceCount;
                       })
                       .always(function() {
                         after();
