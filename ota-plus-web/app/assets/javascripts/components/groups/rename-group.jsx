@@ -53,7 +53,7 @@ define(function(require) {
               <div className="modal-header">
                 <h4 className="modal-title">
                   <img src="/assets/img/icons/edit_white.png" className="blacklist-edit-icon" style={{width: '30px'}} alt="" />&nbsp;
-                  Rename group - {this.props.group.groupName}
+                  Rename group
                 </h4>
               </div>
               <form ref='form' onSubmit={this.handleSubmit}>
