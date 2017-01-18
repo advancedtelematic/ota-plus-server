@@ -8,7 +8,7 @@ define(function(require) {
       DeviceListItem = require('./devices-list-item');
 
   const minBoxWidth = 350;
-  const boxHeight = 105;
+  const boxHeight = 100;
 
   class DevicesList extends React.Component {
     constructor(props) {
