@@ -57,8 +57,7 @@ define(function(require) {
         <div className="text-center">
           <span className="font-16"><strong>The credentials file should be placed in /sysroot/boot/sota.toml.</strong></span> <br /><br />
           For a step-by-step guide to building your first linux <br />
-          distro with Yocto, read the guide <br />
-          <a href="http://docs.atsgarage.com/start-yocto/your-first-ostreeenabled-yocto-project.html" className="blue">http://docs.atsgarage.com/start-yocto/your-first-ostreeenabled-yocto-project.html</a>
+          distro with Yocto, <a href="http://docs.atsgarage.com/start-yocto/your-first-ostreeenabled-yocto-project.html" className="blue">read the guide</a>.
         </div>
       );
       return (
