@@ -56,20 +56,12 @@ define(function(require) {
           break;
           case 'search-packages-for-device-by-regex':
             var query = payload.regex ? '?regex=' + payload.regex : '';
-            sendRequest.doGet('/api/v1/devices_info', {action: payload.actionType})
-              .success(function(devices) {
-                var device = _.find(devices, function(device) {
-                  return device.uuid == payload.device;
+            sendRequest.doGet('/api/v1/resolver/devices/' + payload.device + '/package' + query, {action: payload.actionType})
+              .success(function(packages) {
+                var list = _.map(packages, function(package) {
+                  return {id: package}
                 });
-                if (!_.isUndefined(device)) {
-                  sendRequest.doGet('/api/v1/resolver/devices/' + device.uuid + '/package' + query, {action: payload.actionType})
-                    .success(function(packages) {
-                      var list = _.map(packages, function(package) {
-                        return {id: package}
-                      });
-                      db.searchablePackagesForDevice.reset(list);
-                    });
-                }
+                db.searchablePackagesForDevice.reset(list);
               });
           break;
           case 'get-devices-queued-for-package':
