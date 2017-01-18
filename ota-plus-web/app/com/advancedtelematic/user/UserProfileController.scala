@@ -15,7 +15,7 @@ import play.api.mvc.{Action, AnyContent, BodyParsers, Controller}
 import scala.concurrent.{ExecutionContext, Future}
 
 
-final case class UserProfile(fullName: String, email: String, picture: String, scope: Option[String])
+final case class UserProfile(fullName: String, email: String, picture: String, profile: Option[JsValue])
 
 final case class UserId(id: String) extends AnyVal
 
@@ -25,8 +25,8 @@ object UserProfile {
     (((__ \ "user_metadata" \ "name").read[String] | (__ \ "name").read[String]) and
       (__ \ "email").read[String] and
       (__ \ "picture").read[String] and
-      ((__ \ "user_metadata" \ "scope_beta").readNullable[String] |
-        Reads.pure(Option.empty[String])))(UserProfile.apply _)
+      ((__ \ "user_metadata" \ "profile").readNullable[JsValue] |
+        Reads.pure(Option.empty[JsValue])))(UserProfile.apply _)
 
   implicit val FormatInstance: Format[UserProfile] = Json.format[UserProfile]
 }
@@ -41,7 +41,12 @@ class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient,
   import org.genivi.webserver.controllers.FeatureName
 
   def getUserProfile: Action[AnyContent] = AuthenticatedAction.async { request =>
-    auth0Api.queryUserProfile(request.auth0AccessToken).map(x => Ok(Json.toJson(x))).recover {
+    val fut = for {
+      user <- auth0Api.queryUserProfile(request.auth0AccessToken)
+      profile <- userProfileApi.getUser(request.idToken.userId)
+    } yield Ok(Json.toJson(user.copy(profile = Some(profile))))
+
+    fut.recover {
       case e: RemoteApiError => e.result.header.status match {
         case Unauthorized.header.status => Forbidden.sendEntity(e.result.body)
         case _ => e.result
@@ -67,8 +72,8 @@ class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient,
     }
   }
 
-  def updateBillingInfo(): Action[AnyContent] = AuthenticatedAction.async { request =>
-    userProfileApi.updateBillingInfo(request.idToken.userId, request.body.toString)
+  def updateBillingInfo(): Action[JsValue] = AuthenticatedAction.async(BodyParsers.parse.json) { request =>
+    userProfileApi.updateBillingInfo(request.idToken.userId, request.body)
   }
 
   implicit val featureW: Writes[FeatureName] = Writes.StringWrites.contramap(_.get)
