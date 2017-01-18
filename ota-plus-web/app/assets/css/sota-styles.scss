@@ -1869,14 +1869,6 @@ a.close, button.close {
             .modal-body {
                 color: #444;
                 padding: 60px 80px 20px 80px;
-
-                a {
-                    color: $color-mint;
-
-                    &:hover, &:focus, &:active {
-                        color: $color-mint-active;
-                    }
-                }
             }
         }
     }
@@ -3213,6 +3205,14 @@ hr.full-line {
 
             .modal-body {
                 padding: 0;
+
+                a {
+                    color: $color-darkgrey;
+
+                    &:hover, &:focus, &:active {
+                        color: $color-darkgrey;
+                    }
+                }
 
                 .modal-subheader {
                     background: #dedede;
