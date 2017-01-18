@@ -3,7 +3,7 @@ define(function(require) {
       SotaDispatcher = require('sota-dispatcher'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
       
-  class BillingPlans extends React.Component {
+  class BillingFree extends React.Component {
     constructor(props) {
       super(props);
     }
@@ -54,9 +54,9 @@ define(function(require) {
     }
   };
 
-  BillingPlans.propTypes = {
-    user: React.PropTypes.object.isRequired
+  BillingFree.propTypes = {
+    openBillingEditInfoModal: React.PropTypes.func.isRequired
   };
 
-  return BillingPlans;
+  return BillingFree;
 });
