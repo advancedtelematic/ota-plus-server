@@ -162,6 +162,12 @@ define(function(require) {
           isWholeProcessFinished = false,
         overallUploadSize += upload.size;
         overallUploadedSize += upload.uploaded;
+        if(!_.isUndefined(upload.status) && upload.status === 'success') {
+          delete postUpload[uploadKey];
+          var mainPostUpload = db.postUpload.deref();
+          mainPostUpload['create-package'] = postUpload;
+          db.postUpload.reset(mainPostUpload);
+        }
       });
                         
       this.setState({
