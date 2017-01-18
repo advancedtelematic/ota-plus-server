@@ -276,7 +276,8 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
     val requestBody = Json.obj(
       "user_id" -> userId.id,
       "applications" -> Seq.empty[String],
-      "features" -> Seq.empty[FeatureName]
+      "features" -> Seq.empty[FeatureName],
+      "plan" -> "free"
     )
 
     userProfileRequest("users")
