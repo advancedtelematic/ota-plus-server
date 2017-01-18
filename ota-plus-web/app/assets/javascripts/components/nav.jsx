@@ -118,7 +118,10 @@ define(function(require) {
                 </li>
               : null}
               <li className="text-link">
-                <a href="mailto:support@atsgarage.com">NEED SUPPORT?</a>
+                <a href="http://docs.atsgarage.com">DOCS</a> |&nbsp;
+              </li>
+              <li className="text-link">
+                <a href="mailto:support@atsgarage.com">SUPPORT</a>
               </li>
               <li className="dropdown" id="menuLogin">
                 <a className="dropdown-toggle btn-profile" href="#" data-toggle="dropdown">
