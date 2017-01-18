@@ -21,7 +21,10 @@ define(function(require) {
               });
           break;
           case 'update-user-billing':
-            sendRequest.doPut('/user/profile/billing_info', payload.data, {action: payload.actionType})
+            var query = '/user/profile/billing_info';
+            if(payload.setQuote)
+              query += '?plan=quote';
+            sendRequest.doPut(query, payload.data, {action: payload.actionType})
               .success(function() {
               });
           break;
