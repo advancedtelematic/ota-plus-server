@@ -4782,7 +4782,9 @@ hr.full-line {
         position: relative;
     }
 
-    .table {
+    .table-campaigns {
+        background: #fff;
+
         & > tbody {
             & > tr {
                 & > td {
