@@ -44,7 +44,7 @@ define(function(require) {
                   errorText="Error occured during billing info updating."/>
                 <BillingEditInfoForm 
                   billingInfo={this.props.billingInfo}/>
-                <button type="submit" className="btn btn-confirm pull-right">Submit</button>
+                <button type="submit" className="btn btn-confirm pull-right">Update details</button>
               </form>
             </div>
           </div>

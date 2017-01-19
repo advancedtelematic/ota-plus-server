@@ -50,7 +50,7 @@ define(function(require) {
                 <label htmlFor="input-login">Login</label>
                 <input type="text" className="form-control" id="input-login" defaultValue={user.email} disabled/>
               </div>
-              <button type="submit" className="btn btn-confirm">Update details</button>
+              <button type="submit" className="btn btn-confirm margin-top-20">Update details</button>
             </form>
             <a href="#" className="btn btn-confirm margin-top-30" onClick={this.handleChangePassword.bind(this)}>Change password</a>
           </div>
