@@ -15,17 +15,16 @@ define(function(require) {
             <div className="billing-plan-body">
               <ul className="billing-features">
                 <li>20 devices</li>
-                <li>Community support</li>
-                <li>Limited campaigns</li>
+                <li>Community support only</li>
               </ul>
               <div className="billing-price">
                 0 €
               </div>
               <hr />
               <div className="text-center">
-                The <strong>FREE</strong> account allows up <br />
-                to 20 active devices per month,<br />
-                with community support only.
+                The <strong>BASIC</strong> account allows <br />
+                up to 20 active devices, with<br />
+                community support only.
               </div>
             </div>
           </div>
@@ -34,8 +33,7 @@ define(function(require) {
             <div className="billing-plan-body">
               <ul className="billing-features">
                 <li>Unlimited devices</li>
-                <li>Unlimited packages</li>
-                <li>Unlimited campaigns</li>
+                <li>Premium support</li>
               </ul>
               <div className="billing-price">
                 0.99 €
