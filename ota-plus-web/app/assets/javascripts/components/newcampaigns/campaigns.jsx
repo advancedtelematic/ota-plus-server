@@ -55,9 +55,10 @@ define(function(require) {
       db.updateSpec.removeWatch("poll-updatespec-campaigns");
       db.campaigns.reset();
     }
-    setCampaignsData(filterValue, selectedSort) {    
+    setCampaignsData(filterValue, selectedSort) {
       var campaigns = db.campaigns.deref();
       if(!_.isUndefined(campaigns)) {
+        filterValue = (filterValue !== null ? filterValue : this.state.filterValue);
         if(filterValue) {            
           campaigns = _.filter(campaigns, function(campaign) {
             return campaign.name.indexOf(filterValue) > -1;
@@ -198,14 +199,15 @@ define(function(require) {
           To create a campaign, you'll need to have at least one <Link to="/packages" className="black"><i className="fa fa-external-link" aria-hidden="true"></i> package</Link>, and at least one <Link to="/devices"  className="black"><i className="fa fa-external-link" aria-hidden="true"></i> group</Link>.
         </div>
       );
+      var campaignCount = !_.isUndefined(db.campaigns.deref()) ? Object.keys(db.campaigns.deref()).length : undefined;
     
       return (
         <div>
           <CampaignsHeader 
-            campaignCount={this.state.campaignCount}/>
+            campaignCount={campaignCount}/>
           <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
-            {!_.isUndefined(this.state.campaignCount) ? 
-              this.state.campaignCount ?
+            {!_.isUndefined(db.campaigns.deref()) ? 
+              campaignCount ?
                 <div className="panel panel-ats" style={{height: this.state.contentHeight}}>
                   <div className="panel-body">
                     <div className="panel-subheading">
