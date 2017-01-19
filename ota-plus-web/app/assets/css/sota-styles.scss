@@ -138,7 +138,7 @@ button {
     margin-bottom: 0;
 
     li {
-        margin: 10px 0 0 20px;
+        margin: 10px 0 0 15px;
         display: inline-block;
         vertical-align: top;
 
@@ -160,6 +160,11 @@ button {
                     color: $color-mint-active;
                 }
             }
+        }
+
+        &.separator {
+            color: $color-darkgrey;
+            padding: 8px 0 0 0;
         }
     }
 }

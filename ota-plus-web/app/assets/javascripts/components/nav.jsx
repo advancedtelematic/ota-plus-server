@@ -118,8 +118,9 @@ define(function(require) {
                 </li>
               : null}
               <li className="text-link">
-                <a href="http://docs.atsgarage.com">DOCS</a> |&nbsp;
+                <a href="http://docs.atsgarage.com" target="_blank">DOCS</a>
               </li>
+              <li className="separator">|</li>
               <li className="text-link">
                 <a href="mailto:support@atsgarage.com">SUPPORT</a>
               </li>
