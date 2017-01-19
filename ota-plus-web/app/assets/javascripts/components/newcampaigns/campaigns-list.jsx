@@ -64,7 +64,7 @@ define(function(require) {
           <div className="with-background" style={{height: this.state.campaignsWrapperHeight}}>
             <div className="campaigns-section-header">Draft campaigns</div>
             {draftCampaigns.length ? 
-              <table className="table with-background">
+              <table className="table table-campaigns">
                 <thead>
                   <tr>
                     <th className="col-md-4">Name</th>
@@ -89,7 +89,7 @@ define(function(require) {
             }
             <div className="campaigns-section-header">Running campaigns</div>
             {runningCampaigns.length ? 
-              <table className="table with-background">
+              <table className="table table-campaigns">
                 <thead>
                   <tr>
                     <th className="col-md-4">Name</th>
@@ -114,7 +114,7 @@ define(function(require) {
             }
             <div className="campaigns-section-header">Finished campaigns</div>
             {finishedCampaigns.length ? 
-              <table className="table with-background">
+              <table className="table table-campaigns">
                 <thead>
                   <tr>
                     <th className="col-md-4">Name</th>
