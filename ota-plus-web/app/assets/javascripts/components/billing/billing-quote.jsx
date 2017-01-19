@@ -15,10 +15,12 @@ define(function(require) {
                 <img src="/assets/img/icons/crown.png" style={{width: 120}} alt=""/>
 
                 <div className="margin-top-40">
-                  Received request
+                  Request received
                 </div>
                 <div className="margin-top-20">
-                  lorem ipsum es dolores
+                  Thank you for your interest in a <strong>PREMIUM</strong> <br />
+                  subscription. We will be in touch shortly with <br />
+                  a quote/purchase order to sign.
                 </div>
               </div>
             </div>
