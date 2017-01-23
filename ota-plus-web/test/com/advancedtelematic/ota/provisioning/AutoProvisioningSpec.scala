@@ -132,7 +132,7 @@ class AutoProvisioningSpec extends PlaySpec with OneServerPerSuite with ScalaFut
           .futureValue
       }
       response.status mustBe OK
-      (response.json \ "uuid").as[String] mustEqual MockCrypt.TestDeviceUuid
+      (response.json \ "id").as[String] mustEqual MockCrypt.TestDeviceUuid
       (response.json \ "description").as[String] mustEqual description
       (response.json \ "validFrom").as[Instant] mustEqual MockCrypt.now
       val validUntilResp = (response.json \ "validUntil").as[Instant].getLong(ChronoField.INSTANT_SECONDS)

@@ -23,12 +23,10 @@ object MockCrypt {
   val TestDeviceDescription = "simple description"
 
   def TestDeviceJson(description: String, ttl: Long) = Json.obj(
-    "uuid" -> TestDeviceUuid,
+    "id" -> TestDeviceUuid,
     "description" -> description,
     "validFrom" -> Json.toJson(now),
-    "validUntil" -> Json.toJson(now.plus(ttl, ChronoUnit.HOURS)),
-    "serialNumber" -> "",
-    "path" -> ""
+    "validUntil" -> Json.toJson(now.plus(ttl, ChronoUnit.HOURS))
   )
 
   val testAccountUrl  = CryptHost + "/accounts/test"
