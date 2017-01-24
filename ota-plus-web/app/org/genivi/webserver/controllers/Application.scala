@@ -82,6 +82,7 @@ class Application @Inject() (ws: WSClient,
     case "device_groups" :: _ => devicesApiUri
     case "device_count" :: _ => devicesApiUri
     case "active_device_count" :: _ => devicesApiUri
+    case "device_packages" :: _ => devicesApiUri
   }
 
   private val resolverProxiedPrefixes: PartialFunction[List[String], String] = {
