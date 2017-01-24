@@ -46,7 +46,7 @@ object DeviceRegistrationCredentials {
   implicit val PathWrites: Writes[Path] = Writes.StringWrites.contramap(_.toString)
 
   implicit val FormatInstance: Format[DeviceRegistrationCredentials] =
-    ((__ \ "uuid").format[UUID] and
+    ((__ \ "id").format[UUID] and
      (__ \ "description").format[String] and
      (__ \ "validFrom").format[Instant] and
      (__ \ "validUntil").format[Instant]
