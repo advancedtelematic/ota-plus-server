@@ -25,7 +25,7 @@ define(function(require) {
       return (
         <div className={this.props.class}>
           <div className="input-group">
-            <input type="text" className="form-control" onChange={this.handleChange} value={this.props.filterValue} id={this.props.inputId}/>
+            <input type="text" className="form-control" onChange={this.handleChange} value={this.props.filterValue} id={this.props.inputId} disabled={this.props.isDisabled ? "disabled" : null}/>
             <span className="input-group-addon"><i className="fa fa-search"></i></span>
           </div>
         </div>
