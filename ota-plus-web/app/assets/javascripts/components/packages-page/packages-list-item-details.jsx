@@ -14,7 +14,8 @@ define(function(require) {
             version={version}
             showBlacklistForm={this.props.showBlacklistForm}
             key={'package-' + this.props.packageName + '-' + version.id.version}
-            queryPackagesData={this.props.queryPackagesData}/>
+            queryPackagesData={this.props.queryPackagesData}
+            isOndevicesList={this.props.isOndevicesList}/>
         );
       }, this);
 

@@ -14,6 +14,7 @@ define(function(require) {
       this.packageQueueForDevice = atom.createAtom();
       this.searchableDevices = atom.createAtom();
       this.searchablePackages = atom.createAtom();
+      this.ondevicesPackages = atom.createAtom();
       this.postStatus = atom.createAtom({});
       this.postUpload = atom.createAtom();
       

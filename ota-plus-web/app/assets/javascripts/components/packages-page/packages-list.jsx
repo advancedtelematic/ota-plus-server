@@ -40,6 +40,10 @@ define(function(require) {
       if(this.state.packagesWrapperHeight !== prevState.packagesWrapperHeight) {
         this.packagesListScroll();
       }
+      if(this.props.selectedType !== prevProps.selectedType) {
+        ReactDOM.findDOMNode(this.refs.packagesList).scrollTop = 0;
+        this.packagesListScroll();
+      }
     }
     componentWillUnmount() {
       ReactDOM.findDOMNode(this.refs.packagesList).removeEventListener('scroll', this.packagesListScroll);
@@ -82,8 +86,8 @@ define(function(require) {
         var packageDetailsOffset = Math.min(Math.max(packageDetails.getBoundingClientRect().top - wrapperPosition.top, -packageDetails.offsetHeight), 0);
     
       var offset = 5;
-      var headersHeight = !_.isUndefined(document.getElementsByClassName('ioslist-group-header')[0]) ? document.getElementsByClassName('ioslist-group-header')[0].offsetHeight : 28;
-      var listItemHeight = !_.isUndefined(document.getElementsByClassName('list-group-item')[0]) ? document.getElementsByClassName('list-group-item')[0].offsetHeight - 1 : 39;
+      var headersHeight = !_.isUndefined(document.getElementsByClassName('ioslist-group-header')[0]) ? document.getElementsByClassName('ioslist-group-header')[0].offsetHeight : 28;;
+      var listItemHeight = !_.isUndefined(document.getElementsByClassName('list-group-item')[0]) ? document.getElementsByClassName('list-group-item')[0].offsetHeight - 1 : 39;;
       var packagesShownStartIndex = Math.floor((ReactDOM.findDOMNode(this.refs.packagesList).scrollTop - (beforeHeadersCount - 1) * headersHeight + packageDetailsOffset) / listItemHeight) - offset;
       var packagesShownEndIndex = packagesShownStartIndex + Math.floor(this.state.packagesWrapperHeight / listItemHeight) + 2 * offset;     
             
@@ -131,7 +135,8 @@ define(function(require) {
                   name={pack.packageName}
                   expandPackage={this.props.expandPackage}
                   showPackageStatusModal={this.props.showPackageStatusModal}
-                  selected={isExpanded}/>
+                  selected={isExpanded}
+                  isOndevicesList={this.props.isOndevicesList}/>
                 <VelocityTransitionGroup enter={{animation: "slideDown", begin: function() {that.startIntervalPackagesListScroll()}, complete: function() {that.stopIntervalPackagesListScroll()}}} leave={{animation: "slideUp"}}>
                   {isExpanded ?
                     <PackageListItemDetails
@@ -139,13 +144,14 @@ define(function(require) {
                       versions={pack.elements}
                       packageName={pack.packageName}
                       showBlacklistForm={this.props.showBlacklistModal}
-                      queryPackagesData={this.props.queryPackagesData}/>
+                      queryPackagesData={this.props.queryPackagesData}
+                      isOndevicesList={this.props.isOndevicesList}/>
                   : null}
                 </VelocityTransitionGroup>
               </li>
             );
           return (
-            <li key={'package-' + pack.packageName} className="list-group-item" >{packageIndex}</li>
+            <li key={'package-' + pack.packageName} className="list-group-item" ></li>
           );
         }, this);
         return(
@@ -160,7 +166,7 @@ define(function(require) {
       return (
         <div>
           <ul className="list-group" id="packages-list" style={{height: this.state.packagesWrapperHeight}}>
-            <Dropzone ref="dropzone" onDrop={this.props.onFileDrop} multiple={false} disableClick={true} className="dnd-zone" activeClassName="dnd-zone-active">
+            <Dropzone ref="dropzone" onDrop={!this.props.isOndevicesList ? this.props.onFileDrop : null} multiple={false} disableClick={true} className="dnd-zone" activeClassName={!this.props.isOndevicesList ? "dnd-zone-active" : null}>
               <div id="packages-list-inside">
                 <div className="ioslist-wrapper with-background" ref="packagesList">
                   <VelocityTransitionGroup enter={{animation: "fadeIn", complete: function() {that.highlightPackage()}}} leave={{animation: "fadeOut"}}>
