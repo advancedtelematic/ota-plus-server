@@ -6,7 +6,8 @@ define(function(require) {
       db = require('stores/db'),
       serializeForm = require('../../mixins/serialize-form'),
       SotaDispatcher = require('sota-dispatcher'),
-      Responses = require('../responses');
+      Responses = require('../responses'),
+      setFocusAtEnd = require('utils/utils').setFocusAtEnd;
 
   class RenameDevice extends React.Component {
     constructor(props) {
@@ -15,6 +16,11 @@ define(function(require) {
       this.closeRenameDeviceModal = this.closeRenameDeviceModal.bind(this);
       this.handleResponse = this.handleResponse.bind(this);
       db.postStatus.addWatch("poll-edit-device", _.bind(this.handleResponse, this, null));
+    }
+    componentDidMount() {
+      setTimeout(function() {
+        this.refs.deviceName.focus();
+      }.bind(this), 100);
     }
     componentWillUnmount() {
       db.postStatus.removeWatch("poll-edit-device");
@@ -63,7 +69,7 @@ define(function(require) {
                   <div className="form-group">
                     <label htmlFor="deviceName">Name</label>
                     <input type="text" className="form-control" name="deviceName"
-                         ref="deviceName" defaultValue={this.props.device.deviceName}/>
+                         ref="deviceName" defaultValue={this.props.device.deviceName} onFocus={setFocusAtEnd}/>
                   </div>
                 </div>
                 <div className="modal-footer">

@@ -6,7 +6,8 @@ define(function(require) {
       db = require('stores/db'),
       serializeForm = require('../../mixins/serialize-form'),
       SotaDispatcher = require('sota-dispatcher'),
-      Responses = require('../responses');
+      Responses = require('../responses'),
+      setFocusAtEnd = require('utils/utils').setFocusAtEnd;
 
   class RenameGroup extends React.Component {
     constructor(props) {
@@ -15,6 +16,11 @@ define(function(require) {
       this.closeRenameGroupModal = this.closeRenameGroupModal.bind(this);
       this.handleResponse = this.handleResponse.bind(this);
       db.postStatus.addWatch("poll-rename-group", _.bind(this.handleResponse, this, null));
+    }
+    componentDidMount() {
+      setTimeout(function() {
+        this.refs.groupName.focus();
+      }.bind(this), 100);
     }
     componentWillUnmount() {
       db.postStatus.removeWatch("poll-rename-group");
@@ -62,7 +68,7 @@ define(function(require) {
                   <div className="form-group">
                     <label htmlFor="groupName">New group name</label>
                     <input type="text" className="form-control" name="groupName"
-                         ref="groupName" defaultValue={this.props.group.groupName}/>
+                         ref="groupName" defaultValue={this.props.group.groupName} onFocus={setFocusAtEnd}/>
                   </div>
                 </div>
                 <div className="modal-footer">

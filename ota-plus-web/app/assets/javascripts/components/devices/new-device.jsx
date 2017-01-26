@@ -16,6 +16,11 @@ define(function(require) {
       this.closeNewDeviceModal = this.closeNewDeviceModal.bind(this);
       db.postStatus.addWatch("poll-create-device", _.bind(this.handleResponse, this, null));
     }
+    componentDidMount() {
+      setTimeout(function() {
+        this.refs.deviceName.focus();
+      }.bind(this), 100);
+    }
     componentWillUnmount() {
       db.postStatus.removeWatch("poll-create-device");
     }
