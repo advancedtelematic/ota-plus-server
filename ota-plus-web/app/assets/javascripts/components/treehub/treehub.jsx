@@ -107,7 +107,7 @@ define(function(require) {
                           I'm new to Yocto/Open Embedded. <br />
                           Show me how to start a project <br />
                           from scratch.
-                          <a href="http://docs.atsgarage.com/start-yocto/your-first-ostreeenabled-yocto-project.html" className="btn btn-confirm btn-small">Start</a>
+                          <a href="http://docs.atsgarage.com/start-yocto/your-first-ostreeenabled-yocto-project.html" target="_blank" className="btn btn-confirm btn-small">Start</a>
                         </div>
                       </div>
                       <div className="panel panel-grey">
@@ -117,7 +117,7 @@ define(function(require) {
                         <div className="panel-body">
                           I have an existing Yocto project <br />
                           that I want to OTA-enable.
-                          <a href="http://docs.atsgarage.com/start-yocto/adding-ostree-updates-to-your-existing-yocto-project.html" className="btn btn-confirm btn-small">Start</a>
+                          <a href="http://docs.atsgarage.com/start-yocto/adding-ostree-updates-to-your-existing-yocto-project.html" target="_blank" className="btn btn-confirm btn-small">Start</a>
                         </div>
                       </div>
                     </div>
