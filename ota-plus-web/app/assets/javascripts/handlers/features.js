@@ -54,6 +54,17 @@ define(function(require) {
                 }, 1);
               });
           break;
+          case 'get-provisioning-credentials':
+            sendRequest.doGet('/api/v1/provisioning/credentials/registration', {action: payload.actionType})
+              .success(function(provisioningCredentials) {
+                db.provisioningCredentials.reset(provisioningCredentials);
+              });
+          break;
+          case 'add-provisioning-credential':
+            sendRequest.doPost('/api/v1/provisioning/credentials/registration', payload.data, {action: payload.actionType})
+              .success(function() {
+              });
+          break;
         }
       };
       SotaDispatcher.register(this.dispatchCallback.bind(this));

@@ -4996,6 +4996,7 @@ hr.full-line {
         width: 100%;
         padding: 20px 0 0 0;
         float: left;
+        overflow-y: scroll;
 
         .common-box-icon {
             background-image: url(/assets/img/icons/black/key.png);
