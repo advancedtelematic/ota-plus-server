@@ -2,7 +2,8 @@ define(function(require) {
   var React = require('react'),
       db = require('stores/db'),
       SotaDispatcher = require('sota-dispatcher'),
-      Responses = require('../responses');
+      Responses = require('../responses'),
+      setFocusAtEnd = require('utils/utils').setFocusAtEnd;
 
   class CampaignRename extends React.Component {
     constructor(props) {
@@ -11,6 +12,11 @@ define(function(require) {
       this.closeModal = this.closeModal.bind(this);
       this.handleResponse = this.handleResponse.bind(this);
       db.postStatus.addWatch("poll-rename-campaign", _.bind(this.handleResponse, this, null));
+    }
+    componentDidMount() {
+      setTimeout(function() {
+        this.refs.campaignName.focus();
+      }.bind(this), 100);
     }
     componentWillUnmount() {
       db.postStatus.removeWatch("poll-rename-campaign");
@@ -56,7 +62,7 @@ define(function(require) {
                   <div className="form-group">
                     <label htmlFor="campaignName">New campaign name</label>
                     <input type="text" className="form-control" name="campaignName"
-                         ref="campaignName" defaultValue={this.props.campaign.name}/>
+                         ref="campaignName" defaultValue={this.props.campaign.name} onFocus={setFocusAtEnd}/>
                   </div>
                 </div>
                 <div className="modal-footer">
