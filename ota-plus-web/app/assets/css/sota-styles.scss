@@ -839,6 +839,7 @@ button {
     }
 
     .switch-text {
+        color: #888;
         font-size: 14px;
         font-weight: normal;
         text-transform: none;
@@ -847,7 +848,7 @@ button {
         vertical-align: sub;
 
         &.selected {
-            font-weight: bold;
+            color: #fff;
         }
     }
 }
