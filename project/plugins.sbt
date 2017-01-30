@@ -29,3 +29,5 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.0")
 addSbtPlugin("com.github.ddispaltro" % "sbt-reactjs" % "0.5.2")
 
 addSbtPlugin("com.geirsson" % "sbt-scalafmt" % "0.2.10")
+
+addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.8")
