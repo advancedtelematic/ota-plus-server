@@ -5,6 +5,7 @@ import eu.timepit.refined._
 import eu.timepit.refined.api.{Refined, Validate}
 import java.time.Instant
 
+import org.genivi.sota.data.DeviceStatus
 import org.genivi.sota.data.{Device, DeviceT, Namespace, Uuid}
 import org.genivi.sota.marshalling.{DeserializationException, RefinementError}
 import play.api.libs.functional.syntax._
@@ -37,6 +38,8 @@ object Devices {
 
   implicit val InstantR: Reads[Instant] = Reads[Instant] { js => Reads.DefaultDateReads.reads(js).map(_.toInstant) }
 
+  implicit val DeviceStatusR: Reads[DeviceStatus.Value] = Reads.enumNameReads(DeviceStatus)
+
   implicit val DeviceTR: Reads[DeviceT] = Json.reads[DeviceT]
 
   implicit val DeviceR: Reads[Device] = {(
@@ -46,7 +49,9 @@ object Devices {
       (__ \ "deviceId").readNullable[DeviceId] and
       (__ \ "deviceType").read[DeviceType] and
       (__ \ "lastSeen").readNullable[Instant] and
-      (__ \ "createdAt").read[Instant]
+      (__ \ "createdAt").read[Instant] and
+      (__ \ "activatedAt").readNullable[Instant] and
+      (__ \ "deviceStatus").read[DeviceStatus.Value]
     )(Device.apply _)}
 
 
@@ -62,6 +67,8 @@ object Devices {
 
   implicit val InstantW: Writes[Instant] = Writes.StringWrites.contramap(i => i.toString)
 
+  implicit val DeviceStatusW: Writes[DeviceStatus.Value] = Writes.enumNameWrites[DeviceStatus.type]
+
   implicit val DeviceTW: Writes[DeviceT] = Json.writes[DeviceT]
 
   implicit val DeviceW: Writes[Device] = (
@@ -71,7 +78,9 @@ object Devices {
       (__ \ "deviceId").writeNullable[DeviceId] and
       (__ \ "deviceType").write[DeviceType] and
       (__ \ "lastSeen").writeNullable[Instant] and
-      (__ \ "createdAt").write[Instant]
+      (__ \ "createdAt").write[Instant] and
+      (__ \ "activatedAt").writeNullable[Instant] and
+      (__ \ "deviceStatus").write[DeviceStatus.Value]
     )(unlift(Device.unapply))
 }
 
