@@ -1,10 +1,13 @@
 package com.advancedtelematic.login
 
 import akka.{Done, NotUsed}
+import akka.actor.ActorSystem
 import org.genivi.sota.data.Namespace
+import org.genivi.sota.messaging.Messages.UserLogin
 import com.advancedtelematic._
 import com.advancedtelematic.api.{UnexpectedResponse, MalformedResponse}
 import com.advancedtelematic.user.UserId
+import java.time.Instant
 import javax.inject.{Inject, Singleton}
 
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
@@ -19,6 +22,9 @@ import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{ Failure, Success, Try }
+
+import cats.data.Xor
+import org.genivi.sota.messaging.{MessageBus, MessageBusPublisher}
 
 final case class LoginData(username: String, password: String)
 
@@ -36,7 +42,7 @@ class LoginController @Inject()(
   val messagesApi: MessagesApi,
   val ws: WSClient,
   val clientExec: ApiClientExec)
-  (implicit context: ExecutionContext)
+  (implicit system: ActorSystem, context: ExecutionContext)
     extends Controller
     with I18nSupport
     with ApiClientSupport {
@@ -54,6 +60,16 @@ class LoginController @Inject()(
   private[this] val auth0Config = Auth0Config(conf).get
 
   private[this] val log = Logger(this.getClass)
+
+  lazy val config = system.settings.config
+
+  lazy val messageBus =
+    MessageBus.publisher(system, config) match {
+      case Xor.Right(v) => v
+      case Xor.Left(error) =>
+        log.error("Could not initialize message bus publisher", error)
+        MessageBusPublisher.ignore
+    }
 
   val login: Action[AnyContent] = Action { implicit req =>
     Ok(views.html.login(auth0Config))
@@ -123,6 +139,14 @@ class LoginController @Inject()(
       case err        => false ~> ("User profile error: " + err.getMessage)
     } |> AsyncDescribedComputation.apply
 
+  def publishLoginEvent(user: UserId): AsyncDescribedComputation[Boolean] = {
+    messageBus.publish(UserLogin(user.id, Instant.now())).map { _ =>
+      true ~> "User logged in"
+    }.recover { case err =>
+      false ~> ("Cannot publish login event: " + err.getMessage)
+    } |> AsyncDescribedComputation.apply
+  }
+
   val callback: Action[AnyContent] = Action.async { request =>
     request
       .getQueryString("error")
@@ -144,6 +168,7 @@ class LoginController @Inject()(
           authPlusAccessToken <- requestAuthPlusAccessToken(assertion)
           ns <- extractNsFromToken(idToken) |> AsyncDescribedComputation.lift
           _ <- provisionUser(idToken.userId)
+          _ <- publishLoginEvent(idToken.userId)
         } yield (idToken, accessToken, authPlusAccessToken, ns)
 
         tokens.run
