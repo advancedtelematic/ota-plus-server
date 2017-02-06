@@ -3,8 +3,7 @@ package com.advancedtelematic.ota.Messages
 import cats.syntax.show._
 import com.advancedtelematic.ota.device.Devices._
 import org.genivi.sota.data.PackageId
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, PackageCreated,
-                                           PackageBlacklisted, UpdateSpec}
+import org.genivi.sota.messaging.Messages._
 import play.api.libs.json.{JsString, Writes, _}
 
 object MessageWriters {
@@ -66,6 +65,14 @@ object MessageWriters {
       "device" -> updateSpecMsg.device.show,
       "packageUuid" -> Json.toJson(updateSpecMsg.packageUuid),
       "status" -> updateSpecMsg.status
+    )
+  }
+
+  implicit val deviceUpdateStatusWrites = new Writes[DeviceUpdateStatus] {
+    def writes(deviceUpdateStatusMsg: DeviceUpdateStatus) = Json.obj(
+      "namespace" -> deviceUpdateStatusMsg.namespace.get,
+      "device" -> deviceUpdateStatusMsg.device.show,
+      "status" -> deviceUpdateStatusMsg.status
     )
   }
 }
