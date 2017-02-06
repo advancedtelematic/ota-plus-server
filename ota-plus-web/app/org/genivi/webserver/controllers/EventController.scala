@@ -7,9 +7,9 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.{Flow, Sink, Source}
 import com.advancedtelematic.ota.Messages.MessageWriters._
 import com.advancedtelematic.ota.Messages.WebMessageBusListenerActor
-import org.genivi.sota.data.{Namespace, Uuid}
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, PackageCreated,
-                                           PackageBlacklisted, UpdateSpec}
+import org.genivi.sota.data.Namespace
+import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, DeviceUpdateStatus,
+                                           PackageBlacklisted, PackageCreated, UpdateSpec}
 import org.genivi.sota.messaging.daemon.MessageBusListenerActor.Subscribe
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
 import play.api.http.ContentTypes
@@ -17,7 +17,6 @@ import play.api.libs.Comet
 import play.api.libs.streams._
 import play.api.libs.json._
 import play.api.mvc._
-import play.api.mvc.WebSocket.FrameFormatter
 import play.api.Configuration
 import scala.concurrent.Future
 import scala.reflect.ClassTag
@@ -40,7 +39,8 @@ class EventController @Inject()
     WebMessageBusListenerActor.props[DeviceDeleted],
     WebMessageBusListenerActor.props[PackageCreated],
     WebMessageBusListenerActor.props[PackageBlacklisted],
-    WebMessageBusListenerActor.props[UpdateSpec]
+    WebMessageBusListenerActor.props[UpdateSpec],
+    WebMessageBusListenerActor.props[DeviceUpdateStatus]
   ).foreach(p => system.actorOf(p) ! Subscribe)
 
   private def subscribe[T](source: Source[T, _], callbackName: String)(implicit writes: Writes[T]) = {
@@ -77,6 +77,7 @@ class EventController @Inject()
       .merge(getSource[PackageCreated](_.namespace))
       .merge(getSource[PackageBlacklisted](_.namespace))
       .merge(getSource[UpdateSpec](_.namespace))
+      .merge(getSource[DeviceUpdateStatus](_.namespace))
 
     Flow.fromSinkAndSource(Sink.ignore, sources)
   }

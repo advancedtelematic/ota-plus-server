@@ -11,9 +11,10 @@ import com.advancedtelematic.ota.Messages.MessageWriters._
 import eu.timepit.refined.api.Refined
 import java.time.Instant
 import java.util.UUID
-import org.genivi.sota.data.{Device, Namespace, PackageId, Uuid}
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, PackageBlacklisted,
-                                           PackageCreated, UpdateSpec}
+
+import org.genivi.sota.data._
+import org.genivi.sota.messaging.Messages._
+import org.genivi.sota.messaging.Messages
 import org.genivi.webserver.controllers.EventController
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -23,8 +24,8 @@ import play.api.libs.json._
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import scala.reflect.ClassTag
 
+import scala.reflect.ClassTag
 import Device._
 
 
@@ -45,29 +46,10 @@ object MessagingData {
   val updateSpecMessage = UpdateSpec(namespace, deviceUuid, packageUuid, "Finished")
   val packageBlacklistedMessage = PackageBlacklisted(namespace, packageId)
   val packageCreatedMessage = PackageCreated(namespace, packageId, Some("description"), Some("ghc"), None)
+  val deviceUpdateStatusMessage = Messages.DeviceUpdateStatus(namespace, deviceUuid, DeviceStatus.UpToDate)
 }
 
 class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
-
-  protected def getDeviceSeenResponse(msg: DeviceSeen): String = {
-    "<html><body><script type=\"text/javascript\">parent.deviceSeen(" + Json.toJson(msg) + ");</script>"
-  }
-
-  protected def getDeviceCreatedResponse(msg: DeviceCreated): String = {
-    "<html><body><script type=\"text/javascript\">parent.deviceCreated(" + Json.toJson(msg) + ");</script>"
-  }
-
-  protected def getDeviceDeletedResponse(msg: DeviceDeleted): String = {
-    "<html><body><script type=\"text/javascript\">parent.deviceDeleted(" + Json.toJson(msg) + ");</script>"
-  }
-
-  protected def getPackageCreatedResponse(msg: PackageCreated): String = {
-    "<html><body><script type=\"text/javascript\">parent.packageCreated(" + Json.toJson(msg) + ");</script>"
-  }
-
-  protected def getUpdateSpecResponse(msg: UpdateSpec): String = {
-    "<html><body><script type=\"text/javascript\">parent.updateSpec(" + Json.toJson(msg) + ");</script>"
-  }
 
   val mockMsgSrc = new MessageSourceProvider {
     override def getSource[T]()(implicit system: ActorSystem, tag: ClassTag[T]): Source[T, _] = {
@@ -83,6 +65,8 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
         Source.single(MessagingData.packageBlacklistedMessage).asInstanceOf[Source[T, NotUsed]]
       } else if(tag.runtimeClass.equals(classOf[PackageCreated])) {
         Source.single(MessagingData.packageCreatedMessage).asInstanceOf[Source[T, NotUsed]]
+      } else if(tag.runtimeClass.equals(classOf[Messages.DeviceUpdateStatus])) {
+        Source.single(MessagingData.deviceUpdateStatusMessage).asInstanceOf[Source[T, NotUsed]]
       } else {
         throw new IllegalArgumentException("[test] Event class not supported " +
           s"${tag.runtimeClass.getSimpleName}")
@@ -114,13 +98,14 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
         .toMat(TestSink.probe[JsValue])(Keep.both)
         .run()
 
-      sub.request(n = 6)
+      sub.request(n = 7)
       sub.expectNextUnordered(mkJs(MessagingData.deviceSeenMessage),
                               mkJs(MessagingData.deviceCreatedMessage),
                               mkJs(MessagingData.deviceDeletedMessage),
                               mkJs(MessagingData.updateSpecMessage),
                               mkJs(MessagingData.packageBlacklistedMessage),
-                              mkJs(MessagingData.packageCreatedMessage))
+                              mkJs(MessagingData.packageCreatedMessage),
+                              mkJs(MessagingData.deviceUpdateStatusMessage))
     }
   }
 
