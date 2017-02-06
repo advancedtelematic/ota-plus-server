@@ -131,14 +131,6 @@ class LoginController @Inject()(
     computation.run.map("Exchange id_token for jwt assertion" ~< _) |> AsyncDescribedComputation.apply
   }
 
-  def provisionUser(user: UserId): AsyncDescribedComputation[Boolean] =
-    userProfileApi.createProfile(user).map {
-      case Some(Done) => true  ~> "Sign-up: creating profile."
-      case None       => false ~> "User already registered."
-    }.recover {
-      case err        => false ~> ("User profile error: " + err.getMessage)
-    } |> AsyncDescribedComputation.apply
-
   def publishLoginEvent(user: UserId): AsyncDescribedComputation[Boolean] = {
     messageBus.publish(UserLogin(user.id, Instant.now())).map { _ =>
       true ~> "User logged in"
@@ -167,7 +159,6 @@ class LoginController @Inject()(
           assertion           <- exchangeIdTokenForAssertion(idToken)
           authPlusAccessToken <- requestAuthPlusAccessToken(assertion)
           ns <- extractNsFromToken(idToken) |> AsyncDescribedComputation.lift
-          _ <- provisionUser(idToken.userId)
           _ <- publishLoginEvent(idToken.userId)
         } yield (idToken, accessToken, authPlusAccessToken, ns)
 
