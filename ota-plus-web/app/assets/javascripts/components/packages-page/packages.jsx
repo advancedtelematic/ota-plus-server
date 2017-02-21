@@ -314,11 +314,13 @@ define(function(require) {
                             <a href="#" onClick={this.selectSort.bind(this, 'asc')} id="link-sort-packages-asc"><i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A</a>
                           }
                         </div>
-                        <div className="devices-status-switch">
-                          <div className={"switch-text" + (this.state.selectedType === 'ondevices' ? " selected" : "")}>On device</div>
-                          <div className={"switch" + (this.state.selectedType === 'ingarage' ? " switchOn" : "")} onClick={this.selectType.bind(this, (this.state.selectedType === 'ingarage' ? 'ondevices' : 'ingarage'))}></div>
-                          <div className={"switch-text" + (this.state.selectedType === 'ingarage' ? " selected" : "")}>In Garage</div>
-                        </div>
+                        {0 ?
+                            <div className="devices-status-switch">
+                              <div className={"switch-text" + (this.state.selectedType === 'ondevices' ? " selected" : "")}>On device</div>
+                              <div className={"switch" + (this.state.selectedType === 'ingarage' ? " switchOn" : "")} onClick={this.selectType.bind(this, (this.state.selectedType === 'ingarage' ? 'ondevices' : 'ingarage'))}></div>
+                              <div className={"switch-text" + (this.state.selectedType === 'ingarage' ? " selected" : "")}>In Garage</div>
+                            </div>
+                        : null}
                         <button onClick={this.openCreateModal} className="btn btn-main btn-add pull-right" id="button-add-new-package">
                           <i className="fa fa-plus"></i> &nbsp; Add new package
                         </button>
