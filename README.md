@@ -44,11 +44,6 @@ Step 3:`cd ota-plus-server` and run tests, for example:
 ```
   sbt "ota-plus-web/testOnly ApplicationFunTests"
 ```
-- Integration tests
-```
-  sbt "ota-plus-web/it:testOnly APIFunTests"
-  sbt "ota-plus-web/it:test"
-```
 - Other tests
 ```
   sbt "ota-plus-web/testOnly com.advancedtelematic.ota.ClientSdkControllerSpec"

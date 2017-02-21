@@ -14,9 +14,7 @@ play.sbt.routes.RoutesKeys.routesImport ++= Seq(
 
 RoutesKeys.routesGenerator := InjectedRoutesGenerator
 
-testOptions in UnitTests += Tests.Argument(TestFrameworks.ScalaTest, "-l", "APITests BrowserTests")
-
-testOptions in IntegrationTests += Tests.Argument(TestFrameworks.ScalaTest, "-n", "APITests")
+testOptions in UnitTests += Tests.Argument(TestFrameworks.ScalaTest, "-l", "BrowserTests")
 
 testOptions in BrowserTests += Tests.Argument(TestFrameworks.ScalaTest, "-n", "BrowserTests")
 
@@ -68,15 +66,11 @@ Release.settings
 
 lazy val UnitTests = config("ut") extend Test
 
-lazy val IntegrationTests = config("it") extend Test
-
 lazy val BrowserTests = config("bt") extend Test
 
-configs(UnitTests, IntegrationTests, BrowserTests)
+configs(UnitTests, BrowserTests)
 
 inConfig(UnitTests)(Defaults.testTasks)
-
-inConfig(IntegrationTests)(Defaults.testTasks)
 
 inConfig(BrowserTests)(Defaults.testTasks)
 
