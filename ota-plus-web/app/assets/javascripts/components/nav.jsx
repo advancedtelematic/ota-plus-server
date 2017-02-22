@@ -3,7 +3,6 @@ define(function(require) {
       Router = require('react-router'),
       Link = Router.Link,
       db = require('stores/db'),
-      SotaDispatcher = require('sota-dispatcher'),
       Profile = require('./user/profile'),
       VelocityComponent = require('mixins/velocity/velocity-component'),
       VelocityTransitionGroup = require('mixins/velocity/velocity-transition-group');
@@ -20,7 +19,6 @@ define(function(require) {
       db.impactAnalysis.addWatch("poll-impact-analysis-nav", _.bind(this.forceUpdate, this, null));
     }
     componentDidMount() {
-      SotaDispatcher.dispatch({actionType: 'get-user'});
       $(".dropdown-profile").click(function(e) {
         if(e.target.tagName.toLowerCase() !== 'a') {
           e.stopPropagation();
