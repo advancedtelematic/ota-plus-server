@@ -126,6 +126,8 @@ define(function(require) {
         }
       }, 5000);
       
+      SotaDispatcher.dispatch({actionType: 'get-user'});
+      
       this.setState({
         intervalId: intervalId
       });
