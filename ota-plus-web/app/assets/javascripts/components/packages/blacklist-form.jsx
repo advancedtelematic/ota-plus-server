@@ -124,8 +124,8 @@ define(function(require) {
                       <div className="row text-center">
                         <div className="col-md-12">
                           <p>You're about to <strong>blacklist</strong> the following package version:</p>
-                          <div className="font-20">{this.props.packageName}</div>
-                          <div className="font-20"><strong>{this.props.packageVersion}</strong></div>
+                          <div className="blacklist-package-name" title={this.props.packageName}>{this.props.packageName}</div>
+                          <div className="blacklist-package-version" title={this.props.packageVersion}><strong>{this.props.packageVersion}</strong></div>
                           <p className="lightgrey margin-top-25">
                             When you blacklist a package version, you can no longer install it on any devices. 
                             It will also appear in the <strong>Impact analysis tab</strong>, showing which devices currently have it installed.
