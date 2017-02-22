@@ -3309,6 +3309,18 @@ hr.full-line {
 
             .modal-body {
                 padding: 40px 60px 30px 60px;
+                
+                .blacklist-package-name {
+                    font-size: 20px;
+                    line-height: 1.5em;
+                    @include textoverflow-ellipsis;
+                }
+                
+                .blacklist-package-version {
+                    font-size: 20px;
+                    line-height: 1.5em;
+                    @include textoverflow-ellipsis;
+                }
             }
         }
     }
@@ -5010,12 +5022,6 @@ hr.full-line {
                 }
             }
         }
-        
-        
-        
-        
-        
-        
     }
 }
 
