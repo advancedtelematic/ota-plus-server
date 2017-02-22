@@ -9,7 +9,7 @@ define(function(require) {
     render() {
       const { credential, width } = this.props;
       return (
-        <div className="common-box" style={{width: width}}>
+        <a href={"/api/v1/provisioning/credentials/registration/" + credential.id} className="common-box" style={{width: width}}>
           <div className="common-box-actions">
             <ul>
               <li title="Rename key" data-toggle="provisioning-tooltip" data-placement="right">
@@ -22,7 +22,7 @@ define(function(require) {
             <div className="common-box-title">{credential.description}</div>
             <div className="common-box-subtitle">Valid until: {moment(credential.validUntil, "YYYY-MM-DD").format("DD/MM/YYYY")}</div>
           </div>
-        </div>
+        </a>
       );
     }
   };
