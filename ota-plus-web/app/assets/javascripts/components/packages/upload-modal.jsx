@@ -130,8 +130,7 @@ define(function(require) {
       var currentTime = new Date().getTime();
       var overallUploadSize = 0;
       var overallUploadedSize = 0;
-      var isWholeProcessFinished = true;
-            
+      var isWholeProcessFinished = true;            
       if(firstUpdatedSecondsRemaining == null) {
         this.setState({
           firstUpdatedSecondsRemaining: currentTime

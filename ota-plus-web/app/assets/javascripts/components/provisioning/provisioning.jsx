@@ -40,6 +40,11 @@ define(function(require) {
       window.addEventListener("resize", this.setContentHeight);
       this.setContentHeight();
     }
+    componentDidUpdate(prevProps, prevState) {		
+      if(prevProps.hasBetaAccess !== this.props.hasBetaAccess) {		
+        this.setContentHeight();		
+      }		
+    }
     componentWillUnmount() {
       window.removeEventListener("resize", this.setContentHeight);
       db.provisioningStatus.removeWatch("poll-provisioning-status");
@@ -48,10 +53,12 @@ define(function(require) {
       db.provisioningDetails.reset();
     }
     setContentHeight() {
-      var windowHeight = jQuery(window).height();
-      this.setState({
-        contentHeight: windowHeight - jQuery('.grey-header').offset().top - jQuery('.grey-header').outerHeight()
-      });
+      if(this.props.hasBetaAccess) {
+        var windowHeight = jQuery(window).height();
+        this.setState({
+          contentHeight: windowHeight - jQuery('.grey-header').offset().top - jQuery('.grey-header').outerHeight()
+        });
+      }
     }
     showProvisioningTooltip(e) {
       if(e) e.preventDefault();
@@ -113,6 +120,7 @@ define(function(require) {
         </div>
       );
       return (
+        this.props.hasBetaAccess ?
           <div>
             <ProvisioningHeader />
             <VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
@@ -174,6 +182,8 @@ define(function(require) {
               : undefined}
             </VelocityTransitionGroup>
           </div>
+        : 
+          <NoAccess />
       );
     }
   }
