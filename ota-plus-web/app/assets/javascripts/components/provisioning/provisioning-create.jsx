@@ -25,7 +25,7 @@ define(function(require) {
     handleSubmit(e) {
       e.preventDefault();
       var data = {
-        description: this.refs.deviceName.value,
+        description: this.refs.credential.value,
         until: moment(jQuery(this.refs.validUntil).val(), "DD/MM/YYYY").format('YYYY-MM-DD')
       };
       SotaDispatcher.dispatch({
@@ -68,8 +68,8 @@ define(function(require) {
                     action="add-provisioning-credential" 
                     handledStatuses="error"/>
                   <div className="form-group">
-                    <label htmlFor="deviceName">Device name</label>
-                    <input type="text" className="form-control" name="deviceName" placeholder="Device name" ref="deviceName"/>
+                    <label htmlFor="credential">Device registration credential name</label>
+                    <input type="text" className="form-control" name="credential" placeholder="Device registration credential" ref="credential" required/>
                   </div>
                   <div className="form-group position-relative">
                     <label htmlFor="validUntil">Valid until</label>
