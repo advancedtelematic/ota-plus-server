@@ -157,17 +157,12 @@ define(function(require) {
         }
       }
             
-      _.each(postUpload, function(upload, uploadKey) {
-        if(_.isUndefined(upload.status) || upload.status === 'error')
-          isWholeProcessFinished = false,
+      _.each(postUpload, function(upload) {      
+        if(_.isUndefined(upload.request.status)) {
+          isWholeProcessFinished = false;
+        }
         overallUploadSize += upload.size;
         overallUploadedSize += upload.uploaded;
-        if(!_.isUndefined(upload.status) && upload.status === 'success') {
-          delete postUpload[uploadKey];
-          var mainPostUpload = db.postUpload.deref();
-          mainPostUpload['create-package'] = postUpload;
-          db.postUpload.reset(mainPostUpload);
-        }
       });
                         
       this.setState({
@@ -258,7 +253,7 @@ define(function(require) {
         }
       }, this);
     }
-    render() {    
+    render() {
       var data = this.state.data;
       var overallUploadedSize = !isNaN(this.state.overallUploadedSize) ? this.state.overallUploadedSize/(1024*1024) : 0;
       var overallUploadSize = this.state.overallUploadSize/(1024*1024);
@@ -334,7 +329,7 @@ define(function(require) {
       return (
         <div>
           <div id="modal-upload" className={"myModal" + (_.isUndefined(uploads) || _.isEmpty(uploads) ? ' hidden': '') + (this.state.isModalMinimized ? ' minimized' : '')}>
-            {!_.isUndefined(uploads) && !_.isEmpty(uploads) && !this.state.isWholeProcessFinished ?
+            {!_.isUndefined(uploads) && !_.isEmpty(uploads) ?
               <div className="modal-dialog">
                 <div className="modal-content">
                   <div className="modal-header">
@@ -373,7 +368,7 @@ define(function(require) {
                               {this.convertBytesToUnits(overallUploadedSize)} of {this.convertBytesToUnits(overallUploadSize)}
                             </span>
                           : 
-                            !this.state.isUploadFinished ?
+                            !this.state.isWholeProcessFinished ?
                               <a href="#" className="black" onClick={this.showUploadCancelModal.bind(this, undefined)} title="Cancel all uploads">Cancel all</a>
                             : null
                           }
