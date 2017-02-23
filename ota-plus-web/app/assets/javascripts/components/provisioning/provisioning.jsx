@@ -64,7 +64,10 @@ define(function(require) {
     handleProvisioningStatus() {
       var provisioningStatus = db.provisioningStatus.deref();
       if(!_.isUndefined(provisioningStatus)) {
-        this.setState({isProvisioningActivated: provisioningStatus.active});
+        this.setState({
+            isProvisioningActivated: provisioningStatus.active,
+            isProvisioningTooltipShown: false
+        });
       }
     }
     handleProvisioningDetails() {
@@ -130,16 +133,6 @@ define(function(require) {
                     <div className="panel panel-ats">
                       <div className="panel-body">
                         <div className="panel-subheading">
-                          <div className="pull-left">
-                            <SearchBar class="search-bar pull-left" inputId="search-campaigns-input" changeFilter={this.changeFilter}/>
-                          </div>
-                          <div className="sort-text pull-left">
-                            {this.state.selectedSort == 'asc' ? 
-                              <a href="#" onClick={this.selectSort.bind(this, 'desc')} id="link-sort-packages-desc"><i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z</a>
-                            :
-                              <a href="#" onClick={this.selectSort.bind(this, 'asc')} id="link-sort-packages-asc"><i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A</a>
-                            }
-                          </div>
                           <div className="pull-right margin-left-15">
                             <button onClick={this.openCreateModal} className="btn btn-main btn-add pull-right" id="button-add-new-campaign">
                               <i className="fa fa-plus"></i> &nbsp; Add new key

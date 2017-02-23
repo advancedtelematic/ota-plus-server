@@ -4999,9 +4999,23 @@ hr.full-line {
         float: left;
         overflow-y: scroll;
 
-        .common-box-icon {
-            background-image: url(/assets/img/icons/black/key.png);
+        .common-box {
+            .common-box-icon {
+                background-image: url(/assets/img/icons/black/key.png);
+            }
+            
+            &:hover {
+                .common-box-actions {
+                    margin-left: -60px;
+                }
+            }
         }
+        
+        
+        
+        
+        
+        
     }
 }
 
