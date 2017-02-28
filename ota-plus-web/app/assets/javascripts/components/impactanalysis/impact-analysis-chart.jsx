@@ -30,20 +30,22 @@ define(function(require) {
       var colorIndex = -1;
       var stats = [];
       _.each(this.props.packages, function(pack, index) {
-        if(index < availableColors.length) {
-          colorIndex++;
-          stats.push(
-            {
-              value: pack.deviceCount,
-              groupIds: pack.groupIds,
-              color: availableColors[colorIndex],
-              highlight: availableColors[colorIndex],
-              label: (index === availableColors.length - 1 ? groupedStatsName : pack.packageName)
-            }
-          );
-        } else if(index >= availableColors.length) {
-          stats[availableColors.length - 1].value = pack.deviceCount + stats[availableColors.length - 1].value;
-          stats[availableColors.length - 1].groupIds = _.union(pack.groupIds, stats[availableColors.length - 1].groupIds);
+        if(pack.deviceCount) {
+          if(index < availableColors.length) {
+            colorIndex++;
+            stats.push(
+              {
+                value: pack.deviceCount,
+                groupIds: pack.groupIds,
+                color: availableColors[colorIndex],
+                highlight: availableColors[colorIndex],
+                label: (index === availableColors.length - 1 ? groupedStatsName : pack.packageName)
+              }
+            );
+          } else if(index >= availableColors.length) {
+            stats[availableColors.length - 1].value = pack.deviceCount + stats[availableColors.length - 1].value;
+            stats[availableColors.length - 1].groupIds = _.union(pack.groupIds, stats[availableColors.length - 1].groupIds);
+          }
         }
       }, this);
       
