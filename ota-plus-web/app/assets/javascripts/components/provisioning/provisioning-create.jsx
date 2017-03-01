@@ -16,7 +16,10 @@ define(function(require) {
     componentDidMount() {
       jQuery(this.refs.validUntilGroup).datetimepicker({
          format: 'DD/MM/YYYY',
-         defaultDate: new Date()
+         minDate: moment().toDate(),
+         maxDate: (moment().add(1, 'month').toDate()),
+         defaultDate: (moment().add(1, 'month').subtract(1, 'second').toDate()),
+         useCurrent: false,
       });
     }
     componentWillUnmount() {
