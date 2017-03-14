@@ -102,9 +102,7 @@ define(function(require) {
                   </Link>
                 </li>
                 <li><Link to="/treehub" activeClassName="active" id="link-treehub">TreeHub</Link></li>
-                {this.props.hasBetaAccess ?
-                  <li><Link to="/provisioning" activeClassName="active" id="link-provisioning">Provisioning</Link></li>
-                : null}
+                <li><Link to="/provisioning" activeClassName="active" id="link-provisioning">Provisioning</Link></li>
               </ul>
             </div>
             <ul className="right-nav pull-right">
