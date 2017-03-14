@@ -25,7 +25,7 @@ class LoginSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAll {
     // the following 2 entries should come from the environment in production
     .configure("authplus.client_id" -> "")
     .configure("authplus.secret"    -> "")
-    .configure("authplus.host"      -> AuthPlusUri)
+    .configure("authplus.uri"      -> AuthPlusUri)
     .build()
 
   lazy val auth0Config: Auth0Config = Auth0Config(app.configuration).get

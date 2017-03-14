@@ -11,21 +11,21 @@ case class ConfigurationException(msg: String = "")
 trait OtaPlusConfig {
   val conf: Configuration
 
-  val coreApiUri = conf.underlying.getString("core.api.uri")
+  val coreApiUri = conf.underlying.getString("core.uri")
 
-  val resolverApiUri = conf.underlying.getString("resolver.api.uri")
+  val resolverApiUri = conf.underlying.getString("resolver.uri")
 
-  val devicesApiUri = conf.underlying.getString("deviceregistry.api.uri")
+  val devicesApiUri = conf.underlying.getString("deviceregistry.uri")
 
-  val authPlusApiUri = conf.underlying.getString("authplus.host")
+  val authPlusApiUri = conf.underlying.getString("authplus.uri")
 
-  val buildSrvApiUri = conf.underlying.getString("buildservice.api.host")
+  val buildSrvApiUri = conf.underlying.getString("buildservice.uri")
 
-  val userProfileApiUri = conf.underlying.getString("userprofile.api.uri")
+  val userProfileApiUri = conf.underlying.getString("userprofile.uri")
 
-  val auditorApiUri = conf.underlying.getString("auditor.api.uri")
+  val auditorApiUri = conf.underlying.getString("auditor.uri")
 
-  val directorApiUri = conf.underlying.getString("director.api.uri")
+  val directorApiUri = conf.underlying.getString("director.uri")
 
-  val repoApiUri = conf.underlying.getString("repo.api.uri")
+  val repoApiUri = conf.underlying.getString("repo.uri")
 }
