@@ -18,9 +18,9 @@ object AuthPlusConfig {
       _conf        <- conf.getConfig("authplus")
       clientId     <- _conf.getString("client_id")
       clientSecret <- _conf.getString("secret")
-      authPlusHost <- _conf.getString("host").map(Uri.create)
+      authPlusUri <- _conf.getString("uri").map(Uri.create)
       tokenVerify  <- _conf.getBoolean("token_verify")
-    } yield AuthPlusConfig(authPlusHost, clientId, clientSecret, tokenVerify)
+    } yield AuthPlusConfig(authPlusUri, clientId, clientSecret, tokenVerify)
   }
 }
 
