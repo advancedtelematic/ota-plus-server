@@ -52,7 +52,6 @@ define(function(require) {
       //Events
       this.deviceSeen = atom.createAtom();
       this.deviceCreated = atom.createAtom();
-      this.deviceDeleted = atom.createAtom();
       this.packageCreated = atom.createAtom();
       this.packageBlacklisted = atom.createAtom();
       this.updateSpec = atom.createAtom();

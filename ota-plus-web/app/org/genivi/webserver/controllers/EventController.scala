@@ -8,7 +8,7 @@ import akka.stream.scaladsl.{Flow, Sink, Source}
 import com.advancedtelematic.ota.Messages.MessageWriters._
 import com.advancedtelematic.ota.Messages.WebMessageBusListenerActor
 import org.genivi.sota.data.Namespace
-import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceDeleted, DeviceSeen, DeviceUpdateStatus,
+import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceSeen, DeviceUpdateStatus,
                                            PackageBlacklisted, PackageCreated, UpdateSpec}
 import org.genivi.sota.messaging.daemon.MessageBusListenerActor.Subscribe
 import org.genivi.webserver.controllers.messaging.MessageSourceProvider
@@ -36,7 +36,6 @@ class EventController @Inject()
   List(
     WebMessageBusListenerActor.props[DeviceSeen],
     WebMessageBusListenerActor.props[DeviceCreated],
-    WebMessageBusListenerActor.props[DeviceDeleted],
     WebMessageBusListenerActor.props[PackageCreated],
     WebMessageBusListenerActor.props[PackageBlacklisted],
     WebMessageBusListenerActor.props[UpdateSpec],
@@ -72,7 +71,6 @@ class EventController @Inject()
     }
 
     val sources = getSource[DeviceSeen](_.namespace)
-      .merge(getSource[DeviceDeleted](_.namespace))
       .merge(getSource[DeviceCreated](_.namespace))
       .merge(getSource[PackageCreated](_.namespace))
       .merge(getSource[PackageBlacklisted](_.namespace))
