@@ -42,7 +42,6 @@ object MessagingData {
   val packageId = PackageId(Refined.unsafeApply("ghc"), Refined.unsafeApply("1.0.0"))
   val packageUuid = UUID.fromString("b82ca6a4-5422-47e0-85d0-8f931006a307")
   val deviceCreatedMessage = DeviceCreated(namespace, deviceUuid, deviceName, deviceId, deviceType)
-  val deviceDeletedMessage = DeviceDeleted(namespace, deviceUuid)
   val updateSpecMessage = UpdateSpec(namespace, deviceUuid, packageUuid, "Finished")
   val packageBlacklistedMessage = PackageBlacklisted(namespace, packageId)
   val packageCreatedMessage = PackageCreated(namespace, packageId, Some("description"), Some("ghc"), None)
@@ -57,8 +56,6 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
         Source.single(MessagingData.deviceSeenMessage).asInstanceOf[Source[T, NotUsed]]
       } else if(tag.runtimeClass.equals(classOf[DeviceCreated])) {
         Source.single(MessagingData.deviceCreatedMessage).asInstanceOf[Source[T, NotUsed]]
-      } else if(tag.runtimeClass.equals(classOf[DeviceDeleted])) {
-        Source.single(MessagingData.deviceDeletedMessage).asInstanceOf[Source[T, NotUsed]]
       } else if(tag.runtimeClass.equals(classOf[UpdateSpec])) {
         Source.single(MessagingData.updateSpecMessage).asInstanceOf[Source[T, NotUsed]]
       } else if(tag.runtimeClass.equals(classOf[PackageBlacklisted])) {
@@ -98,10 +95,9 @@ class EventControllerSpec extends PlaySpec with OneServerPerSuite with Results {
         .toMat(TestSink.probe[JsValue])(Keep.both)
         .run()
 
-      sub.request(n = 7)
+      sub.request(n = 6)
       sub.expectNextUnordered(mkJs(MessagingData.deviceSeenMessage),
                               mkJs(MessagingData.deviceCreatedMessage),
-                              mkJs(MessagingData.deviceDeletedMessage),
                               mkJs(MessagingData.updateSpecMessage),
                               mkJs(MessagingData.packageBlacklistedMessage),
                               mkJs(MessagingData.packageCreatedMessage),
