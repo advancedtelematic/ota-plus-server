@@ -34,7 +34,7 @@ class RegistryProps extends TestKit(ActorSystem("vehicle-registry"))
     uuid <- arbitrary[Uuid]
   } yield DeviceMetadata(uuid, clientInfo)
 
-  val vehicles = Vehicles( system.actorOf( VehicleRegistry.props() ) )(Timeout(1, TimeUnit.SECONDS))
+  val vehicles = Vehicles( system.actorOf( VehicleRegistry.props() ) )(Timeout(10, TimeUnit.SECONDS))
 
   property("Registered vehicle can be requested by vin") {
     implicit val exec = system.dispatcher
