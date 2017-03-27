@@ -55,13 +55,18 @@ class Application @Inject() (ws: WSClient,
     val proxiedPrefixes = coreProxiedPrefixes orElse
       deviceRegistryProxiedPrefixes orElse
       resolverProxiedPrefixes orElse
-      auditorProxiedPrefixes
+      auditorProxiedPrefixes orElse
+      directorProxiedPrefixes
 
     proxiedPrefixes.lift(pathComponents)
   }
 
   private val auditorProxiedPrefixes: PartialFunction[List[String], String] = {
     case "auditor" :: "devices_seen_in" :: _ => auditorApiUri
+  }
+
+  private val directorProxiedPrefixes: PartialFunction[List[String], String] = {
+    case "multi_target_updates" :: _ => directorApiUri
   }
 
   private val coreProxiedPrefixes: PartialFunction[List[String], String] = {
