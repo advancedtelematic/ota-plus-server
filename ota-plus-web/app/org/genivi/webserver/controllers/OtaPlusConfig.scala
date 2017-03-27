@@ -24,4 +24,6 @@ trait OtaPlusConfig {
   val userProfileApiUri = conf.underlying.getString("userprofile.api.uri")
 
   val auditorApiUri = conf.underlying.getString("auditor.api.uri")
+
+  val directorApiUri = conf.underlying.getString("director.api.uri")
 }
