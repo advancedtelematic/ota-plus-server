@@ -17,8 +17,8 @@ define(function(require) {
       jQuery(this.refs.validUntilGroup).datetimepicker({
          format: 'DD/MM/YYYY',
          minDate: moment().toDate(),
-         maxDate: (moment().add(1, 'month').toDate()),
-         defaultDate: (moment().add(1, 'month').subtract(1, 'second').toDate()),
+         maxDate: (moment().add(4, 'year').toDate()),
+         defaultDate: (moment().add(1, 'year').subtract(1, 'second').toDate()),
          useCurrent: false,
       });
     }
