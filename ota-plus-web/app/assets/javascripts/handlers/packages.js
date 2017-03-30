@@ -54,39 +54,14 @@ define(function(require) {
                 db.ondevicesPackages.reset(list);
               });
           break;
-          case 'get-packages-for-device':
-            sendRequest.doGet('/api/v1/devices_info', {action: payload.actionType})
-              .success(function(devices) {        
-                var device = _.find(devices, function(device) {
-                  return device.uuid == payload.device;
-                });
-                if (!_.isUndefined(device)) {
-                  sendRequest.doGet('/api/v1/resolver/devices/' + device.uuid + '/package', {action: payload.actionType})
-                    .success(function(packages) {
-                      var list = _.map(packages, function(package) {
-                        return {id: package}
-                      });
-                      db.packagesForDevice.reset(list);
-                    });
-                }
-              });
-          break;
           case 'search-packages-for-device-by-regex':
             var query = payload.regex ? '?regex=' + payload.regex : '';
-            sendRequest.doGet('/api/v1/devices_info', {action: payload.actionType})
-              .success(function(devices) {
-                var device = _.find(devices, function(device) {
-                  return device.uuid == payload.device;
+            sendRequest.doGet('/api/v1/devices/' + payload.device + '/packages' + query, {action: payload.actionType})
+              .success(function(packages) {
+                var list = _.map(packages, function(entry) {
+                  return {id: entry.packageId}
                 });
-                if (!_.isUndefined(device)) {
-                  sendRequest.doGet('/api/v1/resolver/devices/' + device.uuid + '/package' + query, {action: payload.actionType})
-                    .success(function(packages) {
-                      var list = _.map(packages, function(package) {
-                        return {id: package}
-                      });
-                      db.searchablePackagesForDevice.reset(list);
-                    });
-                }
+                db.searchablePackagesForDevice.reset(list);
               });
           break;
           case 'get-devices-queued-for-package':
@@ -161,23 +136,19 @@ define(function(require) {
                 db.impactedDevicesCount.reset(impactedDevicesCount);                
               });
           break;
-          case 'get-affected-devices':
-            sendRequest.doPost('/api/v1/resolver/packages/affected', payload.data, {action: payload.actionType})
-              .success(function(vehicles) {
-                db.affectedDevices.reset(vehicles);
-              });
-          break;
           case 'get-package-stats':
-            sendRequest.doGet('/api/v1/resolver/package_stats/' + payload.packageName, {action: payload.actionType})
-              .success(function(packageStats) {
-                if(Object.keys(packageStats).length) {
-                  var after = _.after(Object.keys(packageStats).length, function() {
+            sendRequest.doGet('/api/v1/package_stats/' + payload.packageName, {action: payload.actionType})
+              .success(function(result) {
+                packageStats = result.values;
+                if(packageStats.length) {
+                  var after = _.after(packageStats.length, function() {
                     db.packageStats.reset(packageStats);
                   });
-                  _.each(packageStats, function(pack, index) {                      
+                  _.each(packageStats, function(pack, index) {
                     sendRequest.doGet('/api/v1/device_count/' + payload.packageName + '/' + pack.packageVersion, {action: 'get-package-version-stats'})
                       .success(function(statistics) {
                         packageStats[index].groupIds = statistics.groupIds;
+                        packageStats[index].installedCount = statistics.deviceCount;
                       })
                       .always(function() {
                         after();
