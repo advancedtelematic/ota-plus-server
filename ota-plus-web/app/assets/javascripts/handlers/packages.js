@@ -137,7 +137,7 @@ define(function(require) {
               });
           break;
           case 'get-package-stats':
-            sendRequest.doGet('/api/v1/package_stats/' + payload.packageName, {action: payload.actionType})
+            sendRequest.doGet('/api/v1/device_packages/' + payload.packageName, {action: payload.actionType})
               .success(function(result) {
                 packageStats = result.values;
                 if(packageStats.length) {
