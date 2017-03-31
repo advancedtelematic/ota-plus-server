@@ -56,7 +56,7 @@ object DeviceRegistrationCredentials {
 class CryptApi(conf: Configuration, val apiExec: ApiClientExec)(implicit exec: ExecutionContext) {
   import org.asynchttpclient.util.HttpConstants.Methods._
 
-  val baseUri = ApiRequest.base(conf.underlying.getString("crypt.host"))
+  val baseUri = ApiRequest.base(conf.underlying.getString("crypt.uri"))
 
   def registerAccount(accountName: String): Future[CryptAccountInfo] = {
     baseUri(s"/accounts/$accountName").transform(_.withMethod(PUT)).execJson[CryptAccountInfo](apiExec)

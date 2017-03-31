@@ -8,7 +8,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 
 class CryptApiSpec extends PlaySpec with OneAppPerSuite with ScalaFutures {
   implicit override lazy val app: Application =
-    new GuiceApplicationBuilder().configure("crypt.host" -> MockCrypt.CryptHost).build()
+    new GuiceApplicationBuilder().configure("crypt.uri" -> MockCrypt.CryptHost).build()
   import play.api.libs.concurrent.Execution.Implicits.defaultContext
   val cryptApi = new CryptApi(app.configuration, new ApiClientExec(MockCrypt.mockClient))
   "registerAccount" should {
