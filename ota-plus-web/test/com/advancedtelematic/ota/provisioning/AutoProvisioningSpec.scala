@@ -22,7 +22,7 @@ class AutoProvisioningSpec extends PlaySpec with OneServerPerSuite with ScalaFut
 
   implicit override lazy val app: Application =
     new GuiceApplicationBuilder()
-      .configure("crypt.host" -> MockCrypt.CryptHost)
+      .configure("crypt.uri" -> MockCrypt.CryptHost)
       .overrides(bind[WSClient].toInstance(MockCrypt.mockClient))
       .build()
 
