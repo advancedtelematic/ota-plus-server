@@ -10,13 +10,13 @@ import com.advancedtelematic.user.{ UserId, UserProfile }
 import com.advancedtelematic.{ Auth0AccessToken, AuthPlusAccessToken, IdToken }
 import java.util.UUID
 import org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
-import org.genivi.sota.data.{ Device, DeviceT, Namespace, Uuid }
+import org.genivi.sota.data.{ Device, Namespace, Uuid }
 import org.genivi.webserver.controllers.FeatureName
 import org.genivi.webserver.controllers.OtaPlusConfig
 import play.api.libs.json._
 import play.api.libs.ws.{ WSAuthScheme, WSClient, WSRequest, WSResponse }
 import play.api.mvc.Result
-import play.api.{ Configuration, Logger }
+import play.api.Configuration
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.Try
 import scala.util.control.NoStackTrace
@@ -301,6 +301,19 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
           .withQueryString(query.mapValues(_.head).toSeq :_*)
           .withBody(body))
       .execResult(apiExec)
+
+  def getApplicationIds(userId: UserId): Future[Seq[Uuid]] =
+    userProfileRequest(s"users/${userId.id}/applications").execJson[Seq[Uuid]](apiExec)
+
+  private def applicationIdRequest(method: String, userId: UserId, clientId: Uuid): Future[Result] =
+    userProfileRequest(s"users/${userId.id}/applications/${clientId.underlying.get}").transform(_.withMethod(method))
+      .execResult(apiExec)
+
+  def addApplicationId(userId: UserId, clientId: Uuid): Future[Result] =
+    applicationIdRequest("PUT", userId, clientId)
+
+  def removeApplicationId(userId: UserId, clientId: Uuid): Future[Result] =
+    applicationIdRequest("DELETE", userId, clientId)
 }
 
 class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
