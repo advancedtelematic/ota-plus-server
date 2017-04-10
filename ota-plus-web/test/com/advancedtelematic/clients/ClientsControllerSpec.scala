@@ -2,7 +2,7 @@ package com.advancedtelematic.clients
 
 import akka.stream.Materializer
 import com.advancedtelematic.Tokens
-import mockws.{ MockWS, Route }
+import mockws.MockWS
 import org.genivi.sota.data.Uuid
 import org.scalatestplus.play.{ OneServerPerSuite, PlaySpec }
 import play.api.inject.bind
@@ -21,12 +21,11 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
 
   val auth0Domain = "auth0test"
   val auth0Url    = s"https://$auth0Domain/api/v2/users/$userId"
-  def auth0UserMetadata(value: JsValue): JsValue =
-    Json.obj("user_metadata" -> value, "email" -> "", "picture" -> "", "name" -> "")
+  def auth0UserMetadata(value: JsValue): JsValue = JsArray()
 
   val authPlusUri       = "http://localhost:9001/clients"
   val authPlusClientUri = s"$authPlusUri/${clientId.underlying.get}"
-  val authPlusClient = Json.obj(
+  val clientInfo = Json.obj(
     "client_id"                 -> clientId.underlying.get,
     "client_name"               -> "Test Client",
     "registration_client_uri"   -> authPlusClientUri,
@@ -35,19 +34,21 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
   val userIdWithNoClients   = "auth0|useridwithnoclients"
   val auth0UrlWithNoClients = s"https://auth0test/api/v2/users/$userIdWithNoClients"
 
+  val userApplications = s"http://localhost:8085/api/v1/users/${userId}/applications"
+  val userNoApplications = s"http://localhost:8085/api/v1/users/${userIdWithNoClients}/applications"
+  val userNoApplicationsClientId = s"${userNoApplications}/${clientId.underlying.get}"
+
   val mockClient = MockWS {
-    case (GET, `auth0Url`) =>
-      Action { Ok(auth0UserMetadata(Json.obj("client_ids" -> Json.toJson(clientIds)))) }
-    case (PATCH, `auth0Url`) =>
-      Action { Ok(auth0UserMetadata(Json.obj("client_ids" -> Json.toJson(clientIds)))) }
-    case (GET, `auth0UrlWithNoClients`) =>
-      Action { Ok(auth0UserMetadata(Json.obj("no_client_ids" -> ""))) }
-    case (PATCH, `auth0UrlWithNoClients`) =>
-      Action { Ok(auth0UserMetadata(Json.obj("client_ids" -> Json.toJson(clientIds)))) }
     case (POST, `authPlusUri`) =>
-      Action { Ok(authPlusClient) }
+      Action { Ok(clientInfo) }
     case (GET, `authPlusClientUri`) =>
-      Action { Ok(authPlusClient) }
+      Action { Ok(clientInfo) }
+    case (PUT, `userNoApplicationsClientId`) =>
+      Action { Ok }
+    case (GET, `userApplications`) =>
+      Action { Ok(Json.toJson(clientIds)) }
+    case (GET, `userNoApplications`) =>
+      Action { Ok("[]") }
     case (GET, path) =>
       Action { NotFound }
   }
@@ -78,7 +79,6 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
       val result = call(controller.createClient(), request)
 
       status(result) must be(201)
-      contentAsJson(result).as[Seq[String]] must be(clientIds)
     }
 
     "return info for a valid clientId" in {
@@ -86,7 +86,7 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
       val result  = call(controller.getClient(clientId), request)
 
       status(result) must be(200)
-      contentAsJson(result) must be(authPlusClient)
+      contentAsJson(result) must be(clientInfo)
     }
 
     "return 404 for an invalid clientId" in {
@@ -101,7 +101,7 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
       val result  = call(controller.getClients(), request)
 
       status(result) must be(200)
-      contentAsJson(result).as[Seq[JsValue]] must be(Seq(authPlusClient))
+      contentAsJson(result).as[Seq[JsValue]] must be(Seq(clientInfo))
     }
 
     "return no clients for user with no clients" in {
