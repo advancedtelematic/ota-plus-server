@@ -1,93 +1,21 @@
-@import helper._
 @import com.advancedtelematic.login.Auth0Config
-@(config: Auth0Config)()(implicit req: RequestHeader)
-
+@import play.filters.csrf.CSRF
+@(config: Auth0Config, csrf: Option[CSRF.Token])()(implicit req: RequestHeader)
 <!DOCTYPE html>
-
 <html lang="en">
   <head>
     <title>ATS Garage</title>
-    <link rel="stylesheet" href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
-    <link rel="stylesheet" href='@routes.Assets.versioned("css/font-awesome.min.css")'>
-    <link rel="stylesheet" href='@routes.Assets.versioned("css/bootstrap-datetimepicker.min.css")'>
-    <link rel="stylesheet" href='@routes.Assets.versioned("css/jquery.ioslist.css")'>
-    <link rel="stylesheet" href='@routes.Assets.versioned("css/sota-styles.css")'>
-    <script type="text/javascript" src='@routes.Assets.versioned("js/define-theme.js")'></script>
-    <script type="text/javascript" src='@routes.Assets.versioned("js/loading-texts.js")'></script>
+    <meta name="description" content="ATS Garage">
+    <meta name="keywords" content="garage">
+    <link href="/assets/css/style.css" rel="stylesheet" type="text/css"/>
   </head>
   <body>
     <div id="app"></div>
-    <div id="app-door">
-        <div class="door">
-            <div class="loader text-center">
-                <div id="loading-text" class="loading-text"></div>
-                <i class="fa fa-square-o fa-spin fa-2x"></i>
-            </div>
-        </div>
-    </div>
-
-    <div id="requirejs-errors">
-      <div class="block-icon">
-        <i class="fa fa-exclamation-circle"></i>
-      </div>
-      <div class="block-text"></div>
-      <a href="#" class="close-error" onClick="hideError(event)"><i class="fa fa-times"></i></a>
-    </div>
-
     <script>
         var appUrl = location.protocol+'//'+location.host;
         var logoutUrl = 'https://' + '@config.domain' + '/v2/logout?returnTo='+ appUrl + '/logout&client_id=' + '@config.clientId';
-        var appElement = document.getElementById("app");
-        var appDoorElement = document.getElementById("app-door");
-        appElement.classList.add(defineTheme());
-        appDoorElement.classList.add(defineTheme());
-        var loadingText = new LoadingTexts({wrapper: "loading-text"});
-
-        var errorContainer = document.getElementById("requirejs-errors");
-
-        function hideError(e) {
-          e.preventDefault();
-          errorContainer.style.display = 'none';
-        }
-
-        @Html(org.webjars.RequireJS.getSetupJavaScript(routes.WebJarAssets.at("").url))
-        cachedCallback = require.callback;
-        require = {
-          callback: function() {
-            cachedCallback()
-            requirejs.config({"paths": {"lodash": ["/webjars/lodash/3.10.1/lodash"]}});
-            requirejs.config({"paths": {"react": ["/webjars/react/0.14.7/react-with-addons"]}});
-            requirejs.config({"paths": {"react-dom": ["/webjars/react/0.14.7/react-dom"]}});
-            requirejs.config({"paths": {"react-router": ["@routes.Assets.versioned("js/ReactRouter.min")"]}});
-            requirejs.config({"paths": {"moment": ["@routes.Assets.versioned("js/moment.min")"]}});
-            requirejs.config({"paths": {"bootstrap-datetimepicker": ["@routes.Assets.versioned("js/bootstrap-datetimepicker.min")"]}});
-            requirejs.config({"paths": {"ioslist": ["@routes.Assets.versioned("js/jquery.ioslist.min")"]}});
-            requirejs.config({"paths": {"velocity": ["@routes.Assets.versioned("js/velocity.min")"]}});
-            requirejs.config({"paths": {"velocity-ui": ["@routes.Assets.versioned("js/velocity.ui.min")"]}});
-            requirejs.config({"paths": {"jquery": ["@routes.Assets.versioned("js/jquery.min")"]}});
-            requirejs.config({"paths": {"jquery-ui": ["@routes.Assets.versioned("js/jquery-ui.min")"]}});
-            requirejs.config({"paths": {"progressbar-js": ["@routes.Assets.versioned("js/progressbar.min")"]}});
-            requirejs.config({"paths": {"babel": ["@routes.Assets.versioned("js/babel.min")"]}});
-            requirejs.config({"paths": {"Chartjs": ["@routes.Assets.versioned("js/Chart.min")"]}});
-            requirejs.config({"paths": {"react-chartjs": ["@routes.Assets.versioned("js/react-chartjs.min")"]}});
-            requirejs.config({"paths": {"bootstrap": ["/webjars/bootstrap/3.3.6/js/bootstrap"], "bootstrap-css": ["/webjars/bootstrap/3.3.6/css/bootstrap"]}, "shim": {"bootstrap": ["jquery"]}, "packages":[]});
-            requirejs.config({"paths": {"i18nextXHRBackend": ["@routes.Assets.versioned("js/i18nextXHRBackend.min")"]}});
-            requirejs.config({"paths": {"i18next": ["https://cdnjs.cloudflare.com/ajax/libs/i18next/4.1.1/i18next.min"]}});
-            requirejs.config({"paths": {"i18nextBrowserLanguageDetector": ["@routes.Assets.versioned("js/i18nextBrowserLanguageDetector.min")"]}});
-            requirejs.config({"paths": {"reactI18next": ["@routes.Assets.versioned("js/react-i18next.min")"]}});
-            requirejs.config({
-              waitSeconds: 60,
-            });
-
-            requirejs.onError = function (err) {
-              errorContainer.style.display = 'table';
-              errorContainer.getElementsByClassName('block-text')[0].innerHTML = "<div><strong>Oops! Something went wrong.</strong></div><div>You need to reload application. If the problem repeats please contact ATS Garage administrator.</div>";
-              throw err;
-            };
-          }
-        }
+        var csrfToken = "@csrf.get.value";
     </script>
-    <script data-main="@routes.Assets.versioned("javascripts/react-app.js")" src="@routes.WebJarAssets.at(WebJarAssets.locate("require.min.js"))"></script>
-    @CSRF.formField
+    <script src="@routes.Assets.versioned("js/app.js")"></script>
   </body>
 </html>

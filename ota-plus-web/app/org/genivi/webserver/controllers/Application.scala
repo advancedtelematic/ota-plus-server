@@ -16,6 +16,7 @@ import play.api.http.HttpEntity
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.ws._
 import play.api.mvc._
+import play.filters.csrf.CSRF
 
 import scala.concurrent.Future
 
@@ -162,6 +163,6 @@ class Application @Inject() (ws: WSClient,
    * @return OK response and index html
    */
   def index : Action[AnyContent] = AuthenticatedAction { implicit req =>
-    Ok(views.html.main(auth0Config))
+    Ok(views.html.main(auth0Config, CSRF.getToken))
   }
 }
