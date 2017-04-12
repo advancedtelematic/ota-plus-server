@@ -1,0 +1,401 @@
+@import 'common.scss';
+
+$font: "akkurat";
+$color-blue: #A6E6DF;
+$color-red: #d66f6f;
+$color-mint: #9ce2d8;
+$color-mint-active: #7de9da;
+$footer-panel-bg-color: #282828;
+
+* {
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    outline: none !important;
+}
+
+*:focus {  
+    text-decoration: none;
+}
+
+button:focus {
+    outline: none;
+}
+
+html {
+    height: 100%;
+    min-height: 100%;
+}
+
+body {
+    color: #fff;
+    font: normal 13px $font;
+    background: url('/assets/img/door.jpg') top center no-repeat;
+    background-size: cover;
+    height: 100%;
+}
+
+a, a:hover, a:focus {
+    color: #fff;
+    text-decoration: none;
+}
+
+#logo {
+    width: 70px;
+    margin: 80px 0 50px 0;
+}
+
+.login {
+    #ats-page {
+        min-height: 600px;
+        height: 100%;
+        position: relative;
+
+        .container {
+            padding: 0 0 60px 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            .login-content {
+                width: 450px;
+                margin: 0 auto;
+            }
+        }
+    }
+}
+
+input.error {
+    border-color: $color-red !important;
+}
+
+label.error {
+    color: #fff;
+    font-weight: lighter;
+    margin: 5px 0 0 0;
+
+    .fa {
+        color: $color-red;
+    }
+}
+
+.footer-panel {
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+    overflow: hidden;
+    z-index: 999; 
+
+    .clickme {
+        text-align: center;
+        background: $footer-panel-bg-color; 
+        width: 300px;
+        padding: 10px 15px;
+        margin: 0 auto;
+        border-top-left-radius: 25px;
+        border-top-right-radius: 25px;
+        display: block;
+    }
+
+    @media screen and (max-width: 730px) {
+        width: 100%;
+    }
+}
+
+/* Auth0 */
+
+body {
+    #a0-lock {
+        font-family: $font;
+        width: 350px;
+        margin: 0 auto;
+        position: relative;
+
+        &.a0-theme-default {
+            font-family: $font;
+
+            .a0-panel {
+                * {
+                    font-family: $font;
+                }
+            }
+
+            .a0-switch {
+                border: 0;
+
+                span {
+                    color: #ddd;
+                    font-size: 16px;
+                    text-transform: none;
+                    background-color: transparent;
+                    width: 100%;
+                    padding: 0;
+                    transition: all 0.3s ease-in;
+
+                    &:hover {
+                        color: $color-mint;
+                        background-color: transparent;
+                    }
+                }
+
+                .a0-active {
+                    display: none;
+                }
+            }
+
+            .a0-btn-small {
+                &.a0-back {
+                    background: rgba(255,255,255,0.7);
+                    top: 170px;
+                    left: 22px;
+                    border-color: #ccc;
+                    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.5);
+                    box-shadow: 0 1px 3px rgba(0,0,0,.5);
+                }
+            }
+
+            .a0-panel {
+                width: 100%;
+                box-shadow: none;
+                -webkit-box-shadow: none;
+
+                .a0-avatar-guest {
+                    display: none !important;
+                }
+
+                .a0-icon-container {
+                    color: #fff;
+                    background: transparent;
+
+                    .a0-image {
+                        img {
+                            height: 65px;
+                        }
+                    }
+
+                    h1 {
+                        margin: 25px 0;
+                    }
+                }
+
+                .a0-forgot-pass {
+                    text-align: right;
+                    display: block;
+
+                    &:before {
+                        content: "" !important;
+                    }
+                }
+
+                .a0-top-header {
+                    background: transparent;
+                    min-height: 0;
+                }
+
+                .a0-bg-gradient {
+                    opacity: 0;
+                }
+
+                .a0-error, .a0-success {
+                    font: 400 14px Arial;
+                    text-align: center;
+                    padding: 15px 30px;
+                    margin: 0 15px;
+                    margin-bottom: 20px;
+                    border-radius: 12px;
+                    position: absolute;
+                    top: 100px;
+                    left: 0;
+                    right: 0;
+                    z-index: 999;
+                }
+
+                .a0-error {
+                    background: #d66f6f;
+                }
+
+                .a0-success {
+                    background: #7ED321;
+                }
+
+                .a0-instructions {
+                    color: #fff;
+                    padding: 0 35px;
+
+                    span {
+                        display: none;
+                    }
+                }
+
+                .a0-mode {
+                    background: transparent;
+
+                    form {
+                        .a0-body-content {
+                            padding: 0 20px;
+                            background: transparent;
+
+                            .a0-last-time {
+                                color: #fff;
+                            }
+
+                            .a0-collapse-social, .a0-collapse-social-signup {
+                                width: 100%;
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+
+                                .a0-separator {
+                                    margin: -90px 0 0 0;
+                                }
+                            }
+                        }
+                    }
+
+                    &.a0-signup {
+                        .a0-separator {
+                            padding: 0 10px;
+                        }
+                    }
+                }
+
+                .a0-email, .a0-password {
+                    .a0-input-box {
+                        border-radius: 12px;
+                        border: 2px solid rgba(255,255,255,0.4);
+                        -moz-background-clip: padding;
+                        -webkit-background-clip: padding;
+                        background-clip: padding-box;
+                        padding-left: 0;
+                        margin: 15px 0;
+
+                        &:hover, &:active, &:focus {
+                            border-color: rgba(255,255,255,0.6);
+                        }
+
+                        &.a0-error-input {
+                            border-color: #d66f6f;
+                        }
+
+                        i {
+                            display: none;
+                        }
+
+                    }
+
+                    input {
+                        font: normal 16px $font;
+                        text-align: center;
+                        height: 50px;
+                    }
+                }
+
+                .a0-separator {
+                    color: #fff;
+                    text-transform: none;
+                    opacity: 0.4;
+                    margin: 15px 0;
+                }
+
+                .a0-action {
+                    button {
+                        text-transform: none;
+                        text-indent: 0;
+                        height: 55px;
+
+                        &:after {
+                            display: none;
+                        }
+                    }
+                }
+
+                .terms-conditions {
+                    color: #fff;
+                    opacity: 0.9;
+
+                    a {
+                        font-weight: normal;
+                        text-decoration: underline;
+                    }
+                }
+
+                button {
+                    &.a0-primary {
+                        color: #444;
+                        font-size: 17px;
+                        font-weight: normal;
+                        text-align: center;
+                        text-decoration: none;
+                        letter-spacing: 0px;
+                        background: $color-mint !important;
+                        width: 100%;
+                        padding: 15px;
+                        transition: all 0.5s ease;
+                        border: 0;
+                        border-radius: 25px;
+                        display: block;
+                        position: static;
+
+                        &:hover {
+                            text-decoration: none;
+                            background: $color-mint-active !important;
+                            -webkit-box-shadow: none;
+                            box-shadow: none;
+                        }
+                    }
+                }
+
+                .bottom-content {
+                    padding: 0 20px;
+                }
+
+                .a0-forgot-pass {
+                    margin: 10px 0;
+
+                    &:before {
+                        font-family: FontAwesome;
+                        content: "\f084";
+                    }
+                }
+
+                .a0-all, .a0-forgot-pass {
+                    color: #fff;
+                }
+
+                .a0-footer {
+                    display: none;
+                }
+            }
+
+            .a0-nocentrix {
+                .a0-panel {
+                    .a0-mode-container {
+                        background: transparent;
+
+                        .a0-notloggedin, .a0-signup {
+                            height: 320px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.otaplus {
+        #a0-lock {
+            &.a0-theme-default {
+                .a0-panel {
+                    .a0-icon-container {
+                        background: #7b7b7b;
+                    }
+                }
+            }
+        }
+    }
+}
