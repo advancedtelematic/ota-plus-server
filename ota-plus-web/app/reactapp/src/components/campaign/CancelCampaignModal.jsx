@@ -1,0 +1,86 @@
+import React, { Component, PropTypes } from 'react';
+import { observer } from 'mobx-react';
+import { Modal, AsyncResponse } from '../../partials';
+import { AsyncStatusCallbackHandler } from '../../utils';
+import { FlatButton } from 'material-ui';
+import { translate } from 'react-i18next';
+import _ from 'underscore';
+
+@observer
+class CancelCampaignModal extends Component {
+    constructor(props) {
+        super(props);
+        this.cancelHandler = new AsyncStatusCallbackHandler(props.campaignsStore, 'campaignsCancelAsync', this.handleResponse.bind(this));
+    }
+    componentWillUnmount() {
+        this.cancelHandler();
+    }
+    cancelCampaign() {
+        this.props.campaignsStore.cancelCampaign(this.props.campaign.meta.id);
+    }
+    handleResponse() {
+        this.props.campaignsStore.fetchCampaign(this.props.campaign.meta.id);
+        this.props.hide();
+    }
+    render() {
+        const { t, shown, hide, campaign, overallStatistics, campaignsStore } = this.props;
+        const content = (
+            !_.isEmpty(campaign) ?
+                <span>
+                    <AsyncResponse 
+                        handledStatus="error"
+                        action={campaignsStore.campaignsCancelAsync}
+                        errorMsg={(campaignsStore.campaignsCancelAsync.data ? campaignsStore.campaignsCancelAsync.data.description : null)}
+                    />
+                    <div className="element-box campaign">
+                        <div className="icon"></div>
+                        <div className="desc">
+                            <div className="title">
+                                {campaign.meta.name}
+                            </div>
+                            <div className="subtitle">
+                                {t('common.deviceWithCount', {count: overallStatistics.devicesCount})}
+                            </div>
+                        </div>
+                    </div>
+                    <span>
+                        This campaign will not be executed on any further devices, <br />
+                        and will be moved to <strong>Finished</strong>.
+                    </span>
+                    <div className="body-actions">
+                        <a href="#"
+                            onClick={hide}
+                            className="link-cancel">
+                            Close
+                        </a>
+                        <FlatButton
+                            label="Confirm"
+                            type="submit"
+                            className="btn-main"
+                            onClick={this.cancelCampaign.bind(this)}
+                        />
+                    </div>
+                </span>
+            :
+                <span />
+        );
+        return (
+            <Modal 
+                title="You're about to cancel a campaign"
+                content={content}
+                shown={shown}
+                className="cancel-campaign-modal"
+            />
+        );
+    }
+}
+
+CancelCampaignModal.propTypes = {
+    shown: PropTypes.bool.isRequired,
+    hide: PropTypes.func.isRequired,
+    campaign: PropTypes.object.isRequired,
+    campaignsStore: PropTypes.object.isRequired,
+    overallStatistics: PropTypes.object.isRequired
+}
+
+export default translate()(CancelCampaignModal);

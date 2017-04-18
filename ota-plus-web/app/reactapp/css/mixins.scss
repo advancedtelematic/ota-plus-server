@@ -1,0 +1,26 @@
+@mixin transition {
+	transition: all 0.2s ease-in;
+}
+
+@mixin fullHeight {
+	height: 100vh;
+}
+
+@mixin wrapperFlexDefault {
+	.wrapper-flex {
+		.content {
+			background: #fff;
+		}
+	}
+}
+
+@mixin textoverflowEllipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@mixin flexCenter {
+	display: flex;
+	justify-content: center;
+}

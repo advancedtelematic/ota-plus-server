@@ -5,14 +5,9 @@
 <html lang="en">
     <head>
         <title>ATS Garage - Log in</title>
-        <link rel="stylesheet" href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
-        <link rel="stylesheet" href='@routes.Assets.versioned("css/font-awesome.min.css")'>
-        <link rel="stylesheet" href='@routes.Assets.versioned("css/main-styles.css")'>
-        <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.min.js")'></script>
-        <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("js/bootstrap.min.js"))'></script>        
-        <script type="text/javascript" src='@routes.Assets.versioned("js/jquery.validate.min.js")'></script>
+        <link href="/assets/css/unlogged.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js'></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/lock-9.2.min.js")'></script>
-        <script type="text/javascript" src='@routes.Assets.versioned("js/define-theme.js")'></script>
         <script>
             var AUTH0_CLIENT_ID = '@config.clientId';
             var AUTH0_DOMAIN = '@config.domain';
@@ -31,14 +26,13 @@
                 </div>
             </div>
 
-            <section class="ats-footer-panel"> 
+            <section class="footer-panel"> 
                 <a href="mailto:support@@atsgarage.com" class="clickme">Need Support?</a>
             </section>
         </div>
 
         <script>
             $(function () {
-                $('body').addClass(defineTheme());
                 $('#ats-page').fadeIn('slow');
 
                 var lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN);
@@ -75,14 +69,15 @@
 
                 lock.on('ready', function () {
                     var appUrl = location.protocol + '//' + location.host;
-                    $(".a0-image").append('<img src="' + appUrl + '/assets/img/atsgarage_white.png" alt="">');
+                    $(".a0-image").append('<img src="' + appUrl + '/assets/img/ATS-Garage_Logo_white.svg" alt="">');
                 });
                 lock.on('signin ready', function () {
                     $(".a0-forgot-pass").detach().appendTo('.bottom-content');
                 });
                 lock.on('signup ready', function () {
                     var link = $("<div class='terms-conditions'>By registering I agree to <a href='http://atsgarage.com/en/terms-conditions.html' target='_blank'>ATS Garage's Terms of Use.</a></div>");
-                    link.appendTo('.bottom-content');
+                    if(!$('.terms-conditions').length)
+                        link.appendTo('.bottom-content');
                 });
             });
 
