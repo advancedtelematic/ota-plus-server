@@ -41,13 +41,6 @@ libraryDependencies ++= Seq (
     "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.0",
     "org.webjars" %% "webjars-play" % "2.4.0-1",
     "org.webjars" % "webjars-locator" % "0.27",
-    "org.webjars.bower" % "react" % "0.14.7",
-    "org.webjars.bower" % "flux" % "2.1.1",
-    "org.webjars.bower" % "backbone" % "1.3.3",
-    "org.webjars.bower" % "jquery" % "1.12.3",
-    "org.webjars.bower" % "lodash" % "3.10.1",
-    "org.webjars" % "bootstrap" % "3.3.6",
-    "org.webjars.bower" % "js-cookie" % "2.1.2",
     "com.amazonaws" % "aws-java-sdk-ses" % "1.11.13",
     ws, Dependencies.MockWs,
     play.sbt.Play.autoImport.cache,
@@ -55,10 +48,7 @@ libraryDependencies ++= Seq (
     Dependencies.SotaCommonTest
     ) ++ Dependencies.JsonWebSecurity ++ Dependencies.LogTree
 
-enablePlugins(PlayScala, SbtWeb, Versioning.Plugin)
-
-ReactJsKeys.harmony := true
-ReactJsKeys.es6module := true
+enablePlugins(PlayScala, Versioning.Plugin)
 
 Versioning.settings
 

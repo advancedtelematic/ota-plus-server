@@ -25,6 +25,19 @@ Once everything is loaded, the OTA Plus admin GUI will be available at
 
 This also creates the user `demo@advancedtelematic.com` with the password `demo`
 
+## Webpack
+
+Build a docker container to run npm/webpack to compile `assets/js/app.js`.
+
+```
+  docker run --rm \
+    --volume $PWD/ota-plus-web/app:/app \
+    advancedtelematic/webpack \
+    bash -c 'cd reactapp && npm install && webpack'
+```
+
+This step is necessary until there is an sbt plugin for webpack.
+
 ## Tests
 
 Step 1: `docker/start-up.sh`

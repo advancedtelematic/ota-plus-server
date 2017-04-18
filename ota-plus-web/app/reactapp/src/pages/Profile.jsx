@@ -1,0 +1,43 @@
+import React, { Component, PropTypes } from 'react';
+import { observer } from 'mobx-react';
+import { MetaData, FadeAnimation } from '../utils';
+import { Header } from '../partials';
+import { ProfileAside } from '../components/profile';
+
+const title = "Profile";
+
+@observer
+class Profile extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        const { userStore, children } = this.props;
+        return (
+            <FadeAnimation 
+                display="flex">
+                <div className="wrapper-flex">
+                    <MetaData 
+                        title={title}>
+                        <ProfileAside
+                            userStore={userStore}
+                        />
+                        {children ?
+                            <children.type
+                                userStore={userStore}
+                            />
+                        :
+                            null
+                        }
+                    </MetaData>
+                </div>
+            </FadeAnimation>
+        );
+    }
+}
+
+Profile.propTypes = {
+    userStore: PropTypes.object
+}
+
+export default Profile;
