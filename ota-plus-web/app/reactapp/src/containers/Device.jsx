@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
+import { observable, extendObservable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Loader } from '../partials';
 import { 
@@ -20,7 +20,7 @@ class Device extends Component {
     @observable packageBlacklistModalShown = false;
     @observable packageBlacklistAction = {};
     @observable packageProperties = {};
-    @observable packageVersionUuid = null;
+    @observable packageVersion = {};
 
     constructor(props) {
         super(props);
@@ -54,7 +54,7 @@ class Device extends Component {
         };
     }
     hidePackageBlacklistModal(e) {
-        if(e) e.preventDefault();
+    if(e) e.preventDefault();
         this.packageBlacklistModalShown = false;
         this.packageBlacklistAction = {};
         this.props.packagesStore._resetBlacklistActions();
@@ -70,13 +70,16 @@ class Device extends Component {
     }
     installPackage(data) {
         this.props.packagesStore.installPackage(this.props.devicesStore.device.uuid, data);
+        this.props.showQueueModal();
     }
     cancelInstallation(requestId) {
         this.props.packagesStore.cancelInstallation(this.props.devicesStore.device.uuid, requestId);
     }
     loadPackageVersionProperties(versionUuid, e) {
         if(e) e.preventDefault();
-        this.packageVersionUuid = versionUuid;
+        this.packageVersion = {
+            uuid: versionUuid
+        }
     }
     render() {
         const { devicesStore, packagesStore, hardwareStore } = this.props;
@@ -100,7 +103,7 @@ class Device extends Component {
                                 togglePackageAutoUpdate={this.togglePackageAutoUpdate}
                                 installPackage={this.installPackage}
                                 onFileDrop={this.onFileDrop}
-                                packageVersionUuid={this.packageVersionUuid}
+                                packageVersion={this.packageVersion}
                                 loadPackageVersionProperties={this.loadPackageVersionProperties}
                             />
                             <DevicePropertiesPanel
@@ -111,7 +114,7 @@ class Device extends Component {
                                 togglePackageAutoUpdate={this.togglePackageAutoUpdate}
                                 installPackage={this.installPackage}
                                 device={device}
-                                packageVersionUuid={this.packageVersionUuid}
+                                packageVersion={this.packageVersion}
                             />
                         </span>
                     :

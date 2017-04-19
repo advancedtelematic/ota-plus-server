@@ -56,21 +56,30 @@ class Details extends Component {
         this.props.packagesStore.updatePackageDetails(data);
     }
     componentWillReceiveProps(nextProps) {
-    	this.version = this.props.packagesStore._getPackageVersionByUuid(nextProps.packageVersionUuid);
+    	this.version = this.props.packagesStore._getPackageVersionByUuid(nextProps.packageVersion.uuid);
 
     	if(!_.isUndefined(this.version)) {
     		this.comment = this.version.description;
         	this.commentTmp = this.version.description;
+
+        	let data = {
+	    		name: this.version.id.name,
+	            version: this.version.id.version
+	    	}
+	    	this.props.packagesStore.fetchBlacklistedPackage(data);
+	    	console.log('Blcklisted pckg');
+	    	console.log('Name: ' + this.version.id.name + ". Version: " + this.version.id.version);
+	    	console.log(this.props.packagesStore.blacklistedPackage);
     	}
     }
     render() {
-    	const { packageVersionUuid, showPackageBlacklistModal, packagesStore, installPackage } = this.props;
+    	const { packageVersion, showPackageBlacklistModal, packagesStore, installPackage } = this.props;
+
     	let isPackageQueued = false;
     	let isPackageInstalled = false;
     	let isAutoInstallEnabled = false;
 
     	if(!_.isUndefined(this.version) && this.version) {
-    		console.log("Is blacklisted: " + this.version.isBlackListed);
 	    	isPackageQueued = _.find(packagesStore.deviceQueue, (dev) => {
 	    		return (dev.packageId.name === this.version.id.name) && (dev.packageId.version === this.version.id.version);
 	    	});
@@ -160,7 +169,9 @@ class Details extends Component {
 		                      : null}
 			        	</div>
 			        	<div className={"blacklist" + (this.version.isBlackListed ? " package-blacklisted" : "")}>
-			        		<span className="text">Blacklist package</span>
+			        		<span className="text">
+			        			Blacklist package
+			        		</span>
 			        		{this.version.isBlackListed ?
 				        		<button className="btn-blacklist edit" 
 				        				onClick={showPackageBlacklistModal.bind(this, this.version.id.name, this.version.id.version, 'edit' )}>
@@ -195,7 +206,7 @@ class Details extends Component {
 }
 
 Details.propTypes = {
-    packageVersionUuid: PropTypes.string,
+    packageVersion: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired
 }
 

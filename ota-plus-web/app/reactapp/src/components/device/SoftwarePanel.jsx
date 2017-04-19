@@ -20,7 +20,7 @@ class SoftwarePanel extends Component {
         this.props.packagesStore.fetchDevicePackages(this.props.device.uuid, filter);
     }
     render() {
-        const { packagesStore, device, togglePackageAutoUpdate, onFileDrop, packageVersionUuid, loadPackageVersionProperties } = this.props;
+        const { packagesStore, device, togglePackageAutoUpdate, onFileDrop, packageVersion, loadPackageVersionProperties } = this.props;
         return (
             <div className="software-panel">
                 <div className="darkgrey-header">
@@ -48,7 +48,7 @@ class SoftwarePanel extends Component {
                     </SubHeader>
 
                     <div className="wrapper-software">
-                        {packagesStore.packagesFetchAsync.isFetching ?
+                        {packagesStore.packagesFetchAsync.isFetching && !packagesStore.packagesOndeviceFetchAsync.isFetching ?
                             <div className="wrapper-loader">
                                 <Loader />
                             </div>
@@ -58,7 +58,7 @@ class SoftwarePanel extends Component {
                                 deviceId={device.uuid}
                                 onFileDrop={onFileDrop}
                                 togglePackageAutoUpdate={togglePackageAutoUpdate}
-                                packageVersionUuid={packageVersionUuid}
+                                packageVersion={packageVersion}
                                 loadPackageVersionProperties={loadPackageVersionProperties}
                             />
                         }
@@ -78,7 +78,7 @@ SoftwarePanel.propTypes = {
     device: PropTypes.object.isRequired,
     togglePackageAutoUpdate: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,
-    packageVersionUuid: PropTypes.string,
+    packageVersion: PropTypes.object.isRequired,
     loadPackageVersionProperties: PropTypes.func.isRequired,
 }
 

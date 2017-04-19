@@ -1140,6 +1140,10 @@
                     .wrapper-center.absolute-position {
                         position: absolute;
                     }
+                }
+
+                .details-wrapper.fetching {
+                    display: none;
                 }             
 
                 .details {

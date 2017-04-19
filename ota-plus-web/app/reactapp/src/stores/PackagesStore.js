@@ -504,9 +504,10 @@ export default class PackagesStore {
     }
 
     _getPackageVersionByUuid(uuid) {
-        return _.find(this.packages, (pack) => {
+        let found = _.find(this.packages, (pack) => {
             return pack.uuid === uuid;
-        });        
+        });
+        return found;
     }
 
     _getDevicePackage(data) {
@@ -830,11 +831,17 @@ export default class PackagesStore {
             name: data.packageId.name,
             version: data.packageId.version,
         }
-
         let foundPackage = this._getPackage(formattedData);
-
-        if (foundPackage) {
+        if(foundPackage) {
             foundPackage.isBlackListed = true;
+        }
+
+        if(this.page === 'device') {
+
+            // const foundOndevicePackage = _.find(this.ondevicePackages, (ondevicePackage) => {
+            //     return ondevicePackage.packageId.name === data.packageId.name && ondevicePackage.packageId.version === data.packageId.version;
+            // });
+
         }
         this.fetchBlacklist();
     }

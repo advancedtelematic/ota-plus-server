@@ -25,7 +25,7 @@ class OnDeviceList extends Component {
         this.listScroll = this.listScroll.bind(this);
         this.togglePackage = this.togglePackage.bind(this);
         this.packagesChangeHandler = observe(props.packagesStore, (change) => {
-            if(change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
+            if(change.name === 'preparedOndevicePackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
                   setTimeout(() => {
                       that.listScroll();
@@ -72,7 +72,7 @@ class OnDeviceList extends Component {
             let lastShownIndex = null;
             _.each(headersPositions, (position, index) => {
                 if(scrollTop >= position) {
-                    newFakeHeaderLetter = Object.keys(this.props.packagesStore.preparedPackages)[index];
+                    newFakeHeaderLetter = Object.keys(this.props.packagesStore.preparedOndevicePackages)[index];
                     return true;
                 } else if(scrollTop >= position - headerHeight) {
                     scrollTop -= scrollTop - (position - headerHeight);
@@ -111,11 +111,8 @@ class OnDeviceList extends Component {
         const { deviceId, showPackageBlacklistModal, packagesStore, onFileDrop, togglePackageAutoUpdate, installPackage } = this.props;
         let packageIndex = -1;
         return (
-            <div className={"ios-list" + (
-                packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesBlacklistFetchAsync.isFetching ||
-                packagesStore.packagesForDeviceFetchAsync.isFetching || packagesStore.packagesAutoInstalledForDeviceFetchAsync.isFetching ||
-                packagesStore.packagesDeviceQueueFetchAsync.isFetching ? " fetching" : "")} ref="list">
-                {Object.keys(packagesStore.preparedPackages).length ? 
+            <div className="ios-list" ref="list">
+                {Object.keys(packagesStore.preparedOndevicePackages).length ? 
                     <Dropzone 
                         ref="dropzone" 
                         onDrop={onFileDrop} 

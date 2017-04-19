@@ -82,7 +82,7 @@ class BlacklistModal extends Component {
                     "Blacklist"
                 }
             </span>
-        );
+        );      
         const content = (
             <Form
                 onValid={this.enableButton.bind(this)}
