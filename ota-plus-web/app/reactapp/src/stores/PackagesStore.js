@@ -270,6 +270,7 @@ export default class PackagesStore {
                     switch (this.page) {
                         case 'device':
                             this._prepareDevicePackages();
+                            this._prepareOndevicePackages();
                             break;
                         case 'packages':
                             this._preparePackages();
@@ -691,7 +692,7 @@ export default class PackagesStore {
                 let newPack = {
                     name: pack.name,
                     version: pack.version,
-                    isBlackListed: !_.isUndefined(parsedBlacklist[pack.name + '-' + pack.version]),
+                    isBlackListed: pack.isBlackListed || !_.isUndefined(parsedBlacklist[pack.name + '-' + pack.version]),
                 };
                 packages.push(newPack);
             });
@@ -837,21 +838,36 @@ export default class PackagesStore {
         }
 
         if(this.page === 'device') {
+            const foundOndevicePackage = _.find(this.ondevicePackages, (ondevicePackage) => {
+                return ondevicePackage.name === data.packageId.name && ondevicePackage.version === data.packageId.version;
+            });
 
-            // const foundOndevicePackage = _.find(this.ondevicePackages, (ondevicePackage) => {
-            //     return ondevicePackage.packageId.name === data.packageId.name && ondevicePackage.packageId.version === data.packageId.version;
-            // });
-
+            if(foundOndevicePackage) {
+                foundOndevicePackage.isBlackListed = true;
+                this._prepareOndevicePackages();
+            }
         }
-        this.fetchBlacklist();
     }
 
     _removePackageFromBlacklist(data) {
+        console.log(data);
         var foundPackage = this._getPackage(data);
         if (foundPackage) {
             foundPackage.isBlackListed = false;
         }
-        this.fetchBlacklist();
+
+        if(this.page === 'device') {
+            const foundOndevicePackage = _.find(this.ondevicePackages, (ondevicePackage) => {
+                return ondevicePackage.name === data.name && ondevicePackage.version === data.version;
+            });
+
+            if(foundOndevicePackage) {
+                foundOndevicePackage.isBlackListed = false;
+                this._prepareOndevicePackages();
+            }
+        }
+
+        // this.fetchBlacklist();
     }
 
     @computed

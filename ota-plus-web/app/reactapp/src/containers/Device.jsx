@@ -20,7 +20,7 @@ class Device extends Component {
     @observable packageBlacklistModalShown = false;
     @observable packageBlacklistAction = {};
     @observable packageProperties = {};
-    @observable packageVersion = {};
+    @observable packageVersion = { uuid: 1 };
 
     constructor(props) {
         super(props);
@@ -77,9 +77,9 @@ class Device extends Component {
     }
     loadPackageVersionProperties(versionUuid, e) {
         if(e) e.preventDefault();
-        this.packageVersion = {
+        extendObservable(this.packageVersion, {
             uuid: versionUuid
-        }
+        })
     }
     render() {
         const { devicesStore, packagesStore, hardwareStore } = this.props;
