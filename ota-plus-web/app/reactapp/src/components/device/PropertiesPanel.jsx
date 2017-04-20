@@ -20,9 +20,7 @@ class PropertiesPanel extends Component {
         this.showPackagesList = this.showPackagesList.bind(this);
         this.showPackagesDetails = this.showPackagesDetails.bind(this);
 
-        // Does not work yet
         this.uuidChangedHandler = observe(props.packageVersion, (change) => {
-            console.log('Observing...');
             if(change.name === 'uuid' && change.oldValue !== change.object[change.name]) {
                 this.shouldShowPackagesDetails = true;
             }

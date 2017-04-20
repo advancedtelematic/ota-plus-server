@@ -5,13 +5,31 @@ import { FlatButton } from 'material-ui';
 import _ from 'underscore';
 
 @observer
+class Comment extends Component {
+	render() {
+		const { comment, changeCommentFieldLength, enableEditField } = this.props;
+		return (
+			<textarea 
+		                        className="input-comment" 
+		                        name="comment" 
+		                        value={comment} 
+		                        type="text" 
+		                        placeholder="Comment here." 
+		                        onKeyUp={changeCommentFieldLength.bind(this)}
+		                        onChange={changeCommentFieldLength.bind(this)}
+		                        onFocus={enableEditField.bind(this)}
+		                        />
+		);
+	}
+}
+
+@observer
 class Details extends Component {
-	@observable version = null;
+	@observable blacklistedPackage = null;
 
 	@observable activeEditField = false;
     @observable showEditButton = false;
     @observable commentFieldLength = 0;
-    @observable comment = null;
     @observable commentTmp = '';
 
     constructor(props) {
@@ -19,65 +37,49 @@ class Details extends Component {
         this.enableEditField = this.enableEditField.bind(this);
         this.disableEditField = this.disableEditField.bind(this);
         this.changeCommentFieldLength = this.changeCommentFieldLength.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-
-       //  this.uuidChangedHandler = observe(props.packageVersion, (change) => {
-       //      console.log('Observing2...');
-       //      if(change.name === 'uuid' && change.oldValue !== change.object[change.name]) {
-
-       //      	setTimeout(() => {
-
-
-       //      	this.version = this.props.packagesStore._getPackageVersionByUuid(props.packageVersion.uuid);
-       //      	console.log(JSON.stringify(this.version));
-
-		    	// if(!_.isUndefined(this.version)) {
-		    	// 	this.comment = this.version.description;
-		     //    	this.commentTmp = this.version.description;
-
-		     //    	let data = {
-			    // 		name: this.version.id.name,
-			    //         version: this.version.id.version
-			    // 	}
-			    // 	this.props.packagesStore.fetchBlacklistedPackage(data);
-			    // 	console.log('Finished');
-		    	// }
-		    	// }, 50)
-       //      }
-       //  });
+        this.handleSubmit = this.handleSubmit.bind(this);        
     }    
    	enableEditField(e) {
-        e.preventDefault();
+   		if (e) e.preventDefault();
         this.activeEditField = true;
-        this.changeCommentFieldLength();
+        // this.changeCommentFieldLength();
     }
     disableEditField(e) {
-        e.preventDefault();
+    	if (e) e.preventDefault();
         var that = this;
         setTimeout(function(){
             if(document.activeElement.className.indexOf('accept-button') == -1) {
                 that.activeEditField = false;
-                that.commentTmp = that.comment;
+                that.commentTmp = null;
             }
         }, 1);
     }
-    changeCommentFieldLength() {
-        var val = this.refs.comment.value;
+    changeCommentFieldLength(e) {
+        var val = e.target.value;
         this.commentFieldLength = val.length;
         this.commentTmp = val;
+
+        // const data = {
+        //     name: 'jq',
+        //     version: '0.0-2',
+        //     details: {
+        //         description: '2341234324123'
+        //     }
+        // };
+        // this.props.packagesStore.updatePackageDetails(data);
     }
-    handleSubmit(name, version) {
-        this.comment = this.refs.comment.value;
-        this.commentTmp = this.refs.comment.value;
-        this.activeEditField = false;
+    handleSubmit(name, version, e) {
+    	if (e) e.preventDefault();
         const data = {
             name: name,
             version: version,
             details: {
-                description: this.refs.comment.value
+                description: this.commentTmp
             }
         };
         this.props.packagesStore.updatePackageDetails(data);
+        this.commentTmp = null;
+        this.activeEditField = false;
     }
     render() {
     	const { packageVersion, showPackageBlacklistModal, packagesStore, installPackage } = this.props;
@@ -88,7 +90,8 @@ class Details extends Component {
     	let isPackageInstalled = false;
     	let isAutoInstallEnabled = false;
 
-    	if(!_.isUndefined(version) && version) {
+    	if(!_.isUndefined(version) && version) {    		
+		    	
 	    	isPackageQueued = _.find(packagesStore.deviceQueue, (dev) => {
 	    		return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
 	    	});
@@ -98,7 +101,8 @@ class Details extends Component {
 	    	isAutoInstallEnabled = _.find(packagesStore.deviceAutoInstalledPackages, (packageName) => {
 	    		return packageName === version.id.name;
 	    	});
-	    }	    
+	    	console.log('desc', version.description)
+	    }
 
         return (
         	<div className="details-wrapper">
@@ -155,31 +159,37 @@ class Details extends Component {
 				            </div>
 			        	</div>
 			        	<div className="comments">
-			        		<textarea 
-		                        className="input-comment" 
-		                        name="comment" 
-		                        value={this.commentTmp} 
-		                        type="text" 
-		                        placeholder="Comment here." 
-		                        ref="comment" 
-		                        onKeyUp={this.changeCommentFieldLength}
-		                        onChange={this.changeCommentFieldLength}
-		                        onFocus={this.enableEditField} />
+			        		<Comment
+			        			comment={this.commentTmp || version.description}
+			        			changeCommentFieldLength={this.changeCommentFieldLength}
+			        			enableEditField={this.enableEditField}
+			        			key={packageVersion.uuid}
+			        		/>
 		                    {this.commentFieldLength > 0 && this.activeEditField ?
 		                        <div className="action-buttons">
 		                            <a href="#" className="cancel-button" onClick={this.disableEditField}>
 		                                <img src="/assets/img/icons/close_icon.png" alt="" />
 		                            </a>
 		                            &nbsp;
-		                            <a href="#" className="accept-button" onClick={this.handleSubmit(this, version.id.name, version.id.version)}>
+		                            <a href="#" className="accept-button" onClick={this.handleSubmit.bind(this, version.id.name, version.id.version)}>
 		                                <img src="/assets/img/icons/accept_icon.png" alt="" />
 		                            </a>
 		                        </div>
 		                      : null}
 			        	</div>
 			        	<div className={"blacklist" + (version.isBlackListed ? " package-blacklisted" : "")}>
-			        		<span className="text">
-			        			Blacklist package
+			        		<span className="text">			    
+			        			{!_.isEmpty(this.props.packagesStore.blacklistedPackage) ? 
+			        				this.props.packagesStore.blacklistedPackage.packageId.name === version.id.name 
+			        				&& this.props.packagesStore.blacklistedPackage.packageId.version === version.id.version
+			        				&& this.props.packagesStore.blacklistedPackage.comment !== '' ? 
+				        				this.props.packagesStore.blacklistedPackage.comment
+				        			:
+				        				"Blacklist package"			        				
+		        				:
+		        					"Blacklist package"
+		        				}
+			        			
 			        		</span>
 			        		{version.isBlackListed ?
 				        		<button className="btn-blacklist edit" 

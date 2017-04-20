@@ -79,7 +79,8 @@ class Device extends Component {
         if(e) e.preventDefault();
         extendObservable(this.packageVersion, {
             uuid: versionUuid
-        })
+        });
+        this.props.packagesStore._prepareBlacklistedPackage(versionUuid);
     }
     render() {
         const { devicesStore, packagesStore, hardwareStore } = this.props;

@@ -10,6 +10,7 @@ const WebsocketHandler = (function (stores) {
         };
 
         this.websocket.onmessage = function (msg) {
+            console.log('websocket on message');
             const eventObj = JSON.parse(msg.data);
             const type = eventObj.type;
             const data = eventObj.event;
@@ -17,6 +18,7 @@ const WebsocketHandler = (function (stores) {
             switch (type) {
                 case "DeviceSeen":
                     stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
+                    stores.packagesStore.fetchDevicePackagesQueue(data.uuid);
                     break;
                 case "DeviceCreated":
                     
