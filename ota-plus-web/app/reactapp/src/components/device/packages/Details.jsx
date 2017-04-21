@@ -1,17 +1,35 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
-import { observable } from 'mobx';
+import { observe, observable } from 'mobx';
 import { FlatButton } from 'material-ui';
 import _ from 'underscore';
 
 @observer
+class Comment extends Component {
+	render() {
+		const { comment, changeCommentFieldLength, enableEditField } = this.props;
+		return (
+			<textarea 
+		                        className="input-comment" 
+		                        name="comment" 
+		                        value={comment} 
+		                        type="text" 
+		                        placeholder="Comment here." 
+		                        onKeyUp={changeCommentFieldLength.bind(this)}
+		                        onChange={changeCommentFieldLength.bind(this)}
+		                        onFocus={enableEditField.bind(this)}
+		                        />
+		);
+	}
+}
+
+@observer
 class Details extends Component {
-	@observable version = null;
+	@observable blacklistedPackage = null;
 
 	@observable activeEditField = false;
     @observable showEditButton = false;
     @observable commentFieldLength = 0;
-    @observable comment = null;
     @observable commentTmp = '';
 
     constructor(props) {
@@ -20,81 +38,73 @@ class Details extends Component {
         this.disableEditField = this.disableEditField.bind(this);
         this.changeCommentFieldLength = this.changeCommentFieldLength.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-    }    
-    enableEditField(e) {
-        e.preventDefault();
+    }
+   	enableEditField(e) {
+   		if (e) e.preventDefault();
         this.activeEditField = true;
-        this.changeCommentFieldLength();
     }
     disableEditField(e) {
-        e.preventDefault();
+    	if (e) e.preventDefault();
         var that = this;
         setTimeout(function(){
             if(document.activeElement.className.indexOf('accept-button') == -1) {
                 that.activeEditField = false;
-                that.commentTmp = that.comment;
+                that.commentTmp = null;
             }
         }, 1);
     }
-    changeCommentFieldLength() {
-        var val = this.refs.comment.value;
+    changeCommentFieldLength(e) {
+        var val = e.target.value;
         this.commentFieldLength = val.length;
         this.commentTmp = val;
     }
-    handleSubmit(e) {
-        e.preventDefault();
-        this.comment = this.refs.comment.value;
-        this.commentTmp = this.refs.comment.value;
-        this.activeEditField = false;
+    handleSubmit(name, version, e) {
+    	if (e) e.preventDefault();
         const data = {
-            name: this.version.id.name,
-            version: this.version.id.version,
+            name: name,
+            version: version,
             details: {
-                description: this.refs.comment.value
+                description: this.commentTmp
             }
         };
         this.props.packagesStore.updatePackageDetails(data);
-    }
-    componentWillReceiveProps(nextProps) {
-    	this.version = this.props.packagesStore._getPackageVersionByUuid(nextProps.packageVersionUuid);
-
-    	if(!_.isUndefined(this.version)) {
-    		this.comment = this.version.description;
-        	this.commentTmp = this.version.description;
-    	}
+        this.commentTmp = null;
+        this.activeEditField = false;
     }
     render() {
-    	const { packageVersionUuid, showPackageBlacklistModal, packagesStore, installPackage } = this.props;
+    	const { packageVersion, showPackageBlacklistModal, packagesStore, installPackage } = this.props;
+
+    	let version = this.props.packagesStore._getPackageVersionByUuid(packageVersion.uuid);
+
     	let isPackageQueued = false;
     	let isPackageInstalled = false;
     	let isAutoInstallEnabled = false;
 
-    	if(!_.isUndefined(this.version) && this.version) {
-    		console.log("Is blacklisted: " + this.version.isBlackListed);
+    	if(!_.isUndefined(version) && version) {
 	    	isPackageQueued = _.find(packagesStore.deviceQueue, (dev) => {
-	    		return (dev.packageId.name === this.version.id.name) && (dev.packageId.version === this.version.id.version);
+	    		return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
 	    	});
 	    	isPackageInstalled = _.find(packagesStore.devicePackages, (dev) => {
-	    		return (dev.name === this.version.id.name) && (dev.version === this.version.id.version);
+	    		return (dev.name === version.id.name) && (dev.version === version.id.version);
 	    	});
 	    	isAutoInstallEnabled = _.find(packagesStore.deviceAutoInstalledPackages, (packageName) => {
-	    		return packageName === this.version.id.name;
+	    		return packageName === version.id.name;
 	    	});
 	    }
 
         return (
         	<div className="details-wrapper">
-	        	{this.version ? 
+	        	{version ? 
 		        	<div className="details">	        	
 			        	<div className="top">
-			        		<div className="title">{this.version.id.name}</div>
+			        		<div className="title">{version.id.name}</div>
 				        		<div className="status">
-				        			{this.version.isBlackListed && isPackageInstalled ?
+				        			{version.isBlackListed && isPackageInstalled ?
 				        				<div className="status-container blacklisted-installed">
 				        					<img src="/assets/img/icons/red_cross.png" alt="" />
 			        			 			<span>Installed</span>	        			 	        		
 				        				</div>
-				        			: this.version.isBlackListed ?
+				        			: version.isBlackListed ?
 				        				<div className="status-container blacklisted">
 				        					<img src="/assets/img/icons/ban_red.png" alt="" />
 			        			 			<span>Blacklisted</span>	        			 	        		
@@ -121,53 +131,61 @@ class Details extends Component {
 			        	<div className="bottom">
 				        	<div className="version">
 				        		<span className = "sub-title">Version:</span>
-				        		<span className="value">{this.version.id.version}</span>
+				        		<span className="value">{version.id.version}</span>
 			        		</div>
 				            <div className="hash">
 								<span className = "sub-title">Hash:</span>
-				        		<span className="value">{this.version.uuid}</span>
+				        		<span className="value">{version.uuid}</span>
 			        		</div>
 			        		<div className="created">
 								<span className = "sub-title">Created:</span>
-				        		<span className="value">{this.version.createdAt}</span>
+				        		<span className="value">{version.createdAt}</span>
 			        		</div>
 				            <div className="vendor">
 				            	<span className = "sub-title">Vendor:</span>
-				        		<span className="value">{this.version.vendor}</span>
+				        		<span className="value">{version.vendor}</span>
 				            </div>
 			        	</div>
 			        	<div className="comments">
-			        		<textarea 
-		                        className="input-comment" 
-		                        name="comment" 
-		                        value={this.commentTmp} 
-		                        type="text" 
-		                        placeholder="Comment here." 
-		                        ref="comment" 
-		                        onKeyUp={this.changeCommentFieldLength}
-		                        onChange={this.changeCommentFieldLength}
-		                        onFocus={this.enableEditField} />
+			        		<Comment
+			        			comment={this.commentTmp || version.description}
+			        			changeCommentFieldLength={this.changeCommentFieldLength}
+			        			enableEditField={this.enableEditField}
+			        			key={packageVersion.uuid}
+			        		/>
 		                    {this.commentFieldLength > 0 && this.activeEditField ?
 		                        <div className="action-buttons">
 		                            <a href="#" className="cancel-button" onClick={this.disableEditField}>
 		                                <img src="/assets/img/icons/close_icon.png" alt="" />
 		                            </a>
 		                            &nbsp;
-		                            <a href="#" className="accept-button" onClick={this.handleSubmit}>
+		                            <a href="#" className="accept-button" onClick={this.handleSubmit.bind(this, version.id.name, version.id.version)}>
 		                                <img src="/assets/img/icons/accept_icon.png" alt="" />
 		                            </a>
 		                        </div>
 		                      : null}
 			        	</div>
-			        	<div className={"blacklist" + (this.version.isBlackListed ? " package-blacklisted" : "")}>
-			        		<span className="text">Blacklist package</span>
-			        		{this.version.isBlackListed ?
+			        	<div className={"blacklist" + (version.isBlackListed ? " package-blacklisted" : "")}>
+			        		<span className="text">			    
+			        			{!_.isEmpty(this.props.packagesStore.blacklistedPackage) ? 
+			        				this.props.packagesStore.blacklistedPackage.packageId.name === version.id.name 
+			        				&& this.props.packagesStore.blacklistedPackage.packageId.version === version.id.version
+			        				&& this.props.packagesStore.blacklistedPackage.comment !== '' ? 
+				        				this.props.packagesStore.blacklistedPackage.comment
+				        			:
+				        				"Blacklist package"			        				
+		        				:
+		        					"Blacklist package"
+		        				}
+			        			
+			        		</span>
+			        		{version.isBlackListed ?
 				        		<button className="btn-blacklist edit" 
-				        				onClick={showPackageBlacklistModal.bind(this, this.version.id.name, this.version.id.version, 'edit' )}>
+				        				onClick={showPackageBlacklistModal.bind(this, version.id.name, version.id.version, 'edit' )}>
 				        		</button>
 			        		:
 			        			<button className="btn-blacklist" 
-				        				onClick={showPackageBlacklistModal.bind(this, this.version.id.name, this.version.id.version, 'add' )}>
+				        				onClick={showPackageBlacklistModal.bind(this, version.id.name, version.id.version, 'add' )}>
 				        		</button>
 			        		}
 			        	</div>
@@ -176,9 +194,9 @@ class Details extends Component {
 	                            className="btn-main btn-install"
 	                            label="Install"
 	                            title="Install"
-	                            id={"button-install-package-" + this.version.id.name + "-" + this.version.id.version}
-	                            onClick={installPackage.bind(this, {name: this.version.id.name, version: this.version.id.version})}
-	                            disabled={this.version.isBlackListed || isPackageQueued || isAutoInstallEnabled || isPackageInstalled}>
+	                            id={"button-install-package-" + version.id.name + "-" + version.id.version}
+	                            onClick={installPackage.bind(this, {name: version.id.name, version: version.id.version})}
+	                            disabled={version.isBlackListed || isPackageQueued || isAutoInstallEnabled || isPackageInstalled}>
 	                            Install
 	                        </button>
 			        	</div>
@@ -195,7 +213,7 @@ class Details extends Component {
 }
 
 Details.propTypes = {
-    packageVersionUuid: PropTypes.string,
+    packageVersion: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired
 }
 

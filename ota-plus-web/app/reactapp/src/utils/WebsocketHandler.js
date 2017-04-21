@@ -13,10 +13,10 @@ const WebsocketHandler = (function (stores) {
             const eventObj = JSON.parse(msg.data);
             const type = eventObj.type;
             const data = eventObj.event;
-
             switch (type) {
                 case "DeviceSeen":
                     stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
+                    stores.packagesStore.fetchDevicePackagesQueue(data.uuid);
                     break;
                 case "DeviceCreated":
                     

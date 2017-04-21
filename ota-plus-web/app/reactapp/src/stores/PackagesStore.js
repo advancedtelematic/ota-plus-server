@@ -270,6 +270,7 @@ export default class PackagesStore {
                     switch (this.page) {
                         case 'device':
                             this._prepareDevicePackages();
+                            this._prepareOndevicePackages();
                             break;
                         case 'packages':
                             this._preparePackages();
@@ -301,7 +302,13 @@ export default class PackagesStore {
         resetAsync(this.packagesBlacklistAsync, true);
         return axios.post(API_PACKAGES_BLACKLIST, data)
             .then(function(response) {
+                this.fetchBlacklistedPackage({ name: data.packageId.name, version: data.packageId.version });
                 this._blacklistPackage(data);
+                // console.log('before _prepareBlacklistedPackage');
+                // console.log(this.blacklistedPackage);
+                // this._prepareBlacklistedPackage(data);
+                // console.log('after _prepareBlacklistedPackage');
+                // console.log(this.blacklistedPackage);
                 this.packagesBlacklistAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
@@ -313,11 +320,48 @@ export default class PackagesStore {
         resetAsync(this.packagesUpdateBlacklistedAsync, true);
         return axios.put(API_PACKAGES_UPDATE_BLACKLISTED, data)
             .then(function(response) {
+                console.log(data)
+                this.fetchBlacklistedPackage({ name: data.packageId.name, version: data.packageId.version });
+                // this._prepareBlacklistedPackage(data);
                 this.packagesUpdateBlacklistedAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
                 this.packagesUpdateBlacklistedAsync = handleAsyncError(error);
             }.bind(this));
+    }
+
+    _prepareBlacklistedPackage(uuid) {
+        this._resetBlacklistedPackage();
+        let data = null;
+        if(typeof(uuid) !== 'object') {
+            let foundPackage = _.find(this.packages, (pack) => {
+                return pack.uuid === uuid;
+            });
+            data = {
+                packageId: {
+                    name: foundPackage.id.name,
+                    version: foundPackage.id.version
+                }
+            }
+        } else {
+            data = uuid;
+        }
+        
+        let foundBlacklistedPackage = _.find(this.blacklist, (pack) => {
+            return pack.packageId.name === data.packageId.name && pack.packageId.version === data.packageId.version;
+        });
+        console.log('inside _prepareBlacklistedPackage');
+        console.log('foundBlacklistedPackage');
+        console.log(foundBlacklistedPackage);
+
+        this.fetchBlacklistedPackage({ name: data.packageId.name, version: data.packageId.version});
+
+        console.log('quit _prepareBlacklistedPackage');
+    }
+
+    _resetBlacklistedPackage() {
+        console.log('reset');
+        this.blacklistedPackage = {};
     }
 
     removePackageFromBlacklist(data) {
@@ -504,9 +548,10 @@ export default class PackagesStore {
     }
 
     _getPackageVersionByUuid(uuid) {
-        return _.find(this.packages, (pack) => {
+        let found = _.find(this.packages, (pack) => {
             return pack.uuid === uuid;
-        });        
+        });
+        return found;
     }
 
     _getDevicePackage(data) {
@@ -690,7 +735,7 @@ export default class PackagesStore {
                 let newPack = {
                     name: pack.name,
                     version: pack.version,
-                    isBlackListed: !_.isUndefined(parsedBlacklist[pack.name + '-' + pack.version]),
+                    isBlackListed: pack.isBlackListed || !_.isUndefined(parsedBlacklist[pack.name + '-' + pack.version]),
                 };
                 packages.push(newPack);
             });
@@ -830,20 +875,41 @@ export default class PackagesStore {
             name: data.packageId.name,
             version: data.packageId.version,
         }
-
         let foundPackage = this._getPackage(formattedData);
-
-        if (foundPackage) {
+        if(foundPackage) {
             foundPackage.isBlackListed = true;
         }
+
+        if(this.page === 'device') {
+            const foundOndevicePackage = _.find(this.ondevicePackages, (ondevicePackage) => {
+                return ondevicePackage.name === data.packageId.name && ondevicePackage.version === data.packageId.version;
+            });
+
+            if(foundOndevicePackage) {
+                foundOndevicePackage.isBlackListed = true;
+            }
+        }
+
         this.fetchBlacklist();
     }
 
     _removePackageFromBlacklist(data) {
+        console.log(data);
         var foundPackage = this._getPackage(data);
         if (foundPackage) {
             foundPackage.isBlackListed = false;
         }
+
+        if(this.page === 'device') {
+            const foundOndevicePackage = _.find(this.ondevicePackages, (ondevicePackage) => {
+                return ondevicePackage.name === data.name && ondevicePackage.version === data.version;
+            });
+
+            if(foundOndevicePackage) {
+                foundOndevicePackage.isBlackListed = false;
+            }
+        }
+
         this.fetchBlacklist();
     }
 
