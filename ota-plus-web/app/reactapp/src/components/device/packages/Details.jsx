@@ -37,12 +37,11 @@ class Details extends Component {
         this.enableEditField = this.enableEditField.bind(this);
         this.disableEditField = this.disableEditField.bind(this);
         this.changeCommentFieldLength = this.changeCommentFieldLength.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);        
-    }    
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
    	enableEditField(e) {
    		if (e) e.preventDefault();
         this.activeEditField = true;
-        // this.changeCommentFieldLength();
     }
     disableEditField(e) {
     	if (e) e.preventDefault();
@@ -58,15 +57,6 @@ class Details extends Component {
         var val = e.target.value;
         this.commentFieldLength = val.length;
         this.commentTmp = val;
-
-        // const data = {
-        //     name: 'jq',
-        //     version: '0.0-2',
-        //     details: {
-        //         description: '2341234324123'
-        //     }
-        // };
-        // this.props.packagesStore.updatePackageDetails(data);
     }
     handleSubmit(name, version, e) {
     	if (e) e.preventDefault();
@@ -90,8 +80,7 @@ class Details extends Component {
     	let isPackageInstalled = false;
     	let isAutoInstallEnabled = false;
 
-    	if(!_.isUndefined(version) && version) {    		
-		    	
+    	if(!_.isUndefined(version) && version) {
 	    	isPackageQueued = _.find(packagesStore.deviceQueue, (dev) => {
 	    		return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
 	    	});
@@ -101,7 +90,6 @@ class Details extends Component {
 	    	isAutoInstallEnabled = _.find(packagesStore.deviceAutoInstalledPackages, (packageName) => {
 	    		return packageName === version.id.name;
 	    	});
-	    	console.log('desc', version.description)
 	    }
 
         return (

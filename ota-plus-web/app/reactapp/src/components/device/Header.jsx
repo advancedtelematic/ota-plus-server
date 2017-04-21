@@ -29,8 +29,6 @@ class Header extends Component {
             default:
             break;
         }
-
-        console.log(device);
         return (
             <BaseHeader
                 title={
