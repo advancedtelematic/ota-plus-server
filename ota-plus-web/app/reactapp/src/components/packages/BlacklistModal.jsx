@@ -92,10 +92,11 @@ class BlacklistModal extends Component {
                 id="blacklist-form">
                 {blacklistAction.mode === "edit" ? 
                     <span>
+                        
                         <AsyncResponse 
                             handledStatus="error"
-                            action={packagesStore.packagesBlacklistAsync}
-                            errorMsg={packagesStore.packagesBlacklistAsync.data ? packagesStore.packagesBlacklistAsync.data.description : null}
+                            action={packagesStore.packagesUpdateBlacklistedAsync}
+                            errorMsg={packagesStore.packagesUpdateBlacklistedAsync.data ? packagesStore.packagesUpdateBlacklistedAsync.data.description : null}
                         />
                         <AsyncResponse 
                             handledStatus="error"
@@ -106,8 +107,8 @@ class BlacklistModal extends Component {
                 :
                     <AsyncResponse 
                         handledStatus="error"
-                        action={packagesStore.packagesUpdateBlacklistedAsync}
-                        errorMsg={packagesStore.packagesUpdateBlacklistedAsync.data ? packagesStore.packagesUpdateBlacklistedAsync.data.description : null}
+                        action={packagesStore.packagesBlacklistAsync}
+                        errorMsg={packagesStore.packagesBlacklistAsync.data ? packagesStore.packagesBlacklistAsync.data.description : null}
                     />
                 }
                 {blacklistAction.mode === 'add' ?

@@ -80,7 +80,8 @@ class Device extends Component {
         extendObservable(this.packageVersion, {
             uuid: versionUuid
         });
-        this.props.packagesStore._prepareBlacklistedPackage(versionUuid);
+        let packageVersion = this.props.packagesStore._getPackageVersionByUuid(versionUuid);
+        this.props.packagesStore.fetchBlacklistedPackage({ name: packageVersion.id.name, version: packageVersion.id.version});
     }
     render() {
         const { devicesStore, packagesStore, hardwareStore } = this.props;
