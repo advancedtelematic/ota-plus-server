@@ -110,13 +110,10 @@ class List extends Component {
         this.tmpIntervalId = null;
     }
     render() {
-        const { packagesStore, deviceId, onFileDrop, togglePackageAutoUpdate, packageVersionUuid, loadPackageVersionProperties } = this.props;
+        const { packagesStore, deviceId, onFileDrop, togglePackageAutoUpdate, packageVersion, loadPackageVersionProperties } = this.props;
         let packageIndex = -1;
         return (
-            <div className={"ios-list" + (
-                packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesBlacklistFetchAsync.isFetching ||
-                packagesStore.packagesForDeviceFetchAsync.isFetching || packagesStore.packagesAutoInstalledForDeviceFetchAsync.isFetching ||
-                packagesStore.packagesDeviceQueueFetchAsync.isFetching ? " fetching" : "")} ref="list">
+            <div className="ios-list" ref="list">
                 {Object.keys(packagesStore.preparedPackages).length ? 
                     <Dropzone 
                         ref="dropzone" 
@@ -198,7 +195,7 @@ class List extends Component {
                                                                             installedPackage={installedPackage}
                                                                             isAutoInstallEnabled={pack.isAutoInstallEnabled}
                                                                             packagesStore={packagesStore}
-                                                                            packageVersionUuid={packageVersionUuid}
+                                                                            packageVersion={packageVersion}
                                                                             loadPackageVersionProperties={loadPackageVersionProperties}
                                                                             key={i}
                                                                         />
@@ -236,7 +233,7 @@ List.propTypes = {
     deviceId: PropTypes.string.isRequired,
     onFileDrop: PropTypes.func.isRequired,
     togglePackageAutoUpdate: PropTypes.func.isRequired,
-    packageVersionUuid: PropTypes.string,
+    packageVersion: PropTypes.object.isRequired,
     loadPackageVersionProperties: PropTypes.func.isRequired,
 }
 

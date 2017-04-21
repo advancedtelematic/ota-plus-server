@@ -7,6 +7,7 @@ import { Form } from 'formsy-react';
 import { FormsyText } from 'formsy-material-ui/lib';
 import { FlatButton } from 'material-ui';
 import serialize from 'form-serialize';
+import _ from 'underscore';
 
 @observer
 class BlacklistModal extends Component {
@@ -146,7 +147,7 @@ class BlacklistModal extends Component {
                         : 
                             <FormsyText
                                 name="comment"
-                                value={packagesStore.blacklistedPackage.comment}
+                                value={!_.isEmpty(packagesStore.blacklistedPackage) ? packagesStore.blacklistedPackage.comment : ''}
                                 floatingLabelText="Comment"
                                 className="input-wrapper"
                                 updateImmediately

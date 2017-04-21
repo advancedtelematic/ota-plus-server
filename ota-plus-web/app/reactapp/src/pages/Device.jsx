@@ -59,6 +59,7 @@ class Device extends Component {
                             devicesStore={devicesStore}
                             packagesStore={packagesStore}
                             hardwareStore={hardwareStore}
+                            showQueueModal={this.showQueueModal}
                         />
                     </MetaData>
                     <DeviceQueueModal
