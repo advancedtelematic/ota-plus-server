@@ -10,15 +10,15 @@ class Comment extends Component {
 		const { comment, changeCommentFieldLength, enableEditField } = this.props;
 		return (
 			<textarea 
-		                        className="input-comment" 
-		                        name="comment" 
-		                        value={comment} 
-		                        type="text" 
-		                        placeholder="Comment here." 
-		                        onKeyUp={changeCommentFieldLength.bind(this)}
-		                        onChange={changeCommentFieldLength.bind(this)}
-		                        onFocus={enableEditField.bind(this)}
-		                        />
+	            className="input-comment" 
+	            name="comment" 
+	            value={comment} 
+	            type="text" 
+	            placeholder="Comment here." 
+	            onKeyUp={changeCommentFieldLength.bind(this)}
+	            onChange={changeCommentFieldLength.bind(this)}
+	            onFocus={enableEditField.bind(this)}
+            />
 		);
 	}
 }
@@ -73,14 +73,16 @@ class Details extends Component {
     }
     render() {
     	const { packageVersion, showPackageBlacklistModal, packagesStore, installPackage } = this.props;
-
-    	let version = this.props.packagesStore._getPackageVersionByUuid(packageVersion.uuid);
-
+    	let version = packagesStore._getPackageVersionByUuid(packageVersion.uuid);
+    	let blacklistComment = null;
+    	let allPackages = packagesStore.packages;
+    	let blacklistedPackages = packagesStore.blacklist;
     	let isPackageQueued = false;
     	let isPackageInstalled = false;
     	let isAutoInstallEnabled = false;
 
     	if(!_.isUndefined(version) && version) {
+    		blacklistComment = version.blacklistComment;
 	    	isPackageQueued = _.find(packagesStore.deviceQueue, (dev) => {
 	    		return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
 	    	});
@@ -167,15 +169,10 @@ class Details extends Component {
 			        	</div>
 			        	<div className={"blacklist" + (version.isBlackListed ? " package-blacklisted" : "")}>
 			        		<span className="text">			    
-			        			{!_.isEmpty(this.props.packagesStore.blacklistedPackage) ? 
-			        				this.props.packagesStore.blacklistedPackage.packageId.name === version.id.name 
-			        				&& this.props.packagesStore.blacklistedPackage.packageId.version === version.id.version
-			        				&& this.props.packagesStore.blacklistedPackage.comment !== '' ? 
-				        				this.props.packagesStore.blacklistedPackage.comment
-				        			:
-				        				"Blacklist package"			        				
+			        			{blacklistComment ?
+			        				blacklistComment
 		        				:
-		        					"Blacklist package"
+		        					"Blacklist Package"
 		        				}
 			        			
 			        		</span>
