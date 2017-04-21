@@ -620,7 +620,17 @@ export default class PackagesStore {
                     packInstalled.isAutoInstallEnabled = true;
             });
 
-            this.packages = packages;
+            // In order to display comments, we should set this.packages = packages, but then there is a problem with auto update
+            // So for now setting of blacklist comment looks the following way 
+            _.each(this.packages, (packageObj) => {
+                _.each(packages, (packInstalled) => {
+                    if(packInstalled.id.name === packageObj.id.name && packInstalled.id.version === packageObj.id.version) {
+                        if(!_.isUndefined(packInstalled.blacklistComment)) {
+                            packageObj.blacklistComment = packInstalled.blacklistComment;
+                        }
+                    }
+                });
+            });
 
             let queuedIds = [];
             _.each(queuedPackages, (pack) => {

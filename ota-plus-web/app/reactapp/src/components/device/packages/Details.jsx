@@ -153,7 +153,7 @@ class Details extends Component {
 			        			comment={this.commentTmp || version.description}
 			        			changeCommentFieldLength={this.changeCommentFieldLength}
 			        			enableEditField={this.enableEditField}
-			        			key={packageVersion.uuid}
+			        			key={version.uuid}
 			        		/>
 		                    {this.commentFieldLength > 0 && this.activeEditField ?
 		                        <div className="action-buttons">
