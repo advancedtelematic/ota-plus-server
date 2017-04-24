@@ -2,75 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { observe, observable } from 'mobx';
 import { FlatButton } from 'material-ui';
+import { PackagesComment } from '.';
 import _ from 'underscore';
 
 @observer
-class Comment extends Component {
-	render() {
-		const { comment, changeCommentFieldLength, enableEditField } = this.props;
-		return (
-			<textarea 
-	            className="input-comment" 
-	            name="comment" 
-	            value={comment} 
-	            type="text" 
-	            placeholder="Comment here." 
-	            onKeyUp={changeCommentFieldLength.bind(this)}
-	            onChange={changeCommentFieldLength.bind(this)}
-	            onFocus={enableEditField.bind(this)}
-            />
-		);
-	}
-}
-
-@observer
 class Details extends Component {
-	@observable blacklistedPackage = null;
-
-	@observable activeEditField = false;
-    @observable showEditButton = false;
-    @observable commentFieldLength = 0;
-    @observable commentTmp = '';
-
-    constructor(props) {
-        super(props);
-        this.enableEditField = this.enableEditField.bind(this);
-        this.disableEditField = this.disableEditField.bind(this);
-        this.changeCommentFieldLength = this.changeCommentFieldLength.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-   	enableEditField(e) {
-   		if (e) e.preventDefault();
-        this.activeEditField = true;
-    }
-    disableEditField(e) {
-    	if (e) e.preventDefault();
-        var that = this;
-        setTimeout(function(){
-            if(document.activeElement.className.indexOf('accept-button') == -1) {
-                that.activeEditField = false;
-                that.commentTmp = null;
-            }
-        }, 1);
-    }
-    changeCommentFieldLength(e) {
-        var val = e.target.value;
-        this.commentFieldLength = val.length;
-        this.commentTmp = val;
-    }
-    handleSubmit(name, version, e) {
-    	if (e) e.preventDefault();
-        const data = {
-            name: name,
-            version: version,
-            details: {
-                description: this.commentTmp
-            }
-        };
-        this.props.packagesStore.updatePackageDetails(data);
-        this.commentTmp = null;
-        this.activeEditField = false;
-    }
     render() {
     	const { packageVersion, showPackageBlacklistModal, packagesStore, installPackage } = this.props;
     	let version = packagesStore._getPackageVersionByUuid(packageVersion.uuid);
@@ -83,7 +19,7 @@ class Details extends Component {
 
     	if(!_.isUndefined(version) && version) {
     		blacklistComment = version.blacklistComment;
-	    	isPackageQueued = _.find(packagesStore.deviceQueue, (dev) => {
+			isPackageQueued = _.find(packagesStore.deviceQueue, (dev) => {
 	    		return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
 	    	});
 	    	isPackageInstalled = _.find(packagesStore.devicePackages, (dev) => {
@@ -149,23 +85,11 @@ class Details extends Component {
 				            </div>
 			        	</div>
 			        	<div className="comments">
-			        		<Comment
-			        			comment={this.commentTmp || version.description}
-			        			changeCommentFieldLength={this.changeCommentFieldLength}
-			        			enableEditField={this.enableEditField}
-			        			key={version.uuid}
+	        				<PackagesComment
+	        					version={version}
+	        					packagesStore={packagesStore}
+	        					key={version.uuid}
 			        		/>
-		                    {this.commentFieldLength > 0 && this.activeEditField ?
-		                        <div className="action-buttons">
-		                            <a href="#" className="cancel-button" onClick={this.disableEditField}>
-		                                <img src="/assets/img/icons/close_icon.png" alt="" />
-		                            </a>
-		                            &nbsp;
-		                            <a href="#" className="accept-button" onClick={this.handleSubmit.bind(this, version.id.name, version.id.version)}>
-		                                <img src="/assets/img/icons/accept_icon.png" alt="" />
-		                            </a>
-		                        </div>
-		                      : null}
 			        	</div>
 			        	<div className={"blacklist" + (version.isBlackListed ? " package-blacklisted" : "")}>
 			        		<span className="text">			    
@@ -174,7 +98,6 @@ class Details extends Component {
 		        				:
 		        					"Blacklist Package"
 		        				}
-			        			
 			        		</span>
 			        		{version.isBlackListed ?
 				        		<button className="btn-blacklist edit" 
