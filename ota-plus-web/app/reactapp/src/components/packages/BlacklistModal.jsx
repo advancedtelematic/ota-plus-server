@@ -33,7 +33,7 @@ class BlacklistModal extends Component {
                 version: nextProps.blacklistAction.version
             };
             nextProps.blacklistAction.mode === 'edit' ?
-                this.props.packagesStore.fetchBlacklistedPackage(data);
+                this.props.packagesStore.fetchBlacklistedPackage(data)
             :
                 this.props.packagesStore.fetchAffectedDevicesCount(data);
         }
