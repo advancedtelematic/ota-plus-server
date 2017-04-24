@@ -4,6 +4,7 @@ import { observe, observable } from 'mobx';
 import { FlatButton } from 'material-ui';
 import { PackagesComment } from '.';
 import _ from 'underscore';
+import moment from 'moment';
 
 @observer
 class Details extends Component {
@@ -16,6 +17,8 @@ class Details extends Component {
     	let isPackageQueued = false;
     	let isPackageInstalled = false;
     	let isAutoInstallEnabled = false;
+
+    	console.log(packagesStore.packagesBlacklistAsync.isFetching);
 
     	if(!_.isUndefined(version) && version) {
     		blacklistComment = version.blacklistComment;
@@ -77,7 +80,7 @@ class Details extends Component {
 			        		</div>
 			        		<div className="created">
 								<span className = "sub-title">Created:</span>
-				        		<span className="value">{version.createdAt}</span>
+				        		<span className="value">{moment(version.createdAt).format('ddd MMM DD YYYY')}</span>
 			        		</div>
 				            <div className="vendor">
 				            	<span className = "sub-title">Vendor:</span>
@@ -96,7 +99,10 @@ class Details extends Component {
 			        			{blacklistComment ?
 			        				blacklistComment
 		        				:
-		        					"Blacklist Package"
+		        					!packagesStore.packagesBlacklistAsync.isFetching ?
+		        						"Blacklist Package"
+	        						:
+	        							""
 		        				}
 			        		</span>
 			        		{version.isBlackListed ?
