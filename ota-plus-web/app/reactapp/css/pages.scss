@@ -446,6 +446,18 @@
             &.status-UpToDate {
                 background-image: url('/assets/img/icons/green_tick.png');
             }
+
+            &.status-success {
+                background-image: url('/assets/img/icons/green_tick.png');
+            }
+
+            &.status-pending {
+                background-image: url('/assets/img/icons/orange_exclamation.png');
+            }
+
+            &.status-error {
+                background-image: url('/assets/img/icons/red_cross.png');
+            }
         }
 
         .queue-button {

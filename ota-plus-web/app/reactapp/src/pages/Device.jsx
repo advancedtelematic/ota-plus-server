@@ -51,6 +51,7 @@ class Device extends Component {
                 <div className="wrapper-flex">
                     <DeviceHeader
                         devicesStore={devicesStore}
+                        packagesStore={packagesStore}
                         showQueueModal={this.showQueueModal}
                     />
                     <MetaData 
