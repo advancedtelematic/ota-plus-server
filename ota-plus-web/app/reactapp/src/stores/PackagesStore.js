@@ -297,6 +297,7 @@ export default class PackagesStore {
     }
 
     fetchBlacklistedPackage(data) {
+        this.blacklistedPackage = {};
         resetAsync(this.packagesOneBlacklistedFetchAsync, true);
         return axios.get(API_PACKAGES_PACKAGE_BLACKLISTED_FETCH + '/' + data.name + '/' + data.version, data.details)
             .then(function(response) {
