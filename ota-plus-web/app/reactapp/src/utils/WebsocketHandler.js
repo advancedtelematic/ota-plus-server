@@ -13,14 +13,22 @@ const WebsocketHandler = (function (stores) {
             const eventObj = JSON.parse(msg.data);
             const type = eventObj.type;
             const data = eventObj.event;
+            console.log('Websocket event');
+            console.log(type);
             switch (type) {
                 case "DeviceSeen":
                     stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
-                    stores.packagesStore.fetchDevicePackagesQueue(data.uuid);
-                    stores.packagesStore.fetchDevicePackages(data.uuid, null);
+                    if(stores.packagesStore.deviceQueue.length) {
+                        stores.packagesStore.fetchDevicePackagesHistory(data.uuid);
+                        stores.packagesStore.fetchDevicePackagesUpdatesLogs(data.uuid);
+                        stores.packagesStore.fetchDevicePackagesQueue(data.uuid);
+                        stores.packagesStore.fetchDevicePackages(data.uuid, null);
+                    }
+                    break;
+                case "DeviceUpdateStatus":
+                    stores.devicesStore._updateDeviceData(data.uuid, {deviceStatus: data.status});
                     break;
                 case "DeviceCreated":
-                    
                     break;
                 case "PackageCreated":
                     stores.packagesStore._addPackage(data);

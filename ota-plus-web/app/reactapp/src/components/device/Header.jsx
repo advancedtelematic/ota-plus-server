@@ -16,26 +16,18 @@ class Header extends Component {
         const createdDate = new Date(device.createdAt);
         const activatedDate = new Date(device.activatedAt);
         let deviceStatus = 'Status unknown';
-        let installationStatus = 'unknown';
         switch(device.deviceStatus) {
             case 'UpToDate':
                 deviceStatus = 'Device synchronized';
-                installationStatus = 'success';
             break;
             case 'Outdated':
                 deviceStatus = 'Device unsynchronized';
-                installationStatus = 'pending';
             break;
             case 'Error':
                 deviceStatus = 'Installation error';
-                installationStatus = 'error';
             break;
             default:
             break;
-        }
-
-        if(packagesStore.deviceQueue.length) {
-            installationStatus = 'pending';
         }
 
         return (
@@ -57,7 +49,7 @@ class Header extends Component {
                     {!devicesStore.devicesOneFetchAsync.isFetching ?
                         <span className="pull-right">
                             <button className="queue-button" onClick={showQueueModal}>
-                                <div className={"status status-" + installationStatus}></div>
+                                <div className={"status status-" + device.deviceStatus}></div>
                             </button>
                             <div className="dates">
                                 <div className="date">
