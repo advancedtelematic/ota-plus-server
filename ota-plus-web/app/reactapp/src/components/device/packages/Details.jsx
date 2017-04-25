@@ -8,6 +8,9 @@ import moment from 'moment';
 
 @observer
 class Details extends Component {
+	componentWillMount() {
+		this.props.packagesStore.fetchDevicePackages(this.props.devicesStore.device.uuid);
+	}
     render() {
     	const { packageVersion, showPackageBlacklistModal, packagesStore, installPackage } = this.props;
     	let version = packagesStore._getPackageVersionByUuid(packageVersion.uuid);
@@ -18,15 +21,13 @@ class Details extends Component {
     	let isPackageInstalled = false;
     	let isAutoInstallEnabled = false;
 
-    	console.log(packagesStore.packagesBlacklistAsync.isFetching);
-
     	if(!_.isUndefined(version) && version) {
     		blacklistComment = version.blacklistComment;
 			isPackageQueued = _.find(packagesStore.deviceQueue, (dev) => {
 	    		return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
 	    	});
 	    	isPackageInstalled = _.find(packagesStore.devicePackages, (dev) => {
-	    		return (dev.name === version.id.name) && (dev.version === version.id.version);
+	    		return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
 	    	});
 	    	isAutoInstallEnabled = _.find(packagesStore.deviceAutoInstalledPackages, (packageName) => {
 	    		return packageName === version.id.name;

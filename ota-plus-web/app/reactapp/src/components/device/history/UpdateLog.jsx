@@ -21,7 +21,7 @@ class UpdateLog extends Component {
                     }
                     &nbsp;
                     {request.success ?
-                        "successfully"
+                        ""
                     :
                         "not"
                     }
