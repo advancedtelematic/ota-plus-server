@@ -36,7 +36,7 @@ class RegistryProps extends TestKit(ActorSystem("vehicle-registry"))
 
   val vehicles = Vehicles( system.actorOf( VehicleRegistry.props() ) )(Timeout(10, TimeUnit.SECONDS))
 
-  property("Registered vehicle can be requested by vin") {
+  ignore("Registered vehicle can be requested by vin") {
     implicit val exec = system.dispatcher
     forAll( VehicleGen ) { vehicle =>
       vehicles.registerVehicle(vehicle).flatMap { _ =>
