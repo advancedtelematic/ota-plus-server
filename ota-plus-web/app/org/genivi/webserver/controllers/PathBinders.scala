@@ -10,7 +10,7 @@ import eu.timepit.refined.refineV
 import eu.timepit.refined.string._
 import org.genivi.sota.data.Device._
 import org.genivi.sota.data.{Device, Namespace, Uuid}
-import play.api.mvc.PathBindable
+import play.api.mvc.{QueryStringBindable, PathBindable}
 
 /**
   * Implicits that allow giving custom param-types in the method signatures in the routes file.
@@ -76,6 +76,11 @@ object PathBinders {
     def unbind(key: String, value: FeatureName): String = value.get
   }
 
+  implicit object bindableQueryInteger extends QueryStringBindable.Parsing[Integer](
+    _.toInt,
+    _.toString,
+    (k: String, e: Exception) => "Cannot parse %s as Integer: %s".format(k, e.getMessage())
+  )
 }
 
 trait ArtifactType {
@@ -105,6 +110,19 @@ case class Architecture(bits: Int) {
     case _ => throw new IllegalArgumentException
   }
   override def toString: String = bits.toString
+}
+
+object PackageManager extends Enumeration {
+  val deb    = Value("deb")
+  val rpm    = Value("rpm")
+  val ostree = Value("ostree")
+  val off    = Value("off")
+
+  implicit object binder extends QueryStringBindable.Parsing[Value](
+    withName(_),
+    _.toString,
+    (k: String, e: Exception) => "Cannot parse %s as PackageManager: %s".format(k, e.getMessage())
+  )
 }
 
 final case class FeatureName(get: String)

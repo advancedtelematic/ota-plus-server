@@ -64,7 +64,11 @@ extends Controller with ApiClientSupport {
     * @param device UUID of device
     * @param artifact one of "deb", "rpm", "toml"
     */
-  def deviceClientDownload(device: Uuid, artifact: ArtifactType) : Action[AnyContent] =
+  def deviceClientDownload(
+      device: Uuid,
+      artifact: ArtifactType,
+      pkgMgr: PackageManager.Value,
+      pollingSec: Option[Integer]) : Action[AnyContent] =
     authAction.AuthenticatedApiAction.async { implicit request =>
       for (
         dev <- devicesApi.getDevice(
@@ -75,8 +79,8 @@ extends Controller with ApiClientSupport {
           "device_uuid" -> Seq(device.underlying.get),
           "client_id" -> Seq(vMetadata.clientInfo.clientId.toString),
           "client_secret" -> Seq(secret),
-          "package_manager" -> request.queryString.get("package_manager").getOrElse(Seq("off")),
-          "polling_sec" -> request.queryString.get("polling_sec").getOrElse(Seq("10")),
+          "package_manager" -> Seq(pkgMgr.toString),
+          "polling_sec" -> Seq(pollingSec.getOrElse(10).toString),
           "filename" -> Seq(s"sota_client_${device.underlying.get}.${artifact.fileExtension}")
         ))
       ) yield result
