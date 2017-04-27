@@ -33,7 +33,7 @@ class Main extends Component {
 
     constructor(props) {
         super(props);
-        axios.defaults.headers.common['Csrf-Token'] = csrfToken;
+        axios.defaults.headers.common['Csrf-Token'] = document.getElementById('csrf-token-val').value;
         axios.interceptors.response.use(null, (error) => {
             if (error.response && (error.response.status === 401 || error.response.status === 403)) {
                 this.ifLogout = true;

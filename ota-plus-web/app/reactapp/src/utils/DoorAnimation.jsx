@@ -3,6 +3,9 @@ import 'velocity-animate';
 import 'velocity-animate/velocity.ui';
 import { VelocityTransitionGroup, velocityHelpers } from 'velocity-react';
 
+import { doLogout } from '../utils/Common';
+
+
 const Animation = {
     up: velocityHelpers.registerEffect({
         defaultDuration: 1200,
@@ -35,7 +38,7 @@ class DoorAnimation extends Component {
                         enter={{
                             animation: Animation.down, 
                             complete: () => {
-                                window.location.href = logoutUrl
+                              doLogout();
                             }
                         }} 
                         runOnMount={true}>

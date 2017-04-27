@@ -1,3 +1,9 @@
+const doLogout = () => {
+  document.getElementById('logout-return-to').value =
+    location.protocol + '//' + location.host + '/logout';
+  document.getElementById('logout').submit();
+}
+
 const resetAsync = (obj, isFetching = false) => {
   obj.isFetching = isFetching;
   obj.status = null;
@@ -19,7 +25,7 @@ const handleAsyncError = (error) => {
   error.response = error.response || {status: null, data: {}};
 
   if(error.response.status === 401) {
-    window.href = logoutUrl;
+    doLogout();
   }
 
   let resp = {
@@ -32,6 +38,7 @@ const handleAsyncError = (error) => {
 }
 
 export {
+  doLogout,
   resetAsync,
   handleAsyncSuccess,
   handleAsyncError
