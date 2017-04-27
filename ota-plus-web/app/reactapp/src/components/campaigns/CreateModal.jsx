@@ -53,6 +53,7 @@ class CreateModal extends Component {
                             name="name"
                             floatingLabelText="Campaign name"
                             className="input-wrapper"
+                            id="add-new-campaign-name"
                             updateImmediately
                             required
                         />
@@ -63,13 +64,15 @@ class CreateModal extends Component {
                         <div className="body-actions">
                             <a href="#"
                                 onClick={hide.bind(this, null)}
-                                className="link-cancel">
+                                className="link-cancel"
+                                id="add-new-campaign-cancel">
                                 Cancel
                             </a>
                             <FlatButton
                                 label="Add campaign"
                                 type="submit"
                                 className="btn-main"
+                                id="add-new-campaign-confirm"
                                 disabled={this.submitButtonDisabled || campaignsStore.campaignsCreateAsync.isFetching}
                             />
                         </div>

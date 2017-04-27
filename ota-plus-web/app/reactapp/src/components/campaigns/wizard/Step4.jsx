@@ -27,10 +27,10 @@ class WizardStep4 extends Component {
                                 Package
                             </div>
                             <div className="desc">
-                                <div className="wrapper-package-name">
+                                <div className="wrapper-package-name" id="wizard-summary-package-name">
                                     {wizardData[0].package.name}
                                 </div>
-                                <div className="wrapper-package-version">
+                                <div className="wrapper-package-version" id="wizard-summary-package-version">
                                     {wizardData[0].package.version}
                                 </div>
                             </div>
@@ -48,10 +48,10 @@ class WizardStep4 extends Component {
                                             <div className="element-box group" key={index}>
                                                 <div className="icon"></div>
                                                 <div className="desc">
-                                                    <div className="title">
+                                                    <div className="title" id="wizard-summary-group-name">
                                                         {foundGroup.groupName}
                                                     </div>
-                                                    <div className="subtitle">
+                                                    <div className="subtitle" id="wizard-summary-group-devices">
                                                         {t('common.deviceWithCount', {count: foundGroup.devices.length})}
                                                     </div>
                                                 </div>

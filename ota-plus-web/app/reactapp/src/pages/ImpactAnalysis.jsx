@@ -35,7 +35,7 @@ class ImpactAnalysis extends Component {
                                 }
                                 <FadeAnimation>
                                     {!packagesStore.packagesBlacklistFetchAsync.isFetching && !impactAnalysisStore.impactAnalysisFetchAsync.isFetching ?
-                                        <span>
+                                        <span id="impact-analysis-affected-count">
                                             Impact: {t('common.deviceWithCount', {count: impactAnalysisStore.impactAnalysis.length})} in {t('common.groupWithCount', {count: packagesStore.uniqueGroupsCount})}
                                         </span>
                                     :

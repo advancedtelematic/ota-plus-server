@@ -49,6 +49,7 @@ class CreateModal extends Component {
                             name="description"
                             floatingLabelText="Description"
                             className="input-wrapper"
+                            id="add-new-key-description"
                             disabled={provisioningStore.provisioningKeyCreateAsync.isFetching}
                             updateImmediately
                             required
@@ -59,6 +60,7 @@ class CreateModal extends Component {
                             name="until"
                             floatingLabelText="Valid until"
                             className="input-wrapper date-wrapper"
+                            id="add-new-key-valid-until﻿"
                             disabled={provisioningStore.provisioningKeyCreateAsync.isFetching}
                             minDate={moment().toDate()}
                             maxDate={moment().add(4, 'year').toDate()}
@@ -72,13 +74,15 @@ class CreateModal extends Component {
                         <div className="body-actions">
                             <a href="#"
                                 onClick={hide}
-                                className="link-cancel">
+                                className="link-cancel"
+                                id="add-new-key-cancel">
                                 Cancel
                             </a>
                             <FlatButton
                                 label="Add key"
                                 type="submit"
                                 className="btn-main"
+                                id="add-new-key-confirm﻿"
                                 disabled={this.submitButtonDisabled || provisioningStore.provisioningKeyCreateAsync.isFetching}
                             />
                         </div>

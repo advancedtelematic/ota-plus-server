@@ -40,7 +40,7 @@ class ListItem extends Component {
             <div className="item" onClick={(type == "draft" ? showWizard.bind(this, campaign.id) : goToDetails.bind(this, campaign.id))}>
                 <div className="actions">
                     <ul>
-                        <li onClick={this.rename.bind(this)}>
+                        <li id={"rename-campaign-" + campaign.name} onClick={this.rename.bind(this)}>
                             <img src="/assets/img/icons/edit_white.png" alt="" />
                             <span>Rename</span>
                         </li>
@@ -49,10 +49,10 @@ class ListItem extends Component {
                 <div className="column">
                     {campaign.name}
                 </div>
-                <div className="column">
+                <div className="column" id="campaign-start-date">
                     none
                 </div>
-                <div className="column">
+                <div className="column" id="campaign-end-date">
                     none
                 </div>
                 <div className="column">

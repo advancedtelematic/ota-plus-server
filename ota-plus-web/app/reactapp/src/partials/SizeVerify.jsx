@@ -38,7 +38,8 @@ class SizeVerify extends Component {
                     <div className="wrapper-checkbox">
                         <input 
                             type="checkbox" 
-                            name="dontShowAgain" 
+                            name="dontShowAgain"
+                            id="size-verify-dismiss"
                             value="1" 
                             ref="checkbox"
                         />&nbsp;
@@ -48,6 +49,7 @@ class SizeVerify extends Component {
                         label="OK"
                         type="submit"
                         className="btn-main"
+                        id="size-verify-confirm"
                         onClick={this.handleClick}
                     />
                 </div>

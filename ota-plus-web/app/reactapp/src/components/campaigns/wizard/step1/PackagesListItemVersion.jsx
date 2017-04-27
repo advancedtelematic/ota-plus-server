@@ -14,13 +14,13 @@ class PackagesListItemVersion extends Component {
                     {version.id.name}
                 </div>
                 <div className="right-box">
-                    <span title={version.id.version} className="version-name">
+                    <span title={version.id.version} className="version-name" id="wizard-package-version">
                         {version.id.version}
                     </span>
                     {version.isBlackListed ?
-                        <button className="btn-blacklist"></button>
+                        <button className="btn-blacklist" id="wizard-package-blacklisted"></button>
                     : 
-                        <button className={"btn-checkbox" + (isChosen ? " checked" : "")} onClick={setWizardData.bind(this, version.id.name, version.id.version)}>
+                        <button className={"btn-checkbox" + (isChosen ? " checked" : "")} id="wizard-select-package" onClick={setWizardData.bind(this, version.id.name, version.id.version)}>
                             <i className="fa fa-check" aria-hidden="true"></i>
                         </button>
                     }

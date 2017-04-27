@@ -39,7 +39,7 @@ class Packages extends Component {
                                 }
                                 <FadeAnimation>
                                     {!packagesStore.packagesFetchAsync.isFetching ?
-                                        <span>
+                                        <span id="packages-count">
                                             {t('common.packageWithCount', {count: packagesStore.overallPackagesCount})}
                                         </span>
                                     :
