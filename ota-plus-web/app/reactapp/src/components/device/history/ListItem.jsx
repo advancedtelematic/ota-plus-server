@@ -16,7 +16,7 @@ class ListItem extends Component {
     }
     render() {
         const { request, updateLog, packagesStore } = this.props;
-        request.cancelled= false;
+        // request.cancelled= false;
         return (
             <li>
                 <div className="name" title={request.packageId.name}>
@@ -31,7 +31,7 @@ class ListItem extends Component {
                         </span>
                     </div>
                     <div className="version" title={request.packageId.version}>
-                        {request.packageId.version}
+                        v {request.packageId.version}
                     </div>
                     <div className="status">
                         {request.cancelled ? 

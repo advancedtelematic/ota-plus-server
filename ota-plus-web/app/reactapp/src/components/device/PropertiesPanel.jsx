@@ -49,7 +49,7 @@ class PropertiesPanel extends Component {
         this.shouldShowPackagesDetails = true;
     }
     render() {
-        const { showPackageCreateModal, showPackageBlacklistModal, onFileDrop, packagesStore, packageVersion, installPackage, device, togglePackageAutoUpdate } = this.props;
+        const { showPackageCreateModal, showPackageBlacklistModal, onFileDrop, packagesStore, packageVersion, installPackage, device, togglePackageAutoUpdate, devicesStore } = this.props;
 
         return (
             <div className="properties-panel">
@@ -91,6 +91,7 @@ class PropertiesPanel extends Component {
                                     packageVersion={packageVersion}
                                     showPackageBlacklistModal={showPackageBlacklistModal}
                                     packagesStore={packagesStore}
+                                    devicesStore={devicesStore}
                                     installPackage={installPackage}
                                 />
                             :
@@ -125,6 +126,7 @@ PropertiesPanel.propTypes = {
     showPackageBlacklistModal: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,
     packagesStore: PropTypes.object.isRequired,
+    devicesStore: PropTypes.object.isRequired,
     packageVersion: PropTypes.object.isRequired,
 }
 

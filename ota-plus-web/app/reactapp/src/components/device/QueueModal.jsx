@@ -37,7 +37,7 @@ class QueueModal extends Component {
     }
     render() {
         const { packagesStore, shown, hide, device, cancelInstallation } = this.props;
-        const installationStatus = QueueModal.checkStatus(device.status);
+        const installationStatus = QueueModal.checkStatus(device.deviceStatus);
         const content = (
             <span>
                 <Tabs

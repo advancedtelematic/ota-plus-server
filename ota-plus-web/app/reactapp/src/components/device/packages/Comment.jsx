@@ -9,13 +9,18 @@ class Comment extends Component {
     @observable showEditButton = false;
     @observable commentFieldLength = 0;
     @observable commentTmp = '';
+    @observable previouslySavedComment = '';
 
 	constructor(props) {
         super(props);
         this.enableEditField = this.enableEditField.bind(this);
         this.disableEditField = this.disableEditField.bind(this);
         this.changeCommentFieldLength = this.changeCommentFieldLength.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);       
+    }
+    componentWillMount() {
+        this.commentTmp = this.props.version.description;
+        this.previouslySavedComment = this.props.version.description;
     }
    	enableEditField(e) {
    		if (e) e.preventDefault();
@@ -27,7 +32,7 @@ class Comment extends Component {
         setTimeout(function(){
             if(document.activeElement.className.indexOf('accept-button') == -1) {
                 that.activeEditField = false;
-                that.commentTmp = null;
+                that.commentTmp = that.previouslySavedComment;
             }
         }, 1);
     }
@@ -38,6 +43,8 @@ class Comment extends Component {
     }
     handleSubmit(name, version, e) {
     	if (e) e.preventDefault();
+        this.commentTmp = this.refs.comment.value;
+        this.previouslySavedComment = this.refs.comment.value;
         const data = {
             name: name,
             version: version,
@@ -45,8 +52,7 @@ class Comment extends Component {
                 description: this.commentTmp
             }
         };
-        this.props.packagesStore.updatePackageDetails(data);
-        this.commentTmp = null;
+        this.props.packagesStore.updatePackageDetails(data);        
         this.activeEditField = false;
     }
 
@@ -57,8 +63,9 @@ class Comment extends Component {
 				<textarea 
 		            className="input-comment" 
 		            name="comment" 
-		            value={this.commentTmp || version.description} 
-		            type="text" 
+		            value={this.commentTmp} 
+		            type="text"
+                    ref="comment" 
 		            placeholder="Comment here." 
 		            onKeyUp={this.changeCommentFieldLength.bind(this)}
 		            onChange={this.changeCommentFieldLength.bind(this)}
