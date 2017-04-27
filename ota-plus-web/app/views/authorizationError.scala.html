@@ -1,17 +1,38 @@
 @()(implicit flash: Flash)
 <!doctype html>
 <html lang="en">
-    <head>
-        <title>ATS Garage - Authorization error</title>
-    </head>
-    <body>
-        @flash.get("authzError") match {
-          case Some("unauthorized") => {
-          <p>Your account has not been activated. Please confirm your email.</p>
-          }
-          case _ => {
-          <p>We cannot log you in at this time. Please contact us for support.</p>
-          }
-        }
-    </body>
+  <head>
+    <title>ATS Garage - Error</title>
+    <link href="/assets/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/css/unlogged.css" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <div id="ats-page">
+      <div class="container ats">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <a href="#"><img src='@routes.Assets.versioned("img/logo.png")' id="logo"></a>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
+            <div class="ats-header text-center">
+              @flash.get("authzError") match {
+                case Some("unauthorized") => {
+                  <p>Your account has not been activated. Please confirm your email.</p>
+                }
+                case _ => {
+                  <p>We cannot log you in at this time. Please contact us for support.</p>
+                }
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <section class="footer-panel">
+        <a href="mailto:support@@atsgarage.com" class="clickme">Need Support?</a>
+      </section>
+    </div>
+  </body>
 </html>
