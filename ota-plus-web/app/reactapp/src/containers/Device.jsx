@@ -112,6 +112,7 @@ class Device extends Component {
                                 showPackageCreateModal={this.showPackageCreateModal}
                                 showPackageBlacklistModal={this.showPackageBlacklistModal}
                                 packagesStore={packagesStore}
+                                devicesStore={devicesStore}
                                 onFileDrop={this.onFileDrop}
                                 togglePackageAutoUpdate={this.togglePackageAutoUpdate}
                                 installPackage={this.installPackage}
