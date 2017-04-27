@@ -6,13 +6,8 @@
     <head>
         <title>ATS Garage - Log in</title>
         <link href="/assets/css/unlogged.css" rel="stylesheet" type="text/css"/>
-        <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js'></script>
+        <script type="text/javascript" src='@routes.Assets.versioned("js/jquery-2.2.4.min.js")'></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/lock-9.2.min.js")'></script>
-        <script>
-            var AUTH0_CLIENT_ID = '@config.clientId';
-            var AUTH0_DOMAIN = '@config.domain';
-            var AUTH0_CALLBACK_URL = '@config.callbackURL';
-        </script>
     </head>
     <body class="login">
         <div id="ats-page" style="display: none;">
@@ -31,56 +26,10 @@
             </section>
         </div>
 
-        <script>
-            $(function () {
-                $('#ats-page').fadeIn('slow');
+        <input type="hidden" id="auth0-client-id" value="@config.clientId"/>
+        <input type="hidden" id="auth0-domain" value="@config.domain"/>
+        <input type="hidden" id="auth0-callback-url" value="@config.callbackURL"/>
+        <script type="text/javascript" src='@routes.Assets.versioned("js/login.js")'></script>
 
-                var lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN);
-                lock.on("authorization_error", function (err) {
-                    alert(err);
-                });
-
-                lock.show({
-                    callbackURL: AUTH0_CALLBACK_URL,
-                    container: 'widget-container',
-                    authParams: {
-                        scope: 'openid email'
-                    },
-                    dict: {
-                        signin: {
-                            title: "Login to ATS Garage.",
-                            action: "Login",
-                            forgotText: "Forgot Password >",
-                            separatorText: "Or use an existing account:",
-                            signupText: "Not registered yet? Sign up here.",
-                            signinText: "Already registered? Login here."
-                        },
-                        signup: {
-                            title: "Get started with ATS Garage.",
-                            action: "Start now!",
-                            signupText: "Not registered yet? Sign up here.",
-                            signinText: "Already registered? Login here."
-                        },
-                        newReset: {
-                            headerText: "Please enter your email address. We will send you a link to reset your password."
-                        }
-                    }
-                });
-
-                lock.on('ready', function () {
-                    var appUrl = location.protocol + '//' + location.host;
-                    $(".a0-image").append('<img src="' + appUrl + '/assets/img/ATS-Garage_Logo_white.svg" alt="">');
-                });
-                lock.on('signin ready', function () {
-                    $(".a0-forgot-pass").detach().appendTo('.bottom-content');
-                });
-                lock.on('signup ready', function () {
-                    var link = $("<div class='terms-conditions'>By registering I agree to <a href='http://atsgarage.com/en/terms-conditions.html' target='_blank'>ATS Garage's Terms of Use.</a></div>");
-                    if(!$('.terms-conditions').length)
-                        link.appendTo('.bottom-content');
-                });
-            });
-
-        </script>
     </body>
 </html>
