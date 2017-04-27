@@ -10,12 +10,13 @@
     <link href="/assets/css/style.css" rel="stylesheet" type="text/css"/>
   </head>
   <body>
+    <form id="logout" action="https://@{config.domain}/v2/logout">
+      <input type="hidden" name="client_id" value="@{config.clientId}" />
+      <input type="hidden" id="logout-return-to" name="returnTo" value="http://localhost:9000/logout" />
+    </form>
+    <input type="hidden" id="csrf-token-val" value="@csrf.get.value"/>
+
     <div id="app"></div>
-    <script>
-        var appUrl = location.protocol+'//'+location.host;
-        var logoutUrl = 'https://' + '@config.domain' + '/v2/logout?returnTo='+ appUrl + '/logout&client_id=' + '@config.clientId';
-        var csrfToken = "@csrf.get.value";
-    </script>
     <script src="@routes.Assets.versioned("js/app.js")"></script>
   </body>
 </html>
