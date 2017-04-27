@@ -57,7 +57,7 @@ class Treehub extends Component {
                                             I'm new to Yocto/Open Embedded. <br />
                                             Show me how to start a project <br />
                                             from scratch.
-                                            <a href="http://docs.atsgarage.com/start-yocto/your-first-ostreeenabled-yocto-project.html" target="_blank" className="btn-main btn-small">Start</a>
+                                            <a href="http://docs.atsgarage.com/start-yocto/your-first-ostreeenabled-yocto-project.html" target="_blank" className="btn-main btn-small" id="user-new-yocto-docs">Start</a>
                                         </div>
                                     </div>
                                     <div className="panel panel-grey">
@@ -67,7 +67,7 @@ class Treehub extends Component {
                                         <div className="panel-body">
                                             I have an existing Yocto project <br />
                                               that I want to OTA-enable.
-                                            <a href="http://docs.atsgarage.com/start-yocto/adding-ostree-updates-to-your-existing-yocto-project.html" target="_blank" className="btn-main btn-small">Start</a>
+                                            <a href="http://docs.atsgarage.com/start-yocto/adding-ostree-updates-to-your-existing-yocto-project.html" target="_blank" className="btn-main btn-small" id="user-existing-yocto-docs">Start</a>
                                         </div>
                                     </div>
                                 </div>

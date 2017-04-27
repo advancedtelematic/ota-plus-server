@@ -41,7 +41,7 @@ class StatsModal extends Component {
                     colorIndex++;
                     stats.push(
                         {
-                        value: stateObject.deviceCount,
+                            value: stateObject.deviceCount,
                             groupsCount: stateObject.groupsCount,
                             color: availableColors[colorIndex],
                             highlight: availableColors[colorIndex],
@@ -94,7 +94,7 @@ class StatsModal extends Component {
                     <span>
                         <img src="/assets/img/icons/pie_chart.png" className="icon" alt="" />&nbsp;
                         Statistics - Package {packageName}
-                        <button className="close" onClick={hide}></button>
+                        <button className="close" id="package-stats-close" onClick={hide}></button>
                     </span>
                 )}
                 content={

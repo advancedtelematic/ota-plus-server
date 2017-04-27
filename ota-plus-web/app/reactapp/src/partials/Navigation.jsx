@@ -14,7 +14,7 @@ class Navigation extends Component {
             <nav className="navbar navbar-inverse navbar-fixed-top">
                   <div className="container">
                     <div className="navbar-header">
-                          <Link to="/" className="navbar-brand"></Link>
+                          <Link to="/" className="navbar-brand" id="logo"></Link>
                     </div>
                     <div id="navbar">
                           <ul className="nav navbar-nav">
@@ -40,11 +40,11 @@ class Navigation extends Component {
                     </div>
                     <ul className="right-nav">
                         <li className="text-link">
-                            <a href="http://docs.atsgarage.com" target="_blank">DOCS</a>
+                            <a href="http://docs.atsgarage.com" target="_blank" id="docs-link">DOCS</a>
                         </li>
                         <li className="separator">|</li>
                         <li className="text-link">
-                            <a href="mailto:support@atsgarage.com">SUPPORT</a>
+                            <a href="mailto:support@atsgarage.com" id="support-link">SUPPORT</a>
                         </li>
                         <li id="menu-login">
                             <NavigationDropdown 

@@ -24,6 +24,7 @@ class Tooltip extends Component {
                         label="Got it"
                         type="button"
                         className="btn-main"
+                        id="impact-analysis-got-it﻿"
                         onClick={hide}
                     />
                 </div>

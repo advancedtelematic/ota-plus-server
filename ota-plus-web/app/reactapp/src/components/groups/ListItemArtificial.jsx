@@ -33,6 +33,7 @@ class ListItemArtificial extends Component {
                 <button 
                     type="button"
                     title={group.friendlyName}
+                    id={group.identifier}
                     className={"artificial" + (isDND ? " droppable" : "") + (isSelected ? " selected" : "") + (isOver ? " active" : "")}
                     onClick={() => {
                         selectGroup({type: 'artificial', name: group.name});

@@ -61,6 +61,7 @@ class RenameModal extends Component {
                                 value={device.deviceName}
                                 floatingLabelText="Device name"
                                 className="input-wrapper"
+                                id="rename-device-new-name"
                                 disabled={devicesStore.devicesRenameAsync.isFetching}
                                 updateImmediately
                                 required
@@ -72,13 +73,15 @@ class RenameModal extends Component {
                             <div className="body-actions">
                                 <a href="#"
                                     onClick={hide}
-                                    className="link-cancel">
+                                    className="link-cancel"
+                                    id="rename-device-cancel">
                                     Cancel
                                 </a>
                                 <FlatButton
                                     label="Rename device"
                                     type="submit"
                                     className="btn-main"
+                                    id="rename-device-confirm"
                                     disabled={this.submitButtonDisabled || devicesStore.devicesRenameAsync.isFetching}
                                 />
                             </div>

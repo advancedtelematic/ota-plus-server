@@ -9,7 +9,7 @@ class ListItem extends Component {
     render() {
         const { request, cancelInstallation } = this.props;
         return (
-            <li>
+            <li id={"queued-entry-" + request.packageId.name}>
                 <div className="name">
                     {request.packageId.name}
                 </div>

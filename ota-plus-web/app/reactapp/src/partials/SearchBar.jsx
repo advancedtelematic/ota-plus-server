@@ -7,11 +7,12 @@ class SearchBar extends Component {
     }
     render() {
         let timeout = undefined;
-        const { value, changeAction, disabled } = this.props;
+        const { value, changeAction, disabled, id } = this.props;
         return (
             <FormsyText
                 name="filterValue"
                 value={value}
+                id={id}
                 className="input-wrapper search"
                 disabled={disabled}
                 onChange={(e) => {

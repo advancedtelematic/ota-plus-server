@@ -9,12 +9,14 @@ const groupsArtificial = [
         name: 'all',
         devicesCount: null,
         friendlyName: 'All devices',
+        identifier: 'all-devices',
         isDND: false
     },
     {
         name: 'ungrouped',
         devicesCount: null,
         friendlyName: 'Ungrouped devices',
+        identifier: 'ungrouped-devices',
         isDND: true
     }
 ];
