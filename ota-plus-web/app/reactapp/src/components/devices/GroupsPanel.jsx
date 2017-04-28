@@ -17,6 +17,7 @@ class GroupsPanel extends Component {
                         label="Add new group"
                         type="button"
                         className="btn-dashed"
+                        id="add-new-group"
                         onClick={showCreateGroupModal}
                     />
                 </div>

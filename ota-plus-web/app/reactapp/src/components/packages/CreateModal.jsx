@@ -78,6 +78,7 @@ class CreateModal extends Component {
                             name="packageName"
                             floatingLabelText="Package name"
                             className="input-wrapper"
+                            id="add-new-package-name"
                             updateImmediately
                             required
                         />
@@ -87,6 +88,7 @@ class CreateModal extends Component {
                             name="version"
                             floatingLabelText="Version"
                             className="input-wrapper"
+                            id="add-new-package-version"
                             updateImmediately
                             required
                         />
@@ -99,6 +101,7 @@ class CreateModal extends Component {
                             value=""
                             floatingLabelText="Description"
                             className="input-wrapper"
+                            id="add-new-package-description"
                             updateImmediately
                         />
                     </div>
@@ -108,6 +111,7 @@ class CreateModal extends Component {
                             value=""
                             floatingLabelText="Vendor"
                             className="input-wrapper"
+                            id="add-new-package-vendor"
                             updateImmediately
                         />
                     </div>
@@ -120,6 +124,7 @@ class CreateModal extends Component {
                                     label="Choose file"
                                     onClick={this._onFileUploadClick.bind(this)}
                                     className="btn-main btn-small"
+                                    id="choose-package"
                                 />
                             :
                                 null
@@ -158,6 +163,7 @@ class CreateModal extends Component {
                             <a href="#"
                                 onClick={this.hideModal.bind(this)}
                                 className="link-cancel"
+                                id="add-new-package-cancel"
                             >
                                 Cancel
                             </a>
@@ -165,6 +171,7 @@ class CreateModal extends Component {
                                 label="Add package"
                                 type="submit"
                                 className="btn-main"
+                                id="add-new-package-confirm"
                                 disabled={this.submitButtonDisabled}
                             />
                         </div>

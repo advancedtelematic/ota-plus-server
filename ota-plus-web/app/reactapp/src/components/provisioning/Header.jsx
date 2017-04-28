@@ -16,6 +16,7 @@ class Header extends Component {
                     label="Add new key"
                     onClick={showCreateModal.bind(this, null)}
                     className="btn-main btn-small btn-add"
+                    id="add-new-key"
                 />
             </SubHeader>
         );

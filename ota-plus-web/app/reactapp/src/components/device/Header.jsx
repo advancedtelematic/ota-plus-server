@@ -35,7 +35,7 @@ class Header extends Component {
                 title={
                     <FadeAnimation>
                         {!devicesStore.devicesOneFetchAsync.isFetching ?
-                            <span>
+                            <span id="device-name">
                                 {device.deviceName}
                             </span>
                         :
@@ -48,17 +48,17 @@ class Header extends Component {
                 <FadeAnimation>
                     {!devicesStore.devicesOneFetchAsync.isFetching ?
                         <span className="pull-right">
-                            <button className="queue-button" onClick={showQueueModal}>
-                                <div className={"status status-" + device.deviceStatus}></div>
+                            <button className="queue-button" id="queue-button" onClick={showQueueModal}>
+                                <div className={"status status-" + device.deviceStatus} id={"status=" + device.deviceStatus}></div>
                             </button>
                             <div className="dates">
-                                <div className="date">
+                                <div className="date" id="created-info">
                                     <span className="date-label">Created</span>
                                     <div className="date-desc">
                                         {createdDate.toDateString() + ' ' + createdDate.toLocaleTimeString()}
                                     </div>
                                 </div>
-                                <div className="date">
+                                <div className="date" id="activated-info">
                                     <span className="date-label">Activated</span>
                                     <div className="date-desc">
                                         {device.activatedAt !== null ?
@@ -72,7 +72,7 @@ class Header extends Component {
                                         }
                                     </div>
                                 </div>
-                                <div className="date">
+                                <div className="date" id="last-seen-online-info">
                                     <span className="date-label">Last seen online</span>
                                     <div className="date-desc">
                                         {device.status !== 'NotSeen' ?

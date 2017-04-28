@@ -31,6 +31,7 @@ class ListItem extends Component {
                 <button 
                     title={group.groupName}
                     className={"droppable" + (isSelected ? " selected" : "") + (isOver ? " active" : "")}
+                    id={"button-group-" + group.groupName}
                     onClick={() => {
                         selectGroup({type: 'real', name: group.groupName, id: group.id});
                     }}>

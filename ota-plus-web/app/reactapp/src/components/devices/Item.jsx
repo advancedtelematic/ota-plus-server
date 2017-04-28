@@ -55,10 +55,10 @@ class Item extends Component {
         });
         return (
             connectDragSource(
-                <div className="common-box" style={{width, opacity}} onClick={goToDetails.bind(this, device.uuid)}>
+                <div className="common-box" style={{width, opacity}} onClick={goToDetails.bind(this, device.uuid)} id={"link-devicedetails-" + device.uuid}>
                     <div className="actions">
                         <ul>
-                            <li title="Rename device" onClick={(e) => {
+                            <li title="Rename device" id={"rename-device-" + device.uuid} onClick={(e) => {
                                 e.stopPropagation();
                                 showRenameModal(device.uuid)
                             }}>

@@ -39,7 +39,7 @@ class Devices extends Component {
                                 }
                                 <FadeAnimation>
                                     {devicesStore.devicesInitialTotalCount !== null ?
-                                        <span>
+                                        <span id = "devices-count">
                                             {t('common.deviceWithCount', {count: devicesStore.devicesInitialTotalCount})}
                                         </span>
                                     :

@@ -13,7 +13,7 @@ class Footer extends Component {
                 <div className="text">
                     My personal server Name:
                 </div>
-                <pre>
+                <pre id="personal-server-name">
                     {provisioningStore.provisioningDetails.hostName}
                 </pre>
             </div>

@@ -17,12 +17,14 @@ class ContentPanelHeader extends Component {
                     <SearchBar 
                         value={devicesFilter}
                         changeAction={changeFilter}
+                        id="search-devices-input"
                     />
                 </Form>
                 <FlatButton
                     label="Add new device"
                     onClick={showCreateModal}
                     className="btn-main btn-small btn-add"
+                    id="add-new-device"
                 />
                 <div className="sort-box">
                     {devicesSort == 'asc' ? 
