@@ -20,7 +20,7 @@ class ListItem extends Component {
             <button className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
                 {pack.packageName}
                 {this.props.showStatsButton ? 
-                    <div className="btn-status" onClick={this.showStatsModal}>
+                    <div className="btn-status" id="package-stats" onClick={this.showStatsModal}>
                         Stats
                     </div>
                 : '' }

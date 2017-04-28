@@ -11,7 +11,7 @@ class ListItem extends Component {
         const validFrom = new Date(provisioningKey.validFrom);
         const validUntil = new Date(provisioningKey.validUntil);
         return (
-            <a href={"/api/v1/provisioning/credentials/registration/" + provisioningKey.id} className="common-box" style={{width: width}}>
+            <a href={"/api/v1/provisioning/credentials/registration/" + provisioningKey.id} className="common-box" id={"key-" + provisioningKey.description} style={{width: width}}>
                 <div className="actions">
                 </div>
                 <div className="icon"></div>
@@ -19,10 +19,10 @@ class ListItem extends Component {
                     <div className="title" title={provisioningKey.description}>
                         {provisioningKey.description}
                     </div>
-                    <div className="subtitle">
+                    <div className="subtitle" id="key-valid-from">
                         Valid from: {validFrom.toDateString() + ' ' + validFrom.toLocaleTimeString()}
                     </div>
-                    <div className="subtitle">
+                    <div className="subtitle" id="key-valid-until">
                         Valid until: {validUntil.toDateString() + ' ' + validUntil.toLocaleTimeString()}
                     </div>                        
                 </div>

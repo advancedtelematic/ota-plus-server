@@ -99,6 +99,7 @@ class Tutorial extends Component {
                                                         label="Download"
                                                         type="submit"
                                                         className="btn-main"
+                                                        id="yocto-download-button"
                                                         onClick={this.showTooltipInfo.bind(this, 'unique_credentials')}
                                                     />
                                                 </div>
@@ -134,10 +135,10 @@ class Tutorial extends Component {
                                                 Download the OTA Plus Client for<br />
                                                 your distro/system architecture.
                                                 <div className="buttons-ota-client">
-                                                    <a href={"/api/v1/device_client/" + device.uuid + "/deb?package_manager=deb"} className="btn-main" target="_blank">
+                                                    <a href={"/api/v1/device_client/" + device.uuid + "/deb?package_manager=deb"} className="btn-main" id="deb-download-button" target="_blank">
                                                         DEB Intel 64
                                                     </a>
-                                                    <a href={"/api/v1/device_client/" + device.uuid + "/rpm?package_manager=rpm"} className="btn-main" target="_blank">
+                                                    <a href={"/api/v1/device_client/" + device.uuid + "/rpm?package_manager=rpm"} className="btn-main" id="rpm-download-button" target="_blank">
                                                         RPM Intel 64
                                                     </a>
                                                 </div>

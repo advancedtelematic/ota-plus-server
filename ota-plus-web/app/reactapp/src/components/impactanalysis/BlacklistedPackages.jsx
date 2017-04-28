@@ -47,6 +47,7 @@ class BlacklistedPackages extends Component {
                                 <span key={index}>
                                     <button 
                                         className={"item" + (this.expandedPackage == pack.packageName ? " selected" : "")}
+                                        id={"impact-analysis-blacklisted-" + pack.packageName}
                                         onClick={this.togglePackage.bind(this, pack.packageName )}
                                         key={pack.packageName }>
                                         <div className="column column-first" title={pack.packageName}>

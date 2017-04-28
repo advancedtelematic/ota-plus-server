@@ -37,7 +37,7 @@ class Campaigns extends Component {
                                 }
                                 <FadeAnimation>
                                     {!campaignsStore.campaignsFetchAsync.isFetching ?
-                                        <span>
+                                        <span id="campaigns-count﻿">
                                             {t('common.campaignWithCount', {count: campaignsStore.overallCampaignsCount})}
                                         </span>
                                     :

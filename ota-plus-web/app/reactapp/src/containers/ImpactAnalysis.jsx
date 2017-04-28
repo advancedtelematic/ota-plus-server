@@ -44,7 +44,7 @@ class ImpactAnalysis extends Component {
                         <div className="wrapper-center">
                             <div className="page-intro">
                                 <div>You don't have any blacklisted packages..</div>
-                                <a href="#" onClick={this.showTooltip}>What is this?</a>
+                                <a href="#" id="impact-analysis-what-is-this" onClick={this.showTooltip}>What is this?</a>
                             </div>
                         </div>
                 }

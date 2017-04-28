@@ -17,12 +17,14 @@ class Header extends Component {
                     <SearchBar 
                         value={packagesFilter}
                         changeAction={changeFilter}
+                        id="search-packages-input"
                     />
                 </Form>
                 <FlatButton
                     label="Add new package"
                     onClick={showCreateModal.bind(this, null)}
                     className="btn-main btn-small btn-add"
+                    id="add-new-package"
                 />
                 <div className="sort-box">
                     {packagesSort == 'asc' ? 

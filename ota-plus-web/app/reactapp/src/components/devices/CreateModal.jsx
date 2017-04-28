@@ -52,6 +52,7 @@ class CreateModal extends Component {
                     <div className="col-xs-12">
                         <FormsyText
                             name="deviceName"
+                            id="new-device-name"
                             floatingLabelText="Device name"
                             className="input-wrapper"
                             disabled={devicesStore.devicesCreateAsync.isFetching}
@@ -65,13 +66,15 @@ class CreateModal extends Component {
                         <div className="body-actions">
                             <a href="#"
                                 onClick={hide}
-                                className="link-cancel">
+                                className="link-cancel"
+                                id="add-new-device-cancel">
                                 Cancel
                             </a>
                             <FlatButton
                                 label="Add device"
                                 type="submit"
                                 className="btn-main"
+                                id="add-new-device-confirm"
                                 disabled={this.submitButtonDisabled || devicesStore.devicesCreateAsync.isFetching}
                             />
                         </div>

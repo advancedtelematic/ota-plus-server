@@ -18,6 +18,7 @@ class List extends Component {
                         href="#" 
                         data-id={hardware['id-nr']}
                         className={"selected" + (shownIds.indexOf(hardware['id-nr']) > -1 ? " shown" : "")}
+                        id="hardware-primary-details"
                         onClick={e => e.preventDefault()}
                     >
                         <div className="desc">
@@ -31,14 +32,14 @@ class List extends Component {
                         ></i>
                     </a>
                 :
-                    <div className="not-available">
+                    <div className="not-available" id="hardware-primary-not-available">
                         Not available
                     </div>
                 }
                 <div className="section-header">
                     Secondary ECU
                 </div>
-                <div className="not-available">
+                <div className="not-available" id="hardware-secondary-not-available">
                     Not available
                 </div>
             </span>

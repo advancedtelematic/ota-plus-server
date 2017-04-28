@@ -236,6 +236,7 @@ class Wizard extends Component {
                             <SearchBar 
                                 value={this.filterValue}
                                 changeAction={this.changeFilter}
+                                id="wizard-search-package"
                             />
                         </Form>
                       :
@@ -244,7 +245,7 @@ class Wizard extends Component {
                   </div>
                   <div className="actions">
                       <div className="wrapper-close">
-                          <a href="#" className="link-close" onClick={this.close}>
+                          <a href="#" className="link-close" id="save-and-close" onClick={this.close}>
                               Save & Close
                           </a>
                       </div>
@@ -270,6 +271,7 @@ class Wizard extends Component {
                             <FlatButton
                                 label="Launch"
                                 className="btn-main btn-red"
+                                id="wizard-launch-button"
                                 onClick={this.launch} 
                                 disabled={!currentStep.isFinished}
                             />
@@ -277,6 +279,7 @@ class Wizard extends Component {
                             <FlatButton
                                 label="Next"
                                 className="btn-main"
+                                id="next-step"
                                 onClick={this.nextStep} 
                                 disabled={!currentStep.isFinished}
                             />

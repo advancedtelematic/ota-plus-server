@@ -46,8 +46,9 @@ class QueueModal extends Component {
                     inkBarStyle={{display: 'none'}}
                 >
                     <Tab
-                        label="Queued" 
+                        label="Queued"
                         className={"tab-item" + (this.activeTabId === 0 ? " active" : "")}
+                        id="queued-packages"
                         data-id={0}
                         onActive={this.handleActive}
                     >
@@ -61,6 +62,7 @@ class QueueModal extends Component {
                     <Tab
                         label="History" 
                         className={"tab-item" + (this.activeTabId === 1 ? " active" : "")}
+                        id="installation-history"
                         data-id={1}
                         onActive={this.handleActive}
                     >
