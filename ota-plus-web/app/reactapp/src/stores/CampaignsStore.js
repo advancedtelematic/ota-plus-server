@@ -66,10 +66,12 @@ export default class CampaignsStore {
                         this.campaignsFetchAsync = handleAsyncSuccess(response);
                     }, this);
                     _.each(campaigns, (campaign, index) => {
-                        if(campaign.launched)
+                        if(campaign.status === "Active")
                             axios.get(API_CAMPAIGNS_CAMPAIGN_STATISTICS + '/' + campaign.id + '/statistics')
                             .then(function(resp) {
                                 let statistics = resp.data;
+                                console.log('statistics');
+                                console.log(statistics);
                                 var summary = {};
                                 let overallDevicesCount = 0;
                                 let overallUpdatedDevicesCount = 0;
@@ -279,19 +281,19 @@ export default class CampaignsStore {
 
     @computed get draftCampaigns() {
         return _.filter(this.preparedCampaigns, (campaign) => {
-            return campaign.launched == false;
+            return campaign.status === "Draft";
         });
     }
 
     @computed get activeCampaigns() {
         return _.filter(this.preparedCampaigns, (campaign) => {
-            return campaign.launched == true && campaign.summary.overallDevicesCount !== campaign.summary.overallUpdatedDevicesCount;
+            return campaign.status === "Active" && campaign.summary.overallDevicesCount !== campaign.summary.overallUpdatedDevicesCount;
         });
     }
 
     @computed get finishedCampaigns() {
         return _.filter(this.preparedCampaigns, (campaign) => {
-            return campaign.launched == true && campaign.summary.overallDevicesCount === campaign.summary.overallUpdatedDevicesCount;
+            return campaign.status === "Active" && campaign.summary.overallDevicesCount === campaign.summary.overallUpdatedDevicesCount;
         });
     }
 
