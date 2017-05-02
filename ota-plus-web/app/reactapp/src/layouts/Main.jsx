@@ -93,7 +93,10 @@ class Main extends Component {
                         userStore={this.userStore}
                     />
                 </FadeAnimation>
-                <SizeVerify />
+                <SizeVerify 
+                    minWidth={1280}
+                    minHeight={768}
+                />
                 <UploadBox 
                     packagesStore={this.packagesStore}
                 />
