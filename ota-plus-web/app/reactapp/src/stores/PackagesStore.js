@@ -6,8 +6,8 @@ import {
     API_PACKAGES_CREATE,
     API_PACKAGES_UPDATE_DETAILS,
     API_PACKAGES_BLACKLIST_FETCH,
-    API_PACKAGES_PACKAGE_STATS,
-    API_PACKAGES_REAL_PACKAGE_STATS,
+    API_PACKAGES_COUNT_DEVICE_AND_GROUP,
+    API_PACKAGES_COUNT_VERSION_BY_NAME,
     API_PACKAGES_PACKAGE_BLACKLISTED_FETCH,
     API_PACKAGES_BLACKLIST,
     API_PACKAGES_UPDATE_BLACKLISTED,
@@ -120,21 +120,21 @@ export default class PackagesStore {
 
     fetchPackageStatistics(packageName) {
         resetAsync(this.packageStatisticsFetchAsync, true);
-        return axios.get(API_PACKAGES_REAL_PACKAGE_STATS + '/' + packageName)
+        return axios.get(API_PACKAGES_COUNT_VERSION_BY_NAME + '/' + packageName)
             .then(function(response) {
-                let packageStats = response.data;
-                let formattedPackageStatsData = [];
+                let countByVersion = response.data;
+                let countOnDeviceAndGroup = [];
 
-                if (packageStats.values.length) {
-                    let after = _.after(packageStats.values.length, () => {
-                        this.packageStats = formattedPackageStatsData;
+                if (countByVersion.values.length) {
+                    let after = _.after(countByVersion.values.length, () => {
+                        this.packageStats = countOnDeviceAndGroup;
                         this.packageStatisticsFetchAsync = handleAsyncSuccess(response);
                     }, this);
-                    _.each(packageStats.values, (statistics, index) => {
+                    _.each(countByVersion.values, (statistics, index) => {
                         let packageVersion = statistics.packageVersion;
-                        axios.get(API_PACKAGES_PACKAGE_STATS + '/' + packageName + '/' + packageVersion)
+                        axios.get(API_PACKAGES_COUNT_DEVICE_AND_GROUP + '/' + packageName + '/' + packageVersion)
                             .then(function(response) {
-                                formattedPackageStatsData.push({
+                                countOnDeviceAndGroup.push({
                                     packageVersion: packageVersion,
                                     deviceCount: response.data.deviceCount,
                                     groupsCount: response.data.groupIds.length
@@ -146,7 +146,7 @@ export default class PackagesStore {
                             });
                     });
                 } else {
-                    this.packageStats = formattedPackageStatsData;
+                    this.packageStats = countOnDeviceAndGroup;
                     this.packageStatisticsFetchAsync = handleAsyncSuccess(response);
                 }
 
@@ -256,7 +256,7 @@ export default class PackagesStore {
                             this.packagesBlacklistFetchAsync = handleAsyncSuccess(response);
                         }, this);
                         _.each(blacklist, (pack, index) => {
-                            axios.get(API_PACKAGES_PACKAGE_STATS + '/' + pack.packageId.name + '/' + pack.packageId.version)
+                            axios.get(API_PACKAGES_COUNT_DEVICE_AND_GROUP + '/' + pack.packageId.name + '/' + pack.packageId.version)
                                 .then(function(count) {
                                     pack.statistics = count.data;
                                     after();
