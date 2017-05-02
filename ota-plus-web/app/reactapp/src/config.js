@@ -33,8 +33,8 @@ export const API_GROUPS_REMOVE_DEVICE = '/api/v1/device_groups';
 
 export const API_PACKAGES_SEARCH = '/api/v1/packages';
 export const API_PACKAGES_PACKAGE_DETAILS = '/api/v1/packages';
-export const API_PACKAGES_REAL_PACKAGE_STATS = '/api/v1/package_stats';
-export const API_PACKAGES_PACKAGE_STATS = '/api/v1/device_count';
+export const API_PACKAGES_COUNT_VERSION_BY_NAME = '/api/v1/device_packages';
+export const API_PACKAGES_COUNT_DEVICE_AND_GROUP = '/api/v1/device_count';
 export const API_PACKAGES_CREATE = '/api/v1/packages';
 export const API_PACKAGES_UPDATE_DETAILS = '/api/v1/packages';
 export const API_PACKAGES_BLACKLIST_FETCH = '/api/v1/blacklist';
