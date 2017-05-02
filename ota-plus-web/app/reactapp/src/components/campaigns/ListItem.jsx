@@ -13,7 +13,7 @@ class ListItem extends Component {
     }
     render() {
         const { campaign, goToDetails, rename, showWizard, type } = this.props;
-        if(campaign.launched) {
+        if(campaign.status === "Active") {
             var progress = Math.min(Math.round(campaign.summary.overallUpdatedDevicesCount/Math.max(campaign.summary.overallDevicesCount, 1) * 100), 100);
             var data = [
                 {
@@ -56,7 +56,7 @@ class ListItem extends Component {
                     none
                 </div>
                 <div className="column">
-                    {campaign.launched ?
+                    {campaign.status === "Active" ?
                         <div className="progress progress-blue">
                             <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}></div>
                             <div className="progress-count">
@@ -74,7 +74,7 @@ class ListItem extends Component {
                     : null}
                 </div>
                 <div className="column">
-                    {campaign.launched ?
+                    {campaign.status === "Active" ?
                         <Pie data={data} width="30" height="30" options={{showTooltips: false}}/>
                     : null}
                 </div>
