@@ -38,8 +38,7 @@ class BlacklistedPackages extends Component {
                 <div className="wrapper-list" ref="list">
                     <div className="header" style={{top: this.headerTopPosition}}>
                         <div className="column column-first">Package</div>
-                        <div className="column column-second">Devices</div>
-                        <div className="column column-third">Groups</div>
+                        <div className="column column-second">Impacted devices</div>
                     </div>
                     <div className="list">
                         {_.map(blacklist, (pack, index) => {
@@ -55,13 +54,6 @@ class BlacklistedPackages extends Component {
                                         </div>
                                         <div className="column column-second">
                                             {pack.deviceCount}
-                                        </div>
-                                        <div className="column column-third">
-                                            {pack.groupIds !== null ?
-                                                Object.keys(pack.groupIds).length
-                                            :
-                                                null
-                                            }
                                         </div>
                                     </button>
                                     <SlideAnimation changeDisplay={false}>

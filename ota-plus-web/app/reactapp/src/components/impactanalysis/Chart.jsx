@@ -49,9 +49,6 @@ class Chart extends Component {
                     <div className="subtitle-box">
                         {t('common.deviceWithCount', {count: stat.value})}
                     </div>
-                    <div className="subtitle-box">
-                        {t('common.groupWithCount', {count: Object.keys(stat.groupIds).length})}
-                    </div>
                 </li>
             );
         }, this);
