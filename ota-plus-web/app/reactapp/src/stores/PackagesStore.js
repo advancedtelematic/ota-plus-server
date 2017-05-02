@@ -359,6 +359,7 @@ export default class PackagesStore {
         resetAsync(this.packagesAffectedDevicesCountFetchAsync, true);
         return axios.get(API_PACKAGES_AFFECTED_DEVICES_COUNT_FETCH + '/' + data.name + '/' + data.version + '/preview')
             .then(function(response) {
+                this.affectedDevicesCount = response.data;
                 this.packagesAffectedDevicesCountFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
