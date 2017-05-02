@@ -29,7 +29,6 @@ class Header extends Component {
             default:
             break;
         }
-
         return (
             <BaseHeader
                 title={
@@ -75,7 +74,7 @@ class Header extends Component {
                                 <div className="date" id="last-seen-online-info">
                                     <span className="date-label">Last seen online</span>
                                     <div className="date-desc">
-                                        {device.status !== 'NotSeen' ?
+                                        {deviceStatus !== 'Status unknown' ?
                                             <span>{lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
                                         :
                                             <span>Never seen online</span>
