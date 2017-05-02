@@ -70,8 +70,6 @@ export default class CampaignsStore {
                             axios.get(API_CAMPAIGNS_CAMPAIGN_STATISTICS + '/' + campaign.id + '/statistics')
                             .then(function(resp) {
                                 let statistics = resp.data;
-                                console.log('statistics');
-                                console.log(statistics);
                                 var summary = {};
                                 let overallDevicesCount = 0;
                                 let overallUpdatedDevicesCount = 0;

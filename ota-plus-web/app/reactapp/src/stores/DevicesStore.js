@@ -133,11 +133,11 @@ export default class DevicesStore {
             _.each(data, (value, attr) => {
                 device[attr] = value;
             });
-        }
-        if(this.device)
+        } else if(this.device) {
             _.each(data, (value, attr) => {
                 this.device[attr] = value;
             });
+        }
     }
 
     _prepareDevices(devicesSort = this.devicesSort) {
