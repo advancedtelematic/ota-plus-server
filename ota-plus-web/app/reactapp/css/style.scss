@@ -84,6 +84,10 @@ body {
     box-shadow: 1px 1px 4px #888;
 
     .navbar-header {
+        float: left;
+        margin-left: 0;
+        margin-right: 0;
+
         .navbar-brand {
             background: url('/assets/img/ATS-Garage_Logo.svg') no-repeat;
             background-size: cover;
@@ -98,14 +102,15 @@ body {
 
         .navbar-nav {
             height: 100%;
+            margin: 0;
 
             > li {
+                float: left;
                 > a {
                     color: #888;
                     font-size: 1.15em;
                     height: 50px;
-                    padding-left: 7px;
-                    padding-right: 7px;
+                    padding: 15px 7px;
                     margin: 0 10px;
                     @include transition;
 

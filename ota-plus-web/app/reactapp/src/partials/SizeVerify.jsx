@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
+import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import { FlatButton } from 'material-ui';
 import Cookies from 'js-cookie';
 import Modal from './Modal';
 
+@observer
 class SizeVerify extends Component {
     @observable sizeVerifyHidden = true;
 
@@ -20,7 +22,7 @@ class SizeVerify extends Component {
         window.removeEventListener("resize", this.checkSize);
     }
     checkSize() {
-        this.sizeVerifyHidden = (Cookies.get('sizeVerifyHidden') == 1 || (window.innerWidth >= this.props.minWidth && window.innerHeight >= this.props.minHeight));
+        this.sizeVerifyHidden = (Cookies.get('sizeVerifyHidden') == 1 || (window.innerWidth >= this.props.minWidth));
     }
     handleClick() {
         const dontShowAgain = this.refs.checkbox.checked;
@@ -32,7 +34,7 @@ class SizeVerify extends Component {
         const { minWidth, minHeight } = this.props;
         const content = (
             <span>
-                ATS Garage works best in a browser window that is at least <strong>{minWidth} x 768</strong>. <br />
+                ATS Garage works best in a browser window that is at least <strong>{minWidth} x {minHeight}</strong>. <br />
                 You can still use it at a smaller size, but we recommend using a desktop browser for the best experience.
                 <div className="body-actions">
                     <div className="wrapper-checkbox">
@@ -73,7 +75,7 @@ SizeVerify.propTypes = {
 
 SizeVerify.defaultProps = {
     minWidth: 1280,
-    minHeight: 0
+    minHeight: 768
 }
 
 export default SizeVerify;
