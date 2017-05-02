@@ -62,6 +62,7 @@ class Main extends Component {
     componentWillMount() {
         this.userStore.fetchUser();
         this.featuresStore.fetchFeatures();
+        this.devicesStore.fetchDevices();
         this.websocketHandler.init();
     }
     componentWillUnmount() {
