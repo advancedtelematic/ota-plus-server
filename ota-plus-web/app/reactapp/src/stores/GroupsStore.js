@@ -24,6 +24,10 @@ export default class GroupsStore {
     @observable groupsRemoveDeviceAsync = {};
     @observable groups = [];
     @observable preparedGroups = {};
+    @observable selectedGroup = {
+        type: 'artificial',
+        name: 'all'
+    };
     
     constructor() {
         resetAsync(this.groupsFetchAsync);
