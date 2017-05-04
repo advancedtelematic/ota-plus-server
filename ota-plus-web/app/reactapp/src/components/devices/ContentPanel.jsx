@@ -81,16 +81,21 @@ class ContentPanel extends Component {
                                 }
                             </div>
                         :
-                            devicesStore.devicesFetchAsync.isFetching ?
+                            !devicesStore.devicesFetchAsync.isFetching && devicesStore.devicesCount === 0 ? 
                                 <div className="wrapper-center">
                                     <Loader />
                                 </div>
                             :
-                                <span className="content-empty">
+                                devicesStore.devicesFetchAsync.isFetching ?
                                     <div className="wrapper-center">
-                                        Oops, there are no devices to show.
+                                        <Loader />
                                     </div>
-                                </span>
+                                :
+                                    <span className="content-empty">
+                                        <div className="wrapper-center">
+                                            Oops, there are no devices to show.
+                                        </div>
+                                    </span>
                         }
                     </InfiniteScroll>
                 </div>
