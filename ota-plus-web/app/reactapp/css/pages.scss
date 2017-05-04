@@ -23,6 +23,9 @@
                 padding: 15px;
 
                 &:first-child {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                     padding-top: 30px;
 
                     .column {
@@ -129,8 +132,12 @@
 
             &.empty {
                 color: #bbb;
-                height: calc(100% - 50px);
+                height: 100%;
                 border-bottom: 0;
+
+                & > thead {
+                    height: 35px;
+                }
 
                 & > tbody {
                     height: calc(100% - 50px);
