@@ -26,12 +26,18 @@ class GroupsList extends Component {
     constructor(props) {
         super(props);
     }
+    componentWillMount() {
+        const { devicesStore, groupsStore } = this.props;
+        const selectedGroup = groupsStore.selectedGroup;
+        const groupId = selectedGroup.id || null;
+        devicesStore.fetchDevices(devicesStore.devicesFilter, groupId);        
+    }
     render() {
-        const { devicesStore, groupsStore, showRenameGroupModal, selectedGroup, selectGroup, onDeviceDrop } = this.props;
+        const { devicesStore, groupsStore, showRenameGroupModal, selectGroup, onDeviceDrop } = this.props;
         return (
             <div className="wrapper-groups">
                 {_.map(groupsArtificial, (group) => {
-                    const isSelected = (selectedGroup.type === 'artificial' && selectedGroup.name === group.name);
+                    const isSelected = (groupsStore.selectedGroup.type === 'artificial' && groupsStore.selectedGroup.name === group.name);
                     let deviceCount = 0;
                     if(group.name === 'all') {
                         deviceCount = devicesStore.devicesInitialTotalCount;
@@ -58,7 +64,7 @@ class GroupsList extends Component {
                     );
                 })}
                 {_.map(groupsStore.groups, (group) => {
-                    const isSelected = (selectedGroup.type === 'real' && selectedGroup.name === group.groupName);
+                    const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.name === group.groupName);
                     return (
                         <GroupsListItem 
                             group={group}
@@ -79,7 +85,6 @@ GroupsList.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     groupsStore: PropTypes.object.isRequired,
     showRenameGroupModal: PropTypes.func.isRequired,
-    selectedGroup: PropTypes.object.isRequired,
     selectGroup: PropTypes.func.isRequired,
     onDeviceDrop: PropTypes.func.isRequired,
 }
