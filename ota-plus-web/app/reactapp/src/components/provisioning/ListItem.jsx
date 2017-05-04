@@ -6,12 +6,21 @@ class ListItem extends Component {
     constructor(props) {
         super(props);
     }
+    _onDownload() {
+        const { provisioningStore, provisioningKey } = this.props;
+        provisioningStore.downloadProvisioningKeyBundle(provisioningKey.id);
+    }
     render() {
         const { provisioningKey, width } = this.props; 
         const validFrom = new Date(provisioningKey.validFrom);
         const validUntil = new Date(provisioningKey.validUntil);
         return (
-            <a href={"/api/v1/provisioning/credentials/registration/" + provisioningKey.id} className="common-box" id={"key-" + provisioningKey.description} style={{width: width}}>
+            <a href="#/provisioning"
+                onClick={this._onDownload.bind(this)}
+                className="common-box"
+                id={"key-" + provisioningKey.description}
+                style={{width: width}}>
+
                 <div className="actions">
                 </div>
                 <div className="icon"></div>
@@ -40,6 +49,7 @@ class ListItem extends Component {
 }
 
 ListItem.propTypes = {
+    provisioningStore: PropTypes.object.isRequired,
     provisioningKey: PropTypes.object.isRequired,
     width: PropTypes.number.isRequired
 }
