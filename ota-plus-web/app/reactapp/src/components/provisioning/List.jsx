@@ -37,6 +37,7 @@ class List extends Component {
                     {_.map(provisioningStore.provisioningKeys, (provisioningKey, index) => {
                         return (
                             <ListItem
+                                provisioningStore={provisioningStore}
                                 provisioningKey={provisioningKey}
                                 width={this.boxWidth}
                                 key={index}

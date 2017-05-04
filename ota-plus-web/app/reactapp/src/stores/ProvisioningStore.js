@@ -1,11 +1,14 @@
 import { observable } from 'mobx';
 import axios from 'axios';
+import FileSaver from 'file-saver';
+import JSZip from 'jszip';
 import { 
     API_PROVISIONING_STATUS, 
     API_PROVISIONING_ACTIVATE,
     API_PROVISIONING_DETAILS,
     API_PROVISIONING_KEYS_FETCH,
-    API_PROVISIONING_KEY_CREATE
+    API_PROVISIONING_KEY_CREATE,
+    API_FEATURES_TREEHUB_ACTIVATE
 } from '../config';
 import { 
     resetAsync, 
@@ -93,6 +96,26 @@ export default class ProvisioningStore {
             }.bind(this))
             .catch(function (error) {
                 this.provisioningKeyCreateAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
+    downloadProvisioningKeyBundle(keyUuid) {
+        return axios.all([
+                axios.get(API_PROVISIONING_KEYS_FETCH + '/' + keyUuid),
+                axios.get(API_FEATURES_TREEHUB_ACTIVATE + '/client')])
+            .then(axios.spread(function (provResp, treehubResp) {
+                var zip = new JSZip();
+                zip.file("autoprov.url", this.provisioningDetails.hostName);
+                zip.file("autoprov_credentials.p12", provResp.data);
+                zip.file("treehub.json", JSON.stringify(treehubResp.data, null, 2));
+                zip.generateAsync({type: "blob"})
+                    .then(function (content) {
+                        FileSaver.saveAs(content, "credentials.zip");
+                    }
+                );
+            }.bind(this)))
+            .catch(function (error) {
+                handleAsyncError(error);
             }.bind(this));
     }
 
