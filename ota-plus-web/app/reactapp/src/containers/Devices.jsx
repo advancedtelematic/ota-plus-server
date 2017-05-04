@@ -15,10 +15,6 @@ class Devices extends Component {
     @observable renameModalShown = false;
     @observable createGroupModalShown = false;
     @observable renameGroupModalShown = false;
-    @observable selectedGroup = {
-        type: 'artificial',
-        name: 'all'
-    };
     @observable actionDeviceId = null;
     @observable actionGroupId = null;
 
@@ -88,8 +84,10 @@ class Devices extends Component {
         resetAsync(this.props.groupsStore.groupsRenameAsync);
     }
     selectGroup(group) {
-        const { devicesStore } = this.props;
-        this.selectedGroup = group;
+        console.log('group');
+        console.log(group);
+        const { devicesStore, groupsStore } = this.props;
+        groupsStore.selectedGroup = group;
         const groupId = group.id || null;
         devicesStore.fetchDevices(devicesStore.devicesFilter, groupId);
     }
@@ -124,7 +122,6 @@ class Devices extends Component {
                                     groupsStore={groupsStore}
                                     showCreateGroupModal={this.showCreateGroupModal}
                                     showRenameGroupModal={this.showRenameGroupModal}
-                                    selectedGroup={this.selectedGroup}
                                     selectGroup={this.selectGroup}
                                     onDeviceDrop={this.onDeviceDrop}
                                 />
