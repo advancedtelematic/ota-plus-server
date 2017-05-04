@@ -44,13 +44,6 @@ const initialWizardStep = [
         isSearchBarShown: false,
     },
     {
-        class: WizardStep3,
-        title: "Delta switch",
-        name: "delta",
-        isFinished: true,
-        isSearchBarShown: false,
-    },
-    {
         class: WizardStep4,
         title: "Summary",
         name: "summary",
