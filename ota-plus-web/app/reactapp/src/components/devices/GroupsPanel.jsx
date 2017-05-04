@@ -9,7 +9,7 @@ class GroupsPanel extends Component {
         super(props);
     }
     render() {
-        const { devicesStore, groupsStore, showCreateGroupModal, showRenameGroupModal, selectedGroup, selectGroup, onDeviceDrop } = this.props;
+        const { devicesStore, groupsStore, showCreateGroupModal, showRenameGroupModal, selectGroup, onDeviceDrop } = this.props;
         return (
             <div className="groups-panel">
                 <div className="wrapper-btn">
@@ -24,7 +24,6 @@ class GroupsPanel extends Component {
                 <GroupsList
                     devicesStore={devicesStore}
                     groupsStore={groupsStore}
-                    selectedGroup={selectedGroup}
                     selectGroup={selectGroup}
                     showRenameGroupModal={showRenameGroupModal}
                     onDeviceDrop={onDeviceDrop}
@@ -39,7 +38,6 @@ GroupsPanel.propTypes = {
     groupsStore: PropTypes.object.isRequired,
     showCreateGroupModal: PropTypes.func.isRequired,
     showRenameGroupModal: PropTypes.func.isRequired,
-    selectedGroup: PropTypes.object.isRequired,
     selectGroup: PropTypes.func.isRequired,
     onDeviceDrop: PropTypes.func.isRequired,
 }
