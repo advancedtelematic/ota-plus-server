@@ -1,4 +1,4 @@
-package org.genivi.webserver.controllers
+package com.advancedtelematic.controllers
 
 import javax.inject.{Inject, Named, Singleton}
 
