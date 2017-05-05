@@ -3,6 +3,7 @@ package com.advancedtelematic.api
 import akka.Done
 import cats.syntax.show.toShowOps
 import com.advancedtelematic.api.ApiRequest.UserOptions
+import com.advancedtelematic.controllers.FeatureName
 import com.advancedtelematic.login.Auth0Config
 import com.advancedtelematic.ota.device.Devices._
 import com.advancedtelematic.ota.vehicle.ClientInfo
@@ -11,8 +12,6 @@ import com.advancedtelematic.{ Auth0AccessToken, AuthPlusAccessToken, IdToken }
 import java.util.UUID
 import org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 import org.genivi.sota.data.{ Device, Namespace, Uuid }
-import org.genivi.webserver.controllers.FeatureName
-import org.genivi.webserver.controllers.OtaPlusConfig
 import play.api.libs.json._
 import play.api.libs.ws.{ WSAuthScheme, WSClient, WSRequest, WSResponse }
 import play.api.mvc.Result

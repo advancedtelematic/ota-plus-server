@@ -89,7 +89,7 @@ class LoginController @Inject()(
       case Failure(t) =>
         log.error(s"Revocation request for token '${req.authPlusAccessToken.value}' failed.", t)
       }
-    Redirect(org.genivi.webserver.controllers.routes.Application.index()).withNewSession
+    Redirect(com.advancedtelematic.controllers.routes.Application.index()).withNewSession
   }
 
   val authorizationError: Action[AnyContent] = Action { implicit request =>
@@ -168,7 +168,7 @@ class LoginController @Inject()(
 
         tokens.run.map(_.fold[Result](_ => Redirect(routes.LoginController.login()), {
           case (idToken, auth0AccessToken, authPlusAccessToken, ns) =>
-            Redirect(org.genivi.webserver.controllers.routes.Application.index()).withSession(
+            Redirect(com.advancedtelematic.controllers.routes.Application.index()).withSession(
                 "namespace"              -> ns.get,
                 "id_token"               -> idToken.value,
                 "access_token"           -> auth0AccessToken.value,

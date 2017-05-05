@@ -7,6 +7,7 @@ import akka.stream.scaladsl.{Keep, Source}
 import akka.stream.testkit.scaladsl.{TestSink, TestSource}
 import akka.util.ByteString
 import cats.syntax.show._
+import com.advancedtelematic.controllers.EventController
 import com.advancedtelematic.ota.Messages.MessageWriters._
 import com.advancedtelematic.ota.Messages.MessageSourceProvider
 import eu.timepit.refined.api.Refined
@@ -16,7 +17,6 @@ import java.util.UUID
 import org.genivi.sota.data._
 import org.genivi.sota.messaging.Messages._
 import org.genivi.sota.messaging.Messages
-import org.genivi.webserver.controllers.EventController
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
