@@ -157,6 +157,7 @@ class Devices extends Component {
                     shown={this.createModalShown}
                     hide={this.hideCreateModal}
                     devicesStore={devicesStore}
+                    groupsStore={groupsStore}
                 />
                 <DevicesRenameModal 
                     shown={this.renameModalShown}

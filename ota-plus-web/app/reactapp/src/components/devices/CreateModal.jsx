@@ -33,6 +33,8 @@ class CreateModal extends Component {
     }
     handleResponse() {
         let id = this.props.devicesStore.devicesCreateAsync.data;
+        let selectedGroupId = this.props.groupsStore.selectedGroup.id ? this.props.groupsStore.selectedGroup.id : null;
+        this.props.groupsStore.addDeviceToGroup(selectedGroupId, id);
         this.context.router.push(`/device/${id}`);
     }
     render() {
