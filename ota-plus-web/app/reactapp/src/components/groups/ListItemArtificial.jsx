@@ -36,7 +36,7 @@ class ListItemArtificial extends Component {
                     id={group.identifier}
                     className={"artificial" + (isDND ? " droppable" : "") + (isSelected ? " selected" : "") + (isOver ? " active" : "")}
                     onClick={() => {
-                        selectGroup({type: 'artificial', name: group.name});
+                        selectGroup({type: 'artificial', name: group.name, id: group.id});
                     }}
                     key={group.name}>
                     <div className="desc">
