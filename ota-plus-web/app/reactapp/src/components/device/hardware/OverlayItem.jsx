@@ -78,7 +78,6 @@ class OverlayItem extends Component {
                             return (
                                 <span key={"components-list-menu-" + child['id-nr'] + "-" + child.class}>
                                     <div className="header">
-                                        <img src="/assets/img/icons/chip.png" alt="" style={{width: '90px'}}/> <br /><br />
                                         <span className="name">
                                             {!_.isUndefined(child.description) ? child.description : child.class}
                                         </span>

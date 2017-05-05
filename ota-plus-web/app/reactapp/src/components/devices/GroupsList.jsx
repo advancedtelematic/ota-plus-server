@@ -10,6 +10,7 @@ const groupsArtificial = [
         devicesCount: null,
         friendlyName: 'All devices',
         identifier: 'all-devices',
+        id: null,
         isDND: false
     },
     {
@@ -17,6 +18,7 @@ const groupsArtificial = [
         devicesCount: null,
         friendlyName: 'Ungrouped devices',
         identifier: 'ungrouped-devices',
+        id: 'ungrouped',
         isDND: true
     }
 ];
