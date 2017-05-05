@@ -13,7 +13,7 @@ class LastDevicesItem extends Component {
         const link = 'device/' + device.uuid;
         const lastSeenDate = new Date(device.lastSeen);
         let deviceStatus = 'Status unknown';
-        switch(device.status) {
+        switch(device.deviceStatus) {
             case 'UpToDate':
                 deviceStatus = 'Device synchronized';
             break;
@@ -38,7 +38,7 @@ class LastDevicesItem extends Component {
                         {device.deviceName}
                     </div>
                     <div className="subtitle">
-                        {device.status !== 'NotSeen' ?
+                        {deviceStatus !== 'Status unknown' ?
                             <span>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
                         :
                             <span>Never seen online</span>
