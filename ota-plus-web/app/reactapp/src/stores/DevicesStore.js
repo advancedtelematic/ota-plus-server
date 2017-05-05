@@ -52,7 +52,9 @@ export default class DevicesStore {
         this.devicesFilter = filter;
         this.devicesGroupFilter = groupId;
         let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesCurrentPage*this.devicesLimit}`;
-        if(groupId)
+        if(groupId && groupId === 'ungrouped')
+            apiAddress += `&ungrouped=true`;
+        else if(groupId)
             apiAddress += `&groupId=${groupId}`;
         return axios.get(apiAddress)
             .then((response) => {
@@ -133,9 +135,11 @@ export default class DevicesStore {
                 device[attr] = value;
             });
         } else if(this.device) {
-            _.each(data, (value, attr) => {
-                this.device[attr] = value;
-            });
+            if(this.device.uuid === id) {
+                _.each(data, (value, attr) => {
+                    this.device[attr] = value;
+                });
+            }
         }
     }
 
