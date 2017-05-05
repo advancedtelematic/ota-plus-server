@@ -68,12 +68,12 @@ class Item extends Component {
                         </ul>
                     </div>
                     <div className="icon">
-                        <div className={"device-status device-status-" + device.deviceStatus} title={deviceStatus}></div>
+                        <div className={"device-status device-status-" + deviceStatus} title={deviceStatus}></div>
                     </div>
                     <div className="desc">
                         <div className="title" title={device.deviceName}>{device.deviceName}</div>
                         <div className="subtitle">
-                            {device.status !== 'NotSeen' ?
+                            {deviceStatus !== 'Status unknown' ?
                                 <span>Last seen: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
                             :
                                 <span>Never seen online</span>
