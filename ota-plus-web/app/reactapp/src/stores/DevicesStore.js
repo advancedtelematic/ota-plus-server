@@ -5,8 +5,7 @@ import {
     API_DEVICES_DEVICE_DETAILS,
     API_DEVICES_CREATE, 
     API_DEVICES_RENAME,
-    API_DEVICES_UPDATES_LOGS,
-    API_PACKAGES_SEARCH
+    API_DEVICES_UPDATES_LOGS
 } from '../config';
 import { 
     resetAsync,

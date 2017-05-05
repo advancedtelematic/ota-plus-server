@@ -1,10 +1,7 @@
 import { observable, computed, extendObservable } from 'mobx';
 import axios from 'axios';
 import {
-    API_PACKAGES_SEARCH,
-    API_PACKAGES_PACKAGE_DETAILS,
-    API_PACKAGES_CREATE,
-    API_PACKAGES_UPDATE_DETAILS,
+    API_PACKAGES,
     API_PACKAGES_BLACKLIST_FETCH,
     API_PACKAGES_COUNT_DEVICE_AND_GROUP,
     API_PACKAGES_COUNT_VERSION_BY_NAME,
@@ -97,7 +94,7 @@ export default class PackagesStore {
     fetchPackages(filter = this.packagesFilter) {        
         this.packagesFilter = filter;
         resetAsync(this.packagesFetchAsync, true);
-        return axios.get(API_PACKAGES_SEARCH + '?regex=' + (filter ? filter : ''))
+        return axios.get(API_PACKAGES + '?regex=' + (filter ? filter : ''))
             .then(function(response) {
                 this.packages = response.data;
                 switch (this.page) {
@@ -156,9 +153,15 @@ export default class PackagesStore {
             }.bind(this));
     }
 
+    _packageURI(name, version) {
+        return API_PACKAGES + '/' +
+            encodeURIComponent(name) + '/' +
+            encodeURIComponent(version);
+    }
+
     createPackage(data, formData) {
         resetAsync(this.packagesCreateAsync, true);
-        return axios.get(API_PACKAGES_PACKAGE_DETAILS + '/' + data.packageName + '/' + data.version)
+        return axios.get(this._packageURI(data.packageName, data.version))
             .then(function(resp) {
                 let error = {
                     response: {
@@ -202,7 +205,12 @@ export default class PackagesStore {
                     }.bind(this),
                     cancelToken: source.token
                 };
-                const request = axios.put(API_PACKAGES_CREATE + '/' + data.packageName + '/' + data.version + '?description=' + encodeURIComponent(data.description) + '&vendor=' + encodeURIComponent(data.vendor), formData, config)
+                const request = axios.put(
+                        this._packageURI(data.packageName, data.version) +
+                            '?description=' + encodeURIComponent(data.description) +
+                            '&vendor=' + encodeURIComponent(data.vendor),
+                        formData,
+                        config)
                     .then(function(response) {
                         uploadObj.status = 'success';
                     }.bind(this))
@@ -215,7 +223,7 @@ export default class PackagesStore {
 
     updatePackageDetails(data) {
         resetAsync(this.packagesUpdateDetailsAsync, true);
-        return axios.put(API_PACKAGES_UPDATE_DETAILS + '/' + data.name + '/' + data.version + '/info', data.details)
+        return axios.put(this._packageURI(data.name, data.version) + '/info', data.details)
             .then(function(response) {
                 this._updatePackageComment(data);
                 this.packagesUpdateDetailsAsync = handleAsyncSuccess(response);
