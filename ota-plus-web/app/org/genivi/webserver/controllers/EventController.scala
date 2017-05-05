@@ -7,11 +7,11 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.{Flow, Sink, Source}
 import com.advancedtelematic.ota.Messages.MessageWriters._
 import com.advancedtelematic.ota.Messages.WebMessageBusListenerActor
+import com.advancedtelematic.ota.Messages.MessageSourceProvider
 import org.genivi.sota.data.Namespace
 import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceSeen, DeviceUpdateStatus,
                                            PackageBlacklisted, PackageCreated, UpdateSpec}
 import org.genivi.sota.messaging.daemon.MessageBusListenerActor.Subscribe
-import org.genivi.webserver.controllers.messaging.MessageSourceProvider
 import play.api.http.ContentTypes
 import play.api.libs.Comet
 import play.api.libs.streams._
