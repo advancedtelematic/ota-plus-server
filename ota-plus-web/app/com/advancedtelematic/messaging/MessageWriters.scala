@@ -1,4 +1,4 @@
-package com.advancedtelematic.ota.Messages
+package com.advancedtelematic.messaging
 
 import cats.syntax.show._
 import com.advancedtelematic.api.Devices._
