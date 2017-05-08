@@ -1,4 +1,4 @@
-package com.advancedtelematic.ota.vehicle
+package com.advancedtelematic.persistence
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.Uri
@@ -13,7 +13,7 @@ import org.scalatest.prop.PropertyChecks
 import org.scalatest.{BeforeAndAfterAll, Matchers, PropSpecLike}
 
 
-class RegistryProps extends TestKit(ActorSystem("vehicle-registry"))
+class RegistryProps extends TestKit(ActorSystem("device-metadata-registry"))
     with PropSpecLike
     with PropertyChecks
     with Matchers
@@ -29,19 +29,19 @@ class RegistryProps extends TestKit(ActorSystem("vehicle-registry"))
     token <- alphaStr.map( RegistrationAccessToken.apply )
   } yield ClientInfo(id, Uri(s"http://ota.plus/clients/$uuid"), token)
 
-  val VehicleGen: Gen[DeviceMetadata] = for {
+  val DeviceMetadataGen: Gen[DeviceMetadata] = for {
     clientInfo <- ClientInfoGen
     uuid <- arbitrary[Uuid]
   } yield DeviceMetadata(uuid, clientInfo)
 
-  val vehicles = Vehicles( system.actorOf( VehicleRegistry.props() ) )(Timeout(10, TimeUnit.SECONDS))
+  val journal = DeviceMetadataJournal( system.actorOf( DeviceMetadataRegistry.props() ) )(Timeout(10, TimeUnit.SECONDS))
 
-  ignore("Registered vehicle can be requested by vin") {
+  ignore("Registered device-metadata can be requested by device-uuid") {
     implicit val exec = system.dispatcher
-    forAll( VehicleGen ) { vehicle =>
-      vehicles.registerVehicle(vehicle).flatMap { _ =>
-        vehicles.getVehicle(vehicle.uuid)
-      }.futureValue shouldBe Some(vehicle)
+    forAll( DeviceMetadataGen ) { devMeta =>
+      journal.registerDeviceMetadata(devMeta).flatMap { _ =>
+        journal.getDeviceMetadata(devMeta.uuid)
+      }.futureValue shouldBe Some(devMeta)
 
     }
   }

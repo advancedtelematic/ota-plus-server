@@ -1,4 +1,4 @@
-package com.advancedtelematic.ota.provisioning
+package com.advancedtelematic.provisioning
 
 import akka.http.scaladsl.model.Uri.NamedHost
 import akka.stream.scaladsl.Source

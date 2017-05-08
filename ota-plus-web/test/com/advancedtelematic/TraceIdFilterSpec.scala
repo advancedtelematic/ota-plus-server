@@ -1,9 +1,8 @@
-package com.advancedtelematic.api
+package com.advancedtelematic
 
 import java.util.UUID
 
-import akka.stream.Materializer
-import com.advancedtelematic.TraceIdFilter
+import _root_.akka.stream.Materializer
 import org.genivi.sota.http.{TraceId, TraceIdSig}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.mvc._

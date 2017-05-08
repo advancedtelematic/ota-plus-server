@@ -1,4 +1,4 @@
-package com.advancedtelematic.ota.provisioning
+package com.advancedtelematic.provisioning
 
 import akka.util.ByteString
 import com.advancedtelematic.Tokens
