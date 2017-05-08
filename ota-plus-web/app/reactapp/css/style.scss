@@ -75,6 +75,10 @@ body {
     }
 }
 
+.transparent-bg {
+    background-color: transparent!important;
+}
+
 .navbar-inverse {
     background: #fff;
     min-width: 1280px;
@@ -1885,6 +1889,20 @@ body {
 .queue-modal {
     padding-top: 80px !important;
 
+    ::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: #c1c1c1;
+    }
+
     .content {
         width: 600px !important;
         margin: 0 10px 0 0 !important;
@@ -1906,11 +1924,14 @@ body {
                 & > div {
                     &:first-child {
                         width: 60% !important;
-                        margin: 0 auto;
+                        position: fixed;
+                        left: 20%;
+                        z-index: 1;
                     }
 
                     &:nth-child(3) {
-                        padding: 20px 0;
+                        padding-top: 45px;
+                        padding-bottom: 20px;
                     }
                 }
 
@@ -1923,6 +1944,7 @@ body {
                     &:first-child {
                         border-top-left-radius: 5px;
                         border-bottom-left-radius: 5px;
+                        background: white!important;
                     }
 
                     &:last-child {
@@ -2122,7 +2144,7 @@ body {
             height: 0;
             border-left: 15px solid transparent;
             border-right: 15px solid transparent;
-            border-bottom: 25px solid #fff;
+            border-bottom: 25px solid #f7f7f7;
             position: absolute;
             top: -20px;
             right: 35px;

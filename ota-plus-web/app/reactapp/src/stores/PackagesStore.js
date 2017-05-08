@@ -456,7 +456,9 @@ export default class PackagesStore {
         resetAsync(this.packagesDeviceHistoryFetchAsync, true);
         return axios.get(API_PACKAGES_DEVICE_HISTORY + '?uuid=' + id)
             .then(function(response) {
-                this.deviceHistory = response.data;
+                let data = response.data;
+                this.deviceHistory = data.reverse();
+                console.log(this.deviceHistory);
                 this.packagesDeviceHistoryFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
