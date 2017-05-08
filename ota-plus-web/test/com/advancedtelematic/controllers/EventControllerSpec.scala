@@ -7,8 +7,8 @@ import akka.stream.scaladsl.{Keep, Source}
 import akka.stream.testkit.scaladsl.{TestSink, TestSource}
 import akka.util.ByteString
 import cats.syntax.show._
-import com.advancedtelematic.ota.Messages.MessageWriters._
-import com.advancedtelematic.ota.Messages.MessageSourceProvider
+import com.advancedtelematic.messaging.MessageWriters._
+import com.advancedtelematic.messaging.MessageSourceProvider
 import eu.timepit.refined.api.Refined
 import java.time.Instant
 import java.util.UUID

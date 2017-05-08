@@ -5,9 +5,9 @@ import javax.inject.{Inject, Singleton}
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import akka.stream.scaladsl.{Flow, Sink, Source}
-import com.advancedtelematic.ota.Messages.MessageWriters._
-import com.advancedtelematic.ota.Messages.WebMessageBusListenerActor
-import com.advancedtelematic.ota.Messages.MessageSourceProvider
+import com.advancedtelematic.messaging.MessageWriters._
+import com.advancedtelematic.messaging.WebMessageBusListenerActor
+import com.advancedtelematic.messaging.MessageSourceProvider
 import org.genivi.sota.data.Namespace
 import org.genivi.sota.messaging.Messages.{DeviceCreated, DeviceSeen, DeviceUpdateStatus,
                                            PackageBlacklisted, PackageCreated, UpdateSpec}

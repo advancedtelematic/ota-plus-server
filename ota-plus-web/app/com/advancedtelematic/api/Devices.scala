@@ -1,4 +1,4 @@
-package com.advancedtelematic.ota.device
+package com.advancedtelematic.api
 
 import cats.Show
 import eu.timepit.refined._
