@@ -1,4 +1,4 @@
-package com.advancedtelematic.ota.provisioning
+package com.advancedtelematic.provisioning
 
 import com.advancedtelematic.api.{ApiClientExec, CryptApi}
 import org.scalatest.concurrent.ScalaFutures
