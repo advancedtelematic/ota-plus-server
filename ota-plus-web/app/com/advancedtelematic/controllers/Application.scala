@@ -3,11 +3,12 @@
  * License: MPL-2.0
  */
 
-package org.genivi.webserver.controllers
+package com.advancedtelematic.controllers
 
-import com.advancedtelematic.login.Auth0Config
 import javax.inject.{Inject, Named, Singleton}
 
+import com.advancedtelematic.api.OtaPlusConfig
+import com.advancedtelematic.login.Auth0Config
 import com.advancedtelematic.ota.vehicle.Vehicles
 import com.advancedtelematic.{AuthenticatedAction, AuthenticatedRequest, AuthPlusAuthentication}
 import org.slf4j.LoggerFactory

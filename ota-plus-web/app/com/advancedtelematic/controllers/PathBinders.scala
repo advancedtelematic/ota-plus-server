@@ -3,7 +3,7 @@
  * License: MPL-2.0
  */
 
-package org.genivi.webserver.controllers
+package com.advancedtelematic.controllers
 
 import cats.syntax.show._
 import eu.timepit.refined.refineV

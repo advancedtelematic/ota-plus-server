@@ -1,4 +1,4 @@
-package org.genivi.webserver.controllers.messaging
+package com.advancedtelematic.ota.Messages
 
 import akka.actor.ActorSystem
 import akka.stream.OverflowStrategy

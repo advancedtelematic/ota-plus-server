@@ -4,11 +4,11 @@ import play.sbt.routes.RoutesKeys
 PlaySettings.defaultScalaSettings
 
 play.sbt.routes.RoutesKeys.routesImport ++= Seq(
-  "org.genivi.webserver.controllers.PathBinders._",
-  "org.genivi.webserver.controllers.ArtifactType",
-  "org.genivi.webserver.controllers.PackageManager",
-  "org.genivi.webserver.controllers.Architecture",
-  "org.genivi.webserver.controllers.FeatureName",
+  "com.advancedtelematic.controllers.PathBinders._",
+  "com.advancedtelematic.controllers.ArtifactType",
+  "com.advancedtelematic.controllers.PackageManager",
+  "com.advancedtelematic.controllers.Architecture",
+  "com.advancedtelematic.controllers.FeatureName",
   "org.genivi.sota.data.Namespace",
   "org.genivi.sota.data.Uuid"
 )

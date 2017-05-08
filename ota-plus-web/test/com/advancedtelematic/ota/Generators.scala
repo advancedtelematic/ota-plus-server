@@ -5,7 +5,7 @@ package com.advancedtelematic.ota
  * License: MPL-2.0
  */
 
-import org.genivi.webserver.controllers.{Architecture, ArtifactType, Debian, RPM, Toml}
+import com.advancedtelematic.controllers.{Architecture, ArtifactType, Debian, RPM, Toml}
 import org.scalacheck.{Arbitrary, Gen}
 
 object Generators {
