@@ -8,7 +8,6 @@ package com.advancedtelematic.controllers
 import javax.inject.{Inject, Named, Singleton}
 
 import com.advancedtelematic.api.OtaPlusConfig
-import com.advancedtelematic.ota.vehicle.Vehicles
 import com.advancedtelematic.{AuthenticatedAction, AuthenticatedRequest, AuthPlusAuthentication}
 import org.slf4j.LoggerFactory
 import play.api._
@@ -28,8 +27,7 @@ import scala.concurrent.Future
 class Application @Inject() (ws: WSClient,
                              val messagesApi: MessagesApi,
                              val conf: Configuration,
-                             val authAction: AuthPlusAuthentication,
-                             @Named("vehicles-store") vehiclesStore: Vehicles)
+                             val authAction: AuthPlusAuthentication)
   extends Controller with I18nSupport with OtaPlusConfig {
 
   val auditLogger = LoggerFactory.getLogger("audit")
