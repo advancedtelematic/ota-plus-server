@@ -1,4 +1,4 @@
-package com.advancedtelematic.ota
+package com.advancedtelematic.controllers
 
 import cats.syntax.show._
 import org.genivi.sota.data._
@@ -13,7 +13,7 @@ class ClientSdkControllerSpec extends PlaySpec
     with GeneratorDrivenPropertyChecks with DeviceIdGenerators with DeviceGenerators {
 
   import play.api.test.Helpers._
-  import Generators._
+  import com.advancedtelematic.ota.Generators._
   import Device._
   import UuidGenerator._
 

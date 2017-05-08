@@ -8,7 +8,6 @@ package com.advancedtelematic.controllers
 import javax.inject.{Inject, Named, Singleton}
 
 import com.advancedtelematic.api.OtaPlusConfig
-import com.advancedtelematic.login.Auth0Config
 import com.advancedtelematic.ota.vehicle.Vehicles
 import com.advancedtelematic.{AuthenticatedAction, AuthenticatedRequest, AuthPlusAuthentication}
 import org.slf4j.LoggerFactory

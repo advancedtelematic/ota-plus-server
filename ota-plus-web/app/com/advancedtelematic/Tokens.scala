@@ -2,7 +2,7 @@ package com.advancedtelematic
 
 import cats.data.Xor
 import com.advancedtelematic.jws.CompactSerialization
-import com.advancedtelematic.user.UserId
+import com.advancedtelematic.controllers.UserId
 import play.api.libs.json.Json
 
 sealed abstract case class IdToken(value: String, userId: UserId, email: String)
