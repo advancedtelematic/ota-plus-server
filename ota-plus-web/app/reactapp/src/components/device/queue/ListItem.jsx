@@ -32,6 +32,9 @@ class ListItem extends Component {
                         null
                     }
                     <div>
+                        Queued on: {request.createdAt}
+                    </div>
+                    <div>
                         Update identifier: {request.requestId}
                     </div>
                 </div>
