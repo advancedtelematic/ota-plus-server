@@ -72,15 +72,15 @@ class Details extends Component {
 			        	</div>
 			        	<div className="bottom">
 				        	<div className="version">
-				        		<span className = "sub-title">Version:</span>
+				        		<span className = "sub-title">Version / hash:</span>
 				        		<span className="value">{version.id.version}</span>
 			        		</div>
 				            <div className="hash">
-								<span className = "sub-title">Hash:</span>
+								<span className = "sub-title">Package identifier:</span>
 				        		<span className="value">{version.uuid}</span>
 			        		</div>
 			        		<div className="created">
-								<span className = "sub-title">Created:</span>
+								<span className = "sub-title">Created at:</span>
 				        		<span className="value">{moment(version.createdAt).format('ddd MMM DD YYYY')}</span>
 			        		</div>
 				            <div className="vendor">
@@ -95,7 +95,13 @@ class Details extends Component {
 	        					key={version.uuid}
 			        		/>
 			        	</div>
-			        	<div className={"blacklist" + (version.isBlackListed ? " package-blacklisted" : "")}>
+			        	<button className={"btn-blacklist blacklist" + (version.isBlackListed ? " package-blacklisted" : "")}
+			        		onClick={version.isBlackListed ? 
+			        			showPackageBlacklistModal.bind(this, version.id.name, version.id.version, 'edit')
+		        				: 
+		        				showPackageBlacklistModal.bind(this, version.id.name, version.id.version, 'add')
+		        			}>
+
 			        		<span className="text">			    
 			        			{blacklistComment ?
 			        				blacklistComment
@@ -106,16 +112,14 @@ class Details extends Component {
 	        							""
 		        				}
 			        		</span>
-			        		{version.isBlackListed ?
-				        		<button className="btn-blacklist edit" 
-				        				onClick={showPackageBlacklistModal.bind(this, version.id.name, version.id.version, 'edit' )}>
-				        		</button>
+			        		{!version.isBlackListed ?
+			        			<span className="btn-blacklist">
+				        		</span>
 			        		:
-			        			<button className="btn-blacklist" 
-				        				onClick={showPackageBlacklistModal.bind(this, version.id.name, version.id.version, 'add' )}>
-				        		</button>
+			        			null
 			        		}
-			        	</div>
+			        	</button>
+
 			        	<div className="install">
 		                	<button 
 	                            className="btn-main btn-install"

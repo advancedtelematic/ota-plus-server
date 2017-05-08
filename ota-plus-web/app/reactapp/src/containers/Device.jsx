@@ -81,7 +81,9 @@ class Device extends Component {
             uuid: versionUuid
         });
         let packageVersion = this.props.packagesStore._getPackageVersionByUuid(versionUuid);
-        this.props.packagesStore.fetchBlacklistedPackage({ name: packageVersion.id.name, version: packageVersion.id.version});
+        if(packageVersion.isBlacklisted) {
+            this.props.packagesStore.fetchBlacklistedPackage({ name: packageVersion.id.name, version: packageVersion.id.version});
+        }
     }
     render() {
         const { devicesStore, packagesStore, hardwareStore } = this.props;
