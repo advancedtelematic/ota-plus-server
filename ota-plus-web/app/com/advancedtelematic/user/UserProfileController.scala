@@ -38,7 +38,7 @@ class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient,
     with ApiClientSupport {
 
   import com.advancedtelematic.JsResultSyntax._
-  import org.genivi.webserver.controllers.FeatureName
+  import com.advancedtelematic.controllers.FeatureName
 
   def getUserProfile: Action[AnyContent] = AuthenticatedAction.async { request =>
     val fut = for {

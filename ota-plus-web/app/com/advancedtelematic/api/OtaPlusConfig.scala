@@ -1,4 +1,4 @@
-package org.genivi.webserver.controllers
+package com.advancedtelematic.api
 
 import play.api.Configuration
 
