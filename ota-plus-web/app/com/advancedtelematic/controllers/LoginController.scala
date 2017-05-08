@@ -1,4 +1,4 @@
-package com.advancedtelematic.login
+package com.advancedtelematic.controllers
 
 import akka.{Done, NotUsed}
 import akka.actor.ActorSystem
@@ -6,7 +6,6 @@ import org.genivi.sota.data.Namespace
 import org.genivi.sota.messaging.Messages.UserLogin
 import com.advancedtelematic._
 import com.advancedtelematic.api.{UnexpectedResponse, MalformedResponse}
-import com.advancedtelematic.user.UserId
 import java.time.Instant
 import javax.inject.{Inject, Singleton}
 

@@ -10,22 +10,22 @@ GET     /assets/*file                            controllers.Assets.versioned(pa
 GET     /webjars/*file                           controllers.WebJarAssets.at(file)
 
 GET     /api/v1/device_client/:uuid/:artifact    com.advancedtelematic.controllers.ClientSdkController.deviceClientDownload(uuid: Uuid, artifact: ArtifactType, package_manager: PackageManager.Value, polling_sec: Option[Integer])
-POST    /api/v1/clients                          com.advancedtelematic.clients.ClientsController.createClient
-GET     /api/v1/clients                          com.advancedtelematic.clients.ClientsController.getClients
-GET     /api/v1/clients/:uuid                    com.advancedtelematic.clients.ClientsController.getClient(uuid: Uuid)
+POST    /api/v1/clients                          com.advancedtelematic.controllers.ClientsController.createClient
+GET     /api/v1/clients                          com.advancedtelematic.controllers.ClientsController.getClients
+GET     /api/v1/clients/:uuid                    com.advancedtelematic.controllers.ClientsController.getClient(uuid: Uuid)
 
 GET     /api/v1/events/ws                        com.advancedtelematic.controllers.EventController.ws()
 
-GET     /api/v1/provisioning/status              com.advancedtelematic.ProvisioningController.provisioningStatus
-GET     /api/v1/provisioning                     com.advancedtelematic.ProvisioningController.provisioningInfo
-PUT     /api/v1/provisioning/activate            com.advancedtelematic.ProvisioningController.activateAutoProvisioning
-POST    /api/v1/provisioning/credentials/registration       com.advancedtelematic.ProvisioningController.credentialsRegistration
-GET     /api/v1/provisioning/credentials/registration       com.advancedtelematic.ProvisioningController.getCredentials
-GET     /api/v1/provisioning/credentials/registration/:uuid com.advancedtelematic.ProvisioningController.downloadCredentials(uuid: Uuid)
+GET     /api/v1/provisioning/status              com.advancedtelematic.controllers.ProvisioningController.provisioningStatus
+GET     /api/v1/provisioning                     com.advancedtelematic.controllers.ProvisioningController.provisioningInfo
+PUT     /api/v1/provisioning/activate            com.advancedtelematic.controllers.ProvisioningController.activateAutoProvisioning
+POST    /api/v1/provisioning/credentials/registration       com.advancedtelematic.controllers.ProvisioningController.credentialsRegistration
+GET     /api/v1/provisioning/credentials/registration       com.advancedtelematic.controllers.ProvisioningController.getCredentials
+GET     /api/v1/provisioning/credentials/registration/:uuid com.advancedtelematic.controllers.ProvisioningController.downloadCredentials(uuid: Uuid)
 
-GET     /api/v1/features                         com.advancedtelematic.user.UserProfileController.getFeatures
-PUT     /api/v1/features/:feature                com.advancedtelematic.user.UserProfileController.activateFeature(feature: FeatureName)
-GET     /api/v1/features/:feature/client         com.advancedtelematic.user.UserProfileController.getConfig(feature: FeatureName)
+GET     /api/v1/features                         com.advancedtelematic.controllers.UserProfileController.getFeatures
+PUT     /api/v1/features/:feature                com.advancedtelematic.controllers.UserProfileController.activateFeature(feature: FeatureName)
+GET     /api/v1/features/:feature/client         com.advancedtelematic.controllers.UserProfileController.getConfig(feature: FeatureName)
 
 GET     /api/v1/*path                            com.advancedtelematic.controllers.Application.apiProxy(path: String)
 PUT     /api/v1/*path                            com.advancedtelematic.controllers.Application.apiProxy(path: String)
@@ -33,17 +33,17 @@ POST    /api/v1/*path                            com.advancedtelematic.controlle
 DELETE  /api/v1/*path                            com.advancedtelematic.controllers.Application.apiProxy(path: String)
 
 
-GET     /login                                   com.advancedtelematic.login.LoginController.login
-GET     /logout                                  com.advancedtelematic.login.LoginController.logout
-GET     /callback                                com.advancedtelematic.login.LoginController.callback
-GET     /authorization_error                     com.advancedtelematic.login.LoginController.authorizationError
-GET     /welcome                                 com.advancedtelematic.login.LoginController.accountActivated
+GET     /login                                   com.advancedtelematic.controllers.LoginController.login
+GET     /logout                                  com.advancedtelematic.controllers.LoginController.logout
+GET     /callback                                com.advancedtelematic.controllers.LoginController.callback
+GET     /authorization_error                     com.advancedtelematic.controllers.LoginController.authorizationError
+GET     /welcome                                 com.advancedtelematic.controllers.LoginController.accountActivated
 
-GET     /health                                  com.advancedtelematic.HealthController.health
-GET     /health/version                          com.advancedtelematic.HealthController.version
+GET     /health                                  com.advancedtelematic.controllers.HealthController.health
+GET     /health/version                          com.advancedtelematic.controllers.HealthController.version
 
 # User profile
-GET     /user/profile                            com.advancedtelematic.user.UserProfileController.getUserProfile
-PUT     /user/profile                            com.advancedtelematic.user.UserProfileController.updateUserProfile
-PUT     /user/profile/billing_info               com.advancedtelematic.user.UserProfileController.updateBillingInfo
-POST    /user/change_password                    com.advancedtelematic.user.UserProfileController.changePassword
+GET     /user/profile                            com.advancedtelematic.controllers.UserProfileController.getUserProfile
+PUT     /user/profile                            com.advancedtelematic.controllers.UserProfileController.updateUserProfile
+PUT     /user/profile/billing_info               com.advancedtelematic.controllers.UserProfileController.updateBillingInfo
+POST    /user/change_password                    com.advancedtelematic.controllers.UserProfileController.changePassword

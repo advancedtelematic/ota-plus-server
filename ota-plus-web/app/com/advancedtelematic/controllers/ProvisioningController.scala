@@ -1,7 +1,8 @@
-package com.advancedtelematic
+package com.advancedtelematic.controllers
 
 import javax.inject.{ Inject, Singleton }
 
+import com.advancedtelematic.{ AuthenticatedAction, AuthenticatedRequest }
 import com.advancedtelematic.api.{ ApiClientExec, CryptApi }
 import java.time.{LocalDate, ZonedDateTime, ZoneOffset}
 import java.time.temporal.ChronoUnit

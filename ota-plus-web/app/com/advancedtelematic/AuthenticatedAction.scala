@@ -36,7 +36,7 @@ object AuthenticatedAction extends ActionBuilder[AuthenticatedRequest] {
       case Xor.Right(x) => block(x)
       case Xor.Left(x) =>
         log.debug(s"Invalid session: $x")
-        Future.successful(Results.Redirect(com.advancedtelematic.login.routes.LoginController.login()))
+        Future.successful(Results.Redirect(com.advancedtelematic.controllers.routes.LoginController.login()))
     }
   }
 

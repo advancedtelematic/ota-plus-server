@@ -4,7 +4,7 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.testkit.scaladsl.TestSink
 import akka.testkit.TestKit
-import com.advancedtelematic.api.MessagingData
+import com.advancedtelematic.controllers.MessagingData
 import com.advancedtelematic.ota.Messages.EventBusActorListener
 import org.genivi.sota.messaging.Messages.DeviceSeen
 import com.advancedtelematic.ota.Messages.MessageWriters.deviceSeenWrites

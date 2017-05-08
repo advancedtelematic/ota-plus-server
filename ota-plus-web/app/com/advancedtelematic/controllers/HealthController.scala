@@ -1,4 +1,4 @@
-package com.advancedtelematic
+package com.advancedtelematic.controllers
 
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, Controller}
