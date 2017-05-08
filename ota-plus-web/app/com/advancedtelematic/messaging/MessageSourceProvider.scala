@@ -1,4 +1,4 @@
-package com.advancedtelematic.ota.Messages
+package com.advancedtelematic.messaging
 
 import akka.actor.ActorSystem
 import akka.stream.OverflowStrategy

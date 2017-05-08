@@ -1,13 +1,12 @@
-package com.advancedtelematic.api.messaging
+package com.advancedtelematic.messaging
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.testkit.scaladsl.TestSink
 import akka.testkit.TestKit
 import com.advancedtelematic.controllers.MessagingData
-import com.advancedtelematic.ota.Messages.EventBusActorListener
+import com.advancedtelematic.messaging.MessageWriters.deviceSeenWrites
 import org.genivi.sota.messaging.Messages.DeviceSeen
-import com.advancedtelematic.ota.Messages.MessageWriters.deviceSeenWrites
 import org.genivi.sota.messaging.MessageBus
 import org.scalatest.WordSpecLike
 

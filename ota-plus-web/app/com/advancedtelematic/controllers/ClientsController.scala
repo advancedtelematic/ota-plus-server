@@ -30,7 +30,7 @@ extends Controller with ApiClientSupport {
 
   val metadata_key = "client_ids"
 
-  import com.advancedtelematic.ota.device.Devices._
+  import com.advancedtelematic.api.Devices._
 
   implicit class JsResultOps[T](res: JsResult[T]) {
     def toXor: String Xor T =
