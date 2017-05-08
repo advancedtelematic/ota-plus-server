@@ -3,9 +3,9 @@ package com.advancedtelematic.api
 import akka.Done
 import cats.syntax.show.toShowOps
 import com.advancedtelematic.api.ApiRequest.UserOptions
+import com.advancedtelematic.api.Devices._
 import com.advancedtelematic.controllers.FeatureName
 import com.advancedtelematic.controllers.Auth0Config
-import com.advancedtelematic.ota.device.Devices._
 import com.advancedtelematic.ota.vehicle.ClientInfo
 import com.advancedtelematic.controllers.{ UserId, UserProfile }
 import com.advancedtelematic.{ Auth0AccessToken, AuthPlusAccessToken, IdToken }
