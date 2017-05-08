@@ -1,4 +1,4 @@
-package com.advancedtelematic.user
+package com.advancedtelematic.controllers
 
 import cats.data.Xor
 import cats.syntax.show._

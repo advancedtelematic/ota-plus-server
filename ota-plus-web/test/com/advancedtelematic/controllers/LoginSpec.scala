@@ -1,10 +1,9 @@
-package com.advancedtelematic.login
+package com.advancedtelematic.controllers
 
 import com.advancedtelematic.Tokens
 import mockws.MockWS
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.play._
-import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
@@ -20,7 +19,7 @@ class LoginSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAll {
 
   val AuthPlusUri = "http://auth-plus.com"
 
-  implicit override lazy val app: Application = new GuiceApplicationBuilder()
+  implicit override lazy val app: play.api.Application = new GuiceApplicationBuilder()
     .overrides(bind[WSClient].toInstance(mockClient))
     // the following 2 entries should come from the environment in production
     .configure("authplus.client_id" -> "")

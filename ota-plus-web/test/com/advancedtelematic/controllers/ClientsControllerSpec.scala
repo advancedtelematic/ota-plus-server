@@ -1,4 +1,4 @@
-package com.advancedtelematic.clients
+package com.advancedtelematic.controllers
 
 import akka.stream.Materializer
 import com.advancedtelematic.Tokens

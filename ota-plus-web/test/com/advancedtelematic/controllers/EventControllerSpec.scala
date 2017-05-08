@@ -1,4 +1,4 @@
-package com.advancedtelematic.api
+package com.advancedtelematic.controllers
 
 import akka.NotUsed
 import akka.actor.ActorSystem
@@ -7,7 +7,6 @@ import akka.stream.scaladsl.{Keep, Source}
 import akka.stream.testkit.scaladsl.{TestSink, TestSource}
 import akka.util.ByteString
 import cats.syntax.show._
-import com.advancedtelematic.controllers.EventController
 import com.advancedtelematic.ota.Messages.MessageWriters._
 import com.advancedtelematic.ota.Messages.MessageSourceProvider
 import eu.timepit.refined.api.Refined
