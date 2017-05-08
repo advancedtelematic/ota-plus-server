@@ -6,7 +6,7 @@ import akka.actor.ActorSystem
 import com.advancedtelematic.{AuthPlusAuthentication, AuthPlusAccessToken, AuthenticatedRequest}
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.api.ApiRequest.UserOptions
-import com.advancedtelematic.ota.vehicle.{DeviceMetadata, Vehicles}
+import com.advancedtelematic.persistence.{DeviceMetadata, DeviceMetadataJournal}
 import org.asynchttpclient.uri.Uri
 import org.genivi.sota.data.{Device, Uuid}
 import play.api.http.HttpEntity
@@ -24,7 +24,7 @@ class ClientSdkController @Inject() (system: ActorSystem,
                                      val conf: Configuration,
                                      val authAction: AuthPlusAuthentication,
                                      val clientExec: ApiClientExec,
-                                     @Named("vehicles-store") vehiclesStore: Vehicles)
+                                     @Named("device-metadata-journal") deviceMetadataJournal: DeviceMetadataJournal)
 extends Controller with ApiClientSupport {
 
   import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -37,12 +37,12 @@ extends Controller with ApiClientSupport {
     * Contact Auth+ to register for the first time the given [[Uuid]],
     * to later persist (in cassandra-journal) the resulting [[DeviceMetadata]]
     */
-  private def registerAuthPlusVehicle(device: Uuid, token: AuthPlusAccessToken): Future[DeviceMetadata] = {
+  private def registerAuthPlusDeviceClient(device: Uuid, token: AuthPlusAccessToken): Future[DeviceMetadata] = {
     for {
       clientInfo <- authPlusApi.createClient(device, token)
-      vehicleMetadata = DeviceMetadata(device, clientInfo)
-      _ <- vehiclesStore.registerVehicle(vehicleMetadata)
-    } yield vehicleMetadata
+      devMeta = DeviceMetadata(device, clientInfo)
+      _ <- deviceMetadataJournal.registerDeviceMetadata(devMeta)
+    } yield devMeta
   }
 
   /**
@@ -50,10 +50,10 @@ extends Controller with ApiClientSupport {
     */
   def getRegisterDevice(device: Uuid, token: AuthPlusAccessToken) : Future[DeviceMetadata] = {
     for {
-        opt <- vehiclesStore.getVehicle(device)
+        opt <- deviceMetadataJournal.getDeviceMetadata(device)
         devMeta <- opt match {
           case Some(vmeta) => Future.successful(vmeta)
-          case None => registerAuthPlusVehicle(device, token)
+          case None => registerAuthPlusDeviceClient(device, token)
         }
     } yield devMeta
   }

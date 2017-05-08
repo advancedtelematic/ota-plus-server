@@ -1,4 +1,4 @@
-package com.advancedtelematic.ota.vehicle
+package com.advancedtelematic.persistence
 
 import java.util.UUID
 
