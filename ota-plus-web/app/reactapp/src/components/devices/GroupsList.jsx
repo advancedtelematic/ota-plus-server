@@ -41,17 +41,16 @@ class GroupsList extends Component {
                 {_.map(groupsArtificial, (group) => {
                     const isSelected = (groupsStore.selectedGroup.type === 'artificial' && groupsStore.selectedGroup.name === group.name);
                     let deviceCount = 0;
+                    let groupDevicesCount = 0;
                     if(group.name === 'all') {
                         deviceCount = devicesStore.devicesInitialTotalCount;
                     } else if(group.name === 'ungrouped') {
-                        const groupedIds = [];
                         _.each(groupsStore.groups, (group) => {
                             _.each(group.devices, (device) => {
-                                if(groupedIds.indexOf(device) === -1)
-                                    groupedIds.push(device);
+                                groupDevicesCount++;
                             });
                         });
-                        deviceCount = devicesStore.devices.length - groupedIds.length;
+                        deviceCount = devicesStore.devicesInitialTotalCount - groupDevicesCount;
                     }
                     return (
                         <GroupsListItemArtificial
