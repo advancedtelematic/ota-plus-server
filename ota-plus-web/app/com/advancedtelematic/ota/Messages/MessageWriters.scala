@@ -1,7 +1,7 @@
 package com.advancedtelematic.ota.Messages
 
 import cats.syntax.show._
-import com.advancedtelematic.ota.device.Devices._
+import com.advancedtelematic.api.Devices._
 import org.genivi.sota.data.PackageId
 import org.genivi.sota.messaging.Messages._
 import play.api.libs.json.{JsString, Writes, _}
