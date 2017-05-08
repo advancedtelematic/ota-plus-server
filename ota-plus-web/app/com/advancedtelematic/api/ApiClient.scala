@@ -4,10 +4,10 @@ import akka.Done
 import cats.syntax.show.toShowOps
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.controllers.FeatureName
-import com.advancedtelematic.login.Auth0Config
+import com.advancedtelematic.controllers.Auth0Config
 import com.advancedtelematic.ota.device.Devices._
 import com.advancedtelematic.ota.vehicle.ClientInfo
-import com.advancedtelematic.user.{ UserId, UserProfile }
+import com.advancedtelematic.controllers.{ UserId, UserProfile }
 import com.advancedtelematic.{ Auth0AccessToken, AuthPlusAccessToken, IdToken }
 import java.util.UUID
 import org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
