@@ -7,30 +7,52 @@ class ListItem extends Component {
         super(props);
     }
     render() {
-        const { pack, deviceId, queuedPackage, installedPackage, isSelected, isAutoInstallEnabled, toggleAutoInstall, togglePackage } = this.props;
+        const { pack, deviceId, queuedPackage, installedPackage, blacklistedAndInstalled, isSelected, isAutoInstallEnabled, toggleAutoInstall, togglePackage } = this.props;
         return (
             <span className="wrapper-item">
                 <button className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
                     {pack.packageName}
 
                     {!isSelected ?
+                        blacklistedAndInstalled ?
+                            pack.isAutoInstallEnabled ?
+                                <div className="labels">
+                                    <label className="label label-auto-update">Auto</label>
+                                    <label className="label label-package-blacklisted">Blacklisted/Installed</label>
+                                </div>
+                            :
+                                <div className="labels">
+                                    <label className="label label-package-blacklisted">Blacklisted</label>
+                                </div>
+                        :
                         installedPackage ?
                             pack.isAutoInstallEnabled ?
-                                <label className="label label-auto-update">Auto</label>
-                            : null
-                        :
-                            queuedPackage ?
-                                <span>
-                                    {pack.isAutoInstallEnabled ?
-                                        <label className="label label-auto-update">Auto</label>
-                                    : 
-                                        null
-                                    }
-                                </span>
-                            :
-                                pack.isAutoInstallEnabled ?
+                                <div className="labels">
                                     <label className="label label-auto-update">Auto</label>
-                                  : null
+                                    <label className="label label-package-installed">Installed</label>
+                                </div>
+                            :
+                                <div className="labels">
+                                    <label className="label label-package-installed">Installed</label>
+                                </div>
+                        :
+                        queuedPackage ?
+                            <span>
+                                {pack.isAutoInstallEnabled ?
+                                    <div className="labels">
+                                        <label className="label label-auto-update">Auto</label>
+                                        <label className="label label-package-queued">Queued</label>
+                                    </div>
+                                : 
+                                    <div className="labels">
+                                        <label className="label label-package-queued">Queued</label>
+                                    </div>
+                                }
+                            </span>
+                        :
+                            pack.isAutoInstallEnabled ?
+                                <label className="label label-auto-update">Auto</label>
+                              : null
                         : null
                     }
                 </button>

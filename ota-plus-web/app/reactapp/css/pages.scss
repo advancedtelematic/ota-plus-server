@@ -927,25 +927,47 @@
                         display: block;
                         clear: both;
 
+                        .labels {
+                            overflow: hidden;
+                            float: right;
+
+                            .label {
+                                float: right;
+                                color: #fff;
+                                font-size: 11px;
+                                font-weight: normal;
+                                cursor: pointer;
+                                cursor: hand;
+                                background: #369E47;
+                                padding: 2px 14px;
+                                margin: 0 0 0 10px;
+                                float: right;
+                                border-radius: 10px;
+                            }
+
+                            .label-auto-update {
+                                background: #369E47;
+                            }
+
+                            .label-package-installed {
+                                background: #369E47;
+                            }
+
+                            .label-package-queued {
+                                background: #fb9773;
+                            }
+
+                            .label-package-blacklisted {
+                                background: red;
+                            }
+                        }
+
                         .wrapper-auto-update {
                             font-size: 12px;
                             position: absolute;
                             top: 15px;
                             right: 15px;
-                        }
-
-                        .label-auto-update {
-                            color: #fff;
-                            font-size: 11px;
-                            font-weight: normal;
-                            cursor: pointer;
-                            cursor: hand;
-                            background: #369E47;
-                            padding: 2px 14px;
-                            margin: 0 0 0 10px;
-                            float: right;
-                            border-radius: 10px;
-                        }
+                        }                        
 
                         .item {
                             height: 50px;
@@ -1160,6 +1182,8 @@
 
                     .wrapper-center.absolute-position {
                         position: absolute;
+                        left: 0;
+                        top: 0;
                     }
                 }
 
