@@ -56,16 +56,19 @@ class Hardware extends Component {
                     />
                 </div>
 
-                <FadeAnimation>
-                    {this.detailsIdShown ?
-                        <HardwareOverlay 
-                            hardware={this.findNode(this.detailsIdShown, hardwareStore.hardware)}
-                            hideDetails={this.hideDetails}
-                        />
-                    : 
-                        null
-                    }
-                </FadeAnimation>
+                {this.detailsIdShown ?
+                    <FadeAnimation>
+                        <div className="overlay-animation-container">
+                            <HardwareOverlay 
+                                hardware={this.findNode(this.detailsIdShown, hardwareStore.hardware)}
+                                hideDetails={this.hideDetails}
+                                shown={this.detailsIdShown ? true : false}
+                            />
+                        </div>
+                    </FadeAnimation>
+                : 
+                    null
+                }
             </span>
         );
     }

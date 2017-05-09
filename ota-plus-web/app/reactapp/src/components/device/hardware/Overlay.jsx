@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observer, observable } from 'mobx-react';
 import _ from 'underscore';
 import DeviceHardwareOverlayItem from './OverlayItem';
+import { Modal } from '../../../partials';
 
 @observer
 class Overlay extends Component {
@@ -9,25 +10,28 @@ class Overlay extends Component {
         super(props);
     }
     render() {
-        const { hardware, hideDetails } = this.props;
-        return (
+        const { hardware, hideDetails, shown } = this.props;
+        const content = (
             <div id="hardware-overlay">
+                <div className="triangle"></div>
                 <div className="details">
-                    <span className="title">
-                        OVERVIEW
-                    </span>
-            
-                    <button className="btn-close-hardware" onClick={hideDetails}>
-                        <img src="/assets/img/icons/back.png" className="img-responsive" alt=""/>
-                    </button>
-
                     <DeviceHardwareOverlayItem 
                         data={hardware}
                         mainLevel={true}
                     />
-
                 </div>
             </div>
+        );
+
+        return (
+            <Modal 
+                title={<img src="/assets/img/icons/chip.png" alt="" style={{width: '90px'}}/>}
+                content={content}
+                shown={shown}
+                className="hardware-overlay-modal"
+                hideOnClickOutside={true}
+                onRequestClose={hideDetails}
+            />
         );
     }
 }
