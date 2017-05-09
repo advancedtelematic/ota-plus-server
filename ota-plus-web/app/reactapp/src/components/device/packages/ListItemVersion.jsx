@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import moment from 'moment';
 
 @observer
 class ListItemVersion extends Component {
@@ -14,10 +15,10 @@ class ListItemVersion extends Component {
             <li className={version.uuid === packageVersion.uuid ? "selected" : ""} onClick={loadPackageVersionProperties.bind(this, version.uuid)}>
                 <div className="left-box">
                       <div className="hash">
-                        <span className="text">Hash:</span> <span className="value">XXXXXXXXXXXXXXXXXXXXXXXXXXX</span>
+                        <span className="text">Hash / version:</span> <span className="value">{version.id.version}</span>
                       </div>
                       <div className="created_at">
-                        <span className="text">Created at:</span> <span className="value">23.01.2017</span>
+                        <span className="text">Created at:</span> <span className="value">{moment(version.createdAt).format('ddd MMM DD YYYY')}</span>
                       </div>
                 </div>
                 <div className="right-box">
