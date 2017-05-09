@@ -35,7 +35,7 @@ class CancelCampaignModal extends Component {
                     <div className="element-box campaign">
                         <div className="icon"></div>
                         <div className="desc">
-                            <div className="title">
+                            <div className="title" id="cancel-all-campaign-name">
                                 {campaign.meta.name}
                             </div>
                             <div className="subtitle">
@@ -50,13 +50,15 @@ class CancelCampaignModal extends Component {
                     <div className="body-actions">
                         <a href="#"
                             onClick={hide}
-                            className="link-cancel">
+                            className="link-cancel"
+                            id="cancel-all-close">
                             Close
                         </a>
                         <FlatButton
                             label="Confirm"
                             type="submit"
                             className="btn-main"
+                            id="cancel-all-confirm"
                             onClick={this.cancelCampaign.bind(this)}
                         />
                     </div>

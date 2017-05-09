@@ -46,7 +46,7 @@ class ListItem extends Component {
                         </li>
                     </ul>
                 </div>
-                <div className="column">
+                <div className="column" id="campaign-name">
                     {campaign.name}
                 </div>
                 <div className="column" id="campaign-start-date">

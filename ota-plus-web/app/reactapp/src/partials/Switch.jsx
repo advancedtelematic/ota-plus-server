@@ -8,10 +8,10 @@ class Switch extends Component {
         const { showPackagesList, showPackagesDetails, shouldShowPackagesDetails } = this.props;
         return (
             <div className={"wrapper-switch" + (!shouldShowPackagesDetails ? " negative-margin-top" : "")}>
-                <div className={"show-details" + (shouldShowPackagesDetails ? " active" : "")} onClick={showPackagesDetails}>
+                <div className={"show-details" + (shouldShowPackagesDetails ? " active" : "")} id="show-details" onClick={showPackagesDetails}>
                     <img src="/assets/img/icons/info_icon_single.png" alt="" />
                 </div>
-                <div className={"show-packages" + (!shouldShowPackagesDetails ? " active" : "")} onClick={showPackagesList}> 
+                <div className={"show-packages" + (!shouldShowPackagesDetails ? " active" : "")} id="show-packages" onClick={showPackagesList}> 
                     <img src="/assets/img/icons/package_icon_dark.png" alt="" />
                 </div>
             </div>
