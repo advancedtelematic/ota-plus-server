@@ -15,7 +15,6 @@ class OverlayItem extends Component {
                 result = (
                     <li>
                         <div className="header">
-                            <img src="/assets/img/icons/chip.png" alt="" style={{width: '90px'}}/> <br /><br />
                             <span className="name">
                                 {data.description ? data.description : data.class}
                             </span>
