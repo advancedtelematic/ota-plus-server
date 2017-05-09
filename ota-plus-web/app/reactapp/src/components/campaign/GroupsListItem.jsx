@@ -87,6 +87,7 @@ class GroupsListItem extends Component {
                         <a 
                             href="#" 
                             className="cancel-campaign" 
+                            id="campaign-detail-cancel"
                             title="Cancel the Campaign for this group" 
                             onClick={showCancelGroupModal.bind(this, {
                                 groupName: foundGroup.groupName, 
