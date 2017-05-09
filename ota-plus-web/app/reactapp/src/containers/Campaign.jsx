@@ -83,7 +83,7 @@ class Campaign extends Component {
                                 </span>
                                 <div className="total-progress">
                                     <div className="devices-stats">
-                                        <span>
+                                        <span id="campaign-detail-devices-stats">
                                             {overallStatistics.updatedDevicesCount} of {t('common.deviceWithCount', {count: overallStatistics.devicesCount})}
                                         </span>
                                     </div>
@@ -111,7 +111,7 @@ class Campaign extends Component {
                                 <span className="section-title">
                                     Failure rate
                                 </span>
-                                <div className="total-failure-rate">
+                                <div className="total-failure-rate" id="campaign-detail-total-failure-rate">
                                     <Doughnut 
                                         data={failureRateData} 
                                         options={{percentageInnerCutout: 40}} 
@@ -137,6 +137,7 @@ class Campaign extends Component {
                                         type="button"
                                         onClick={this.showCancelCampaignModal}
                                         className="btn-main btn-red"
+                                        id="campaign-detail-cancel-all"
                                     />
                                 : 
                                     null
