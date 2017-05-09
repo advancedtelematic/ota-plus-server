@@ -18,7 +18,7 @@ class ListItem extends Component {
                             pack.isAutoInstallEnabled ?
                                 <div className="labels">
                                     <label className="label label-auto-update">Auto</label>
-                                    <label className="label label-package-blacklisted">Blacklisted/Installed</label>
+                                    <label className="label label-package-blacklisted">Blacklisted</label>
                                 </div>
                             :
                                 <div className="labels">
