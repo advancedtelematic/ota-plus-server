@@ -134,6 +134,7 @@ class List extends Component {
                                         packageIndex++;
                                         let queuedPackage = null;
                                         let installedPackage = null;
+                                        let blacklistedAndInstalled = null;
                                         const foundQueued = _.find(pack.versions, (version) => {
                                             return version.attributes.status == 'queued';
                                         });
@@ -143,6 +144,11 @@ class List extends Component {
                                         });
                                         installedPackage = foundInstalled ? foundInstalled.id.version : null;
 
+                                        const foundBlacklistedAndInstalled = _.find(pack.versions, (version) => {
+                                            return version.isBlackListed && version.attributes.status == 'installed';
+                                        });
+                                        blacklistedAndInstalled = foundBlacklistedAndInstalled ? foundBlacklistedAndInstalled.id.version : null;
+
                                         if(packageIndex >= this.firstShownIndex && packageIndex <= this.lastShownIndex || this.expandedPackageName === pack.packageName) 
                                             return (
                                                 <span key={index}>
@@ -151,6 +157,7 @@ class List extends Component {
                                                         deviceId={deviceId}
                                                         queuedPackage={queuedPackage}
                                                         installedPackage={installedPackage}
+                                                        blacklistedAndInstalled={blacklistedAndInstalled}
                                                         isSelected={this.expandedPackageName === pack.packageName}
                                                         togglePackage={this.togglePackage}
                                                         toggleAutoInstall={togglePackageAutoUpdate}
@@ -181,7 +188,7 @@ class List extends Component {
                                                                     }}>
                                                                     {pack.isAutoInstallEnabled ? 
                                                                         <div className="info-auto-update">
-                                                                            Automatic update activated.
+                                                                            Automatic update activated. The latest version of this package will automatically be installed on this device.
                                                                         </div>
                                                                     : 
                                                                         null
