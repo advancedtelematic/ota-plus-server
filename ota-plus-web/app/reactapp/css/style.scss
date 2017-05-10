@@ -53,6 +53,10 @@ body {
     overflow-y: hidden;
 }
 
+input {
+    box-shadow: none;
+}
+
 #app {
     min-width: 1280px;
     width: 100%;

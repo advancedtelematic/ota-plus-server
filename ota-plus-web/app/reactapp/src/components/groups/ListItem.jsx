@@ -24,7 +24,7 @@ class ListItem extends Component {
         super(props);
     }
     render() {
-        const { t, group, isSelected, selectGroup, showRenameGroupModal } = this.props;
+        const { t, group, isSelected, selectGroup, showRenameGroupModal, groupsStore } = this.props;
         const { isOver, canDrop, connectDropTarget } = this.props;
         return (
             connectDropTarget(
@@ -51,7 +51,7 @@ class ListItem extends Component {
                             {group.groupName}
                         </div>
                         <div className="subtitle">
-                            {t('common.deviceWithCount', {count: group.devices.length})}
+                            {t('common.deviceWithCount', {count: groupsStore._getGroupDevices(group).length})}
                         </div>
                     </div>
                     <div className="pointer">
