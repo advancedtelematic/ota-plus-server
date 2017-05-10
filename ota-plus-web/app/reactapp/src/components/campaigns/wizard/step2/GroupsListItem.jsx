@@ -8,7 +8,7 @@ class GroupsListItem extends Component {
         super(props);
     }
     render() {
-        const { t, group, setWizardData, isChosen } = this.props;
+        const { t, group, setWizardData, isChosen, groupsStore } = this.props;
         return (
             <button className={"item" + (isChosen ? " selected" : "")} id={"button-group-" + group.groupName} onClick={setWizardData.bind(this, group.id)}>
                 <div className={"btn-checkbox" + (isChosen ? " checked" : "")}>
@@ -21,7 +21,7 @@ class GroupsListItem extends Component {
                             {group.groupName}
                         </div>
                         <div className="subtitle">
-                            {t('common.deviceWithCount', {count: group.devices.length})}
+                            {t('common.deviceWithCount', {count: groupsStore._getGroupDevices(group).length})}
                         </div>
                     </div>
                 </div>
