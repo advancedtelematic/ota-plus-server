@@ -458,7 +458,6 @@ export default class PackagesStore {
             .then(function(response) {
                 let data = response.data;
                 this.deviceHistory = data.reverse();
-                console.log(this.deviceHistory);
                 this.packagesDeviceHistoryFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {

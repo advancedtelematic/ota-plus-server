@@ -6,7 +6,7 @@ import _ from 'underscore';
 const deviceSource = {
     beginDrag(props) {
         const foundGroup = _.find(props.groupsStore.groups, (group) => {
-            return group.devices.indexOf(props.device.uuid) > -1;
+            return group.devices.values.indexOf(props.device.uuid) > -1;
         });
         return {
             uuid: props.device.uuid,
@@ -51,7 +51,7 @@ class Item extends Component {
             break;
         }
         const foundGroup = _.find(groupsStore.groups, (group) => {
-            return group.devices.indexOf(device.uuid) > -1;
+            return group.devices.values.indexOf(device.uuid) > -1;
         });
         return (
             connectDragSource(

@@ -88,6 +88,7 @@ class GroupsList extends Component {
                                                 <GroupsListItem 
                                                     group={group}
                                                     setWizardData={setWizardData}
+                                                    groupsStore={groupsStore}
                                                     isChosen={chosenGroups.indexOf(group.id) > -1}
                                                 /> 
                                             </span>
