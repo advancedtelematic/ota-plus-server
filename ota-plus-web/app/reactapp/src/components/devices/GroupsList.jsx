@@ -32,7 +32,7 @@ class GroupsList extends Component {
         const { devicesStore, groupsStore } = this.props;
         const selectedGroup = groupsStore.selectedGroup;
         const groupId = selectedGroup.id || null;
-        devicesStore.fetchDevices(devicesStore.devicesFilter, groupId);        
+        devicesStore.fetchRememberedDevices(devicesStore.devicesFilter, groupId);        
     }
     render() {
         const { devicesStore, groupsStore, showRenameGroupModal, selectGroup, onDeviceDrop } = this.props;

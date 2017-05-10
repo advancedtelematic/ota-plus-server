@@ -17,6 +17,7 @@ import _ from 'underscore';
 export default class DevicesStore {
 
     @observable devicesFetchAsync = {};
+    @observable devicesRememberedFetchAsync = {};
     @observable devicesOneFetchAsync = {};
     @observable devicesCreateAsync = {};
     @observable devicesRenameAsync = {};
@@ -35,6 +36,7 @@ export default class DevicesStore {
     
     constructor() {
         resetAsync(this.devicesFetchAsync);
+        resetAsync(this.devicesRememberedFetchAsync);
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
@@ -69,6 +71,37 @@ export default class DevicesStore {
             })
             .catch((error) => {
                 this.devicesFetchAsync = handleAsyncError(error);
+            });
+    }
+
+    fetchRememberedDevices(filter = '', groupId) {
+        resetAsync(this.devicesRememberedFetchAsync, true);
+        if(this.devicesFilter !== filter || this.devicesGroupFilter !== groupId) {
+            this.devicesTotalCount = null;
+            this.devicesCurrentPage = 0;
+            this.devices = [];
+            this.preparedDevices = [];
+        }
+        this.devicesFilter = filter;
+        this.devicesGroupFilter = groupId;
+        let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesCurrentPage*this.devicesLimit}`;
+        if(groupId && groupId === 'ungrouped')
+            apiAddress += `&ungrouped=true`;
+        else if(groupId)
+            apiAddress += `&groupId=${groupId}`;
+        return axios.get(apiAddress)
+            .then((response) => {
+                this.devices = _.uniq(this.devices.concat(response.data.values), device => device.uuid);
+                this._prepareDevices();
+                if(this.devicesInitialTotalCount === null) {
+                    this.devicesInitialTotalCount = response.data.total;
+                }
+                this.devicesCurrentPage++;
+                this.devicesTotalCount = response.data.total;
+                this.devicesRememberedFetchAsync = handleAsyncSuccess(response);                
+            })
+            .catch((error) => {
+                this.devicesRememberedFetchAsync = handleAsyncError(error);
             });
     }
 
@@ -108,6 +141,7 @@ export default class DevicesStore {
 
     _reset() {
         resetAsync(this.devicesFetchAsync);
+        resetAsync(this.devicesRememberedFetchAsync);
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);

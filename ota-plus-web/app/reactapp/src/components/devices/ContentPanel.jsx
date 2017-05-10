@@ -81,12 +81,12 @@ class ContentPanel extends Component {
                                 }
                             </div>
                         :
-                            !devicesStore.devicesFetchAsync.isFetching && devicesStore.devicesCount === 0 ? 
+                            devicesStore.devicesFetchAsync.isFetching ?
                                 <div className="wrapper-center">
                                     <Loader />
                                 </div>
                             :
-                                devicesStore.devicesFetchAsync.isFetching ?
+                                devicesStore.devicesRememberedFetchAsync.isFetching ?
                                     <div className="wrapper-center">
                                         <Loader />
                                     </div>
