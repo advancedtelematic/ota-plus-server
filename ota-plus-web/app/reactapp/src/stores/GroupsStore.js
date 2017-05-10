@@ -166,6 +166,10 @@ export default class GroupsStore {
         });
     }
 
+    _getGroupDevices(group) {
+        return group.devices.values;
+    }
+
     @computed get groupsCount() {
         return this.groups.length;
     }

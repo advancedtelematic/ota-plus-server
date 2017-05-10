@@ -46,7 +46,7 @@ class GroupsList extends Component {
                         deviceCount = devicesStore.devicesInitialTotalCount;
                     } else if(group.name === 'ungrouped') {
                         _.each(groupsStore.groups, (group) => {
-                            _.each(group.devices, (device) => {
+                            _.each(groupsStore._getGroupDevices(group), (device) => {
                                 groupDevicesCount++;
                             });
                         });
@@ -69,6 +69,7 @@ class GroupsList extends Component {
                     return (
                         <GroupsListItem 
                             group={group}
+                            groupsStore={groupsStore}
                             showRenameGroupModal={showRenameGroupModal}
                             selectGroup={selectGroup}
                             isSelected={isSelected}
