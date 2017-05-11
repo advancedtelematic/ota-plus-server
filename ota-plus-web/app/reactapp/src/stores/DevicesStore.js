@@ -18,6 +18,7 @@ export default class DevicesStore {
 
     @observable devicesFetchAsync = {};
     @observable devicesRememberedFetchAsync = {};
+    @observable devicesFetchAfterDragAndDropAsync = {};
     @observable devicesOneFetchAsync = {};
     @observable devicesCreateAsync = {};
     @observable devicesRenameAsync = {};
@@ -37,6 +38,7 @@ export default class DevicesStore {
     constructor() {
         resetAsync(this.devicesFetchAsync);
         resetAsync(this.devicesRememberedFetchAsync);
+        resetAsync(this.devicesFetchAfterDragAndDropAsync);
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
@@ -105,6 +107,33 @@ export default class DevicesStore {
             });
     }
 
+    fetchDevicesAfterDragAndDrop(groupId) {
+        resetAsync(this.devicesFetchAfterDragAndDropAsync, true);
+        this.devicesTotalCount = null;
+        this.devicesCurrentPage = 0;
+        this.devices = [];
+        this.preparedDevices = [];
+        let apiAddress = `${API_DEVICES_SEARCH}?regex=&limit=${this.devicesLimit}&offset=${this.devicesCurrentPage*this.devicesLimit}`;
+        if(groupId && groupId === 'ungrouped')
+            apiAddress += `&ungrouped=true`;
+        else if(groupId)
+            apiAddress += `&groupId=${groupId}`;
+        return axios.get(apiAddress)
+            .then((response) => {
+                this.devices = response.data.values;
+                this._prepareDevices();
+                if(this.devicesInitialTotalCount === null) {
+                    this.devicesInitialTotalCount = response.data.total;
+                }
+                this.devicesCurrentPage++;
+                this.devicesTotalCount = response.data.total;
+                this.devicesFetchAfterDragAndDropAsync = handleAsyncSuccess(response);                
+            })
+            .catch((error) => {
+                this.devicesFetchAfterDragAndDropAsync = handleAsyncError(error);
+            });
+    }
+
     fetchDevice(id) {
         resetAsync(this.devicesOneFetchAsync, true);
         return axios.get(API_DEVICES_DEVICE_DETAILS + '/' + id + '?status=true')
@@ -142,6 +171,7 @@ export default class DevicesStore {
     _reset() {
         resetAsync(this.devicesFetchAsync);
         resetAsync(this.devicesRememberedFetchAsync);
+        resetAsync(this.devicesFetchAfterDragAndDropAsync);
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);

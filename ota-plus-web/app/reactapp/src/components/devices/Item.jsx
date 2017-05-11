@@ -16,6 +16,12 @@ const deviceSource = {
     endDrag(props, monitor) {
         const item = monitor.getItem();
         const dropResult = monitor.getDropResult();
+        let selectedGroup = props.groupsStore.selectedGroup;
+        if(selectedGroup.id) {
+            props.devicesStore.fetchDevicesAfterDragAndDrop(selectedGroup.id);
+        } else {
+            props.devicesStore.fetchDevicesAfterDragAndDrop(null);
+        }
     },
 };
 
