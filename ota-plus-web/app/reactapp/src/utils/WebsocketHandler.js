@@ -18,7 +18,7 @@ const WebsocketHandler = (function (stores) {
             switch (type) {
                 case "DeviceSeen":
                     stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
-                    if(stores.packagesStore.deviceQueue.length) {
+                    if(stores.packagesStore.deviceQueue.length && stores.devicesStore.device.uuid === data.uuid) {
                         stores.packagesStore.fetchDevicePackagesHistory(data.uuid);
                         stores.packagesStore.fetchDevicePackagesUpdatesLogs(data.uuid);
                         stores.packagesStore.fetchDevicePackagesQueue(data.uuid);
