@@ -6,7 +6,6 @@ import CampaignsPage from './Campaigns';
 import CampaignPage from './Campaign';
 import ImpactAnalysisPage from './ImpactAnalysis';
 import TreehubPage from './Treehub';
-import ProvisioningPage from './Provisioning';
 import ProfilePage from './Profile';
 import NoMatchPage from './NoMatch';
 
@@ -19,7 +18,6 @@ export {
     CampaignPage,
     ImpactAnalysisPage,
     TreehubPage,
-    ProvisioningPage,
     ProfilePage,
     NoMatchPage
 }

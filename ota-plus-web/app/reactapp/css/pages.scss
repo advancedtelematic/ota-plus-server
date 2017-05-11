@@ -2328,7 +2328,9 @@
         width: 300px;
         height: 100%;
         position: absolute;
-        box-shadow: 0px 0px 35px #888;
+        -webkit-box-shadow: 0 0 15px -4px rgba(0,0,0,.75);
+        -moz-box-shadow: 0 0 15px -4px rgba(0,0,0,.75);
+        box-shadow: 0 0 15px 0px rgba(0,0,0,.75);
 
         .user-details {
             text-align: center;
@@ -2439,6 +2441,25 @@
                             &.active {                                
                                 &:before {
                                     background-image: url('/assets/img/icons/black/billing.png');
+                                }
+                            }
+                        }
+
+                        &#link-access-keys {
+                            &:before {
+                                content: "";
+                                background: url(/assets/img/icons/white/key.png) no-repeat;
+                                background-size: cover;
+                                width: 13px;
+                                height: 13px;
+                                position: absolute;
+                                top: 26px;
+                                left: 30px;
+                            }
+
+                            &.active {                                
+                                &:before {
+                                    background-image: url('/assets/img/icons/black/key.png');
                                 }
                             }
                         }
@@ -2846,6 +2867,103 @@
                     }         
                 }
             }
+        }
+
+        &#access-keys {
+            @include fullHeight;
+            padding: 30px 0;
+
+            .title.top {
+                padding: 0px 0px 30px 45px;
+                height: 50px;
+            }
+
+            .page-heading {
+                .icon {
+                    background-image: url('/assets/img/icons/black/provisioning.png');
+                }
+            }
+
+            .content {
+                overflow: hidden;
+
+                .subheader {
+                    padding: 0 30px;
+                }
+
+                .wrapper {
+                    height: calc(100% - 100px);
+                    padding: 10px 30px;
+                    overflow-y: auto;
+
+                    .inner-container {
+                        width: 100%;
+                        height: 100%;
+
+                        .content-empty {
+                            color: #444;
+                            font-size: 24px;
+                        }
+                    }
+
+                    .common-box {
+                        color: inherit;
+                        position: relative;
+                        text-shadow: none;
+
+                        .icon {
+                            background-image: url(/assets/img/icons/white/key.png);
+                            background-size: 35px 36px;
+                            background-position: 13px 11px;
+                            background-color: #666;
+                            -webkit-box-shadow: 0px 0px 15px -4px rgba(0,0,0,0.75);
+                            -moz-box-shadow: 0px 0px 15px -4px rgba(0,0,0,0.75);
+                            box-shadow: 0px 0px 15px -4px rgba(0,0,0,0.75);
+                        }
+                    }
+                }
+
+                .footer {
+                    color: #fff;
+                    background: #222;
+                    width: 100%;
+                    height: 40px;
+                    padding: 11px 45px;
+
+                    .server-name {
+                        width: 60%;
+                        float: left;
+
+                        .text {
+                            margin: 0 10px 0 0;
+                            float: left;
+                        }
+
+                        pre {
+                            padding: 4px 10px;
+                            margin: -4px 0 0 0;
+                            float: left;
+                        }
+                    }
+
+                    .treehub {
+                        width: 20%;
+                        float: left;
+                    }
+
+                    .prebuilds {
+                        width: 20%;
+                        float: left;
+                        text-align: right;
+                    }
+
+                    a {
+                        color: white;
+                        text-decoration: underline;
+                    }
+                    
+                }
+            }     
         }
     }
 }
