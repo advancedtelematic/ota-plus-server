@@ -50,10 +50,14 @@ class ListItem extends Component {
                                 }
                             </span>
                         :
-                            pack.isAutoInstallEnabled ?
-                                <label className="label label-auto-update">Auto</label>
-                              : null
-                        : null
+                        pack.isAutoInstallEnabled ?
+                                <div className="labels">
+                                    <label className="label label-auto-update">Auto</label>
+                                </div>
+                            : 
+                                null
+                        : 
+                            null
                     }
                 </button>
                 {isSelected ?
