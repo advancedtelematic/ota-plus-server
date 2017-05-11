@@ -33,9 +33,6 @@ class Navigation extends Component {
                                 <li>
                                     <Link to="/treehub" activeClassName="active" id="link-treehub">Treehub</Link>
                                 </li>
-                                <li>
-                                    <Link to="/provisioning" activeClassName="active" id="link-provisioning">Provisioning</Link>
-                                </li>
                           </ul>
                     </div>
                     <ul className="right-nav">

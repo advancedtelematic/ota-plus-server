@@ -15,6 +15,7 @@ import {
     handleAsyncSuccess, 
     handleAsyncError 
 } from '../utils/Common';
+import _ from 'underscore';
 
 export default class ProvisioningStore {
 
@@ -25,7 +26,10 @@ export default class ProvisioningStore {
     @observable provisioningKeyCreateAsync = {};
     @observable provisioningStatus = {};
     @observable provisioningDetails = {};
+    @observable initialProvisioningKeys = [];
     @observable provisioningKeys = [];
+    @observable provisioningKeysSort = 'asc';
+    @observable preparedProvisioningKeys = [];
 
     constructor() {
         resetAsync(this.provisioningStatusFetchAsync);
@@ -33,6 +37,29 @@ export default class ProvisioningStore {
         resetAsync(this.provisioningDetailsFetchAsync);
         resetAsync(this.provisioningKeysFetchAsync);
         resetAsync(this.provisioningKeyCreateAsync);
+    }
+
+    _filterProvisioningKeys(filter) {
+        let searchResults = [];
+        let found = _.each(this.initialProvisioningKeys, function(key, index) {
+            return key.description.indexOf(filter) >= 0 ? searchResults.push(key) : null
+        });
+        this.provisioningKeys = searchResults;
+        this._prepareProvisioningKeys();
+    }
+
+    _prepareProvisioningKeys(sort = this.provisioningKeysSort) {
+        this.provisioningKeysSort = sort;
+        let keys = this.provisioningKeys;
+
+        this.preparedProvisioningKeys = keys.sort((a, b) => {
+            let aName = a.description;
+            let bName = b.description;
+            if(sort !== 'undefined' && sort == 'desc')
+                return bName.localeCompare(aName);
+            else
+                return aName.localeCompare(bName);
+        });
     }
 
     fetchProvisioningStatus() {
@@ -79,7 +106,9 @@ export default class ProvisioningStore {
         resetAsync(this.provisioningKeysFetchAsync, true);
         return axios.get(API_PROVISIONING_KEYS_FETCH)
             .then(function (response) {
+                this.initialProvisioningKeys = response.data;
                 this.provisioningKeys = response.data;
+                this._prepareProvisioningKeys();
                 this.provisioningKeysFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
@@ -127,6 +156,9 @@ export default class ProvisioningStore {
         resetAsync(this.provisioningKeyCreateAsync);
         this.provisioningStatus = {};
         this.provisioningDetails = {};
+        this.initialProvisioningKeys = [];
         this.provisioningKeys = [];
+        this.provisioningKeysSort = 'asc';
+        this.preparedProvisioningKeys = [];
     }
 }

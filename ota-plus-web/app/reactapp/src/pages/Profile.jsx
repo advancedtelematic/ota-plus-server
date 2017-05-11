@@ -12,7 +12,7 @@ class Profile extends Component {
         super(props);
     }
     render() {
-        const { userStore, children } = this.props;
+        const { userStore, provisioningStore, devicesStore, groupsStore, children } = this.props;
         return (
             <FadeAnimation 
                 display="flex">
@@ -25,6 +25,9 @@ class Profile extends Component {
                         {children ?
                             <children.type
                                 userStore={userStore}
+                                provisioningStore={provisioningStore}
+                                devicesStore={devicesStore}
+                                groupsStore={groupsStore}
                             />
                         :
                             null

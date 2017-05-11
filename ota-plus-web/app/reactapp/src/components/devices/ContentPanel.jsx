@@ -31,7 +31,7 @@ class ContentPanel extends Component {
         let containerWidth = this.refs.innerContainer.getBoundingClientRect().width;
         let howManyBoxesPerRow = Math.floor(containerWidth / minBoxWidth);
         this.boxWidth = Math.floor(containerWidth / howManyBoxesPerRow);
-        this.howManyBoxesPerRow = howManyBoxesPerRow;
+        this.howManyBoxesPerRow = howManyBoxesPerRow;        
     }
     goToDetails(deviceId, e) {
         if(e) e.preventDefault();
