@@ -38,6 +38,7 @@ class QueueModal extends Component {
             this.props.packagesStore.fetchDevicePackagesUpdatesLogs(this.props.device.uuid);
             this.props.packagesStore.fetchDevicePackagesQueue(this.props.device.uuid);
         }
+        this.activeTabId = 0;
     }
     handleActive(tab) {
         this.activeTabId = tab.props['data-id'];
