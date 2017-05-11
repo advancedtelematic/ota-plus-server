@@ -64,6 +64,7 @@ class ContentPanel extends Component {
                                     return (
                                         <DeviceItem
                                             groupsStore={groupsStore}
+                                            devicesStore={devicesStore}
                                             device={device}
                                             width={this.boxWidth}
                                             showRenameModal={showRenameModal}
@@ -91,6 +92,11 @@ class ContentPanel extends Component {
                                         <Loader />
                                     </div>
                                 :
+                                    devicesStore.devicesFetchAfterDragAndDropAsync.isFetching ?
+                                        <div className="wrapper-center">
+                                            <Loader />
+                                        </div>
+                                    :
                                     <span className="content-empty">
                                         <div className="wrapper-center">
                                             Oops, there are no devices to show.
