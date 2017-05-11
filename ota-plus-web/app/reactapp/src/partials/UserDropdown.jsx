@@ -45,6 +45,9 @@ class UserDropdown extends Component {
                           <Link to="/profile/billing" id="link-billing" onClick={this.closeDropdown}>Billing</Link>
                     </li>
                     <li>
+                          <Link to="/profile/access-keys" id="link-access-keys" onClick={this.closeDropdown}>Access keys</Link>
+                    </li>
+                    <li>
                           <a href="http://atsgarage.com/en/terms-conditions.html" target="_blank" id="terms-of-use" onClick={this.closeDropdown}>Terms of use</a>
                     </li>
                     <li className="signout">

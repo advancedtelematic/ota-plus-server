@@ -10,7 +10,6 @@ import {
     CampaignPage,
     ImpactAnalysisPage,
     TreehubPage,
-    ProvisioningPage,
     ProfilePage,
     NoMatchPage,
 } from './pages';
@@ -18,6 +17,7 @@ import {
     ProfileEditProfile,
     ProfileUsage,
     ProfileBilling,
+    ProfileAccessKeys,
 } from './components/profile';
 
 const Routes = () => {
@@ -33,12 +33,12 @@ const Routes = () => {
                 <Route path="/campaign/:id" component={CampaignPage}/>
                 <Route path="/impact-analysis" component={ImpactAnalysisPage}/>
                 <Route path="/treehub" component={TreehubPage}/>
-                <Route path="/provisioning" component={ProvisioningPage}/>
                 <Route path="/profile" component={ProfilePage}>
                     <IndexRoute component={ProfileEditProfile}/>
                     <Route path="edit" component={ProfileEditProfile} />
                     <Route path="usage" component={ProfileUsage} />
                     <Route path="billing" component={ProfileBilling} />
+                    <Route path="access-keys" component={ProfileAccessKeys} />
                 </Route>
                 <Route path="*" component={NoMatchPage}/>
             </Route>

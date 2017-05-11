@@ -49,6 +49,11 @@ class Aside extends Component {
                                 Billing
                             </Link>
                         </li>
+                        <li>
+                            <Link to="/profile/access-keys" activeClassName="active" id="link-access-keys">
+                                Access keys
+                            </Link>
+                        </li>
                     </ul>
                 </nav>
             </aside>
