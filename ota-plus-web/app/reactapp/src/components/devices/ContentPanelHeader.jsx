@@ -10,7 +10,7 @@ class ContentPanelHeader extends Component {
         super(props);
     }
     render() {
-        const { showCreateModal, devicesSort, changeSort, devicesFilter, changeFilter } = this.props;
+        const { devicesSort, changeSort, devicesFilter, changeFilter } = this.props;
         return (
             <SubHeader>
                 <Form>
@@ -19,13 +19,7 @@ class ContentPanelHeader extends Component {
                         changeAction={changeFilter}
                         id="search-devices-input"
                     />
-                </Form>
-                <FlatButton
-                    label="Add new device"
-                    onClick={showCreateModal}
-                    className="btn-main btn-small btn-add"
-                    id="add-new-device"
-                />
+                </Form>                
                 <div className="sort-box">
                     {devicesSort == 'asc' ? 
                         <a href="#" onClick={changeSort.bind(this, 'desc')} id="link-sort-devices-desc">
@@ -43,7 +37,6 @@ class ContentPanelHeader extends Component {
 }
 
 ContentPanelHeader.propTypes = {
-    showCreateModal: PropTypes.func.isRequired,
     devicesSort: PropTypes.string,
     changeSort: PropTypes.func.isRequired,
     devicesFilter: PropTypes.string,

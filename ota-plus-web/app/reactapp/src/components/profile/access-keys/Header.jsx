@@ -10,7 +10,7 @@ class Header extends Component {
         super(props);
     }
     render() {
-        const { showCreateModal, devicesFilter, changeFilter, provisioningSort, changeSort} = this.props;
+        const { showCreateModal, showDevicesCreateModal, devicesFilter, changeFilter, provisioningSort, changeSort} = this.props;
         return (
             <SubHeader>
                 <Form>
@@ -32,8 +32,14 @@ class Header extends Component {
                     }
                 </div>
                 <FlatButton
+                    label="Add new device"
+                    onClick={showDevicesCreateModal.bind(this)}
+                    className="btn-main btn-small btn-add"
+                    id="add-new-device"
+                />
+                <FlatButton
                     label="Add new key"
-                    onClick={showCreateModal.bind(this, null)}
+                    onClick={showCreateModal.bind(this)}
                     className="btn-main btn-small btn-add"
                     id="add-new-key"
                 />
