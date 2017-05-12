@@ -79,6 +79,7 @@ class Provisioning extends Component {
                         <span>
                             <ProvisioningHeader 
                                 showCreateModal={this.showCreateModal}
+                                showDevicesCreateModal={this.showDevicesCreateModal}
                                 devicesFilter={devicesStore.devicesFilter}
                                 changeFilter={this.changeFilter}
                                 provisioningSort={provisioningStore.provisioningKeysSort}
