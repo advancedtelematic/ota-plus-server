@@ -1,15 +1,20 @@
 import React, { Component, PropTypes } from 'react';
+import { observe, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
 import { Header } from '../partials';
 import { HomeContainer } from '../containers';
+import Cookies from 'js-cookie';
 
 const title = "Home";
 
 @observer
 class Home extends Component {
+    @observable router = null;
+
     constructor(props) {
         super(props);
+        this.redirectTo = this.redirectTo.bind(this);
     }
     componentWillMount() {
         this.props.devicesStore.fetchDevices();
@@ -20,6 +25,29 @@ class Home extends Component {
         this.props.devicesStore._reset();
         this.props.packagesStore._reset();
         this.props.campaignsStore._reset();
+    }
+    componentWillReceiveProps(nextProps) {
+        this.router = nextProps.router;
+        let initialDevicesCount = nextProps.initialDevicesCount;
+        let onlineDevicesCount = nextProps.onlineDevicesCount;
+        let deviceInstallationHistory = nextProps.deviceInstallationHistory;
+        let deviceInstallationQueue = nextProps.deviceInstallationQueue;
+
+        if(initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') != 1) {
+            this.redirectTo('welcome');
+        }
+        if(initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') == 1) {
+            this.redirectTo('destiny');
+        }
+        if(onlineDevicesCount === 1 && Cookies.get('welcomePageAcknowledged') != 1
+            && deviceInstallationQueue.length === 0 && deviceInstallationHistory.length === 0
+            && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') 
+            && !this.router.isActive('/fireworks')) {
+                this.redirectTo('fireworks');
+        }
+    }
+    redirectTo( page) {
+        this.router.push('/' + page);
     }
     render() {
         const { devicesStore, packagesStore, campaignsStore, groupsStore } = this.props;
@@ -32,7 +60,7 @@ class Home extends Component {
                     />
                     <MetaData 
                         title={title}>
-                        <HomeContainer 
+                        <HomeContainer
                             devicesStore={devicesStore}
                             packagesStore={packagesStore}
                             campaignsStore={campaignsStore}
@@ -43,6 +71,10 @@ class Home extends Component {
             </FadeAnimation>
         );
     }
+}
+
+Home.contextTypes = {
+    router: React.PropTypes.object.isRequired
 }
 
 Home.propTypes = {

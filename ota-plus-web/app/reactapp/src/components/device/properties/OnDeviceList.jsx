@@ -6,6 +6,7 @@ import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
 import { Loader } from '../../../partials';
 import ListItemOnDevice from './ListItemOnDevice';
+import { InfiniteScroll } from '../../../utils';
 
 const headerHeight = 28;
 
@@ -87,7 +88,7 @@ class OnDeviceList extends Component {
                 }
             }, this);
             this.firstShownIndex = firstShownIndex;
-              this.lastShownIndex = lastShownIndex !== null ? lastShownIndex : itemsPositions.length - 1;
+            this.lastShownIndex = lastShownIndex !== null ? lastShownIndex : itemsPositions.length - 1;
             this.fakeHeaderLetter = newFakeHeaderLetter;
             this.fakeHeaderTopPosition = scrollTop;
         }
@@ -112,42 +113,54 @@ class OnDeviceList extends Component {
         let packageIndex = -1;
         return (
             <div className="ios-list" ref="list">
-                {Object.keys(packagesStore.preparedOndevicePackages).length ? 
-                    <Dropzone 
-                        ref="dropzone" 
-                        onDrop={onFileDrop} 
-                        multiple={false} 
-                        disableClick={true} 
-                        className="dnd-zone" 
-                        activeClassName={"dnd-zone-active"}>
-                        <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
-                            {this.fakeHeaderLetter}
-                        </div>
-                        {_.map(packagesStore.preparedOndevicePackages, (packages, letter) => {
-                            return (
-                                <span key={letter}>
-                                    <div className="header">{letter}</div>
-                                    {_.map(packages, (pack, index) => {
-                                        return (
-                                           <ListItemOnDevice 
-                                                pack={pack}
-                                                showPackageBlacklistModal={showPackageBlacklistModal}
-                                                key={index}
-                                            />
-                                        );
-                                            
-                                    })}
-                                </span>
-                            );
-                        })}
-                    </Dropzone>
-                :
-                    <span className="content-empty">
-                        <div className="wrapper-center">
-                            No matching packages found.
-                        </div>
-                    </span>
-                }
+                <InfiniteScroll
+                    className="wrapper-infinite-scroll"
+                    hasMore={packagesStore.ondevicePackagesCurrentPage < packagesStore.ondevicePackagesTotalCount / packagesStore.ondevicePackagesLimit}
+                    isLoading={packagesStore.packagesOndeviceFetchAsync.isFetching}
+                    useWindow={false}
+                    loadMore={() => {
+                        packagesStore.fetchOndevicePackages(deviceId, null)
+                    }}
+                >
+
+                    {Object.keys(packagesStore.preparedOndevicePackages).length ? 
+                        <Dropzone 
+                            ref="dropzone" 
+                            onDrop={onFileDrop} 
+                            multiple={false} 
+                            disableClick={true} 
+                            className="dnd-zone" 
+                            activeClassName={"dnd-zone-active"}>
+                            <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
+                                {this.fakeHeaderLetter}
+                            </div>
+                            {_.map(packagesStore.preparedOndevicePackages, (packages, letter) => {
+                                return (
+                                    <span key={letter}>
+                                        <div className="header">{letter}</div>
+                                        {_.map(packages, (pack, index) => {
+                                            return (
+                                               <ListItemOnDevice 
+                                                    pack={pack}
+                                                    showPackageBlacklistModal={showPackageBlacklistModal}
+                                                    key={index}
+                                                />
+                                            );
+                                                
+                                        })}
+                                    </span>
+                                );
+                            })}
+                        </Dropzone>
+                    :
+                        <span className="content-empty">
+                            <div className="wrapper-center">
+                                No matching packages found.
+                            </div>
+                        </span>
+                    }
+
+                </InfiniteScroll>
             </div>
         );
     }

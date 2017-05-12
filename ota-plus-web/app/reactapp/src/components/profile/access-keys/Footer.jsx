@@ -23,16 +23,22 @@ class Footer extends Component {
                     </li>
                     <li>
                         <div className="treehub">
-                            <div className="text">
-                                get <a href="/api/v1/features/treehub/client">Treehub</a> credentials
+                            <div className="text" id="access-keys-treehub-description">
+                                get <a href="/api/v1/features/treehub/client" id="ccess-keys-treehub-link">Treehub</a> credentials
+                                <a href="https://docs.atsgarage.com/index.html" target="_blank" className="icon">
+                                    <img src="/assets/img/icons/questionmark.png" alt=""/>
+                                </a>
                             </div>
                         </div>
                     </li>
                     <li>
                         <div className="prebuilds">
-                            <div className="text">
-                                get prebuilds <a href="#" onClick={showDevicesCreateModal} >DEB/RPM</a>
-                            </div>                            
+                            <div className="text" id="access-keys-prebuilds-description">
+                                get prebuilds <a href="#" id="access-keys-prebuilds-link" onClick={showDevicesCreateModal}>DEB/RPM</a>
+                                <a href="https://docs.atsgarage.com/index.html" target="_blank" className="icon">
+                                    <img src="/assets/img/icons/questionmark.png" alt=""/>
+                                </a>
+                            </div>
                         </div>
                     </li>
                 </ul>

@@ -3,7 +3,8 @@ import { observable, extendObservable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Loader } from '../partials';
 import { 
-    DeviceTutorial, 
+    DeviceTutorial,
+    DeviceGuide,
     DeviceHardwarePanel, 
     DevicePropertiesPanel, 
     DeviceSoftwarePanel
@@ -123,7 +124,7 @@ class Device extends Component {
                             />
                         </span>
                     :
-                        <DeviceTutorial
+                        <DeviceGuide
                             device={device}
                         />
                 }

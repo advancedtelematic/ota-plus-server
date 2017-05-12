@@ -10,6 +10,7 @@ import SizeVerify from './SizeVerify';
 import UploadBox from './UploadBox';
 import PopoverWrapper from './PopoverWrapper';
 import Switch from './Switch';
+import IntroNavigation from './IntroNavigation';
 
 export {
     Navigation,
@@ -23,5 +24,6 @@ export {
     SizeVerify,
     UploadBox,
     PopoverWrapper,
-    Switch
+    Switch,
+    IntroNavigation,
 }

@@ -24,11 +24,16 @@ export default class GroupsStore {
     @observable groupsRemoveDeviceAsync = {};
     @observable groups = [];
     @observable preparedGroups = {};
+    @observable latestCreatedGroupId = null;
     @observable selectedGroup = {
         type: 'artificial',
         name: 'all'
     };
-    
+
+    @observable groupsCurrentPage = 0;
+    @observable groupsTotalCount = null;
+    @observable groupsLimit = 1000;
+
     constructor() {
         resetAsync(this.groupsFetchAsync);
         resetAsync(this.groupsCreateAsync);
@@ -39,13 +44,13 @@ export default class GroupsStore {
 
     fetchGroups() {
         resetAsync(this.groupsFetchAsync, true);
-        return axios.get(API_GROUPS_FETCH)
+        return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsLimit + '&offset=' + this.groupsCurrentPage * this.groupsLimit)
             .then(function (response) {
-                let groups = response.data;
+                let groups = response.data.values;
                 if(groups.length) {
                     let after = _.after(groups.length, () => {
-                        this.groups = groups;
-                        this._prepareGroups();
+                        this.groups = _.uniq(this.groups.concat(groups), group => group.id);
+                        this._prepareGroups();                        
                         this.groupsFetchAsync = handleAsyncSuccess(response);
                     }, this);
                     _.each(groups, (group, index) => {
@@ -59,9 +64,11 @@ export default class GroupsStore {
                             });
                     });
                 } else {
-                    this.groups = groups;
+                    this.groups = _.uniq(this.groups.concat(groups), group => group.id);
                     this.groupsFetchAsync = handleAsyncSuccess(response);
                 }
+                this.groupsCurrentPage++;
+                this.groupsTotalCount = response.data.total;
             }.bind(this))
             .catch(function (error) {
                 this.groupsFetchAsync = handleAsyncError(error);
@@ -72,6 +79,7 @@ export default class GroupsStore {
         resetAsync(this.groupsCreateAsync, true);
         return axios.post(API_GROUPS_CREATE + '?groupName=' + name)
             .then(function (response) {
+                this.latestCreatedGroupId = response.data;
                 this.fetchGroups();
                 this.groupsCreateAsync = handleAsyncSuccess(response);
             }.bind(this))
@@ -134,6 +142,9 @@ export default class GroupsStore {
         resetAsync(this.groupsRemoveDeviceAsync);
         this.groups = [];
         this.preparedGroups = {};
+        this.latestCreatedGroupId = null;
+        this.groupsCurrentPage = 0;
+        this.groupsTotalCount = 0;
     }
 
     _prepareGroups() {

@@ -102,7 +102,8 @@ class Devices extends Component {
         this.props.devicesStore._prepareDevices(sort);
     }
     changeFilter(filter) {
-        this.props.devicesStore.fetchDevices(filter);
+        let groupId = this.props.groupsStore.selectedGroup.id;
+        this.props.devicesStore.fetchDevices(filter, groupId);
     }
     render() {
         const { devicesStore, groupsStore } = this.props;
@@ -170,6 +171,7 @@ class Devices extends Component {
                     hide={this.hideCreateGroupModal}
                     selectGroup={this.selectGroup}
                     groupsStore={groupsStore}
+                    devicesStore={devicesStore}
                 />
                 <GroupsRenameModal 
                     shown={this.renameGroupModalShown}

@@ -29,10 +29,6 @@ class Provisioning extends Component {
         this.hideDevicesCreateModal = this.hideDevicesCreateModal.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
         this.changeSort = this.changeSort.bind(this);
-        this.activateHandler = new AsyncStatusCallbackHandler(props.provisioningStore, 'provisioningActivateAsync', this.hideTooltip);
-    }
-    componentWillUnmount() {
-        this.activateHandler();
     }
     showTooltip(e) {
         if(e) e.preventDefault();
@@ -86,6 +82,7 @@ class Provisioning extends Component {
                             />
                             <ProvisioningList 
                                 provisioningStore={provisioningStore}
+                                showTooltip={this.showTooltip}
                             />
                             <ProvisioningFooter 
                                 provisioningStore={provisioningStore}
@@ -96,14 +93,12 @@ class Provisioning extends Component {
                         <div className="wrapper-center">
                             <div className="page-intro">
                                 <div>Provisioning not activated.</div>
-                                <a href="#" onClick={this.showTooltip}>What is this?</a>
                             </div>
                         </div>
                 }
                 <ProvisioningTooltip 
                     shown={this.tooltipShown}
                     hide={this.hideTooltip}
-                    provisioningStore={provisioningStore}
                 />
                 <ProvisioningCreateModal 
                     shown={this.createModalShown}

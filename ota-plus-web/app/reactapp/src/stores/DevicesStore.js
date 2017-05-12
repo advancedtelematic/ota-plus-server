@@ -17,13 +17,17 @@ import _ from 'underscore';
 export default class DevicesStore {
 
     @observable devicesFetchAsync = {};
+    @observable devicesInitialFetchAsync = {};
     @observable devicesRememberedFetchAsync = {};
     @observable devicesFetchAfterDragAndDropAsync = {};
+    @observable devicesFetchAfterGroupCreationAsync = {};
     @observable devicesOneFetchAsync = {};
     @observable devicesCreateAsync = {};
     @observable devicesRenameAsync = {};
+    @observable initialDevices = [];
     @observable devices = [];
     @observable devicesInitialTotalCount = null;
+    @observable ungroupedDevicesInitialTotalCount = null;
     @observable devicesTotalCount = null;
     @observable devicesCurrentPage = 0;
     @observable preparedDevices = [];
@@ -34,15 +38,32 @@ export default class DevicesStore {
     @observable deviceQueue = [];
     @observable deviceHistory = [];
     @observable deviceUpdatesLogs = [];
-    
+    @observable onlineDevices = [];
+
     constructor() {
         resetAsync(this.devicesFetchAsync);
+        resetAsync(this.devicesInitialFetchAsync);
         resetAsync(this.devicesRememberedFetchAsync);
         resetAsync(this.devicesFetchAfterDragAndDropAsync);
+        resetAsync(this.devicesFetchAfterGroupCreationAsync);
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
-        this.devicesLimit = 10;
+        this.devicesLimit = 30;
+    }
+
+    fetchInitialDevices() {
+        resetAsync(this.devicesInitialFetchAsync, true);
+        let apiAddress = `${API_DEVICES_SEARCH}`;
+        return axios.get(apiAddress)
+            .then((response) => {
+                this.initialDevices = response.data.values;
+                this._countOnlineDevices();
+                this.devicesInitialFetchAsync = handleAsyncSuccess(response);                
+            })
+            .catch((error) => {
+                this.devicesInitialFetchAsync = handleAsyncError(error);
+            });
     }
 
     fetchDevices(filter = '', groupId) {
@@ -62,10 +83,13 @@ export default class DevicesStore {
             apiAddress += `&groupId=${groupId}`;
         return axios.get(apiAddress)
             .then((response) => {
-                this.devices = _.uniq(this.devices.concat(response.data.values), device => device.uuid);
+                this.devices = _.uniq(this.devices.concat(response.data.values), device => device.uuid);   
                 this._prepareDevices();
-                if(this.devicesInitialTotalCount === null) {
+                if(this.devicesInitialTotalCount === null && groupId !== 'ungrouped') {
                     this.devicesInitialTotalCount = response.data.total;
+                }
+                if(this.ungroupedDevicesInitialTotalCount === null && groupId === 'ungrouped') {
+                    this.ungroupedDevicesInitialTotalCount = response.data.total;
                 }
                 this.devicesCurrentPage++;
                 this.devicesTotalCount = response.data.total;
@@ -134,6 +158,11 @@ export default class DevicesStore {
             });
     }
 
+    fetchDevicesAfterGroupCreation() {
+        this.devices = [];
+        this.preparedDevices = [];
+    }
+
     fetchDevice(id) {
         resetAsync(this.devicesOneFetchAsync, true);
         return axios.get(API_DEVICES_DEVICE_DETAILS + '/' + id + '?status=true')
@@ -170,13 +199,17 @@ export default class DevicesStore {
 
     _reset() {
         resetAsync(this.devicesFetchAsync);
+        resetAsync(this.devicesInitialFetchAsync);
         resetAsync(this.devicesRememberedFetchAsync);
         resetAsync(this.devicesFetchAfterDragAndDropAsync);
+        resetAsync(this.devicesFetchAfterGroupCreationAsync);
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
         this.devices = [];
+        this.initialDevices = [];
         this.devicesInitialTotalCount = null;
+        this.ungroupedDevicesInitialTotalCount = null;
         this.devicesTotalCount = null;
         this.devicesCurrentPage = 0;
         this.preparedDevices = [];
@@ -186,6 +219,7 @@ export default class DevicesStore {
         this.deviceQueue = [];
         this.deviceHistory = [];
         this.deviceUpdatesLogs = [];
+        this.onlineDevices = [];
     }
 
     _getDevice(id) {
@@ -217,6 +251,15 @@ export default class DevicesStore {
             return bName.localeCompare(aName);
           else
             return aName.localeCompare(bName);
+        });
+    }
+
+    _countOnlineDevices() {
+        this.onlineDevices = [];
+        _.each(this.initialDevices, (device, index) => {
+            if(device.deviceStatus === "UpToDate") {
+                this.onlineDevices.push(device);
+            }
         });
     }
 

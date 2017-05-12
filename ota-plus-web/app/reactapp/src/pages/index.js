@@ -8,6 +8,9 @@ import ImpactAnalysisPage from './ImpactAnalysis';
 import TreehubPage from './Treehub';
 import ProfilePage from './Profile';
 import NoMatchPage from './NoMatch';
+import WelcomePage from './Welcome';
+import DestinyPage from './Destiny';
+import FireworksPage from './Fireworks';
 
 export {
     HomePage,
@@ -19,5 +22,8 @@ export {
     ImpactAnalysisPage,
     TreehubPage,
     ProfilePage,
-    NoMatchPage
+    NoMatchPage,
+    WelcomePage,
+    DestinyPage,
+    FireworksPage,
 }
