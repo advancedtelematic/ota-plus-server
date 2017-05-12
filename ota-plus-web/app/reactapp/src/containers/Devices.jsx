@@ -127,7 +127,6 @@ class Devices extends Component {
                                     devicesStore={devicesStore}
                                     groupsStore={groupsStore}
                                     showRenameModal={this.showRenameModal}
-                                    showCreateModal={this.showCreateModal}
                                     changeSort={this.changeSort}
                                     changeFilter={this.changeFilter}
                                 />

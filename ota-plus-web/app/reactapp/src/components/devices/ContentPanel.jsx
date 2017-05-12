@@ -38,11 +38,10 @@ class ContentPanel extends Component {
         this.context.router.push(`/device/${deviceId}`);
     }
     render() {
-        const { devicesStore, groupsStore, showRenameModal, showCreateModal, changeSort, changeFilter } = this.props;
+        const { devicesStore, groupsStore, showRenameModal, changeSort, changeFilter } = this.props;
         return (
             <div className="content-panel">
                 <ContentPanelHeader 
-                    showCreateModal={showCreateModal}
                     devicesSort={devicesStore.devicesSort}
                     changeSort={changeSort}
                     devicesFilter={devicesStore.devicesFilter}
@@ -118,7 +117,6 @@ ContentPanel.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     groupsStore: PropTypes.object.isRequired,
     showRenameModal: PropTypes.func.isRequired,
-    showCreateModal: PropTypes.func.isRequired,
     changeSort: PropTypes.func.isRequired,
     changeFilter: PropTypes.func.isRequired
 }
