@@ -6,33 +6,22 @@ class Tooltip extends Component {
     constructor(props) {
         super(props);
     }
-    _onClick() {
-        this.props.provisioningStore.activateProvisioning();
-    }
     render() {
         const { shown, hide } = this.props;
         const content = (
             <span>
                 <div className="text-center">
-                    The provisioning API lets you programmatically add new devices <br />
-                    to ATS Garage as soon as they come online. You can, for example, <br />
-                    put the same image on 100 devices, power them on, and have them <br />
-                    register themselves (and download updates!) the first time they boot.<br /><br />
-                    If you enable this feature, you'll get an individual URL and API <br />
-                    credentials for the provisioning endpoints. Read the docs for more details.
+                    ATS Garage automatically provisions and activates your devices the first
+                    time they come online. Here, you can create and manage the provisioning keys
+                    linked to your account.
                 </div>
 
                 <div className="body-actions">
-                    <a href="#"
-                        onClick={hide}
-                        className="link-cancel">
-                        Later
-                    </a>
                     <FlatButton
-                        label="Activate Provisioning API"
+                        label="Got it!"
                         type="button"
                         className="btn-main"
-                        onClick={this._onClick.bind(this)}
+                        onClick={hide}
                     />
                 </div>
             </span>
@@ -40,16 +29,13 @@ class Tooltip extends Component {
             
         return (
             <Modal 
-                title="Provisioning"
+                title={<span className="heading provisioning-tooltip-header"><img src="/assets/img/icons/white/key.png" alt="Image" />Provisioning Key</span>}
                 content={content}
                 shown={shown}
+                className="provisioning-key-tooltip"
             />
         );
     }
-}
-
-Tooltip.propTypes = {
-    provisioningStore: PropTypes.object.isRequired
 }
 
 export default Tooltip;

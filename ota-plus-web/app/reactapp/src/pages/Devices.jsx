@@ -14,6 +14,7 @@ class Devices extends Component {
     }
     componentWillMount() {
         this.props.devicesStore.fetchDevices();
+        this.props.devicesStore.fetchDevices(this.props.devicesStore.devicesFilter, 'ungrouped');
         this.props.groupsStore.fetchGroups();
     }
     componentWillUnmount() {

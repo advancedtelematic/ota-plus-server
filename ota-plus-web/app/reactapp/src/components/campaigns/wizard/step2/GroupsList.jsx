@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { Loader } from '../../../../partials';
 import GroupsListItem from './GroupsListItem';
 import _ from 'underscore';
+import { InfiniteScroll } from '../../../../utils';
 
 const headerHeight = 28;
 
@@ -67,38 +68,49 @@ class GroupsList extends Component {
         const { chosenGroups, setWizardData, groupsStore } = this.props;
         return (
             <div className="ios-list" ref="list">
-                {groupsStore.groupsFetchAsync.isFetching ? 
-                    <div className="wrapper-center">
-                        <Loader />
-                    </div>
-                :
-                    <span>
-                        <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
-                            {this.fakeHeaderLetter}
+                <InfiniteScroll
+                    className="wrapper-infinite-scroll"
+                    hasMore={groupsStore.groupsCurrentPage < groupsStore.groupsTotalCount / groupsStore.groupsLimit}
+                    isLoading={groupsStore.groupsFetchAsync.isFetching}
+                    useWindow={false}
+                    loadMore={() => {
+                        groupsStore.fetchGroups()
+                    }}
+                >
+                    {groupsStore.groupsFetchAsync.isFetching ? 
+                        <div className="wrapper-center">
+                            <Loader />
                         </div>
-                        {_.map(groupsStore.preparedGroups, (groups, letter) => {
-                            return (
-                                <span key={letter}>
-                                    <div className="header">
-                                        {letter}
-                                    </div>
-                                    {_.map(groups, (group, index) => {
-                                        return (
-                                            <span key={index}>
-                                                <GroupsListItem 
-                                                    group={group}
-                                                    setWizardData={setWizardData}
-                                                    groupsStore={groupsStore}
-                                                    isChosen={chosenGroups.indexOf(group.id) > -1}
-                                                /> 
-                                            </span>
-                                        );
-                                    })}
-                                </span>
-                            );
-                        })}
-                    </span>
-                }
+                    :
+                        <span>
+                            <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
+                                {this.fakeHeaderLetter}
+                            </div>
+                            
+                            {_.map(groupsStore.preparedGroups, (groups, letter) => {
+                                return (
+                                    <span key={letter}>
+                                        <div className="header">
+                                            {letter}
+                                        </div>
+                                        {_.map(groups, (group, index) => {
+                                            return (
+                                                <span key={index}>
+                                                    <GroupsListItem 
+                                                        group={group}
+                                                        setWizardData={setWizardData}
+                                                        groupsStore={groupsStore}
+                                                        isChosen={chosenGroups.indexOf(group.id) > -1}
+                                                    /> 
+                                                </span>
+                                            );
+                                        })}
+                                    </span>
+                                );
+                            })}
+                        </span>
+                    }
+                </InfiniteScroll>
             </div>
         );
     }
