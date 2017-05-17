@@ -135,7 +135,7 @@ export default class ProvisioningStore {
             .then(axios.spread(function (provResp, treehubResp) {
                 var zip = new JSZip();
                 zip.file("autoprov.url", this.provisioningDetails.hostName);
-                zip.file("autoprov_credentials.p12", provResp.data);
+                zip.file("autoprov_credentials.p12", provResp.data, { binary: true });
                 zip.file("treehub.json", JSON.stringify(treehubResp.data, null, 2));
                 zip.generateAsync({type: "blob"})
                     .then(function (content) {
