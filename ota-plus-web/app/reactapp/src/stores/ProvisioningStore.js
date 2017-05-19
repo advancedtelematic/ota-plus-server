@@ -130,7 +130,7 @@ export default class ProvisioningStore {
 
     downloadProvisioningKeyBundle(keyUuid) {
         return axios.all([
-                axios.get(API_PROVISIONING_KEYS_FETCH + '/' + keyUuid),
+                axios.get(API_PROVISIONING_KEYS_FETCH + '/' + keyUuid, { responseType: 'arraybuffer' }),
                 axios.get(API_FEATURES_TREEHUB_ACTIVATE + '/client')])
             .then(axios.spread(function (provResp, treehubResp) {
                 var zip = new JSZip();
