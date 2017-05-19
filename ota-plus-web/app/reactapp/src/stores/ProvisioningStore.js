@@ -108,7 +108,6 @@ export default class ProvisioningStore {
             .then(function (response) {
                 this.initialProvisioningKeys = response.data;
                 this.provisioningKeys = response.data;
-                this.provisioningKeys = [];
                 this._prepareProvisioningKeys();
                 this.provisioningKeysFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
