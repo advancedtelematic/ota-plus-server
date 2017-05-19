@@ -3,6 +3,7 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import _ from 'underscore';
 import ListItem from './ListItem';
+import NoKeys from './NoKeys';
 import { Loader } from '../../../partials';
 
 const minBoxWidth = 350;
@@ -52,14 +53,9 @@ class List extends Component {
                                 <Loader />
                             </div>
                         :
-                            <div className="wrapper-center">
-                                <div className="no-access-keys">
-                                    You haven't created any keys yet.
-                                </div>
-                                <div>
-                                    <a href="#" onClick={showTooltip.bind(this)}>What is this?</a>
-                                </div>
-                            </div>
+                            <NoKeys 
+                                showTooltip={showTooltip}
+                            />
                     }
                 </div>
             </div>
