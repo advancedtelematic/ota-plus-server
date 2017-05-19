@@ -32,12 +32,6 @@ class Header extends Component {
                     }
                 </div>
                 <FlatButton
-                    label="Add new device"
-                    onClick={showDevicesCreateModal.bind(this)}
-                    className="btn-main btn-small btn-add"
-                    id="add-new-device"
-                />
-                <FlatButton
                     label="Add new key"
                     onClick={showCreateModal.bind(this)}
                     className="btn-main btn-small btn-add"
