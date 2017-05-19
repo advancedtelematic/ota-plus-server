@@ -31,7 +31,7 @@ class List extends Component {
         this.howManyBoxesPerRow = howManyBoxesPerRow;
     }
     render() {
-        const { provisioningStore } = this.props;
+        const { provisioningStore, showTooltip } = this.props;
         return (
             <div className="wrapper">
                 <div className="inner-container" ref="innerContainer">
@@ -52,11 +52,14 @@ class List extends Component {
                                 <Loader />
                             </div>
                         :
-                            <span className="content-empty">
-                                <div className="wrapper-center">
-                                    Oops, there are no keys to show.
+                            <div className="wrapper-center">
+                                <div className="no-access-keys">
+                                    You haven't created any keys yet.
                                 </div>
-                            </span>
+                                <div>
+                                    <a href="#" onClick={showTooltip.bind(this)}>What is this?</a>
+                                </div>
+                            </div>
                     }
                 </div>
             </div>

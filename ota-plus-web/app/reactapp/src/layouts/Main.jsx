@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import axios from 'axios';
-import { observe, observable } from 'mobx';
+import { observe, observable, extendObservable } from 'mobx';
 import { observer } from 'mobx-react';
 import { DragDropContextProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -17,7 +17,8 @@ import {
 } from '../stores';
 import { APP_LAYOUT } from '../config';
 import { 
-    Navigation, 
+    Navigation,
+    IntroNavigation,
     SizeVerify,
     UploadBox 
 } from '../partials';
@@ -26,10 +27,17 @@ import {
     WebsocketHandler,
     DoorAnimation
 } from '../utils';
+import _ from 'underscore';
+import Cookies from 'js-cookie';
 
 @observer
 class Main extends Component {
     @observable ifLogout = false;
+    @observable initialDevicesCount = null;
+    @observable onlineDevicesCount = null;
+    @observable deviceInstallationHistory = [];
+    @observable deviceInstallationQueue = [];
+    @observable router = null;
 
     constructor(props) {
         super(props);
@@ -49,6 +57,7 @@ class Main extends Component {
         this.featuresStore = new FeaturesStore();
         this.provisioningStore = new ProvisioningStore();
         this.userStore = new UserStore();
+        this.redirectTo = this.redirectTo.bind(this);
         this.websocketHandler = new WebsocketHandler({
             devicesStore: this.devicesStore,
             packagesStore: this.packagesStore
@@ -58,15 +67,73 @@ class Main extends Component {
                 this.ifLogout = true;
             }
         });
+
+        this.locationHasChanged = this.locationHasChanged.bind(this);
+        this.devicesHandler = observe(this.devicesStore, (change) => {
+            if(change.name === 'devicesInitialFetchAsync' && change.object[change.name].isFetching === false) {
+                this.initialDevicesCount = this.devicesStore.initialDevices.length;
+                let onlineDevices = this.devicesStore.onlineDevices;
+                let onlineDevicesCount = onlineDevices.length;
+                this.onlineDevicesCount = onlineDevicesCount;
+
+                if(onlineDevicesCount === 1) {
+                    let device = _.head(onlineDevices);
+                    this.packagesStore.fetchDevicePackagesQueue(device.uuid);
+                    this.packagesStore.fetchDevicePackagesHistory(device.uuid);
+                }
+            }
+        });
+        this.packagesQueueHandler = observe(this.packagesStore, (change) => {
+            if(change.name === 'packagesDeviceQueueFetchAsync' && change.object[change.name].isFetching === false) {
+                this.deviceInstallationQueue = this.packagesStore.deviceQueue;
+            }
+        });
+        this.packagesHistoryHandler = observe(this.packagesStore, (change) => {
+            if(change.name === 'packagesDeviceHistoryFetchAsync' && change.object[change.name].isFetching === false) {
+                this.deviceInstallationHistory = this.packagesStore.deviceHistory;
+            }
+        });
     }
     componentWillMount() {
+        this.router = this.context.router;
         this.userStore.fetchUser();
         this.featuresStore.fetchFeatures();
+        this.devicesStore.fetchInitialDevices();
         this.devicesStore.fetchDevices();
         this.websocketHandler.init();
     }
+    componentDidMount() {
+        this.router.listen(this.locationHasChanged);
+    }
+    locationHasChanged() {
+        if(this.initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') != 1) {
+            this.redirectTo('welcome');
+        }
+        if(this.initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') == 1) {
+            this.redirectTo('destiny');
+        }
+        if(this.onlineDevicesCount === 1 && Cookies.get('welcomePageAcknowledged') != 1
+            && this.deviceInstallationQueue.length === 0 && this.deviceInstallationHistory.length === 0
+            && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') 
+            && !this.router.isActive('/fireworks')) {
+                this.redirectTo('fireworks');
+        }
+        if(this.initialDevicesCount !== 0 && (this.router.isActive('/welcome') || this.router.isActive('/destiny'))) {
+            this.redirectTo(null);
+        }
+    }
+    redirectTo(page) {
+        if(!page) {
+            this.router.push('/');
+        } else {
+            this.router.push('/' + page);
+        }
+    }
     componentWillUnmount() {
         this.logoutHandler();
+        this.devicesHandler();
+        this.packagesQueueHandler();
+        this.packagesHistoryHandler();
     }
     render() {
         const { children, ...rest } = this.props;
@@ -75,10 +142,28 @@ class Main extends Component {
             <DragDropContextProvider backend={HTML5Backend}>
             <div id={pageId}>
                 <FadeAnimation>
-                    <Navigation
-                        userStore={this.userStore}
-                        featuresStore={this.featuresStore}
-                    />
+                    {this.router.isActive('/welcome') || this.router.isActive('/destiny') ?
+                        <IntroNavigation
+                            userStore={this.userStore}
+                            featuresStore={this.featuresStore}
+                            devicesStore={this.devicesStore}
+                            logoLink={'/welcome'}
+                        />
+                    : this.router.isActive('/fireworks') ?
+                        <IntroNavigation
+                            userStore={this.userStore}
+                            featuresStore={this.featuresStore}
+                            devicesStore={this.devicesStore}
+                            logoLink={'/'}
+                        />
+                    :
+                        <Navigation
+                            userStore={this.userStore}
+                            featuresStore={this.featuresStore}
+                            devicesStore={this.devicesStore}
+                        />
+                    }
+                    
                     <children.type
                         {...rest}
                         children={children.props.children}
@@ -91,6 +176,11 @@ class Main extends Component {
                         featuresStore={this.featuresStore}
                         provisioningStore={this.provisioningStore}
                         userStore={this.userStore}
+                        initialDevicesCount={this.initialDevicesCount}
+                        onlineDevicesCount={this.onlineDevicesCount}
+                        deviceInstallationHistory={this.deviceInstallationHistory}
+                        deviceInstallationQueue={this.deviceInstallationQueue}
+                        router={this.router}
                     />
                 </FadeAnimation>
                 <SizeVerify 
@@ -115,6 +205,10 @@ class Main extends Component {
         );
     }
     
+}
+
+Main.contextTypes = {
+    router: React.PropTypes.object.isRequired,
 }
 
 Main.propTypes = {
