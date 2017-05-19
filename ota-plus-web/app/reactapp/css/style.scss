@@ -296,6 +296,12 @@ input {
     display: flex;
     flex-direction: column;
 
+    &.whitened {
+        background: url(/assets/img/bg_white.png) no-repeat 100px 170px;
+        background-attachment: fixed;
+        background-size: cover;
+    }
+
     .content {
         height: 100%;
         overflow-y: auto;

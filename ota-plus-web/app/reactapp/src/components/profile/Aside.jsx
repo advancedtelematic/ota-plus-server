@@ -51,7 +51,7 @@ class Aside extends Component {
                         </li>
                         <li>
                             <Link to="/profile/access-keys" activeClassName="active" id="link-access-keys">
-                                Access keys
+                                Provisioning keys
                             </Link>
                         </li>
                     </ul>
