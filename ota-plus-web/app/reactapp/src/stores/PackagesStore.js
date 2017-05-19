@@ -68,6 +68,11 @@ export default class PackagesStore {
     @observable deviceHistory = [];
     @observable deviceUpdatesLogs = [];
 
+    @observable ondevicePackages = [];
+    @observable ondevicePackagesCurrentPage = 0;
+    @observable ondevicePackagesTotalCount = null;
+    @observable ondevicePackagesLimit = 25;
+
     constructor() {
         resetAsync(this.packagesFetchAsync);
         resetAsync(this.packageStatisticsFetchAsync);
@@ -379,7 +384,7 @@ export default class PackagesStore {
         resetAsync(this.packagesForDeviceFetchAsync, true);
         return axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages?regex=' + (this.devicePackagesFilter ? this.devicePackagesFilter : ''))
             .then(function(response) {
-                this.devicePackages = response.data;
+                this.devicePackages = response.data.values;
                 switch (this.page) {
                     case 'device':
                         this._prepareDevicePackages();
@@ -396,12 +401,21 @@ export default class PackagesStore {
 
     fetchOndevicePackages(id, filter) {
         resetAsync(this.packagesOndeviceFetchAsync, true);
-        return axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages?regex=' + (filter ? filter : ''))
+        if(filter) {
+            this.ondevicePackagesTotalCount = null;
+            this.ondevicePackagesCurrentPage = 0;
+            this.ondevicePackages = [];
+            this.preparedOndevicePackages = [];
+        }
+        return axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages?regex=' + (filter ? filter : '') + 
+                        '&limit=' + this.ondevicePackagesLimit + '&offset=' + this.ondevicePackagesCurrentPage * this.ondevicePackagesLimit)
             .then(function(response) {
-                this.ondevicePackages = response.data;
+                this.ondevicePackages = _.uniq(this.ondevicePackages.concat(response.data.values), pack => pack.packageId.name);
                 switch (this.page) {
                     case 'device':
                         this._prepareOndevicePackages();
+                        this.ondevicePackagesCurrentPage++;
+                        this.ondevicePackagesTotalCount = response.data.total;
                         break;
                     default:
                         break;
@@ -859,6 +873,9 @@ export default class PackagesStore {
         this.deviceQueue = [];
         this.deviceHistory = [];
         this.deviceUpdatesLogs = [];
+        this.ondevicePackages = [];
+        this.ondevicePackagesCurrentPage = 0;
+        this.ondevicePackagesTotalCount = 0;
     }
 
     _resetWizard() {

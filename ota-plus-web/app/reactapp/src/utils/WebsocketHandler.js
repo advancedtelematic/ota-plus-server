@@ -17,6 +17,9 @@ const WebsocketHandler = (function (stores) {
             console.log(type);
             switch (type) {
                 case "DeviceSeen":
+                    if(stores.devicesStore.onlineDevices.length === 0 || stores.devicesStore.onlineDevices.length === 1) {
+                        window.location = "#/fireworks";
+                    }
                     stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
                     if(stores.packagesStore.deviceQueue.length && stores.devicesStore.device.uuid === data.uuid) {
                         stores.packagesStore.fetchDevicePackagesHistory(data.uuid);

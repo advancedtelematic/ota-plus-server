@@ -31,6 +31,11 @@ a {
             color: $color-mint2;
         }
     }
+
+    &.disabled {
+        pointer-events: none;
+        cursor: default;
+    }
 }
 
 .mint {
@@ -51,6 +56,12 @@ body {
     background-size: cover;
     padding-top: 50px; 
     overflow-y: hidden;
+
+    &.whitened {
+        background: url('/assets/img/bg_white.png') no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+    }
 }
 
 input {
@@ -740,7 +751,7 @@ input {
 
 .ios-list {
     background: #fff;
-    height: calc(100% - 40px);
+    height: calc(100%);
     overflow-y: auto;
     position: relative;
 
@@ -1113,10 +1124,6 @@ input {
                                         .icon {
                                             width: 40px;
                                             height: 40px;
-                                        }
-
-                                        .desc {
-                                            width: 70%;
                                         }
                                     }
                                 }
@@ -1729,6 +1736,24 @@ input {
 .create-provisioning-key-modal {
     .content {
         width: 550px !important;
+    }
+}
+
+.provisioning-key-tooltip {
+    .text-center {
+        padding: 50px;
+    }
+
+    .body-actions {
+        .btn-main {
+            padding: 15px 80px!important;
+            margin: 15px!important;
+        }
+    }
+
+    .provisioning-tooltip-header img {
+        width: 20px;
+        margin-right: 10px;
     }
 }
 

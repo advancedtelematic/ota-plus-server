@@ -12,6 +12,9 @@ import {
     TreehubPage,
     ProfilePage,
     NoMatchPage,
+    WelcomePage,
+    DestinyPage,
+    FireworksPage,
 } from './pages';
 import {
     ProfileEditProfile,
@@ -24,8 +27,11 @@ const Routes = () => {
     return (
         <Router history={hashHistory}>
             <Route component={MainLayout}>
-                <IndexRoute component={HomePage} />
+                <IndexRoute component={HomePage}/>
                 <Route path="/" component={HomePage}/>
+                <Route path="/welcome" component={WelcomePage}/>
+                <Route path="/destiny" component={DestinyPage}/>
+                <Route path="/fireworks" component={FireworksPage}/>
                 <Route path="/devices" component={DevicesPage}/>
                 <Route path="/device/:id" component={DevicePage}/>
                 <Route path="/packages(/:packageName)" component={PackagesPage}/>
@@ -45,5 +51,5 @@ const Routes = () => {
         </Router>
     );
 }
-    
+
 export default Routes;

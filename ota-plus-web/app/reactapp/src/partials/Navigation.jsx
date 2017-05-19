@@ -9,12 +9,13 @@ class Navigation extends Component {
         super(props);
     }
     render() {
-        const { userStore } = this.props;
+        const { userStore, devicesStore } = this.props;
+        const logoLink = '/';
         return (
             <nav className="navbar navbar-inverse navbar-fixed-top">
                   <div className="container">
                     <div className="navbar-header">
-                          <Link to="/" className="navbar-brand" id="logo"></Link>
+                          <Link to={logoLink} className="navbar-brand" id="logo"></Link>
                     </div>
                     <div id="navbar">
                           <ul className="nav navbar-nav">
@@ -29,9 +30,6 @@ class Navigation extends Component {
                                 </li>
                                 <li>
                                     <Link to="/impact-analysis" activeClassName="active" id="link-impactanalysis">Impact analysis</Link>
-                                </li>
-                                <li>
-                                    <Link to="/treehub" activeClassName="active" id="link-treehub">Treehub</Link>
                                 </li>
                           </ul>
                     </div>

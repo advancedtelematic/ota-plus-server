@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import { FlatButton } from 'material-ui';
 import _ from 'underscore';
 import { GroupsListItem, GroupsListItemArtificial } from '../groups';
+import { InfiniteScroll } from '../../utils';
 
 const groupsArtificial = [
     {
@@ -38,46 +39,53 @@ class GroupsList extends Component {
         const { devicesStore, groupsStore, showRenameGroupModal, selectGroup, onDeviceDrop } = this.props;
         return (
             <div className="wrapper-groups">
-                {_.map(groupsArtificial, (group) => {
-                    const isSelected = (groupsStore.selectedGroup.type === 'artificial' && groupsStore.selectedGroup.name === group.name);
-                    let deviceCount = 0;
-                    let groupDevicesCount = 0;
-                    if(group.name === 'all') {
-                        deviceCount = devicesStore.devicesInitialTotalCount;
-                    } else if(group.name === 'ungrouped') {
-                        _.each(groupsStore.groups, (group) => {
-                            _.each(groupsStore._getGroupDevices(group), (device) => {
-                                groupDevicesCount++;
-                            });
-                        });
-                        deviceCount = devicesStore.devicesInitialTotalCount - groupDevicesCount;
-                    }
-                    return (
-                        <GroupsListItemArtificial
-                            group={group}
-                            selectGroup={selectGroup}
-                            isSelected={isSelected}
-                            onDeviceDrop={onDeviceDrop}
-                            isDND={group.isDND}
-                            deviceCount={deviceCount}
-                            key={group.name}
-                        />
-                    );
-                })}
-                {_.map(groupsStore.groups, (group) => {
-                    const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.name === group.groupName);
-                    return (
-                        <GroupsListItem 
-                            group={group}
-                            groupsStore={groupsStore}
-                            showRenameGroupModal={showRenameGroupModal}
-                            selectGroup={selectGroup}
-                            isSelected={isSelected}
-                            onDeviceDrop={onDeviceDrop}
-                            key={group.groupName}
-                        />
-                    );
-                })}
+            
+                <InfiniteScroll
+                        className="wrapper-infinite-scroll"
+                        hasMore={groupsStore.groupsCurrentPage < groupsStore.groupsTotalCount / groupsStore.groupsLimit}
+                        isLoading={groupsStore.groupsFetchAsync.isFetching}
+                        useWindow={false}
+                        loadMore={() => {
+                            groupsStore.fetchGroups()
+                        }}
+                    >
+                    {_.map(groupsArtificial, (group) => {
+                        const isSelected = (groupsStore.selectedGroup.type === 'artificial' && groupsStore.selectedGroup.name === group.name);
+                        let deviceCount = 0;
+                        let groupDevicesCount = 0;
+                        if(group.name === 'all') {
+                            deviceCount = devicesStore.devicesInitialTotalCount;
+                        } else if(group.name === 'ungrouped') {
+                            deviceCount = devicesStore.ungroupedDevicesInitialTotalCount ? devicesStore.ungroupedDevicesInitialTotalCount : 0;
+                        }
+                        return (
+                            <GroupsListItemArtificial
+                                group={group}
+                                selectGroup={selectGroup}
+                                isSelected={isSelected}
+                                onDeviceDrop={onDeviceDrop}
+                                isDND={group.isDND}
+                                deviceCount={deviceCount}
+                                key={group.name}
+                            />
+                        );
+                    })}
+                    {_.map(groupsStore.groups, (group) => {
+                        const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.name === group.groupName);
+                        return (
+                            <GroupsListItem 
+                                group={group}
+                                groupsStore={groupsStore}
+                                showRenameGroupModal={showRenameGroupModal}
+                                selectGroup={selectGroup}
+                                isSelected={isSelected}
+                                onDeviceDrop={onDeviceDrop}
+                                key={group.groupName}
+                            />
+                        );
+                    })}
+                </InfiniteScroll>
+
             </div>
         );
     }
