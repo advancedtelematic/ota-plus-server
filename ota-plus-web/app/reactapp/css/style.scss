@@ -880,7 +880,7 @@ input {
         border: 0;
         border-left: 1px solid #ddd;
         border-right: 1px solid #ddd;
-        display: inline-block;
+        float: right;
         @include transition;
 
         &:hover {
