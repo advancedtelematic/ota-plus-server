@@ -11,17 +11,28 @@ class Overlay extends Component {
     }
     render() {
         const { hardware, hideDetails, shown } = this.props;
-        const content = (
-            <div id="hardware-overlay">
-                <div className="triangle"></div>
-                <div className="details">
-                    <DeviceHardwareOverlayItem 
-                        data={hardware}
-                        mainLevel={true}
-                    />
+        let content = null;
+
+        if(!hardware) {            
+            content = (
+                <div className="wrapper-center">
+                    This device hasn’t reported any information about
+                    its hardware or system components yet.
                 </div>
-            </div>
-        );
+            );
+        } else {
+            content = (
+                <div id="hardware-overlay">
+                    <div className="triangle"></div>
+                    <div className="details">
+                        <DeviceHardwareOverlayItem 
+                            data={hardware}
+                            mainLevel={true}
+                        />
+                    </div>
+                </div>
+            );
+        }
 
         return (
             <Modal 
@@ -37,7 +48,6 @@ class Overlay extends Component {
 }
 
 Overlay.propTypes = {
-    hardware: PropTypes.object.isRequired,
     hideDetails: PropTypes.func.isRequired
 }
 
