@@ -27,7 +27,7 @@ class Device extends Component {
         this.props.hardwareStore.fetchHardware(this.props.params.id);
         this.props.packagesStore.fetchPackages();
         this.props.packagesStore.fetchBlacklist();
-        this.props.packagesStore.fetchDevicePackages(this.props.params.id);
+        this.props.packagesStore.fetchInitialDevicePackages(this.props.params.id);
         this.props.packagesStore.fetchDeviceAutoInstalledPackages(this.props.params.id);
         this.props.packagesStore.fetchDevicePackagesQueue(this.props.params.id);
     }

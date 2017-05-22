@@ -59,6 +59,7 @@ export default class PackagesStore {
     @observable preparedBlacklist = [];
     @observable blacklistedPackage = {};
     @observable affectedDevicesCount = {};
+    @observable initialDevicePackages = [];
     @observable devicePackages = [];
     @observable devicePackagesFilter = '';
     @observable deviceAutoInstalledPackages = [];
@@ -67,6 +68,8 @@ export default class PackagesStore {
     @observable deviceQueue = [];
     @observable deviceHistory = [];
     @observable deviceUpdatesLogs = [];
+
+    @observable devicePackagesLimit = 1000;
 
     @observable ondevicePackages = [];
     @observable ondevicePackagesCurrentPage = 0;
@@ -380,6 +383,25 @@ export default class PackagesStore {
             }.bind(this));
     }
 
+    fetchInitialDevicePackages(id, filter = this.devicePackagesFilter) {
+        resetAsync(this.packagesForDeviceFetchAsync, true);
+        return axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages?regex=' + '&limit=' + this.devicePackagesLimit)
+            .then(function(response) {
+                this.initialDevicePackages = response.data.values;
+                switch (this.page) {
+                    case 'device':
+                        this._prepareDevicePackages();
+                        break;
+                    default:
+                        break;
+                }
+                this.packagesForDeviceFetchAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function(error) {
+                this.packagesForDeviceFetchAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
     fetchDevicePackages(id, filter = this.devicePackagesFilter) {
         resetAsync(this.packagesForDeviceFetchAsync, true);
         return axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages?regex=' + (this.devicePackagesFilter ? this.devicePackagesFilter : ''))
@@ -607,7 +629,7 @@ export default class PackagesStore {
         this.packagesSort = packagesSort;
         let packages = JSON.parse(JSON.stringify(this.packages));
         if(packages.length) {
-            const installedPackages = this.devicePackages;
+            const installedPackages = this.initialDevicePackages;
             const autoInstalledPackages = this.deviceAutoInstalledPackages;
             const blacklist = this.blacklist;
             const queuedPackages = this.deviceQueue;
@@ -866,6 +888,7 @@ export default class PackagesStore {
         this.preparedBlacklist = [];
         this.blacklistedPackage = {};
         this.affectedDevicesCount = {};
+        this.initialDevicePackages = [];
         this.devicePackages = [];
         this.deviceAutoInstalledPackages = [];
         this.devicePackagesInstalledCount = 0;
