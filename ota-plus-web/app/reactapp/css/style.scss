@@ -2244,6 +2244,7 @@ input {
 }
 
 .hardware-overlay-modal {
+    padding-top: 0!important;
 
     ::-webkit-scrollbar {
         width: 12px;
@@ -2279,6 +2280,7 @@ input {
         .body {
             background: #f7f7f7;
             border-radius: 10px;
+            height: 756px!important;
 
             .table>tbody>tr th, .table>tbody>tr td {
                 padding: 2px 15px;
@@ -2314,7 +2316,7 @@ input {
                 border-right: 25px solid #f7f7f7;
                 position: absolute;
                 left: -25px;
-                top: 155px;
+                top: 172px;
             }
         }
 
