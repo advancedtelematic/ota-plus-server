@@ -8,8 +8,6 @@ import { HistoryList } from './history';
 
 @observer
 class QueueModal extends Component {
-    @observable activeTabId = 0;
-
     static checkStatus(status) {
         let installationStatus = null;
         switch(status) {
@@ -27,24 +25,11 @@ class QueueModal extends Component {
         }
         return installationStatus;
     }
-
     constructor(props) {
         super(props);
-        this.handleActive = this.handleActive.bind(this);
-    }
-    componentWillReceiveProps() {
-        if(this.props.device.lastSeen) {
-            this.props.packagesStore.fetchDevicePackagesHistory(this.props.device.uuid);
-            this.props.packagesStore.fetchDevicePackagesUpdatesLogs(this.props.device.uuid);
-            this.props.packagesStore.fetchDevicePackagesQueue(this.props.device.uuid);
-        }
-        this.activeTabId = 0;
-    }
-    handleActive(tab) {
-        this.activeTabId = tab.props['data-id'];
     }
     render() {
-        const { packagesStore, shown, hide, device, cancelInstallation } = this.props;
+        const { packagesStore, shown, hide, device, cancelInstallation, activeTabId, setQueueModalActiveTabId } = this.props;
         const installationStatus = QueueModal.checkStatus(device.deviceStatus);
         const content = (
             <span>
@@ -55,10 +40,10 @@ class QueueModal extends Component {
                 >
                     <Tab
                         label="Queued"
-                        className={"tab-item" + (this.activeTabId === 0 ? " active" : "")}
+                        className={"tab-item" + (activeTabId === 0 ? " active" : "")}
                         id="queued-packages"
                         data-id={0}
-                        onActive={this.handleActive}
+                        onActive={setQueueModalActiveTabId.bind(this, 0)}
                     >
                         <div className="wrapper-list">
                             <QueueList 
@@ -69,10 +54,10 @@ class QueueModal extends Component {
                     </Tab>
                     <Tab
                         label="History" 
-                        className={"tab-item" + (this.activeTabId === 1 ? " active" : "")}
+                        className={"tab-item" + (activeTabId === 1 ? " active" : "")}
                         id="installation-history"
                         data-id={1}
-                        onActive={this.handleActive}
+                        onActive={setQueueModalActiveTabId.bind(this, 1)}
                     >
                         <div className="wrapper-list">
                             <HistoryList 
