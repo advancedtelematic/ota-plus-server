@@ -23,6 +23,7 @@ const WebsocketHandler = (function (stores) {
                         stores.packagesStore.fetchDevicePackagesUpdatesLogs(data.uuid);
                         stores.packagesStore.fetchDevicePackagesQueue(data.uuid);
                         stores.packagesStore.fetchDevicePackages(data.uuid, null);
+                        stores.packagesStore.fetchOndevicePackages(data.uuid, null);
                     }
                     break;
                 case "DeviceUpdateStatus":
