@@ -65,12 +65,23 @@ Step 3:`cd ota-plus-server` and run tests, for example:
 
 ## Ota Plus Web
 
-To run the web app with authentication support you will need a configure an application
-on [Auth0](https://auth0.com) and set `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_DOMAIN`
-and `AUTH0_CALLBACK_URL` environment variables. 
+To run the web app with authentication support you will need a configure an
+application and a database on [Auth0](https://auth0.com) and set environment
+variables:
 
-The `AUTH0_CALLBACK_URL` should be in the list of `Allowed Callback URLs` of the Auth0 application.   
+Variable                    | Description
+-------------------:        | :------------------
+`AUTH0_CALLBACK_URL`        | Callback url, eg. `http://localhost/callback`
+`AUTH0_CLIENT_ID`           | Client ID of Auth0 client
+`AUTH0_CLIENT_SECRET`       | Client Secret of Auth0 client
+`AUTH0_DB_CONNECTION`       | Name of database connectino in Auth0
+`AUTH0_AUTH_PLUS_CLIENT_ID` | Client ID of Auth+ client in Auth0
+`AUTH0_DOMAIN`              | Host of auth0 endpoints, eg: `ats-dev.eu.auth0.com`
+`AUTHPLUS_CLIENT_ID`        | Client ID of ota-plus in Auth+
+`AUTHPLUS_SECRET`           | Client secret of ota-plus in Auth+
 
+The `AUTH0_CALLBACK_URL` should be in the list of `Allowed Callback URLs` of
+the Auth0 application.
 
 ## Ota Plus Core
 
