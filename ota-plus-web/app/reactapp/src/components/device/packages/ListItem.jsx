@@ -25,17 +25,6 @@ class ListItem extends Component {
                                     <label className="label label-package-blacklisted">Blacklisted</label>
                                 </div>
                         :
-                        installedPackage ?
-                            pack.isAutoInstallEnabled ?
-                                <div className="labels">
-                                    <label className="label label-auto-update">Auto</label>
-                                    <label className="label label-package-installed">Installed</label>
-                                </div>
-                            :
-                                <div className="labels">
-                                    <label className="label label-package-installed">Installed</label>
-                                </div>
-                        :
                         queuedPackage ?
                             <span>
                                 {pack.isAutoInstallEnabled ?
@@ -49,6 +38,17 @@ class ListItem extends Component {
                                     </div>
                                 }
                             </span>
+                        :
+                        installedPackage ?
+                            pack.isAutoInstallEnabled ?
+                                <div className="labels">
+                                    <label className="label label-auto-update">Auto</label>
+                                    <label className="label label-package-installed">Installed</label>
+                                </div>
+                            :
+                                <div className="labels">
+                                    <label className="label label-package-installed">Installed</label>
+                                </div>
                         :
                         pack.isAutoInstallEnabled ?
                                 <div className="labels">
