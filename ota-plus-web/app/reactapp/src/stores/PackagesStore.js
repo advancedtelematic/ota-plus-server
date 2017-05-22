@@ -69,8 +69,6 @@ export default class PackagesStore {
     @observable deviceHistory = [];
     @observable deviceUpdatesLogs = [];
 
-    @observable devicePackagesLimit = 1000;
-
     @observable ondevicePackages = [];
     @observable ondevicePackagesCurrentPage = 0;
     @observable ondevicePackagesTotalCount = null;
@@ -385,16 +383,38 @@ export default class PackagesStore {
 
     fetchInitialDevicePackages(id, filter = this.devicePackagesFilter) {
         resetAsync(this.packagesForDeviceFetchAsync, true);
-        return axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages?regex=' + '&limit=' + this.devicePackagesLimit)
+        return axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages')
             .then(function(response) {
-                this.initialDevicePackages = response.data.values;
-                switch (this.page) {
-                    case 'device':
-                        this._prepareDevicePackages();
-                        break;
-                    default:
-                        break;
-                }
+                let totalPackagesCount = response.data.total;
+                let initialDevicePackages = [];
+
+                if (totalPackagesCount) {
+                    let after = _.after(initialDevicePackages.length, () => {
+                        this.initialDevicePackages = initialDevicePackages;
+                        this.packagesForDeviceFetchAsync = handleAsyncSuccess(response);
+
+                        switch (this.page) {
+                            case 'device':
+                                this._prepareDevicePackages();
+                                break;
+                            default:
+                                break;
+                        }
+                        
+                    }, this);
+
+                    axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages?regex=' + '&limit=' + totalPackagesCount)
+                        .then(function(response) {
+                            initialDevicePackages = response.data.values;
+                            after();
+                        })
+                        .catch(function() {
+                            after();
+                        });
+                } else {
+                    this.initialDevicePackages = [];
+                    this.packageStatisticsFetchAsync = handleAsyncSuccess(response);
+                }                
                 this.packagesForDeviceFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
