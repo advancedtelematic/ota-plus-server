@@ -50,7 +50,6 @@ class PropertiesPanel extends Component {
     }
     render() {
         const { showPackageCreateModal, showPackageBlacklistModal, onFileDrop, packagesStore, packageVersion, installPackage, device, togglePackageAutoUpdate, devicesStore } = this.props;
-
         return (
             <div className="properties-panel">
                 <div className="darkgrey-header">

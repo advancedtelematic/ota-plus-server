@@ -12,11 +12,13 @@ const title = "Device";
 @observer
 class Device extends Component {
     @observable queueModalShown = false;
+    @observable activeTabId = 0;
 
     constructor(props) {
         super(props);
         this.showQueueModal = this.showQueueModal.bind(this);
         this.hideQueueModal = this.hideQueueModal.bind(this);
+        this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
         this.cancelInstallation = this.cancelInstallation.bind(this);
     }
     componentWillMount() {
@@ -36,9 +38,16 @@ class Device extends Component {
     }
     showQueueModal() {
         this.queueModalShown = true;
+        this.props.packagesStore.fetchDevicePackagesHistory(this.props.devicesStore.device.uuid);
+        this.props.packagesStore.fetchDevicePackagesUpdatesLogs(this.props.devicesStore.device.uuid);
+        this.props.packagesStore.fetchDevicePackagesQueue(this.props.devicesStore.device.uuid);
     }
     hideQueueModal() {
         this.queueModalShown = false;
+        this.setQueueModalActiveTabId(0);
+    }
+    setQueueModalActiveTabId(tabId) {
+        this.activeTabId = tabId;
     }
     cancelInstallation(requestId) {
         this.props.packagesStore.cancelInstallation(this.props.params.id, requestId);
@@ -69,6 +78,8 @@ class Device extends Component {
                         hide={this.hideQueueModal}
                         device={devicesStore.device}
                         cancelInstallation={this.cancelInstallation}
+                        activeTabId={this.activeTabId}
+                        setQueueModalActiveTabId={this.setQueueModalActiveTabId}
                     />
                 </div>
             </FadeAnimation>

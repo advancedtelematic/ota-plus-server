@@ -46,7 +46,7 @@ class Home extends Component {
                 this.redirectTo('fireworks');
         }
     }
-    redirectTo( page) {
+    redirectTo(page) {
         this.router.push('/' + page);
     }
     render() {
