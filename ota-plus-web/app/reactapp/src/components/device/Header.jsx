@@ -9,6 +9,10 @@ class Header extends Component {
     constructor(props) {
         super(props);
     }
+    backButtonAction() {
+        document.body.className = document.body.className.replace("whitened", "");
+        window.history.back();
+    }
     render() {
         const { devicesStore, packagesStore, showQueueModal } = this.props;
         const { device } = devicesStore;
@@ -43,7 +47,7 @@ class Header extends Component {
                     </FadeAnimation>
                 }
                 backButtonShown={true}
-                backButtonAction={browserHistory.goBack}>
+                backButtonAction={this.backButtonAction}>
                 <FadeAnimation>
                     {!devicesStore.devicesOneFetchAsync.isFetching ?
                         <span className="pull-right">

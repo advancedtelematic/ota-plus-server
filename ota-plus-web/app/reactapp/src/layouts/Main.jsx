@@ -107,21 +107,26 @@ class Main extends Component {
         this.router.listen(this.locationHasChanged);
     }
     locationHasChanged() {
-        if(this.initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') != 1) {
-            this.redirectTo('welcome');
+        // TODO - refactor
+        if(!this.router.isActive('/profile/edit') && !this.router.isActive('/profile/usage') && !this.router.isActive('/profile/billing') && !this.router.isActive('/profile/access-keys')
+            && !this.props.location.pathname.includes("/device")) {
+            if(this.initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') != 1) {
+                this.redirectTo('welcome');
+            }
+            if(this.initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') == 1) {
+                this.redirectTo('destiny');
+            }
+            if(this.onlineDevicesCount === 1 && Cookies.get('welcomePageAcknowledged') != 1
+                && this.deviceInstallationQueue.length === 0 && this.deviceInstallationHistory.length === 0
+                && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') 
+                && !this.router.isActive('/fireworks')) {
+                    this.redirectTo('fireworks');
+            }
+            if(this.initialDevicesCount !== 0 && (this.router.isActive('/welcome') || this.router.isActive('/destiny'))) {
+                this.redirectTo(null);
+            }
         }
-        if(this.initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') == 1) {
-            this.redirectTo('destiny');
-        }
-        if(this.onlineDevicesCount === 1 && Cookies.get('welcomePageAcknowledged') != 1
-            && this.deviceInstallationQueue.length === 0 && this.deviceInstallationHistory.length === 0
-            && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') 
-            && !this.router.isActive('/fireworks')) {
-                this.redirectTo('fireworks');
-        }
-        if(this.initialDevicesCount !== 0 && (this.router.isActive('/welcome') || this.router.isActive('/destiny'))) {
-            this.redirectTo(null);
-        }
+        
     }
     redirectTo(page) {
         if(!page) {
