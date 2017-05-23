@@ -239,11 +239,17 @@ export default class DevicesStore {
                 _.each(data, (value, attr) => {
                     this.device[attr] = value;
                 });
+                if(!_.includes(this.onlineDevices, this.device)) {
+                    this.onlineDevices.push(this.device);
+                }
             }
         } else if(device) {
             _.each(data, (value, attr) => {
                 device[attr] = value;
             });
+            if(!_.includes(this.onlineDevices, device)) {
+                this.onlineDevices.push(device);
+            }
         }
     }
 
@@ -261,10 +267,11 @@ export default class DevicesStore {
     }
 
     _countOnlineDevices() {
-        this.onlineDevices = [];
         _.each(this.initialDevices, (device, index) => {
             if(device.deviceStatus === "UpToDate") {
-                this.onlineDevices.push(device);
+                if(!_.includes(this.onlineDevices, device)) {
+                    this.onlineDevices.push(device);
+                }
             }
         });
     }
