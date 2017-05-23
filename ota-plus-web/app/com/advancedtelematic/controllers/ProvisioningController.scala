@@ -20,6 +20,8 @@ class ProvisioningController @Inject()(config: Configuration, wsClient: WSClient
     implicit executionContext: ExecutionContext)
     extends Controller {
   val cryptApi = new CryptApi(config, new ApiClientExec(wsClient))
+  val gatewayPort = config.getInt("crypt.gateway.port").getOrElse(8000)
+
   def accountName(request: AuthenticatedRequest[_]): String = request.idToken.userId.id
 
   val provisioningStatus: Action[AnyContent] = AuthenticatedAction.async { implicit request =>
@@ -32,7 +34,10 @@ class ProvisioningController @Inject()(config: Configuration, wsClient: WSClient
 
   val provisioningInfo: Action[AnyContent] = AuthenticatedAction.async { implicit request =>
     cryptApi.getAccountInfo(accountName(request)).map {
-      case Some(x) => Ok(Json.toJson(x))
+      case Some(x) => Ok(Json.obj(
+        "hostName" -> x.hostName.toString,
+        "uri" -> s"https://${x.hostName}:$gatewayPort",
+        "subject" -> x.name))
       case None    => NotFound
     }
   }
