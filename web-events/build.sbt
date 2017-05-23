@@ -1,32 +1,36 @@
 name := "web_events"
 organization := "com.advancedtelematic"
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.2"
 
-scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
+scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8", "-Ypartial-unification")
 
 resolvers += "ATS Releases" at "http://nexus.prod01.internal.advancedtelematic.com:8081/content/repositories/releases"
 
 resolvers += "ATS Snapshots" at "http://nexus.prod01.internal.advancedtelematic.com:8081/content/repositories/snapshots"
 
 libraryDependencies ++= {
-  val akkaV = "2.4.14"
-  val akkaHttpV = "10.0.0"
+  val akkaV = "2.5.1"
+  val akkaHttpV = "10.0.6"
   val scalaTestV = "3.0.0"
-  val sotaV = "0.2.53"
+  val libatsV = "0.0.1-63-g8dcff8c"
+  val jwsV = "0.4.5"
 
   Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaV,
     "com.typesafe.akka" %% "akka-stream" % akkaV,
-    "com.typesafe.akka" %% "akka-http" % akkaHttpV,
+    "com.typesafe.akka" %% "akka-http-core" % akkaHttpV,
     "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpV,
     "com.typesafe.akka" %% "akka-slf4j" % akkaV,
     "org.scalatest"     %% "scalatest" % scalaTestV % "test",
 
     "ch.qos.logback" % "logback-classic" % "1.1.3",
 
-    "org.genivi" %% "sota-common" % sotaV,
-    "org.genivi" %% "sota-common-data" % sotaV,
-    "org.genivi" %% "sota-common-messaging" % sotaV
+    "com.advancedtelematic" %% "libats" % libatsV,
+    "com.advancedtelematic" %% "libats-messaging" % libatsV,
+    "com.advancedtelematic" %% "libats-messaging-datatype" % libatsV,
+    "com.advancedtelematic" %% "jw-security-core" % jwsV,
+    "com.advancedtelematic" %% "jw-security-jca" % jwsV,
+    "commons-codec" % "commons-codec" % "1.10"
   )
 }
 

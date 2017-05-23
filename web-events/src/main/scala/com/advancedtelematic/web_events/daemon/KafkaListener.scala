@@ -4,11 +4,10 @@ import akka.actor.{ActorSystem, Props}
 import akka.kafka.ConsumerMessage.CommittableMessage
 import akka.stream.scaladsl.Source
 import akka.{Done, NotUsed}
-import cats.data.Xor
 import com.typesafe.config.Config
-import org.genivi.sota.messaging.Messages.MessageLike
-import org.genivi.sota.messaging.daemon.MessageBusListenerActor
-import org.genivi.sota.messaging.kafka.KafkaClient
+import com.advancedtelematic.libats.messaging.Messages.MessageLike
+import com.advancedtelematic.libats.messaging.daemon.MessageBusListenerActor
+import com.advancedtelematic.libats.messaging.kafka.KafkaClient
 import scala.concurrent.{ExecutionContext, Future}
 
 object KafkaListener {
@@ -23,9 +22,9 @@ object KafkaListener {
   private def kafkaSource[Event](config: Config)
                                 (implicit system: ActorSystem,
                                  ml: MessageLike[Event]): Source[CommittableMessage[Array[Byte], Event], NotUsed] =
-    KafkaClient.commitableSource[Event](config)(ml, system) match {
-      case Xor.Right(s) => s
-      case Xor.Left(err) => throw err
+    KafkaClient.committableSource[Event](config)(ml, system) match {
+      case Right(s) => s
+      case Left(err) => throw err
     }
 
   private def buildSource[Event](action: Event => Future[Done],
