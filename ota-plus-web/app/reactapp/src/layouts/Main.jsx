@@ -60,7 +60,8 @@ class Main extends Component {
         this.redirectTo = this.redirectTo.bind(this);
         this.websocketHandler = new WebsocketHandler({
             devicesStore: this.devicesStore,
-            packagesStore: this.packagesStore
+            packagesStore: this.packagesStore,
+            welcomePageAcknowledged: Cookies.get('welcomePageAcknowledged') == 1
         });
         this.logoutHandler = observe(this.userStore, (change) => {
             if(change.name === 'ifLogout' && change.object[change.name]) {

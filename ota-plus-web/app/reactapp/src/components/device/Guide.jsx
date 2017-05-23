@@ -9,7 +9,7 @@ import _ from 'underscore';
 @observer
 class Guide extends Component {
     @observable shownTooltipInfoName = null;
-    @observable stepsHistory = [1];
+    
 
     constructor(props) {
         super(props);
@@ -28,27 +28,26 @@ class Guide extends Component {
     }
     componentWillMount() {
         document.body.className = "whitened";
-    }
+        this.props.devicesStore.addStepToHistory(1);
+        if(this.props.device.lastSeen) {
+            this.props.devicesStore.addStepToHistory(3);
+        }
+    }    
     componentWillUnmount() {
         document.body.className = document.body.className.replace("whitened", "");
     }
     downloadClient(e) {
         e.stopPropagation();
-        this.stepsHistory.push(2);
+        this.props.devicesStore.addStepToHistory(2);
     }
     selectStep(step) {
-        if(_.includes(this.stepsHistory, step)) {
-            this.stepsHistory.push(step);
-        }
-    }
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.device.deviceStatus === "UpToDate") {
-            this.selectStep(3);
+        if(_.includes(this.props.devicesStore.stepsHistory, step)) {
+            this.props.devicesStore.addStepToHistory(step);
         }
     }
     render() {
-        const { device } = this.props;
-        let activeStep = _.last(this.stepsHistory);
+        const { device, devicesStore } = this.props;        
+        let activeStep = _.last(devicesStore.stepsHistory);
         const bodyActions = (
             <div className="body-actions">
                 <FlatButton
