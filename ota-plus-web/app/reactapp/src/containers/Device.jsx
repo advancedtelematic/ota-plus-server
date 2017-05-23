@@ -96,7 +96,7 @@ class Device extends Component {
                         <Loader />
                     </div>
                 :
-                    device.lastSeen ?
+                    device.lastSeen && devicesStore.stepsHistory.length === 0 ?
                         <span>
                             <DeviceHardwarePanel 
                                 hardwareStore={hardwareStore}
@@ -126,6 +126,7 @@ class Device extends Component {
                     :
                         <DeviceGuide
                             device={device}
+                            devicesStore={devicesStore}
                         />
                 }
                 <PackagesCreateModal 
