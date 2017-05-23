@@ -39,6 +39,7 @@ export default class DevicesStore {
     @observable deviceHistory = [];
     @observable deviceUpdatesLogs = [];
     @observable onlineDevices = [];
+    @observable stepsHistory = [];
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
@@ -50,6 +51,10 @@ export default class DevicesStore {
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
         this.devicesLimit = 30;
+    }
+
+    addStepToHistory(step) {
+        this.stepsHistory.push(step);
     }
 
     fetchInitialDevices() {
@@ -220,24 +225,25 @@ export default class DevicesStore {
         this.deviceHistory = [];
         this.deviceUpdatesLogs = [];
         this.onlineDevices = [];
+        this.stepsHistory = [];
     }
 
     _getDevice(id) {
-        return _.findWhere(this.devices, {uuid: id});
+        return _.findWhere(this.initialDevices, {uuid: id});
     }
 
     _updateDeviceData(id, data) {
         let device = this._getDevice(id);
-        if(device) {
-            _.each(data, (value, attr) => {
-                device[attr] = value;
-            });
-        } else if(this.device) {
+        if(this.device) {
             if(this.device.uuid === id) {
                 _.each(data, (value, attr) => {
                     this.device[attr] = value;
                 });
             }
+        } else if(device) {
+            _.each(data, (value, attr) => {
+                device[attr] = value;
+            });
         }
     }
 
