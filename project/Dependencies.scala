@@ -1,6 +1,6 @@
 object Version {
   val Akka = "2.4.7"
-  val JsonWebSecurity = "0.2.1"
+  val JsonWebSecurity = "0.4.5"
   val MockWs = "2.5.0"
   val GeniviSota = "0.2.77"
   // Version 0.17 of akka-persistence-cassandra depends on Akka 2.4.7 and Scala 2.11.8
