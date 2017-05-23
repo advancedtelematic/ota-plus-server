@@ -23,6 +23,7 @@ class Device extends Component {
     }
     componentWillMount() {
         this.props.packagesStore.page = 'device';
+        this.props.devicesStore.fetchInitialDevices();
         this.props.devicesStore.fetchDevice(this.props.params.id);
         this.props.hardwareStore.fetchHardware(this.props.params.id);
         this.props.packagesStore.fetchPackages();
