@@ -42,7 +42,7 @@ class Welcome extends Component {
                 			<div className="body">
                 				<img src="/assets/img/onboarding_step_one.png" alt="Image" />
                 				<div className="subtitle">
-                					Integrate your open source client
+                					Integrate our open source client
                 				</div>
                 				<div className="text">
                 					Add a Yocto layer to an existing project, or follow a quickstart guide if you're new to Yocto/OpenEmbedded.
