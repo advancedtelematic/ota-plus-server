@@ -45,6 +45,7 @@ export default class PackagesStore {
     @observable packagesDeviceInstallAsync = {};
     @observable packagesDeviceCancelInstallationAsync = {};
     @observable page = null;
+    @observable initialPackages = [];
     @observable packages = [];
     @observable packageStats = [];
     @observable overallPackagesCount = null;
@@ -102,6 +103,7 @@ export default class PackagesStore {
         resetAsync(this.packagesFetchAsync, true);
         return axios.get(API_PACKAGES + '?regex=' + (filter ? filter : ''))
             .then(function(response) {
+                this.initialPackages = response.data;
                 this.packages = response.data;
                 switch (this.page) {
                     case 'device':
@@ -899,6 +901,7 @@ export default class PackagesStore {
         resetAsync(this.packagesDeviceInstallAsync);
         resetAsync(this.packagesDeviceCancelInstallationAsync);
         this.page = null;
+        this.initialPackages = [];
         this.packages = [];
         this.overallPackagesCount = null;
         this.preparedPackages = [];
@@ -983,7 +986,7 @@ export default class PackagesStore {
 
     @computed
     get lastPackages() {
-        return _.sortBy(this.packages, function(pack) {
+        return _.sortBy(this.initialPackages, function(pack) {
             return pack.createdAt;
         }).reverse().slice(0, 10);
     }
