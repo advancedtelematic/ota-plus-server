@@ -9,7 +9,6 @@ import _ from 'underscore';
 @observer
 class Guide extends Component {
     @observable shownTooltipInfoName = null;
-    
 
     constructor(props) {
         super(props);
