@@ -224,7 +224,6 @@ export default class DevicesStore {
         this.deviceQueue = [];
         this.deviceHistory = [];
         this.deviceUpdatesLogs = [];
-        this.onlineDevices = [];
         this.stepsHistory = [];
     }
 
@@ -233,13 +232,14 @@ export default class DevicesStore {
     }
 
     _updateDeviceData(id, data) {
+        let currentOnlineDeviceUuids = this.onlineDevices.map(field => field.uuid);
         let device = this._getDevice(id);
         if(this.device) {
             if(this.device.uuid === id) {
                 _.each(data, (value, attr) => {
                     this.device[attr] = value;
                 });
-                if(!_.includes(this.onlineDevices, this.device)) {
+                if(!_.includes(currentOnlineDeviceUuids, device.uuid)) {
                     this.onlineDevices.push(this.device);
                 }
             }
@@ -247,7 +247,7 @@ export default class DevicesStore {
             _.each(data, (value, attr) => {
                 device[attr] = value;
             });
-            if(!_.includes(this.onlineDevices, device)) {
+            if(!_.includes(currentOnlineDeviceUuids, device.uuid)) {
                 this.onlineDevices.push(device);
             }
         }
@@ -267,11 +267,10 @@ export default class DevicesStore {
     }
 
     _countOnlineDevices() {
+        let currentOnlineDeviceUuids = this.onlineDevices.map(field => field.uuid);
         _.each(this.initialDevices, (device, index) => {
-            if(device.deviceStatus === "UpToDate") {
-                if(!_.includes(this.onlineDevices, device)) {
-                    this.onlineDevices.push(device);
-                }
+            if(device.deviceStatus === "UpToDate" && !_.includes(currentOnlineDeviceUuids, device.uuid)) {
+                this.onlineDevices.push(device);
             }
         });
     }
