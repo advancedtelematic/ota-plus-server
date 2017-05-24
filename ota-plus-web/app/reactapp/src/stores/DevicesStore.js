@@ -17,6 +17,7 @@ import _ from 'underscore';
 export default class DevicesStore {
 
     @observable devicesFetchAsync = {};
+    @observable devicesUngroupedFetchAsync = {};
     @observable devicesInitialFetchAsync = {};
     @observable devicesRememberedFetchAsync = {};
     @observable devicesFetchAfterDragAndDropAsync = {};
@@ -43,6 +44,7 @@ export default class DevicesStore {
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
+        resetAsync(this.devicesUngroupedFetchAsync);
         resetAsync(this.devicesInitialFetchAsync);
         resetAsync(this.devicesRememberedFetchAsync);
         resetAsync(this.devicesFetchAfterDragAndDropAsync);
@@ -102,6 +104,19 @@ export default class DevicesStore {
             })
             .catch((error) => {
                 this.devicesFetchAsync = handleAsyncError(error);
+            });
+    }
+
+    fetchUngroupedDevicesCount() {
+        resetAsync(this.devicesUngroupedFetchAsync, true);
+        let apiAddress = `${API_DEVICES_SEARCH}?ungrouped=true`;
+        return axios.get(apiAddress)
+            .then((response) => {
+                this.ungroupedDevicesInitialTotalCount = response.data.total;
+                this.devicesUngroupedFetchAsync = handleAsyncSuccess(response);                
+            })
+            .catch((error) => {
+                this.devicesUngroupedFetchAsync = handleAsyncError(error);
             });
     }
 
@@ -204,6 +219,7 @@ export default class DevicesStore {
 
     _reset() {
         resetAsync(this.devicesFetchAsync);
+        resetAsync(this.devicesUngroupedFetchAsync);
         resetAsync(this.devicesInitialFetchAsync);
         resetAsync(this.devicesRememberedFetchAsync);
         resetAsync(this.devicesFetchAfterDragAndDropAsync);
