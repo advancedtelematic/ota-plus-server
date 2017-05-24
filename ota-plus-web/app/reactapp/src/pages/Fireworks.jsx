@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { FadeAnimation } from '../utils';
 import Cookies from 'js-cookie';
+import _ from 'underscore';
 
 @observer
 class Fireworks extends Component {
@@ -10,19 +11,21 @@ class Fireworks extends Component {
         this.acknowledgeWelcomePage = this.acknowledgeWelcomePage.bind(this);
     }
     componentWillMount() {
-        document.body.className = "whitened";
-    }
-    componentDidMount() {
         if(Cookies.get('welcomePageAcknowledged') == 1) {
             this.context.router.push(`/devices`);
+        }        
+        if(this.props.devicesStore.onlineDevices.length === 0) {
+            this.props.devicesStore.fetchInitialDevices();
         }
-    }
+        document.body.className = "whitened";
+    }    
     componentWillUnmount() {
         document.body.className = document.body.className.replace("whitened", "");
     }
     acknowledgeWelcomePage() {
         Cookies.set('welcomePageAcknowledged', 1);
-        this.context.router.push(`/devices`);
+        let deviceOnline = _.first(this.props.devicesStore.onlineDevices);
+        this.context.router.push(`/device/` + deviceOnline.uuid);
     }
     render() {
         const { devicesStore } = this.props;
