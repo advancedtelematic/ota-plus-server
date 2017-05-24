@@ -57,7 +57,6 @@ class Main extends Component {
         this.featuresStore = new FeaturesStore();
         this.provisioningStore = new ProvisioningStore();
         this.userStore = new UserStore();
-        this.redirectTo = this.redirectTo.bind(this);
         this.websocketHandler = new WebsocketHandler({
             devicesStore: this.devicesStore,
             packagesStore: this.packagesStore,
@@ -68,8 +67,6 @@ class Main extends Component {
                 this.ifLogout = true;
             }
         });
-
-        this.locationHasChanged = this.locationHasChanged.bind(this);
         this.devicesHandler = observe(this.devicesStore, (change) => {
             if(change.name === 'devicesInitialFetchAsync' && change.object[change.name].isFetching === false) {
                 this.initialDevicesCount = this.devicesStore.initialDevices.length;
@@ -102,38 +99,6 @@ class Main extends Component {
         this.devicesStore.fetchInitialDevices();
         this.devicesStore.fetchDevices();
         this.websocketHandler.init();
-    }
-    componentDidMount() {
-        this.router.listen(this.locationHasChanged);
-    }
-    locationHasChanged() {
-        // TODO - refactor
-        if(!this.router.isActive('/profile/edit') && !this.router.isActive('/profile/usage') && !this.router.isActive('/profile/billing') && !this.router.isActive('/profile/access-keys')
-            && !this.props.location.pathname.includes("/device")) {
-            if(this.initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') != 1) {
-                this.redirectTo('welcome');
-            }
-            if(this.initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') == 1) {
-                this.redirectTo('destiny');
-            }
-            if(this.onlineDevicesCount === 1 && Cookies.get('welcomePageAcknowledged') != 1
-                && this.deviceInstallationQueue.length === 0 && this.deviceInstallationHistory.length === 0
-                && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') 
-                && !this.router.isActive('/fireworks')) {
-                    this.redirectTo('fireworks');
-            }
-            if(this.initialDevicesCount !== 0 && (this.router.isActive('/welcome') || this.router.isActive('/destiny'))) {
-                this.redirectTo(null);
-            }
-        }
-        
-    }
-    redirectTo(page) {
-        if(!page) {
-            this.router.push('/');
-        } else {
-            this.router.push('/' + page);
-        }
     }
     componentWillUnmount() {
         this.logoutHandler();
