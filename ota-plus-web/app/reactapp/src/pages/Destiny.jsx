@@ -8,16 +8,10 @@ class Destiny extends Component {
     constructor(props) {
         super(props);
     }
-    componentWillMount() {
-        document.body.className = "whitened";
-    }
     componentDidMount() {
         if(Cookies.get('welcomePageAcknowledged') != 1) {
             this.context.router.push(`/welcome`);
         }
-    }
-    componentWillUmnount() {
-        document.body.className = document.body.className.replace("whitened", "");
     }
     render() {
         const { devicesStore } = this.props;
