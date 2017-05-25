@@ -74,6 +74,7 @@ export default class PackagesStore {
     @observable ondevicePackagesCurrentPage = 0;
     @observable ondevicePackagesTotalCount = null;
     @observable ondevicePackagesLimit = 25;
+    @observable ondeviceFilter = '';
 
     constructor() {
         resetAsync(this.packagesFetchAsync);
@@ -443,14 +444,15 @@ export default class PackagesStore {
             }.bind(this));
     }
 
-    fetchOndevicePackages(id, filter) {
+    fetchOndevicePackages(id, filter = '') {
         resetAsync(this.packagesOndeviceFetchAsync, true);
-        if(filter) {
+        if(this.ondeviceFilter !== filter) {
             this.ondevicePackagesTotalCount = null;
             this.ondevicePackagesCurrentPage = 0;
             this.ondevicePackages = [];
             this.preparedOndevicePackages = [];
         }
+        this.ondeviceFilter = filter;
         return axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages?regex=' + (filter ? filter : '') + 
                         '&limit=' + this.ondevicePackagesLimit + '&offset=' + this.ondevicePackagesCurrentPage * this.ondevicePackagesLimit)
             .then(function(response) {
@@ -922,6 +924,7 @@ export default class PackagesStore {
         this.ondevicePackages = [];
         this.ondevicePackagesCurrentPage = 0;
         this.ondevicePackagesTotalCount = 0;
+        this.ondeviceFilter = '';
     }
 
     _resetWizard() {
