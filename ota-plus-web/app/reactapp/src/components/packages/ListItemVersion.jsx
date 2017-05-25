@@ -21,6 +21,10 @@ class ListItemVersion extends Component {
         this.comment = this.props.version.description;
         this.commentTmp = this.props.version.description;
     }
+    componentWillReceiveProps(nextProps) {
+        this.comment = nextProps.version.description;
+        this.commentTmp = nextProps.version.description;
+    }
     enableEditField(e) {
         e.preventDefault();
         this.activeEditField = true;
