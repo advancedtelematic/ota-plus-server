@@ -38,6 +38,7 @@ class Main extends Component {
     @observable deviceInstallationHistory = [];
     @observable deviceInstallationQueue = [];
     @observable router = null;
+    @observable pagesWithRedirectToWelcome = ['page-welcome', 'page-destiny'];
 
     constructor(props) {
         super(props);
@@ -109,23 +110,20 @@ class Main extends Component {
     render() {
         const { children, ...rest } = this.props;
         const pageId = "page-" + (this.props.location.pathname.toLowerCase().split('/')[1] || "home");
+        let logoLink = '/';
+        if(_.includes(this.pagesWithRedirectToWelcome, pageId)) {
+            logoLink = '/welcome';
+        }
         return (
             <DragDropContextProvider backend={HTML5Backend}>
             <div id={pageId}>
                 <FadeAnimation>
-                    {this.router.isActive('/welcome') || this.router.isActive('/destiny') ?
+                    {!this.initialDevicesCount ?
                         <IntroNavigation
                             userStore={this.userStore}
                             featuresStore={this.featuresStore}
                             devicesStore={this.devicesStore}
-                            logoLink={'/welcome'}
-                        />
-                    : this.router.isActive('/fireworks') ?
-                        <IntroNavigation
-                            userStore={this.userStore}
-                            featuresStore={this.featuresStore}
-                            devicesStore={this.devicesStore}
-                            logoLink={'/'}
+                            logoLink={logoLink}
                         />
                     :
                         <Navigation
