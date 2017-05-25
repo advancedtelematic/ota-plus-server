@@ -10,7 +10,6 @@ class Header extends Component {
         super(props);
     }
     backButtonAction() {
-        document.body.className = document.body.className.replace("whitened", "");
         window.history.back();
     }
     render() {
