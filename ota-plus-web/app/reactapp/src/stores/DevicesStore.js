@@ -244,13 +244,13 @@ export default class DevicesStore {
     }
 
     _getDevice(id) {
-        return _.findWhere(this.initialDevices, {uuid: id});
+        return _.findWhere(this.devices, {uuid: id});
     }
 
     _updateDeviceData(id, data) {
         let currentOnlineDeviceUuids = this.onlineDevices.map(field => field.uuid);
         let device = this._getDevice(id);
-        if(this.device) {
+        if(!_.isEmpty(this.device)) {
             if(this.device.uuid === id) {
                 _.each(data, (value, attr) => {
                     this.device[attr] = value;
