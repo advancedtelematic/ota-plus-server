@@ -30,7 +30,7 @@ const WebsocketHandler = (function (stores) {
                     }
                     break;
                 case "DeviceUpdateStatus":
-                    stores.devicesStore._updateDeviceData(data.uuid, {deviceStatus: data.status});
+                    stores.devicesStore._updateDeviceData(data.device, {deviceStatus: data.status});
                     break;
                 case "DeviceCreated":
                     break;
