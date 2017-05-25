@@ -119,7 +119,7 @@ class OnDeviceList extends Component {
                     isLoading={packagesStore.packagesOndeviceFetchAsync.isFetching}
                     useWindow={false}
                     loadMore={() => {
-                        packagesStore.fetchOndevicePackages(deviceId, null)
+                        packagesStore.fetchOndevicePackages(deviceId, packagesStore.ondeviceFilter)
                     }}
                 >
 

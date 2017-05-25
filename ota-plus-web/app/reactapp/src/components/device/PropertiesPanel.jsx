@@ -10,7 +10,6 @@ import { Switch } from '../../partials';
 
 @observer
 class PropertiesPanel extends Component {
-
     @observable shouldShowPackagesDetails = true;
 
     constructor(props) {
@@ -37,7 +36,6 @@ class PropertiesPanel extends Component {
         this.props.packagesStore._prepareOndevicePackages(sort);
     }
     changeFilter(filter) {
-        // this.props.packagesStore.fetchPackages(filter);
         this.props.packagesStore.fetchOndevicePackages(this.props.device.uuid, filter);
     }
     showPackagesList(e) {
