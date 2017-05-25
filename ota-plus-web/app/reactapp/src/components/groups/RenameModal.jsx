@@ -32,6 +32,7 @@ class RenameModal extends Component {
     handleResponse() {
         let data = serialize(document.querySelector('#group-rename-form'), { hash: true });
         this.props.groupsStore._updateGroupData(this.props.groupId, data);
+        this.props.groupsStore.selectedGroup.name = data.groupName;
         this.props.hide();
     }
     render() {
