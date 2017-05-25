@@ -39,6 +39,7 @@ class Main extends Component {
     @observable deviceInstallationQueue = [];
     @observable router = null;
     @observable pagesWithRedirectToWelcome = ['page-welcome', 'page-destiny'];
+    @observable pagesWithWhiteBackground = ['welcome', 'destiny', 'fireworks', 'device'];
 
     constructor(props) {
         super(props);
@@ -49,6 +50,8 @@ class Main extends Component {
             }
             return Promise.reject(error);
         });
+        this.locationHasChanged = this.locationHasChanged.bind(this);
+        this.makeBodyWhite = this.makeBodyWhite.bind(this);
         this.devicesStore = new DevicesStore();
         this.hardwareStore = new HardwareStore();
         this.groupsStore = new GroupsStore();
@@ -92,14 +95,27 @@ class Main extends Component {
                 this.deviceInstallationHistory = this.packagesStore.deviceHistory;
             }
         });
+        this.makeBodyWhite();
     }
     componentWillMount() {
         this.router = this.context.router;
+        this.router.listen(this.locationHasChanged);
         this.userStore.fetchUser();
         this.featuresStore.fetchFeatures();
         this.devicesStore.fetchInitialDevices();
         this.devicesStore.fetchDevices();
         this.websocketHandler.init();
+    }
+    locationHasChanged() {
+        this.makeBodyWhite();
+    }
+    makeBodyWhite() {
+        let pageName = this.props.location.pathname.toLowerCase().split('/')[1];
+        if(_.includes(this.pagesWithWhiteBackground, pageName)) {
+            document.body.className = "whitened";
+        } else {
+            document.body.classList.remove("whitened");
+        }
     }
     componentWillUnmount() {
         this.logoutHandler();

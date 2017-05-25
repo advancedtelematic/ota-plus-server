@@ -26,15 +26,11 @@ class Guide extends Component {
         this.shownTooltipInfoName = null;
     }
     componentWillMount() {
-        document.body.className = "whitened";
         this.props.devicesStore.addStepToHistory(1);
         if(this.props.device.lastSeen) {
             this.props.devicesStore.addStepToHistory(3);
         }
     }    
-    componentWillUnmount() {
-        document.body.className = document.body.className.replace("whitened", "");
-    }
     downloadClient(e) {
         e.stopPropagation();
         this.props.devicesStore.addStepToHistory(2);

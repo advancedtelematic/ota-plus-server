@@ -9,12 +9,6 @@ class Welcome extends Component {
         super(props);
         this.acknowledgeWelcomePage = this.acknowledgeWelcomePage.bind(this);
     }
-    componentWillMount() {
-        document.body.className = "whitened";
-    }    
-    componentWillUnmount() {
-        document.body.className = document.body.className.replace("whitened", "");
-    }
     acknowledgeWelcomePage() {
         Cookies.set('welcomePageAcknowledged', 1);
         this.props.provisioningStore.activateProvisioning();

@@ -17,11 +17,7 @@ class Fireworks extends Component {
         if(this.props.devicesStore.onlineDevices.length === 0) {
             this.props.devicesStore.fetchInitialDevices();
         }
-        document.body.className = "whitened";
     }    
-    componentWillUnmount() {
-        document.body.className = document.body.className.replace("whitened", "");
-    }
     acknowledgeWelcomePage() {
         Cookies.set('welcomePageAcknowledged', 1);
         let deviceOnline = _.first(this.props.devicesStore.onlineDevices);
