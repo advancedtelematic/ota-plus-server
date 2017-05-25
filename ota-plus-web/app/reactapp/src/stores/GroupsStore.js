@@ -44,6 +44,7 @@ export default class GroupsStore {
 
     fetchGroups() {
         resetAsync(this.groupsFetchAsync, true);
+        this.groupsCurrentPage = 0;
         return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsLimit + '&offset=' + this.groupsCurrentPage * this.groupsLimit)
             .then(function (response) {
                 let groups = response.data.values;
