@@ -9,6 +9,7 @@ import _ from 'underscore';
 @observer
 class Guide extends Component {
     @observable shownTooltipInfoName = null;
+    @observable isDeviceSeen = false;
 
     constructor(props) {
         super(props);
@@ -30,7 +31,13 @@ class Guide extends Component {
         if(this.props.device.lastSeen) {
             this.props.devicesStore.addStepToHistory(3);
         }
-    }    
+    }
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.device.lastSeen && !this.isDeviceSeen) {
+            this.props.devicesStore.addStepToHistory(3);
+            this.isDeviceSeen = true;
+        }
+    }
     downloadClient(e) {
         e.stopPropagation();
         this.props.devicesStore.addStepToHistory(2);
