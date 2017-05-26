@@ -13,21 +13,11 @@ const WebsocketHandler = (function (stores) {
             const eventObj = JSON.parse(msg.data);
             const type = eventObj.type;
             const data = eventObj.event;
-            console.log('Websocket event');
-            console.log(type);
             switch (type) {
                 case "DeviceSeen":
                     stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
                     if(stores.devicesStore.onlineDevices.length === 1 && !stores.welcomePageAcknowledged) {
                         window.location = '#/fireworks'
-                    }
-                    if(stores.packagesStore.deviceQueue.length && stores.devicesStore.device.uuid === data.uuid) {
-                        stores.packagesStore.fetchDevicePackagesHistory(data.uuid);
-                        stores.packagesStore.fetchDevicePackagesUpdatesLogs(data.uuid);
-                        stores.packagesStore.fetchDevicePackagesQueue(data.uuid);
-                        stores.packagesStore.fetchDevicePackages(data.uuid, null);
-                        stores.packagesStore.fetchInitialDevicePackages(data.uuid);
-                        stores.packagesStore.fetchOndevicePackages(data.uuid, null);
                     }
                     break;
                 case "DeviceUpdateStatus":
@@ -42,6 +32,14 @@ const WebsocketHandler = (function (stores) {
                     stores.packagesStore._blacklistPackage(data.id);
                     break;
                 case "UpdateSpec":
+                    if(stores.packagesStore.deviceQueue.length && stores.devicesStore.device.uuid === data.device && data.status === 'Finished') {
+                        stores.packagesStore.fetchDevicePackagesHistory(data.device);
+                        stores.packagesStore.fetchDevicePackagesUpdatesLogs(data.device);
+                        stores.packagesStore.fetchDevicePackagesQueue(data.device);
+                        stores.packagesStore.fetchDevicePackages(data.device, null);
+                        stores.packagesStore.fetchInitialDevicePackages(data.device);
+                        stores.packagesStore.fetchOndevicePackages(data.device, null);
+                    }
                     break;
                 default:
                     console.log('Unhandled event type: ' + eventObj.type);
