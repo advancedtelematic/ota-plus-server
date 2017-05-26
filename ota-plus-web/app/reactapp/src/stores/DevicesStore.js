@@ -255,7 +255,7 @@ export default class DevicesStore {
                 _.each(data, (value, attr) => {
                     this.device[attr] = value;
                 });
-                if(!_.includes(currentOnlineDeviceUuids, device.uuid)) {
+                if(!_.includes(currentOnlineDeviceUuids, this.device.uuid)) {
                     this.onlineDevices.push(this.device);
                 }
             }
