@@ -29,7 +29,7 @@ class Destiny extends Component {
                                 <img src="/assets/img/icons/destiny_10_min.png" alt="Image" />
                             </div>
                             <div className="title">
-                                NEW
+                                START FRESH
                             </div>
                             <div className="body">
                                 <img src="/assets/img/icons/destiny_new.png" alt="Image" />
@@ -41,7 +41,7 @@ class Destiny extends Component {
                                 </div>
                                 <div className="action">
                                     <a href="http://docs.atsgarage.com/start-yocto/your-first-ostreeenabled-yocto-project.html" target="_blank" className="btn btn-main" id="user-new-yocto-docs">
-                                        Create new
+                                        Quickstart guide
                                     </a>
                                 </div>
                             </div>
@@ -51,7 +51,7 @@ class Destiny extends Component {
                                 <img src="/assets/img/icons/destiny_10_min.png" alt="Image" />
                             </div>
                             <div className="title">
-                                EXISTING
+                                INTEGRATE
                             </div>
                             <div className="body">
                                 <img src="/assets/img/icons/destiny_existing.png" alt="Image" />
@@ -63,7 +63,7 @@ class Destiny extends Component {
                                 </div>
                                 <div className="action">
                                     <a href="http://docs.atsgarage.com/start-yocto/adding-ostree-updates-to-your-existing-yocto-project.html" target="_blank" className="btn btn-main" id="user-existing-yocto-docs">
-                                        Add to existing
+                                        Integration guide
                                     </a>
                                 </div>
                             </div>
