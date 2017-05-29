@@ -37,6 +37,8 @@ class Main extends Component {
     @observable onlineDevicesCount = null;
     @observable deviceInstallationHistory = [];
     @observable deviceInstallationQueue = [];
+    @observable provisioningActivated = null;
+    @observable treehubActivated = null;
     @observable router = null;
     @observable pagesWithRedirectToWelcome = ['page-welcome', 'page-destiny'];
     @observable pagesWithWhiteBackground = ['welcome', 'destiny', 'fireworks', 'device'];
@@ -96,6 +98,16 @@ class Main extends Component {
                 this.deviceInstallationHistory = this.packagesStore.deviceHistory;
             }
         });
+        this.provisioningStatusHandler = observe(this.provisioningStore, (change) => {
+            if(change.name === 'provisioningStatusFetchAsync' && change.object[change.name].isFetching === false) {
+                this.provisioningActivated = this.provisioningStore.provisioningStatus.active;
+            }
+        });
+        this.treehubStatusHandler = observe(this.featuresStore, (change) => {
+            if(change.name === 'featuresFetchAsync' && change.object[change.name].isFetching === false) {
+                this.treehubActivated = _.includes(this.featuresStore.features, "treehub");
+            }
+        });
         this.makeBodyWhite();
     }
     componentWillMount() {
@@ -105,6 +117,7 @@ class Main extends Component {
         this.featuresStore.fetchFeatures();
         this.devicesStore.fetchInitialDevices();
         this.devicesStore.fetchDevices();
+        this.provisioningStore.fetchProvisioningStatus();
         this.websocketHandler.init();
     }
     locationHasChanged() {
@@ -123,6 +136,7 @@ class Main extends Component {
         this.devicesHandler();
         this.packagesQueueHandler();
         this.packagesHistoryHandler();
+        this.provisioningStatusHandler();
     }
     render() {
         const { children, ...rest } = this.props;
@@ -166,6 +180,8 @@ class Main extends Component {
                         onlineDevicesCount={this.onlineDevicesCount}
                         deviceInstallationHistory={this.deviceInstallationHistory}
                         deviceInstallationQueue={this.deviceInstallationQueue}
+                        provisioningActivated={this.provisioningActivated}
+                        treehubActivated={this.treehubActivated}
                         router={this.router}
                     />
                 </FadeAnimation>
