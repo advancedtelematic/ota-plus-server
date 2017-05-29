@@ -64,6 +64,7 @@ class Main extends Component {
         this.websocketHandler = new WebsocketHandler({
             devicesStore: this.devicesStore,
             packagesStore: this.packagesStore,
+            hardwareStore: this.hardwareStore,
             welcomePageAcknowledged: Cookies.get('welcomePageAcknowledged') == 1
         });
         this.logoutHandler = observe(this.userStore, (change) => {

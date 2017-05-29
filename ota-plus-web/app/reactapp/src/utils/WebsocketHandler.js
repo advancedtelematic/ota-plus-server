@@ -14,11 +14,12 @@ const WebsocketHandler = (function (stores) {
             const type = eventObj.type;
             const data = eventObj.event;
             switch (type) {
-                case "DeviceSeen":
-                    stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
+                case "DeviceSeen":                    
                     if(stores.devicesStore.onlineDevices.length === 1 && !stores.welcomePageAcknowledged) {
                         window.location = '#/fireworks'
                     }
+                    stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
+                    stores.hardwareStore.fetchHardware(data.uuid);
                     break;
                 case "DeviceUpdateStatus":
                     stores.devicesStore._updateDeviceData(data.device, {deviceStatus: data.status});
