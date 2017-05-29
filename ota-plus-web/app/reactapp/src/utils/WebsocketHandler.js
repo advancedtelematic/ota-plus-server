@@ -32,7 +32,7 @@ const WebsocketHandler = (function (stores) {
                     stores.packagesStore._blacklistPackage(data.id);
                     break;
                 case "UpdateSpec":
-                    if(stores.packagesStore.deviceQueue.length && stores.devicesStore.device.uuid === data.device && data.status === 'Finished') {
+                    if(stores.packagesStore.deviceQueue.length && stores.devicesStore.device.uuid === data.device && data.status !== 'InFlight' && data.status !== "Pending") {
                         stores.packagesStore.fetchDevicePackagesHistory(data.device);
                         stores.packagesStore.fetchDevicePackagesUpdatesLogs(data.device);
                         stores.packagesStore.fetchDevicePackagesQueue(data.device);
