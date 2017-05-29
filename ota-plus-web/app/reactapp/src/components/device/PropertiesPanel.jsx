@@ -109,9 +109,6 @@ class PropertiesPanel extends Component {
                             null
                         }
                     </div>
-
-                    <div className="wrapper-statistics">
-                    </div>
                 </div>
             </div>
         );
