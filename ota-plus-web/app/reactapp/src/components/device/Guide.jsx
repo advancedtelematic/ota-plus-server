@@ -48,7 +48,7 @@ class Guide extends Component {
         }
     }
     render() {
-        const { device, devicesStore } = this.props;        
+        const { device, devicesStore, clearStepsHistory } = this.props;        
         let activeStep = _.last(devicesStore.stepsHistory);
         const bodyActions = (
             <div className="body-actions">
@@ -167,7 +167,7 @@ class Guide extends Component {
                                     </div>
                                 }
                                 <div className="actions">
-                                    <a href="#" className={"btn-main" + (activeStep !== 3 ? " disabled" : "")} id="manage-device-button">
+                                    <a href="#" className={"btn-main" + (activeStep !== 3 ? " disabled" : "")} id="manage-device-button" onClick={clearStepsHistory.bind(this)}>
                                         Manage your device
                                     </a>
                                 </div>
