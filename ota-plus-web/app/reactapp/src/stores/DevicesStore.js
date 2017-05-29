@@ -59,6 +59,10 @@ export default class DevicesStore {
         this.stepsHistory.push(step);
     }
 
+    clearStepsHistory() {
+        this.stepsHistory = [];
+    }
+
     fetchInitialDevices() {
         resetAsync(this.devicesInitialFetchAsync, true);
         let apiAddress = `${API_DEVICES_SEARCH}`;

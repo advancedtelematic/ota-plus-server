@@ -33,6 +33,7 @@ class Device extends Component {
         this.togglePackageAutoUpdate = this.togglePackageAutoUpdate.bind(this);
         this.installPackage = this.installPackage.bind(this);
         this.cancelInstallation = this.cancelInstallation.bind(this);
+        this.clearStepsHistory = this.clearStepsHistory.bind(this);
         this.loadPackageVersionProperties = this.loadPackageVersionProperties.bind(this);
     }
     showPackageCreateModal(files, e) {
@@ -55,7 +56,7 @@ class Device extends Component {
         };
     }
     hidePackageBlacklistModal(e) {
-    if(e) e.preventDefault();
+        if(e) e.preventDefault();
         this.packageBlacklistModalShown = false;
         this.packageBlacklistAction = {};
         this.props.packagesStore._resetBlacklistActions();
@@ -75,6 +76,10 @@ class Device extends Component {
     }
     cancelInstallation(requestId) {
         this.props.packagesStore.cancelInstallation(this.props.devicesStore.device.uuid, requestId);
+    }
+    clearStepsHistory(e) {
+        if(e) e.preventDefault();
+        this.props.devicesStore.clearStepsHistory();
     }
     loadPackageVersionProperties(versionUuid, e) {
         if(e) e.preventDefault();
@@ -127,6 +132,7 @@ class Device extends Component {
                         <DeviceGuide
                             device={device}
                             devicesStore={devicesStore}
+                            clearStepsHistory={this.clearStepsHistory}
                         />
                 }
                 <PackagesCreateModal 
