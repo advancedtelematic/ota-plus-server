@@ -18,9 +18,15 @@ class ListItem extends Component {
                     <div className="version">
                         {request.packageId.version}
                     </div>
-                    <button onClick={cancelInstallation.bind(this, request.requestId)}>
-                        Cancel
-                    </button>
+                    {request.status == 'InFlight' ?
+                        <button disabled>
+                            In progress <img src="/assets/img/icons/loading_dots.gif" alt="Icon" />
+                        </button>
+                    :
+                        <button onClick={cancelInstallation.bind(this, request.requestId)}>
+                            Cancel
+                        </button>
+                    }
                 </div>
 
                 <div className="desc">
