@@ -67,7 +67,7 @@ class Main extends Component {
             devicesStore: this.devicesStore,
             packagesStore: this.packagesStore,
             hardwareStore: this.hardwareStore,
-            welcomePageAcknowledged: Cookies.get('welcomePageAcknowledged') == 1
+            fireworksPageAcknowledged: Cookies.get('fireworksPageAcknowledged') == 1
         });
         this.logoutHandler = observe(this.userStore, (change) => {
             if(change.name === 'ifLogout' && change.object[change.name]) {
