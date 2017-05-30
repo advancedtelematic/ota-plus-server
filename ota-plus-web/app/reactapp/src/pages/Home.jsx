@@ -52,7 +52,11 @@ class Home extends Component {
         }
     }
     redirectTo(page, query = null) {
-        this.router.push('/' + page + (query ? query : null));
+        if(query) {
+            this.router.push('/' + page + query);
+        } else {
+            this.router.push('/' + page);
+        }
     }
     render() {
         const { devicesStore, packagesStore, campaignsStore, groupsStore } = this.props;
