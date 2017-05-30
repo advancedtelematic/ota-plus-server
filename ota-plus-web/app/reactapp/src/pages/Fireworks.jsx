@@ -8,18 +8,18 @@ import _ from 'underscore';
 class Fireworks extends Component {
     constructor(props) {
         super(props);
-        this.acknowledgeWelcomePage = this.acknowledgeWelcomePage.bind(this);
+        this.acknowledgeFireworks = this.acknowledgeFireworks.bind(this);
     }
     componentWillMount() {
-        if(Cookies.get('welcomePageAcknowledged') == 1) {
+        if(Cookies.get('fireworksPageAcknowledged') == 1) {
             this.context.router.push(`/devices`);
         }        
         if(this.props.devicesStore.onlineDevices.length === 0) {
             this.props.devicesStore.fetchInitialDevices();
         }
     }    
-    acknowledgeWelcomePage() {
-        Cookies.set('welcomePageAcknowledged', 1);
+    acknowledgeFireworks() {
+        Cookies.set('fireworksPageAcknowledged', 1);
         let deviceOnline = _.first(this.props.devicesStore.onlineDevices);
         this.context.router.push(`/device/` + deviceOnline.uuid);
     }
@@ -44,7 +44,7 @@ class Fireworks extends Component {
                             </div>
                         </div>
                         <div className="manage">
-                            <button className="btn btn-main btn-manage" onClick={this.acknowledgeWelcomePage}>
+                            <button className="btn btn-main btn-manage" onClick={this.acknowledgeFireworks}>
                                 Go to my device
                             </button>
                         </div>
