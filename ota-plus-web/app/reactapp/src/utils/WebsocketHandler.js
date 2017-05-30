@@ -34,11 +34,15 @@ const WebsocketHandler = (function (stores) {
                     stores.packagesStore._blacklistPackage(data.id);
                     break;
                 case "UpdateSpec":
-                    if(stores.packagesStore.deviceQueue.length && stores.devicesStore.device.uuid === data.device && data.status !== 'InFlight' && data.status !== "Pending") {
-                        stores.packagesStore.fetchDevicePackagesHistory(data.device);
-                        stores.packagesStore.fetchDevicePackagesUpdatesLogs(data.device);
-                        stores.packagesStore.fetchDevicePackagesQueue(data.device);
-                        stores.packagesStore.fetchOndevicePackages(data.device, null);
+                    if(stores.packagesStore.deviceQueue.length && stores.devicesStore.device.uuid === data.device) {
+                        if(data.status !== 'Pending') {
+                            stores.packagesStore.fetchDevicePackagesQueue(data.device);
+                        }
+                        if(data.status === 'Finished') {
+                            stores.packagesStore.fetchDevicePackagesHistory(data.device);
+                            stores.packagesStore.fetchDevicePackagesUpdatesLogs(data.device);
+                            stores.packagesStore.fetchOndevicePackages(data.device, null);
+                        }
                     }
                     break;
                 default:
