@@ -19,6 +19,7 @@ const WebsocketHandler = (function (stores) {
                         window.location = '#/fireworks'
                     }
                     stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
+                    stores.packagesStore.fetchInitialDevicePackages(data.uuid);
                     stores.hardwareStore.fetchHardware(data.uuid);
                     break;
                 case "DeviceUpdateStatus":
@@ -37,8 +38,6 @@ const WebsocketHandler = (function (stores) {
                         stores.packagesStore.fetchDevicePackagesHistory(data.device);
                         stores.packagesStore.fetchDevicePackagesUpdatesLogs(data.device);
                         stores.packagesStore.fetchDevicePackagesQueue(data.device);
-                        stores.packagesStore.fetchDevicePackages(data.device, null);
-                        stores.packagesStore.fetchInitialDevicePackages(data.device);
                         stores.packagesStore.fetchOndevicePackages(data.device, null);
                     }
                     break;
