@@ -2034,12 +2034,16 @@ input {
                                 right: 0;
                                 font-size: 12px;
 
+                                img {
+                                    width: 15px;
+                                }
+
                                 button {
-                                    color: $color-lightgrey;
+                                    font-weight: 700;
                                     background: none;
                                     padding: 10px 15px;
                                     border: 0;
-                                    border-left: 1px solid #ddd;
+                                    border-left: 1px solid white;
                                     border-radius: 0;
                                     @include transition;
 
@@ -2048,12 +2052,13 @@ input {
                                     }
 
                                     &[disabled] {
-                                        text-decoration: line-through;
+                                        text-decoration: none;
                                         cursor: not-allowed;
                                     }
                                 }
 
                                 .version {
+                                    font-weight: 700;
                                     max-width: 90px;
                                     padding: 0 15px 0 0;
                                     display: inline-block;
@@ -2070,7 +2075,7 @@ input {
 
                         &.queue {
                             li {
-                                background: #fff;
+                                background: #cdcdcd;
 
                                 .desc {
                                     color: $color-lightgrey;
