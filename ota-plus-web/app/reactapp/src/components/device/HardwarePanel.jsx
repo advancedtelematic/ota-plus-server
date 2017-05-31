@@ -17,16 +17,10 @@ class HardwarePanel extends Component {
                 </div>
 
                 <div className="inner-container">
-                    {hardwareStore.hardwareFetchAsync.isFetching ?
-                        <div className="wrapper-center">
-                            <Loader />
-                        </div>
-                    :
-                        <DeviceHardware
-                            hardwareStore={hardwareStore}
-                            deviceId={deviceId}
-                        />
-                    }
+                    <DeviceHardware
+                        hardwareStore={hardwareStore}
+                        deviceId={deviceId}
+                    />
                 </div>
             </div>
         );
