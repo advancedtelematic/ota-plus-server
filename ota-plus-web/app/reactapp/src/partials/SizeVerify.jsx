@@ -22,7 +22,7 @@ class SizeVerify extends Component {
         window.removeEventListener("resize", this.checkSize);
     }
     checkSize() {
-        this.sizeVerifyHidden = (Cookies.get('sizeVerifyHidden') == 1 || (window.innerWidth >= this.props.minWidth));
+        this.sizeVerifyHidden = (Cookies.get('sizeVerifyHidden') == 1 || (window.innerWidth >= this.props.minWidth && window.innerHeight >= this.props.minHeight));
     }
     handleClick() {
         const dontShowAgain = this.refs.checkbox.checked;
