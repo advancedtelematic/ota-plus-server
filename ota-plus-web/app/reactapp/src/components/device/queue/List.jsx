@@ -5,44 +5,48 @@ import { Loader } from '../../../partials';
 import ListItem from './ListItem';
 
 @observer
+    
 class List extends Component {
     constructor(props) {
         super(props);
     }
+
     render() {
-        const { cancelInstallation, packagesStore } = this.props;
+        const {cancelInstallation, packagesStore} = this.props;
         return (
-            <ul className={"list queue" + (!packagesStore.deviceQueue.length ? " empty" : "")}>
+            <div>
                 {packagesStore.packagesDeviceQueueFetchAsync.isFetching ?
-                    <div className="wrapper-loader">
-                        <Loader />
-                    </div>
-                :
-                    packagesStore.deviceQueue.length ? 
-                        _.map(packagesStore.deviceQueue, (request, index) => {
-                            return (
-                                <ListItem 
-                                    request={request}
-                                    cancelInstallation={cancelInstallation}
-                                    key={index}
-                                />
-                            );
-                        })
+                    <ul className={"list queue" + (!packagesStore.deviceQueue.length ? " empty" : "")}>
+                        <div className="wrapper-loader">
+                            <Loader />
+                        </div>
+                    </ul>
                     :
-                        <div className="wrapper-center">
+                    packagesStore.deviceQueue.length ?
+                        <ul className={"list queue" + (!packagesStore.deviceQueue.length ? " empty" : "")}>
+                            {_.map(packagesStore.deviceQueue, (request, index) => {
+                                return (
+                                    <ListItem
+                                        request={request}
+                                        cancelInstallation={cancelInstallation}
+                                        key={index}
+                                    />
+                                );
+                            })}
+                        </ul>
+                        :
+                        <div className="queue-empty-center">
                             Installation queue is empty. <br />
-                            Click on a package you want to install and 
+                            Click on a package you want to install and
                             select a version to add it to the queue.
                         </div>
                 }
-            </ul>
+            </div>
         );
     }
 }
-
 List.propTypes = {
     cancelInstallation: PropTypes.func.isRequired,
     packagesStore: PropTypes.object.isRequired
 }
-
 export default List;
