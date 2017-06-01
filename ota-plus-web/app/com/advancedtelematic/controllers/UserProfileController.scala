@@ -89,7 +89,7 @@ class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient,
       }
   }
 
-  val apiDomain = conf.getString("api.domain")
+  val apiDomain = conf.getString("api.domain").get
 
   def activateFeature(feature: FeatureName): Action[AnyContent] = AuthenticatedAction.async { request =>
     val userId = request.idToken.userId
