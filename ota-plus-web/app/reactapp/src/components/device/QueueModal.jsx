@@ -45,7 +45,7 @@ class QueueModal extends Component {
                         data-id={0}
                         onActive={setQueueModalActiveTabId.bind(this, 0)}
                     >
-                        <div className="wrapper-list">
+                        <div className={"wrapper-list" + (activeTabId === 1 ? " hide" : "")}>
                             <QueueList 
                                 packagesStore={packagesStore}
                                 cancelInstallation={cancelInstallation}
@@ -59,7 +59,7 @@ class QueueModal extends Component {
                         data-id={1}
                         onActive={setQueueModalActiveTabId.bind(this, 1)}
                     >
-                        <div className="wrapper-list">
+                        <div className={"wrapper-list" + (activeTabId === 0 ? " hide" : "")}>
                             <HistoryList 
                                 packagesStore={packagesStore}
                             />
