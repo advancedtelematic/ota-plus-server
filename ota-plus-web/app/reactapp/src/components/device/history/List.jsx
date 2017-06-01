@@ -5,45 +5,49 @@ import { Loader } from '../../../partials';
 import ListItem from './ListItem';
 
 @observer
+
 class List extends Component {
     constructor(props) {
         super(props);
     }
+
     render() {
-        const { packagesStore } = this.props;
+        const {packagesStore} = this.props;
         return (
-            <ul className={"list history" + (!packagesStore.deviceHistory.length ? " empty" : "")}>
+            <div>
                 {packagesStore.packagesDeviceHistoryFetchAsync.isFetching || packagesStore.packagesDeviceUpdatesLogsFetchAsync.isFetching ?
-                    <div className="wrapper-loader">
-                        <Loader />
-                    </div>
-                :
-                    packagesStore.deviceHistory.length ?
-                        _.map(packagesStore.deviceHistory, (request, index) => {
-                            const foundUpdateLog = _.findWhere(packagesStore.deviceUpdatesLogs, {updateId: request.updateId});
-                            return (
-                                <ListItem 
-                                    request={request}
-                                    updateLog={foundUpdateLog}
-                                    packagesStore={packagesStore}
-                                    key={index}
-                                />
-                            );
-                        })
+                    <ul className={"list history" + (!packagesStore.deviceHistory.length ? " empty" : "")}>
+                        <div className="wrapper-loader">
+                            <Loader />
+                        </div>
+                    </ul>
                     :
-                        <div className="wrapper-center">
+                    packagesStore.deviceHistory.length ?
+                        <ul className={"list history" + (!packagesStore.deviceHistory.length ? " empty" : "")}>
+                            {_.map(packagesStore.deviceHistory, (request, index) => {
+                                const foundUpdateLog = _.findWhere(packagesStore.deviceUpdatesLogs, {updateId: request.updateId});
+                                return (
+                                    <ListItem
+                                        request={request}
+                                        updateLog={foundUpdateLog}
+                                        packagesStore={packagesStore}
+                                        key={index}
+                                    />
+                                );
+                            })}
+                        </ul>
+                        :
+                        <div className="queue-empty-center">
                             Installation history is empty. <br />
-                            The installation of the queued packages will start 
+                            The installation of the queued packages will start
                             automatically when your device connects.
                         </div>
                 }
-            </ul>
+            </div>
         );
     }
 }
-
 List.propTypes = {
     packagesStore: PropTypes.object.isRequired
 }
-
 export default List;
