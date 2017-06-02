@@ -77,7 +77,7 @@ class Details extends Component {
 				        		<span className="value">{version.uuid}</span>
 			        		</div>
 			        		<div className="created">
-								<span className = "sub-title">Created at:2</span>
+								<span className = "sub-title">Created at:</span>
 				        		<span className="value">{new Date(version.createdAt).toDateString() + ' ' + new Date(version.createdAt).toLocaleTimeString()}</span>
 			        		</div>
 				            <div className="vendor">
