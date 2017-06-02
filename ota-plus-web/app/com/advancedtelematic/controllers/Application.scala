@@ -67,6 +67,7 @@ class Application @Inject() (ws: WSClient,
 
   private val directorProxiedPrefixes: PartialFunction[List[String], String] = {
     case "multi_target_updates" :: _ => directorApiUri
+    case "admin" :: _ => directorApiUri
   }
 
   private val coreProxiedPrefixes: PartialFunction[List[String], String] = {
