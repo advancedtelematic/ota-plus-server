@@ -10,6 +10,7 @@ class ListItemVersion extends Component {
     }
     render() {
         const { version, queuedPackage, installedPackage, isAutoInstallEnabled, packageVersion, loadPackageVersionProperties } = this.props;
+        const createdAt = new Date(version.createdAt);
 
         return (
             <li className={version.uuid === packageVersion.uuid ? "selected" : ""} onClick={loadPackageVersionProperties.bind(this, version.uuid)}>
@@ -18,7 +19,7 @@ class ListItemVersion extends Component {
                         <span className="text">Hash / version:</span> <span className="value">{version.id.version}</span>
                       </div>
                       <div className="created_at">
-                        <span className="text">Created at:</span> <span className="value">{moment(version.createdAt).format('ddd MMM DD YYYY')}</span>
+                        <span className="text">Created at:</span> <span className="value">{createdAt.toDateString() + ' ' + createdAt.toLocaleTimeString()}</span>
                       </div>
                 </div>
                 <div className="right-box">
