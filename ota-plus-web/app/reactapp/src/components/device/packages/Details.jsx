@@ -10,6 +10,7 @@ import moment from 'moment';
 class Details extends Component {
     render() {
     	const { packageVersion, showPackageBlacklistModal, packagesStore, installPackage } = this.props;
+
     	let version = packagesStore._getPackageVersionByUuid(packageVersion.uuid);
     	let blacklistComment = null;
     	let allPackages = packagesStore.packages;
@@ -30,7 +31,6 @@ class Details extends Component {
 	    		return packageName === version.id.name;
 	    	});
 	    }
-
         return (
         	<div className="details-wrapper">
 	        	{version ? 
@@ -77,8 +77,8 @@ class Details extends Component {
 				        		<span className="value">{version.uuid}</span>
 			        		</div>
 			        		<div className="created">
-								<span className = "sub-title">Created at:</span>
-				        		<span className="value">{moment(version.createdAt).format('ddd MMM DD YYYY')}</span>
+								<span className = "sub-title">Created at:2</span>
+				        		<span className="value">{new Date(version.createdAt).toDateString() + ' ' + new Date(version.createdAt).toLocaleTimeString()}</span>
 			        		</div>
 				            <div className="vendor">
 				            	<span className = "sub-title">Vendor:</span>
