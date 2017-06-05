@@ -90,6 +90,7 @@ class PropertiesPanel extends Component {
                                     packagesStore={packagesStore}
                                     devicesStore={devicesStore}
                                     installPackage={installPackage}
+                                    deviceId={device.uuid}
                                 />
                             :
                                 <PropertiesOnDeviceList 

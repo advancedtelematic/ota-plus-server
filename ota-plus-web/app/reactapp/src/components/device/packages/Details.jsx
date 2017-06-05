@@ -9,7 +9,7 @@ import moment from 'moment';
 @observer
 class Details extends Component {
     render() {
-    	const { packageVersion, showPackageBlacklistModal, packagesStore, installPackage } = this.props;
+    	const { packageVersion, showPackageBlacklistModal, packagesStore, installPackage, deviceId } = this.props;
 
     	let version = packagesStore._getPackageVersionByUuid(packageVersion.uuid);
     	let blacklistComment = null;
@@ -24,7 +24,7 @@ class Details extends Component {
 			isPackageQueued = _.find(packagesStore.deviceQueue, (dev) => {
 	    		return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
 	    	});
-	    	isPackageInstalled = _.find(packagesStore.initialDevicePackages, (dev) => {
+	    	isPackageInstalled = _.find(packagesStore.installedPackagesPerDevice[deviceId], (dev) => {
 	    		return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
 	    	});
 	    	isAutoInstallEnabled = _.find(packagesStore.deviceAutoInstalledPackages, (packageName) => {
