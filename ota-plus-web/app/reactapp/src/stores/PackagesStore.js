@@ -50,6 +50,7 @@ export default class PackagesStore {
     @observable packageStats = [];
     @observable overallPackagesCount = null;
     @observable preparedPackages = {};
+    @observable preparedPackagesPerDevice = {};
     @observable packagesFilter = null;
     @observable packagesSort = 'asc';
     @observable preparedOndevicePackages = {};
@@ -61,6 +62,7 @@ export default class PackagesStore {
     @observable blacklistedPackage = {};
     @observable affectedDevicesCount = {};
     @observable initialDevicePackages = [];
+    @observable installedPackagesPerDevice = {};
     @observable devicePackages = [];
     @observable devicePackagesFilter = '';
     @observable deviceAutoInstalledPackages = [];
@@ -75,6 +77,7 @@ export default class PackagesStore {
     @observable ondevicePackagesTotalCount = null;
     @observable ondevicePackagesLimit = 25;
     @observable ondeviceFilter = '';
+    @observable activeDeviceId = null;
 
     constructor() {
         resetAsync(this.packagesFetchAsync);
@@ -394,6 +397,9 @@ export default class PackagesStore {
                 if (totalPackagesCount) {
                     let after = _.after(initialDevicePackages.length, () => {
                         this.initialDevicePackages = initialDevicePackages;
+                        extendObservable(this.installedPackagesPerDevice, {
+                            [id]: initialDevicePackages
+                        })
                         this.packagesForDeviceFetchAsync = handleAsyncSuccess(response);
 
                         switch (this.page) {
@@ -416,6 +422,7 @@ export default class PackagesStore {
                         });
                 } else {
                     this.initialDevicePackages = [];
+                    this.installedPackagesPerDevice[id] = [];
                     this.packageStatisticsFetchAsync = handleAsyncSuccess(response);
                 }                
                 this.packagesForDeviceFetchAsync = handleAsyncSuccess(response);
@@ -653,7 +660,7 @@ export default class PackagesStore {
         this.packagesSort = packagesSort;
         let packages = JSON.parse(JSON.stringify(this.packages));
         if(packages.length) {
-            const installedPackages = this.initialDevicePackages;
+            const installedPackages = this.installedPackagesPerDevice[this.activeDeviceId];
             const autoInstalledPackages = this.deviceAutoInstalledPackages;
             const blacklist = this.blacklist;
             const queuedPackages = this.deviceQueue;
@@ -772,10 +779,16 @@ export default class PackagesStore {
                 sortedPackages = (packagesSort !== 'undefined' && packagesSort == 'desc' ? Object.assign(specialGroup, sortedPackages) : Object.assign(sortedPackages, specialGroup));
             }
             this.preparedPackages = sortedPackages;
+            extendObservable(this.preparedPackagesPerDevice, {
+                [this.activeDeviceId]: sortedPackages
+            });
             this.devicePackagesQueuedCount = queuedCount;
             this.devicePackagesInstalledCount = installedCount;
         } else {
-            this.preparedPackages = [];
+            this.preparedPackages = {};
+            extendObservable(this.preparedPackagesPerDevice, {
+                [this.activeDeviceId]: {}
+            });
             this.devicePackagesQueuedCount = 0;
             this.devicePackagesInstalledCount = 0;
         }
@@ -906,7 +919,8 @@ export default class PackagesStore {
         this.initialPackages = [];
         this.packages = [];
         this.overallPackagesCount = null;
-        this.preparedPackages = [];
+        this.preparedPackages = {};
+        this.preparedPackagesPerDevice = {};
         this.packagesFilter = null;
         this.packagesSort = 'asc';
         this.blacklist = [];
@@ -914,6 +928,7 @@ export default class PackagesStore {
         this.blacklistedPackage = {};
         this.affectedDevicesCount = {};
         this.initialDevicePackages = [];
+        this.installedPackagesPerDevice = [];
         this.devicePackages = [];
         this.deviceAutoInstalledPackages = [];
         this.devicePackagesInstalledCount = 0;
@@ -925,6 +940,7 @@ export default class PackagesStore {
         this.ondevicePackagesCurrentPage = 0;
         this.ondevicePackagesTotalCount = 0;
         this.ondeviceFilter = '';
+        this.activeDeviceId = null;
     }
 
     _resetWizard() {

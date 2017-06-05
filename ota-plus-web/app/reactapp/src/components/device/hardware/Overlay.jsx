@@ -13,7 +13,7 @@ class Overlay extends Component {
         const { hardware, hideDetails, shown } = this.props;
         let content = null;
 
-        if(!hardware) {            
+        if(_.isEmpty(hardware)) {            
             content = (
                 <div className="wrapper-center">
                     This device hasn’t reported any information about
@@ -26,7 +26,7 @@ class Overlay extends Component {
                     <div className="triangle"></div>
                     <div className="details">
                         <DeviceHardwareOverlayItem 
-                            data={hardware}
+                            hardware={hardware}
                             mainLevel={true}
                         />
                     </div>
