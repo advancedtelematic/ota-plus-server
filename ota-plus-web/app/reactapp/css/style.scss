@@ -2044,11 +2044,11 @@ input {
                                 }
 
                                 button {
-                                    font-weight: 700;
+                                    color: $color-lightgrey;
                                     background: none;
                                     padding: 10px 15px;
                                     border: 0;
-                                    border-left: 1px solid white;
+                                    border-left: 1px solid #ddd;
                                     border-radius: 0;
                                     @include transition;
 
@@ -2063,13 +2063,28 @@ input {
                                 }
 
                                 .version {
-                                    font-weight: 700;
                                     max-width: 90px;
                                     padding: 0 15px 0 0;
                                     display: inline-block;
                                     vertical-align: middle;
                                     text-align: right;
                                     @include textoverflowEllipsis;
+                                }
+                            }
+
+                            &.in-flight {
+                                background: #cdcdcd!important;
+
+                                .itemactions {
+                                    
+                                    button {
+                                        color: black;
+                                        font-weight: 700;
+                                        border-left: 1px solid #fff;
+                                    }
+                                    .version {
+                                        font-weight: 700;
+                                    }
                                 }
                             }
                         }
@@ -2080,7 +2095,7 @@ input {
 
                         &.queue {
                             li {
-                                background: #cdcdcd;
+                                background: #fff;
 
                                 .desc {
                                     color: $color-lightgrey;
