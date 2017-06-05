@@ -408,8 +408,6 @@
 }
 
 #page-device {
-    @include fullHeight;
-
     .page-heading {
         .icon {
             background-image: url('/assets/img/icons/black/devices.png');
@@ -482,6 +480,7 @@
     }
 
     .content {
+        height: calc(100vh - 150px);
         .hardware-panel {
             background: #fff;
             width: 20%;
