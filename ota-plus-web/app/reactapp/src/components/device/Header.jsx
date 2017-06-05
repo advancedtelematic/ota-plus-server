@@ -10,7 +10,7 @@ class Header extends Component {
         super(props);
     }
     backButtonAction() {
-        window.history.back();
+        window.history.go(-1);
     }
     render() {
         const { devicesStore, packagesStore, showQueueModal } = this.props;
