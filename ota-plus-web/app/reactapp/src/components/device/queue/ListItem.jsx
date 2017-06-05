@@ -9,7 +9,7 @@ class ListItem extends Component {
     render() {
         const { request, cancelInstallation } = this.props;
         return (
-            <li id={"queued-entry-" + request.packageId.name}>
+            <li id={"queued-entry-" + request.packageId.name} className={request.status == "InFlight" ? "in-flight" : null}>
                 <div className="name">
                     {request.packageId.name}
                 </div>
