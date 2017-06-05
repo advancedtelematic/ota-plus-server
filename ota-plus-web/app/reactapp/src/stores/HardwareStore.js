@@ -26,7 +26,7 @@ export default class HardwareStore {
         resetAsync(this.hardwareFetchAsync, true);
         return axios.get(`${API_ECUS_FETCH}/${deviceId}/system_info`)
             .then(function (response) {
-                this.hardware = response.data;
+                this.hardware[deviceId] = response.data;
                 this.hardwareFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {

@@ -74,7 +74,7 @@ class List extends Component {
             let lastShownIndex = null;
             _.each(headersPositions, (position, index) => {
                 if(scrollTop >= position) {
-                    newFakeHeaderLetter = Object.keys(this.props.packagesStore.preparedPackages)[index];
+                    newFakeHeaderLetter = Object.keys(this.props.packagesStore.preparedPackagesPerDevice[this.props.deviceId])[index];
                     return true;
                 } else if(scrollTop >= position - headerHeight) {
                     scrollTop -= scrollTop - (position - headerHeight);
@@ -114,7 +114,7 @@ class List extends Component {
         let packageIndex = -1;
         return (
             <div className="ios-list" ref="list">
-                {Object.keys(packagesStore.preparedPackages).length ? 
+                {Object.keys(packagesStore.preparedPackagesPerDevice[deviceId]).length ? 
                     <Dropzone 
                         ref="dropzone" 
                         onDrop={onFileDrop} 
@@ -125,7 +125,7 @@ class List extends Component {
                         <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
                             {this.fakeHeaderLetter}
                         </div>
-                        {_.map(packagesStore.preparedPackages, (packages, letter) => {
+                        {_.map(packagesStore.preparedPackagesPerDevice[deviceId], (packages, letter) => {
                             return (
                                 <span key={letter}>
                                     <div className="header">{letter}</div>

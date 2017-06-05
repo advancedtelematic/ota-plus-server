@@ -26,11 +26,14 @@ class Device extends Component {
         this.props.devicesStore.fetchInitialDevices();
         this.props.devicesStore.fetchDevice(this.props.params.id);
         this.props.hardwareStore.fetchHardware(this.props.params.id);
+        this.props.packagesStore.activeDeviceId = this.props.params.id;
         this.props.packagesStore.fetchPackages();
         this.props.packagesStore.fetchBlacklist();
         this.props.packagesStore.fetchInitialDevicePackages(this.props.params.id);
         this.props.packagesStore.fetchDeviceAutoInstalledPackages(this.props.params.id);
         this.props.packagesStore.fetchDevicePackagesQueue(this.props.params.id);
+        this.props.packagesStore.fetchDevicePackagesHistory(this.props.params.id);
+        this.props.packagesStore.fetchDevicePackagesUpdatesLogs(this.props.params.id);
     }
     componentWillUnmount() {
         this.props.devicesStore._reset();
@@ -39,9 +42,6 @@ class Device extends Component {
     }
     showQueueModal() {
         this.queueModalShown = true;
-        this.props.packagesStore.fetchDevicePackagesHistory(this.props.devicesStore.device.uuid);
-        this.props.packagesStore.fetchDevicePackagesUpdatesLogs(this.props.devicesStore.device.uuid);
-        this.props.packagesStore.fetchDevicePackagesQueue(this.props.devicesStore.device.uuid);
     }
     hideQueueModal() {
         this.queueModalShown = false;

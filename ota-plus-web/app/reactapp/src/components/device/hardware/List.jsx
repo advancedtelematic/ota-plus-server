@@ -9,7 +9,7 @@ class List extends Component {
     render() {
         const { shownIds, showDetails, showSecondaryDetails, secondaryDetailsShown, hardware } = this.props;
         let dataId = 0;
-        if(!_.isUndefined(hardware.id) && (!_.isUndefined(hardware.description) || !_.isUndefined(hardware.class))) {
+        if(!_.isUndefined(hardware) && !_.isUndefined(hardware.id) && (!_.isUndefined(hardware.description) || !_.isUndefined(hardware.class))) {
             dataId = hardware['id-nr'];
         }
         return (
@@ -47,7 +47,6 @@ class List extends Component {
 }
 
 List.propTypes = {
-    hardware: PropTypes.object.isRequired,
     showDetails: PropTypes.func.isRequired,
     shownIds: PropTypes.object.isRequired,
 }

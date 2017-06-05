@@ -15,28 +15,10 @@ class Hardware extends Component {
 
     constructor(props) {
         super(props);
-        this.findNode = this.findNode.bind(this);
         this.showDetails = this.showDetails.bind(this);
         this.showSecondaryDetails = this.showSecondaryDetails.bind(this);
         this.hideSecondaryDetails = this.hideSecondaryDetails.bind(this);
         this.hideDetails = this.hideDetails.bind(this);
-    }
-    findNode(id, hardware) {
-        let i, currentChild, result;
-        if (id == hardware['id-nr']) {
-            return hardware;
-        } else {
-            if (hardware.children != null) {
-                for (i = 0; i < hardware.children.length; i += 1) {
-                    currentChild = hardware.children[i];
-                    result = this.findNode(id, currentChild);
-                    if (result !== false) {
-                        return result;
-                    }
-                }
-            }
-            return false;
-        }
     }
     showDetails(e) {
         e.preventDefault();
@@ -57,12 +39,13 @@ class Hardware extends Component {
         this.detailsIdShown = null;
     }
     render() {
-        const { hardwareStore } = this.props;
+        const { hardwareStore, deviceId } = this.props;
+        let hardware = hardwareStore.hardware[deviceId];
         return (
             <span>
                 <div className="hardware-list">
                     <HardwareList 
-                        hardware={hardwareStore.hardware}
+                        hardware={hardware}
                         showDetails={this.showDetails}
                         showSecondaryDetails={this.showSecondaryDetails}
                         shownIds={this.shownIds}
@@ -74,7 +57,7 @@ class Hardware extends Component {
                     <FadeAnimation>
                         <div className="overlay-animation-container">
                             <HardwareOverlay 
-                                hardware={this.findNode(this.detailsIdShown, hardwareStore.hardware)}
+                                hardware={hardware}
                                 hideDetails={this.hideDetails}
                                 shown={this.detailsIdShown ? true : false}
                             />

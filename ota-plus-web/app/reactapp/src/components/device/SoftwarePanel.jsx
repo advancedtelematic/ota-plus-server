@@ -48,7 +48,7 @@ class SoftwarePanel extends Component {
                     </SubHeader>
 
                     <div className="wrapper-software">
-                        {packagesStore.packagesFetchAsync.isFetching && !packagesStore.packagesOndeviceFetchAsync.isFetching ?
+                        {packagesStore.packagesFetchAsync.isFetching ?
                             <div className="wrapper-loader">
                                 <Loader />
                             </div>

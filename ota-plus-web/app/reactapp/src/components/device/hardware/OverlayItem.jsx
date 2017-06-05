@@ -8,15 +8,15 @@ class OverlayItem extends Component {
         super(props);
     }
     render() {
-        const { data, mainLevel } = this.props;
+        const { hardware, mainLevel } = this.props;
         let result;
         if (this.props.mainLevel) {
-            if (!_.isUndefined(data.id) && (!_.isUndefined(data.description) || !_.isUndefined(data.class))) {
+            if (!_.isUndefined(hardware.id) && (!_.isUndefined(hardware.description) || !_.isUndefined(hardware.class))) {
                 result = (
                     <li>
                         <div className="header">
                             <span className="name">
-                                {data.description ? data.description : data.class}
+                                {hardware.description ? hardware.description : hardware.class}
                             </span>
                         </div>
                         <div>
@@ -29,16 +29,16 @@ class OverlayItem extends Component {
                                 <div className="col-md-6 col-md-offset-1">
                                     <table className="table">
                                         <tbody>
-                                            {_.map(data, function(d, i) {
-                                                if(i !== 'children' && typeof(data[i]) !== 'object') {
+                                            {_.map(hardware, function(d, i) {
+                                                if(i !== 'children' && typeof(hardware[i]) !== 'object') {
                                                     return (
                                                         <tr key={i}>
                                                             <th>{i}:</th>
                                                             <td>{d}</td>
                                                         </tr>
                                                     );
-                                                } else if(typeof(data[i]) === 'object') {
-                                                    {_.map(data[i], function(dd, ii) {
+                                                } else if(typeof(hardware[i]) === 'object') {
+                                                    {_.map(hardware[i], function(dd, ii) {
                                                         return (
                                                             <tr key={ii}>
                                                                 <th>{ii}:</th>
@@ -55,7 +55,7 @@ class OverlayItem extends Component {
                         </div>
                         <ul>
                             <OverlayItem
-                              data={data.children}
+                              hardware={hardware.children}
                               mainLevel={false}
                             />
                         </ul>
@@ -72,7 +72,7 @@ class OverlayItem extends Component {
         } else {
             result = (
                 <li>
-                    {_.map(data, function(child, i) {
+                    {_.map(hardware, function(child, i) {
                         if(!_.isUndefined(child.id) && (!_.isUndefined(child.description) || !_.isUndefined(child.class))) {
                             return (
                                 <span key={"components-list-menu-" + child['id-nr'] + "-" + child.class}>
@@ -119,7 +119,7 @@ class OverlayItem extends Component {
                                     {!_.isUndefined(child.children) && typeof child.children === 'object' ? 
                                         <ul>
                                             <OverlayItem
-                                                data={child.children}
+                                                hardware={child.children}
                                                 mainLevel={false}
                                             />
                                         </ul>
