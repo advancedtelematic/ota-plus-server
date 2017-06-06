@@ -78,7 +78,7 @@ class Details extends Component {
 			        		</div>
 			        		<div className="created">
 								<span className = "sub-title">Created at:</span>
-				        		<span className="value">{new Date(version.createdAt).toDateString() + ' ' + new Date(version.createdAt).toLocaleTimeString()}</span>
+				        		<span className="value">{moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
 			        		</div>
 				            <div className="vendor">
 				            	<span className = "sub-title">Vendor:</span>
