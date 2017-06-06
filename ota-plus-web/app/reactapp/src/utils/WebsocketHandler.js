@@ -44,6 +44,13 @@ const WebsocketHandler = (function (stores) {
                             stores.packagesStore.fetchDevicePackagesUpdatesLogs(data.device);
                             stores.packagesStore.fetchOndevicePackages(data.device, null);
                         }
+                    } else {
+                        if(data.status === 'Finished') {
+                            if(stores.campaignsStore.campaign.meta.id) {
+                                stores.campaignsStore.fetchCampaign(stores.campaignsStore.campaign.meta.id);
+                            }
+                            stores.campaignsStore.fetchCampaigns();
+                        }
                     }
                     break;
                 default:
