@@ -1861,7 +1861,8 @@ input {
 
             li {
                 height: 45px;
-                padding: 10px 0;
+                padding: 15px 0;
+                display: flex;
 
                 .col {
                     padding: 0 10px;
@@ -1870,15 +1871,18 @@ input {
 
                     &.name {
                         width: 15%;
+                        @include textoverflowEllipsis;
                     }
 
                     &.version {
                         width: 15%;
+                        @include textoverflowEllipsis;
                     }
 
                     &.uploaded {
                         text-align: center;
                         width: 30%;
+                        @include textoverflowEllipsis;
                     }
 
                     &.status {
