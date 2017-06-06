@@ -27,13 +27,11 @@ class Guide extends Component {
         this.shownTooltipInfoName = null;
     }
     componentWillMount() {
-        this.props.devicesStore.addStepToHistory(1);
-        if(this.props.device.lastSeen) {
-            this.props.devicesStore.addStepToHistory(3);
-        }
+        this.props.devicesStore.addStepToHistory(1);        
     }
     componentWillReceiveProps(nextProps) {
         if(nextProps.device.lastSeen && !this.isDeviceSeen) {
+            this.props.devicesStore.fetchDevice(this.props.device.uuid);
             this.props.devicesStore.addStepToHistory(3);
             this.isDeviceSeen = true;
         }
