@@ -42,7 +42,6 @@ class StatsModal extends Component {
                     stats.push(
                         {
                             value: stateObject.deviceCount,
-                            groupsCount: stateObject.groupsCount,
                             color: availableColors[colorIndex],
                             highlight: availableColors[colorIndex],
                             label: (index === availableColors.length - 1 ? groupedStatsName : " " + stateObject.packageVersion)
@@ -60,7 +59,6 @@ class StatsModal extends Component {
                         <div className="color-box" style={{backgroundColor: stat.color}}></div> 
                         <div className="title-box">{stat.label}</div>
                         <div className="subtitle-box">{stat.value} Devices</div>
-                        <div className="subtitle-box">{stat.groupsCount} Groups</div>
                     </li>
                 );
             });
