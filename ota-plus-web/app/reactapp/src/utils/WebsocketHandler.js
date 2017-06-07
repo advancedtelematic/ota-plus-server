@@ -46,7 +46,7 @@ const WebsocketHandler = (function (stores) {
                         }
                     } else {
                         if(data.status === 'Finished') {
-                            if(stores.campaignsStore.campaign.meta.id) {
+                            if(Object.keys(stores.campaignsStore.campaign).length) {
                                 stores.campaignsStore.fetchCampaign(stores.campaignsStore.campaign.meta.id);
                             }
                             stores.campaignsStore.fetchCampaigns();
