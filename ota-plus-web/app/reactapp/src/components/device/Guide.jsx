@@ -9,7 +9,6 @@ import _ from 'underscore';
 @observer
 class Guide extends Component {
     @observable shownTooltipInfoName = null;
-    @observable isDeviceSeen = false;
 
     constructor(props) {
         super(props);
@@ -27,21 +26,16 @@ class Guide extends Component {
         this.shownTooltipInfoName = null;
     }
     componentWillMount() {
-        this.props.devicesStore.addStepToHistory(1);        
+        this.props.devicesStore.addStepToHistory(1);
     }
     componentWillReceiveProps(nextProps) {
-        console.log('Guide is receiving props');
-        console.log('nextProps');
-        console.log(nextProps);
-        console.log('nextProps.device.lastSeen');
-        console.log(nextProps.device.lastSeen);
-        console.log('this.isDeviceSeen');
-        console.log(this.isDeviceSeen);
-        if(nextProps.device.lastSeen && !this.isDeviceSeen) {
+        console.log('nextProps.device.lastSeen - ', nextProps.device.lastSeen);
+        console.log('this.props.devicesStore.deviceFetchTimes - ', this.props.devicesStore.deviceFetchTimes);
+        if(nextProps.device.lastSeen && !this.props.devicesStore.deviceFetchTimes[nextProps.device.uuid]) {
             console.log('In if');
-            this.props.devicesStore.fetchDevice(this.props.device.uuid);
             this.props.devicesStore.addStepToHistory(3);
-            this.isDeviceSeen = true;
+            this.props.devicesStore.fetchDevice(this.props.device.uuid);
+            this.props.devicesStore.deviceFetchTimes[nextProps.device.uuid] = 1;
         }
     }
     downloadClient(e) {
