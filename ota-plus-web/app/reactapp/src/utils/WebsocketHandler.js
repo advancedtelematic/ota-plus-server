@@ -20,7 +20,7 @@ const WebsocketHandler = (function (stores) {
                     console.log(stores.devicesStore.onlineDevices.length);
                     console.log('document.cookie.indexOf("fireworksPageAcknowledged")');
                     console.log(document.cookie.indexOf("fireworksPageAcknowledged"));
-                    if(stores.devicesStore.onlineDevices.length <= 1 && !document.cookie.indexOf("fireworksPageAcknowledged") >= 0) {
+                    if(stores.devicesStore.onlineDevices.length <= 1 && !(document.cookie.indexOf("fireworksPageAcknowledged") >= 0)) {
                         window.location = '#/fireworks'
                     }
                     stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
