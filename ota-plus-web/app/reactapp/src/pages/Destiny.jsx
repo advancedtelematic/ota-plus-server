@@ -40,7 +40,7 @@ class Destiny extends Component {
                                     New to Yocto? We'll take you through a starter project step by step.
                                 </div>
                                 <div className="action">
-                                    <a href="http://docs.atsgarage.com/start-yocto/your-first-ostreeenabled-yocto-project.html" target="_blank" className="btn btn-main" id="user-new-yocto-docs">
+                                    <a href="http://docs.atsgarage.com/quickstarts/raspberry-pi.html" target="_blank" className="btn btn-main" id="user-new-yocto-docs">
                                         Quickstart guide
                                     </a>
                                 </div>
@@ -62,7 +62,7 @@ class Destiny extends Component {
                                     Add the meta-updater layer into your existing Yocto project and OTA-enable your devices.
                                 </div>
                                 <div className="action">
-                                    <a href="http://docs.atsgarage.com/start-yocto/adding-ostree-updates-to-your-existing-yocto-project.html" target="_blank" className="btn btn-main" id="user-existing-yocto-docs">
+                                    <a href="http://docs.atsgarage.com/quickstarts/adding-ats-garage-updating-to-an-existing-yocto-project.html" target="_blank" className="btn btn-main" id="user-existing-yocto-docs">
                                         Integration guide
                                     </a>
                                 </div>
