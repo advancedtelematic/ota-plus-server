@@ -41,6 +41,7 @@ export default class DevicesStore {
     @observable deviceUpdatesLogs = [];
     @observable onlineDevices = [];
     @observable stepsHistory = [];
+    @observable deviceFetchTimes = {};
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
