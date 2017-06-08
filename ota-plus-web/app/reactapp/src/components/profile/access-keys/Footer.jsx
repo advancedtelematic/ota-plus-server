@@ -15,7 +15,7 @@ class Footer extends Component {
                         <div className="prebuilds">
                             <div className="text" id="access-keys-prebuilds-description">
                                 get pre-builds <a href="#" id="access-keys-prebuilds-link" onClick={showDevicesCreateModal}>DEB/RPM</a>
-                                <a href="https://docs.atsgarage.com/index.html" target="_blank" className="icon">
+                                <a href="https://docs.atsgarage.com/quickstarts/install-from-a-prebuilt-deb-or-rpm-package.html" target="_blank" className="icon">
                                     <img src="/assets/img/icons/questionmark.png" alt=""/>
                                 </a>
                             </div>
