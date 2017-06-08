@@ -30,7 +30,15 @@ class Guide extends Component {
         this.props.devicesStore.addStepToHistory(1);        
     }
     componentWillReceiveProps(nextProps) {
+        console.log('Guide is receiving props');
+        console.log('nextProps');
+        console.log(nextProps);
+        console.log('nextProps.device.lastSeen');
+        console.log(nextProps.device.lastSeen);
+        console.log('this.isDeviceSeen');
+        console.log(this.isDeviceSeen);
         if(nextProps.device.lastSeen && !this.isDeviceSeen) {
+            console.log('In if');
             this.props.devicesStore.fetchDevice(this.props.device.uuid);
             this.props.devicesStore.addStepToHistory(3);
             this.isDeviceSeen = true;
