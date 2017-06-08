@@ -16,7 +16,11 @@ const WebsocketHandler = (function (stores) {
             switch (type) {
                 case "DeviceSeen":
                     stores.devicesStore.fetchInitialDevices();
-                    if((stores.devicesStore.onlineDevices.length === 0 || stores.devicesStore.onlineDevices.length === 1) && !stores.fireworksPageAcknowledged) {
+                    console.log('stores.devicesStore.onlineDevices.length');
+                    console.log(stores.devicesStore.onlineDevices.length);
+                    console.log('document.cookie.indexOf("fireworksPageAcknowledged")');
+                    console.log(document.cookie.indexOf("fireworksPageAcknowledged"));
+                    if(stores.devicesStore.onlineDevices.length <= 1 && !document.cookie.indexOf("fireworksPageAcknowledged") >= 0) {
                         window.location = '#/fireworks'
                     }
                     stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
