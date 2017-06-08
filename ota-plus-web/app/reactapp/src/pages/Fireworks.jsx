@@ -11,11 +11,15 @@ class Fireworks extends Component {
         this.acknowledgeFireworks = this.acknowledgeFireworks.bind(this);
     }
     componentWillMount() {
+        if(Cookies.get('fireworksPageAcknowledged') == 1) {
+            this.context.router.push(`/devices`);
+        }        
         if(this.props.devicesStore.onlineDevices.length === 0) {
             this.props.devicesStore.fetchInitialDevices();
         }
     }    
     acknowledgeFireworks() {
+        Cookies.set('fireworksPageAcknowledged', 1);
         let deviceOnline = _.first(this.props.devicesStore.onlineDevices);
         this.context.router.push(`/device/` + deviceOnline.uuid);
     }
