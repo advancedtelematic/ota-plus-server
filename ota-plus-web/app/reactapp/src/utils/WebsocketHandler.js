@@ -16,7 +16,7 @@ const WebsocketHandler = (function (stores) {
             switch (type) {
                 case "DeviceSeen":
                     stores.devicesStore.fetchInitialDevices();
-                    if((stores.devicesStore.onlineDevices.length === 0 || stores.devicesStore.onlineDevices.length === 1) && !stores.fireworksPageAcknowledged) {
+                    if(stores.devicesStore.onlineDevices.length <= 1 && window.location.href.indexOf("destiny") > -1) {
                         window.location = '#/fireworks'
                     }
                     stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
