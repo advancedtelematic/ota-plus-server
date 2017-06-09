@@ -29,10 +29,7 @@ class Guide extends Component {
         this.props.devicesStore.addStepToHistory(1);
     }
     componentWillReceiveProps(nextProps) {
-        console.log('nextProps.device.lastSeen - ', nextProps.device.lastSeen);
-        console.log('this.props.devicesStore.deviceFetchTimes - ', this.props.devicesStore.deviceFetchTimes);
         if(nextProps.device.lastSeen && !this.props.devicesStore.deviceFetchTimes[nextProps.device.uuid]) {
-            console.log('In if');
             this.props.devicesStore.addStepToHistory(3);
             this.props.devicesStore.fetchDevice(this.props.device.uuid);
             this.props.devicesStore.deviceFetchTimes[nextProps.device.uuid] = 1;

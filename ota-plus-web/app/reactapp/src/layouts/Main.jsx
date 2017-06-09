@@ -2,8 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import axios from 'axios';
 import { observe, observable, extendObservable } from 'mobx';
 import { observer } from 'mobx-react';
-import { DragDropContextProvider } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import { 
     DevicesStore,
     HardwareStore,
@@ -150,7 +148,6 @@ class Main extends Component {
             logoLink = '/welcome';
         }
         return (
-            <DragDropContextProvider backend={HTML5Backend}>
             <div id={pageId}>
                 <FadeAnimation>
                     {!this.initialDevicesCount ?
@@ -208,7 +205,6 @@ class Main extends Component {
                     null
                 }
             </div>
-            </DragDropContextProvider>
         );
     }
     
