@@ -3208,7 +3208,7 @@
     }
 }
 
-#page-welcome, #page-destiny, #page-fireworks {    
+#page-welcome, #page-destiny, #page-fireworks {
     @include fullHeight;
 
     .heading {
@@ -3461,15 +3461,19 @@
         }
     }
 
+
+    
+}
+#page-welcome, #page-destiny, #page-fireworks, #page-device {
     $breakpoint: 820px;
     @media (max-height: $breakpoint) {
-        .wrapper-center {
+
+        .wrapper-responsive {
             display: inline-block!important;
 
-            .heading, .fireworks-container {
+            .heading, .fireworks-container, .guide-install-device {
                 margin: 50px 0;
             }
         }
     }
-    
 }
