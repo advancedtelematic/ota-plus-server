@@ -478,9 +478,12 @@
             }
         }
     }
-
+    .wrapper-flex {
+        .content {
+            height: calc(100vh - 150px);
+        }
+    }
     .content {
-        height: calc(100vh - 150px);
         .hardware-panel {
             background: #fff;
             width: 20%;
