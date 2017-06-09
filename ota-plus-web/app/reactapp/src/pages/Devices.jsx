@@ -4,10 +4,13 @@ import { translate } from 'react-i18next';
 import { MetaData, FadeAnimation } from '../utils';
 import { Header } from '../partials';
 import { DevicesContainer } from '../containers';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 const title = "Devices";
 
 @observer
+@DragDropContext(HTML5Backend)
 class Devices extends Component {
     constructor(props) {
         super(props);
