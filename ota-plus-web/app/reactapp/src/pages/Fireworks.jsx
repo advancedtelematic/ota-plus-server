@@ -24,7 +24,7 @@ class Fireworks extends Component {
         const { devicesStore } = this.props;
         return (
             <FadeAnimation>
-                <div className="wrapper-center">
+                <div className="wrapper-center wrapper-responsive">
                 	<div className="fireworks-container">
                         <div className="item">
                             <div className="title">

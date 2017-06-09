@@ -96,7 +96,7 @@ class Guide extends Component {
             </div>
         );
         return (
-            <div className="wrapper-center">
+            <div className="wrapper-center wrapper-responsive">
                 <div className="guide-install-device">
                     {activeStep !== 3 ?
                         <div className="title">
