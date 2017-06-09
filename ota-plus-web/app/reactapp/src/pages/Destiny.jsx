@@ -17,7 +17,7 @@ class Destiny extends Component {
         const { devicesStore } = this.props;
         return (
             <FadeAnimation>
-                <div className="wrapper-center">
+                <div className="wrapper-center wrapper-responsive">
                     <div className="destiny-container">
                         <div className="heading">
                             <div className="title">

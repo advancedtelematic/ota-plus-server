@@ -46,6 +46,10 @@ a {
     color: $color-lightgrey;
 }
 
+html, body {
+    overflow: hidden;
+}
+
 body {
     font-family: $font;
     font-size: 13px;

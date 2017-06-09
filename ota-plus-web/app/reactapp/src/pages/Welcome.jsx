@@ -27,7 +27,7 @@ class Welcome extends Component {
         const { devicesStore } = this.props;
         return (
             <FadeAnimation>
-                <div className="wrapper-center">
+                <div className="wrapper-center wrapper-responsive">
                 	<div className="steps-container">
     	            	<div className="heading">
     		            	<div className="title welcome-title">

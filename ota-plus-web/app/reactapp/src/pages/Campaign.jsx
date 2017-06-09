@@ -22,14 +22,14 @@ class Campaign extends Component {
         this.props.groupsStore._reset();
     }
     render() {
-        const { t, campaignsStore, groupsStore } = this.props;
+        const { t, campaignsStore, groupsStore, backButtonAction } = this.props;
         return (
             <FadeAnimation 
                 display="flex">
                 <div className="wrapper-flex">
                     <Header 
                         backButtonShown={true}
-                        backButtonAction={browserHistory.goBack}
+                        backButtonAction={backButtonAction}
                         title={"Campaign " + (
                             !campaignsStore.campaignsOneFetchAsync.isFetching && !campaignsStore.campaignsOneStatisticsFetchAsync.isFetching ? 
                                 campaignsStore.campaign.meta.name 

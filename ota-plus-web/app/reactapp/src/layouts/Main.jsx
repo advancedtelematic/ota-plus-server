@@ -54,6 +54,7 @@ class Main extends Component {
         });
         this.locationHasChanged = this.locationHasChanged.bind(this);
         this.makeBodyWhite = this.makeBodyWhite.bind(this);
+        this.backButtonAction = this.backButtonAction.bind(this);
         this.devicesStore = new DevicesStore();
         this.hardwareStore = new HardwareStore();
         this.groupsStore = new GroupsStore();
@@ -138,6 +139,9 @@ class Main extends Component {
         this.packagesHistoryHandler();
         this.provisioningStatusHandler();
     }
+    backButtonAction() {
+        window.history.go(-1);
+    }
     render() {
         const { children, ...rest } = this.props;
         const pageId = "page-" + (this.props.location.pathname.toLowerCase().split('/')[1] || "home");
@@ -183,6 +187,7 @@ class Main extends Component {
                         provisioningActivated={this.provisioningActivated}
                         treehubActivated={this.treehubActivated}
                         router={this.router}
+                        backButtonAction={this.backButtonAction}
                     />
                 </FadeAnimation>
                 <SizeVerify 
