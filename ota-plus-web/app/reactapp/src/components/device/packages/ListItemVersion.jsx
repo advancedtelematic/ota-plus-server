@@ -9,8 +9,8 @@ class ListItemVersion extends Component {
         super(props);        
     }
     render() {
-        const { version, queuedPackage, installedPackage, isAutoInstallEnabled, packageVersion, loadPackageVersionProperties } = this.props;
-
+        const { packagesStore, device, version, queuedPackage, installedPackage, isAutoInstallEnabled, packageVersion, loadPackageVersionProperties } = this.props;
+        
         return (
             <li className={version.uuid === packageVersion.uuid ? "selected" : ""} onClick={loadPackageVersionProperties.bind(this, version.uuid)}>
                 <div className="left-box">
@@ -56,7 +56,6 @@ ListItemVersion.propTypes = {
     version: PropTypes.object.isRequired,
     queuedPackage: PropTypes.string,
     installedPackage: PropTypes.string,
-    isAutoInstallEnabled: PropTypes.bool.isRequired,
     packageVersion: PropTypes.object.isRequired,
     loadPackageVersionProperties: PropTypes.func.isRequired,
 }

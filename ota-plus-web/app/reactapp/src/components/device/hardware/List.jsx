@@ -7,7 +7,7 @@ class List extends Component {
         super(props);
     }
     render() {
-        const { shownIds, showDetails, showSecondaryDetails, secondaryDetailsShown, hardware } = this.props;
+        const { shownIds, showDetails, showKey, showSecondaryDetails, secondaryDetailsShown, hardware, device } = this.props;
         let dataId = 0;
         if(!_.isUndefined(hardware) && !_.isUndefined(hardware.id) && (!_.isUndefined(hardware.description) || !_.isUndefined(hardware.class))) {
             dataId = hardware['id-nr'];
@@ -24,15 +24,31 @@ class List extends Component {
                     id="hardware-primary-details"
                     onClick={e => e.preventDefault()}
                 >
-                    <div className="desc">
-                        Serial: not reported <br />
-                        Hardware ID: not reported
+                <div className="desc">
+                    { device.isDirector ? 
+                        <span>
+                            Serial: {_.first(device.directorAttributes).id} <br />
+                            Hardware ID: {_.first(device.directorAttributes).hardwareId}
+                        </span>
+                    :
+                        <span>
+                            Serial: not reported <br />
+                            Hardware ID: not reported
+                        </span>
+                    }
                     </div>
-                    <i
-                        className="fa fa-info hardware-info-icon" 
-                        onClick={showDetails}
-                        data-id={dataId}
-                    ></i>
+                    <div className="icons">
+                        <i
+                            className="fa fa-info hardware-icon key" 
+                            onClick={showDetails}
+                            data-id={dataId}
+                        ></i>
+                        <i
+                            className="fa fa-key hardware-icon details" 
+                            onClick={showKey}
+                            data-id={dataId}
+                        ></i>
+                    </div>
                 </a>
                 <div className="section-header">
                     Secondary ECUs
@@ -48,7 +64,9 @@ class List extends Component {
 
 List.propTypes = {
     showDetails: PropTypes.func.isRequired,
+    showKey: PropTypes.func.isRequired,
     shownIds: PropTypes.object.isRequired,
+    device: PropTypes.object.isRequired
 }
 
 export default List;

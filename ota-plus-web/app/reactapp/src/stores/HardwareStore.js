@@ -34,9 +34,9 @@ export default class HardwareStore {
             }.bind(this));
     }
 
-    fetchPublicKey(deviceId, ecuSerial) {
+    fetchPublicKey(deviceId, ecuId) {
         resetAsync(this.hardwarePublicKeyFetchAsync, true);
-        // return axios.get(`${API_ECUS_PUBLIC_KEY_FETCH}/${deviceId}/ecu/${ecuSerial}/public_key`)
+        // return axios.get(`${API_ECUS_PUBLIC_KEY_FETCH}/${deviceId}/ecus/public_key/ecu_serial=${ecuId}`)
         //     .then(function (response) {
         //         this.publicKey = response.data;
         //         this.hardwarePublicKeyFetchAsync = handleAsyncSuccess(response);
@@ -44,7 +44,6 @@ export default class HardwareStore {
         //     .catch(function (error) {
         //         this.hardwarePublicKeyFetchAsync = handleAsyncError(error);
         //     }.bind(this));
-
         setTimeout(() => {
             this.publicKey = {
                 "keytype": "RSA",

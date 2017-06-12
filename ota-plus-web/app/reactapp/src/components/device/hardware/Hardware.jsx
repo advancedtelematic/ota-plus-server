@@ -5,25 +5,35 @@ import HardwareList from './List';
 import HardwareOverlay from './Overlay';
 import HardwareSecondaryEcuDetails from './SecondaryEcuDetails';
 import { FadeAnimation } from '../../../utils';
+import { PopoverWrapper } from '../../../partials';
+import PrimaryEcu from './PrimaryEcu';
 import _ from 'underscore';
 
 @observer
 class Hardware extends Component {
     @observable detailsIdShown = null;
+    @observable keyModalShown = false;
     @observable secondaryDetailsShown = false;
     @observable shownIds = [];
 
     constructor(props) {
         super(props);
         this.showDetails = this.showDetails.bind(this);
+        this.showKey = this.showKey.bind(this);
         this.showSecondaryDetails = this.showSecondaryDetails.bind(this);
         this.hideSecondaryDetails = this.hideSecondaryDetails.bind(this);
         this.hideDetails = this.hideDetails.bind(this);
+        this.hideKey = this.hideKey.bind(this);
     }
     showDetails(e) {
         e.preventDefault();
         e.stopPropagation();
-        this.detailsIdShown = e.target.dataset.id
+        this.detailsIdShown = e.target.dataset.id;
+    }
+    showKey(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.keyModalShown = true;
     }
     showSecondaryDetails(e) {
         e.preventDefault();
@@ -38,19 +48,47 @@ class Hardware extends Component {
         if(e) e.preventDefault();
         this.detailsIdShown = null;
     }
+    hideKey(e) {
+        if(e) e.preventDefault();
+        this.keyModalShown = false;
+    }
     render() {
-        const { hardwareStore, deviceId } = this.props;
-        let hardware = hardwareStore.hardware[deviceId];
+        const { hardwareStore, device } = this.props;
+        const hardware = hardwareStore.hardware[device.uuid];
+        const primaryEcu = hardware;
         return (
             <span>
                 <div className="hardware-list">
-                    <HardwareList 
-                        hardware={hardware}
-                        showDetails={this.showDetails}
-                        showSecondaryDetails={this.showSecondaryDetails}
-                        shownIds={this.shownIds}
-                        secondaryDetailsShown={this.secondaryDetailsShown}
-                    />
+                    <div className="primary-ecus">
+                        <PopoverWrapper
+                            onOpen={() => {
+                                hardwareStore.fetchPublicKey(device.uuid, _.first(device.directorAttributes).id);
+                            }}
+                            onClose={() => {
+                                hardwareStore._resetPublicKey();
+                            }}
+                        >
+                            <PrimaryEcu
+                                ecu={primaryEcu}
+                                hardwareStore={hardwareStore}
+                                showKey={this.showKey}
+                                showDetails={this.showDetails}
+                                keyModalShown={this.keyModalShown}
+                                hardware={hardware}
+                                shownIds={this.shownIds}
+                                device={device}
+                            />
+                        </PopoverWrapper>
+                    </div>
+                    <div className="secondary-ecus">
+                        <div className="section-header">
+                            Secondary ECUs
+                            <img src="/assets/img/icons/questionmark.png" alt="" className="hardware-secondary-details" onClick={this.showSecondaryDetails} />
+                        </div>                
+                        <div className="not-available" id="hardware-secondary-not-available">
+                            None reported
+                        </div>
+                    </div>
                 </div>
 
                 {this.detailsIdShown ?
@@ -79,13 +117,15 @@ class Hardware extends Component {
                 : 
                     null
                 }
+
             </span>
         );
     }
 }
 
 Hardware.propTypes = {
-    hardwareStore: PropTypes.object.isRequired
+    hardwareStore: PropTypes.object.isRequired,
+    device: PropTypes.object.isRequired
 }
 
 export default Hardware;

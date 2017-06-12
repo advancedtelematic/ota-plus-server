@@ -2,6 +2,7 @@ import { observable, computed, extendObservable } from 'mobx';
 import axios from 'axios';
 import {
     API_PACKAGES,
+    API_TUF_PACKAGES,
     API_PACKAGES_BLACKLIST_FETCH,
     API_PACKAGES_COUNT_DEVICE_AND_GROUP,
     API_PACKAGES_COUNT_VERSION_BY_NAME,
@@ -399,7 +400,7 @@ export default class PackagesStore {
                         this.initialDevicePackages = initialDevicePackages;
                         extendObservable(this.installedPackagesPerDevice, {
                             [id]: initialDevicePackages
-                        })
+                        });
                         this.packagesForDeviceFetchAsync = handleAsyncSuccess(response);
 
                         switch (this.page) {
@@ -605,6 +606,33 @@ export default class PackagesStore {
         return found;
     }
 
+    _getPackageByVersion(version) {
+        let found = _.find(this.packages, (pack) => {
+            return pack.id.version === version;
+        });
+
+        let object = {
+            checkSum: found.checkSum,
+            createdAt: found.createdAt,
+            description: found.description,
+            packageId: {
+                name: found.id.name,
+                version: found.id.version
+            },
+            isBlackListed: found.isBlackListed,
+            namespace: found.namespace,
+            signature: found.signature,
+            size: found.size,
+            uri: {
+                uri: found.uri
+            },
+            uuid: found.uuid,
+            vendor: found.vendor
+        }
+
+        return object;
+    }
+
     _getDevicePackage(data) {
         return _.find(this.devicePackages, (pack) => {
             return pack.name === data.name && pack.version === data.version;
@@ -629,6 +657,7 @@ export default class PackagesStore {
                 return pack.createdAt;
             }).reverse();
         });
+
         let specialGroup = {
             '#': []
         };
@@ -670,7 +699,6 @@ export default class PackagesStore {
             let installedIds = [];
             let queuedCount = 0;
             let installedCount = 0;
-
 
             _.each(blacklist, (pack) => {
                 parsedBlacklist[pack.packageId.name + '-' + pack.packageId.version] = {

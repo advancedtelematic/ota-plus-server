@@ -9,10 +9,9 @@ import moment from 'moment';
 @observer
 class Details extends Component {
     render() {
-    	const { packageVersion, showPackageBlacklistModal, packagesStore, installPackage, deviceId } = this.props;
-
+    	const { packageVersion, showPackageBlacklistModal, packagesStore, installPackage, device } = this.props;
     	let version = packagesStore._getPackageVersionByUuid(packageVersion.uuid);
-    	let blacklistComment = null;
+       	let blacklistComment = null;
     	let allPackages = packagesStore.packages;
     	let blacklistedPackages = packagesStore.blacklist;
     	let isPackageQueued = false;
@@ -24,7 +23,7 @@ class Details extends Component {
 			isPackageQueued = _.find(packagesStore.deviceQueue, (dev) => {
 	    		return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
 	    	});
-	    	isPackageInstalled = _.find(packagesStore.installedPackagesPerDevice[deviceId], (dev) => {
+	    	isPackageInstalled = _.find(packagesStore.installedPackagesPerDevice[device.uuid], (dev) => {
 	    		return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
 	    	});
 	    	isAutoInstallEnabled = _.find(packagesStore.deviceAutoInstalledPackages, (packageName) => {
@@ -34,7 +33,7 @@ class Details extends Component {
         return (
         	<div className="details-wrapper">
 	        	{version ? 
-		        	<div className="details">	        	
+    				<div className="details">	        	
 			        	<div className="top">
 			        		<div className="title">{version.id.name}</div>
 				        		<div className="status">
@@ -128,11 +127,11 @@ class Details extends Component {
 	                            Install
 	                        </button>
 			        	</div>
-		        	</div>     
-	        	:
-	        	<div className="wrapper-center absolute-position">
-                    Select the package version to see its details.
-                </div>
+		        	</div>
+    			:
+		        	<div className="wrapper-center absolute-position">
+	                    Select the package version to see its details.
+	                </div>
 	        	}
         	</div>
 
