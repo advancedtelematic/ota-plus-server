@@ -26,13 +26,14 @@ class Guide extends Component {
         this.shownTooltipInfoName = null;
     }
     componentWillMount() {
-        this.props.devicesStore.addStepToHistory(1);
+        if(!_.includes(this.props.devicesStore.stepsHistory, 3)) {
+            this.props.devicesStore.addStepToHistory(1);
+        }
     }
     componentWillReceiveProps(nextProps) {
-        if(nextProps.device.lastSeen && !this.props.devicesStore.deviceFetchTimes[nextProps.device.uuid]) {
+        if(nextProps.device.lastSeen && !nextProps.device.fetched) {
             this.props.devicesStore.addStepToHistory(3);
-            this.props.devicesStore.fetchDevice(this.props.device.uuid);
-            this.props.devicesStore.deviceFetchTimes[nextProps.device.uuid] = 1;
+            this.props.devicesStore.fetchDevice(this.props.device.uuid, 'once');
         }
     }
     downloadClient(e) {
