@@ -61,8 +61,9 @@ export default class CampaignsStore {
                     let after = _.after(campaigns.length, () => {
                         this.campaigns = campaigns;
                         this._prepareCampaigns(this.campaignsFilter, this.campaignsSort);
-                        if(this.overallCampaignsCount === null)
+                        if(this.overallCampaignsCount === null || this.overallCampaignsCount === 0) {
                             this.overallCampaignsCount = campaigns.length;
+                        }
                         this.campaignsFetchAsync = handleAsyncSuccess(response);
                     }, this);
                     _.each(campaigns, (campaign, index) => {
