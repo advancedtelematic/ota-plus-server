@@ -9,7 +9,7 @@ class HardwarePanel extends Component {
         super(props);
     }
     render() {
-        const { hardwareStore, deviceId } = this.props;
+        const { hardwareStore, device } = this.props;
         return (
             <div className="hardware-panel">
                 <div className="darkgrey-header">
@@ -17,10 +17,16 @@ class HardwarePanel extends Component {
                 </div>
 
                 <div className="inner-container">
-                    <DeviceHardware
-                        hardwareStore={hardwareStore}
-                        deviceId={deviceId}
-                    />
+                    {hardwareStore.hardwareFetchAsync.isFetching ?
+                        <div className="wrapper-center">
+                            <Loader />
+                        </div>
+                    :
+                        <DeviceHardware
+                            hardwareStore={hardwareStore}
+                            device={device}
+                        />
+                    }
                 </div>
             </div>
         );
@@ -29,7 +35,7 @@ class HardwarePanel extends Component {
 
 HardwarePanel.propTypes = {
     hardwareStore: PropTypes.object.isRequired,
-    deviceId: PropTypes.string.isRequired,
+    device: PropTypes.object.isRequired,
 }
 
 export default HardwarePanel;

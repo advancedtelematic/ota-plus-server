@@ -81,7 +81,6 @@ class PropertiesPanel extends Component {
                     />
 
                     <div className={"wrapper-properties" + (this.shouldShowPackagesDetails ? " recalculated-properties-height" : "")}>
-
                         {packagesStore.overallPackagesCount ?
                             this.shouldShowPackagesDetails ? 
                                 <PackagesDetails 
@@ -90,7 +89,7 @@ class PropertiesPanel extends Component {
                                     packagesStore={packagesStore}
                                     devicesStore={devicesStore}
                                     installPackage={installPackage}
-                                    deviceId={device.uuid}
+                                    device={device}
                                 />
                             :
                                 <PropertiesOnDeviceList 

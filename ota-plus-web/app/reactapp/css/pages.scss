@@ -59,6 +59,13 @@
                         .panel-body {
                             height: calc(100% - 50px);
                             padding: 0;
+
+                            .element-box {
+                                .package-name img {
+                                    height: 17px;
+                                    width: 17px;
+                                }
+                            }
                         }
                     }
                 }
@@ -430,6 +437,12 @@
                 .date-desc {
                     margin-top: 1px;
                 }
+
+                img {
+                    width: 40px;
+                    height: 40px;
+                    margin-top: -20px;
+                }
             }
         }
 
@@ -516,10 +529,6 @@
 
                         &:hover {
                             background: #eee;
-
-                            .hardware-info-icon {
-                                display: block;
-                            }
                         }
 
                         &.selected {
@@ -529,20 +538,24 @@
                         .desc {
                             width: 85%;
                         }
-
-                        .hardware-info-icon {
-                            color: $color-lightgrey;
-                            text-align: center;
-                            width: 20px;
-                            height: 20px;
-                            padding: 4px 0 0 0;
-                            float: right;
-                            border: 1px solid $color-lightgrey;
-                            border-radius: 30px;
-                            display: none;
+                        .icons {
                             position: absolute;
-                            top: 15px;
                             right: 10px;
+                            top: 15px;
+
+                            .hardware-icon {
+                                color: $color-lightgrey;
+                                text-align: center;
+                                width: 20px;
+                                height: 20px;
+                                padding: 4px 0 0 0;
+                                border: 1px solid $color-lightgrey;
+                                border-radius: 30px;
+
+                                &.key {
+                                    margin-left: 5px;
+                                }
+                            }
                         }
                     }
 
@@ -1041,6 +1054,28 @@
                     .versions {
                         padding: 0;
 
+                        .tuf {
+
+                            .right-box {
+                                padding: 0 10px;
+                                width: 30%;
+
+                                .installed {
+                                    border-right: 1px solid #ddd;
+                                }
+
+                                .installed-text {
+                                    display: inline-block;
+                                    padding-left: 10px;
+                                    color: green;
+                                }
+                            }
+
+                            .left-box {
+                                width: 70%;
+                            }
+                        }
+
                         li {
                             height: 50px;
                             margin: 8px 30px;
@@ -1075,7 +1110,7 @@
 
                                 .blacklisted, .installed, .blacklisted-installed {
                                     display: inline-block;
-                                    margin: 12px;
+                                    padding: 12px;
 
                                     img {
                                         width: 25px;
@@ -1953,6 +1988,17 @@
             background: $color-mint;
             padding: 1px 5px;
             border-radius: 3px;
+            float: right;
+        }
+
+        .package-name {
+            display: inline-block;
+            width: 30%;
+        }
+        
+        .tuf-repo-icon {
+            height: 20px;
+            width: 20px;
             float: right;
         }
     }    
