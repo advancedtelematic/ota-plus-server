@@ -188,11 +188,14 @@ export default class DevicesStore {
         this.preparedDevices = [];
     }
 
-    fetchDevice(id) {
+    fetchDevice(id, fetchTimes = null) {
         resetAsync(this.devicesOneFetchAsync, true);
         return axios.get(API_DEVICES_DEVICE_DETAILS + '/' + id + '?status=true')
             .then((response) => {
                 this.device = response.data;
+                if(fetchTimes) {
+                    this.device.fetched = true;
+                }
                 this.devicesOneFetchAsync = handleAsyncSuccess(response);
             })
             .catch((error) => {
