@@ -203,7 +203,7 @@
                 height: calc(100% - 130px);
                 overflow-y: auto;
 
-                button {
+                .group-btn, button {
                     color: #555;
                     text-align: left;
                     background: #fff;
@@ -287,7 +287,7 @@
 
                         &:hover {
                             width: 90px;
-
+                            cursor: pointer;
                             ul {
                                 li {
                                     & > div {

@@ -28,9 +28,9 @@ class ListItem extends Component {
         const { isOver, canDrop, connectDropTarget } = this.props;
         return (
             connectDropTarget(
-                <button 
+                <div
                     title={group.groupName}
-                    className={"droppable" + (isSelected ? " selected" : "") + (isOver ? " active" : "")}
+                    className={"group-btn droppable" + (isSelected ? " selected" : "") + (isOver ? " active" : "")}
                     id={"button-group-" + group.groupName}
                     onClick={() => {
                         selectGroup({type: 'real', name: group.groupName, id: group.id});
@@ -57,7 +57,7 @@ class ListItem extends Component {
                     <div className="pointer">
                         <i className="fa fa-angle-right fa-3x"></i>
                     </div>
-                </button>
+                </div>
             )
         );
     }
