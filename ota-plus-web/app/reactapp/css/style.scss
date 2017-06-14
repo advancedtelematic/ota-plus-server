@@ -1966,7 +1966,7 @@ input {
         .body {
             background: #F7F7F7;
             border-radius: 10px;
-            height: 750px!important;
+            height: calc(100vh - 180px) !important;
 
             .tabs {
                 & > div {
