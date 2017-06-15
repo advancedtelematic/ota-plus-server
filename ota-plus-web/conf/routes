@@ -14,8 +14,6 @@ POST    /api/v1/clients                          com.advancedtelematic.controlle
 GET     /api/v1/clients                          com.advancedtelematic.controllers.ClientsController.getClients
 GET     /api/v1/clients/:uuid                    com.advancedtelematic.controllers.ClientsController.getClient(uuid: Uuid)
 
-GET     /api/v1/events/ws                        com.advancedtelematic.controllers.EventController.ws()
-
 GET     /api/v1/provisioning/status              com.advancedtelematic.controllers.ProvisioningController.provisioningStatus
 GET     /api/v1/provisioning                     com.advancedtelematic.controllers.ProvisioningController.provisioningInfo
 PUT     /api/v1/provisioning/activate            com.advancedtelematic.controllers.ProvisioningController.activateAutoProvisioning
