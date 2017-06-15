@@ -62,7 +62,7 @@ class Main extends Component {
         this.featuresStore = new FeaturesStore();
         this.provisioningStore = new ProvisioningStore();
         this.userStore = new UserStore();
-        this.websocketHandler = new WebsocketHandler({
+        this.websocketHandler = new WebsocketHandler(document.getElementById('ws-url').value, {
             devicesStore: this.devicesStore,
             packagesStore: this.packagesStore,
             hardwareStore: this.hardwareStore,

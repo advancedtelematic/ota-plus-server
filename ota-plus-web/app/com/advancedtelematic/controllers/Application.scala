@@ -33,6 +33,10 @@ class Application @Inject() (ws: WSClient,
   val auditLogger = LoggerFactory.getLogger("audit")
 
   private[this] val auth0Config = Auth0Config(conf).get
+  private[this] val wsScheme = conf.underlying.getString("ws.scheme")
+  private[this] val wsHost = conf.underlying.getString("ws.host")
+  private[this] val wsPort = conf.underlying.getString("ws.port")
+  private[this] val wsPath = conf.underlying.getString("ws.path")
 
   private def logToAudit(caller: String, msg: String) {
     // Useful to debug instances running in the cloud.
@@ -162,6 +166,7 @@ class Application @Inject() (ws: WSClient,
    * @return OK response and index html
    */
   def index : Action[AnyContent] = AuthenticatedAction { implicit req =>
-    Ok(views.html.main(auth0Config, CSRF.getToken))
+    val wsUrl = s"$wsScheme://bearer:${req.authPlusAccessToken.value}@$wsHost:$wsPort$wsPath"
+    Ok(views.html.main(auth0Config, CSRF.getToken, wsUrl))
   }
 }

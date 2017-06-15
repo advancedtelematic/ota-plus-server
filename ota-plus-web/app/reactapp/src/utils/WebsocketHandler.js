@@ -1,9 +1,7 @@
-const WebsocketHandler = (function (stores) {
+const WebsocketHandler = (function (wsUrl, stores) {
     const base = this;
     this.init = function () {
-        const proto = (location.protocol == "http:") ? "ws://" : "wss://";
-        const port = (location.protocol == "http:") ? ":" + location.port : ":8080";
-        this.websocket = new WebSocket(proto + location.hostname + port + "/api/v1/events/ws");
+        this.websocket = new WebSocket(wsUrl);
 
         this.websocket.onopen = function () {
             console.log("WEBSOCKET: OPEN");
