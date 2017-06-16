@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import PublicKeyPopover from './PublicKeyPopover';
+import _ from 'underscore';
 
 @observer
 class PrimaryEcu extends Component {
@@ -8,33 +9,70 @@ class PrimaryEcu extends Component {
         super(props);
     }
     render() {
-        const { ecu, toggle, toggled, ...otherProps } = this.props;
+        const { ecu, hardwareStore, showKey, showDetails, keyModalShown, hardware, shownIds, device, ...otherProps} = this.props;
+        let dataId = 0;
+        if(!_.isUndefined(hardware) && !_.isUndefined(hardware.id) && (!_.isUndefined(hardware.description) || !_.isUndefined(hardware.class))) {
+            dataId = hardware['id-nr'];
+        }
         return (
-            <button
-                className="primary"
-                onClick={toggle}
-            >
-                <i className={"fa " + (toggled ? "fa-chevron-down" : "fa-chevron-right")} aria-hidden="true"></i>
-                {ecu.image.filepath}
-                <div
-                    className={"popover-icon" + (otherProps.popoverShown ? " active" : "")}
-                    onTouchTap={otherProps.handleTouchTap}
-                    onClick={(e) => {e.stopPropagation()}}>
-                    PK
+            <span>
+                <div className="section-header">
+                    Primary ECUs
+                </div>
+                <a
+                    href="#" 
+                    data-id={dataId}
+                    className={"selected" + (shownIds.indexOf(dataId) > -1 ? " shown" : "")}
+                    id="hardware-primary-details"
+                    onClick={e => e.preventDefault()}
+                >
+                    <div className="desc">
+                        { device.isDirector ? 
+                            <span>
+                                Serial: {_.first(device.directorAttributes).id} <br />
+                                Hardware ID: {_.first(device.directorAttributes).hardwareId}
+                            </span>
+                        :
+                            <span>
+                                Serial: not reported <br />
+                                Hardware ID: not reported
+                            </span>
+                        }
+                    </div>
+                    <div className="icons">
+                        <i
+                            className="fa fa-info hardware-icon details" 
+                            onClick={showDetails}
+                            data-id={dataId}
+                        ></i>
+                        {device.isDirector ? 
+                            <i
+                                className="fa fa-key hardware-icon key" 
+                                onClick={showKey}
+                                onTouchTap={otherProps.handleTouchTap}
+                            ></i>
+                        :
+                            null
+                        }
+
+                    </div>
+                </a>
+                {keyModalShown ? 
                     <PublicKeyPopover
                         {...otherProps}
                         ecu={ecu}
+                        hardwareStore={hardwareStore}
                     />
-                </div>
-            </button>
+                :
+                    null
+                }
+            </span>
         );
     }
 }
 
 PrimaryEcu.propTypes = {
     ecu: PropTypes.object.isRequired,
-    toggle: PropTypes.func.isRequired,
-    toggled: PropTypes.bool.isRequired,
     handleCopy: PropTypes.func,
     handleRequestClose: PropTypes.func,
     handleTouchTap: PropTypes.func,

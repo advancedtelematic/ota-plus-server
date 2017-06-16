@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react';
+import { observe } from 'mobx';
 import { observer } from 'mobx-react';
 import { Form } from 'formsy-react';
 import { SubHeader, SearchBar, Loader } from '../../partials';
-import { PackagesList } from './packages';
+import { PackagesCoreList } from './packages';
+import _ from 'underscore';
 
 @observer
 class SoftwarePanel extends Component {
@@ -10,6 +12,21 @@ class SoftwarePanel extends Component {
         super(props);
         this.changeSort = this.changeSort.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
+
+        this.packagesChangeHandler = observe(props.packagesStore, (change) => {
+            if(change.name === 'packagesForDeviceFetchAsync' && change.object[change.name].isFetching === false) {
+                if(this.props.device.isDirector) {
+                    let hash = _.first(this.props.device.directorAttributes).image.hash.sha256;
+                    let pack = this.props.packagesStore._getPackageByVersion(hash);
+                    if(!_.isUndefined(this.props.packagesStore.installedPackagesPerDevice[this.props.device.uuid])) {
+                        this.props.packagesStore.installedPackagesPerDevice[this.props.device.uuid].push(pack);
+                    }
+                }
+            }
+        });
+    }
+    componentWillUnmount() {
+        this.packagesChangeHandler();
     }
     changeSort(sort, e) {
         if(e) e.preventDefault();
@@ -17,10 +34,9 @@ class SoftwarePanel extends Component {
     }
     changeFilter(filter) {
         this.props.packagesStore.fetchPackages(filter);
-        this.props.packagesStore.fetchDevicePackages(this.props.device.uuid, filter);
     }
     render() {
-        const { packagesStore, device, togglePackageAutoUpdate, onFileDrop, packageVersion, loadPackageVersionProperties } = this.props;
+        const { devicesStore, packagesStore, device, togglePackageAutoUpdate, onFileDrop, packageVersion, loadPackageVersionProperties } = this.props;
         return (
             <div className="software-panel">
                 <div className="darkgrey-header">
@@ -53,14 +69,21 @@ class SoftwarePanel extends Component {
                                 <Loader />
                             </div>
                         :
-                            <PackagesList
-                                packagesStore={packagesStore}
-                                deviceId={device.uuid}
-                                onFileDrop={onFileDrop}
-                                togglePackageAutoUpdate={togglePackageAutoUpdate}
-                                packageVersion={packageVersion}
-                                loadPackageVersionProperties={loadPackageVersionProperties}
-                            />
+                            Object.keys(packagesStore.preparedPackagesPerDevice[device.uuid]).length ?
+                                <PackagesCoreList
+                                    packagesStore={packagesStore}
+                                    device={device}
+                                    onFileDrop={onFileDrop}
+                                    togglePackageAutoUpdate={togglePackageAutoUpdate}
+                                    packageVersion={packageVersion}
+                                    loadPackageVersionProperties={loadPackageVersionProperties}
+                                />
+                            :
+                                <span className="content-empty">
+                                    <div className="wrapper-center">
+                                        No matching packages found.
+                                    </div>
+                                </span>
                         }
                     </div>
 

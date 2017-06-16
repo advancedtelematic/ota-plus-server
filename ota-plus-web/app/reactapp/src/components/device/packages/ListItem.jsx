@@ -12,7 +12,6 @@ class ListItem extends Component {
             <span className="wrapper-item">
                 <button className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
                     {pack.packageName}
-
                     {!isSelected ?
                         blacklistedAndInstalled ?
                             pack.isAutoInstallEnabled ?
