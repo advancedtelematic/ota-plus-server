@@ -105,9 +105,10 @@ class Device extends Component {
                         <span>
                             <DeviceHardwarePanel 
                                 hardwareStore={hardwareStore}
-                                deviceId={device.uuid}
+                                device={device}
                             />
                             <DeviceSoftwarePanel
+                                devicesStore={devicesStore}
                                 packagesStore={packagesStore}
                                 device={device}
                                 togglePackageAutoUpdate={this.togglePackageAutoUpdate}

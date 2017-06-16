@@ -3,6 +3,7 @@ import axios from 'axios';
 import { 
     API_DEVICES_SEARCH,
     API_DEVICES_DEVICE_DETAILS,
+    API_DEVICES_DIRECTOR_DEVICE,
     API_DEVICES_CREATE, 
     API_DEVICES_RENAME,
     API_DEVICES_UPDATES_LOGS
@@ -190,14 +191,23 @@ export default class DevicesStore {
 
     fetchDevice(id, fetchTimes = null) {
         resetAsync(this.devicesOneFetchAsync, true);
-        return axios.get(API_DEVICES_DEVICE_DETAILS + '/' + id + '?status=true')
-            .then((response) => {
-                this.device = response.data;
-                if(fetchTimes) {
-                    this.device.fetched = true;
+       let that = this;
+        return axios.all([
+                axios.get(API_DEVICES_DEVICE_DETAILS + '/' + id + '?status=true'),
+                axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id, {
+                    validateStatus: function (status) {
+                        return status === 200 || status === 404;
+                    },
+                })
+            ])
+            .then(axios.spread(function(legacy, director) {
+                that.device = legacy.data;
+                if(director.data.code !== 'missing_device') {
+                    that.device.isDirector = true;
+                    that.device.directorAttributes = director.data;
                 }
-                this.devicesOneFetchAsync = handleAsyncSuccess(response);
-            })
+                this.devicesOneFetchAsync = handleAsyncSuccess(legacy);
+            }))
             .catch((error) => {
                 this.devicesOneFetchAsync = handleAsyncError(error);
             });

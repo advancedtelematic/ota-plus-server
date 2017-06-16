@@ -54,6 +54,13 @@ class Header extends Component {
                                 <div className={"status status-" + device.deviceStatus} id={"status=" + device.deviceStatus}></div>
                             </button>
                             <div className="dates">
+                                <div className="date director">
+                                    { device.isDirector ? 
+                                        <img src="/assets/img/icons/white/director-device-icon.png" alt="Director" />
+                                    :
+                                        null
+                                    }
+                                </div>                               
                                 <div className="date" id="created-info">
                                     <span className="date-label">Created</span>
                                     <div className="date-desc">
