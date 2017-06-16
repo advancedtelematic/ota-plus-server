@@ -13,6 +13,7 @@ import {
 export default class HardwareStore {
 
     @observable hardwareFetchAsync = {};
+    @observable hardwareFetchWsAsync = {};
     @observable hardwarePublicKeyFetchAsync = {};
     @observable hardware = {};
     @observable publicKey = {};
@@ -31,6 +32,18 @@ export default class HardwareStore {
             }.bind(this))
             .catch(function (error) {
                 this.hardwareFetchAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
+    fetchHardwareWs(deviceId) {
+        resetAsync(this.hardwareFetchWsAsync, true);
+        return axios.get(`${API_ECUS_FETCH}/${deviceId}/system_info`)
+            .then(function (response) {
+                this.hardware[deviceId] = response.data;
+                this.hardwareFetchWsAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function (error) {
+                this.hardwareFetchWsAsync = handleAsyncError(error);
             }.bind(this));
     }
 
@@ -61,6 +74,7 @@ FPqri0cb2JZfXJ/DgYSF6vUpwmJG8wVQZKjeGcjDOL5UlsuusFncCzWBQ7RKNUSesmQRMSGkVb1/
 
     _reset() {
         resetAsync(this.hardwareFetchAsync);
+        resetAsync(this.hardwareFetchWsAsync);
         resetAsync(this.hardwarePublicKeyFetchAsync);
         this.hardware = {};
         this.publicKey = {};
