@@ -19,7 +19,7 @@ const WebsocketHandler = (function (wsUrl, stores) {
                     }
                     stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
                     stores.packagesStore.fetchInitialDevicePackages(data.uuid);
-                    stores.hardwareStore.fetchHardware(data.uuid);
+                    stores.hardwareStore.fetchHardwareWs(data.uuid);
                     break;
                 case "DeviceUpdateStatus":
                     stores.devicesStore._updateDeviceData(data.device, {deviceStatus: data.status});
