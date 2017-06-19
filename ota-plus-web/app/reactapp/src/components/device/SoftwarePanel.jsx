@@ -14,7 +14,7 @@ class SoftwarePanel extends Component {
         this.changeFilter = this.changeFilter.bind(this);
 
         this.packagesChangeHandler = observe(props.packagesStore, (change) => {
-            if(change.name === 'packagesForDeviceFetchAsync' && change.object[change.name].isFetching === false) {
+            if(change.name === 'initialPackagesForDeviceFetchAsyncBeforePreparing' && change.object[change.name].isFetching === false) {
                 if(this.props.device.isDirector) {
                     let hash = _.first(this.props.device.directorAttributes).image.hash.sha256;
                     let pack = this.props.packagesStore._getPackageByVersion(hash);
