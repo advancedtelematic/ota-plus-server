@@ -37,7 +37,7 @@ const WebsocketHandler = (function (wsUrl, stores) {
                         if(data.status !== 'Pending') {
                             stores.packagesStore.fetchDevicePackagesQueue(data.device);
                         }
-                        if(data.status === 'Finished') {
+                        if(data.status === 'Finished' || data.status === 'Failed') {
                             stores.packagesStore.fetchDevicePackagesHistory(data.device);
                             stores.packagesStore.fetchDevicePackagesUpdatesLogs(data.device);
                             stores.packagesStore.fetchOndevicePackages(data.device, null);
