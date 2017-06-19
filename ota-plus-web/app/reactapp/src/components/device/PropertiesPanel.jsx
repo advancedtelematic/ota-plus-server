@@ -60,6 +60,7 @@ class PropertiesPanel extends Component {
                             <SearchBar
                                 value={packagesStore.packagesOndeviceFilter}
                                 changeAction={this.changeFilter}
+                                id="search-installed-packages-input"
                             />
                         </Form>
                         <div className="sort-box">

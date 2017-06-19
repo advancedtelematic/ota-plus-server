@@ -83,7 +83,7 @@ class Hardware extends Component {
                     <div className="secondary-ecus">
                         <div className="section-header">
                             Secondary ECUs
-                            <img src="/assets/img/icons/questionmark.png" alt="" className="hardware-secondary-details" onClick={this.showSecondaryDetails} />
+                            <img src="/assets/img/icons/questionmark.png" alt="" className="hardware-secondary-details" onClick={this.showSecondaryDetails} id="hardware-secondary-ecu-details" />
                         </div>                
                         <div className="not-available" id="hardware-secondary-not-available">
                             None reported
