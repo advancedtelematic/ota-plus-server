@@ -127,13 +127,13 @@ class OnDeviceList extends Component {
                             packagesStore.fetchOndevicePackages(device.uuid, packagesStore.ondeviceFilter)
                         }}
                     >
-                        {Object.keys(packagesStore.preparedOndevicePackages).length ? 
-                            <Dropzone 
-                                ref="dropzone" 
-                                onDrop={onFileDrop} 
-                                multiple={false} 
-                                disableClick={true} 
-                                className="dnd-zone" 
+                        {Object.keys(packagesStore.preparedOndevicePackages).length ?
+                            <Dropzone
+                                ref="dropzone"
+                                onDrop={onFileDrop}
+                                multiple={false}
+                                disableClick={true}
+                                className="dnd-zone"
                                 activeClassName={"dnd-zone-active"}>
                                 <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
                                     {this.fakeHeaderLetter}
@@ -144,13 +144,13 @@ class OnDeviceList extends Component {
                                             <div className="header">{letter}</div>
                                             {_.map(packages, (pack, index) => {
                                                 return (
-                                                   <ListItemOnDevice 
+                                                   <ListItemOnDevice
                                                         pack={pack}
                                                         showPackageBlacklistModal={showPackageBlacklistModal}
                                                         key={index}
                                                     />
                                                 );
-                                                    
+
                                             })}
                                         </span>
                                     );

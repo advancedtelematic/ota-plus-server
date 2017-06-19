@@ -48,6 +48,7 @@ class PropertiesPanel extends Component {
     }
     render() {
         const { showPackageCreateModal, showPackageBlacklistModal, onFileDrop, packagesStore, packageVersion, installPackage, device, togglePackageAutoUpdate, devicesStore } = this.props;
+        let attributesFetching = packagesStore.packagesForDeviceFetchAsync.isFetching || packagesStore.packagesDeviceQueueFetchAsync.isFetching || packagesStore.packagesAutoInstalledForDeviceFetchAsync.isFetching;
         return (
             <div className="properties-panel">
                 <div className="darkgrey-header">
@@ -56,13 +57,13 @@ class PropertiesPanel extends Component {
                 <div className="wrapper-full">
                     <SubHeader shouldSubHeaderBeHidden={this.shouldShowPackagesDetails}>
                         <Form>
-                            <SearchBar 
+                            <SearchBar
                                 value={packagesStore.packagesOndeviceFilter}
                                 changeAction={this.changeFilter}
                             />
                         </Form>
                         <div className="sort-box">
-                            {packagesStore.packagesOndeviceSort == 'asc' ? 
+                            {packagesStore.packagesOndeviceSort == 'asc' ?
                                 <a href="#" onClick={this.changeSort.bind(this, 'desc')} id="link-sort-packages-desc">
                                     <i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z
                                 </a>
@@ -74,40 +75,45 @@ class PropertiesPanel extends Component {
                         </div>
                     </SubHeader>
 
-                    <Switch 
+                    <Switch
                         showPackagesList={this.showPackagesList}
                         showPackagesDetails={this.showPackagesDetails}
                         shouldShowPackagesDetails={this.shouldShowPackagesDetails}
                     />
 
                     <div className={"wrapper-properties" + (this.shouldShowPackagesDetails ? " recalculated-properties-height" : "")}>
-                        {packagesStore.overallPackagesCount ?
-                            this.shouldShowPackagesDetails ? 
-                                <PackagesDetails 
-                                    packageVersion={packageVersion}
-                                    showPackageBlacklistModal={showPackageBlacklistModal}
-                                    packagesStore={packagesStore}
-                                    devicesStore={devicesStore}
-                                    installPackage={installPackage}
-                                    device={device}
-                                />
-                            :
-                                <PropertiesOnDeviceList
-                                    packageVersion={packageVersion}
-                                    device={device}
-                                    showPackageBlacklistModal={showPackageBlacklistModal}
-                                    onFileDrop={onFileDrop}
-                                    togglePackageAutoUpdate={togglePackageAutoUpdate}
-                                    installPackage={installPackage}
-                                    packagesStore={packagesStore}
-                                />
-                        : null}
-                        {packagesStore.overallPackagesCount && packagesStore.packagesOndeviceFetchAsync.isFetching ? 
+                        {attributesFetching ?
                             <div className="wrapper-loader">
                                 <Loader />
                             </div>
-                        :  
-                            null
+                        :
+                            packagesStore.overallPackagesCount ?
+                                this.shouldShowPackagesDetails ?
+                                    <PackagesDetails
+                                        packageVersion={packageVersion}
+                                        showPackageBlacklistModal={showPackageBlacklistModal}
+                                        packagesStore={packagesStore}
+                                        devicesStore={devicesStore}
+                                        installPackage={installPackage}
+                                        device={device}
+                                    />
+                                :
+                                    <PropertiesOnDeviceList
+                                        deviceId={device.uuid}
+                                        showPackageBlacklistModal={showPackageBlacklistModal}
+                                        onFileDrop={onFileDrop}
+                                        togglePackageAutoUpdate={togglePackageAutoUpdate}
+                                        installPackage={installPackage}
+                                        packagesStore={packagesStore}
+                                    />
+                            :
+                                null
+                            (packagesStore.overallPackagesCount && packagesStore.packagesOndeviceFetchAsync.isFetching) ?
+                                <div className="wrapper-loader">
+                                    <Loader />
+                                </div>
+                            :
+                                null
                         }
                     </div>
                 </div>
