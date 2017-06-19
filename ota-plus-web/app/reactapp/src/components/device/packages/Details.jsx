@@ -10,26 +10,35 @@ import moment from 'moment';
 class Details extends Component {
     render() {
     	const { packageVersion, showPackageBlacklistModal, packagesStore, installPackage, device } = this.props;
-    	let version = packagesStore._getPackageVersionByUuid(packageVersion.uuid);
+
+    	let version = null;
+    	if(device.isDirector && packageVersion.uuid === 1) {
+    		version = packagesStore._getPackageByVersion(_.first(device.directorAttributes).image.hash.sha256);
+    		version.id = version.packageId;
+    		delete version.packageId;
+    	} else {
+    		version = packagesStore._getPackageVersionByUuid(packageVersion.uuid);
+    	}
+
        	let blacklistComment = null;
     	let allPackages = packagesStore.packages;
     	let blacklistedPackages = packagesStore.blacklist;
     	let isPackageQueued = false;
     	let isPackageInstalled = false;
-    	let isAutoInstallEnabled = false;
 
     	if(!_.isUndefined(version) && version) {
-    		blacklistComment = version.blacklistComment;
+			blacklistComment = version.blacklistComment;
 			isPackageQueued = _.find(packagesStore.deviceQueue, (dev) => {
-	    		return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
-	    	});
-	    	isPackageInstalled = _.find(packagesStore.installedPackagesPerDevice[device.uuid], (dev) => {
-	    		return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
-	    	});
-	    	isAutoInstallEnabled = _.find(packagesStore.deviceAutoInstalledPackages, (packageName) => {
-	    		return packageName === version.id.name;
-	    	});
-	    }
+				return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
+			});
+			isPackageInstalled = _.find(packagesStore.installedPackagesPerDevice[device.uuid], (dev) => {
+				return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
+			});
+			isAutoInstallEnabled = _.find(packagesStore.deviceAutoInstalledPackages, (packageName) => {
+				return packageName === version.id.name;
+			});
+		}
+		
         return (
         	<div className="details-wrapper">
 	        	{version ? 
@@ -37,7 +46,7 @@ class Details extends Component {
 			        	<div className="top">
 			        		<div className="title">{version.id.name}</div>
 				        		<div className="status">
-				        			{version.isBlackListed && isPackageInstalled ?
+				        			{version.isBlackListed && (isPackageInstalled || version.isInstalled) ?
 				        				<div className="status-container blacklisted-installed">
 				        					<img src="/assets/img/icons/red_cross.png" alt="" />
 			        			 			<span>Installed</span>	        			 	        		
@@ -54,7 +63,7 @@ class Details extends Component {
 				                            </span>
 			        						<span className="status-name">Queued</span>
 			        					</div>
-			        				: isPackageInstalled ? 
+			        				: isPackageInstalled || version.isInstalled ? 
 				        				<div className="status-container installed">
 				        					<img src="/assets/img/icons/check.png" alt="" />
 				        					<span>Installed</span>
@@ -123,7 +132,7 @@ class Details extends Component {
 	                            title="Install"
 	                            id={"button-install-package-" + version.id.name + "-" + version.id.version}
 	                            onClick={installPackage.bind(this, {name: version.id.name, version: version.id.version})}
-	                            disabled={version.isBlackListed || isPackageQueued || isAutoInstallEnabled || isPackageInstalled}>
+	                            disabled={version.isBlackListed || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || version.isInstalled}>
 	                            Install
 	                        </button>
 			        	</div>
