@@ -62,7 +62,7 @@ class ListItem extends Component {
                 {isSelected ?
                     <div className="wrapper-auto-update">
                         Automatic update
-                        <div className={"switch" + (pack.isAutoInstallEnabled ? " switchOn" : "")} onClick={toggleAutoInstall.bind(this, pack.packageName, deviceId, pack.isAutoInstallEnabled)}>
+                        <div className={"switch" + (pack.isAutoInstallEnabled ? " switchOn" : "")} id="auto-install-switch" onClick={toggleAutoInstall.bind(this, pack.packageName, deviceId, pack.isAutoInstallEnabled)}>
                             <div className="switch-status">
                                 {pack.isAutoInstallEnabled ?
                                     <span>ON</span>
