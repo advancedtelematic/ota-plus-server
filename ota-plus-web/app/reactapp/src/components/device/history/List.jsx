@@ -12,7 +12,7 @@ class List extends Component {
     }
 
     render() {
-        const {packagesStore} = this.props;
+        const { packagesStore, device } = this.props;
         return (
             <div>
                 {packagesStore.packagesDeviceHistoryFetchAsync.isFetching || packagesStore.packagesDeviceUpdatesLogsFetchAsync.isFetching ?
@@ -22,9 +22,9 @@ class List extends Component {
                         </div>
                     </ul>
                     :
-                    packagesStore.deviceHistory.length ?
+                    Object.keys(packagesStore.deviceHistoryPerDevice[device.uuid]).length ?
                         <ul className={"list history" + (!packagesStore.deviceHistory.length ? " empty" : "")}>
-                            {_.map(packagesStore.deviceHistory, (request, index) => {
+                            {_.map(packagesStore.deviceHistoryPerDevice[device.uuid], (request, index) => {
                                 const foundUpdateLog = _.findWhere(packagesStore.deviceUpdatesLogs, {updateId: request.updateId});
                                 return (
                                     <ListItem
