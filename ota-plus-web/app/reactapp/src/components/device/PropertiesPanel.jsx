@@ -92,7 +92,8 @@ class PropertiesPanel extends Component {
                                     device={device}
                                 />
                             :
-                                <PropertiesOnDeviceList 
+                                <PropertiesOnDeviceList
+                                    packageVersion={packageVersion}
                                     deviceId={device.uuid}
                                     showPackageBlacklistModal={showPackageBlacklistModal}
                                     onFileDrop={onFileDrop}

@@ -81,10 +81,12 @@ class Device extends Component {
         if(e) e.preventDefault();
         this.props.devicesStore.clearStepsHistory();
     }
-    loadPackageVersionProperties(versionUuid, e) {
+    loadPackageVersionProperties(version, e) {
+        let versionUuid = version.uuid;
         if(e) e.preventDefault();
         extendObservable(this.packageVersion, {
-            uuid: versionUuid
+            uuid: versionUuid,
+            isInstalled: version.attributes.status === 'installed'
         });
         let packageVersion = this.props.packagesStore._getPackageVersionByUuid(versionUuid);
         if(packageVersion.isBlacklisted) {
