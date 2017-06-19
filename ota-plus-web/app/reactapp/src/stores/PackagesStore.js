@@ -71,6 +71,7 @@ export default class PackagesStore {
     @observable devicePackagesQueuedCount = 0;
     @observable deviceQueue = [];
     @observable deviceHistory = [];
+    @observable deviceHistoryPerDevice = {};
     @observable deviceUpdatesLogs = [];
 
     @observable ondevicePackages = [];
@@ -525,7 +526,8 @@ export default class PackagesStore {
         return axios.get(API_PACKAGES_DEVICE_HISTORY + '?uuid=' + id)
             .then(function(response) {
                 let data = response.data;
-                this.deviceHistory = data.reverse();
+                this.deviceHistory = data;
+                this.deviceHistoryPerDevice[this.activeDeviceId] = data.reverse();
                 this.packagesDeviceHistoryFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
@@ -963,6 +965,7 @@ export default class PackagesStore {
         this.devicePackagesQueuedCount = 0;
         this.deviceQueue = [];
         this.deviceHistory = [];
+        this.deviceHistoryPerDevice = {};
         this.deviceUpdatesLogs = [];
         this.ondevicePackages = [];
         this.ondevicePackagesCurrentPage = 0;

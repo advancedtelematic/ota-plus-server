@@ -62,6 +62,7 @@ class QueueModal extends Component {
                         <div className={"wrapper-list" + (activeTabId === 0 ? " hide" : "")}>
                             <HistoryList 
                                 packagesStore={packagesStore}
+                                device={device}
                             />
                         </div>
                     </Tab>
