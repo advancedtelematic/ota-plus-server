@@ -56,7 +56,7 @@ class Header extends Component {
                             <div className="dates">
                                 <div className="date director">
                                     { device.isDirector ? 
-                                        <img src="/assets/img/icons/white/director-device-icon.png" alt="Director" />
+                                        <img src="/assets/img/icons/white/director-device-icon.png" alt="Director" id="director-device-icon" />
                                     :
                                         null
                                     }

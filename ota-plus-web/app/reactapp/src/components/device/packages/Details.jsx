@@ -44,32 +44,32 @@ class Details extends Component {
 	        	{version ? 
     				<div className="details">	        	
 			        	<div className="top">
-			        		<div className="title">{version.id.name}</div>
+			        		<div className="title" id={"image-title-" + version.id.name}>{version.id.name}</div>
 				        		<div className="status">
 				        			{version.isBlackListed && (isPackageInstalled || version.isInstalled) ?
 				        				<div className="status-container blacklisted-installed">
-				        					<img src="/assets/img/icons/red_cross.png" alt="" />
-			        			 			<span>Installed</span>	        			 	        		
+				        					<img src="/assets/img/icons/red_cross.png" alt="" id={"blacklisted-and-installed-icon-" + version.id.version.substring(0,8)} />
+			        			 			<span id={"blacklisted-and-installed-" + version.id.version.substring(0,8)}>Installed</span>	        			 	        		
 				        				</div>
 				        			: version.isBlackListed ?
 				        				<div className="status-container blacklisted">
-				        					<img src="/assets/img/icons/ban_red.png" alt="" />
-			        			 			<span>Blacklisted</span>	        			 	        		
+				        					<img src="/assets/img/icons/ban_red.png" alt="" id={"blacklisted-icon-" + version.id.version.substring(0,8)} />
+			        			 			<span id={"blacklisted-" + version.id.version.substring(0,8)}>Blacklisted</span>	        			 	        		
 				        				</div>
 				        			: isPackageQueued ? 
 				        				<div className="status-container queued">
 			        						<span className="fa-stack queued">
-				                                <i className="fa fa-dot-circle-o fa-stack-1x" aria-hidden="true"></i>
+				                                <i className="fa fa-dot-circle-o fa-stack-1x" aria-hidden="true" id={"queued-icon-" + version.id.version.substring(0,8)}></i>
 				                            </span>
-			        						<span className="status-name">Queued</span>
+			        						<span className="status-name" id={"queued-" + version.id.version.substring(0,8)}>Queued</span>
 			        					</div>
 			        				: isPackageInstalled || version.isInstalled ? 
 				        				<div className="status-container installed">
-				        					<img src="/assets/img/icons/check.png" alt="" />
-				        					<span>Installed</span>
+				        					<img src="/assets/img/icons/check.png" alt="" id={"installed-icon-" + version.id.version.substring(0,8)} />
+				        					<span id={"image-installed-" + version.id.version.substring(0,8)}>Installed</span>
 				        				</div>
 			        				: 
-				        				<div className="status-container not-installed">
+				        				<div className="status-container not-installed" id={"not-installed-" + version.id.version.substring(0,8)}>
 				        					Not installed
 				        				</div>
 			    					}
@@ -78,11 +78,11 @@ class Details extends Component {
 			        	<div className="bottom">
 				        	<div className="version">
 				        		<span className = "sub-title">Version / hash:</span>
-				        		<span className="value">{version.id.version}</span>
+				        		<span className="value" id={"version-hash-value-" + version.id.version.substring(0,8)}>{version.id.version}</span>
 			        		</div>
 				            <div className="hash">
 								<span className = "sub-title">Package identifier:</span>
-				        		<span className="value">{version.uuid}</span>
+				        		<span className="value" id={"package-identifier-value-" + version.id.version.substring(0,8)}>{version.uuid}</span>
 			        		</div>
 			        		<div className="created">
 								<span className = "sub-title">Created at:</span>
@@ -100,7 +100,7 @@ class Details extends Component {
 	        					key={version.uuid}
 			        		/>
 			        	</div>
-			        	<button className={"btn-blacklist blacklist" + (version.isBlackListed ? " package-blacklisted" : "")}
+			        	<button className={"btn-blacklist blacklist" + (version.isBlackListed ? " package-blacklisted" : "")} id={"blacklist-button-" + version.id.version.substring(0,8)}
 			        		onClick={version.isBlackListed ? 
 			        			showPackageBlacklistModal.bind(this, version.id.name, version.id.version, 'edit')
 		        				: 

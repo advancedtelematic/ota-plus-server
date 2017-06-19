@@ -29,25 +29,27 @@ class PrimaryEcu extends Component {
                     <div className="desc">
                         { device.isDirector ? 
                             <span>
-                                Serial: {_.first(device.directorAttributes).id} <br />
-                                Hardware ID: {_.first(device.directorAttributes).hardwareId}
+                                Serial: <span id="hardware-serial-value">{_.first(device.directorAttributes).id}</span> <br />
+                                Hardware ID: <span id="hardware-id-value">{_.first(device.directorAttributes).hardwareId}</span>
                             </span>
                         :
                             <span>
-                                Serial: not reported <br />
-                                Hardware ID: not reported
+                                Serial: <span id="hardware-serial-value">not reported</span> <br />
+                                Hardware ID: <span id="hardware-id-value">not reported</span>
                             </span>
                         }
                     </div>
                     <div className="icons">
                         <i
                             className="fa fa-info hardware-icon details" 
+                            id="hardware-details-icon"
                             onClick={showDetails}
                             data-id={dataId}
                         ></i>
                         {device.isDirector ? 
                             <i
                                 className="fa fa-key hardware-icon key" 
+                                id="hardware-key-icon"
                                 onClick={showKey}
                                 onTouchTap={otherProps.handleTouchTap}
                             ></i>
