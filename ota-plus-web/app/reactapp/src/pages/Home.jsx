@@ -30,8 +30,6 @@ class Home extends Component {
         this.router = nextProps.router;
         let initialDevicesCount = nextProps.initialDevicesCount;
         let onlineDevicesCount = nextProps.onlineDevicesCount;
-        let deviceInstallationHistory = nextProps.deviceInstallationHistory;
-        let deviceInstallationQueue = nextProps.deviceInstallationQueue;
         let provisioningActivated = nextProps.provisioningActivated;
         let treehubActivated = nextProps.treehubActivated;
 
@@ -44,8 +42,7 @@ class Home extends Component {
         if(initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') == 1) {
             this.redirectTo('destiny');
         }
-        if(onlineDevicesCount === 1 && Cookies.get('fireworksPageAcknowledged') != 1
-            && deviceInstallationQueue.length === 0 && deviceInstallationHistory.length === 0
+        if(onlineDevicesCount === 1 && Cookies.get('fireworksPageAcknowledged') != 1            
             && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') 
             && !this.router.isActive('/fireworks')) {
                 this.redirectTo('fireworks');
