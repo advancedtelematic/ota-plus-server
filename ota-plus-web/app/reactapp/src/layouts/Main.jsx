@@ -33,8 +33,6 @@ class Main extends Component {
     @observable ifLogout = false;
     @observable initialDevicesCount = null;
     @observable onlineDevicesCount = null;
-    @observable deviceInstallationHistory = [];
-    @observable deviceInstallationQueue = [];
     @observable provisioningActivated = null;
     @observable treehubActivated = null;
     @observable router = null;
@@ -79,22 +77,6 @@ class Main extends Component {
                 let onlineDevices = this.devicesStore.onlineDevices;
                 let onlineDevicesCount = onlineDevices.length;
                 this.onlineDevicesCount = onlineDevicesCount;
-
-                if(onlineDevicesCount === 1) {
-                    let device = _.head(onlineDevices);
-                    this.packagesStore.fetchDevicePackagesQueue(device.uuid);
-                    this.packagesStore.fetchDevicePackagesHistory(device.uuid);
-                }
-            }
-        });
-        this.packagesQueueHandler = observe(this.packagesStore, (change) => {
-            if(change.name === 'packagesDeviceQueueFetchAsync' && change.object[change.name].isFetching === false) {
-                this.deviceInstallationQueue = this.packagesStore.deviceQueue;
-            }
-        });
-        this.packagesHistoryHandler = observe(this.packagesStore, (change) => {
-            if(change.name === 'packagesDeviceHistoryFetchAsync' && change.object[change.name].isFetching === false) {
-                this.deviceInstallationHistory = this.packagesStore.deviceHistory;
             }
         });
         this.provisioningStatusHandler = observe(this.provisioningStore, (change) => {
@@ -133,8 +115,6 @@ class Main extends Component {
     componentWillUnmount() {
         this.logoutHandler();
         this.devicesHandler();
-        this.packagesQueueHandler();
-        this.packagesHistoryHandler();
         this.provisioningStatusHandler();
     }
     backButtonAction() {
@@ -179,8 +159,6 @@ class Main extends Component {
                         userStore={this.userStore}
                         initialDevicesCount={this.initialDevicesCount}
                         onlineDevicesCount={this.onlineDevicesCount}
-                        deviceInstallationHistory={this.deviceInstallationHistory}
-                        deviceInstallationQueue={this.deviceInstallationQueue}
                         provisioningActivated={this.provisioningActivated}
                         treehubActivated={this.treehubActivated}
                         router={this.router}
