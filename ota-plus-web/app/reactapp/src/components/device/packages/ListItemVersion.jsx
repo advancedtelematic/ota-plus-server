@@ -10,7 +10,6 @@ class ListItemVersion extends Component {
     }
     render() {
         const { packagesStore, device, version, queuedPackage, installedPackage, isAutoInstallEnabled, packageVersion, loadPackageVersionProperties } = this.props;
-        
         return (
             <li className={version.uuid === packageVersion.uuid ? "selected" : ""} onClick={loadPackageVersionProperties.bind(this, version)}>
                 <div className="left-box">

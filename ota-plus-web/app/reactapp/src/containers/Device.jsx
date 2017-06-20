@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { observable, extendObservable } from 'mobx';
+import { observable, extendObservable, observe } from 'mobx';
 import { observer } from 'mobx-react';
 import { Loader } from '../partials';
 import { 
@@ -13,6 +13,7 @@ import {
     PackagesCreateModal,
     PackagesBlacklistModal
 } from '../components/packages';
+import _ from 'underscore';
 
 @observer
 class Device extends Component {
@@ -35,6 +36,19 @@ class Device extends Component {
         this.cancelInstallation = this.cancelInstallation.bind(this);
         this.clearStepsHistory = this.clearStepsHistory.bind(this);
         this.loadPackageVersionProperties = this.loadPackageVersionProperties.bind(this);
+
+        this.packageVersionChangeHandler = observe(props.devicesStore, (change) => {
+            if(change.name === 'devicesOneFetchAsync' && change.object[change.name].isFetching === false) {
+                extendObservable(this.packageVersion, {
+                    uuid: _.first(props.devicesStore.device.directorAttributes).image.hash.sha256,
+                    isInstalled: true,
+                    initialState: true
+                });
+            }
+        });
+    }
+    componentWillUnmount() {
+        this.packageVersionChangeHandler();
     }
     showPackageCreateModal(files, e) {
         if(e) e.preventDefault();
@@ -86,7 +100,8 @@ class Device extends Component {
         if(e) e.preventDefault();
         extendObservable(this.packageVersion, {
             uuid: versionUuid,
-            isInstalled: version.attributes.status === 'installed'
+            isInstalled: version.attributes.status === 'installed',
+            initialState: false
         });
         let packageVersion = this.props.packagesStore._getPackageVersionByUuid(versionUuid);
         if(packageVersion.isBlacklisted) {

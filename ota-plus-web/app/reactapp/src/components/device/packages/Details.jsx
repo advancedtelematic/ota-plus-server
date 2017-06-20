@@ -12,7 +12,7 @@ class Details extends Component {
     	const { packageVersion, showPackageBlacklistModal, packagesStore, installPackage, device } = this.props;
 
     	let version = null;
-    	if(device.isDirector && packageVersion.uuid === 1) {
+    	if(device.isDirector && packageVersion.initialState) {
     		version = packagesStore._getPackageByVersion(_.first(device.directorAttributes).image.hash.sha256);
     		version.id = version.packageId;
     		delete version.packageId;
@@ -25,6 +25,7 @@ class Details extends Component {
     	let blacklistedPackages = packagesStore.blacklist;
     	let isPackageQueued = false;
     	let isPackageInstalled = false;
+    	let isAutoInstallEnabled = false;
 
     	if(!_.isUndefined(version) && version) {
 			blacklistComment = version.blacklistComment;
