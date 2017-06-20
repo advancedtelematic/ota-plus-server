@@ -93,21 +93,25 @@ class ListItemVersion extends Component {
                     <span title={version.id.version} className="version-name">
                         {version.id.version}
                     </span>
-                    {version.isBlackListed ?
-                        <button 
-                            className="btn-blacklist edit" 
-                            onClick={this.openBlacklistModal.bind(this, 'edit')} 
-                            title="Edit blacklisted package version" 
-                            id={"button-edit-blacklisted-package-" + version.id.name + "-" + version.id.version}>
-                        </button>
-                    : 
-                        <button 
-                            className="btn-blacklist" 
-                            onClick={this.openBlacklistModal.bind(this, 'add')} 
-                            title="Blacklist package version" 
-                            id={"button-blacklist-package-" + version.id.name + "-" + version.id.version}>
-                        </button>
+                    {!version.inDirector ?
+                        version.isBlackListed ?
+                            <button 
+                                className="btn-blacklist edit" 
+                                onClick={this.openBlacklistModal.bind(this, 'edit')} 
+                                title="Edit blacklisted package version" 
+                                id={"button-edit-blacklisted-package-" + version.id.name + "-" + version.id.version}>
+                            </button>
+                        : 
+                            <button 
+                                className="btn-blacklist" 
+                                onClick={this.openBlacklistModal.bind(this, 'add')} 
+                                title="Blacklist package version" 
+                                id={"button-blacklist-package-" + version.id.name + "-" + version.id.version}>
+                            </button>
+                    :
+                        null
                     }
+                    
                 </div>
             </li>
         );
