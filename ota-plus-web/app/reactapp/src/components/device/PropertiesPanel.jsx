@@ -100,7 +100,8 @@ class PropertiesPanel extends Component {
                                     />
                                 :
                                     <PropertiesOnDeviceList
-                                        deviceId={device.uuid}
+                                        packageVersion={packageVersion}
+                                        device={device}
                                         showPackageBlacklistModal={showPackageBlacklistModal}
                                         onFileDrop={onFileDrop}
                                         togglePackageAutoUpdate={togglePackageAutoUpdate}
