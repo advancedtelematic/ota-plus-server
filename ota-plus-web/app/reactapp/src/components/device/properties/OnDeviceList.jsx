@@ -109,18 +109,22 @@ class OnDeviceList extends Component {
         this.tmpIntervalId = null;
     }
     render() {
-        const { packageVersion, deviceId, showPackageBlacklistModal, packagesStore, onFileDrop, togglePackageAutoUpdate, installPackage } = this.props;
+        const { packageVersion, device, showPackageBlacklistModal, packagesStore, onFileDrop, togglePackageAutoUpdate, installPackage } = this.props;
         let packageIndex = -1;
         return (
             <div className="ios-list" ref="list">
-                {packageVersion.isInstalled ?
+                {!packageVersion.isInstalled && device.isDirector ?
+                    <div className="wrapper-center">
+                        None reported for the current selection
+                    </div>
+                :
                     <InfiniteScroll
                         className="wrapper-infinite-scroll"
                         hasMore={packagesStore.ondevicePackagesCurrentPage < packagesStore.ondevicePackagesTotalCount / packagesStore.ondevicePackagesLimit}
                         isLoading={packagesStore.packagesOndeviceFetchAsync.isFetching}
                         useWindow={false}
                         loadMore={() => {
-                            packagesStore.fetchOndevicePackages(deviceId, packagesStore.ondeviceFilter)
+                            packagesStore.fetchOndevicePackages(device.uuid, packagesStore.ondeviceFilter)
                         }}
                     >
                         {Object.keys(packagesStore.preparedOndevicePackages).length ? 
@@ -160,10 +164,6 @@ class OnDeviceList extends Component {
                             </span>
                         }
                     </InfiniteScroll>
-                :
-                    <div className="wrapper-center">
-                        None reported for the current selection
-                    </div>
                 }
             </div>
         );
@@ -171,7 +171,7 @@ class OnDeviceList extends Component {
 }
 
 OnDeviceList.propTypes = {
-    deviceId: PropTypes.string.isRequired,
+    device: PropTypes.object.isRequired,
     showPackageBlacklistModal: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,
     togglePackageAutoUpdate: PropTypes.func.isRequired,
