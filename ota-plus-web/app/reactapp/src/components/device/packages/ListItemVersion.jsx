@@ -11,7 +11,7 @@ class ListItemVersion extends Component {
     render() {
         const { packagesStore, device, version, queuedPackage, installedPackage, isAutoInstallEnabled, packageVersion, loadPackageVersionProperties } = this.props;
         return (
-            <li className={version.uuid === packageVersion.uuid ? "selected" : ""} id={version.uuid === packageVersion.uuid ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={loadPackageVersionProperties.bind(this, version.uuid)}>
+            <li className={version.uuid === packageVersion.uuid ? "selected" : ""} id={version.uuid === packageVersion.uuid ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={loadPackageVersionProperties.bind(this, version)}>
                 <div className="left-box">
                       <div className="hash">
                         <span className="text">Hash / version:</span> <span className="value" id={"version-value-" + version.id.version.substring(0,8)}>{version.id.version}</span>
