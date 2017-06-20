@@ -39,11 +39,13 @@ class Device extends Component {
 
         this.packageVersionChangeHandler = observe(props.devicesStore, (change) => {
             if(change.name === 'devicesOneFetchAsync' && change.object[change.name].isFetching === false) {
-                extendObservable(this.packageVersion, {
-                    uuid: _.first(props.devicesStore.device.directorAttributes).image.hash.sha256,
-                    isInstalled: true,
-                    initialState: true
-                });
+                if(props.devicesStore.device.isDirector) {
+                    extendObservable(this.packageVersion, {
+                        uuid: _.first(props.devicesStore.device.directorAttributes).image.hash.sha256,
+                        isInstalled: true,
+                        initialState: true
+                    });
+                }
             }
         });
     }
