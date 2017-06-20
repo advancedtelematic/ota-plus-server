@@ -36,8 +36,6 @@ export default class PackagesStore {
     @observable packagesRemoveFromBlacklistAsync = {};
     @observable packagesAffectedDevicesCountFetchAsync = {};
     @observable packagesForDeviceFetchAsync = {};
-    @observable initialPackagesForDeviceFetchAsync = {};
-    @observable initialPackagesForDeviceFetchAsyncBeforePreparing = {};
     @observable packagesOndeviceFetchAsync = {};
     @observable packagesAutoInstalledForDeviceFetchAsync = {};
     @observable packagesDeviceQueueFetchAsync = {};
@@ -73,7 +71,6 @@ export default class PackagesStore {
     @observable devicePackagesQueuedCount = 0;
     @observable deviceQueue = [];
     @observable deviceHistory = [];
-    @observable deviceHistoryPerDevice = {};
     @observable deviceUpdatesLogs = [];
 
     @observable ondevicePackages = [];
@@ -95,8 +92,6 @@ export default class PackagesStore {
         resetAsync(this.packagesRemoveFromBlacklistAsync);
         resetAsync(this.packagesAffectedDevicesCountFetchAsync);
         resetAsync(this.packagesForDeviceFetchAsync);
-        resetAsync(this.initialPackagesForDeviceFetchAsync);
-        resetAsync(this.initialPackagesForDeviceFetchAsyncBeforePreparing);
         resetAsync(this.packagesOndeviceFetchAsync);
         resetAsync(this.packagesAutoInstalledForDeviceFetchAsync);
         resetAsync(this.packagesDeviceQueueFetchAsync);
@@ -108,29 +103,72 @@ export default class PackagesStore {
         resetAsync(this.packagesDeviceCancelInstallationAsync);
     }
 
-    fetchPackages(filter = this.packagesFilter) {        
+    fetchPackages(filter = this.packagesFilter) {
         this.packagesFilter = filter;
         resetAsync(this.packagesFetchAsync, true);
         return axios.get(API_PACKAGES + '?regex=' + (filter ? filter : ''))
             .then(function(response) {
                 this.initialPackages = response.data;
                 this.packages = response.data;
-                switch (this.page) {
-                    case 'device':
-                        this._prepareDevicePackages();
-                        break;
-                    default:
-                        this._preparePackages();
-                        break;
-                }
+                let directorPackages = [];
+                let after = _.after(directorPackages.length, () => {
+                    this._prepareDirectorPackages(directorPackages);
+                    switch (this.page) {
+                        case 'device':                        
+                            this._prepareDevicePackages();
+                            break;
+                        default:
+                            this._preparePackages();
+                            break;
+                    }
+                    this.packagesFetchAsync = handleAsyncSuccess(response);
+                }, this);
+                axios.get(API_TUF_PACKAGES)
+                    .then(function(responseDirector) {
+                        directorPackages.push(responseDirector.data.signed.targets);
+                        after();
+                    })
+                    .catch(function() {
+                        after();
+                    });
+
                 if (this.overallPackagesCount === null) {
                     this.overallPackagesCount = response.data.length;
                 }
-                this.packagesFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
                 this.packagesFetchAsync = handleAsyncError(error);
             }.bind(this));
+    }
+
+    _prepareDirectorPackages(directorPackages) {
+        let versionedDirectorPackages = [];
+        _.each(directorPackages, (versionObject, index) => {
+            _.each(versionObject, (version, ind) => {
+                let packageName = version.custom.name.value;   
+                let packageHash = version.custom.version.value;
+                let formattedVersion = {
+                    checkSum: packageHash,
+                    createdAt: null,
+                    description: packageHash,
+                    id: {
+                        name: packageName,
+                        version: packageHash
+                    },
+                    isBlackListed: false,
+                    namespace: null,
+                    signature: null,
+                    size: 0,
+                    uri: {
+                        uri: null
+                    },
+                    uuid: null,
+                    inDirector: true
+                };
+                versionedDirectorPackages.push(formattedVersion);
+            });
+        });
+        this.directorPackages = versionedDirectorPackages;
     }
 
     fetchPackageStatistics(packageName) {
@@ -394,8 +432,7 @@ export default class PackagesStore {
     }
 
     fetchInitialDevicePackages(id, filter = this.devicePackagesFilter) {
-        resetAsync(this.initialPackagesForDeviceFetchAsync, true);
-        resetAsync(this.initialPackagesForDeviceFetchAsyncBeforePreparing, true);
+        resetAsync(this.packagesForDeviceFetchAsync, true);
         return axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages')
             .then(function(response) {
                 let totalPackagesCount = response.data.total;
@@ -407,7 +444,8 @@ export default class PackagesStore {
                         extendObservable(this.installedPackagesPerDevice, {
                             [id]: initialDevicePackages
                         });
-                        this.initialPackagesForDeviceFetchAsyncBeforePreparing = handleAsyncSuccess(response);
+                        this.packagesForDeviceFetchAsync = handleAsyncSuccess(response);
+
                         switch (this.page) {
                             case 'device':
                                 this._prepareDevicePackages();
@@ -415,7 +453,7 @@ export default class PackagesStore {
                             default:
                                 break;
                         }
-                        this.initialPackagesForDeviceFetchAsync = handleAsyncSuccess(response);
+                        
                     }, this);
 
                     axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages?regex=' + '&limit=' + totalPackagesCount)
@@ -429,15 +467,12 @@ export default class PackagesStore {
                 } else {
                     this.initialDevicePackages = [];
                     this.installedPackagesPerDevice[id] = [];
-                    this.initialPackagesForDeviceFetchAsyncBeforePreparing = handleAsyncSuccess(response);
-                    this.initialPackagesForDeviceFetchAsync = handleAsyncSuccess(response);
+                    this.packageStatisticsFetchAsync = handleAsyncSuccess(response);
                 }                
-                this.initialPackagesForDeviceFetchAsyncBeforePreparing = handleAsyncSuccess(response);
-                this.initialPackagesForDeviceFetchAsync = handleAsyncSuccess(response);
+                this.packagesForDeviceFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
-                this.initialPackagesForDeviceFetchAsyncBeforePreparing = handleAsyncError(error);
-                this.initialPackagesForDeviceFetchAsync = handleAsyncError(error);
+                this.packagesForDeviceFetchAsync = handleAsyncError(error);
             }.bind(this));
     }
 
@@ -533,8 +568,7 @@ export default class PackagesStore {
         return axios.get(API_PACKAGES_DEVICE_HISTORY + '?uuid=' + id)
             .then(function(response) {
                 let data = response.data;
-                this.deviceHistory = data;
-                this.deviceHistoryPerDevice[this.activeDeviceId] = data.reverse();
+                this.deviceHistory = data.reverse();
                 this.packagesDeviceHistoryFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
@@ -629,7 +663,6 @@ export default class PackagesStore {
                 version: found.id.version
             },
             isBlackListed: found.isBlackListed,
-            isInstalled: true,
             namespace: found.namespace,
             signature: found.signature,
             size: found.size,
@@ -651,6 +684,18 @@ export default class PackagesStore {
 
     _preparePackages(packagesSort = this.packagesSort) {
         let packages = this.packages;
+        switch(this.page) {
+            case 'packages':
+                let directorPackages = this.directorPackages;
+                _.each(directorPackages, (dirPack, dirIndex) => {
+                    _.each(packages, (corePack, index) => {
+                        if((corePack.id.name === dirPack.id.name) && (corePack.id.version === dirPack.id.version)) {
+                            packages[index] = directorPackages[dirIndex];
+                        }
+                    });
+                });
+                break;
+        }
         let groupedPackages = {};
         let sortedPackages = {};
         this.packagesSort = packagesSort;
@@ -659,6 +704,7 @@ export default class PackagesStore {
                 groupedPackages[obj.id.name] = new Object();
                 groupedPackages[obj.id.name].versions = [];
                 groupedPackages[obj.id.name].packageName = obj.id.name;
+                groupedPackages[obj.id.name].inDirector = obj.inDirector;
             }
             groupedPackages[obj.id.name].versions.push(obj);
         }, this);
@@ -717,7 +763,7 @@ export default class PackagesStore {
                 };
             });
 
-            _.each(installedPackages, (pack, index) => {
+            _.each(installedPackages, (pack) => {
                 installedIds[pack.packageId.name + '_' + pack.packageId.version] = pack.packageId.name + '_' + pack.packageId.version;
             });
 
@@ -945,8 +991,6 @@ export default class PackagesStore {
         resetAsync(this.packagesRemoveFromBlacklistAsync);
         resetAsync(this.packagesAffectedDevicesCountFetchAsync);
         resetAsync(this.packagesForDeviceFetchAsync);
-        resetAsync(this.initialPackagesForDeviceFetchAsync);
-        resetAsync(this.initialPackagesForDeviceFetchAsyncBeforePreparing);
         resetAsync(this.packagesAutoInstalledForDeviceFetchAsync);
         resetAsync(this.packagesDeviceQueueFetchAsync);
         resetAsync(this.packagesDeviceHistoryFetchAsync);
@@ -975,7 +1019,6 @@ export default class PackagesStore {
         this.devicePackagesQueuedCount = 0;
         this.deviceQueue = [];
         this.deviceHistory = [];
-        this.deviceHistoryPerDevice = {};
         this.deviceUpdatesLogs = [];
         this.ondevicePackages = [];
         this.ondevicePackagesCurrentPage = 0;

@@ -1995,6 +1995,15 @@
             float: right;
         }
 
+        .in-director {
+            display: inline-block;
+            margin-top: -6px;
+
+            img {
+                width: 30px;
+            }
+        }
+
         .package-name {
             display: inline-block;
             width: 30%;
