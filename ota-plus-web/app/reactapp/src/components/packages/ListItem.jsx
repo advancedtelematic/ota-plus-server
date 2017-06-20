@@ -19,6 +19,13 @@ class ListItem extends Component {
         return (
             <button className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
                 {pack.packageName}
+                {pack.inDirector ?
+                    <div className="in-director">
+                        <img src="/assets/img/icons/black/packages.png" alt="Director" />
+                    </div>
+                :
+                    null
+                }
                 {this.props.showStatsButton ? 
                     <div className="btn-status" id="package-stats" onClick={this.showStatsModal}>
                         Stats
