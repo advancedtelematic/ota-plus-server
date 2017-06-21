@@ -7,11 +7,16 @@ import moment from 'moment';
 class ListItemVersion extends Component {
     constructor(props) {
         super(props);
+        this.handlePackageVersionClick = this.handlePackageVersionClick.bind(this);
+    }
+    handlePackageVersionClick() {
+        this.props.loadPackageVersionProperties(this.props.version);
+        this.props.togglePackageVersion(this.props.version.id.version);
     }
     render() {
-        const { packagesStore, device, version, queuedPackage, installedPackage, isAutoInstallEnabled, packageVersion, loadPackageVersionProperties } = this.props;
+        const { packagesStore, device, version, queuedPackage, installedPackage, isAutoInstallEnabled, packageVersion, loadPackageVersionProperties, selectedPackageVersion } = this.props;
         return (
-            <li className={version.uuid === packageVersion.uuid ? "selected" : ""} id={version.uuid === packageVersion.uuid ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={loadPackageVersionProperties.bind(this, version)}>
+            <li className={selectedPackageVersion === version.id.version ? "selected" : ""} id={version.uuid === packageVersion.uuid ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={this.handlePackageVersionClick}>
                 <div className="left-box">
                       <div className="hash">
                         <span className="text">Hash / version:</span> <span className="value" id={"version-value-" + version.id.version.substring(0,8)}>{version.id.version}</span>
@@ -57,6 +62,7 @@ ListItemVersion.propTypes = {
     installedPackage: PropTypes.string,
     packageVersion: PropTypes.object.isRequired,
     loadPackageVersionProperties: PropTypes.func.isRequired,
+    togglePackageVersion: PropTypes.func.isRequired,
 }
 
 export default ListItemVersion;
