@@ -109,7 +109,7 @@ class OnDeviceList extends Component {
         this.tmpIntervalId = null;
     }
     render() {
-        const { packageVersion, device, showPackageBlacklistModal, packagesStore, onFileDrop, togglePackageAutoUpdate, installPackage } = this.props;
+        const { packageVersion, device, showPackageBlacklistModal, packagesStore, onFileDrop } = this.props;
         let packageIndex = -1;
         return (
             <div className="ios-list" ref="list">
@@ -171,11 +171,10 @@ class OnDeviceList extends Component {
 }
 
 OnDeviceList.propTypes = {
+    packageVersion: PropTypes.object.isRequired,
     device: PropTypes.object.isRequired,
     showPackageBlacklistModal: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,
-    togglePackageAutoUpdate: PropTypes.func.isRequired,
-    installPackage: PropTypes.func.isRequired,
     packagesStore: PropTypes.object.isRequired,
 }
 

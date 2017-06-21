@@ -95,6 +95,8 @@ QueueModal.propTypes = {
     hide: PropTypes.func.isRequired,
     device: PropTypes.object.isRequired,
     cancelInstallation: PropTypes.func.isRequired,
+    activeTabId: PropTypes.number.isRequired,
+    setQueueModalActiveTabId: PropTypes.func.isRequired
 }
 
 export default QueueModal;

@@ -75,7 +75,6 @@ class Provisioning extends Component {
                         <span>
                             <ProvisioningHeader 
                                 showCreateModal={this.showCreateModal}
-                                showDevicesCreateModal={this.showDevicesCreateModal}
                                 devicesFilter={devicesStore.devicesFilter}
                                 changeFilter={this.changeFilter}
                                 provisioningSort={provisioningStore.provisioningKeysSort}
@@ -118,7 +117,9 @@ class Provisioning extends Component {
 }
 
 Provisioning.propTypes = {
-    provisioningStore: PropTypes.object
+    provisioningStore: PropTypes.object.isRequired,
+    devicesStore: PropTypes.object.isRequired,
+    groupsStore: PropTypes.object.isRequired,
 }
 
 export default Provisioning;

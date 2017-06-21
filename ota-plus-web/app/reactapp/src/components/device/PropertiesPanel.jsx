@@ -47,7 +47,7 @@ class PropertiesPanel extends Component {
         this.shouldShowPackagesDetails = true;
     }
     render() {
-        const { showPackageCreateModal, showPackageBlacklistModal, onFileDrop, packagesStore, packageVersion, installPackage, device, togglePackageAutoUpdate, devicesStore } = this.props;
+        const { showPackageBlacklistModal, onFileDrop, packagesStore, installPackage, device, packageVersion } = this.props;
         let attributesFetching = packagesStore.packagesForDeviceFetchAsync.isFetching || packagesStore.packagesDeviceQueueFetchAsync.isFetching || packagesStore.packagesAutoInstalledForDeviceFetchAsync.isFetching;
         return (
             <div className="properties-panel">
@@ -94,7 +94,6 @@ class PropertiesPanel extends Component {
                                         packageVersion={packageVersion}
                                         showPackageBlacklistModal={showPackageBlacklistModal}
                                         packagesStore={packagesStore}
-                                        devicesStore={devicesStore}
                                         installPackage={installPackage}
                                         device={device}
                                     />
@@ -104,8 +103,6 @@ class PropertiesPanel extends Component {
                                         device={device}
                                         showPackageBlacklistModal={showPackageBlacklistModal}
                                         onFileDrop={onFileDrop}
-                                        togglePackageAutoUpdate={togglePackageAutoUpdate}
-                                        installPackage={installPackage}
                                         packagesStore={packagesStore}
                                     />
                             :
@@ -125,11 +122,11 @@ class PropertiesPanel extends Component {
 }
 
 PropertiesPanel.propTypes = {
-    showPackageCreateModal: PropTypes.func.isRequired,
     showPackageBlacklistModal: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,
     packagesStore: PropTypes.object.isRequired,
-    devicesStore: PropTypes.object.isRequired,
+    installPackage: PropTypes.func.isRequired,
+    device: PropTypes.object.isRequired,
     packageVersion: PropTypes.object.isRequired,
 }
 
