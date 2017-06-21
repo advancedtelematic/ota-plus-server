@@ -7,29 +7,29 @@
     <link href="/assets/css/unlogged.css" rel="stylesheet" type="text/css"/>
   </head>
   <body>
-    <div id="ats-page">
-      <div class="container ats">
-        <div class="row">
-          <div class="col-md-12 text-center">
-            <a href="#"><img src='@routes.Assets.versioned("img/logo.png")' id="logo"></a>
-          </div>
-        </div>
+    <div id="ats-page" class="error-page">
 
-        <div class="row">
-          <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
-            <div class="ats-header text-center">
-              @flash.get("authzError") match {
-                case Some("unauthorized") => {
-                  <p>Your account has not been activated. Please confirm your email.</p>
-                }
-                case _ => {
-                  <p>We cannot log you in at this time. Please contact us for support.</p>
-                }
-              }
-            </div>
-          </div>
+        <div class="wrapper-center">
+          @flash.get("authzError") match {
+            case _ => {
+              <div class="info">
+                <div class="logo text-center">
+                  <a href="#"><img src='@routes.Assets.versioned("img/atsgarage_white.png")' id="logo"></a>
+                </div>
+                <div class="header">
+                  <p class="welcome">Welcome!</p>
+                  <p>Your account has been created, but it looks like your email address isn't verified yet.</p>
+                  <p>Please check your inbox for a welcome email with an account confirmation link.</p>
+                </div>
+                <div class="box">
+                  If your welcome email didn't arrive yet, please check your spam or junk mail folder. If 
+                  it's not there, please <a href="mailto:support@@atsgarage.com">contact us</a>                       
+                </div>
+              </div>
+            }
+          }
         </div>
-      </div>
+       
       <section class="footer-panel">
         <a href="mailto:support@@atsgarage.com" class="clickme">Need Support?</a>
       </section>
