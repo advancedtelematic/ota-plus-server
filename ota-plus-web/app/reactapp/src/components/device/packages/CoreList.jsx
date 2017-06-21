@@ -18,6 +18,7 @@ class CoreList extends Component {
     @observable fakeHeaderLetter = null;
     @observable fakeHeaderTopPosition = 0;
     @observable expandedPackageName = null;
+    @observable selectedPackageVersion = null;
     @observable tmpIntervalId = null;
 
     constructor(props) {
@@ -26,6 +27,7 @@ class CoreList extends Component {
         this.generateItemsPositions = this.generateItemsPositions.bind(this);
         this.listScroll = this.listScroll.bind(this);
         this.togglePackage = this.togglePackage.bind(this);
+        this.togglePackageVersion = this.togglePackageVersion.bind(this);
         this.packagesChangeHandler = observe(props.packagesStore, (change) => {
             if(change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
@@ -34,6 +36,14 @@ class CoreList extends Component {
                   }, 50);
             }
         });
+    }
+    componentWillMount() {
+        let hash = this.props.packageVersion.uuid;
+        if(hash !== 1) {
+            let pack = this.props.packagesStore._getPackageByVersion(hash);
+            this.expandedPackageName = pack.packageId.name;
+            this.selectedPackageVersion = pack.packageId.version;
+        }
     }
     componentDidMount() {
         this.refs.list.addEventListener('scroll', this.listScroll);
@@ -96,6 +106,9 @@ class CoreList extends Component {
     }
     togglePackage(packageName) {
         this.expandedPackageName = (this.expandedPackageName !== packageName ? packageName : null);
+    }
+    togglePackageVersion(hash) {
+        this.selectedPackageVersion = (this.selectedPackageVersion !== hash ? hash : null);;
     }
     startIntervalListScroll() {
         clearInterval(this.tmpIntervalId);
@@ -223,6 +236,8 @@ class CoreList extends Component {
                                                                 packagesStore={packagesStore}
                                                                 packageVersion={packageVersion}
                                                                 loadPackageVersionProperties={loadPackageVersionProperties}
+                                                                togglePackageVersion={this.togglePackageVersion}
+                                                                selectedPackageVersion={this.selectedPackageVersion}
                                                                 key={i}
                                                             />
                                                         );
