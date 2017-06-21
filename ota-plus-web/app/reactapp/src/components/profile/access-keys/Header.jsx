@@ -10,7 +10,7 @@ class Header extends Component {
         super(props);
     }
     render() {
-        const { showCreateModal, showDevicesCreateModal, devicesFilter, changeFilter, provisioningSort, changeSort} = this.props;
+        const { showCreateModal, devicesFilter, changeFilter, provisioningSort, changeSort} = this.props;
         return (
             <SubHeader>
                 <Form>
@@ -43,7 +43,11 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-    showCreateModal: PropTypes.func.isRequired
+    showCreateModal: PropTypes.func.isRequired,
+    devicesFilter: PropTypes.string.isRequired,
+    changeFilter: PropTypes.func.isRequired,
+    provisioningSort: PropTypes.string.isRequired,
+    changeSort: PropTypes.func.isRequired,
 }
 
 export default Header;

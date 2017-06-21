@@ -2,11 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import HardwareList from './List';
-import HardwareOverlay from './Overlay';
 import HardwareSecondaryEcuDetails from './SecondaryEcuDetails';
-import { FadeAnimation } from '../../../utils';
 import { PopoverWrapper } from '../../../partials';
 import PrimaryEcu from './PrimaryEcu';
+import { FadeAnimation } from '../../../utils';
 import _ from 'underscore';
 
 @observer
@@ -14,7 +13,6 @@ class Hardware extends Component {
     @observable detailsIdShown = null;
     @observable keyModalShown = false;
     @observable secondaryDetailsShown = false;
-    @observable shownIds = [];
 
     constructor(props) {
         super(props);
@@ -73,9 +71,10 @@ class Hardware extends Component {
                                 hardwareStore={hardwareStore}
                                 showKey={this.showKey}
                                 showDetails={this.showDetails}
+                                hideDetails={this.hideDetails}
+                                detailsIdShown={this.detailsIdShown}
                                 keyModalShown={this.keyModalShown}
                                 hardware={hardware}
-                                shownIds={this.shownIds}
                                 device={device}
                             />
                         </PopoverWrapper>
@@ -91,32 +90,14 @@ class Hardware extends Component {
                     </div>
                 </div>
 
-                {this.detailsIdShown ?
-                    <FadeAnimation>
-                        <div className="overlay-animation-container">
-                            <HardwareOverlay 
-                                hardware={hardware}
-                                hideDetails={this.hideDetails}
-                                shown={this.detailsIdShown ? true : false}
-                            />
-                        </div>
-                    </FadeAnimation>
-                : 
-                    null
-                }
-
-                {this.secondaryDetailsShown ?
-                    <FadeAnimation>
-                        <div className="overlay-animation-container">
-                            <HardwareSecondaryEcuDetails 
-                                hideDetails={this.hideSecondaryDetails}
-                                shown={this.secondaryDetailsShown}
-                            />
-                        </div>
-                    </FadeAnimation>
-                : 
-                    null
-                }
+                <FadeAnimation>
+                    <div className="overlay-animation-container">
+                        <HardwareSecondaryEcuDetails 
+                            hideDetails={this.hideSecondaryDetails}
+                            shown={this.secondaryDetailsShown}
+                        />
+                    </div>
+                </FadeAnimation>
 
             </span>
         );

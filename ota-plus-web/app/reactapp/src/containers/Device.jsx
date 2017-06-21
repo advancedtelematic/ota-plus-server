@@ -98,8 +98,8 @@ class Device extends Component {
         this.props.devicesStore.clearStepsHistory();
     }
     loadPackageVersionProperties(version, e) {
-        let versionUuid = version.uuid;
         if(e) e.preventDefault();
+        let versionUuid = version.uuid;
         extendObservable(this.packageVersion, {
             uuid: versionUuid,
             isInstalled: version.attributes.status === 'installed',
@@ -127,22 +127,17 @@ class Device extends Component {
                                 device={device}
                             />
                             <DeviceSoftwarePanel
-                                devicesStore={devicesStore}
                                 packagesStore={packagesStore}
                                 device={device}
                                 togglePackageAutoUpdate={this.togglePackageAutoUpdate}
-                                installPackage={this.installPackage}
                                 onFileDrop={this.onFileDrop}
                                 packageVersion={this.packageVersion}
                                 loadPackageVersionProperties={this.loadPackageVersionProperties}
                             />
                             <DevicePropertiesPanel
-                                showPackageCreateModal={this.showPackageCreateModal}
                                 showPackageBlacklistModal={this.showPackageBlacklistModal}
-                                packagesStore={packagesStore}
-                                devicesStore={devicesStore}
                                 onFileDrop={this.onFileDrop}
-                                togglePackageAutoUpdate={this.togglePackageAutoUpdate}
+                                packagesStore={packagesStore}
                                 installPackage={this.installPackage}
                                 device={device}
                                 packageVersion={this.packageVersion}
@@ -176,6 +171,7 @@ Device.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
+    showQueueModal: PropTypes.func.isRequired
 }
 
 export default Device;

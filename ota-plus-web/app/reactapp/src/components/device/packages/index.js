@@ -3,7 +3,7 @@ import PackagesListItemVersion from './ListItemVersion';
 import PackagesListItemOnDevice from './ListItemOnDevice';
 import PackagesDetails from './Details';
 import PackagesComment from './Comment';
-import PackagesCoreList from './CoreList';
+import PackagesList from './List';
 
 export {
     PackagesListItem,
@@ -11,5 +11,5 @@ export {
     PackagesListItemOnDevice,
     PackagesDetails,
     PackagesComment,
-    PackagesCoreList
+    PackagesList
 }

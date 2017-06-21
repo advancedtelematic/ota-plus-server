@@ -151,7 +151,10 @@ class Details extends Component {
 
 Details.propTypes = {
     packageVersion: PropTypes.object.isRequired,
-    packagesStore: PropTypes.object.isRequired
+    showPackageBlacklistModal: PropTypes.func.isRequired,
+    packagesStore: PropTypes.object.isRequired,
+    installPackage: PropTypes.func.isRequired,
+    device: PropTypes.object.isRequired,
 }
 
 

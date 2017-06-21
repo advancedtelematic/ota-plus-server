@@ -64,7 +64,8 @@ class List extends Component {
 }
 
 List.propTypes = {
-    provisioningStore: PropTypes.object.isRequired
+    provisioningStore: PropTypes.object.isRequired,
+    showTooltip: PropTypes.func.isRequired
 }
 
 export default List;

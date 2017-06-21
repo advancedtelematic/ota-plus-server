@@ -41,4 +41,10 @@ class AccessKeys extends Component {
     }
 }
 
+AccessKeys.propTypes = {
+    provisioningStore: PropTypes.object,
+    devicesStore: PropTypes.object,
+    groupsStore: PropTypes.object
+}
+
 export default AccessKeys;

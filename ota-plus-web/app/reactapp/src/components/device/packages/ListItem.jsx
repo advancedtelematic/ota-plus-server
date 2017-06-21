@@ -7,11 +7,13 @@ class ListItem extends Component {
         super(props);
     }
     render() {
-        const { pack, deviceId, queuedPackage, installedPackage, blacklistedAndInstalled, isSelected, isAutoInstallEnabled, toggleAutoInstall, togglePackage } = this.props;
+        const { pack, deviceId, queuedPackage, installedPackage, blacklistedAndInstalled, isSelected, togglePackage, toggleAutoInstall } = this.props;
         return (
             <span className="wrapper-item">
                 <button className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
-                    {pack.packageName}
+                    <span className="pack-name">
+                        {pack.packageName}
+                    </span>
                     {!isSelected ?
                         blacklistedAndInstalled ?
                             pack.isAutoInstallEnabled ?
@@ -85,6 +87,7 @@ ListItem.propTypes = {
     deviceId: PropTypes.string.isRequired,
     queuedPackage: PropTypes.string,
     installedPackage: PropTypes.string,
+    blacklistedAndInstalled: PropTypes.string,
     isSelected: PropTypes.bool.isRequired,
     togglePackage: PropTypes.func.isRequired,
     toggleAutoInstall: PropTypes.func.isRequired

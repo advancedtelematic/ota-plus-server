@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import PublicKeyPopover from './PublicKeyPopover';
+import HardwareOverlay from './Overlay';
+import { FadeAnimation } from '../../../utils';
 import _ from 'underscore';
 
 @observer
@@ -9,7 +11,7 @@ class PrimaryEcu extends Component {
         super(props);
     }
     render() {
-        const { ecu, hardwareStore, showKey, showDetails, keyModalShown, hardware, shownIds, device, ...otherProps} = this.props;
+        const { ecu, hardwareStore, showKey, showDetails, hideDetails, detailsIdShown, keyModalShown, hardware, device, ...otherProps} = this.props;
         let dataId = 0;
         if(!_.isUndefined(hardware) && !_.isUndefined(hardware.id) && (!_.isUndefined(hardware.description) || !_.isUndefined(hardware.class))) {
             dataId = hardware['id-nr'];
@@ -22,7 +24,7 @@ class PrimaryEcu extends Component {
                 <a
                     href="#" 
                     data-id={dataId}
-                    className={"selected" + (shownIds.indexOf(dataId) > -1 ? " shown" : "")}
+                    className={"selected"}
                     id="hardware-primary-details"
                     onClick={e => e.preventDefault()}
                 >
@@ -68,6 +70,19 @@ class PrimaryEcu extends Component {
                 :
                     null
                 }
+                {detailsIdShown ?
+                    <FadeAnimation>
+                        <div className="overlay-animation-container">
+                            <HardwareOverlay 
+                                hardware={hardware}
+                                hideDetails={hideDetails}
+                                shown={detailsIdShown ? true : false}
+                            />
+                        </div>
+                    </FadeAnimation>
+                : 
+                    null
+                }
             </span>
         );
     }
@@ -75,6 +90,13 @@ class PrimaryEcu extends Component {
 
 PrimaryEcu.propTypes = {
     ecu: PropTypes.object.isRequired,
+    hardwareStore: PropTypes.object.isRequired,
+    showKey: PropTypes.func.isRequired,
+    showDetails: PropTypes.func.isRequired,
+    hideDetails: PropTypes.func.isRequired,
+    keyModalShown: PropTypes.bool.isRequired,
+    hardware: PropTypes.object.isRequired,
+    device: PropTypes.object.isRequired,
     handleCopy: PropTypes.func,
     handleRequestClose: PropTypes.func,
     handleTouchTap: PropTypes.func,

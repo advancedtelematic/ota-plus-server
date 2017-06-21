@@ -28,7 +28,8 @@ class Footer extends Component {
 }
 
 Footer.propTypes = {
-    provisioningStore: PropTypes.object.isRequired
+    provisioningStore: PropTypes.object.isRequired,
+    showDevicesCreateModal: PropTypes.func.isRequired
 }
 
 export default Footer;

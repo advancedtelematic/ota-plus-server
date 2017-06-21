@@ -3,7 +3,7 @@ import { observe } from 'mobx';
 import { observer } from 'mobx-react';
 import { Form } from 'formsy-react';
 import { SubHeader, SearchBar, Loader } from '../../partials';
-import { PackagesCoreList } from './packages';
+import { PackagesList } from './packages';
 import _ from 'underscore';
 
 @observer
@@ -36,7 +36,7 @@ class SoftwarePanel extends Component {
         this.props.packagesStore.fetchPackages(filter);
     }
     render() {
-        const { devicesStore, packagesStore, device, togglePackageAutoUpdate, onFileDrop, packageVersion, loadPackageVersionProperties } = this.props;
+        const { packagesStore, device, togglePackageAutoUpdate, onFileDrop, packageVersion, loadPackageVersionProperties } = this.props;
         return (
             <div className="software-panel">
                 <div className="darkgrey-header">
@@ -70,7 +70,7 @@ class SoftwarePanel extends Component {
                             </div>
                         :
                             Object.keys(packagesStore.preparedPackagesPerDevice[device.uuid]).length ?
-                                <PackagesCoreList
+                                <PackagesList
                                     packagesStore={packagesStore}
                                     device={device}
                                     onFileDrop={onFileDrop}

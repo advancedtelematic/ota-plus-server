@@ -619,27 +619,28 @@ export default class PackagesStore {
         let found = _.find(this.packages, (pack) => {
             return pack.id.version === version;
         });
-
-        let object = {
-            checkSum: found.checkSum,
-            createdAt: found.createdAt,
-            description: found.description,
-            packageId: {
-                name: found.id.name,
-                version: found.id.version
-            },
-            isBlackListed: found.isBlackListed,
-            isInstalled: true,
-            namespace: found.namespace,
-            signature: found.signature,
-            size: found.size,
-            uri: {
-                uri: found.uri
-            },
-            uuid: found.uuid,
-            vendor: found.vendor
+        let object = {};
+        if(found) {
+            object = {
+                checkSum: found.checkSum,
+                createdAt: found.createdAt,
+                description: found.description,
+                packageId: {
+                    name: found.id.name,
+                    version: found.id.version
+                },
+                isBlackListed: found.isBlackListed,
+                isInstalled: true,
+                namespace: found.namespace,
+                signature: found.signature,
+                size: found.size,
+                uri: {
+                    uri: found.uri
+                },
+                uuid: found.uuid,
+                vendor: found.vendor
+            }
         }
-
         return object;
     }
 
