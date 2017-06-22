@@ -95,6 +95,10 @@ class LoginController @Inject()(
     Unauthorized(views.html.authorizationError())
   }
 
+  val accountConfirmation: Action[AnyContent] = Action {
+    Ok(views.html.accountConfirmation())
+  }
+
   val accountActivated: Action[AnyContent] = Action {
     Ok(views.html.activated())
   }
