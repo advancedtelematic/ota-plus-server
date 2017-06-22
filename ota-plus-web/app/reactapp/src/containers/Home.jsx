@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import {
     ActiveCampaigns,
@@ -9,8 +10,15 @@ import {
 
 @observer
 class Home extends Component {
+    @observable uploadToTuf = false;
+
     constructor(props) {
         super(props);
+        this.toggleTufUpload = this.toggleTufUpload.bind(this);
+    }
+    toggleTufUpload(e) {
+        if(e) e.preventDefault();
+        this.uploadToTuf = !this.uploadToTuf;
     }
     render() {
         const { devicesStore, packagesStore, campaignsStore, groupsStore } = this.props;
@@ -37,6 +45,8 @@ class Home extends Component {
                             <div className="panel-body">
                                 <LastPackages 
                                     packagesStore={packagesStore}
+                                    toggleTufUpload={this.toggleTufUpload}
+                                    uploadToTuf={this.uploadToTuf}
                                 />
                             </div>
                         </div>

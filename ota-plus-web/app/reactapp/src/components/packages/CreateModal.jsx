@@ -38,7 +38,11 @@ class CreateModal extends Component {
         delete data['fake-file'];
         data.description = data.description ? data.description : "";
         data.vendor = data.vendor ? data.vendor : "";
-        this.props.packagesStore.createPackage(data, formData);
+        if(this.props.uploadToTuf) {
+            this.props.packagesStore.createTufPackage(data, formData);
+        } else {
+            this.props.packagesStore.createPackage(data, formData);
+        }
     }
     _onFileUploadClick() {
         var fileUploadDom = this.refs.fileUpload;
@@ -54,7 +58,7 @@ class CreateModal extends Component {
         this.props.hide();
     }
     render() {
-        const { shown, hide, packagesStore, fileDropped } = this.props;
+        const { shown, hide, packagesStore, fileDropped, toggleTufUpload, uploadToTuf } = this.props;
         const form = (
             <Form
                 onValid={this.enableButton.bind(this)}
@@ -156,6 +160,43 @@ class CreateModal extends Component {
                             />
                         </div>
                     </div>
+                    <div className="col-xs-6">
+                        <div className="row">
+                            <div className="switch-row">
+                                <div className="col-xs-2">
+                                    <div className={"switch" + (uploadToTuf ? " switchOn" : "")} onClick={toggleTufUpload.bind(this)}>
+                                        <div className="switch-status">
+                                        {uploadToTuf ?
+                                            <span>ON</span>
+                                        :
+                                            <span>OFF</span>
+                                        }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-xs-10">
+                                    <div className="tuf-title">
+                                        Secured
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-xs-2">
+                                <div className="tuf-icon">
+                                    <img src="/assets/img/icons/crown.png" alt="Icon" />
+                                </div>
+                            </div>
+                            <div className="col-xs-10">
+                                <div className="tuf-description">
+                                    long text long text long text long text long text long text
+                                    long text long text long text long text long text long text
+                                    long text long text long text long text long text long text
+                                    long text long text long text long text long text long text
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div className="row">
                     <div className="col-xs-12">
@@ -188,6 +229,7 @@ class CreateModal extends Component {
                 )}
                 content={form}
                 shown={shown}
+                className="add-package-modal"
             />
         );
     }
