@@ -13,9 +13,7 @@ class Details extends Component {
 
     	let version = null;
     	if(device.isDirector && packageVersion.initialState) {
-    		version = packagesStore._getPackageByVersion(_.first(device.directorAttributes).image.hash.sha256);
-    		version.id = version.packageId;
-    		delete version.packageId;
+    		version = packagesStore.installedDirectorPackage;    		
     	} else {
     		version = packagesStore._getPackageVersionByUuid(packageVersion.uuid);
     	}

@@ -38,11 +38,9 @@ class CoreList extends Component {
         });
     }
     componentWillMount() {
-        let hash = this.props.packageVersion.uuid;
-        if(hash !== 1) {
-            let pack = this.props.packagesStore._getPackageByVersion(hash);
-            this.expandedPackageName = pack.packageId.name;
-            this.selectedPackageVersion = pack.packageId.version;
+        if(this.props.device.isDirector) {
+            this.expandedPackageName = this.props.packagesStore.installedDirectorPackage.id.name;
+            this.selectedPackageVersion = this.props.packagesStore.installedDirectorPackage.id.version;
         }
     }
     componentDidMount() {
