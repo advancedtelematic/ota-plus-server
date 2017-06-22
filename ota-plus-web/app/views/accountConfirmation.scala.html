@@ -1,0 +1,34 @@
+@()()
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>ATS Garage - Error</title>
+    <link href="/assets/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/css/unlogged.css" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <div id="ats-page" class="error-page">
+
+      <div class="wrapper-center">
+        <div class="info">
+          <div class="logo text-center">
+            <a href="#"><img src='@routes.Assets.versioned("img/atsgarage_white.png")' id="logo"></a>
+          </div>
+          <div class="header">
+            <p class="welcome">Welcome!</p>
+            <p>Your account has been created, but it looks like your email address isn't verified yet.</p>
+            <p>Please check your inbox for a welcome email with an account confirmation link.</p>
+          </div>
+          <div class="box">
+            If your welcome email didn't arrive yet, please check your spam or junk mail folder.
+            If it's not there, please <a href="mailto:support@@atsgarage.com">contact us</a>
+          </div>
+        </div>
+      </div>
+
+      <section class="footer-panel">
+        <a href="mailto:support@@atsgarage.com" class="clickme">Need Support?</a>
+      </section>
+    </div>
+  </body>
+</html>
