@@ -82,6 +82,7 @@ export default class PackagesStore {
     @observable ondevicePackagesLimit = 25;
     @observable ondeviceFilter = '';
     @observable activeDeviceId = null;
+    @observable installedDirectorPackage = {};
 
     constructor() {
         resetAsync(this.packagesFetchAsync);
@@ -663,7 +664,12 @@ export default class PackagesStore {
             return pack.id.version === version;
         });
 
-        let object = {
+        if(found && _.isEmpty(this.installedDirectorPackage)) {
+            this.installedDirectorPackage = found;
+            this.installedDirectorPackage.isInstalled = true;
+        }
+
+        return found ? {
             checkSum: found.checkSum,
             createdAt: found.createdAt,
             description: found.description,
@@ -681,9 +687,7 @@ export default class PackagesStore {
             },
             uuid: found.uuid,
             vendor: found.vendor
-        }
-
-        return object;
+        } : {};
     }
 
     _getDevicePackage(data) {
@@ -1036,6 +1040,7 @@ export default class PackagesStore {
         this.ondevicePackagesTotalCount = 0;
         this.ondeviceFilter = '';
         this.activeDeviceId = null;
+        this.installedDirectorPackage = {};
     }
 
     _resetWizard() {
