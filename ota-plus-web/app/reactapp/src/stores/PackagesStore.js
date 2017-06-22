@@ -3,6 +3,7 @@ import axios from 'axios';
 import {
     API_PACKAGES,
     API_TUF_PACKAGES,
+    API_UPLOAD_TUF_PACKAGE,
     API_PACKAGES_BLACKLIST_FETCH,
     API_PACKAGES_COUNT_DEVICE_AND_GROUP,
     API_PACKAGES_COUNT_VERSION_BY_NAME,
@@ -50,6 +51,7 @@ export default class PackagesStore {
     @observable page = null;
     @observable initialPackages = [];
     @observable packages = [];
+    @observable directorPackages = [];
     @observable packageStats = [];
     @observable overallPackagesCount = null;
     @observable preparedPackages = {};
@@ -281,6 +283,53 @@ export default class PackagesStore {
                     }.bind(this));
                 uploadObj.source = source;
             }.bind(this));
+    }
+
+    _tufPackageURI(entryName, name, version) {
+        return API_UPLOAD_TUF_PACKAGE + '/' + entryName + '?name=' + encodeURIComponent(name) + '&version=' + encodeURIComponent(version) + '&hardwareIds=1';
+    }
+
+    createTufPackage(data, formData) {
+        let source = axios.CancelToken.source();
+        let length = this.packagesUploading.push({
+            status: null,
+            size: 0,
+            uploaded: 0,
+            progress: 0,
+            upSpeed: 0,
+            package: {
+                name: data.packageName,
+                version: data.version
+            }
+        });
+        const uploadObj = this.packagesUploading[length - 1];
+        const config = {
+            onUploadProgress: function(progressEvent) {
+                let currentTime = new Date().getTime();
+                let lastUpTime = uploadObj.lastUpTime || currentTime;
+                let upSpeed = ((progressEvent.loaded - uploadObj.uploaded) * 1000) / ((currentTime - lastUpTime) * 1024)
+                uploadObj.progress = progressEvent.loaded * 100 / progressEvent.total;
+                uploadObj.size = progressEvent.total;
+                uploadObj.uploaded = progressEvent.loaded;
+                uploadObj.upSpeed = upSpeed;
+                uploadObj.lastUpTime = currentTime;
+            }.bind(this),
+            cancelToken: source.token
+        };
+        const entryName = data.packageName + '_' + data.version;
+        const request = axios.put(
+                this._tufPackageURI(entryName, data.packageName, data.version) +
+                    '&description=' + encodeURIComponent(data.description) +
+                    '&vendor=' + encodeURIComponent(data.vendor),
+                formData,
+                config)
+            .then(function(response) {
+                uploadObj.status = 'success';
+            }.bind(this))
+            .catch(function(error) {
+                uploadObj.status = 'error';
+            }.bind(this));
+        uploadObj.source = source;
     }
 
     updatePackageDetails(data) {
@@ -701,13 +750,14 @@ export default class PackagesStore {
         switch(this.page) {
             case 'packages':
                 let directorPackages = this.directorPackages;
+                let mergedPackages = [];
                 _.each(directorPackages, (dirPack, dirIndex) => {
-                    _.each(packages, (corePack, index) => {
-                        if((corePack.id.name === dirPack.id.name) && (corePack.id.version === dirPack.id.version)) {
-                            packages[index] = directorPackages[dirIndex];
-                        }
-                    });
+                    mergedPackages.push(dirPack);
                 });
+                _.each(packages, (corePack, index) => {
+                    mergedPackages.push(corePack);
+                });
+                packages = mergedPackages;
                 break;
         }
         let groupedPackages = {};
@@ -1016,6 +1066,7 @@ export default class PackagesStore {
         this.page = null;
         this.initialPackages = [];
         this.packages = [];
+        this.directorPackages = [];
         this.overallPackagesCount = null;
         this.preparedPackages = {};
         this.preparedPackagesPerDevice = {};
@@ -1052,6 +1103,8 @@ export default class PackagesStore {
 
     _addPackage(data) {
         data.isBlackListed = false;
+        data.id = data.packageId;
+        delete data.packageId;
         this.packages.push(data);
         switch (this.page) {
             case 'device':

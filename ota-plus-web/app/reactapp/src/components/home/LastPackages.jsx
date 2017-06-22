@@ -27,7 +27,7 @@ class LastPackages extends Component {
         resetAsync(this.props.packagesStore.packagesCreateAsync);
     }
     render() {
-        const { packagesStore } = this.props;
+        const { packagesStore, toggleTufUpload, uploadToTuf } = this.props;
         const { lastPackages } = packagesStore;
         return (
             <span>
@@ -61,6 +61,8 @@ class LastPackages extends Component {
                     shown={this.createModalShown}
                     hide={this.hideCreateModal}
                     packagesStore={packagesStore}
+                    toggleTufUpload={toggleTufUpload}
+                    uploadToTuf={uploadToTuf}
                 />
             </span>
         );
