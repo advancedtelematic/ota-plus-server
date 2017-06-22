@@ -9,7 +9,7 @@ import {
     DevicePropertiesPanel, 
     DeviceSoftwarePanel
 } from '../components/device';
-import { 
+import {
     PackagesCreateModal,
     PackagesBlacklistModal
 } from '../components/packages';
@@ -23,6 +23,7 @@ class Device extends Component {
     @observable packageBlacklistAction = {};
     @observable packageProperties = {};
     @observable packageVersion = { uuid: 1 };
+    @observable uploadToTuf = false;
 
     constructor(props) {
         super(props);
@@ -36,6 +37,7 @@ class Device extends Component {
         this.cancelInstallation = this.cancelInstallation.bind(this);
         this.clearStepsHistory = this.clearStepsHistory.bind(this);
         this.loadPackageVersionProperties = this.loadPackageVersionProperties.bind(this);
+        this.toggleTufUpload = this.toggleTufUpload.bind(this);
 
         this.packageVersionChangeHandler = observe(props.devicesStore, (change) => {
             if(change.name === 'devicesOneFetchAsync' && change.object[change.name].isFetching === false) {
@@ -48,6 +50,10 @@ class Device extends Component {
                 }
             }
         });
+    }
+    toggleTufUpload(e) {
+        if(e) e.preventDefault();
+        this.uploadToTuf = !this.uploadToTuf;
     }
     componentWillUnmount() {
         this.packageVersionChangeHandler();
@@ -160,6 +166,8 @@ class Device extends Component {
                     hide={this.hidePackageCreateModal}
                     packagesStore={packagesStore}
                     fileDropped={this.fileDropped}
+                    toggleTufUpload={this.toggleTufUpload}
+                    uploadToTuf={this.uploadToTuf}
                 />
                 <PackagesBlacklistModal 
                     shown={this.packageBlacklistModalShown}

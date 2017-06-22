@@ -21,6 +21,7 @@ class Packages extends Component {
     @observable blacklistAction = {};
     @observable statsModalShown = false;
     @observable statsPackageName = null;
+    @observable uploadToTuf = false;
 
     constructor(props) {
         super(props);
@@ -36,6 +37,7 @@ class Packages extends Component {
         this.changeFilter = this.changeFilter.bind(this);
         this.changeType = this.changeType.bind(this);
         this.onFileDrop = this.onFileDrop.bind(this);
+        this.toggleTufUpload = this.toggleTufUpload.bind(this);
     }
     showTooltip(e) {
         if(e) e.preventDefault();
@@ -49,6 +51,10 @@ class Packages extends Component {
         if(e) e.preventDefault();
         this.createModalShown = true;
         this.fileDropped = (files ? files[0] : null);
+    }
+    toggleTufUpload(e) {
+        if(e) e.preventDefault();
+        this.uploadToTuf = !this.uploadToTuf;
     }
     hideCreateModal(e) {
         if(e) e.preventDefault();
@@ -154,6 +160,8 @@ class Packages extends Component {
                     hide={this.hideCreateModal}
                     packagesStore={packagesStore}
                     fileDropped={this.fileDropped}
+                    toggleTufUpload={this.toggleTufUpload}
+                    uploadToTuf={this.uploadToTuf}
                 />
                 <PackagesBlacklistModal 
                     shown={this.blacklistModalShown}

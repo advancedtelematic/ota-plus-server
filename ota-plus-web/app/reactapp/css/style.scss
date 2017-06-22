@@ -1647,6 +1647,32 @@ input {
     }
 }
 
+.add-package-modal {
+    .switch {
+        margin-top: 3px;
+    }
+
+    .tuf-title {
+        font-size: 18px;
+    }
+
+    .tuf-icon {
+        img {
+            width: 40px;
+        }
+    }
+
+    .tuf-description {
+        font-size: 13px;
+        color: rgba(0, 0, 0, 0.4);
+    }
+
+    .switch-row {
+        padding: 20px 0;
+        overflow: hidden;
+    }
+}
+
 .btn-checkbox {
     color: #fff;
     font-size: 10px;
