@@ -29,6 +29,7 @@ export default class PackagesStore {
     @observable packagesFetchAsync = {};
     @observable packageStatisticsFetchAsync = {};
     @observable packagesCreateAsync = {};
+    @observable packagesTufCreateAsync = {};
     @observable packagesUpdateDetailsAsync = {};
     @observable packagesBlacklistFetchAsync = {};
     @observable packagesOneBlacklistedFetchAsync = {};
@@ -90,6 +91,7 @@ export default class PackagesStore {
         resetAsync(this.packagesFetchAsync);
         resetAsync(this.packageStatisticsFetchAsync);
         resetAsync(this.packagesCreateAsync);
+        resetAsync(this.packagesTufCreateAsync);
         resetAsync(this.packagesUpdateDetailsAsync);
         resetAsync(this.packagesBlacklistFetchAsync);
         resetAsync(this.packagesOneBlacklistedFetchAsync);
@@ -290,6 +292,7 @@ export default class PackagesStore {
     }
 
     createTufPackage(data, formData) {
+        resetAsync(this.packagesTufCreateAsync, true);
         let source = axios.CancelToken.source();
         let length = this.packagesUploading.push({
             status: null,
@@ -325,9 +328,11 @@ export default class PackagesStore {
                 config)
             .then(function(response) {
                 uploadObj.status = 'success';
+                this.packagesTufCreateAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
                 uploadObj.status = 'error';
+                this.packagesTufCreateAsync = handleAsyncError(error);
             }.bind(this));
         uploadObj.source = source;
     }
@@ -1047,6 +1052,7 @@ export default class PackagesStore {
     _reset() {
         resetAsync(this.packagesFetchAsync);
         resetAsync(this.packagesCreateAsync);
+        resetAsync(this.packagesTufCreateAsync);
         resetAsync(this.packagesUpdateDetailsAsync);
         resetAsync(this.packagesBlacklistFetchAsync);
         resetAsync(this.packagesOneBlacklistedFetchAsync);
