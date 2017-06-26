@@ -18,9 +18,11 @@ class CreateModal extends Component {
     }
     componentDidMount() {
         this.createHandler = new AsyncStatusCallbackHandler(this.props.packagesStore, 'packagesCreateAsync', this.hideModal.bind(this));
+        this.createTufHandler = new AsyncStatusCallbackHandler(this.props.packagesStore, 'packagesTufCreateAsync', this.hideModal.bind(this));
     }
     componentWillUnmount() {
         this.createHandler();
+        this.createTufHandler();
     }
     enableButton() {
         this.submitButtonDisabled = false;
