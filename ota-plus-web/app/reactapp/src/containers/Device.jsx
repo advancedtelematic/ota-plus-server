@@ -165,6 +165,7 @@ class Device extends Component {
                     shown={this.packageCreateModalShown}
                     hide={this.hidePackageCreateModal}
                     packagesStore={packagesStore}
+                    hardwareStore={hardwareStore}
                     fileDropped={this.fileDropped}
                     toggleTufUpload={this.toggleTufUpload}
                     uploadToTuf={this.uploadToTuf}
