@@ -101,7 +101,7 @@ class Packages extends Component {
     }
     render() {
 
-        const { packagesStore, highlightedPackage } = this.props;
+        const { packagesStore, hardwareStore, highlightedPackage } = this.props;
         return (
             <span ref="component">
                 {packagesStore.overallPackagesCount === null && packagesStore.packagesFetchAsync.isFetching ?
@@ -162,6 +162,7 @@ class Packages extends Component {
                     fileDropped={this.fileDropped}
                     toggleTufUpload={this.toggleTufUpload}
                     uploadToTuf={this.uploadToTuf}
+                    hardwareStore={hardwareStore}
                 />
                 <PackagesBlacklistModal 
                     shown={this.blacklistModalShown}

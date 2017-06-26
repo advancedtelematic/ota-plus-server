@@ -21,7 +21,7 @@ class Packages extends Component {
         this.props.packagesStore._reset();
     }
     render() {
-        const { t, packagesStore } = this.props;
+        const { t, packagesStore, hardwareStore } = this.props;
         return (
             <FadeAnimation 
                 display="flex">
@@ -53,6 +53,7 @@ class Packages extends Component {
                         title={title}>
                         <PackagesContainer 
                             packagesStore={packagesStore}
+                            hardwareStore={hardwareStore}
                             highlightedPackage={this.props.params.packageName}
                         />
                     </MetaData>

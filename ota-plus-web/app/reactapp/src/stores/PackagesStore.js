@@ -287,12 +287,11 @@ export default class PackagesStore {
             }.bind(this));
     }
 
-    _tufPackageURI(entryName, name, version) {
-        return API_UPLOAD_TUF_PACKAGE + '/' + entryName + '?name=' + encodeURIComponent(name) + '&version=' + encodeURIComponent(version) + '&hardwareIds=1';
+    _tufPackageURI(entryName, name, version, hardwareIds) {
+        return API_UPLOAD_TUF_PACKAGE + '/' + entryName + '?name=' + encodeURIComponent(name) + '&version=' + encodeURIComponent(version) + '&hardwareIds=' + hardwareIds;
     }
 
-    createTufPackage(data, formData) {
-        resetAsync(this.packagesTufCreateAsync, true);
+    createTufPackage(data, formData, hardwareIds) {
         let source = axios.CancelToken.source();
         let length = this.packagesUploading.push({
             status: null,
@@ -321,7 +320,7 @@ export default class PackagesStore {
         };
         const entryName = data.packageName + '_' + data.version;
         const request = axios.put(
-                this._tufPackageURI(entryName, data.packageName, data.version) +
+                this._tufPackageURI(entryName, data.packageName, data.version, hardwareIds) +
                     '&description=' + encodeURIComponent(data.description) +
                     '&vendor=' + encodeURIComponent(data.vendor),
                 formData,
