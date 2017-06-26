@@ -1647,9 +1647,26 @@ input {
     }
 }
 
+div[role=presentation] {
+    width: auto!important;
+}    
+
 .add-package-modal {
+
     .switch {
         margin-top: 3px;
+        background: white!important;
+
+        &.switchOn {
+
+            &:before {
+                background: #9ce2d8!important;
+            }
+
+            .switch-status {
+                color: black;
+            }
+        }
     }
 
     .tuf-title {

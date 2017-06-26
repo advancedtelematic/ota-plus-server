@@ -22,6 +22,7 @@ export const API_DEVICES_DEVICE_DETAILS = '/api/v1/devices';
 export const API_DEVICES_DIRECTOR_DEVICE = '/api/v1/admin/devices';
 export const API_DEVICES_RENAME = '/api/v1/devices';
 
+export const API_HARDWARE_IDS_FETCH = '/api/v1/admin/devices/hardware_identifiers';
 export const API_ECUS_FETCH = '/api/v1/devices';
 export const API_ECUS_PUBLIC_KEY_FETCH = '/api/v1/admin/devices';
 

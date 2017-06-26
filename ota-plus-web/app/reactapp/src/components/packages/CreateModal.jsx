@@ -1,20 +1,26 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Modal, AsyncResponse } from '../../partials';
+import { Modal, AsyncResponse, Loader } from '../../partials';
 import { AsyncStatusCallbackHandler } from '../../utils';
 import { Form } from 'formsy-react';
 import { FormsyText } from 'formsy-material-ui/lib';
-import { FlatButton } from 'material-ui';
+import { FlatButton, SelectField, MenuItem } from 'material-ui';
 import serialize from 'form-serialize';
+import _ from 'underscore';
 
 @observer
 class CreateModal extends Component {
     @observable submitButtonDisabled = true;
     @observable fileName = null;
+    @observable selectedHardwareIds = [];
 
     constructor(props) {
         super(props);
+        this.selectHardwareIds = this.selectHardwareIds.bind(this);
+    }
+    componentWillMount() {
+        this.props.hardwareStore.fetchHardwareIds();
     }
     componentDidMount() {
         this.createHandler = new AsyncStatusCallbackHandler(this.props.packagesStore, 'packagesCreateAsync', this.hideModal.bind(this));
@@ -41,7 +47,7 @@ class CreateModal extends Component {
         data.description = data.description ? data.description : "";
         data.vendor = data.vendor ? data.vendor : "";
         if(this.props.uploadToTuf) {
-            this.props.packagesStore.createTufPackage(data, formData);
+            this.props.packagesStore.createTufPackage(data, formData, this.selectedHardwareIds.join());
         } else {
             this.props.packagesStore.createPackage(data, formData);
         }
@@ -57,7 +63,23 @@ class CreateModal extends Component {
     hideModal(e) {
         if(e) e.preventDefault();
         this.fileName = null;
+        this.selectedHardwareIds = [];
         this.props.hide();
+    }
+    formatHardwareIds(selectedHardwareIds) {
+        let hardwareIds = this.props.hardwareStore.hardwareIds;
+        return hardwareIds.map((id) => (
+            <MenuItem
+                key={id}
+                insetChildren={true}
+                checked={selectedHardwareIds && selectedHardwareIds.indexOf(id) > -1}
+                value={id}
+                primaryText={id}
+            />
+        ));
+    }
+    selectHardwareIds(event, index, values) {
+        this.selectedHardwareIds = values;
     }
     render() {
         const { shown, hide, packagesStore, fileDropped, toggleTufUpload, uploadToTuf } = this.props;
@@ -100,28 +122,55 @@ class CreateModal extends Component {
                         />
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-xs-6">
-                        <FormsyText
-                            name="description"
-                            value=""
-                            floatingLabelText="Description"
-                            className="input-wrapper"
-                            id="add-new-package-description"
-                            updateImmediately
-                        />
+                {!uploadToTuf ?
+                    <div className="row">
+                        <div className="col-xs-6">
+                            <FormsyText
+                                name="description"
+                                value=""
+                                floatingLabelText="Description"
+                                className="input-wrapper"
+                                id="add-new-package-description"
+                                updateImmediately
+                            />
+                        </div>
+                        <div className="col-xs-6">
+                            <FormsyText
+                                name="vendor"
+                                value=""
+                                floatingLabelText="Vendor"
+                                className="input-wrapper"
+                                id="add-new-package-vendor"
+                                updateImmediately
+                            />
+                        </div>
                     </div>
-                    <div className="col-xs-6">
-                        <FormsyText
-                            name="vendor"
-                            value=""
-                            floatingLabelText="Vendor"
-                            className="input-wrapper"
-                            id="add-new-package-vendor"
-                            updateImmediately
-                        />
+                :
+                    null 
+                }
+                {uploadToTuf ?
+                    <div className="row">
+                        <div className="col-xs-6">
+                            <div className="hardware-ids-select">
+                                {this.props.hardwareStore.hardwareIdsFetchAsync.isFetching ?
+                                    <Loader />
+                                :
+                                    <SelectField
+                                        multiple={true}
+                                        onChange={this.selectHardwareIds}
+                                        hintText="Select hardware ids"
+                                        hintStyle={{opacity: this.selectedHardwareIds.length ? 0 : 1, color: '#b2b2b2', fontWeight: 'bold'}}
+                                        value={this.selectedHardwareIds}
+                                    >
+                                        {this.formatHardwareIds(this.selectedHardwareIds)}
+                                    </SelectField>
+                                }
+                            </div>
+                        </div>
                     </div>
-                </div>
+                :
+                    null
+                }
                 <div className="row">
                     <div className="col-xs-6">
                         <div className="upload-wrapper">
@@ -186,15 +235,13 @@ class CreateModal extends Component {
                         <div className="row">
                             <div className="col-xs-2">
                                 <div className="tuf-icon">
-                                    <img src="/assets/img/icons/crown.png" alt="Icon" />
+                                    <img src="/assets/img/icons/black/lock.png" alt="Icon" />
                                 </div>
                             </div>
                             <div className="col-xs-10">
                                 <div className="tuf-description">
-                                    long text long text long text long text long text long text
-                                    long text long text long text long text long text long text
-                                    long text long text long text long text long text long text
-                                    long text long text long text long text long text long text
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                                 </div>
                             </div>
                         </div>
@@ -215,7 +262,7 @@ class CreateModal extends Component {
                                 type="submit"
                                 className="btn-main"
                                 id="add-new-package-confirm"
-                                disabled={this.submitButtonDisabled}
+                                disabled={this.submitButtonDisabled || (uploadToTuf && !this.selectedHardwareIds.length)}
                             />
                         </div>
                     </div>
