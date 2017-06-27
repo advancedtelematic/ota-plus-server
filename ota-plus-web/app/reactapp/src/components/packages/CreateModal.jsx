@@ -75,6 +75,7 @@ class CreateModal extends Component {
                 checked={selectedHardwareIds && selectedHardwareIds.indexOf(id) > -1}
                 value={id}
                 primaryText={id}
+                id={"hardware-ids-select-menu-item-" + id}
             />
         ));
     }
@@ -151,11 +152,12 @@ class CreateModal extends Component {
                 {uploadToTuf ?
                     <div className="row">
                         <div className="col-xs-6">
-                            <div className="hardware-ids-select">
+                            <div className="hardware-ids-select" id="hardware-ids-select">
                                 {this.props.hardwareStore.hardwareIdsFetchAsync.isFetching ?
                                     <Loader />
                                 :
                                     <SelectField
+                                        id="hardware-ids-select-field"
                                         multiple={true}
                                         onChange={this.selectHardwareIds}
                                         hintText="Select hardware ids"
@@ -215,18 +217,18 @@ class CreateModal extends Component {
                         <div className="row">
                             <div className="switch-row">
                                 <div className="col-xs-2">
-                                    <div className={"switch" + (uploadToTuf ? " switchOn" : "")} onClick={toggleTufUpload.bind(this)}>
+                                    <div className={"switch" + (uploadToTuf ? " switchOn" : "")} id="switch" onClick={toggleTufUpload.bind(this)}>
                                         <div className="switch-status">
                                         {uploadToTuf ?
-                                            <span>ON</span>
+                                            <span id="switch-on">ON</span>
                                         :
-                                            <span>OFF</span>
+                                            <span id="switch-off">OFF</span>
                                         }
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-xs-10">
-                                    <div className="tuf-title">
+                                    <div className="tuf-title" id="tuf-title">
                                         Secured
                                     </div>
                                 </div>
@@ -234,12 +236,12 @@ class CreateModal extends Component {
                         </div>
                         <div className="row">
                             <div className="col-xs-2">
-                                <div className="tuf-icon">
+                                <div className="tuf-icon" id="tuf-icon">
                                     <img src="/assets/img/icons/black/lock.png" alt="Icon" />
                                 </div>
                             </div>
                             <div className="col-xs-10">
-                                <div className="tuf-description">
+                                <div className="tuf-description" id="tuf-description">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
                                     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                                 </div>
