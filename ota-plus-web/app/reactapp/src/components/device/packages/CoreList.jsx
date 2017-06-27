@@ -123,6 +123,43 @@ class CoreList extends Component {
     render() {
         const { packagesStore, device, onFileDrop, togglePackageAutoUpdate, packageVersion, loadPackageVersionProperties } = this.props;
         let packageIndex = -1;
+
+        let preparedPackages = packagesStore.preparedPackagesPerDevice[device.uuid];
+
+        if(this.props.device.isDirector) {
+            let directorPackages = {};
+            _.map(packagesStore.preparedPackagesPerDevice[device.uuid], (packages, letter) => {
+                directorPackages[letter] = [];
+                _.map(packages, (pack, index) => {
+                    if(pack.inDirector) {
+                        directorPackages[letter].push(pack);
+                    }
+                });
+            });
+            _.map(directorPackages, (pack, letter) => {
+                if(!directorPackages[letter].length) {
+                    delete directorPackages[letter];
+                }
+            });
+            preparedPackages = directorPackages;
+        } else {
+            let corePackages = {};
+            _.map(packagesStore.preparedPackagesPerDevice[device.uuid], (packages, letter) => {
+                corePackages[letter] = [];
+                _.map(packages, (pack, index) => {
+                    if(!pack.inDirector) {
+                        corePackages[letter].push(pack);
+                    }
+                });
+            });
+            _.map(corePackages, (pack, letter) => {
+                if(!corePackages[letter].length) {
+                    delete corePackages[letter];
+                }
+            });
+            preparedPackages = corePackages;
+        }
+
         return (
             <div className="ios-list" ref="list">
                 <Dropzone
@@ -135,7 +172,7 @@ class CoreList extends Component {
                     <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
                         {this.fakeHeaderLetter}
                     </div>
-                    {_.map(packagesStore.preparedPackagesPerDevice[device.uuid], (packages, letter) => {
+                    {_.map(preparedPackages, (packages, letter) => {
                         return (
                             <span key={letter}>
                         <div className="header">{letter}</div>

@@ -52,7 +52,6 @@ export default class PackagesStore {
     @observable page = null;
     @observable initialPackages = [];
     @observable packages = [];
-    @observable directorPackages = [];
     @observable packageStats = [];
     @observable overallPackagesCount = null;
     @observable preparedPackages = {};
@@ -172,13 +171,21 @@ export default class PackagesStore {
                     uri: {
                         uri: null
                     },
-                    uuid: null,
+                    uuid: packageHash,
                     inDirector: true
                 };
                 versionedDirectorPackages.push(formattedVersion);
             });
         });
-        this.directorPackages = versionedDirectorPackages;
+
+        let mergedPackages = [];
+        _.each(versionedDirectorPackages, (dirPack, dirIndex) => {
+            mergedPackages.push(dirPack);
+        });
+        _.each(this.packages, (corePack, index) => {
+            mergedPackages.push(corePack);
+        });
+        this.packages = mergedPackages;
     }
 
     fetchPackageStatistics(packageName) {
@@ -750,20 +757,7 @@ export default class PackagesStore {
     }
 
     _preparePackages(packagesSort = this.packagesSort) {
-        let packages = this.packages;
-        switch(this.page) {
-            case 'packages':
-                let directorPackages = this.directorPackages;
-                let mergedPackages = [];
-                _.each(directorPackages, (dirPack, dirIndex) => {
-                    mergedPackages.push(dirPack);
-                });
-                _.each(packages, (corePack, index) => {
-                    mergedPackages.push(corePack);
-                });
-                packages = mergedPackages;
-                break;
-        }
+        let packages = this.packages;        
         let groupedPackages = {};
         let sortedPackages = {};
         this.packagesSort = packagesSort;
@@ -780,8 +774,11 @@ export default class PackagesStore {
             groupedPackages[index].versions = _.sortBy(obj.versions, (pack) => {
                 return pack.createdAt;
             }).reverse();
+            let uniqueVersions = _.uniq(groupedPackages[index].versions.reverse(), function (item, key, a) {
+                return item.checkSum;
+            });
+            groupedPackages[index].versions = uniqueVersions;
         });
-
         let specialGroup = {
             '#': []
         };
@@ -886,6 +883,7 @@ export default class PackagesStore {
                     groupedPackages[pack.id.name] = {
                         versions: [],
                         packageName: pack.id.name,
+                        inDirector: pack.inDirector ? true : false,
                         isQueued: isQueued,
                         isInstalled: isInstalled,
                         isBlackListed: pack.isBlackListed && isInstalled ? true : false,
@@ -908,6 +906,11 @@ export default class PackagesStore {
                 }).reverse();
                 pack.isQueued ? queuedCount++ : null;
                 pack.isInstalled ? installedCount++ : null;
+
+                let uniqueVersions = _.uniq(groupedPackages[index].versions.reverse(), function (item, key, a) {
+                    return item.checkSum;
+                });
+                groupedPackages[index].versions = uniqueVersions;
             });
             
             let specialGroup = {'#' : []};
@@ -1071,7 +1074,6 @@ export default class PackagesStore {
         this.page = null;
         this.initialPackages = [];
         this.packages = [];
-        this.directorPackages = [];
         this.overallPackagesCount = null;
         this.preparedPackages = {};
         this.preparedPackagesPerDevice = {};
