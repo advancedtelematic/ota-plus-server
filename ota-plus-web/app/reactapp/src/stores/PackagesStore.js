@@ -1107,19 +1107,21 @@ export default class PackagesStore {
     }
 
     _addPackage(data) {
-        data.isBlackListed = false;
-        data.id = data.packageId;
-        delete data.packageId;
-        this.packages.push(data);
-        switch (this.page) {
-            case 'device':
-                this._prepareDevicePackages();
-                break;
-            default:
-                this._preparePackages();
-                break;
+        if (_.filter(this.packages, function(o) { return ((o.id.version == data.packageId.version) && (o.id.name == data.packageId.name)); }).length <= 0) {
+            data.isBlackListed = false;
+            data.id = data.packageId;
+            delete data.packageId;
+            this.packages.push(data);
+            switch (this.page) {
+                case 'device':
+                    this._prepareDevicePackages();
+                    break;
+                default:
+                    this._preparePackages();
+                    break;
+            }
+            this.overallPackagesCount++;
         }
-        this.overallPackagesCount++;
     }
 
     _blacklistPackage(data) {
