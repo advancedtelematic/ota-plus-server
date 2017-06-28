@@ -135,6 +135,7 @@ class Device extends Component {
                             <DeviceSoftwarePanel
                                 devicesStore={devicesStore}
                                 packagesStore={packagesStore}
+                                hardwareStore={hardwareStore}
                                 device={device}
                                 togglePackageAutoUpdate={this.togglePackageAutoUpdate}
                                 installPackage={this.installPackage}
