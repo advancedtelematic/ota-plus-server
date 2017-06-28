@@ -30,14 +30,9 @@ class Home extends Component {
         this.router = nextProps.router;
         let initialDevicesCount = nextProps.initialDevicesCount;
         let onlineDevicesCount = nextProps.onlineDevicesCount;
-        let provisioningActivated = nextProps.provisioningActivated;
-        let treehubActivated = nextProps.treehubActivated;
 
         if(initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') != 1) {
             this.redirectTo('welcome');
-        }
-        if(treehubActivated === false || provisioningActivated === false) {
-            this.redirectTo('welcome', '?features=false');
         }
         if(initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') == 1) {
             this.redirectTo('destiny');
