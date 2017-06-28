@@ -33,8 +33,6 @@ class Main extends Component {
     @observable ifLogout = false;
     @observable initialDevicesCount = null;
     @observable onlineDevicesCount = null;
-    @observable provisioningActivated = null;
-    @observable treehubActivated = null;
     @observable router = null;
     @observable pagesWithRedirectToWelcome = ['page-welcome', 'page-destiny'];
     @observable pagesWithWhiteBackground = ['welcome', 'destiny', 'fireworks', 'device'];
@@ -77,16 +75,6 @@ class Main extends Component {
                 let onlineDevices = this.devicesStore.onlineDevices;
                 let onlineDevicesCount = onlineDevices.length;
                 this.onlineDevicesCount = onlineDevicesCount;
-            }
-        });
-        this.provisioningStatusHandler = observe(this.provisioningStore, (change) => {
-            if(change.name === 'provisioningStatusFetchAsync' && change.object[change.name].isFetching === false) {
-                this.provisioningActivated = this.provisioningStore.provisioningStatus.active;
-            }
-        });
-        this.treehubStatusHandler = observe(this.featuresStore, (change) => {
-            if(change.name === 'featuresFetchAsync' && change.object[change.name].isFetching === false) {
-                this.treehubActivated = _.includes(this.featuresStore.features, "treehub");
             }
         });
         this.makeBodyWhite();
@@ -159,8 +147,6 @@ class Main extends Component {
                         userStore={this.userStore}
                         initialDevicesCount={this.initialDevicesCount}
                         onlineDevicesCount={this.onlineDevicesCount}
-                        provisioningActivated={this.provisioningActivated}
-                        treehubActivated={this.treehubActivated}
                         router={this.router}
                         backButtonAction={this.backButtonAction}
                     />
