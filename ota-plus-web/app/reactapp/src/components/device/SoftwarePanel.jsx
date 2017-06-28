@@ -36,7 +36,7 @@ class SoftwarePanel extends Component {
         this.props.packagesStore.fetchPackages(filter);
     }
     render() {
-        const { devicesStore, packagesStore, device, togglePackageAutoUpdate, onFileDrop, packageVersion, loadPackageVersionProperties } = this.props;
+        const { devicesStore, packagesStore, hardwareStore, device, togglePackageAutoUpdate, onFileDrop, packageVersion, loadPackageVersionProperties } = this.props;
         return (
             <div className="software-panel">
                 <div className="darkgrey-header">
@@ -72,6 +72,7 @@ class SoftwarePanel extends Component {
                             Object.keys(packagesStore.preparedPackagesPerDevice[device.uuid]).length ?
                                 <PackagesCoreList
                                     packagesStore={packagesStore}
+                                    hardwareStore={hardwareStore}
                                     device={device}
                                     onFileDrop={onFileDrop}
                                     togglePackageAutoUpdate={togglePackageAutoUpdate}

@@ -121,7 +121,7 @@ class CoreList extends Component {
         this.tmpIntervalId = null;
     }
     render() {
-        const { packagesStore, device, onFileDrop, togglePackageAutoUpdate, packageVersion, loadPackageVersionProperties } = this.props;
+        const { packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, packageVersion, loadPackageVersionProperties } = this.props;
         let packageIndex = -1;
 
         let preparedPackages = packagesStore.preparedPackagesPerDevice[device.uuid];
@@ -131,7 +131,7 @@ class CoreList extends Component {
             _.map(packagesStore.preparedPackagesPerDevice[device.uuid], (packages, letter) => {
                 directorPackages[letter] = [];
                 _.map(packages, (pack, index) => {
-                    if(pack.inDirector) {
+                    if(pack.inDirector && _.includes(pack.hardwareIds, _.first(device.directorAttributes).hardwareId)) {
                         directorPackages[letter].push(pack);
                     }
                 });

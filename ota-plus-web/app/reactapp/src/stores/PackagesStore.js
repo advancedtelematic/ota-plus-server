@@ -172,7 +172,8 @@ export default class PackagesStore {
                         uri: null
                     },
                     uuid: packageHash,
-                    inDirector: true
+                    inDirector: true,
+                    hardwareIds: version.custom.hardwareIds
                 };
                 versionedDirectorPackages.push(formattedVersion);
             });
@@ -884,6 +885,7 @@ export default class PackagesStore {
                         versions: [],
                         packageName: pack.id.name,
                         inDirector: pack.inDirector ? true : false,
+                        hardwareIds: pack.hardwareIds,
                         isQueued: isQueued,
                         isInstalled: isInstalled,
                         isBlackListed: pack.isBlackListed && isInstalled ? true : false,
