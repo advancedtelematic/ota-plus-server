@@ -3,7 +3,7 @@ import { observe, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
 import { Header } from '../partials';
-import { HomeContainer } from '../containers';
+import { HomeContainer, PreparationContainer } from '../containers';
 import Cookies from 'js-cookie';
 
 const title = "Home";
@@ -11,6 +11,7 @@ const title = "Home";
 @observer
 class Home extends Component {
     @observable router = null;
+    @observable systemPrepared = false;
 
     constructor(props) {
         super(props);
@@ -51,10 +52,9 @@ class Home extends Component {
         }
     }
     render() {
-        const { devicesStore, hardwareStore, groupsStore, packagesStore, campaignsStore } = this.props;
+        const { devicesStore, packagesStore, campaignsStore, groupsStore, hardwareStore, userStore, provisioningStore, featuresStore } = this.props;
         return (
-            <FadeAnimation 
-                display="flex">
+            <span>
                 <div className="wrapper-flex">
                     <Header 
                         title={title}
@@ -70,7 +70,20 @@ class Home extends Component {
                         />
                     </MetaData>
                 </div>
-            </FadeAnimation>
+                {Cookies.get('systemReady') == 1 ?
+                    null
+                :
+                    <PreparationContainer 
+                        devicesStore={devicesStore}
+                        userStore={userStore}
+                        provisioningStore={provisioningStore}
+                        featuresStore={featuresStore}
+                        systemPrepared={this.systemPrepared}
+                        setSystemPrepared={this.setSystemPrepared}
+                    />
+                }
+                
+            </span>
         );
     }
 }
@@ -84,7 +97,10 @@ Home.propTypes = {
     hardwareStore: PropTypes.object,
     groupsStore: PropTypes.object,
     packagesStore: PropTypes.object,
-    campaignsStore: PropTypes.object
+    campaignsStore: PropTypes.object,
+    userStore: PropTypes.object,
+    provisioningStore: PropTypes.object,
+    featuresStore: PropTypes.object,
 }
 
 export default Home;
