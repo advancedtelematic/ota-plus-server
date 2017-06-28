@@ -8,6 +8,7 @@ import ImpactAnalysisContainer from './ImpactAnalysis';
 import TreehubContainer from './Treehub';
 import ProvisioningContainer from './Provisioning';
 import NoMatchContainer from './NoMatch';
+import PreparationContainer from './Preparation';
 
 export {
     HomeContainer,
@@ -19,5 +20,6 @@ export {
     ImpactAnalysisContainer,
     TreehubContainer,
     ProvisioningContainer,
-    NoMatchContainer
+    NoMatchContainer,
+    PreparationContainer
 }

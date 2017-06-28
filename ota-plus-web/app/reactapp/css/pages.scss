@@ -2,6 +2,73 @@
     @include fullHeight;
     @include wrapperFlexDefault;
 
+    .preparation-container {
+        background: url('/assets/img/door.jpg') top center no-repeat;
+        background-size: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: o;
+        z-index: 9999;
+
+        &.door-open {
+            transform: translateY(-10000px);
+            -webkit-transition-duration: 5s;
+            transition-duration: 5s;
+        }
+
+        .wrapper-center {
+            display: flex!important;
+            color: white;
+            height: 100vh;
+
+            .title {
+                font-weight: 700;
+                font-size: 36px;
+                margin: 25px 0;
+            }
+
+            .sequence-list {
+                width: 60%;
+                margin: 50px auto;
+
+                li {
+                    margin: 10px;
+
+                    .stepnum {
+                        overflow: hidden;
+
+                        img {
+                            height: 30px;
+                            width: 30px;
+                            margin-right: 15px;
+                        }
+
+                        span {
+                            height: 30px;
+                            font-size: 15px;
+                        }
+                    }
+                }
+            }
+
+            .setting-up {
+                text-align: center;
+                margin: 25px 0;
+
+                .loader {
+                    display: inline-block;
+                    margin-right: 15px;
+                }
+                .text {
+                    display: inline-block;
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+
     .page-heading {
         .icon {
             background-image: url('/assets/img/icons/black/home.png');
