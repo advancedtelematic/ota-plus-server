@@ -9,19 +9,9 @@ class Welcome extends Component {
         super(props);
         this.acknowledgeWelcomePage = this.acknowledgeWelcomePage.bind(this);
     }
-    componentWillMount() {
-        this.props.provisioningStore.activateProvisioning();
-        this.props.featuresStore.activateTreehub();
-    }
     acknowledgeWelcomePage() {
         Cookies.set('welcomePageAcknowledged', 1);
-        
-        /* if user does not have treehub or provisioning activated */
-        if(this.props.location.search === '?features=false') {
-            this.context.router.push(`/`);
-        } else {
-            this.context.router.push(`/destiny`);
-        }
+        this.context.router.push(`/destiny`);
     }
     render() {
         const { devicesStore } = this.props;
