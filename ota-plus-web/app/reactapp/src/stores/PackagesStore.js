@@ -1128,6 +1128,32 @@ export default class PackagesStore {
         }
     }
 
+    _addTufPackage(data) {
+        let formattedData = {
+            description: '',
+            id: {
+                name: data.custom.name.value,
+                version: data.custom.version.value
+            },
+            isBlackListed: false,
+            inDirector: true,
+            namespace: data.namespace,
+            signature: null,
+            timestamp: null,
+            vendor: null
+        }
+        this.packages.push(formattedData);
+        switch (this.page) {
+            case 'device':
+                this._prepareDevicePackages();
+                break;
+            default:
+                this._preparePackages();
+                break;
+        }
+        this.overallPackagesCount++;
+    }
+
     _blacklistPackage(data) {
         var formattedData = {
             name: data.packageId.name,

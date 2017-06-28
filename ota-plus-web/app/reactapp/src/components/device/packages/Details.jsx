@@ -87,18 +87,26 @@ class Details extends Component {
 								<span className = "sub-title">Created at:</span>
 				        		<span className="value">{moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
 			        		</div>
-				            <div className="vendor">
-				            	<span className = "sub-title">Vendor:</span>
-				        		<span className="value">{version.vendor}</span>
-				            </div>
+			        		{!device.isDirector ?
+			        			<div className="vendor">
+					            	<span className = "sub-title">Vendor:</span>
+					        		<span className="value">{version.vendor}</span>
+					            </div>
+		        			:
+			        			null
+			        		}
 			        	</div>
-			        	<div className="comments">
-	        				<PackagesComment
-	        					version={version}
-	        					packagesStore={packagesStore}
-	        					key={version.uuid}
-			        		/>
-			        	</div>
+			        	{!device.isDirector ?
+				        	<div className="comments">
+		        				<PackagesComment
+		        					version={version}
+		        					packagesStore={packagesStore}
+		        					key={version.uuid}
+				        		/>
+				        	</div>
+			        	:
+			        		null 
+			        	}
 			        	<button className={"btn-blacklist blacklist" + (version.isBlackListed ? " package-blacklisted" : "")} id={"blacklist-button-" + version.id.version.substring(0,8)}
 			        		onClick={version.isBlackListed ? 
 			        			showPackageBlacklistModal.bind(this, version.id.name, version.id.version, 'edit')
