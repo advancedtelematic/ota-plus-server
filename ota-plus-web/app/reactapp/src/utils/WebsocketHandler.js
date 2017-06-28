@@ -29,6 +29,9 @@ const WebsocketHandler = (function (wsUrl, stores) {
                 case "PackageCreated":
                     stores.packagesStore._addPackage(data);
                     break;
+                case "TufTargetAdded":
+                    stores.packagesStore._addTufPackage(data);
+                    break;
                 case "PackageBlacklisted":
                     stores.packagesStore._blacklistPackage(data.id);
                     break;
