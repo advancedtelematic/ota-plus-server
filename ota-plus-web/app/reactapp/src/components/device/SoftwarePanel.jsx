@@ -43,26 +43,6 @@ class SoftwarePanel extends Component {
                     Software
                 </div>
                 <div className="wrapper-full">
-                    <SubHeader>
-                        <Form>
-                            <SearchBar 
-                                value={packagesStore.devicePackagesFilter}
-                                changeAction={this.changeFilter}
-                            />
-                        </Form>
-                        <div className="sort-box">
-                            {packagesStore.packagesSort == 'asc' ? 
-                                <a href="#" onClick={this.changeSort.bind(this, 'desc')} id="link-sort-packages-desc">
-                                    <i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z
-                                </a>
-                            :
-                                <a href="#" onClick={this.changeSort.bind(this, 'asc')} id="link-sort-packages-asc">
-                                    <i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A
-                                </a>
-                            }
-                        </div>
-                    </SubHeader>
-
                     <div className="wrapper-software">
                         {packagesStore.packagesFetchAsync.isFetching ?
                             <div className="wrapper-loader">
