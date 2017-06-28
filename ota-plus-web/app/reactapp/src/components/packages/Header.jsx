@@ -13,30 +13,12 @@ class Header extends Component {
         const { showCreateModal, packagesSort, changeSort, packagesFilter, changeFilter, changeType } = this.props;
         return (
             <SubHeader>
-                <Form>
-                    <SearchBar 
-                        value={packagesFilter}
-                        changeAction={changeFilter}
-                        id="search-packages-input"
-                    />
-                </Form>
                 <FlatButton
                     label="Add new package"
                     onClick={showCreateModal.bind(this, null)}
                     className="btn-main btn-small btn-add"
                     id="add-new-package"
                 />
-                <div className="sort-box">
-                    {packagesSort == 'asc' ? 
-                        <a href="#" onClick={changeSort.bind(this, 'desc')} id="link-sort-packages-desc">
-                            <i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z
-                        </a>
-                    :
-                        <a href="#" onClick={changeSort.bind(this, 'asc')} id="link-sort-packages-asc">
-                            <i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A
-                        </a>
-                    }
-                </div>
             </SubHeader>
         );
     }
