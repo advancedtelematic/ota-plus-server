@@ -67,27 +67,36 @@ class ListItemVersion extends Component {
         return (
             <li className={version.isBlackListed ? "blacklist" : ""}>
                 <div className="left-box">
-                    <input 
-                        className="input-comment" 
-                        name="comment" 
-                        value={this.commentTmp} 
-                        type="text" 
-                        placeholder="Comment here." 
-                        ref="comment" 
-                        onKeyUp={this.changeCommentFieldLength} 
-                        onChange={this.changeCommentFieldLength} 
-                        onFocus={this.enableEditField}/>
-                    {this.commentFieldLength > 0 && this.activeEditField ?
-                        <div className="action-buttons">
-                            <a href="#" className="cancel-button" onClick={this.disableEditField}>
-                                <img src="/assets/img/icons/close_icon.png" alt="" />
-                            </a>
-                            &nbsp;
-                            <a href="#" className="accept-button" onClick={this.handleSubmit}>
-                                <img src="/assets/img/icons/accept_icon.png" alt="" />
-                            </a>
-                        </div>
-                      : null}
+                {!version.inDirector ?
+                    <span>
+                        <input 
+                            className="input-comment" 
+                            name="comment" 
+                            value={this.commentTmp} 
+                            type="text" 
+                            placeholder="Comment here." 
+                            ref="comment" 
+                            onKeyUp={this.changeCommentFieldLength} 
+                            onChange={this.changeCommentFieldLength} 
+                            onFocus={this.enableEditField} />
+                            {this.commentFieldLength > 0 && this.activeEditField ?
+                                <div className="action-buttons">
+                                    <a href="#" className="cancel-button" onClick={this.disableEditField}>
+                                        <img src="/assets/img/icons/close_icon.png" alt="" />
+                                    </a>
+                                    &nbsp;
+                                    <a href="#" className="accept-button" onClick={this.handleSubmit}>
+                                        <img src="/assets/img/icons/accept_icon.png" alt="" />
+                                    </a>
+                                </div>
+                            : 
+                                ''
+                            }
+                        </span>
+                :
+                    null
+                }
+                    
                 </div>
                 <div className="right-box">
                     <span title={version.id.version} className="version-name">
