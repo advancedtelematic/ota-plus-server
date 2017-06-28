@@ -20,12 +20,16 @@ import {
     API_PACKAGES_DEVICE_AUTO_INSTALL,
     API_PACKAGES_DEVICE_INSTALL,
     API_PACKAGES_DEVICE_CANCEL_INSTALLATION,
+    API_CREATE_TUF_REPO,
+    API_CREATE_DIRECTOR_REPO
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import _ from 'underscore';
 
 export default class PackagesStore {
 
+    @observable directorRepoExistsFetchAsync = {};
+    @observable tufRepoExistsFetchAsync = {};
     @observable packagesFetchAsync = {};
     @observable packageStatisticsFetchAsync = {};
     @observable packagesCreateAsync = {};
@@ -85,6 +89,8 @@ export default class PackagesStore {
     @observable activeDeviceId = null;
 
     constructor() {
+        resetAsync(this.directorRepoExistsFetchAsync);
+        resetAsync(this.tufRepoExistsFetchAsync);
         resetAsync(this.packagesFetchAsync);
         resetAsync(this.packageStatisticsFetchAsync);
         resetAsync(this.packagesCreateAsync);
@@ -107,6 +113,28 @@ export default class PackagesStore {
         resetAsync(this.packagesDeviceDisableAutoInstallAsync);
         resetAsync(this.packagesDeviceInstallAsync);
         resetAsync(this.packagesDeviceCancelInstallationAsync);
+    }
+
+    fetchDirectorRepoExists() {
+        resetAsync(this.directorRepoExistsFetchAsync, true);
+        return axios.post(API_CREATE_DIRECTOR_REPO)
+            .then(function(response) {
+                this.directorRepoExistsFetchAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function(error) {
+                this.directorRepoExistsFetchAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
+    fetchTufRepoExists() {
+        resetAsync(this.tufRepoExistsFetchAsync, true);
+        return axios.post(API_CREATE_TUF_REPO)
+            .then(function(response) {
+                this.tufRepoExistsFetchAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function(error) {
+                this.tufRepoExistsFetchAsync = handleAsyncError(error);
+            }.bind(this));
     }
 
     fetchPackages(filter = this.packagesFilter) {
@@ -1043,6 +1071,8 @@ export default class PackagesStore {
     }
 
     _reset() {
+        resetAsync(this.directorRepoExistsFetchAsync);
+        resetAsync(this.tufRepoExistsFetchAsync);
         resetAsync(this.packagesFetchAsync);
         resetAsync(this.packagesCreateAsync);
         resetAsync(this.packagesTufCreateAsync);
