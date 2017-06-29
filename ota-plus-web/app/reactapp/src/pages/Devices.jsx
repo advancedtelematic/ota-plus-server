@@ -9,8 +9,8 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 const title = "Devices";
 
-@observer
 @DragDropContext(HTML5Backend)
+@observer
 class Devices extends Component {
     constructor(props) {
         super(props);
