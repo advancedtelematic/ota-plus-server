@@ -39,8 +39,10 @@ class CoreList extends Component {
     }
     componentWillMount() {
         if(this.props.device.isDirector) {
-            this.expandedPackageName = this.props.packagesStore.installedDirectorPackage.id.name;
-            this.selectedPackageVersion = this.props.packagesStore.installedDirectorPackage.id.version;
+            let hash = this.props.packageVersion.uuid;
+            let pack = this.props.packagesStore._getPackageByVersion(hash);
+            this.expandedPackageName = pack.packageId.name;
+            this.selectedPackageVersion = pack.packageId.version;
         }
     }
     componentDidMount() {
@@ -153,6 +155,12 @@ class CoreList extends Component {
                                     return version.attributes.status == 'installed';
                                 });
                                 installedPackage = foundInstalled ? foundInstalled.id.version : null;
+
+                                {_.map(pack.versions, (version, i) => {
+                                    if(device.isDirector && version.id.version === _.first(device.directorAttributes).image.hash.sha256) {
+                                        installedPackage = version.id.version;
+                                    }
+                                })}
 
                                 const foundBlacklistedAndInstalled = _.find(pack.versions, (version) => {
                                     return version.isBlackListed && version.attributes.status == 'installed';
