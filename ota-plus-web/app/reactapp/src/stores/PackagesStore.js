@@ -37,7 +37,6 @@ export default class PackagesStore {
     @observable packagesAffectedDevicesCountFetchAsync = {};
     @observable packagesForDeviceFetchAsync = {};
     @observable initialPackagesForDeviceFetchAsync = {};
-    @observable initialPackagesForDeviceFetchAsyncBeforePreparing = {};
     @observable packagesOndeviceFetchAsync = {};
     @observable packagesAutoInstalledForDeviceFetchAsync = {};
     @observable packagesDeviceQueueFetchAsync = {};
@@ -82,7 +81,6 @@ export default class PackagesStore {
     @observable ondevicePackagesLimit = 25;
     @observable ondeviceFilter = '';
     @observable activeDeviceId = null;
-    @observable installedDirectorPackage = {};
 
     constructor() {
         resetAsync(this.packagesFetchAsync);
@@ -97,7 +95,6 @@ export default class PackagesStore {
         resetAsync(this.packagesAffectedDevicesCountFetchAsync);
         resetAsync(this.packagesForDeviceFetchAsync);
         resetAsync(this.initialPackagesForDeviceFetchAsync);
-        resetAsync(this.initialPackagesForDeviceFetchAsyncBeforePreparing);
         resetAsync(this.packagesOndeviceFetchAsync);
         resetAsync(this.packagesAutoInstalledForDeviceFetchAsync);
         resetAsync(this.packagesDeviceQueueFetchAsync);
@@ -439,7 +436,6 @@ export default class PackagesStore {
 
     fetchInitialDevicePackages(id, filter = this.devicePackagesFilter) {
         resetAsync(this.initialPackagesForDeviceFetchAsync, true);
-        resetAsync(this.initialPackagesForDeviceFetchAsyncBeforePreparing, true);
         return axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages')
             .then(function(response) {
                 let totalPackagesCount = response.data.total;
@@ -451,7 +447,6 @@ export default class PackagesStore {
                         extendObservable(this.installedPackagesPerDevice, {
                             [id]: initialDevicePackages
                         });
-                        this.initialPackagesForDeviceFetchAsyncBeforePreparing = handleAsyncSuccess(response);
                         switch (this.page) {
                             case 'device':
                                 this._prepareDevicePackages();
@@ -473,14 +468,11 @@ export default class PackagesStore {
                 } else {
                     this.initialDevicePackages = [];
                     this.installedPackagesPerDevice[id] = [];
-                    this.initialPackagesForDeviceFetchAsyncBeforePreparing = handleAsyncSuccess(response);
                     this.initialPackagesForDeviceFetchAsync = handleAsyncSuccess(response);
                 }                
-                this.initialPackagesForDeviceFetchAsyncBeforePreparing = handleAsyncSuccess(response);
                 this.initialPackagesForDeviceFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
-                this.initialPackagesForDeviceFetchAsyncBeforePreparing = handleAsyncError(error);
                 this.initialPackagesForDeviceFetchAsync = handleAsyncError(error);
             }.bind(this));
     }
@@ -663,11 +655,6 @@ export default class PackagesStore {
         let found = _.find(this.packages, (pack) => {
             return pack.id.version === version;
         });
-
-        if(found && _.isEmpty(this.installedDirectorPackage)) {
-            this.installedDirectorPackage = found;
-            this.installedDirectorPackage.isInstalled = true;
-        }
 
         return found ? {
             checkSum: found.checkSum,
@@ -1040,7 +1027,6 @@ export default class PackagesStore {
         this.ondevicePackagesTotalCount = 0;
         this.ondeviceFilter = '';
         this.activeDeviceId = null;
-        this.installedDirectorPackage = {};
     }
 
     _resetWizard() {

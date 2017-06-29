@@ -43,7 +43,6 @@ class Device extends Component {
                     extendObservable(this.packageVersion, {
                         uuid: _.first(props.devicesStore.device.directorAttributes).image.hash.sha256,
                         isInstalled: true,
-                        initialState: true
                     });
                 }
             }
@@ -103,7 +102,6 @@ class Device extends Component {
         extendObservable(this.packageVersion, {
             uuid: versionUuid,
             isInstalled: version.attributes.status === 'installed',
-            initialState: false
         });
         let packageVersion = this.props.packagesStore._getPackageVersionByUuid(versionUuid);
         if(packageVersion.isBlacklisted) {
