@@ -47,8 +47,8 @@ class PropertiesPanel extends Component {
         this.shouldShowPackagesDetails = true;
     }
     render() {
-        const { showPackageCreateModal, showPackageBlacklistModal, onFileDrop, packagesStore, packageVersion, installPackage, device, togglePackageAutoUpdate, devicesStore } = this.props;
-        let attributesFetching = packagesStore.packagesForDeviceFetchAsync.isFetching || packagesStore.packagesDeviceQueueFetchAsync.isFetching || packagesStore.packagesAutoInstalledForDeviceFetchAsync.isFetching;
+        const { packagesStore, showPackageBlacklistModal, onFileDrop, togglePackageAutoUpdate, packageVersion, installPackage, device } = this.props;
+        let attributesFetching = packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesForDeviceFetchAsync.isFetching;
         return (
             <div className="properties-panel">
                 <div className="darkgrey-header">
@@ -91,22 +91,19 @@ class PropertiesPanel extends Component {
                             packagesStore.overallPackagesCount ?
                                 this.shouldShowPackagesDetails ?
                                     <PackagesDetails
+                                        packagesStore={packagesStore}
                                         packageVersion={packageVersion}
                                         showPackageBlacklistModal={showPackageBlacklistModal}
-                                        packagesStore={packagesStore}
-                                        devicesStore={devicesStore}
                                         installPackage={installPackage}
                                         device={device}
                                     />
                                 :
                                     <PropertiesOnDeviceList
+                                        packagesStore={packagesStore}
                                         packageVersion={packageVersion}
                                         device={device}
                                         showPackageBlacklistModal={showPackageBlacklistModal}
                                         onFileDrop={onFileDrop}
-                                        togglePackageAutoUpdate={togglePackageAutoUpdate}
-                                        installPackage={installPackage}
-                                        packagesStore={packagesStore}
                                     />
                             :
                                 null
@@ -125,12 +122,14 @@ class PropertiesPanel extends Component {
 }
 
 PropertiesPanel.propTypes = {
-    showPackageCreateModal: PropTypes.func.isRequired,
+    packagesStore: PropTypes.object.isRequired,
     showPackageBlacklistModal: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,
-    packagesStore: PropTypes.object.isRequired,
-    devicesStore: PropTypes.object.isRequired,
     packageVersion: PropTypes.object.isRequired,
+    togglePackageAutoUpdate: PropTypes.func.isRequired,
+    packageVersion: PropTypes.object.isRequired,
+    installPackage: PropTypes.func.isRequired,
+    device: PropTypes.object.isRequired,
 }
 
 export default PropertiesPanel;

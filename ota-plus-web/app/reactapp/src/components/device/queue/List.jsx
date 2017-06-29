@@ -12,7 +12,7 @@ class List extends Component {
     }
 
     render() {
-        const {cancelInstallation, packagesStore} = this.props;
+        const {packagesStore, cancelInstallation } = this.props;
         return (
             <div>
                 {packagesStore.packagesDeviceQueueFetchAsync.isFetching ?
@@ -46,7 +46,7 @@ class List extends Component {
     }
 }
 List.propTypes = {
-    cancelInstallation: PropTypes.func.isRequired,
-    packagesStore: PropTypes.object.isRequired
+    packagesStore: PropTypes.object.isRequired,
+    cancelInstallation: PropTypes.func.isRequired
 }
 export default List;

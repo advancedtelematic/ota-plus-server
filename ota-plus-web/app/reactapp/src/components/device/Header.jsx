@@ -13,7 +13,7 @@ class Header extends Component {
         window.history.go(-1);
     }
     render() {
-        const { devicesStore, packagesStore, showQueueModal } = this.props;
+        const { devicesStore, showQueueModal } = this.props;
         const { device } = devicesStore;
         const lastSeenDate = new Date(device.lastSeen);
         const createdDate = new Date(device.createdAt);
@@ -104,7 +104,7 @@ class Header extends Component {
 
 Header.propTypes = {
     devicesStore: PropTypes.object.isRequired,
-    showQueueModal: PropTypes.func.isRequired,
+    showQueueModal: PropTypes.func.isRequired
 }
 
 export default Header;

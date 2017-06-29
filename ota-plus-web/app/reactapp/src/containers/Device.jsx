@@ -44,8 +44,7 @@ class Device extends Component {
                 if(props.devicesStore.device.isDirector) {
                     extendObservable(this.packageVersion, {
                         uuid: _.first(props.devicesStore.device.directorAttributes).image.hash.sha256,
-                        isInstalled: true,
-                        initialState: true
+                        isInstalled: true
                     });
                 }
             }
@@ -108,8 +107,7 @@ class Device extends Component {
         if(e) e.preventDefault();
         extendObservable(this.packageVersion, {
             uuid: versionUuid,
-            isInstalled: version.attributes.status === 'installed',
-            initialState: false
+            isInstalled: version.attributes.status === 'installed'
         });
         let packageVersion = this.props.packagesStore._getPackageVersionByUuid(versionUuid);
         if(packageVersion.isBlacklisted) {
@@ -144,15 +142,13 @@ class Device extends Component {
                                 loadPackageVersionProperties={this.loadPackageVersionProperties}
                             />
                             <DevicePropertiesPanel
-                                showPackageCreateModal={this.showPackageCreateModal}
-                                showPackageBlacklistModal={this.showPackageBlacklistModal}
                                 packagesStore={packagesStore}
-                                devicesStore={devicesStore}
+                                showPackageBlacklistModal={this.showPackageBlacklistModal}
                                 onFileDrop={this.onFileDrop}
                                 togglePackageAutoUpdate={this.togglePackageAutoUpdate}
+                                packageVersion={this.packageVersion}
                                 installPackage={this.installPackage}
                                 device={device}
-                                packageVersion={this.packageVersion}
                             />
                         </span>
                     :
@@ -186,6 +182,7 @@ Device.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
+    showQueueModal: PropTypes.func.isRequired
 }
 
 export default Device;

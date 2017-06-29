@@ -22,8 +22,6 @@ class Devices extends Component {
         super(props);
         this.showTooltip = this.showTooltip.bind(this);
         this.hideTooltip = this.hideTooltip.bind(this);
-        this.showCreateModal = this.showCreateModal.bind(this);
-        this.hideCreateModal = this.hideCreateModal.bind(this);
         this.showRenameModal = this.showRenameModal.bind(this);
         this.hideRenameModal = this.hideRenameModal.bind(this);
         this.showCreateGroupModal = this.showCreateGroupModal.bind(this);
@@ -42,15 +40,6 @@ class Devices extends Component {
     hideTooltip(e) {
         if(e) e.preventDefault();
         this.tooltipShown = false;
-    }
-    showCreateModal(e) {
-        if(e) e.preventDefault();
-        this.createModalShown = true;
-    }
-    hideCreateModal(e) {
-        if(e) e.preventDefault();
-        this.createModalShown = false;
-        resetAsync(this.props.devicesStore.devicesCreateAsync);
     }
     showRenameModal(deviceId, e) {
         if(e) e.preventDefault();
@@ -153,12 +142,6 @@ class Devices extends Component {
                     shown={this.tooltipShown}
                     hide={this.hideTooltip}
                 />
-                <DevicesCreateModal 
-                    shown={this.createModalShown}
-                    hide={this.hideCreateModal}
-                    devicesStore={devicesStore}
-                    groupsStore={groupsStore}
-                />
                 <DevicesRenameModal 
                     shown={this.renameModalShown}
                     hide={this.hideRenameModal}
@@ -184,8 +167,8 @@ class Devices extends Component {
 }
 
 Devices.propTypes = {
-    devicesStore: PropTypes.object,
-    groupsStore: PropTypes.object
+    devicesStore: PropTypes.object.isRequired,
+    groupsStore: PropTypes.object.isRequired
 }
 
 export default Devices;

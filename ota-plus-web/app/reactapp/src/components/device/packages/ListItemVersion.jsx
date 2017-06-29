@@ -14,7 +14,7 @@ class ListItemVersion extends Component {
         this.props.togglePackageVersion(this.props.version.id.version);
     }
     render() {
-        const { packagesStore, device, version, queuedPackage, installedPackage, isAutoInstallEnabled, packageVersion, loadPackageVersionProperties, selectedPackageVersion } = this.props;
+        const { version, queuedPackage, installedPackage, packageVersion, loadPackageVersionProperties, selectedPackageVersion } = this.props;
         return (
             <li className={selectedPackageVersion === version.id.version ? "selected" : ""} id={version.uuid === packageVersion.uuid ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={this.handlePackageVersionClick}>
                 <div className="left-box">
@@ -56,7 +56,6 @@ class ListItemVersion extends Component {
 }
 
 ListItemVersion.propTypes = {
-    packagesStore: PropTypes.object.isRequired,
     version: PropTypes.object.isRequired,
     queuedPackage: PropTypes.string,
     installedPackage: PropTypes.string,
