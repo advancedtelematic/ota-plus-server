@@ -40,6 +40,7 @@ ListItem.propTypes = {
     pack: PropTypes.object.isRequired,
     togglePackage: PropTypes.func.isRequired,
     showStatsModal: PropTypes.func.isRequired,
+    showStatsButton: PropTypes.bool.isRequired,
 }
 
 export default ListItem;

@@ -27,7 +27,7 @@ class LastPackages extends Component {
         resetAsync(this.props.packagesStore.packagesCreateAsync);
     }
     render() {
-        const { packagesStore, toggleTufUpload, uploadToTuf, hardwareStore } = this.props;
+        const { packagesStore, hardwareStore, toggleTufUpload, uploadToTuf } = this.props;
         const { lastPackages } = packagesStore;
         return (
             <span>
@@ -71,7 +71,10 @@ class LastPackages extends Component {
 }
 
 LastPackages.propTypes = {
-    packagesStore: PropTypes.object
+    packagesStore: PropTypes.object.isRequired,
+    hardwareStore: PropTypes.object.isRequired,
+    toggleTufUpload: PropTypes.func.isRequired,
+    uploadToTuf: PropTypes.bool.isRequired
 }
 
 export default LastPackages;

@@ -21,7 +21,7 @@ class Home extends Component {
         this.uploadToTuf = !this.uploadToTuf;
     }
     render() {
-        const { devicesStore, packagesStore, campaignsStore, groupsStore, hardwareStore } = this.props;
+        const { devicesStore, hardwareStore, groupsStore, packagesStore, campaignsStore } = this.props;
         return (
             <span>
                 <div className="boxes-row">
@@ -88,9 +88,10 @@ class Home extends Component {
 
 Home.propTypes = {
     devicesStore: PropTypes.object.isRequired,
+    hardwareStore: PropTypes.object.isRequired,
+    groupsStore: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired,
-    campaignsStore: PropTypes.object.isRequired,
-    groupsStore: PropTypes.object.isRequired
+    campaignsStore: PropTypes.object.isRequired
 }
 
 export default Home;
