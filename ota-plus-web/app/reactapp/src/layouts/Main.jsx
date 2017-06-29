@@ -83,10 +83,8 @@ class Main extends Component {
         this.router = this.context.router;
         this.router.listen(this.locationHasChanged);
         this.userStore.fetchUser();
-        this.featuresStore.fetchFeatures();
         this.devicesStore.fetchInitialDevices();
         this.devicesStore.fetchDevices();
-        this.provisioningStore.fetchProvisioningStatus();
         this.websocketHandler.init();
     }
     locationHasChanged() {

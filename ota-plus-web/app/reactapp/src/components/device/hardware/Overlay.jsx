@@ -48,7 +48,9 @@ class Overlay extends Component {
 }
 
 Overlay.propTypes = {
-    hideDetails: PropTypes.func.isRequired
+    hardware: PropTypes.object.isRequired,
+    hideDetails: PropTypes.func.isRequired,
+    shown: PropTypes.bool.isRequired,
 }
 
 export default Overlay;

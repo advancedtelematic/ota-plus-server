@@ -81,10 +81,10 @@ class DraftCampaigns extends Component {
                 <CampaignsWizard 
                     shown={this.wizardShown}
                     hide={this.hideWizard}
+                    campaignId={this.campaignIdToAction}
                     campaignsStore={campaignsStore}
                     packagesStore={packagesStore}
                     groupsStore={groupsStore}
-                    campaignId={this.campaignIdToAction}
                 />
             </span>
         );
@@ -92,9 +92,9 @@ class DraftCampaigns extends Component {
 }
 
 DraftCampaigns.propTypes = {
-    campaignsStore: PropTypes.object,
-    packagesStore: PropTypes.object,
-    groupsStore: PropTypes.object
+    campaignsStore: PropTypes.object.isRequired,
+    packagesStore: PropTypes.object.isRequired,
+    groupsStore: PropTypes.object.isRequired
 }
 
 export default DraftCampaigns;
