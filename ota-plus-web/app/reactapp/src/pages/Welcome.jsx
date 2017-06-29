@@ -9,6 +9,10 @@ class Welcome extends Component {
         super(props);
         this.acknowledgeWelcomePage = this.acknowledgeWelcomePage.bind(this);
     }
+    componentWillMount() {
+        this.props.provisioningStore.activateProvisioning();
+        this.props.featuresStore.activateTreehub();
+    }
     acknowledgeWelcomePage() {
         Cookies.set('welcomePageAcknowledged', 1);
         this.context.router.push(`/destiny`);
