@@ -12,21 +12,6 @@ class SoftwarePanel extends Component {
         super(props);
         this.changeSort = this.changeSort.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
-
-        this.packagesChangeHandler = observe(props.packagesStore, (change) => {
-            if(change.name === 'initialPackagesForDeviceFetchAsyncBeforePreparing' && change.object[change.name].isFetching === false) {
-                if(this.props.device.isDirector) {
-                    let hash = _.first(this.props.device.directorAttributes).image.hash.sha256;
-                    let pack = this.props.packagesStore._getPackageByVersion(hash);
-                    if(!_.isUndefined(this.props.packagesStore.installedPackagesPerDevice[this.props.device.uuid])) {
-                        this.props.packagesStore.installedPackagesPerDevice[this.props.device.uuid].push(pack);
-                    }
-                }
-            }
-        });
-    }
-    componentWillUnmount() {
-        this.packagesChangeHandler();
     }
     changeSort(sort, e) {
         if(e) e.preventDefault();
@@ -78,7 +63,9 @@ class SoftwarePanel extends Component {
 }
 
 SoftwarePanel.propTypes = {
+    devicesStore: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired,
+    hardwareStore: PropTypes.object.isRequired,
     device: PropTypes.object.isRequired,
     togglePackageAutoUpdate: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,

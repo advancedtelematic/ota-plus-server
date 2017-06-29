@@ -83,7 +83,7 @@ class CreateModal extends Component {
         this.selectedHardwareIds = values;
     }
     render() {
-        const { shown, hide, packagesStore, fileDropped, toggleTufUpload, uploadToTuf } = this.props;
+        const { shown, hide, packagesStore, hardwareStore, toggleTufUpload, uploadToTuf, fileDropped } = this.props;
         const form = (
             <Form
                 onValid={this.enableButton.bind(this)}
@@ -153,7 +153,7 @@ class CreateModal extends Component {
                     <div className="row">
                         <div className="col-xs-6">
                             <div className="hardware-ids-select" id="hardware-ids-select">
-                                {this.props.hardwareStore.hardwareIdsFetchAsync.isFetching ?
+                                {hardwareStore.hardwareIdsFetchAsync.isFetching ?
                                     <Loader />
                                 :
                                     <SelectField
@@ -290,6 +290,9 @@ CreateModal.propTypes = {
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
     packagesStore: PropTypes.object.isRequired,
+    hardwareStore: PropTypes.object.isRequired,
+    toggleTufUpload: PropTypes.func.isRequired,
+    uploadToTuf: PropTypes.bool.isRequired,
     fileDropped: PropTypes.object
 }
 

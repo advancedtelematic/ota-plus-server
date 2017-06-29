@@ -16,7 +16,6 @@ class ListItem extends Component {
     }
     render() {
         const { request, updateLog, packagesStore } = this.props;
-        // request.cancelled= false;
         return (
             <li id={"history-entry-" + request.packageId.name}>
                 <div className="name" title={request.packageId.name}>

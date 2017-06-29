@@ -95,6 +95,7 @@ class Item extends Component {
 
 Item.propTypes = {
     groupsStore: PropTypes.object.isRequired,
+    devicesStore: PropTypes.object.isRequired,
     device: PropTypes.object.isRequired,
     width: PropTypes.number.isRequired,
     showRenameModal: PropTypes.func.isRequired,

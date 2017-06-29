@@ -9,11 +9,13 @@ import moment from 'moment';
 @observer
 class Details extends Component {
     render() {
-    	const { packageVersion, showPackageBlacklistModal, packagesStore, installPackage, device } = this.props;
+    	const { packagesStore, packageVersion, showPackageBlacklistModal, installPackage, device } = this.props;
 
     	let version = null;
-    	if(device.isDirector && packageVersion.initialState) {
-    		version = packagesStore.installedDirectorPackage;    		
+    	if(device.isDirector && packageVersion.uuid === _.first(device.directorAttributes).image.hash.sha256) {
+    		version = packagesStore._getPackageByVersion(packageVersion.uuid);
+    		version.id = version.packageId;
+    		delete version.packageId;  		
     	} else {
     		version = packagesStore._getPackageVersionByUuid(packageVersion.uuid);
     	}
@@ -156,9 +158,11 @@ class Details extends Component {
 }
 
 Details.propTypes = {
+    packagesStore: PropTypes.object.isRequired,
     packageVersion: PropTypes.object.isRequired,
-    packagesStore: PropTypes.object.isRequired
+    showPackageBlacklistModal: PropTypes.func.isRequired,
+    installPackage: PropTypes.func.isRequired,
+    device: PropTypes.object.isRequired,
 }
-
 
 export default Details;

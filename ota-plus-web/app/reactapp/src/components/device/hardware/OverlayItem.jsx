@@ -139,6 +139,12 @@ class OverlayItem extends Component {
     }
 }
 
-OverlayItem.propTypes = {}
+OverlayItem.propTypes = {
+    hardware: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.array,
+    ]),
+    mainLevel: PropTypes.bool.isRequired,
+}
 
 export default OverlayItem;

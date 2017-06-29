@@ -64,7 +64,8 @@ class Packages extends Component {
 }
 
 Packages.propTypes = {
-    packagesStore: PropTypes.object
+    packagesStore: PropTypes.object,
+    hardwareStore: PropTypes.object
 }
 
 export default translate()(Packages);

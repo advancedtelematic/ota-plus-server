@@ -48,6 +48,7 @@ class List extends Component {
     }
 }
 List.propTypes = {
-    packagesStore: PropTypes.object.isRequired
+    packagesStore: PropTypes.object.isRequired,
+    device: PropTypes.object.isRequired
 }
 export default List;

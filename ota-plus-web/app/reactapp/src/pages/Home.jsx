@@ -51,7 +51,7 @@ class Home extends Component {
         }
     }
     render() {
-        const { devicesStore, packagesStore, campaignsStore, groupsStore, hardwareStore } = this.props;
+        const { devicesStore, hardwareStore, groupsStore, packagesStore, campaignsStore } = this.props;
         return (
             <FadeAnimation 
                 display="flex">
@@ -81,9 +81,10 @@ Home.contextTypes = {
 
 Home.propTypes = {
     devicesStore: PropTypes.object,
+    hardwareStore: PropTypes.object,
+    groupsStore: PropTypes.object,
     packagesStore: PropTypes.object,
-    campaignsStore: PropTypes.object,
-    groupsStore: PropTypes.object
+    campaignsStore: PropTypes.object
 }
 
 export default Home;

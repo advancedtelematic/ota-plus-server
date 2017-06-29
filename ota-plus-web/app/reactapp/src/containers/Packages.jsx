@@ -121,7 +121,6 @@ class Packages extends Component {
                             />
                             <PackagesList 
                                 showBlacklistModal={this.showBlacklistModal}
-                                packagesSort={packagesStore.packagesSort}
                                 packagesStore={packagesStore}
                                 onFileDrop={this.onFileDrop}
                                 highlightedPackage={highlightedPackage}
@@ -182,7 +181,8 @@ class Packages extends Component {
 }
 
 Packages.propTypes = {
-    packagesStore: PropTypes.object,
+    packagesStore: PropTypes.object.isRequired,
+    hardwareStore: PropTypes.object.isRequired,
     highlightedPackage: PropTypes.string
 }
 
