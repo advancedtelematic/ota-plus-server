@@ -24,6 +24,7 @@ export default class DevicesStore {
     @observable devicesFetchAfterDragAndDropAsync = {};
     @observable devicesFetchAfterGroupCreationAsync = {};
     @observable devicesOneFetchAsync = {};
+    @observable devicesDirectorAttributesFetchAsync = {};
     @observable devicesCreateAsync = {};
     @observable devicesRenameAsync = {};
     @observable initialDevices = [];
@@ -52,6 +53,7 @@ export default class DevicesStore {
         resetAsync(this.devicesFetchAfterDragAndDropAsync);
         resetAsync(this.devicesFetchAfterGroupCreationAsync);
         resetAsync(this.devicesOneFetchAsync);
+        resetAsync(this.devicesDirectorAttributesFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
         this.devicesLimit = 30;
@@ -190,7 +192,7 @@ export default class DevicesStore {
     }
 
     fetchDevice(id, fetchTimes = null) {
-        resetAsync(this.devicesOneFetchAsync, true);
+       resetAsync(this.devicesOneFetchAsync, true);
        let that = this;
         return axios.all([
                 axios.get(API_DEVICES_DEVICE_DETAILS + '/' + id + '?status=true'),
@@ -210,6 +212,18 @@ export default class DevicesStore {
             }))
             .catch((error) => {
                 this.devicesOneFetchAsync = handleAsyncError(error);
+            });
+    }
+
+    fetchDirectorAttributes(id) {
+        resetAsync(this.devicesDirectorAttributesFetchAsync, true);
+        return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
+            .then((response) => {
+                this.device.directorAttributes = response.data;
+                this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
             });
     }
 
@@ -243,6 +257,7 @@ export default class DevicesStore {
         resetAsync(this.devicesFetchAfterDragAndDropAsync);
         resetAsync(this.devicesFetchAfterGroupCreationAsync);
         resetAsync(this.devicesOneFetchAsync);
+        resetAsync(this.devicesDirectorAttributesFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
         this.devices = [];
