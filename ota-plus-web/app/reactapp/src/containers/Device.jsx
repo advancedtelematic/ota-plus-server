@@ -24,6 +24,8 @@ class Device extends Component {
     @observable packageProperties = {};
     @observable packageVersion = { uuid: 1 };
     @observable uploadToTuf = false;
+    @observable activeEcu = 'raspberrypi3';
+    @observable multiTargetUpdateStarted = false;
 
     constructor(props) {
         super(props);
@@ -34,6 +36,7 @@ class Device extends Component {
         this.onFileDrop = this.onFileDrop.bind(this);
         this.togglePackageAutoUpdate = this.togglePackageAutoUpdate.bind(this);
         this.installPackage = this.installPackage.bind(this);
+        this.multiTargetUpdate = this.multiTargetUpdate.bind(this);
         this.cancelInstallation = this.cancelInstallation.bind(this);
         this.clearStepsHistory = this.clearStepsHistory.bind(this);
         this.loadPackageVersionProperties = this.loadPackageVersionProperties.bind(this);
@@ -95,6 +98,11 @@ class Device extends Component {
         this.props.packagesStore.installPackage(this.props.devicesStore.device.uuid, data);
         this.props.showQueueModal();
     }
+    multiTargetUpdate(data) {
+        data.hardwareId = this.activeEcu;
+        this.props.devicesStore.createMultiTargetUpdate(data, this.props.devicesStore.device.uuid);
+        this.props.showQueueModal();
+    }
     cancelInstallation(requestId) {
         this.props.packagesStore.cancelInstallation(this.props.devicesStore.device.uuid, requestId);
     }
@@ -129,6 +137,7 @@ class Device extends Component {
                             <DeviceHardwarePanel 
                                 hardwareStore={hardwareStore}
                                 device={device}
+                                activeEcu={this.activeEcu}
                             />
                             <DeviceSoftwarePanel
                                 devicesStore={devicesStore}
@@ -148,6 +157,7 @@ class Device extends Component {
                                 togglePackageAutoUpdate={this.togglePackageAutoUpdate}
                                 packageVersion={this.packageVersion}
                                 installPackage={this.installPackage}
+                                multiTargetUpdate={this.multiTargetUpdate}
                                 device={device}
                             />
                         </span>

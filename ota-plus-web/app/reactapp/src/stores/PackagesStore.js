@@ -150,11 +150,12 @@ export default class PackagesStore {
     _prepareDirectorPackages(directorPackages) {
         let versionedDirectorPackages = [];
         _.each(directorPackages, (versionObject, index) => {
-            _.each(versionObject, (version, ind) => {
+            _.each(versionObject, (version, imageName) => {
                 let packageName = version.custom.name.value;   
                 let packageHash = version.custom.version.value;
                 let formattedVersion = {
                     checkSum: packageHash,
+                    imageName: imageName,
                     createdAt: null,
                     description: packageHash,
                     id: {
@@ -719,6 +720,7 @@ export default class PackagesStore {
 
         return found ? {
             checkSum: found.checkSum,
+            imageName: found.imageName,
             createdAt: found.createdAt,
             description: found.description,
             packageId: {
