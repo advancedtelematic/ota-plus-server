@@ -9,7 +9,7 @@ class PrimaryEcu extends Component {
         super(props);
     }
     render() {
-        const { ecu, hardwareStore, showKey, showDetails, keyModalShown, hardware, shownIds, device, ...otherProps} = this.props;
+        const { active, ecu, hardwareStore, showKey, showDetails, keyModalShown, hardware, device, ...otherProps} = this.props;
         let dataId = 0;
         if(!_.isUndefined(hardware) && !_.isUndefined(hardware.id) && (!_.isUndefined(hardware.description) || !_.isUndefined(hardware.class))) {
             dataId = hardware['id-nr'];
@@ -22,7 +22,7 @@ class PrimaryEcu extends Component {
                 <a
                     href="#" 
                     data-id={dataId}
-                    className={"selected" + (shownIds.indexOf(dataId) > -1 ? " shown" : "")}
+                    className={active ? " selected" : ""}
                     id="hardware-primary-details"
                     onClick={e => e.preventDefault()}
                 >
@@ -74,7 +74,8 @@ class PrimaryEcu extends Component {
 }
 
 PrimaryEcu.propTypes = {
-    ecu: PropTypes.object.isRequired,
+    active: PropTypes.bool,
+    ecu: PropTypes.object,
     handleCopy: PropTypes.func,
     handleRequestClose: PropTypes.func,
     handleTouchTap: PropTypes.func,
