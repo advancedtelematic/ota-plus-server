@@ -133,9 +133,14 @@ class CoreList extends Component {
             _.map(packagesStore.preparedPackagesPerDevice[device.uuid], (packages, letter) => {
                 directorPackages[letter] = [];
                 _.map(packages, (pack, index) => {
-                    if(pack.inDirector && _.includes(pack.hardwareIds, _.first(device.directorAttributes).hardwareId)) {
+                    if(pack.inDirector && (_.includes(pack.hardwareIds, _.first(device.directorAttributes).hardwareId))) {
                         directorPackages[letter].push(pack);
                     }
+                    _.map(pack.versions, (version, ind) => {
+                        if(version.id.version === _.first(device.directorAttributes).image.hash.sha256) {
+                            directorPackages[letter].push(pack);
+                        }
+                    });
                 });
             });
             _.map(directorPackages, (pack, letter) => {
