@@ -42,6 +42,7 @@ class Device extends Component {
                 if(props.devicesStore.device.isDirector) {
                     extendObservable(this.packageVersion, {
                         uuid: _.first(props.devicesStore.device.directorAttributes).image.hash.sha256,
+                        version: _.first(props.devicesStore.device.directorAttributes).image.hash.sha256,
                         isInstalled: true,
                     });
                 }
@@ -101,7 +102,9 @@ class Device extends Component {
         if(e) e.preventDefault();
         extendObservable(this.packageVersion, {
             uuid: versionUuid,
-            isInstalled: version.attributes.status === 'installed',
+            version: version.id.version,
+            isInstalled: version.attributes.status === 'installed' || 
+                (this.props.devicesStore.device.isDirector && _.first(this.props.devicesStore.device.directorAttributes).image.hash.sha256 === version.id.version),
         });
         let packageVersion = this.props.packagesStore._getPackageVersionByUuid(versionUuid);
         if(packageVersion.isBlacklisted) {

@@ -12,8 +12,8 @@ class Details extends Component {
     	const { packageVersion, showPackageBlacklistModal, packagesStore, installPackage, device } = this.props;
 
     	let version = null;
-    	if(device.isDirector && packageVersion.uuid === _.first(device.directorAttributes).image.hash.sha256) {
-    		version = packagesStore._getPackageByVersion(packageVersion.uuid);
+    	if(device.isDirector && packageVersion.version === _.first(device.directorAttributes).image.hash.sha256) {
+    		version = packagesStore._getPackageByVersion(packageVersion.version);
     		version.id = version.packageId;
     		delete version.packageId;  		
     	} else {
