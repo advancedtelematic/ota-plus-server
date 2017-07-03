@@ -9,7 +9,7 @@ import moment from 'moment';
 @observer
 class Details extends Component {
     render() {
-    	const { packagesStore, packageVersion, showPackageBlacklistModal, installPackage, device } = this.props;
+    	const { packagesStore, packageVersion, showPackageBlacklistModal, installPackage, multiTargetUpdate, device } = this.props;
 
     	let version = null;
     	if(device.isDirector && packageVersion.uuid === _.first(device.directorAttributes).image.hash.sha256) {
@@ -134,17 +134,32 @@ class Details extends Component {
 			        		}
 			        	</button>
 
-			        	<div className="install">
-		                	<button 
-	                            className="btn-main btn-install"
-	                            label="Install"
-	                            title="Install"
-	                            id={"button-install-package-" + version.id.name + "-" + version.id.version}
-	                            onClick={installPackage.bind(this, {name: version.id.name, version: version.id.version})}
-	                            disabled={version.isBlackListed || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || version.isInstalled}>
-	                            Install
-	                        </button>
-			        	</div>
+			        	{device.isDirector ?
+		        			<div className="install multi-target">
+			                	<button 
+		                            className="btn-main btn-install"
+		                            label="Install"
+		                            title="Install"
+		                            id={"button-install-package-" + version.id.name + "-" + version.id.version}
+		                            onClick={multiTargetUpdate.bind(this, {target: version.imageName, hash: version.id.version})}
+		                            disabled={version.isBlackListed || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || version.isInstalled}>
+		                            Install
+		                        </button>
+				        	</div>
+		        		:
+		        			<div className="install">
+			                	<button 
+		                            className="btn-main btn-install"
+		                            label="Install"
+		                            title="Install"
+		                            id={"button-install-package-" + version.id.name + "-" + version.id.version}
+		                            onClick={installPackage.bind(this, {name: version.id.name, version: version.id.version})}
+		                            disabled={version.isBlackListed || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || version.isInstalled}>
+		                            Install
+		                        </button>
+				        	</div>
+			        	}
+			        	
 		        	</div>
     			:
 		        	<div className="wrapper-center absolute-position">
@@ -162,6 +177,7 @@ Details.propTypes = {
     packageVersion: PropTypes.object.isRequired,
     showPackageBlacklistModal: PropTypes.func.isRequired,
     installPackage: PropTypes.func.isRequired,
+    multiTargetUpdate: PropTypes.func.isRequired,
     device: PropTypes.object.isRequired,
 }
 

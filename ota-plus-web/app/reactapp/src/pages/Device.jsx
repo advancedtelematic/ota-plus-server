@@ -34,6 +34,7 @@ class Device extends Component {
         this.props.packagesStore.fetchDevicePackagesQueue(this.props.params.id);
         this.props.packagesStore.fetchDevicePackagesHistory(this.props.params.id);
         this.props.packagesStore.fetchDevicePackagesUpdatesLogs(this.props.params.id);
+        this.props.devicesStore.fetchMultiTargetUpdates(this.props.params.id);
     }
     componentWillUnmount() {
         this.props.devicesStore._reset();
@@ -74,6 +75,7 @@ class Device extends Component {
                     </MetaData>
                     <DeviceQueueModal
                         packagesStore={packagesStore}
+                        devicesStore={devicesStore}
                         shown={this.queueModalShown}
                         hide={this.hideQueueModal}
                         device={devicesStore.device}
