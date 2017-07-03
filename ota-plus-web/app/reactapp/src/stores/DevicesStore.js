@@ -6,7 +6,10 @@ import {
     API_DEVICES_DIRECTOR_DEVICE,
     API_DEVICES_CREATE,
     API_DEVICES_RENAME,
-    API_DEVICES_UPDATES_LOGS
+    API_DEVICES_UPDATES_LOGS,
+    API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
+    API_CREATE_MULTI_TARGET_UPDATE,
+    API_FETCH_MULTI_TARGET_UPDATES
 } from '../config';
 import {
     resetAsync,
@@ -26,6 +29,8 @@ export default class DevicesStore {
     @observable devicesOneFetchAsync = {};
     @observable devicesCreateAsync = {};
     @observable devicesRenameAsync = {};
+    @observable multiTargetUpdateCreateAsync = {};
+    @observable multiTargetUpdatesFetchAsync = {};
     @observable initialDevices = [];
     @observable devices = [];
     @observable devicesInitialTotalCount = null;
@@ -43,6 +48,7 @@ export default class DevicesStore {
     @observable onlineDevices = [];
     @observable stepsHistory = [];
     @observable deviceFetchTimes = {};
+    @observable multiTargetUpdates = {};
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
@@ -54,6 +60,8 @@ export default class DevicesStore {
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
+        resetAsync(this.multiTargetUpdateCreateAsync);
+        resetAsync(this.multiTargetUpdatesFetchAsync);
         this.devicesLimit = 30;
     }
 
@@ -63,6 +71,63 @@ export default class DevicesStore {
 
     clearStepsHistory() {
         this.stepsHistory = [];
+    }
+
+    createMultiTargetUpdate(data, id) {
+        let updateObject = this._prepareUpdateObject(data);
+        resetAsync(this.multiTargetUpdateCreateAsync, true);
+        return axios.post(API_GET_MULTI_TARGET_UPDATE_INDENTIFIER, updateObject)
+            .then((response) => {
+                let updateIdentifier = response.data;
+                let status = null;
+                if(updateIdentifier.length) {
+                    let after = _.after(status === 'success', () => {
+                        this.fetchMultiTargetUpdates(id);
+                        this.multiTargetUpdateCreateAsync = handleAsyncSuccess(response);
+                    }, this);
+                    axios.put(API_CREATE_MULTI_TARGET_UPDATE + '/' + id + '/multi_target_update/' + updateIdentifier)
+                        .then(function(multiTargetResponse) {
+                            status = 'success';
+                            after();
+                        })
+                        .catch(function() {
+                            status = 'error';
+                            after();
+                        });
+                }
+            })
+            .catch((error) => {
+                this.multiTargetUpdateCreateAsync = handleAsyncError(error);
+            });
+    }
+
+    fetchMultiTargetUpdates(id) {
+        resetAsync(this.multiTargetUpdatesFetchAsync, true);
+        return axios.get(API_FETCH_MULTI_TARGET_UPDATES + '/' + id + '/queue')
+            .then((response) => {
+                this.multiTargetUpdates[id] = response.data;
+                this.multiTargetUpdatesFetchAsync = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this.multiTargetUpdatesFetchAsync = handleAsyncError(error);
+            });
+    }
+
+    _prepareUpdateObject(data) {
+        return {
+            targets: {
+                [data.hardwareId]: {
+                    to: {
+                        target: data.target,
+                        checksum: {
+                            method: "sha256",
+                            hash: data.hash
+                        },
+                        targetLength: data.target.length
+                    }
+                }
+            }
+        }
     }
 
     fetchInitialDevices() {
@@ -248,6 +313,8 @@ export default class DevicesStore {
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
+        resetAsync(this.multiTargetUpdateCreateAsync);
+        resetAsync(this.multiTargetUpdatesFetchAsync);
         this.devices = [];
         this.initialDevices = [];
         this.devicesInitialTotalCount = null;
@@ -262,6 +329,7 @@ export default class DevicesStore {
         this.deviceHistory = [];
         this.deviceUpdatesLogs = [];
         this.stepsHistory = [];
+        this.multiTargetUpdates = {};
     }
 
     _getDevice(id) {

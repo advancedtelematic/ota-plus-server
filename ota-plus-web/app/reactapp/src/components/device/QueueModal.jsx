@@ -29,7 +29,7 @@ class QueueModal extends Component {
         super(props);
     }
     render() {
-        const { packagesStore, shown, hide, device, cancelInstallation, activeTabId, setQueueModalActiveTabId } = this.props;
+        const { packagesStore, devicesStore, shown, hide, device, cancelInstallation, activeTabId, setQueueModalActiveTabId } = this.props;
         const installationStatus = QueueModal.checkStatus(device.deviceStatus);
         const content = (
             <span>
@@ -48,7 +48,9 @@ class QueueModal extends Component {
                         <div className={"wrapper-list" + (activeTabId === 1 ? " hide" : "")}>
                             <QueueList 
                                 packagesStore={packagesStore}
+                                devicesStore={devicesStore}
                                 cancelInstallation={cancelInstallation}
+                                device={device}
                             />
                         </div>
                     </Tab>
@@ -91,6 +93,7 @@ class QueueModal extends Component {
 
 QueueModal.propTypes = {
     packagesStore: PropTypes.object.isRequired,
+    devicesStore: PropTypes.object.isRequired,
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
     device: PropTypes.object.isRequired,

@@ -14,7 +14,6 @@ class Hardware extends Component {
     @observable detailsIdShown = null;
     @observable keyModalShown = false;
     @observable secondaryDetailsShown = false;
-    @observable shownIds = [];
 
     constructor(props) {
         super(props);
@@ -53,7 +52,7 @@ class Hardware extends Component {
         this.keyModalShown = false;
     }
     render() {
-        const { hardwareStore, device } = this.props;
+        const { hardwareStore, device, activeEcu } = this.props;
         const hardware = hardwareStore.hardware[device.uuid];
         const primaryEcu = hardware;
         return (
@@ -69,13 +68,13 @@ class Hardware extends Component {
                             }}
                         >
                             <PrimaryEcu
+                                active={activeEcu === 'raspberrypi3'}
                                 ecu={primaryEcu}
                                 hardwareStore={hardwareStore}
                                 showKey={this.showKey}
                                 showDetails={this.showDetails}
                                 keyModalShown={this.keyModalShown}
                                 hardware={hardware}
-                                shownIds={this.shownIds}
                                 device={device}
                             />
                         </PopoverWrapper>
@@ -125,7 +124,8 @@ class Hardware extends Component {
 
 Hardware.propTypes = {
     hardwareStore: PropTypes.object.isRequired,
-    device: PropTypes.object.isRequired
+    device: PropTypes.object.isRequired,
+    activeEcu: PropTypes.string.isRequired,
 }
 
 export default Hardware;
