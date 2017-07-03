@@ -47,7 +47,7 @@ class PropertiesPanel extends Component {
         this.shouldShowPackagesDetails = true;
     }
     render() {
-        const { packagesStore, showPackageBlacklistModal, onFileDrop, togglePackageAutoUpdate, packageVersion, installPackage, multiTargetUpdate, device } = this.props;
+        const { showPackageCreateModal, showPackageBlacklistModal, onFileDrop, packagesStore, packageVersion, installPackage, multiTargetUpdate, device, togglePackageAutoUpdate, devicesStore } = this.props;
         let attributesFetching = packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesForDeviceFetchAsync.isFetching;
         return (
             <div className="properties-panel">

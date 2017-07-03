@@ -27,6 +27,7 @@ export default class DevicesStore {
     @observable devicesFetchAfterDragAndDropAsync = {};
     @observable devicesFetchAfterGroupCreationAsync = {};
     @observable devicesOneFetchAsync = {};
+    @observable devicesDirectorAttributesFetchAsync = {};
     @observable devicesCreateAsync = {};
     @observable devicesRenameAsync = {};
     @observable multiTargetUpdateCreateAsync = {};
@@ -58,6 +59,7 @@ export default class DevicesStore {
         resetAsync(this.devicesFetchAfterDragAndDropAsync);
         resetAsync(this.devicesFetchAfterGroupCreationAsync);
         resetAsync(this.devicesOneFetchAsync);
+        resetAsync(this.devicesDirectorAttributesFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
         resetAsync(this.multiTargetUpdateCreateAsync);
@@ -281,6 +283,18 @@ export default class DevicesStore {
             });
     }
 
+    fetchDirectorAttributes(id) {
+        resetAsync(this.devicesDirectorAttributesFetchAsync, true);
+        return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
+            .then((response) => {
+                this.device.directorAttributes = response.data;
+                this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
+            });
+    }
+
     createDevice(data) {
         resetAsync(this.devicesCreateAsync, true);
         return axios.post(API_DEVICES_CREATE, data)
@@ -311,6 +325,7 @@ export default class DevicesStore {
         resetAsync(this.devicesFetchAfterDragAndDropAsync);
         resetAsync(this.devicesFetchAfterGroupCreationAsync);
         resetAsync(this.devicesOneFetchAsync);
+        resetAsync(this.devicesDirectorAttributesFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
         resetAsync(this.multiTargetUpdateCreateAsync);
