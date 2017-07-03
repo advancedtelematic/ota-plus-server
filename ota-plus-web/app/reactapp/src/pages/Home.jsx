@@ -11,7 +11,6 @@ const title = "Home";
 @observer
 class Home extends Component {
     @observable router = null;
-    @observable systemPrepared = false;
 
     constructor(props) {
         super(props);
@@ -73,16 +72,14 @@ class Home extends Component {
                 {Cookies.get('systemReady') == 1 ?
                     null
                 :
-                    <PreparationContainer 
-                        devicesStore={devicesStore}
+                    <PreparationContainer
+                        packagesStore={packagesStore}
                         userStore={userStore}
                         provisioningStore={provisioningStore}
                         featuresStore={featuresStore}
-                        systemPrepared={this.systemPrepared}
-                        setSystemPrepared={this.setSystemPrepared}
                     />
                 }
-                
+
             </span>
         );
     }
