@@ -49,8 +49,7 @@ class Hardware extends Component {
         this.secondaryDetailsShown = false;
     }
 
-    hideDetails(e) {
-        if (e) e.preventDefault();
+    hideDetails() {
         this.detailsIdShown = null;
     }
 
