@@ -13,7 +13,7 @@ class Header extends Component {
         window.history.go(-1);
     }
     render() {
-        const { devicesStore, showQueueModal } = this.props;
+        const { devicesStore, showQueueModal, queueButtonRef } = this.props;
         const { device } = devicesStore;
         const lastSeenDate = new Date(device.lastSeen);
         const createdDate = new Date(device.createdAt);
@@ -50,7 +50,7 @@ class Header extends Component {
                 <FadeAnimation>
                     {!devicesStore.devicesOneFetchAsync.isFetching ?
                         <span className="pull-right">
-                            <button className="queue-button" id="queue-button" onClick={showQueueModal}>
+                            <button className="queue-button" id="queue-button" onClick={showQueueModal} ref={queueButtonRef}>
                                 <div className={"status status-" + device.deviceStatus} id={"status=" + device.deviceStatus}></div>
                             </button>
                             <div className="dates">
@@ -104,7 +104,8 @@ class Header extends Component {
 
 Header.propTypes = {
     devicesStore: PropTypes.object.isRequired,
-    showQueueModal: PropTypes.func.isRequired
+    showQueueModal: PropTypes.func.isRequired,
+    queueButtonRef: PropTypes.func.isRequired,
 }
 
 export default Header;
