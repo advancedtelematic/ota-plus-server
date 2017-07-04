@@ -90,6 +90,7 @@ class QueueModal extends Component {
                 useLayerForClickAway={false}
                 animated={false}
             >
+                <div className="triangle"></div>
                 <div className="content">
                     <div className="body">
                         {content}
