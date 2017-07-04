@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Tabs, Tab } from 'material-ui/Tabs';
+import { Popover } from 'material-ui';
 import { Modal } from '../../partials';
 import { QueueList } from './queue';
 import { HistoryList } from './history';
@@ -29,7 +30,7 @@ class QueueModal extends Component {
         super(props);
     }
     render() {
-        const { packagesStore, devicesStore, shown, hide, device, cancelInstallation, activeTabId, setQueueModalActiveTabId } = this.props;
+        const { packagesStore, devicesStore, shown, hide, device, cancelInstallation, activeTabId, setQueueModalActiveTabId, anchorEl } = this.props;
         const installationStatus = QueueModal.checkStatus(device.deviceStatus);
         const content = (
             <span>
@@ -70,7 +71,7 @@ class QueueModal extends Component {
                     </Tab>
                 </Tabs>
                 {installationStatus ?
-                    <div className={"installation-status " + installationStatus}>
+                    <div className={(activeTabId === 0) ? " queue installation-status " + installationStatus : " history installation-status " + installationStatus}>
                         Last installation status: {installationStatus}
                     </div>
                 :
@@ -79,14 +80,22 @@ class QueueModal extends Component {
             </span>
         );
         return (
-            <Modal 
-                title=""
-                content={content}
-                shown={shown}
+            <Popover
                 className="queue-modal"
-                hideOnClickOutside={true}
+                open={shown}
+                anchorEl={anchorEl}
+                anchorOrigin={{horizontal: 'right', vertical: 'center'}}
+                targetOrigin={{horizontal: 'left', vertical: 'center'}}
                 onRequestClose={hide}
-            />
+                useLayerForClickAway={false}
+                animated={false}
+            >
+                <div className="content">
+                    <div className="body">
+                        {content}
+                    </div>
+                </div>
+            </Popover>
         );
     }
 }
@@ -100,6 +109,7 @@ QueueModal.propTypes = {
     cancelInstallation: PropTypes.func.isRequired,
     activeTabId: PropTypes.number.isRequired,
     setQueueModalActiveTabId: PropTypes.func.isRequired,
+    anchorEl: PropTypes.object,
 }
 
 export default QueueModal;
