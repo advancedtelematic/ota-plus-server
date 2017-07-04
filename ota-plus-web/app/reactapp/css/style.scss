@@ -2289,7 +2289,6 @@ div[role=presentation] {
 
     ul {
         margin: 30px 0 0 0;
-
         li {
             line-height: 1.6em;
             text-align: left;
@@ -2325,9 +2324,25 @@ div[role=presentation] {
         margin: -5px 0 0 0;
     }
 }
-
+.triangle {
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-right: 25px solid #f7f7f7;
+    position: absolute;
+    left: -25px;
+    top: 172px;
+}
 .hardware-overlay-modal {
     padding-top: 0!important;
+    border-radius: 10px !important;
+    left: 20% !important;
+    top: 65px !important;
+    overflow-y: visible !important;
+    width: 70% !important;
+    max-width: 768px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 45px, rgba(0, 0, 0, 0.22) 0px 10px 18px!important;
 
     ::-webkit-scrollbar {
         width: 12px;
@@ -2344,10 +2359,10 @@ div[role=presentation] {
     }
 
     .content {
-        margin-left: 20%!important;
-
         & > div {
             border-radius: 10px!important;
+            overflow-y: hidden;
+            overflow-x: hidden;
 
             &:first-child {
                 background: #4b5151!important;
@@ -2355,16 +2370,20 @@ div[role=presentation] {
         }
 
         .heading {
-            width: 100px!important;
-            height: 90px!important;
-            margin: auto!important;
+            width: 70px!important;
+            height: 70px!important;
+            margin: 15px calc(50% - 50px) !important;
         }
 
         .body {
             background: #f7f7f7;
             border-radius: 10px;
             height: 756px!important;
-
+            overflow-y: auto;
+            overflow-x: hidden;
+            .details {
+                padding: 20px;
+            }
             .table>tbody>tr th, .table>tbody>tr td {
                 padding: 2px 15px;
                 border: 0;
@@ -2391,16 +2410,7 @@ div[role=presentation] {
                 margin: 20px 0;
             }
 
-            .triangle {
-                width: 0;
-                height: 0;
-                border-top: 15px solid transparent;
-                border-bottom: 15px solid transparent;
-                border-right: 25px solid #f7f7f7;
-                position: absolute;
-                left: -25px;
-                top: 172px;
-            }
+
         }
 
     }

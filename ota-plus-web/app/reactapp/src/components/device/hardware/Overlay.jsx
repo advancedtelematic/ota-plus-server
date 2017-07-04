@@ -2,8 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observer, observable } from 'mobx-react';
 import _ from 'underscore';
 import DeviceHardwareOverlayItem from './OverlayItem';
-import { Modal } from '../../../partials';
-
+import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
 @observer
 class Overlay extends Component {
     constructor(props) {
@@ -13,7 +12,7 @@ class Overlay extends Component {
         const { hardware, hideDetails, shown } = this.props;
         let content = null;
 
-        if(_.isEmpty(hardware)) {            
+        if(_.isEmpty(hardware)) {
             content = (
                 <div className="wrapper-center">
                     This device hasn’t reported any information about
@@ -23,9 +22,9 @@ class Overlay extends Component {
         } else {
             content = (
                 <div id="hardware-overlay">
-                    <div className="triangle"></div>
+
                     <div className="details">
-                        <DeviceHardwareOverlayItem 
+                        <DeviceHardwareOverlayItem
                             hardware={hardware}
                             mainLevel={true}
                         />
@@ -35,14 +34,26 @@ class Overlay extends Component {
         }
 
         return (
-            <Modal 
-                title={<img src="/assets/img/icons/chip.png" alt="" style={{width: '90px'}}/>}
-                content={content}
-                shown={shown}
-                className="hardware-overlay-modal"
-                hideOnClickOutside={true}
-                onRequestClose={hideDetails}
-            />
+                <Popover
+                    className="hardware-overlay-modal"
+                    open={shown}
+                    anchorEl={this.detailsIdShown}
+                    anchorOrigin={{horizontal: 'right', vertical: 'center'}}
+                    targetOrigin={{horizontal: 'left', vertical: 'center'}}
+                    onRequestClose={hideDetails}
+                    useLayerForClickAway={false}
+                    animation={PopoverAnimationVertical}
+                >
+                    <div className="triangle"></div>
+                    <div className="content">
+                        <div>
+                            <img src="/assets/img/icons/chip.png" className="heading" alt="" style={{width: '90px'}}/>
+                            <div className="body">
+                                {content}
+                            </div>
+                        </div>
+                    </div>
+                </Popover>
         );
     }
 }
