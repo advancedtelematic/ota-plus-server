@@ -13,6 +13,7 @@ const title = "Device";
 class Device extends Component {
     @observable queueModalShown = false;
     @observable activeTabId = 0;
+    anchorEl = null;
 
     constructor(props) {
         super(props);
@@ -63,6 +64,7 @@ class Device extends Component {
                     <DeviceHeader
                         devicesStore={devicesStore}
                         showQueueModal={this.showQueueModal}
+                        queueButtonRef={el => this.anchorEl = el}
                     />
                     <MetaData 
                         title={title}>
@@ -82,6 +84,7 @@ class Device extends Component {
                         cancelInstallation={this.cancelInstallation}
                         activeTabId={this.activeTabId}
                         setQueueModalActiveTabId={this.setQueueModalActiveTabId}
+                        anchorEl={this.anchorEl}
                     />
                 </div>
             </FadeAnimation>
