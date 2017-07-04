@@ -179,8 +179,16 @@ export default class PackagesStore {
         let versionedDirectorPackages = [];
         _.each(directorPackages, (versionObject, index) => {
             _.each(versionObject, (version, imageName) => {
-                let packageName = version.custom.name.value;   
-                let packageHash = version.custom.version.value;
+                let packageName = null;
+                let packageHash = null;
+                if(version.custom) {
+                    packageName = version.custom.name.value;   
+                    packageHash = version.custom.version.value;
+                } else {
+                    packageName = imageName;   
+                    packageHash = version.hashes.sha256;
+                }
+                
                 let formattedVersion = {
                     checkSum: packageHash,
                     imageName: imageName,
@@ -1147,11 +1155,20 @@ export default class PackagesStore {
     }
 
     _addTufPackage(data) {
+        let name = null;
+        let version = null;
+        if(data.custom) {
+            name = data.custom.name.value;
+            version = data.custom.version.value;
+        } else {
+            name = data.filename;
+            version = data.checksum.hash;
+        }
         let formattedData = {
             description: '',
             id: {
-                name: data.custom.name.value,
-                version: data.custom.version.value
+                name: name,
+                version: version
             },
             isBlackListed: false,
             inDirector: true,
