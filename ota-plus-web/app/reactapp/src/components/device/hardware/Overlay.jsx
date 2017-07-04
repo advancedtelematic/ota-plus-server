@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observer, observable } from 'mobx-react';
 import _ from 'underscore';
 import DeviceHardwareOverlayItem from './OverlayItem';
-import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
+import Popover from 'material-ui/Popover';
 @observer
 class Overlay extends Component {
     constructor(props) {
@@ -22,7 +22,6 @@ class Overlay extends Component {
         } else {
             content = (
                 <div id="hardware-overlay">
-
                     <div className="details">
                         <DeviceHardwareOverlayItem
                             hardware={hardware}
@@ -42,7 +41,7 @@ class Overlay extends Component {
                     targetOrigin={{horizontal: 'left', vertical: 'center'}}
                     onRequestClose={hideDetails}
                     useLayerForClickAway={false}
-                    animation={PopoverAnimationVertical}
+                    animated={false}
                 >
                     <div className="triangle"></div>
                     <div className="content">
