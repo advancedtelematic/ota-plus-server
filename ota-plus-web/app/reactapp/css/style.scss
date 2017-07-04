@@ -2373,7 +2373,10 @@ div[role=presentation] {
 
         .body {
             background: #f7f7f7;
-            border-radius: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 10px;
+            border-bottom-left-radius: 10px;
             height: 756px!important;
             overflow-y: auto;
             overflow-x: hidden;
@@ -2387,10 +2390,9 @@ div[role=presentation] {
 
             .details-header {
                 text-transform: capitalize;
-                width: 200px;
+                width: 100%;
                 padding-left: 20px;
                 padding-bottom: 10px;
-                margin-left: -20px;
                 margin-bottom: 10px;
                 border-bottom: 1px solid black;
             }
