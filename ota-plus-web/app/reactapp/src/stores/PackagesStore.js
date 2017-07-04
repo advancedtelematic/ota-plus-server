@@ -1038,6 +1038,8 @@ export default class PackagesStore {
 
     _addPackage(data) {
         data.isBlackListed = false;
+        data.id = data.packageId;
+        delete data.packageId;
         this.packages.push(data);
         switch (this.page) {
             case 'device':
