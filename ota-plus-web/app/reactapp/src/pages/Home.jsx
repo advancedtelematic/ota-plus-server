@@ -51,36 +51,36 @@ class Home extends Component {
         }
     }
     render() {
-        const { devicesStore, packagesStore, campaignsStore, groupsStore, hardwareStore, userStore, provisioningStore, featuresStore } = this.props;
+        const { devicesStore, packagesStore, campaignsStore, groupsStore, hardwareStore, userStore, provisioningStore, featuresStore, systemReady, setSystemReady } = this.props;
         return (
-            <span>
-                <div className="wrapper-flex">
-                    <Header 
-                        title={title}
-                    />
-                    <MetaData 
-                        title={title}>
-                        <HomeContainer
-                            devicesStore={devicesStore}
-                            packagesStore={packagesStore}
-                            campaignsStore={campaignsStore}
-                            groupsStore={groupsStore}
-                            hardwareStore={hardwareStore}
-                        />
-                    </MetaData>
-                </div>
-                {Cookies.get('systemReady') == 1 ?
-                    null
-                :
+            <FadeAnimation
+                display="flex">
+                {systemReady || Cookies.get('systemReady') == 1 ?
+                        <div className="wrapper-flex">
+                            <Header
+                                title={title}
+                            />
+                            <MetaData
+                                title={title}>
+                                <HomeContainer
+                                    devicesStore={devicesStore}
+                                    packagesStore={packagesStore}
+                                    campaignsStore={campaignsStore}
+                                    groupsStore={groupsStore}
+                                    hardwareStore={hardwareStore}
+                                />
+                            </MetaData>
+                        </div>
+                    :
                     <PreparationContainer
                         packagesStore={packagesStore}
                         userStore={userStore}
                         provisioningStore={provisioningStore}
                         featuresStore={featuresStore}
+                        setSystemReady={setSystemReady}
                     />
                 }
-
-            </span>
+            </FadeAnimation>
         );
     }
 }
@@ -98,6 +98,7 @@ Home.propTypes = {
     userStore: PropTypes.object,
     provisioningStore: PropTypes.object,
     featuresStore: PropTypes.object,
+
 }
 
 export default Home;

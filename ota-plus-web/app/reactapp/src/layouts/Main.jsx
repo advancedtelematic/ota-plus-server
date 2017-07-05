@@ -34,6 +34,7 @@ class Main extends Component {
     @observable initialDevicesCount = null;
     @observable onlineDevicesCount = null;
     @observable router = null;
+    @observable systemReady = false;
     @observable pagesWithRedirectToWelcome = ['page-welcome', 'page-destiny'];
     @observable pagesWithWhiteBackground = ['welcome', 'destiny', 'fireworks', 'device'];
 
@@ -47,6 +48,7 @@ class Main extends Component {
             return Promise.reject(error);
         });
         this.locationHasChanged = this.locationHasChanged.bind(this);
+        this.setSystemReady = this.setSystemReady.bind(this);
         this.makeBodyWhite = this.makeBodyWhite.bind(this);
         this.backButtonAction = this.backButtonAction.bind(this);
         this.devicesStore = new DevicesStore();
@@ -90,6 +92,9 @@ class Main extends Component {
     locationHasChanged() {
         this.makeBodyWhite();
     }
+    setSystemReady(value) {
+        this.systemReady = value;
+    }
     makeBodyWhite() {
         let pageName = this.props.location.pathname.toLowerCase().split('/')[1];
         if(_.includes(this.pagesWithWhiteBackground, pageName)) {
@@ -123,12 +128,14 @@ class Main extends Component {
                             devicesStore={this.devicesStore}
                             logoLink={logoLink}
                         />
-                    :
-                        <Navigation
-                            userStore={this.userStore}
-                            featuresStore={this.featuresStore}
-                            devicesStore={this.devicesStore}
-                        />
+                    : this.systemReady || Cookies.get('systemReady') == 1 ?
+                            <Navigation
+                                userStore={this.userStore}
+                                featuresStore={this.featuresStore}
+                                devicesStore={this.devicesStore}
+                            />
+                        :
+                            null
                     }
                     
                     <children.type
@@ -147,6 +154,8 @@ class Main extends Component {
                         onlineDevicesCount={this.onlineDevicesCount}
                         router={this.router}
                         backButtonAction={this.backButtonAction}
+                        systemReady={this.systemReady}
+                        setSystemReady={this.setSystemReady}
                     />
                 </FadeAnimation>
                 <SizeVerify 
@@ -156,9 +165,13 @@ class Main extends Component {
                 <UploadBox 
                     packagesStore={this.packagesStore}
                 />
-                <DoorAnimation
-                    mode="show"
-                />
+                {this.systemReady || Cookies.get('systemReady') == 1 ?
+                    <DoorAnimation
+                        mode="show"
+                    />
+                    :
+                null
+                }
                 {this.ifLogout ?
                     <DoorAnimation 
                         mode="hide"
