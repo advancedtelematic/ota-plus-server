@@ -9,7 +9,7 @@ import moment from 'moment';
 @observer
 class Details extends Component {
     render() {
-    	const { packagesStore, packageVersion, showPackageBlacklistModal, installPackage, multiTargetUpdate, device } = this.props;
+    	const { packagesStore, devicesStore, packageVersion, showPackageBlacklistModal, installPackage, multiTargetUpdate, device } = this.props;
 
     	let version = null;
     	if(device.isDirector && packageVersion.version === _.first(device.directorAttributes).image.hash.sha256) {
@@ -142,7 +142,7 @@ class Details extends Component {
 		                            title="Install"
 		                            id={"button-install-package-" + version.id.name + "-" + version.id.version}
 		                            onClick={multiTargetUpdate.bind(this, {target: version.imageName, hash: version.id.version})}
-		                            disabled={version.isBlackListed || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || version.isInstalled}>
+		                            disabled={version.isBlackListed || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || version.isInstalled || Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length}>
 		                            Install
 		                        </button>
 				        	</div>
@@ -174,6 +174,7 @@ class Details extends Component {
 
 Details.propTypes = {
     packagesStore: PropTypes.object.isRequired,
+    devicesStore: PropTypes.object.isRequired,
     packageVersion: PropTypes.object.isRequired,
     showPackageBlacklistModal: PropTypes.func.isRequired,
     installPackage: PropTypes.func.isRequired,

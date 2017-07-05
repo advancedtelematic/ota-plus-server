@@ -155,6 +155,7 @@ class Device extends Component {
                             />
                             <DevicePropertiesPanel
                                 packagesStore={packagesStore}
+                                devicesStore={devicesStore}
                                 showPackageBlacklistModal={this.showPackageBlacklistModal}
                                 onFileDrop={this.onFileDrop}
                                 togglePackageAutoUpdate={this.togglePackageAutoUpdate}
