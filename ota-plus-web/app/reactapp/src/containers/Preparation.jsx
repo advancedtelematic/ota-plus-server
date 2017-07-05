@@ -99,6 +99,7 @@ class Preparation extends Component {
         if (container && !_.includes(container.classList, 'door-open')) {
             container.className += " door-open";
             Cookies.set('systemReady', 1);
+            this.props.setSystemReady(true);
         }
     }
 
