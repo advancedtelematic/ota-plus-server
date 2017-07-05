@@ -41,8 +41,8 @@ class CoreList extends Component {
         if(this.props.device.isDirector) {
             let hash = this.props.packageVersion.uuid;
             let pack = this.props.packagesStore._getPackageByVersion(hash);
-            this.expandedPackageName = pack.packageId.name;
-            this.selectedPackageVersion = pack.packageId.version;
+            this.expandedPackageName = pack.id.name;
+            this.selectedPackageVersion = pack.id.version;
         }
     }
     componentDidMount() {
@@ -134,7 +134,7 @@ class CoreList extends Component {
                         directorPackages[letter].push(pack);
                     }
                     _.map(pack.versions, (version, ind) => {
-                        if(version.id.version === _.first(device.directorAttributes).image.hash.sha256) {
+                        if(version.id.version === device.directorAttributes.primary.image.hash.sha256) {
                             directorPackages[letter].push(pack);
                         }
                     });
@@ -184,6 +184,7 @@ class CoreList extends Component {
                                 const that = this;
                                 let queuedPackage = null;
                                 let installedPackage = null;
+                                let blacklistedPackage = null;
                                 let blacklistedAndInstalled = null;
                                 const foundQueued = _.find(pack.versions, (version) => {
                                     return version.attributes.status == 'queued';
@@ -196,7 +197,7 @@ class CoreList extends Component {
                                 installedPackage = foundInstalled ? foundInstalled.id.version : null;
 
                                 {_.map(pack.versions, (version, i) => {
-                                    if(device.isDirector && version.id.version === _.first(device.directorAttributes).image.hash.sha256) {
+                                    if(device.isDirector && version.id.version === device.directorAttributes.primary.image.hash.sha256) {
                                         installedPackage = version.id.version;
                                     }
                                 })}
@@ -272,6 +273,7 @@ class CoreList extends Component {
                                                 {_.map(pack.versions, (version, i) => {
                                                     return (
                                                         <ListItemVersion
+                                                            packagesStore={packagesStore}
                                                             version={version}
                                                             queuedPackage={queuedPackage}
                                                             installedPackage={installedPackage}
@@ -310,7 +312,7 @@ CoreList.propTypes = {
     togglePackageAutoUpdate: PropTypes.func.isRequired,
     packageVersion: PropTypes.object.isRequired,
     loadPackageVersionProperties: PropTypes.func.isRequired,
-    activeEcu: PropTypes.string.isRequired,
+    activeEcu: PropTypes.string,
 }
 
 export default CoreList;

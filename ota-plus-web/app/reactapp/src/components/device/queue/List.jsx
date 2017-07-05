@@ -23,19 +23,19 @@ class List extends Component {
                                 <Loader />
                             </div>
                         </ul>
-                        :
-                    Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length ?
-                        <ul className={"list queue" + (!Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length ? " empty" : "")}>
-                            {_.map(devicesStore.multiTargetUpdates[device.uuid], (item, index) => {
-                                return (
-                                    <MultiTargetItem
-                                        item={item}
-                                        cancelInstallation={cancelInstallation}
-                                        key={index}
-                                    />
-                                );
-                            })}
-                        </ul>
+                    :
+                        Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length ?
+                            <ul className={"list queue" + (!Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length ? " empty" : "")}>
+                                {_.map(devicesStore.multiTargetUpdates[device.uuid], (item, index) => {
+                                    return (
+                                        <MultiTargetItem
+                                            item={item}
+                                            cancelInstallation={cancelInstallation}
+                                            key={index}
+                                        />
+                                    );
+                                })}
+                            </ul>
                     :
                         <div className="queue-empty-center">
                             You haven't got any multi target updates pending. <br />
