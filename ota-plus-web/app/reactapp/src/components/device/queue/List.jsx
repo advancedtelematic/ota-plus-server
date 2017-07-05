@@ -18,28 +18,28 @@ class List extends Component {
             <div>
                 {device.isDirector ?
                     devicesStore.multiTargetUpdatesFetchAsync.isFetching ?
-                        <ul className={"list queue" + (!Object.keys(devicesStore.multiTargetUpdates).length ? " empty" : "")}>
+                        <ul className="list queue">
                             <div className="wrapper-loader">
                                 <Loader />
                             </div>
                         </ul>
                         :
-                        Object.keys(devicesStore.multiTargetUpdates).length ?
-                            <ul className={"list queue" + (!Object.keys(devicesStore.multiTargetUpdates).length ? " empty" : "")}>
-                                {_.map(devicesStore.multiTargetUpdates[device.uuid], (item, index) => {
-                                    return (
-                                        <MultiTargetItem
-                                            item={item}
-                                            cancelInstallation={cancelInstallation}
-                                            key={index}
-                                        />
-                                    );
-                                })}
-                            </ul>
-                            :
-                            <div className="queue-empty-center">
-                                You haven't got any multi target updates pending. <br />
-                            </div>
+                    Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length ?
+                        <ul className={"list queue" + (!Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length ? " empty" : "")}>
+                            {_.map(devicesStore.multiTargetUpdates[device.uuid], (item, index) => {
+                                return (
+                                    <MultiTargetItem
+                                        item={item}
+                                        cancelInstallation={cancelInstallation}
+                                        key={index}
+                                    />
+                                );
+                            })}
+                        </ul>
+                    :
+                        <div className="queue-empty-center">
+                            You haven't got any multi target updates pending. <br />
+                        </div>
                 :
                     packagesStore.packagesDeviceQueueFetchAsync.isFetching ?
                         <ul className={"list queue" + (!packagesStore.deviceQueue.length ? " empty" : "")}>

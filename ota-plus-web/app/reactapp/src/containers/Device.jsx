@@ -24,7 +24,7 @@ class Device extends Component {
     @observable packageProperties = {};
     @observable packageVersion = { uuid: 1 };
     @observable uploadToTuf = false;
-    @observable activeEcu = 'raspberrypi3';
+    @observable activeEcu = null;
     @observable multiTargetUpdateStarted = false;
 
     constructor(props) {
@@ -37,6 +37,7 @@ class Device extends Component {
         this.togglePackageAutoUpdate = this.togglePackageAutoUpdate.bind(this);
         this.installPackage = this.installPackage.bind(this);
         this.multiTargetUpdate = this.multiTargetUpdate.bind(this);
+        this.selectEcu = this.selectEcu.bind(this);
         this.cancelInstallation = this.cancelInstallation.bind(this);
         this.clearStepsHistory = this.clearStepsHistory.bind(this);
         this.loadPackageVersionProperties = this.loadPackageVersionProperties.bind(this);
@@ -104,6 +105,10 @@ class Device extends Component {
         this.props.devicesStore.createMultiTargetUpdate(data, this.props.devicesStore.device.uuid);
         this.props.showQueueModal();
     }
+    selectEcu(ecu, e) {
+        if(e) e.preventDefault();
+        this.activeEcu = ecu;
+    }
     cancelInstallation(requestId) {
         this.props.packagesStore.cancelInstallation(this.props.devicesStore.device.uuid, requestId);
     }
@@ -139,8 +144,9 @@ class Device extends Component {
                         <span>
                             <DeviceHardwarePanel 
                                 hardwareStore={hardwareStore}
-                                device={device}
+                                device={device}                                
                                 activeEcu={this.activeEcu}
+                                selectEcu={this.selectEcu}
                             />
                             <DeviceSoftwarePanel
                                 devicesStore={devicesStore}
@@ -152,6 +158,7 @@ class Device extends Component {
                                 onFileDrop={this.onFileDrop}
                                 packageVersion={this.packageVersion}
                                 loadPackageVersionProperties={this.loadPackageVersionProperties}
+                                activeEcu={this.activeEcu}
                             />
                             <DevicePropertiesPanel
                                 packagesStore={packagesStore}

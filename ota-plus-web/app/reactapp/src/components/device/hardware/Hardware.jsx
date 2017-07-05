@@ -12,7 +12,7 @@ import _ from 'underscore';
 
 @observer
 class Hardware extends Component {
-    @observable detailsIdShown = null;
+    @observable detailsIdShown = false;
     @observable keyModalShown = false;
     @observable secondaryDetailsShown = false;
 
@@ -25,11 +25,14 @@ class Hardware extends Component {
         this.hideDetails = this.hideDetails.bind(this);
         this.hideKey = this.hideKey.bind(this);
     }
+    componentWillMount() {
+        this.props.selectEcu(_.first(this.props.device.directorAttributes).hardwareId);
+    }
 
     showDetails(e) {
         e.preventDefault();
         e.stopPropagation();
-        this.detailsIdShown = e.target.dataset.id;
+        this.detailsIdShown = true;
     }
 
     showKey(e) {
@@ -50,7 +53,7 @@ class Hardware extends Component {
     }
 
     hideDetails() {
-        this.detailsIdShown = null;
+        this.detailsIdShown = false;
     }
 
     hideKey(e) {
@@ -59,7 +62,7 @@ class Hardware extends Component {
     }
 
     render() {
-        const { hardwareStore, device, activeEcu } = this.props;
+        const { hardwareStore, device, activeEcu, selectEcu } = this.props;
         const hardware = hardwareStore.hardware[device.uuid];
         const primaryEcu = hardware;
         const secondaryEcus = _.filter(device.directorAttributes, (item) => {
@@ -78,7 +81,7 @@ class Hardware extends Component {
                             }}
                         >
                             <PrimaryEcu
-                                active={activeEcu === 'raspberrypi3'}
+                                active={activeEcu === _.first(device.directorAttributes).hardwareId}
                                 ecu={primaryEcu}
                                 hardwareStore={hardwareStore}
                                 showKey={this.showKey}
@@ -86,6 +89,7 @@ class Hardware extends Component {
                                 keyModalShown={this.keyModalShown}
                                 hardware={hardware}
                                 device={device}
+                                selectEcu={selectEcu}
                             />
                         </PopoverWrapper>
                     </div>
@@ -108,6 +112,7 @@ class Hardware extends Component {
                                         key={index}
                                     >
                                         <SecondaryEcu
+                                            active={activeEcu === item.hardwareId}
                                             ecu={item}
                                             hardwareStore={hardwareStore}
                                             showKey={this.showKey}
@@ -116,7 +121,7 @@ class Hardware extends Component {
                                             hardware={hardware}
                                             shownIds={this.shownIds}
                                             device={device}
-
+                                            selectEcu={selectEcu}
                                         />
                                     </PopoverWrapper>
                                 );
@@ -135,7 +140,7 @@ class Hardware extends Component {
                             <HardwareOverlay
                                 hardware={hardware}
                                 hideDetails={this.hideDetails}
-                                shown={this.detailsIdShown ? true : false}
+                                shown={this.detailsIdShown}
                             />
                         </div>
                     </FadeAnimation>
@@ -164,7 +169,8 @@ class Hardware extends Component {
 Hardware.propTypes = {
     hardwareStore: PropTypes.object.isRequired,
     device: PropTypes.object.isRequired,
-    activeEcu: PropTypes.string.isRequired,
+    activeEcu: PropTypes.string,
+    selectEcu: PropTypes.func.isRequired,
 }
 
 export default Hardware;

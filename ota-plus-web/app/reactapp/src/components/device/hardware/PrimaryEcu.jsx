@@ -7,9 +7,9 @@ import _ from 'underscore';
 class PrimaryEcu extends Component {
     constructor(props) {
         super(props);
-    }
+    }    
     render() {
-        const { active, ecu, hardwareStore, showKey, showDetails, keyModalShown, hardware, device, ...otherProps} = this.props;
+        const { active, ecu, hardwareStore, showKey, showDetails, keyModalShown, hardware, device, selectEcu, ...otherProps} = this.props;
         let dataId = 0;
         if(!_.isUndefined(hardware) && !_.isUndefined(hardware.id) && (!_.isUndefined(hardware.description) || !_.isUndefined(hardware.class))) {
             dataId = hardware['id-nr'];
@@ -24,7 +24,7 @@ class PrimaryEcu extends Component {
                     data-id={dataId}
                     className={active ? " selected" : ""}
                     id="hardware-primary-details"
-                    onClick={e => e.preventDefault()}
+                    onClick={selectEcu.bind(this, _.first(device.directorAttributes).hardwareId)}
                 >
                     <div className="desc">
                         { device.isDirector ? 
@@ -81,6 +81,7 @@ PrimaryEcu.propTypes = {
     handleTouchTap: PropTypes.func,
     popoverShown: PropTypes.bool,
     copied: PropTypes.bool,
+    selectEcu: PropTypes.func,
 };
 
 export default PrimaryEcu;
