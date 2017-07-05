@@ -9,18 +9,19 @@ class SecondaryEcu extends Component {
         super(props);
     }
     render() {
-        const { ecu, hardwareStore, showKey, showDetails, keyModalShown, hardware, shownIds, device, ...otherProps} = this.props;
+        const { active, ecu, hardwareStore, showKey, showDetails, keyModalShown, hardware, shownIds, device, selectEcu, ...otherProps} = this.props;
         return (
             <span>
                 <a
                     href="#"
                     id="hardware-primary-details"
-                    onClick={e => e.preventDefault()}
+                    className={active ? " selected" : ""}
+                    onClick={selectEcu.bind(this, ecu.hardwareId)}
                 >
                     <div className="desc">
                         <span>
-                            Serial: <span id="hardware-serial-value">{_.first(device.directorAttributes).id}</span> <br />
-                            Hardware ID: <span id="hardware-id-value">{_.first(device.directorAttributes).hardwareId}</span>
+                            Serial: <span id="hardware-serial-value">{ecu.id}</span> <br />
+                            Hardware ID: <span id="hardware-id-value">{ecu.hardwareId}</span>
                         </span>
                     </div>
                     <div className="icons">
@@ -47,12 +48,14 @@ class SecondaryEcu extends Component {
 }
 
 SecondaryEcu.propTypes = {
+    active: PropTypes.bool,
     ecu: PropTypes.object.isRequired,
     handleCopy: PropTypes.func,
     handleRequestClose: PropTypes.func,
     handleTouchTap: PropTypes.func,
     popoverShown: PropTypes.bool,
     copied: PropTypes.bool,
+    selectEcu: PropTypes.func,
 };
 
 export default SecondaryEcu;
