@@ -123,17 +123,14 @@ class CoreList extends Component {
         this.tmpIntervalId = null;
     }
     render() {
-        const { packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, packageVersion, loadPackageVersionProperties } = this.props;
-        let packageIndex = -1;
-
+        const { packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, packageVersion, loadPackageVersionProperties, activeEcu } = this.props;
         let preparedPackages = packagesStore.preparedPackagesPerDevice[device.uuid];
-
         if(this.props.device.isDirector) {
             let directorPackages = {};
             _.map(packagesStore.preparedPackagesPerDevice[device.uuid], (packages, letter) => {
                 directorPackages[letter] = [];
                 _.map(packages, (pack, index) => {
-                    if(pack.inDirector && (_.includes(pack.hardwareIds, _.first(device.directorAttributes).hardwareId))) {
+                    if(pack.inDirector && _.includes(pack.hardwareIds, activeEcu)) {
                         directorPackages[letter].push(pack);
                     }
                     _.map(pack.versions, (version, ind) => {
@@ -185,7 +182,6 @@ class CoreList extends Component {
                         <div className="header">{letter}</div>
                             {_.map(packages, (pack, index) => {
                                 const that = this;
-                                packageIndex++;
                                 let queuedPackage = null;
                                 let installedPackage = null;
                                 let blacklistedAndInstalled = null;
@@ -210,96 +206,91 @@ class CoreList extends Component {
                                 });
                                 blacklistedAndInstalled = foundBlacklistedAndInstalled ? foundBlacklistedAndInstalled.id.version : null;
 
-                                if(packageIndex >= this.firstShownIndex && packageIndex <= this.lastShownIndex || this.expandedPackageName === pack.packageName) {
-                                    return (
-                                        <span key={index}>
-                                        <ListItem
-                                            pack={pack}
-                                            deviceId={device.uuid}
-                                            queuedPackage={queuedPackage}
-                                            installedPackage={installedPackage}
-                                            blacklistedAndInstalled={blacklistedAndInstalled}
-                                            isSelected={this.expandedPackageName === pack.packageName}
-                                            togglePackage={this.togglePackage}
-                                            toggleAutoInstall={togglePackageAutoUpdate}
-                                        />
-                                        <VelocityTransitionGroup
-                                            enter={{
-                                                animation: "slideDown",
-                                                begin: () => {
-                                                    that.startIntervalListScroll()
-                                                },
-                                                complete: () => {
-                                                    that.stopIntervalListScroll()
-                                                }
-                                            }}
-                                            leave={{
-                                                animation: "slideUp",
-                                                begin: () => {
-                                                    that.startIntervalListScroll()
-                                                },
-                                                complete: () => {
-                                                    that.stopIntervalListScroll()
-                                                }
-                                            }}>
-                                            {this.expandedPackageName === pack.packageName ?
-                                                <ul className="versions">
-                                                    <VelocityTransitionGroup
-                                                        enter={{
-                                                            animation: "slideDown",
-                                                            begin: () => {
-                                                                that.startIntervalListScroll()
-                                                            },
-                                                            complete: () => {
-                                                                that.stopIntervalListScroll()
-                                                            }
-                                                        }}
-                                                        leave={{
-                                                            animation: "slideUp",
-                                                            begin: () => {
-                                                                that.startIntervalListScroll()
-                                                            },
-                                                            complete: () => {
-                                                                that.stopIntervalListScroll()
-                                                            }
-                                                        }}>
-                                                        {pack.isAutoInstallEnabled ?
-                                                            <div className="info-auto-update">
-                                                                Automatic update activated. The latest
-                                                                version of this package will
-                                                                automatically be installed on this
-                                                                device.
-                                                            </div>
-                                                            :
-                                                            null
-                                                        }
-                                                    </VelocityTransitionGroup>
-                                                    {_.map(pack.versions, (version, i) => {
-                                                        return (
-                                                            <ListItemVersion
-                                                                version={version}
-                                                                queuedPackage={queuedPackage}
-                                                                installedPackage={installedPackage}
-                                                                packageVersion={packageVersion}
-                                                                loadPackageVersionProperties={loadPackageVersionProperties}
-                                                                togglePackageVersion={this.togglePackageVersion}
-                                                                selectedPackageVersion={this.selectedPackageVersion}
-                                                                key={i}
-                                                            />
-                                                        );
-                                                    })}
-                                                </ul>
-                                                :
-                                                null
+                                return (
+                                    <span key={index}>
+                                    <ListItem
+                                        pack={pack}
+                                        deviceId={device.uuid}
+                                        queuedPackage={queuedPackage}
+                                        installedPackage={installedPackage}
+                                        blacklistedAndInstalled={blacklistedAndInstalled}
+                                        isSelected={this.expandedPackageName === pack.packageName}
+                                        togglePackage={this.togglePackage}
+                                        toggleAutoInstall={togglePackageAutoUpdate}
+                                    />
+                                    <VelocityTransitionGroup
+                                        enter={{
+                                            animation: "slideDown",
+                                            begin: () => {
+                                                that.startIntervalListScroll()
+                                            },
+                                            complete: () => {
+                                                that.stopIntervalListScroll()
                                             }
-                                        </VelocityTransitionGroup>
-                                    </span>
-                                    );
-                                } else {
-                                    return (
-                                        <div className="item" key={index}></div>
-                                    );
-                                }
+                                        }}
+                                        leave={{
+                                            animation: "slideUp",
+                                            begin: () => {
+                                                that.startIntervalListScroll()
+                                            },
+                                            complete: () => {
+                                                that.stopIntervalListScroll()
+                                            }
+                                        }}>
+                                        {this.expandedPackageName === pack.packageName ?
+                                            <ul className="versions">
+                                                <VelocityTransitionGroup
+                                                    enter={{
+                                                        animation: "slideDown",
+                                                        begin: () => {
+                                                            that.startIntervalListScroll()
+                                                        },
+                                                        complete: () => {
+                                                            that.stopIntervalListScroll()
+                                                        }
+                                                    }}
+                                                    leave={{
+                                                        animation: "slideUp",
+                                                        begin: () => {
+                                                            that.startIntervalListScroll()
+                                                        },
+                                                        complete: () => {
+                                                            that.stopIntervalListScroll()
+                                                        }
+                                                    }}>
+                                                    {pack.isAutoInstallEnabled ?
+                                                        <div className="info-auto-update">
+                                                            Automatic update activated. The latest
+                                                            version of this package will
+                                                            automatically be installed on this
+                                                            device.
+                                                        </div>
+                                                        :
+                                                        null
+                                                    }
+                                                </VelocityTransitionGroup>
+                                                {_.map(pack.versions, (version, i) => {
+                                                    return (
+                                                        <ListItemVersion
+                                                            version={version}
+                                                            queuedPackage={queuedPackage}
+                                                            installedPackage={installedPackage}
+                                                            packageVersion={packageVersion}
+                                                            loadPackageVersionProperties={loadPackageVersionProperties}
+                                                            togglePackageVersion={this.togglePackageVersion}
+                                                            selectedPackageVersion={this.selectedPackageVersion}
+                                                            key={i}
+                                                        />
+                                                    );
+                                                })}
+                                            </ul>
+                                            :
+                                            null
+                                        }
+                                    </VelocityTransitionGroup>
+                                </span>
+                                );
+                                
                             })}
                     </span>
                         );
@@ -319,6 +310,7 @@ CoreList.propTypes = {
     togglePackageAutoUpdate: PropTypes.func.isRequired,
     packageVersion: PropTypes.object.isRequired,
     loadPackageVersionProperties: PropTypes.func.isRequired,
+    activeEcu: PropTypes.string.isRequired,
 }
 
 export default CoreList;
