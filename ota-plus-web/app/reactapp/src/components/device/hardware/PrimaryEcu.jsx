@@ -9,7 +9,7 @@ class PrimaryEcu extends Component {
         super(props);
     }    
     render() {
-        const { active, ecu, hardwareStore, showKey, showDetails, keyModalShown, hardware, device, selectEcu, ...otherProps} = this.props;
+        const { active, hardwareStore, showKey, showDetails, keyModalShown, hardware, device, selectEcu, ...otherProps} = this.props;
         let dataId = 0;
         if(!_.isUndefined(hardware) && !_.isUndefined(hardware.id) && (!_.isUndefined(hardware.description) || !_.isUndefined(hardware.class))) {
             dataId = hardware['id-nr'];
@@ -24,13 +24,13 @@ class PrimaryEcu extends Component {
                     data-id={dataId}
                     className={active ? " selected" : ""}
                     id="hardware-primary-details"
-                    onClick={selectEcu.bind(this, _.first(device.directorAttributes).hardwareId)}
+                    onClick={device.isDirector ? selectEcu.bind(this, device.directorAttributes.primary.hardwareId) : e => e.preventDefault()}
                 >
                     <div className="desc">
                         { device.isDirector ? 
                             <span>
-                                Serial: <span id="hardware-serial-value">{_.first(device.directorAttributes).id}</span> <br />
-                                Hardware ID: <span id="hardware-id-value">{_.first(device.directorAttributes).hardwareId}</span>
+                                Serial: <span id="hardware-serial-value">{device.directorAttributes.primary.id}</span> <br />
+                                Hardware ID: <span id="hardware-id-value">{device.directorAttributes.primary.hardwareId}</span>
                             </span>
                         :
                             <span>
@@ -62,7 +62,6 @@ class PrimaryEcu extends Component {
                 {keyModalShown ? 
                     <PublicKeyPopover
                         {...otherProps}
-                        ecu={ecu}
                         hardwareStore={hardwareStore}
                     />
                 :
@@ -75,7 +74,6 @@ class PrimaryEcu extends Component {
 
 PrimaryEcu.propTypes = {
     active: PropTypes.bool,
-    ecu: PropTypes.object,
     handleCopy: PropTypes.func,
     handleRequestClose: PropTypes.func,
     handleTouchTap: PropTypes.func,

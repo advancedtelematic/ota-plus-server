@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import moment from 'moment';
+import _ from 'underscore';
 
 @observer
 class ListItemVersion extends Component {
@@ -13,8 +14,15 @@ class ListItemVersion extends Component {
         this.props.loadPackageVersionProperties(this.props.version);
         this.props.togglePackageVersion(this.props.version.id.version);
     }
+    isPackageBlacklisted(version) {
+        let isPackageBlacklisted = _.find(this.props.packagesStore.blacklist, (dev) => {
+            return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
+        });
+        return isPackageBlacklisted ? isPackageBlacklisted : false;
+    }
     render() {
         const { version, queuedPackage, installedPackage, packageVersion, loadPackageVersionProperties, selectedPackageVersion } = this.props;
+        let blacklistedPackage = this.isPackageBlacklisted(version);
         return (
             <li className={selectedPackageVersion === version.id.version ? "selected" : ""} id={version.uuid === packageVersion.uuid ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={this.handlePackageVersionClick}>
                 <div className="left-box">
@@ -27,12 +35,12 @@ class ListItemVersion extends Component {
                       </div>
                 </div>
                 <div className="right-box">
-                    {version.isBlackListed && version.id.version === installedPackage ?
+                    {blacklistedPackage && version.id.version === installedPackage ?
                         <span className="blacklisted-installed" id={"image-blacklisted-and-installed-" + version.id.version.substring(0,8)}>
                             <img src="/assets/img/icons/red_cross.png" alt="" />
                         </span>
                     :
-                        version.isBlackListed ?
+                        blacklistedPackage ?
                             <span className="blacklisted" id={"image-blacklisted-" + version.id.version.substring(0,8)}>
                                 <img src="/assets/img/icons/ban_red.png" alt="" />
                             </span>
@@ -56,6 +64,7 @@ class ListItemVersion extends Component {
 }
 
 ListItemVersion.propTypes = {
+    packagesStore: PropTypes.object.isRequired,
     version: PropTypes.object.isRequired,
     queuedPackage: PropTypes.string,
     installedPackage: PropTypes.string,

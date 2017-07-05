@@ -26,7 +26,9 @@ class Hardware extends Component {
         this.hideKey = this.hideKey.bind(this);
     }
     componentWillMount() {
-        this.props.selectEcu(_.first(this.props.device.directorAttributes).hardwareId);
+        if(this.props.device.isDirector) {
+            this.props.selectEcu(this.props.device.directorAttributes.primary.hardwareId);
+        }
     }
 
     showDetails(e) {
@@ -64,25 +66,26 @@ class Hardware extends Component {
     render() {
         const { hardwareStore, device, activeEcu, selectEcu } = this.props;
         const hardware = hardwareStore.hardware[device.uuid];
-        const primaryEcu = hardware;
-        const secondaryEcus = _.filter(device.directorAttributes, (item) => {
-            return item.primary === false;
-        });
+
+        let active = true;
+        if(device.isDirector) {
+            active = activeEcu === device.directorAttributes.primary.hardwareId;
+        }
+
         return (
             <span>
                 <div className="hardware-list">
                     <div className="primary-ecus">
                         <PopoverWrapper
                             onOpen={() => {
-                                hardwareStore.fetchPublicKey(device.uuid, _.first(device.directorAttributes).id);
+                                hardwareStore.fetchPublicKey(device.uuid, device.directorAttributes.primary.id);
                             }}
                             onClose={() => {
                                 hardwareStore._resetPublicKey();
                             }}
                         >
                             <PrimaryEcu
-                                active={activeEcu === _.first(device.directorAttributes).hardwareId}
-                                ecu={primaryEcu}
+                                active={active}
                                 hardwareStore={hardwareStore}
                                 showKey={this.showKey}
                                 showDetails={this.showDetails}
@@ -99,8 +102,8 @@ class Hardware extends Component {
                             <img src="/assets/img/icons/questionmark.png" alt="" className="hardware-secondary-details" onClick={this.showSecondaryDetails} id="hardware-secondary-ecu-details" />
                         </div>
 
-                        {device.isDirector && !_.isEmpty(secondaryEcus) ?
-                            _.map(secondaryEcus, (item, index) => {
+                        {device.isDirector && !_.isEmpty(device.directorAttributes.secondary) ?
+                            _.map(device.directorAttributes.secondary, (item, index) => {
                                 return (
                                     <PopoverWrapper
                                         onOpen={() => {

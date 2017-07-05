@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import _ from 'underscore';
 
 @observer
 class ListItemVersion extends Component {
@@ -62,10 +63,17 @@ class ListItemVersion extends Component {
     openBlacklistModal(mode, e) {
         this.props.showBlacklistModal(this.props.version.id.name, this.props.version.id.version, mode);
     }
+    isPackageBlacklisted(version) {
+        let isPackageBlacklisted = _.find(this.props.packagesStore.blacklist, (dev) => {
+            return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
+        });
+        return isPackageBlacklisted ? isPackageBlacklisted : false;
+    }
     render() {
         const { version } = this.props;
+        let isBlacklised = this.isPackageBlacklisted(version);
         return (
-            <li className={version.isBlackListed ? "blacklist" : ""}>
+            <li className={isBlacklised ? "blacklist" : ""}>
                 <div className="left-box">
                 {!version.inDirector ?
                     <span>
@@ -103,7 +111,7 @@ class ListItemVersion extends Component {
                         {version.id.version}
                     </span>
                     {!version.inDirector ?
-                        version.isBlackListed ?
+                        isBlacklised ?
                             <button 
                                 className="btn-blacklist edit" 
                                 onClick={this.openBlacklistModal.bind(this, 'edit')} 

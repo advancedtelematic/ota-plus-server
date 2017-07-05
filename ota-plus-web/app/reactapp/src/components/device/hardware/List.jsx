@@ -27,8 +27,8 @@ class List extends Component {
                 <div className="desc">
                     { device.isDirector ? 
                         <span>
-                            Serial: {_.first(device.directorAttributes).id} <br />
-                            Hardware ID: {_.first(device.directorAttributes).hardwareId}
+                            Serial: {device.directorAttributes.primary.id} <br />
+                            Hardware ID: {device.directorAttributes.primary.hardwareId}
                         </span>
                     :
                         <span>
