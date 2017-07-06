@@ -21,7 +21,7 @@ class SoftwarePanel extends Component {
         this.props.packagesStore.fetchPackages(filter);
     }
     render() {
-        const { devicesStore, packagesStore, hardwareStore, device, togglePackageAutoUpdate, onFileDrop, packageVersion, loadPackageVersionProperties, activeEcu } = this.props;
+        const { devicesStore, packagesStore, hardwareStore, device, togglePackageAutoUpdate, onFileDrop, expandedVersion, loadPackageVersionProperties, activeEcu, setShownVersion } = this.props;
         return (
             <div className="software-panel">
                 <div className="darkgrey-header">
@@ -37,13 +37,15 @@ class SoftwarePanel extends Component {
                             Object.keys(packagesStore.preparedPackagesPerDevice[device.uuid]).length ?
                                 <PackagesCoreList
                                     packagesStore={packagesStore}
+                                    devicesStore={devicesStore}
                                     hardwareStore={hardwareStore}
                                     device={device}
                                     onFileDrop={onFileDrop}
                                     togglePackageAutoUpdate={togglePackageAutoUpdate}
-                                    packageVersion={packageVersion}
+                                    expandedVersion={expandedVersion}
                                     loadPackageVersionProperties={loadPackageVersionProperties}
                                     activeEcu={activeEcu}
+                                    setShownVersion={setShownVersion}
                                 />
                             :
                                 <span className="content-empty">
@@ -70,9 +72,10 @@ SoftwarePanel.propTypes = {
     device: PropTypes.object.isRequired,
     togglePackageAutoUpdate: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,
-    packageVersion: PropTypes.object.isRequired,
+    expandedVersion: PropTypes.object,
     loadPackageVersionProperties: PropTypes.func.isRequired,
     activeEcu: PropTypes.string,
+    setShownVersion: PropTypes.func.isRequired,
 }
 
 export default SoftwarePanel;
