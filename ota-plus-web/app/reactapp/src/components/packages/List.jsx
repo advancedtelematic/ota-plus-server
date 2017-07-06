@@ -122,7 +122,6 @@ class List extends Component {
     }
     render() {
         const { showBlacklistModal, packagesStore, onFileDrop, highlightedPackage, showStatsModal } = this.props;
-        let packageIndex = -1;
         return (
             <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching ? " fetching" : "")} ref="list">
                 {packagesStore.packagesCount ? 
@@ -142,49 +141,44 @@ class List extends Component {
                                     <div className="header">{letter}</div>
                                     {_.map(packages, (pack, index) => {
                                         const that = this;
-                                        packageIndex++;
-                                        if(packageIndex >= this.firstShownIndex && packageIndex <= this.lastShownIndex || this.expandedPackageName === pack.packageName)
-                                            return (
-                                                <span key={index}>
-                                                    <ListItem 
-                                                        pack={pack}
-                                                        togglePackage={this.togglePackage}
-                                                        showStatsModal={showStatsModal}
-                                                        showStatsButton={this.expandedPackageName === pack.packageName}
-                                                    />
-                                                    <VelocityTransitionGroup 
-                                                        enter={{
-                                                            animation: "slideDown",
-                                                            begin: () => {that.startIntervalListScroll();},
-                                                            complete: () => {that.stopIntervalListScroll();}
-                                                        }}
-                                                        leave={{
-                                                            animation: "slideUp",
-                                                            begin: () => {that.startIntervalListScroll();},
-                                                            complete: () => {that.stopIntervalListScroll();}
-                                                        }}
-                                                    >
-                                                        {this.expandedPackageName === pack.packageName ?
-                                                            <ul className="versions">
-                                                                {_.map(pack.versions, (version, i) => {
-                                                                    return (
-                                                                        <ListItemVersion 
-                                                                            version={version}
-                                                                            showBlacklistModal={showBlacklistModal}
-                                                                            packagesStore={packagesStore}
-                                                                            key={i}
-                                                                        />
-                                                                    );
-                                                                })}
-                                                            </ul>
-                                                        : 
-                                                            null
-                                                        }
-                                                    </VelocityTransitionGroup>
-                                                </span>
-                                            );
                                         return (
-                                            <div className="item" key={index}></div>
+                                            <span key={index}>
+                                                <ListItem 
+                                                    pack={pack}
+                                                    togglePackage={this.togglePackage}
+                                                    showStatsModal={showStatsModal}
+                                                    showStatsButton={this.expandedPackageName === pack.packageName}
+                                                />
+                                                <VelocityTransitionGroup 
+                                                    enter={{
+                                                        animation: "slideDown",
+                                                        begin: () => {that.startIntervalListScroll();},
+                                                        complete: () => {that.stopIntervalListScroll();}
+                                                    }}
+                                                    leave={{
+                                                        animation: "slideUp",
+                                                        begin: () => {that.startIntervalListScroll();},
+                                                        complete: () => {that.stopIntervalListScroll();}
+                                                    }}
+                                                >
+                                                    {this.expandedPackageName === pack.packageName ?
+                                                        <ul className="versions">
+                                                            {_.map(pack.versions, (version, i) => {
+                                                                return (
+                                                                    <ListItemVersion 
+                                                                        version={version}
+                                                                        showBlacklistModal={showBlacklistModal}
+                                                                        packagesStore={packagesStore}
+                                                                        key={i}
+                                                                    />
+                                                                );
+                                                            })}
+                                                        </ul>
+                                                    : 
+                                                        null
+                                                    }
+                                                </VelocityTransitionGroup>
+                                            </span>
                                         );
                                     })}
                                 </span>

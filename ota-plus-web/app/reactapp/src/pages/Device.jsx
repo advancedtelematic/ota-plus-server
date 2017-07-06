@@ -13,6 +13,7 @@ const title = "Device";
 class Device extends Component {
     @observable queueModalShown = false;
     @observable activeTabId = 0;
+    
     anchorEl = null;
 
     constructor(props) {

@@ -32,7 +32,11 @@ export default class HardwareStore {
         resetAsync(this.hardwareFetchAsync, true);
         return axios.get(`${API_ECUS_FETCH}/${deviceId}/system_info`)
             .then(function (response) {
-                this.hardware[deviceId] = JSON.parse(response.data);
+                let data = response.data;
+                if(typeof data === 'string') {
+                    data = JSON.parse(data);
+                }
+                this.hardware[deviceId] = data;
                 this.hardwareFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
@@ -44,7 +48,11 @@ export default class HardwareStore {
         resetAsync(this.hardwareFetchWsAsync, true);
         return axios.get(`${API_ECUS_FETCH}/${deviceId}/system_info`)
             .then(function (response) {
-                this.hardware[deviceId] = response.data;
+                let data = response.data;
+                if(typeof data === 'string') {
+                    data = JSON.parse(data);
+                }
+                this.hardware[deviceId] = data;
                 this.hardwareFetchWsAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {

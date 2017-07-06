@@ -274,7 +274,16 @@ export default class DevicesStore {
                 that.device = legacy.data;
                 if (director.data.code !== 'missing_device') {
                     that.device.isDirector = true;
-                    that.device.directorAttributes = director.data;
+                    let primary = _.filter(director.data, (data, index) => {
+                        return data.primary;
+                    });
+                    let secondary = _.filter(director.data, (data, index) => {
+                        return !data.primary;
+                    });
+                    that.device.directorAttributes = {
+                        primary: _.first(primary),
+                        secondary: secondary
+                    };
                 }
                 this.devicesOneFetchAsync = handleAsyncSuccess(legacy);
             }))
@@ -284,12 +293,21 @@ export default class DevicesStore {
     }
 
     fetchDirectorAttributes(id) {
-        let device = this._getDevice(id);        
+        let device = this._getDevice(id);
         if(!_.isEmpty(this.device) && this.device.uuid === id) {
             resetAsync(this.devicesDirectorAttributesFetchAsync, true);
             return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
                 .then((response) => {
-                    this.device.directorAttributes = response.data;
+                    let primary = _.filter(response.data, (data, index) => {
+                        return data.primary;
+                    });
+                    let secondary = _.filter(response.data, (data, index) => {
+                        return !data.primary;
+                    });
+                    this.device.directorAttributes = {
+                        primary: _.first(primary),
+                        secondary: secondary
+                    };
                     this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
                 })
                 .catch((error) => {
@@ -299,13 +317,22 @@ export default class DevicesStore {
             resetAsync(this.devicesDirectorAttributesFetchAsync, true);
             return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
                 .then((response) => {
-                    this.device.directorAttributes = response.data;
+                    let primary = _.filter(response.data, (data, index) => {
+                        return data.primary;
+                    });
+                    let secondary = _.filter(response.data, (data, index) => {
+                        return !data.primary;
+                    });
+                    device.directorAttributes = {
+                        primary: _.first(primary),
+                        secondary: secondary
+                    };
                     this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
                 })
                 .catch((error) => {
                     this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
                 });
-        }
+        } 
     }
 
     createDevice(data) {
