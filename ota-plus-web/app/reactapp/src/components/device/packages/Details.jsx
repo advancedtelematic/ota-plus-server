@@ -141,7 +141,7 @@ class Details extends Component {
 		                            label="Install"
 		                            title="Install"
 		                            id={"button-install-package-" + version.id.name + "-" + version.id.version}
-		                            onClick={multiTargetUpdate.bind(this, {target: version.imageName, hash: version.id.version})}
+		                            onClick={multiTargetUpdate.bind(this, {target: version.imageName, hash: version.checkSum})}
 		                            disabled={version.isBlackListed || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || version.isInstalled || Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length}>
 		                            Install
 		                        </button>

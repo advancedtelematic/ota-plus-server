@@ -180,13 +180,14 @@ export default class PackagesStore {
         _.each(directorPackages, (versionObject, index) => {
             _.each(versionObject, (version, imageName) => {
                 let packageName = null;
-                let packageHash = null;
+                let packageVersion = null;
+                let packageHash = version.hashes.sha256;
                 if(version.custom) {
                     packageName = version.custom.name.value;   
-                    packageHash = version.custom.version.value;
+                    packageVersion = version.custom.version.value;
                 } else {
                     packageName = imageName;   
-                    packageHash = version.hashes.sha256;
+                    packageVersion = version.hashes.sha256;
                 }
                 
                 let formattedVersion = {
@@ -196,7 +197,7 @@ export default class PackagesStore {
                     description: packageHash,
                     id: {
                         name: packageName,
-                        version: packageHash
+                        version: packageVersion
                     },
                     isBlackListed: false,
                     namespace: null,
