@@ -48,7 +48,7 @@ class PropertiesPanel extends Component {
     }
     render() {
         const { devicesStore, showPackageCreateModal, showPackageBlacklistModal, onFileDrop, packagesStore, packageVersion, installPackage, multiTargetUpdate, device, togglePackageAutoUpdate } = this.props;
-        let attributesFetching = packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesForDeviceFetchAsync.isFetching;
+        let attributesFetching = packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesForDeviceFetchAsync.isFetching || packagesStore.packagesOndeviceFetchAsync.isFetching;
         return (
             <div className="properties-panel">
                 <div className="darkgrey-header">
@@ -84,34 +84,28 @@ class PropertiesPanel extends Component {
 
                     <div className={"wrapper-properties" + (this.shouldShowPackagesDetails ? " recalculated-properties-height" : "")}>
                         {attributesFetching ?
-                            <div className="wrapper-loader">
-                                <Loader />
-                            </div>
+                                <div className="wrapper-loader">
+                                    <Loader />
+                                </div>
                             :
-                            this.shouldShowPackagesDetails ?
-                                <PackagesDetails
-                                    packagesStore={packagesStore}
-                                    devicesStore={devicesStore}
-                                    packageVersion={packageVersion}
-                                    showPackageBlacklistModal={showPackageBlacklistModal}
-                                    installPackage={installPackage}
-                                    multiTargetUpdate={multiTargetUpdate}
-                                    device={device}
-                                />
-                                :
-                                <PropertiesOnDeviceList
-                                    packagesStore={packagesStore}
-                                    packageVersion={packageVersion}
-                                    device={device}
-                                    showPackageBlacklistModal={showPackageBlacklistModal}
-                                    onFileDrop={onFileDrop}
+                                this.shouldShowPackagesDetails ?
+                                    <PackagesDetails
+                                        packagesStore={packagesStore}
+                                        devicesStore={devicesStore}
+                                        packageVersion={packageVersion}
+                                        showPackageBlacklistModal={showPackageBlacklistModal}
+                                        installPackage={installPackage}
+                                        multiTargetUpdate={multiTargetUpdate}
+                                        device={device}
                                     />
-                                (packagesStore.overallPackagesCount && packagesStore.packagesOndeviceFetchAsync.isFetching) ?
-                                    <div className="wrapper-loader">
-                                        <Loader />
-                                    </div>
-                                    :
-                                    null
+                                :
+                                    <PropertiesOnDeviceList
+                                        packagesStore={packagesStore}
+                                        packageVersion={packageVersion}
+                                        device={device}
+                                        showPackageBlacklistModal={showPackageBlacklistModal}
+                                        onFileDrop={onFileDrop}
+                                    />
                         }
                     </div>
                 </div>
