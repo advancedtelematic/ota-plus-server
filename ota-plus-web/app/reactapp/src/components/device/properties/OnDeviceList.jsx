@@ -110,7 +110,6 @@ class OnDeviceList extends Component {
     }
     render() {
         const { packagesStore, packageVersion, device, showPackageBlacklistModal, onFileDrop } = this.props;
-        let packageIndex = -1;
         return (
             <div className="ios-list" ref="list">
                 {!packageVersion.isInstalled && device.isDirector ?
