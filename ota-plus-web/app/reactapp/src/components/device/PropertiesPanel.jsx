@@ -87,34 +87,31 @@ class PropertiesPanel extends Component {
                             <div className="wrapper-loader">
                                 <Loader />
                             </div>
-                        :
-                            packagesStore.overallPackagesCount ?
-                                this.shouldShowPackagesDetails ?
-                                    <PackagesDetails
-                                        packagesStore={packagesStore}
-                                        devicesStore={devicesStore}
-                                        packageVersion={packageVersion}
-                                        showPackageBlacklistModal={showPackageBlacklistModal}
-                                        installPackage={installPackage}
-                                        multiTargetUpdate={multiTargetUpdate}
-                                        device={device}
-                                    />
+                            :
+                            this.shouldShowPackagesDetails ?
+                                <PackagesDetails
+                                    packagesStore={packagesStore}
+                                    devicesStore={devicesStore}
+                                    packageVersion={packageVersion}
+                                    showPackageBlacklistModal={showPackageBlacklistModal}
+                                    installPackage={installPackage}
+                                    multiTargetUpdate={multiTargetUpdate}
+                                    device={device}
+                                />
                                 :
-                                    <PropertiesOnDeviceList
-                                        packagesStore={packagesStore}
-                                        packageVersion={packageVersion}
-                                        device={device}
-                                        showPackageBlacklistModal={showPackageBlacklistModal}
-                                        onFileDrop={onFileDrop}
+                                <PropertiesOnDeviceList
+                                    packagesStore={packagesStore}
+                                    packageVersion={packageVersion}
+                                    device={device}
+                                    showPackageBlacklistModal={showPackageBlacklistModal}
+                                    onFileDrop={onFileDrop}
                                     />
-                            :
-                                null
-                            (packagesStore.overallPackagesCount && packagesStore.packagesOndeviceFetchAsync.isFetching) ?
-                                <div className="wrapper-loader">
-                                    <Loader />
-                                </div>
-                            :
-                                null
+                                (packagesStore.overallPackagesCount && packagesStore.packagesOndeviceFetchAsync.isFetching) ?
+                                    <div className="wrapper-loader">
+                                        <Loader />
+                                    </div>
+                                    :
+                                    null
                         }
                     </div>
                 </div>
