@@ -44,21 +44,11 @@ class Details extends Component {
 		});
 		return isAutoInstallEnabled ? isAutoInstallEnabled : false;
 	}
+	generateIdTag(tagName, expandedVersion) {
+		return tagName + '-' + expandedVersion.id.version.substring(0,8);
+	}
     render() {
-    	const { packagesStore, devicesStore, packageVersion, showPackageBlacklistModal, installPackage, multiTargetUpdate, device } = this.props;
-
-    	let version = null;
-    	let defaultVersion = packageVersion.version;
-
-    	if(device.isDirector && defaultVersion === device.directorAttributes.primary.image.hash.sha256) {
-    		version = packagesStore._getPackageByVersion(packageVersion.version);
-    	} else {
-    		if(packageVersion.uuid !== 1) {
-    			version = packagesStore._getPackageVersionByUuid(packageVersion.uuid);
-    		} else {
-    			version = null;
-    		}
-    	}
+    	const { packagesStore, devicesStore, expandedVersion, showPackageBlacklistModal, installPackage, multiTargetUpdate, device } = this.props;
 
     	let blacklistComment = null;
     	let isPackageBlacklisted = false;
@@ -66,45 +56,53 @@ class Details extends Component {
     	let isPackageInstalled = false;
     	let isAutoInstallEnabled = false;
 
-    	if(version) {
-	    	blacklistComment = this.getBlacklistComment(version);
-	    	isPackageBlacklisted = this.isPackageBlacklisted(version);
-	    	isPackageQueued = this.isPackageQueued(version);
-	    	isPackageInstalled = this.isPackageInstalled(version);
-	    	isAutoInstallEnabled = this.isAutoInstallEnabled(version);
+    	if(expandedVersion) {
+	    	blacklistComment = this.getBlacklistComment(expandedVersion);
+	    	isPackageBlacklisted = this.isPackageBlacklisted(expandedVersion);
+	    	isPackageQueued = this.isPackageQueued(expandedVersion);
+	    	isPackageInstalled = this.isPackageInstalled(expandedVersion);
+	    	isAutoInstallEnabled = this.isAutoInstallEnabled(expandedVersion);
     	}
 
         return (
         	<div className="details-wrapper">
-	        	{version ? 
+	        	{expandedVersion ? 
     				<div className="details">	        	
 			        	<div className="top">
-			        		<div className="title" id={"image-title-" + version.id.name}>{version.id.name}</div>
+			        		<div className="title" id={"image-title-" + expandedVersion.id.name}>{expandedVersion.id.name}</div>
 				        		<div className="status">
-				        			{isPackageBlacklisted && (isPackageInstalled || version.isInstalled) ?
+				        			{isPackageBlacklisted && (isPackageInstalled || expandedVersion.isInstalled) ?
 				        				<div className="status-container blacklisted-installed">
-				        					<img src="/assets/img/icons/red_cross.png" alt="" id={"blacklisted-and-installed-icon-" + version.id.version.substring(0,8)} />
-			        			 			<span id={"blacklisted-and-installed-" + version.id.version.substring(0,8)}>Installed</span>	        			 	        		
+				        					<img src="/assets/img/icons/red_cross.png" alt="" id={this.generateIdTag('blacklisted-and-installed-icon', expandedVersion)} />
+			        			 			<span id={this.generateIdTag('blacklisted-and-installed', expandedVersion)}>
+			        			 				Installed
+		        			 				</span>	        			 	        		
 				        				</div>
 				        			: isPackageBlacklisted ?
 				        				<div className="status-container blacklisted">
-				        					<img src="/assets/img/icons/ban_red.png" alt="" id={"blacklisted-icon-" + version.id.version.substring(0,8)} />
-			        			 			<span id={"blacklisted-" + version.id.version.substring(0,8)}>Blacklisted</span>	        			 	        		
+				        					<img src="/assets/img/icons/ban_red.png" alt="" id={this.generateIdTag('blacklisted-icon', expandedVersion)} />
+			        			 			<span id={this.generateIdTag('blacklisted', expandedVersion)}>
+			        			 				Blacklisted
+			        			 			</span>	        			 	        		
 				        				</div>
 				        			: isPackageQueued ? 
 				        				<div className="status-container queued">
 			        						<span className="fa-stack queued">
-				                                <i className="fa fa-dot-circle-o fa-stack-1x" aria-hidden="true" id={"queued-icon-" + version.id.version.substring(0,8)}></i>
+				                                <i className="fa fa-dot-circle-o fa-stack-1x" aria-hidden="true" id={this.generateIdTag('queued-icon', expandedVersion)}></i>
 				                            </span>
-			        						<span className="status-name" id={"queued-" + version.id.version.substring(0,8)}>Queued</span>
+			        						<span className="status-name" id={this.generateIdTag('queued', expandedVersion)}>
+			        							Queued
+			        						</span>
 			        					</div>
-			        				: isPackageInstalled || version.isInstalled ? 
+			        				: isPackageInstalled || expandedVersion.isInstalled ? 
 				        				<div className="status-container installed">
-				        					<img src="/assets/img/icons/check.png" alt="" id={"installed-icon-" + version.id.version.substring(0,8)} />
-				        					<span id={"image-installed-" + version.id.version.substring(0,8)}>Installed</span>
+				        					<img src="/assets/img/icons/check.png" alt="" id={this.generateIdTag('installed-icon', expandedVersion)} />
+				        					<span id={this.generateIdTag('image-installed', expandedVersion)}>
+				        						Installed
+				        					</span>
 				        				</div>
 			        				: 
-				        				<div className="status-container not-installed" id={"not-installed-" + version.id.version.substring(0,8)}>
+				        				<div className="status-container not-installed" id={this.generateIdTag('not-installed', expandedVersion)}>
 				        					Not installed
 				        				</div>
 			    					}
@@ -113,20 +111,28 @@ class Details extends Component {
 			        	<div className="bottom">
 				        	<div className="version">
 				        		<span className = "sub-title">Version / hash:</span>
-				        		<span className="value" id={"version-hash-value-" + version.id.version.substring(0,8)}>{version.id.version}</span>
+				        		<span className="value" id={this.generateIdTag('version-hash-value', expandedVersion)}>
+				        			{expandedVersion.id.version}
+				        		</span>
 			        		</div>
 				            <div className="hash">
 								<span className = "sub-title">Package identifier:</span>
-				        		<span className="value" id={"package-identifier-value-" + version.id.version.substring(0,8)}>{version.uuid}</span>
+				        		<span className="value" id={this.generateIdTag('package-identifier-value', expandedVersion)}>
+				        			{expandedVersion.uuid}
+				        		</span>
 			        		</div>
 			        		<div className="created">
 								<span className = "sub-title">Created at:</span>
-				        		<span className="value">{moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
+				        		<span className="value">
+				        			{moment(expandedVersion.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}
+				        		</span>
 			        		</div>
 			        		{!device.isDirector ?
 			        			<div className="vendor">
 					            	<span className = "sub-title">Vendor:</span>
-					        		<span className="value">{version.vendor}</span>
+					        		<span className="value">
+					        			{expandedVersion.vendor}
+					        		</span>
 					            </div>
 		        			:
 			        			null
@@ -136,16 +142,16 @@ class Details extends Component {
 			        		<span>
 					        	<div className="comments">
 			        				<PackagesComment
-			        					version={version}
+			        					version={expandedVersion}
 			        					packagesStore={packagesStore}
-			        					key={version.uuid}
+			        					key={expandedVersion.uuid}
 					        		/>
 					        	</div>
-					        	<button className={"btn-blacklist blacklist" + (isPackageBlacklisted ? " package-blacklisted" : "")} id={"blacklist-button-" + version.id.version.substring(0,8)}
+					        	<button className={"btn-blacklist blacklist" + (isPackageBlacklisted ? " package-blacklisted" : "")} id={this.generateIdTag('blacklist-button', expandedVersion)}
 					        		onClick={isPackageBlacklisted ? 
-					        			showPackageBlacklistModal.bind(this, version.id.name, version.id.version, 'edit')
+					        			showPackageBlacklistModal.bind(this, expandedVersion.id.name, expandedVersion.id.version, 'edit')
 				        				: 
-				        				showPackageBlacklistModal.bind(this, version.id.name, version.id.version, 'add')
+				        				showPackageBlacklistModal.bind(this, expandedVersion.id.name, expandedVersion.id.version, 'add')
 				        			}>
 					        		<span className="text">			    
 					        			{blacklistComment ?
@@ -174,9 +180,9 @@ class Details extends Component {
 		                            className="btn-main btn-install"
 		                            label="Install"
 		                            title="Install"
-		                            id={"button-install-package-" + version.id.name + "-" + version.id.version}
-		                            onClick={multiTargetUpdate.bind(this, {target: version.imageName, hash: version.id.version})}
-		                            disabled={isPackageBlacklisted || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || version.isInstalled || Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length}>
+		                            id={"button-install-package-" + expandedVersion.id.name + "-" + expandedVersion.id.version}
+		                            onClick={multiTargetUpdate.bind(this, {target: expandedVersion.imageName, hash: expandedVersion.id.version})}
+		                            disabled={isPackageBlacklisted || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || expandedVersion.isInstalled || Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length}>
 		                            Install
 		                        </button>
 				        	</div>
@@ -186,9 +192,9 @@ class Details extends Component {
 		                            className="btn-main btn-install"
 		                            label="Install"
 		                            title="Install"
-		                            id={"button-install-package-" + version.id.name + "-" + version.id.version}
-		                            onClick={installPackage.bind(this, {name: version.id.name, version: version.id.version})}
-		                            disabled={isPackageBlacklisted || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || version.isInstalled}>
+		                            id={"button-install-package-" + expandedVersion.id.name + "-" + expandedVersion.id.version}
+		                            onClick={installPackage.bind(this, {name: expandedVersion.id.name, version: expandedVersion.id.version})}
+		                            disabled={isPackageBlacklisted || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || expandedVersion.isInstalled}>
 		                            Install
 		                        </button>
 				        	</div>
@@ -209,7 +215,7 @@ class Details extends Component {
 Details.propTypes = {
     packagesStore: PropTypes.object.isRequired,
     devicesStore: PropTypes.object.isRequired,
-    packageVersion: PropTypes.object.isRequired,
+    expandedVersion: PropTypes.object,
     showPackageBlacklistModal: PropTypes.func.isRequired,
     installPackage: PropTypes.func.isRequired,
     multiTargetUpdate: PropTypes.func.isRequired,

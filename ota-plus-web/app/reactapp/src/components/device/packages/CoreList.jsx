@@ -39,10 +39,13 @@ class CoreList extends Component {
     }
     componentWillMount() {
         if(this.props.device.isDirector) {
-            let hash = this.props.packageVersion.uuid;
-            let pack = this.props.packagesStore._getPackageByVersion(hash);
-            this.expandedPackageName = pack.id.name;
-            this.selectedPackageVersion = pack.id.version;
+            this.props.setShownVersion(this.props.packagesStore._getPackageByVersion(this.props.devicesStore.device.directorAttributes.primary.image.hash.sha256));
+        }
+    }
+    componentWillReceiveProps(nextProps) {
+        if(this.props.device.isDirector) {
+            this.expandedPackageName = nextProps.expandedVersion.id.name;
+            this.selectedPackageVersion = nextProps.expandedVersion.id.version;
         }
     }
     componentDidMount() {
@@ -123,7 +126,7 @@ class CoreList extends Component {
         this.tmpIntervalId = null;
     }
     render() {
-        const { packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, packageVersion, loadPackageVersionProperties, activeEcu } = this.props;
+        const { packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, expandedVersion, loadPackageVersionProperties, activeEcu } = this.props;
         let preparedPackages = packagesStore.preparedPackagesPerDevice[device.uuid];
         if(this.props.device.isDirector) {
             let directorPackages = {};
@@ -277,7 +280,7 @@ class CoreList extends Component {
                                                             version={version}
                                                             queuedPackage={queuedPackage}
                                                             installedPackage={installedPackage}
-                                                            packageVersion={packageVersion}
+                                                            expandedVersion={expandedVersion}
                                                             loadPackageVersionProperties={loadPackageVersionProperties}
                                                             togglePackageVersion={this.togglePackageVersion}
                                                             selectedPackageVersion={this.selectedPackageVersion}
@@ -306,13 +309,15 @@ class CoreList extends Component {
 
 CoreList.propTypes = {
     packagesStore: PropTypes.object.isRequired,
+    devicesStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
     device: PropTypes.object.isRequired,
     onFileDrop: PropTypes.func.isRequired,
     togglePackageAutoUpdate: PropTypes.func.isRequired,
-    packageVersion: PropTypes.object.isRequired,
+    expandedVersion: PropTypes.object,
     loadPackageVersionProperties: PropTypes.func.isRequired,
     activeEcu: PropTypes.string,
+    setShownVersion: PropTypes.func.isRequired,
 }
 
 export default CoreList;

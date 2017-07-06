@@ -22,7 +22,7 @@ class Device extends Component {
     @observable packageBlacklistModalShown = false;
     @observable packageBlacklistAction = {};
     @observable packageProperties = {};
-    @observable packageVersion = { uuid: 1 };
+    @observable expandedVersion = null;
     @observable uploadToTuf = false;
     @observable activeEcu = null;
     @observable multiTargetUpdateStarted = false;
@@ -41,26 +41,15 @@ class Device extends Component {
         this.cancelInstallation = this.cancelInstallation.bind(this);
         this.clearStepsHistory = this.clearStepsHistory.bind(this);
         this.loadPackageVersionProperties = this.loadPackageVersionProperties.bind(this);
-        this.toggleTufUpload = this.toggleTufUpload.bind(this);
-
-        this.packageVersionChangeHandler = observe(props.devicesStore, (change) => {
-            if(change.name === 'devicesOneFetchAsync' && change.object[change.name].isFetching === false) {
-                if(props.devicesStore.device.isDirector) {
-                    extendObservable(this.packageVersion, {
-                        uuid: props.devicesStore.device.directorAttributes.primary.image.hash.sha256,
-                        version: props.devicesStore.device.directorAttributes.primary.image.hash.sha256,
-                        isInstalled: true,
-                    });
-                }
-            }
-        });
+        this.toggleTufUpload = this.toggleTufUpload.bind(this);        
+        this.setShownVersion = this.setShownVersion.bind(this);        
     }
     toggleTufUpload(e) {
         if(e) e.preventDefault();
         this.uploadToTuf = !this.uploadToTuf;
     }
-    componentWillUnmount() {
-        this.packageVersionChangeHandler();
+    setShownVersion(shown) {
+       this.expandedVersion = shown;
     }
     showPackageCreateModal(files, e) {
         if(e) e.preventDefault();
@@ -119,12 +108,9 @@ class Device extends Component {
     loadPackageVersionProperties(version, e) {
         let versionUuid = version.uuid;
         if(e) e.preventDefault();
-        extendObservable(this.packageVersion, {
-            uuid: versionUuid,
-            version: version.id.version,
-            isInstalled: version.attributes.status === 'installed' || 
-                (this.props.devicesStore.device.isDirector && this.props.devicesStore.device.directorAttributes.primary.image.hash.sha256 === version.id.version),
-        });
+        this.expandedVersion = version;
+        this.expandedVersion.isInstalled = version.attributes.status === 'installed' || 
+                (this.props.devicesStore.device.isDirector && this.props.devicesStore.device.directorAttributes.primary.image.hash.sha256 === version.id.version);
     }
     render() {
         const { devicesStore, packagesStore, hardwareStore } = this.props;
@@ -152,9 +138,10 @@ class Device extends Component {
                                 togglePackageAutoUpdate={this.togglePackageAutoUpdate}
                                 installPackage={this.installPackage}
                                 onFileDrop={this.onFileDrop}
-                                packageVersion={this.packageVersion}
+                                expandedVersion={this.expandedVersion}
                                 loadPackageVersionProperties={this.loadPackageVersionProperties}
                                 activeEcu={this.activeEcu}
+                                setShownVersion={this.setShownVersion}
                             />
                             <DevicePropertiesPanel
                                 packagesStore={packagesStore}
@@ -162,7 +149,7 @@ class Device extends Component {
                                 showPackageBlacklistModal={this.showPackageBlacklistModal}
                                 onFileDrop={this.onFileDrop}
                                 togglePackageAutoUpdate={this.togglePackageAutoUpdate}
-                                packageVersion={this.packageVersion}
+                                expandedVersion={this.expandedVersion}
                                 installPackage={this.installPackage}
                                 multiTargetUpdate={this.multiTargetUpdate}
                                 device={device}

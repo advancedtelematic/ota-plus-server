@@ -18,18 +18,9 @@ class PropertiesPanel extends Component {
         this.changeFilter = this.changeFilter.bind(this);
         this.showPackagesList = this.showPackagesList.bind(this);
         this.showPackagesDetails = this.showPackagesDetails.bind(this);
-
-        this.uuidChangedHandler = observe(props.packageVersion, (change) => {
-            if(change.name === 'uuid' && change.oldValue !== change.object[change.name]) {
-                this.shouldShowPackagesDetails = true;
-            }
-        });
     }
     componentWillMount() {
         this.props.packagesStore.fetchOndevicePackages(this.props.device.uuid);
-    }
-    componentWillUnmount() {
-        this.uuidChangedHandler();
     }
     changeSort(sort, e) {
         if(e) e.preventDefault();
@@ -47,7 +38,7 @@ class PropertiesPanel extends Component {
         this.shouldShowPackagesDetails = true;
     }
     render() {
-        const { devicesStore, showPackageCreateModal, showPackageBlacklistModal, onFileDrop, packagesStore, packageVersion, installPackage, multiTargetUpdate, device, togglePackageAutoUpdate } = this.props;
+        const { devicesStore, showPackageCreateModal, showPackageBlacklistModal, onFileDrop, packagesStore, expandedVersion, installPackage, multiTargetUpdate, device, togglePackageAutoUpdate } = this.props;
         let attributesFetching = packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesForDeviceFetchAsync.isFetching || packagesStore.packagesOndeviceFetchAsync.isFetching;
         return (
             <div className="properties-panel">
@@ -87,25 +78,25 @@ class PropertiesPanel extends Component {
                                 <div className="wrapper-loader">
                                     <Loader />
                                 </div>
+                        :
+                            this.shouldShowPackagesDetails ?
+                                <PackagesDetails
+                                    packagesStore={packagesStore}
+                                    devicesStore={devicesStore}
+                                    expandedVersion={expandedVersion}
+                                    showPackageBlacklistModal={showPackageBlacklistModal}
+                                    installPackage={installPackage}
+                                    multiTargetUpdate={multiTargetUpdate}
+                                    device={device}
+                                />
                             :
-                                this.shouldShowPackagesDetails ?
-                                    <PackagesDetails
-                                        packagesStore={packagesStore}
-                                        devicesStore={devicesStore}
-                                        packageVersion={packageVersion}
-                                        showPackageBlacklistModal={showPackageBlacklistModal}
-                                        installPackage={installPackage}
-                                        multiTargetUpdate={multiTargetUpdate}
-                                        device={device}
-                                    />
-                                :
-                                    <PropertiesOnDeviceList
-                                        packagesStore={packagesStore}
-                                        packageVersion={packageVersion}
-                                        device={device}
-                                        showPackageBlacklistModal={showPackageBlacklistModal}
-                                        onFileDrop={onFileDrop}
-                                    />
+                                <PropertiesOnDeviceList
+                                    packagesStore={packagesStore}
+                                    expandedVersion={expandedVersion}
+                                    device={device}
+                                    showPackageBlacklistModal={showPackageBlacklistModal}
+                                    onFileDrop={onFileDrop}
+                                />
                         }
                     </div>
                 </div>
@@ -119,9 +110,8 @@ PropertiesPanel.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     showPackageBlacklistModal: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,
-    packageVersion: PropTypes.object.isRequired,
     togglePackageAutoUpdate: PropTypes.func.isRequired,
-    packageVersion: PropTypes.object.isRequired,
+    expandedVersion: PropTypes.object,
     installPackage: PropTypes.func.isRequired,
     multiTargetUpdate: PropTypes.func.isRequired,
     device: PropTypes.object.isRequired,
