@@ -19,9 +19,6 @@ class MultiTargetITem extends Component {
                     <div className="version">
                         {hash}
                     </div>
-                    <button>
-                        Cancel
-                    </button>
                 </div>
 
                 <div className="desc">
