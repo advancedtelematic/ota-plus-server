@@ -12,7 +12,7 @@ class PublicKeyPopover extends Component {
         super(props);
     }
     render() {
-        const { hardwareStore, ecu, handleCopy, handleRequestClose, handleTouchTap, popoverShown, anchorEl, copied } = this.props;
+        const { hardwareStore, handleCopy, handleRequestClose, handleTouchTap, popoverShown, anchorEl, copied } = this.props;
         return (
             <Popover
                 className="hardware-pk-popover"
@@ -68,7 +68,6 @@ class PublicKeyPopover extends Component {
 
 PublicKeyPopover.propTypes = {
     hardwareStore: PropTypes.object.isRequired,
-    ecu: PropTypes.object.isRequired,
     handleRequestClose: PropTypes.func.isRequired,
     handleTouchTap: PropTypes.func.isRequired,
     popoverShown: PropTypes.bool.isRequired,

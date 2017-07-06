@@ -465,16 +465,6 @@ export default class PackagesStore {
         resetAsync(this.packagesOneBlacklistedFetchAsync, true);
         return axios.get(API_PACKAGES_PACKAGE_BLACKLISTED_FETCH + '/' + data.name + '/' + data.version, data.details)
             .then(function(response) {
-                let comment = data.comment;
-                if(!_.isUndefined(comment)) {
-                      _.each(this.packages, (obj, index) => {
-                        if(obj.id.name === data.name && obj.id.version === data.version && obj.isBlackListed === true) {
-                            extendObservable(obj, {
-                                blacklistComment: comment,
-                            })
-                        }
-                    });
-                }
                 this.blacklistedPackage = response.data;
                 this.packagesOneBlacklistedFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
@@ -487,8 +477,6 @@ export default class PackagesStore {
         resetAsync(this.packagesBlacklistAsync, true);
         return axios.post(API_PACKAGES_BLACKLIST, data)
             .then(function(response) {
-                this.fetchBlacklistedPackage({ name: data.packageId.name, version: data.packageId.version, comment: data.comment });
-                this._blacklistPackage(data);
                 this.packagesBlacklistAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
@@ -500,8 +488,7 @@ export default class PackagesStore {
         resetAsync(this.packagesUpdateBlacklistedAsync, true);
         return axios.put(API_PACKAGES_UPDATE_BLACKLISTED, data)
             .then(function(response) {
-                this.fetchBlacklistedPackage({ name: data.packageId.name, version: data.packageId.version, comment: data.comment });
-                this._blacklistPackage(data);
+                this.fetchBlacklist();
                 this.packagesUpdateBlacklistedAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
@@ -513,7 +500,7 @@ export default class PackagesStore {
         resetAsync(this.packagesRemoveFromBlacklistAsync, true);
         return axios.delete(API_PACKAGES_REMOVE_FROM_BLACKLIST + '/' + data.name + '/' + data.version)
             .then(function(response) {
-                this._removePackageFromBlacklist(data);
+                this.fetchBlacklist();
                 this.packagesRemoveFromBlacklistAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
@@ -747,34 +734,18 @@ export default class PackagesStore {
         let found = _.find(this.packages, (pack) => {
             return pack.uuid === uuid;
         });
-        return found;
+        return found ? found : null;
     }
 
     _getPackageByVersion(version) {
         let found = _.find(this.packages, (pack) => {
             return pack.id.version === version;
         });
-
-        return found ? {
-            checkSum: found.checkSum,
-            imageName: found.imageName,
-            createdAt: found.createdAt,
-            description: found.description,
-            packageId: {
-                name: found.id.name,
-                version: found.id.version
-            },
-            isBlackListed: found.isBlackListed,
-            isInstalled: true,
-            namespace: found.namespace,
-            signature: found.signature,
-            size: found.size,
-            uri: {
-                uri: found.uri
-            },
-            uuid: found.uuid,
-            vendor: found.vendor
-        } : {};
+        if(found) {
+            found.isInstalled = true;
+            return found;
+        }
+        return null;
     }
 
     _getDevicePackage(data) {
@@ -862,22 +833,9 @@ export default class PackagesStore {
             _.each(packages, (packInstalled) => {
                 if(!_.isUndefined(parsedBlacklist[packInstalled.id.name + '-' + packInstalled.id.version])) {
                     packInstalled.isBlackListed = true;
-                    packInstalled.blacklistComment = parsedBlacklist[packInstalled.id.name + '-' + packInstalled.id.version].comment;
                 }
                 if(autoInstalledPackages.indexOf(packInstalled.id.name) > -1)
                     packInstalled.isAutoInstallEnabled = true;
-            });
-
-            // In order to display comments, we should set this.packages = packages, but then there is a problem with auto update
-            // So for now setting of blacklist comment looks the following way 
-            _.each(this.packages, (packageObj) => {
-                _.each(packages, (packInstalled) => {
-                    if(packInstalled.id.name === packageObj.id.name && packInstalled.id.version === packageObj.id.version) {
-                        if(!_.isUndefined(packInstalled.blacklistComment)) {
-                            packageObj.blacklistComment = packInstalled.blacklistComment;
-                        }
-                    }
-                });
             });
 
             let queuedIds = [];
@@ -1188,40 +1146,6 @@ export default class PackagesStore {
                 break;
         }
         this.overallPackagesCount++;
-    }
-
-    _blacklistPackage(data) {
-        var formattedData = {
-            name: data.packageId.name,
-            version: data.packageId.version,
-        }
-        let foundPackage = this._getPackage(formattedData);
-        if(foundPackage) {
-            foundPackage.isBlackListed = true;
-        }
-        const foundOndevicePackage = _.find(this.ondevicePackages, (ondevicePackage) => {
-            return ondevicePackage.name === data.packageId.name && ondevicePackage.version === data.packageId.version;
-        });
-
-        if(foundOndevicePackage) {
-            foundOndevicePackage.isBlackListed = true;
-        }
-        this.fetchBlacklist();
-    }
-
-    _removePackageFromBlacklist(data) {
-        var foundPackage = this._getPackage(data);
-        if (foundPackage) {
-            foundPackage.isBlackListed = false;
-            foundPackage.blacklistComment = '';
-        }
-        const foundOndevicePackage = _.find(this.ondevicePackages, (ondevicePackage) => {
-            return ondevicePackage.name === data.name && ondevicePackage.version === data.version;
-        });
-        if(foundOndevicePackage) {
-            foundOndevicePackage.isBlackListed = false;
-        }
-        this.fetchBlacklist();
     }
 
     @computed

@@ -34,7 +34,7 @@ const WebsocketHandler = (function (wsUrl, stores) {
                     stores.packagesStore._addTufPackage(data);
                     break;
                 case "PackageBlacklisted":
-                    stores.packagesStore._blacklistPackage(data.id);
+                    stores.packagesStore.fetchBlacklist();
                     break;
                 case "UpdateSpec":
                     if(stores.packagesStore.deviceQueue.length && stores.devicesStore.device.uuid === data.device) {
