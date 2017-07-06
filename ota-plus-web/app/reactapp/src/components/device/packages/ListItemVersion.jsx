@@ -21,10 +21,11 @@ class ListItemVersion extends Component {
         return isPackageBlacklisted ? isPackageBlacklisted : false;
     }
     render() {
-        const { version, queuedPackage, installedPackage, packageVersion, loadPackageVersionProperties, selectedPackageVersion } = this.props;
+        const { version, queuedPackage, installedPackage, expandedVersion, loadPackageVersionProperties, selectedPackageVersion } = this.props;
         let blacklistedPackage = this.isPackageBlacklisted(version);
+        let expandedVersionUuid = expandedVersion ? expandedVersion.uuid : null;
         return (
-            <li className={selectedPackageVersion === version.id.version ? "selected" : ""} id={version.uuid === packageVersion.uuid ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={this.handlePackageVersionClick}>
+            <li className={selectedPackageVersion === version.id.version ? "selected" : ""} id={version.uuid === expandedVersionUuid ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={this.handlePackageVersionClick}>
                 <div className="left-box">
                       <div className="hash">
                         <span className="text">Hash / version:</span> <span className="value" id={"version-value-" + version.id.version.substring(0,8)}>{version.id.version}</span>
@@ -68,7 +69,7 @@ ListItemVersion.propTypes = {
     version: PropTypes.object.isRequired,
     queuedPackage: PropTypes.string,
     installedPackage: PropTypes.string,
-    packageVersion: PropTypes.object.isRequired,
+    expandedVersion: PropTypes.object,
     loadPackageVersionProperties: PropTypes.func.isRequired,
     togglePackageVersion: PropTypes.func.isRequired,
 }
