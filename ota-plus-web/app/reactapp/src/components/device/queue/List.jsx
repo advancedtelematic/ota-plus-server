@@ -17,7 +17,7 @@ class List extends Component {
         return (
             <div>
                 {device.isDirector ?
-                    devicesStore.multiTargetUpdatesFetchAsync.isFetching ?
+                    devicesStore.multiTargetUpdatesFetchAsync.isFetching || devicesStore.multiTargetUpdateCreateAsync.isFetching ?
                         <ul className="list queue">
                             <div className="wrapper-loader">
                                 <Loader />
