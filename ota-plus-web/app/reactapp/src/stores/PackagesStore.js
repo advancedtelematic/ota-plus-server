@@ -1147,7 +1147,14 @@ export default class PackagesStore {
             timestamp: null,
             vendor: null
         }
-        this.packages.push(formattedData);
+        let found = _.find(this.packages, (pack) => {
+            return pack.id.name === name && pack.id.version === version;
+        });
+        if(found) {
+            found.hardwareIds = hardwareIds;
+        } else {
+            this.packages.push(formattedData);
+        }
         switch (this.page) {
             case 'device':
                 this._prepareDevicePackages();
