@@ -141,7 +141,7 @@ class Details extends Component {
 		        					<div className="name">
 						        		<span className = "sub-title">Name:</span>
 						        		<span className="value" id={this.generateIdTag('version-name-value', expandedVersion)}>
-						        			{expandedVersion.id.name}
+						        			{expandedVersion.customExists ? expandedVersion.id.name : "Not reported"}
 						        		</span>
 					        		</div>
 					        		<div className="created">
@@ -159,7 +159,7 @@ class Details extends Component {
 						            <div className="version">
 						        		<span className = "sub-title">Version:</span>
 						        		<span className="value" id={this.generateIdTag('version-value', expandedVersion)}>
-						        			{expandedVersion.id.version}
+						        			{expandedVersion.customExists ? expandedVersion.id.version : "Not reported"}
 						        		</span>
 					        		</div>
 					        		<div className="hash">
