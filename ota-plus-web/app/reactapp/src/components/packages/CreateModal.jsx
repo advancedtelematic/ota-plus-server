@@ -18,10 +18,7 @@ class CreateModal extends Component {
     constructor(props) {
         super(props);
         this.selectHardwareIds = this.selectHardwareIds.bind(this);
-    }
-    componentWillMount() {
-        this.props.hardwareStore.fetchHardwareIds();
-    }
+    }    
     componentDidMount() {
         this.createHandler = new AsyncStatusCallbackHandler(this.props.packagesStore, 'packagesCreateAsync', this.hideModal.bind(this));
         this.createTufHandler = new AsyncStatusCallbackHandler(this.props.packagesStore, 'packagesTufCreateAsync', this.hideModal.bind(this));
