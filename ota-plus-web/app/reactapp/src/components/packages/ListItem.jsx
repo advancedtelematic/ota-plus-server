@@ -5,14 +5,6 @@ import { observer } from 'mobx-react';
 class ListItem extends Component {
     constructor(props) {
         super(props);
-        this.showStatsModal = this.showStatsModal.bind(this);
-    }
-    showStatsModal(e) {
-        if(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        this.props.showStatsModal(this.props.pack.packageName);
     }
     render() {
         const { pack, togglePackage } = this.props;
@@ -21,16 +13,18 @@ class ListItem extends Component {
                 {pack.packageName}
                 {pack.inDirector ?
                     <div className="in-director">
-                        <img src="/assets/img/icons/black/packages.png" alt="Director" />
+                        <img src="/assets/img/icons/black/lock.png" alt="Director" />
                     </div>
                 :
                     null
                 }
-                {this.props.showStatsButton ? 
-                    <div className="btn-status" id="package-stats" onClick={this.showStatsModal}>
-                        Stats
-                    </div>
-                : '' }
+                <div className="package-versions-nr" id="package-versions-nr">
+                    {pack.versions.length === 1 ?
+                        pack.versions.length + " version"
+                    :
+                        pack.versions.length + " versions"
+                    }
+                </div>
             </button>
         );
     }
@@ -39,8 +33,7 @@ class ListItem extends Component {
 ListItem.propTypes = {
     pack: PropTypes.object.isRequired,
     togglePackage: PropTypes.func.isRequired,
-    showStatsModal: PropTypes.func.isRequired,
-    showStatsButton: PropTypes.bool.isRequired,
+   
 }
 
 export default ListItem;
