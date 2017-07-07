@@ -179,18 +179,23 @@ export default class PackagesStore {
         let versionedDirectorPackages = [];
         _.each(directorPackages, (versionObject, index) => {
             _.each(versionObject, (version, imageName) => {
+
+                let customExists = false;
                 let packageName = null;
                 let packageVersion = null;
                 let packageHash = version.hashes.sha256;
+                
                 if(version.custom) {
+                    customExists = true;
                     packageName = version.custom.name.value;   
                     packageVersion = version.custom.version.value;
                 } else {
                     packageName = imageName;   
                     packageVersion = version.hashes.sha256;
                 }
-                
+
                 let formattedVersion = {
+                    customExists: customExists,
                     checkSum: packageHash,
                     imageName: imageName,
                     createdAt: null,
@@ -1114,16 +1119,26 @@ export default class PackagesStore {
     }
 
     _addTufPackage(data) {
+        let customExists = false;
         let name = null;
         let version = null;
+        let hardwareIds = null;
         if(data.custom) {
+            customExists = true;
             name = data.custom.name.value;
             version = data.custom.version.value;
+            hardwareIds = data.custom.hardwareIds;
         } else {
             name = data.filename;
             version = data.checksum.hash;
+            hardwareIds = [];
         }
         let formattedData = {
+            customExists: customExists,
+            checkSum: data.checksum.hash,
+            createdAt: null,
+            updatedAt: null,
+            hardwareIds: hardwareIds,
             description: '',
             id: {
                 name: name,

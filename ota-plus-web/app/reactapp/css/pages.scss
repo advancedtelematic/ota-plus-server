@@ -2071,13 +2071,32 @@
             float: right;
         }
 
+        .hardware-label {
+            color: $color-darkgrey;
+            font-size: 12px;
+            background: $color-mint;
+            padding: 1px 5px;
+            border-radius: 3px;
+            margin: 0 5px;
+        }
+
         .in-director {
             display: inline-block;
             margin-top: -6px;
+            margin-left: 10px;
+            margin-right: 5px;
 
             img {
-                width: 30px;
+                width: 25px;
             }
+        }
+
+        .package-versions-nr {
+            color: #b5b7b9;
+            display: inline-block;
+            margin-top: -6px;
+            margin-left: 5px;
+            margin-right: 10px;
         }
 
         .package-name {
