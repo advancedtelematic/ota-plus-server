@@ -821,6 +821,10 @@ input {
             overflow: hidden;
             border: 1px solid #e1e1e1;
 
+            &:not(:last-child) {
+                margin-bottom: 5px;
+            }
+
             &.blacklist {
                 color: red;
                 background: #F3BDBD;
