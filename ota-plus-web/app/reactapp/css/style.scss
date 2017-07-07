@@ -799,6 +799,7 @@ input {
         border: 0;
         border-bottom: 1px solid #ddd;
         @include transition;
+        overflow: hidden;
 
         &:hover {
             background: #f5f5f5;
@@ -817,7 +818,6 @@ input {
 
         li {
             background: #fff;
-            margin: 5px 0;
             overflow: hidden;
             border: 1px solid #e1e1e1;
 
