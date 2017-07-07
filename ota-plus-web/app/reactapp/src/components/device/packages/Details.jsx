@@ -109,34 +109,86 @@ class Details extends Component {
 				        		</div>
 			        	</div>
 			        	<div className="bottom">
-				        	<div className="version">
-				        		<span className = "sub-title">Version / hash:</span>
-				        		<span className="value" id={this.generateIdTag('version-hash-value', expandedVersion)}>
-				        			{expandedVersion.id.version}
-				        		</span>
-			        		</div>
-				            <div className="hash">
-								<span className = "sub-title">Package identifier:</span>
-				        		<span className="value" id={this.generateIdTag('package-identifier-value', expandedVersion)}>
-				        			{expandedVersion.uuid}
-				        		</span>
-			        		</div>
-			        		<div className="created">
-								<span className = "sub-title">Created at:</span>
-				        		<span className="value">
-				        			{moment(expandedVersion.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}
-				        		</span>
-			        		</div>
-			        		{!device.isDirector ?
-			        			<div className="vendor">
-					            	<span className = "sub-title">Vendor:</span>
-					        		<span className="value">
-					        			{expandedVersion.vendor}
-					        		</span>
-					            </div>
+			        		{!device.isDirector ? 
+			        			<span>
+			        				<div className="version">
+						        		<span className = "sub-title">Version / hash:</span>
+						        		<span className="value" id={this.generateIdTag('version-hash-value', expandedVersion)}>
+						        			{expandedVersion.id.version}
+						        		</span>
+					        		</div>
+						            <div className="hash">
+										<span className = "sub-title">Package identifier:</span>
+						        		<span className="value" id={this.generateIdTag('package-identifier-value', expandedVersion)}>
+						        			{expandedVersion.uuid}
+						        		</span>
+					        		</div>
+					        		<div className="created">
+										<span className = "sub-title">Created at:</span>
+						        		<span className="value">
+						        			{moment(expandedVersion.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}
+						        		</span>
+					        		</div>
+				        			<div className="vendor">
+						            	<span className = "sub-title">Vendor:</span>
+						        		<span className="value">
+						        			{expandedVersion.vendor}
+						        		</span>
+						            </div>
+			        			</span>
 		        			:
-			        			null
-			        		}
+		        				<span>
+		        					<div className="name">
+						        		<span className = "sub-title">Name:</span>
+						        		<span className="value" id={this.generateIdTag('version-name-value', expandedVersion)}>
+						        			{expandedVersion.id.name}
+						        		</span>
+					        		</div>
+					        		<div className="created">
+										<span className = "sub-title">Created at:</span>
+						        		<span className="value" id={this.generateIdTag('version-created-at-value', expandedVersion)}>
+						        			{moment(expandedVersion.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}
+						        		</span>
+					        		</div>
+					        		<div className="updated">
+										<span className = "sub-title">Updated at:</span>
+						        		<span className="value" id={this.generateIdTag('version-updated-at-value', expandedVersion)}>
+						        			{moment(null).format("ddd MMM DD YYYY, h:mm:ss A")}
+						        		</span>
+					        		</div>
+						            <div className="version">
+						        		<span className = "sub-title">Version:</span>
+						        		<span className="value" id={this.generateIdTag('version-value', expandedVersion)}>
+						        			{expandedVersion.id.version}
+						        		</span>
+					        		</div>
+					        		<div className="hash">
+						        		<span className = "sub-title">Hash:</span>
+						        		<span className="value" id={this.generateIdTag('version-hash-value', expandedVersion)}>
+						        			{expandedVersion.checkSum}
+						        		</span>
+					        		</div>
+					        		<div className="hash-length">
+						        		<span className = "sub-title">Length:</span>
+						        		<span className="value" id={this.generateIdTag('version-hash-length-value', expandedVersion)}>
+						        			{expandedVersion.checkSum.length}
+						        		</span>
+					        		</div>
+					        		<div className="hardware-ids">
+						        		<span className = "sub-title">Hardware ids:</span>
+						        		<span className="value" id={this.generateIdTag('version-hardware-ids-value', expandedVersion)}>
+						        			{_.map(expandedVersion.hardwareIds, (hardwareId, index) => {
+		                                         return (
+		                                            <span className="hardware-label" key={index}>
+		                                                {hardwareId}
+		                                            </span>
+		                                        );
+		                                    })}
+						        		</span>
+					        		</div>
+		        				</span>
+		        			}
+				        	
 			        	</div>
 			        	{!device.isDirector ?
 			        		<span>

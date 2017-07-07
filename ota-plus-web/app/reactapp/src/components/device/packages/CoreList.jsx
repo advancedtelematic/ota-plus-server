@@ -214,7 +214,7 @@ class CoreList extends Component {
                                     <span key={index}>
                                     <ListItem
                                         pack={pack}
-                                        deviceId={device.uuid}
+                                        device={device}
                                         queuedPackage={queuedPackage}
                                         installedPackage={installedPackage}
                                         blacklistedAndInstalled={blacklistedAndInstalled}

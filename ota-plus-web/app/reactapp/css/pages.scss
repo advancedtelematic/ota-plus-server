@@ -1065,6 +1065,16 @@
                             height: 50px;
                             padding: 15px;
 
+                            .name {
+                                display: inline-block;
+                            }
+
+                            .package-versions-nr {
+                                color: #b5b7b9;
+                                display: inline-block;
+                                margin-left: 10px;
+                            }
+
                             .status-name {
                                 float: right;
                             }
