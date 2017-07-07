@@ -16,6 +16,7 @@ class Packages extends Component {
         this.props.packagesStore.page = 'packages';
         this.props.packagesStore.fetchPackages();
         this.props.packagesStore.fetchBlacklist();
+        this.props.hardwareStore.fetchHardwareIds();
     }
     componentWillUnmount() {
         this.props.packagesStore._reset();

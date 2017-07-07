@@ -77,7 +77,6 @@ export default class HardwareStore {
         return axios.get(`${API_HARDWARE_IDS_FETCH}` + '?limit=' + this.hardwareIdsLimit + '&offset=' + this.hardwareIdsCurrentPage * this.hardwareIdsLimit)
             .then(function (response) {
                 this.hardwareIds = response.data.values;
-                this.hardwareIdsCurrentPage++;
                 this.hardwareIdsFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
