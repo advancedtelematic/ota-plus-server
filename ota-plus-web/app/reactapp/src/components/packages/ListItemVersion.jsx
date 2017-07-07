@@ -74,62 +74,108 @@ class ListItemVersion extends Component {
         let isBlacklised = this.isPackageBlacklisted(version);
         return (
             <li className={isBlacklised ? "blacklist" : ""}>
-                <div className="left-box">
-                {!version.inDirector ?
+                {version.inDirector ?
                     <span>
-                        <input 
-                            className="input-comment" 
-                            name="comment" 
-                            value={this.commentTmp} 
-                            type="text" 
-                            placeholder="Comment here." 
-                            ref="comment" 
-                            onKeyUp={this.changeCommentFieldLength} 
-                            onChange={this.changeCommentFieldLength} 
-                            onFocus={this.enableEditField} />
-                            {this.commentFieldLength > 0 && this.activeEditField ?
-                                <div className="action-buttons">
-                                    <a href="#" className="cancel-button" onClick={this.disableEditField}>
-                                        <img src="/assets/img/icons/close_icon.png" alt="" />
-                                    </a>
-                                    &nbsp;
-                                    <a href="#" className="accept-button" onClick={this.handleSubmit}>
-                                        <img src="/assets/img/icons/accept_icon.png" alt="" />
-                                    </a>
-                                </div>
-                            : 
-                                ''
-                            }
-                        </span>
-                :
-                    null
-                }
-                    
-                </div>
-                <div className="right-box">
-                    <span title={version.id.version} className="version-name">
-                        {version.id.version}
+                        <div className="left-box">                        
+                            <div className="fields">
+                                {version.customExists ? 
+                                    <span>
+                                        <div className="version">
+                                            Version: {version.id.version}
+                                        </div>
+                                        <div className="created_at">
+                                            Created_at: {null}
+                                        </div>
+                                        <div className="updated_at">
+                                            Updated_at: {null}
+                                        </div>
+                                        <div className="hash">
+                                            Hash: {version.checkSum}
+                                        </div>
+                                        <div className="hash">
+                                            Length: {version.checkSum.length}
+                                        </div>
+                                        <div className="hardware_ids">
+                                            Hardware ids: 
+                                            {_.map(version.hardwareIds, (hardwareId, index) => {
+                                                return (
+                                                    <span className="hardware-label" key={index}>
+                                                        {hardwareId}
+                                                    </span>
+                                                );
+                                            })}
+                                        </div>
+                                    </span>
+                                :
+                                    <span>
+                                        <div className="hash">
+                                            Hash: {version.checkSum}
+                                        </div>
+                                        <div className="hash">
+                                            Length: {version.checkSum.length}
+                                        </div>
+                                    </span>
+                                }
+                                
+                            </div>
+                        </div>
+                        <div className="right-box">
+                            <span title={version.id.version} className="version-name">
+                                {version.id.version}
+                            </span>
+                        </div>
                     </span>
-                    {!version.inDirector ?
-                        isBlacklised ?
-                            <button 
-                                className="btn-blacklist edit" 
-                                onClick={this.openBlacklistModal.bind(this, 'edit')} 
-                                title="Edit blacklisted package version" 
-                                id={"button-edit-blacklisted-package-" + version.id.name + "-" + version.id.version}>
-                            </button>
-                        : 
-                            <button 
-                                className="btn-blacklist" 
-                                onClick={this.openBlacklistModal.bind(this, 'add')} 
-                                title="Blacklist package version" 
-                                id={"button-blacklist-package-" + version.id.name + "-" + version.id.version}>
-                            </button>
-                    :
-                        null
-                    }
-                    
-                </div>
+                :
+                    <span>
+                        <div className="left-box">
+                            <span>
+                                <input 
+                                    className="input-comment" 
+                                    name="comment" 
+                                    value={this.commentTmp} 
+                                    type="text" 
+                                    placeholder="Comment here." 
+                                    ref="comment" 
+                                    onKeyUp={this.changeCommentFieldLength} 
+                                    onChange={this.changeCommentFieldLength} 
+                                    onFocus={this.enableEditField} />
+                                    {this.commentFieldLength > 0 && this.activeEditField ?
+                                        <div className="action-buttons">
+                                            <a href="#" className="cancel-button" onClick={this.disableEditField}>
+                                                <img src="/assets/img/icons/close_icon.png" alt="" />
+                                            </a>
+                                            &nbsp;
+                                            <a href="#" className="accept-button" onClick={this.handleSubmit}>
+                                                <img src="/assets/img/icons/accept_icon.png" alt="" />
+                                            </a>
+                                        </div>
+                                    : 
+                                        ''
+                                    }
+                            </span>
+                        </div>
+                        <div className="right-box">
+                            <span title={version.id.version} className="version-name">
+                                {version.id.version}
+                            </span>
+                            {isBlacklised ?
+                                <button 
+                                    className="btn-blacklist edit" 
+                                    onClick={this.openBlacklistModal.bind(this, 'edit')} 
+                                    title="Edit blacklisted package version" 
+                                    id={"button-edit-blacklisted-package-" + version.id.name + "-" + version.id.version}>
+                                </button>
+                            : 
+                                <button 
+                                    className="btn-blacklist" 
+                                    onClick={this.openBlacklistModal.bind(this, 'add')} 
+                                    title="Blacklist package version" 
+                                    id={"button-blacklist-package-" + version.id.name + "-" + version.id.version}>
+                                </button>
+                            }
+                        </div>
+                    </span>
+                }
             </li>
         );
     }
