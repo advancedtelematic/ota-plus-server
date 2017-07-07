@@ -31,8 +31,10 @@ class ListItemVersion extends Component {
                         <span className="text">Hash / version:</span> <span className="value" id={"version-value-" + version.id.version.substring(0,8)}>{version.id.version}</span>
                       </div>
                       <div className="created_at">
-
                         <span className="text">Created at:</span> <span className="value">{moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
+                      </div>
+                      <div className="updated_at">
+                        <span className="text">Updated at:</span> <span className="value">{moment(null).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
                       </div>
                 </div>
                 <div className="right-box">

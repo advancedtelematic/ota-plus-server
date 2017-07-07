@@ -7,11 +7,24 @@ class ListItem extends Component {
         super(props);
     }
     render() {
-        const { pack, deviceId, queuedPackage, installedPackage, blacklistedAndInstalled, isSelected, togglePackage, toggleAutoInstall } = this.props;
+        const { pack, device, queuedPackage, installedPackage, blacklistedAndInstalled, isSelected, togglePackage, toggleAutoInstall } = this.props;
         return (
             <span className="wrapper-item">
                 <button className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
-                    {pack.packageName}
+                    <div className="name">
+                        {pack.packageName}
+                    </div>
+                    {device.isDirector ?
+                        <div className="package-versions-nr" id="package-versions-nr">
+                            {pack.versions.length === 1 ?
+                                pack.versions.length + " version"
+                            :
+                                pack.versions.length + " versions"
+                            }
+                        </div>
+                    :
+                        null
+                    }
                     {!isSelected ?
                         blacklistedAndInstalled ?
                             pack.isAutoInstallEnabled ?
@@ -62,7 +75,7 @@ class ListItem extends Component {
                 {isSelected ?
                     <div className="wrapper-auto-update">
                         Automatic update
-                        <div className={"switch" + (pack.isAutoInstallEnabled ? " switchOn" : "")} id="auto-install-switch" onClick={toggleAutoInstall.bind(this, pack.packageName, deviceId, pack.isAutoInstallEnabled)}>
+                        <div className={"switch" + (pack.isAutoInstallEnabled ? " switchOn" : "")} id="auto-install-switch" onClick={toggleAutoInstall.bind(this, pack.packageName, device.uuid, pack.isAutoInstallEnabled)}>
                             <div className="switch-status">
                                 {pack.isAutoInstallEnabled ?
                                     <span>ON</span>
@@ -82,7 +95,7 @@ class ListItem extends Component {
 
 ListItem.propTypes = {
     pack: PropTypes.object.isRequired,
-    deviceId: PropTypes.string.isRequired,
+    device: PropTypes.object.isRequired,
     queuedPackage: PropTypes.string,
     installedPackage: PropTypes.string,
     blacklistedAndInstalled: PropTypes.string,
