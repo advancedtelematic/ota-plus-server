@@ -760,7 +760,7 @@ export default class PackagesStore {
     }
 
     _preparePackages(packagesSort = this.packagesSort) {
-        let packages = this.packages;        
+        let packages = this.packages;
         let groupedPackages = {};
         let sortedPackages = {};
         this.packagesSort = packagesSort;
@@ -777,10 +777,6 @@ export default class PackagesStore {
             groupedPackages[index].versions = _.sortBy(obj.versions, (pack) => {
                 return pack.createdAt;
             }).reverse();
-            let uniqueVersions = _.uniq(groupedPackages[index].versions.reverse(), function (item, key, a) {
-                return item.checkSum;
-            });
-            groupedPackages[index].versions = uniqueVersions;
         });
         let specialGroup = {
             '#': []
