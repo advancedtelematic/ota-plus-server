@@ -112,7 +112,7 @@ class OnDeviceList extends Component {
         const { packagesStore, expandedVersion, device, showPackageBlacklistModal, onFileDrop } = this.props;
         return (
             <div className="ios-list" ref="list">
-                {!expandedVersion.isInstalled && device.isDirector ?
+                {expandedVersion && !expandedVersion.isInstalled && device.isDirector ?
                     <div className="wrapper-center">
                         None reported for the current selection
                     </div>

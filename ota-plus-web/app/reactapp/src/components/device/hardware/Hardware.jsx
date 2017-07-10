@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {observable} from 'mobx';
+import {observable, observe} from 'mobx';
 import {observer} from 'mobx-react';
 import HardwareList from './List';
 import HardwareOverlay from './Overlay';
@@ -24,13 +24,19 @@ class Hardware extends Component {
         this.hideSecondaryDetails = this.hideSecondaryDetails.bind(this);
         this.hideDetails = this.hideDetails.bind(this);
         this.hideKey = this.hideKey.bind(this);
-    }
-    componentWillMount() {
-        if(this.props.device.isDirector) {
-            this.props.selectEcu(this.props.device.directorAttributes.primary.hardwareId);
-        }
-    }
 
+        this.packagesFetchHandler = observe(props.packagesStore, (change) => {
+            if(change.name === 'packagesFetchAsync' && change.object[change.name].isFetching === false) {
+                if(props.device.isDirector) {
+                    props.selectEcu(props.device.directorAttributes.primary.hardwareId, props.device.directorAttributes.primary.image.hash.sha256, 'primary');
+                }
+            }
+        });
+        
+    }
+    componentWillUnmount() {
+        this.packagesFetchHandler();
+    }
     showDetails(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -66,12 +72,10 @@ class Hardware extends Component {
     render() {
         const { hardwareStore, device, activeEcu, selectEcu } = this.props;
         const hardware = hardwareStore.hardware[device.uuid];
-
         let active = true;
         if(device.isDirector) {
-            active = activeEcu === device.directorAttributes.primary.hardwareId;
+            active = activeEcu.ecu === device.directorAttributes.primary.hardwareId;
         }
-
         return (
             <span>
                 <div className="hardware-list">
@@ -115,7 +119,7 @@ class Hardware extends Component {
                                         key={index}
                                     >
                                         <SecondaryEcu
-                                            active={activeEcu === item.hardwareId}
+                                            active={activeEcu.ecu === item.hardwareId}
                                             ecu={item}
                                             hardwareStore={hardwareStore}
                                             showKey={this.showKey}
@@ -171,8 +175,9 @@ class Hardware extends Component {
 
 Hardware.propTypes = {
     hardwareStore: PropTypes.object.isRequired,
+    packagesStore: PropTypes.object.isRequired,
     device: PropTypes.object.isRequired,
-    activeEcu: PropTypes.string,
+    activeEcu: PropTypes.object,
     selectEcu: PropTypes.func.isRequired,
 }
 

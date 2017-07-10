@@ -24,7 +24,10 @@ class Device extends Component {
     @observable packageProperties = {};
     @observable expandedVersion = null;
     @observable uploadToTuf = false;
-    @observable activeEcu = null;
+    @observable activeEcu = {
+        ecu: null,
+        type: null
+    };
     @observable multiTargetUpdateStarted = false;
 
     constructor(props) {
@@ -42,14 +45,10 @@ class Device extends Component {
         this.clearStepsHistory = this.clearStepsHistory.bind(this);
         this.loadPackageVersionProperties = this.loadPackageVersionProperties.bind(this);
         this.toggleTufUpload = this.toggleTufUpload.bind(this);        
-        this.setShownVersion = this.setShownVersion.bind(this);        
     }
     toggleTufUpload(e) {
         if(e) e.preventDefault();
         this.uploadToTuf = !this.uploadToTuf;
-    }
-    setShownVersion(shown) {
-       this.expandedVersion = shown;
     }
     showPackageCreateModal(files, e) {
         if(e) e.preventDefault();
@@ -94,9 +93,13 @@ class Device extends Component {
         this.props.devicesStore.createMultiTargetUpdate(data, this.props.devicesStore.device.uuid);
         this.props.showQueueModal();
     }
-    selectEcu(ecu, e) {
+    selectEcu(ecu, installedHash, ecuType, e) {
         if(e) e.preventDefault();
-        this.activeEcu = ecu;
+        this.activeEcu = {
+            ecu: ecu,
+            type: ecuType
+        };
+        this.expandedVersion = this.props.packagesStore._getExpandedPackage(installedHash);
     }
     cancelInstallation(requestId) {
         this.props.packagesStore.cancelInstallation(this.props.devicesStore.device.uuid, requestId);
@@ -109,8 +112,26 @@ class Device extends Component {
         let versionUuid = version.uuid;
         if(e) e.preventDefault();
         this.expandedVersion = version;
-        this.expandedVersion.isInstalled = version.attributes.status === 'installed' || 
-                (this.props.devicesStore.device.isDirector && this.props.devicesStore.device.directorAttributes.primary.image.hash.sha256 === version.id.version);
+        this.expandedVersion.isInstalled = this.isVersionInstalled(version);
+    }
+    isVersionInstalled(version) {
+        let installedOnPrimary = false;
+        let installedOnSecondary = false;
+        let installedOnLegacy = false;
+        if(this.props.devicesStore.device.isDirector) {
+            if(this.activeEcu.type === 'primary' && this.props.devicesStore.device.directorAttributes.primary.image.hash.sha256 === version.id.version) {
+                installedOnPrimary = true;
+            }
+            if(this.activeEcu.type === 'secondary') {
+                _.map(this.props.devicesStore.device.directorAttributes.secondary, (secondary, index) => {
+                    if(secondary.image.hash.sha256 === version.id.version) {
+                        installedOnSecondary = true;
+                    }
+                })
+            }
+        }
+        installedOnLegacy = version.attributes.status === 'installed';
+        return installedOnPrimary || installedOnSecondary || installedOnLegacy;
     }
     render() {
         const { devicesStore, packagesStore, hardwareStore } = this.props;
@@ -126,6 +147,7 @@ class Device extends Component {
                         <span>
                             <DeviceHardwarePanel 
                                 hardwareStore={hardwareStore}
+                                packagesStore={packagesStore}
                                 device={device}                                
                                 activeEcu={this.activeEcu}
                                 selectEcu={this.selectEcu}
@@ -141,7 +163,6 @@ class Device extends Component {
                                 expandedVersion={this.expandedVersion}
                                 loadPackageVersionProperties={this.loadPackageVersionProperties}
                                 activeEcu={this.activeEcu}
-                                setShownVersion={this.setShownVersion}
                             />
                             <DevicePropertiesPanel
                                 packagesStore={packagesStore}
