@@ -21,7 +21,7 @@ class SoftwarePanel extends Component {
         this.props.packagesStore.fetchPackages(filter);
     }
     render() {
-        const { devicesStore, packagesStore, hardwareStore, device, togglePackageAutoUpdate, onFileDrop, expandedVersion, loadPackageVersionProperties, activeEcu, setShownVersion } = this.props;
+        const { devicesStore, packagesStore, hardwareStore, device, togglePackageAutoUpdate, onFileDrop, expandedVersion, loadPackageVersionProperties, activeEcu } = this.props;
         return (
             <div className="software-panel">
                 <div className="darkgrey-header">
@@ -45,7 +45,6 @@ class SoftwarePanel extends Component {
                                     expandedVersion={expandedVersion}
                                     loadPackageVersionProperties={loadPackageVersionProperties}
                                     activeEcu={activeEcu}
-                                    setShownVersion={setShownVersion}
                                 />
                             :
                                 <span className="content-empty">
@@ -74,8 +73,7 @@ SoftwarePanel.propTypes = {
     onFileDrop: PropTypes.func.isRequired,
     expandedVersion: PropTypes.object,
     loadPackageVersionProperties: PropTypes.func.isRequired,
-    activeEcu: PropTypes.string,
-    setShownVersion: PropTypes.func.isRequired,
+    activeEcu: PropTypes.object,
 }
 
 export default SoftwarePanel;

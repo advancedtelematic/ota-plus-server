@@ -37,15 +37,17 @@ class CoreList extends Component {
             }
         });
     }
-    componentWillMount() {
-        if(this.props.device.isDirector) {
-            this.props.setShownVersion(this.props.packagesStore._getPackageByVersion(this.props.devicesStore.device.directorAttributes.primary.image.hash.sha256));
-        }
-    }
+   
     componentWillReceiveProps(nextProps) {
         if(this.props.device.isDirector) {
-            this.expandedPackageName = nextProps.expandedVersion.id.name;
-            this.selectedPackageVersion = nextProps.expandedVersion.id.version;
+            if(nextProps.expandedVersion) {
+                this.expandedPackageName = nextProps.expandedVersion.id.name;
+                this.selectedPackageVersion = nextProps.expandedVersion.id.version;
+            }
+            else {
+                this.expandedPackageName = null;
+                this.selectedPackageVersion = null;
+            }
         }
     }
     componentDidMount() {
@@ -133,7 +135,7 @@ class CoreList extends Component {
             _.map(packagesStore.preparedPackagesPerDevice[device.uuid], (packages, letter) => {
                 directorPackages[letter] = [];
                 _.map(packages, (pack, index) => {
-                    if(pack.inDirector && _.includes(pack.hardwareIds, activeEcu)) {
+                    if(pack.inDirector && _.includes(pack.hardwareIds, activeEcu.ecu)) {
                         directorPackages[letter].push(pack);
                     }
                     _.map(pack.versions, (version, ind) => {
@@ -199,11 +201,21 @@ class CoreList extends Component {
                                 
                                 installedPackage = foundInstalled ? foundInstalled.id.version : null;
 
-                                {_.map(pack.versions, (version, i) => {
-                                    if(device.isDirector && version.id.version === device.directorAttributes.primary.image.hash.sha256) {
-                                        installedPackage = version.id.version;
-                                    }
-                                })}
+                                if(device.isDirector && activeEcu) {
+                                    {_.map(pack.versions, (version, i) => {
+                                        if(activeEcu.type === 'primary') {
+                                            if(version.id.version === device.directorAttributes.primary.image.hash.sha256) {
+                                                installedPackage = version.id.version;
+                                            }
+                                        } else {
+                                            _.map(device.directorAttributes.secondary, (secondaryObj, ind) => {
+                                                if(version.id.version === secondaryObj.image.hash.sha256) {
+                                                    installedPackage = version.id.version;
+                                                }
+                                            });
+                                        }
+                                    })}
+                                }
 
                                 const foundBlacklistedAndInstalled = _.find(pack.versions, (version) => {
                                     return version.isBlackListed && version.attributes.status == 'installed';
@@ -316,8 +328,7 @@ CoreList.propTypes = {
     togglePackageAutoUpdate: PropTypes.func.isRequired,
     expandedVersion: PropTypes.object,
     loadPackageVersionProperties: PropTypes.func.isRequired,
-    activeEcu: PropTypes.string,
-    setShownVersion: PropTypes.func.isRequired,
+    activeEcu: PropTypes.object,
 }
 
 export default CoreList;
