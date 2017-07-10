@@ -109,10 +109,17 @@ class Device extends Component {
         this.props.devicesStore.clearStepsHistory();
     }
     loadPackageVersionProperties(version, e) {
-        let versionUuid = version.uuid;
-        if(e) e.preventDefault();
-        this.expandedVersion = version;
-        this.expandedVersion.isInstalled = this.isVersionInstalled(version);
+        if(version === 'unmanaged') {
+            this.expandedVersion = {
+                unmanaged: true,
+                isInstalled: true
+            };
+        } else {
+            let versionUuid = version.uuid;
+            if(e) e.preventDefault();
+            this.expandedVersion = version;
+            this.expandedVersion.isInstalled = this.isVersionInstalled(version);
+        }
     }
     isVersionInstalled(version) {
         const { devicesStore } = this.props;
