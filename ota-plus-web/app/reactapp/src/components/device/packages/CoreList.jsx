@@ -127,48 +127,43 @@ class CoreList extends Component {
         clearInterval(this.tmpIntervalId);
         this.tmpIntervalId = null;
     }
-    render() {
-        const { packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, expandedVersion, loadPackageVersionProperties, activeEcu } = this.props;
-        let preparedPackages = packagesStore.preparedPackagesPerDevice[device.uuid];
-        if(this.props.device.isDirector) {
-            let directorPackages = {};
-            _.map(packagesStore.preparedPackagesPerDevice[device.uuid], (packages, letter) => {
-                directorPackages[letter] = [];
-                _.map(packages, (pack, index) => {
-                    if(pack.inDirector && _.includes(pack.hardwareIds, activeEcu.ecu)) {
-                        directorPackages[letter].push(pack);
-                    }
+    clearArray(array) {
+        _.map(array, (item, index) => {
+            if(!array[index].length) {
+                delete array[index];
+            }
+        });
+    }
+    selectPackagesToDisplay() {
+        let preparedPackages = this.props.packagesStore.preparedPackagesPerDevice[this.props.device.uuid];
+        let dirPacks = {};
+        let corePacks = {};
+        _.map(this.props.packagesStore.preparedPackagesPerDevice[this.props.device.uuid], (packages, letter) => {
+            dirPacks[letter] = [];
+            corePacks[letter] = [];
+            _.map(packages, (pack, index) => {
+                if(pack.inDirector && _.includes(pack.hardwareIds, this.props.activeEcu.ecu)) {
+                    dirPacks[letter].push(pack);
+                }
+                if(!pack.inDirector) {
+                    corePacks[letter].push(pack);
+                }
+                if(this.props.device.isDirector) {
                     _.map(pack.versions, (version, ind) => {
-                        if(version.id.version === device.directorAttributes.primary.image.hash.sha256) {
-                            directorPackages[letter].push(pack);
+                        if(version.id.version === this.props.device.directorAttributes.primary.image.hash.sha256) {
+                            dirPacks[letter].push(pack);
                         }
                     });
-                });
-            });
-            _.map(directorPackages, (pack, letter) => {
-                if(!directorPackages[letter].length) {
-                    delete directorPackages[letter];
                 }
             });
-            preparedPackages = directorPackages;
-        } else {
-            let corePackages = {};
-            _.map(packagesStore.preparedPackagesPerDevice[device.uuid], (packages, letter) => {
-                corePackages[letter] = [];
-                _.map(packages, (pack, index) => {
-                    if(!pack.inDirector) {
-                        corePackages[letter].push(pack);
-                    }
-                });
-            });
-            _.map(corePackages, (pack, letter) => {
-                if(!corePackages[letter].length) {
-                    delete corePackages[letter];
-                }
-            });
-            preparedPackages = corePackages;
-        }
-
+        });
+        this.clearArray(dirPacks);
+        this.clearArray(corePacks);
+        return this.props.device.isDirector ? dirPacks : corePacks;
+    }
+    render() {
+        const { packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, expandedVersion, loadPackageVersionProperties, activeEcu } = this.props;
+        let preparedPackages = this.selectPackagesToDisplay();
         return (
             <div className="ios-list" ref="list">
                 <Dropzone
@@ -184,132 +179,132 @@ class CoreList extends Component {
                     {_.map(preparedPackages, (packages, letter) => {
                         return (
                             <span key={letter}>
-                        <div className="header">{letter}</div>
-                            {_.map(packages, (pack, index) => {
-                                const that = this;
-                                let queuedPackage = null;
-                                let installedPackage = null;
-                                let blacklistedPackage = null;
-                                let blacklistedAndInstalled = null;
-                                const foundQueued = _.find(pack.versions, (version) => {
-                                    return version.attributes.status == 'queued';
-                                });
-                                queuedPackage = foundQueued ? foundQueued.id.version : null;
-                                const foundInstalled = _.find(pack.versions, (version) => {
-                                    return version.attributes.status == 'installed';
-                                });
-                                
-                                installedPackage = foundInstalled ? foundInstalled.id.version : null;
+                                <div className="header">{letter}</div>
+                                    {_.map(packages, (pack, index) => {
+                                        const that = this;
+                                        let queuedPackage = null;
+                                        let installedPackage = null;
+                                        let blacklistedPackage = null;
+                                        let blacklistedAndInstalled = null;
+                                        const foundQueued = _.find(pack.versions, (version) => {
+                                            return version.attributes.status == 'queued';
+                                        });
+                                        queuedPackage = foundQueued ? foundQueued.id.version : null;
+                                        const foundInstalled = _.find(pack.versions, (version) => {
+                                            return version.attributes.status == 'installed';
+                                        });
+                                        
+                                        installedPackage = foundInstalled ? foundInstalled.id.version : null;
 
-                                if(device.isDirector && activeEcu) {
-                                    {_.map(pack.versions, (version, i) => {
-                                        if(activeEcu.type === 'primary') {
-                                            if(version.id.version === device.directorAttributes.primary.image.hash.sha256) {
-                                                installedPackage = version.id.version;
-                                            }
-                                        } else {
-                                            _.map(device.directorAttributes.secondary, (secondaryObj, ind) => {
-                                                if(version.id.version === secondaryObj.image.hash.sha256) {
-                                                    installedPackage = version.id.version;
-                                                }
-                                            });
-                                        }
-                                    })}
-                                }
-
-                                const foundBlacklistedAndInstalled = _.find(pack.versions, (version) => {
-                                    return version.isBlackListed && version.attributes.status == 'installed';
-                                });
-                                blacklistedAndInstalled = foundBlacklistedAndInstalled ? foundBlacklistedAndInstalled.id.version : null;
-
-                                return (
-                                    <span key={index}>
-                                    <ListItem
-                                        pack={pack}
-                                        device={device}
-                                        queuedPackage={queuedPackage}
-                                        installedPackage={installedPackage}
-                                        blacklistedAndInstalled={blacklistedAndInstalled}
-                                        isSelected={this.expandedPackageName === pack.packageName}
-                                        togglePackage={this.togglePackage}
-                                        toggleAutoInstall={togglePackageAutoUpdate}
-                                    />
-                                    <VelocityTransitionGroup
-                                        enter={{
-                                            animation: "slideDown",
-                                            begin: () => {
-                                                that.startIntervalListScroll()
-                                            },
-                                            complete: () => {
-                                                that.stopIntervalListScroll()
-                                            }
-                                        }}
-                                        leave={{
-                                            animation: "slideUp",
-                                            begin: () => {
-                                                that.startIntervalListScroll()
-                                            },
-                                            complete: () => {
-                                                that.stopIntervalListScroll()
-                                            }
-                                        }}>
-                                        {this.expandedPackageName === pack.packageName ?
-                                            <ul className="versions">
-                                                <VelocityTransitionGroup
-                                                    enter={{
-                                                        animation: "slideDown",
-                                                        begin: () => {
-                                                            that.startIntervalListScroll()
-                                                        },
-                                                        complete: () => {
-                                                            that.stopIntervalListScroll()
-                                                        }
-                                                    }}
-                                                    leave={{
-                                                        animation: "slideUp",
-                                                        begin: () => {
-                                                            that.startIntervalListScroll()
-                                                        },
-                                                        complete: () => {
-                                                            that.stopIntervalListScroll()
-                                                        }
-                                                    }}>
-                                                    {pack.isAutoInstallEnabled ?
-                                                        <div className="info-auto-update">
-                                                            Automatic update activated. The latest
-                                                            version of this package will
-                                                            automatically be installed on this
-                                                            device.
-                                                        </div>
-                                                        :
-                                                        null
+                                        if(device.isDirector && activeEcu) {
+                                            {_.map(pack.versions, (version, i) => {
+                                                if(activeEcu.type === 'primary') {
+                                                    if(version.id.version === device.directorAttributes.primary.image.hash.sha256) {
+                                                        installedPackage = version.id.version;
                                                     }
-                                                </VelocityTransitionGroup>
-                                                {_.map(pack.versions, (version, i) => {
-                                                    return (
-                                                        <ListItemVersion
-                                                            packagesStore={packagesStore}
-                                                            version={version}
-                                                            queuedPackage={queuedPackage}
-                                                            installedPackage={installedPackage}
-                                                            expandedVersion={expandedVersion}
-                                                            loadPackageVersionProperties={loadPackageVersionProperties}
-                                                            togglePackageVersion={this.togglePackageVersion}
-                                                            selectedPackageVersion={this.selectedPackageVersion}
-                                                            key={i}
-                                                        />
-                                                    );
-                                                })}
-                                            </ul>
-                                            :
-                                            null
+                                                } else {
+                                                    _.map(device.directorAttributes.secondary, (secondaryObj, ind) => {
+                                                        if(version.id.version === secondaryObj.image.hash.sha256) {
+                                                            installedPackage = version.id.version;
+                                                        }
+                                                    });
+                                                }
+                                            })}
                                         }
-                                    </VelocityTransitionGroup>
-                                </span>
-                                );
-                                
-                            })}
-                    </span>
+
+                                        const foundBlacklistedAndInstalled = _.find(pack.versions, (version) => {
+                                            return version.isBlackListed && version.attributes.status == 'installed';
+                                        });
+                                        blacklistedAndInstalled = foundBlacklistedAndInstalled ? foundBlacklistedAndInstalled.id.version : null;
+
+                                        return (
+                                            <span key={index}>
+                                            <ListItem
+                                                pack={pack}
+                                                device={device}
+                                                queuedPackage={queuedPackage}
+                                                installedPackage={installedPackage}
+                                                blacklistedAndInstalled={blacklistedAndInstalled}
+                                                isSelected={this.expandedPackageName === pack.packageName}
+                                                togglePackage={this.togglePackage}
+                                                toggleAutoInstall={togglePackageAutoUpdate}
+                                            />
+                                            <VelocityTransitionGroup
+                                                enter={{
+                                                    animation: "slideDown",
+                                                    begin: () => {
+                                                        that.startIntervalListScroll()
+                                                    },
+                                                    complete: () => {
+                                                        that.stopIntervalListScroll()
+                                                    }
+                                                }}
+                                                leave={{
+                                                    animation: "slideUp",
+                                                    begin: () => {
+                                                        that.startIntervalListScroll()
+                                                    },
+                                                    complete: () => {
+                                                        that.stopIntervalListScroll()
+                                                    }
+                                                }}>
+                                                {this.expandedPackageName === pack.packageName ?
+                                                    <ul className="versions">
+                                                        <VelocityTransitionGroup
+                                                            enter={{
+                                                                animation: "slideDown",
+                                                                begin: () => {
+                                                                    that.startIntervalListScroll()
+                                                                },
+                                                                complete: () => {
+                                                                    that.stopIntervalListScroll()
+                                                                }
+                                                            }}
+                                                            leave={{
+                                                                animation: "slideUp",
+                                                                begin: () => {
+                                                                    that.startIntervalListScroll()
+                                                                },
+                                                                complete: () => {
+                                                                    that.stopIntervalListScroll()
+                                                                }
+                                                            }}>
+                                                            {pack.isAutoInstallEnabled ?
+                                                                <div className="info-auto-update">
+                                                                    Automatic update activated. The latest
+                                                                    version of this package will
+                                                                    automatically be installed on this
+                                                                    device.
+                                                                </div>
+                                                            :
+                                                                null
+                                                            }
+                                                        </VelocityTransitionGroup>
+                                                        {_.map(pack.versions, (version, i) => {
+                                                            return (
+                                                                <ListItemVersion
+                                                                    packagesStore={packagesStore}
+                                                                    version={version}
+                                                                    queuedPackage={queuedPackage}
+                                                                    installedPackage={installedPackage}
+                                                                    expandedVersion={expandedVersion}
+                                                                    loadPackageVersionProperties={loadPackageVersionProperties}
+                                                                    togglePackageVersion={this.togglePackageVersion}
+                                                                    selectedPackageVersion={this.selectedPackageVersion}
+                                                                    key={i}
+                                                                />
+                                                            );
+                                                        })}
+                                                    </ul>
+                                                    :
+                                                    null
+                                                }
+                                            </VelocityTransitionGroup>
+                                        </span>
+                                        );
+                                        
+                                    })}
+                            </span>
                         );
                     })}
                 </Dropzone>
