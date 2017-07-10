@@ -742,7 +742,7 @@ export default class PackagesStore {
         return found ? found : null;
     }
 
-    _getPackageByVersion(version) {
+    _getExpandedPackage(version) {
         let found = _.find(this.packages, (pack) => {
             return pack.id.version === version;
         });
