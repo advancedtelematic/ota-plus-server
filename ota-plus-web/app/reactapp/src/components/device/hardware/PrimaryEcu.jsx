@@ -9,7 +9,7 @@ class PrimaryEcu extends Component {
         super(props);
     }    
     render() {
-        const { active, hardwareStore, showKey, showDetails, keyModalShown, hardware, device, selectEcu, ...otherProps} = this.props;
+        const { active, devicesStore, hardwareStore, showKey, showDetails, keyModalShown, hardware, device, selectEcu, ...otherProps} = this.props;
         let dataId = 0;
         if(!_.isUndefined(hardware) && !_.isUndefined(hardware.id) && (!_.isUndefined(hardware.description) || !_.isUndefined(hardware.class))) {
             dataId = hardware['id-nr'];
@@ -24,13 +24,13 @@ class PrimaryEcu extends Component {
                     data-id={dataId}
                     className={active ? " selected" : ""}
                     id="hardware-primary-details"
-                    onClick={device.isDirector ? selectEcu.bind(this, device.directorAttributes.primary.hardwareId, device.directorAttributes.primary.image.hash.sha256, 'primary') : e => e.preventDefault()}
+                    onClick={device.isDirector ? selectEcu.bind(this, devicesStore._getPrimaryHardwareId(), devicesStore._getPrimaryHash(), 'primary') : e => e.preventDefault()}
                 >
                     <div className="desc">
                         { device.isDirector ? 
                             <span>
-                                Serial: <span id="hardware-serial-value">{device.directorAttributes.primary.id}</span> <br />
-                                Hardware ID: <span id="hardware-id-value">{device.directorAttributes.primary.hardwareId}</span>
+                                Serial: <span id="hardware-serial-value">{devicesStore._getPrimarySerial()}</span> <br />
+                                Hardware ID: <span id="hardware-id-value">{devicesStore._getPrimaryHardwareId()}</span>
                             </span>
                         :
                             <span>

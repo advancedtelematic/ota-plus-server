@@ -21,6 +21,7 @@ class PublicKeyPopover extends Component {
                 anchorOrigin={{horizontal: 'right', vertical: 'center'}}
                 targetOrigin={{horizontal: 'left', vertical: 'center'}}
                 onRequestClose={handleRequestClose}
+                useLayerForClickAway={false}
             >
                 {!hardwareStore.hardwarePublicKeyFetchAsync.isFetching && hardwareStore.publicKey.keyval ?
                     <span>
