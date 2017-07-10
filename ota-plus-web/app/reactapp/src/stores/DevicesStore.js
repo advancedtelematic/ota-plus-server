@@ -354,6 +354,16 @@ export default class DevicesStore {
         return hashes;
     }
 
+    _getSecondaryByHardwareId(hardwareId) {
+        let secondaryObject = {};
+        _.each(this.device.directorAttributes.secondary, (secondary, index) => {
+            if(secondary.hardwareId === hardwareId) {
+                secondaryObject = secondary;
+            }
+        });
+        return secondaryObject;
+    }
+
     createDevice(data) {
         resetAsync(this.devicesCreateAsync, true);
         return axios.post(API_DEVICES_CREATE, data)

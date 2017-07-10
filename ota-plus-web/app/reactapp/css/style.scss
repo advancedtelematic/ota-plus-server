@@ -801,6 +801,14 @@ input {
         @include transition;
         overflow: hidden;
 
+        &.unmanaged {
+           background: #d3d3d3; 
+
+           &:hover {
+            background: #d3d3d3;
+           }
+        }
+
         &:hover {
             background: #f5f5f5;
         }
