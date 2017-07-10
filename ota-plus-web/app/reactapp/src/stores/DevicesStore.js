@@ -334,6 +334,26 @@ export default class DevicesStore {
         } 
     }
 
+    _getPrimaryHash() {
+        return this.device.directorAttributes.primary.image.hash.sha256;
+    }
+
+    _getPrimarySerial() {
+        return this.device.directorAttributes.primary.id;
+    }
+
+    _getPrimaryHardwareId() {
+        return this.device.directorAttributes.primary.hardwareId;
+    }
+
+    _getSecondaryHashes() {
+        let hashes = [];
+        _.map(this.device.directorAttributes.secondary, (secondary, index) => {
+            hashes.push(secondary.image.hash.sha256);
+        })
+        return hashes;
+    }
+
     createDevice(data) {
         resetAsync(this.devicesCreateAsync, true);
         return axios.post(API_DEVICES_CREATE, data)

@@ -115,19 +115,18 @@ class Device extends Component {
         this.expandedVersion.isInstalled = this.isVersionInstalled(version);
     }
     isVersionInstalled(version) {
+        const { devicesStore } = this.props;
         let installedOnPrimary = false;
         let installedOnSecondary = false;
         let installedOnLegacy = false;
-        if(this.props.devicesStore.device.isDirector) {
-            if(this.activeEcu.type === 'primary' && this.props.devicesStore.device.directorAttributes.primary.image.hash.sha256 === version.id.version) {
+        if(devicesStore.device.isDirector) {
+            if(this.activeEcu.type === 'primary' && devicesStore._getPrimaryHash() === version.id.version) {
                 installedOnPrimary = true;
             }
             if(this.activeEcu.type === 'secondary') {
-                _.map(this.props.devicesStore.device.directorAttributes.secondary, (secondary, index) => {
-                    if(secondary.image.hash.sha256 === version.id.version) {
-                        installedOnSecondary = true;
-                    }
-                })
+                if(_.includes(devicesStore._getSecondaryHashes(), version.id.version)) {
+                    installedOnSecondary = true;
+                }
             }
         }
         installedOnLegacy = version.attributes.status === 'installed';
@@ -146,6 +145,7 @@ class Device extends Component {
                     device.lastSeen && devicesStore.stepsHistory.length === 0 ?
                         <span>
                             <DeviceHardwarePanel 
+                                devicesStore={devicesStore}
                                 hardwareStore={hardwareStore}
                                 packagesStore={packagesStore}
                                 device={device}                                
