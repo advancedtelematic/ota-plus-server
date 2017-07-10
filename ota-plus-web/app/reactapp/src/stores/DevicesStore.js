@@ -48,7 +48,6 @@ export default class DevicesStore {
     @observable deviceUpdatesLogs = [];
     @observable onlineDevices = [];
     @observable stepsHistory = [];
-    @observable deviceFetchTimes = {};
     @observable multiTargetUpdates = {};
 
     constructor() {

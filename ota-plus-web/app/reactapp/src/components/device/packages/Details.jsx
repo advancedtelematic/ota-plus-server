@@ -187,8 +187,7 @@ class Details extends Component {
 						        		</span>
 					        		</div>
 		        				</span>
-		        			}
-				        	
+		        			}				        	
 			        	</div>
 			        	{!device.isDirector ?
 			        		<span>
