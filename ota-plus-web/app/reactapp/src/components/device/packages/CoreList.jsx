@@ -162,7 +162,7 @@ class CoreList extends Component {
         return this.props.device.isDirector ? dirPacks : corePacks;
     }
     render() {
-        const { packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, expandedVersion, loadPackageVersionProperties, activeEcu } = this.props;
+        const { devicesStore, packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, expandedVersion, loadPackageVersionProperties, activeEcu } = this.props;
         let preparedPackages = this.selectPackagesToDisplay();
         return (
             <div className="ios-list" ref="list">
@@ -199,7 +199,7 @@ class CoreList extends Component {
                                         if(device.isDirector && activeEcu) {
                                             {_.map(pack.versions, (version, i) => {
                                                 if(activeEcu.type === 'primary') {
-                                                    if(version.id.version === device.directorAttributes.primary.image.hash.sha256) {
+                                                    if(version.id.version === devicesStore._getPrimaryHash()) {
                                                         installedPackage = version.id.version;
                                                     }
                                                 } else {
@@ -209,7 +209,7 @@ class CoreList extends Component {
                                                         }
                                                     });
                                                 }
-                                            })}
+                                            })};
                                         }
 
                                         const foundBlacklistedAndInstalled = _.find(pack.versions, (version) => {

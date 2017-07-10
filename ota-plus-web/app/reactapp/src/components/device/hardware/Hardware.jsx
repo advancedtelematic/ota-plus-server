@@ -28,7 +28,7 @@ class Hardware extends Component {
         this.packagesFetchHandler = observe(props.packagesStore, (change) => {
             if(change.name === 'packagesFetchAsync' && change.object[change.name].isFetching === false) {
                 if(props.device.isDirector) {
-                    props.selectEcu(props.device.directorAttributes.primary.hardwareId, props.device.directorAttributes.primary.image.hash.sha256, 'primary');
+                    props.selectEcu(this.props.devicesStore._getPrimaryHardwareId(), this.props.devicesStore._getPrimaryHash(), 'primary');
                 }
             }
         });
@@ -70,11 +70,11 @@ class Hardware extends Component {
     }
 
     render() {
-        const { hardwareStore, device, activeEcu, selectEcu } = this.props;
+        const { devicesStore, hardwareStore, device, activeEcu, selectEcu } = this.props;
         const hardware = hardwareStore.hardware[device.uuid];
         let active = true;
         if(device.isDirector) {
-            active = activeEcu.ecu === device.directorAttributes.primary.hardwareId;
+            active = activeEcu.ecu === devicesStore._getPrimaryHardwareId();
         }
         return (
             <span>
@@ -82,7 +82,7 @@ class Hardware extends Component {
                     <div className="primary-ecus">
                         <PopoverWrapper
                             onOpen={() => {
-                                hardwareStore.fetchPublicKey(device.uuid, device.directorAttributes.primary.id);
+                                hardwareStore.fetchPublicKey(device.uuid, devicesStore._getPrimarySerial());
                             }}
                             onClose={() => {
                                 hardwareStore._resetPublicKey();
@@ -91,6 +91,7 @@ class Hardware extends Component {
                             <PrimaryEcu
                                 active={active}
                                 hardwareStore={hardwareStore}
+                                devicesStore={devicesStore}
                                 showKey={this.showKey}
                                 showDetails={this.showDetails}
                                 keyModalShown={this.keyModalShown}
@@ -174,6 +175,7 @@ class Hardware extends Component {
 }
 
 Hardware.propTypes = {
+    devicesStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired,
     device: PropTypes.object.isRequired,

@@ -9,7 +9,7 @@ class HardwarePanel extends Component {
         super(props);
     }
     render() {
-        const { hardwareStore, packagesStore, device, activeEcu, selectEcu } = this.props;
+        const { devicesStore, hardwareStore, packagesStore, device, activeEcu, selectEcu } = this.props;
         return (
             <div className="hardware-panel">
                 <div className="darkgrey-header">
@@ -23,6 +23,7 @@ class HardwarePanel extends Component {
                         </div>
                     :
                         <DeviceHardware
+                            devicesStore={devicesStore}
                             hardwareStore={hardwareStore}
                             packagesStore={packagesStore}
                             device={device}
@@ -37,6 +38,7 @@ class HardwarePanel extends Component {
 }
 
 HardwarePanel.propTypes = {
+    devicesStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired,
     device: PropTypes.object.isRequired,
