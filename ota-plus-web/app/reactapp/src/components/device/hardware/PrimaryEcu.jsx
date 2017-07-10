@@ -24,7 +24,7 @@ class PrimaryEcu extends Component {
                     data-id={dataId}
                     className={active ? " selected" : ""}
                     id="hardware-primary-details"
-                    onClick={device.isDirector ? selectEcu.bind(this, device.directorAttributes.primary.hardwareId) : e => e.preventDefault()}
+                    onClick={device.isDirector ? selectEcu.bind(this, device.directorAttributes.primary.hardwareId, device.directorAttributes.primary.image.hash.sha256, 'primary') : e => e.preventDefault()}
                 >
                     <div className="desc">
                         { device.isDirector ? 
