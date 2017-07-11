@@ -216,27 +216,31 @@ export default class DevicesStore {
     }
 
     fetchDirectorAttributes(id) {
-        let device = this._getDevice(id);        
+        let device = this._getDevice(id);
         if(!_.isEmpty(this.device) && this.device.uuid === id) {
-            resetAsync(this.devicesDirectorAttributesFetchAsync, true);
-            return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
-                .then((response) => {
-                    this.device.directorAttributes = response.data;
-                    this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
-                })
-                .catch((error) => {
-                    this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
-                });
+            if(this.device.isDirector) {
+                resetAsync(this.devicesDirectorAttributesFetchAsync, true);
+                return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
+                    .then((response) => {
+                        this.device.directorAttributes = response.data;
+                        this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
+                    })
+                    .catch((error) => {
+                        this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
+                    });
+            }
         } else if(device) {
-            resetAsync(this.devicesDirectorAttributesFetchAsync, true);
-            return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
-                .then((response) => {
-                    this.device.directorAttributes = response.data;
-                    this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
-                })
-                .catch((error) => {
-                    this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
-                });
+            if(device.isDirector) {
+                resetAsync(this.devicesDirectorAttributesFetchAsync, true);
+                return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
+                    .then((response) => {
+                        this.device.directorAttributes = response.data;
+                        this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
+                    })
+                    .catch((error) => {
+                        this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
+                    });
+            }
         }
     }
 
