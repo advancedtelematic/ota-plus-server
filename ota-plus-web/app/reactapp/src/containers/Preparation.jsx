@@ -50,7 +50,9 @@ class Preparation extends Component {
         this.userProfileHandler = new AsyncStatusCallbackHandler(props.userStore, 'userFetchAsync', this.checkUserProfile.bind(this));
         this.activatedProvisioningHandler = new AsyncStatusCallbackHandler(props.provisioningStore, 'provisioningStatusFetchAsync', this.checkActivatedProvisioning.bind(this));
         this.createdTufHandler = new AsyncConflictCallbackHandler(props.packagesStore, 'tufRepoExistsFetchAsync', this.checkCreatedTuf.bind(this));
+        this.createTufHandler = new AsyncStatusCallbackHandler(props.packagesStore, 'tufRepoCreateFetchAsync', this.doubleCheckCreatedTuf.bind(this));
         this.createdDirectorHandler = new AsyncConflictCallbackHandler(props.packagesStore, 'directorRepoExistsFetchAsync', this.checkCreatedDirector.bind(this));
+        this.createDirectorHandler = new AsyncConflictCallbackHandler(props.packagesStore, 'directorRepoCreateFetchAsync', this.doubleCheckCreatedDirector.bind(this));
         this.createdTreehubHandler = new AsyncStatusCallbackHandler(props.featuresStore, 'featuresFetchAsync', this.checkCreatedTreehub.bind(this));
     }
 
@@ -68,6 +70,8 @@ class Preparation extends Component {
         this.createdTufHandler();
         this.createdDirectorHandler();
         this.createdTreehubHandler();
+        this.createDirectorHandler();
+        this.createTufHandler();
     }
 
     checkUserProfile() {
@@ -100,6 +104,9 @@ class Preparation extends Component {
             this.createdTuf = true;
             this.checkedCreatedTufCalled = true;
         }
+        if(this.props.packagesStore.tufRepoExistsFetchAsync.code === 404) {
+            this.props.packagesStore.createTufRepo()
+        }
     }
 
     checkCreatedDirector() {
@@ -113,6 +120,10 @@ class Preparation extends Component {
             this.createdDirector = true;
             this.checkedCreatedDirectorCalled = true;
         }
+        if(this.props.packagesStore.directorRepoExistsFetchAsync.code === 404) {
+            this.props.packagesStore.createDirectorRepo()
+        }
+
     }
 
     checkCreatedTreehub() {
