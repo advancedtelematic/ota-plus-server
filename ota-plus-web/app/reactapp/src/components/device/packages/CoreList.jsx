@@ -40,7 +40,7 @@ class CoreList extends Component {
    
     componentWillReceiveProps(nextProps) {
         if(this.props.device.isDirector) {
-            if(nextProps.expandedVersion) {
+            if(nextProps.expandedVersion && !nextProps.expandedVersion.unmanaged) {
                 this.expandedPackageName = nextProps.expandedVersion.id.name;
                 this.selectedPackageVersion = nextProps.expandedVersion.id.version;
             }
@@ -150,20 +150,39 @@ class CoreList extends Component {
                 }
                 if(this.props.device.isDirector) {
                     _.map(pack.versions, (version, ind) => {
-                        if(version.id.version === this.props.device.directorAttributes.primary.image.hash.sha256) {
+                        if(version.id.version === this.props.devicesStore._getPrimaryHash()) {
                             dirPacks[letter].push(pack);
                         }
                     });
-                }
+                }                
+
             });
         });
         this.clearArray(dirPacks);
         this.clearArray(corePacks);
         return this.props.device.isDirector ? dirPacks : corePacks;
     }
+    addUnmanagedPackage(preparedPackages) {
+        const { devicesStore, packagesStore, device, activeEcu } = this.props;
+        if(activeEcu.type === 'secondary') {
+            let secondaryObject = devicesStore._getSecondaryByHardwareId(activeEcu.ecu);
+            let reportedHash = secondaryObject.image.hash.sha256;
+            let pack = packagesStore._getExpandedPackage(reportedHash);
+            if(!pack) {
+                let unmanagedPack = {
+                    filepath: secondaryObject.image.filepath,
+                    size: secondaryObject.image.size,
+                    hash: reportedHash,
+                    unmanaged: true
+                };
+                preparedPackages['#'].push(unmanagedPack);
+            }
+        }
+    }
     render() {
         const { devicesStore, packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, expandedVersion, loadPackageVersionProperties, activeEcu } = this.props;
         let preparedPackages = this.selectPackagesToDisplay();
+        this.addUnmanagedPackage(preparedPackages);
         return (
             <div className="ios-list" ref="list">
                 <Dropzone
@@ -228,6 +247,7 @@ class CoreList extends Component {
                                                 isSelected={this.expandedPackageName === pack.packageName}
                                                 togglePackage={this.togglePackage}
                                                 toggleAutoInstall={togglePackageAutoUpdate}
+                                                loadPackageVersionProperties={loadPackageVersionProperties}
                                             />
                                             <VelocityTransitionGroup
                                                 enter={{
