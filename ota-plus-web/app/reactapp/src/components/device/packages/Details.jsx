@@ -156,7 +156,7 @@ class Details extends Component {
 					        		<div className="updated">
 										<span className = "sub-title">Updated at:</span>
 						        		<span className="value" id={this.generateIdTag('version-updated-at-value', expandedVersion)}>
-						        			{moment(null).format("ddd MMM DD YYYY, h:mm:ss A")}
+						        			{moment(expandedVersion.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}
 						        		</span>
 					        		</div>
 						            <div className="version">

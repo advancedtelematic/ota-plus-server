@@ -184,11 +184,15 @@ export default class PackagesStore {
                 let packageName = null;
                 let packageVersion = null;
                 let packageHash = version.hashes.sha256;
+                let createdAt = null;
+                let updatedAt = null;
                 
                 if(version.custom) {
                     customExists = true;
-                    packageName = version.custom.name.value;   
-                    packageVersion = version.custom.version.value;
+                    packageName = version.custom.name;   
+                    packageVersion = version.custom.version;
+                    createdAt = version.custom.createdAt;
+                    updatedAt = version.custom.updatedAt;
                 } else {
                     packageName = imageName;   
                     packageVersion = version.hashes.sha256;
@@ -198,7 +202,8 @@ export default class PackagesStore {
                     customExists: customExists,
                     checkSum: packageHash,
                     imageName: imageName,
-                    createdAt: null,
+                    createdAt: createdAt,
+                    updatedAt: updatedAt,
                     description: packageHash,
                     id: {
                         name: packageName,
@@ -368,9 +373,7 @@ export default class PackagesStore {
         };
         const entryName = data.packageName + '_' + data.version;
         const request = axios.put(
-                this._tufPackageURI(entryName, data.packageName, data.version, hardwareIds) +
-                    '&description=' + encodeURIComponent(data.description) +
-                    '&vendor=' + encodeURIComponent(data.vendor),
+                this._tufPackageURI(entryName, data.packageName, data.version, hardwareIds),
                 formData,
                 config)
             .then(function(response) {
@@ -771,7 +774,9 @@ export default class PackagesStore {
                 groupedPackages[obj.id.name].packageName = obj.id.name;
                 groupedPackages[obj.id.name].inDirector = obj.inDirector;
             }
-            groupedPackages[obj.id.name].versions.push(obj);
+            if(!(groupedPackages[obj.id.name].inDirector && !obj.inDirector)) {
+                groupedPackages[obj.id.name].versions.push(obj);
+            }
         }, this);
         _.each(groupedPackages, (obj, index) => {
             groupedPackages[index].versions = _.sortBy(obj.versions, (pack) => {
@@ -884,20 +889,19 @@ export default class PackagesStore {
                     groupedPackages[pack.id.name].isInstalled = true;
                 if(!groupedPackages[pack.id.name].isBlackListed && pack.isBlackListed && isInstalled)
                     groupedPackages[pack.id.name].isBlackListed = true;
-                groupedPackages[pack.id.name].versions.push(pack);
+
+                if(!(groupedPackages[pack.id.name].inDirector && !pack.inDirector)) {
+                    groupedPackages[pack.id.name].versions.push(pack);
+                }
             });
-            
+
             _.each(groupedPackages, (pack, index) => {
                 groupedPackages[index].versions = _.sortBy(pack.versions, (element) => {
                     return element.createdAt;
                 }).reverse();
+
                 pack.isQueued ? queuedCount++ : null;
                 pack.isInstalled ? installedCount++ : null;
-
-                let uniqueVersions = _.uniq(groupedPackages[index].versions.reverse(), function (item, key, a) {
-                    return item.checkSum;
-                });
-                groupedPackages[index].versions = uniqueVersions;
             });
             
             let specialGroup = {'#' : []};
@@ -1119,11 +1123,15 @@ export default class PackagesStore {
         let name = null;
         let version = null;
         let hardwareIds = null;
+        let createdAt = null;
+        let updatedAt = null;
         if(data.custom) {
             customExists = true;
-            name = data.custom.name.value;
-            version = data.custom.version.value;
+            name = data.custom.name;
+            version = data.custom.version;
             hardwareIds = data.custom.hardwareIds;
+            createdAt = data.custom.createdAt;
+            updatedAt = data.custom.updatedAt;
         } else {
             name = data.filename;
             version = data.checksum.hash;
@@ -1132,8 +1140,8 @@ export default class PackagesStore {
         let formattedData = {
             customExists: customExists,
             checkSum: data.checksum.hash,
-            createdAt: null,
-            updatedAt: null,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
             hardwareIds: hardwareIds,
             description: '',
             id: {
