@@ -4,7 +4,7 @@ import { PropTypes as MobxPropTypes} from 'mobx-react';
 
 const AsyncConflictCallbackHandler = (store, actionName, callbackFunc) => {
       return observe(store, (change) => {
-        if(change.object[change.name].code === 409 || change.object[change.name].code === 200) {
+        if(change.object[change.name].code === 409 || change.object[change.name].code === 200 || change.object[change.name].code === 201) {
               callbackFunc.call();
         }
     });
