@@ -55,18 +55,21 @@ class Details extends Component {
     	let isPackageQueued = false;
     	let isPackageInstalled = false;
     	let isAutoInstallEnabled = false;
+    	let unmanaged = false;
 
-    	if(expandedVersion) {
+    	if(expandedVersion && !expandedVersion.unmanaged) {
 	    	blacklistComment = this.getBlacklistComment(expandedVersion);
 	    	isPackageBlacklisted = this.isPackageBlacklisted(expandedVersion);
 	    	isPackageQueued = this.isPackageQueued(expandedVersion);
 	    	isPackageInstalled = this.isPackageInstalled(expandedVersion);
 	    	isAutoInstallEnabled = this.isAutoInstallEnabled(expandedVersion);
+    	} else if(expandedVersion && expandedVersion.unmanaged) {
+    		unmanaged = true;
     	}
 
         return (
         	<div className="details-wrapper">
-	        	{expandedVersion ? 
+	        	{expandedVersion && !unmanaged ? 
     				<div className="details">	        	
 			        	<div className="top">
 			        		<div className="title" id={"image-title-" + expandedVersion.id.name}>{expandedVersion.id.name}</div>
@@ -252,6 +255,10 @@ class Details extends Component {
 			        	}
 			        	
 		        	</div>
+    			: unmanaged ?
+    				<div className="wrapper-center absolute-position">
+	                    Unmanaged package
+	                </div>
     			:
 		        	<div className="wrapper-center absolute-position">
 	                    Select the package version to see its details.
