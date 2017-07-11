@@ -37,10 +37,16 @@ class Preparation extends Component {
     @observable createdTuf = null;
     @observable createdDirector = null;
     @observable createdTreehub = null;
+    @observable timesCheckCreatedTufCalled = 0;
+    @observable timesCheckCreatedDirectorCalled = 0;
+    @observable checkedCreatedDirector = false;
+    @observable checkedCreatedTufCalled = false;
 
     constructor(props) {
         super(props);
         this.doorOpen = this.doorOpen.bind(this);
+        this.doubleCheckCreatedTuf = this.doubleCheckCreatedTuf.bind(this);
+        this.doubleCheckCreatedDirector = this.doubleCheckCreatedDirector.bind(this);
         this.userProfileHandler = new AsyncStatusCallbackHandler(props.userStore, 'userFetchAsync', this.checkUserProfile.bind(this));
         this.activatedProvisioningHandler = new AsyncStatusCallbackHandler(props.provisioningStore, 'provisioningStatusFetchAsync', this.checkActivatedProvisioning.bind(this));
         this.createdTufHandler = new AsyncConflictCallbackHandler(props.packagesStore, 'tufRepoExistsFetchAsync', this.checkCreatedTuf.bind(this));
@@ -76,15 +82,36 @@ class Preparation extends Component {
         }
     }
 
+    doubleCheckCreatedTuf() {
+        this.props.packagesStore.fetchTufRepoExists();
+    }
+    doubleCheckCreatedDirector() {
+        this.props.packagesStore.fetchDirectorRepoExists();
+    }
+
     checkCreatedTuf() {
         if (this.props.packagesStore.tufRepoExistsFetchAsync.code === 409) {
+            this.timesCheckCreatedTufCalled += 1;
+            if(this.timesCheckCreatedTufCalled === 1){
+                setInterval(this.doubleCheckCreatedTuf, 800);
+            }
+        }
+        if(this.props.packagesStore.tufRepoExistsFetchAsync.code === 200) {
             this.createdTuf = true;
+            this.checkedCreatedTufCalled = true;
         }
     }
 
     checkCreatedDirector() {
         if (this.props.packagesStore.directorRepoExistsFetchAsync.code === 409) {
+            this.timesCheckCreatedDirectorCalled += 1;
+            if(this.timesCheckCreatedDirectorCalled === 1){
+                setInterval(this.doubleCheckCreatedDirector, 800);
+            }
+        }
+        if(this.props.packagesStore.directorRepoExistsFetchAsync.code === 200) {
             this.createdDirector = true;
+            this.checkedCreatedDirectorCalled = true;
         }
     }
 
@@ -109,9 +136,12 @@ class Preparation extends Component {
             !provisioningStore.provisioningStatusFetchAsync.isFetching &&
             !packagesStore.tufRepoExistsFetchAsync.isFetching &&
             !packagesStore.directorRepoExistsFetchAsync.isFetching &&
-            !featuresStore.featuresTreehubActivateAsync.isFetching;
+            !featuresStore.featuresTreehubActivateAsync.isFetching && this.checkedCreatedTufCalled && this.checkedCreatedDirectorCalled;
         let allIsPassed = finished && this.userProfile && this.activatedProvisioning && this.createdTuf && this.createdDirector && this.createdTreehub;
         if (allIsPassed) {
+            for (let i = 1; i < 100; i++)
+                window.clearInterval(i);
+
             setTimeout(this.doorOpen, 2000);
         }
         return (
@@ -157,7 +187,7 @@ class Preparation extends Component {
                                                                 : null
                                                         :
                                                         step.nr === 3 ?
-                                                            packagesStore.tufRepoExistsFetchAsync.isFetching ?
+                                                            packagesStore.tufRepoExistsFetchAsync.isFetching || !this.checkedCreatedTufCalled ?
                                                                 <span className="img">
                                                                     <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
                                                                 </span>
@@ -172,7 +202,7 @@ class Preparation extends Component {
                                                                     : null
                                                             :
                                                             step.nr === 4 ?
-                                                                packagesStore.directorRepoExistsFetchAsync.isFetching ?
+                                                                packagesStore.directorRepoExistsFetchAsync.isFetching || !this.checkedCreatedDirectorCalled ?
                                                                     <span className="img">
                                                                         <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
                                                                     </span>
