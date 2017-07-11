@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import moment from 'moment';
 import _ from 'underscore';
 
 @observer
@@ -84,10 +85,10 @@ class ListItemVersion extends Component {
                                             Version: {version.id.version}
                                         </div>
                                         <div className="created_at">
-                                            Created_at: {null}
+                                            Created at: {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}
                                         </div>
                                         <div className="updated_at">
-                                            Updated_at: {null}
+                                            Updated at: {moment(version.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}
                                         </div>
                                         <div className="hash">
                                             Hash: {version.checkSum}

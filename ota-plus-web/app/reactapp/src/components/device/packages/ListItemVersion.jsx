@@ -36,7 +36,7 @@ class ListItemVersion extends Component {
                       </div>
                       {versionInDirector ?
                         <div className="updated_at">
-                            <span className="text">Updated at:</span> <span className="value">{moment(null).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
+                            <span className="text">Updated at:</span> <span className="value">{moment(version.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
                         </div>
                       :
                         null
