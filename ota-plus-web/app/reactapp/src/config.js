@@ -57,7 +57,9 @@ export const API_PACKAGES_DEVICE_INSTALL = '/api/v1/device_updates';
 export const API_PACKAGES_DEVICE_CANCEL_INSTALLATION = '/api/v1/device_updates';
 
 export const API_CREATE_TUF_REPO = '/api/v1/user_repo';
+export const API_CHECK_TUF_REPO = '/api/v1/user_repo/root.json';
 export const API_CREATE_DIRECTOR_REPO = '/api/v1/admin/repo';
+export const API_CHECK_DIRECTOR_REPO = '/api/v1/admin/repo/root.json';
 
 export const API_CAMPAIGNS_FETCH = '/api/v1/campaigns';
 export const API_CAMPAIGNS_CAMPAIGN_DETAILS = '/api/v1/campaigns';

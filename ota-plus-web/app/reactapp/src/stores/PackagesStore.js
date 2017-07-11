@@ -21,7 +21,9 @@ import {
     API_PACKAGES_DEVICE_INSTALL,
     API_PACKAGES_DEVICE_CANCEL_INSTALLATION,
     API_CREATE_TUF_REPO,
-    API_CREATE_DIRECTOR_REPO
+    API_CHECK_TUF_REPO,
+    API_CREATE_DIRECTOR_REPO,
+    API_CHECK_DIRECTOR_REPO
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import _ from 'underscore';
@@ -29,7 +31,9 @@ import _ from 'underscore';
 export default class PackagesStore {
 
     @observable directorRepoExistsFetchAsync = {};
+    @observable directorRepoCreateFetchAsync = {};
     @observable tufRepoExistsFetchAsync = {};
+    @observable tufRepoCreateFetchAsync = {};
     @observable packagesFetchAsync = {};
     @observable packageStatisticsFetchAsync = {};
     @observable packagesCreateAsync = {};
@@ -90,7 +94,9 @@ export default class PackagesStore {
 
     constructor() {
         resetAsync(this.directorRepoExistsFetchAsync);
+        resetAsync(this.directorRepoCreateFetchAsync);
         resetAsync(this.tufRepoExistsFetchAsync);
+        resetAsync(this.tufRepoCreateFetchAsync);
         resetAsync(this.packagesFetchAsync);
         resetAsync(this.packageStatisticsFetchAsync);
         resetAsync(this.packagesCreateAsync);
@@ -117,7 +123,7 @@ export default class PackagesStore {
 
     fetchDirectorRepoExists() {
         resetAsync(this.directorRepoExistsFetchAsync, true);
-        return axios.post(API_CREATE_DIRECTOR_REPO)
+        return axios.get(API_CHECK_DIRECTOR_REPO)
             .then(function(response) {
                 this.directorRepoExistsFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
@@ -126,9 +132,21 @@ export default class PackagesStore {
             }.bind(this));
     }
 
+    createDirectorRepo() {
+        resetAsync(this.directorRepoCreateFetchAsync, true);
+        return axios.post(API_CREATE_DIRECTOR_REPO)
+            .then(function(response) {
+                this.directorRepoCreateFetchAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function(error) {
+                this.directorRepoCreateFetchAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
+
     fetchTufRepoExists() {
         resetAsync(this.tufRepoExistsFetchAsync, true);
-        return axios.post(API_CREATE_TUF_REPO)
+        return axios.get(API_CHECK_TUF_REPO)
             .then(function(response) {
                 this.tufRepoExistsFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
@@ -136,6 +154,18 @@ export default class PackagesStore {
                 this.tufRepoExistsFetchAsync = handleAsyncError(error);
             }.bind(this));
     }
+
+    createTufRepo() {
+        resetAsync(this.tufRepoCreateFetchAsync, true);
+        return axios.post(API_CREATE_TUF_REPO)
+            .then(function(response) {
+                this.tufRepoCreateFetchAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function(error) {
+                this.tufRepoCreateFetchAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
 
     fetchPackages(filter = this.packagesFilter) {
         this.packagesFilter = filter;
@@ -1044,7 +1074,9 @@ export default class PackagesStore {
 
     _reset() {
         resetAsync(this.directorRepoExistsFetchAsync);
+        resetAsync(this.directorRepoCreateFetchAsync);
         resetAsync(this.tufRepoExistsFetchAsync);
+        resetAsync(this.tufRepoCreateFetchAsync);
         resetAsync(this.packagesFetchAsync);
         resetAsync(this.packagesCreateAsync);
         resetAsync(this.packagesTufCreateAsync);
