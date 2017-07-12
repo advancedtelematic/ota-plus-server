@@ -40,7 +40,7 @@ class Preparation extends Component {
     @observable timesCheckCreatedTufCalled = 0;
     @observable timesCreateTufCalled = 0;
     @observable timesCheckCreatedDirectorCalled = 0;
-    @observable timesCreatDirectorCalled = 0;
+    @observable timesCreateDirectorCalled = 0;
     @observable checkedCreatedDirector = false;
     @observable checkedCreatedTufCalled = false;
 
@@ -49,6 +49,8 @@ class Preparation extends Component {
         this.doorOpen = this.doorOpen.bind(this);
         this.doubleCheckCreatedTuf = this.doubleCheckCreatedTuf.bind(this);
         this.doubleCheckCreatedDirector = this.doubleCheckCreatedDirector.bind(this);
+        this.fetchDirectorRepoExists = this.fetchDirectorRepoExists.bind(this);
+        this.fetchTufRepoExists = this.fetchTufRepoExists.bind(this);
         this.userProfileHandler = new AsyncStatusCallbackHandler(props.userStore, 'userFetchAsync', this.checkUserProfile.bind(this));
         this.activatedProvisioningHandler = new AsyncStatusCallbackHandler(props.provisioningStore, 'provisioningStatusFetchAsync', this.checkActivatedProvisioning.bind(this));
         this.createdTufHandler = new AsyncConflictCallbackHandler(props.packagesStore, 'tufRepoExistsFetchAsync', this.checkCreatedTuf.bind(this));
@@ -89,19 +91,27 @@ class Preparation extends Component {
     }
 
     doubleCheckCreatedTuf() {
-        let timeOut = 0;
         if(this.timesCreateTufCalled > 0) {
-            timeOut = 3000;
+            setTimeout(this.fetchTufRepoExists, 3000);
+        } else {
+            this.props.packagesStore.fetchTufRepoExists();
         }
-        setTimeout(this.props.packagesStore.fetchTufRepoExists, timeOut);
+    }
+
+    fetchTufRepoExists() {
+        this.props.packagesStore.fetchTufRepoExists();
     }
 
     doubleCheckCreatedDirector() {
-        let timeOut = 0;
-        if (this.timesCreatDirectorCalled > 0) {
-            timeOut = 3000;
+        if (this.timesCreateDirectorCalled > 0) {
+            setTimeout(this.fetchDirectorRepoExists, 3000);
+        } else {
+            this.props.packagesStore.fetchDirectorRepoExists()
         }
-        setTimeout(this.props.packagesStore.fetchDirectorRepoExists, timeOut);
+    }
+
+    fetchDirectorRepoExists() {
+        this.props.packagesStore.fetchDirectorRepoExists();
     }
 
     checkCreatedTuf() {
@@ -118,7 +128,7 @@ class Preparation extends Component {
         if(this.props.packagesStore.tufRepoExistsFetchAsync.code === 404) {
             this.timesCreateTufCalled +=1;
             if(this.timesCreateTufCalled === 1) {
-                this.props.packagesStore.createTufRepo()
+                this.props.packagesStore.createTufRepo();
             }
         }
     }
@@ -135,9 +145,9 @@ class Preparation extends Component {
             this.checkedCreatedDirectorCalled = true;
         }
         if(this.props.packagesStore.directorRepoExistsFetchAsync.code === 404) {
-            this.timesCreatDirectorCalled += 1;
-            if(this.timesCreatDirectorCalled === 1) {
-                this.props.packagesStore.createDirectorRepo()
+            this.timesCreateDirectorCalled += 1;
+            if(this.timesCreateDirectorCalled === 1) {
+                this.props.packagesStore.createDirectorRepo();
             }
         }
     }
