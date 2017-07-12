@@ -97,6 +97,7 @@ class UploadBox extends Component {
                 {packagesStore.packagesUploading.length ?
                     <Draggable
                         bounds="html"
+                        disabled={true}
                     >
                         <div id="upload-box" className={this.minimized ? "minimized" : ""}>
                             <div className="heading">
