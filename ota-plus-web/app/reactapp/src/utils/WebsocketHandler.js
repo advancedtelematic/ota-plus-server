@@ -17,10 +17,14 @@ const WebsocketHandler = (function (wsUrl, stores) {
                     if(stores.devicesStore.onlineDevices.length <= 1 && !(document.cookie.indexOf("fireworksPageAcknowledged") >= 0)) {
                         window.location = '#/fireworks'
                     }
+
                     stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
                     stores.packagesStore.fetchInitialDevicePackages(data.uuid);
-                    stores.hardwareStore.fetchHardwareWs(data.uuid);
-                    stores.devicesStore.fetchDirectorAttributes(data.uuid);
+
+                    if(window.location.href.indexOf('/device/') > -1) {
+                        stores.hardwareStore.fetchHardwareWs(data.uuid);
+                        stores.devicesStore.fetchDirectorAttributes(data.uuid);
+                    }
                     break;
                 case "DeviceUpdateStatus":
                     stores.devicesStore._updateDeviceData(data.device, {deviceStatus: data.status});
