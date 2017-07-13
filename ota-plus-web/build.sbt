@@ -4,6 +4,7 @@ import play.sbt.routes.RoutesKeys
 PlaySettings.defaultScalaSettings
 
 play.sbt.routes.RoutesKeys.routesImport ++= Seq(
+  "com.advancedtelematic.api.ApiVersion._",
   "com.advancedtelematic.controllers.PathBinders._",
   "com.advancedtelematic.controllers.ArtifactType",
   "com.advancedtelematic.controllers.PackageManager",

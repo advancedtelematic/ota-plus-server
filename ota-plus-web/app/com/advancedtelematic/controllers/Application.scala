@@ -7,6 +7,7 @@ package com.advancedtelematic.controllers
 
 import javax.inject.{Inject, Named, Singleton}
 
+import com.advancedtelematic.api.ApiVersion
 import com.advancedtelematic.api.OtaPlusConfig
 import com.advancedtelematic.{AuthenticatedAction, AuthenticatedRequest, AuthPlusAuthentication}
 import org.slf4j.LoggerFactory
@@ -30,6 +31,8 @@ class Application @Inject() (ws: WSClient,
                              val authAction: AuthPlusAuthentication)
   extends Controller with I18nSupport with OtaPlusConfig {
 
+  import ApiVersion.ApiVersion
+
   val auditLogger = LoggerFactory.getLogger("audit")
 
   private[this] val auth0Config = Auth0Config(conf).get
@@ -52,7 +55,7 @@ class Application @Inject() (ws: WSClient,
    * @param path The path of the request
    * @return The service to proxy to
    */
-  private def apiByPath(path: String) : Option[String] = {
+  private def apiByPath(version: ApiVersion, path: String) : Option[String] = {
     val pathComponents = path.split("/").toList
 
     val proxiedPrefixes = coreProxiedPrefixes orElse
@@ -60,52 +63,59 @@ class Application @Inject() (ws: WSClient,
       resolverProxiedPrefixes orElse
       auditorProxiedPrefixes orElse
       directorProxiedPrefixes orElse
-      repoProxiedPrefixes
+      repoProxiedPrefixes orElse
+      campaignerProxiedPrefixes
 
-    proxiedPrefixes.lift(pathComponents)
+    proxiedPrefixes.lift((version, pathComponents))
   }
 
-  private val auditorProxiedPrefixes: PartialFunction[List[String], String] = {
-    case "auditor" :: "devices_seen_in" :: _ => auditorApiUri
+  type Dispatcher = PartialFunction[(ApiVersion, List[String]), String]
+
+  private val auditorProxiedPrefixes: Dispatcher = {
+    case (_, "auditor" :: "devices_seen_in" :: _) => auditorApiUri
   }
 
-  private val directorProxiedPrefixes: PartialFunction[List[String], String] = {
-    case "multi_target_updates" :: _ => directorApiUri
-    case "admin" :: _ => directorApiUri
+  private val directorProxiedPrefixes: Dispatcher = {
+    case (_, "multi_target_updates" :: _) => directorApiUri
+    case (_, "admin" :: _) => directorApiUri
   }
 
-  private val coreProxiedPrefixes: PartialFunction[List[String], String] = {
-    case "packages" :: _ => coreApiUri
-    case "devices_info" :: _ => coreApiUri
-    case "device_updates" :: _ => coreApiUri
-    case "vehicle_updates" :: _ => coreApiUri
-    case "update_requests" :: _ => coreApiUri
-    case "history" :: _ => coreApiUri
-    case "blacklist" :: _ => coreApiUri
-    case "impact" :: _ => coreApiUri
-    case "campaigns" :: _ => coreApiUri
-    case "auto_install" :: _ => coreApiUri
+  private val coreProxiedPrefixes: Dispatcher = {
+    case (_, "packages" :: _) => coreApiUri
+    case (_, "devices_info" :: _) => coreApiUri
+    case (_, "device_updates" :: _) => coreApiUri
+    case (_, "vehicle_updates" :: _) => coreApiUri
+    case (_, "update_requests" :: _) => coreApiUri
+    case (_, "history" :: _) => coreApiUri
+    case (_, "blacklist" :: _) => coreApiUri
+    case (_, "impact" :: _) => coreApiUri
+    case (ApiVersion.v1, "campaigns" :: _) => coreApiUri
+    case (_, "auto_install" :: _) => coreApiUri
   }
 
-  private val deviceRegistryProxiedPrefixes: PartialFunction[List[String], String] = {
-    case "devices" :: _ => devicesApiUri
-    case "device_groups" :: _ => devicesApiUri
-    case "device_count" :: _ => devicesApiUri
-    case "active_device_count" :: _ => devicesApiUri
-    case "device_packages" :: _ => devicesApiUri
+  private val deviceRegistryProxiedPrefixes: Dispatcher = {
+    case (_, "devices" :: _) => devicesApiUri
+    case (_, "device_groups" :: _) => devicesApiUri
+    case (_, "device_count" :: _) => devicesApiUri
+    case (_, "active_device_count" :: _) => devicesApiUri
+    case (_, "device_packages" :: _) => devicesApiUri
   }
 
-  private val resolverProxiedPrefixes: PartialFunction[List[String], String] = {
-    case "resolver" :: _ => resolverApiUri
-    case "firmware" :: _ => resolverApiUri
-    case "filters" :: _ => resolverApiUri
-    case "components" :: _ => resolverApiUri
-    case "resolve" :: _ => resolverApiUri
-    case "package_filters" :: _ => resolverApiUri
+  private val resolverProxiedPrefixes: Dispatcher = {
+    case (_, "resolver" :: _) => resolverApiUri
+    case (_, "firmware" :: _) => resolverApiUri
+    case (_, "filters" :: _) => resolverApiUri
+    case (_, "components" :: _) => resolverApiUri
+    case (_, "resolve" :: _) => resolverApiUri
+    case (_, "package_filters" :: _) => resolverApiUri
   }
 
-  private val repoProxiedPrefixes: PartialFunction[List[String], String] = {
-    case "user_repo" :: _ => repoApiUri
+  private val repoProxiedPrefixes: Dispatcher = {
+    case (_, "user_repo" :: _) => repoApiUri
+  }
+
+  private val campaignerProxiedPrefixes: Dispatcher = {
+    case (ApiVersion.v2, "campaigns" :: _) => campaignerApiUri
   }
 
   /**
@@ -153,12 +163,13 @@ class Application @Inject() (ws: WSClient,
    * @param path Path of the request
    * @return
    */
-  def apiProxy(path: String) : Action[RawBuffer] = authAction.AuthenticatedApiAction.async(parse.raw) { req =>
-    apiByPath(path) match {
-      case Some(p) => proxyTo(p, req)
-      case None => Future.successful(NotFound("Could not proxy request to requested path"))
+  def apiProxy(version: ApiVersion, path: String): Action[RawBuffer] =
+    authAction.AuthenticatedApiAction.async(parse.raw) { req =>
+      apiByPath(version, path) match {
+        case Some(p) => proxyTo(p, req)
+        case None => Future.successful(NotFound("Could not proxy request to requested path"))
+      }
     }
-  }
 
   /**
    * Renders index.html

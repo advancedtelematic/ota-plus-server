@@ -6,6 +6,7 @@
 package com.advancedtelematic.controllers
 
 import cats.syntax.show._
+import com.advancedtelematic.api.ApiVersion
 import eu.timepit.refined.refineV
 import eu.timepit.refined.string._
 import org.genivi.sota.data.Device._
@@ -81,6 +82,18 @@ object PathBinders {
     _.toString,
     (k: String, e: Exception) => "Cannot parse %s as Integer: %s".format(k, e.getMessage())
   )
+
+  import ApiVersion.ApiVersion
+
+  implicit object bindableApiVersion extends PathBindable[ApiVersion] {
+    def bind(key: String, value: String): Either[String, ApiVersion] = try {
+      Right(ApiVersion.withName(value))
+    } catch {
+      case _: NoSuchElementException => Left("version is not supported")
+    }
+    def unbind(key: String, value: ApiVersion): String = value.toString
+  }
+
 }
 
 trait ArtifactType {
