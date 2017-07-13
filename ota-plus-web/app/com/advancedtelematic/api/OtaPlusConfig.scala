@@ -28,4 +28,6 @@ trait OtaPlusConfig {
   val directorApiUri = conf.underlying.getString("director.uri")
 
   val repoApiUri = conf.underlying.getString("repo.uri")
+
+  val campaignerApiUri = conf.underlying.getString("campaigner.uri")
 }

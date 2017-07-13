@@ -20,6 +20,10 @@ import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.Try
 import scala.util.control.NoStackTrace
 
+object ApiVersion extends Enumeration {
+  type ApiVersion = Value
+  val v1, v2 = Value
+}
 
 case class RemoteApiIOError(cause: Throwable) extends Exception(cause) with NoStackTrace
 
