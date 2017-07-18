@@ -70,6 +70,10 @@ const WebsocketHandler = (function (wsUrl, stores) {
             if (msg.code === 1006) {
                 base.init();
             }
+            if (msg.code === 401) {
+                console.log('WEBSOCKET: CLOSE with 401');
+                this.websocket.close();
+            }
         };
 
         this.websocket.onerror = function (msg) {
