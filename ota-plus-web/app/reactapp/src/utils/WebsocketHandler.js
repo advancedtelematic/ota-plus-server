@@ -1,5 +1,6 @@
 const WebsocketHandler = (function (wsUrl, stores) {
     const base = this;
+    let stop = false;
     this.init = function () {
         this.websocket = new WebSocket(wsUrl);
 
@@ -67,18 +68,16 @@ const WebsocketHandler = (function (wsUrl, stores) {
 
         this.websocket.onclose = function (msg) {
             console.log('WEBSOCKET: CLOSE');
-            if (msg.code === 1006) {
+            if (msg.code === 1006 && !stop) {
                 base.init();
-            }
-            if (msg.code === 401) {
-                console.log('WEBSOCKET: CLOSE with 401');
-                this.websocket.close();
             }
         };
 
         this.websocket.onerror = function (msg) {
             console.log('WEBSOCKET: ERROR');
             console.log(msg);
+            stop = true;
+            base.destroy();
         };
     };
 
