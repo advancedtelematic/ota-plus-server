@@ -175,6 +175,9 @@ class CoreList extends Component {
                     hash: reportedHash,
                     unmanaged: true
                 };
+                if(_.isUndefined(preparedPackages['#'])) {
+                    preparedPackages['#'] = [];
+                }
                 preparedPackages['#'].push(unmanagedPack);
             }
         }
