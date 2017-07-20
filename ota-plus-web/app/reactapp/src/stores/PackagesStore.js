@@ -216,13 +216,16 @@ export default class PackagesStore {
                 let packageHash = version.hashes.sha256;
                 let createdAt = null;
                 let updatedAt = null;
-                
+                let targetFormat = null;
+
                 if(version.custom) {
                     customExists = true;
                     packageName = version.custom.name;   
                     packageVersion = version.custom.version;
                     createdAt = version.custom.createdAt;
                     updatedAt = version.custom.updatedAt;
+                    updatedAt = version.custom.updatedAt;
+                    targetFormat = version.custom.targetFormat;
                 } else {
                     packageName = imageName;   
                     packageVersion = version.hashes.sha256;
@@ -235,6 +238,7 @@ export default class PackagesStore {
                     createdAt: createdAt,
                     updatedAt: updatedAt,
                     description: packageHash,
+                    targetFormat: targetFormat ? targetFormat : 'OSTREE',
                     id: {
                         name: packageName,
                         version: packageVersion
@@ -1157,6 +1161,8 @@ export default class PackagesStore {
         let hardwareIds = null;
         let createdAt = null;
         let updatedAt = null;
+        let targetFormat = null;
+
         if(data.custom) {
             customExists = true;
             name = data.custom.name;
@@ -1164,6 +1170,7 @@ export default class PackagesStore {
             hardwareIds = data.custom.hardwareIds;
             createdAt = data.custom.createdAt;
             updatedAt = data.custom.updatedAt;
+            targetFormat = data.custom.targetFormat;
         } else {
             name = data.filename;
             version = data.checksum.hash;
@@ -1174,6 +1181,7 @@ export default class PackagesStore {
             checkSum: data.checksum.hash,
             createdAt: createdAt,
             updatedAt: updatedAt,
+            targetFormat: targetFormat ? targetFormat : 'OSTREE',
             hardwareIds: hardwareIds,
             description: '',
             id: {

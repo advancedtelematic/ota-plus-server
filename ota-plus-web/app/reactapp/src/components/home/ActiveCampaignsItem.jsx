@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import _ from 'underscore';
-import { Pie } from 'react-chartjs';
+import moment from 'moment';
 
 @observer
 class ActiveCampaignsItem extends Component {
@@ -9,51 +9,63 @@ class ActiveCampaignsItem extends Component {
         super(props);
     }
     render() {
-        const { campaign, goToDetails } = this.props;
-        let progress = Math.min(Math.round(campaign.summary.overallUpdatedDevicesCount/Math.max(campaign.summary.overallDevicesCount, 1) * 100), 100);
-        let data = [
-            {
-                value: campaign.summary.overallFailedUpdates,
-                color:"#FF0000",
-                highlight: "#FF0000",
-                label: "Failure rate"
-            },
-            {
-                value: campaign.summary.overallSuccessfulUpdates,
-                color: "#96DCD1",
-                highlight: "#96DCD1",
-                label: "Success rate"
-            },
-            {
-                value: campaign.summary.overallCancelledUpdates,
-                color: "#CCCCCC",
-                highlight: "#CCCCCC",
-                label: "Cancelled rate"
-            }
-        ];
+        const { campaign, goToDetails, groupsStore } = this.props;
+
+        let totalProcessed = 0;
+        let totalFinished = 0;
+        let totalDevices = 0;
+        let failureRate = 0;
+
+        let stats = campaign.summary.stats;
+        totalFinished = campaign.summary.finished;
+        _.each(stats, (stat, groupId) => {
+            totalProcessed += stat.processed;
+            let foundGroup = _.find(groupsStore.groups, (item, index) => { 
+                return item.id === groupId; 
+            });
+            totalDevices += foundGroup.devices.total;                        
+        });
+        failureRate = Math.round(totalFinished/Math.max(totalProcessed, 1) * 100);
+            
         return (
             <tr key={campaign.id} onClick={goToDetails.bind(this, campaign.id)}>
                 <td>{campaign.name}</td>
-                <td>none</td>
-                <td>none</td>
-                <td>
-                    <div className="progress progress-blue">
-                        <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}></div>
-                        <div className="progress-count">
-                            {progress}%
-                        </div>
-                        <div className="progress-status">
-                            {progress == 100 ?
-                                <span className="fa-stack">
-                                    <i className="fa fa-circle fa-stack-1x"></i>
-                                    <i className="fa fa-check-circle fa-stack-1x fa-inverse"></i>
-                                </span>
-                            : null}
-                        </div>
+                <td id={"campaign-start-date-" + campaign.name}>
+                    {moment(campaign.createdAt).format("DD.MM.YYYY")}
+                </td>
+                <td id={"campaign-delta-switch-" + campaign.name}>
+                    <div className="delta-switch">
+                        OFF
                     </div>
                 </td>
-                <td>
-                    <Pie data={data} width="30" height="30" options={{showTooltips: false}}/>
+                <td id={"campaign-delta-generation-size-" + campaign.name}>
+                    <span>
+                        30 MB
+                    </span>
+                </td>
+                <td id={"campaign-processed-" + campaign.name}>
+                    <span>
+                        <span>{totalProcessed}</span>
+                        /
+                        <span>{totalDevices}</span>
+                    </span>
+                </td>
+                <td id={"campaign-finished-" + campaign.name}>
+                    <span>
+                        <span>{totalFinished}</span>
+                        /
+                        <span>{totalDevices}</span>
+                    </span>
+                </td>
+                <td id={"campaign-failure-rate-" + campaign.name}>
+                    <span>
+                        <span>{failureRate} %</span>
+                    </span>
+                </td>
+                <td className="additional-info" id={"campaign-additional-info-" + campaign.name}>
+                    <div className="more-info" id="campaign-more-info">
+                        More info
+                    </div>
                 </td>
             </tr>
         );
@@ -62,7 +74,8 @@ class ActiveCampaignsItem extends Component {
 
 ActiveCampaignsItem.propTypes = {
     campaign: PropTypes.object.isRequired,
-    goToDetails: PropTypes.func.isRequired
+    goToDetails: PropTypes.func.isRequired,
+    groupsStore: PropTypes.object.isRequired
 }
 
 export default ActiveCampaignsItem;

@@ -8,14 +8,14 @@ class DraftCampaignsItem extends Component {
         super(props);
     }
     render() {
-        const { campaign, showWizard } = this.props;
+        const { campaign } = this.props;
         return (
             <a
                 href="#"
                 className="element-box campaign" 
                 title={campaign.name}
                 id={"link-campaignwizard-" + campaign.id}
-                onClick={showWizard.bind(this, campaign.id)}>
+                >
                 <div className="icon"></div>
                 <div className="desc">
                     <div className="title">
@@ -34,8 +34,7 @@ class DraftCampaignsItem extends Component {
 }
 
 DraftCampaignsItem.propTypes = {
-    campaign: PropTypes.object.isRequired,
-    showWizard: PropTypes.func.isRequired
+    campaign: PropTypes.object.isRequired
 }
 
 export default DraftCampaignsItem;
