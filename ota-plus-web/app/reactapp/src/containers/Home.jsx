@@ -21,7 +21,7 @@ class Home extends Component {
         this.uploadToTuf = !this.uploadToTuf;
     }
     render() {
-        const { devicesStore, hardwareStore, groupsStore, packagesStore, campaignsStore } = this.props;
+        const { devicesStore, hardwareStore, groupsStore, packagesStore, campaignsStore, addNewWizard } = this.props;
         return (
             <span>
                 <div className="boxes-row">
@@ -62,6 +62,7 @@ class Home extends Component {
                                     campaignsStore={campaignsStore}
                                     packagesStore={packagesStore}
                                     groupsStore={groupsStore}
+                                    addNewWizard={addNewWizard}
                                 />
                             </div>
                         </div>
@@ -76,6 +77,7 @@ class Home extends Component {
                             <div className="panel-body">
                                 <ActiveCampaigns 
                                     campaignsStore={campaignsStore}
+                                    groupsStore={groupsStore}
                                 />
                             </div>
                         </div>

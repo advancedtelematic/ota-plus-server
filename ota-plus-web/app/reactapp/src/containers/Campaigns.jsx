@@ -6,10 +6,8 @@ import { resetAsync } from '../utils/Common';
 import { 
     CampaignsHeader,
     CampaignsTooltip, 
-    CampaignsCreateModal, 
     CampaignsRenameModal,
-    CampaignsListItem,
-    CampaignsWizard
+    CampaignsListItem
 } from '../components/campaigns';
 import { FlatButton } from 'material-ui';
 import _ from 'underscore';
@@ -17,24 +15,23 @@ import _ from 'underscore';
 @observer
 class Campaigns extends Component {
     @observable tooltipShown = false;
-    @observable createModalShown = false;
     @observable renameModalShown = false;
     @observable campaignIdToAction = null;
-    @observable wizardShown = false;
 
     constructor(props) {
         super(props);
         this.showTooltip = this.showTooltip.bind(this);
         this.hideTooltip = this.hideTooltip.bind(this);
-        this.showCreateModal = this.showCreateModal.bind(this);
-        this.hideCreateModal = this.hideCreateModal.bind(this);
         this.showRenameModal = this.showRenameModal.bind(this);
         this.hideRenameModal = this.hideRenameModal.bind(this);
-        this.showWizard = this.showWizard.bind(this);
-        this.hideWizard = this.hideWizard.bind(this);
         this.goToDetails = this.goToDetails.bind(this);
         this.changeSort = this.changeSort.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
+        this.showWizard = this.showWizard.bind(this);
+    }
+    showWizard(campaignId) {
+
+        this.campaignIdToAction = campaignId;
     }
     showTooltip(e) {
         if(e) e.preventDefault();
@@ -43,18 +40,6 @@ class Campaigns extends Component {
     hideTooltip(e) {
         if(e) e.preventDefault();
         this.tooltipShown = false;
-    }
-    showCreateModal(e) {
-        if(e) e.preventDefault();
-        this.createModalShown = true;
-    }
-    hideCreateModal(createdCampaignId, e) {
-        if(e) e.preventDefault();
-        this.createModalShown = false;
-        if(createdCampaignId) {
-            resetAsync(this.props.campaignsStore.campaignsCreateAsync);
-            this.showWizard(createdCampaignId);
-        }
     }
     showRenameModal(campaignId, e) {
         if(e) e.preventDefault();
@@ -66,17 +51,7 @@ class Campaigns extends Component {
         this.renameModalShown = false;
         this.campaignIdToAction = null;
         resetAsync(this.props.campaignsStore.campaignsRenameAsync);
-    }
-    showWizard(campaignId, e) {
-        if(e) e.preventDefault();
-        this.wizardShown = true;
-        this.campaignIdToAction = campaignId;
-    }
-    hideWizard(e) {
-        if(e) e.preventDefault();
-        this.wizardShown = false;
-        this.campaignIdToAction = null;
-    }
+    }    
     goToDetails(campaignId, e) {
         this.context.router.push(`/campaign/${campaignId}`);
     }
@@ -88,10 +63,11 @@ class Campaigns extends Component {
         this.props.campaignsStore._prepareCampaigns(filter, this.props.campaignsStore.campaignsSort);
     }
     render() {
-        const { campaignsStore, packagesStore, groupsStore } = this.props;
+        const { campaignsStore, packagesStore, groupsStore, hardwareStore, addNewWizard } = this.props;
         return (
             <span>
-                {campaignsStore.overallCampaignsCount === null && campaignsStore.campaignsFetchAsync.isFetching ?
+                {(campaignsStore.overallCampaignsCount === null && campaignsStore.campaignsFetchAsync.isFetching) 
+                    || groupsStore.groupsFetchAsync.isFetching ?
                     <div className="wrapper-center">
                         <Loader />
                     </div>
@@ -99,7 +75,7 @@ class Campaigns extends Component {
                     campaignsStore.overallCampaignsCount ? 
                         <span>
                             <CampaignsHeader
-                                showCreateModal={this.showCreateModal}
+                                addNewWizard={addNewWizard}
                                 campaignsSort={campaignsStore.campaignsSort}
                                 changeSort={this.changeSort}
                                 campaignsFilter={campaignsStore.campaignsFilter}
@@ -116,16 +92,20 @@ class Campaigns extends Component {
                                                 <div className="heading">
                                                     <div></div>
                                                     <div className="column">Name</div>
-                                                    <div className="column">Start date</div>
-                                                    <div className="column">End date</div>
-                                                    <div className="column"></div>
-                                                    <div className="column"></div>
+                                                    <div className="column text-center">Created at</div>
+                                                    <div className="column text-center">Delta switch</div>
+                                                    <div className="column text-center">Delta generation size</div>
+                                                    <div className="column text-center">Processed</div>
+                                                    <div className="column text-center">Finished</div>
+                                                    <div className="column text-center">Failure rate</div>
                                                 </div>
                                                 {_.map(campaignsStore.draftCampaigns, (campaign) => {
                                                     return (
-                                                        <CampaignsListItem 
+                                                        <CampaignsListItem
+                                                            groupsStore={groupsStore}
                                                             goToDetails={this.goToDetails}
                                                             showWizard={this.showWizard}
+                                                            addNewWizard={addNewWizard}
                                                             showRenameModal={this.showRenameModal}
                                                             campaign={campaign}
                                                             type="draft"
@@ -141,27 +121,68 @@ class Campaigns extends Component {
                                         }
                                     </div>
                                     <div className="section-header">
-                                        Running campaigns
+                                        In preparation
                                     </div>
                                     <div className="campaigns-list">
-                                        {campaignsStore.activeCampaigns.length ?
+                                        {campaignsStore.inPreparationCampaigns.length ?
                                             <span>
                                                 <div className="heading">
                                                     <div></div>
                                                     <div className="column">Name</div>
-                                                    <div className="column">Start date</div>
-                                                    <div className="column">End date</div>
-                                                    <div className="column">Status</div>
-                                                    <div className="column"></div>
+                                                    <div className="column">Created at</div>
+                                                    <div className="column">Delta switch</div>
+                                                    <div className="column">Delta generation size</div>
+                                                    <div className="column">Processed</div>
+                                                    <div className="column">Finished</div>
+                                                    <div className="column">Failure rate</div>
                                                 </div>
-                                                {_.map(campaignsStore.activeCampaigns, (campaign) => {
+                                                {_.map(campaignsStore.inPreparationCampaigns, (campaign) => {
                                                     return (
                                                         <CampaignsListItem 
+                                                            groupsStore={groupsStore}
                                                             goToDetails={this.goToDetails}
                                                             showWizard={this.showWizard}
+                                                            addNewWizard={addNewWizard}
                                                             showRenameModal={this.showRenameModal}
                                                             campaign={campaign}
-                                                            type="active"
+                                                            type="inPreparation"
+                                                            key={campaign.id}
+                                                        />
+                                                    );
+                                                })}
+                                            </span>
+                                        :
+                                            <div className="empty">
+                                                No running campaigns.
+                                            </div>
+                                        }
+                                    </div>
+                                    <div className="section-header">
+                                        Running campaigns
+                                    </div>
+                                    <div className="campaigns-list">
+                                        {campaignsStore.runningCampaigns.length ?
+                                            <span>
+                                                <div className="heading">
+                                                    <div></div>
+                                                    <div className="column">Name</div>
+                                                    <div className="column">Created at</div>
+                                                    <div className="column">Delta switch</div>
+                                                    <div className="column">Delta generation size</div>
+                                                    <div className="column">Processed</div>
+                                                    <div className="column">Finished</div>
+                                                    <div className="column">Failure rate</div>
+                                                </div>
+                                                {_.map(campaignsStore.runningCampaigns, (campaign) => {
+                                                    return (
+                                                        <CampaignsListItem 
+                                                            groupsStore={groupsStore}
+                                                            goToDetails={this.goToDetails}
+                                                            showWizard={this.showWizard}
+                                                            addNewWizard={addNewWizard}
+                                                            showRenameModal={this.showRenameModal}
+                                                            campaign={campaign}
+                                                            type="running"
                                                             key={campaign.id}
                                                         />
                                                     );
@@ -182,16 +203,20 @@ class Campaigns extends Component {
                                                 <div className="heading">
                                                     <div></div>
                                                     <div className="column">Name</div>
-                                                    <div className="column">Start date</div>
-                                                    <div className="column">End date</div>
-                                                    <div className="column">Status</div>
-                                                    <div className="column"></div>
+                                                    <div className="column">Created at</div>
+                                                    <div className="column">Delta switch</div>
+                                                    <div className="column">Delta generation size</div>
+                                                    <div className="column">Processed</div>
+                                                    <div className="column">Finished</div>
+                                                    <div className="column">Failure rate</div>
                                                 </div>
                                                 {_.map(campaignsStore.finishedCampaigns, (campaign) => {
                                                     return (
                                                         <CampaignsListItem 
+                                                            groupsStore={groupsStore}
                                                             goToDetails={this.goToDetails}
                                                             showWizard={this.showWizard}
+                                                            addNewWizard={addNewWizard}
                                                             showRenameModal={this.showRenameModal}
                                                             campaign={campaign}
                                                             type="finished"
@@ -224,7 +249,7 @@ class Campaigns extends Component {
                                         label="Add new campaign"
                                         type="button"
                                         className="btn-main"
-                                        onClick={this.showCreateModal}
+                                        onClick={addNewWizard.bind(this, null)}
                                     />
                                 </div>
                                 <a href="#" onClick={this.showTooltip}>What is this?</a>
@@ -235,25 +260,12 @@ class Campaigns extends Component {
                     shown={this.tooltipShown}
                     hide={this.hideTooltip}
                 />
-                <CampaignsCreateModal 
-                    shown={this.createModalShown}
-                    hide={this.hideCreateModal}
-                    campaignsStore={campaignsStore}
-                />
                 <CampaignsRenameModal 
                     shown={this.renameModalShown}
                     hide={this.hideRenameModal}
                     campaignsStore={campaignsStore}
                     campaignId={this.campaignIdToAction}
-                />
-                <CampaignsWizard 
-                    shown={this.wizardShown}
-                    hide={this.hideWizard}
-                    campaignsStore={campaignsStore}
-                    packagesStore={packagesStore}
-                    groupsStore={groupsStore}
-                    campaignId={this.campaignIdToAction}
-                />
+                />                
             </span>
         );
     }
@@ -266,7 +278,8 @@ Campaigns.contextTypes = {
 Campaigns.propTypes = {
     campaignsStore: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired,
-    groupsStore: PropTypes.object.isRequired
+    groupsStore: PropTypes.object.isRequired,
+    hardwareStore: PropTypes.object
 }
 
 export default Campaigns;

@@ -27,6 +27,7 @@ import {
 } from '../utils';
 import _ from 'underscore';
 import Cookies from 'js-cookie';
+import { CampaignsWizard } from '../components/campaigns';
 
 @observer
 class Main extends Component {
@@ -37,6 +38,11 @@ class Main extends Component {
     @observable systemReady = false;
     @observable pagesWithRedirectToWelcome = ['page-welcome', 'page-destiny'];
     @observable pagesWithWhiteBackground = ['welcome', 'destiny', 'fireworks', 'device'];
+    @observable numOfWizards = 0;
+    @observable campaignIdToAction = null;
+    @observable wizards = [];    
+    @observable minimizedWizardIds = [];
+    @observable uploadBoxMinimized = false;
 
     constructor(props) {
         super(props);
@@ -51,6 +57,10 @@ class Main extends Component {
         this.setSystemReady = this.setSystemReady.bind(this);
         this.makeBodyWhite = this.makeBodyWhite.bind(this);
         this.backButtonAction = this.backButtonAction.bind(this);
+        this.addNewWizard = this.addNewWizard.bind(this);
+        this.hideWizard = this.hideWizard.bind(this);
+        this.toggleWizard = this.toggleWizard.bind(this);
+        this.toggleUploadBoxMode = this.toggleUploadBoxMode.bind(this);
         this.devicesStore = new DevicesStore();
         this.hardwareStore = new HardwareStore();
         this.groupsStore = new GroupsStore();
@@ -89,6 +99,41 @@ class Main extends Component {
         this.devicesStore.fetchDevices();
         this.websocketHandler.init();
     }
+    toggleWizard(wizardId, e) {
+        e.preventDefault();
+        if(_.includes(this.minimizedWizardIds, wizardId))
+            this.minimizedWizardIds.splice(this.minimizedWizardIds.indexOf(wizardId), 1);
+        else
+            this.minimizedWizardIds.push(wizardId);
+    }
+    addNewWizard(campaignId = null) {
+        this.campaignIdToAction = campaignId;
+        this.wizards.push(
+            <CampaignsWizard
+                campaignsStore={this.campaignsStore}
+                packagesStore={this.packagesStore}
+                groupsStore={this.groupsStore}
+                hardwareStore={this.hardwareStore}
+                campaignId={this.campaignIdToAction}
+                wizardIdentifier={this.wizards.length}
+                hideWizard={this.hideWizard}
+                toggleWizard={this.toggleWizard}
+                minimizedWizardIds={this.minimizedWizardIds}
+                key={this.wizards.length}
+            />
+        );
+    }
+    hideWizard(wizardIdentifier, e) {
+        if(e) e.preventDefault();
+        _.each(this.wizards, (wizard, index) => {
+            if(wizard && wizard.key == wizardIdentifier) {
+                this.wizards.splice(index, 1);
+            }
+        })
+    }
+    toggleUploadBoxMode() {
+        this.uploadBoxMinimized = !this.uploadBoxMinimized;
+    }
     locationHasChanged() {
         this.makeBodyWhite();
     }
@@ -110,14 +155,14 @@ class Main extends Component {
     }
     backButtonAction() {
         window.history.go(-1);
-    }
+    }    
     render() {
         const { children, ...rest } = this.props;
         const pageId = "page-" + (this.props.location.pathname.toLowerCase().split('/')[1] || "home");
         let logoLink = '/';
         if(_.includes(this.pagesWithRedirectToWelcome, pageId)) {
             logoLink = '/welcome';
-        }
+        }        
         return (
             <div id={pageId}>
                 <FadeAnimation>
@@ -156,21 +201,28 @@ class Main extends Component {
                         backButtonAction={this.backButtonAction}
                         systemReady={this.systemReady}
                         setSystemReady={this.setSystemReady}
+                        addNewWizard={this.addNewWizard}
                     />
                 </FadeAnimation>
                 <SizeVerify 
                     minWidth={1280}
                     minHeight={768}
                 />
-                <UploadBox 
-                    packagesStore={this.packagesStore}
-                />
+                {!this.uploadBoxMinimized ? 
+                    <UploadBox 
+                        packagesStore={this.packagesStore}
+                        minimized={this.uploadBoxMinimized}
+                        toggleUploadBoxMode={this.toggleUploadBoxMode}
+                    />
+                : 
+                    null 
+                }
                 {this.systemReady || Cookies.get('systemReady') == 1 ?
                     <DoorAnimation
                         mode="show"
                     />
-                    :
-                null
+                        :
+                    null
                 }
                 {this.ifLogout ?
                     <DoorAnimation 
@@ -179,6 +231,30 @@ class Main extends Component {
                 :
                     null
                 }
+                {this.wizards}
+                <div className="minimized-wizards-container">
+                    {this.uploadBoxMinimized ? 
+                        <div className="minimized-box">
+                            <UploadBox 
+                                packagesStore={this.packagesStore}
+                                minimized={this.uploadBoxMinimized}
+                                toggleUploadBoxMode={this.toggleUploadBoxMode}
+                            />
+                        </div>
+                    :
+                        null
+                    }
+                    {_.map(this.minimizedWizardIds, (wizardId, index) => {
+                        return (
+                            <div className="minimized-box" key={index}>
+                                Identifier: {wizardId}
+                                <a href="#" className="box-toggle" title="Toggle upload box size" onClick={this.toggleWizard.bind(this, wizardId)}>
+                                    <i className={"fa toggle-modal-size " + (_.includes(this.minimizedWizardIds, wizardId) ? "fa-angle-up" : "fa-angle-down")} aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
         );
     }

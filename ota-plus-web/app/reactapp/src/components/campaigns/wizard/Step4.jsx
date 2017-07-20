@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Loader } from '../../../partials';
 import { translate } from 'react-i18next';
@@ -6,95 +7,120 @@ import _ from 'underscore';
 
 @observer
 class WizardStep4 extends Component {
+    @observable packages = null;
+
     constructor(props) {
         super(props);
     }
     componentWillMount() {
-        this.props.groupsStore.fetchGroups();
+        const { wizardData } = this.props;
+        let packages = wizardData[0].packages;
+        let versions = wizardData[1].versions;
+
+        _.each(packages, (pack, index) => {
+            pack.updates = [];
+            _.each(versions, (version, packageName) => {
+                if(pack.packageName === packageName) {
+                    pack.updates.push(version);
+                }
+            });
+        });
+
+        this.packages = packages;
     }
     render() {
         const { t, wizardData, groupsStore } = this.props;
         return (
             <div className="step-inner">
-                {groupsStore.groupsFetchAsync.isFetching ? 
-                    <div className="wrapper-center">
-                        <Loader />
+                <div className="box-bordered">
+                    <div className="title">
+                        Software & Version
                     </div>
-                :
-                    <span>
-                        <div className="box-bordered">
-                            <div className="title">
-                                Package
-                            </div>
-                            <div className="desc">
-                                <div className="wrapper-package-name" id="wizard-summary-package-name">
-                                    {wizardData[0].package.name}
-                                </div>
-                                <div className="wrapper-package-version" id="wizard-summary-package-version">
-                                    {wizardData[0].package.version}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="box-bordered groups">
-                            <div className="title">
-                                Groups
-                            </div>
-                            <div className="desc">
-                                <div className="fade-wrapper-groups top"></div>
-                                <div className="wrapper-groups">
-                                    {_.map(wizardData[1].groups, (group, index) => {
-                                        const foundGroup = _.findWhere(groupsStore.groups, {id: group});
-                                        return (
-                                            <div className="element-box group" key={index}>
-                                                <div className="icon"></div>
-                                                <div className="desc">
-                                                    <div className="title" id="wizard-summary-group-name">
-                                                        {foundGroup.groupName}
+                    <div className="desc">
+                        {_.map(this.packages, (pack, index) => {
+                            return (
+                                <span key={index}>
+                                    <div className="package-container">
+                                        <div className="package-name">
+                                            {pack.packageName}
+                                        </div>
+                                        {_.map(pack.updates, (update, i) => {
+                                            return (
+                                                <span key={index}>
+                                                    <div className="update-container">
+                                                        <div className="update-from">
+                                                            <div className="text">
+                                                                From:
+                                                            </div>
+                                                            <div className="value">
+                                                                <div className="hash">
+                                                                    Hash: {update.from}
+                                                                </div>
+                                                                <div className="createdAt">
+                                                                    Created at: created at
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="update-to">
+                                                            <div className="text">
+                                                                To:
+                                                            </div>
+                                                            <div className="value">
+                                                                <div className="hash">
+                                                                    Hash: {update.to}
+                                                                </div>
+                                                                <div className="createdAt">
+                                                                    Created at: created at
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div className="subtitle" id="wizard-summary-group-devices">
-                                                        {t('common.deviceWithCount', {count: groupsStore._getGroupDevices(foundGroup).length})}
+                                                    <div className="hardware-id-container">
+                                                        <div className="text">
+                                                            Hardware id:
+                                                        </div>
+                                                        <div className="value">
+                                                            <div className="hash">
+                                                                {update.hardwareId}
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                </span>
+                                            );
+                                        })}
+                                    </div>
+                                </span>
+                            );
+                        })}
+                    </div>
+                </div>
+                <div className="box-bordered groups">
+                    <div className="title">
+                        Groups & Devices
+                    </div>
+                    <div className="desc">
+                        <div className="wrapper-groups">
+                            {_.map(wizardData[2].groups, (group, index) => {
+                                const foundGroup = _.findWhere(groupsStore.groups, {id: group});
+                                return (
+                                    <div className="element-box group" key={index}>
+                                        <div className="icon"></div>
+                                        <div className="desc">
+                                            <div className="title" id="wizard-summary-group-name">
+                                                {foundGroup.groupName}
                                             </div>
-                                        );
-                                    })}
-                                    
-                                </div>
-                                <div className="fade-wrapper-groups bottom"></div>
-                            </div>
+                                            <div className="subtitle" id="wizard-summary-group-devices">
+                                                {t('common.deviceWithCount', {count: groupsStore._getGroupDevices(foundGroup).length})}
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                            
                         </div>
-                        <div className="wrapper-box-dates">
-                            <div className="box-bordered">
-                                <div className="title">
-                                    Start date
-                                </div>
-                                <div className="desc">
-                                    none
-                                </div>
-                            </div>
-                            <div className="box-bordered">
-                                <div className="title">
-                                    End date
-                                </div>
-                                <div className="desc">
-                                    none
-                                </div>
-                            </div>
-                        </div>
-                        <div className="box-bordered delta">
-                            <div className="title">
-                                Delta switch:
-                            </div>
-                            <div className="desc">
-                                {wizardData[2].isActivated ?
-                                    <span>Activated</span>
-                                :
-                                    <span>Not activated</span>
-                                }
-                            </div>
-                        </div>
-                    </span>
-                }
+                        <div className="fade-wrapper-groups bottom"></div>
+                    </div>
+                </div>
             </div>
         );
     }

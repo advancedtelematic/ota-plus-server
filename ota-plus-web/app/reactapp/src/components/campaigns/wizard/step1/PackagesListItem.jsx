@@ -7,18 +7,35 @@ class PackagesListItem extends Component {
         super(props);
     }
     render() {
-        const { pack, togglePackage } = this.props;
+        const { pack, togglePackage, setWizardData, chosen } = this.props;
         return (
-            <button className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)} title={pack.packageName}>
-                {pack.packageName}
-            </button>
+            <span>
+                <div className={"item" + (pack.inDirector ? " director" : " legacy") + (chosen && chosen.packageName === pack.packageName ? " chosen" : "")} id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)} title={pack.packageName} ref="item">
+                    <button className={"btn-checkbox" + (chosen && chosen.packageName === pack.packageName ? " checked" : "")} id={"wizard-select-package-" + pack.packageName} onClick={setWizardData.bind(this, pack)}>
+                        <i className="fa fa-check" aria-hidden="true"></i>
+                    </button>
+                    <div className="info">
+                        <span className="name">
+                            {pack.packageName}
+                        </span>
+                        {pack.inDirector ?
+                            <div className="in-director">
+                                <img src="/assets/img/icons/black/lock.png" alt="Director" />
+                            </div>
+                        :
+                            null
+                        }
+                    </div>
+                </div>
+            </span>
         );
     }
 }
 
 PackagesListItem.propTypes = {
     pack: PropTypes.object.isRequired,
-    togglePackage: PropTypes.func.isRequired
+    togglePackage: PropTypes.func.isRequired,
+    setWizardData: PropTypes.func.isRequired,
 }
 
 export default PackagesListItem;

@@ -1,25 +1,27 @@
 import React, { Component, PropTypes } from 'react';
-import { observable, observe } from "mobx"
+import { observable, observe, extendObservable } from "mobx"
 import { observer } from 'mobx-react';
 import { FlatButton } from 'material-ui';
 import _ from 'underscore';
 import { Form } from 'formsy-react';
 import { AsyncStatusCallbackHandler } from '../../utils';
 import { Modal, Loader, SearchBar } from '../../partials';
+import Draggable from 'react-draggable';
 import { 
     WizardStep1,
     WizardStep2,
     WizardStep3,
-    WizardStep4
+    WizardStep4,
+    WizardStep5
 } from './wizard';
 
 const initialCurrentStepId = 0;
 const initialWizardData = [
     {
-        package: {
-            name: null,
-            version: null,
-        }
+        packages: [],
+    },
+    {
+        versions: {},
     },
     {
         groups: [],
@@ -34,7 +36,14 @@ const initialWizardStep = [
         name: "packages",
         title: "Select Package",
         isFinished: false,
-        isSearchBarShown: true,
+        isSearchBarShown: false,
+    },
+    {
+        class: WizardStep5,
+        name: "versions",
+        title: "Select software version",
+        isFinished: false,
+        isSearchBarShown: false,
     },
     {
         class: WizardStep2,
@@ -54,8 +63,8 @@ const initialWizardStep = [
 ];
 
 const initialFilterValue = null;
-let asyncActionsLeftCounter = 2;
-let waitingForLaunch = false;
+const minimizedWizardWidth = 400;
+const minimizedWizardPadding = 25;
 
 @observer
 class Wizard extends Component {
@@ -63,6 +72,8 @@ class Wizard extends Component {
     @observable wizardSteps = initialWizardStep;
     @observable wizardData = initialWizardData;
     @observable filterValue = initialFilterValue;
+    @observable campaignIdToAction = null;
+    versions = {};
 
     constructor(props) {
         super(props);
@@ -75,43 +86,61 @@ class Wizard extends Component {
         this.markStepAsFinished = this.markStepAsFinished.bind(this);
         this.markStepAsNotFinished = this.markStepAsNotFinished.bind(this);
         this.setWizardData = this.setWizardData.bind(this);
-        this.saveData = this.saveData.bind(this);
-        this.close = this.close.bind(this);
         this.launch = this.launch.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
-        this.handleLaunchResponse = this.handleLaunchResponse.bind(this);
-        this.handleSaveDataResponse = this.handleSaveDataResponse.bind(this);
-        this.hide = this.hide.bind(this);
-        this.fetchHandler = observe(props.campaignsStore, (change) => {
-            const newValue = change.object[change.name];
-            if(change.name === 'campaign' && _.isEmpty(change.oldValue) && !_.isMatch(change.oldValue, newValue)) {
-                if(newValue.packageId.name && newValue.packageId.version) {
-                    this.wizardData[0].package = {
-                        name: newValue.packageId.name,
-                        version: newValue.packageId.version
-                    }
-                    this.wizardSteps[0].isFinished = true;
-                }
-                if(newValue.groups.length) {
-                    _.each(newValue.groups, (group) => {
-                        this.wizardData[1].groups.push(group.group);
-                    });
-                    this.wizardSteps[1].isFinished = true;
+        this.handleMultiTargetUpdateCreated = this.handleMultiTargetUpdateCreated.bind(this);
+        this.handleCampaignCreated = this.handleCampaignCreated.bind(this);
+        this.selectVersion = this.selectVersion.bind(this);
+
+        this.multiTargetUpdateCreatedHandler = observe(props.campaignsStore, (change) => {
+            if(change.name === 'campaignsMultiTargetUpdateCreateAsync' && change.object[change.name].isFetching === false) {
+                if(!_.includes(props.minimizedWizardIds, props.wizardIdentifier)) {
+                    this.handleMultiTargetUpdateCreated();
                 }
             }
         });
-        this.launchHandler = new AsyncStatusCallbackHandler(props.campaignsStore, 'campaignsLaunchAsync', this.handleLaunchResponse);
-        this.packageSaveHandler = new AsyncStatusCallbackHandler(props.campaignsStore, 'campaignsPackageSaveAsync', this.handleSaveDataResponse);
-        this.groupsSaveHandler = new AsyncStatusCallbackHandler(props.campaignsStore, 'campaignsGroupsSaveAsync', this.handleSaveDataResponse);
-    }
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.campaignId && nextProps.campaignId !== this.props.campaignId)
-            this.props.campaignsStore.fetchCampaign(nextProps.campaignId);
+        this.campaignCreatedHandler = observe(props.campaignsStore, (change) => {
+            if(change.name === 'campaignsCreateAsync' && change.object[change.name].isFetching === false) {
+                if(!_.includes(props.minimizedWizardIds, props.wizardIdentifier)) {
+                    this.handleCampaignCreated();
+                }
+            }
+        });
     }
     componentWillUnmount() {
-        this.launchHandler();
-        this.packageSaveHandler();
-        this.groupsSaveHandler();
+        this.multiTargetUpdateCreatedHandler();
+        this.campaignCreatedHandler();
+    }
+    selectVersion(data) {
+        if(_.isUndefined(this.versions[data.packageName])) {
+            this.versions[data.packageName] = {};
+        }
+        switch(data.type) {
+            case 'from':                
+                this.versions[data.packageName] = {
+                    from: data.version, 
+                    to: this.wizardData[1].versions[data.packageName] ? this.wizardData[1].versions[data.packageName].to : null,
+                    hardwareId: this.wizardData[1].versions[data.packageName] ? this.wizardData[1].versions[data.packageName].hardwareId : null
+                }
+                break;
+            case 'to':
+                this.versions[data.packageName] = {
+                    to: data.version, 
+                    from: this.wizardData[1].versions[data.packageName] ? this.wizardData[1].versions[data.packageName].from : null,
+                    hardwareId: this.wizardData[1].versions[data.packageName] ? this.wizardData[1].versions[data.packageName].hardwareId : null
+                }
+                break;
+            case 'hardwareId':
+                this.versions[data.packageName] = {
+                    to: this.wizardData[1].versions[data.packageName] ? this.wizardData[1].versions[data.packageName].to : null,
+                    from: this.wizardData[1].versions[data.packageName] ? this.wizardData[1].versions[data.packageName].from : null,
+                    hardwareId: data.hardwareId
+                }
+                break;
+            default:
+                break;
+        }
+        this.wizardData[1].versions = this.versions;
     }
     isFirstStep() {
         return this.currentStepId == 0;
@@ -154,151 +183,190 @@ class Wizard extends Component {
     setWizardData(data) {
         this.wizardData[this.currentStepId] = data;
     }
-    saveData() {
-        asyncActionsLeftCounter = 2;
-        if(this.wizardData[1].groups.length) {
-            this.props.campaignsStore.saveGroupsForCampaign(this.props.campaignId, this.wizardData[1]);
-        } else {
-            asyncActionsLeftCounter--;
-        }
-        if(this.wizardData[0].package.name && this.wizardData[0].package.version) {
-            this.props.campaignsStore.savePackageForCampaign(this.props.campaignId, this.wizardData[0].package);
-        } else {
-            asyncActionsLeftCounter--;
-        }
-        if(asyncActionsLeftCounter === 0)
-            this.hide();
-    }
-    close(e) {
-        if(e) e.preventDefault();
-        this.saveData();
-    }
     launch() {
-        waitingForLaunch = true;
-        this.saveData();
+        if(this.campaignIdToAction) {
+            // Add packages to campaign
+            // Add versions to campaign
+            // Add groups to campaign
+            console.log('launching');
+            this.props.campaignsStore.launchCampaign(this.campaignIdToAction);
+        } else {
+            let packages = this.wizardData[0].packages;
+            let updates = this.wizardData[1].versions;
+            let updateData = [];
+            if(_.first(packages).inDirector) {
+                _.each(updates, (update, packageName) => {
+                    let fromFilepath = null;
+                    let toFilepath = null;
+                    let targetFormat = null;
+                    let packages = this.props.packagesStore.packages;
+                    _.each(packages, (pack, index) => {
+                        if(pack.inDirector) {
+                            if(pack.id.version === update.from) {
+                                fromFilepath = pack.imageName;
+                            }
+                            if(pack.id.version === update.to) {                    
+                                toFilepath = pack.imageName;
+                            }
+                            if(pack.id.name === packageName) {
+                                targetFormat = pack.targetFormat;
+                            }
+                        }
+                    });
+                    updateData.push({
+                        hardwareId: update.hardwareId,
+                        from: {
+                            target: fromFilepath,
+                            hash: update.from
+                        },
+                        to: {
+                            target: toFilepath,
+                            hash: update.to
+                        },
+                        targetFormat: targetFormat,
+                        generateDiff: false
+                    });
+                });
+                this.props.campaignsStore.createMultiTargetUpdate(updateData);
+            }
+        }
+    }
+    handleMultiTargetUpdateCreated() {
+        
+        let createData = {
+            name: "Ohh223",
+            update: this.props.campaignsStore.campaignData.mtuId,
+            groups: this.wizardData[2].groups
+        };
+        this.props.campaignsStore.createCampaign(createData);
+    }
+    handleCampaignCreated() {        
+        this.props.campaignsStore.launchCampaign(this.props.campaignsStore.campaignData.campaignId);
+        this.props.hideWizard(this.props.wizardIdentifier);
     }
     changeFilter(filterValue) {
         this.filterValue = filterValue;
     }
-    handleLaunchResponse() {
-        this.hide();
-    }
-    handleSaveDataResponse() {
-        asyncActionsLeftCounter--;
-        if(asyncActionsLeftCounter == 0)
-            waitingForLaunch ? 
-                this.props.campaignsStore.launchCampaign(this.props.campaignId) 
-            : 
-                this.hide();
-    }
-    hide() {
-        this.props.hide();
-        this.props.campaignsStore._resetWizard();
-        this.props.packagesStore._resetWizard();
-        this.currentStepId = initialCurrentStepId;
-        this.wizardData = initialWizardData;
-        this.wizardSteps = initialWizardStep;
-        this.filterValue = initialFilterValue;
-        asyncActionsLeftCounter = 2;
-        waitingForLaunch = false;
-    }
     render() {
-        const { shown, hide, campaignsStore, packagesStore, groupsStore } = this.props;
+        const { campaignsStore, packagesStore, groupsStore, hardwareStore, campaignId, wizardIdentifier, hideWizard, toggleWizard, minimizedWizardIds } = this.props;
         const currentStep = this.wizardSteps[this.currentStepId];
-          const modalContent = (
-              <span>
-                  <div className={"content-step step-" + currentStep.name}>
-                      {campaignsStore.campaignsOneFetchAsync.isFetching ?
-                          <div className="wrapper-center">
-                            <Loader />
-                        </div>
-                      :
-                          React.createElement(currentStep.class, {
-                            campaign: {},
-                            setWizardData: this.setWizardData,
-                            wizardData: this.wizardData,
-                            markStepAsFinished: this.markStepAsFinished,
-                            markStepAsNotFinished: this.markStepAsNotFinished,
-                            filterValue: this.filterValue,
-                            packagesStore: packagesStore,
-                            groupsStore: groupsStore
-                          })
-                      }
-                      {currentStep.isSearchBarShown ?
-                          <Form>
-                            <SearchBar 
-                                value={this.filterValue}
-                                changeAction={this.changeFilter}
-                                id="wizard-search-package"
-                            />
-                        </Form>
-                      :
-                          null
-                      }
-                  </div>
-                  <div className="actions">
-                      <div className="wrapper-close">
-                          <a href="#" className="link-close" id="save-and-close" onClick={this.close}>
-                              Save & Close
-                          </a>
-                      </div>
-                      <div className="wrapper-steps-no">
-                        {_.map(this.wizardSteps, (step, index) => {
-                            return (
-                                  <div className={"step" + (this.currentStepId == index ? " active" : "")} key={'wizard-step-' + index}>
-                                    <div className="progress">
-                                        <div className="progress-bar"></div>
-                                    </div>
-                                    <a href="#" className="dot" onClick={this.jumpToStep.bind(this, index)}>
-                                        {index+1}
-                                    </a>
-                                    <div className="stepnum">
-                                        {step.title}
-                                    </div>
-                                  </div>
-                            );
-                        }, this)}
+        this.campaignIdToAction = campaignId;        
+        const modalContent = (
+            !_.includes(minimizedWizardIds, wizardIdentifier) ?
+                <span>
+                    <div className="heading">
+                        {this.wizardSteps[this.currentStepId].title}
+                        <a href="#" className="box-toggle" title="Toggle upload box size" onClick={toggleWizard.bind(this, wizardIdentifier)}>
+                            <i className={"fa toggle-modal-size " + (_.includes(minimizedWizardIds, wizardIdentifier) ? "fa-angle-up" : "fa-angle-down")} aria-hidden="true"></i>
+                        </a>
                     </div>
-                    <div className="wrapper-confirm">
-                        {this.isLastStep() ? 
-                            <FlatButton
-                                label="Launch"
-                                className="btn-main btn-red"
-                                id="wizard-launch-button"
-                                onClick={this.launch} 
-                                disabled={!currentStep.isFinished}
-                            />
-                        :
-                            <FlatButton
-                                label="Next"
-                                className="btn-main"
-                                id="next-step"
-                                onClick={this.nextStep} 
-                                disabled={!currentStep.isFinished}
-                            />
-                        }
+                        <span>
+                            <div className={"content-step step-" + currentStep.name}>
+                                {campaignsStore.campaignsOneFetchAsync.isFetching ?
+                                    <div className="wrapper-center">
+                                        <Loader />
+                                    </div>
+                                :
+                                    React.createElement(currentStep.class, {
+                                        campaign: {},
+                                        setWizardData: this.setWizardData,
+                                        wizardData: this.wizardData,
+                                        markStepAsFinished: this.markStepAsFinished,
+                                        markStepAsNotFinished: this.markStepAsNotFinished,
+                                        filterValue: this.filterValue,
+                                        packagesStore: packagesStore,
+                                        groupsStore: groupsStore,
+                                        hardwareStore: hardwareStore,
+                                        selectFromVersion: this.selectFromVersion,
+                                        selectedFromVersion: this.selectedFromVersion,
+                                        selectVersion: this.selectVersion,
+                                        wizardIdentifier: wizardIdentifier,
+                                    })
+                                }
+                                {currentStep.isSearchBarShown ?
+                                    <Form>
+                                        <SearchBar 
+                                            value={this.filterValue}
+                                            changeAction={this.changeFilter}
+                                            id="wizard-search-package"
+                                        />
+                                    </Form>
+                                :
+                                    null
+                                }
+                            </div>
+                            <div className="actions">
+                                <div className="wrapper-close">
+                                      <a href="#" className="link-close" id="save-and-close" onClick={hideWizard.bind(this, wizardIdentifier)}>
+                                          Close
+                                      </a>
+                                </div>
+                                <div className="wrapper-steps-no">
+                                    {_.map(this.wizardSteps, (step, index) => {
+                                        return (
+                                              <div className={"step" + (this.currentStepId == index ? " active" : "")} key={'wizard-step-' + index}>
+                                                <div className="progress">
+                                                    <div className="progress-bar"></div>
+                                                </div>
+                                                <a href="#" className="dot" onClick={this.jumpToStep.bind(this, index)}>
+                                                    {index+1}
+                                                </a>
+                                                <div className="stepnum">
+                                                    {step.title}
+                                                </div>
+                                              </div>
+                                        );
+                                    }, this)}
+                                </div>
+                                <div className="wrapper-confirm">
+                                    {this.isLastStep() ? 
+                                        <FlatButton
+                                            label="Launch"
+                                            className="btn-main btn-red"
+                                            id="wizard-launch-button"
+                                            onClick={this.launch} 
+                                            disabled={!currentStep.isFinished}
+                                        />
+                                    :
+                                        <FlatButton
+                                            label="Next"
+                                            className="btn-main"
+                                            id="next-step"
+                                            onClick={this.nextStep} 
+                                            disabled={!currentStep.isFinished}
+                                        />
+                                    }
+                                </div>
+                            </div>
+                        </span>
+                    
+                </span>
+            :
+                null            
+        );
+        return (            
+            <Draggable
+                bounds="html"
+                disabled={true}
+            >
+                <div className={"campaigns-wizard campaigns-wizard-" + wizardIdentifier}>
+                    <div className="draggable-content">
+                        <div className="body">
+                            {modalContent}
+                        </div>
                     </div>
                 </div>
-              </span>
-          );
-        return (
-            <Modal
-                title={currentStep.title}
-                content={modalContent}
-                shown={shown}
-                className="campaigns-wizard"
-            />
+            </Draggable>            
         );
     }
 }
 
 Wizard.propTypes = {
-    shown: PropTypes.bool.isRequired,
-    hide: PropTypes.func.isRequired,
     campaignId: PropTypes.string,
     campaignsStore: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired,
-    groupsStore: PropTypes.object.isRequired
+    groupsStore: PropTypes.object.isRequired,
+    hardwareStore: PropTypes.object
 }
 
 export default Wizard;

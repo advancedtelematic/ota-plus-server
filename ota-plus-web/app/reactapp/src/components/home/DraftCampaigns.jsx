@@ -10,43 +10,17 @@ import { FlatButton } from 'material-ui';
 
 @observer
 class DraftCampaigns extends Component {
-    @observable createModalShown = false;
     @observable campaignIdToAction = null;
-    @observable wizardShown = false;
 
     constructor(props) {
         super(props);
-        this.showCreateModal = this.showCreateModal.bind(this);
-        this.hideCreateModal = this.hideCreateModal.bind(this);
-        this.showWizard = this.showWizard.bind(this);
-        this.hideWizard = this.hideWizard.bind(this);
-    }
-    showCreateModal(e) {
-        if(e) e.preventDefault();
-        this.createModalShown = true;
-    }
-    hideCreateModal(createdCampaignId, e) {
-        if(e) e.preventDefault();
-        this.createModalShown = false;
-        resetAsync(this.props.campaignsStore.campaignsCreateAsync);
-        this.showWizard(createdCampaignId);
-    }
-    showWizard(campaignId, e) {
-        if(e) e.preventDefault();
-        this.wizardShown = true;
-        this.campaignIdToAction = campaignId;
-    }
-    hideWizard(e) {
-        if(e) e.preventDefault();
-        this.wizardShown = false;
-        this.campaignIdToAction = null;
     }
     render() {
-        const { campaignsStore, packagesStore, groupsStore } = this.props;
+        const { campaignsStore, packagesStore, groupsStore, addNewWizard } = this.props;
         const { lastDraftCampaigns } = campaignsStore;
         return (
             <span>
-                {campaignsStore.campaignsFetchAsync.isFetching ?
+                {campaignsStore.campaignsFetchAsync.isFetching || groupsStore.groupsFetchAsync.isFetching ?
                     <div className="wrapper-center">
                         <Loader 
                             className="dark"
@@ -59,7 +33,6 @@ class DraftCampaigns extends Component {
                                 <DraftCampaignsItem 
                                     key={campaign.id}
                                     campaign={campaign}
-                                    showWizard={this.showWizard}
                                 />
                             );
                         })
@@ -69,23 +42,10 @@ class DraftCampaigns extends Component {
                                 label="Add new campaign"
                                 type="button"
                                 className="btn-main btn-small"
-                                onClick={this.showCreateModal}
+                                onClick={addNewWizard.bind(this, null)}
                             />
                         </div>
                 }
-                <CampaignsCreateModal 
-                    shown={this.createModalShown}
-                    hide={this.hideCreateModal}
-                    campaignsStore={campaignsStore}
-                />
-                <CampaignsWizard 
-                    shown={this.wizardShown}
-                    hide={this.hideWizard}
-                    campaignId={this.campaignIdToAction}
-                    campaignsStore={campaignsStore}
-                    packagesStore={packagesStore}
-                    groupsStore={groupsStore}
-                />
             </span>
         );
     }
