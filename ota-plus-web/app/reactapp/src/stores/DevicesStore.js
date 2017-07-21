@@ -298,7 +298,18 @@ export default class DevicesStore {
                 resetAsync(this.devicesDirectorAttributesFetchAsync, true);
                 return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
                     .then((response) => {
-                        this.device.directorAttributes = response.data;
+
+                        let primary = _.filter(director.data, (data, index) => {
+                            return data.primary;
+                        });
+                        let secondary = _.filter(director.data, (data, index) => {
+                            return !data.primary;
+                        });
+                        that.device.directorAttributes = {
+                            primary: _.first(primary),
+                            secondary: secondary
+                        };
+
                         this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
                     })
                     .catch((error) => {
@@ -310,7 +321,18 @@ export default class DevicesStore {
                 resetAsync(this.devicesDirectorAttributesFetchAsync, true);
                 return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
                     .then((response) => {
-                        this.device.directorAttributes = response.data;
+
+                        let primary = _.filter(director.data, (data, index) => {
+                            return data.primary;
+                        });
+                        let secondary = _.filter(director.data, (data, index) => {
+                            return !data.primary;
+                        });
+                        that.device.directorAttributes = {
+                            primary: _.first(primary),
+                            secondary: secondary
+                        };
+
                         this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
                     })
                     .catch((error) => {
