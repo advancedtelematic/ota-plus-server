@@ -14,10 +14,12 @@ class CreateModal extends Component {
     @observable submitButtonDisabled = true;
     @observable fileName = null;
     @observable selectedHardwareIds = [];
-
+    @observable packUrl = {value: ''};
     constructor(props) {
         super(props);
         this.selectHardwareIds = this.selectHardwareIds.bind(this);
+
+        this.disableRequiredFile = this.disableRequiredFile.bind(this);
     }    
     componentDidMount() {
         this.createHandler = new AsyncStatusCallbackHandler(this.props.packagesStore, 'packagesCreateAsync', this.hideModal.bind(this));
@@ -63,6 +65,10 @@ class CreateModal extends Component {
         this.selectedHardwareIds = [];
         this.props.hide();
     }
+    disableRequiredFile(event) {
+        this.packUrl = {value: event.target.value};
+    }
+
     formatHardwareIds(selectedHardwareIds) {
         let hardwareIds = this.props.hardwareStore.hardwareIds;
         return hardwareIds.map((id) => (
@@ -81,6 +87,7 @@ class CreateModal extends Component {
     }
     render() {
         const { shown, hide, packagesStore, hardwareStore, toggleTufUpload, uploadToTuf, fileDropped } = this.props;
+
         const form = (
             <Form
                 onValid={this.enableButton.bind(this)}
@@ -172,44 +179,71 @@ class CreateModal extends Component {
                 }
                 <div className="row">
                     <div className="col-xs-6">
-                        <div className="upload-wrapper">
-                            {!fileDropped ?
-                                <FlatButton
-                                    label="Choose file"
-                                    onClick={this._onFileUploadClick.bind(this)}
-                                    className="btn-main btn-small"
-                                    id="choose-package"
+                        <div className="row">
+                            <div className="upload-wrapper col-xs-12">
+                                {!fileDropped ?
+                                    <FlatButton
+                                        label="Choose file"
+                                        onClick={this._onFileUploadClick.bind(this)}
+                                        className="btn-main btn-small"
+                                        id="choose-package"
+                                    />
+                                    :
+                                    null
+                                }
+                                <div className="file-name">
+                                    {fileDropped ?
+                                        fileDropped.name
+                                        :
+                                        this.fileName
+                                    }
+                                </div>
+                                <input
+                                    ref="fileUpload"
+                                    name="file"
+                                    type="file"
+                                    onChange={this._onFileChange.bind(this)}
+                                    className="file"
                                 />
-                            :
-                                null
-                            }
-                            <div className="file-name">
-                                {fileDropped ?
-                                    fileDropped.name
+                                {this.packUrl.value === '' ?
+                                    <FormsyText
+                                        type="text"
+                                        name="fake-file"
+                                        value={fileDropped ?
+                                            fileDropped.name
+                                            :
+                                            this.fileName
+                                        }
+                                        style={{display: 'none'}}
+                                        required
+                                    />
                                 :
-                                    this.fileName
+                                    <FormsyText
+                                        type="text"
+                                        name="fake-file"
+                                        value={fileDropped ?
+                                            fileDropped.name
+                                            :
+                                            this.fileName
+                                        }
+                                        style={{display: 'none'}}
+                                    />
                                 }
                             </div>
-                            <input
-                                ref="fileUpload"
-                                name="file"
-                                type="file" 
-                                onChange={this._onFileChange.bind(this)}
-                                className="file"
-                            />
-                            <FormsyText 
-                                type="text"
-                                name="fake-file"
-                                value={fileDropped ? 
-                                    fileDropped.name
-                                :
-                                    this.fileName
-                                }
-                                style={{display: 'none'}}
-                                required
-                            />
+                            <div className="col-xs-12">
+                                <input
+                                    name="fileUrl"
+                                    type="text"
+                                    onChange={this.disableRequiredFile.bind(this)}
+                                    value={this.packUrl.value}
+                                    style={{border: 'none'}}
+                                    id="url-to-new-package"
+                                />
+                            </div>
                         </div>
+
                     </div>
+
                     <div className="col-xs-6">
                         <div className="row">
                             <div className="switch-row">
