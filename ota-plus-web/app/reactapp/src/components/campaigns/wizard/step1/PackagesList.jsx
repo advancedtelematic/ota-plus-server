@@ -4,7 +4,6 @@ import { observer } from 'mobx-react';
 import _ from 'underscore';
 import { VelocityTransitionGroup } from 'velocity-react';
 import PackagesListItem from './PackagesListItem';
-import PackagesListItemVersion from './PackagesListItemVersion';
 import { Loader } from '../../../../partials';
 
 const headerHeight = 28;
@@ -14,7 +13,6 @@ class PackagesList extends Component {
     @observable fakeHeaderLetter = null;
     @observable fakeHeaderTopPosition = 0;
     @observable expandedPackageName = null;
-    @observable tmpIntervalId = null;
 
     constructor(props) {
         super(props);
@@ -31,9 +29,6 @@ class PackagesList extends Component {
                   }, 50);
             }
         });
-    }
-    componentWillMount() {
-        this.expandedPackageName = this.props.chosenPackage.name;
     }
     componentDidMount() {
         this.refs.list.addEventListener('scroll', this.listScroll);
@@ -74,19 +69,8 @@ class PackagesList extends Component {
     togglePackage(packageName) {
         this.expandedPackageName = (this.expandedPackageName !== packageName ? packageName : null);
     }
-    startIntervalListScroll() {
-        clearInterval(this.tmpIntervalId);
-        let intervalId = setInterval(() => {
-            this.listScroll();
-        }, 10);
-        this.tmpIntervalId = intervalId;
-    }
-    stopIntervalListScroll() {
-        clearInterval(this.tmpIntervalId);
-        this.tmpIntervalId = null;
-    }
     render() {
-        const { chosenPackage, setWizardData, packagesStore } = this.props;
+        const { chosenPackagesList, setWizardData, packagesStore } = this.props;
         return (
             <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching ? " fetching" : "")} ref="list">
                 {packagesStore.packagesCount ? 
@@ -100,41 +84,20 @@ class PackagesList extends Component {
                                     <div className="header">{letter}</div>
                                     {_.map(packages, (pack, index) => {
                                         const that = this;
+                                        let chosen = null;
+                                        _.each(chosenPackagesList, (listItem, index) => {
+                                            if(listItem.packageName === pack.packageName) {
+                                                chosen = pack;
+                                            }
+                                        });
                                         return (
                                             <span key={index}>
-                                                <PackagesListItem 
+                                                <PackagesListItem
                                                     pack={pack}
                                                     togglePackage={this.togglePackage}
+                                                    setWizardData={setWizardData}
+                                                    chosen={chosen}
                                                 />
-                                                <VelocityTransitionGroup 
-                                                    enter={{
-                                                        animation: "slideDown", 
-                                                        begin: () => {that.startIntervalListScroll()}, 
-                                                        complete: () => {that.stopIntervalListScroll()}
-                                                    }} 
-                                                    leave={{
-                                                        animation: "slideUp",
-                                                        begin: () => {that.startIntervalListScroll();},
-                                                        complete: () => {that.stopIntervalListScroll();}
-                                                    }}
-                                                >
-                                                    {this.expandedPackageName === pack.packageName ?
-                                                        <ul className="versions">
-                                                            {_.map(pack.versions, (version, i) => {
-                                                                return (
-                                                                    <PackagesListItemVersion 
-                                                                        version={version}
-                                                                        setWizardData={setWizardData}
-                                                                        isChosen={version.id.name == chosenPackage.name && version.id.version == chosenPackage.version}
-                                                                        key={i}
-                                                                    />
-                                                                );
-                                                            })}
-                                                        </ul>
-                                                    : 
-                                                        null
-                                                    }
-                                                </VelocityTransitionGroup>
                                             </span>
                                         );
                                     })}
@@ -155,9 +118,8 @@ class PackagesList extends Component {
 }
 
 PackagesList.propTypes = {
-    chosenPackage: PropTypes.object.isRequired,
     setWizardData: PropTypes.func.isRequired,
-    packagesStore: PropTypes.object.isRequired
+    packagesStore: PropTypes.object.isRequired,
 }
 
 export default PackagesList;

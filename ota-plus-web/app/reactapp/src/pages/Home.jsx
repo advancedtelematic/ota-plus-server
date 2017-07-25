@@ -20,11 +20,13 @@ class Home extends Component {
         this.props.devicesStore.fetchDevices();
         this.props.packagesStore.fetchPackages();
         this.props.campaignsStore.fetchCampaigns();
+        this.props.groupsStore.fetchGroups();
     }
     componentWillUnmount() {
         this.props.devicesStore._reset();
         this.props.packagesStore._reset();
         this.props.campaignsStore._reset();
+        this.props.groupsStore._reset();
     }
     componentWillReceiveProps(nextProps) {
         this.router = nextProps.router;
@@ -51,7 +53,7 @@ class Home extends Component {
         }
     }
     render() {
-        const { devicesStore, packagesStore, campaignsStore, groupsStore, hardwareStore, userStore, provisioningStore, featuresStore, systemReady, setSystemReady } = this.props;
+        const { devicesStore, packagesStore, campaignsStore, groupsStore, hardwareStore, userStore, provisioningStore, featuresStore, systemReady, setSystemReady, addNewWizard } = this.props;
         return (
             <FadeAnimation
                 display="flex">
@@ -68,6 +70,7 @@ class Home extends Component {
                                     campaignsStore={campaignsStore}
                                     groupsStore={groupsStore}
                                     hardwareStore={hardwareStore}
+                                    addNewWizard={addNewWizard}
                                 />
                             </MetaData>
                         </div>

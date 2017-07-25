@@ -11,7 +11,9 @@ import {
     API_CAMPAIGNS_LAUNCH,
     API_CAMPAIGNS_RENAME,
     API_CAMPAIGNS_CANCEL,
-    API_CAMPAIGNS_CANCEL_REQUEST
+    API_CAMPAIGNS_CANCEL_REQUEST,
+    API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
+    API_CAMPAIGNS_INDIVIDUAL_FETCH,
 } from '../config';
 import { 
     resetAsync, 
@@ -32,12 +34,14 @@ export default class CampaignsStore {
     @observable campaignsRenameAsync = {};
     @observable campaignsCancelAsync = {};
     @observable campaignsCancelRequestAsync = {};
+    @observable campaignsMultiTargetUpdateCreateAsync = {};
     @observable campaigns = [];
     @observable preparedCampaigns = [];
     @observable overallCampaignsCount = null;
     @observable campaignsFilter = '';
     @observable campaignsSort = 'asc';
     @observable campaign = {};
+    @observable campaignData = {};
 
     constructor() {
         resetAsync(this.campaignsFetchAsync);
@@ -50,62 +54,89 @@ export default class CampaignsStore {
         resetAsync(this.campaignsRenameAsync);
         resetAsync(this.campaignsCancelAsync);
         resetAsync(this.campaignsCancelRequestAsync);
+        resetAsync(this.campaignsMultiTargetUpdateCreateAsync);
+    }
+
+    createMultiTargetUpdate(data) {
+        let updateObject = this._prepareUpdateObject(data);
+        resetAsync(this.campaignsMultiTargetUpdateCreateAsync, true);
+        return axios.post(API_GET_MULTI_TARGET_UPDATE_INDENTIFIER, updateObject)
+            .then((response) => {
+                this.campaignData.mtuId = response.data;
+                this.campaignsMultiTargetUpdateCreateAsync = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this.campaignsMultiTargetUpdateCreateAsync = handleAsyncError(error);
+            });
+    }
+
+     _prepareUpdateObject(data) {
+        let targets = {};
+        _.each(data, (item, index) => {
+            targets[item.hardwareId] = {
+                from: {
+                    target: item.from.target,
+                    checksum: {
+                        method: "sha256",
+                        hash: item.from.hash
+                    },
+                    targetLength: item.from.target.length
+                },
+                to: {
+                    target: item.to.target,
+                    checksum: {
+                        method: "sha256",
+                        hash: item.to.hash
+                    },
+                    targetLength: item.to.target.length
+                },
+                targetFormat: item.targetFormat,
+                generateDiff: item.generateDiff
+            }
+        });
+        return {
+            targets
+        };
     }
 
     fetchCampaigns() {
         resetAsync(this.campaignsFetchAsync, true);
         return axios.get(API_CAMPAIGNS_FETCH)
             .then(function (response) {
-                let campaigns = response.data;
-                if(campaigns.length) {
-                    let after = _.after(campaigns.length, () => {
-                        this.campaigns = campaigns;
-                        this._prepareCampaigns(this.campaignsFilter, this.campaignsSort);
-                        if(this.overallCampaignsCount === null || this.overallCampaignsCount === 0) {
-                            this.overallCampaignsCount = campaigns.length;
-                        }
-                        this.campaignsFetchAsync = handleAsyncSuccess(response);
-                    }, this);
-                    _.each(campaigns, (campaign, index) => {
-                        if(campaign.status === "Active")
-                            axios.get(API_CAMPAIGNS_CAMPAIGN_STATISTICS + '/' + campaign.id + '/statistics')
-                            .then(function(resp) {
-                                let statistics = resp.data;
-                                var summary = {};
-                                let overallDevicesCount = 0;
-                                let overallUpdatedDevicesCount = 0;
-                                let overallFailedUpdates = 0;
-                                let overallSuccessfulUpdates = 0;
-                                let overallCancelledUpdates = 0;
-                                _.each(statistics, (statistic) => {
-                                    overallDevicesCount += statistic.deviceCount;
-                                    overallUpdatedDevicesCount += statistic.updatedDevices;
-                                    overallFailedUpdates += statistic.failedUpdates;
-                                    overallSuccessfulUpdates += statistic.successfulUpdates;
-                                    overallCancelledUpdates += statistic.cancelledUpdates;
+                let campaignIds = response.data.values;
+                let that = this;
+                if(campaignIds.length) {
+                    let after = _.after(campaignIds.length, () => {
+                        let afterStats = _.after(this.campaigns.length, () => {
+                            this.overallCampaignsCount = response.data.total;
+                            this._prepareCampaigns(this.campaignsFilter, this.campaignsSort);
+                            this.campaignsFetchAsync = handleAsyncSuccess(response);
+                        });
+                        _.each(this.campaigns, (campaign, index) => {
+                            axios.get(API_CAMPAIGNS_CAMPAIGN_STATISTICS + '/' + campaign.id + '/stats')
+                                .then(function(resp) {
+                                    let stats = resp.data;
+                                    campaign.summary = stats;
+                                    afterStats();
+                                })
+                                .catch(function() {
+                                    afterStats();
                                 });
-                                summary = {
-                                    overallDevicesCount: overallDevicesCount,
-                                    overallUpdatedDevicesCount: overallUpdatedDevicesCount,
-                                    overallFailedUpdates: overallFailedUpdates,
-                                    overallSuccessfulUpdates: overallSuccessfulUpdates,
-                                    overallCancelledUpdates: overallCancelledUpdates
-                                };
-                                campaign.statistics = statistics;
-                                campaign.summary = summary;
-                                after();
-                            })
-                            .catch(function() {
-                                after();
-                            });
-                    else
-                      after();
+                        });
+                    }, this);
+                    _.each(campaignIds, (campaignId, index) => {
+                        axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + campaignId)
+                        .then(function(resp) {
+                            that.campaigns = _.uniq(that.campaigns.concat(resp.data), campaign => campaign.id);
+                            after();
+                        })
+                        .catch(function() {
+                            after();
+                        });
                   });
+
                 } else {
-                    this.campaigns = campaigns;
-                    this._prepareCampaigns(this.campaignsFilter, this.campaignsSort);
-                    if(this.overallCampaignsCount === null)
-                            this.overallCampaignsCount = campaigns.length;
+                    this.campaigns = [];
                     this.campaignsFetchAsync = handleAsyncSuccess(response);
                 }
             }.bind(this))
@@ -116,11 +147,11 @@ export default class CampaignsStore {
 
     fetchCampaign(id) {
         resetAsync(this.campaignsOneFetchAsync, true);
-        return axios.get(API_CAMPAIGNS_CAMPAIGN_DETAILS + '/' + id)
+        return axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + id)
             .then(function (response) {
                 resetAsync(this.campaignsOneStatisticsFetchAsync, true);
                 this.campaignsOneFetchAsync = handleAsyncSuccess(response);
-                axios.get(API_CAMPAIGNS_CAMPAIGN_STATISTICS + '/' + id + '/statistics')
+                axios.get(API_CAMPAIGNS_CAMPAIGN_STATISTICS + '/' + id + '/stats')
                     .then(function (resp) {
                         let data = response.data;
                         data.statistics = resp.data;
@@ -140,7 +171,7 @@ export default class CampaignsStore {
         resetAsync(this.campaignsCreateAsync, true);
         return axios.post(API_CAMPAIGNS_CREATE, data)
             .then(function (response) {
-                this.fetchCampaigns();
+                this.campaignData.campaignId = response.data;
                 this.campaignsCreateAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
@@ -184,7 +215,7 @@ export default class CampaignsStore {
 
     renameCampaign(id, data) {
         resetAsync(this.campaignsRenameAsync, true);
-        return axios.put(API_CAMPAIGNS_RENAME + '/' + id + '/name', data)
+        return axios.put(API_CAMPAIGNS_RENAME + '/' + id, data)
             .then(function (response) {
                 this.campaignsRenameAsync = handleAsyncSuccess(response);
             }.bind(this))
@@ -265,12 +296,15 @@ export default class CampaignsStore {
         resetAsync(this.campaignsRenameAsync);
         resetAsync(this.campaignsCancelAsync);
         resetAsync(this.campaignsCancelRequestAsync);
+        resetAsync(this.campaignsMultiTargetUpdateCreateAsync);
         this.campaigns = [];
         this.preparedCampaigns = [];
         this.overallCampaignsCount = null;
         this.campaignsFilter = null;
         this.campaignsSort = 'asc';
         this.campaign = {};
+        this.campaignData = {};
+        this.camapignMultiTargetUpdateIdentifier = null;
     }
 
 
@@ -280,19 +314,25 @@ export default class CampaignsStore {
 
     @computed get draftCampaigns() {
         return _.filter(this.preparedCampaigns, (campaign) => {
-            return campaign.status === "Draft";
+            return campaign.summary.status === "prepared";
         });
     }
 
-    @computed get activeCampaigns() {
+    @computed get inPreparationCampaigns() {
         return _.filter(this.preparedCampaigns, (campaign) => {
-            return campaign.status === "Active" && campaign.summary.overallDevicesCount !== campaign.summary.overallUpdatedDevicesCount;
+            return campaign.summary.status === "scheduled";
+        });
+    }
+
+    @computed get runningCampaigns() {
+        return _.filter(this.preparedCampaigns, (campaign) => {
+            return campaign.summary.status === "launched";
         });
     }
 
     @computed get finishedCampaigns() {
         return _.filter(this.preparedCampaigns, (campaign) => {
-            return campaign.status === "Active" && campaign.summary.overallDevicesCount === campaign.summary.overallUpdatedDevicesCount;
+            return campaign.summary.status === "finished";
         });
     }
 
@@ -305,7 +345,7 @@ export default class CampaignsStore {
     }
 
     @computed get lastActiveCampaigns() {
-        let campaigns = this.activeCampaigns;
+        let campaigns = this.runningCampaigns;
         _.sortBy(campaigns, function(campaign) {
           return campaign.createdAt;
         }).reverse()

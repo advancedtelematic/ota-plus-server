@@ -15,7 +15,7 @@ class ActiveCampaigns extends Component {
         this.context.router.push(`/campaign/${campaignId}`);
     }
     render() {
-        const { campaignsStore } = this.props;
+        const { campaignsStore, groupsStore } = this.props;
         const { lastActiveCampaigns } = campaignsStore;
         return (
             <span>
@@ -23,16 +23,19 @@ class ActiveCampaigns extends Component {
                     <thead>
                         <tr>
                             <td>Name</td>
-                            <td>Start date</td>
-                            <td>End date</td>
-                            <td>Status</td>
+                            <td>Created at</td>
+                            <td>Delta switch</td>
+                            <td>Delta generation size</td>
+                            <td>Processed</td>
+                            <td>Finished</td>
+                            <td>Failure rate</td>
                             <td></td>
                         </tr>
                     </thead>
                     <tbody>
-                        {campaignsStore.campaignsFetchAsync.isFetching ?
+                        {campaignsStore.campaignsFetchAsync.isFetching || groupsStore.groupsFetchAsync.isFetching ?
                             <tr>
-                                <td colSpan="5">
+                                <td colSpan="8">
                                     <Loader 
                                         className="dark"
                                     />
@@ -46,6 +49,7 @@ class ActiveCampaigns extends Component {
                                             key={campaign.id}
                                             campaign={campaign}
                                             goToDetails={this.goToDetails}
+                                            groupsStore={groupsStore}
                                         />
                                     );
                                 })
