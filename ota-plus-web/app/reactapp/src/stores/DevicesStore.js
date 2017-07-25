@@ -124,8 +124,10 @@ export default class DevicesStore {
                             method: "sha256",
                             hash: data.hash
                         },
-                        targetLength: data.target.length
-                    }
+                        targetLength: data.targetLength
+                    },
+                    targetFormat: data.targetFormat,
+                    generateDiff: data.generateDiff
                 }
             }
         }
