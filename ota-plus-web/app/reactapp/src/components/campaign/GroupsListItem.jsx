@@ -10,22 +10,22 @@ class GroupsListItem extends Component {
     }
     render() {
         const { t, group, statistics, showCancelGroupModal, foundGroup } = this.props;
-        const progress = Math.min(Math.round(statistics.updatedDevices/Math.max(statistics.deviceCount, 1) * 100), 100);
+        const progress = Math.min(Math.round(statistics.processed/Math.max(foundGroup.devices.total, 1) * 100), 100);
         const data = [
             {
-              value: statistics.failedUpdates,
-              color:"#FF0000",
+              value: statistics.affected,
+              color:"#FE0001",
               highlight: "#FF0000",
               label: "Failure rate"
             },
             {
-              value: statistics.successfulUpdates,
-              color: "#96DCD1",
+              value: statistics.processed,
+              color: "#83D060",
               highlight: "#96DCD1",
               label: "Success rate"
             },
             {
-              value: statistics.cancelledUpdates,
+              value: 0,
               color: "#CCCCCC",
               highlight: "#CCCCCC",
               label: "Cancelled rate"
@@ -41,29 +41,15 @@ class GroupsListItem extends Component {
                                 {foundGroup.groupName}
                             </div>
                             <div className="subtitle">
-                                {t('common.deviceWithCount', {count: statistics.deviceCount})}
+                                {t('common.deviceWithCount', {count: foundGroup.devices.total})}
                             </div>
                         </div>
                     </div>
                 </td>
                 <td className="stats">
-                    <div className="devices-stats">
-                        {statistics.updatedDevices} of {t('common.deviceWithCount', {count: statistics.deviceCount})}
-                    </div>
                     <div className="devices-progress">
                         <div className="progress progress-blue">
                             <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}></div>
-                            <div className="progress-count">
-                                {progress}%
-                            </div>
-                            <div className="progress-status">
-                                {progress == 100 ?
-                                    <span className="fa-stack">
-                                        <i className="fa fa-circle fa-stack-1x"></i>
-                                        <i className="fa fa-check-circle fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                : null}
-                            </div>
                         </div>
                     </div>
                 </td>
@@ -71,42 +57,45 @@ class GroupsListItem extends Component {
                     <div className="wrapper-chart">
                         <Pie 
                             data={data} 
-                            width="50" 
-                            height="50" 
+                            width="80"
+                            height="80"
                             options={{showTooltips: false}}
                         />
                     </div>
                     <div className="wrapper-rate">
-                        <span className={statistics.failedUpdates == 0 ? "lightgrey" : ""}>
-                            {Math.round(statistics.failedUpdates/Math.max(statistics.updatedDevices, 1)*100)} % failure rate
-                        </span>
+                        <div className="stat-big-count">
+                            {Math.round(statistics.affected/Math.max(statistics.processed, 1)*100)} %
+                        </div>
+                        <div className="stat-small-title">
+                            failure rate
+                        </div>
                     </div>
                 </td>
-                <td>
-                    {statistics.updatedDevices !== statistics.deviceCount ?
-                        <a 
-                            href="#" 
-                            className="cancel-campaign" 
-                            id="campaign-detail-cancel"
-                            title="Cancel the Campaign for this group" 
-                            onClick={showCancelGroupModal.bind(this, {
-                                groupName: foundGroup.groupName, 
-                                updateRequest: group.updateRequest,
-                                deviceCount: statistics.deviceCount
-                            })}>
-                            <strong>Cancel</strong>
-                        </a>
+                    {statistics.processed !== foundGroup.devices.total ?
+                        <td>
+                            <a
+                                href="#"
+                                className="cancel-campaign"
+                                id="campaign-detail-cancel"
+                                title="Cancel the Campaign for this group"
+                                onClick={showCancelGroupModal.bind(this, {
+                                    groupName: foundGroup.groupName,
+                                    updateRequest: group.updateRequest,
+                                    deviceCount: statistics.deviceCount
+                                })}>
+                                <strong>Cancel</strong>
+                            </a>
+                        </td>
                     : 
                         null
                     }
-                </td>
             </tr>
         );
     }
 }
 
 GroupsListItem.propTypes = {
-    group: PropTypes.object.isRequired,
+    group: PropTypes.string.isRequired,
     foundGroup: PropTypes.object.isRequired,
     statistics: PropTypes.object.isRequired,
     showCancelGroupModal: PropTypes.func.isRequired
