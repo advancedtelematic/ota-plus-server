@@ -217,6 +217,7 @@ export default class PackagesStore {
                 let createdAt = null;
                 let updatedAt = null;
                 let targetFormat = null;
+                let hardwareIds = [];
 
                 if(version.custom) {
                     customExists = true;
@@ -226,6 +227,7 @@ export default class PackagesStore {
                     updatedAt = version.custom.updatedAt;
                     updatedAt = version.custom.updatedAt;
                     targetFormat = version.custom.targetFormat;
+                    hardwareIds = version.custom.hardwareIds;
                 } else {
                     packageName = imageName;   
                     packageVersion = version.hashes.sha256;
@@ -239,6 +241,7 @@ export default class PackagesStore {
                     updatedAt: updatedAt,
                     description: packageHash,
                     targetFormat: targetFormat ? targetFormat : 'OSTREE',
+                    targetLength: version.length,
                     id: {
                         name: packageName,
                         version: packageVersion
@@ -252,7 +255,7 @@ export default class PackagesStore {
                     },
                     uuid: packageHash,
                     inDirector: true,
-                    hardwareIds: version.custom.hardwareIds
+                    hardwareIds: hardwareIds
                 };
                 versionedDirectorPackages.push(formattedVersion);
             });
@@ -1158,7 +1161,7 @@ export default class PackagesStore {
         let customExists = false;
         let name = null;
         let version = null;
-        let hardwareIds = null;
+        let hardwareIds = [];
         let createdAt = null;
         let updatedAt = null;
         let targetFormat = null;
@@ -1182,6 +1185,7 @@ export default class PackagesStore {
             createdAt: createdAt,
             updatedAt: updatedAt,
             targetFormat: targetFormat ? targetFormat : 'OSTREE',
+            targetLength: data.length,
             hardwareIds: hardwareIds,
             description: '',
             id: {

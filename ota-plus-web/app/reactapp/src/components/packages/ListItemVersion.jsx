@@ -94,7 +94,7 @@ class ListItemVersion extends Component {
                                             Hash: {version.checkSum}
                                         </div>
                                         <div className="hash">
-                                            Length: {version.checkSum.length}
+                                            Length: {version.targetLength}
                                         </div>
                                         <div className="hardware_ids">
                                             Hardware ids: 
@@ -113,7 +113,7 @@ class ListItemVersion extends Component {
                                             Hash: {version.checkSum}
                                         </div>
                                         <div className="hash">
-                                            Length: {version.checkSum.length}
+                                            Length: {version.targetLength}
                                         </div>
                                     </span>
                                 }
