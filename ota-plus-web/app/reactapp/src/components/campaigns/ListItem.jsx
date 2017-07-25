@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { observer } from 'mobx-react';
-import { Pie } from 'react-chartjs';
+import moment from 'moment';
+import _ from 'underscore';
+import { Loader } from '../../partials';
 
 @observer
 class ListItem extends Component {
@@ -12,32 +14,33 @@ class ListItem extends Component {
         this.props.showRenameModal(this.props.campaign.id);
     }
     render() {
-        const { campaign, goToDetails, rename, showWizard, type } = this.props;
-        if(campaign.status === "Active") {
-            var progress = Math.min(Math.round(campaign.summary.overallUpdatedDevicesCount/Math.max(campaign.summary.overallDevicesCount, 1) * 100), 100);
-            var data = [
-                {
-                    value: campaign.summary.overallFailedUpdates,
-                    color:"#FF0000",
-                    highlight: "#FF0000",
-                    label: "Failure rate"
-                },
-                {
-                    value: campaign.summary.overallSuccessfulUpdates,
-                    color: "#96DCD1",
-                    highlight: "#96DCD1",
-                    label: "Success rate"
-                },
-                {
-                    value: campaign.summary.overallCancelledUpdates,
-                    color: "#CCCCCC",
-                    highlight: "#CCCCCC",
-                    label: "Cancelled rate"
-                }
-            ];
+        const { groupsStore, campaign, goToDetails, rename, type, addNewWizard } = this.props;
+
+        let totalAffected = 0;
+        let totalProcessed = 0;
+        let totalFinished = 0;
+        let totalDevices = 0;
+        let failureRate = 0;
+
+        switch(type) {
+            case 'running':
+                    let stats = campaign.summary.stats;
+                    totalFinished = campaign.summary.finished;
+                    _.each(stats, (stat, groupId) => {
+                        totalAffected += stat.affected;
+                        totalProcessed += stat.processed;
+                        let foundGroup = _.find(groupsStore.groups, (item, index) => { 
+                            return item.id === groupId; 
+                        });
+                        totalDevices += foundGroup.devices.total;                        
+                    });
+                    failureRate = Math.round(totalFinished/Math.max(totalProcessed, 1) * 100);
+                break;
+            default:
+                break;
         }
         return (
-            <div className="item" onClick={(type == "draft" ? showWizard.bind(this, campaign.id) : goToDetails.bind(this, campaign.id))}>
+            <div className="item" onClick={(type == "draft" ? addNewWizard.bind(this, campaign.id) : null)}>
                 <div className="actions">
                     <ul>
                         <li id={"rename-campaign-" + campaign.name} onClick={this.rename.bind(this)}>
@@ -49,44 +52,84 @@ class ListItem extends Component {
                 <div className="column" id={"campaign-" + campaign.name}>
                     {campaign.name}
                 </div>
-                <div className="column" id={"campaign-start-date" + campaign.name}>
-                    none
+                <div className="column" id={"campaign-start-date-" + campaign.name}>
+                    {moment(campaign.createdAt).format("DD.MM.YYYY")}
                 </div>
-                <div className="column" id={"campaign-end-date" + campaign.name}>
-                    none
+                <div className="column" id={"campaign-delta-switch-" + campaign.name}>
+                    <div className="delta-switch">
+                        OFF
+                    </div>
                 </div>
-                <div className="column">
-                    {campaign.status === "Active" ?
-                        <div className="progress progress-blue">
-                            <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}></div>
-                            <div className="progress-count">
-                                {progress}%
-                            </div>
-                            <div className="progress-status">
-                                {progress == 100 ?
-                                    <span className="fa-stack">
-                                        <i className="fa fa-circle fa-stack-1x"></i>
-                                        <i className="fa fa-check-circle fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                : null}
-                            </div>
+                <div className="column" id={"campaign-delta-generation-size-" + campaign.name}>
+                    {type === "draft" ?
+                        null
+                    : type === 'inPreparation' ?
+                        <span>
+                            Calculating...
+                        </span>
+                    :
+                        <span>
+                            30 MB
+                        </span>
+                    }
+                </div>
+                <div className="column" id={"campaign-processed-" + campaign.name}>
+                    {type === 'running' ?
+                        <span>
+                            <span>{totalProcessed}</span>
+                            /
+                            <span>{totalDevices}</span>
+                        </span>
+                    :
+                        null
+                    }
+                </div>
+                <div className="column" id={"campaign-finished-" + campaign.name}>
+                    {type === 'running' ?
+                        <span>
+                            <span>{totalFinished}</span>
+                            /
+                            <span>{totalDevices}</span>
+                        </span>
+                    :
+                        null
+                    }
+                </div>
+                <div className="column" id={"campaign-failure-rate-" + campaign.name}>
+                    {type === 'running' ?
+                        <span>
+                            <span>{failureRate} %</span>
+                        </span>
+                    :
+                        null
+                    }
+                </div>
+                <div className="column additional-info" id={"campaign-additional-info-" + campaign.name}>
+                    {type === 'inPreparation' ?
+                        <div className="wrapper-center">
+                            <Loader 
+                                size={30}
+                                thickness={5}
+                            />
                         </div>
-                    : null}
+                    : type === 'running' ?
+                        <div className="more-info" id="campaign-more-info">
+                            More info
+                        </div>
+                    :
+                        null
+                    }
                 </div>
-                <div className="column">
-                    {campaign.status === "Active" ?
-                        <Pie data={data} width="30" height="30" options={{showTooltips: false}}/>
-                    : null}
-                </div>
+                
             </div>
         );
     }
 }
 
 ListItem.propTypes = {
+    groupsStore: PropTypes.object.isRequired,
     campaign: PropTypes.object.isRequired,
     goToDetails: PropTypes.func.isRequired,
-    showWizard: PropTypes.func.isRequired,
     showRenameModal: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired
 }

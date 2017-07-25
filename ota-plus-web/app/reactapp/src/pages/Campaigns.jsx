@@ -14,12 +14,13 @@ class Campaigns extends Component {
     }
     componentWillMount() {
         this.props.campaignsStore.fetchCampaigns();
+        this.props.groupsStore.fetchGroups();
     }
     componentWillUnmount() {
         this.props.campaignsStore._reset();
     }
     render() {
-        const { t, campaignsStore, packagesStore, groupsStore } = this.props;
+        const { t, campaignsStore, packagesStore, groupsStore, hardwareStore, addNewWizard } = this.props;
         return (
             <FadeAnimation 
                 display="flex">
@@ -53,6 +54,8 @@ class Campaigns extends Component {
                             campaignsStore={campaignsStore}
                             packagesStore={packagesStore}
                             groupsStore={groupsStore}
+                            hardwareStore={hardwareStore}
+                            addNewWizard={addNewWizard}
                         />
                     </MetaData>
                 </div>
@@ -64,7 +67,8 @@ class Campaigns extends Component {
 Campaigns.propTypes = {
     campaignsStore: PropTypes.object,
     packagesStore: PropTypes.object,
-    groupsStore: PropTypes.object
+    groupsStore: PropTypes.object,
+    hardwareStore: PropTypes.object
 }
 
 export default translate()(Campaigns);
