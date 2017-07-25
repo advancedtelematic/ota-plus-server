@@ -360,13 +360,11 @@ export default class CampaignsStore {
             successfulUpdates: 0,
             cancelledUpdates: 0
         };
-        _.each(this.campaign.statistics, (statistic) => {
-            stats.devicesCount += statistic.deviceCount;
-            stats.updatedDevicesCount += statistic.updatedDevices;
-            stats.failedUpdates += statistic.failedUpdates;
-            stats.successfulUpdates += statistic.successfulUpdates;
-            stats.cancelledUpdates += statistic.cancelledUpdates;
+        _.each(this.campaign.statistics.stats, (statistic) => {
+            stats.updatedDevicesCount += statistic.processed;
+            stats.failedUpdates += statistic.affected;
         });
+        stats.devicesCount = this.campaign.statistics.finished + this.campaign.statistics.failed.length; //to discuss
         return stats;
     }
 

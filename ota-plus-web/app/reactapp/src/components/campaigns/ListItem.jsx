@@ -40,7 +40,8 @@ class ListItem extends Component {
                 break;
         }
         return (
-            <div className="item" onClick={(type == "draft" ? addNewWizard.bind(this, campaign.id) : null)}>
+            <div className="item" onClick={(type == "draft" ? addNewWizard.bind(this, campaign.id) : goToDetails.bind(this, campaign.id))}>
+
                 <div className="actions">
                     <ul>
                         <li id={"rename-campaign-" + campaign.name} onClick={this.rename.bind(this)}>

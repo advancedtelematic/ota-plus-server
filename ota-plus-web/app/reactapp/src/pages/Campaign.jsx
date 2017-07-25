@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { browserHistory } from 'react-router';
 import { observer } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
 import { Header } from '../partials';
@@ -22,36 +21,28 @@ class Campaign extends Component {
         this.props.groupsStore._reset();
     }
     render() {
-        const { t, campaignsStore, groupsStore, backButtonAction } = this.props;
+        const { campaignsStore, groupsStore, backButtonAction } = this.props;
         return (
+
             <FadeAnimation 
                 display="flex">
                 <div className="wrapper-flex">
                     <Header 
                         backButtonShown={true}
                         backButtonAction={backButtonAction}
-                        title={"Campaign " + (
-                            !campaignsStore.campaignsOneFetchAsync.isFetching && !campaignsStore.campaignsOneStatisticsFetchAsync.isFetching ? 
-                                campaignsStore.campaign.meta.name 
-                            : 
-                                ""
-                        )}
-                        subtitle={(
-                            campaignsStore.campaignsOneFetchAsync.isFetching || campaignsStore.campaignsOneStatisticsFetchAsync.isFetching ?
-                                <span>
-                                    <i className="fa fa-square-o fa-spin"></i> devices counting
-                                </span>
-                            :
-                                t('common.deviceWithCount', {count: campaignsStore.overallCampaignStatistics.devicesCount})
-                        )}
                     />
-                    <MetaData 
-                        title={title}>
-                        <CampaignContainer 
-                            campaignsStore={campaignsStore}
-                            groupsStore={groupsStore}
-                        />
-                    </MetaData>
+                    {campaignsStore.campaignsOneFetchAsync.isFetching || campaignsStore.campaignsOneStatisticsFetchAsync.isFetching ?
+                        null
+                    :
+                        <MetaData
+                            title={title}>
+                            <CampaignContainer
+                                campaignsStore={campaignsStore}
+                                groupsStore={groupsStore}
+                            />
+                        </MetaData>
+                    }
+
                 </div>
             </FadeAnimation>
         );

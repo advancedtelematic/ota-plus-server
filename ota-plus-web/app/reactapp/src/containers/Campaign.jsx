@@ -42,29 +42,31 @@ class Campaign extends Component {
         resetAsync(this.props.campaignsStore.campaignsCancelRequestAsync);
     }
     render() {
-        const { t, campaignsStore, groupsStore } = this.props;
+        const { campaignsStore, groupsStore } = this.props;
         const overallStatistics = campaignsStore.overallCampaignStatistics;
+
         const progress = Math.min(Math.round(overallStatistics.updatedDevicesCount/Math.max(overallStatistics.devicesCount, 1) * 100), 100);
         const failureRateData = [
             {
                 value: overallStatistics.failedUpdates,
-                color: "#FF0000",
-                highlight: "#FF0000",
+                color: "#FE0001",
+                highlight: "#FE0001",
                 label: "Failure rate"
             },
             {
-                value: overallStatistics.successfulUpdates,
-                color: "#96DCD1",
-                highlight: "#96DCD1",
+                value: overallStatistics.updatedDevicesCount,
+                color: "#83D060",
+                highlight: "#83D060",
                 label: "Success rate"
             },
             {
-                value: overallStatistics.cancelledUpdates,
+                value: 0,
                 color: "#CCCCCC",
                 highlight: "#CCCCCC",
                 label: "Cancelled rate"
             }
         ];
+
         return (
             <span>
                 {campaignsStore.campaignsOneFetchAsync.isFetching || campaignsStore.campaignsOneStatisticsFetchAsync.isFetching || groupsStore.groupsFetchAsync.isFetching ?
@@ -73,51 +75,120 @@ class Campaign extends Component {
                     </div>
                 :
                     <span>
-                        <div className="black-header">
-                            Campaign detailed view
-                        </div>
                         <div className="subcontent">
-                            <div className="col-xs-7">
-                                <span className="section-title">
-                                    Total progress
+                            <div className="col-xs-2">
+                                <span className="campaign-name">
+                                    {
+                                        !campaignsStore.campaignsOneFetchAsync.isFetching && !campaignsStore.campaignsOneStatisticsFetchAsync.isFetching ?
+                                            campaignsStore.campaign.name
+                                        :
+                                            ""
+                                    }
                                 </span>
-                                <div className="total-progress">
-                                    <div className="devices-stats">
-                                        <span id="campaign-detail-devices-stats">
-                                            {overallStatistics.updatedDevicesCount} of {t('common.deviceWithCount', {count: overallStatistics.devicesCount})}
-                                        </span>
+                            </div>
+                            <div className="col-xs-8">
+                                <div className="row">
+                                    <div className="col-xs-12 section-title">
+                                        Total progress
                                     </div>
-                                    <div className="devices-progress">
-                                        <div className="progress progress-blue">
-                                            <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}></div>
-                                            <div className="progress-count">
-                                              {progress}%
+                                </div>
+                                <div className="row">
+                                    <div className="col-xs-2 devices-stats">
+                                        <div id="campaign-detail-devices-stats-processed" className="stat-big-count">
+                                            {overallStatistics.updatedDevicesCount}
+                                        </div>
+                                        <div className="stat-small-title">
+                                            Processed
+                                        </div>
+                                    </div>
+                                    <div className="col-xs-2 devices-stats">
+                                        <div id="campaign-detail-devices-stats-failed" className="stat-big-count">
+                                            {overallStatistics.failedUpdates}
+                                        </div>
+                                        <div className="stat-small-title">
+                                            Affected
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="total-progress col-xs-12">
+                                        <div className="devices-progress">
+                                            <div className="progress progress-blue">
+                                                <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}></div>
                                             </div>
-                                            <div className="progress-status">
-                                                {progress == 100 ?
-                                                    <span className="fa-stack">
-                                                        <i className="fa fa-circle fa-stack-1x"></i>
-                                                        <i className="fa fa-check-circle fa-stack-1x fa-inverse"></i>
-                                                    </span>
-                                                : 
-                                                    null
-                                                }
+                                        </div>
+                                    </div>
+                                    <div className="col-xs-12 status-block">
+                                        <div className="row status-row">
+                                            <div className="col-xs-4">
+                                                <div className="row">
+                                                    <div className="col-xs-6">
+                                                        <span className="status failure">Failure</span>
+                                                    </div>
+                                                    <div className="col-xs-6">
+                                                        <span className="status-value">{overallStatistics.failedUpdates}/{overallStatistics.devicesCount}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-xs-4">
+                                                <div className="row">
+                                                    <div className="col-xs-6">
+                                                        <span className="status not-impacted">Not impacted</span>
+                                                    </div>
+                                                    <div className="col-xs-6">
+                                                        <span className="status-value">0/0</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row status-row">
+                                            <div className="col-xs-4">
+                                                <div className="row">
+                                                    <div className="col-xs-6">
+                                                        <span className="status successed">Successed</span>
+                                                    </div>
+                                                    <div className="col-xs-6">
+                                                        <span className="status-value">{overallStatistics.updatedDevicesCount}/{overallStatistics.devicesCount}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-xs-4">
+                                                <div className="row">
+                                                    <div className="col-xs-6">
+                                                        <span className="status not-proceed">Not proceed</span>
+                                                    </div>
+                                                    <div className="col-xs-6">
+                                                        <span className="status-value">0/0</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row status-row">
+                                            <div className="col-xs-4">
+                                                <div className="row">
+                                                    <div className="col-xs-6">
+                                                        <span className="status queued">Queued</span>
+                                                    </div>
+                                                    <div className="col-xs-6">
+                                                        <span className="status-value">0/0</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
-                            <div className="col-xs-5">
+                            <div className="col-xs-2">
                                 <span className="section-title">
                                     Failure rate
                                 </span>
                                 <div className="total-failure-rate" id="campaign-detail-total-failure-rate">
                                     <Doughnut 
                                         data={failureRateData} 
-                                        options={{percentageInnerCutout: 40}} 
-                                        width="120" 
-                                        height="120" 
-                                        options={{showTooltips: false}}
+                                        options={{percentageInnerCutout: 40, showTooltips: false}}
+                                        width="140"
+                                        height="140"
                                     />
                                     <div className="rate">
                                         {Math.round(overallStatistics.failedUpdates/Math.max(overallStatistics.updatedDevicesCount, 1) * 100)}%
