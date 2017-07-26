@@ -14,8 +14,8 @@ class WizardStep4 extends Component {
     }
     componentWillMount() {
         const { wizardData } = this.props;
-        let packages = wizardData[0].packages;
-        let versions = wizardData[1].versions;
+        let packages = wizardData[1].packages;
+        let versions = wizardData[2].versions;
 
         _.each(packages, (pack, index) => {
             pack.updates = [];
@@ -100,7 +100,7 @@ class WizardStep4 extends Component {
                     </div>
                     <div className="desc">
                         <div className="wrapper-groups">
-                            {_.map(wizardData[2].groups, (group, index) => {
+                            {_.map(wizardData[3].groups, (group, index) => {
                                 const foundGroup = _.findWhere(groupsStore.groups, {id: group});
                                 return (
                                     <div className="element-box group" key={index}>
