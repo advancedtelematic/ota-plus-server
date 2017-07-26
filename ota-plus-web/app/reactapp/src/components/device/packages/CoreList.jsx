@@ -17,6 +17,7 @@ class CoreList extends Component {
     @observable lastShownIndex = 50;
     @observable fakeHeaderLetter = null;
     @observable fakeHeaderTopPosition = 0;
+    @observable packageExpandedManually = false;
     @observable expandedPackageName = null;
     @observable selectedPackageVersion = null;
     @observable tmpIntervalId = null;
@@ -40,11 +41,11 @@ class CoreList extends Component {
    
     componentWillReceiveProps(nextProps) {
         if(this.props.device.isDirector) {
-            if(nextProps.expandedVersion && !nextProps.expandedVersion.unmanaged) {
+            if(nextProps.expandedVersion && !nextProps.expandedVersion.unmanaged && !this.packageExpandedManually) {
                 this.expandedPackageName = nextProps.expandedVersion.id.name;
                 this.selectedPackageVersion = nextProps.expandedVersion.id.version;
             }
-            else {
+            else if(!this.packageExpandedManually) {
                 this.expandedPackageName = null;
                 this.selectedPackageVersion = null;
             }
@@ -111,6 +112,7 @@ class CoreList extends Component {
     }
     togglePackage(packageName) {
         this.expandedPackageName = (this.expandedPackageName !== packageName ? packageName : null);
+        this.packageExpandedManually = true;
     }
     togglePackageVersion(hash) {
         this.selectedPackageVersion = (this.selectedPackageVersion !== hash ? hash : null);;
