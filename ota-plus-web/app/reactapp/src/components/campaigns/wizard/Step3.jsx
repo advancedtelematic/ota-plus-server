@@ -8,12 +8,12 @@ class WizardStep3 extends Component {
         this.setWizardData = this.setWizardData.bind(this);
     }
     setWizardData() {
-        let stepWizardData = this.props.wizardData[2];
+        let stepWizardData = this.props.wizardData[4];
         stepWizardData.isActivated = !stepWizardData.isActivated;
     }
     render() {
         const { wizardData } = this.props;
-        const isActivated = wizardData[2].isActivated;
+        const isActivated = wizardData[4].isActivated;
         return (
             <div className="content">
                 <div className="delta-switch">

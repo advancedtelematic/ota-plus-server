@@ -10,7 +10,7 @@ class WizardStep2 extends Component {
         this.setWizardData = this.setWizardData.bind(this);
     }
     setWizardData(groupId) {
-        let stepWizardData = this.props.wizardData[2];
+        let stepWizardData = this.props.wizardData[3];
         if(stepWizardData.groups.indexOf(groupId) > -1) {
             stepWizardData.groups.splice(stepWizardData.groups.indexOf(groupId), 1);
         } else {
@@ -23,7 +23,7 @@ class WizardStep2 extends Component {
     }
     render() {
         const { wizardData, groupsStore } = this.props;
-        const chosenGroups = wizardData[2].groups;
+        const chosenGroups = wizardData[3].groups;
         return (
             !groupsStore.overallGroupsCount && groupsStore.groupsFetchAsync.isFetching ? 
                 <div className="wrapper-center">
