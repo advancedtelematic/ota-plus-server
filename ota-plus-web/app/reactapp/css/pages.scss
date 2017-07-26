@@ -1945,6 +1945,10 @@
             }
         }
 
+        .ios-list {
+            height: calc(100% - 40px);
+        }
+
         .btn-status {
             color: $color-darkgrey;
             font-size: 12px;
