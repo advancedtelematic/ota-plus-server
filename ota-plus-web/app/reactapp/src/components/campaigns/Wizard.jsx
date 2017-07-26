@@ -12,11 +12,15 @@ import {
     WizardStep2,
     WizardStep3,
     WizardStep4,
-    WizardStep5
+    WizardStep5,
+    WizardStep6,
 } from './wizard';
 
 const initialCurrentStepId = 0;
 const initialWizardData = [
+    {
+        name: '',
+    },
     {
         packages: [],
     },
@@ -31,6 +35,13 @@ const initialWizardData = [
     },
 ];
 const initialWizardStep = [
+    {
+        class: WizardStep6,
+        name: "name",
+        title: "Choose name",
+        isFinished: false,
+        isSearchBarShown: false,
+    },
     {
         class: WizardStep1,
         name: "packages",
@@ -119,28 +130,28 @@ class Wizard extends Component {
             case 'from':                
                 this.versions[data.packageName] = {
                     from: data.version, 
-                    to: this.wizardData[1].versions[data.packageName] ? this.wizardData[1].versions[data.packageName].to : null,
-                    hardwareId: this.wizardData[1].versions[data.packageName] ? this.wizardData[1].versions[data.packageName].hardwareId : null
+                    to: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].to : null,
+                    hardwareId: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].hardwareId : null
                 }
                 break;
             case 'to':
                 this.versions[data.packageName] = {
                     to: data.version, 
-                    from: this.wizardData[1].versions[data.packageName] ? this.wizardData[1].versions[data.packageName].from : null,
-                    hardwareId: this.wizardData[1].versions[data.packageName] ? this.wizardData[1].versions[data.packageName].hardwareId : null
+                    from: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].from : null,
+                    hardwareId: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].hardwareId : null
                 }
                 break;
             case 'hardwareId':
                 this.versions[data.packageName] = {
-                    to: this.wizardData[1].versions[data.packageName] ? this.wizardData[1].versions[data.packageName].to : null,
-                    from: this.wizardData[1].versions[data.packageName] ? this.wizardData[1].versions[data.packageName].from : null,
+                    to: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].to : null,
+                    from: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].from : null,
                     hardwareId: data.hardwareId
                 }
                 break;
             default:
                 break;
         }
-        this.wizardData[1].versions = this.versions;
+        this.wizardData[2].versions = this.versions;
     }
     isFirstStep() {
         return this.currentStepId == 0;
@@ -191,8 +202,8 @@ class Wizard extends Component {
             console.log('launching');
             this.props.campaignsStore.launchCampaign(this.campaignIdToAction);
         } else {
-            let packages = this.wizardData[0].packages;
-            let updates = this.wizardData[1].versions;
+            let packages = this.wizardData[1].packages;
+            let updates = this.wizardData[2].versions;
             let updateData = [];
             if(_.first(packages).inDirector) {
                 _.each(updates, (update, packageName) => {
@@ -232,11 +243,10 @@ class Wizard extends Component {
         }
     }
     handleMultiTargetUpdateCreated() {
-        
         let createData = {
-            name: "Ohh223",
+            name: this.wizardData[0].name,
             update: this.props.campaignsStore.campaignData.mtuId,
-            groups: this.wizardData[2].groups
+            groups: this.wizardData[3].groups
         };
         this.props.campaignsStore.createCampaign(createData);
     }

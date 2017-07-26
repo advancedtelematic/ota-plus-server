@@ -32,8 +32,8 @@ class WizardStep5 extends Component {
     }
     render() {
         const { wizardData, selectVersion, markStepAsFinished, markStepAsNotFinished, hardwareStore } = this.props;
-        let chosenPackagesList = this.sortByFirstLetter(wizardData[0].packages);
-        let selectedVersions = wizardData[1].versions;
+        let chosenPackagesList = this.sortByFirstLetter(wizardData[1].packages);
+        let selectedVersions = wizardData[2].versions;
         return (
             <div className="ios-list" ref="list">
                 <span>

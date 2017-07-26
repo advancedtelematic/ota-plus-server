@@ -17,7 +17,7 @@ class WizardStep1 extends Component {
     }
     componentWillMount() {
         this.props.packagesStore.fetchPackages();
-        this.disableItemsOnEnter(this.props.wizardData[0].packages);
+        this.disableItemsOnEnter(this.props.wizardData[1].packages);
     }
     togglePackage(chosenPackagesList, pack) {
         let found = _.find(chosenPackagesList, {packageName: pack.packageName});
@@ -57,7 +57,7 @@ class WizardStep1 extends Component {
         }
     }
     setWizardData(pack) {
-        let chosenPackagesList = this.props.wizardData[0].packages;
+        let chosenPackagesList = this.props.wizardData[1].packages;
         this.togglePackage(chosenPackagesList, pack);
         this.toggleStep(chosenPackagesList, pack);
         this.disablePackageListItems(chosenPackagesList, pack);
@@ -70,7 +70,7 @@ class WizardStep1 extends Component {
     }
     render() {
         const { wizardData, packagesStore } = this.props;
-        let chosenPackagesList = wizardData[0].packages;
+        let chosenPackagesList = wizardData[1].packages;
         return (
             !packagesStore.packagesCount && packagesStore.packagesFetchAsync.isFetching ? 
                 <div className="wrapper-center">
