@@ -42,6 +42,9 @@ const WebsocketHandler = (function (wsUrl, stores) {
                     stores.packagesStore.fetchBlacklist();
                     break;
                 case "UpdateSpec":
+                    if(window.location.href.indexOf('/device/') > -1 && stores.devicesStore.device.isDirector && stores.devicesStore.device.uuid === data.device) {
+                        stores.devicesStore.fetchMultiTargetUpdates(data.device);
+                    }
                     if(stores.packagesStore.deviceQueue.length && stores.devicesStore.device.uuid === data.device) {
                         if(data.status !== 'Pending') {
                             stores.packagesStore.fetchDevicePackagesQueue(data.device);
