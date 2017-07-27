@@ -1055,6 +1055,10 @@ input {
                 overflow-y: auto;
                 height: 490px;
 
+                .alert {
+                    margin-bottom: 0;
+                }
+
                 &.step-packages {
                     .ios-list {
                         height: 100%;

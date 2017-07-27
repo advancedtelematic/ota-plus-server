@@ -5,6 +5,7 @@ import _ from 'underscore';
 
 @observer
 class PackagesVersionList extends Component {
+
     constructor(props) {
         super(props);
         this.formatFromVersions = this.formatFromVersions.bind(this);
@@ -79,6 +80,8 @@ class PackagesVersionList extends Component {
             let hardwareIdDuplicates = selectedHardwareIds.some((value, index)=>{
                 return selectedHardwareIds.indexOf(value) != index;
             });
+
+            this.props.setHardwareIdDuplicates(hardwareIdDuplicates);
 
             if(shouldPass && !hardwareIdDuplicates)
                 this.props.markStepAsFinished();
