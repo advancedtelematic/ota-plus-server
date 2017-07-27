@@ -2152,7 +2152,9 @@
 
 #page-campaign {
     @include fullHeight;
-
+    .white-bg {
+        background-color: #FFF;
+    }
     .page-heading {
         height: 74px;
         .icon {

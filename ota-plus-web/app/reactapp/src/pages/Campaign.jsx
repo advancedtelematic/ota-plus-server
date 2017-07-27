@@ -4,6 +4,7 @@ import { MetaData, FadeAnimation } from '../utils';
 import { Header } from '../partials';
 import { CampaignContainer } from '../containers';
 import { translate } from 'react-i18next';
+import { Loader } from '../partials';
 
 const title = "Campaign";
 
@@ -21,9 +22,8 @@ class Campaign extends Component {
         this.props.groupsStore._reset();
     }
     render() {
-        const { campaignsStore, groupsStore, backButtonAction } = this.props;
+        const { campaignsStore, groupsStore, backButtonAction, devicesStore } = this.props;
         return (
-
             <FadeAnimation 
                 display="flex">
                 <div className="wrapper-flex">
@@ -31,18 +31,15 @@ class Campaign extends Component {
                         backButtonShown={true}
                         backButtonAction={backButtonAction}
                     />
-                    {campaignsStore.campaignsOneFetchAsync.isFetching || campaignsStore.campaignsOneStatisticsFetchAsync.isFetching ?
-                        null
-                    :
-                        <MetaData
-                            title={title}>
-                            <CampaignContainer
-                                campaignsStore={campaignsStore}
-                                groupsStore={groupsStore}
-                            />
-                        </MetaData>
-                    }
-
+                    <MetaData
+                        title={title}>
+                        <CampaignContainer
+                            campaignsStore={campaignsStore}
+                            groupsStore={groupsStore}
+                            devicesStore={devicesStore}
+                            overallStatistics={campaignsStore.overallCampaignStatistics}
+                        />
+                    </MetaData>
                 </div>
             </FadeAnimation>
         );
@@ -50,7 +47,8 @@ class Campaign extends Component {
 }
 
 Campaign.propTypes = {
-    campaignsStore: PropTypes.object
+    campaignsStore: PropTypes.object,
+    devicesStore: PropTypes.object
 }
 
 export default translate()(Campaign);

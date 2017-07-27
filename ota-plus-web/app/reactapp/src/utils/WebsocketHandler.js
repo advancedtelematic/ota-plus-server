@@ -29,6 +29,9 @@ const WebsocketHandler = (function (wsUrl, stores) {
                     break;
                 case "DeviceUpdateStatus":
                     stores.devicesStore._updateDeviceData(data.device, {deviceStatus: data.status});
+                    if(window.location.href.indexOf('/campaign/') > -1) {
+                        stores.campaignsStore.fetchCampaign(stores.campaignsStore.campaign.id);
+                    }
                     break;
                 case "DeviceCreated":
                     break;
