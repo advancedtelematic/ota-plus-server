@@ -11,35 +11,28 @@ class GroupsList extends Component {
     render() {
         const { showCancelGroupModal, campaignsStore, groupsStore } = this.props;
         return (
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Status
-                        </th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {_.map(campaignsStore.campaign.groups, (group, index) => {
-                        const foundGroup = _.findWhere(groupsStore.groups, {id: group.group});
-                        const statistics = _.findWhere(campaignsStore.campaign.statistics, {groupId: group.group});
-                        return (
-                            <GroupsListItem 
-                                group={group}
-                                statistics={statistics}
-                                foundGroup={foundGroup}
-                                showCancelGroupModal={showCancelGroupModal}
-                                key={index}
-                            />
-                        );
-                    })}
-                </tbody>
-            </table>
+            <div className="container">
+                <table className="table table-fixed">
+                    <tbody>
+                        {_.map(campaignsStore.campaign.groups, (groupId, index) => {
+                            const foundGroup = _.findWhere(groupsStore.groups, {id: groupId});
+                            let groupStat = _.find(campaignsStore.campaign.statistics.stats, (stat, gId) => {
+                                return gId === groupId;
+                            });
+                            return (
+                                <GroupsListItem
+                                    group={groupId}
+                                    campaign={campaignsStore.campaign}
+                                    statistics={groupStat}
+                                    foundGroup={foundGroup}
+                                    showCancelGroupModal={showCancelGroupModal}
+                                    key={index}
+                                />
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
         );
     }
 }

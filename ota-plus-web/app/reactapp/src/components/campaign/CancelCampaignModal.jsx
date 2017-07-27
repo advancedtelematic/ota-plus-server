@@ -36,7 +36,7 @@ class CancelCampaignModal extends Component {
                         <div className="icon"></div>
                         <div className="desc">
                             <div className="title" id="cancel-all-campaign-name">
-                                {campaign.meta.name}
+                                {campaign.name}
                             </div>
                             <div className="subtitle">
                                 {t('common.deviceWithCount', {count: overallStatistics.devicesCount})}
