@@ -16,10 +16,10 @@ class CancelCampaignModal extends Component {
         this.cancelHandler();
     }
     cancelCampaign() {
-        this.props.campaignsStore.cancelCampaign(this.props.campaign.meta.id);
+        this.props.campaignsStore.cancelCampaign(this.props.campaign.id);
     }
     handleResponse() {
-        this.props.campaignsStore.fetchCampaign(this.props.campaign.meta.id);
+        this.props.campaignsStore.fetchCampaign(this.props.campaign.id);
         this.props.hide();
     }
     render() {
