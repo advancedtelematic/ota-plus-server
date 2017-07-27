@@ -105,14 +105,20 @@ class Wizard extends Component {
 
         this.multiTargetUpdateCreatedHandler = observe(props.campaignsStore, (change) => {
             if(change.name === 'campaignsMultiTargetUpdateCreateAsync' && change.object[change.name].isFetching === false) {
-                if(!_.includes(props.minimizedWizardIds, props.wizardIdentifier)) {
+                let wizardMinimized = _.find(props.minimizedWizards, (wizard, index) => {
+                    return wizard.id === props.wizardIdentifier;
+                });
+                if(!wizardMinimized) {
                     this.handleMultiTargetUpdateCreated();
                 }
             }
         });
         this.campaignCreatedHandler = observe(props.campaignsStore, (change) => {
             if(change.name === 'campaignsCreateAsync' && change.object[change.name].isFetching === false) {
-                if(!_.includes(props.minimizedWizardIds, props.wizardIdentifier)) {
+                 let wizardMinimized = _.find(props.minimizedWizards, (wizard, index) => {
+                    return wizard.id === props.wizardIdentifier;
+                });
+                if(!wizardMinimized) {
                     this.handleCampaignCreated();
                 }
             }
@@ -258,16 +264,21 @@ class Wizard extends Component {
         this.filterValue = filterValue;
     }
     render() {
-        const { campaignsStore, packagesStore, groupsStore, hardwareStore, campaignId, wizardIdentifier, hideWizard, toggleWizard, minimizedWizardIds } = this.props;
+        const { campaignsStore, packagesStore, groupsStore, hardwareStore, campaignId, wizardIdentifier, hideWizard, toggleWizard, minimizedWizards } = this.props;
         const currentStep = this.wizardSteps[this.currentStepId];
-        this.campaignIdToAction = campaignId;        
+        this.campaignIdToAction = campaignId;
+
+        let wizardMinimized = _.find(minimizedWizards, (wizard, index) => {
+            return wizard.id === wizardIdentifier;
+        });
+
         const modalContent = (
-            !_.includes(minimizedWizardIds, wizardIdentifier) ?
+            !wizardMinimized ?
                 <span>
                     <div className="heading">
                         {this.wizardSteps[this.currentStepId].title}
-                        <a href="#" className="box-toggle" title="Toggle upload box size" onClick={toggleWizard.bind(this, wizardIdentifier)}>
-                            <i className={"fa toggle-modal-size " + (_.includes(minimizedWizardIds, wizardIdentifier) ? "fa-angle-up" : "fa-angle-down")} aria-hidden="true"></i>
+                        <a href="#" className="box-toggle" title="Toggle upload box size" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)}>
+                            <span className="line"></span>
                         </a>
                     </div>
                         <span>
