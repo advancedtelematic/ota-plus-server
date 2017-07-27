@@ -937,25 +937,48 @@ input {
     .minimized-box {
         color: #fff;
         font-size: 18px;
-        text-align: center;
         background: #4B5151;
         height: 50px;
         padding: 14px 15px;
         border: 0;
-        width: 400px;
+        width: 350px;
         float: right;
-        position: relative;
         margin-left: 25px;
         margin-top: 25px;
         z-index: 9999;
 
-        .box-toggle {
-            color: #fff;
-            font-size: 40px;
-            line-height: 1.0em;
-            position: absolute;
-            top: 5px;
-            right: 15px;
+        .name {
+            float: left;
+        }
+
+        .actions {
+            float: right;
+            position: relative;
+            margin-top: -10px;
+
+            .box-toggle {
+                color: #fff;
+                font-size: 40px;
+                line-height: 1.0em;
+
+                &.box-maximize {
+                    display: inline-block;
+                    width: 30px;
+                    height: 22px;
+                    position: absolute;
+                    top: 10px;
+                    right: 45px;
+
+                    .line {
+                        display: block;
+                        border-top: 3px solid white;
+                    }
+                }
+
+                &.box-hide {
+                    display: inline-block;
+                }
+            }
         }
 
         .minimized {
@@ -1001,8 +1024,22 @@ input {
                     font-size: 40px;
                     line-height: 1.0em;
                     position: absolute;
-                    top: 5px;
-                    right: 15px;
+                    right: 0;
+                    top: 0;
+                    width: 60px;
+                    height: 50px;
+
+                    &:hover {
+                        background: #384643;
+                    }
+
+                    .line {
+                        width: 25px;
+                        border-top: 2px solid white;
+                        text-align: center;
+                        display: block;
+                        margin: 25px auto;
+                    }
                 }
             }
 
