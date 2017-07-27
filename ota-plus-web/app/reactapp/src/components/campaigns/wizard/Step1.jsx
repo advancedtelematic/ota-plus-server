@@ -17,6 +17,8 @@ class WizardStep1 extends Component {
     }
     componentWillMount() {
         this.props.packagesStore.fetchPackages();
+    }
+    componentDidMount() {
         this.disableItemsOnEnter(this.props.wizardData[1].packages);
     }
     togglePackage(chosenPackagesList, pack) {
