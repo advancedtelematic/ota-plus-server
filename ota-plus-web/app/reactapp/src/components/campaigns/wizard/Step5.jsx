@@ -11,12 +11,21 @@ const headerHeight = 28;
 
 @observer
 class WizardStep5 extends Component {
+    @observable hardwareIdDuplicates = false;
+
     constructor(props) {
         super(props);
         this.sortByFirstLetter = this.sortByFirstLetter.bind(this);
+        this.setHardwareIdDuplicates = this.setHardwareIdDuplicates.bind(this);
     }
     componentWillMount() {
         this.props.hardwareStore.fetchHardwareIds();
+    }
+    setHardwareIdDuplicates(value) {
+        if(value)
+            this.hardwareIdDuplicates = true;
+        else
+            this.hardwareIdDuplicates = false;
     }
     sortByFirstLetter(packagesList) {
         let sortedPackages = {};
@@ -41,6 +50,13 @@ class WizardStep5 extends Component {
                         <Loader />
                     :
                         <span>
+                            {this.hardwareIdDuplicates ?
+                                <div className="alert alert-danger" role="alert">
+                                    You can't select the same hardware ids
+                                </div>
+                            :
+                                null
+                            }
                             {_.map(chosenPackagesList, (packages, letter) => {
                                 let packsCount = packages.length;
                                 return (
@@ -59,6 +75,8 @@ class WizardStep5 extends Component {
                                                         markStepAsFinished={markStepAsFinished}
                                                         markStepAsNotFinished={markStepAsNotFinished}
                                                         hardwareStore={hardwareStore}
+                                                        setHardwareIdDuplicates={this.setHardwareIdDuplicates}
+                                                        hardwareIdDuplicates={this.hardwareIdDuplicates}
                                                     />
                                                 </span>
                                             );
