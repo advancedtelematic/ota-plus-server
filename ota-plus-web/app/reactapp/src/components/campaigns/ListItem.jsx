@@ -22,23 +22,20 @@ class ListItem extends Component {
         let totalDevices = 0;
         let failureRate = 0;
 
-        switch(type) {
-            case 'running':
-                    let stats = campaign.summary.stats;
-                    totalFinished = campaign.summary.finished;
-                    _.each(stats, (stat, groupId) => {
-                        totalAffected += stat.affected;
-                        totalProcessed += stat.processed;
-                        let foundGroup = _.find(groupsStore.groups, (item, index) => { 
-                            return item.id === groupId; 
-                        });
-                        totalDevices += foundGroup.devices.total;                        
-                    });
-                    failureRate = Math.round(totalFinished/Math.max(totalProcessed, 1) * 100);
-                break;
-            default:
-                break;
+        if(type === 'running' || type === 'finished') {
+            let stats = campaign.summary.stats;
+            totalFinished = campaign.summary.finished;
+            _.each(stats, (stat, groupId) => {
+                totalAffected += stat.affected;
+                totalProcessed += stat.processed;
+                let foundGroup = _.find(groupsStore.groups, (item, index) => { 
+                    return item.id === groupId; 
+                });
+                totalDevices += foundGroup.devices.total;                        
+            });
+            failureRate = Math.round(totalFinished/Math.max(totalProcessed, 1) * 100);
         }
+        
         return (
             <div className="item" onClick={(type == "draft" ? addNewWizard.bind(this, campaign.id) : goToDetails.bind(this, campaign.id))}>
 
@@ -75,7 +72,7 @@ class ListItem extends Component {
                     }
                 </div>
                 <div className="column" id={"campaign-processed-" + campaign.name}>
-                    {type === 'running' ?
+                    {type === 'running' || type === 'finished' ?
                         <span>
                             <span>{totalProcessed}</span>
                             /
@@ -86,7 +83,7 @@ class ListItem extends Component {
                     }
                 </div>
                 <div className="column" id={"campaign-finished-" + campaign.name}>
-                    {type === 'running' ?
+                    {type === 'running' || type === 'finished' ?
                         <span>
                             <span>{totalFinished}</span>
                             /
@@ -97,7 +94,7 @@ class ListItem extends Component {
                     }
                 </div>
                 <div className="column" id={"campaign-failure-rate-" + campaign.name}>
-                    {type === 'running' ?
+                    {type === 'running' || type === 'finished' ?
                         <span>
                             <span>{failureRate} %</span>
                         </span>
@@ -113,7 +110,7 @@ class ListItem extends Component {
                                 thickness={5}
                             />
                         </div>
-                    : type === 'running' ?
+                    : type === 'running' || type === 'finished' ?
                         <div className="more-info" id="campaign-more-info">
                             More info
                         </div>
