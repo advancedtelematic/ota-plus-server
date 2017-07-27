@@ -201,7 +201,7 @@ class Campaign extends Component {
                                 groupsStore={groupsStore}
                             />
                             <div>
-                                {overallStatistics.updatedDevicesCount !== overallStatistics.devicesCount ?
+                                {campaignsStore.campaign.statistics.status !== 'cancelled' ?
                                     <FlatButton
                                         label="Cancel all"
                                         title="Cancel the Campaign for all groups"

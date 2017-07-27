@@ -57,7 +57,7 @@ const WebsocketHandler = (function (wsUrl, stores) {
                     } else {
                         if(data.status === 'Finished') {
                             if(Object.keys(stores.campaignsStore.campaign).length) {
-                                stores.campaignsStore.fetchCampaign(stores.campaignsStore.campaign.meta.id);
+                                stores.campaignsStore.fetchCampaign(stores.campaignsStore.campaign.id);
                             }
                             stores.campaignsStore.fetchCampaigns();
                         }

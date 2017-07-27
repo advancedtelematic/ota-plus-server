@@ -226,7 +226,7 @@ export default class CampaignsStore {
 
     cancelCampaign(id) {
         resetAsync(this.campaignsCancelAsync, true);
-        return axios.put(API_CAMPAIGNS_CANCEL + '/' + id + '/cancel')
+        return axios.post(API_CAMPAIGNS_CANCEL + '/' + id + '/cancel')
             .then(function (response) {
                 this.campaignsCancelAsync = handleAsyncSuccess(response);
             }.bind(this))
@@ -332,7 +332,7 @@ export default class CampaignsStore {
 
     @computed get finishedCampaigns() {
         return _.filter(this.preparedCampaigns, (campaign) => {
-            return campaign.summary.status === "finished";
+            return campaign.summary.status === "finished" || campaign.summary.status === "cancelled";
         });
     }
 

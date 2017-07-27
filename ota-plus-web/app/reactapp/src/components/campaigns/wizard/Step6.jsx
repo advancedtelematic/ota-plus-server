@@ -11,11 +11,7 @@ import serialize from 'form-serialize';
 class WizardStep6 extends Component {
     constructor(props) {
         super(props);
-        this.setWizardData = this.setWizardData.bind(this);
         this.changeCampaignName = this.changeCampaignName.bind(this);
-    }
-    setWizardData(name) {
-        console.log('set');
     }
     changeCampaignName() {
         let data = serialize(document.querySelector('#add-campaign-name-form'), { hash: true });

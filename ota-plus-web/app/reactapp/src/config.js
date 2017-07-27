@@ -70,7 +70,7 @@ export const API_CAMPAIGNS_PACKAGE_SAVE = '/api/v1/campaigns';
 export const API_CAMPAIGNS_GROUPS_SAVE = '/api/v1/campaigns';
 export const API_CAMPAIGNS_LAUNCH = '/api/v2/campaigns';
 export const API_CAMPAIGNS_RENAME = '/api/v2/campaigns';
-export const API_CAMPAIGNS_CANCEL = '/api/v1/campaigns';
+export const API_CAMPAIGNS_CANCEL = '/api/v2/campaigns';
 export const API_CAMPAIGNS_CANCEL_REQUEST = '/api/v1/update_requests';
 
 export const API_IMPACT_ANALYSIS_FETCH = '/api/v1/impact/blacklist';
