@@ -360,11 +360,13 @@ export default class CampaignsStore {
             successfulUpdates: 0,
             cancelledUpdates: 0
         };
-        _.each(this.campaign.statistics.stats, (statistic) => {
-            stats.updatedDevicesCount += statistic.processed;
-            stats.failedUpdates += statistic.affected;
-        });
-        stats.devicesCount = this.campaign.statistics.finished + this.campaign.statistics.failed.length; //to discuss
+        if(!this.campaignsOneFetchAsync.isFetching && !this.campaignsOneStatisticsFetchAsync.isFetching) {
+            _.each(this.campaign.statistics.stats, (statistic) => {
+                stats.updatedDevicesCount += statistic.processed;
+                stats.failedUpdates += statistic.affected;
+            });
+            stats.devicesCount = this.campaign.statistics.finished + this.campaign.statistics.failed.length; //to discuss
+        }
         return stats;
     }
 

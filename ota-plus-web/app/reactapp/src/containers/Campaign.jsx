@@ -8,6 +8,8 @@ import { Doughnut } from 'react-chartjs';
 import { FlatButton } from 'material-ui';
 import { translate } from 'react-i18next';
 
+const AUTO_REFRESH_TIME = 10000;
+
 @observer
 class Campaign extends Component {
     @observable cancelCampaignModalShown = false;
@@ -20,7 +22,17 @@ class Campaign extends Component {
         this.hideCancelCampaignModal = this.hideCancelCampaignModal.bind(this);
         this.showCancelGroupModal = this.showCancelGroupModal.bind(this);
         this.hideCancelGroupModal = this.hideCancelGroupModal.bind(this);
+        this.autoRefresh = this.autoRefresh.bind(this);
+        setTimeout(this.autoRefresh, AUTO_REFRESH_TIME);
     }
+
+    autoRefresh() {
+        if(this.props.campaignsStore.campaign.statistics.status === "prepared" || this.props.campaignsStore.campaign.statistics.status === "scheduled") {
+            this.props.campaignsStore.fetchCampaign(this.props.campaignsStore.campaign.id);
+        }
+        setTimeout(this.autoRefresh, AUTO_REFRESH_TIME);
+    }
+
     showCancelCampaignModal(e) {
         if(e) e.preventDefault();
         this.cancelCampaignModalShown = true;
@@ -42,9 +54,7 @@ class Campaign extends Component {
         resetAsync(this.props.campaignsStore.campaignsCancelRequestAsync);
     }
     render() {
-        const { campaignsStore, groupsStore } = this.props;
-        const overallStatistics = campaignsStore.overallCampaignStatistics;
-
+        const { campaignsStore, groupsStore, overallStatistics } = this.props;
         const progress = Math.min(Math.round(overallStatistics.updatedDevicesCount/Math.max(overallStatistics.devicesCount, 1) * 100), 100);
         const failureRateData = [
             {
@@ -70,7 +80,7 @@ class Campaign extends Component {
         return (
             <span>
                 {campaignsStore.campaignsOneFetchAsync.isFetching || campaignsStore.campaignsOneStatisticsFetchAsync.isFetching || groupsStore.groupsFetchAsync.isFetching ?
-                    <div className="wrapper-center">
+                    <div className="wrapper-center white-bg">
                         <Loader />
                     </div>
                 :
@@ -215,16 +225,17 @@ class Campaign extends Component {
                                 }
                             </div>
                         </div>
+
                     </span>
                 }
-                <CampaignCancelCampaignModal 
+                <CampaignCancelCampaignModal
                     shown={this.cancelCampaignModalShown}
                     hide={this.hideCancelCampaignModal}
                     campaignsStore={campaignsStore}
                     campaign={campaignsStore.campaign}
                     overallStatistics={overallStatistics}
                 />
-                <CampaignCancelGroupModal 
+                <CampaignCancelGroupModal
                     shown={this.cancelGroupModalShown}
                     hide={this.hideCancelGroupModal}
                     campaign={campaignsStore.campaign}
@@ -238,7 +249,8 @@ class Campaign extends Component {
 
 Campaign.propTypes = {
     campaignsStore: PropTypes.object.isRequired,
-    groupsStore: PropTypes.object.isRequired
+    groupsStore: PropTypes.object.isRequired,
+    devicesStore: PropTypes.object.isRequired
 }
 
 export default translate()(Campaign);
