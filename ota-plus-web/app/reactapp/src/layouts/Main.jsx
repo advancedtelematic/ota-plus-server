@@ -41,7 +41,7 @@ class Main extends Component {
     @observable numOfWizards = 0;
     @observable campaignIdToAction = null;
     @observable wizards = [];    
-    @observable minimizedWizardIds = [];
+    @observable minimizedWizards = [];
     @observable uploadBoxMinimized = false;
 
     constructor(props) {
@@ -99,12 +99,17 @@ class Main extends Component {
         this.devicesStore.fetchDevices();
         this.websocketHandler.init();
     }
-    toggleWizard(wizardId, e) {
+    toggleWizard(wizardId, wizardName, e) {
         e.preventDefault();
-        if(_.includes(this.minimizedWizardIds, wizardId))
-            this.minimizedWizardIds.splice(this.minimizedWizardIds.indexOf(wizardId), 1);
+        let minimizedWizard = {
+            id: wizardId,
+            name: wizardName
+        };
+        let wizardAlreadyMinimized = _.find(this.minimizedWizards, {id: wizardId});
+        if(wizardAlreadyMinimized)
+            this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, { id: wizardId }), 1);
         else
-            this.minimizedWizardIds.push(wizardId);
+            this.minimizedWizards.push(minimizedWizard);
     }
     addNewWizard(campaignId = null) {
         this.campaignIdToAction = campaignId;
@@ -118,7 +123,7 @@ class Main extends Component {
                 wizardIdentifier={this.wizards.length}
                 hideWizard={this.hideWizard}
                 toggleWizard={this.toggleWizard}
-                minimizedWizardIds={this.minimizedWizardIds}
+                minimizedWizards={this.minimizedWizards}
                 key={this.wizards.length}
             />
         );
@@ -130,6 +135,7 @@ class Main extends Component {
                 this.wizards.splice(index, 1);
             }
         })
+        this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, { id: wizardIdentifier }), 1);
     }
     toggleUploadBoxMode() {
         this.uploadBoxMinimized = !this.uploadBoxMinimized;
@@ -244,13 +250,28 @@ class Main extends Component {
                     :
                         null
                     }
-                    {_.map(this.minimizedWizardIds, (wizardId, index) => {
+                    {_.map(this.minimizedWizards, (wizard, index) => {
                         return (
                             <div className="minimized-box" key={index}>
-                                Identifier: {wizardId}
-                                <a href="#" className="box-toggle" title="Toggle upload box size" onClick={this.toggleWizard.bind(this, wizardId)}>
-                                    <i className={"fa toggle-modal-size " + (_.includes(this.minimizedWizardIds, wizardId) ? "fa-angle-up" : "fa-angle-down")} aria-hidden="true"></i>
-                                </a>
+                                <div className="name">
+                                    {wizard.name ?
+                                        <span>
+                                            {wizard.name}
+                                        </span>
+                                    :
+                                        <span>
+                                            Choose name
+                                        </span>
+                                    }
+                                </div>
+                                <div className="actions">
+                                    <a href="#" className="box-toggle box-maximize" title="Maximize wizard" onClick={this.toggleWizard.bind(this, wizard.id, wizard.name)}>
+                                        <span className="line"></span>
+                                    </a>
+                                    <a href="#" className="box-toggle box-hide" title="Hide wizard" onClick={this.hideWizard.bind(this, wizard.id)}>
+                                        <i className="fa fa-times" aria-hidden="true"></i>
+                                    </a>
+                                </div>
                             </div>
                         );
                     })}

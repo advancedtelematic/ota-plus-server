@@ -42,6 +42,7 @@ class WizardStep6 extends Component {
                                     floatingLabelText="Campaign name"
                                     className="input-wrapper"
                                     id="add-campaign-name"
+                                    value={campaignName}
                                     updateImmediately
                                     required
                                 />
