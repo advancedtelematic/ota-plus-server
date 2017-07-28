@@ -20,8 +20,8 @@ class PackagesVersionList extends Component {
                 key={version.id.version}
                 insetChildren={true}
                 checked={false}
-                value={version.id.version}
-                primaryText={<span className='version-hash'>Hash: {version.id.version}</span>}
+                value={version.packageHash}
+                primaryText={<span className='version-hash'>Version: {version.id.version}</span>}
                 secondaryText={<span className='version-created-at'>Created at: {version.createdAt}</span>}
                 id={"version-from-menu-item-" + version.id.version}
                 className={"version-menu-item"}
@@ -35,8 +35,8 @@ class PackagesVersionList extends Component {
                 key={version.id.version}
                 insetChildren={true}
                 checked={false}
-                value={version.id.version}
-                primaryText={<span className='version-hash'>Hash: {version.id.version}</span>}
+                value={version.packageHash}
+                primaryText={<span className='version-hash'>Version: {version.id.version}</span>}
                 secondaryText={<span className='version-created-at'>Created at: {version.createdAt}</span>}
                 id={"version-to-menu-item-" + version.id.version}
                 className={"version-menu-item"}

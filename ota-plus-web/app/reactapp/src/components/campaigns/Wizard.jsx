@@ -216,14 +216,18 @@ class Wizard extends Component {
                     let fromFilepath = null;
                     let toFilepath = null;
                     let targetFormat = null;
+                    let fromTargetLength = null;
+                    let toTargetLength = null;
                     let packages = this.props.packagesStore.packages;
                     _.each(packages, (pack, index) => {
                         if(pack.inDirector) {
-                            if(pack.id.version === update.from) {
+                            if(pack.packageHash === update.from) {
                                 fromFilepath = pack.imageName;
+                                fromTargetLength = pack.targetLength;
                             }
-                            if(pack.id.version === update.to) {                    
+                            if(pack.packageHash === update.to) {                    
                                 toFilepath = pack.imageName;
+                                toTargetLength = pack.targetLength;
                             }
                             if(pack.id.name === packageName) {
                                 targetFormat = pack.targetFormat;
@@ -234,10 +238,12 @@ class Wizard extends Component {
                         hardwareId: update.hardwareId,
                         from: {
                             target: fromFilepath,
+                            targetLength: fromTargetLength,
                             hash: update.from
                         },
                         to: {
                             target: toFilepath,
+                            targetLength: toTargetLength,
                             hash: update.to
                         },
                         targetFormat: targetFormat,

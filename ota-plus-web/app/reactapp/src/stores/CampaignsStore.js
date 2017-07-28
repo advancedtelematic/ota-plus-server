@@ -80,7 +80,7 @@ export default class CampaignsStore {
                         method: "sha256",
                         hash: item.from.hash
                     },
-                    targetLength: item.from.target.length
+                    targetLength: item.from.targetLength
                 },
                 to: {
                     target: item.to.target,
@@ -88,7 +88,7 @@ export default class CampaignsStore {
                         method: "sha256",
                         hash: item.to.hash
                     },
-                    targetLength: item.to.target.length
+                    targetLength: item.to.targetLength
                 },
                 targetFormat: item.targetFormat,
                 generateDiff: item.generateDiff

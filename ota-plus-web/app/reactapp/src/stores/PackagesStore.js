@@ -143,7 +143,6 @@ export default class PackagesStore {
             }.bind(this));
     }
 
-
     fetchTufRepoExists() {
         resetAsync(this.tufRepoExistsFetchAsync, true);
         return axios.get(API_CHECK_TUF_REPO)
@@ -235,7 +234,7 @@ export default class PackagesStore {
 
                 let formattedVersion = {
                     customExists: customExists,
-                    checkSum: packageHash,
+                    packageHash: packageHash,
                     imageName: imageName,
                     createdAt: createdAt,
                     updatedAt: updatedAt,
