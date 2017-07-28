@@ -53,6 +53,7 @@ export const API_PACKAGES_DEVICE_QUEUE = '/api/v1/device_updates';
 export const API_PACKAGES_DEVICE_HISTORY = '/api/v1/history';
 export const API_PACKAGES_DEVICE_UPDATES_LOGS = '/api/v1/device_updates';
 export const API_PACKAGES_DEVICE_AUTO_INSTALL = '/api/v1/auto_install';
+export const API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL = '/api/v1/admin/devices';
 export const API_PACKAGES_DEVICE_INSTALL = '/api/v1/device_updates';
 export const API_PACKAGES_DEVICE_CANCEL_INSTALLATION = '/api/v1/device_updates';
 

@@ -26,7 +26,8 @@ class Device extends Component {
     @observable uploadToTuf = false;
     @observable activeEcu = {
         ecu: null,
-        type: null
+        serial: null,
+        type: null,
     };
     @observable multiTargetUpdateStarted = false;
 
@@ -38,6 +39,7 @@ class Device extends Component {
         this.hidePackageBlacklistModal = this.hidePackageBlacklistModal.bind(this);
         this.onFileDrop = this.onFileDrop.bind(this);
         this.togglePackageAutoUpdate = this.togglePackageAutoUpdate.bind(this);
+        this.toggleTufPackageAutoUpdate = this.toggleTufPackageAutoUpdate.bind(this);
         this.installPackage = this.installPackage.bind(this);
         this.multiTargetUpdate = this.multiTargetUpdate.bind(this);
         this.selectEcu = this.selectEcu.bind(this);
@@ -84,6 +86,12 @@ class Device extends Component {
         else
             this.props.packagesStore.enableDevicePackageAutoInstall(packageName, deviceId);
     }
+    toggleTufPackageAutoUpdate(packageName, deviceId, isAutoInstallEnabled) {
+        if(isAutoInstallEnabled)
+            this.props.packagesStore.disableTufPackageAutoInstall(packageName, deviceId, this.activeEcu.serial);
+        else
+            this.props.packagesStore.enableTufPackageAutoInstall(packageName, deviceId, this.activeEcu.serial);
+    }
     installPackage(data) {
         this.props.packagesStore.installPackage(this.props.devicesStore.device.uuid, data);
         this.props.showQueueModal();
@@ -93,13 +101,15 @@ class Device extends Component {
         this.props.devicesStore.createMultiTargetUpdate(data, this.props.devicesStore.device.uuid);
         this.props.showQueueModal();
     }
-    selectEcu(ecu, installedHash, ecuType, e) {
+    selectEcu(ecu, serial, installedHash, ecuType, e) {
         if(e) e.preventDefault();
         this.activeEcu = {
             ecu: ecu,
+            serial: serial,
             type: ecuType
         };
         this.expandedVersion = this.props.packagesStore._getExpandedPackage(installedHash);
+        this.props.packagesStore.fetchDirectorDeviceAutoInstalledPackages(this.props.devicesStore.device.uuid, this.activeEcu.serial);
     }
     cancelInstallation(requestId) {
         this.props.packagesStore.cancelInstallation(this.props.devicesStore.device.uuid, requestId);
@@ -165,6 +175,7 @@ class Device extends Component {
                                 hardwareStore={hardwareStore}
                                 device={device}
                                 togglePackageAutoUpdate={this.togglePackageAutoUpdate}
+                                toggleTufPackageAutoUpdate={this.toggleTufPackageAutoUpdate}
                                 installPackage={this.installPackage}
                                 onFileDrop={this.onFileDrop}
                                 expandedVersion={this.expandedVersion}
