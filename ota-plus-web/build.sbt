@@ -74,4 +74,17 @@ mkVersionProperties := {
   Seq(propFile)
 }
 
+val runWebpack = taskKey[Seq[Int]]("Run webpack")
+
+runWebpack := {
+  Seq(Process(
+    "docker" :: "run" ::
+    "--rm" ::
+    "--volume" :: s"${baseDirectory.value.toString}/app:/app" ::
+    "advancedtelematic/webpack" ::
+    "bash" :: "-c" :: "cd reactapp && npm install && webpack" ::
+    Nil)!
+  )
+}
+
 buildInfoPackage := "com.advancedtelematic.ota.web"
