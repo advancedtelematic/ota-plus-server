@@ -168,13 +168,13 @@ class Details extends Component {
 					        		<div className="hash">
 						        		<span className = "sub-title">Hash:</span>
 						        		<span className="value" id={this.generateIdTag('version-hash-value', expandedVersion)}>
-						        			{expandedVersion.checkSum}
+						        			{expandedVersion.packageHash}
 						        		</span>
 					        		</div>
 					        		<div className="hash-length">
 						        		<span className = "sub-title">Length:</span>
 						        		<span className="value" id={this.generateIdTag('version-hash-length-value', expandedVersion)}>
-						        			{expandedVersion.checkSum.length}
+						        			{expandedVersion.targetLength}
 						        		</span>
 					        		</div>
 					        		<div className="hardware-ids">
