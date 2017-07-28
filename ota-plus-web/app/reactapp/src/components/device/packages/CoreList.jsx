@@ -185,7 +185,7 @@ class CoreList extends Component {
         }
     }
     render() {
-        const { devicesStore, packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, expandedVersion, loadPackageVersionProperties, activeEcu } = this.props;
+        const { devicesStore, packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, toggleTufPackageAutoUpdate, expandedVersion, loadPackageVersionProperties, activeEcu } = this.props;
         let preparedPackages = this.selectPackagesToDisplay();
         this.addUnmanagedPackage(preparedPackages);
         return (
@@ -252,6 +252,7 @@ class CoreList extends Component {
                                                 isSelected={this.expandedPackageName === pack.packageName}
                                                 togglePackage={this.togglePackage}
                                                 toggleAutoInstall={togglePackageAutoUpdate}
+                                                toggleTufAutoInstall={toggleTufPackageAutoUpdate}
                                                 loadPackageVersionProperties={loadPackageVersionProperties}
                                             />
                                             <VelocityTransitionGroup
@@ -346,6 +347,7 @@ CoreList.propTypes = {
     device: PropTypes.object.isRequired,
     onFileDrop: PropTypes.func.isRequired,
     togglePackageAutoUpdate: PropTypes.func.isRequired,
+    toggleTufPackageAutoUpdate: PropTypes.func.isRequired,
     expandedVersion: PropTypes.object,
     loadPackageVersionProperties: PropTypes.func.isRequired,
     activeEcu: PropTypes.object,
