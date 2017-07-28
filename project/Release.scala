@@ -14,6 +14,7 @@ object Release {
     releaseProcess := Seq(
       checkSnapshotDependencies,
       releaseStepCommand("mkVersionProperties"),
+      releaseStepCommand("runWebpack"),
       releaseStepCommand("docker:publish")
     )
   )
