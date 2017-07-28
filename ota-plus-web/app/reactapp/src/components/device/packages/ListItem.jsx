@@ -7,7 +7,7 @@ class ListItem extends Component {
         super(props);
     }
     render() {
-        const { pack, device, queuedPackage, installedPackage, blacklistedAndInstalled, isSelected, togglePackage, toggleAutoInstall, loadPackageVersionProperties } = this.props;
+        const { pack, device, queuedPackage, installedPackage, blacklistedAndInstalled, isSelected, togglePackage, toggleAutoInstall, toggleTufAutoInstall, loadPackageVersionProperties } = this.props;
         return (
             <span className="wrapper-item">
                 {!pack.unmanaged ?
@@ -77,7 +77,12 @@ class ListItem extends Component {
                         {isSelected ?
                             <div className="wrapper-auto-update">
                                 Automatic update
-                                <div className={"switch" + (pack.isAutoInstallEnabled ? " switchOn" : "")} id="auto-install-switch" onClick={toggleAutoInstall.bind(this, pack.packageName, device.uuid, pack.isAutoInstallEnabled)}>
+                                <div className={"switch" + (pack.isAutoInstallEnabled ? " switchOn" : "")} id="auto-install-switch" onClick={
+                                    pack.inDirector ?
+                                        toggleTufAutoInstall.bind(this, pack.packageName, device.uuid, pack.isAutoInstallEnabled)
+                                    :                                    
+                                        toggleAutoInstall.bind(this, pack.packageName, device.uuid, pack.isAutoInstallEnabled)
+                                }>
                                     <div className="switch-status">
                                         {pack.isAutoInstallEnabled ?
                                             <span>ON</span>
@@ -121,6 +126,7 @@ ListItem.propTypes = {
     isSelected: PropTypes.bool.isRequired,
     togglePackage: PropTypes.func.isRequired,
     toggleAutoInstall: PropTypes.func.isRequired,
+    toggleTufAutoInstall: PropTypes.func.isRequired,
     loadPackageVersionProperties: PropTypes.func.isRequired,
 }
 

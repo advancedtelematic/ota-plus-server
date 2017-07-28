@@ -23,7 +23,8 @@ import {
     API_CREATE_TUF_REPO,
     API_CHECK_TUF_REPO,
     API_CREATE_DIRECTOR_REPO,
-    API_CHECK_DIRECTOR_REPO
+    API_CHECK_DIRECTOR_REPO,
+    API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import _ from 'underscore';
@@ -49,11 +50,14 @@ export default class PackagesStore {
     @observable initialPackagesForDeviceFetchAsync = {};
     @observable packagesOndeviceFetchAsync = {};
     @observable packagesAutoInstalledForDeviceFetchAsync = {};
+    @observable packagesAutoInstalledForDirectorDeviceFetchAsync = {};
     @observable packagesDeviceQueueFetchAsync = {};
     @observable packagesDeviceHistoryFetchAsync = {};
     @observable packagesDeviceUpdatesLogsFetchAsync = {};
     @observable packagesDeviceEnableAutoInstallAsync = {};
+    @observable packagesDirectorDeviceEnableAutoInstallAsync = {};
     @observable packagesDeviceDisableAutoInstallAsync = {};
+    @observable packagesDirectorDeviceDisableAutoInstallAsync = {};
     @observable packagesDeviceInstallAsync = {};
     @observable packagesDeviceCancelInstallationAsync = {};
     @observable page = null;
@@ -78,6 +82,7 @@ export default class PackagesStore {
     @observable devicePackages = [];
     @observable devicePackagesFilter = '';
     @observable deviceAutoInstalledPackages = [];
+    @observable directorDeviceAutoInstalledPackages = [];
     @observable devicePackagesInstalledCount = 0;
     @observable devicePackagesQueuedCount = 0;
     @observable deviceQueue = [];
@@ -112,11 +117,14 @@ export default class PackagesStore {
         resetAsync(this.initialPackagesForDeviceFetchAsync);
         resetAsync(this.packagesOndeviceFetchAsync);
         resetAsync(this.packagesAutoInstalledForDeviceFetchAsync);
+        resetAsync(this.packagesAutoInstalledForDirectorDeviceFetchAsync);
         resetAsync(this.packagesDeviceQueueFetchAsync);
         resetAsync(this.packagesDeviceHistoryFetchAsync);
         resetAsync(this.packagesDeviceUpdatesLogsFetchAsync);
         resetAsync(this.packagesDeviceEnableAutoInstallAsync);
+        resetAsync(this.packagesDirectorDeviceEnableAutoInstallAsync);
         resetAsync(this.packagesDeviceDisableAutoInstallAsync);
+        resetAsync(this.packagesDirectorDeviceDisableAutoInstallAsync);
         resetAsync(this.packagesDeviceInstallAsync);
         resetAsync(this.packagesDeviceCancelInstallationAsync);
     }
@@ -675,6 +683,25 @@ export default class PackagesStore {
             }.bind(this));
     }
 
+    fetchDirectorDeviceAutoInstalledPackages(deviceId, ecuSerial) {
+        resetAsync(this.packagesAutoInstalledForDirectorDeviceFetchAsync, true);
+        return axios.get(API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL + '/' + deviceId + '/ecus/' + ecuSerial + '/auto_update')
+            .then(function(response) {
+                this.directorDeviceAutoInstalledPackages = response.data;
+                switch (this.page) {
+                    case 'device':
+                        this._prepareDevicePackages();
+                        break;
+                    default:
+                        break;
+                }
+                this.packagesAutoInstalledForDirectorDeviceFetchAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function(error) {
+                this.packagesAutoInstalledForDirectorDeviceFetchAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
     fetchDevicePackagesQueue(id) {
         resetAsync(this.packagesDeviceQueueFetchAsync, true);
         return axios.get(API_PACKAGES_DEVICE_QUEUE + '/' + id + '/queued')
@@ -693,7 +720,7 @@ export default class PackagesStore {
             .catch(function(error) {
                 this.packagesDeviceQueueFetchAsync = handleAsyncError(error);
             }.bind(this));
-    }    
+    }
 
     fetchDevicePackagesHistory(id) {
         resetAsync(this.packagesDeviceHistoryFetchAsync, true);
@@ -733,6 +760,18 @@ export default class PackagesStore {
             }.bind(this));
     }
 
+    enableTufPackageAutoInstall(targetName, deviceId, ecuSerial) {
+        resetAsync(this.packagesDirectorDeviceEnableAutoInstallAsync, true);
+        return axios.put(API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL + '/' + deviceId + '/ecus/' + ecuSerial + '/auto_update/' + targetName)
+            .then(function(response) {
+                this.fetchDirectorDeviceAutoInstalledPackages(deviceId, ecuSerial);
+                this.packagesDirectorDeviceEnableAutoInstallAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function(error) {
+                this.packagesDirectorDeviceEnableAutoInstallAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
     disableDevicePackageAutoInstall(packageName, deviceId) {
         resetAsync(this.packagesDeviceDisableAutoInstallAsync, true);
         return axios.delete(API_PACKAGES_DEVICE_AUTO_INSTALL + '/' + packageName + '/' + deviceId)
@@ -742,6 +781,18 @@ export default class PackagesStore {
             }.bind(this))
             .catch(function(error) {
                 this.packagesDeviceDisableAutoInstallAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
+    disableTufPackageAutoInstall(packageName, deviceId, ecuSerial) {
+        resetAsync(this.packagesDirectorDeviceDisableAutoInstallAsync, true);
+        return axios.delete(API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL + '/' + deviceId + '/ecus/' + ecuSerial + '/auto_update/' + packageName)
+            .then(function(response) {
+                this.fetchDirectorDeviceAutoInstalledPackages(deviceId, ecuSerial);
+                this.packagesDirectorDeviceDisableAutoInstallAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function(error) {
+                this.packagesDirectorDeviceDisableAutoInstallAsync = handleAsyncError(error);
             }.bind(this));
     }
 
@@ -853,6 +904,7 @@ export default class PackagesStore {
         if(packages.length) {
             const installedPackages = this.installedPackagesPerDevice[this.activeDeviceId];
             const autoInstalledPackages = this.deviceAutoInstalledPackages;
+            const directorAutoInstalledPackages = this.directorDeviceAutoInstalledPackages;
             const blacklist = this.blacklist;
             const queuedPackages = this.deviceQueue;
             let groupedPackages = {};
@@ -877,7 +929,7 @@ export default class PackagesStore {
                 if(!_.isUndefined(parsedBlacklist[packInstalled.id.name + '-' + packInstalled.id.version])) {
                     packInstalled.isBlackListed = true;
                 }
-                if(autoInstalledPackages.indexOf(packInstalled.id.name) > -1)
+                if(autoInstalledPackages.indexOf(packInstalled.id.name) > -1 || directorAutoInstalledPackages.indexOf(packInstalled.id.name) > -1)
                     packInstalled.isAutoInstallEnabled = true;
             });
 
@@ -1096,11 +1148,14 @@ export default class PackagesStore {
         resetAsync(this.packagesAffectedDevicesCountFetchAsync);
         resetAsync(this.packagesForDeviceFetchAsync);
         resetAsync(this.packagesAutoInstalledForDeviceFetchAsync);
+        resetAsync(this.packagesAutoInstalledForDirectorDeviceFetchAsync);
         resetAsync(this.packagesDeviceQueueFetchAsync);
         resetAsync(this.packagesDeviceHistoryFetchAsync);
         resetAsync(this.packagesDeviceUpdatesLogsFetchAsync);
         resetAsync(this.packagesDeviceEnableAutoInstallAsync);
+        resetAsync(this.packagesDirectorDeviceEnableAutoInstallAsync);
         resetAsync(this.packagesDeviceDisableAutoInstallAsync);
+        resetAsync(this.packagesDirectorDeviceDisableAutoInstallAsync);
         resetAsync(this.packagesDeviceInstallAsync);
         resetAsync(this.packagesDeviceCancelInstallationAsync);
         this.page = null;
@@ -1119,6 +1174,7 @@ export default class PackagesStore {
         this.installedPackagesPerDevice = [];
         this.devicePackages = [];
         this.deviceAutoInstalledPackages = [];
+        this.directorDeviceAutoInstalledPackages = [];
         this.devicePackagesInstalledCount = 0;
         this.devicePackagesQueuedCount = 0;
         this.deviceQueue = [];
