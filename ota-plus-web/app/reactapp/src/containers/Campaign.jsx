@@ -29,8 +29,8 @@ class Campaign extends Component {
     autoRefresh() {
         if(this.props.campaignsStore.campaign.statistics.status === "prepared" || this.props.campaignsStore.campaign.statistics.status === "scheduled") {
             this.props.campaignsStore.fetchCampaign(this.props.campaignsStore.campaign.id);
+            setTimeout(this.autoRefresh, AUTO_REFRESH_TIME);
         }
-        setTimeout(this.autoRefresh, AUTO_REFRESH_TIME);
     }
 
     showCancelCampaignModal(e) {
@@ -86,7 +86,7 @@ class Campaign extends Component {
                 :
                     <span>
                         <div className="subcontent">
-                            <div className="col-xs-2">
+                            <div className="col-xs-2 campaign-name-block">
                                 <span className="campaign-name">
                                     {
                                         !campaignsStore.campaignsOneFetchAsync.isFetching && !campaignsStore.campaignsOneStatisticsFetchAsync.isFetching ?
