@@ -138,7 +138,7 @@ class Campaign extends Component {
                                                         <span className="status failure">Failure</span>
                                                     </div>
                                                     <div className="col-xs-6">
-                                                        <span className="status-value">{overallStatistics.failed}/{overallStatistics.processed}</span>
+                                                        <span className="status-value">{overallStatistics.failed}/{overallStatistics.affected}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -160,7 +160,7 @@ class Campaign extends Component {
                                                         <span className="status successed">Successful</span>
                                                     </div>
                                                     <div className="col-xs-6">
-                                                        <span className="status-value">{overallStatistics.successful}/{overallStatistics.processed}</span>
+                                                        <span className="status-value">{overallStatistics.successful}/{overallStatistics.affected}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -182,7 +182,7 @@ class Campaign extends Component {
                                                         <span className="status queued">Queued</span>
                                                     </div>
                                                     <div className="col-xs-6">
-                                                        <span className="status-value">{overallStatistics.queued}/{overallStatistics.processed}</span>
+                                                        <span className="status-value">{overallStatistics.queued}/{overallStatistics.affected}</span>
                                                     </div>
                                                 </div>
                                             </div>
