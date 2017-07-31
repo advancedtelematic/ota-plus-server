@@ -164,6 +164,7 @@ class List extends Component {
                                                             {_.map(pack.versions, (version, i) => {
                                                                 return (
                                                                     <ListItemVersion 
+                                                                        pack={pack}
                                                                         version={version}
                                                                         showBlacklistModal={showBlacklistModal}
                                                                         packagesStore={packagesStore}
