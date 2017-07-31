@@ -74,7 +74,7 @@ class Hardware extends Component {
         const hardware = hardwareStore.hardware[device.uuid];
         let active = true;
         if(device.isDirector) {
-            active = activeEcu.ecu === devicesStore._getPrimaryHardwareId();
+            active = activeEcu.hardwareId === devicesStore._getPrimaryHardwareId();
         }
         return (
             <span>
@@ -120,7 +120,7 @@ class Hardware extends Component {
                                         key={index}
                                     >
                                         <SecondaryEcu
-                                            active={activeEcu.ecu === item.hardwareId}
+                                            active={activeEcu.hardwareId === item.hardwareId}
                                             ecu={item}
                                             hardwareStore={hardwareStore}
                                             showKey={this.showKey}
