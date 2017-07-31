@@ -71,7 +71,7 @@ class ListItemVersion extends Component {
         return isPackageBlacklisted ? isPackageBlacklisted : false;
     }
     render() {
-        const { version } = this.props;
+        const { pack, version } = this.props;
         let isBlacklised = this.isPackageBlacklisted(version);
         return (
             <li className={isBlacklised ? "blacklist" : ""}>
@@ -81,26 +81,26 @@ class ListItemVersion extends Component {
                             <div className="fields">
                                 {version.customExists ? 
                                     <span>
-                                        <div className="version">
+                                        <div className="version" id={"package-" + pack.packageName + "-version-" + version.id.version}>
                                             Version: {version.id.version}
                                         </div>
-                                        <div className="created_at">
+                                        <div className="created_at" id={"package-" + pack.packageName + "-created_at-" + moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}>
                                             Created at: {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}
                                         </div>
-                                        <div className="updated_at">
+                                        <div className="updated_at" id={"package-" + pack.packageName + "-updated_at-" + moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}>
                                             Updated at: {moment(version.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}
                                         </div>
-                                        <div className="hash">
-                                            Hash: {version.checkSum}
+                                        <div className="hash" id={"package-" + pack.packageName + "-hash-" + version.packageHash}>
+                                            Hash: {version.packageHash}
                                         </div>
-                                        <div className="hash">
+                                        <div className="target-length" id={"package-" + pack.packageName + "-target-length-" + version.targetLength}>
                                             Length: {version.targetLength}
                                         </div>
-                                        <div className="hardware_ids">
+                                        <div className="hardware_ids" id={"package-" + pack.packageName + "-hardware_ids"}>
                                             Hardware ids: 
                                             {_.map(version.hardwareIds, (hardwareId, index) => {
                                                 return (
-                                                    <span className="hardware-label" key={index}>
+                                                    <span className="hardware-label" key={index} id={"package-" + pack.packageName + "-hardware-label-" + hardwareId}>
                                                         {hardwareId}
                                                     </span>
                                                 );
@@ -109,10 +109,10 @@ class ListItemVersion extends Component {
                                     </span>
                                 :
                                     <span>
-                                        <div className="hash">
-                                            Hash: {version.checkSum}
+                                        <div className="hash" id={"package-" + pack.packageName + "-hash-" + version.packageHash}>
+                                            Hash: {version.packageHash}
                                         </div>
-                                        <div className="hash">
+                                        <div className="target-length" id={"package-" + pack.packageName + "-target-length-" + version.targetLength}>
                                             Length: {version.targetLength}
                                         </div>
                                     </span>
@@ -183,6 +183,7 @@ class ListItemVersion extends Component {
 }
 
 ListItemVersion.propTypes = {
+    pack: PropTypes.object.isRequired,
     version: PropTypes.object.isRequired,
     showBlacklistModal: PropTypes.func.isRequired,
     packagesStore: PropTypes.object.isRequired
