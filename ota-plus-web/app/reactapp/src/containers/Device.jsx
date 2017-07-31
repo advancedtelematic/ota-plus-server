@@ -97,14 +97,14 @@ class Device extends Component {
         this.props.showQueueModal();
     }
     multiTargetUpdate(data) {
-        data.hardwareId = this.activeEcu.ecu;
+        data.hardwareId = this.activeEcu.hardwareId;
         this.props.devicesStore.createMultiTargetUpdate(data, this.props.devicesStore.device.uuid);
         this.props.showQueueModal();
     }
-    selectEcu(ecu, serial, installedHash, ecuType, e) {
+    selectEcu(hardwareId, serial, installedHash, ecuType, e) {
         if(e) e.preventDefault();
         this.activeEcu = {
-            ecu: ecu,
+            hardwareId: hardwareId,
             serial: serial,
             type: ecuType
         };

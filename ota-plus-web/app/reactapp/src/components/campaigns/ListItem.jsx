@@ -67,7 +67,7 @@ class ListItem extends Component {
                         </span>
                     :
                         <span>
-                            30 MB
+                            -
                         </span>
                     }
                 </div>

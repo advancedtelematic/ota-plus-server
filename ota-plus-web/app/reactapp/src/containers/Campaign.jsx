@@ -57,16 +57,16 @@ class Campaign extends Component {
     }
     render() {
         const { campaignsStore, groupsStore, overallStatistics } = this.props;
-        const progress = Math.min(Math.round(overallStatistics.updatedDevicesCount/Math.max(overallStatistics.devicesCount, 1) * 100), 100);
+        const progress = Math.min(Math.round(overallStatistics.finished/Math.max(overallStatistics.affected, 1) * 100), 100);
         const failureRateData = [
             {
-                value: overallStatistics.failedUpdates,
+                value: overallStatistics.failed,
                 color: "#FE0001",
                 highlight: "#FE0001",
                 label: "Failure rate"
             },
             {
-                value: overallStatistics.updatedDevicesCount,
+                value: overallStatistics.finished,
                 color: "#83D060",
                 highlight: "#83D060",
                 label: "Success rate"
@@ -85,7 +85,7 @@ class Campaign extends Component {
                     <div className="wrapper-center white-bg">
                         <Loader />
                     </div>
-                :
+            :
                     <span>
                         <div className="subcontent">
                             <div className="col-xs-2 campaign-name-block">
@@ -107,15 +107,15 @@ class Campaign extends Component {
                                 <div className="row">
                                     <div className="col-xs-2 devices-stats">
                                         <div id="campaign-detail-devices-stats-processed" className="stat-big-count">
-                                            {overallStatistics.updatedDevicesCount}
+                                            {overallStatistics.processed}
                                         </div>
                                         <div className="stat-small-title">
                                             Processed
                                         </div>
                                     </div>
                                     <div className="col-xs-2 devices-stats">
-                                        <div id="campaign-detail-devices-stats-failed" className="stat-big-count">
-                                            {overallStatistics.failedUpdates}
+                                        <div id="campaign-detail-devices-stats-affected" className="stat-big-count">
+                                            {overallStatistics.affected}
                                         </div>
                                         <div className="stat-small-title">
                                             Affected
@@ -138,7 +138,7 @@ class Campaign extends Component {
                                                         <span className="status failure">Failure</span>
                                                     </div>
                                                     <div className="col-xs-6">
-                                                        <span className="status-value">{overallStatistics.failedUpdates}/{overallStatistics.devicesCount}</span>
+                                                        <span className="status-value">{overallStatistics.failed}/{overallStatistics.processed}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -148,7 +148,7 @@ class Campaign extends Component {
                                                         <span className="status not-impacted">Not impacted</span>
                                                     </div>
                                                     <div className="col-xs-6">
-                                                        <span className="status-value">0/0</span>
+                                                        <span className="status-value">{overallStatistics.notImpacted}/{overallStatistics.processed}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -157,10 +157,10 @@ class Campaign extends Component {
                                             <div className="col-xs-4">
                                                 <div className="row">
                                                     <div className="col-xs-6">
-                                                        <span className="status successed">Successed</span>
+                                                        <span className="status successed">Successful</span>
                                                     </div>
                                                     <div className="col-xs-6">
-                                                        <span className="status-value">{overallStatistics.updatedDevicesCount}/{overallStatistics.devicesCount}</span>
+                                                        <span className="status-value">{overallStatistics.successful}/{overallStatistics.processed}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -170,7 +170,7 @@ class Campaign extends Component {
                                                         <span className="status not-proceed">Not proceed</span>
                                                     </div>
                                                     <div className="col-xs-6">
-                                                        <span className="status-value">0/0</span>
+                                                        <span className="status-value">0/{overallStatistics.processed}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -182,7 +182,7 @@ class Campaign extends Component {
                                                         <span className="status queued">Queued</span>
                                                     </div>
                                                     <div className="col-xs-6">
-                                                        <span className="status-value">0/0</span>
+                                                        <span className="status-value">{overallStatistics.queued}/{overallStatistics.processed}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -203,7 +203,7 @@ class Campaign extends Component {
                                         height="140"
                                     />
                                     <div className="rate">
-                                        {Math.round(overallStatistics.failedUpdates/Math.max(overallStatistics.updatedDevicesCount, 1) * 100)}%
+                                        {Math.round(overallStatistics.failed/Math.max(overallStatistics.finished, 1) * 100)}%
                                     </div>
                                 </div>
                             </div>
