@@ -14,14 +14,14 @@ class SecondaryEcu extends Component {
             <span>
                 <a
                     href="#"
-                    id="hardware-primary-details"
+                    id={"hardware-secondary-" + ecu.id}
                     className={active ? " selected" : ""}
                     onClick={selectEcu.bind(this, ecu.hardwareId, ecu.id, ecu.image.hash.sha256, 'secondary')}
                 >
                     <div className="desc">
                         <span>
-                            Serial: <span id="hardware-serial-value">{ecu.id}</span> <br />
-                            Hardware ID: <span id="hardware-id-value">{ecu.hardwareId}</span>
+                            Serial: <span id={"hardware-serial-" + ecu.id}>{ecu.id}</span> <br />
+                            Hardware ID: <span id={"hardware-id-" + ecu.hardwareId}>{ecu.hardwareId}</span>
                         </span>
                     </div>
                     <div className="icons">
