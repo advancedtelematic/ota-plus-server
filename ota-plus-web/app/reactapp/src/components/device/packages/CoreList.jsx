@@ -144,7 +144,7 @@ class CoreList extends Component {
             dirPacks[letter] = [];
             corePacks[letter] = [];
             _.map(packages, (pack, index) => {
-                if(pack.inDirector && _.includes(pack.hardwareIds, this.props.activeEcu.ecu)) {
+                if(pack.inDirector && _.includes(pack.hardwareIds, this.props.activeEcu.hardwareId)) {
                     dirPacks[letter].push(pack);
                 }
                 if(!pack.inDirector) {
@@ -167,7 +167,7 @@ class CoreList extends Component {
     addUnmanagedPackage(preparedPackages) {
         const { devicesStore, packagesStore, device, activeEcu } = this.props;
         if(activeEcu.type === 'secondary') {
-            let secondaryObject = devicesStore._getSecondaryByHardwareId(activeEcu.ecu);
+            let secondaryObject = devicesStore._getSecondaryByHardwareId(activeEcu.hardwareId);
             let reportedHash = secondaryObject.image.hash.sha256;
             let pack = packagesStore._getExpandedPackage(reportedHash);
             if(!pack) {
