@@ -354,18 +354,24 @@ export default class CampaignsStore {
 
     @computed get overallCampaignStatistics() {
         let stats = {
-            devicesCount: 0,
-            updatedDevicesCount: 0,
-            failedUpdates: 0,
-            successfulUpdates: 0,
-            cancelledUpdates: 0
+            processed: 0,
+            affected: 0,
+            finished: 0,
+            queued: 0,
+            successful: 0,
+            notImpacted: 0,
+            failed: 0
         };
         if(!this.campaignsOneFetchAsync.isFetching && !this.campaignsOneStatisticsFetchAsync.isFetching) {
             _.each(this.campaign.statistics.stats, (statistic) => {
-                stats.updatedDevicesCount += statistic.processed;
-                stats.failedUpdates += statistic.affected;
+                stats.affected += statistic.affected;
+                stats.processed += statistic.processed;
             });
-            stats.devicesCount = this.campaign.statistics.finished + this.campaign.statistics.failed.length; //to discuss
+            stats.notImpacted = stats.processed - stats.affected;
+            stats.finished = stats.finished;
+            stats.queued = stats.affected - stats.finished;
+            stats.failed = this.campaign.statistics.failed.length;
+            stats.successful = stats.finished - stats.failed;
         }
         return stats;
     }
