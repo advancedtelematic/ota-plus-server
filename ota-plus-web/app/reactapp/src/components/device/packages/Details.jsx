@@ -237,7 +237,7 @@ class Details extends Component {
 		                            id={"button-install-package-" + expandedVersion.id.name + "-" + expandedVersion.id.version}
 		                            onClick={multiTargetUpdate.bind(this, {
 		                            	target: expandedVersion.imageName, 
-		                            	hash: expandedVersion.checkSum, 
+		                            	hash: expandedVersion.packageHash, 
 		                            	targetLength: expandedVersion.targetLength,
 		                            	targetFormat: expandedVersion.targetFormat, 
 		                            	generateDiff: false 
