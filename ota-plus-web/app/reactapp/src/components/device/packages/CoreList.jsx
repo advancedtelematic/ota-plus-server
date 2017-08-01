@@ -21,6 +21,7 @@ class CoreList extends Component {
     @observable expandedPackageName = null;
     @observable selectedPackageVersion = null;
     @observable tmpIntervalId = null;
+    @observable preparedPackages = {};
 
     constructor(props) {
         super(props);
@@ -49,6 +50,8 @@ class CoreList extends Component {
                 this.expandedPackageName = null;
                 this.selectedPackageVersion = null;
             }
+            this.preparedPackages = this.selectPackagesToDisplay();
+            this.addUnmanagedPackage(this.preparedPackages);
         }
     }
     componentDidMount() {
@@ -144,8 +147,17 @@ class CoreList extends Component {
             dirPacks[letter] = [];
             corePacks[letter] = [];
             _.map(packages, (pack, index) => {
-                if(pack.inDirector && _.includes(pack.hardwareIds, this.props.activeEcu.hardwareId)) {
-                    dirPacks[letter].push(pack);
+                if(pack.inDirector) {
+                    let filteredVersions = [];
+                    _.each(pack.versions, (version, i) => {
+                        if(_.includes(version.hardwareIds, this.props.activeEcu.hardwareId)) {
+                            filteredVersions.push(version);
+                        }
+                    })
+                    if(!_.isEmpty(filteredVersions)) {
+                        pack.versions = filteredVersions;
+                        dirPacks[letter].push(pack);
+                    }
                 }
                 if(!pack.inDirector) {
                     corePacks[letter].push(pack);
@@ -156,8 +168,7 @@ class CoreList extends Component {
                             dirPacks[letter].push(pack);
                         }
                     });
-                }                
-
+                }
             });
         });
         this.clearArray(dirPacks);
@@ -186,8 +197,7 @@ class CoreList extends Component {
     }
     render() {
         const { devicesStore, packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, toggleTufPackageAutoUpdate, expandedVersion, loadPackageVersionProperties, activeEcu } = this.props;
-        let preparedPackages = this.selectPackagesToDisplay();
-        this.addUnmanagedPackage(preparedPackages);
+        let preparedPackages = this.preparedPackages;
         return (
             <div className="ios-list" ref="list">
                 <Dropzone

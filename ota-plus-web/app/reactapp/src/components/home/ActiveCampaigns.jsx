@@ -55,7 +55,7 @@ class ActiveCampaigns extends Component {
                                 })
                             :
                                 <tr>
-                                    <td colSpan="5">
+                                    <td colSpan="8">
                                         <span>
                                             No running campaigns.
                                         </span>
