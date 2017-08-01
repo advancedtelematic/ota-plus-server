@@ -67,7 +67,7 @@ class GroupsListItem extends Component {
                             {Math.round(statistics.affected/Math.max(statistics.processed, 1)*100)} %
                         </div>
                         <div className="stat-small-title">
-                            failure rate
+                            Affected
                         </div>
                     </div>
                 </td>
