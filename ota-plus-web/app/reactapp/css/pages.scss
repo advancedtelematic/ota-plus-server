@@ -2251,8 +2251,35 @@
                     width: 75%;
                     padding: 0 120px 0 0;
                     display: inline-block;
-                    .progress-bar {
-                        background-color: #83D060;
+                    
+                    .bar {
+                        height: 50px;
+                        overflow: hidden;
+                        border-radius: 5px;
+
+                        .failure {
+                            height: 50px;
+                            background-color: #fe0001;
+                            float: left;
+                        }
+
+                        .success {
+                            height: 50px;
+                            background-color: #83d060;
+                            float: left;
+                        }
+
+                        .queued {
+                            height: 50px;
+                            background-color: #f5a623;
+                            float: left;
+                        }
+
+                        .not-impacted {
+                            height: 50px;
+                            background-color: #b9b9b9;
+                            float: left;
+                        }
                     }
                 }
             }

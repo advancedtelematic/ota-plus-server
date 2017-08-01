@@ -79,6 +79,12 @@ class Campaign extends Component {
             }
         ];
 
+
+        let successRate = Math.min(Math.round(overallStatistics.successful/Math.max(overallStatistics.affected, 1) * 100), 100);
+        let failureRate = Math.min(Math.round(overallStatistics.failed/Math.max(overallStatistics.affected, 1) * 100), 100);
+        let queuedRate = Math.min(Math.round(overallStatistics.queued/Math.max(overallStatistics.affected, 1) * 100), 100);
+        let notImpactedRate = Math.min(Math.round(overallStatistics.notImpacted/Math.max(overallStatistics.processed, 1) * 100), 100);
+
         return (
             <span>
                 {campaignsStore.campaignsOneFetchAsync.isFetching || campaignsStore.campaignsOneStatisticsFetchAsync.isFetching || groupsStore.groupsFetchAsync.isFetching ?
@@ -107,7 +113,7 @@ class Campaign extends Component {
                                 <div className="row">
                                     <div className="col-xs-2 devices-stats">
                                         <div id="campaign-detail-devices-stats-processed" className="stat-big-count">
-                                            {overallStatistics.processed}
+                                           {overallStatistics.processed}
                                         </div>
                                         <div className="stat-small-title">
                                             Processed
@@ -125,8 +131,15 @@ class Campaign extends Component {
                                 <div className="row">
                                     <div className="total-progress col-xs-12">
                                         <div className="devices-progress">
-                                            <div className="progress progress-blue">
-                                                <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}></div>
+                                            <div className="bar">
+                                                <div className="failure" style={{width: failureRate + '%'}}>
+                                                </div>
+                                                <div className="success" style={{width: successRate + '%'}}>
+                                                </div>
+                                                <div className="queued" style={{width: queuedRate + '%'}}>
+                                                </div>
+                                                <div className="not-impacted" style={{width: notImpactedRate + '%'}}>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -161,16 +174,6 @@ class Campaign extends Component {
                                                     </div>
                                                     <div className="col-xs-6">
                                                         <span className="status-value">{overallStatistics.successful}/{overallStatistics.affected}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-xs-4">
-                                                <div className="row">
-                                                    <div className="col-xs-6">
-                                                        <span className="status not-proceed">Not proceed</span>
-                                                    </div>
-                                                    <div className="col-xs-6">
-                                                        <span className="status-value">0/{overallStatistics.processed}</span>
                                                     </div>
                                                 </div>
                                             </div>
