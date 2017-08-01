@@ -19,7 +19,6 @@ class ListItem extends Component {
         let totalAffected = 0;
         let totalProcessed = 0;
         let totalFinished = 0;
-        let totalDevices = 0;
         let failureRate = 0;
 
         if(type === 'running' || type === 'finished') {
@@ -28,10 +27,6 @@ class ListItem extends Component {
             _.each(stats, (stat, groupId) => {
                 totalAffected += stat.affected;
                 totalProcessed += stat.processed;
-                let foundGroup = _.find(groupsStore.groups, (item, index) => { 
-                    return item.id === groupId; 
-                });
-                totalDevices += foundGroup.devices.total;                        
             });
             failureRate = Math.round(totalFinished/Math.max(totalProcessed, 1) * 100);
         }
@@ -74,9 +69,16 @@ class ListItem extends Component {
                 <div className="column" id={"campaign-processed-" + campaign.name}>
                     {type === 'running' || type === 'finished' ?
                         <span>
-                            <span>{totalProcessed}</span>
-                            /
-                            <span>{totalDevices}</span>
+                            <span>{totalProcessed}</span>                            
+                        </span>
+                    :
+                        null
+                    }
+                </div>
+                <div className="column" id={"campaign-affected-" + campaign.name}>
+                    {type === 'running' || type === 'finished' ?
+                        <span>
+                            <span>{totalAffected}</span>                            
                         </span>
                     :
                         null
@@ -87,7 +89,7 @@ class ListItem extends Component {
                         <span>
                             <span>{totalFinished}</span>
                             /
-                            <span>{totalDevices}</span>
+                            <span>{totalAffected}</span>
                         </span>
                     :
                         null

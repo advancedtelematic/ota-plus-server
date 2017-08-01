@@ -96,6 +96,7 @@ class Campaigns extends Component {
                                                     <div className="column text-center">Delta switch</div>
                                                     <div className="column text-center">Delta generation size</div>
                                                     <div className="column text-center">Processed</div>
+                                                    <div className="column text-center">Affected</div>
                                                     <div className="column text-center">Finished</div>
                                                     <div className="column text-center">Failure rate</div>
                                                 </div>
@@ -133,6 +134,7 @@ class Campaigns extends Component {
                                                     <div className="column">Delta switch</div>
                                                     <div className="column">Delta generation size</div>
                                                     <div className="column">Processed</div>
+                                                    <div className="column">Affected</div>
                                                     <div className="column">Finished</div>
                                                     <div className="column">Failure rate</div>
                                                 </div>
@@ -170,6 +172,7 @@ class Campaigns extends Component {
                                                     <div className="column">Delta switch</div>
                                                     <div className="column">Delta generation size</div>
                                                     <div className="column">Processed</div>
+                                                    <div className="column">Affected</div>
                                                     <div className="column">Finished</div>
                                                     <div className="column">Failure rate</div>
                                                 </div>
@@ -207,6 +210,7 @@ class Campaigns extends Component {
                                                     <div className="column">Delta switch</div>
                                                     <div className="column">Delta generation size</div>
                                                     <div className="column">Processed</div>
+                                                    <div className="column">Affected</div>
                                                     <div className="column">Finished</div>
                                                     <div className="column">Failure rate</div>
                                                 </div>
