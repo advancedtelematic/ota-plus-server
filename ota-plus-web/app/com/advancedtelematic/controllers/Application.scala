@@ -73,6 +73,7 @@ class Application @Inject() (ws: WSClient,
 
   private val auditorProxiedPrefixes: Dispatcher = {
     case (_, "auditor" :: "devices_seen_in" :: _) => auditorApiUri
+    case (_, "auditor" :: "update_reports" :: _) => auditorApiUri
   }
 
   private val directorProxiedPrefixes: Dispatcher = {
