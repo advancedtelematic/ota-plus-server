@@ -721,6 +721,41 @@ export default class PackagesStore {
             }.bind(this));
     }
 
+    _setQueuedTufPackages(multiTargetUpdates, ecuSerial) {
+        let queuedHash = null;
+        _.each(multiTargetUpdates, (update, index) => {
+            let targets = update.targets;
+            _.each(targets, (target, serial) => {
+                if(ecuSerial === serial) {
+                    queuedHash = target.image.fileinfo.hashes.sha256;
+                    let data = {
+                        hash: queuedHash
+                    }
+                    this._addQueuedTufPackage(data);
+                }
+            })
+        })
+        if(!queuedHash) {
+            this.deviceQueue.splice(_.findIndex(this.deviceQueue, { hash: queuedHash }), 1);            
+        }
+    }
+
+    _addQueuedTufPackage(data) {
+        let packageName = null;
+        _.each(this.packages, (pack, index) => {
+            if(pack.packageHash === data.hash) {
+                packageName = pack.id.name;
+            }
+        });
+        let queuedTuf = {
+            packageId: {
+                name: packageName,
+                version: data.hash
+            }
+        }
+        this.deviceQueue.push(queuedTuf);
+    }
+
     fetchDevicePackagesHistory(id) {
         resetAsync(this.packagesDeviceHistoryFetchAsync, true);
         return axios.get(API_PACKAGES_DEVICE_HISTORY + '?uuid=' + id)
