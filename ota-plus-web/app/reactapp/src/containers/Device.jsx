@@ -100,6 +100,7 @@ class Device extends Component {
         data.hardwareId = this.activeEcu.hardwareId;
         this.props.devicesStore.createMultiTargetUpdate(data, this.props.devicesStore.device.uuid);
         this.props.showQueueModal();
+        this.props.packagesStore._addQueuedTufPackage(data);
     }
     selectEcu(hardwareId, serial, installedHash, ecuType, e) {
         if(e) e.preventDefault();
@@ -110,6 +111,7 @@ class Device extends Component {
         };
         this.expandedVersion = this.props.packagesStore._getExpandedPackage(installedHash);
         this.props.packagesStore.fetchDirectorDeviceAutoInstalledPackages(this.props.devicesStore.device.uuid, this.activeEcu.serial);
+        this.props.packagesStore._setQueuedTufPackages(this.props.devicesStore.multiTargetUpdates[this.props.devicesStore.device.uuid], this.activeEcu.serial);
     }
     cancelInstallation(requestId) {
         this.props.packagesStore.cancelInstallation(this.props.devicesStore.device.uuid, requestId);
