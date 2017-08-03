@@ -58,7 +58,7 @@ class WizardStep5 extends Component {
                                 null
                             }
                             {_.map(chosenPackagesList, (packages, letter) => {
-                                let packsCount = packages.length;
+                                let packsCount = wizardData[1].packages.length;
                                 return (
                                     <span key={letter}>
                                         <div className="header">
