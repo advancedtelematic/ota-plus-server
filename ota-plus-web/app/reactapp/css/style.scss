@@ -933,6 +933,7 @@ input {
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 9999;
 
     .minimized-box {
         color: #fff;
