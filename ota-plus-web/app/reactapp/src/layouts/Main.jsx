@@ -100,7 +100,7 @@ class Main extends Component {
         this.websocketHandler.init();
     }
     toggleWizard(wizardId, wizardName, e) {
-        e.preventDefault();
+        if(e) e.preventDefault();
         let minimizedWizard = {
             id: wizardId,
             name: wizardName
