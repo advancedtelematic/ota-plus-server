@@ -285,52 +285,58 @@ class CoreList extends Component {
                                                     }
                                                 }}>
                                                 {this.expandedPackageName === pack.packageName ?
-                                                    <ul className="versions">
-                                                        <VelocityTransitionGroup
-                                                            enter={{
-                                                                animation: "slideDown",
-                                                                begin: () => {
-                                                                    that.startIntervalListScroll()
-                                                                },
-                                                                complete: () => {
-                                                                    that.stopIntervalListScroll()
+                                                    <ul className="versions-container">
+                                                        <li className="auto-update">
+                                                            <VelocityTransitionGroup
+                                                                enter={{
+                                                                    animation: "slideDown",
+                                                                    begin: () => {
+                                                                        that.startIntervalListScroll()
+                                                                    },
+                                                                    complete: () => {
+                                                                        that.stopIntervalListScroll()
+                                                                    }
+                                                                }}
+                                                                leave={{
+                                                                    animation: "slideUp",
+                                                                    begin: () => {
+                                                                        that.startIntervalListScroll()
+                                                                    },
+                                                                    complete: () => {
+                                                                        that.stopIntervalListScroll()
+                                                                    }
+                                                                }}>
+                                                                {pack.isAutoInstallEnabled ?
+                                                                    <div className="info-auto-update">
+                                                                        Automatic update activated. The latest
+                                                                        version of this package will
+                                                                        automatically be installed on this
+                                                                        device.
+                                                                    </div>
+                                                                :
+                                                                    null
                                                                 }
-                                                            }}
-                                                            leave={{
-                                                                animation: "slideUp",
-                                                                begin: () => {
-                                                                    that.startIntervalListScroll()
-                                                                },
-                                                                complete: () => {
-                                                                    that.stopIntervalListScroll()
-                                                                }
-                                                            }}>
-                                                            {pack.isAutoInstallEnabled ?
-                                                                <div className="info-auto-update">
-                                                                    Automatic update activated. The latest
-                                                                    version of this package will
-                                                                    automatically be installed on this
-                                                                    device.
-                                                                </div>
-                                                            :
-                                                                null
-                                                            }
-                                                        </VelocityTransitionGroup>
-                                                        {_.map(pack.versions, (version, i) => {
-                                                            return (
-                                                                <ListItemVersion
-                                                                    packagesStore={packagesStore}
-                                                                    version={version}
-                                                                    queuedPackage={queuedPackage}
-                                                                    installedPackage={installedPackage}
-                                                                    expandedVersion={expandedVersion}
-                                                                    loadPackageVersionProperties={loadPackageVersionProperties}
-                                                                    togglePackageVersion={this.togglePackageVersion}
-                                                                    selectedPackageVersion={this.selectedPackageVersion}
-                                                                    key={i}
-                                                                />
-                                                            );
-                                                        })}
+                                                            </VelocityTransitionGroup>
+                                                        </li>
+                                                        <li>
+                                                            <ul className="versions">
+                                                                {_.map(pack.versions, (version, i) => {
+                                                                    return (
+                                                                        <ListItemVersion
+                                                                            packagesStore={packagesStore}
+                                                                            version={version}
+                                                                            queuedPackage={queuedPackage}
+                                                                            installedPackage={installedPackage}
+                                                                            expandedVersion={expandedVersion}
+                                                                            loadPackageVersionProperties={loadPackageVersionProperties}
+                                                                            togglePackageVersion={this.togglePackageVersion}
+                                                                            selectedPackageVersion={this.selectedPackageVersion}
+                                                                            key={i}
+                                                                        />
+                                                                    );
+                                                                })}
+                                                            </ul>
+                                                        </li>
                                                     </ul>
                                                     :
                                                     null
