@@ -41,6 +41,7 @@ class CoreList extends Component {
     }
    
     componentWillReceiveProps(nextProps) {
+        this.preparedPackages = this.selectPackagesToDisplay();
         if(this.props.device.isDirector) {
             if(nextProps.expandedVersion && !nextProps.expandedVersion.unmanaged && !this.packageExpandedManually) {
                 this.expandedPackageName = nextProps.expandedVersion.id.name;
@@ -50,7 +51,6 @@ class CoreList extends Component {
                 this.expandedPackageName = null;
                 this.selectedPackageVersion = null;
             }
-            this.preparedPackages = this.selectPackagesToDisplay();
             this.addUnmanagedPackage(this.preparedPackages);
         }
     }
