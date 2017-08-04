@@ -24,7 +24,8 @@ import {
     API_CHECK_TUF_REPO,
     API_CREATE_DIRECTOR_REPO,
     API_CHECK_DIRECTOR_REPO,
-    API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL
+    API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL,
+    API_PACKAGES_COUNT_INSTALLED_ECUS
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import _ from 'underscore';
@@ -63,6 +64,7 @@ export default class PackagesStore {
     @observable page = null;
     @observable initialPackages = [];
     @observable packages = [];
+    @observable directorPackages = [];
     @observable packageStats = [];
     @observable overallPackagesCount = null;
     @observable preparedPackages = {};
@@ -184,6 +186,14 @@ export default class PackagesStore {
                 let directorPackages = [];
                 let after = _.after(directorPackages.length, () => {
                     this._prepareDirectorPackages(directorPackages);
+                    let filepaths = this._getAllDirectorFilepaths();
+                    let that = this;
+                    axios.post(API_PACKAGES_COUNT_INSTALLED_ECUS, filepaths)
+                        .then(function(resp) {
+                            that._prepareFilePaths(resp.data);
+                        })
+                        .catch(function(e) {
+                        });
                     switch (this.page) {
                         case 'device':                        
                             this._prepareDevicePackages();
@@ -210,6 +220,22 @@ export default class PackagesStore {
             .catch(function(error) {
                 this.packagesFetchAsync = handleAsyncError(error);
             }.bind(this));
+    }
+
+    _getAllDirectorFilepaths() {
+        return {
+            filepaths: this.directorPackages.map(function(pack) { return pack.imageName; })
+        }
+    }
+
+    _prepareFilePaths(filepaths) {
+        _.each(this.packages, (pack, index) => {
+            _.each(filepaths, (installedOn, filepath) => {
+                if(pack.imageName === filepath) {                    
+                    pack.installedOnEcus = installedOn;
+                }
+            });
+        });
     }
 
     _prepareDirectorPackages(directorPackages) {
@@ -262,7 +288,7 @@ export default class PackagesStore {
                     },
                     uuid: packageHash,
                     inDirector: true,
-                    hardwareIds: hardwareIds
+                    hardwareIds: hardwareIds,
                 };
                 versionedDirectorPackages.push(formattedVersion);
             });
@@ -276,6 +302,7 @@ export default class PackagesStore {
             mergedPackages.push(corePack);
         });
         this.packages = mergedPackages;
+        this.directorPackages = versionedDirectorPackages;
     }
 
     fetchPackageStatistics(packageName) {
@@ -1195,6 +1222,7 @@ export default class PackagesStore {
         this.page = null;
         this.initialPackages = [];
         this.packages = [];
+        this.directorPackages = [];
         this.overallPackagesCount = null;
         this.preparedPackages = {};
         this.preparedPackagesPerDevice = {};

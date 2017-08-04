@@ -106,6 +106,9 @@ class ListItemVersion extends Component {
                                                 );
                                             })}
                                         </div>
+                                        <div className="ecus-installed" id={"package-" + pack.packageName + "-ecus-installed"}>
+                                            Installed on {version.installedOnEcus ? version.installedOnEcus : 0} ECU(s)
+                                        </div>
                                     </span>
                                 :
                                     <span>
