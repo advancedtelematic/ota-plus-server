@@ -56,6 +56,7 @@ export const API_PACKAGES_DEVICE_AUTO_INSTALL = '/api/v1/auto_install';
 export const API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL = '/api/v1/admin/devices';
 export const API_PACKAGES_DEVICE_INSTALL = '/api/v1/device_updates';
 export const API_PACKAGES_DEVICE_CANCEL_INSTALLATION = '/api/v1/device_updates';
+export const API_PACKAGES_COUNT_INSTALLED_ECUS = '/api/v1/admin/images/installed_count';
 
 export const API_CREATE_TUF_REPO = '/api/v1/user_repo';
 export const API_CHECK_TUF_REPO = '/api/v1/user_repo/root.json';
