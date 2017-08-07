@@ -930,7 +930,7 @@
                         }                        
 
                         .item {
-                            height: auto;
+                            height: 50px;
                             padding: 15px;
 
                             .name {
@@ -947,7 +947,7 @@
                                 float: right;
                             }
 
-                            .package-versionf {
+                            .package-version {
                                 float: right;
                             }
 
@@ -995,129 +995,132 @@
                         }
                     }
 
-                    .versions {
-                        padding: 8px 30px;
+                    .versions-container {
+                    
+                        .versions {
+                            padding: 8px 30px;
 
-                        .tuf {
+                            .tuf {
 
-                            .right-box {
-                                padding: 0 10px;
-                                width: 30%;
+                                .right-box {
+                                    padding: 0 10px;
+                                    width: 30%;
 
-                                .installed {
-                                    border-right: 1px solid #ddd;
+                                    .installed {
+                                        border-right: 1px solid #ddd;
+                                    }
+
+                                    .installed-text {
+                                        display: inline-block;
+                                        padding-left: 10px;
+                                        color: green;
+                                    }
                                 }
 
-                                .installed-text {
-                                    display: inline-block;
-                                    padding-left: 10px;
-                                    color: green;
-                                }
-                            }
-
-                            .left-box {
-                                width: 70%;
-                            }
-                        }
-
-                        li {
-                            cursor: pointer;
-
-                            &:not(:last-child) {
-                                margin-bottom: 8px;
-                            }
-
-                            .left-box {
-                                width: 80%;
-                                padding: 8px 0 8px 10px;
-
-                                .hash {
-                                    white-space: nowrap;
-                                    overflow: hidden;
-                                    text-overflow: ellipsis;
+                                .left-box {
+                                    width: 70%;
                                 }
                             }
 
-                            .right-box {
-                                width: 20%;
+                            li {
+                                cursor: pointer;
 
-                                .fa-stack {
-                                    float: right;
-                                    margin: 12px;
+                                &:not(:last-child) {
+                                    margin-bottom: 8px;
+                                }
 
-                                    &.queued {
-                                        color: #fff;
+                                .left-box {
+                                    width: 80%;
+                                    padding: 8px 0 8px 10px;
 
-                                        .fa-dot-circle-o {
-                                            color: #FB9773;
+                                    .hash {
+                                        white-space: nowrap;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                    }
+                                }
+
+                                .right-box {
+                                    width: 20%;
+
+                                    .fa-stack {
+                                        float: right;
+                                        margin: 12px;
+
+                                        &.queued {
+                                            color: #fff;
+
+                                            .fa-dot-circle-o {
+                                                color: #FB9773;
+                                            }
+                                        }
+                                    }
+
+                                    .blacklisted, .installed, .blacklisted-installed {
+                                        display: inline-block;
+                                        padding: 10px 0;
+                                        margin: 0 12px;
+
+                                        img {
+                                            width: 25px;
+                                            height: 25px;
                                         }
                                     }
                                 }
+                            }
 
-                                .blacklisted, .installed, .blacklisted-installed {
+                            li.selected {
+                                border-bottom: 3px solid #9ce2d8;
+                            }
+
+                            .right-box {
+                                .status {
+                                    font-size: 12px;
+                                    line-height: 32px;
+                                    text-align: center;
+                                    width: 70px;
+                                    height: 32px;
                                     display: inline-block;
-                                    padding: 10px 0;
-                                    margin: 0 12px;
+                                    vertical-align: top;
 
-                                    img {
-                                        width: 25px;
-                                        height: 25px;
+                                    &.queued {
+                                        color: #FB9773;
+                                    }
+
+                                    &.installed {
+                                        color: #369E47;
+                                    }
+                                }
+
+                                .btn-install {
+                                    color: $color-lightgrey;
+                                    background: transparent;
+                                    width: 70px;
+                                    height: 32px;
+                                    padding: 0 15px;
+                                    display: inline-block;
+                                    vertical-align: top;
+                                    border: 0;
+
+                                    &:hover {
+                                        color: $color-darkgrey;
+                                        @include transition;
+                                    }
+
+                                    &[disabled] {
+                                        text-decoration: line-through;
+                                        cursor: not-allowed;
                                     }
                                 }
                             }
                         }
 
-                        li.selected {
-                            border-bottom: 3px solid #9ce2d8;
+                        .info-auto-update {
+                            color: #fff;
+                            text-align: center;
+                            background: #369E47;
+                            padding: 7px;
                         }
-
-                        .right-box {
-                            .status {
-                                font-size: 12px;
-                                line-height: 32px;
-                                text-align: center;
-                                width: 70px;
-                                height: 32px;
-                                display: inline-block;
-                                vertical-align: top;
-
-                                &.queued {
-                                    color: #FB9773;
-                                }
-
-                                &.installed {
-                                    color: #369E47;
-                                }
-                            }
-
-                            .btn-install {
-                                color: $color-lightgrey;
-                                background: transparent;
-                                width: 70px;
-                                height: 32px;
-                                padding: 0 15px;
-                                display: inline-block;
-                                vertical-align: top;
-                                border: 0;
-
-                                &:hover {
-                                    color: $color-darkgrey;
-                                    @include transition;
-                                }
-
-                                &[disabled] {
-                                    text-decoration: line-through;
-                                    cursor: not-allowed;
-                                }
-                            }
-                        }
-                    }
-
-                    .info-auto-update {
-                        color: #fff;
-                        text-align: center;
-                        background: #369E47;
-                        padding: 7px;
                     }
                 }
             }            
