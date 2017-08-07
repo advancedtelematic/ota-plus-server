@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
+import _ from 'underscore';
 
 @observer
 class ListItem extends Component {
@@ -8,13 +9,22 @@ class ListItem extends Component {
     }
     render() {
         const { pack, togglePackage } = this.props;
+        let installedOnEcus = 0;
+        _.each(pack.versions, (version, index) => {
+            installedOnEcus += version.installedOnEcus;
+        });
         return (
             <button className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
                 {pack.packageName}
                 {pack.inDirector ?
-                    <div className="in-director">
-                        <img src="/assets/img/icons/black/lock.png" alt="Director" />
-                    </div>
+                    <span>
+                        <div className="in-director">
+                            <img src="/assets/img/icons/black/lock.png" alt="Director" />
+                        </div>
+                        <div className="installed-on-ecus">
+                            Installed on {installedOnEcus} Ecu(s)
+                        </div>
+                    </span>
                 :
                     null
                 }
