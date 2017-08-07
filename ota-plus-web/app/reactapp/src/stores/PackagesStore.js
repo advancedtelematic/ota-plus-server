@@ -188,21 +188,29 @@ export default class PackagesStore {
                     this._prepareDirectorPackages(directorPackages);
                     let filepaths = this._getAllDirectorFilepaths();
                     let that = this;
+                    let receivedFilepaths = null;
+                    let afterReceivedFilepaths = _.after(!_.isNull(receivedFilepaths), () => {
+                        that._prepareFilePaths(receivedFilepaths);
+                        switch (this.page) {
+                            case 'device':                        
+                                this._prepareDevicePackages();
+                                break;
+                            default:
+                                this._preparePackages();
+                                break;
+                        }
+                        this.packagesFetchAsync = handleAsyncSuccess(response);
+                    });
+
                     axios.post(API_PACKAGES_COUNT_INSTALLED_ECUS, filepaths)
                         .then(function(resp) {
-                            that._prepareFilePaths(resp.data);
+                            receivedFilepaths = resp.data;
+                            afterReceivedFilepaths();
                         })
                         .catch(function(e) {
+                            afterReceivedFilepaths();
                         });
-                    switch (this.page) {
-                        case 'device':                        
-                            this._prepareDevicePackages();
-                            break;
-                        default:
-                            this._preparePackages();
-                            break;
-                    }
-                    this.packagesFetchAsync = handleAsyncSuccess(response);
+                    
                 }, this);
                 axios.get(API_TUF_PACKAGES)
                     .then(function(responseDirector) {
@@ -230,6 +238,7 @@ export default class PackagesStore {
 
     _prepareFilePaths(filepaths) {
         _.each(this.packages, (pack, index) => {
+            pack.installedOnEcus = 0;
             _.each(filepaths, (installedOn, filepath) => {
                 if(pack.imageName === filepath) {                    
                     pack.installedOnEcus = installedOn;
