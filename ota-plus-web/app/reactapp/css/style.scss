@@ -2087,10 +2087,6 @@ div[role=presentation] {
         .heading {
             background: #222 !important;
         }
-
-        .inner {
-            height: 440px;
-        }
     }
 }
 
@@ -2580,6 +2576,10 @@ div[role=presentation] {
         font-size: 18px;
         font-weight: bold;
         margin: 5px 0;
+        text-overflow: ellipsis;
+        width: 95px;
+        white-space: nowrap;
+        overflow: hidden;
     }
 }
 .package-stats-modal {
