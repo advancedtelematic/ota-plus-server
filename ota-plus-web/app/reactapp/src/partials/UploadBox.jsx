@@ -101,7 +101,7 @@ class UploadBox extends Component {
                         <div id={minimized ? "" : "upload-box"} className={minimized ? "minimized" : ""}>
                             <div className="heading">
                                 Uploading {t('common.packageWithCount', {count: packagesStore.packagesUploading.length})}
-                                <a href="#" className="box-toggle" title="Toggle upload box size" onClick={this.toggleMode}>
+                                <a href="#" className="box-toggle pack-box-maximize" title="Toggle upload box size" onClick={this.toggleMode}>
                                     <i className={"fa toggle-modal-size " + (minimized ? "fa-angle-up" : "fa-angle-down")} aria-hidden="true"></i>
                                 </a>
                                 {!minimized ?
