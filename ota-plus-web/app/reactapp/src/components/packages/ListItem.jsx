@@ -8,7 +8,7 @@ class ListItem extends Component {
         super(props);
     }
     render() {
-        const { pack, togglePackage } = this.props;
+        const { pack, togglePackage, showStatsModal } = this.props;
         let installedOnEcus = 0;
         _.each(pack.versions, (version, index) => {
             installedOnEcus += version.installedOnEcus;
@@ -35,6 +35,11 @@ class ListItem extends Component {
                         pack.versions.length + " versions"
                     }
                 </div>
+                {pack.inDirector ?
+                    <div className="btn-status" id="package-stats" onClick={showStatsModal.bind(this, pack.packageName)}>Stats</div>
+                :
+                    null
+                }
             </button>
         );
     }
@@ -43,6 +48,7 @@ class ListItem extends Component {
 ListItem.propTypes = {
     pack: PropTypes.object.isRequired,
     togglePackage: PropTypes.func.isRequired,
+    showStatsModal: PropTypes.func.isRequired,
    
 }
 

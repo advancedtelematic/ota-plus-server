@@ -121,7 +121,7 @@ class List extends Component {
         this.tmpIntervalId = null;
     }
     render() {
-        const { showBlacklistModal, packagesStore, onFileDrop, highlightedPackage } = this.props;
+        const { showBlacklistModal, packagesStore, onFileDrop, highlightedPackage, showStatsModal } = this.props;
         return (
             <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching ? " fetching" : "")} ref="list">
                 {packagesStore.packagesCount ? 
@@ -146,6 +146,7 @@ class List extends Component {
                                                 <ListItem 
                                                     pack={pack}
                                                     togglePackage={this.togglePackage}
+                                                    showStatsModal={showStatsModal}
                                                 />
                                                 <VelocityTransitionGroup 
                                                     enter={{
@@ -201,6 +202,7 @@ List.propTypes = {
     packagesStore: PropTypes.object.isRequired,
     onFileDrop: PropTypes.func.isRequired,
     highlightedPackage: PropTypes.string,
+    showStatsModal: PropTypes.func.isRequired,
 }
 
 export default List;
