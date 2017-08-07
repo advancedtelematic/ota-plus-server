@@ -948,6 +948,23 @@ input {
         margin-top: 25px;
         z-index: 9999;
 
+        .pack-box-maximize {
+            display: inline-block;
+            width: 30px;
+            height: 22px;
+            position: absolute;
+            top: 17px;
+            right: 45px;
+            color: #fff;
+            font-size: 48px;
+
+            .line {
+                display: block;
+                border-top: 3px solid white;
+            }
+        }
+
+
         .name {
             float: left;
         }
