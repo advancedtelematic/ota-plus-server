@@ -63,16 +63,16 @@ class Campaigns extends Component {
         this.props.campaignsStore._prepareCampaigns(filter, this.props.campaignsStore.campaignsSort);
     }
     render() {
-        const { campaignsStore, packagesStore, groupsStore, hardwareStore, addNewWizard } = this.props;
+        const { campaignsStore, packagesStore, groupsStore, hardwareStore, addNewWizard } = this.props;        
         return (
             <span>
                 {(campaignsStore.overallCampaignsCount === null && campaignsStore.campaignsFetchAsync.isFetching) 
-                    || groupsStore.groupsFetchAsync.isFetching ?
-                    <div className="wrapper-center">
-                        <Loader />
-                    </div>
+                    || (campaignsStore.overallLegacyCampaignsCount === null && campaignsStore.campaignsLegacyFetchAsync.isFetching) ?
+                        <div className="wrapper-center">
+                            <Loader />
+                        </div>
                 :
-                    campaignsStore.overallCampaignsCount ? 
+                    campaignsStore.overallCampaignsCount + campaignsStore.overallLegacyCampaignsCount ? 
                         <span>
                             <CampaignsHeader
                                 addNewWizard={addNewWizard}
