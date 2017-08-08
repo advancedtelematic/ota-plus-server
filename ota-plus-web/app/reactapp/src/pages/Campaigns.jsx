@@ -13,8 +13,7 @@ class Campaigns extends Component {
         super(props);
     }
     componentWillMount() {
-        this.props.campaignsStore.fetchCampaigns();
-        this.props.groupsStore.fetchGroups();
+        this.props.campaignsStore.fetchCampaigns();        
     }
     componentWillUnmount() {
         this.props.campaignsStore._reset();
