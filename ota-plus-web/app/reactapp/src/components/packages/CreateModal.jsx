@@ -20,14 +20,6 @@ class CreateModal extends Component {
         this.selectHardwareIds = this.selectHardwareIds.bind(this);
 
         this.disableRequiredFile = this.disableRequiredFile.bind(this);
-    }    
-    componentDidMount() {
-        this.createHandler = new AsyncStatusCallbackHandler(this.props.packagesStore, 'packagesCreateAsync', this.hideModal.bind(this));
-        this.createTufHandler = new AsyncStatusCallbackHandler(this.props.packagesStore, 'packagesTufCreateAsync', this.hideModal.bind(this));
-    }
-    componentWillUnmount() {
-        this.createHandler();
-        this.createTufHandler();
     }
     enableButton() {
         this.submitButtonDisabled = false;
@@ -50,6 +42,7 @@ class CreateModal extends Component {
         } else {
             this.props.packagesStore.createPackage(data, formData);
         }
+        this.hideModal();
     }
     _onFileUploadClick() {
         var fileUploadDom = this.refs.fileUpload;
