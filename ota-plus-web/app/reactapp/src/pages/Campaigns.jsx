@@ -13,7 +13,9 @@ class Campaigns extends Component {
         super(props);
     }
     componentWillMount() {
-        this.props.campaignsStore.fetchCampaigns();        
+        this.props.campaignsStore.fetchCampaigns();
+        this.props.campaignsStore.fetchLegacyCampaigns();
+        this.props.groupsStore.fetchGroups();
     }
     componentWillUnmount() {
         this.props.campaignsStore._reset();
@@ -28,22 +30,20 @@ class Campaigns extends Component {
                         title={title}
                         subtitle={(
                             <span>
-                                {campaignsStore.overallCampaignsCount === null && campaignsStore.campaignsFetchAsync.isFetching ?
+                                {campaignsStore.overallCampaignsCount === null && (campaignsStore.campaignsFetchAsync.isFetching || campaignsStore.campaignsLegacyFetchAsync.isFetching) ?
                                     <span>
                                         <i className="fa fa-square-o fa-spin"></i> campaigns counting
                                     </span>
                                 :
                                     null
                                 }
-                                <FadeAnimation>
-                                    {!campaignsStore.campaignsFetchAsync.isFetching ?
-                                        <span id="campaigns-count﻿">
-                                            {t('common.campaignWithCount', {count: campaignsStore.overallCampaignsCount})}
-                                        </span>
-                                    :
-                                        null
-                                    }
-                                </FadeAnimation>
+                                {!campaignsStore.campaignsFetchAsync.isFetching && !campaignsStore.campaignsLegacyFetchAsync.isFetching ?
+                                    <span id="campaigns-count﻿">
+                                        {t('common.campaignWithCount', {count: campaignsStore.overallCampaignsCount + campaignsStore.overallLegacyCampaignsCount})}
+                                    </span>
+                                :
+                                    null
+                                }
                             </span>
                         )}
                     />

@@ -23,7 +23,7 @@ class CancelCampaignModal extends Component {
         this.props.hide();
     }
     render() {
-        const { t, shown, hide, campaign, overallStatistics, campaignsStore } = this.props;
+        const { t, shown, hide, campaign, campaignsStore } = this.props;
         const content = (
             !_.isEmpty(campaign) ?
                 <span>
@@ -39,7 +39,7 @@ class CancelCampaignModal extends Component {
                                 {campaign.name}
                             </div>
                             <div className="subtitle">
-                                {t('common.deviceWithCount', {count: overallStatistics.devicesCount})}
+                                {t('common.deviceWithCount', {count: campaignsStore.overallCampaignStatistics.devicesCount})}
                             </div>
                         </div>
                     </div>
@@ -82,7 +82,6 @@ CancelCampaignModal.propTypes = {
     hide: PropTypes.func.isRequired,
     campaign: PropTypes.object.isRequired,
     campaignsStore: PropTypes.object.isRequired,
-    overallStatistics: PropTypes.object.isRequired
 }
 
 export default translate()(CancelCampaignModal);

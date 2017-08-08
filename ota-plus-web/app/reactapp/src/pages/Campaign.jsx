@@ -22,7 +22,7 @@ class Campaign extends Component {
         this.props.groupsStore._reset();
     }
     render() {
-        const { campaignsStore, groupsStore, backButtonAction, devicesStore } = this.props;
+        const { t, campaignsStore, groupsStore, backButtonAction, devicesStore } = this.props;
         return (
             <FadeAnimation 
                 display="flex">
@@ -37,7 +37,6 @@ class Campaign extends Component {
                             campaignsStore={campaignsStore}
                             groupsStore={groupsStore}
                             devicesStore={devicesStore}
-                            overallStatistics={campaignsStore.overallCampaignStatistics}
                         />
                     </MetaData>
                 </div>
