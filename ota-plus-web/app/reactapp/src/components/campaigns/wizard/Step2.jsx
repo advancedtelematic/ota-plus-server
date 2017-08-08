@@ -9,6 +9,9 @@ class WizardStep2 extends Component {
         super(props);
         this.setWizardData = this.setWizardData.bind(this);
     }
+    componentWillMount() {
+        this.props.groupsStore.fetchGroups();
+    }
     setWizardData(groupId) {
         let stepWizardData = this.props.wizardData[3];
         if(stepWizardData.groups.indexOf(groupId) > -1) {
