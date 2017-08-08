@@ -28,6 +28,15 @@ class WizardStep4 extends Component {
 
         this.packages = packages;
     }
+    getCreatedAt(version) {
+        let createdAt = null;
+        _.each(this.props.packagesStore.packages, (pack, index) => {
+            if(pack.packageHash === version) {
+                createdAt = pack.createdAt;
+            }
+        });
+        return createdAt;
+    }
     render() {
         const { t, wizardData, groupsStore } = this.props;
         return (
@@ -57,7 +66,7 @@ class WizardStep4 extends Component {
                                                                     Hash: {update.from}
                                                                 </div>
                                                                 <div className="createdAt">
-                                                                    Created at: created at
+                                                                    Created at: {this.getCreatedAt(update.from)}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -70,7 +79,7 @@ class WizardStep4 extends Component {
                                                                     Hash: {update.to}
                                                                 </div>
                                                                 <div className="createdAt">
-                                                                    Created at: created at
+                                                                    Created at: {this.getCreatedAt(update.to)}
                                                                 </div>
                                                             </div>
                                                         </div>
