@@ -43,6 +43,21 @@ class PackagesVersionList extends Component {
             />
         ));
     }
+    formatLegacyToVersions(pack) {
+        let versions = pack.versions;
+        return versions.map((version) => (
+            <MenuItem
+                key={version.id.version}
+                insetChildren={true}
+                checked={false}
+                value={version.id.version}
+                primaryText={<span className='version-hash'>Version: {version.id.version}</span>}
+                secondaryText={<span className='version-created-at'>Created at: {version.createdAt}</span>}
+                id={"version-to-menu-item-" + version.id.version}
+                className={"version-menu-item"}
+            />
+        ));
+    }
     formatHardwareIds() {
         let hardwareIds = this.props.hardwareStore.hardwareIds;
         return hardwareIds.map((id) => (
@@ -66,30 +81,39 @@ class PackagesVersionList extends Component {
     }
     componentWillReceiveProps(nextProps) {
         let selectedVersions = nextProps.selectedVersions;
-        if(Object.keys(selectedVersions).length === nextProps.packsCount) {
-            let shouldPass = true;
-            let selectedHardwareIds = [];
 
-            _.each(selectedVersions, (version, index) => {
-                selectedHardwareIds.push(version.hardwareId);
-                if(_.isNull(version.to) || _.isNull(version.from) || _.isNull(version.hardwareId)) {
-                    shouldPass = false;
-                }                
-            });
+        if(this.props.pack.inDirector) {
+            if(Object.keys(selectedVersions).length === nextProps.packsCount) {
+                let shouldPass = true;
+                let selectedHardwareIds = [];
 
-            let hardwareIdDuplicates = selectedHardwareIds.some((value, index)=>{
-                return selectedHardwareIds.indexOf(value) != index;
-            });
+                _.each(selectedVersions, (version, index) => {
+                    selectedHardwareIds.push(version.hardwareId);
+                    if(_.isNull(version.to) || _.isNull(version.from) || _.isNull(version.hardwareId)) {
+                        shouldPass = false;
+                    }                
+                });
 
-            this.props.setHardwareIdDuplicates(hardwareIdDuplicates);
+                let hardwareIdDuplicates = selectedHardwareIds.some((value, index)=>{
+                    return selectedHardwareIds.indexOf(value) != index;
+                });
 
-            if(shouldPass && !hardwareIdDuplicates)
-                this.props.markStepAsFinished();
-            else
+                this.props.setHardwareIdDuplicates(hardwareIdDuplicates);
+
+                if(shouldPass && !hardwareIdDuplicates)
+                    this.props.markStepAsFinished();
+                else
+                    this.props.markStepAsNotFinished();
+            }
+            else {
                 this.props.markStepAsNotFinished();
-        }
-        else {
-            this.props.markStepAsNotFinished();
+            }
+        } else {
+            if(Object.keys(selectedVersions).length && selectedVersions[this.props.pack.packageName].to) {
+                this.props.markStepAsFinished();
+            } else {
+                this.props.markStepAsNotFinished();
+            }
         }
     }
     render() {
@@ -109,43 +133,63 @@ class PackagesVersionList extends Component {
                     }
                 </div>
                 <div className="versions">
-                    <div className="from">
-                        From: 
-                        <SelectField
-                            id="version-from"
-                            multiple={false}
-                            onChange={this.selectVersion.bind(this, {type: 'from', packageName: pack.packageName})}
-                            hintText="Select from version"
-                            value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].from : null}
-                            style={{display: 'block', width : '100%'}}
-                        >
-                            {this.formatFromVersions(pack)}
-                        </SelectField>
-                    </div>
-                    <div className="to">
-                        To:
-                        <SelectField
-                            id="version-to"
-                            multiple={false}
-                            onChange={this.selectVersion.bind(this, {type: 'to', packageName: pack.packageName})}
-                            hintText="Select to version"
-                            value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].to : null}
-                            style={{display: 'block', width : '100%'}}
-                        >
-                            {this.formatToVersions(pack)}
-                        </SelectField>
-                    </div>
-                    <div className="hardware-id">
-                        <SelectField
-                            id="hardware-ids-select-field"
-                            multiple={false}
-                            onChange={this.selectHardwareId.bind(this, {type: 'hardwareId', packageName: pack.packageName})}
-                            hintText="Select hardware ids"
-                            value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].hardwareId : null}
-                        >
-                            {this.formatHardwareIds()}
-                        </SelectField>
-                    </div>
+                    {pack.inDirector ?
+                        <span>
+                            <div className="from">
+                                From: 
+                                <SelectField
+                                    id="version-from"
+                                    multiple={false}
+                                    onChange={this.selectVersion.bind(this, {type: 'from', packageName: pack.packageName})}
+                                    hintText="Select from version"
+                                    value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].from : null}
+                                    style={{display: 'block', width : '100%'}}
+                                >
+                                    {this.formatFromVersions(pack)}
+                                </SelectField>
+                            </div>
+                            <div className="to">
+                                To:
+                                <SelectField
+                                    id="version-to"
+                                    multiple={false}
+                                    onChange={this.selectVersion.bind(this, {type: 'to', packageName: pack.packageName})}
+                                    hintText="Select to version"
+                                    value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].to : null}
+                                    style={{display: 'block', width : '100%'}}
+                                >
+                                    {this.formatToVersions(pack)}
+                                </SelectField>
+                            </div>
+                            <div className="hardware-id">
+                                <SelectField
+                                    id="hardware-ids-select-field"
+                                    multiple={false}
+                                    onChange={this.selectHardwareId.bind(this, {type: 'hardwareId', packageName: pack.packageName})}
+                                    hintText="Select hardware ids"
+                                    value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].hardwareId : null}
+                                >
+                                    {this.formatHardwareIds()}
+                                </SelectField>
+                            </div>
+                        </span>
+                    :
+                        <span>
+                            <div className="to">
+                                To:
+                                <SelectField
+                                    id="version-to"
+                                    multiple={false}
+                                    onChange={this.selectVersion.bind(this, {type: 'to', packageName: pack.packageName})}
+                                    hintText="Select to version"
+                                    value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].to : null}
+                                    style={{display: 'block', width : '100%'}}
+                                >
+                                    {this.formatLegacyToVersions(pack)}
+                                </SelectField>
+                            </div>
+                        </span>
+                    }
                 </div>
             </div>
         );
