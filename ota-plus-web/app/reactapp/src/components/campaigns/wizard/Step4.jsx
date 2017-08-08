@@ -57,19 +57,18 @@ class WizardStep4 extends Component {
                                             return (
                                                 <span key={index}>
                                                     <div className="update-container">
-                                                        <div className="update-from">
-                                                            <div className="text">
-                                                                From:
-                                                            </div>
-                                                            <div className="value">
-                                                                <div className="hash">
-                                                                    Hash: {update.from}
+                                                        {pack.inDirector ?
+                                                            <div className="update-from">
+                                                                <div className="text">
+                                                                    From:
                                                                 </div>
                                                                 <div className="createdAt">
                                                                     Created at: {this.getCreatedAt(update.from)}
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        :
+                                                            null
+                                                        }
                                                         <div className="update-to">
                                                             <div className="text">
                                                                 To:
@@ -84,16 +83,20 @@ class WizardStep4 extends Component {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="hardware-id-container">
-                                                        <div className="text">
-                                                            Hardware id:
-                                                        </div>
-                                                        <div className="value">
-                                                            <div className="hash">
-                                                                {update.hardwareId}
+                                                    {pack.inDirector ?
+                                                        <div className="hardware-id-container">
+                                                            <div className="text">
+                                                                Hardware id:
+                                                            </div>
+                                                            <div className="value">
+                                                                <div className="hash">
+                                                                    {update.hardwareId}
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    :
+                                                        null
+                                                    }
                                                 </span>
                                             );
                                         })}

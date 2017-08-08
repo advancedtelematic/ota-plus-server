@@ -101,6 +101,9 @@ class Wizard extends Component {
         this.changeFilter = this.changeFilter.bind(this);
         this.handleMultiTargetUpdateCreated = this.handleMultiTargetUpdateCreated.bind(this);
         this.handleCampaignCreated = this.handleCampaignCreated.bind(this);
+        this.handleLegacyCampaignCreated = this.handleLegacyCampaignCreated.bind(this);
+        this.handleLegacyCampaignPackageSaved = this.handleLegacyCampaignPackageSaved.bind(this);
+        this.handleLegacyCampaignGroupsSaved = this.handleLegacyCampaignGroupsSaved.bind(this);
         this.selectVersion = this.selectVersion.bind(this);
 
         this.multiTargetUpdateCreatedHandler = observe(props.campaignsStore, (change) => {
@@ -123,10 +126,42 @@ class Wizard extends Component {
                 }
             }
         });
+        this.legacyCampaignCreatedHandler = observe(props.campaignsStore, (change) => {
+            if(change.name === 'campaignsLegacyCreateAsync' && change.object[change.name].isFetching === false) {
+                 let wizardMinimized = _.find(props.minimizedWizards, (wizard, index) => {
+                    return wizard.id === props.wizardIdentifier;
+                });
+                if(!wizardMinimized) {
+                    this.handleLegacyCampaignCreated();
+                }
+            }
+        });
+        this.legacyCampaignSavePackageHandler = observe(props.campaignsStore, (change) => {
+            if(change.name === 'campaignsPackageSaveAsync' && change.object[change.name].isFetching === false) {
+                 let wizardMinimized = _.find(props.minimizedWizards, (wizard, index) => {
+                    return wizard.id === props.wizardIdentifier;
+                });
+                if(!wizardMinimized) {
+                    this.handleLegacyCampaignPackageSaved();
+                }
+            }
+        });
+        this.legacyCampaignSaveGroupsHandler = observe(props.campaignsStore, (change) => {
+            if(change.name === 'campaignsGroupsSaveAsync' && change.object[change.name].isFetching === false) {
+                 let wizardMinimized = _.find(props.minimizedWizards, (wizard, index) => {
+                    return wizard.id === props.wizardIdentifier;
+                });
+                if(!wizardMinimized) {
+                    this.handleLegacyCampaignGroupsSaved();
+                }
+            }
+        });        
     }
     componentWillUnmount() {
         this.multiTargetUpdateCreatedHandler();
         this.campaignCreatedHandler();
+        this.legacyCampaignCreatedHandler();
+        this.legacyCampaignSavePackageHandler();
     }
     selectVersion(data) {
         if(_.isUndefined(this.versions[data.packageName])) {
@@ -251,6 +286,14 @@ class Wizard extends Component {
                     });
                 });
                 this.props.campaignsStore.createMultiTargetUpdate(updateData);
+            } else {
+                let pack = _.first(packages);
+                let data = {
+                    name: this.wizardData[0].name
+                };
+                this.props.campaignsStore.createLegacyCampaign(data);
+                //saveGroupsForCampaign
+                //launchCampaign
             }
         }
     }
@@ -264,6 +307,23 @@ class Wizard extends Component {
     }
     handleCampaignCreated() {        
         this.props.campaignsStore.launchCampaign(this.props.campaignsStore.campaignData.campaignId);
+        this.props.hideWizard(this.props.wizardIdentifier);
+    }
+    handleLegacyCampaignCreated() {
+        let pack = _.first(this.wizardData[1].packages);
+        let version = this.wizardData[2].versions[pack.packageName].to;
+        let packageData = {
+            name: pack.packageName,
+            version: version
+        };
+        this.props.campaignsStore.savePackageForCampaign(this.props.campaignsStore.campaignData.campaignId, packageData);
+    }
+    handleLegacyCampaignPackageSaved() {
+        let groupsData = this.wizardData[3];
+        this.props.campaignsStore.saveGroupsForCampaign(this.props.campaignsStore.campaignData.campaignId, groupsData);
+    }
+    handleLegacyCampaignGroupsSaved() {
+        this.props.campaignsStore.launchLegacyCampaign(this.props.campaignsStore.campaignData.campaignId);
         this.props.hideWizard(this.props.wizardIdentifier);
     }
     changeFilter(filterValue) {

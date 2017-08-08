@@ -2012,9 +2012,8 @@
     @include fullHeight;
 
     .page-heading {
-        height: 74px;
         .icon {
-            display: none;
+            background-image: url(/assets/img/icons/black/campaigns.png);
         }
     }
 
@@ -2240,9 +2239,7 @@
                 font-size: 36px;
             }
             .section-title {
-                font-size: 25px;
-                margin: 4px 0 20px 0;
-                padding: 0 0 0 10px;
+                font-size: 18px;                
             }
             .devices-stats {
                 color: $color-lightgrey;
@@ -2252,7 +2249,7 @@
                 vertical-align: super;
             }
             .total-progress {
-                margin: 10px 0 0;
+                margin: 50px 0 0;
                 .progress-blue {
                     height: 50px;
                 }
@@ -2351,82 +2348,189 @@
                 }
             }
 
-            .table {
-                border-bottom: 1px solid #ddd;
-                thead,tbody,tr,td,th{
-                    display:block;
+            .tuf-campaign {
+
+                .section-title {
+                    font-size: 25px;
+                    margin: 4px 0 20px 0;
+                    padding: 0 0 0 10px;
                 }
-                ::-webkit-scrollbar {
-                    display: none;
+
+                .total-progress {
+                    margin: 10px 0 0;
                 }
-                & > tbody {
 
-                    height: 400px;
-                    overflow-y: auto;
-                    & > tr {
-                        & > td {
-                            height: 100px;
-                            float:left;
-                            &:nth-child(1) {
-                                width: 20%;
-                                padding-top: 20px;
-                            }
+                .table {
+                    border-bottom: 1px solid #ddd;
 
-                            &:nth-child(2) {
-                                text-align: center;
-                                width: 60%;
-                                padding-top: 40px;
-                            }
 
-                            &:nth-child(3) {
-                                width: 20%;
-                            }
-                            padding-left: 15px;
-                            padding-right: 15px;
-                            vertical-align: middle;
+                    thead,tbody,tr,td,th{
+                        display:block;
+                    }
+                    ::-webkit-scrollbar {
+                        display: none;
+                    }
+                    & > tbody {
 
-                            a.cancel-campaign {
-                                &:hover {
-                                    color: red;
-                                    text-decoration: underline;
-                                    @include transition;
-                                }
-                            }
-
-                            &.name {
-                                
-                            }
-
-                            &.stats {
-                                .devices-stats {
-                                    color: $color-lightgrey;
-                                    width: 30%;
-                                    display: inline-block;
-                                    vertical-align: super;
+                        height: 400px;
+                        overflow-y: auto;
+                        & > tr {
+                            & > td {
+                                height: 100px;
+                                float:left;
+                                &:nth-child(1) {
+                                    width: 20%;
+                                    padding-top: 20px;
                                 }
 
-                                .devices-progress {
-                                    width: 100%;
-                                    display: inline-block;
-                                    .progress-bar {
-                                        background-color: #83D060;
+                                &:nth-child(2) {
+                                    text-align: center;
+                                    width: 60%;
+                                    padding-top: 40px;
+                                }
+
+                                &:nth-child(3) {
+                                    width: 20%;
+                                }
+                                padding-left: 15px;
+                                padding-right: 15px;
+                                vertical-align: middle;
+
+                                a.cancel-campaign {
+                                    &:hover {
+                                        color: red;
+                                        text-decoration: underline;
+                                        @include transition;
+                                    }
+                                }
+
+                                &.name {
+                                    
+                                }
+
+                                &.stats {
+                                    .devices-stats {
+                                        color: $color-lightgrey;
+                                        width: 30%;
+                                        display: inline-block;
+                                        vertical-align: super;
+                                    }
+
+                                    .devices-progress {
+                                        width: 100%;
+                                        display: inline-block;
+                                        .progress-bar {
+                                            background-color: #83D060;
+                                        }
+                                    }
+                                }
+
+                                &.chart {
+                                    text-align: right;
+                                    .wrapper-chart {
+                                        padding: 0 0 0 30px;
+                                        display: inline-block;
+                                    }
+
+                                    .wrapper-rate {
+                                        padding: 20px 0 0 20px;
+                                        display: inline-block;
+                                        vertical-align: top;
+                                        text-align: center;
+                                        color: #888;
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+            }
 
-                            &.chart {
-                                text-align: right;
-                                .wrapper-chart {
-                                    padding: 0 0 0 30px;
-                                    display: inline-block;
+            .legacy-campaign {
+
+                .total-progress {
+
+                    .progress-blue {
+                        height: 25px;
+                    }
+                }
+
+                .table {
+                    border-bottom: 1px solid #ddd;
+
+                    & > thead {
+                        & > tr {
+                            background: #eee;
+
+                            & > th {
+                                padding-left: 15px;
+                                padding-right: 15px;
+                                border-bottom-width: 1px;
+
+                                &:nth-child(1) {
+                                    width: 33.3333333%;
                                 }
 
-                                .wrapper-rate {
-                                    padding: 20px 0 0 20px;
-                                    display: inline-block;
-                                    vertical-align: top;
+                                &:nth-child(2) {
                                     text-align: center;
-                                    color: #888;
+                                    width: 33.3333333%;
+                                }
+
+                                &:nth-child(3) {
+                                    width: 25%;
+                                }
+
+                                &:nth-child(4) {
+                                    width: 8.33333333%;
+                                }
+                            }
+                        }
+                    }
+
+                    & > tbody {
+                        & > tr {
+                            & > td {
+                                padding-left: 15px;
+                                padding-right: 15px;
+                                vertical-align: middle;
+
+                                a.cancel-campaign {
+                                    &:hover {
+                                        color: red;
+                                        text-decoration: underline;
+                                        @include transition;
+                                    }
+                                }
+
+                                &.name {
+                                    
+                                }
+
+                                &.stats {
+                                    .devices-stats {
+                                        color: $color-lightgrey;
+                                        width: 30%;
+                                        display: inline-block;
+                                        vertical-align: super;
+                                    }
+
+                                    .devices-progress {
+                                        width: 70%;
+                                        display: inline-block;
+                                    }
+                                }
+
+                                &.chart {
+                                    .wrapper-chart {
+                                        padding: 0 0 0 30px;
+                                        display: inline-block;
+                                    }
+
+                                    .wrapper-rate {
+                                        padding: 20px 0 0 20px;
+                                        display: inline-block;
+                                        vertical-align: top;
+                                    }
                                 }
                             }
                         }
