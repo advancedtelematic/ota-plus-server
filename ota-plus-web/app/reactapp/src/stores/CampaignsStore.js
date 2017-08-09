@@ -517,6 +517,23 @@ export default class CampaignsStore {
     @computed get overallCampaignStatistics() {
         if(this.campaign.isLegacy) {
             let stats = {
+                devicesCount: 0,
+                updatedDevicesCount: 0,
+                failedUpdates: 0,
+                successfulUpdates: 0,
+                cancelledUpdates: 0
+            };
+            _.each(this.campaign.statistics, (statistic) => {
+                stats.devicesCount += statistic.deviceCount;
+                stats.updatedDevicesCount += statistic.updatedDevices;
+                stats.failedUpdates += statistic.failedUpdates;
+                stats.successfulUpdates += statistic.successfulUpdates;
+                stats.cancelledUpdates += statistic.cancelledUpdates;
+            });
+            
+            return stats;
+        } else {
+            let stats = {
                 processed: 0,
                 affected: 0,
                 finished: 0,
@@ -534,22 +551,7 @@ export default class CampaignsStore {
             stats.queued = stats.affected - stats.finished;
             stats.failed = this.campaign.statistics.failed.length;
             stats.successful = stats.finished - stats.failed;
-            return stats;
-        } else {
-             let stats = {
-                devicesCount: 0,
-                updatedDevicesCount: 0,
-                failedUpdates: 0,
-                successfulUpdates: 0,
-                cancelledUpdates: 0
-            };
-            _.each(this.campaign.statistics, (statistic) => {
-                stats.devicesCount += statistic.deviceCount;
-                stats.updatedDevicesCount += statistic.updatedDevices;
-                stats.failedUpdates += statistic.failedUpdates;
-                stats.successfulUpdates += statistic.successfulUpdates;
-                stats.cancelledUpdates += statistic.cancelledUpdates;
-            });
+            
             return stats;
         }
     }
