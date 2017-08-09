@@ -7,8 +7,8 @@ class MultiTargetITem extends Component {
         super(props);
     }
     render() {
-        const { item, cancelInstallation } = this.props;
-        let hash = item.targets[Object.keys(item.targets)[0]].image.fileinfo.hashes.sha256;
+        const { item, hardwareId, updateId, cancelInstallation } = this.props;
+        let hash = item.image.fileinfo.hashes.sha256;
         return (
             <li id={"queued-entry-" + hash} className="multi-target-entry">
                 <div className="name">
@@ -23,7 +23,7 @@ class MultiTargetITem extends Component {
 
                 <div className="desc">
                     <div>
-                        Update identifier: {item.updateId}
+                        Update identifier: {updateId}
                     </div>
                 </div>
             </li>
