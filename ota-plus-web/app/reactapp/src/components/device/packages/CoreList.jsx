@@ -93,7 +93,7 @@ class CoreList extends Component {
             let lastShownIndex = null;
             _.each(headersPositions, (position, index) => {
                 if(scrollTop >= position) {
-                    newFakeHeaderLetter = Object.keys(this.props.packagesStore.preparedPackagesPerDevice[this.props.device.uuid])[index];
+                    newFakeHeaderLetter = Object.keys(this.preparedPackages)[index];
                     return true;
                 } else if(scrollTop >= position - headerHeight) {
                     scrollTop -= scrollTop - (position - headerHeight);
