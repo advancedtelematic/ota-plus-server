@@ -24,7 +24,6 @@ class ListItemVersion extends Component {
         const { version, queuedPackage, installedPackage, expandedVersion, loadPackageVersionProperties, selectedPackageVersion } = this.props;
         let blacklistedPackage = this.isPackageBlacklisted(version);
         let expandedVersionUuid = expandedVersion ? expandedVersion.uuid : null;
-        let versionInDirector = expandedVersion ? expandedVersion.inDirector : false;
         return (
             <li className={selectedPackageVersion === version.id.version ? "selected" : ""} id={version.uuid === expandedVersionUuid ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={this.handlePackageVersionClick}>
                 <div className="left-box">
@@ -34,7 +33,7 @@ class ListItemVersion extends Component {
                       <div className="created_at">
                         <span className="text">Created at:</span> <span className="value">{moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
                       </div>
-                      {versionInDirector ?
+                      {version.inDirector ?
                         <div className="updated_at">
                             <span className="text">Updated at:</span> <span className="value">{moment(version.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
                         </div>
