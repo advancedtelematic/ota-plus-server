@@ -26,14 +26,18 @@ class List extends Component {
                     :
                         Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length ?
                             <ul className={"list queue" + (!Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length ? " empty" : "")}>
-                                {_.map(devicesStore.multiTargetUpdates[device.uuid], (item, index) => {
-                                    return (
-                                        <MultiTargetItem
-                                            item={item}
-                                            cancelInstallation={cancelInstallation}
-                                            key={index}
-                                        />
-                                    );
+                                {_.map(devicesStore.multiTargetUpdates[device.uuid], (update, index) => {
+                                    return _.map(update.targets, (target, hardwareId) => {
+                                        return (
+                                            <MultiTargetItem
+                                                item={target}
+                                                hardwareId={target}
+                                                updateId={update.updateId}
+                                                cancelInstallation={cancelInstallation}
+                                                key={index}
+                                            />
+                                        );
+                                    });
                                 })}
                             </ul>
                     :
