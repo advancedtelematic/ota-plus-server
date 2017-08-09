@@ -188,27 +188,28 @@ export default class PackagesStore {
                     this._prepareDirectorPackages(directorPackages);
                     let filepaths = this._getAllDirectorFilepaths();
                     let that = this;
-                    let receivedFilepaths = null;
-                    let afterReceivedFilepaths = _.after(!_.isNull(receivedFilepaths), () => {
-                        that._prepareFilePaths(receivedFilepaths);
-                        switch (this.page) {
-                            case 'device':                        
-                                this._prepareDevicePackages();
-                                break;
-                            default:
-                                this._preparePackages();
-                                break;
-                        }
-                        this.packagesFetchAsync = handleAsyncSuccess(response);
-                    });
-
                     axios.post(API_PACKAGES_COUNT_INSTALLED_ECUS, filepaths)
                         .then(function(resp) {
-                            receivedFilepaths = resp.data;
-                            afterReceivedFilepaths();
+                            that._prepareFilePaths(resp.data);
+                            switch (that.page) {
+                                case 'device':                        
+                                    that._prepareDevicePackages();
+                                    break;
+                                default:
+                                    that._preparePackages();
+                                    break;
+                            }
+                            that.packagesFetchAsync = handleAsyncSuccess(response);
                         })
                         .catch(function(e) {
-                            afterReceivedFilepaths();
+                            switch (that.page) {
+                                case 'device':                        
+                                    that._prepareDevicePackages();
+                                    break;
+                                default:
+                                    that._preparePackages();
+                                    break;
+                            }
                         });
                     
                 }, this);
@@ -219,11 +220,7 @@ export default class PackagesStore {
                     })
                     .catch(function() {
                         after();
-                    });
-
-                if (this.overallPackagesCount === null) {
-                    this.overallPackagesCount = response.data.length;
-                }
+                    });                
             }.bind(this))
             .catch(function(error) {
                 this.packagesFetchAsync = handleAsyncError(error);
@@ -312,6 +309,9 @@ export default class PackagesStore {
         });
         this.packages = mergedPackages;
         this.directorPackages = versionedDirectorPackages;
+        if (this.overallPackagesCount === null) {
+            this.overallPackagesCount = this.packages.length;
+        }
     }
 
     fetchPackageStatistics(packageName) {
