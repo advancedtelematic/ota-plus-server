@@ -34,7 +34,7 @@ class List extends Component {
                                                 hardwareId={target}
                                                 updateId={update.updateId}
                                                 cancelInstallation={cancelInstallation}
-                                                key={index}
+                                                key={hardwareId}
                                             />
                                         );
                                     });
