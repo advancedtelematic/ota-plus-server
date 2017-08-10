@@ -29,7 +29,9 @@ class ListItem extends Component {
                     <img src="/assets/img/icons/black/lock.png" alt="Director" />
                 </div>
                 <div className="installed-on-ecus">
-                    Installed on {installedOnEcus} Ecu(s)
+                    <span id={"package-" + pack.packageName + "-installed-on-ecus"}>
+                        Installed on <span id={"package-" + pack.packageName + "-installed-on-ecus-count"}>{installedOnEcus}</span> Ecu(s)
+                    </span>
                 </div>
                 <div className="package-versions-nr" id="package-versions-nr">
                     {packVersionsNumber === 1 ?
