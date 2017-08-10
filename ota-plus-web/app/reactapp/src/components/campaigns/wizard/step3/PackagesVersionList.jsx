@@ -79,6 +79,12 @@ class PackagesVersionList extends Component {
         data.hardwareId = value;
         this.props.selectVersion(data);
     }
+    componentWillMount() {
+        this.props.markStepAsNotFinished();
+    }
+    componentWillUnmount() {
+        this.props.clearSelectedVersions();
+    }
     componentWillReceiveProps(nextProps) {
         let selectedVersions = nextProps.selectedVersions;
 
