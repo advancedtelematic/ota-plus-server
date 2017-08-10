@@ -1,101 +1,147 @@
 import React, { Component, PropTypes } from 'react';
-import { observable, observe } from 'mobx';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import _ from 'underscore';
-import { WizardPackagesVersionList } from './step5';
-import { VelocityTransitionGroup } from 'velocity-react';
 import { Loader } from '../../../partials';
-import { SelectField, MenuItem } from 'material-ui';
-
-const headerHeight = 28;
+import { translate } from 'react-i18next';
+import _ from 'underscore';
 
 @observer
 class WizardStep5 extends Component {
-    @observable hardwareIdDuplicates = false;
+    @observable packages = null;
 
     constructor(props) {
         super(props);
-        this.sortByFirstLetter = this.sortByFirstLetter.bind(this);
-        this.setHardwareIdDuplicates = this.setHardwareIdDuplicates.bind(this);
     }
     componentWillMount() {
-        this.props.hardwareStore.fetchHardwareIds();
-    }
-    setHardwareIdDuplicates(value) {
-        if(value)
-            this.hardwareIdDuplicates = true;
-        else
-            this.hardwareIdDuplicates = false;
-    }
-    sortByFirstLetter(packagesList) {
-        let sortedPackages = {};
-        _.each(packagesList, (pack, index) => {
-            let firstLetter = pack.packageName.charAt(0).toUpperCase();
-            firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
-            if(_.isUndefined(sortedPackages[firstLetter])) {
-                sortedPackages[firstLetter] = [];
-            }
-            sortedPackages[firstLetter].push(pack);
+        const { wizardData } = this.props;
+        let packages = wizardData[1].packages;
+        let versions = wizardData[2].versions;
+
+        _.each(packages, (pack, index) => {
+            pack.updates = [];
+            _.each(versions, (version, packageName) => {
+                if(pack.packageName === packageName) {
+                    pack.updates.push(version);
+                }
+            });
         });
-        return sortedPackages;
+
+        this.packages = packages;
+    }
+    getCreatedAt(version) {
+        let createdAt = null;
+        _.each(this.props.packagesStore.packages, (pack, index) => {
+            if(pack.packageHash === version) {
+                createdAt = pack.createdAt;
+            }
+        });
+        return createdAt;
     }
     render() {
-        const { wizardData, selectVersion, markStepAsFinished, markStepAsNotFinished, hardwareStore } = this.props;
-        let chosenPackagesList = this.sortByFirstLetter(wizardData[1].packages);
-        let selectedVersions = wizardData[2].versions;
+        const { t, wizardData, groupsStore } = this.props;
         return (
-            <div className="ios-list" ref="list">
-                <span>
-                    {hardwareStore.hardwareIdsFetchAsync.isFetching ?
-                        <Loader />
-                    :
-                        <span>
-                            {this.hardwareIdDuplicates ?
-                                <div className="alert alert-danger" role="alert">
-                                    You can't select the same hardware ids
-                                </div>
-                            :
-                                null
-                            }
-                            {_.map(chosenPackagesList, (packages, letter) => {
-                                let packsCount = wizardData[1].packages.length;
-                                return (
-                                    <span key={letter}>
-                                        <div className="header">
-                                            {letter}
+            <div className="step-inner">
+                <div className="box-bordered">
+                    <div className="title">
+                        Software & Version
+                    </div>
+                    <div className="desc">
+                        {_.map(this.packages, (pack, index) => {
+                            return (
+                                <span key={index}>
+                                    <div className="package-container">
+                                        <div className="package-name">
+                                            {pack.packageName}
                                         </div>
-                                        {_.map(packages, (pack, index) => {
-                                             return (
+                                        {_.map(pack.updates, (update, i) => {
+                                            return (
                                                 <span key={index}>
-                                                    <WizardPackagesVersionList
-                                                        pack={pack}
-                                                        packsCount={packsCount}
-                                                        selectedVersions={selectedVersions}
-                                                        selectVersion={selectVersion}
-                                                        markStepAsFinished={markStepAsFinished}
-                                                        markStepAsNotFinished={markStepAsNotFinished}
-                                                        hardwareStore={hardwareStore}
-                                                        setHardwareIdDuplicates={this.setHardwareIdDuplicates}
-                                                        hardwareIdDuplicates={this.hardwareIdDuplicates}
-                                                    />
+                                                    <div className="update-container">
+                                                        {pack.inDirector ?
+                                                            <div className="update-from">
+                                                                <div className="text">
+                                                                    From:
+                                                                </div>
+                                                                <div className="createdAt">
+                                                                    Created at: {this.getCreatedAt(update.from)}
+                                                                </div>
+                                                            </div>
+                                                        :
+                                                            null
+                                                        }
+                                                        <div className="update-to">
+                                                            <div className="text">
+                                                                To:
+                                                            </div>
+                                                            <div className="value">
+                                                                <div className="hash">
+                                                                    Hash: {update.to}
+                                                                </div>
+                                                                <div className="createdAt">
+                                                                    Created at: {this.getCreatedAt(update.to)}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {pack.inDirector ?
+                                                        <div className="hardware-id-container">
+                                                            <div className="text">
+                                                                Hardware id:
+                                                            </div>
+                                                            <div className="value">
+                                                                <div className="hash">
+                                                                    {update.hardwareId}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    :
+                                                        null
+                                                    }
                                                 </span>
                                             );
                                         })}
-                                    </span>
+                                    </div>
+                                </span>
+                            );
+                        })}
+                    </div>
+                </div>
+                <div className="box-bordered groups">
+                    <div className="title">
+                        Groups & Devices
+                    </div>
+                    <div className="desc">
+                        <div className="wrapper-groups">
+                            {_.map(wizardData[3].groups, (group, index) => {
+                                const foundGroup = _.findWhere(groupsStore.groups, {id: group});
+                                return (
+                                    <div className="element-box group" key={index}>
+                                        <div className="icon"></div>
+                                        <div className="desc">
+                                            <div className="title" id="wizard-summary-group-name">
+                                                {foundGroup.groupName}
+                                            </div>
+                                            <div className="subtitle" id="wizard-summary-group-devices">
+                                                {t('common.deviceWithCount', {count: groupsStore._getGroupDevices(foundGroup).length})}
+                                            </div>
+                                        </div>
+                                    </div>
                                 );
                             })}
-                        </span>
-                    }
-                </span>                
+                            
+                        </div>
+                        <div className="fade-wrapper-groups bottom"></div>
+                    </div>
+                </div>
             </div>
         );
     }
 }
 
 WizardStep5.propTypes = {
-    setWizardData: PropTypes.func.isRequired,
-    packagesStore: PropTypes.object.isRequired,
-    hardwareStore: PropTypes.object
+    wizardData: PropTypes.object.isRequired,
+    groupsStore: PropTypes.object.isRequired
 }
 
-export default WizardStep5;
+export default translate()(WizardStep5);
+
