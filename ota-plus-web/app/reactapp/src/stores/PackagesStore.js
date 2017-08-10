@@ -235,7 +235,6 @@ export default class PackagesStore {
 
     _prepareFilePaths(filepaths) {
         _.each(this.packages, (pack, index) => {
-            pack.installedOnEcus = 0;
             _.each(filepaths, (installedOn, filepath) => {
                 if(pack.imageName === filepath) {                    
                     pack.installedOnEcus = installedOn;
@@ -245,70 +244,49 @@ export default class PackagesStore {
     }
 
     _prepareDirectorPackages(directorPackages) {
-        let versionedDirectorPackages = [];
-        _.each(directorPackages, (versionObject, index) => {
-            _.each(versionObject, (version, imageName) => {
+        let packages = _.first(directorPackages);
+        let preparedPackages = [];
 
-                let customExists = false;
-                let packageName = null;
-                let packageVersion = null;
-                let packageHash = version.hashes.sha256;
-                let createdAt = null;
-                let updatedAt = null;
-                let targetFormat = null;
-                let hardwareIds = [];
-
-                if(version.custom) {
-                    customExists = true;
-                    packageName = version.custom.name;   
-                    packageVersion = version.custom.version;
-                    createdAt = version.custom.createdAt;
-                    updatedAt = version.custom.updatedAt;
-                    updatedAt = version.custom.updatedAt;
-                    targetFormat = version.custom.targetFormat;
-                    hardwareIds = version.custom.hardwareIds;
-                } else {
-                    packageName = imageName;   
-                    packageVersion = version.hashes.sha256;
-                }
-
-                let formattedVersion = {
-                    customExists: customExists,
-                    packageHash: packageHash,
-                    imageName: imageName,
-                    createdAt: createdAt,
-                    updatedAt: updatedAt,
-                    description: packageHash,
-                    targetFormat: targetFormat ? targetFormat : 'OSTREE',
-                    targetLength: version.length,
-                    id: {
-                        name: packageName,
-                        version: packageVersion
-                    },
-                    isBlackListed: false,
-                    namespace: null,
-                    signature: null,
-                    size: 0,
-                    uri: {
-                        uri: null
-                    },
-                    uuid: packageHash,
-                    inDirector: true,
-                    hardwareIds: hardwareIds,
-                };
-                versionedDirectorPackages.push(formattedVersion);
-            });
+        _.each(packages, (pack, imageName) => {
+            let formattedPack = {
+                customExists: pack.custom ? true : false,
+                packageHash: pack.hashes.sha256,
+                imageName: imageName,
+                createdAt: pack.custom.createdAt ? pack.custom.createdAt : null,
+                updatedAt: pack.custom.updatedAt ? pack.custom.updatedAt : null,
+                description: pack.hashes.sha256,
+                targetFormat: pack.custom.targetFormat ? pack.custom.targetFormat : 'OSTREE',
+                targetLength: pack.length,
+                id: {
+                    name: pack.custom.name ? pack.custom.name : imageName,
+                    version: pack.custom.version ? pack.custom.version : pack.hashes.sha256
+                },
+                installedOnEcus: 0,
+                isBlackListed: false,
+                namespace: null,
+                signature: null,
+                size: 0,
+                uri: {
+                    uri: null
+                },
+                uuid: pack.hashes.sha256,
+                inDirector: true,
+                hardwareIds: pack.custom.hardwareIds ? pack.custom.hardwareIds : [],
+            };
+            preparedPackages.push(formattedPack);
         });
 
         let mergedPackages = [];
-        _.each(versionedDirectorPackages, (dirPack, dirIndex) => {
-            mergedPackages.push(dirPack);
+        _.each(preparedPackages, (pack, index) => {
+            mergedPackages.push(pack);
         });
-        _.each(this.packages, (corePack, index) => {
-            mergedPackages.push(corePack);
+        _.each(this.packages, (pack, index) => {
+            mergedPackages.push(pack);
         });
+
+        this.directorPackages = preparedPackages;        
         this.packages = mergedPackages;
-        this.directorPackages = versionedDirectorPackages;
+
         if (this.overallPackagesCount === null) {
             this.overallPackagesCount = this.packages.length;
         }
@@ -1284,55 +1262,38 @@ export default class PackagesStore {
         }
     }
 
-    _addTufPackage(data) {
-        let customExists = false;
-        let name = null;
-        let version = null;
-        let hardwareIds = [];
-        let createdAt = null;
-        let updatedAt = null;
-        let targetFormat = null;
-
-        if(data.custom) {
-            customExists = true;
-            name = data.custom.name;
-            version = data.custom.version;
-            hardwareIds = data.custom.hardwareIds;
-            createdAt = data.custom.createdAt;
-            updatedAt = data.custom.updatedAt;
-            targetFormat = data.custom.targetFormat;
-        } else {
-            name = data.filename;
-            version = data.checksum.hash;
-            hardwareIds = [];
-        }
-        let formattedData = {
-            customExists: customExists,
-            checkSum: data.checksum.hash,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            targetFormat: targetFormat ? targetFormat : 'OSTREE',
-            targetLength: data.length,
+    _addTufPackage(pack) {
+        let name = pack.custom.name ? pack.custom.name : pack.filename;
+        let version = pack.custom.version ? pack.custom.version : pack.checksum.hash;
+        let hardwareIds = pack.custom.hardwareIds ? pack.custom.hardwareIds : [];
+        let formattedPack = {
+            customExists: pack.custom ? true : false,
+            packageHash: pack.checksum.hash,
+            createdAt: pack.custom.createdAt ? pack.custom.createdAt : null,
+            updatedAt: pack.custom.updatedAt ? pack.custom.updatedAt : null,
+            targetFormat: pack.custom.targetFormat ? pack.custom.targetFormat : 'OSTREE',
+            targetLength: pack.length,
             hardwareIds: hardwareIds,
-            description: '',
+            description: pack.checksum.hash,
             id: {
                 name: name,
                 version: version
             },
+            installedOnEcus: 0,
             isBlackListed: false,
             inDirector: true,
-            namespace: data.namespace,
+            namespace: pack.namespace,
             signature: null,
             timestamp: null,
             vendor: null
-        }
+        };
         let found = _.find(this.packages, (pack) => {
             return pack.id.name === name && pack.id.version === version;
         });
         if(found) {
             found.hardwareIds = hardwareIds;
         } else {
-            this.packages.push(formattedData);
+            this.packages.push(formattedPack);
         }
         switch (this.page) {
             case 'device':
