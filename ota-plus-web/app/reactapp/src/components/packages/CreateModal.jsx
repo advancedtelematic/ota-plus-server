@@ -14,12 +14,9 @@ class CreateModal extends Component {
     @observable submitButtonDisabled = true;
     @observable fileName = null;
     @observable selectedHardwareIds = [];
-    @observable packUrl = {value: ''};
     constructor(props) {
         super(props);
         this.selectHardwareIds = this.selectHardwareIds.bind(this);
-
-        this.disableRequiredFile = this.disableRequiredFile.bind(this);
     }
     enableButton() {
         this.submitButtonDisabled = false;
@@ -58,10 +55,6 @@ class CreateModal extends Component {
         this.selectedHardwareIds = [];
         this.props.hide();
     }
-    disableRequiredFile(event) {
-        this.packUrl = {value: event.target.value};
-    }
-
     formatHardwareIds(selectedHardwareIds) {
         let hardwareIds = this.props.hardwareStore.hardwareIds;
         return hardwareIds.map((id) => (
@@ -198,39 +191,16 @@ class CreateModal extends Component {
                                     onChange={this._onFileChange.bind(this)}
                                     className="file"
                                 />
-                                {this.packUrl.value === '' ?
-                                    <FormsyText
-                                        type="text"
-                                        name="fake-file"
-                                        value={fileDropped ?
-                                            fileDropped.name
-                                            :
-                                            this.fileName
-                                        }
-                                        style={{display: 'none'}}
-                                        required
-                                    />
-                                :
-                                    <FormsyText
-                                        type="text"
-                                        name="fake-file"
-                                        value={fileDropped ?
-                                            fileDropped.name
-                                            :
-                                            this.fileName
-                                        }
-                                        style={{display: 'none'}}
-                                    />
-                                }
-                            </div>
-                            <div className="col-xs-12">
-                                <input
-                                    name="fileUrl"
+                                <FormsyText
                                     type="text"
-                                    onChange={this.disableRequiredFile.bind(this)}
-                                    value={this.packUrl.value}
-                                    style={{border: 'none'}}
-                                    id="url-to-new-package"
+                                    name="fake-file"
+                                    value={fileDropped ?
+                                        fileDropped.name
+                                        :
+                                        this.fileName
+                                    }
+                                    style={{display: 'none'}}
+                                    required
                                 />
                             </div>
                         </div>
