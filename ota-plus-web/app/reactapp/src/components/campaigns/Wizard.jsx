@@ -104,6 +104,7 @@ class Wizard extends Component {
         this.handleLegacyCampaignPackageSaved = this.handleLegacyCampaignPackageSaved.bind(this);
         this.handleLegacyCampaignGroupsSaved = this.handleLegacyCampaignGroupsSaved.bind(this);
         this.selectVersion = this.selectVersion.bind(this);
+        this.clearSelectedVersions = this.clearSelectedVersions.bind(this);
 
         this.multiTargetUpdateCreatedHandler = observe(props.campaignsStore, (change) => {
             if(change.name === 'campaignsMultiTargetUpdateCreateAsync' && change.object[change.name].isFetching === false) {
@@ -198,6 +199,10 @@ class Wizard extends Component {
     }
     isLastStep() {
         return this.currentStepId == this.wizardSteps.length - 1;
+    }
+    clearSelectedVersions() {
+        this.wizardData[2].versions = {};
+        this.versions = {};
     }
     prevStep() {
         if(this.currentStepId != 0) {
@@ -369,6 +374,7 @@ class Wizard extends Component {
                                                 selectedFromVersion: this.selectedFromVersion,
                                                 selectVersion: this.selectVersion,
                                                 wizardIdentifier: wizardIdentifier,
+                                                clearSelectedVersions: this.clearSelectedVersions,
                                             })
                                         }
                                         {currentStep.isSearchBarShown ?
