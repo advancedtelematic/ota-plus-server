@@ -1,97 +1,60 @@
 import React, { Component, PropTypes } from 'react';
-import { observable, observe } from "mobx"
 import { observer } from 'mobx-react';
-import { WizardPackagesList } from './step1';
+import { observable } from 'mobx';
 import { Loader } from '../../../partials';
 import _ from 'underscore';
+import { Form } from 'formsy-react';
+import { FormsyText } from 'formsy-material-ui/lib';
+import serialize from 'form-serialize';
 
 @observer
 class WizardStep1 extends Component {
     constructor(props) {
         super(props);
-        this.setWizardData = this.setWizardData.bind(this);
-        this.togglePackage = this.togglePackage.bind(this);
-        this.toggleStep = this.toggleStep.bind(this);
-        this.disablePackageListItems = this.disablePackageListItems.bind(this);
-        this.disableItemsOnEnter = this.disableItemsOnEnter.bind(this);
+        this.changeCampaignName = this.changeCampaignName.bind(this);
     }
-    componentWillMount() {
-        this.props.packagesStore.fetchPackages();
-    }
-    componentDidMount() {
-        this.disableItemsOnEnter(this.props.wizardData[1].packages);
-    }
-    togglePackage(chosenPackagesList, pack) {
-        let found = _.find(chosenPackagesList, {packageName: pack.packageName});
-        if(found) {
-            let index = chosenPackagesList.indexOf(pack.packageName);
-            chosenPackagesList.splice(index, 1);
-        } else {
-            chosenPackagesList.push(pack);
-        }
-    }
-    toggleStep(chosenPackagesList, pack) {
-        if(chosenPackagesList.length)
+    changeCampaignName() {
+        let data = serialize(document.querySelector('#add-campaign-name-form'), { hash: true });
+        this.props.wizardData[0].name = data.name;
+        if(!_.isEmpty(this.props.wizardData[0].name)) 
             this.props.markStepAsFinished();
         else
             this.props.markStepAsNotFinished();
     }
-    disablePackageListItems(chosenPackagesList, pack) {
-        let selector = null;
-        switch(pack.inDirector) {
-            case true:
-                selector = '.campaigns-wizard-' + this.props.wizardIdentifier + ' .legacy';          
-                break;
-            default:
-                selector = '.campaigns-wizard-' + this.props.wizardIdentifier + ' .item:not(.chosen)';
-                break;
-        }
-        let items = document.querySelectorAll(selector);
-        let found = _.find(chosenPackagesList, {packageName: pack.packageName});
-        if(found) {
-            _.each(items, (item, index) => {
-                item.className += " disabled";
-            });
-        } else if(!chosenPackagesList.length) {
-            _.each(items, (item, index) => {
-                item.classList.remove("disabled");
-            });
-        }
-    }
-    setWizardData(pack) {
-        let chosenPackagesList = this.props.wizardData[1].packages;
-        this.togglePackage(chosenPackagesList, pack);
-        this.toggleStep(chosenPackagesList, pack);
-        this.disablePackageListItems(chosenPackagesList, pack);
-    }
-    disableItemsOnEnter(chosenPackagesList) {
-        if(chosenPackagesList.length) {
-            let firstEl = _.first(chosenPackagesList);
-            this.disablePackageListItems(chosenPackagesList, firstEl);
-        }
-    }
     render() {
-        const { wizardData, packagesStore } = this.props;
-        let chosenPackagesList = wizardData[1].packages;
+        const { wizardData } = this.props;
+        const campaignName = this.props.wizardData[0].name;
         return (
-            !packagesStore.packagesCount && packagesStore.packagesFetchAsync.isFetching ? 
-                <div className="wrapper-center">
-                    <Loader />
+            <div className="wrapper-center">
+                <div>
+                    <Form
+                        onValid={this.changeCampaignName.bind(this)}
+                        onInvalid={this.changeCampaignName.bind(this)}
+                        id="add-campaign-name-form">
+                        <div className="row">
+                            <div className="col-xs-12">
+                                <FormsyText
+                                    name="name"
+                                    floatingLabelText="Campaign name"
+                                    className="input-wrapper"
+                                    id="add-campaign-name"
+                                    value={campaignName}
+                                    updateImmediately
+                                    required
+                                />
+                            </div>
+                        </div>
+                    </Form>
+
                 </div>
-            :
-                <WizardPackagesList
-                    chosenPackagesList={chosenPackagesList}
-                    setWizardData={this.setWizardData}
-                    packagesStore={packagesStore}
-                />
+            </div>
         );
     }
 }
 
 WizardStep1.propTypes = {
     wizardData: PropTypes.object.isRequired,
-    packagesStore: PropTypes.object.isRequired
+    groupsStore: PropTypes.object.isRequired
 }
 
 export default WizardStep1;
-

@@ -1,7 +1,7 @@
-import WizardGroupsList from './GroupsList';
-import WizardGroupsListItem from './GroupsListItem';
+import WizardPackagesList from './PackagesList';
+import WizardPackagesListItem from './PackagesListItem';
 
 export {
-    WizardGroupsList,
-    WizardGroupsListItem
+    WizardPackagesList,
+    WizardPackagesListItem
 }
