@@ -164,8 +164,17 @@ class CoreList extends Component {
                 }
                 if(this.props.device.isDirector) {
                     _.map(pack.versions, (version, ind) => {
-                        if(version.id.version === this.props.devicesStore._getPrimaryHash()) {
-                            dirPacks[letter].push(pack);
+
+                        if(this.props.activeEcu.type === 'primary') {
+                            if(version.id.version === this.props.devicesStore._getPrimaryHash()) {
+                                dirPacks[letter].push(pack);
+                            }
+                        } else {
+                            _.map(this.props.device.directorAttributes.secondary, (secondaryObj, ind) => {
+                                if(version.id.version === secondaryObj.image.hash.sha256) {
+                                    dirPacks[letter].push(pack);
+                                }
+                            });
                         }
                     });
                 }
