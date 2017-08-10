@@ -13,7 +13,6 @@ import {
     WizardStep3,
     WizardStep4,
     WizardStep5,
-    WizardStep6,
 } from './wizard';
 
 const initialCurrentStepId = 0;
@@ -36,35 +35,35 @@ const initialWizardData = [
 ];
 const initialWizardStep = [
     {
-        class: WizardStep6,
+        class: WizardStep1,
         name: "name",
         title: "Choose name",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
-        class: WizardStep1,
+        class: WizardStep2,
         name: "packages",
         title: "Select Package",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
-        class: WizardStep5,
+        class: WizardStep3,
         name: "versions",
         title: "Select software version",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
-        class: WizardStep2,
+        class: WizardStep4,
         title: "Select Group(s)",
         name: "groups",
         isFinished: false,
         isSearchBarShown: false,
     },
     {
-        class: WizardStep4,
+        class: WizardStep5,
         title: "Summary",
         name: "summary",
         finishButtonLabel: "Launch",
