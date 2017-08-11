@@ -298,8 +298,10 @@ export default class CampaignsStore {
                     .then(function (resp) {
                         let data = response.data;
                         data.statistics = resp.data;
-                        this.campaign = data;
-                        this.campaign.isLegacy = true;
+                        this.campaign = {
+                            ...data,
+                            isLegacy:true
+                        };
                         this.campaignsOneStatisticsFetchAsync = handleAsyncSuccess(resp);
                     }.bind(this))
                     .catch(function (err) {
