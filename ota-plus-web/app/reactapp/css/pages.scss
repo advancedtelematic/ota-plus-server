@@ -2465,6 +2465,15 @@
                     }
                 }
 
+                .total-failure-rate {
+
+                    .rate {
+                        top: 50%;
+                        left: 65px;
+                        transform: translateY(-50%);
+                    }
+                }
+
                 .table {
                     border-bottom: 1px solid #ddd;
 
