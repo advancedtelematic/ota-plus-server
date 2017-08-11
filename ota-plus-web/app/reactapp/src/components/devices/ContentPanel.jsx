@@ -8,30 +8,13 @@ import ContentPanelHeader from './ContentPanelHeader';
 import { Loader } from '../../partials';
 import { InfiniteScroll } from '../../utils';
 
-const minBoxWidth = 350;
-
 @observer
 class ContentPanel extends Component {
     @observable boxWidth = 350;
-    @observable howManyBoxesPerRow = 4;
 
     constructor(props) {
         super(props);
-        this.setBoxesWidth = this.setBoxesWidth.bind(this);
         this.goToDetails = this.goToDetails.bind(this);
-    }
-    componentDidMount() {
-        this.setBoxesWidth();
-        window.addEventListener("resize", this.setBoxesWidth);
-    }
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.setBoxesWidth);
-    }
-    setBoxesWidth() {
-        let containerWidth = this.refs.innerContainer.getBoundingClientRect().width;
-        let howManyBoxesPerRow = Math.floor(containerWidth / minBoxWidth);
-        this.boxWidth = Math.floor(containerWidth / howManyBoxesPerRow);
-        this.howManyBoxesPerRow = howManyBoxesPerRow;        
     }
     goToDetails(deviceId, e) {
         if(e) e.preventDefault();
