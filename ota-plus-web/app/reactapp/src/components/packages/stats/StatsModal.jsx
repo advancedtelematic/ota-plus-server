@@ -49,7 +49,7 @@ class StatsModal extends Component {
                                 value: version.installedOnEcus,
                                 color: availableColors[colorIndex],
                                 highlight: availableColors[colorIndex],
-                                label: (index === availableColors.length - 1 ? "Other" : " " + version.id.version)
+                                label: (index === availableColors.length - 1 ? "Other" : version.id.version)
                             }
                       );
                     } else if(index >= availableColors.length) {
@@ -60,15 +60,17 @@ class StatsModal extends Component {
 
             const legend = _.map(stats, (stat) => {
                 return (
-                    <li key={"color-" + stat.label + "-" + stat.color}>
-                        <div className="color-box" style={{backgroundColor: stat.color}}></div> 
-                        <div className="title-box">{stat.label}</div>
-                        <div className="subtitle-box">{stat.value} Devices</div>
+                    <li key={"color-" + stat.label + "-" + stat.color} id={"version-" + stat.label + "-stats"}>
+                        <div className="color-box" id={"version-color-" + stat.color} style={{backgroundColor: stat.color}}></div> 
+                        <div className="title-box" id={"version-hash-" + stat.label}>{stat.label}</div>
+                        <div className="subtitle-box">
+                            <span id={"version-" + stat.label + "-devices-count"}>{stat.value}</span> Devices
+                        </div>
                     </li>
                 );
             });
             content = (
-                <div className="chart-panel">
+                <div className="chart-panel" id={"package-" + this.package.packageName + "-stats"}>
                     <div className="wrapper-center">
                         {stats.length ?
                             <div>
@@ -87,7 +89,7 @@ class StatsModal extends Component {
                                 </ul>
                             </div>
                         :
-                            <div>
+                            <div id={"package-" + this.package.packageName + "-not-installed"}>
                                 This package has not been installed yet.
                             </div>
                         }

@@ -800,6 +800,7 @@ input {
         border-bottom: 1px solid #ddd;
         @include transition;
         overflow: hidden;
+        cursor: pointer;
 
         &.unmanaged {
            background: #d3d3d3; 

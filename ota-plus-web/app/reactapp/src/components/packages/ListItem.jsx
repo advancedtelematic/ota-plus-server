@@ -29,9 +29,11 @@ class ListItem extends Component {
                     <img src="/assets/img/icons/black/lock.png" alt="Director" />
                 </div>
                 <div className="installed-on-ecus">
-                    <span id={"package-" + pack.packageName + "-installed-on-ecus"}>
-                        Installed on <span id={"package-" + pack.packageName + "-installed-on-ecus-count"}>{installedOnEcus}</span> Ecu(s)
-                    </span>
+                    <a href="#" className="link" onClick={showStatsModal.bind(this, pack.packageName)}>
+                        <span id={"package-" + pack.packageName + "-installed-on-ecus"}>
+                            Installed on <span id={"package-" + pack.packageName + "-installed-on-ecus-count"}>{installedOnEcus}</span> Ecu(s)
+                        </span>
+                    </a>
                 </div>
                 <div className="package-versions-nr" id="package-versions-nr">
                     {packVersionsNumber === 1 ?
@@ -39,8 +41,7 @@ class ListItem extends Component {
                     :
                         packVersionsNumber + " versions"
                     }
-                </div>
-                <div className="btn-status" id="package-stats" onClick={showStatsModal.bind(this, pack.packageName)}>Stats</div>
+                </div>                
             </span>
         );
         const legacyBlock = (
@@ -55,14 +56,14 @@ class ListItem extends Component {
             </span>
         );
         return (
-            <button className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
+            <div className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
                 {pack.packageName}
                 {pack.inDirector ?
                     directorBlock
                 :
                     legacyBlock
                 }
-            </button>
+            </div>
         );
     }
 }
