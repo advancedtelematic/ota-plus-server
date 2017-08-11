@@ -71,24 +71,6 @@ class GroupsListItem extends Component {
                         </div>
                     </div>
                 </td>
-                    {statistics.processed !== foundGroup.devices.total ?
-                        <td>
-                            <a
-                                href="#"
-                                className="cancel-campaign"
-                                id="campaign-detail-cancel"
-                                title="Cancel the Campaign for this group"
-                                onClick={showCancelGroupModal.bind(this, {
-                                    groupName: foundGroup.groupName,
-                                    updateRequest: group.updateRequest,
-                                    deviceCount: statistics.deviceCount
-                                })}>
-                                <strong>Cancel</strong>
-                            </a>
-                        </td>
-                    : 
-                        null
-                    }
             </tr>
         );
     }
