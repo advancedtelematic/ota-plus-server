@@ -33,7 +33,9 @@ export default class CampaignsStore {
     @observable campaignsFetchAsync = {};
     @observable campaignsLegacyFetchAsync = {};
     @observable campaignsOneFetchAsync = {};
+    @observable campaignsOneSafeFetchAsync = {};
     @observable campaignsOneStatisticsFetchAsync = {};
+    @observable campaignsOneSafeStatisticsFetchAsync = {};
     @observable campaignsCreateAsync = {};
     @observable campaignsLegacyCreateAsync = {};
     @observable campaignsLaunchAsync = {};
@@ -57,7 +59,9 @@ export default class CampaignsStore {
         resetAsync(this.campaignsFetchAsync);
         resetAsync(this.campaignsLegacyFetchAsync);
         resetAsync(this.campaignsOneFetchAsync);
+        resetAsync(this.campaignsOneSafeFetchAsync);
         resetAsync(this.campaignsOneStatisticsFetchAsync);
+        resetAsync(this.campaignsOneSafeStatisticsFetchAsync);
         resetAsync(this.campaignsCreateAsync);
         resetAsync(this.campaignsLegacyCreateAsync);
         resetAsync(this.campaignsPackageSaveAsync);
@@ -236,6 +240,51 @@ export default class CampaignsStore {
             }.bind(this))
             .catch(function (error) {
                 this.fetchLegacyCampaign(id);
+            }.bind(this));
+    }
+
+    fetchCampaignSafe(id) {
+        resetAsync(this.campaignsOneSafeFetchAsync, true);
+        return axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + id)
+            .then(function (response) {
+                resetAsync(this.campaignsOneSafeStatisticsFetchAsync, true);
+                this.campaignsOneSafeFetchAsync = handleAsyncSuccess(response);
+                axios.get(API_CAMPAIGNS_CAMPAIGN_STATISTICS + '/' + id + '/stats')
+                    .then(function (resp) {
+                        let data = response.data;
+                        data.statistics = resp.data;
+                        this.campaign = data;
+                        this.campaignsOneSafeStatisticsFetchAsync = handleAsyncSuccess(resp);
+                    }.bind(this))
+                    .catch(function (err) {
+                        this.campaignsOneSafeStatisticsFetchAsync = handleAsyncError(err);
+                    }.bind(this));
+            }.bind(this))
+            .catch(function (error) {
+                this.fetchLegacyCampaignSafe(id);
+            }.bind(this));
+    }
+
+    fetchLegacyCampaignSafe(id) {
+        resetAsync(this.campaignsOneSafeFetchAsync, true);
+        return axios.get(API_CAMPAIGNS_LEGACY_INDIVIDUAL_FETCH + '/' + id)
+            .then(function (response) {
+                resetAsync(this.campaignsOneSafeStatisticsFetchAsync, true);
+                this.campaignsOneSafeFetchAsync = handleAsyncSuccess(response);
+                axios.get(API_CAMPAIGNS_LEGACY_CAMPAIGN_STATISTICS + '/' + id + '/statistics')
+                    .then(function (resp) {
+                        let data = response.data;
+                        data.statistics = resp.data;
+                        this.campaign = data;
+                        this.campaign.isLegacy = true;
+                        this.campaignsOneSafeStatisticsFetchAsync = handleAsyncSuccess(resp);
+                    }.bind(this))
+                    .catch(function (err) {
+                        this.campaignsOneSafeStatisticsFetchAsync = handleAsyncError(err);
+                    }.bind(this));
+            }.bind(this))
+            .catch(function (error) {
+                this.campaignsOneFetchAsync = handleAsyncError(error);
             }.bind(this));
     }
 
@@ -433,7 +482,9 @@ export default class CampaignsStore {
 
     _resetWizard() {
         resetAsync(this.campaignsOneFetchAsync);
+        resetAsync(this.campaignsOneSafeFetchAsync);
         resetAsync(this.campaignsOneStatisticsFetchAsync);
+        resetAsync(this.campaignsOneSafeStatisticsFetchAsync);
         resetAsync(this.campaignsPackageSaveAsync);
         resetAsync(this.campaignsGroupsSaveAsync);
         resetAsync(this.campaignsLaunchAsync);
@@ -445,7 +496,9 @@ export default class CampaignsStore {
         resetAsync(this.campaignsFetchAsync);
         resetAsync(this.campaignsLegacyFetchAsync);
         resetAsync(this.campaignsOneFetchAsync);
+        resetAsync(this.campaignsOneSafeFetchAsync);
         resetAsync(this.campaignsOneStatisticsFetchAsync);
+        resetAsync(this.campaignsOneSafeStatisticsFetchAsync);
         resetAsync(this.campaignsCreateAsync);
         resetAsync(this.campaignsLegacyCreateAsync);
         resetAsync(this.campaignsPackageSaveAsync);
