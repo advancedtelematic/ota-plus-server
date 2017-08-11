@@ -9,8 +9,6 @@ import { translate } from 'react-i18next';
 import { CampaignTuf, CampaignLegacy } from '../components/campaign';
 import _ from 'underscore';
 
-const AUTO_REFRESH_TIME = 10000;
-
 @observer
 class Campaign extends Component {
     @observable cancelCampaignModalShown = false;
@@ -23,18 +21,7 @@ class Campaign extends Component {
         this.hideCancelCampaignModal = this.hideCancelCampaignModal.bind(this);
         this.showCancelGroupModal = this.showCancelGroupModal.bind(this);
         this.hideCancelGroupModal = this.hideCancelGroupModal.bind(this);
-        this.autoRefresh = this.autoRefresh.bind(this);
-        setTimeout(this.autoRefresh, AUTO_REFRESH_TIME);
     }
-
-    autoRefresh() {
-        if(!_.isEmpty(this.props.campaignsStore.campaign) &&
-            (this.props.campaignsStore.campaign.statistics.status === "prepared" || this.props.campaignsStore.campaign.statistics.status === "scheduled")) {
-            this.props.campaignsStore.fetchCampaign(this.props.campaignsStore.campaign.id);
-            setTimeout(this.autoRefresh, AUTO_REFRESH_TIME);
-        }
-    }
-
     showCancelCampaignModal(e) {
         if(e) e.preventDefault();
         this.cancelCampaignModalShown = true;

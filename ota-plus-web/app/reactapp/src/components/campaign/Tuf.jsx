@@ -5,10 +5,21 @@ import { Doughnut } from 'react-chartjs';
 import { FlatButton } from 'material-ui';
 import CampaignGroupsList from './GroupsList';
 
+const AUTO_REFRESH_TIME = 10000;
+
 @observer
 class Tuf extends Component {
     constructor(props) {
         super(props);
+        this.autoRefresh = this.autoRefresh.bind(this);
+        setTimeout(this.autoRefresh, AUTO_REFRESH_TIME);
+    }
+    autoRefresh() {
+        if(!_.isEmpty(this.props.campaignsStore.campaign) &&
+            (this.props.campaignsStore.campaign.statistics.status === "prepared" || this.props.campaignsStore.campaign.statistics.status === "scheduled")) {
+            this.props.campaignsStore.fetchCampaignSafe(this.props.campaignsStore.campaign.id);
+            setTimeout(this.autoRefresh, AUTO_REFRESH_TIME);
+        }
     }
     render() {
         const { campaignsStore, groupsStore, showCancelGroupModal } = this.props;
