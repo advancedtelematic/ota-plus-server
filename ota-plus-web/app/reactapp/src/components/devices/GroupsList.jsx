@@ -56,7 +56,11 @@ class GroupsList extends Component {
                         if(group.name === 'all') {
                             deviceCount = devicesStore.devicesInitialTotalCount;
                         } else if(group.name === 'ungrouped') {
-                            deviceCount = devicesStore.ungroupedDevicesInitialTotalCount ? devicesStore.ungroupedDevicesInitialTotalCount : 0;
+                            let groupedDevicesCount = 0;
+                            _.each(groupsStore.groups, (group, index) => {
+                                groupedDevicesCount += group.devices.total;
+                            });
+                            deviceCount = devicesStore.devicesInitialTotalCount - groupedDevicesCount;
                         }
                         return (
                             <GroupsListItemArtificial
