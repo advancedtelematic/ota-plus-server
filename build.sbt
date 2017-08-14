@@ -31,7 +31,7 @@ def otaPlusProject(name: String): Project = Project(name, file(name))
     .settings(shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project + "> " })
     .settings(fullResolvers := Seq(
       Resolver.defaultLocal,
-      "ATS Public" at "http://nexus.prod01.internal.advancedtelematic.com:8081/content/groups/public/",
+      "ATS Public" at "http://nexus.advancedtelematic.com:8081/content/groups/public/",
       DefaultMavenRepository,
       projectResolver.value,
       "version99 Empty loggers" at "http://version99.qos.ch"
@@ -50,8 +50,8 @@ def otaPlusProject(name: String): Project = Project(name, file(name))
     .settings(buildInfoOptions ++= Seq(BuildInfoOption.ToJson, BuildInfoOption.ToMap))
 
 lazy val atsRepos = Seq(
-  "ATS Releases" at "http://nexus.prod01.internal.advancedtelematic.com:8081/content/repositories/releases",
-  "ATS Snapshots" at "http://nexus.prod01.internal.advancedtelematic.com:8081/content/repositories/snapshots"
+  "ATS Releases" at "http://nexus.advancedtelematic.com:8081/content/repositories/releases",
+  "ATS Snapshots" at "http://nexus.advancedtelematic.com:8081/content/repositories/snapshots"
 )
 
 lazy val otaPlusWeb = otaPlusProject("ota-plus-web")
