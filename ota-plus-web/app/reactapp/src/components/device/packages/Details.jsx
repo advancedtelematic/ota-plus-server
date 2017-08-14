@@ -44,11 +44,11 @@ class Details extends Component {
 		});
 		return isAutoInstallEnabled ? isAutoInstallEnabled : false;
 	}
-	generateIdTag(tagName, expandedVersion) {
-		return tagName + '-' + expandedVersion.id.version.substring(0,8);
+	generateIdTag(tagName, expandedPack) {
+		return tagName + '-' + expandedPack.id.version.substring(0,8);
 	}
     render() {
-    	const { packagesStore, devicesStore, expandedVersion, showPackageBlacklistModal, installPackage, multiTargetUpdate, device } = this.props;
+    	const { packagesStore, devicesStore, expandedPack, showPackageBlacklistModal, installPackage, multiTargetUpdate, device } = this.props;
 
     	let blacklistComment = null;
     	let isPackageBlacklisted = false;
@@ -57,218 +57,221 @@ class Details extends Component {
     	let isAutoInstallEnabled = false;
     	let unmanaged = false;
 
-    	if(expandedVersion && !expandedVersion.unmanaged) {
-	    	blacklistComment = this.getBlacklistComment(expandedVersion);
-	    	isPackageBlacklisted = this.isPackageBlacklisted(expandedVersion);
-	    	isPackageQueued = this.isPackageQueued(expandedVersion);
-	    	isPackageInstalled = this.isPackageInstalled(expandedVersion);
-	    	isAutoInstallEnabled = this.isAutoInstallEnabled(expandedVersion);
-    	} else if(expandedVersion && expandedVersion.unmanaged) {
+    	if(expandedPack && !expandedPack.unmanaged) {
+	    	blacklistComment = this.getBlacklistComment(expandedPack);
+	    	isPackageBlacklisted = this.isPackageBlacklisted(expandedPack);
+	    	isPackageQueued = this.isPackageQueued(expandedPack);
+	    	isPackageInstalled = this.isPackageInstalled(expandedPack);
+	    	isAutoInstallEnabled = this.isAutoInstallEnabled(expandedPack);
+    	} else if(expandedPack && expandedPack.unmanaged) {
     		unmanaged = true;
     	}
-
+		const unmanagedPackage = (
+			<div className="wrapper-center absolute-position">
+                Unmanaged package
+            </div>
+		);
+		const noPackage = (
+    		<div className="wrapper-center absolute-position">
+                Select the package version to see its details.
+            </div>
+		);
         return (
         	<div className="details-wrapper">
-	        	{expandedVersion && !unmanaged ? 
-    				<div className="details">	        	
-			        	<div className="top">
-			        		<div className="title" id={"image-title-" + expandedVersion.id.name}>{expandedVersion.id.name}</div>
+	        	{expandedPack && !unmanaged ? 
+    				<div className="details">
+    					<div className="top">
+			        		<div className="title" id={"image-title-" + expandedPack.id.name}>{expandedPack.id.name}</div>
 				        		<div className="status">
-				        			{isPackageBlacklisted && (isPackageInstalled || expandedVersion.isInstalled) ?
+				        			{isPackageBlacklisted && (isPackageInstalled || expandedPack.isInstalled) ?
 				        				<div className="status-container blacklisted-installed">
-				        					<img src="/assets/img/icons/red_cross.png" alt="" id={this.generateIdTag('blacklisted-and-installed-icon', expandedVersion)} />
-			        			 			<span id={this.generateIdTag('blacklisted-and-installed', expandedVersion)}>
+				        					<img src="/assets/img/icons/red_cross.png" alt="" id={this.generateIdTag('blacklisted-and-installed-icon', expandedPack)} />
+			        			 			<span id={this.generateIdTag('blacklisted-and-installed', expandedPack)}>
 			        			 				Installed
 		        			 				</span>	        			 	        		
 				        				</div>
 				        			: isPackageBlacklisted ?
 				        				<div className="status-container blacklisted">
-				        					<img src="/assets/img/icons/ban_red.png" alt="" id={this.generateIdTag('blacklisted-icon', expandedVersion)} />
-			        			 			<span id={this.generateIdTag('blacklisted', expandedVersion)}>
+				        					<img src="/assets/img/icons/ban_red.png" alt="" id={this.generateIdTag('blacklisted-icon', expandedPack)} />
+			        			 			<span id={this.generateIdTag('blacklisted', expandedPack)}>
 			        			 				Blacklisted
 			        			 			</span>	        			 	        		
 				        				</div>
 				        			: isPackageQueued ? 
 				        				<div className="status-container queued">
 			        						<span className="fa-stack queued">
-				                                <i className="fa fa-dot-circle-o fa-stack-1x" aria-hidden="true" id={this.generateIdTag('queued-icon', expandedVersion)}></i>
+				                                <i className="fa fa-dot-circle-o fa-stack-1x" aria-hidden="true" id={this.generateIdTag('queued-icon', expandedPack)}></i>
 				                            </span>
-			        						<span className="status-name" id={this.generateIdTag('queued', expandedVersion)}>
+			        						<span className="status-name" id={this.generateIdTag('queued', expandedPack)}>
 			        							Queued
 			        						</span>
 			        					</div>
-			        				: isPackageInstalled || expandedVersion.isInstalled ? 
+			        				: isPackageInstalled || expandedPack.isInstalled ? 
 				        				<div className="status-container installed">
-				        					<img src="/assets/img/icons/check.png" alt="" id={this.generateIdTag('installed-icon', expandedVersion)} />
-				        					<span id={this.generateIdTag('image-installed', expandedVersion)}>
+				        					<img src="/assets/img/icons/check.png" alt="" id={this.generateIdTag('installed-icon', expandedPack)} />
+				        					<span id={this.generateIdTag('image-installed', expandedPack)}>
 				        						Installed
 				        					</span>
 				        				</div>
 			        				: 
-				        				<div className="status-container not-installed" id={this.generateIdTag('not-installed', expandedVersion)}>
+				        				<div className="status-container not-installed" id={this.generateIdTag('not-installed', expandedPack)}>
 				        					Not installed
 				        				</div>
 			    					}
 				        		</div>
 			        	</div>
-			        	<div className="bottom">
-			        		{!device.isDirector ? 
-			        			<span>
-			        				<div className="version">
-						        		<span className = "sub-title">Version / hash:</span>
-						        		<span className="value" id={this.generateIdTag('version-hash-value', expandedVersion)}>
-						        			{expandedVersion.id.version}
-						        		</span>
-					        		</div>
-						            <div className="hash">
-										<span className = "sub-title">Package identifier:</span>
-						        		<span className="value" id={this.generateIdTag('package-identifier-value', expandedVersion)}>
-						        			{expandedVersion.uuid}
-						        		</span>
-					        		</div>
-					        		<div className="created">
-										<span className = "sub-title">Created at:</span>
-						        		<span className="value">
-						        			{moment(expandedVersion.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}
-						        		</span>
-					        		</div>
-				        			<div className="vendor">
-						            	<span className = "sub-title">Vendor:</span>
-						        		<span className="value">
-						        			{expandedVersion.vendor}
-						        		</span>
-						            </div>
-			        			</span>
-		        			:
-		        				<span>
-		        					<div className="name">
-						        		<span className = "sub-title">Name:</span>
-						        		<span className="value" id={this.generateIdTag('version-name-value', expandedVersion)}>
-						        			{expandedVersion.customExists ? expandedVersion.id.name : "Not reported"}
-						        		</span>
-					        		</div>
-					        		<div className="created">
-										<span className = "sub-title">Created at:</span>
-						        		<span className="value" id={this.generateIdTag('version-created-at-value', expandedVersion)}>
-						        			{moment(expandedVersion.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}
-						        		</span>
-					        		</div>
-					        		<div className="updated">
-										<span className = "sub-title">Updated at:</span>
-						        		<span className="value" id={this.generateIdTag('version-updated-at-value', expandedVersion)}>
-						        			{moment(expandedVersion.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}
-						        		</span>
-					        		</div>
-						            <div className="version">
-						        		<span className = "sub-title">Version:</span>
-						        		<span className="value" id={this.generateIdTag('version-value', expandedVersion)}>
-						        			{expandedVersion.customExists ? expandedVersion.id.version : "Not reported"}
-						        		</span>
-					        		</div>
-					        		<div className="hash">
-						        		<span className = "sub-title">Hash:</span>
-						        		<span className="value" id={this.generateIdTag('version-hash-value', expandedVersion)}>
-						        			{expandedVersion.packageHash}
-						        		</span>
-					        		</div>
-					        		<div className="hash-length">
-						        		<span className = "sub-title">Length:</span>
-						        		<span className="value" id={this.generateIdTag('version-hash-length-value', expandedVersion)}>
-						        			{expandedVersion.targetLength}
-						        		</span>
-					        		</div>
-					        		<div className="hardware-ids">
-						        		<span className = "sub-title">Hardware ids:</span>
-						        		<span className="value" id={this.generateIdTag('version-hardware-ids-value', expandedVersion)}>
-						        			{_.map(expandedVersion.hardwareIds, (hardwareId, index) => {
-		                                         return (
-		                                            <span className="hardware-label" key={index}>
-		                                                {hardwareId}
-		                                            </span>
-		                                        );
-		                                    })}
-						        		</span>
-					        		</div>
-		        				</span>
-		        			}				        	
-			        	</div>
-			        	{!device.isDirector ?
-			        		<span>
-					        	<div className="comments">
-			        				<PackagesComment
-			        					version={expandedVersion}
-			        					packagesStore={packagesStore}
-			        					key={expandedVersion.uuid}
-					        		/>
+    					{device.isDirector ?
+    						<div>
+					        	<div className="bottom">
+					        		<span>
+			        					<div className="name">
+							        		<span className = "sub-title">Name:</span>
+							        		<span className="value" id={this.generateIdTag('version-name-value', expandedPack)}>
+							        			{expandedPack.customExists ? expandedPack.id.name : "Not reported"}
+							        		</span>
+						        		</div>
+						        		<div className="created">
+											<span className = "sub-title">Created at:</span>
+							        		<span className="value" id={this.generateIdTag('version-created-at-value', expandedPack)}>
+							        			{moment(expandedPack.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}
+							        		</span>
+						        		</div>
+						        		<div className="updated">
+											<span className = "sub-title">Updated at:</span>
+							        		<span className="value" id={this.generateIdTag('version-updated-at-value', expandedPack)}>
+							        			{moment(expandedPack.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}
+							        		</span>
+						        		</div>
+							            <div className="version">
+							        		<span className = "sub-title">Version:</span>
+							        		<span className="value" id={this.generateIdTag('version-value', expandedPack)}>
+							        			{expandedPack.customExists ? expandedPack.id.version : "Not reported"}
+							        		</span>
+						        		</div>
+						        		<div className="hash">
+							        		<span className = "sub-title">Hash:</span>
+							        		<span className="value" id={this.generateIdTag('version-hash-value', expandedPack)}>
+							        			{expandedPack.packageHash}
+							        		</span>
+						        		</div>
+						        		<div className="hash-length">
+							        		<span className = "sub-title">Length:</span>
+							        		<span className="value" id={this.generateIdTag('version-hash-length-value', expandedPack)}>
+							        			{expandedPack.targetLength}
+							        		</span>
+						        		</div>
+						        		<div className="hardware-ids">
+							        		<span className = "sub-title">Hardware ids:</span>
+							        		<span className="value" id={this.generateIdTag('version-hardware-ids-value', expandedPack)}>
+							        			{_.map(expandedPack.hardwareIds, (hardwareId, index) => {
+			                                         return (
+			                                            <span className="hardware-label" key={index}>
+			                                                {hardwareId}
+			                                            </span>
+			                                        );
+			                                    })}
+							        		</span>
+						        		</div>
+			        				</span>
 					        	</div>
-					        	<button className={"btn-blacklist blacklist" + (isPackageBlacklisted ? " package-blacklisted" : "")} id={this.generateIdTag('blacklist-button', expandedVersion)}
-					        		onClick={isPackageBlacklisted ? 
-					        			showPackageBlacklistModal.bind(this, expandedVersion.id.name, expandedVersion.id.version, 'edit')
-				        				: 
-				        				showPackageBlacklistModal.bind(this, expandedVersion.id.name, expandedVersion.id.version, 'add')
-				        			}>
-					        		<span className="text">			    
-					        			{blacklistComment ?
-					        				blacklistComment
-				        				:
-				        					!packagesStore.packagesBlacklistAsync.isFetching ?
-				        						"Blacklist Package"
-			        						:
-			        							""
-				        				}
-					        		</span>
-					        		{!isPackageBlacklisted ?
-					        			<span className="btn-blacklist">
+					        	<div className="install multi-target">
+				                	<button 
+			                            className="btn-main btn-install"
+			                            label="Install"
+			                            title="Install"
+			                            id={"button-install-package-" + expandedPack.id.name + "-" + expandedPack.id.version}
+			                            onClick={multiTargetUpdate.bind(this, {
+			                            	target: expandedPack.imageName, 
+			                            	hash: expandedPack.packageHash, 
+			                            	targetLength: expandedPack.targetLength,
+			                            	targetFormat: expandedPack.targetFormat, 
+			                            	generateDiff: false 
+			                            })}
+			                            disabled={isPackageBlacklisted || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || expandedPack.isInstalled || Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length }>
+			                            Install
+			                        </button>
+					        	</div>
+				        	</div>
+						:
+							<div>
+								<div className="bottom">
+					        		<span>
+				        				<div className="version">
+							        		<span className = "sub-title">Version / hash:</span>
+							        		<span className="value" id={this.generateIdTag('version-hash-value', expandedPack)}>
+							        			{expandedPack.id.version}
+							        		</span>
+						        		</div>
+							            <div className="hash">
+											<span className = "sub-title">Package identifier:</span>
+							        		<span className="value" id={this.generateIdTag('package-identifier-value', expandedPack)}>
+							        			{expandedPack.uuid}
+							        		</span>
+						        		</div>
+						        		<div className="created">
+											<span className = "sub-title">Created at:</span>
+							        		<span className="value">
+							        			{moment(expandedPack.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}
+							        		</span>
+						        		</div>
+					        			<div className="vendor">
+							            	<span className = "sub-title">Vendor:</span>
+							        		<span className="value">
+							        			{expandedPack.vendor}
+							        		</span>
+							            </div>
+				        			</span>
+					        	</div>
+					        	<span>
+						        	<div className="comments">
+				        				<PackagesComment
+				        					version={expandedPack}
+				        					packagesStore={packagesStore}
+				        					key={expandedPack.uuid}
+						        		/>
+						        	</div>
+						        	<button className={"btn-blacklist blacklist" + (isPackageBlacklisted ? " package-blacklisted" : "")} id={this.generateIdTag('blacklist-button', expandedPack)}
+						        		onClick={isPackageBlacklisted ? 
+						        			showPackageBlacklistModal.bind(this, expandedPack.id.name, expandedPack.id.version, 'edit')
+					        				: 
+					        				showPackageBlacklistModal.bind(this, expandedPack.id.name, expandedPack.id.version, 'add')
+					        			}>
+						        		<span className="text">			    
+						        			{blacklistComment ?
+						        				blacklistComment
+					        				:
+					        					!packagesStore.packagesBlacklistAsync.isFetching ?
+					        						"Blacklist Package"
+				        						:
+				        							""
+					        				}
 						        		</span>
-					        		:
-					        			null
-					        		}
-					        	</button>
-				        	</span>
-			        	:
-			        		null 
-			        	}
-			        	{device.isDirector ?
-		        			<div className="install multi-target">
-			                	<button 
-		                            className="btn-main btn-install"
-		                            label="Install"
-		                            title="Install"
-		                            id={"button-install-package-" + expandedVersion.id.name + "-" + expandedVersion.id.version}
-		                            onClick={multiTargetUpdate.bind(this, {
-		                            	target: expandedVersion.imageName, 
-		                            	hash: expandedVersion.packageHash, 
-		                            	targetLength: expandedVersion.targetLength,
-		                            	targetFormat: expandedVersion.targetFormat, 
-		                            	generateDiff: false 
-		                            })}
-		                            disabled={isPackageBlacklisted || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || expandedVersion.isInstalled || Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length }>
-		                            Install
-		                        </button>
+						        		{!isPackageBlacklisted ?
+						        			<span className="btn-blacklist">
+							        		</span>
+						        		:
+						        			null
+						        		}
+						        	</button>
+					        	</span>
+					        	<div className="install">
+				                	<button 
+			                            className="btn-main btn-install"
+			                            label="Install"
+			                            title="Install"
+			                            id={"button-install-package-" + expandedPack.id.name + "-" + expandedPack.id.version}
+			                            onClick={installPackage.bind(this, {name: expandedPack.id.name, version: expandedPack.id.version})}
+			                            disabled={isPackageBlacklisted || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || expandedPack.isInstalled}>
+			                            Install
+			                        </button>
+					        	</div>
 				        	</div>
-		        		:
-		        			<div className="install">
-			                	<button 
-		                            className="btn-main btn-install"
-		                            label="Install"
-		                            title="Install"
-		                            id={"button-install-package-" + expandedVersion.id.name + "-" + expandedVersion.id.version}
-		                            onClick={installPackage.bind(this, {name: expandedVersion.id.name, version: expandedVersion.id.version})}
-		                            disabled={isPackageBlacklisted || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || expandedVersion.isInstalled}>
-		                            Install
-		                        </button>
-				        	</div>
-			        	}
-			        	
+						}			        	
 		        	</div>
     			: unmanaged ?
-    				<div className="wrapper-center absolute-position">
-	                    Unmanaged package
-	                </div>
+    				unmanagedPackage
     			:
-		        	<div className="wrapper-center absolute-position">
-	                    Select the package version to see its details.
-	                </div>
+		        	noPackage
 	        	}
         	</div>
 
@@ -279,7 +282,7 @@ class Details extends Component {
 Details.propTypes = {
     packagesStore: PropTypes.object.isRequired,
     devicesStore: PropTypes.object.isRequired,
-    expandedVersion: PropTypes.object,
+    expandedPack: PropTypes.object,
     showPackageBlacklistModal: PropTypes.func.isRequired,
     installPackage: PropTypes.func.isRequired,
     multiTargetUpdate: PropTypes.func.isRequired,

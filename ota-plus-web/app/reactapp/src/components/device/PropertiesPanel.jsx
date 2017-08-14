@@ -38,7 +38,7 @@ class PropertiesPanel extends Component {
         this.shouldShowPackagesDetails = true;
     }
     render() {
-        const { devicesStore, showPackageCreateModal, showPackageBlacklistModal, onFileDrop, packagesStore, expandedVersion, installPackage, multiTargetUpdate, device, togglePackageAutoUpdate } = this.props;
+        const { devicesStore, showPackageCreateModal, showPackageBlacklistModal, onFileDrop, packagesStore, expandedPack, installPackage, multiTargetUpdate, device, togglePackageAutoUpdate } = this.props;
         let attributesFetching = packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesForDeviceFetchAsync.isFetching || packagesStore.packagesOndeviceFetchAsync.isFetching;
         return (
             <div className="properties-panel">
@@ -83,7 +83,7 @@ class PropertiesPanel extends Component {
                                 <PackagesDetails
                                     packagesStore={packagesStore}
                                     devicesStore={devicesStore}
-                                    expandedVersion={expandedVersion}
+                                    expandedPack={expandedPack}
                                     showPackageBlacklistModal={showPackageBlacklistModal}
                                     installPackage={installPackage}
                                     multiTargetUpdate={multiTargetUpdate}
@@ -92,7 +92,7 @@ class PropertiesPanel extends Component {
                             :
                                 <PropertiesOnDeviceList
                                     packagesStore={packagesStore}
-                                    expandedVersion={expandedVersion}
+                                    expandedPack={expandedPack}
                                     device={device}
                                     showPackageBlacklistModal={showPackageBlacklistModal}
                                     onFileDrop={onFileDrop}
@@ -111,7 +111,7 @@ PropertiesPanel.propTypes = {
     showPackageBlacklistModal: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,
     togglePackageAutoUpdate: PropTypes.func.isRequired,
-    expandedVersion: PropTypes.object,
+    expandedPack: PropTypes.object,
     installPackage: PropTypes.func.isRequired,
     multiTargetUpdate: PropTypes.func.isRequired,
     device: PropTypes.object.isRequired,

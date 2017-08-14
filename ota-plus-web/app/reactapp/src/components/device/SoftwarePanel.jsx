@@ -21,7 +21,7 @@ class SoftwarePanel extends Component {
         this.props.packagesStore.fetchPackages(filter);
     }
     render() {
-        const { devicesStore, packagesStore, hardwareStore, device, togglePackageAutoUpdate, toggleTufPackageAutoUpdate, onFileDrop, expandedVersion, loadPackageVersionProperties, activeEcu } = this.props;
+        const { devicesStore, packagesStore, hardwareStore, device, togglePackageAutoUpdate, toggleTufPackageAutoUpdate, onFileDrop, expandedPack, loadPackageVersionProperties, activeEcu } = this.props;
         return (
             <div className="software-panel">
                 <div className="darkgrey-header">
@@ -43,7 +43,7 @@ class SoftwarePanel extends Component {
                                     onFileDrop={onFileDrop}
                                     togglePackageAutoUpdate={togglePackageAutoUpdate}
                                     toggleTufPackageAutoUpdate={toggleTufPackageAutoUpdate}
-                                    expandedVersion={expandedVersion}
+                                    expandedPack={expandedPack}
                                     loadPackageVersionProperties={loadPackageVersionProperties}
                                     activeEcu={activeEcu}
                                 />
@@ -73,7 +73,7 @@ SoftwarePanel.propTypes = {
     togglePackageAutoUpdate: PropTypes.func.isRequired,
     toggleTufPackageAutoUpdate: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,
-    expandedVersion: PropTypes.object,
+    expandedPack: PropTypes.object,
     loadPackageVersionProperties: PropTypes.func.isRequired,
     activeEcu: PropTypes.object,
 }
