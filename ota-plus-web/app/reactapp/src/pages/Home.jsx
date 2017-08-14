@@ -15,6 +15,7 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.redirectTo = this.redirectTo.bind(this);
+        this.sanityCheckCompleted = this.sanityCheckCompleted.bind(this);
     }
     componentWillMount() {
         this.props.devicesStore.fetchDevices();
@@ -28,21 +29,26 @@ class Home extends Component {
         this.props.campaignsStore._reset();
         this.props.groupsStore._reset();
     }
+    sanityCheckCompleted() {
+        return this.props.systemReady || Cookies.get('systemReady') == 1;
+    }
     componentWillReceiveProps(nextProps) {
-        this.router = nextProps.router;
-        let initialDevicesCount = nextProps.initialDevicesCount;
-        let onlineDevicesCount = nextProps.onlineDevicesCount;
+        if(this.sanityCheckCompleted()) {            
+            this.router = nextProps.router;
+            let initialDevicesCount = nextProps.initialDevicesCount;
+            let onlineDevicesCount = nextProps.onlineDevicesCount;
 
-        if(initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') != 1) {
-            this.redirectTo('welcome');
-        }
-        if(initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') == 1) {
-            this.redirectTo('destiny');
-        }
-        if(onlineDevicesCount === 1 && Cookies.get('fireworksPageAcknowledged') != 1            
-            && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') 
-            && !this.router.isActive('/fireworks')) {
-                this.redirectTo('fireworks');
+            if(initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') != 1) {
+                this.redirectTo('welcome');
+            }
+            if(initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') == 1) {
+                this.redirectTo('destiny');
+            }
+            if(onlineDevicesCount === 1 && Cookies.get('fireworksPageAcknowledged') != 1            
+                && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') 
+                && !this.router.isActive('/fireworks')) {
+                    this.redirectTo('fireworks');
+            }
         }
     }
     redirectTo(page, query = null) {
@@ -53,11 +59,11 @@ class Home extends Component {
         }
     }
     render() {
-        const { devicesStore, packagesStore, campaignsStore, groupsStore, hardwareStore, userStore, provisioningStore, featuresStore, systemReady, setSystemReady, addNewWizard } = this.props;
+        const { devicesStore, packagesStore, campaignsStore, groupsStore, hardwareStore, userStore, provisioningStore, featuresStore, setSystemReady, addNewWizard } = this.props;
         return (
             <FadeAnimation
                 display="flex">
-                {systemReady || Cookies.get('systemReady') == 1 ?
+                {this.sanityCheckCompleted() ?
                         <div className="wrapper-flex">
                             <Header
                                 title={title}
