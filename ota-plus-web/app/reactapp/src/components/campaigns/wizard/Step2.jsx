@@ -24,7 +24,7 @@ class WizardStep2 extends Component {
     togglePackage(chosenPackagesList, pack) {
         let found = _.find(chosenPackagesList, {packageName: pack.packageName});
         if(found) {
-            let index = chosenPackagesList.indexOf(pack.packageName);
+            let index = chosenPackagesList.indexOf(pack);
             chosenPackagesList.splice(index, 1);
         } else {
             chosenPackagesList.push(pack);
