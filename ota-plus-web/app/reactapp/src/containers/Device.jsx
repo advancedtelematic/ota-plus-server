@@ -21,16 +21,14 @@ class Device extends Component {
     @observable fileDropped = null;
     @observable packageBlacklistModalShown = false;
     @observable packageBlacklistAction = {};
-    @observable packageProperties = {};
-    @observable expandedVersion = null;
+    @observable expandedPack = null;
     @observable uploadToTuf = false;
     @observable activeEcu = {
-        ecu: null,
+        hardwareId: null,
         serial: null,
         type: null,
     };
-    @observable multiTargetUpdateStarted = false;
-
+    
     constructor(props) {
         super(props);
         this.showPackageCreateModal = this.showPackageCreateModal.bind(this);
@@ -109,9 +107,9 @@ class Device extends Component {
             serial: serial,
             type: ecuType
         };
-        this.expandedVersion = this.props.packagesStore._getExpandedPackage(installedHash);
-        this.props.packagesStore.fetchDirectorDeviceAutoInstalledPackages(this.props.devicesStore.device.uuid, this.activeEcu.serial);
-        this.props.packagesStore._setQueuedTufPackages(this.props.devicesStore.multiTargetUpdates[this.props.devicesStore.device.uuid], this.activeEcu.serial);
+        this.expandedPack = this.props.packagesStore._getInstalledPackage(installedHash);
+        this.props.packagesStore.fetchDirectorDeviceAutoInstalledPackages(this.props.devicesStore.device.uuid, serial);
+        this.props.packagesStore._setQueuedTufPackages(this.props.devicesStore.multiTargetUpdates[this.props.devicesStore.device.uuid], serial);
     }
     cancelInstallation(requestId) {
         this.props.packagesStore.cancelInstallation(this.props.devicesStore.device.uuid, requestId);
@@ -122,18 +120,18 @@ class Device extends Component {
     }
     loadPackageVersionProperties(version, e) {
         if(version === 'unmanaged') {
-            this.expandedVersion = {
+            this.expandedPack = {
                 unmanaged: true,
                 isInstalled: true
             };
         } else {
             let versionUuid = version.uuid;
             if(e) e.preventDefault();
-            this.expandedVersion = version;
-            this.expandedVersion.isInstalled = this.isVersionInstalled(version);
+            this.expandedPack = version;
+            this.expandedPack.isInstalled = this.isPackInstalled(version);
         }
     }
-    isVersionInstalled(version) {
+    isPackInstalled(version) {
         const { devicesStore } = this.props;
         let installedOnPrimary = false;
         let installedOnSecondary = false;
@@ -180,7 +178,7 @@ class Device extends Component {
                                 toggleTufPackageAutoUpdate={this.toggleTufPackageAutoUpdate}
                                 installPackage={this.installPackage}
                                 onFileDrop={this.onFileDrop}
-                                expandedVersion={this.expandedVersion}
+                                expandedPack={this.expandedPack}
                                 loadPackageVersionProperties={this.loadPackageVersionProperties}
                                 activeEcu={this.activeEcu}
                             />
@@ -190,7 +188,7 @@ class Device extends Component {
                                 showPackageBlacklistModal={this.showPackageBlacklistModal}
                                 onFileDrop={this.onFileDrop}
                                 togglePackageAutoUpdate={this.togglePackageAutoUpdate}
-                                expandedVersion={this.expandedVersion}
+                                expandedPack={this.expandedPack}
                                 installPackage={this.installPackage}
                                 multiTargetUpdate={this.multiTargetUpdate}
                                 device={device}
