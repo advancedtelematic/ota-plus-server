@@ -39,13 +39,17 @@ class CoreList extends Component {
             }
         });
     }
-   
+    componentWillMount() {
+        if(!this.props.device.isDirector) {
+            this.preparedPackages = this.selectPackagesToDisplay();
+        }
+    }
     componentWillReceiveProps(nextProps) {
         this.preparedPackages = this.selectPackagesToDisplay();
         if(this.props.device.isDirector) {
-            if(nextProps.expandedVersion && !nextProps.expandedVersion.unmanaged && !this.packageExpandedManually) {
-                this.expandedPackageName = nextProps.expandedVersion.id.name;
-                this.selectedPackageVersion = nextProps.expandedVersion.id.version;
+            if(nextProps.expandedPack && !nextProps.expandedPack.unmanaged && !this.packageExpandedManually) {
+                this.expandedPackageName = nextProps.expandedPack.id.name;
+                this.selectedPackageVersion = nextProps.expandedPack.id.version;
             }
             else if(!this.packageExpandedManually) {
                 this.expandedPackageName = null;
@@ -172,7 +176,12 @@ class CoreList extends Component {
                         } else {
                             _.map(this.props.device.directorAttributes.secondary, (secondaryObj, ind) => {
                                 if(version.id.version === secondaryObj.image.hash.sha256) {
-                                    dirPacks[letter].push(pack);
+                                    let packAdded = _.some(dirPacks[letter], (item, index) => {
+                                        return item.packageName == version.id.name;
+                                    });
+                                    if(!packAdded) {
+                                        dirPacks[letter].push(pack);
+                                    }
                                 }
                             });
                         }
@@ -189,7 +198,7 @@ class CoreList extends Component {
         if(activeEcu.type === 'secondary') {
             let secondaryObject = devicesStore._getSecondaryByHardwareId(activeEcu.hardwareId);
             let reportedHash = secondaryObject.image.hash.sha256;
-            let pack = packagesStore._getExpandedPackage(reportedHash);
+            let pack = packagesStore._getInstalledPackage(reportedHash);
             if(!pack) {
                 let unmanagedPack = {
                     filepath: secondaryObject.image.filepath,
@@ -205,7 +214,7 @@ class CoreList extends Component {
         }
     }
     render() {
-        const { devicesStore, packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, toggleTufPackageAutoUpdate, expandedVersion, loadPackageVersionProperties, activeEcu } = this.props;
+        const { devicesStore, packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, toggleTufPackageAutoUpdate, expandedPack, loadPackageVersionProperties, activeEcu } = this.props;
         let preparedPackages = this.preparedPackages;
         return (
             <div className="ios-list" ref="list">
@@ -336,7 +345,7 @@ class CoreList extends Component {
                                                                             version={version}
                                                                             queuedPackage={queuedPackage}
                                                                             installedPackage={installedPackage}
-                                                                            expandedVersion={expandedVersion}
+                                                                            expandedPack={expandedPack}
                                                                             loadPackageVersionProperties={loadPackageVersionProperties}
                                                                             togglePackageVersion={this.togglePackageVersion}
                                                                             selectedPackageVersion={this.selectedPackageVersion}
@@ -373,7 +382,7 @@ CoreList.propTypes = {
     onFileDrop: PropTypes.func.isRequired,
     togglePackageAutoUpdate: PropTypes.func.isRequired,
     toggleTufPackageAutoUpdate: PropTypes.func.isRequired,
-    expandedVersion: PropTypes.object,
+    expandedPack: PropTypes.object,
     loadPackageVersionProperties: PropTypes.func.isRequired,
     activeEcu: PropTypes.object,
 }

@@ -109,10 +109,10 @@ class OnDeviceList extends Component {
         this.tmpIntervalId = null;
     }
     render() {
-        const { packagesStore, expandedVersion, device, showPackageBlacklistModal, onFileDrop } = this.props;
+        const { packagesStore, expandedPack, device, showPackageBlacklistModal, onFileDrop } = this.props;
         return (
             <div className="ios-list" ref="list">
-                {expandedVersion && !expandedVersion.isInstalled && device.isDirector ?
+                {expandedPack && !expandedPack.isInstalled && device.isDirector ?
                     <div className="wrapper-center">
                         None reported for the current selection
                     </div>
@@ -171,7 +171,7 @@ class OnDeviceList extends Component {
 
 OnDeviceList.propTypes = {
     packagesStore: PropTypes.object.isRequired,
-    expandedVersion: PropTypes.object,
+    expandedPack: PropTypes.object,
     device: PropTypes.object.isRequired,
     showPackageBlacklistModal: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,

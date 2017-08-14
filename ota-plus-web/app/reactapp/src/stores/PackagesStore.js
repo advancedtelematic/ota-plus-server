@@ -881,7 +881,7 @@ export default class PackagesStore {
         return found ? found : null;
     }
 
-    _getExpandedPackage(version) {
+    _getInstalledPackage(version) {
         let found = _.find(this.packages, (pack) => {
             return pack.id.version === version;
         });
