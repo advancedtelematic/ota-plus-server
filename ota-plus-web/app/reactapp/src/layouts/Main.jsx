@@ -61,6 +61,7 @@ class Main extends Component {
         this.hideWizard = this.hideWizard.bind(this);
         this.toggleWizard = this.toggleWizard.bind(this);
         this.toggleUploadBoxMode = this.toggleUploadBoxMode.bind(this);
+        this.sanityCheckCompleted = this.sanityCheckCompleted.bind(this);
         this.devicesStore = new DevicesStore();
         this.hardwareStore = new HardwareStore();
         this.groupsStore = new GroupsStore();
@@ -146,6 +147,9 @@ class Main extends Component {
     setSystemReady(value) {
         this.systemReady = value;
     }
+    sanityCheckCompleted() {
+        return this.systemReady || Cookies.get('systemReady') == 1;
+    }
     makeBodyWhite() {
         let pageName = this.props.location.pathname.toLowerCase().split('/')[1];
         if(_.includes(this.pagesWithWhiteBackground, pageName)) {
@@ -179,7 +183,7 @@ class Main extends Component {
                             devicesStore={this.devicesStore}
                             logoLink={logoLink}
                         />
-                    : this.systemReady || Cookies.get('systemReady') == 1 ?
+                    : this.sanityCheckCompleted() ?
                             <Navigation
                                 userStore={this.userStore}
                                 featuresStore={this.featuresStore}
@@ -223,11 +227,11 @@ class Main extends Component {
                 : 
                     null 
                 }
-                {this.systemReady || Cookies.get('systemReady') == 1 ?
+                {this.sanityCheckCompleted() ?
                     <DoorAnimation
                         mode="show"
                     />
-                        :
+                :
                     null
                 }
                 {this.ifLogout ?
