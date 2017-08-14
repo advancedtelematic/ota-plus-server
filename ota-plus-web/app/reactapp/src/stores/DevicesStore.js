@@ -21,7 +21,6 @@ import _ from 'underscore';
 export default class DevicesStore {
 
     @observable devicesFetchAsync = {};
-    @observable devicesUngroupedFetchAsync = {};
     @observable devicesInitialFetchAsync = {};
     @observable devicesRememberedFetchAsync = {};
     @observable devicesFetchAfterDragAndDropAsync = {};
@@ -35,7 +34,6 @@ export default class DevicesStore {
     @observable initialDevices = [];
     @observable devices = [];
     @observable devicesInitialTotalCount = null;
-    @observable ungroupedDevicesInitialTotalCount = null;
     @observable devicesTotalCount = null;
     @observable devicesCurrentPage = 0;
     @observable preparedDevices = [];
@@ -52,7 +50,6 @@ export default class DevicesStore {
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
-        resetAsync(this.devicesUngroupedFetchAsync);
         resetAsync(this.devicesInitialFetchAsync);
         resetAsync(this.devicesRememberedFetchAsync);
         resetAsync(this.devicesFetchAfterDragAndDropAsync);
@@ -170,9 +167,6 @@ export default class DevicesStore {
                 if (this.devicesInitialTotalCount === null && groupId !== 'ungrouped') {
                     this.devicesInitialTotalCount = response.data.total;
                 }
-                if (this.ungroupedDevicesInitialTotalCount === null && groupId === 'ungrouped') {
-                    this.ungroupedDevicesInitialTotalCount = response.data.total;
-                }
 
                 this.devicesCurrentPage++;
                 this.devicesTotalCount = response.data.total;
@@ -181,19 +175,6 @@ export default class DevicesStore {
             })
             .catch((error) => {
                 this.devicesFetchAsync = handleAsyncError(error);
-            });
-    }
-
-    fetchUngroupedDevicesCount() {
-        resetAsync(this.devicesUngroupedFetchAsync, true);
-        let apiAddress = `${API_DEVICES_SEARCH}?ungrouped=true`;
-        return axios.get(apiAddress)
-            .then((response) => {
-                this.ungroupedDevicesInitialTotalCount = response.data.total;
-                this.devicesUngroupedFetchAsync = handleAsyncSuccess(response);
-            })
-            .catch((error) => {
-                this.devicesUngroupedFetchAsync = handleAsyncError(error);
             });
     }
 
@@ -398,7 +379,6 @@ export default class DevicesStore {
 
     _reset() {
         resetAsync(this.devicesFetchAsync);
-        resetAsync(this.devicesUngroupedFetchAsync);
         resetAsync(this.devicesInitialFetchAsync);
         resetAsync(this.devicesRememberedFetchAsync);
         resetAsync(this.devicesFetchAfterDragAndDropAsync);
@@ -412,7 +392,6 @@ export default class DevicesStore {
         this.devices = [];
         this.initialDevices = [];
         this.devicesInitialTotalCount = null;
-        this.ungroupedDevicesInitialTotalCount = null;
         this.devicesTotalCount = null;
         this.devicesCurrentPage = 0;
         this.preparedDevices = [];

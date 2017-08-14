@@ -85,7 +85,6 @@ class Devices extends Component {
         if(device.groupId !== groupId && groupId) {
             this.props.groupsStore.addDeviceToGroup(groupId, device.uuid);
         }
-        this.props.devicesStore.fetchUngroupedDevicesCount();
     }
     changeSort(sort, e) {
         if(e) e.preventDefault();
