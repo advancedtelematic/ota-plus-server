@@ -10,6 +10,7 @@ import {
     PackagesCancelAllUploadsModal
 } from '../components/packages';
 import { ConvertTime, ConvertBytes } from '../utils';
+import Modal from './Modal';
 
 @observer
 class UploadBox extends Component {
@@ -69,7 +70,7 @@ class UploadBox extends Component {
         }
     }
     render() {
-        const { t, packagesStore, minimized } = this.props;
+        const { t, packagesStore, minimized, toggleUploadBoxMode } = this.props;
         const barOptions = {
             strokeWidth: 18,
             easing: 'easeInOut',
@@ -91,131 +92,109 @@ class UploadBox extends Component {
             if(upload.status === null)
                 uploadFinished = false;
         });
-        return (
-            <span>
-                {packagesStore.packagesUploading.length ?
-                    <Draggable
-                        bounds="html"
-                        disabled={true}
-                    >
-                        <div id={minimized ? "" : "upload-box"} className={minimized ? "minimized" : ""}>
-                            <div className="heading">
-                                Uploading {t('common.packageWithCount', {count: packagesStore.packagesUploading.length})}
-                                <a href="#" className="box-toggle pack-box-maximize" title="Toggle upload box size" onClick={this.toggleMode}>
-                                    <i className={"fa toggle-modal-size " + (minimized ? "fa-angle-up" : "fa-angle-down")} aria-hidden="true"></i>
-                                </a>
-                                {!minimized ?
-                                    <a href="#" className="box-close" title="Close" onClick={this.close}>
-                                        <span className="fa-stack close-x">
-                                            <i className="fa fa-angle-down fa-stack-1x"></i>
-                                            <i className="fa fa-angle-up fa-stack-1x"></i>
-                                        </span>
-                                    </a>
-                                :
-                                    null
-                                }
-                            </div>
-                            {!minimized ?
-                                <span>
-                                    <div className="subheading">
-                                        <div className="left">
-                                            {uploadFinished ? 
+        const heading = (
+            <div className="heading">
+                Uploading {t('common.packageWithCount', {count: packagesStore.packagesUploading.length})}
+                <a href="#" className="box-toggle pack-box-close" title="Toggle upload box size" onClick={this.close}>
+                    <i className="fa fa-times fa-times-thin" aria-hidden="true"></i>
+                </a>
+                <a href="#" className="box-toggle pack-box-minimize" title="Toggle upload box size" onClick={this.toggleMode}>
+                    <i className="fa fa-angle-down" aria-hidden="true"></i>
+                </a>
+            </div>
+        );
+        const uploadBoxData = (                 
+            <div id="upload-box">
+                <div className="subheading">
+                    <div className="left">
+                        {uploadFinished ? 
+                            <span>
+                                Upload is finished
+                            </span>
+                        :
+                            <span>
+                                <ConvertTime 
+                                    seconds={secondsRemaining}
+                                />
+                                &nbsp;left
+                            </span>
+                        }
+                    </div>
+                    <div className="right">
+                        {!uploadFinished ? 
+                            <a href="#" onClick={this.showCancelAllUploadsModal.bind(this, false)}>Cancel all</a>
+                        :
+                            null
+                        }
+                    </div>
+                </div>
+                <div className="content">
+                    <ul className="list">
+                        {_.map(packagesStore.packagesUploading, (upload, index) => {
+                            return (
+                                <li key={index}>
+                                    <div className="col name">
+                                        {upload.package.name}
+                                    </div>
+                                    <div className="col version">
+                                        {upload.package.version}
+                                    </div>
+                                    <div className="col uploaded">
+                                        <ConvertBytes 
+                                            bytes={upload.uploaded}
+                                        />
+                                        &nbsp;of&nbsp; 
+                                        <ConvertBytes 
+                                            bytes={upload.size}
+                                        />
+                                    </div>
+                                    <div className="col status">
+                                        {upload.progress !== 100 && upload.status === null ?
+                                            <Circle
+                                                progress={upload.progress / 100}
+                                                options={barOptions}
+                                                initialAnimate={false}
+                                                containerStyle={{
+                                                    width: '30px', 
+                                                    height: '30px',
+                                                    display: 'inline-block',
+                                                    verticalAlign: 'middle',
+                                                    margin: '-3px 0 0 0'
+                                                }}
+                                            />
+                                        :
+                                            upload.status == 'success' ?
                                                 <span>
-                                                    Upload is finished
+                                                    <i className="fa fa-check-circle" aria-hidden="true"></i> Success
                                                 </span>
                                             :
-                                                <span>
-                                                    <ConvertTime 
-                                                        seconds={secondsRemaining}
-                                                    />
-                                                    &nbsp;left
-                                                </span>
-                                            }
-                                        </div>
-                                        <div className="right">
-                                            {!uploadFinished ? 
-                                                <a href="#" onClick={this.showCancelAllUploadsModal.bind(this, false)}>Cancel all</a>
-                                            :
-                                                null
-                                            }
-                                        </div>
+                                                upload.status == 'error' ?
+                                                    <span>
+                                                        <i className="fa fa-exclamation-triangle" aria-hidden="true"></i> Error
+                                                    </span>
+                                                :
+                                                    <span>
+                                                        <i className="fa fa-square-o fa-spin"></i> &nbsp;
+                                                        <span className="counting black">Processing</span>
+                                                    </span>
+                                        }
                                     </div>
-                                    <div className="content">
-                                        <ul className="list">
-                                            {_.map(packagesStore.packagesUploading, (upload, index) => {
-                                                return (
-                                                    <li key={index}>
-                                                        <div className="col name">
-                                                            {upload.package.name}
-                                                        </div>
-                                                        <div className="col version">
-                                                            {upload.package.version}
-                                                        </div>
-                                                        <div className="col uploaded">
-                                                            <ConvertBytes 
-                                                                bytes={upload.uploaded}
-                                                            />
-                                                            &nbsp;of&nbsp; 
-                                                            <ConvertBytes 
-                                                                bytes={upload.size}
-                                                            />
-                                                        </div>
-                                                        <div className="col status">
-                                                            {upload.progress !== 100 && upload.status === null ?
-                                                                <Circle
-                                                                    progress={upload.progress / 100}
-                                                                    options={barOptions}
-                                                                    initialAnimate={false}
-                                                                    containerStyle={{
-                                                                        width: '30px', 
-                                                                        height: '30px',
-                                                                        display: 'inline-block',
-                                                                        verticalAlign: 'middle',
-                                                                        margin: '-3px 0 0 0'
-                                                                    }}
-                                                                />
-                                                            :
-                                                                upload.status == 'success' ?
-                                                                    <span>
-                                                                        <i className="fa fa-check-circle" aria-hidden="true"></i> Success
-                                                                    </span>
-                                                                :
-                                                                    upload.status == 'error' ?
-                                                                        <span>
-                                                                            <i className="fa fa-exclamation-triangle" aria-hidden="true"></i> Error
-                                                                        </span>
-                                                                    :
-                                                                        <span>
-                                                                            <i className="fa fa-square-o fa-spin"></i> &nbsp;
-                                                                            <span className="counting black">Processing</span>
-                                                                        </span>
-                                                            }
-                                                        </div>
-                                                        <div className="col action">
-                                                            {upload.status === null ?
-                                                                <a href="#" onClick={this.showCancelUploadModal.bind(this, index)}>
-                                                                    cancel
-                                                                </a>
-                                                            :
-                                                                <a href="#" onClick={this.removeFromList.bind(this, index)}>
-                                                                    remove from list
-                                                                </a>
-                                                            }
-                                                        </div>
-                                                    </li>
-                                                );
-                                            }, this)}
-                                        </ul>
+                                    <div className="col action">
+                                        {upload.status === null ?
+                                            <a href="#" onClick={this.showCancelUploadModal.bind(this, index)}>
+                                                cancel
+                                            </a>
+                                        :
+                                            <a href="#" onClick={this.removeFromList.bind(this, index)}>
+                                                remove from list
+                                            </a>
+                                        }
                                     </div>
-                                </span>
-                            :
-                                null
-                            }
-                        </div>
-                    </Draggable>
-                :
-                    null
-                }
+                                </li>
+                            );
+                        }, this)}
+                    </ul>
+                </div>
                 <PackagesCancelUploadModal 
                     shown={this.cancelUploadModalShown}
                     hide={this.hideCancelUploadModal}
@@ -228,7 +207,16 @@ class UploadBox extends Component {
                     ifClearUploads={this.ifClearUploads}
                     packagesStore={packagesStore}
                 />
-            </span>
+            </div>                
+        );
+        return (
+            <Modal 
+                title={heading}
+                content={uploadBoxData}
+                shown={packagesStore.packagesUploading.length && !minimized}
+                onRequestClose={toggleUploadBoxMode}
+                className="upload-box"
+            />
         );
     }
 }

@@ -985,8 +985,7 @@ input {
                     width: 30px;
                     height: 22px;
                     position: absolute;
-                    top: 10px;
-                    right: 45px;
+                    right: 0;
 
                     .line {
                         display: block;
@@ -1041,23 +1040,16 @@ input {
                 .box-toggle {
                     color: #fff;
                     font-size: 40px;
-                    line-height: 1.0em;
-                    position: absolute;
-                    right: 0;
-                    top: 0;
-                    width: 60px;
+                    float: right;
+                    margin-top: -15px;
                     height: 50px;
 
-                    &:hover {
-                        background: #384643;
+                    &:last-child {
+                        margin-right: 15px;
                     }
 
-                    .line {
-                        width: 25px;
-                        border-top: 2px solid white;
-                        text-align: center;
-                        display: block;
-                        margin: 25px auto;
+                    .fa-times-thin:before {
+                        content: '\00d7';
                     }
                 }
             }
@@ -2095,15 +2087,7 @@ div[role=presentation] {
     outline: none;
 }
 
-#upload-box {
-    background: #fff;
-    width: 600px;
-    position: absolute;
-    bottom: 0;
-    right: 40px;
-    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
-    box-shadow: 0 3px 9px rgba(0,0,0,.5);
-    z-index: 1500;
+.upload-box {
 
     &.minimized {
         width: 400px;
@@ -2122,10 +2106,16 @@ div[role=presentation] {
         .box-toggle {
             color: #fff;
             font-size: 40px;
-            line-height: 1.0em;
-            position: absolute;
-            top: 5px;
-            right: 55px;
+            float: right;
+            margin-top: -5px;
+
+            &:last-child {
+                margin-right: 15px;
+            }
+
+            .fa-times-thin:before {
+                content: '\00d7';
+            }
         }
 
         .box-close {
@@ -2170,7 +2160,7 @@ div[role=presentation] {
 
         .list {
             width: 100%;
-            max-height: 135px;
+            max-height: 300px;
             padding: 0 10px;
             margin: 0;
 

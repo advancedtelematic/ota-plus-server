@@ -349,8 +349,11 @@ class Wizard extends Component {
                         <span>
                             <div className="heading">
                                 {this.wizardSteps[this.currentStepId].title}
-                                <a href="#" className="box-toggle" title="Toggle upload box size" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)}>
-                                    <span className="line"></span>
+                                <a href="#" className="box-toggle pack-box-close" title="Toggle upload box size" onClick={hideWizard.bind(this, wizardIdentifier)}>
+                                    <i className="fa fa-times fa-times-thin" aria-hidden="true"></i>
+                                </a>
+                                <a href="#" className="box-toggle pack-box-minimize" title="Toggle upload box size" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)}>
+                                    <i className="fa fa-angle-down" aria-hidden="true"></i>
                                 </a>
                             </div>
                                 <span>

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import axios from 'axios';
 import { observe, observable, extendObservable } from 'mobx';
 import { observer } from 'mobx-react';
+import { translate } from 'react-i18next';
 import { 
     DevicesStore,
     HardwareStore,
@@ -138,7 +139,8 @@ class Main extends Component {
         })
         this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, { id: wizardIdentifier }), 1);
     }
-    toggleUploadBoxMode() {
+    toggleUploadBoxMode(e) {
+        if(e) e.preventDefault();
         this.uploadBoxMinimized = !this.uploadBoxMinimized;
     }
     locationHasChanged() {
@@ -218,15 +220,11 @@ class Main extends Component {
                     minWidth={1280}
                     minHeight={768}
                 />
-                {!this.uploadBoxMinimized ? 
-                    <UploadBox 
-                        packagesStore={this.packagesStore}
-                        minimized={this.uploadBoxMinimized}
-                        toggleUploadBoxMode={this.toggleUploadBoxMode}
-                    />
-                : 
-                    null 
-                }
+                <UploadBox 
+                    packagesStore={this.packagesStore}
+                    minimized={this.uploadBoxMinimized}
+                    toggleUploadBoxMode={this.toggleUploadBoxMode}
+                />
                 {this.sanityCheckCompleted() ?
                     <DoorAnimation
                         mode="show"
@@ -243,13 +241,16 @@ class Main extends Component {
                 }
                 {this.wizards}
                 <div className="minimized-wizards-container">
-                    {this.uploadBoxMinimized ? 
-                        <div className="minimized-box">
-                            <UploadBox 
-                                packagesStore={this.packagesStore}
-                                minimized={this.uploadBoxMinimized}
-                                toggleUploadBoxMode={this.toggleUploadBoxMode}
-                            />
+                    {this.uploadBoxMinimized ?
+                        <div className="minimized-box" key={this.packagesStore.packagesUploading.length}>
+                            <div className="name">
+                                Uploading {this.props.t('common.packageWithCount', {count: this.packagesStore.packagesUploading.length})}
+                            </div>
+                            <div className="actions">
+                                <a href="#" className="box-toggle box-maximize" title="Maximize wizard" onClick={this.toggleUploadBoxMode.bind(this)}>
+                                    <i className="fa fa-angle-up" aria-hidden="true"></i>
+                                </a>                           
+                            </div>
                         </div>
                     :
                         null
@@ -270,10 +271,7 @@ class Main extends Component {
                                 </div>
                                 <div className="actions">
                                     <a href="#" className="box-toggle box-maximize" title="Maximize wizard" onClick={this.toggleWizard.bind(this, wizard.id, wizard.name)}>
-                                        <span className="line"></span>
-                                    </a>
-                                    <a href="#" className="box-toggle box-hide" title="Hide wizard" onClick={this.hideWizard.bind(this, wizard.id)}>
-                                        <i className="fa fa-times" aria-hidden="true"></i>
+                                        <i className="fa fa-angle-up" aria-hidden="true"></i>
                                     </a>
                                 </div>
                             </div>
@@ -294,4 +292,4 @@ Main.propTypes = {
     children: PropTypes.object.isRequired
 }
 
-export default Main;
+export default translate()(Main);
