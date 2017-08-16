@@ -602,7 +602,7 @@ export default class CampaignsStore {
                 stats.processed += statistic.processed;
             });
             stats.notImpacted = stats.processed - stats.affected;
-            stats.finished = stats.finished;
+            stats.finished = this.campaign.statistics.finished;
             stats.queued = stats.affected - stats.finished;
             stats.failed = this.campaign.statistics.failed.length;
             stats.successful = stats.finished - stats.failed;
