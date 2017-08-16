@@ -114,6 +114,7 @@ class StatsModal extends Component {
                 }
                 shown={shown}
                 className="package-stats-modal"
+                onRequestClose={hide}
             />
         );
     }
