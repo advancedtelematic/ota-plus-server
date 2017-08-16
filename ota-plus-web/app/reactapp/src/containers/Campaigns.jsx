@@ -66,13 +66,12 @@ class Campaigns extends Component {
         const { campaignsStore, packagesStore, groupsStore, hardwareStore, addNewWizard } = this.props;        
         return (
             <span>
-                {(campaignsStore.overallCampaignsCount === null && campaignsStore.campaignsFetchAsync.isFetching) 
-                    || (campaignsStore.overallLegacyCampaignsCount === null && campaignsStore.campaignsLegacyFetchAsync.isFetching) ?
+                {campaignsStore.overallCampaignsCount === null && campaignsStore.campaignsFetchAsync.isFetching ?
                         <div className="wrapper-center">
                             <Loader />
                         </div>
                 :
-                    campaignsStore.overallCampaignsCount + campaignsStore.overallLegacyCampaignsCount ? 
+                    campaignsStore.overallCampaignsCount ?
                         <span>
                             <CampaignsHeader
                                 addNewWizard={addNewWizard}

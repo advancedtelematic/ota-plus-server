@@ -16,10 +16,6 @@ import {
     API_CAMPAIGNS_INDIVIDUAL_FETCH,
     API_CAMPAIGNS_LEGACY_CREATE,
     API_CAMPAIGNS_LEGACY_LAUNCH,
-    API_CAMPAIGNS_LEGACY_FETCH,
-    API_CAMPAIGNS_LEGACY_CAMPAIGN_STATISTICS,
-    API_CAMPAIGNS_LEGACY_INDIVIDUAL_FETCH,
-    API_CAMPAIGNS_LEGACY_RENAME
 } from '../config';
 import { 
     resetAsync, 
@@ -31,7 +27,6 @@ import _ from 'underscore';
 export default class CampaignsStore {
 
     @observable campaignsFetchAsync = {};
-    @observable campaignsLegacyFetchAsync = {};
     @observable campaignsOneFetchAsync = {};
     @observable campaignsOneSafeFetchAsync = {};
     @observable campaignsOneStatisticsFetchAsync = {};
@@ -49,7 +44,6 @@ export default class CampaignsStore {
     @observable campaigns = [];
     @observable preparedCampaigns = [];
     @observable overallCampaignsCount = null;
-    @observable overallLegacyCampaignsCount = null;
     @observable campaignsFilter = '';
     @observable campaignsSort = 'asc';
     @observable campaign = {};
@@ -57,17 +51,16 @@ export default class CampaignsStore {
 
     constructor() {
         resetAsync(this.campaignsFetchAsync);
-        resetAsync(this.campaignsLegacyFetchAsync);
         resetAsync(this.campaignsOneFetchAsync);
         resetAsync(this.campaignsOneSafeFetchAsync);
         resetAsync(this.campaignsOneStatisticsFetchAsync);
         resetAsync(this.campaignsOneSafeStatisticsFetchAsync);
         resetAsync(this.campaignsCreateAsync);
-        resetAsync(this.campaignsLegacyCreateAsync);
         resetAsync(this.campaignsPackageSaveAsync);
         resetAsync(this.campaignsGroupsSaveAsync);
-        resetAsync(this.campaignsLaunchAsync);
+        resetAsync(this.campaignsLegacyCreateAsync);
         resetAsync(this.campaignsLegacyLaunchAsync);
+        resetAsync(this.campaignsLaunchAsync);
         resetAsync(this.campaignsRenameAsync);
         resetAsync(this.campaignsCancelAsync);
         resetAsync(this.campaignsCancelRequestAsync);
@@ -162,65 +155,6 @@ export default class CampaignsStore {
             }.bind(this));    
     }
 
-    fetchLegacyCampaigns() {
-        resetAsync(this.campaignsLegacyFetchAsync, true);
-        return axios.get(API_CAMPAIGNS_LEGACY_FETCH)
-            .then(function (response) {
-                let campaigns = response.data;
-                if(campaigns.length) {
-                    let after = _.after(campaigns.length, () => {
-                        this.legacyCampaigns = campaigns;
-                        this._prepareCampaigns(this.campaignsFilter, this.campaignsSort);
-                        this.overallLegacyCampaignsCount = campaigns.length;
-                        this.campaignsLegacyFetchAsync = handleAsyncSuccess(response);
-                    }, this);
-                    _.each(campaigns, (campaign, index) => {
-                        if(campaign.status === "Active")
-                            axios.get(API_CAMPAIGNS_LEGACY_CAMPAIGN_STATISTICS + '/' + campaign.id + '/statistics')
-                            .then(function(resp) {
-                                let statistics = resp.data;
-                                var summary = {};
-                                let overallDevicesCount = 0;
-                                let overallUpdatedDevicesCount = 0;
-                                let overallFailedUpdates = 0;
-                                let overallSuccessfulUpdates = 0;
-                                let overallCancelledUpdates = 0;
-                                _.each(statistics, (statistic) => {
-                                    overallDevicesCount += statistic.deviceCount;
-                                    overallUpdatedDevicesCount += statistic.updatedDevices;
-                                    overallFailedUpdates += statistic.failedUpdates;
-                                    overallSuccessfulUpdates += statistic.successfulUpdates;
-                                    overallCancelledUpdates += statistic.cancelledUpdates;
-                                });
-                                summary = {
-                                    overallDevicesCount: overallDevicesCount,
-                                    overallUpdatedDevicesCount: overallUpdatedDevicesCount,
-                                    overallFailedUpdates: overallFailedUpdates,
-                                    overallSuccessfulUpdates: overallSuccessfulUpdates,
-                                    overallCancelledUpdates: overallCancelledUpdates
-                                };
-                                campaign.statistics = statistics;
-                                campaign.summary = summary;
-                                after();
-                            })
-                            .catch(function() {
-                                after();
-                            });
-                    else
-                      after();
-                  });
-                } else {
-                    this.legacyCampaigns = campaigns;
-                    this._prepareCampaigns(this.campaignsFilter, this.campaignsSort);
-                    this.overallLegacyCampaignsCount = campaigns.length;
-                    this.campaignsLegacyFetchAsync = handleAsyncSuccess(response);
-                }
-            }.bind(this))
-            .catch(function (error) {
-                this.campaignsLegacyFetchAsync = handleAsyncError(error);
-            }.bind(this));    
-    }
-
     fetchCampaign(id) {
         resetAsync(this.campaignsOneFetchAsync, true);
         return axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + id)
@@ -239,7 +173,6 @@ export default class CampaignsStore {
                     }.bind(this));
             }.bind(this))
             .catch(function (error) {
-                this.fetchLegacyCampaign(id);
             }.bind(this));
     }
 
@@ -261,55 +194,6 @@ export default class CampaignsStore {
                     }.bind(this));
             }.bind(this))
             .catch(function (error) {
-                this.fetchLegacyCampaignSafe(id);
-            }.bind(this));
-    }
-
-    fetchLegacyCampaignSafe(id) {
-        resetAsync(this.campaignsOneSafeFetchAsync, true);
-        return axios.get(API_CAMPAIGNS_LEGACY_INDIVIDUAL_FETCH + '/' + id)
-            .then(function (response) {
-                resetAsync(this.campaignsOneSafeStatisticsFetchAsync, true);
-                this.campaignsOneSafeFetchAsync = handleAsyncSuccess(response);
-                axios.get(API_CAMPAIGNS_LEGACY_CAMPAIGN_STATISTICS + '/' + id + '/statistics')
-                    .then(function (resp) {
-                        let data = response.data;
-                        data.statistics = resp.data;
-                        this.campaign = data;
-                        this.campaign.isLegacy = true;
-                        this.campaignsOneSafeStatisticsFetchAsync = handleAsyncSuccess(resp);
-                    }.bind(this))
-                    .catch(function (err) {
-                        this.campaignsOneSafeStatisticsFetchAsync = handleAsyncError(err);
-                    }.bind(this));
-            }.bind(this))
-            .catch(function (error) {
-                this.campaignsOneFetchAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    fetchLegacyCampaign(id) {
-        resetAsync(this.campaignsOneFetchAsync, true);
-        return axios.get(API_CAMPAIGNS_LEGACY_INDIVIDUAL_FETCH + '/' + id)
-            .then(function (response) {
-                resetAsync(this.campaignsOneStatisticsFetchAsync, true);
-                this.campaignsOneFetchAsync = handleAsyncSuccess(response);
-                axios.get(API_CAMPAIGNS_LEGACY_CAMPAIGN_STATISTICS + '/' + id + '/statistics')
-                    .then(function (resp) {
-                        let data = response.data;
-                        data.statistics = resp.data;
-                        this.campaign = {
-                            ...data,
-                            isLegacy:true
-                        };
-                        this.campaignsOneStatisticsFetchAsync = handleAsyncSuccess(resp);
-                    }.bind(this))
-                    .catch(function (err) {
-                        this.campaignsOneStatisticsFetchAsync = handleAsyncError(err);
-                    }.bind(this));
-            }.bind(this))
-            .catch(function (error) {
-                this.campaignsOneFetchAsync = handleAsyncError(error);
             }.bind(this));
     }
 
@@ -375,7 +259,6 @@ export default class CampaignsStore {
         resetAsync(this.campaignsLegacyLaunchAsync, true);
         return axios.post(API_CAMPAIGNS_LEGACY_LAUNCH + '/' + id + '/launch')
             .then(function (response) {
-                this.fetchLegacyCampaigns();
                 this.campaignsLegacyLaunchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
@@ -386,17 +269,6 @@ export default class CampaignsStore {
     renameCampaign(id, data) {
         resetAsync(this.campaignsRenameAsync, true);
         return axios.put(API_CAMPAIGNS_RENAME + '/' + id, data)
-            .then(function (response) {
-                this.campaignsRenameAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function (error) {
-                this.campaignsRenameAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    renameLegacyCampaign(id, data) {
-        resetAsync(this.campaignsRenameAsync, true);
-        return axios.put(API_CAMPAIGNS_LEGACY_RENAME + '/' + id + '/name', data)
             .then(function (response) {
                 this.campaignsRenameAsync = handleAsyncSuccess(response);
             }.bind(this))
@@ -431,20 +303,11 @@ export default class CampaignsStore {
         this.campaignsFilter = campaignsFilter;
         this.campaignsSort = campaignsSort;
         let campaigns = this.campaigns;
-        let legacyCampaigns = this.legacyCampaigns;
-        let mergedCampaigns = [];
-        _.each(campaigns, (campaign, index) => {
-            mergedCampaigns.push(campaign);
-        });
-        _.each(legacyCampaigns, (legacyCampaign, index) => {
-            legacyCampaign.isLegacy = true;
-            mergedCampaigns.push(legacyCampaign);
-        });
         if(campaignsFilter)
-            mergedCampaigns = _.filter(mergedCampaigns, (campaign) => {
+            campaigns = _.filter(campaigns, (campaign) => {
                 return campaign.name.indexOf(campaignsFilter) > -1;
             });
-        this.preparedCampaigns = mergedCampaigns.sort((a, b) => {
+        this.preparedCampaigns = campaigns.sort((a, b) => {
           let aName = a.name;
           let bName = b.name;
           if(campaignsSort !== 'undefined' && campaignsSort == 'desc')
@@ -460,18 +323,6 @@ export default class CampaignsStore {
 
     _getTufCampaign(id) {
         return _.findWhere(this.campaigns, {id: id});
-    }
-
-    _getLegacyCampaign(id) {
-        return _.findWhere(this.legacyCampaigns, {id: id});
-    }
-
-    _updateLegacyCampaignData(id, data) {
-        let legacyCampaign = this._getLegacyCampaign(id);
-        _.each(data, (value, attr) => {
-            legacyCampaign[attr] = value;
-        });
-       this._prepareCampaigns(this.campaignsFilter, this.campaignsSort);
     }
 
     _updateTufCampaignData(id, data) {
@@ -490,23 +341,21 @@ export default class CampaignsStore {
         resetAsync(this.campaignsPackageSaveAsync);
         resetAsync(this.campaignsGroupsSaveAsync);
         resetAsync(this.campaignsLaunchAsync);
-        resetAsync(this.campaignsLegacyLaunchAsync);
         this.campaign = {};
     }
 
     _reset() {
         resetAsync(this.campaignsFetchAsync);
-        resetAsync(this.campaignsLegacyFetchAsync);
         resetAsync(this.campaignsOneFetchAsync);
         resetAsync(this.campaignsOneSafeFetchAsync);
         resetAsync(this.campaignsOneStatisticsFetchAsync);
         resetAsync(this.campaignsOneSafeStatisticsFetchAsync);
         resetAsync(this.campaignsCreateAsync);
-        resetAsync(this.campaignsLegacyCreateAsync);
         resetAsync(this.campaignsPackageSaveAsync);
         resetAsync(this.campaignsGroupsSaveAsync);
-        resetAsync(this.campaignsLaunchAsync);
+        resetAsync(this.campaignsLegacyCreateAsync);
         resetAsync(this.campaignsLegacyLaunchAsync);
+        resetAsync(this.campaignsLaunchAsync);
         resetAsync(this.campaignsRenameAsync);
         resetAsync(this.campaignsCancelAsync);
         resetAsync(this.campaignsCancelRequestAsync);
@@ -514,7 +363,6 @@ export default class CampaignsStore {
         this.campaigns = [];
         this.preparedCampaigns = [];
         this.overallCampaignsCount = null;
-        this.overallLegacyCampaignsCount = null;
         this.campaignsFilter = null;
         this.campaignsSort = 'asc';
         this.campaign = {};
@@ -529,7 +377,7 @@ export default class CampaignsStore {
 
     @computed get draftCampaigns() {
         return _.filter(this.preparedCampaigns, (campaign) => {
-            return (!_.isUndefined(campaign.summary) && campaign.summary.status === "prepared") || campaign.status === "Draft";
+            return !_.isUndefined(campaign.summary) && campaign.summary.status === "prepared";
         });
     }
 
@@ -541,15 +389,13 @@ export default class CampaignsStore {
 
     @computed get runningCampaigns() {
         return _.filter(this.preparedCampaigns, (campaign) => {
-            return (!_.isUndefined(campaign.summary) && campaign.summary.status === "launched") 
-                || campaign.status === "Active" && campaign.summary.overallDevicesCount !== campaign.summary.overallUpdatedDevicesCount;
+            return !_.isUndefined(campaign.summary) && campaign.summary.status === "launched";
         });
     }
 
     @computed get finishedCampaigns() {
         return _.filter(this.preparedCampaigns, (campaign) => {
-            return (!_.isUndefined(campaign.summary) && (campaign.summary.status === "finished" || campaign.summary.status === "cancelled"))
-                || campaign.status === "Active" && campaign.summary.overallDevicesCount === campaign.summary.overallUpdatedDevicesCount;
+            return !_.isUndefined(campaign.summary) && (campaign.summary.status === "finished" || campaign.summary.status === "cancelled");
         });
     }
 
@@ -557,7 +403,7 @@ export default class CampaignsStore {
         let campaigns = this.draftCampaigns;
         _.sortBy(campaigns, function(campaign) {
           return campaign.createdAt;
-        }).reverse()
+        }).reverse();
         return campaigns.slice(0,10);
     }
 
@@ -565,49 +411,30 @@ export default class CampaignsStore {
         let campaigns = this.runningCampaigns;
         _.sortBy(campaigns, function(campaign) {
           return campaign.createdAt;
-        }).reverse()
+        }).reverse();
         return campaigns.slice(0,10);
     }
 
     @computed get overallCampaignStatistics() {
-        if(this.campaign.isLegacy) {
-            let stats = {
-                devicesCount: 0,
-                updatedDevicesCount: 0,
-                failedUpdates: 0,
-                successfulUpdates: 0,
-                cancelledUpdates: 0
-            };
-            _.each(this.campaign.statistics, (statistic) => {
-                stats.devicesCount += statistic.deviceCount;
-                stats.updatedDevicesCount += statistic.updatedDevices;
-                stats.failedUpdates += statistic.failedUpdates;
-                stats.successfulUpdates += statistic.successfulUpdates;
-                stats.cancelledUpdates += statistic.cancelledUpdates;
-            });
-            
-            return stats;
-        } else {
-            let stats = {
-                processed: 0,
-                affected: 0,
-                finished: 0,
-                queued: 0,
-                successful: 0,
-                notImpacted: 0,
-                failed: 0
-            };
-            _.each(this.campaign.statistics.stats, (statistic) => {
-                stats.affected += statistic.affected;
-                stats.processed += statistic.processed;
-            });
-            stats.notImpacted = stats.processed - stats.affected;
-            stats.finished = stats.finished;
-            stats.queued = stats.affected - stats.finished;
-            stats.failed = this.campaign.statistics.failed.length;
-            stats.successful = stats.finished - stats.failed;
-            
-            return stats;
-        }
+        let stats = {
+            processed: 0,
+            affected: 0,
+            finished: 0,
+            queued: 0,
+            successful: 0,
+            notImpacted: 0,
+            failed: 0
+        };
+        _.each(this.campaign.statistics.stats, (statistic) => {
+            stats.affected += statistic.affected;
+            stats.processed += statistic.processed;
+        });
+        stats.notImpacted = stats.processed - stats.affected;
+        stats.finished = stats.finished;
+        stats.queued = stats.affected - stats.finished;
+        stats.failed = this.campaign.statistics.failed.length;
+        stats.successful = stats.finished - stats.failed;
+
+        return stats;
     }
 }
