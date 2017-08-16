@@ -19,16 +19,18 @@ class ListItem extends Component {
         let totalAffected = 0;
         let totalProcessed = 0;
         let totalFinished = 0;
+        let totalFailed = 0;
         let failureRate = 0;
 
         if(type === 'running' || type === 'finished') {
-            let stats = campaign.summary.stats;
+            let stats = campaign.summary.stats;   
+            totalFailed = campaign.summary.failed.length;       
             totalFinished = campaign.summary.finished;
             _.each(stats, (stat, groupId) => {
                 totalAffected += stat.affected;
                 totalProcessed += stat.processed;
             });
-            failureRate = Math.round(totalFinished/Math.max(totalProcessed, 1) * 100);
+            failureRate = Math.round(totalFailed/Math.max(totalFinished, 1) * 100);
         }
         
         return (
@@ -47,24 +49,6 @@ class ListItem extends Component {
                 </div>
                 <div className="column" id={"campaign-start-date-" + campaign.name}>
                     {moment(campaign.createdAt).format("DD.MM.YYYY")}
-                </div>
-                <div className="column" id={"campaign-delta-switch-" + campaign.name}>
-                    <div className="delta-switch">
-                        OFF
-                    </div>
-                </div>
-                <div className="column" id={"campaign-delta-generation-size-" + campaign.name}>
-                    {type === "draft" ?
-                        null
-                    : type === 'inPreparation' ?
-                        <span>
-                            Calculating...
-                        </span>
-                    :
-                        <span>
-                            -
-                        </span>
-                    }
                 </div>
                 <div className="column" id={"campaign-processed-" + campaign.name}>
                     {type === 'running' || type === 'finished' ?
