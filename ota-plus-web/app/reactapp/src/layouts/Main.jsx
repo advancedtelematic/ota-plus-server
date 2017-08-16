@@ -43,6 +43,8 @@ class Main extends Component {
     @observable wizards = [];    
     @observable minimizedWizards = [];
     @observable uploadBoxMinimized = false;
+    @observable queueModalShown = false;
+    @observable activeTabId = 0;
 
     constructor(props) {
         super(props);
@@ -62,6 +64,9 @@ class Main extends Component {
         this.toggleWizard = this.toggleWizard.bind(this);
         this.toggleUploadBoxMode = this.toggleUploadBoxMode.bind(this);
         this.sanityCheckCompleted = this.sanityCheckCompleted.bind(this);
+        this.showQueueModal = this.showQueueModal.bind(this);
+        this.hideQueueModal = this.hideQueueModal.bind(this);
+        this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
         this.devicesStore = new DevicesStore();
         this.hardwareStore = new HardwareStore();
         this.groupsStore = new GroupsStore();
@@ -99,6 +104,16 @@ class Main extends Component {
         this.devicesStore.fetchInitialDevices();
         this.devicesStore.fetchDevices();
         this.websocketHandler.init();
+    }
+    showQueueModal() {
+        this.queueModalShown = true;
+    }
+    hideQueueModal() {
+        this.queueModalShown = false;
+        this.setQueueModalActiveTabId(0);
+    }
+    setQueueModalActiveTabId(tabId) {
+        this.activeTabId = tabId;
     }
     toggleWizard(wizardId, wizardName, e) {
         if(e) e.preventDefault();
@@ -188,6 +203,7 @@ class Main extends Component {
                                 userStore={this.userStore}
                                 featuresStore={this.featuresStore}
                                 devicesStore={this.devicesStore}
+                                hideQueueModal={this.hideQueueModal}
                             />
                         :
                             null
@@ -212,6 +228,11 @@ class Main extends Component {
                         systemReady={this.systemReady}
                         setSystemReady={this.setSystemReady}
                         addNewWizard={this.addNewWizard}
+                        showQueueModal={this.showQueueModal}
+                        hideQueueModal={this.hideQueueModal}
+                        queueModalShown={this.queueModalShown}
+                        activeTabId={this.activeTabId}
+                        setQueueModalActiveTabId={this.setQueueModalActiveTabId}
                     />
                 </FadeAnimation>
                 <SizeVerify 
