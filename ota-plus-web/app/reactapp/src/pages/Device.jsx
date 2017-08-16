@@ -11,16 +11,11 @@ const title = "Device";
 
 @observer
 class Device extends Component {
-    @observable queueModalShown = false;
-    @observable activeTabId = 0;
-    
     anchorEl = null;
 
     constructor(props) {
         super(props);
-        this.showQueueModal = this.showQueueModal.bind(this);
-        this.hideQueueModal = this.hideQueueModal.bind(this);
-        this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
+       
         this.cancelInstallation = this.cancelInstallation.bind(this);
     }
     componentWillMount() {
@@ -43,28 +38,18 @@ class Device extends Component {
         this.props.packagesStore._reset();
         this.props.hardwareStore._reset();
     }
-    showQueueModal() {
-        this.queueModalShown = true;
-    }
-    hideQueueModal() {
-        this.queueModalShown = false;
-        this.setQueueModalActiveTabId(0);
-    }
-    setQueueModalActiveTabId(tabId) {
-        this.activeTabId = tabId;
-    }
     cancelInstallation(requestId) {
         this.props.packagesStore.cancelInstallation(this.props.params.id, requestId);
     }
     render() {
-        const { devicesStore, packagesStore, hardwareStore } = this.props;
+        const { devicesStore, packagesStore, hardwareStore, showQueueModal, hideQueueModal, queueModalShown, activeTabId, setQueueModalActiveTabId } = this.props;
         return (
             <FadeAnimation 
                 display="flex">
                 <div className="wrapper-flex">
                     <DeviceHeader
                         devicesStore={devicesStore}
-                        showQueueModal={this.showQueueModal}
+                        showQueueModal={showQueueModal}
                         queueButtonRef={el => this.anchorEl = el}
                     />
                     <MetaData 
@@ -73,18 +58,18 @@ class Device extends Component {
                             devicesStore={devicesStore}
                             packagesStore={packagesStore}
                             hardwareStore={hardwareStore}
-                            showQueueModal={this.showQueueModal}
+                            showQueueModal={showQueueModal}
                         />
                     </MetaData>
                     <DeviceQueueModal
                         packagesStore={packagesStore}
                         devicesStore={devicesStore}
-                        shown={this.queueModalShown}
-                        hide={this.hideQueueModal}
+                        shown={queueModalShown}
+                        hide={hideQueueModal}
                         device={devicesStore.device}
                         cancelInstallation={this.cancelInstallation}
-                        activeTabId={this.activeTabId}
-                        setQueueModalActiveTabId={this.setQueueModalActiveTabId}
+                        activeTabId={activeTabId}
+                        setQueueModalActiveTabId={setQueueModalActiveTabId}
                         anchorEl={this.anchorEl}
                     />
                 </div>
