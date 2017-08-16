@@ -252,14 +252,14 @@ export default class PackagesStore {
                 customExists: pack.custom ? true : false,
                 packageHash: pack.hashes.sha256,
                 imageName: imageName,
-                createdAt: pack.custom.createdAt ? pack.custom.createdAt : null,
-                updatedAt: pack.custom.updatedAt ? pack.custom.updatedAt : null,
+                createdAt: pack.custom ? pack.custom.createdAt : null,
+                updatedAt: pack.custom ? pack.custom.updatedAt : null,
                 description: pack.hashes.sha256,
-                targetFormat: pack.custom.targetFormat ? pack.custom.targetFormat : 'OSTREE',
+                targetFormat: pack.custom ? pack.custom.targetFormat : 'OSTREE',
                 targetLength: pack.length,
                 id: {
-                    name: pack.custom.name ? pack.custom.name : imageName,
-                    version: pack.custom.version ? pack.custom.version : pack.hashes.sha256
+                    name: pack.custom ? pack.custom.name : imageName,
+                    version: pack.custom ? pack.custom.version : pack.hashes.sha256
                 },
                 installedOnEcus: 0,
                 isBlackListed: false,
@@ -271,7 +271,7 @@ export default class PackagesStore {
                 },
                 uuid: pack.hashes.sha256,
                 inDirector: true,
-                hardwareIds: pack.custom.hardwareIds ? pack.custom.hardwareIds : [],
+                hardwareIds: pack.custom ? pack.custom.hardwareIds : [],
             };
             preparedPackages.push(formattedPack);
         });
@@ -1263,15 +1263,15 @@ export default class PackagesStore {
     }
 
     _addTufPackage(pack) {
-        let name = pack.custom.name ? pack.custom.name : pack.filename;
-        let version = pack.custom.version ? pack.custom.version : pack.checksum.hash;
-        let hardwareIds = pack.custom.hardwareIds ? pack.custom.hardwareIds : [];
+        let name = pack.custom ? pack.custom.name : pack.filename;
+        let version = pack.custom ? pack.custom.version : pack.checksum.hash;
+        let hardwareIds = pack.custom ? pack.custom.hardwareIds : [];
         let formattedPack = {
             customExists: pack.custom ? true : false,
             packageHash: pack.checksum.hash,
-            createdAt: pack.custom.createdAt ? pack.custom.createdAt : null,
-            updatedAt: pack.custom.updatedAt ? pack.custom.updatedAt : null,
-            targetFormat: pack.custom.targetFormat ? pack.custom.targetFormat : 'OSTREE',
+            createdAt: pack.custom ? pack.custom.createdAt : null,
+            updatedAt: pack.custom ? pack.custom.updatedAt : null,
+            targetFormat: pack.custom ? pack.custom.targetFormat : 'OSTREE',
             targetLength: pack.length,
             hardwareIds: hardwareIds,
             description: pack.checksum.hash,
