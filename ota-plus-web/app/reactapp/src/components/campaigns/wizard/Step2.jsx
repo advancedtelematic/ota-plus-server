@@ -21,6 +21,9 @@ class WizardStep2 extends Component {
     componentDidMount() {
         this.disableItemsOnEnter(this.props.wizardData[1].packages);
     }
+    componentWillUnmount() {
+        this.props.setRawSelectedPacks(this.props.wizardData[1].packages);
+    }
     togglePackage(chosenPackagesList, pack) {
         let found = _.find(chosenPackagesList, {packageName: pack.packageName});
         if(found) {

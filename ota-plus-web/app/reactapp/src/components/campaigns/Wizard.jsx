@@ -83,6 +83,7 @@ class Wizard extends Component {
     @observable wizardData = initialWizardData;
     @observable filterValue = initialFilterValue;
     @observable campaignIdToAction = null;
+    @observable rawSelectedPacks = [];
     versions = {};
 
     constructor(props) {
@@ -104,7 +105,8 @@ class Wizard extends Component {
         this.handleLegacyCampaignPackageSaved = this.handleLegacyCampaignPackageSaved.bind(this);
         this.handleLegacyCampaignGroupsSaved = this.handleLegacyCampaignGroupsSaved.bind(this);
         this.selectVersion = this.selectVersion.bind(this);
-        this.clearSelectedVersions = this.clearSelectedVersions.bind(this);
+        this.setRawSelectedPacks = this.setRawSelectedPacks.bind(this);
+        this.removeSelectedPacksByKeys = this.removeSelectedPacksByKeys.bind(this);
 
         this.multiTargetUpdateCreatedHandler = observe(props.campaignsStore, (change) => {
             if(change.name === 'campaignsMultiTargetUpdateCreateAsync' && change.object[change.name].isFetching === false) {
@@ -163,6 +165,16 @@ class Wizard extends Component {
         this.legacyCampaignCreatedHandler();
         this.legacyCampaignSavePackageHandler();
     }
+    setRawSelectedPacks(packs) {
+        this.rawSelectedPacks = [];
+        this.rawSelectedPacks = packs;
+    }
+    removeSelectedPacksByKeys(keys) {
+        _.each(keys, (key, i) => {
+            delete this.wizardData[2].versions[key];
+            delete this.versions[key];
+        });
+    }
     selectVersion(data) {
         if(_.isUndefined(this.versions[data.packageName])) {
             this.versions[data.packageName] = {};
@@ -199,10 +211,6 @@ class Wizard extends Component {
     }
     isLastStep() {
         return this.currentStepId == this.wizardSteps.length - 1;
-    }
-    clearSelectedVersions() {
-        this.wizardData[2].versions = {};
-        this.versions = {};
     }
     prevStep() {
         if(this.currentStepId != 0) {
@@ -250,6 +258,7 @@ class Wizard extends Component {
             let packages = this.wizardData[1].packages;
             let updates = this.wizardData[2].versions;
             let updateData = [];
+
             if(_.first(packages).inDirector) {
                 _.each(updates, (update, packageName) => {
                     let fromFilepath = null;
@@ -374,7 +383,9 @@ class Wizard extends Component {
                                                 selectedFromVersion: this.selectedFromVersion,
                                                 selectVersion: this.selectVersion,
                                                 wizardIdentifier: wizardIdentifier,
-                                                clearSelectedVersions: this.clearSelectedVersions,
+                                                setRawSelectedPacks: this.setRawSelectedPacks,
+                                                rawSelectedPacks: this.rawSelectedPacks,
+                                                removeSelectedPacksByKeys: this.removeSelectedPacksByKeys,
                                             })
                                         }
                                         {currentStep.isSearchBarShown ?

@@ -5,7 +5,6 @@ import _ from 'underscore';
 
 @observer
 class PackagesVersionList extends Component {
-
     constructor(props) {
         super(props);
         this.formatFromVersions = this.formatFromVersions.bind(this);
@@ -82,18 +81,29 @@ class PackagesVersionList extends Component {
     componentWillMount() {
         this.props.markStepAsNotFinished();
     }
-    componentWillUnmount() {
-        this.props.clearSelectedVersions();
-    }
     componentWillReceiveProps(nextProps) {
         let selectedVersions = nextProps.selectedVersions;
 
+        let packsToValidate = {};
+        _.each(selectedVersions, (version, packageName) => {
+            _.each(this.props.rawSelectedPacks, (pack, i) => {
+                if(packageName === pack.packageName) {
+                    packsToValidate[packageName] = version;
+                }
+            });
+        });
+
+        let allSelectedKeys = Object.keys(selectedVersions);
+        let validateKeys = Object.keys(packsToValidate);
+        let differentKeys = _.difference(allSelectedKeys, validateKeys);
+        this.props.removeSelectedPacksByKeys(differentKeys);
+
         if(this.props.pack.inDirector) {
-            if(Object.keys(selectedVersions).length === nextProps.packsCount) {
+            if(Object.keys(packsToValidate).length === nextProps.packsCount) {
                 let shouldPass = true;
                 let selectedHardwareIds = [];
 
-                _.each(selectedVersions, (version, index) => {
+                _.each(packsToValidate, (version, index) => {
                     selectedHardwareIds.push(version.hardwareId);
                     if(_.isNull(version.to) || _.isNull(version.from) || _.isNull(version.hardwareId)) {
                         shouldPass = false;
@@ -115,7 +125,7 @@ class PackagesVersionList extends Component {
                 this.props.markStepAsNotFinished();
             }
         } else {
-            if(Object.keys(selectedVersions).length && selectedVersions[this.props.pack.packageName].to) {
+            if(Object.keys(packsToValidate).length && packsToValidate[this.props.pack.packageName].to) {
                 this.props.markStepAsFinished();
             } else {
                 this.props.markStepAsNotFinished();
