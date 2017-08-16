@@ -9,7 +9,7 @@ class Navigation extends Component {
         super(props);
     }
     render() {
-        const { userStore, devicesStore } = this.props;
+        const { userStore, devicesStore, hideQueueModal } = this.props;
         const logoLink = '/';
         return (
             <nav className="navbar navbar-inverse navbar-fixed-top">
@@ -44,6 +44,7 @@ class Navigation extends Component {
                         <li id="menu-login">
                             <NavigationDropdown 
                                 userStore={userStore}
+                                hideQueueModal={hideQueueModal}
                             />
                         </li>
                     </ul>
