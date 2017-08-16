@@ -93,8 +93,6 @@ class Campaigns extends Component {
                                                     <div></div>
                                                     <div className="column">Name</div>
                                                     <div className="column text-center">Created at</div>
-                                                    <div className="column text-center">Delta switch</div>
-                                                    <div className="column text-center">Delta generation size</div>
                                                     <div className="column text-center">Processed</div>
                                                     <div className="column text-center">Affected</div>
                                                     <div className="column text-center">Finished</div>
@@ -131,8 +129,6 @@ class Campaigns extends Component {
                                                     <div></div>
                                                     <div className="column">Name</div>
                                                     <div className="column">Created at</div>
-                                                    <div className="column">Delta switch</div>
-                                                    <div className="column">Delta generation size</div>
                                                     <div className="column">Processed</div>
                                                     <div className="column">Affected</div>
                                                     <div className="column">Finished</div>
@@ -169,8 +165,6 @@ class Campaigns extends Component {
                                                     <div></div>
                                                     <div className="column">Name</div>
                                                     <div className="column">Created at</div>
-                                                    <div className="column">Delta switch</div>
-                                                    <div className="column">Delta generation size</div>
                                                     <div className="column">Processed</div>
                                                     <div className="column">Affected</div>
                                                     <div className="column">Finished</div>
@@ -207,8 +201,6 @@ class Campaigns extends Component {
                                                     <div></div>
                                                     <div className="column">Name</div>
                                                     <div className="column">Created at</div>
-                                                    <div className="column">Delta switch</div>
-                                                    <div className="column">Delta generation size</div>
                                                     <div className="column">Processed</div>
                                                     <div className="column">Affected</div>
                                                     <div className="column">Finished</div>

@@ -45,9 +45,9 @@ class Tuf extends Component {
                 label: "Cancelled rate"
             }
         ];
-        let successRate = Math.min(Math.round(overallStatistics.successful/Math.max(overallStatistics.affected, 1) * 100), 100);
-        let failureRate = Math.min(Math.round(overallStatistics.failed/Math.max(overallStatistics.affected, 1) * 100), 100);
-        let queuedRate = Math.min(Math.round(overallStatistics.queued/Math.max(overallStatistics.affected, 1) * 100), 100);
+        let successRate = Math.min(Math.round(overallStatistics.successful/Math.max(overallStatistics.processed, 1) * 100), 100);
+        let failureRate = Math.min(Math.round(overallStatistics.failed/Math.max(overallStatistics.processed, 1) * 100), 100);
+        let queuedRate = Math.min(Math.round(overallStatistics.queued/Math.max(overallStatistics.processed, 1) * 100), 100);
         let notImpactedRate = Math.min(Math.round(overallStatistics.notImpacted/Math.max(overallStatistics.processed, 1) * 100), 100);
 
         return (
@@ -111,7 +111,7 @@ class Tuf extends Component {
                                                     <span className="status failure">Failure</span>
                                                 </div>
                                                 <div className="col-xs-6">
-                                                    <span className="status-value">{overallStatistics.failed}/{overallStatistics.affected}</span>
+                                                    <span className="status-value">{overallStatistics.failed}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -121,7 +121,7 @@ class Tuf extends Component {
                                                     <span className="status not-impacted">Not impacted</span>
                                                 </div>
                                                 <div className="col-xs-6">
-                                                    <span className="status-value">{overallStatistics.notImpacted}/{overallStatistics.processed}</span>
+                                                    <span className="status-value">{overallStatistics.notImpacted}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -133,7 +133,7 @@ class Tuf extends Component {
                                                     <span className="status successed">Successful</span>
                                                 </div>
                                                 <div className="col-xs-6">
-                                                    <span className="status-value">{overallStatistics.successful}/{overallStatistics.affected}</span>
+                                                    <span className="status-value">{overallStatistics.successful}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -145,7 +145,7 @@ class Tuf extends Component {
                                                     <span className="status queued">Queued</span>
                                                 </div>
                                                 <div className="col-xs-6">
-                                                    <span className="status-value">{overallStatistics.queued}/{overallStatistics.affected}</span>
+                                                    <span className="status-value">{overallStatistics.queued}</span>
                                                 </div>
                                             </div>
                                         </div>
