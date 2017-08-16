@@ -64,12 +64,9 @@ export const API_CREATE_DIRECTOR_REPO = '/api/v1/admin/repo';
 export const API_CHECK_DIRECTOR_REPO = '/api/v1/admin/repo/root.json';
 
 export const API_CAMPAIGNS_FETCH = '/api/v2/campaigns';
-export const API_CAMPAIGNS_LEGACY_FETCH = '/api/v1/campaigns';
 export const API_CAMPAIGNS_INDIVIDUAL_FETCH = '/api/v2/campaigns';
-export const API_CAMPAIGNS_LEGACY_INDIVIDUAL_FETCH = '/api/v1/campaigns';
 export const API_CAMPAIGNS_CAMPAIGN_DETAILS = '/api/v1/campaigns';
 export const API_CAMPAIGNS_CAMPAIGN_STATISTICS = '/api/v2/campaigns';
-export const API_CAMPAIGNS_LEGACY_CAMPAIGN_STATISTICS = '/api/v1/campaigns';
 export const API_CAMPAIGNS_CREATE = '/api/v2/campaigns';
 export const API_CAMPAIGNS_LEGACY_CREATE = '/api/v1/campaigns';
 export const API_CAMPAIGNS_PACKAGE_SAVE = '/api/v1/campaigns';
@@ -77,7 +74,6 @@ export const API_CAMPAIGNS_GROUPS_SAVE = '/api/v1/campaigns';
 export const API_CAMPAIGNS_LAUNCH = '/api/v2/campaigns';
 export const API_CAMPAIGNS_LEGACY_LAUNCH = '/api/v1/campaigns';
 export const API_CAMPAIGNS_RENAME = '/api/v2/campaigns';
-export const API_CAMPAIGNS_LEGACY_RENAME = '/api/v1/campaigns';
 export const API_CAMPAIGNS_CANCEL = '/api/v2/campaigns';
 export const API_CAMPAIGNS_CANCEL_REQUEST = '/api/v1/update_requests';
 

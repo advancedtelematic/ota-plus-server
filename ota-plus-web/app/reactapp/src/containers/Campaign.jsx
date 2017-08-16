@@ -6,7 +6,7 @@ import { resetAsync } from '../utils/Common';
 import { CampaignGroupsList, CampaignCancelCampaignModal, CampaignCancelGroupModal } from '../components/campaign';
 
 import { translate } from 'react-i18next';
-import { CampaignTuf, CampaignLegacy } from '../components/campaign';
+import { CampaignTuf } from '../components/campaign';
 import _ from 'underscore';
 
 @observer
@@ -51,18 +51,11 @@ class Campaign extends Component {
                         <Loader />
                     </div>
                 :
-                    campaignsStore.campaign.isLegacy ?
-                        <CampaignLegacy 
-                            campaignsStore={campaignsStore}
-                            groupsStore={groupsStore}
-                            showCancelGroupModal={this.showCancelGroupModal}
-                        />
-                    :
-                        <CampaignTuf 
-                            campaignsStore={campaignsStore}
-                            groupsStore={groupsStore}
-                            showCancelGroupModal={this.showCancelGroupModal}
-                        />
+                    <CampaignTuf
+                        campaignsStore={campaignsStore}
+                        groupsStore={groupsStore}
+                        showCancelGroupModal={this.showCancelGroupModal}
+                    />
                 }
                 <CampaignCancelCampaignModal
                     shown={this.cancelCampaignModalShown}
