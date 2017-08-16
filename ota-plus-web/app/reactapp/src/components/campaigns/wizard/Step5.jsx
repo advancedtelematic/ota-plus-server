@@ -30,11 +30,19 @@ class WizardStep5 extends Component {
     }
     getCreatedAt(version) {
         let createdAt = null;
-        _.each(this.props.packagesStore.packages, (pack, index) => {
-            if(pack.packageHash === version) {
-                createdAt = pack.createdAt;
-            }
-        });
+        if(_.first(this.packages).inDirector) {
+            _.each(this.props.packagesStore.packages, (pack, index) => {
+                if(pack.packageHash === version) {
+                    createdAt = pack.createdAt;
+                }
+            });
+        } else {
+            _.each(this.props.packagesStore.packages, (pack, index) => {
+                if(pack.id.version === version) {
+                    createdAt = pack.createdAt;
+                }
+            });
+        }        
         return createdAt;
     }
     render() {
@@ -62,8 +70,13 @@ class WizardStep5 extends Component {
                                                                 <div className="text">
                                                                     From:
                                                                 </div>
-                                                                <div className="createdAt">
-                                                                    Created at: {this.getCreatedAt(update.from)}
+                                                                <div className="value">
+                                                                    <div className="hash">
+                                                                        Hash: {update.from}
+                                                                    </div>
+                                                                    <div className="createdAt">
+                                                                        Created at: {this.getCreatedAt(update.from)}
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         :
