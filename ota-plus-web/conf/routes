@@ -23,7 +23,8 @@ GET     /api/v1/provisioning/credentials/registration/:uuid com.advancedtelemati
 
 GET     /api/v1/features                         com.advancedtelematic.controllers.UserProfileController.getFeatures
 PUT     /api/v1/features/:feature                com.advancedtelematic.controllers.UserProfileController.activateFeature(feature: FeatureName)
-GET     /api/v1/features/:feature/client         com.advancedtelematic.controllers.UserProfileController.getConfig(feature: FeatureName)
+GET     /api/v1/features/:feature/client         com.advancedtelematic.controllers.UserProfileController.getFeatureClient(feature: FeatureName)
+GET     /api/v1/features/:feature/config         com.advancedtelematic.controllers.UserProfileController.getFeatureConfig(feature: FeatureName)
 
 GET     /api/:version/*path                      com.advancedtelematic.controllers.Application.apiProxy(version: ApiVersion, path: String)
 PUT     /api/:version/*path                      com.advancedtelematic.controllers.Application.apiProxy(version: ApiVersion, path: String)
