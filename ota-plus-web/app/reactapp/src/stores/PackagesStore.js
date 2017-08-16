@@ -1313,7 +1313,7 @@ export default class PackagesStore {
 
     @computed
     get lastPackages() {
-        return _.sortBy(this.initialPackages, function(pack) {
+        return _.sortBy(this.packages, function(pack) {
             return pack.createdAt;
         }).reverse().slice(0, 10);
     }
