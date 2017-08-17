@@ -44,7 +44,7 @@ class Treehub extends Component {
                                 The first thing you'll need to do is add OSTree support into your project.<br /><br />
                                 Download your credentials and start pushing your images to TreeHub.<br />
 
-                                <a href="/api/v1/features/treehub/client" className="btn-main" id="download-treehub-client">
+                                <a href="/api/v1/features/treehub/config" className="btn-main" id="download-treehub-client">
                                     Download
                                 </a>
 
