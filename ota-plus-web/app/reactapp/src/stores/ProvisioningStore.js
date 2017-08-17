@@ -131,7 +131,7 @@ export default class ProvisioningStore {
     downloadProvisioningKeyBundle(keyUuid) {
         return axios.all([
                 axios.get(API_PROVISIONING_KEYS_FETCH + '/' + keyUuid, { responseType: 'arraybuffer' }),
-                axios.get(API_FEATURES_TREEHUB_ACTIVATE + '/client')])
+                axios.get(API_FEATURES_TREEHUB_ACTIVATE + '/config')])
             .then(axios.spread(function (provResp, treehubResp) {
                 var zip = new JSZip();
                 zip.file("autoprov.url", this.provisioningDetails.uri);
