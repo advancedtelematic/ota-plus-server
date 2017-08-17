@@ -21,6 +21,7 @@ class Home extends Component {
         this.props.devicesStore.fetchDevices();
         this.props.packagesStore.fetchPackages();
         this.props.campaignsStore.fetchCampaigns();
+        this.props.campaignsStore.fetchLegacyCampaigns();
         this.props.groupsStore.fetchGroups();
     }
     componentWillUnmount() {

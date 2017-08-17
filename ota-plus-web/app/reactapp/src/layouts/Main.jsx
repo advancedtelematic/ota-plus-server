@@ -40,7 +40,6 @@ class Main extends Component {
     @observable pagesWithRedirectToWelcome = ['page-welcome', 'page-destiny'];
     @observable pagesWithWhiteBackground = ['welcome', 'destiny', 'fireworks', 'device'];
     @observable numOfWizards = 0;
-    @observable campaignIdToAction = null;
     @observable wizards = [];    
     @observable minimizedWizards = [];
     @observable uploadBoxMinimized = false;
@@ -129,14 +128,12 @@ class Main extends Component {
             this.minimizedWizards.push(minimizedWizard);
     }
     addNewWizard(campaignId = null) {
-        this.campaignIdToAction = campaignId;
         this.wizards.push(
             <CampaignsWizard
                 campaignsStore={this.campaignsStore}
                 packagesStore={this.packagesStore}
                 groupsStore={this.groupsStore}
                 hardwareStore={this.hardwareStore}
-                campaignId={this.campaignIdToAction}
                 wizardIdentifier={this.wizards.length}
                 hideWizard={this.hideWizard}
                 toggleWizard={this.toggleWizard}

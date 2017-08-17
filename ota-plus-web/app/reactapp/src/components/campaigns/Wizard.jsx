@@ -82,7 +82,6 @@ class Wizard extends Component {
     @observable wizardSteps = initialWizardStep;
     @observable wizardData = initialWizardData;
     @observable filterValue = initialFilterValue;
-    @observable campaignIdToAction = null;
     @observable rawSelectedPacks = [];
     versions = {};
 
@@ -248,66 +247,56 @@ class Wizard extends Component {
         this.wizardData[this.currentStepId] = data;
     }
     launch() {
-        if(this.campaignIdToAction) {
-            // Add packages to campaign
-            // Add versions to campaign
-            // Add groups to campaign
-            console.log('launching');
-            this.props.campaignsStore.launchCampaign(this.campaignIdToAction);
-        } else {
-            let packages = this.wizardData[1].packages;
-            let updates = this.wizardData[2].versions;
-            let updateData = [];
+        let packages = this.wizardData[1].packages;
+        let updates = this.wizardData[2].versions;
+        let updateData = [];
 
-            if(_.first(packages).inDirector) {
-                _.each(updates, (update, packageName) => {
-                    let fromFilepath = null;
-                    let toFilepath = null;
-                    let targetFormat = null;
-                    let fromTargetLength = null;
-                    let toTargetLength = null;
-                    let packages = this.props.packagesStore.packages;
-                    _.each(packages, (pack, index) => {
-                        if(pack.inDirector) {
-                            if(pack.packageHash === update.from) {
-                                fromFilepath = pack.imageName;
-                                fromTargetLength = pack.targetLength;
-                            }
-                            if(pack.packageHash === update.to) {                    
-                                toFilepath = pack.imageName;
-                                toTargetLength = pack.targetLength;
-                            }
-                            if(pack.id.name === packageName) {
-                                targetFormat = pack.targetFormat;
-                            }
+        if(_.first(packages).inDirector) {
+            _.each(updates, (update, packageName) => {
+                let fromFilepath = null;
+                let toFilepath = null;
+                let targetFormat = null;
+                let fromTargetLength = null;
+                let toTargetLength = null;
+                let packages = this.props.packagesStore.packages;
+                _.each(packages, (pack, index) => {
+                    if(pack.inDirector) {
+                        if(pack.packageHash === update.from) {
+                            fromFilepath = pack.imageName;
+                            fromTargetLength = pack.targetLength;
                         }
-                    });
-                    updateData.push({
-                        hardwareId: update.hardwareId,
-                        from: {
-                            target: fromFilepath,
-                            targetLength: fromTargetLength,
-                            hash: update.from
-                        },
-                        to: {
-                            target: toFilepath,
-                            targetLength: toTargetLength,
-                            hash: update.to
-                        },
-                        targetFormat: targetFormat,
-                        generateDiff: false
-                    });
+                        if(pack.packageHash === update.to) {                    
+                            toFilepath = pack.imageName;
+                            toTargetLength = pack.targetLength;
+                        }
+                        if(pack.id.name === packageName) {
+                            targetFormat = pack.targetFormat;
+                        }
+                    }
                 });
-                this.props.campaignsStore.createMultiTargetUpdate(updateData);
-            } else {
-                let pack = _.first(packages);
-                let data = {
-                    name: this.wizardData[0].name
-                };
-                this.props.campaignsStore.createLegacyCampaign(data);
-                //saveGroupsForCampaign
-                //launchCampaign
-            }
+                updateData.push({
+                    hardwareId: update.hardwareId,
+                    from: {
+                        target: fromFilepath,
+                        targetLength: fromTargetLength,
+                        hash: update.from
+                    },
+                    to: {
+                        target: toFilepath,
+                        targetLength: toTargetLength,
+                        hash: update.to
+                    },
+                    targetFormat: targetFormat,
+                    generateDiff: false
+                });
+            });
+            this.props.campaignsStore.createMultiTargetUpdate(updateData);
+        } else {
+            let pack = _.first(packages);
+            let data = {
+                name: this.wizardData[0].name
+            };
+            this.props.campaignsStore.createLegacyCampaign(data);
         }
     }
     handleMultiTargetUpdateCreated() {
@@ -343,9 +332,8 @@ class Wizard extends Component {
         this.filterValue = filterValue;
     }
     render() {
-        const { campaignsStore, packagesStore, groupsStore, hardwareStore, campaignId, wizardIdentifier, hideWizard, toggleWizard, minimizedWizards } = this.props;
+        const { campaignsStore, packagesStore, groupsStore, hardwareStore, wizardIdentifier, hideWizard, toggleWizard, minimizedWizards } = this.props;
         const currentStep = this.wizardSteps[this.currentStepId];
-        this.campaignIdToAction = campaignId;
 
         let wizardMinimized = _.find(minimizedWizards, (wizard, index) => {
             return wizard.id === wizardIdentifier;
@@ -464,7 +452,6 @@ class Wizard extends Component {
 }
 
 Wizard.propTypes = {
-    campaignId: PropTypes.string,
     campaignsStore: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired,
     groupsStore: PropTypes.object.isRequired,
