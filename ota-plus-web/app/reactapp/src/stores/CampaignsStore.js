@@ -19,7 +19,8 @@ import {
     API_CAMPAIGNS_LEGACY_FETCH,
     API_CAMPAIGNS_LEGACY_CAMPAIGN_STATISTICS,
     API_CAMPAIGNS_LEGACY_INDIVIDUAL_FETCH,
-    API_CAMPAIGNS_LEGACY_RENAME
+    API_CAMPAIGNS_LEGACY_RENAME,
+    API_CAMPAIGNS_LEGACY_CANCEL
 } from '../config';
 import { 
     resetAsync, 
@@ -31,7 +32,9 @@ import _ from 'underscore';
 export default class CampaignsStore {
 
     @observable campaignsFetchAsync = {};
+    @observable campaignsSafeFetchAsync = {};
     @observable campaignsLegacyFetchAsync = {};
+    @observable campaignsLegacySafeFetchAsync = {};
     @observable campaignsOneFetchAsync = {};
     @observable campaignsOneSafeFetchAsync = {};
     @observable campaignsOneStatisticsFetchAsync = {};
@@ -48,6 +51,7 @@ export default class CampaignsStore {
     @observable campaignsMultiTargetUpdateCreateAsync = {};
     @observable campaigns = [];
     @observable preparedCampaigns = [];
+    @observable preparedLegacyCampaigns = [];
     @observable overallCampaignsCount = null;
     @observable overallLegacyCampaignsCount = null;
     @observable campaignsFilter = '';
@@ -57,7 +61,9 @@ export default class CampaignsStore {
 
     constructor() {
         resetAsync(this.campaignsFetchAsync);
+        resetAsync(this.campaignsSafeFetchAsync);
         resetAsync(this.campaignsLegacyFetchAsync);
+        resetAsync(this.campaignsLegacySafeFetchAsync);
         resetAsync(this.campaignsOneFetchAsync);
         resetAsync(this.campaignsOneSafeFetchAsync);
         resetAsync(this.campaignsOneStatisticsFetchAsync);
@@ -116,8 +122,8 @@ export default class CampaignsStore {
         };
     }
 
-    fetchCampaigns() {
-        resetAsync(this.campaignsFetchAsync, true);
+    fetchCampaigns(async = 'campaignsFetchAsync') {
+        resetAsync(this[async], true);
         return axios.get(API_CAMPAIGNS_FETCH)
             .then(function (response) {
                 let campaignIds = response.data.values;
@@ -126,8 +132,8 @@ export default class CampaignsStore {
                     let after = _.after(campaignIds.length, () => {
                         let afterStats = _.after(this.campaigns.length, () => {
                             this.overallCampaignsCount = response.data.total;
-                            this._prepareCampaigns(this.campaignsFilter, this.campaignsSort);
-                            this.campaignsFetchAsync = handleAsyncSuccess(response);
+                            this._prepareCampaigns();
+                            this[async] = handleAsyncSuccess(response);
                         });
                         _.each(this.campaigns, (campaign, index) => {
                             axios.get(API_CAMPAIGNS_CAMPAIGN_STATISTICS + '/' + campaign.id + '/stats')
@@ -154,25 +160,25 @@ export default class CampaignsStore {
 
                 } else {
                     this.campaigns = [];
-                    this.campaignsFetchAsync = handleAsyncSuccess(response);
+                    this[async] = handleAsyncSuccess(response);
                 }
             }.bind(this))
             .catch(function (error) {
-                this.campaignsFetchAsync = handleAsyncError(error);
+                this[async] = handleAsyncError(error);
             }.bind(this));    
     }
 
-    fetchLegacyCampaigns() {
-        resetAsync(this.campaignsLegacyFetchAsync, true);
+    fetchLegacyCampaigns(async = 'campaignsLegacyFetchAsync') {
+        resetAsync(this[async], true);
         return axios.get(API_CAMPAIGNS_LEGACY_FETCH)
             .then(function (response) {
                 let campaigns = response.data;
                 if(campaigns.length) {
                     let after = _.after(campaigns.length, () => {
                         this.legacyCampaigns = campaigns;
-                        this._prepareCampaigns(this.campaignsFilter, this.campaignsSort);
+                        this._prepareCampaigns();
                         this.overallLegacyCampaignsCount = campaigns.length;
-                        this.campaignsLegacyFetchAsync = handleAsyncSuccess(response);
+                        this[async] = handleAsyncSuccess(response);
                     }, this);
                     _.each(campaigns, (campaign, index) => {
                         if(campaign.status === "Active")
@@ -213,103 +219,58 @@ export default class CampaignsStore {
                     this.legacyCampaigns = campaigns;
                     this._prepareCampaigns(this.campaignsFilter, this.campaignsSort);
                     this.overallLegacyCampaignsCount = campaigns.length;
-                    this.campaignsLegacyFetchAsync = handleAsyncSuccess(response);
+                    this[async] = handleAsyncSuccess(response);
                 }
             }.bind(this))
             .catch(function (error) {
-                this.campaignsLegacyFetchAsync = handleAsyncError(error);
-            }.bind(this));    
+                this[async] = handleAsyncError(error);
+            }.bind(this));
     }
 
-    fetchCampaign(id) {
-        resetAsync(this.campaignsOneFetchAsync, true);
+    fetchCampaign(id, mainAsync = 'campaignsOneFetchAsync', statsAsync = 'campaignsOneStatisticsFetchAsync') {
+        resetAsync(this[mainAsync], true);
         return axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + id)
             .then(function (response) {
-                resetAsync(this.campaignsOneStatisticsFetchAsync, true);
-                this.campaignsOneFetchAsync = handleAsyncSuccess(response);
+                resetAsync(this[statsAsync], true);
+                this[mainAsync] = handleAsyncSuccess(response);
                 axios.get(API_CAMPAIGNS_CAMPAIGN_STATISTICS + '/' + id + '/stats')
                     .then(function (resp) {
                         let data = response.data;
                         data.statistics = resp.data;
                         this.campaign = data;
-                        this.campaignsOneStatisticsFetchAsync = handleAsyncSuccess(resp);
+                        this[statsAsync] = handleAsyncSuccess(resp);
                     }.bind(this))
                     .catch(function (err) {
-                        this.campaignsOneStatisticsFetchAsync = handleAsyncError(err);
+                        this[statsAsync] = handleAsyncError(err);
                     }.bind(this));
             }.bind(this))
             .catch(function (error) {
-                this.fetchLegacyCampaign(id);
+                this.fetchLegacyCampaign(id, mainAsync, statsAsync);
             }.bind(this));
     }
 
-    fetchCampaignSafe(id) {
-        resetAsync(this.campaignsOneSafeFetchAsync, true);
-        return axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + id)
-            .then(function (response) {
-                resetAsync(this.campaignsOneSafeStatisticsFetchAsync, true);
-                this.campaignsOneSafeFetchAsync = handleAsyncSuccess(response);
-                axios.get(API_CAMPAIGNS_CAMPAIGN_STATISTICS + '/' + id + '/stats')
-                    .then(function (resp) {
-                        let data = response.data;
-                        data.statistics = resp.data;
-                        this.campaign = data;
-                        this.campaignsOneSafeStatisticsFetchAsync = handleAsyncSuccess(resp);
-                    }.bind(this))
-                    .catch(function (err) {
-                        this.campaignsOneSafeStatisticsFetchAsync = handleAsyncError(err);
-                    }.bind(this));
-            }.bind(this))
-            .catch(function (error) {
-                this.fetchLegacyCampaignSafe(id);
-            }.bind(this));
-    }
-
-    fetchLegacyCampaignSafe(id) {
-        resetAsync(this.campaignsOneSafeFetchAsync, true);
+    fetchLegacyCampaign(id, mainAsync = 'campaignsOneFetchAsync', statsAsync = 'campaignsOneStatisticsFetchAsync') {
+        resetAsync(this[mainAsync], true);
         return axios.get(API_CAMPAIGNS_LEGACY_INDIVIDUAL_FETCH + '/' + id)
             .then(function (response) {
-                resetAsync(this.campaignsOneSafeStatisticsFetchAsync, true);
-                this.campaignsOneSafeFetchAsync = handleAsyncSuccess(response);
-                axios.get(API_CAMPAIGNS_LEGACY_CAMPAIGN_STATISTICS + '/' + id + '/statistics')
-                    .then(function (resp) {
-                        let data = response.data;
-                        data.statistics = resp.data;
-                        this.campaign = data;
-                        this.campaign.isLegacy = true;
-                        this.campaignsOneSafeStatisticsFetchAsync = handleAsyncSuccess(resp);
-                    }.bind(this))
-                    .catch(function (err) {
-                        this.campaignsOneSafeStatisticsFetchAsync = handleAsyncError(err);
-                    }.bind(this));
-            }.bind(this))
-            .catch(function (error) {
-                this.campaignsOneFetchAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    fetchLegacyCampaign(id) {
-        resetAsync(this.campaignsOneFetchAsync, true);
-        return axios.get(API_CAMPAIGNS_LEGACY_INDIVIDUAL_FETCH + '/' + id)
-            .then(function (response) {
-                resetAsync(this.campaignsOneStatisticsFetchAsync, true);
-                this.campaignsOneFetchAsync = handleAsyncSuccess(response);
+                resetAsync(this[statsAsync], true);
+                this[mainAsync] = handleAsyncSuccess(response);
                 axios.get(API_CAMPAIGNS_LEGACY_CAMPAIGN_STATISTICS + '/' + id + '/statistics')
                     .then(function (resp) {
                         let data = response.data;
                         data.statistics = resp.data;
                         this.campaign = {
                             ...data,
-                            isLegacy:true
+                            isLegacy: true
                         };
-                        this.campaignsOneStatisticsFetchAsync = handleAsyncSuccess(resp);
+                        this[statsAsync] = handleAsyncSuccess(resp);
                     }.bind(this))
                     .catch(function (err) {
-                        this.campaignsOneStatisticsFetchAsync = handleAsyncError(err);
+                        this[statsAsync] = handleAsyncError(err);
                     }.bind(this));
             }.bind(this))
             .catch(function (error) {
-                this.campaignsOneFetchAsync = handleAsyncError(error);
+                this[mainAsync] = handleAsyncError(error);
             }.bind(this));
     }
 
@@ -363,7 +324,7 @@ export default class CampaignsStore {
         resetAsync(this.campaignsLaunchAsync, true);
         return axios.post(API_CAMPAIGNS_LAUNCH + '/' + id + '/launch')
             .then(function (response) {
-                this.fetchCampaigns();
+                this.fetchCampaigns('campaignsSafeFetchAsync');
                 this.campaignsLaunchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
@@ -375,7 +336,7 @@ export default class CampaignsStore {
         resetAsync(this.campaignsLegacyLaunchAsync, true);
         return axios.post(API_CAMPAIGNS_LEGACY_LAUNCH + '/' + id + '/launch')
             .then(function (response) {
-                this.fetchLegacyCampaigns();
+                this.fetchLegacyCampaigns('campaignsLegacySafeFetchAsync');
                 this.campaignsLegacyLaunchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
@@ -416,6 +377,17 @@ export default class CampaignsStore {
             }.bind(this));
     }
 
+    cancelLegacyCampaign(id) {
+        resetAsync(this.campaignsCancelAsync, true);
+        return axios.put(API_CAMPAIGNS_LEGACY_CANCEL + '/' + id + '/cancel')
+            .then(function (response) {
+                this.campaignsCancelAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function (error) {
+                this.campaignsCancelAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
     cancelCampaignRequest(id) {
         resetAsync(this.campaignsCancelRequestAsync, true);
         return axios.put(API_CAMPAIGNS_CANCEL_REQUEST + '/' + id + '/cancel')
@@ -427,35 +399,29 @@ export default class CampaignsStore {
             }.bind(this));
     }
 
-    _prepareCampaigns(campaignsFilter, campaignsSort) {
-        this.campaignsFilter = campaignsFilter;
-        this.campaignsSort = campaignsSort;
+    _prepareCampaigns() {
         let campaigns = this.campaigns;
         let legacyCampaigns = this.legacyCampaigns;
-        let mergedCampaigns = [];
-        _.each(campaigns, (campaign, index) => {
-            mergedCampaigns.push(campaign);
-        });
-        _.each(legacyCampaigns, (legacyCampaign, index) => {
-            legacyCampaign.isLegacy = true;
-            mergedCampaigns.push(legacyCampaign);
-        });
-        if(campaignsFilter)
-            mergedCampaigns = _.filter(mergedCampaigns, (campaign) => {
-                return campaign.name.indexOf(campaignsFilter) > -1;
-            });
-        this.preparedCampaigns = mergedCampaigns.sort((a, b) => {
+        this.preparedCampaigns = campaigns.sort((a, b) => {
           let aName = a.name;
           let bName = b.name;
-          if(campaignsSort !== 'undefined' && campaignsSort == 'desc')
-            return (aName.charAt(0) % 1 === 0 && bName.charAt(0) % 1 !== 0) ? -1 : bName.localeCompare(aName);
-          else
-            return (aName.charAt(0) % 1 === 0 && bName.charAt(0) % 1 !== 0) ? 1 : aName.localeCompare(bName);
+            return aName.localeCompare(bName);
+        });
+        this.preparedLegacyCampaigns = legacyCampaigns.sort((a, b) => {
+          let aName = a.name;
+          let bName = b.name;
+            return aName.localeCompare(bName);
         });
     }
 
     _getCampaign(id) {
-        return _.findWhere(this.preparedCampaigns, {id: id});
+        let campaign = null;
+        campaign = this._getTufCampaign(id);
+        if(!campaign) {
+            campaign = this._getLegacyCampaign(id);
+            campaign.isLegacy = true;
+        }
+        return campaign;
     }
 
     _getTufCampaign(id) {
@@ -471,7 +437,7 @@ export default class CampaignsStore {
         _.each(data, (value, attr) => {
             legacyCampaign[attr] = value;
         });
-       this._prepareCampaigns(this.campaignsFilter, this.campaignsSort);
+        this._prepareCampaigns();
     }
 
     _updateTufCampaignData(id, data) {
@@ -479,7 +445,7 @@ export default class CampaignsStore {
         _.each(data, (value, attr) => {
             campaign[attr] = value;
         });
-       this._prepareCampaigns(this.campaignsFilter, this.campaignsSort);
+       this._prepareCampaigns();
     }
 
     _resetWizard() {
@@ -496,7 +462,9 @@ export default class CampaignsStore {
 
     _reset() {
         resetAsync(this.campaignsFetchAsync);
+        resetAsync(this.campaignsSafeFetchAsync);
         resetAsync(this.campaignsLegacyFetchAsync);
+        resetAsync(this.campaignsLegacySafeFetchAsync);
         resetAsync(this.campaignsOneFetchAsync);
         resetAsync(this.campaignsOneSafeFetchAsync);
         resetAsync(this.campaignsOneStatisticsFetchAsync);
@@ -513,6 +481,7 @@ export default class CampaignsStore {
         resetAsync(this.campaignsMultiTargetUpdateCreateAsync);
         this.campaigns = [];
         this.preparedCampaigns = [];
+        this.preparedLegacyCampaigns = [];
         this.overallCampaignsCount = null;
         this.overallLegacyCampaignsCount = null;
         this.campaignsFilter = null;
@@ -520,17 +489,6 @@ export default class CampaignsStore {
         this.campaign = {};
         this.campaignData = {};
         this.camapignMultiTargetUpdateIdentifier = null;
-    }
-
-
-    @computed get campaignsCount() {
-        return this.campaigns.length;
-    }
-
-    @computed get draftCampaigns() {
-        return _.filter(this.preparedCampaigns, (campaign) => {
-            return (!_.isUndefined(campaign.summary) && campaign.summary.status === "prepared") || campaign.status === "Draft";
-        });
     }
 
     @computed get inPreparationCampaigns() {
@@ -541,24 +499,26 @@ export default class CampaignsStore {
 
     @computed get runningCampaigns() {
         return _.filter(this.preparedCampaigns, (campaign) => {
-            return (!_.isUndefined(campaign.summary) && campaign.summary.status === "launched") 
-                || campaign.status === "Active" && campaign.summary.overallDevicesCount !== campaign.summary.overallUpdatedDevicesCount;
+            return !_.isUndefined(campaign.summary) && campaign.summary.status === "launched";
+        });
+    }
+
+    @computed get runningLegacyCampaigns() {
+        return _.filter(this.preparedLegacyCampaigns, (campaign) => {
+            return campaign.status === "Active" && campaign.summary.overallDevicesCount !== campaign.summary.overallUpdatedDevicesCount
         });
     }
 
     @computed get finishedCampaigns() {
         return _.filter(this.preparedCampaigns, (campaign) => {
-            return (!_.isUndefined(campaign.summary) && (campaign.summary.status === "finished" || campaign.summary.status === "cancelled"))
-                || campaign.status === "Active" && campaign.summary.overallDevicesCount === campaign.summary.overallUpdatedDevicesCount;
+            return !_.isUndefined(campaign.summary) && (campaign.summary.status === "finished" || campaign.summary.status === "cancelled");
         });
     }
 
-    @computed get lastDraftCampaigns() {
-        let campaigns = this.draftCampaigns;
-        _.sortBy(campaigns, function(campaign) {
-          return campaign.createdAt;
-        }).reverse()
-        return campaigns.slice(0,10);
+    @computed get finishedLegacyCampaigns() {
+        return _.filter(this.preparedLegacyCampaigns, (campaign) => {
+            return campaign.status === "Active" && campaign.summary.overallDevicesCount === campaign.summary.overallUpdatedDevicesCount;
+        });
     }
 
     @computed get lastActiveCampaigns() {

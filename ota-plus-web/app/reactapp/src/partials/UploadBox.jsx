@@ -213,7 +213,7 @@ class UploadBox extends Component {
             <Modal 
                 title={heading}
                 content={uploadBoxData}
-                shown={packagesStore.packagesUploading.length && !minimized}
+                shown={packagesStore.packagesUploading.length && !minimized ? true : false}
                 onRequestClose={toggleUploadBoxMode}
                 className="upload-box"
             />

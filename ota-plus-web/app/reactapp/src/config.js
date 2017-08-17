@@ -79,6 +79,7 @@ export const API_CAMPAIGNS_LEGACY_LAUNCH = '/api/v1/campaigns';
 export const API_CAMPAIGNS_RENAME = '/api/v2/campaigns';
 export const API_CAMPAIGNS_LEGACY_RENAME = '/api/v1/campaigns';
 export const API_CAMPAIGNS_CANCEL = '/api/v2/campaigns';
+export const API_CAMPAIGNS_LEGACY_CANCEL = '/api/v1/campaigns';
 export const API_CAMPAIGNS_CANCEL_REQUEST = '/api/v1/update_requests';
 
 export const API_IMPACT_ANALYSIS_FETCH = '/api/v1/impact/blacklist';
