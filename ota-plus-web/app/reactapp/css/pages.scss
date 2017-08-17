@@ -2049,6 +2049,18 @@
             height: calc(100% - 40px);
             min-height: calc(100% - 40px);
             overflow-y: auto;
+
+            .legacy-list {
+
+                .progress {
+
+                    margin-top: -4px;
+                }
+
+                .pie {
+                    margin-top: -6px;
+                }
+            }
         }
 
         .content-empty {

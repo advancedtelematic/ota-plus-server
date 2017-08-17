@@ -2,7 +2,7 @@ import CampaignsHeader from './Header';
 import CampaignsCreateModal from './CreateModal';
 import CampaignsRenameModal from './RenameModal';
 import CampaignsTooltip from './Tooltip';
-import CampaignsListItem from './ListItem';
+import CampaignsList from './List';
 import CampaignsWizard from './Wizard';
 
 export {
@@ -10,6 +10,6 @@ export {
     CampaignsCreateModal,
     CampaignsRenameModal,
     CampaignsTooltip,
-    CampaignsListItem,
-    CampaignsWizard
+    CampaignsWizard,
+    CampaignsList,
 }

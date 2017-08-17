@@ -58,12 +58,7 @@ class Home extends Component {
                                 Draft campaigns
                             </div>
                             <div className="panel-body">
-                                <DraftCampaigns 
-                                    campaignsStore={campaignsStore}
-                                    packagesStore={packagesStore}
-                                    groupsStore={groupsStore}
-                                    addNewWizard={addNewWizard}
-                                />
+                                
                             </div>
                         </div>
                     </div>

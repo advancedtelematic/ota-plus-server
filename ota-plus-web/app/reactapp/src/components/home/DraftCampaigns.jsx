@@ -10,8 +10,6 @@ import { FlatButton } from 'material-ui';
 
 @observer
 class DraftCampaigns extends Component {
-    @observable campaignIdToAction = null;
-
     constructor(props) {
         super(props);
     }

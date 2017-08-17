@@ -33,7 +33,7 @@ class ActiveCampaigns extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {campaignsStore.campaignsFetchAsync.isFetching || groupsStore.groupsFetchAsync.isFetching ?
+                        {campaignsStore.campaignsFetchAsync.isFetching || groupsStore.groupsFetchAsync.isFetching || campaignsStore.campaignsLegacyFetchAsync.isFetching ?
                             <tr>
                                 <td colSpan="8">
                                     <Loader 
