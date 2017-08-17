@@ -10,7 +10,7 @@ class Header extends Component {
         super(props);
     }
     render() {
-        const { addNewWizard, campaignsSort, changeSort, campaignsFilter, changeFilter } = this.props;
+        const { addNewWizard } = this.props;
         return (
             <SubHeader>
                 <FlatButton
@@ -26,10 +26,6 @@ class Header extends Component {
 
 Header.propTypes = {
     addNewWizard: PropTypes.func.isRequired,
-    campaignsSort: PropTypes.string,
-    changeSort: PropTypes.func.isRequired,
-    campaignsFilter: PropTypes.string,
-    changeFilter: PropTypes.func.isRequired
 }
 
 export default Header;

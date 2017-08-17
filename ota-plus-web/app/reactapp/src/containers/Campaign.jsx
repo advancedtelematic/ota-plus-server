@@ -3,10 +3,10 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Loader } from '../partials';
 import { resetAsync } from '../utils/Common';
-import { CampaignGroupsList, CampaignCancelCampaignModal, CampaignCancelGroupModal } from '../components/campaign';
-
+import { CampaignCancelCampaignModal, CampaignCancelGroupModal } from '../components/campaign';
 import { translate } from 'react-i18next';
-import { CampaignTuf, CampaignLegacy } from '../components/campaign';
+import { CampaignLegacy } from '../components/campaign/legacy';
+import { CampaignTuf } from '../components/campaign/tuf';
 import _ from 'underscore';
 
 @observer
@@ -56,12 +56,14 @@ class Campaign extends Component {
                             campaignsStore={campaignsStore}
                             groupsStore={groupsStore}
                             showCancelGroupModal={this.showCancelGroupModal}
+                            showCancelCampaignModal={this.showCancelCampaignModal}
                         />
                     :
                         <CampaignTuf 
                             campaignsStore={campaignsStore}
                             groupsStore={groupsStore}
                             showCancelGroupModal={this.showCancelGroupModal}
+                            showCancelCampaignModal={this.showCancelCampaignModal}
                         />
                 }
                 <CampaignCancelCampaignModal
