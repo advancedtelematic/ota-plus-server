@@ -4,7 +4,8 @@ import { observer } from 'mobx-react';
 import { Loader } from '../partials';
 import { 
     PackagesTooltip, 
-    PackagesCreateModal, 
+    PackagesCreateModal,
+    PackagesFileUploaderModal, 
     PackagesHeader, 
     PackagesList,
     PackagesBlacklistModal,
@@ -16,6 +17,7 @@ import { FlatButton } from 'material-ui';
 class Packages extends Component {
     @observable tooltipShown = false;
     @observable createModalShown = false;
+    @observable fileUploaderModalShown = false;
     @observable fileDropped = null;
     @observable blacklistModalShown = false;
     @observable blacklistAction = {};
@@ -23,6 +25,7 @@ class Packages extends Component {
     @observable uploadToTuf = false;
     @observable statsModalShown = false;
     @observable statsPackageName = null;
+    @observable copied = false;
 
     constructor(props) {
         super(props);
@@ -31,7 +34,9 @@ class Packages extends Component {
         this.showStatsModal = this.showStatsModal.bind(this);
         this.hideStatsModal = this.hideStatsModal.bind(this);
         this.showCreateModal = this.showCreateModal.bind(this);
+        this.showFileUploaderModal = this.showFileUploaderModal.bind(this);
         this.hideCreateModal = this.hideCreateModal.bind(this);
+        this.hideFileUploaderModal = this.hideFileUploaderModal.bind(this);
         this.showBlacklistModal = this.showBlacklistModal.bind(this);
         this.hideBlacklistModal = this.hideBlacklistModal.bind(this);
         this.changeSort = this.changeSort.bind(this);
@@ -39,6 +44,7 @@ class Packages extends Component {
         this.changeType = this.changeType.bind(this);
         this.onFileDrop = this.onFileDrop.bind(this);
         this.toggleTufUpload = this.toggleTufUpload.bind(this);
+        this.handleCopy = this.handleCopy.bind(this);
     }
     showTooltip(e) {
         if(e) e.preventDefault();
@@ -63,9 +69,20 @@ class Packages extends Component {
         this.createModalShown = true;
         this.fileDropped = (files ? files[0] : null);
     }
+    showFileUploaderModal(e) {
+        if(e) e.preventDefault();
+        this.fileUploaderModalShown = true;
+    }
+    hideFileUploaderModal(e) {
+        if(e) e.preventDefault();
+        this.fileUploaderModalShown = false;
+    }
     toggleTufUpload(e) {
         if(e) e.preventDefault();
         this.uploadToTuf = !this.uploadToTuf;
+    } 
+    handleCopy() {
+        this.copied = true;
     }
     hideCreateModal(e) {
         if(e) e.preventDefault();
@@ -102,7 +119,7 @@ class Packages extends Component {
     }
     render() {
 
-        const { packagesStore, hardwareStore, highlightedPackage } = this.props;
+        const { packagesStore, hardwareStore, highlightedPackage, featuresStore } = this.props;
         return (
             <span ref="component">
                 {packagesStore.overallPackagesCount === null && packagesStore.packagesFetchAsync.isFetching ?
@@ -114,11 +131,7 @@ class Packages extends Component {
                         <span>
                             <PackagesHeader
                                 showCreateModal={this.showCreateModal}
-                                packagesSort={packagesStore.packagesSort}
-                                changeSort={this.changeSort}
-                                packagesFilter={packagesStore.packagesFilter}
-                                changeFilter={this.changeFilter}
-                                changeType={this.changeType}
+                                showFileUploaderModal={this.showFileUploaderModal}
                             />
                             <PackagesList 
                                 showBlacklistModal={this.showBlacklistModal}
@@ -163,6 +176,13 @@ class Packages extends Component {
                     toggleTufUpload={this.toggleTufUpload}
                     uploadToTuf={this.uploadToTuf}
                     hardwareStore={hardwareStore}
+                />
+                <PackagesFileUploaderModal 
+                    shown={this.fileUploaderModalShown}
+                    hide={this.hideFileUploaderModal}
+                    handleCopy={this.handleCopy}
+                    copied={this.copied}
+                    featuresStore={featuresStore}
                 />
                 <PackagesBlacklistModal 
                     shown={this.blacklistModalShown}

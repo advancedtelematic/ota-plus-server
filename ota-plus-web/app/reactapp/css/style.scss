@@ -389,6 +389,14 @@ input {
         margin: 6px 15px 0 0 !important;
         float: right !important;
     }
+
+    .setup-file-uploader {
+        float: right;
+        color: white;
+        margin-top: 11px;
+        margin-right: 15px;
+        text-decoration: underline;
+    }
 }
 
 .input-wrapper {
@@ -1655,6 +1663,20 @@ input {
                     opacity: 0;
                 }
             }
+        }
+    }
+}
+
+.file-uploader-modal {
+
+    .description {
+        margin-bottom: 15px;
+    }
+    .github {
+        margin-bottom: 15px;
+        
+        a {
+            text-decoration: underline;
         }
     }
 }

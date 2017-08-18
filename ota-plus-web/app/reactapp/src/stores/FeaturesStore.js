@@ -3,7 +3,8 @@ import axios from 'axios';
 import { 
     API_FEATURES_FETCH, 
     API_FEATURES_TREEHUB_ACTIVATE, 
-    API_FEATURES_FILE_UPLOADER_ACTIVATE
+    API_FEATURES_FILE_UPLOADER_ACTIVATE,
+    API_FEATURES_FILE_UPLOADER_CLIENT_ID_GET
 } from '../config';
 import { 
     resetAsync, 
@@ -16,12 +17,15 @@ export default class FeaturesStore {
     @observable featuresFetchAsync = {};
     @observable featuresTreehubActivateAsync = {};
     @observable featuresFileUploaderActivateAsync = {};
+    @observable featuresClientIdFetchAsync = {};
     @observable features = [];
+    @observable clientId = null;
     
     constructor() {
         resetAsync(this.featuresFetchAsync);
         resetAsync(this.featuresTreehubActivateAsync);
         resetAsync(this.featuresFileUploaderActivateAsync);
+        resetAsync(this.featuresClientIdFetchAsync);
     }
 
     resetFeaturesFetchAsync(isFetching = false) {
@@ -74,9 +78,22 @@ export default class FeaturesStore {
             }.bind(this));
     }
 
+    fetchClientId() {
+        resetAsync(this.featuresClientIdFetchAsync, true);
+        return axios.get(API_FEATURES_FILE_UPLOADER_CLIENT_ID_GET)
+            .then(function (response) {
+                this.clientId = response.data.client_id;
+                this.featuresClientIdFetchAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function (error) {
+                this.featuresClientIdFetchAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
     _reset() {
         resetAsync(this.featuresFetchAsync);
         resetAsync(this.featuresTreehubActivateAsync);
         resetAsync(this.featuresFileUploaderActivateAsync);
+        resetAsync(this.featuresClientIdFetchAsync);
     }
 }

@@ -10,9 +10,10 @@ class Header extends Component {
         super(props);
     }
     render() {
-        const { showCreateModal, packagesSort, changeSort, packagesFilter, changeFilter, changeType } = this.props;
+        const { showCreateModal, showFileUploaderModal } = this.props;
         return (
             <SubHeader>
+                <a href="#" className="setup-file-uploader" onClick={showFileUploaderModal.bind(this)}>or setup file uploader</a>
                 <FlatButton
                     label="Add new package"
                     onClick={showCreateModal.bind(this, null)}
@@ -26,11 +27,7 @@ class Header extends Component {
 
 Header.propTypes = {
     showCreateModal: PropTypes.func.isRequired,
-    packagesSort: PropTypes.string,
-    changeSort: PropTypes.func.isRequired,
-    packagesFilter: PropTypes.string,
-    changeFilter: PropTypes.func.isRequired,
-    changeType: PropTypes.func.isRequired
+    showFileUploaderModal: PropTypes.func.isRequired,
 }
 
 export default Header;
