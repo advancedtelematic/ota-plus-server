@@ -284,16 +284,12 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
     userProfileRequest("users/" + userId.id + "/features").execJson[Seq[FeatureName]](apiExec)
 
   def activateFeature(userId: UserId, feature: FeatureName, clientId: Uuid)
-                     (implicit executionContext: ExecutionContext): Future[Done] = {
+                     (implicit executionContext: ExecutionContext): Future[Result] = {
     val requestBody = Json.obj("feature" -> feature.get, "client_id" -> clientId)
 
     userProfileRequest(s"users/${userId.id}/features")
       .transform(_.withMethod("POST").withBody(requestBody))
-      .execResponse(apiExec)
-      .flatMap { response => response.status match {
-        case 201 => Future.successful(Done)
-        case _ => Future.failed(UnexpectedResponse(response))
-      }}
+      .execResult(apiExec)
   }
 
   def updateBillingInfo[T](userId: UserId, query: Map[String,Seq[String]], body: JsValue)
