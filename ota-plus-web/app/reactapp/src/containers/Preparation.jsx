@@ -26,6 +26,10 @@ const initialPreparationSequence = [
     {
         nr: 5,
         name: "Activate treehub"
+    },
+    {
+        nr: 6,
+        name: "File uploader"
     }
 ];
 
@@ -37,6 +41,7 @@ class Preparation extends Component {
     @observable createdTuf = null;
     @observable createdDirector = null;
     @observable createdTreehub = null;
+    @observable createdFileUploader = null;
     @observable timesCheckCreatedTufCalled = 0;
     @observable timesCreateTufCalled = 0;
     @observable timesCheckCreatedDirectorCalled = 0;
@@ -58,6 +63,7 @@ class Preparation extends Component {
         this.createdDirectorHandler = new AsyncConflictCallbackHandler(props.packagesStore, 'directorRepoExistsFetchAsync', this.checkCreatedDirector.bind(this));
         this.createDirectorHandler = new AsyncConflictCallbackHandler(props.packagesStore, 'directorRepoCreateFetchAsync', this.doubleCheckCreatedDirector.bind(this));
         this.createdTreehubHandler = new AsyncStatusCallbackHandler(props.featuresStore, 'featuresFetchAsync', this.checkCreatedTreehub.bind(this));
+        this.createdFileUploaderHandler = new AsyncStatusCallbackHandler(props.featuresStore, 'featuresFetchAsync', this.checkCreatedFileUploader.bind(this));
     }
 
     componentWillMount() {
@@ -66,6 +72,7 @@ class Preparation extends Component {
         this.props.packagesStore.fetchTufRepoExists();
         this.props.packagesStore.fetchDirectorRepoExists();
         this.props.featuresStore.activateTreehub();
+        this.props.featuresStore.activateFileUploader();
     }
 
     componentWillUnmount() {
@@ -74,6 +81,7 @@ class Preparation extends Component {
         this.createdTufHandler();
         this.createdDirectorHandler();
         this.createdTreehubHandler();
+        this.createdFileUploaderHandler();
         this.createDirectorHandler();
         this.createTufHandler();
     }
@@ -161,6 +169,12 @@ class Preparation extends Component {
         }
     }
 
+    checkCreatedFileUploader() {
+        if (this.props.featuresStore.featuresFetchAsync.code === 200 && _.includes(this.props.featuresStore.features, 'tufupload')) {
+            this.createdFileUploader = true;
+        }
+    }
+
     doorOpen() {
         let container = document.getElementsByClassName('preparation-container')[0];
         if (container && !_.includes(container.classList, 'door-open')) {
@@ -176,8 +190,9 @@ class Preparation extends Component {
             !provisioningStore.provisioningStatusFetchAsync.isFetching &&
             !packagesStore.tufRepoExistsFetchAsync.isFetching &&
             !packagesStore.directorRepoExistsFetchAsync.isFetching &&
-            !featuresStore.featuresTreehubActivateAsync.isFetching && this.checkedCreatedTufCalled && this.checkedCreatedDirectorCalled;
-        let allIsPassed = finished && this.userProfile && this.activatedProvisioning && this.createdTuf && this.createdDirector && this.createdTreehub;
+            !featuresStore.featuresTreehubActivateAsync.isFetching &&
+            !featuresStore.featuresFileUploaderActivateAsync.isFetching && this.checkedCreatedTufCalled && this.checkedCreatedDirectorCalled;
+        let allIsPassed = finished && this.userProfile && this.activatedProvisioning && this.createdTuf && this.createdDirector && this.createdTreehub && this.createdFileUploader;
         if (allIsPassed) {
             for (let i = 1; i < 100; i++)
                 window.clearInterval(i);
@@ -262,6 +277,21 @@ class Preparation extends Component {
                                                                             <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
                                                                         </span>
                                                                         : this.createdTreehub ?
+                                                                        <span className="img">
+                                                                            <img src="/assets/img/icons/check.png" alt="pass"/>
+                                                                        </span>
+                                                                        : finished ?
+                                                                            <span className="img">
+                                                                                <img src="/assets/img/icons/red_cross.png" alt="fail"/>
+                                                                            </span>
+                                                                            : null
+                                                                :
+                                                                step.nr === 6 ?
+                                                                    featuresStore.featuresFetchAsync.isFetching ?
+                                                                        <span className="img">
+                                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                                        </span>
+                                                                        : this.createdFileUploader ?
                                                                         <span className="img">
                                                                             <img src="/assets/img/icons/check.png" alt="pass"/>
                                                                         </span>

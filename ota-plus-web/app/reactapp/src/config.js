@@ -17,6 +17,7 @@ export const API_USER_DEVICES_SEEN = '/api/v1/auditor/devices_seen_in';
 
 export const API_FEATURES_FETCH = '/api/v1/features';
 export const API_FEATURES_TREEHUB_ACTIVATE = '/api/v1/features/treehub';
+export const API_FEATURES_FILE_UPLOADER_ACTIVATE = '/api/v1/features/tufupload';
 
 export const API_DEVICES_SEARCH = '/api/v1/devices';
 export const API_DEVICES_CREATE = '/api/v1/devices';
