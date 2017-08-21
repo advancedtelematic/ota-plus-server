@@ -126,40 +126,45 @@ class Preparation extends Component {
     }
 
     checkCreatedTuf() {
-        if (this.props.packagesStore.tufRepoExistsFetchAsync.code === 409) {
-            this.timesCheckCreatedTufCalled += 1;
-            if(this.timesCheckCreatedTufCalled === 1){
-                setInterval(this.doubleCheckCreatedTuf, 800);
-            }
-        }
-        if(this.props.packagesStore.tufRepoExistsFetchAsync.code === 200) {
-            this.createdTuf = true;
-            this.checkedCreatedTufCalled = true;
-        }
-        if(this.props.packagesStore.tufRepoExistsFetchAsync.code === 404 || this.props.packagesStore.tufRepoExistsFetchAsync.code === 502) {
-            this.timesCreateTufCalled +=1;
-            if(this.timesCreateTufCalled === 1) {
-                this.props.packagesStore.createTufRepo();
-            }
+        switch (this.props.packagesStore.tufRepoExistsFetchAsync.code) {
+            case 200:
+                this.createdTuf = true;
+                this.checkedCreatedTufCalled = true;
+                break;
+            case 404:
+                this.timesCreateTufCalled +=1;
+                if(this.timesCreateTufCalled === 1) {
+                    this.props.packagesStore.createTufRepo();
+                }
+                break;
+            case 409:
+            case 502:
+                this.timesCheckCreatedTufCalled += 1;
+                if(this.timesCheckCreatedTufCalled === 1){
+                    setInterval(this.doubleCheckCreatedTuf, 800);
+                }
+                break;
         }
     }
 
     checkCreatedDirector() {
-        if (this.props.packagesStore.directorRepoExistsFetchAsync.code === 409) {
-            this.timesCheckCreatedDirectorCalled += 1;
-            if(this.timesCheckCreatedDirectorCalled === 1){
-                setInterval(this.doubleCheckCreatedDirector, 800);
-            }
-        }
-        if(this.props.packagesStore.directorRepoExistsFetchAsync.code === 200) {
-            this.createdDirector = true;
-            this.checkedCreatedDirectorCalled = true;
-        }
-        if(this.props.packagesStore.directorRepoExistsFetchAsync.code === 404 || this.props.packagesStore.directorRepoExistsFetchAsync.code === 502) {
-            this.timesCreateDirectorCalled += 1;
-            if(this.timesCreateDirectorCalled === 1) {
-                this.props.packagesStore.createDirectorRepo();
-            }
+        switch (this.props.packagesStore.directorRepoExistsFetchAsync.code) {
+            case 200:
+                this.createdDirector = true;
+                this.checkedCreatedDirectorCalled = true;
+                break;
+            case 404:
+                this.timesCreateDirectorCalled += 1;
+                if(this.timesCreateDirectorCalled === 1) {
+                    this.props.packagesStore.createDirectorRepo();
+                }
+                break;
+            case 409:
+            case 502:
+                this.timesCheckCreatedDirectorCalled += 1;
+                if(this.timesCheckCreatedDirectorCalled === 1){
+                    setInterval(this.doubleCheckCreatedDirector, 800);
+                }
         }
     }
 
