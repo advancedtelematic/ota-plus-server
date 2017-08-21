@@ -95,15 +95,19 @@ class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient,
     val userId = request.idToken.userId
     val token = request.authPlusAccessToken
 
-    userProfileApi.getFeature(userId, feature).flatMap { f =>
-      f.client_id match {
+    def activateFeatureWithClientId = for {
+      clientInfo <- authPlusApi.createClientForUser(
+        feature.get, s"namespace.${request.namespace.get} $apiDomain/${feature.get}", token)
+      clientId = Uuid.fromJava(clientInfo.clientId)
+      result <- userProfileApi.activateFeature(userId, feature, clientId)
+    } yield result
+
+    userProfileApi.getFeature(userId, feature)
+      .map { r => r.client_id }
+      .recover { case RemoteApiError(r, _) if (r.header.status == 404) => None }
+      .flatMap { client_id => client_id match {
         case Some(id) => Future.successful(Ok(EmptyContent()))
-        case None => for {
-          clientInfo <- authPlusApi.createClientForUser(
-            feature.get, s"namespace.${request.namespace.get} $apiDomain/${feature.get}", token)
-          clientId = Uuid.fromJava(clientInfo.clientId)
-          result <- userProfileApi.activateFeature(userId, feature, clientId)
-        } yield result
+        case None => activateFeatureWithClientId
       }
     }
   }
