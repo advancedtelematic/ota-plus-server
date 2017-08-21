@@ -115,6 +115,7 @@ class Preparation extends Component {
             setTimeout(this.fetchDirectorRepoExists, 3000);
         } else if(this.createdDirector !== true) {
             this.props.packagesStore.fetchDirectorRepoExists()
+
         }
     }
 
@@ -135,10 +136,10 @@ class Preparation extends Component {
             this.createdTuf = true;
             this.checkedCreatedTufCalled = true;
         }
-        else {
-            this.timesCheckCreatedTufCalled += 1;
-            if(this.timesCheckCreatedTufCalled === 1){
-                setInterval(this.doubleCheckCreatedTuf, 800);
+        if(this.props.packagesStore.tufRepoExistsFetchAsync.code === 404 || this.props.packagesStore.tufRepoExistsFetchAsync.code === 403) {
+            this.timesCreateTufCalled +=1;
+            if(this.timesCreateTufCalled === 1) {
+                this.props.packagesStore.createTufRepo();
             }
         }
     }
@@ -154,10 +155,10 @@ class Preparation extends Component {
             this.createdDirector = true;
             this.checkedCreatedDirectorCalled = true;
         }
-        else {
-            this.timesCheckCreatedDirectorCalled += 1;
-            if(this.timesCheckCreatedDirectorCalled === 1){
-                setInterval(this.doubleCheckCreatedDirector, 800);
+        if(this.props.packagesStore.directorRepoExistsFetchAsync.code === 404 || this.props.packagesStore.directorRepoExistsFetchAsync.code === 403) {
+            this.timesCreateDirectorCalled += 1;
+            if(this.timesCreateDirectorCalled === 1) {
+                this.props.packagesStore.createDirectorRepo();
             }
         }
     }
