@@ -136,7 +136,7 @@ class Preparation extends Component {
             this.createdTuf = true;
             this.checkedCreatedTufCalled = true;
         }
-        if(this.props.packagesStore.tufRepoExistsFetchAsync.code === 404 || this.props.packagesStore.tufRepoExistsFetchAsync.code === 403) {
+        if(this.props.packagesStore.tufRepoExistsFetchAsync.code === 404 || this.props.packagesStore.tufRepoExistsFetchAsync.code === 502) {
             this.timesCreateTufCalled +=1;
             if(this.timesCreateTufCalled === 1) {
                 this.props.packagesStore.createTufRepo();
@@ -155,7 +155,7 @@ class Preparation extends Component {
             this.createdDirector = true;
             this.checkedCreatedDirectorCalled = true;
         }
-        if(this.props.packagesStore.directorRepoExistsFetchAsync.code === 404 || this.props.packagesStore.directorRepoExistsFetchAsync.code === 403) {
+        if(this.props.packagesStore.directorRepoExistsFetchAsync.code === 404 || this.props.packagesStore.directorRepoExistsFetchAsync.code === 502) {
             this.timesCreateDirectorCalled += 1;
             if(this.timesCreateDirectorCalled === 1) {
                 this.props.packagesStore.createDirectorRepo();
