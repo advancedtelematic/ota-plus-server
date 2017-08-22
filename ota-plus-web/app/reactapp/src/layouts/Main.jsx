@@ -179,7 +179,11 @@ class Main extends Component {
     }
     backButtonAction() {
         window.history.go(-1);
-    }    
+    }
+    componentWillReceiveProps() {
+        this.queueModalShown = false;
+        this.activeTabId = 0;
+    }
     render() {
         const { children, ...rest } = this.props;
         const pageId = "page-" + (this.props.location.pathname.toLowerCase().split('/')[1] || "home");
