@@ -16,6 +16,7 @@ import {
     API_PACKAGES_DEVICE_AUTO_INSTALLED_PACKAGES,
     API_PACKAGES_DEVICE_QUEUE,
     API_PACKAGES_DEVICE_HISTORY,
+    API_PACKAGES_DIRECTOR_DEVICE_HISTORY,
     API_PACKAGES_DEVICE_UPDATES_LOGS,
     API_PACKAGES_DEVICE_AUTO_INSTALL,
     API_PACKAGES_DEVICE_INSTALL,
@@ -54,6 +55,7 @@ export default class PackagesStore {
     @observable packagesAutoInstalledForDirectorDeviceFetchAsync = {};
     @observable packagesDeviceQueueFetchAsync = {};
     @observable packagesDeviceHistoryFetchAsync = {};
+    @observable packagesDirectorDeviceHistoryFetchAsync = {};
     @observable packagesDeviceUpdatesLogsFetchAsync = {};
     @observable packagesDeviceEnableAutoInstallAsync = {};
     @observable packagesDirectorDeviceEnableAutoInstallAsync = {};
@@ -89,7 +91,9 @@ export default class PackagesStore {
     @observable devicePackagesQueuedCount = 0;
     @observable deviceQueue = [];
     @observable deviceHistory = [];
+    @observable directorDeviceHistory = [];
     @observable deviceHistoryPerDevice = {};
+    @observable directorDeviceHistoryPerDevice = {};
     @observable deviceUpdatesLogs = [];
 
     @observable ondevicePackages = [];
@@ -98,6 +102,11 @@ export default class PackagesStore {
     @observable ondevicePackagesLimit = 25;
     @observable ondeviceFilter = '';
     @observable activeDeviceId = null;
+
+    @observable directorDevicePackagesFilter = '';
+    @observable directorDeviceHistoryCurrentPage = 0;
+    @observable directorDeviceHistoryTotalCount = null;
+    @observable directorDeviceHistoryLimit = 10;
 
     constructor() {
         resetAsync(this.directorRepoExistsFetchAsync);
@@ -122,6 +131,7 @@ export default class PackagesStore {
         resetAsync(this.packagesAutoInstalledForDirectorDeviceFetchAsync);
         resetAsync(this.packagesDeviceQueueFetchAsync);
         resetAsync(this.packagesDeviceHistoryFetchAsync);
+        resetAsync(this.packagesDirectorDeviceHistoryFetchAsync);
         resetAsync(this.packagesDeviceUpdatesLogsFetchAsync);
         resetAsync(this.packagesDeviceEnableAutoInstallAsync);
         resetAsync(this.packagesDirectorDeviceEnableAutoInstallAsync);
@@ -770,6 +780,37 @@ export default class PackagesStore {
         this.deviceQueue.push(queuedTuf);
     }
 
+    fetchDirectorDevicePackagesHistory(id, filter = '') {
+        resetAsync(this.packagesDirectorDeviceHistoryFetchAsync, true);
+        if(this.directorDevicePackagesFilter !== filter) {
+            this.directorDeviceHistoryTotalCount = null;
+            this.directorDeviceHistoryCurrentPage = 0;
+            this.directorDeviceHistoryPerDevice[this.activeDeviceId] = [];
+        }
+        this.directorDevicePackagesFilter = filter;
+        return axios.get(API_PACKAGES_DIRECTOR_DEVICE_HISTORY + '/' + id + '?limit=' + this.directorDeviceHistoryLimit + 
+            '&offset=' + this.directorDeviceHistoryCurrentPage * this.directorDeviceHistoryLimit)
+            .then(function(response) {
+                let data = response.data.values;
+                let prevData = this.directorDeviceHistoryPerDevice[this.activeDeviceId] ? this.directorDeviceHistoryPerDevice[this.activeDeviceId] : [];
+                this.directorDeviceHistory = data;
+                this.directorDeviceHistoryPerDevice[this.activeDeviceId] = _.uniq(prevData.concat(data), obj => obj.updateId);
+                this._prepareDirectorDeviceHistory();
+                this.directorDeviceHistoryCurrentPage++;
+                this.directorDeviceHistoryTotalCount = response.data.total;
+                this.packagesDirectorDeviceHistoryFetchAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function(error) {
+                this.packagesDirectorDeviceHistoryFetchAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
+    _prepareDirectorDeviceHistory() {
+        this.directorDeviceHistoryPerDevice[this.activeDeviceId] = _.sortBy(this.directorDeviceHistoryPerDevice[this.activeDeviceId], (obj) => { 
+            return obj.receivedAt; 
+        }).reverse();
+    }
+
     fetchDevicePackagesHistory(id) {
         resetAsync(this.packagesDeviceHistoryFetchAsync, true);
         return axios.get(API_PACKAGES_DEVICE_HISTORY + '?uuid=' + id)
@@ -1199,6 +1240,7 @@ export default class PackagesStore {
         resetAsync(this.packagesAutoInstalledForDirectorDeviceFetchAsync);
         resetAsync(this.packagesDeviceQueueFetchAsync);
         resetAsync(this.packagesDeviceHistoryFetchAsync);
+        resetAsync(this.packagesDirectorDeviceHistoryFetchAsync);
         resetAsync(this.packagesDeviceUpdatesLogsFetchAsync);
         resetAsync(this.packagesDeviceEnableAutoInstallAsync);
         resetAsync(this.packagesDirectorDeviceEnableAutoInstallAsync);
@@ -1228,13 +1270,18 @@ export default class PackagesStore {
         this.devicePackagesQueuedCount = 0;
         this.deviceQueue = [];
         this.deviceHistory = [];
-        this.deviceHistoryPerDevice = [];
+        this.directorDeviceHistory = [];
+        this.deviceHistoryPerDevice = {};
+        this.directorDeviceHistoryPerDevice = {};
         this.deviceUpdatesLogs = [];
         this.ondevicePackages = [];
         this.ondevicePackagesCurrentPage = 0;
         this.ondevicePackagesTotalCount = 0;
         this.ondeviceFilter = '';
         this.activeDeviceId = null;
+        this.directorDeviceHistoryCurrentPage = 0;
+        this.directorDeviceHistoryTotalCount = 0;
+        this.directorDevicePackagesFilter = '';
     }
 
     _resetWizard() {
