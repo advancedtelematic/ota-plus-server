@@ -6,6 +6,7 @@ import { Popover } from 'material-ui';
 import { Modal } from '../../partials';
 import { QueueList } from './queue';
 import { HistoryList } from './history';
+import _ from 'underscore';
 
 @observer
 class QueueModal extends Component {
@@ -60,7 +61,7 @@ class QueueModal extends Component {
                         className={"tab-item" + (activeTabId === 1 ? " active" : "")}
                         id="installation-history"
                         data-id={1}
-                        onActive={setQueueModalActiveTabId.bind(this, 1)}
+                        onActive={setQueueModalActiveTabId.bind(this, 1, !_.isEmpty(device) ? device : null)}
                     >
                         <div className={"wrapper-list" + (activeTabId === 0 ? " hide" : "")}>
                             <HistoryList 

@@ -112,8 +112,11 @@ class Main extends Component {
         this.queueModalShown = false;
         this.setQueueModalActiveTabId(0);
     }
-    setQueueModalActiveTabId(tabId) {
+    setQueueModalActiveTabId(tabId, device = null) {
         this.activeTabId = tabId;
+        if(!_.isEmpty(device) && device.isDirector && tabId === 1) {
+            this.packagesStore.fetchDirectorDevicePackagesHistory(device.uuid);
+        }
     }
     toggleWizard(wizardId, wizardName, e) {
         if(e) e.preventDefault();
@@ -181,8 +184,7 @@ class Main extends Component {
         window.history.go(-1);
     }
     componentWillReceiveProps() {
-        this.queueModalShown = false;
-        this.activeTabId = 0;
+        this.hideQueueModal();
     }
     render() {
         const { children, ...rest } = this.props;
