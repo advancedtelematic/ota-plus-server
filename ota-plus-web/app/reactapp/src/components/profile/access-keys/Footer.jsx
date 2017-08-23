@@ -12,6 +12,16 @@ class Footer extends Component {
             <div className="footer">
                 <ul>
                     <li>
+                        <div className="server-name">
+                            <div className="text">
+                                My server Name:
+                            </div>
+                            <pre id="personal-server-name">
+                                 {provisioningStore.provisioningDetails.hostName}
+                                                        </pre>
+                        </div>
+                    </li>
+                    <li>
                         <div className="prebuilds">
                             <div className="text" id="access-keys-prebuilds-description">
                                 get pre-builds <a href="#" id="access-keys-prebuilds-link" onClick={showDevicesCreateModal}>DEB/RPM</a>

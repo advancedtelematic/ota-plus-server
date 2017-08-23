@@ -3453,6 +3453,32 @@
                     height: 40px;
                     padding: 11px 45px;
 
+                    .server-name {
+                        width: 60%;
+                        float: left;
+
+                        .text {
+                            margin: 0 10px 0 0;
+                            float: left;
+                        }
+                        pre {
+                            padding: 4px 10px;
+                            margin: -4px 0 0 0;
+                            float: left;
+                        }
+                    }
+
+                    .treehub {
+                        width: 20%;
+                        float: left;
+                    }
+
+                    .prebuilds {
+                        width: 20%;
+                        float: right;
+                        text-align: right;
+                    }
+
                     a {
                         color: white;
                         text-decoration: underline;
