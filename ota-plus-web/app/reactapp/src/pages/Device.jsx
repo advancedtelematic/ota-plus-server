@@ -16,14 +16,6 @@ class Device extends Component {
     constructor(props) {
         super(props);
         this.cancelInstallation = this.cancelInstallation.bind(this);
-
-        this.multiTargetUpdateCreatedHandler = observe(props.devicesStore, (change) => {
-            if(change.name === 'devicesOneFetchAsync' && change.object[change.name].isFetching === false) {
-                if(props.devicesStore.device.isDirector) {
-                    props.packagesStore.fetchDirectorDevicePackagesHistory(props.devicesStore.device.uuid);
-                }
-            }
-        });
     }
     componentWillMount() {
         this.props.packagesStore.page = 'device';
@@ -44,7 +36,6 @@ class Device extends Component {
         this.props.devicesStore._reset();
         this.props.packagesStore._reset();
         this.props.hardwareStore._reset();
-        this.multiTargetUpdateCreatedHandler();
     }
     cancelInstallation(requestId) {
         this.props.packagesStore.cancelInstallation(this.props.params.id, requestId);

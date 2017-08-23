@@ -39,7 +39,7 @@ class PropertiesPanel extends Component {
     }
     render() {
         const { devicesStore, showPackageCreateModal, showPackageBlacklistModal, onFileDrop, packagesStore, expandedPack, installPackage, multiTargetUpdate, device, togglePackageAutoUpdate } = this.props;
-        let attributesFetching = packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesForDeviceFetchAsync.isFetching || packagesStore.packagesOndeviceFetchAsync.isFetching;
+        let attributesFetching = packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesForDeviceFetchAsync.isFetching;
         return (
             <div className="properties-panel">
                 <div className="darkgrey-header">
