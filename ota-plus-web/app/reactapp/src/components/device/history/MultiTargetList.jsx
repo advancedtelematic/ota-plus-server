@@ -21,15 +21,12 @@ class MultiTargetList extends Component {
                     hasMore={packagesStore.directorDeviceHistoryCurrentPage < packagesStore.directorDeviceHistoryTotalCount / packagesStore.directorDeviceHistoryLimit}
                     isLoading={packagesStore.packagesDirectorDeviceHistoryFetchAsync.isFetching}
                     useWindow={false}
+                    threshold={50}
                     loadMore={() => {
                         packagesStore.fetchDirectorDevicePackagesHistory(device.uuid, packagesStore.directorDevicePackagesFilter)
                     }}
                 >
-                    {packagesStore.packagesDirectorDeviceHistoryFetchAsync.isFetching ?
-                        <div className="wrapper-loader">
-                            <Loader />
-                        </div>
-                    :
+                    {!_.isEmpty(packagesStore.directorDeviceHistoryPerDevice[device.uuid]) ?
                         _.map(packagesStore.directorDeviceHistoryPerDevice[device.uuid], (historyItem, index) => {
                             return (
                                 <MultiTargetItem
@@ -38,7 +35,15 @@ class MultiTargetList extends Component {
                                 />
                             );
                         })
+                    :
+                        !packagesStore.packagesDirectorDeviceHistoryFetchAsync.isFetching ?
+                            <div className="queue-empty-center">
+                                Multi target update history is empty.
+                            </div>
+                        :
+                            null                        
                     }
+                     
                 </InfiniteScroll>
             </ul>
         );

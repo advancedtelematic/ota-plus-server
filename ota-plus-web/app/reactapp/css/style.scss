@@ -2363,8 +2363,9 @@ div[role=presentation] {
                     overflow-y: auto;
 
                     ul.list {
-                        min-height: 100%;
+                        height: calc(100vh - 315px);
                         margin: 0;
+                        overflow-y: auto;
 
                         li {
                             padding: 15px;
