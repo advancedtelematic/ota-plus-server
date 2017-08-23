@@ -22,7 +22,7 @@ class Packages extends Component {
     @observable blacklistModalShown = false;
     @observable blacklistAction = {};
     @observable statsPackageName = null;
-    @observable uploadToTuf = false;
+    @observable uploadToTuf = true;
     @observable statsModalShown = false;
     @observable statsPackageName = null;
     @observable copied = false;
@@ -119,7 +119,7 @@ class Packages extends Component {
     }
     render() {
 
-        const { packagesStore, hardwareStore, highlightedPackage, featuresStore } = this.props;
+        const { packagesStore, hardwareStore, highlightedPackage, featuresStore, devicesStore } = this.props;
         return (
             <span ref="component">
                 {packagesStore.overallPackagesCount === null && packagesStore.packagesFetchAsync.isFetching ?
@@ -176,6 +176,7 @@ class Packages extends Component {
                     toggleTufUpload={this.toggleTufUpload}
                     uploadToTuf={this.uploadToTuf}
                     hardwareStore={hardwareStore}
+                    devicesStore={devicesStore}
                 />
                 <PackagesFileUploaderModal 
                     shown={this.fileUploaderModalShown}

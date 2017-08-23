@@ -24,7 +24,7 @@ class CreateModal extends Component {
     disableButton() {
         this.submitButtonDisabled = true;
     }
-    submitForm() {
+    submitForm(type) {
         let formData = new FormData();
         if(this.props.fileDropped)
             formData.append('file', this.props.fileDropped);
@@ -34,7 +34,7 @@ class CreateModal extends Component {
         delete data['fake-file'];
         data.description = data.description ? data.description : "";
         data.vendor = data.vendor ? data.vendor : "";
-        if(this.props.uploadToTuf) {
+        if(this.props.uploadToTuf && (type === 'common' || type === 'director')) {
             this.props.packagesStore.createTufPackage(data, formData, this.selectedHardwareIds.join());
         } else {
             this.props.packagesStore.createPackage(data, formData);
@@ -72,13 +72,12 @@ class CreateModal extends Component {
         this.selectedHardwareIds = values;
     }
     render() {
-        const { shown, hide, packagesStore, hardwareStore, toggleTufUpload, uploadToTuf, fileDropped } = this.props;
-
-        const form = (
+        const { shown, hide, packagesStore, hardwareStore, toggleTufUpload, uploadToTuf, fileDropped, devicesStore } = this.props;
+        const legacyForm = (
             <Form
                 onValid={this.enableButton.bind(this)}
                 onInvalid={this.disableButton.bind(this)}
-                onValidSubmit={this.submitForm.bind(this)}
+                onValidSubmit={this.submitForm.bind(this, 'legacy')}
                 id="package-create-form">
                 <AsyncResponse 
                     handledStatus="error"
@@ -113,56 +112,28 @@ class CreateModal extends Component {
                         />
                     </div>
                 </div>
-                {!uploadToTuf ?
-                    <div className="row">
-                        <div className="col-xs-6">
-                            <FormsyText
-                                name="description"
-                                value=""
-                                floatingLabelText="Description"
-                                className="input-wrapper"
-                                id="add-new-package-description"
-                                updateImmediately
-                            />
-                        </div>
-                        <div className="col-xs-6">
-                            <FormsyText
-                                name="vendor"
-                                value=""
-                                floatingLabelText="Vendor"
-                                className="input-wrapper"
-                                id="add-new-package-vendor"
-                                updateImmediately
-                            />
-                        </div>
+                <div className="row">
+                    <div className="col-xs-6">
+                        <FormsyText
+                            name="description"
+                            value=""
+                            floatingLabelText="Description"
+                            className="input-wrapper"
+                            id="add-new-package-description"
+                            updateImmediately
+                        />
                     </div>
-                :
-                    null 
-                }
-                {uploadToTuf ?
-                    <div className="row">
-                        <div className="col-xs-6">
-                            <div className="hardware-ids-select" id="hardware-ids-select">
-                                {hardwareStore.hardwareIdsFetchAsync.isFetching ?
-                                    <Loader />
-                                :
-                                    <SelectField
-                                        id="hardware-ids-select-field"
-                                        multiple={true}
-                                        onChange={this.selectHardwareIds}
-                                        hintText="Select hardware ids"
-                                        hintStyle={{opacity: this.selectedHardwareIds.length ? 0 : 1, color: '#b2b2b2', fontWeight: 'bold'}}
-                                        value={this.selectedHardwareIds}
-                                    >
-                                        {this.formatHardwareIds(this.selectedHardwareIds)}
-                                    </SelectField>
-                                }
-                            </div>
-                        </div>
+                    <div className="col-xs-6">
+                        <FormsyText
+                            name="vendor"
+                            value=""
+                            floatingLabelText="Vendor"
+                            className="input-wrapper"
+                            id="add-new-package-vendor"
+                            updateImmediately
+                        />
                     </div>
-                :
-                    null
-                }
+                </div>
                 <div className="row">
                     <div className="col-xs-6">
                         <div className="row">
@@ -204,41 +175,128 @@ class CreateModal extends Component {
                                 />
                             </div>
                         </div>
-
                     </div>
-
+                </div>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <div className="body-actions">
+                            <a href="#"
+                                onClick={this.hideModal.bind(this)}
+                                className="link-cancel"
+                                id="add-new-package-cancel"
+                            >
+                                Cancel
+                            </a>
+                            <FlatButton
+                                label="Add package"
+                                type="submit"
+                                className="btn-main"
+                                id="add-new-package-confirm"
+                                disabled={this.submitButtonDisabled}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </Form>
+        );
+        const directorForm = (
+            <Form
+                onValid={this.enableButton.bind(this)}
+                onInvalid={this.disableButton.bind(this)}
+                onValidSubmit={this.submitForm.bind(this, 'director')}
+                id="package-create-form">
+                <AsyncResponse 
+                    handledStatus="error"
+                    action={packagesStore.packagesCreateAsync}
+                    errorMsg={
+                        (packagesStore.packagesCreateAsync.data ? 
+                            packagesStore.packagesCreateAsync.data.description 
+                        : 
+                            "An error occured during package creation. Please try again."
+                        )
+                    }
+                />
+                <div className="row">
+                    <div className="col-xs-6">
+                        <FormsyText
+                            name="packageName"
+                            floatingLabelText="Package name"
+                            className="input-wrapper"
+                            id="add-new-package-name"
+                            updateImmediately
+                            required
+                        />
+                    </div>
+                    <div className="col-xs-6">
+                        <FormsyText
+                            name="version"
+                            floatingLabelText="Version"
+                            className="input-wrapper"
+                            id="add-new-package-version"
+                            updateImmediately
+                            required
+                        />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-xs-6">
+                        <div className="hardware-ids-select" id="hardware-ids-select">
+                            {hardwareStore.hardwareIdsFetchAsync.isFetching ?
+                                <Loader />
+                            :
+                                <SelectField
+                                    id="hardware-ids-select-field"
+                                    multiple={true}
+                                    onChange={this.selectHardwareIds}
+                                    hintText="Select hardware ids"
+                                    hintStyle={{opacity: this.selectedHardwareIds.length ? 0 : 1, color: '#b2b2b2', fontWeight: 'bold'}}
+                                    value={this.selectedHardwareIds}
+                                >
+                                    {this.formatHardwareIds(this.selectedHardwareIds)}
+                                </SelectField>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div className="row">
                     <div className="col-xs-6">
                         <div className="row">
-                            <div className="switch-row">
-                                <div className="col-xs-2">
-                                    <div className={"switch" + (uploadToTuf ? " switchOn" : "")} id="switch" onClick={toggleTufUpload.bind(this)}>
-                                        <div className="switch-status">
-                                        {uploadToTuf ?
-                                            <span id="switch-on">ON</span>
+                            <div className="upload-wrapper col-xs-12">
+                                {!fileDropped ?
+                                    <FlatButton
+                                        label="Choose file"
+                                        onClick={this._onFileUploadClick.bind(this)}
+                                        className="btn-main btn-small"
+                                        id="choose-package"
+                                    />
+                                    :
+                                    null
+                                }
+                                <div className="file-name">
+                                    {fileDropped ?
+                                        fileDropped.name
                                         :
-                                            <span id="switch-off">OFF</span>
-                                        }
-                                        </div>
-                                    </div>
+                                        this.fileName
+                                    }
                                 </div>
-                                <div className="col-xs-10">
-                                    <div className="tuf-title" id="tuf-title">
-                                        Secured
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-xs-2">
-                                <div className="tuf-icon" id="tuf-icon">
-                                    <img src="/assets/img/icons/black/lock.png" alt="Icon" />
-                                </div>
-                            </div>
-                            <div className="col-xs-10">
-                                <div className="tuf-description" id="tuf-description">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                </div>
+                                <input
+                                    ref="fileUpload"
+                                    name="file"
+                                    type="file"
+                                    onChange={this._onFileChange.bind(this)}
+                                    className="file"
+                                />
+                                <FormsyText
+                                    type="text"
+                                    name="fake-file"
+                                    value={fileDropped ?
+                                        fileDropped.name
+                                        :
+                                        this.fileName
+                                    }
+                                    style={{display: 'none'}}
+                                    required
+                                />
                             </div>
                         </div>
                     </div>
@@ -258,21 +316,228 @@ class CreateModal extends Component {
                                 type="submit"
                                 className="btn-main"
                                 id="add-new-package-confirm"
-                                disabled={this.submitButtonDisabled || (uploadToTuf && !this.selectedHardwareIds.length)}
+                                disabled={this.submitButtonDisabled || !this.selectedHardwareIds.length}
                             />
                         </div>
                     </div>
                 </div>
             </Form>
         );
+        const commonForm = (
+            <div className="common-form">
+                <div className="package-manager">
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <div className="row">
+                                <div className="switch-row">
+                                    <div className="col-xs-2">
+                                        <div className={"switch" + (uploadToTuf ? " switchOn" : "")} id="switch" onClick={toggleTufUpload.bind(this)}>
+                                            <div className="switch-status">
+                                            {uploadToTuf ?
+                                                <span id="switch-on">ON</span>
+                                            :
+                                                <span id="switch-off">OFF</span>
+                                            }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-xs-10">
+                                        <div className="tuf-title" id="tuf-title">
+                                            TUF repository
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-xs-10 col-xs-offset-2">
+                                    <div className="tuf-description" id="tuf-description">
+                                        {uploadToTuf ?
+                                            <span>
+                                                Upload package to the TUF repository and regenerate signed metadata. 
+                                                This package will only be installable on devices that were automatically provisioned.
+                                            </span>
+                                        :
+                                            <span>
+                                                This package will only be installable on devices that were created with the pre-builds DEB/RPM.
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <Form
+                    onValid={this.enableButton.bind(this)}
+                    onInvalid={this.disableButton.bind(this)}
+                    onValidSubmit={this.submitForm.bind(this, 'common')}
+                    id="package-create-form">
+                    <AsyncResponse 
+                        handledStatus="error"
+                        action={packagesStore.packagesCreateAsync}
+                        errorMsg={
+                            (packagesStore.packagesCreateAsync.data ? 
+                                packagesStore.packagesCreateAsync.data.description 
+                            : 
+                                "An error occured during package creation. Please try again."
+                            )
+                        }
+                    />
+                    <div className="row">
+                        <div className="col-xs-6">
+                            <FormsyText
+                                name="packageName"
+                                floatingLabelText="Package name"
+                                className="input-wrapper"
+                                id="add-new-package-name"
+                                updateImmediately
+                                required
+                            />
+                        </div>
+                        <div className="col-xs-6">
+                            <FormsyText
+                                name="version"
+                                floatingLabelText="Version"
+                                className="input-wrapper"
+                                id="add-new-package-version"
+                                updateImmediately
+                                required
+                            />
+                        </div>
+                    </div>
+                    {!uploadToTuf ?
+                        <div className="row">
+                            <div className="col-xs-6">
+                                <FormsyText
+                                    name="description"
+                                    value=""
+                                    floatingLabelText="Description"
+                                    className="input-wrapper"
+                                    id="add-new-package-description"
+                                    updateImmediately
+                                />
+                            </div>
+                            <div className="col-xs-6">
+                                <FormsyText
+                                    name="vendor"
+                                    value=""
+                                    floatingLabelText="Vendor"
+                                    className="input-wrapper"
+                                    id="add-new-package-vendor"
+                                    updateImmediately
+                                />
+                            </div>
+                        </div>
+                    :
+                        null 
+                    }
+                    {uploadToTuf ?
+                        <div className="row">
+                            <div className="col-xs-6">
+                                <div className="hardware-ids-select" id="hardware-ids-select">
+                                    {hardwareStore.hardwareIdsFetchAsync.isFetching ?
+                                        <Loader />
+                                    :
+                                        <SelectField
+                                            id="hardware-ids-select-field"
+                                            multiple={true}
+                                            onChange={this.selectHardwareIds}
+                                            hintText="Select hardware ids"
+                                            hintStyle={{opacity: this.selectedHardwareIds.length ? 0 : 1, color: '#b2b2b2', fontWeight: 'bold'}}
+                                            value={this.selectedHardwareIds}
+                                        >
+                                            {this.formatHardwareIds(this.selectedHardwareIds)}
+                                        </SelectField>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    :
+                        null
+                    }
+                    <div className="row">
+                        <div className="col-xs-6">
+                            <div className="row">
+                                <div className="upload-wrapper col-xs-12">
+                                    {!fileDropped ?
+                                        <FlatButton
+                                            label="Choose file"
+                                            onClick={this._onFileUploadClick.bind(this)}
+                                            className="btn-main btn-small"
+                                            id="choose-package"
+                                        />
+                                        :
+                                        null
+                                    }
+                                    <div className="file-name">
+                                        {fileDropped ?
+                                            fileDropped.name
+                                            :
+                                            this.fileName
+                                        }
+                                    </div>
+                                    <input
+                                        ref="fileUpload"
+                                        name="file"
+                                        type="file"
+                                        onChange={this._onFileChange.bind(this)}
+                                        className="file"
+                                    />
+                                    <FormsyText
+                                        type="text"
+                                        name="fake-file"
+                                        value={fileDropped ?
+                                            fileDropped.name
+                                            :
+                                            this.fileName
+                                        }
+                                        style={{display: 'none'}}
+                                        required
+                                    />
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <div className="body-actions">
+                                <a href="#"
+                                    onClick={this.hideModal.bind(this)}
+                                    className="link-cancel"
+                                    id="add-new-package-cancel"
+                                >
+                                    Cancel
+                                </a>
+                                <FlatButton
+                                    label="Add package"
+                                    type="submit"
+                                    className="btn-main"
+                                    id="add-new-package-confirm"
+                                    disabled={this.submitButtonDisabled || (uploadToTuf && !this.selectedHardwareIds.length)}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </Form>
+            </div>
+        );
+        let shownForm = '';
+        if(devicesStore.legacyDevicesCount && devicesStore.directorDevicesCount) {
+            shownForm = commonForm;
+        } else if(devicesStore.legacyDevicesCount) {
+            shownForm = legacyForm;
+        } else if(devicesStore.directorDevicesCount) {
+            shownForm = directorForm;
+        }
         return (
             <Modal 
                 title={(
                     <span>
-                        Add new package
+                        <img src="/assets/img/icons/white/packages.png" alt="Icon" className="header-icon" />                    
+                        <span className="header-text">Add new package</span>
                     </span>
                 )}
-                content={form}
+                content={shownForm}
                 shown={shown}
                 className="add-package-modal"
             />
