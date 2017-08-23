@@ -2,6 +2,7 @@ import {observable, computed} from 'mobx';
 import axios from 'axios';
 import {
     API_DEVICES_SEARCH,
+    API_DIRECTOR_DEVICES_SEARCH,
     API_DEVICES_DEVICE_DETAILS,
     API_DEVICES_DIRECTOR_DEVICE,
     API_DEVICES_CREATE,
@@ -26,6 +27,7 @@ export default class DevicesStore {
     @observable devicesFetchAfterDragAndDropAsync = {};
     @observable devicesFetchAfterGroupCreationAsync = {};
     @observable devicesOneFetchAsync = {};
+    @observable devicesCountFetchAsync = {};
     @observable devicesDirectorAttributesFetchAsync = {};
     @observable devicesCreateAsync = {};
     @observable devicesRenameAsync = {};
@@ -47,6 +49,8 @@ export default class DevicesStore {
     @observable onlineDevices = [];
     @observable stepsHistory = [];
     @observable multiTargetUpdates = {};
+    @observable legacyDevicesCount = 0;
+    @observable directorDevicesCount = 0;
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
@@ -55,6 +59,7 @@ export default class DevicesStore {
         resetAsync(this.devicesFetchAfterDragAndDropAsync);
         resetAsync(this.devicesFetchAfterGroupCreationAsync);
         resetAsync(this.devicesOneFetchAsync);
+        resetAsync(this.devicesCountFetchAsync);
         resetAsync(this.devicesDirectorAttributesFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
@@ -128,6 +133,24 @@ export default class DevicesStore {
                 }
             }
         }
+    }
+
+    fetchDevicesCount() {
+        resetAsync(this.devicesCountFetchAsync, true);
+        let that = this;
+        return axios.all([
+            axios.get(API_DEVICES_SEARCH),
+            axios.get(API_DIRECTOR_DEVICES_SEARCH),
+        ])
+            .then(axios.spread(function (all, director) {
+                let allDevicesCount = all.data.total;
+                that.directorDevicesCount = director.data.total;
+                that.legacyDevicesCount = allDevicesCount - that.directorDevicesCount;
+                that.devicesCountFetchAsync = handleAsyncSuccess(all);
+            }))
+            .catch((error) => {
+                that.devicesCountFetchAsync = handleAsyncError(error);
+            });
     }
 
     fetchInitialDevices() {
@@ -384,6 +407,7 @@ export default class DevicesStore {
         resetAsync(this.devicesFetchAfterDragAndDropAsync);
         resetAsync(this.devicesFetchAfterGroupCreationAsync);
         resetAsync(this.devicesOneFetchAsync);
+        resetAsync(this.devicesCountFetchAsync);
         resetAsync(this.devicesDirectorAttributesFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
@@ -403,6 +427,8 @@ export default class DevicesStore {
         this.deviceUpdatesLogs = [];
         this.stepsHistory = [];
         this.multiTargetUpdates = {};
+        this.legacyDevicesCount = 0;
+        this.directorDevicesCount = 0;
     }
 
     _getDevice(id) {

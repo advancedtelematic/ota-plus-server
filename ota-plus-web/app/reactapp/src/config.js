@@ -21,6 +21,7 @@ export const API_FEATURES_FILE_UPLOADER_ACTIVATE = '/api/v1/features/tufupload';
 export const API_FEATURES_FILE_UPLOADER_CLIENT_ID_GET = '/api/v1/features/tufupload/client';
 
 export const API_DEVICES_SEARCH = '/api/v1/devices';
+export const API_DIRECTOR_DEVICES_SEARCH = '/api/v1/admin/devices';
 export const API_DEVICES_CREATE = '/api/v1/devices';
 export const API_DEVICES_UPDATE = '/api/v1/devices';
 export const API_DEVICES_DEVICE_DETAILS = '/api/v1/devices';
