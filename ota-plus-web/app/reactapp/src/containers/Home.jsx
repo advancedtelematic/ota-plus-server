@@ -10,7 +10,7 @@ import {
 
 @observer
 class Home extends Component {
-    @observable uploadToTuf = false;
+    @observable uploadToTuf = true;
 
     constructor(props) {
         super(props);
@@ -46,6 +46,7 @@ class Home extends Component {
                                 <LastPackages 
                                     packagesStore={packagesStore}
                                     hardwareStore={hardwareStore}
+                                    devicesStore={devicesStore}
                                     toggleTufUpload={this.toggleTufUpload}
                                     uploadToTuf={this.uploadToTuf}
                                 />
