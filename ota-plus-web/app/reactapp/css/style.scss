@@ -2420,12 +2420,84 @@ div[role=presentation] {
                         height: calc(100vh - 315px);
                         margin: 0;
                         overflow-y: auto;
+                        line-height: 22px;
 
                         li {
                             padding: 15px;
                             margin: 5px 0 0 0;
-                            border: 1px solid #ddd;
+                            border-bottom: 1px solid #ddd;
                             position: relative;
+
+                            .main-info {
+                                padding-bottom: 10px;
+                                font-size: 14px;
+                            }
+
+                            .update-id {
+                                font-weight: bold;
+                                color: #494949;
+                            }
+
+                            .update-id, .created-at {
+                                padding: 0 25px;
+                            }
+
+                            .created-at {
+                                color: #888;
+                            }
+
+                            .result {
+                                background-color: #fff;
+                                box-shadow: 0 1px 7px #ccc;
+                                border-radius: 5px;
+                                &:not(:first-child) {
+                                    margin-top: 20px;
+                                }
+                                .result-info {
+                                    padding: 20px 20px 0;
+                                }
+                            }
+
+                            .result-status {
+                                display: flex;
+                                margin-top: 10px;
+                                border-bottom-left-radius: 5px;
+                                border-bottom-right-radius: 5px;
+                                overflow: hidden;
+                                .code, .text {
+                                    color: #fff;
+                                    padding: 15px;
+                                }
+
+                                .code {
+                                    display: flex;
+                                    flex-basis: 20%;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                    text-align: center;
+                                    font-weight: 300;
+                                    .value {
+                                        display: block;
+                                        font-size: 22px;
+                                    }
+                                    span {
+                                        align-self: stretch;
+                                    }
+                                }
+
+                                .text {
+                                    flex-basis: 80%;
+                                    background-color: #4B4B4B;
+                                }
+
+                                .error {
+                                    background-color: #FE0000;
+                                }
+
+                                .success {
+                                    background-color: #83D060;
+                                }
+                            }
 
                             .name {
                                 font-weight: bold;
@@ -2508,7 +2580,6 @@ div[role=presentation] {
 
                         &.history {
                             li {
-                                background: white;
 
                                 .name {
                                     width: calc(100% - 200px);
