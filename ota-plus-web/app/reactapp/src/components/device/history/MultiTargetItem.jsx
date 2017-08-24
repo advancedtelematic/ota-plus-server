@@ -12,31 +12,37 @@ class MultiTargetItem extends Component {
     	const { item } = this.props;
         return (
     		<li>
-            	<div className="update-id">
-            		Update id: {item.updateId}
-        		</div>
-        		<div className="created-at">        			
-        			Created at: {moment(item.receivedAt).format("ddd MMM DD YYYY, h:mm:ss A")}
-        		</div>
+            	<div className="main-info">
+					<div className="update-id">
+						Update ID {item.updateId}
+					</div>
+					<div className="created-at">
+						Received at: {moment(item.receivedAt).format("ddd MMM DD YYYY, h:mm:ss A")}
+					</div>
+				</div>
         		<div className="operation-results">
         			{_.map(item.operationResult, (result, ecuSerial) => {
         				return (
         					<div className="result" key={ecuSerial}>
-		    					<div className="ecu-serial">
-		    						ECU serial: {ecuSerial}
-		    					</div>
-		    					<div className="target">
-		    						Target: {result.target}
-		    					</div>
-		    					<div className="length">
-		    						Length: {result.length}
-		    					</div>
-		    					<div className="code">
-		    						Result code: {result.resultCode}
-		    					</div>
-		    					<div className="text">
-		    						Result text: {result.resultText}
-		    					</div>
+		    					<div className="result-info">
+									<div className="ecu-serial">
+										ECU Serial: {ecuSerial}
+									</div>
+									<div className="target">
+										Target: {result.target}
+									</div>
+									<div className="length">
+										Length: {result.length}
+									</div>
+								</div>
+		    					<div className="result-status">
+									<div className={`code ${result.resultCode <=1 ? 'success' : 'error'}`}>
+										<span>Result code</span> <span className="value">{result.resultCode}</span>
+									</div>
+									<div className="text">
+										{result.resultText}
+									</div>
+								</div>
 	    					</div>
     					);
         			})}
