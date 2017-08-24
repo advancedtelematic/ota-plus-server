@@ -103,6 +103,7 @@ class Main extends Component {
         this.userStore.fetchUser();
         this.devicesStore.fetchInitialDevices();
         this.devicesStore.fetchDevices();
+        this.hardwareStore.fetchHardwareIds();
         this.websocketHandler.init();
     }
     showQueueModal() {

@@ -91,7 +91,6 @@ export default class HardwareStore {
         resetAsync(this.hardwareIdsFetchAsync);
         this.hardware = {};
         this.publicKey = {};
-        this.hardwareIds = {};
         this.hardwareIdsCurrentPage = 0;
     }
 
