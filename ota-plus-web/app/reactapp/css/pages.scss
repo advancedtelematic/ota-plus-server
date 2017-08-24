@@ -1954,6 +1954,50 @@
 
         .ios-list {
             height: calc(100% - 40px);
+
+            .director-details {
+                display: block;                
+                padding-right: 10%;
+                padding-left: 20%;
+                background: #f5f5f5;
+                position: relative;
+                margin-top: -40px;
+
+                .package-name {
+                    position: absolute;
+                    top: 15px;
+                    left: 15px;
+                }
+
+                ul.versions {
+                    padding: 0;
+                    padding-bottom: 20px;
+                }
+
+                .right-box {
+                    text-align: left;
+                    height: auto;
+                    padding: 10px;
+
+                    .ecus-installed {
+                        font-weight: bold;
+                        margin-bottom: 10px;
+                    }
+
+                    .hardware-ids {
+
+                        .heading {
+                            width: 25%;
+                            float: left;
+                        }
+
+                        .value {
+                            width: 75%;
+                            float: left;
+                        }
+                    }
+                }
+            }
         }
 
         .btn-status {
@@ -1968,44 +2012,66 @@
         .hardware-label {
             color: $color-darkgrey;
             font-size: 12px;
-            background: $color-mint;
-            padding: 1px 5px;
-            border-radius: 3px;
-            margin: 0 5px;
+            background: transparent;
+            padding: 0px 10px;
+            border-radius: 10px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+            border: 1px solid #444;
         }
 
-        .in-director {
-            display: inline-block;
-            margin-top: -6px;
-            margin-left: 10px;
-            margin-right: 5px;
+        .director {
 
-            img {
-                width: 25px;
+            .package-name {
+                display: inline-block;
+                width: 30%;
+            }
+
+            .in-director {
+                width: 10%;
+                text-align: center;
+                display: inline-block;
+                margin-top: -6px;
+                margin-left: 10px;
+                margin-right: 5px;
+
+                img {
+                    width: 25px;
+                }
+            }
+
+            .installed-on-ecus {
+                width: 15%;
+                text-align: center;
+                display: inline-block;
+                margin-left: 10px;
+                margin-right: 5px;
+            }
+
+            .package-versions-nr {
+                width: 10%;
+                text-align: center;
+                display: inline-block;
+                margin-top: -6px;
+                margin-left: 5px;
+                margin-right: 10px;
             }
         }
 
-        .installed-on-ecus {
-            display: inline-block;
-            margin-left: 10px;
-            margin-right: 5px;
+        .legacy {
 
-            .link {
-                text-decoration: underline;
+            .package-name {
+                display: inline-block;
             }
-        }
-
-        .package-versions-nr {
-            color: #b5b7b9;
-            display: inline-block;
-            margin-top: -6px;
-            margin-left: 5px;
-            margin-right: 10px;
-        }
-
-        .package-name {
-            display: inline-block;
-            width: 30%;
+        
+            .package-versions-nr {
+                color: #b5b7b9;
+                display: inline-block;
+                margin-top: -6px;
+                margin-left: 5px;
+                margin-right: 10px;
+            }
         }
         
         .tuf-repo-icon {
