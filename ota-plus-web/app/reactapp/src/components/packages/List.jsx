@@ -6,6 +6,7 @@ import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
 import ListItem from './ListItem';
 import ListItemVersion from './ListItemVersion';
+import { PackagesStatsBlock } from './stats';
 import { Loader } from '../../partials';
 
 const headerHeight = 28;
@@ -106,7 +107,8 @@ class List extends Component {
             this.packageAlreadyHighlighted = true;
         }
     }
-    togglePackage(packageName) {
+    togglePackage(packageName, e) {
+        if(e) e.preventDefault();
         this.expandedPackageName = (this.expandedPackageName !== packageName ? packageName : null);
     }
     startIntervalListScroll() {
@@ -121,7 +123,7 @@ class List extends Component {
         this.tmpIntervalId = null;
     }
     render() {
-        const { showBlacklistModal, packagesStore, onFileDrop, highlightedPackage, showStatsModal } = this.props;
+        const { showBlacklistModal, packagesStore, onFileDrop, highlightedPackage } = this.props;
         return (
             <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching ? " fetching" : "")} ref="list">
                 {packagesStore.packagesCount ? 
@@ -146,7 +148,7 @@ class List extends Component {
                                                 <ListItem 
                                                     pack={pack}
                                                     togglePackage={this.togglePackage}
-                                                    showStatsModal={showStatsModal}
+                                                    hide={this.expandedPackageName === pack.packageName && pack.inDirector}
                                                 />
                                                 <VelocityTransitionGroup 
                                                     enter={{
@@ -161,19 +163,48 @@ class List extends Component {
                                                     }}
                                                 >
                                                     {this.expandedPackageName === pack.packageName ?
-                                                        <ul className="versions">
-                                                            {_.map(pack.versions, (version, i) => {
-                                                                return (
-                                                                    <ListItemVersion 
+                                                        pack.inDirector ?
+                                                            <div className="director-details">
+                                                                <div className="package-name">
+                                                                    <a href="#" onClick={this.togglePackage.bind(this, pack.packageName)}>
+                                                                        {pack.packageName}
+                                                                    </a>
+                                                                </div>
+                                                                <div className="stats">
+                                                                    <PackagesStatsBlock 
                                                                         pack={pack}
-                                                                        version={version}
-                                                                        showBlacklistModal={showBlacklistModal}
-                                                                        packagesStore={packagesStore}
-                                                                        key={i}
                                                                     />
-                                                                );
-                                                            })}
-                                                        </ul>
+                                                                </div>
+                                                                <ul className="versions">
+                                                                    {_.map(pack.versions, (version, i) => {
+                                                                        return (
+                                                                            <ListItemVersion 
+                                                                                pack={pack}
+                                                                                version={version}
+                                                                                showBlacklistModal={showBlacklistModal}
+                                                                                packagesStore={packagesStore}
+                                                                                key={i}
+                                                                            />
+                                                                        );
+                                                                    })}
+                                                                </ul>
+                                                            </div>
+                                                        :
+                                                            <div className="legacy-details">
+                                                                <ul className="versions">
+                                                                    {_.map(pack.versions, (version, i) => {
+                                                                        return (
+                                                                            <ListItemVersion 
+                                                                                pack={pack}
+                                                                                version={version}
+                                                                                showBlacklistModal={showBlacklistModal}
+                                                                                packagesStore={packagesStore}
+                                                                                key={i}
+                                                                            />
+                                                                        );
+                                                                    })}
+                                                                </ul>
+                                                            </div>
                                                     : 
                                                         null
                                                     }
@@ -201,8 +232,7 @@ List.propTypes = {
     showBlacklistModal: PropTypes.func.isRequired,
     packagesStore: PropTypes.object.isRequired,
     onFileDrop: PropTypes.func.isRequired,
-    highlightedPackage: PropTypes.string,
-    showStatsModal: PropTypes.func.isRequired,
+    highlightedPackage: PropTypes.string
 }
 
 export default List;

@@ -8,8 +8,7 @@ import {
     PackagesFileUploaderModal, 
     PackagesHeader, 
     PackagesList,
-    PackagesBlacklistModal,
-    PackagesStatsModal
+    PackagesBlacklistModal
 } from '../components/packages';
 import { FlatButton } from 'material-ui';
 
@@ -21,18 +20,13 @@ class Packages extends Component {
     @observable fileDropped = null;
     @observable blacklistModalShown = false;
     @observable blacklistAction = {};
-    @observable statsPackageName = null;
     @observable uploadToTuf = true;
-    @observable statsModalShown = false;
-    @observable statsPackageName = null;
     @observable copied = false;
 
     constructor(props) {
         super(props);
         this.showTooltip = this.showTooltip.bind(this);
         this.hideTooltip = this.hideTooltip.bind(this);
-        this.showStatsModal = this.showStatsModal.bind(this);
-        this.hideStatsModal = this.hideStatsModal.bind(this);
         this.showCreateModal = this.showCreateModal.bind(this);
         this.showFileUploaderModal = this.showFileUploaderModal.bind(this);
         this.hideCreateModal = this.hideCreateModal.bind(this);
@@ -53,16 +47,6 @@ class Packages extends Component {
     hideTooltip(e) {
         if(e) e.preventDefault();
         this.tooltipShown = false;
-    }
-    showStatsModal(name, e) {
-        if(e) e.preventDefault();
-        this.statsModalShown = true;
-        this.statsPackageName = name;
-    }
-    hideStatsModal(e) {
-        if(e) e.preventDefault();
-        this.statsModalShown = false;
-        this.statsPackageName = null;
     }
     showCreateModal(files, e) {
         if(e) e.preventDefault();
@@ -138,7 +122,6 @@ class Packages extends Component {
                                 packagesStore={packagesStore}
                                 onFileDrop={this.onFileDrop}
                                 highlightedPackage={highlightedPackage}
-                                showStatsModal={this.showStatsModal}
                             />
                             {packagesStore.overallPackagesCount && packagesStore.packagesFetchAsync.isFetching ? 
                                 <div className="wrapper-loader">
@@ -190,12 +173,6 @@ class Packages extends Component {
                     hide={this.hideBlacklistModal}
                     blacklistAction={this.blacklistAction}
                     packagesStore={packagesStore}
-                />
-                <PackagesStatsModal
-                    shown={this.statsModalShown}
-                    hide={this.hideStatsModal}
-                    packagesStore={packagesStore}
-                    packageName={this.statsPackageName}
                 />
             </span>
         );

@@ -20,32 +20,36 @@ class ListItem extends Component {
         return this.props.pack.versions.length;
     }
     render() {
-        const { pack, togglePackage, showStatsModal } = this.props;
+        const { pack, togglePackage, hide } = this.props;
         let installedOnEcus = this.countInstalledOnEcus();
         let packVersionsNumber = this.countPackVersionsNumber();
         const directorBlock = (
-            <span>
+            <div className="director">
+                <div className="package-name">
+                    {pack.packageName}
+                </div> 
                 <div className="in-director">
                     <img src="/assets/img/icons/black/lock.png" alt="Director" />
                 </div>
-                <div className="installed-on-ecus">
-                    <a href="#" className="link" onClick={showStatsModal.bind(this, pack.packageName)}>
-                        <span id={"package-" + pack.packageName + "-installed-on-ecus"}>
-                            Installed on <span id={"package-" + pack.packageName + "-installed-on-ecus-count"}>{installedOnEcus}</span> Ecu(s)
-                        </span>
-                    </a>
-                </div>
                 <div className="package-versions-nr" id="package-versions-nr">
                     {packVersionsNumber === 1 ?
                         packVersionsNumber + " version"
                     :
                         packVersionsNumber + " versions"
                     }
-                </div>                
-            </span>
+                </div>
+                <div className="installed-on-ecus">
+                    <span id={"package-" + pack.packageName + "-installed-on-ecus"}>
+                        Installed on <span id={"package-" + pack.packageName + "-installed-on-ecus-count"}>{installedOnEcus}</span> Ecu(s)
+                    </span>
+                </div>
+            </div>
         );
         const legacyBlock = (
-            <span>
+            <div className="legacy">
+                <div className="package-name">
+                    {pack.packageName}
+                </div>
                 <div className="package-versions-nr" id="package-versions-nr">
                     {packVersionsNumber === 1 ?
                         packVersionsNumber + " version"
@@ -53,11 +57,10 @@ class ListItem extends Component {
                         packVersionsNumber + " versions"
                     }
                 </div>
-            </span>
+            </div>
         );
         return (
-            <div className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
-                {pack.packageName}
+            <div className={hide ? "item shadow" : "item"} id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
                 {pack.inDirector ?
                     directorBlock
                 :
@@ -70,9 +73,7 @@ class ListItem extends Component {
 
 ListItem.propTypes = {
     pack: PropTypes.object.isRequired,
-    togglePackage: PropTypes.func.isRequired,
-    showStatsModal: PropTypes.func.isRequired,
-   
+    togglePackage: PropTypes.func.isRequired
 }
 
 export default ListItem;
