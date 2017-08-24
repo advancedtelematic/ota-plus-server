@@ -22,7 +22,7 @@ class Device extends Component {
     @observable packageBlacklistModalShown = false;
     @observable packageBlacklistAction = {};
     @observable expandedPack = null;
-    @observable uploadToTuf = false;
+    @observable uploadToTuf = true;
     @observable activeEcu = {
         hardwareId: null,
         serial: null,
@@ -206,6 +206,7 @@ class Device extends Component {
                     hide={this.hidePackageCreateModal}
                     packagesStore={packagesStore}
                     hardwareStore={hardwareStore}
+                    devicesStore={devicesStore}
                     fileDropped={this.fileDropped}
                     toggleTufUpload={this.toggleTufUpload}
                     uploadToTuf={this.uploadToTuf}
