@@ -4,9 +4,10 @@ import { observer } from 'mobx-react';
 import _ from 'underscore';
 import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
-import { Loader } from '../../../partials';
+import { SubHeader, SearchBar, Loader } from '../../../partials';
 import ListItemOnDevice from './ListItemOnDevice';
 import { InfiniteScroll } from '../../../utils';
+import { Form } from 'formsy-react';
 
 const headerHeight = 28;
 
@@ -24,7 +25,8 @@ class OnDeviceList extends Component {
         this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
         this.generateItemsPositions = this.generateItemsPositions.bind(this);
         this.listScroll = this.listScroll.bind(this);
-        this.togglePackage = this.togglePackage.bind(this);
+        this.changeSort = this.changeSort.bind(this);
+        this.changeFilter = this.changeFilter.bind(this);
         this.packagesChangeHandler = observe(props.packagesStore, (change) => {
             if(change.name === 'preparedOndevicePackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
@@ -93,9 +95,6 @@ class OnDeviceList extends Component {
             this.fakeHeaderTopPosition = scrollTop;
         }
     }
-    togglePackage(packageName) {
-        this.expandedPackageName = (this.expandedPackageName !== packageName ? packageName : null);
-    }
     startIntervalListScroll() {
         clearInterval(this.tmpIntervalId);
         const that = this;
@@ -108,15 +107,38 @@ class OnDeviceList extends Component {
         clearInterval(this.tmpIntervalId);
         this.tmpIntervalId = null;
     }
+    changeSort(sort, e) {
+        if(e) e.preventDefault();
+        this.props.packagesStore._prepareOndevicePackages(sort);
+    }
+    changeFilter(filter) {
+        this.props.packagesStore.fetchOndevicePackages(this.props.device.uuid, filter);
+    }
     render() {
-        const { packagesStore, expandedPack, device, showPackageBlacklistModal, onFileDrop } = this.props;
+        const { packagesStore, device, showPackageBlacklistModal, onFileDrop } = this.props;
         return (
-            <div className="ios-list" ref="list">
-                {expandedPack && !expandedPack.isInstalled && device.isDirector ?
-                    <div className="wrapper-center">
-                        None reported for the current selection
+            <span>
+                <SubHeader>
+                    <Form>
+                        <SearchBar
+                            value={packagesStore.packagesOndeviceFilter}
+                            changeAction={this.changeFilter}
+                            id="search-installed-packages-input"
+                        />
+                    </Form>
+                    <div className="sort-box">
+                        {packagesStore.packagesOndeviceSort == 'asc' ?
+                            <a href="#" onClick={this.changeSort.bind(this, 'desc')} id="link-sort-packages-desc">
+                                <i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z
+                            </a>
+                        :
+                            <a href="#" onClick={this.changeSort.bind(this, 'asc')} id="link-sort-packages-asc">
+                                <i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A
+                            </a>
+                        }
                     </div>
-                :
+                </SubHeader>
+                <div className="ios-list" ref="list">
                     <InfiniteScroll
                         className="wrapper-infinite-scroll"
                         hasMore={packagesStore.ondevicePackagesCurrentPage < packagesStore.ondevicePackagesTotalCount / packagesStore.ondevicePackagesLimit}
@@ -163,8 +185,8 @@ class OnDeviceList extends Component {
                             </span>
                         }
                     </InfiniteScroll>
-                }
-            </div>
+                </div>
+            </span>
         );
     }
 }
