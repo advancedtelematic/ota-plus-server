@@ -2794,7 +2794,7 @@ div[role=presentation] {
         height: 0;
         border-top: 15px solid transparent;
         border-bottom: 15px solid transparent;
-        border-right: 15px solid #f7f7f7;
+        border-right: 15px solid #d3d3d3;
         position: absolute;
         left: -15px;
         top: 172px;
@@ -2826,11 +2826,16 @@ div[role=presentation] {
         }
 
         .heading {
-            background: #9ce2d8;
-            height: 45px;
-            text-align: center;
-            font-size: 18px;
-            padding: 10px 0;
+            background: #4b5151;
+            height: 36px;
+            text-align: left;
+            color: white;
+            font-size: 16px;
+            padding: 8px 0;
+            margin-left: 65px;
+            font-family: akkurat;
+            text-transform: uppercase;
+            font-weight: bold;
         }
 
         .body {
@@ -2859,6 +2864,7 @@ div[role=presentation] {
                     .show-hardware {
                         padding: 12px;
                         cursor: pointer;
+                        border-top-left-radius: 10px;
 
                         &.active {
                             background: #9ce2d8;

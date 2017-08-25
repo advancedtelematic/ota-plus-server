@@ -9,7 +9,7 @@ class PrimaryEcu extends Component {
         super(props);
     }    
     render() {
-        const { active, devicesStore, hardwareStore, showKey, showDetails, keyModalShown, hardware, device, selectEcu, ...otherProps} = this.props;
+        const { active, devicesStore, hardwareStore, showKey, showHardwareOverlay, keyModalShown, hardware, device, selectEcu, ...otherProps} = this.props;
         let dataId = 0;
         if(!_.isUndefined(hardware) && !_.isUndefined(hardware.id) && (!_.isUndefined(hardware.description) || !_.isUndefined(hardware.class))) {
             dataId = hardware['id-nr'];
@@ -43,7 +43,7 @@ class PrimaryEcu extends Component {
                         <i
                             className="fa fa-info hardware-icon details" 
                             id="hardware-details-icon"
-                            onClick={showDetails}
+                            onClick={showHardwareOverlay}
                             data-id={dataId}
                         ></i>
                         {device.isDirector ? 
