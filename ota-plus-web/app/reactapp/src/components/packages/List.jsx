@@ -148,7 +148,6 @@ class List extends Component {
                                                 <ListItem 
                                                     pack={pack}
                                                     togglePackage={this.togglePackage}
-                                                    hide={this.expandedPackageName === pack.packageName && pack.inDirector}
                                                 />
                                                 <VelocityTransitionGroup 
                                                     enter={{
@@ -165,17 +164,20 @@ class List extends Component {
                                                     {this.expandedPackageName === pack.packageName ?
                                                         pack.inDirector ?
                                                             <div className="director-details">
-                                                                <div className="package-name">
-                                                                    <a href="#" onClick={this.togglePackage.bind(this, pack.packageName)}>
-                                                                        {pack.packageName}
-                                                                    </a>
-                                                                </div>
-                                                                <div className="stats">
-                                                                    <PackagesStatsBlock 
-                                                                        pack={pack}
-                                                                    />
+                                                                <div className="distribution">
+                                                                    <div className="heading">
+                                                                        Distribution by devices
+                                                                    </div>
+                                                                    <div className="pie">
+                                                                        <PackagesStatsBlock
+                                                                            pack={pack}
+                                                                        />
+                                                                    </div>
                                                                 </div>
                                                                 <ul className="versions">
+                                                                    <div className="heading">
+                                                                        All versions
+                                                                    </div>
                                                                     {_.map(pack.versions, (version, i) => {
                                                                         return (
                                                                             <ListItemVersion 

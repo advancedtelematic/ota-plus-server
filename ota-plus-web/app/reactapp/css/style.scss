@@ -858,25 +858,18 @@ input {
                 .fields {
                     padding: 10px;
 
-                    .version {
-                        @include textoverflowEllipsis;
-                        font-weight: bold;
-                        margin-bottom: 10px;
-                    }
-
                     .hash {
                         @include textoverflowEllipsis;
                     }
 
-                    .color {
-                        width: 15px;
-                        height: 15px;
-                        border-radius: 50%;
-                        display: inline-block;
-                        margin-right: 10px;
-                    }
-
                     .version-info {
+
+                        .version {
+                            @include textoverflowEllipsis;
+                            font-weight: bold;
+                            margin-bottom: 10px;
+                        }
+
                         padding-left: 25px;
                     }
                     
@@ -2330,12 +2323,6 @@ div[role=presentation] {
     float: left;
 }
 
-.shadow {
-    opacity: 0;
-    -webkit-transition: all 1s;
-    transition: all 1s;
-}
-
 .queue-modal {
     margin-top: 130px;
     margin-left: 55px;
@@ -2719,51 +2706,27 @@ div[role=presentation] {
 }
 
 .packages-stats {
-    text-align: center;
-    overflow-y: hidden;
 
-    .bar {
-        width: 100%;
-        height: 35px;
-        background: #fff;
-        border-radius: 5px;
-        margin-top: 20px;
-        overflow: hidden;
+    .chart-panel {
+        background: transparent;
 
-        .bar-item {
-            height: 35px;
-            float: left;
+        .total-count {
+            position: absolute;
+            font-size: 30px;
+            font-weight: bold;
+            color: #666;
         }
-    }
 
-    ul {
-        margin: 0;
-        overflow: hidden;
-        margin: 10px 0;
-
-        li {
-            text-align: left;
-            width: 50%;
-            float: left;
-            margin: 5px 0;
+        .hide {
+            display: none;
         }
-    }
 
-    .color-box {
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        display: inline-block;
-        margin-right: 10px;
-    }
+        .wrapper-center {
 
-    .title-box {
-        font-size: 13px;
-        text-overflow: ellipsis;
-        width: 90%;
-        white-space: nowrap;
-        display: inline-block;
-        overflow: hidden;
+            &.left {
+                justify-content: left;
+            }
+        }
     }
 }
 
