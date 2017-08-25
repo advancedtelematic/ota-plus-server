@@ -2483,16 +2483,16 @@ div[role=presentation] {
                                 .code, .text {
                                     color: #fff;
                                     padding: 15px;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                    display: flex;
                                 }
 
                                 .code {
-                                    display: flex;
                                     flex-basis: 20%;
-                                    flex-direction: column;
-                                    justify-content: center;
-                                    text-align: center;
                                     font-weight: 300;
-                                    .value {
+                                    text-align: center;
+                                  .value {
                                         display: block;
                                         font-size: 22px;
                                     }
