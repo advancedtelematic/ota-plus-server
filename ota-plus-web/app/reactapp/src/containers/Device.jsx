@@ -28,6 +28,7 @@ class Device extends Component {
         serial: null,
         type: null,
     };
+    @observable hardwareOverlayShown = false;
     
     constructor(props) {
         super(props);
@@ -45,6 +46,8 @@ class Device extends Component {
         this.clearStepsHistory = this.clearStepsHistory.bind(this);
         this.loadPackageVersionProperties = this.loadPackageVersionProperties.bind(this);
         this.toggleTufUpload = this.toggleTufUpload.bind(this);        
+        this.showHardwareOverlay = this.showHardwareOverlay.bind(this);        
+        this.hideHardwareOverlay = this.hideHardwareOverlay.bind(this);        
     }
     toggleTufUpload(e) {
         if(e) e.preventDefault();
@@ -68,12 +71,20 @@ class Device extends Component {
             version: version,
             mode: mode
         };
+        this.hideHardwareOverlay();
     }
     hidePackageBlacklistModal(e) {
         if(e) e.preventDefault();
         this.packageBlacklistModalShown = false;
         this.packageBlacklistAction = {};
         this.props.packagesStore._resetBlacklistActions();
+    }
+    showHardwareOverlay(e) {
+        e.preventDefault();
+        this.hardwareOverlayShown = true;
+    }
+    hideHardwareOverlay() {
+        this.hardwareOverlayShown = false;        
     }
     onFileDrop(files) {
         this.showPackageCreateModal(files);
@@ -170,6 +181,9 @@ class Device extends Component {
                                 selectEcu={this.selectEcu}
                                 showPackageBlacklistModal={this.showPackageBlacklistModal}
                                 onFileDrop={this.onFileDrop}
+                                hardwareOverlayShown={this.hardwareOverlayShown}
+                                showHardwareOverlay={this.showHardwareOverlay}
+                                hideHardwareOverlay={this.hideHardwareOverlay}
                             />
                             <DeviceSoftwarePanel
                                 devicesStore={devicesStore}
