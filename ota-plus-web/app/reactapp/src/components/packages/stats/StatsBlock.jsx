@@ -41,29 +41,37 @@ class StatsBlock extends Component {
             }
             installedOnEcusTotal += version.installedOnEcus;
         });        
-        const legend = _.map(stats, (stat) => {
-            return (
-                <li key={"color-" + stat.label + "-" + stat.color} id={"version-" + stat.label + "-stats"}>
-                    <div className="color-box" id={"version-color-" + stat.color} style={{backgroundColor: stat.color}}></div> 
-                    <div className="title-box" id={"version-hash-" + stat.label}>Version: {stat.label}</div>
-                </li>
-            );
-        });
-        const barData = _.map(stats, (stat, index) => {
-            let percentage = Math.min(stat.value/Math.max(installedOnEcusTotal, 1) * 100, 100);
-            return (
-                <div className="bar-item" style={{width: percentage + '%', backgroundColor: stat.color}} key={index}>
+        const content = (
+            <div className="chart-panel" id={"package-" + pack.packageName + "-stats"}>
+                <div className={installedOnEcusTotal ? "wrapper-center" : "wrapper-center left"}>
+                    <div className={installedOnEcusTotal ? "total-count" : "hide"}>
+                        {installedOnEcusTotal}
+                    </div>
+                    {stats.length ?
+                        <div>
+                            <Doughnut 
+                                data={stats} 
+                                width="250" 
+                                height="250" 
+                                options={{
+                                    percentageInnerCutout: 60, 
+                                    segmentStrokeWidth: 5, 
+                                    showTooltips: true
+                                }}
+                            />
+                        </div>
+                    :
+                        <div id={"package-" + pack.packageName + "-not-installed"}>
+                            This package has not been installed yet.
+                        </div>
+                    }
+                    
                 </div>
-            );
-        });
+            </div>
+        );
         return (
             <div className="packages-stats">
-                <div className="bar">
-                    {barData}
-                </div>
-                <ul className="legend">
-                    {legend}
-                </ul>
+                {content}
             </div>
         )
     }
