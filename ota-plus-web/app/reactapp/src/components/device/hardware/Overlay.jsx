@@ -25,7 +25,7 @@ class Overlay extends Component {
         this.hardwareInfoShown = true;
     }
     render() {
-        const { hardware, hideDetails, shown, packagesStore, device, showPackageBlacklistModal, onFileDrop } = this.props;
+        const { hardware, hideHardwareOverlay, shown, packagesStore, device, showPackageBlacklistModal, onFileDrop } = this.props;
         let content = null;
 
         if(_.isEmpty(hardware)) {
@@ -73,7 +73,7 @@ class Overlay extends Component {
                     anchorEl={this.detailsIdShown}
                     anchorOrigin={{horizontal: 'right', vertical: 'center'}}
                     targetOrigin={{horizontal: 'left', vertical: 'center'}}
-                    onRequestClose={hideDetails}
+                    onRequestClose={hideHardwareOverlay}
                     useLayerForClickAway={false}
                     animated={false}
                 >
@@ -103,7 +103,7 @@ class Overlay extends Component {
 
 Overlay.propTypes = {
     hardware: PropTypes.object,
-    hideDetails: PropTypes.func.isRequired,
+    hideHardwareOverlay: PropTypes.func.isRequired,
     shown: PropTypes.bool.isRequired,
 }
 

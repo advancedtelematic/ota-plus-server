@@ -12,17 +12,14 @@ import _ from 'underscore';
 
 @observer
 class Hardware extends Component {
-    @observable detailsIdShown = false;
     @observable keyModalShown = false;
     @observable secondaryDetailsShown = false;
 
     constructor(props) {
         super(props);
-        this.showDetails = this.showDetails.bind(this);
         this.showKey = this.showKey.bind(this);
         this.showSecondaryDetails = this.showSecondaryDetails.bind(this);
         this.hideSecondaryDetails = this.hideSecondaryDetails.bind(this);
-        this.hideDetails = this.hideDetails.bind(this);
         this.hideKey = this.hideKey.bind(this);
 
         this.packagesFetchHandler = observe(props.packagesStore, (change) => {
@@ -37,40 +34,26 @@ class Hardware extends Component {
     componentWillUnmount() {
         this.packagesFetchHandler();
     }
-    showDetails(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        this.detailsIdShown = true;
-    }
-
     showKey(e) {
         e.preventDefault();
         e.stopPropagation();
         this.keyModalShown = true;
     }
-
     showSecondaryDetails(e) {
         e.preventDefault();
         e.stopPropagation();
         this.secondaryDetailsShown = true;
     }
-
     hideSecondaryDetails(e) {
         if (e) e.preventDefault();
         this.secondaryDetailsShown = false;
     }
-
-    hideDetails() {
-        this.detailsIdShown = false;
-    }
-
     hideKey(e) {
         if (e) e.preventDefault();
         this.keyModalShown = false;
     }
-
     render() {
-        const { devicesStore, hardwareStore, packagesStore, device, activeEcu, selectEcu, showPackageBlacklistModal, onFileDrop } = this.props;
+        const { devicesStore, hardwareStore, packagesStore, device, activeEcu, selectEcu, showPackageBlacklistModal, onFileDrop, hardwareOverlayShown, showHardwareOverlay, hideHardwareOverlay } = this.props;
         const hardware = hardwareStore.hardware[device.uuid];
         let active = true;
         if(device.isDirector) {
@@ -93,7 +76,7 @@ class Hardware extends Component {
                                 hardwareStore={hardwareStore}
                                 devicesStore={devicesStore}
                                 showKey={this.showKey}
-                                showDetails={this.showDetails}
+                                showHardwareOverlay={showHardwareOverlay}
                                 keyModalShown={this.keyModalShown}
                                 hardware={hardware}
                                 device={device}
@@ -124,7 +107,6 @@ class Hardware extends Component {
                                             ecu={item}
                                             hardwareStore={hardwareStore}
                                             showKey={this.showKey}
-                                            showDetails={this.showDetails}
                                             keyModalShown={this.keyModalShown}
                                             hardware={hardware}
                                             shownIds={this.shownIds}
@@ -141,25 +123,15 @@ class Hardware extends Component {
                         }
                     </div>
                 </div>
-
-                {this.detailsIdShown ?
-                    <FadeAnimation>
-                        <div className="overlay-animation-container">
-                            <HardwareOverlay
-                                hardware={hardware}
-                                hideDetails={this.hideDetails}
-                                shown={this.detailsIdShown}
-                                packagesStore={packagesStore}
-                                device={device}
-                                showPackageBlacklistModal={showPackageBlacklistModal}
-                                onFileDrop={onFileDrop}
-                            />
-                        </div>
-                    </FadeAnimation>
-                    :
-                    null
-                }
-
+                <HardwareOverlay
+                    hardware={hardware}
+                    hideHardwareOverlay={hideHardwareOverlay}
+                    shown={hardwareOverlayShown}
+                    packagesStore={packagesStore}
+                    device={device}
+                    showPackageBlacklistModal={showPackageBlacklistModal}
+                    onFileDrop={onFileDrop}
+                />
                 {this.secondaryDetailsShown ?
                     <FadeAnimation>
                         <div className="overlay-animation-container">
