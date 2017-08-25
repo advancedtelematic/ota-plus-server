@@ -1985,7 +1985,7 @@ div[role=presentation] {
         padding: 0 20px 15px;
 
         .hardware-ids-select {
-            margin-top: 25px;
+            margin-top: 11px;
         }
 
         .upload-wrapper {
@@ -2038,6 +2038,9 @@ div[role=presentation] {
     .tuf-description {
         font-size: 13px;
         color: rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        height: 40px;
     }
 
     .switch-row {
