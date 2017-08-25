@@ -1956,22 +1956,29 @@
             height: calc(100% - 40px);
 
             .director-details {
-                display: block;                
-                padding-right: 10%;
-                padding-left: 20%;
                 background: #f5f5f5;
-                position: relative;
-                margin-top: -40px;
+                overflow: hidden;
+                padding: 25px;
 
-                .package-name {
-                    position: absolute;
-                    top: 15px;
-                    left: 15px;
+                .distribution {
+                    width: 20%;
+                    float: left;
+
+                    .heading {
+                        margin-bottom: 10px;
+                        font-weight: bold;
+                    }
                 }
 
                 ul.versions {
-                    padding: 0;
-                    padding-bottom: 20px;
+                    padding: 0 25px;
+                    width: 70%;
+                    float: left;
+
+                    .heading {
+                        margin-bottom: 10px;
+                        font-weight: bold;
+                    }
                 }
 
                 .right-box {
@@ -1985,6 +1992,7 @@
                     }
 
                     .hardware-ids {
+                        overflow: hidden;
 
                         .heading {
                             width: 25%;
