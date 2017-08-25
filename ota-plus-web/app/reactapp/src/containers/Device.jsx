@@ -168,6 +168,8 @@ class Device extends Component {
                                 device={device}                                
                                 activeEcu={this.activeEcu}
                                 selectEcu={this.selectEcu}
+                                showPackageBlacklistModal={this.showPackageBlacklistModal}
+                                onFileDrop={this.onFileDrop}
                             />
                             <DeviceSoftwarePanel
                                 devicesStore={devicesStore}
@@ -186,8 +188,6 @@ class Device extends Component {
                                 packagesStore={packagesStore}
                                 devicesStore={devicesStore}
                                 showPackageBlacklistModal={this.showPackageBlacklistModal}
-                                onFileDrop={this.onFileDrop}
-                                togglePackageAutoUpdate={this.togglePackageAutoUpdate}
                                 expandedPack={this.expandedPack}
                                 installPackage={this.installPackage}
                                 multiTargetUpdate={this.multiTargetUpdate}

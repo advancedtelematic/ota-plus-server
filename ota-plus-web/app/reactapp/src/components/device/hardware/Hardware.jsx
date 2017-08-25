@@ -70,7 +70,7 @@ class Hardware extends Component {
     }
 
     render() {
-        const { devicesStore, hardwareStore, device, activeEcu, selectEcu } = this.props;
+        const { devicesStore, hardwareStore, packagesStore, device, activeEcu, selectEcu, showPackageBlacklistModal, onFileDrop } = this.props;
         const hardware = hardwareStore.hardware[device.uuid];
         let active = true;
         if(device.isDirector) {
@@ -149,6 +149,10 @@ class Hardware extends Component {
                                 hardware={hardware}
                                 hideDetails={this.hideDetails}
                                 shown={this.detailsIdShown}
+                                packagesStore={packagesStore}
+                                device={device}
+                                showPackageBlacklistModal={showPackageBlacklistModal}
+                                onFileDrop={onFileDrop}
                             />
                         </div>
                     </FadeAnimation>
