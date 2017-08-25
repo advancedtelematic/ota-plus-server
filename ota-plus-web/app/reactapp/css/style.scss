@@ -2826,9 +2826,11 @@ div[role=presentation] {
         }
 
         .heading {
-            width: 70px!important;
-            height: 70px!important;
-            margin: 15px calc(50% - 50px) !important;
+            background: #9ce2d8;
+            height: 45px;
+            text-align: center;
+            font-size: 18px;
+            padding: 10px 0;
         }
 
         .body {
@@ -2840,36 +2842,122 @@ div[role=presentation] {
             height: 756px!important;
             overflow-y: auto;
             overflow-x: hidden;
+
             .details {
-                padding: 20px;
-            }
-            .table>tbody>tr th, .table>tbody>tr td {
-                padding: 2px 15px;
-                border: 0;
+
+                .wrapper-switch {
+                    width: 50px;
+                    height: 100%;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    border-top-left-radius: 10px;
+                    border-bottom-left-radius: 10px;
+                    background: #d3d3d3;
+                    border-right: 4px solid #9ce2d8;
+
+                    .show-hardware {
+                        padding: 12px;
+                        cursor: pointer;
+
+                        &.active {
+                            background: #9ce2d8;
+                        }
+                    }
+
+                    .show-packages {
+                        padding: 12px;
+                        cursor: pointer;
+
+                        &.active {
+                            background: #9ce2d8;
+                        }
+                    }
+
+                    img {
+                        width: 20px;
+                    }
+                }
             }
 
-            .details-header {
-                text-transform: capitalize;
-                width: 100%;
-                padding-left: 20px;
-                padding-bottom: 10px;
-                margin-bottom: 10px;
-                border-bottom: 1px solid black;
+            .hardware-details {
+                padding: 20px 20px 20px 65px;
+
+                .table>tbody>tr th, .table>tbody>tr td {
+                    padding: 2px 15px;
+                    border: 0;
+                }
+
+                .details-header {
+                    text-transform: capitalize;
+                    width: 100%;
+                    padding-left: 20px;
+                    padding-bottom: 10px;
+                    margin-bottom: 10px;
+                    border-bottom: 1px solid black;
+                }
+
+                .name {
+                    color: black;
+                    font-size: 20px;
+                    font-weight: 700;
+                }
+
+                .header {
+                    text-align: center;
+                    margin: 20px 0;
+                }
             }
 
-            .name {
-                color: black;
-                font-size: 20px;
-                font-weight: 700;
+            .packages-details {
+                padding: 0px 0px 0px 50px;
+
+                .ios-list {
+                    height: 716px;
+
+                    .dnd-zone {
+                        position: relative;
+                    }
+
+                    .item {
+
+                        &.ondevice {
+
+                            .name {
+                                width: calc(100% - 250px);
+                                display: inline-block;
+                                vertical-align: top;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                            }
+
+                            .actions {
+                                text-align: right;
+                                width: 250px;
+                                display: inline-block;
+
+                                .version {
+                                    font-size: 12px;
+                                    width: 170px;
+                                    display: inline-block;
+                                    vertical-align: top;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                }
+
+                                .btn-blacklist {
+                                    height: 28px;
+                                    margin: -6px -14px 0 10px;
+                                    border-right: 0;
+                                    background-size: 25px 25px!important;
+                                }
+                            }
+                        }
+                    }
+                }
             }
-
-            .header {
-                text-align: center;
-                margin: 20px 0;
-            }
-
-
         }
-
     }
 }
