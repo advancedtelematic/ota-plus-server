@@ -20,7 +20,7 @@ class ListItem extends Component {
         return this.props.pack.versions.length;
     }
     render() {
-        const { pack, togglePackage, hide } = this.props;
+        const { pack, togglePackage } = this.props;
         let installedOnEcus = this.countInstalledOnEcus();
         let packVersionsNumber = this.countPackVersionsNumber();
         const directorBlock = (
@@ -60,7 +60,7 @@ class ListItem extends Component {
             </div>
         );
         return (
-            <div className={hide ? "item shadow" : "item"} id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
+            <div className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
                 {pack.inDirector ?
                     directorBlock
                 :

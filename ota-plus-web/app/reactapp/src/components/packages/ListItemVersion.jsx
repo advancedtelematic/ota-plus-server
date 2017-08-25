@@ -76,15 +76,14 @@ class ListItemVersion extends Component {
         let packageName = version.id.name;
         const directorBlock = (
             <span>
-                <div className="left-box">                        
+                <div className="left-box" style={{borderLeft: '10px solid ' + version.color}}>                        
                     <div className="fields">
                         {version.customExists ? 
                             <span>
-                                <div className="version" id={"package-" + packageName + "-version-" + version.id.version}>
-                                    <span className="color" style={{backgroundColor: version.color}}></span>
-                                    <span className="value">Version: {version.id.version}</span>
-                                </div>
-                                <div className="version-info">                                    
+                                <div className="version-info">
+                                    <div className="version" id={"package-" + packageName + "-version-" + version.id.version}>
+                                        <span className="value">Version: {version.id.version}</span>
+                                    </div>                                 
                                     <div className="created_at" id={"package-" + packageName + "-created_at-" + moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}>
                                         Created at: {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}
                                     </div>
