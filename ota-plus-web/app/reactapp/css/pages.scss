@@ -3045,10 +3045,17 @@
         }
 
         &#usage {
+            .carousel-container {
+                display: flex;
+                height: calc(100vh - 160px);
+            }
+
             .months-slider {
                 width: 880px;
                 margin: 0 auto;
                 position: relative;
+                align-self: center; 
+                height: 380px;
 
                 $level0-width: 340px;
                 $level0-height: 380px;

@@ -43,10 +43,12 @@ class Usage extends Component {
 
                 <hr />
 
-                <UsageCarousel
-                    userStore={userStore}
-                    months={months}
-                />
+                <div className="carousel-container">
+                    <UsageCarousel
+                        userStore={userStore}
+                        months={months}
+                    />
+                </div>
             </main>
         );
     }
