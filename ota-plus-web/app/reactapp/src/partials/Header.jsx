@@ -6,7 +6,7 @@ const Header = (props) => {
         <div className="page-heading">
             <div className="container">
                 {backButtonShown ? 
-                    <a href="#" id="back-button" onClick={backButtonAction}>
+                    <a href="#" id="back-button" className="back-button" onClick={backButtonAction}>
                         <img src="/assets/img/icons/back.png" className="icon-back" alt="" />
                     </a>
                 : null}
