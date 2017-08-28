@@ -203,6 +203,7 @@ class Main extends Component {
                             featuresStore={this.featuresStore}
                             devicesStore={this.devicesStore}
                             logoLink={logoLink}
+                            hideQueueModal={this.hideQueueModal}
                         />
                     : this.sanityCheckCompleted() ?
                             <Navigation
