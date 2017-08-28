@@ -335,6 +335,11 @@ input {
 
     form {
         display: inline-block;
+        .input-wrapper.search {
+            hr {
+                display: none;
+            }
+        }
     }
 
     .sort-box {
