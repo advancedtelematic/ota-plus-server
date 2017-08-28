@@ -79,7 +79,7 @@ class Carousel extends Component {
         return (
             <div className="months-slider">
                 <div className={"arrow arrow-left" + (this.active === months.length - 1 ? " disabled" : "")} onClick={this.moveLeft}>
-                    <i className="fa fa-chevron-left"></i> prev
+                    <i className="fa fa-chevron-left"></i>
                 </div>
                     <ReactCSSTransitionGroup
                         transitionName={this.direction}
@@ -88,7 +88,7 @@ class Carousel extends Component {
                         {this.generateElements()}
                     </ReactCSSTransitionGroup>
                 <div className={"arrow arrow-right" + (this.active === 0 ? " disabled" : "")} onClick={this.moveRight}>
-                    next <i className="fa fa-chevron-right"></i>
+                    <i className="fa fa-chevron-right"></i>
                 </div>
             </div>
         );
