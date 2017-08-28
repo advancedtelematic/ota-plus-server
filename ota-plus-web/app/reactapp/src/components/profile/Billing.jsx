@@ -43,17 +43,26 @@ class Billing extends Component {
                         />
                     </div>
                 :
-                    userStore.user.profile.plan == "premium" ? 
-                        <BillingPremiumPlan 
-                            userStore={userStore}
-                        />
-                    : 
-                        userStore.user.profile.plan == "quote" ?
-                            <BillingQuotePlan />
-                        :
-                            <BillingFreePlan 
-                                showInfoModal={this.showInfoModal}
-                            />
+                    <div className="billing-container">
+                        {userStore.user.profile.plan == "premium" ? 
+                            <div className="premium">
+                                <BillingPremiumPlan 
+                                    userStore={userStore}
+                                />
+                            </div>
+                        : 
+                            userStore.user.profile.plan == "quote" ?
+                                <div className="quote">
+                                    <BillingQuotePlan />
+                                </div>
+                            :
+                                <div className="free">
+                                    <BillingFreePlan 
+                                        showInfoModal={this.showInfoModal}
+                                    />
+                                </div>
+                            }
+                    </div>
                 }
                 <BillingInfoModal 
                     shown={this.infoModalShown}

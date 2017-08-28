@@ -3248,6 +3248,24 @@
         }
 
         &#billing {
+            .billing-container {
+                display: flex;
+                height: calc(100vh - 160px);
+                align-items: center;
+                justify-content: center;
+
+                .free {
+                    height: 425px;
+                }
+
+                .premium {
+                    height: 300px;
+                }
+
+                .quote {
+                    height: 300px;
+                }
+            }
             .billing-plans {
                 width: 740px;
                 margin: 0 auto;
