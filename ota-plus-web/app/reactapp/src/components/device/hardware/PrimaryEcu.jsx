@@ -40,19 +40,22 @@ class PrimaryEcu extends Component {
                         }
                     </div>
                     <div className="icons">
-                        <i
-                            className="fa fa-info hardware-icon details" 
+                        <div className="hardware-icon details" 
                             id="hardware-details-icon"
                             onClick={showHardwareOverlay}
                             data-id={dataId}
-                        ></i>
+                        >
+                            <img src="/assets/img/icons/black/icon.png" alt="Icon" />
+                        </div>
                         {device.isDirector ? 
-                            <i
-                                className="fa fa-key hardware-icon key" 
+                            <div
+                                className="hardware-icon key" 
                                 id="hardware-key-icon"
                                 onClick={showKey}
                                 onTouchTap={otherProps.handleTouchTap}
-                            ></i>
+                            >
+                                <img src="/assets/img/icons/key.png" alt="Icon" />
+                            </div>
                         :
                             null
                         }
