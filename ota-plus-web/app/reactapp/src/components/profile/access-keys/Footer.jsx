@@ -14,7 +14,7 @@ class Footer extends Component {
                     <li>
                         <div className="server-name">
                             <div className="text">
-                                Device gateway server URL:
+                                Device gateway:
                             </div>
                             <pre id="personal-server-name">
                                  {provisioningStore.provisioningDetails.hostName}

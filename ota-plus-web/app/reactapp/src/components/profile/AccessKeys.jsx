@@ -26,7 +26,7 @@ class AccessKeys extends Component {
                     <img src="/assets/img/icons/black/key.png" alt=""/>
                     Provisioning keys
                 </div>
-                <div className={"wrapper-flex" + (!provisioningStore.preparedProvisioningKeys.length ? " whitened" : "")}>
+                <div className={"wrapper-flex"}>
                     <MetaData 
                         title={title}>
                         <ProvisioningContainer
