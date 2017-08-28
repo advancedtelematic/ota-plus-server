@@ -473,7 +473,7 @@ export default class DevicesStore {
     _countOnlineDevices() {
         let currentOnlineDeviceUuids = this.onlineDevices.map(field => field.uuid);
         _.each(this.initialDevices, (device, index) => {
-            if (device.deviceStatus === "UpToDate" && !_.includes(currentOnlineDeviceUuids, device.uuid)) {
+            if ((device.deviceStatus === "UpToDate" || device.deviceStatus === "Outdated") && !_.includes(currentOnlineDeviceUuids, device.uuid)) {
                 this.onlineDevices.push(device);
             }
         });
