@@ -265,6 +265,14 @@ input {
     padding: 20px 0;
     float: left;
 
+    .back-button {
+    
+        img {
+            width: 34px;
+            height: 34px;
+        }
+    }
+
     .icon {
         text-align: center;
         background-color: #fff;
