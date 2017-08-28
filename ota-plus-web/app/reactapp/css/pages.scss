@@ -631,16 +631,15 @@
                             top: 15px;
 
                             .hardware-icon {
-                                color: $color-lightgrey;
-                                text-align: center;
-                                width: 20px;
-                                height: 20px;
-                                padding: 4px 0 0 0;
-                                border: 1px solid $color-lightgrey;
-                                border-radius: 30px;
+                                display: inline-block;
+
+                                img {
+                                    width: 22px;
+                                    height: 22px;
+                                }
 
                                 &.key {
-                                    margin-left: 5px;
+                                    margin-left: 3px;
                                 }
                             }
                         }
