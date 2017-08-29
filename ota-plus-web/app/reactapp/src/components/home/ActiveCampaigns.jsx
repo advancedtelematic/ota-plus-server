@@ -7,15 +7,10 @@ import ActiveCampaignsItem from './ActiveCampaignsItem';
 @observer
 class ActiveCampaigns extends Component {
     constructor(props) {
-        super(props);
-        this.goToDetails = this.goToDetails.bind(this);
-    }
-    goToDetails(campaignId, e) {
-        if(e) e.preventDefault();
-        this.context.router.push(`/campaign/${campaignId}`);
-    }
+        super(props);        
+    }    
     render() {
-        const { campaignsStore, groupsStore } = this.props;
+        const { campaignsStore, groupsStore, goToCampaignDetails } = this.props;
         const { lastActiveCampaigns } = campaignsStore;
         return (
             <span>
@@ -48,7 +43,7 @@ class ActiveCampaigns extends Component {
                                         <ActiveCampaignsItem 
                                             key={campaign.id}
                                             campaign={campaign}
-                                            goToDetails={this.goToDetails}
+                                            goToCampaignDetails={goToCampaignDetails}
                                             groupsStore={groupsStore}
                                         />
                                     );
@@ -67,10 +62,6 @@ class ActiveCampaigns extends Component {
             </span>
         );
     }
-}
-
-ActiveCampaigns.contextTypes = {
-    router: React.PropTypes.object.isRequired
 }
 
 ActiveCampaigns.propTypes = {

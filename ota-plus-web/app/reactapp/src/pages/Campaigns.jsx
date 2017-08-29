@@ -21,7 +21,7 @@ class Campaigns extends Component {
         this.props.campaignsStore._reset();
     }
     render() {
-        const { t, campaignsStore, packagesStore, groupsStore, hardwareStore, addNewWizard } = this.props;
+        const { t, campaignsStore, packagesStore, groupsStore, hardwareStore, addNewWizard, goToCampaignDetails } = this.props;
         return (
             <FadeAnimation 
                 display="flex">
@@ -55,6 +55,7 @@ class Campaigns extends Component {
                             groupsStore={groupsStore}
                             hardwareStore={hardwareStore}
                             addNewWizard={addNewWizard}
+                            goToCampaignDetails={goToCampaignDetails}
                         />
                     </MetaData>
                 </div>

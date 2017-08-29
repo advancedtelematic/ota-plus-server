@@ -67,6 +67,7 @@ class Main extends Component {
         this.showQueueModal = this.showQueueModal.bind(this);
         this.hideQueueModal = this.hideQueueModal.bind(this);
         this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
+        this.goToCampaignDetails = this.goToCampaignDetails.bind(this);
         this.devicesStore = new DevicesStore();
         this.hardwareStore = new HardwareStore();
         this.groupsStore = new GroupsStore();
@@ -119,6 +120,9 @@ class Main extends Component {
             this.packagesStore.fetchDirectorDevicePackagesHistory(device.uuid);
         }
     }
+    goToCampaignDetails(campaignId, e) {
+        this.context.router.push(`/campaign/${campaignId}`);
+    }
     toggleWizard(wizardId, wizardName, e) {
         if(e) e.preventDefault();
         let minimizedWizard = {
@@ -142,6 +146,7 @@ class Main extends Component {
                 hideWizard={this.hideWizard}
                 toggleWizard={this.toggleWizard}
                 minimizedWizards={this.minimizedWizards}
+                goToCampaignDetails={this.goToCampaignDetails}
                 key={this.wizards.length}
             />
         );
@@ -240,6 +245,7 @@ class Main extends Component {
                         queueModalShown={this.queueModalShown}
                         activeTabId={this.activeTabId}
                         setQueueModalActiveTabId={this.setQueueModalActiveTabId}
+                        goToCampaignDetails={this.goToCampaignDetails}
                     />
                 </FadeAnimation>
                 <SizeVerify 

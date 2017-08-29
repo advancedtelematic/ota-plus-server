@@ -9,7 +9,7 @@ class ActiveCampaignsItem extends Component {
         super(props);
     }
     render() {
-        const { campaign, goToDetails, groupsStore } = this.props;
+        const { campaign, goToCampaignDetails, groupsStore } = this.props;
 
         let totalProcessed = 0;
         let totalFinished = 0;
@@ -28,7 +28,7 @@ class ActiveCampaignsItem extends Component {
         failureRate = Math.round(totalFinished/Math.max(totalProcessed, 1) * 100);
             
         return (
-            <tr key={campaign.id} onClick={goToDetails.bind(this, campaign.id)}>
+            <tr key={campaign.id} onClick={goToCampaignDetails.bind(this, campaign.id)}>
                 <td>{campaign.name}</td>
                 <td id={"campaign-start-date-" + campaign.name}>
                     {moment(campaign.createdAt).format("DD.MM.YYYY")}
@@ -74,7 +74,7 @@ class ActiveCampaignsItem extends Component {
 
 ActiveCampaignsItem.propTypes = {
     campaign: PropTypes.object.isRequired,
-    goToDetails: PropTypes.func.isRequired,
+    goToCampaignDetails: PropTypes.func.isRequired,
     groupsStore: PropTypes.object.isRequired
 }
 
