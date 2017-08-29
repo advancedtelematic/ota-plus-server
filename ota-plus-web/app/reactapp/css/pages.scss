@@ -369,6 +369,8 @@
 
                                 img {
                                     width: 20px;
+                                    position: relative;
+                                    top: -2px;
                                 }
 
                                 & > div {
@@ -388,6 +390,8 @@
                                         display: inline-block;
                                         vertical-align: sub;
                                         opacity: 1;
+                                        position: relative;
+                                        top: -2px;
                                     }
                                 }
                             }
