@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { SelectField, MenuItem } from 'material-ui';
 import _ from 'underscore';
+import moment from 'moment';
 
 @observer
 class PackagesVersionList extends Component {
@@ -21,7 +22,7 @@ class PackagesVersionList extends Component {
                 checked={false}
                 value={version.packageHash}
                 primaryText={<span className='version-hash'>Version: {version.id.version}</span>}
-                secondaryText={<span className='version-created-at'>Created at: {version.createdAt}</span>}
+                secondaryText={<span className='version-created-at'>Created at: {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>}
                 id={"version-from-menu-item-" + version.id.version}
                 className={"version-menu-item"}
             />
@@ -36,7 +37,7 @@ class PackagesVersionList extends Component {
                 checked={false}
                 value={version.packageHash}
                 primaryText={<span className='version-hash'>Version: {version.id.version}</span>}
-                secondaryText={<span className='version-created-at'>Created at: {version.createdAt}</span>}
+                secondaryText={<span className='version-created-at'>Created at: {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>}
                 id={"version-to-menu-item-" + version.id.version}
                 className={"version-menu-item"}
             />
@@ -51,7 +52,7 @@ class PackagesVersionList extends Component {
                 checked={false}
                 value={version.id.version}
                 primaryText={<span className='version-hash'>Version: {version.id.version}</span>}
-                secondaryText={<span className='version-created-at'>Created at: {version.createdAt}</span>}
+                secondaryText={<span className='version-created-at'>Created at: {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>}
                 id={"version-to-menu-item-" + version.id.version}
                 className={"version-menu-item"}
             />
