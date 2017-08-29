@@ -55,10 +55,6 @@ class SoftwarePanel extends Component {
                                 </span>
                         }
                     </div>
-
-                    <div className="wrapper-statistics">
-                        {packagesStore.devicePackagesInstalledCount} installed, {packagesStore.devicePackagesQueuedCount} queued
-                    </div>
                 </div>
             </div>
         );
