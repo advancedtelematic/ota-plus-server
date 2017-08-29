@@ -26,7 +26,6 @@ class Campaigns extends Component {
         this.changeFilter = this.changeFilter.bind(this);
         this.showWizard = this.showWizard.bind(this);
         this.showRenameModal = this.showRenameModal.bind(this);
-        this.goToDetails = this.goToDetails.bind(this);
     }
     showWizard(campaignId) {
         this.campaignIdToAction = campaignId;
@@ -35,9 +34,6 @@ class Campaigns extends Component {
         if(e) e.preventDefault();
         this.renameModalShown = true;
         this.campaignIdToAction = campaignId;
-    }
-    goToDetails(campaignId, e) {
-        this.context.router.push(`/campaign/${campaignId}`);
     }
     showTooltip(e) {
         if(e) e.preventDefault();
@@ -61,7 +57,7 @@ class Campaigns extends Component {
         this.props.campaignsStore._prepareCampaigns(filter, this.props.campaignsStore.campaignsSort);
     }
     render() {
-        const { campaignsStore, packagesStore, groupsStore, hardwareStore, addNewWizard } = this.props;
+        const { campaignsStore, packagesStore, groupsStore, hardwareStore, addNewWizard, goToCampaignDetails } = this.props;
         return (
             <span>
                 {campaignsStore.campaignsFetchAsync.isFetching || campaignsStore.campaignsLegacyFetchAsync.isFetching ?
@@ -75,7 +71,7 @@ class Campaigns extends Component {
                         addNewWizard={addNewWizard}
                         showWizard={this.showWizard}
                         showRenameModal={this.showRenameModal}
-                        goToDetails={this.goToDetails}
+                        goToCampaignDetails={goToCampaignDetails}
                     />
                 :
                     <div className="wrapper-center">
@@ -106,10 +102,6 @@ class Campaigns extends Component {
             </span>
         );
     }
-}
-
-Campaigns.contextTypes = {
-    router: React.PropTypes.object.isRequired
 }
 
 Campaigns.propTypes = {
