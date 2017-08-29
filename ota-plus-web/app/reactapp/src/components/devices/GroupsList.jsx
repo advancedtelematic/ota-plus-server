@@ -74,19 +74,21 @@ class GroupsList extends Component {
                             />
                         );
                     })}
-                    {_.map(groupsStore.groups, (group) => {
-                        const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.name === group.groupName);
-                        return (
-                            <GroupsListItem 
-                                group={group}
-                                groupsStore={groupsStore}
-                                showRenameGroupModal={showRenameGroupModal}
-                                selectGroup={selectGroup}
-                                isSelected={isSelected}
-                                onDeviceDrop={onDeviceDrop}
-                                key={group.groupName}
-                            />
-                        );
+                    {_.map(groupsStore.preparedGroups, (groups) => {
+                        return _.map(groups, (group, index) => {
+                            const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.name === group.groupName);
+                            return (
+                                <GroupsListItem 
+                                    group={group}
+                                    groupsStore={groupsStore}
+                                    showRenameGroupModal={showRenameGroupModal}
+                                    selectGroup={selectGroup}
+                                    isSelected={isSelected}
+                                    onDeviceDrop={onDeviceDrop}
+                                    key={group.groupName}
+                                />
+                            );
+                        });
                     })}
                 </InfiniteScroll>
 
