@@ -395,13 +395,7 @@ input {
                 }
             }
         }
-    }
-
-    .btn-add {
-        float: right !important;
-        margin: 6px 15px 0 0 !important;
-        float: right !important;
-    }
+    }   
 
     .setup-file-uploader {
         float: right;
@@ -409,6 +403,16 @@ input {
         margin-top: 11px;
         margin-right: 15px;
         text-decoration: underline;
+    }
+}
+
+.btn-add {
+    float: right !important;
+    margin: 6px 15px 0 0 !important;
+    color: black!important;
+
+    &:before {
+        font-size: 10px;
     }
 }
 

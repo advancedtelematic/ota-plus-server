@@ -52,7 +52,7 @@ class LastPackages extends Component {
                             <FlatButton
                                 label="Add new package"
                                 type="button"
-                                className="btn-main btn-small"
+                                className="btn-main btn-small btn-add"
                                 onClick={this.showCreateModal}
                             />
                         </div>

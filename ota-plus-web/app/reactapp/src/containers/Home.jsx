@@ -7,6 +7,7 @@ import {
     LastDevices,
     LastPackages
 } from '../components/home';
+import { FlatButton } from 'material-ui';
 
 @observer
 class Home extends Component {
@@ -59,7 +60,14 @@ class Home extends Component {
                                 Draft campaigns
                             </div>
                             <div className="panel-body">
-                                
+                                <div className="wrapper-center">
+                                    <FlatButton
+                                        label="Add new campaign"
+                                        type="button"
+                                        className="btn-main btn-small btn-add"
+                                        onClick={addNewWizard.bind(this, null)}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
