@@ -240,10 +240,12 @@ input {
                             }
 
                             &.signout {
-                                #link-signout {
-                                    position: relative;
-                                    top: 2px;
+                                button {
+                                    font-size: 16px !important;
+                                }
+                                span {
                                     color: #333;
+                                    text-transform: uppercase !important;
                                 }
                                 margin: 10px 0 10px 0;
                             }
