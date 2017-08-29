@@ -1223,9 +1223,21 @@
                     .bottom {
                         margin-bottom: 25px;
 
+                        div {
+                            overflow: hidden;
+                        }
+
                         .sub-title {
-                            width: 130px;
-                            display: inline-block;
+                            width: 25%;
+                            float: left;
+                        }
+
+                        .value {
+                            width: 70%;
+                            float: left;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
                         }
 
                         .hardware-ids {

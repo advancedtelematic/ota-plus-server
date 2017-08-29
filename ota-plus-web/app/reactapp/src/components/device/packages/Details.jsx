@@ -162,7 +162,7 @@ class Details extends Component {
 						        		</div>
 						        		<div className="hardware-ids">
 							        		<span className = "sub-title">Hardware ids:</span>
-							        		<span className="value" id={this.generateIdTag('version-hardware-ids-value', expandedPack)}>
+							        		<span id={this.generateIdTag('version-hardware-ids-value', expandedPack)}>
 							        			{_.map(expandedPack.hardwareIds, (hardwareId, index) => {
 			                                         return (
 			                                            <span className="hardware-label" key={index}>
