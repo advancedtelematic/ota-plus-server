@@ -25,15 +25,15 @@ class List extends Component {
                         </ul>
                     :
                         Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length ?
-                            <ul className={"list queue" + (!Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length ? " empty" : "")}>
+                            <ul className={"list queue director-queue" + (!Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length ? " empty" : "")}>
                                 {_.map(devicesStore.multiTargetUpdates[device.uuid], (update, index) => {
                                     return _.map(update.targets, (target, hardwareId) => {
                                         return (
                                             <MultiTargetItem
                                                 item={target}
-                                                hardwareId={target}
+                                                hardwareId={hardwareId}
                                                 updateId={update.updateId}
-                                                cancelInstallation={cancelInstallation}
+                                                length={target.image.fileinfo.length}
                                                 key={hardwareId}
                                             />
                                         );

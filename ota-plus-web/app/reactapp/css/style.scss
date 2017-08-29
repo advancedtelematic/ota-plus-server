@@ -2495,6 +2495,12 @@ div[role=presentation] {
                                 }
                                 .result-info {
                                     padding: 20px 20px 0;
+                                    .target {
+                                        width: auto;
+                                        white-space: nowrap;
+                                        text-overflow: ellipsis;
+                                        overflow: hidden;
+                                    }
                                 }
                             }
 
@@ -2605,7 +2611,7 @@ div[role=presentation] {
                             text-align: center;
                         }
 
-                        &.queue {
+                        &.queue:not(.director-queue) {
                             li {
                                 background: #fff;
 
@@ -2614,6 +2620,40 @@ div[role=presentation] {
                                     font-size: 11px;
                                     line-height: 1.6em;
                                     margin: 8px 0 0 0;
+                                }
+                            }
+                        }
+
+                        &.director-queue {
+                            li {
+
+                                div.name {
+                                    font-weight: 400;
+                                    width: auto;
+                                    white-space: nowrap;
+                                    text-overflow: ellipsis;
+                                }
+
+                                .desc {
+                                    padding:0 25px;
+                                    font-size: 14px;
+                                    line-height: 1.6em;
+                                    margin: 8px 0 0 0;
+                                    font-weight: 700;
+                                    color: #494949
+                                }
+
+                                .result {
+                                    padding: 20px;
+                                    background-color: #fff;
+                                    box-shadow: 0 1px 7px #ccc;
+                                    border-radius: 5px;
+                                    &:not(:first-child) {
+                                        margin-top: 20px;
+                                    }
+                                    .result-info {
+                                        padding: 20px 20px 0;
+                                    }
                                 }
                             }
                         }
