@@ -310,6 +310,7 @@ class Wizard extends Component {
     handleCampaignCreated() {        
         this.props.campaignsStore.launchCampaign(this.props.campaignsStore.campaignData.campaignId);
         this.props.hideWizard(this.props.wizardIdentifier);
+        this.props.goToCampaignDetails(this.props.campaignsStore.campaignData.campaignId);
     }
     handleLegacyCampaignCreated() {
         let pack = _.first(this.wizardData[1].packages);
@@ -327,6 +328,7 @@ class Wizard extends Component {
     handleLegacyCampaignGroupsSaved() {
         this.props.campaignsStore.launchLegacyCampaign(this.props.campaignsStore.campaignData.campaignId);
         this.props.hideWizard(this.props.wizardIdentifier);
+        this.props.goToCampaignDetails(this.props.campaignsStore.campaignData.campaignId);
     }
     changeFilter(filterValue) {
         this.filterValue = filterValue;
