@@ -60,7 +60,7 @@ class Home extends Component {
         }
     }
     render() {
-        const { devicesStore, packagesStore, campaignsStore, groupsStore, hardwareStore, userStore, provisioningStore, featuresStore, setSystemReady, addNewWizard } = this.props;
+        const { devicesStore, packagesStore, campaignsStore, groupsStore, hardwareStore, userStore, provisioningStore, featuresStore, setSystemReady, addNewWizard, goToCampaignDetails } = this.props;
         return (
             <FadeAnimation
                 display="flex">
@@ -78,6 +78,7 @@ class Home extends Component {
                                     groupsStore={groupsStore}
                                     hardwareStore={hardwareStore}
                                     addNewWizard={addNewWizard}
+                                    goToCampaignDetails={goToCampaignDetails}
                                 />
                             </MetaData>
                         </div>

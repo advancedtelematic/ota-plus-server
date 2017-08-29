@@ -11,7 +11,7 @@ class TufList extends Component {
         super(props);
     }
     render() {
-        const { campaignsStore, groupsStore, addNewWizard, showWizard, showRenameModal, goToDetails } = this.props;
+        const { campaignsStore, groupsStore, addNewWizard, showWizard, showRenameModal, goToCampaignDetails } = this.props;
         return (
             <span>
                 {campaignsStore.preparedCampaigns.length ?
@@ -38,7 +38,7 @@ class TufList extends Component {
                                         return (
                                             <CampaignsTufListItem 
                                                 groupsStore={groupsStore}
-                                                goToDetails={goToDetails}
+                                                goToCampaignDetails={goToCampaignDetails}
                                                 showRenameModal={showRenameModal}
                                                 campaign={campaign}
                                                 type="inPreparation"
@@ -72,7 +72,7 @@ class TufList extends Component {
                                         return (
                                             <CampaignsTufListItem 
                                                 groupsStore={groupsStore}
-                                                goToDetails={goToDetails}
+                                                goToCampaignDetails={goToCampaignDetails}
                                                 showRenameModal={showRenameModal}
                                                 campaign={campaign}
                                                 type="running"
@@ -106,7 +106,7 @@ class TufList extends Component {
                                         return (
                                             <CampaignsTufListItem 
                                                 groupsStore={groupsStore}
-                                                goToDetails={goToDetails}
+                                                goToCampaignDetails={goToCampaignDetails}
                                                 showRenameModal={showRenameModal}
                                                 campaign={campaign}
                                                 type="finished"

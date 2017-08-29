@@ -11,7 +11,7 @@ class LegacyList extends Component {
         super(props);
     }
     render() {
-        const { campaignsStore, groupsStore, addNewWizard, showWizard, showRenameModal, goToDetails } = this.props;
+        const { campaignsStore, groupsStore, addNewWizard, showWizard, showRenameModal, goToCampaignDetails } = this.props;
         return (
             <span>
                 {campaignsStore.preparedLegacyCampaigns.length ?
@@ -37,7 +37,7 @@ class LegacyList extends Component {
                                         return (
                                             <CampaignsLegacyListItem 
                                                 groupsStore={groupsStore}
-                                                goToDetails={goToDetails}
+                                                goToCampaignDetails={goToCampaignDetails}
                                                 showRenameModal={showRenameModal}
                                                 campaign={campaign}
                                                 key={campaign.id}
@@ -69,7 +69,7 @@ class LegacyList extends Component {
                                         return (
                                             <CampaignsLegacyListItem 
                                                 groupsStore={groupsStore}
-                                                goToDetails={goToDetails}
+                                                goToCampaignDetails={goToCampaignDetails}
                                                 showRenameModal={showRenameModal}
                                                 campaign={campaign}
                                                 key={campaign.id}

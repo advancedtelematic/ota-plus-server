@@ -13,7 +13,7 @@ class List extends Component {
         super(props);
     }
     render() {
-        const { campaignsStore, groupsStore, addNewWizard, showWizard, showRenameModal, goToDetails } = this.props;
+        const { campaignsStore, groupsStore, addNewWizard, showWizard, showRenameModal, goToCampaignDetails } = this.props;
         return (
             <span>
                 <CampaignsHeader
@@ -24,7 +24,7 @@ class List extends Component {
                         campaignsStore={campaignsStore}
                         groupsStore={groupsStore}
                         showRenameModal={showRenameModal}
-                        goToDetails={goToDetails}
+                        goToCampaignDetails={goToCampaignDetails}
                     />              
                     <CampaignsTufList 
                         campaignsStore={campaignsStore}
@@ -32,7 +32,7 @@ class List extends Component {
                         addNewWizard={addNewWizard}
                         showWizard={showWizard}
                         showRenameModal={showRenameModal}
-                        goToDetails={goToDetails}
+                        goToCampaignDetails={goToCampaignDetails}
                     />
                 </span>
             </span>
