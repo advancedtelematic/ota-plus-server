@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 4</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M24.9808403,49.9616805 C38.7773774,49.9616805 49.9616805,38.7773774 49.9616805,24.9808403 C49.9616805,11.1843032 38.7773774,-3.55271368e-15 24.9808403,-3.55271368e-15 C11.1843032,-3.55271368e-15 0,11.1843032 0,24.9808403 C0,38.7773774 11.1843032,49.9616805 24.9808403,49.9616805 Z" id="path-1"></path>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="49.9616805" height="49.9616805" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Public_Key" transform="translate(-1.000000, -1.000000)" stroke="#707070">
+            <g id="Group-4" transform="translate(1.000000, 1.000000)">
+                <g id="Group-3">
+                    <g id="Group-2">
+                        <use id="Oval-3" mask="url(#mask-2)" stroke-width="2" xlink:href="#path-1"></use>
+                        <path d="M36.21712,17.5599117 C35.5412382,18.2345036 34.4461549,18.2345036 33.770273,17.5599117 C33.0943912,16.8840298 33.0943912,15.7889465 33.770273,15.1130647 C34.4461549,14.4371828 35.5412382,14.4371828 36.21712,15.1130647 C36.891712,15.7889465 36.891712,16.8840298 36.21712,17.5599117 Z M26.3368628,28.6564983 L29.8736337,25.1197273 C32.5784509,26.341216 35.8688603,25.8497829 38.0912733,23.6260801 C40.9586117,20.7587417 40.9586117,16.1075396 38.0912733,13.2389114 C35.2213552,10.3689933 30.571443,10.3702832 27.7028148,13.2389114 C25.6158362,15.3246002 25.054751,18.3518801 26.0040812,20.9522193 L11.0869565,35.869344 L12.1691414,38.4245385 L16.4063013,38.2697564 L17.3698199,34.6491452 L21.510241,33.8416986 L22.2519052,28.5584696 L26.3368628,28.6564983 Z" id="Page-1" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
