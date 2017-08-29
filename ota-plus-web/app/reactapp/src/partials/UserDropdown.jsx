@@ -51,7 +51,7 @@ class UserDropdown extends Component {
                           <a href="http://atsgarage.com/en/terms-conditions.html" target="_blank" id="terms-of-use" onClick={this.closeDropdown}>Terms of use</a>
                     </li>
                     <li className="signout">
-                          <a href="#" onClick={this.logout} id="link-signout">Sign out</a>
+                        <button className="btn-main btn-small"><a href="#" onClick={this.logout} id="link-signout">Sign out</a></button>
                     </li>
                 </ul>
             </div>  
