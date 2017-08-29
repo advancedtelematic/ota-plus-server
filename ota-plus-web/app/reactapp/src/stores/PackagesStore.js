@@ -795,7 +795,6 @@ export default class PackagesStore {
                 let prevData = this.directorDeviceHistoryPerDevice[this.activeDeviceId] ? this.directorDeviceHistoryPerDevice[this.activeDeviceId] : [];
                 this.directorDeviceHistory = data;
                 this.directorDeviceHistoryPerDevice[this.activeDeviceId] = _.uniq(prevData.concat(data), obj => obj.updateId);
-                this._prepareDirectorDeviceHistory();
                 this.directorDeviceHistoryCurrentPage++;
                 this.directorDeviceHistoryTotalCount = response.data.total;
                 this.packagesDirectorDeviceHistoryFetchAsync = handleAsyncSuccess(response);
@@ -803,12 +802,6 @@ export default class PackagesStore {
             .catch(function(error) {
                 this.packagesDirectorDeviceHistoryFetchAsync = handleAsyncError(error);
             }.bind(this));
-    }
-
-    _prepareDirectorDeviceHistory() {
-        this.directorDeviceHistoryPerDevice[this.activeDeviceId] = _.sortBy(this.directorDeviceHistoryPerDevice[this.activeDeviceId], (obj) => { 
-            return obj.receivedAt; 
-        }).reverse();
     }
 
     fetchDevicePackagesHistory(id) {
