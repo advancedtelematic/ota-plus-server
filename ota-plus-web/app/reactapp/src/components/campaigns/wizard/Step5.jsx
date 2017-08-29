@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { Loader } from '../../../partials';
 import { translate } from 'react-i18next';
 import _ from 'underscore';
+import moment from 'moment';
 
 @observer
 class WizardStep5 extends Component {
@@ -75,7 +76,7 @@ class WizardStep5 extends Component {
                                                                         Hash: {update.from}
                                                                     </div>
                                                                     <div className="createdAt">
-                                                                        Created at: {this.getCreatedAt(update.from)}
+                                                                        Created at: {moment(this.getCreatedAt(update.from)).format("ddd MMM DD YYYY, h:mm:ss A")}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -91,7 +92,7 @@ class WizardStep5 extends Component {
                                                                     Hash: {update.to}
                                                                 </div>
                                                                 <div className="createdAt">
-                                                                    Created at: {this.getCreatedAt(update.to)}
+                                                                    Created at: {moment(this.getCreatedAt(update.to)).format("ddd MMM DD YYYY, h:mm:ss A")}
                                                                 </div>
                                                             </div>
                                                         </div>
