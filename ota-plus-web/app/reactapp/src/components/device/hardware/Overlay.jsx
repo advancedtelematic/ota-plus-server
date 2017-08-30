@@ -25,7 +25,7 @@ class Overlay extends Component {
         this.hardwareInfoShown = true;
     }
     render() {
-        const { hardware, hideHardwareOverlay, shown, packagesStore, device, showPackageBlacklistModal, onFileDrop } = this.props;
+        const { hardware, hideHardwareOverlay, shown, packagesStore, device, showPackageBlacklistModal, onFileDrop, hardwareOverlayAnchor } = this.props;
         let content = null;
 
         if(_.isEmpty(hardware)) {
@@ -65,12 +65,11 @@ class Overlay extends Component {
                 </div>
             );
         }
-
         return (
                 <Popover
                     className="hardware-overlay-modal"
                     open={shown}
-                    anchorEl={this.detailsIdShown}
+                    anchorEl={hardwareOverlayAnchor}
                     anchorOrigin={{horizontal: 'right', vertical: 'center'}}
                     targetOrigin={{horizontal: 'left', vertical: 'center'}}
                     onRequestClose={hideHardwareOverlay}
