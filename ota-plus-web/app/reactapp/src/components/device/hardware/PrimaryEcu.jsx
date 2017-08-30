@@ -54,7 +54,7 @@ class PrimaryEcu extends Component {
                                 onClick={showKey}
                                 onTouchTap={otherProps.handleTouchTap}
                             >
-                                <img src="/assets/img/icons/Key_Icon.svg" alt="Icon" />
+                                <img src="/assets/img/icons/key.png" alt="Icon" />
                             </div>
                         :
                             null
