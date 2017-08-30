@@ -65,7 +65,8 @@ class Packages extends Component {
         if(e) e.preventDefault();
         this.uploadToTuf = !this.uploadToTuf;
     } 
-    handleCopy() {
+    handleCopy(e) {
+        if(e) e.preventDefault();
         this.copied = true;
     }
     hideCreateModal(e) {

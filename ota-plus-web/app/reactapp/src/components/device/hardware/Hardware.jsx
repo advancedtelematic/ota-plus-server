@@ -53,7 +53,7 @@ class Hardware extends Component {
         this.keyModalShown = false;
     }
     render() {
-        const { devicesStore, hardwareStore, packagesStore, device, activeEcu, selectEcu, showPackageBlacklistModal, onFileDrop, hardwareOverlayShown, showHardwareOverlay, hideHardwareOverlay } = this.props;
+        const { devicesStore, hardwareStore, packagesStore, device, activeEcu, selectEcu, showPackageBlacklistModal, onFileDrop, hardwareOverlayShown, hardwareOverlayAnchor, showHardwareOverlay, hideHardwareOverlay } = this.props;
         const hardware = hardwareStore.hardware[device.uuid];
         let active = true;
         if(device.isDirector) {
@@ -100,6 +100,7 @@ class Hardware extends Component {
                                         onClose={() => {
                                             hardwareStore._resetPublicKey();
                                         }}
+                                        animated={false}
                                         key={index}
                                     >
                                         <SecondaryEcu
@@ -131,6 +132,7 @@ class Hardware extends Component {
                     device={device}
                     showPackageBlacklistModal={showPackageBlacklistModal}
                     onFileDrop={onFileDrop}
+                    hardwareOverlayAnchor={hardwareOverlayAnchor}
                 />
                 {this.secondaryDetailsShown ?
                     <FadeAnimation>

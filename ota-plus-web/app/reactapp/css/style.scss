@@ -2762,7 +2762,59 @@ div[role=presentation] {
 }
 
 .hardware-pk-popover {
-    padding: 15px;
+    overflow-y: visible!important;
+
+    div {
+
+        &:first-child {
+            overflow-y: visible!important;
+        }
+    }
+
+    .triangle {
+        width: 0;
+        height: 0;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-right: 15px solid #000000;
+        position: absolute;
+        left: -15px;
+        top: 8px;
+    }
+
+    .heading {
+        background: #000000;
+        height: 50px;
+        text-align: left;
+        color: white;
+        font-size: 16px;
+        font-family: akkurat;
+        text-transform: uppercase;
+        font-weight: bold;
+        padding: 14px 0px;
+        text-align: center;
+    }
+
+    .body {
+        padding: 25px;
+        border-bottom: 1px solid #F1F1F1;
+
+        pre {
+            background: transparent;
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    .actions {
+        padding: 25px;
+        overflow: hidden;
+
+        button {
+            float: right;
+        }
+    }
 }
 
 .clipboard-copied {
@@ -2846,11 +2898,16 @@ div[role=presentation] {
     }
 }
 
+.fixed {
+    position: fixed;
+    overflow: hidden;
+    padding-bottom: 5px;
+}
+
 .hardware-overlay-modal {
     padding-top: 0!important;
-    border-radius: 10px !important;
     left: 19% !important;
-    top: 65px !important;
+    top: 225px !important;
     overflow-y: visible !important;
     width: 70% !important;
     max-width: 768px;
@@ -2861,10 +2918,10 @@ div[role=presentation] {
         height: 0;
         border-top: 15px solid transparent;
         border-bottom: 15px solid transparent;
-        border-right: 15px solid #d3d3d3;
+        border-right: 15px solid #000000;
         position: absolute;
         left: -15px;
-        top: 172px;
+        top: 10px;
     }
 
     ::-webkit-scrollbar {
@@ -2883,7 +2940,6 @@ div[role=presentation] {
 
     .content {
         & > div {
-            border-radius: 10px!important;
             overflow-y: hidden;
             overflow-x: hidden;
 
@@ -2893,48 +2949,43 @@ div[role=presentation] {
         }
 
         .heading {
-            background: #4b5151;
-            height: 36px;
+            background: #000000;
+            height: 50px;
             text-align: left;
             color: white;
             font-size: 16px;
-            padding: 8px 0;
-            margin-left: 65px;
             font-family: akkurat;
             text-transform: uppercase;
             font-weight: bold;
+            padding: 14px 0px;
+            text-align: center;
         }
 
         .body {
-            background: #f7f7f7;
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 10px;
-            border-bottom-left-radius: 10px;
-            height: 756px!important;
+            background: white;
+            height: 650px!important;
             overflow-y: auto;
             overflow-x: hidden;
 
             .details {
+                position: relative;
 
                 .wrapper-switch {
                     width: 50px;
                     height: 100%;
                     position: absolute;
                     left: 0;
-                    top: 0;
-                    border-top-left-radius: 10px;
-                    border-bottom-left-radius: 10px;
-                    background: #d3d3d3;
+                    top: 0px;
+                    background: #F1F1F1;
                     border-right: 4px solid #9ce2d8;
 
                     .show-hardware {
                         padding: 12px;
                         cursor: pointer;
-                        border-top-left-radius: 10px;
 
                         &.active {
                             background: #9ce2d8;
+                            box-shadow: 0 1px 10px -2px grey;
                         }
                     }
 
@@ -2944,11 +2995,12 @@ div[role=presentation] {
 
                         &.active {
                             background: #9ce2d8;
+                            box-shadow: 0 1px 10px -2px grey;
                         }
                     }
 
                     img {
-                        width: 20px;
+                        width: 23px;
                     }
                 }
             }
@@ -2967,7 +3019,7 @@ div[role=presentation] {
                     padding-left: 20px;
                     padding-bottom: 10px;
                     margin-bottom: 10px;
-                    border-bottom: 1px solid black;
+                    border-bottom: 1px solid #F1F1F1;
                 }
 
                 .name {
@@ -2986,7 +3038,7 @@ div[role=presentation] {
                 padding: 0px 0px 0px 50px;
 
                 .ios-list {
-                    height: 716px;
+                    height: 610px;
 
                     .dnd-zone {
                         position: relative;
