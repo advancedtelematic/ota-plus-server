@@ -17,9 +17,6 @@ class TufList extends Component {
                 {campaignsStore.preparedCampaigns.length ?
                     <div className="tuf-list">
                         <div className="section-header">
-                            Tuf campaigns
-                        </div>
-                        <div className="section-header">
                             In preparation
                         </div>
                         <div className="campaigns-list">

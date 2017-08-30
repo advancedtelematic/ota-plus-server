@@ -2080,10 +2080,33 @@
             min-height: calc(100% - 40px);
             overflow-y: auto;
 
+            .campaign-tabs {
+                height: 100%;
+
+                .tab-item {
+                    color: #666!important;
+                    width: 250px!important;
+                    font-weight: bold!important;
+                    text-transform: none!important;
+
+                    &.active {
+                        background: #9ce2d8!important;
+                        color: #000000!important;
+                    }
+                }
+
+                .campaigns-wrapper {
+                    height: calc(100% - 50px);
+
+                    .wrapper-list {
+                        height: 100%;
+                    }
+                }
+            }
+
             .legacy-list {
 
                 .progress {
-
                     margin-top: -4px;
                 }
 
