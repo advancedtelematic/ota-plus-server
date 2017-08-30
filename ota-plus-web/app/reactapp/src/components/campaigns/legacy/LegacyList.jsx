@@ -17,9 +17,6 @@ class LegacyList extends Component {
                 {campaignsStore.preparedLegacyCampaigns.length ?
                     <div className="legacy-list">
                         <div className="section-header">
-                            Legacy campaigns
-                        </div>
-                        <div className="section-header">
                             Running campaigns
                         </div>
                         <div className="campaigns-list">

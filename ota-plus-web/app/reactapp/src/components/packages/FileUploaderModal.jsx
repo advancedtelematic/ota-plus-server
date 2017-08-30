@@ -19,7 +19,7 @@ class FileUploaderModal extends Component {
         const { shown, hide, handleCopy, copied, featuresStore } = this.props;
         const content = (
             <span>
-                {featuresStore.featuresClientIdFetchAsync.isFetching ?
+                {featuresStore.featuresClientIdFetchAsync.isFetching || !featuresStore.clientId ?
                     <div className="wrapper-center">
                         <Loader />
                     </div>
