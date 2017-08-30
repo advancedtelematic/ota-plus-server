@@ -29,6 +29,7 @@ class Device extends Component {
         type: null,
     };
     @observable hardwareOverlayShown = false;
+    @observable hardwareOverlayAnchor = null;
     
     constructor(props) {
         super(props);
@@ -82,6 +83,7 @@ class Device extends Component {
     showHardwareOverlay(e) {
         e.preventDefault();
         this.hardwareOverlayShown = true;
+        this.hardwareOverlayAnchor = e.currentTarget;
     }
     hideHardwareOverlay() {
         this.hardwareOverlayShown = false;        
@@ -182,6 +184,7 @@ class Device extends Component {
                                 showPackageBlacklistModal={this.showPackageBlacklistModal}
                                 onFileDrop={this.onFileDrop}
                                 hardwareOverlayShown={this.hardwareOverlayShown}
+                                hardwareOverlayAnchor={this.hardwareOverlayAnchor}
                                 showHardwareOverlay={this.showHardwareOverlay}
                                 hideHardwareOverlay={this.hideHardwareOverlay}
                             />

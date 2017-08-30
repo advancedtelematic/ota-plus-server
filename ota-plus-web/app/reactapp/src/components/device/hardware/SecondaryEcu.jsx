@@ -24,13 +24,13 @@ class SecondaryEcu extends Component {
                             Hardware ID: <span id={"hardware-id-" + ecu.hardwareId}>{ecu.hardwareId}</span>
                         </span>
                     </div>
-                    <div className="icons">
-                        <i
-                            className="fa fa-key hardware-icon key"
-                            id="hardware-key-icon"
-                            onClick={showKey}
-                            onTouchTap={otherProps.handleTouchTap}
-                        ></i>
+                    <div className="icons"
+                         id="hardware-key-icon"
+                         onClick={showKey}
+                         onTouchTap={otherProps.handleTouchTap}>
+                            <span className="hardware-icon">
+                                <img src="/assets/img/icons/key.png" alt="Icon" />
+                            </span>
                     </div>
                 </a>
                 {keyModalShown ? 

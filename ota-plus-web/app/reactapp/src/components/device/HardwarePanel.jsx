@@ -9,7 +9,7 @@ class HardwarePanel extends Component {
         super(props);
     }
     render() {
-        const { devicesStore, hardwareStore, packagesStore, device, activeEcu, selectEcu, showPackageBlacklistModal, onFileDrop, hardwareOverlayShown, showHardwareOverlay, hideHardwareOverlay } = this.props;
+        const { devicesStore, hardwareStore, packagesStore, device, activeEcu, selectEcu, showPackageBlacklistModal, onFileDrop, hardwareOverlayShown, hardwareOverlayAnchor, showHardwareOverlay, hideHardwareOverlay } = this.props;
         return (
             <div className="hardware-panel">
                 <div className="darkgrey-header">
@@ -32,6 +32,7 @@ class HardwarePanel extends Component {
                             showPackageBlacklistModal={showPackageBlacklistModal}
                             onFileDrop={onFileDrop}
                             hardwareOverlayShown={hardwareOverlayShown}
+                            hardwareOverlayAnchor={hardwareOverlayAnchor}
                             showHardwareOverlay={showHardwareOverlay}
                             hideHardwareOverlay={hideHardwareOverlay}
                         />

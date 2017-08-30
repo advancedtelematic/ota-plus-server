@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
-import { RaisedButton, Popover } from 'material-ui';
+import { FlatButton, Popover } from 'material-ui';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { VelocityTransitionGroup } from 'velocity-react';
 import _ from 'underscore';
@@ -22,37 +22,45 @@ class PublicKeyPopover extends Component {
                 targetOrigin={{horizontal: 'left', vertical: 'center'}}
                 onRequestClose={handleRequestClose}
                 useLayerForClickAway={false}
+                animated={false}
             >
                 {!hardwareStore.hardwarePublicKeyFetchAsync.isFetching && hardwareStore.publicKey.keyval ?
                     <span>
-                        <pre>
-                            {hardwareStore.publicKey.keyval.public}
-                        </pre>
-                        <CopyToClipboard
-                            text={hardwareStore.publicKey.keyval.public}
-                            onCopy={handleCopy}>
-                            <RaisedButton
-                                primary={true}
-                                label="Copy to clipboard"
-                                type="button"
-                                className="btn-small"
-                            />
-                        </CopyToClipboard>
-                        <VelocityTransitionGroup 
-                            enter={{
-                                animation: "fadeIn", 
-                            }} 
-                            leave={{
-                                animation: "fadeOut"
-                            }}>
-                            {copied ?
-                                <span className="clipboard-copied">
-                                    (Public key copied)
-                                </span>
-                            :
-                                null
-                            }
-                        </VelocityTransitionGroup>
+                        <div className="triangle"></div>
+                        <div className="heading">
+                            <span>Public key</span>
+                        </div>
+                        <div className="body">
+                            <pre>
+                                {hardwareStore.publicKey.keyval.public}
+                            </pre>                            
+                        </div>
+                        <div className="actions">
+                            <CopyToClipboard
+                                text={hardwareStore.publicKey.keyval.public}
+                                onCopy={handleCopy.bind(this)}>
+                                <FlatButton
+                                    label="Copy to clipboard"
+                                    type="button"
+                                    className="btn-main"
+                                />
+                            </CopyToClipboard>
+                            <VelocityTransitionGroup 
+                                enter={{
+                                    animation: "fadeIn", 
+                                }} 
+                                leave={{
+                                    animation: "fadeOut"
+                                }}>
+                                {copied ?
+                                    <span className="clipboard-copied">
+                                        (Public key copied)
+                                    </span>
+                                :
+                                    null
+                                }
+                            </VelocityTransitionGroup>
+                        </div>
                     </span>
                 :
                     null
