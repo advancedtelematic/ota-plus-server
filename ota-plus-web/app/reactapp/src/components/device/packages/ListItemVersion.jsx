@@ -51,18 +51,16 @@ class ListItemVersion extends Component {
                             <span className="blacklisted" id={"image-blacklisted-" + version.id.version.substring(0,8)}>
                                 <img src="/assets/img/icons/ban_red.png" alt="" />
                             </span>
+                        : version.id.version === queuedPackage ?
+                            <span className="fa-stack queued" id={"image-queued-" + version.id.version.substring(0,8)}>
+                                <i className="fa fa-dot-circle-o fa-stack-2x" aria-hidden="true"></i>
+                            </span>
+                        : version.id.version === installedPackage ?
+                            <span className="installed" id={"image-installed-" + version.id.version.substring(0,8)}>
+                                <img src="/assets/img/icons/check.png" alt="" />
+                            </span>
                         :
-                        version.id.version === queuedPackage || version.id.version === installedPackage ?
-                            version.id.version === queuedPackage ?
-                                <span className="fa-stack queued" id={"image-queued-" + version.id.version.substring(0,8)}>
-                                    <i className="fa fa-dot-circle-o fa-stack-2x" aria-hidden="true"></i>
-                                </span>
-                            :
-                                <span className="installed" id={"image-installed-" + version.id.version.substring(0,8)}>
-                                    <img src="/assets/img/icons/check.png" alt="" />
-                                </span>
-                        :
-                        null
+                            null
                     }
                 </div>
             </li>

@@ -14,16 +14,15 @@ const WebsocketHandler = (function (wsUrl, stores) {
             const data = eventObj.event;
             switch (type) {
                 case "DeviceSeen":
-                    stores.devicesStore.fetchInitialDevices();
-                    if(stores.devicesStore.onlineDevices.length <= 1 && !(document.cookie.indexOf("fireworksPageAcknowledged") >= 0)) {
-                        window.location = '#/fireworks'
+                    if(document.cookie.indexOf("fireworksPageAcknowledged") == -1) {
+                        stores.devicesStore.fetchInitialDevices();
+                        if(stores.devicesStore.onlineDevices.length <= 1) {
+                            window.location = '#/fireworks'
+                        }
                     }
-
                     stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
-                    stores.packagesStore.fetchInitialDevicePackages(data.uuid);
-
-                    if(window.location.href.indexOf('/device/') > -1) {
-                        stores.hardwareStore.fetchHardwareWs(data.uuid);
+                    /* If we're on device detail page */
+                    if(window.location.href.indexOf('/device/') > -1) {                        
                         stores.devicesStore.fetchDirectorAttributes(data.uuid);
                     }
                     break;

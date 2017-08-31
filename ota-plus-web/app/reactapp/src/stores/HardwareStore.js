@@ -44,22 +44,6 @@ export default class HardwareStore {
             }.bind(this));
     }
 
-    fetchHardwareWs(deviceId) {
-        resetAsync(this.hardwareFetchWsAsync, true);
-        return axios.get(`${API_ECUS_FETCH}/${deviceId}/system_info`)
-            .then(function (response) {
-                let data = response.data;
-                if(typeof data === 'string') {
-                    data = JSON.parse(data);
-                }
-                this.hardware[deviceId] = data;
-                this.hardwareFetchWsAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function (error) {
-                this.hardwareFetchWsAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
     fetchPublicKey(deviceId, ecuId) {
         resetAsync(this.hardwarePublicKeyFetchAsync, true);
         return axios.get(`${API_ECUS_PUBLIC_KEY_FETCH}/${deviceId}/ecus/public_key?ecu_serial=${ecuId}`)
