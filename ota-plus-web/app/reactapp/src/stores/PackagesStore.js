@@ -615,7 +615,6 @@ export default class PackagesStore {
                     this.initialPackagesForDeviceFetchAsync = handleAsyncSuccess(response);      
                 }.bind(this))
                 .catch(function(error) {
-                    console.log(error);
                     this.initialPackagesForDeviceFetchAsync = handleAsyncError(error);
                 }.bind(this));
     }

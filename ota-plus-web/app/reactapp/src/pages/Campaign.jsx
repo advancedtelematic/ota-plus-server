@@ -5,6 +5,7 @@ import { Header } from '../partials';
 import { CampaignContainer } from '../containers';
 import { translate } from 'react-i18next';
 import { Loader } from '../partials';
+import _ from 'underscore';
 
 const title = "Campaign";
 
@@ -23,12 +24,16 @@ class Campaign extends Component {
     }
     render() {
         const { t, campaignsStore, groupsStore, backButtonAction, devicesStore } = this.props;
+        let title = '';
+        if(!_.isEmpty(campaignsStore.campaign)) {
+            title = campaignsStore.campaign.name ? campaignsStore.campaign.name : campaignsStore.campaign.meta.name;
+        }
         return (
             <FadeAnimation 
                 display="flex">
                 <div className="wrapper-flex">
                     <Header
-                        title={campaignsStore.campaign.name}
+                        title={title}
                         backButtonShown={true}
                         backButtonAction={backButtonAction}
                     />
