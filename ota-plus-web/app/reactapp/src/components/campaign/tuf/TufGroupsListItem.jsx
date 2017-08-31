@@ -32,8 +32,8 @@ class TufGroupsListItem extends Component {
             }
         ];
         return (
-            <tr>
-                <td className="name">
+            <div className="row display-flex">
+                <div className="name col-xs-3">
                     <div className="element-box group">
                         <div className="icon"></div>
                         <div className="desc">
@@ -45,33 +45,20 @@ class TufGroupsListItem extends Component {
                             </div>
                         </div>
                     </div>
-                </td>
-                <td className="stats">
+                </div>
+                <div className="stats col-xs-6">
                     <div className="devices-progress">
                         <div className="progress progress-blue">
-                            <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}></div>
+                            <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}>
+                                <div className="wrapper-rate">
+                                    {Math.round(statistics.affected/Math.max(statistics.processed, 1)*100)}%
+                                    <i className="fa fa-check" aria-hidden="true"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </td>
-                <td className="chart">
-                    <div className="wrapper-chart">
-                        <Pie 
-                            data={data} 
-                            width="80"
-                            height="80"
-                            options={{showTooltips: false}}
-                        />
-                    </div>
-                    <div className="wrapper-rate">
-                        <div className="stat-big-count">
-                            {Math.round(statistics.affected/Math.max(statistics.processed, 1)*100)} %
-                        </div>
-                        <div className="stat-small-title">
-                            Affected
-                        </div>
-                    </div>
-                </td>
-            </tr>
+                </div>
+            </div>
         );
     }
 }
