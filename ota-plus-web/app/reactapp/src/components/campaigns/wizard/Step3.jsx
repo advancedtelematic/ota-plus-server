@@ -40,7 +40,7 @@ class WizardStep3 extends Component {
         return sortedPackages;
     }
     render() {
-        const { wizardData, selectVersion, markStepAsFinished, markStepAsNotFinished, hardwareStore, rawSelectedPacks, removeSelectedPacksByKeys } = this.props;
+        const { wizardData, selectVersion, markStepAsFinished, markStepAsNotFinished, hardwareStore, rawSelectedPacks, removeSelectedPacksByKeys, packagesStore } = this.props;
         let chosenPackagesList = this.sortByFirstLetter(wizardData[1].packages);
         let selectedVersions = wizardData[2].versions;
         return (
@@ -79,6 +79,7 @@ class WizardStep3 extends Component {
                                                         hardwareIdDuplicates={this.hardwareIdDuplicates}
                                                         rawSelectedPacks={rawSelectedPacks}
                                                         removeSelectedPacksByKeys={removeSelectedPacksByKeys}
+                                                        packagesStore={packagesStore}
                                                     />
                                                 </span>
                                             );
