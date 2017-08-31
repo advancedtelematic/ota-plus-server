@@ -54,7 +54,7 @@ class PackagesVersionList extends Component {
                 primaryText={<span className='version-hash'>Version: {version.id.version}</span>}
                 secondaryText={<span className='version-created-at'>Created at: {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>}
                 id={"version-to-menu-item-" + version.id.version}
-                className={"version-menu-item"}
+                className={"version-menu-item" + (version.isBlackListed ? " blacklisted" : "")}
             />
         ));
     }
@@ -127,7 +127,18 @@ class PackagesVersionList extends Component {
             }
         } else {
             if(Object.keys(packsToValidate).length && packsToValidate[this.props.pack.packageName].to) {
-                this.props.markStepAsFinished();
+                let shouldPass = true;
+                _.each(this.props.packagesStore.packages, (pack, index) => {
+                    if(pack.id.name === this.props.pack.packageName && pack.id.version === packsToValidate[this.props.pack.packageName].to) {
+                        if(pack.isBlackListed) {
+                            shouldPass = false;
+                        }
+                    }
+                });
+                if(shouldPass)
+                    this.props.markStepAsFinished();
+                else 
+                    this.props.markStepAsNotFinished();
             } else {
                 this.props.markStepAsNotFinished();
             }
