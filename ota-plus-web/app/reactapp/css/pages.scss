@@ -2207,15 +2207,18 @@
     }
 }
 
+.display-flex {
+    display: flex;
+}
+
 #page-campaign {
     @include fullHeight;
     .white-bg {
         background-color: #FFF;
     }
     .page-heading {
-        height: 74px;
         .icon {
-            display: none;
+            background-image: url(/assets/img/icons/black/campaigns.png);
         }
     }
 
@@ -2229,6 +2232,16 @@
             font-size: 18px;
             font-weight: 600;
             color: #333;
+        }
+
+        div.tuf-campaign-wrapper {
+            padding: 0 0 30px;
+            .tuf-campaign {
+                &>.row {
+                    padding: 25px 0;
+                    background-color: #f7f7f7;
+                }
+            }
         }
         .subcontent {
             height: calc(100% - 36px);
@@ -2303,8 +2316,10 @@
                     height: 50px;
                 }
                 .devices-progress {
-                    width: 75%;
-                    padding: 0 120px 0 0;
+                    -webkit-box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.75);
+                    -moz-box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.75);
+                    box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.75);
+                    width: 100%;
                     display: inline-block;
                     
                     .bar {
@@ -2333,6 +2348,11 @@
                         .not-impacted {
                             height: 50px;
                             background-color: #b9b9b9;
+                            float: left;
+                        }
+                        .not-proceed {
+                            height: 50px;
+                            background-color: #fff;
                             float: left;
                         }
                     }
@@ -2399,6 +2419,10 @@
 
             .tuf-campaign {
 
+                ::-webkit-scrollbar {
+                    display: none;
+                }
+
                 .section-title {
                     font-size: 25px;
                     margin: 4px 0 20px 0;
@@ -2409,88 +2433,62 @@
                     margin: 10px 0 0;
                 }
 
-                .table {
+                .group-list {
                     border-bottom: 1px solid #ddd;
+                    height: 350px;
+                    overflow-y: auto;
+                    margin-bottom: 20px;
 
-
-                    thead,tbody,tr,td,th{
-                        display:block;
+                    a.cancel-campaign {
+                        &:hover {
+                            color: red;
+                            text-decoration: underline;
+                            @include transition;
+                        }
                     }
-                    ::-webkit-scrollbar {
-                        display: none;
+
+                    .col-xs-12 .row {
+                        padding: 20px 15px;
+                        border-bottom: 1px solid #ddd;
+                        &:first-child {
+                            border-top: 1px solid #ddd;
+                        }
                     }
-                    & > tbody {
 
-                        height: 400px;
-                        overflow-y: auto;
-                        & > tr {
-                            overflow: hidden;
-                            
-                            & > td {
-                                height: 100px;
-                                float:left;
-                                &:nth-child(1) {
-                                    width: 20%;
-                                    padding-top: 20px;
+                    .stats {
+                        padding: 0;
+                        align-self: center;
+                        .devices-stats {
+                            color: $color-lightgrey;
+                            width: 30%;
+                            display: inline-block;
+                            vertical-align: super;
+                        }
+
+                        .devices-progress {
+                            position: relative;
+                            width: 100%;
+                            display: inline-block;
+                            -webkit-box-shadow: 0px 8px 20px -10px rgba(0,0,0,0.75);
+                            -moz-box-shadow: 0px 8px 20px -10px rgba(0,0,0,0.75);
+                            box-shadow: 0px 8px 20px -10px rgba(0,0,0,0.75);
+                            .wrapper-rate {
+                                position: absolute;
+                                top:2px;
+                                right: 10px;
+                                color: #000;
+                                .fa.fa-check {
+                                    margin-left: 5px;
+                                    background-color: #fff;
+                                    display: inline-block;
+                                    border: 2px solid #fff;
+                                    font-size: 8px;
+                                    border-radius: 50%;
+                                    color:#000;
                                 }
-
-                                &:nth-child(2) {
-                                    text-align: center;
-                                    width: 60%;
-                                    padding-top: 40px;
-                                }
-
-                                &:nth-child(3) {
-                                    width: 20%;
-                                }
-                                padding-left: 15px;
-                                padding-right: 15px;
-                                vertical-align: middle;
-
-                                a.cancel-campaign {
-                                    &:hover {
-                                        color: red;
-                                        text-decoration: underline;
-                                        @include transition;
-                                    }
-                                }
-
-                                &.name {
-                                    
-                                }
-
-                                &.stats {
-                                    .devices-stats {
-                                        color: $color-lightgrey;
-                                        width: 30%;
-                                        display: inline-block;
-                                        vertical-align: super;
-                                    }
-
-                                    .devices-progress {
-                                        width: 100%;
-                                        display: inline-block;
-                                        .progress-bar {
-                                            background-color: #83D060;
-                                        }
-                                    }
-                                }
-
-                                &.chart {
-                                    text-align: right;
-                                    .wrapper-chart {
-                                        padding: 0 0 0 30px;
-                                        display: inline-block;
-                                    }
-
-                                    .wrapper-rate {
-                                        padding: 20px 0 0 20px;
-                                        display: inline-block;
-                                        vertical-align: top;
-                                        text-align: center;
-                                        color: #888;
-                                    }
-                                }
+                            }
+                            .progress-bar {
+                                background-color: #96DED2;
                             }
                         }
                     }
