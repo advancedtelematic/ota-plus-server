@@ -305,13 +305,13 @@ export default class DevicesStore {
                 return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
                     .then((response) => {
 
-                        let primary = _.filter(director.data, (data, index) => {
+                        let primary = _.filter(response.data, (data, index) => {
                             return data.primary;
                         });
-                        let secondary = _.filter(director.data, (data, index) => {
+                        let secondary = _.filter(response.data, (data, index) => {
                             return !data.primary;
                         });
-                        that.device.directorAttributes = {
+                        this.device.directorAttributes = {
                             primary: _.first(primary),
                             secondary: secondary
                         };
@@ -328,13 +328,13 @@ export default class DevicesStore {
                 return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
                     .then((response) => {
 
-                        let primary = _.filter(director.data, (data, index) => {
+                        let primary = _.filter(response.data, (data, index) => {
                             return data.primary;
                         });
-                        let secondary = _.filter(director.data, (data, index) => {
+                        let secondary = _.filter(response.data, (data, index) => {
                             return !data.primary;
                         });
-                        that.device.directorAttributes = {
+                        this.device.directorAttributes = {
                             primary: _.first(primary),
                             secondary: secondary
                         };
