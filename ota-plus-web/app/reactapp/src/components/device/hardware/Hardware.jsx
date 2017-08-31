@@ -54,7 +54,6 @@ class Hardware extends Component {
     }
     render() {
         const { devicesStore, hardwareStore, packagesStore, device, activeEcu, selectEcu, showPackageBlacklistModal, onFileDrop, hardwareOverlayShown, hardwareOverlayAnchor, showHardwareOverlay, hideHardwareOverlay } = this.props;
-        const hardware = hardwareStore.hardware[device.uuid];
         let active = true;
         if(device.isDirector) {
             active = activeEcu.hardwareId === devicesStore._getPrimaryHardwareId();
@@ -77,8 +76,7 @@ class Hardware extends Component {
                                 devicesStore={devicesStore}
                                 showKey={this.showKey}
                                 showHardwareOverlay={showHardwareOverlay}
-                                keyModalShown={this.keyModalShown}
-                                hardware={hardware}
+                                keyModalShown={this.keyModalShown}                                
                                 device={device}
                                 selectEcu={selectEcu}
                             />
@@ -109,7 +107,6 @@ class Hardware extends Component {
                                             hardwareStore={hardwareStore}
                                             showKey={this.showKey}
                                             keyModalShown={this.keyModalShown}
-                                            hardware={hardware}
                                             shownIds={this.shownIds}
                                             device={device}
                                             selectEcu={selectEcu}
@@ -125,7 +122,7 @@ class Hardware extends Component {
                     </div>
                 </div>
                 <HardwareOverlay
-                    hardware={hardware}
+                    hardwareStore={hardwareStore}
                     hideHardwareOverlay={hideHardwareOverlay}
                     shown={hardwareOverlayShown}
                     packagesStore={packagesStore}

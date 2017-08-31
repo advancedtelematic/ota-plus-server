@@ -4,7 +4,7 @@ import { observable } from 'mobx';
 import _ from 'underscore';
 import DeviceHardwareOverlayItem from './OverlayItem';
 import Popover from 'material-ui/Popover';
-import { Switch } from '../../../partials';
+import { Switch, Loader } from '../../../partials';
 import { PropertiesOnDeviceList } from '../properties';
 
 @observer
@@ -16,6 +16,12 @@ class Overlay extends Component {
         this.showPackagesList = this.showPackagesList.bind(this);
         this.showHardwareInfo = this.showHardwareInfo.bind(this);
     }
+    componentWillReceiveProps(nextProps) {
+        if(this.props.shown !== nextProps.shown) {
+            this.props.hardwareStore.fetchHardware(this.props.device.uuid);
+            this.props.packagesStore.fetchInitialDevicePackages(this.props.device.uuid);
+        }
+    }
     showPackagesList(e) {
         if(e) e.preventDefault();
         this.hardwareInfoShown = false;
@@ -25,18 +31,18 @@ class Overlay extends Component {
         this.hardwareInfoShown = true;
     }
     render() {
-        const { hardware, hideHardwareOverlay, shown, packagesStore, device, showPackageBlacklistModal, onFileDrop, hardwareOverlayAnchor } = this.props;
-        let content = null;
-
-        if(_.isEmpty(hardware)) {
-            content = (
+        const { hardwareStore, hideHardwareOverlay, shown, packagesStore, device, showPackageBlacklistModal, onFileDrop, hardwareOverlayAnchor } = this.props;
+        let content = (
+            hardwareStore.hardwareFetchAsync.isFetching || packagesStore.initialPackagesForDeviceFetchAsync.isFetching ?
+                <div className="wrapper-center">
+                    <Loader />
+                </div>
+            : _.isEmpty(hardwareStore.hardware[device.uuid]) ?
                 <div className="wrapper-center">
                     This device hasn’t reported any information about
                     its hardware or system components yet.
                 </div>
-            );
-        } else {
-            content = (
+            :
                 <div id="hardware-overlay">
                     <div className="details">
                         <Switch
@@ -47,7 +53,7 @@ class Overlay extends Component {
                         {this.hardwareInfoShown ?
                             <div className="hardware-details">
                                 <DeviceHardwareOverlayItem
-                                    hardware={hardware}
+                                    hardware={hardwareStore.hardware[device.uuid]}
                                     mainLevel={true}
                                 />
                             </div>
@@ -63,8 +69,7 @@ class Overlay extends Component {
                         }
                     </div>
                 </div>
-            );
-        }
+        );
         return (
                 <Popover
                     className="hardware-overlay-modal"

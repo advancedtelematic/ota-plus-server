@@ -9,7 +9,8 @@ class PrimaryEcu extends Component {
         super(props);
     }    
     render() {
-        const { active, devicesStore, hardwareStore, showKey, showHardwareOverlay, keyModalShown, hardware, device, selectEcu, ...otherProps} = this.props;
+        const { active, devicesStore, hardwareStore, showKey, showHardwareOverlay, keyModalShown, device, selectEcu, ...otherProps} = this.props;
+        const hardware = hardwareStore.hardware[device.uuid];
         let dataId = 0;
         if(!_.isUndefined(hardware) && !_.isUndefined(hardware.id) && (!_.isUndefined(hardware.description) || !_.isUndefined(hardware.class))) {
             dataId = hardware['id-nr'];
