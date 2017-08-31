@@ -28,9 +28,6 @@ const WebsocketHandler = (function (wsUrl, stores) {
                     break;
                 case "DeviceUpdateStatus":
                     stores.devicesStore._updateDeviceData(data.device, {deviceStatus: data.status});
-                    if(window.location.href.indexOf('/campaign/') > -1) {
-                        stores.campaignsStore.fetchCampaign(stores.campaignsStore.campaign.id);
-                    }
                     break;
                 case "DeviceCreated":
                     break;
@@ -59,7 +56,11 @@ const WebsocketHandler = (function (wsUrl, stores) {
                     } else {
                         if(data.status === 'Finished') {
                             if(Object.keys(stores.campaignsStore.campaign).length) {
-                                stores.campaignsStore.fetchCampaign(stores.campaignsStore.campaign.id);
+                                let campaignId = stores.campaignsStore.campaign.id;
+                                if(!campaignId) {
+                                    campaignId = stores.campaignsStore.campaign.meta.id;
+                                }
+                                stores.campaignsStore.fetchCampaign(campaignId);
                             }
                             stores.campaignsStore.fetchCampaigns();
                         }

@@ -545,7 +545,6 @@ export default class CampaignsStore {
                 stats.successfulUpdates += statistic.successfulUpdates;
                 stats.cancelledUpdates += statistic.cancelledUpdates;
             });
-            
             return stats;
         } else {
             let stats = {
