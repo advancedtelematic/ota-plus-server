@@ -82,6 +82,7 @@ class Device extends Component {
     }
     showHardwareOverlay(e) {
         e.preventDefault();
+        e.stopPropagation();
         this.hardwareOverlayShown = true;
         this.hardwareOverlayAnchor = e.currentTarget;
     }

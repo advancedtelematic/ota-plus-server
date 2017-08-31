@@ -17,26 +17,20 @@ class HardwarePanel extends Component {
                 </div>
 
                 <div className="inner-container">
-                    {hardwareStore.hardwareFetchAsync.isFetching ?
-                        <div className="wrapper-center">
-                            <Loader />
-                        </div>
-                    :
-                        <DeviceHardware
-                            devicesStore={devicesStore}
-                            hardwareStore={hardwareStore}
-                            packagesStore={packagesStore}
-                            device={device}
-                            activeEcu={activeEcu}
-                            selectEcu={selectEcu}
-                            showPackageBlacklistModal={showPackageBlacklistModal}
-                            onFileDrop={onFileDrop}
-                            hardwareOverlayShown={hardwareOverlayShown}
-                            hardwareOverlayAnchor={hardwareOverlayAnchor}
-                            showHardwareOverlay={showHardwareOverlay}
-                            hideHardwareOverlay={hideHardwareOverlay}
-                        />
-                    }
+                    <DeviceHardware
+                        devicesStore={devicesStore}
+                        hardwareStore={hardwareStore}
+                        packagesStore={packagesStore}
+                        device={device}
+                        activeEcu={activeEcu}
+                        selectEcu={selectEcu}
+                        showPackageBlacklistModal={showPackageBlacklistModal}
+                        onFileDrop={onFileDrop}
+                        hardwareOverlayShown={hardwareOverlayShown}
+                        hardwareOverlayAnchor={hardwareOverlayAnchor}
+                        showHardwareOverlay={showHardwareOverlay}
+                        hideHardwareOverlay={hideHardwareOverlay}
+                    />
                 </div>
             </div>
         );

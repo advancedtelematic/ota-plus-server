@@ -95,6 +95,7 @@ export default class PackagesStore {
     @observable deviceHistoryPerDevice = {};
     @observable directorDeviceHistoryPerDevice = {};
     @observable deviceUpdatesLogs = [];
+    @observable devicePackagesLimit = 2000;
 
     @observable ondevicePackages = [];
     @observable ondevicePackagesCurrentPage = 0;
@@ -598,45 +599,25 @@ export default class PackagesStore {
 
     fetchInitialDevicePackages(id, filter = this.devicePackagesFilter) {
         resetAsync(this.initialPackagesForDeviceFetchAsync, true);
-        return axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages')
-            .then(function(response) {
-                let totalPackagesCount = response.data.total;
-                let initialDevicePackages = [];
-
-                if (totalPackagesCount) {
-                    let after = _.after(initialDevicePackages.length, () => {
-                        this.initialDevicePackages = initialDevicePackages;
-                        extendObservable(this.installedPackagesPerDevice, {
-                            [id]: initialDevicePackages
-                        });
-                        switch (this.page) {
-                            case 'device':
-                                this._prepareDevicePackages();
-                                break;
-                            default:
-                                break;
-                        }
-                        this.initialPackagesForDeviceFetchAsync = handleAsyncSuccess(response);                        
-                    }, this);
-
-                    axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages?regex=' + '&limit=' + totalPackagesCount)
-                        .then(function(response) {
-                            initialDevicePackages = response.data.values;
-                            after();
-                        })
-                        .catch(function() {
-                            after();
-                        });
-                } else {
-                    this.initialDevicePackages = [];
-                    this.installedPackagesPerDevice[id] = [];
-                    this.initialPackagesForDeviceFetchAsync = handleAsyncSuccess(response);
-                }                
-                this.initialPackagesForDeviceFetchAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.initialPackagesForDeviceFetchAsync = handleAsyncError(error);
-            }.bind(this));
+        return axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages?regex=' + '&limit=' + this.devicePackagesLimit)
+                .then(function(response) {
+                    this.initialDevicePackages = response.data.values;
+                    extendObservable(this.installedPackagesPerDevice, {
+                        [id]: response.data.values
+                    });
+                    switch (this.page) {
+                        case 'device':
+                            this._prepareDevicePackages();
+                            break;
+                        default:
+                            break;
+                    }
+                    this.initialPackagesForDeviceFetchAsync = handleAsyncSuccess(response);      
+                }.bind(this))
+                .catch(function(error) {
+                    console.log(error);
+                    this.initialPackagesForDeviceFetchAsync = handleAsyncError(error);
+                }.bind(this));
     }
 
     fetchDevicePackages(id, filter = this.devicePackagesFilter) {
