@@ -644,10 +644,157 @@ input {
 }
 
 .content-container {
+    height: calc(100% - 40px);
+    min-height: calc(100% - 40px);
+    overflow-y: auto;
     background: #fff;
     width: 100%;
-    min-height: 100%;
     display: block;
+
+    .campaign-tabs {
+        height: 100%;
+
+        .tab-item {
+            color: #666!important;
+            width: 250px!important;
+            font-weight: bold!important;
+            text-transform: none!important;
+
+            &.active {
+                background: #9ce2d8!important;
+                color: #000000!important;
+            }
+        }
+
+        .campaigns-wrapper {
+            height: calc(100% - 50px);
+
+            .wrapper-list {
+                height: 100%;                
+
+                .campaigns-list {
+                    width: 100%;
+                    overflow-x: hidden;
+                    overflow-y: hidden;       
+
+                    .empty {
+                        padding: 15px;
+                    }
+
+                    .heading {
+                        border-bottom: 1px solid #ddd;
+
+                        .column {
+                            font-weight: bold;
+                            padding-top: 10px;
+                            padding-bottom: 10px;
+                        }
+                    }
+
+                    .column {
+                        padding: 15px;
+                        display: inline-block;
+                        vertical-align: top;
+                        @include transition;
+                        width: 14%;
+                        text-align: center;
+
+                        &.additional-info {
+                            padding: 8px;
+                        }
+
+                        &:nth-child(2) {
+                            width: 15%;
+                            text-align: left;
+                        }
+
+                        .more-info {
+                            color: #444;
+                            font-size: 11px;
+                            background: #9ce2d8;
+                            padding: 1px 10px;
+                            border-radius: 10px;
+                            display: inline-block;
+                        }
+                    }
+
+                    .item {
+                        cursor: pointer;
+                        width: 100%;
+                        height: 48px;
+                        border-bottom: 1px solid #ddd;
+                        position: relative;
+                        @include transition;
+
+                        &:not(.off) {
+                            &:hover {
+                                background: rgba(0,0,0,0.02);
+                                margin-left: 65px;
+                            }
+                        }
+
+                        &.off {
+                            &:hover {
+                                background: rgba(0,0,0,.05);
+                            }
+                        }
+
+                        .actions {
+                            background: #4B5151;
+                            width: 65px;
+                            height: 49px;
+                            border-bottom: 1px solid #ddd;
+                            position: absolute;
+                            left: -65px;
+
+                            &:hover {
+                                ul {
+                                    li {
+                                        span {
+                                            opacity: 1;
+                                        }
+                                    }
+                                }
+                            }
+
+                            ul {
+                                height: 100%;
+                                margin-bottom: 0;
+
+                                li {
+                                    text-align: center;
+                                    padding: 9px 0 4px 0;
+
+                                    img {
+                                        width: 20px;
+                                    }
+
+                                    span {
+                                        color: #fff;
+                                        font-size: 11px;
+                                        opacity: 0;
+                                        display: block;
+                                        @include transition;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .legacy-list {
+
+        .progress {
+            margin-top: -4px;
+        }
+
+        .pie {
+            margin-top: -6px;
+        }
+    }
 }
 
 .section-header {
