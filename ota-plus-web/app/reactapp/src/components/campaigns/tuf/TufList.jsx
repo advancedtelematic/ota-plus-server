@@ -11,113 +11,155 @@ class TufList extends Component {
         super(props);
     }
     render() {
-        const { campaignsStore, groupsStore, addNewWizard, showWizard, showRenameModal, goToCampaignDetails } = this.props;
+        const { campaignsStore, groupsStore, showRenameModal, goToCampaignDetails, onHomePage } = this.props;
         return (
             <span>
                 {campaignsStore.preparedCampaigns.length ?
                     <div className="tuf-list">
-                        <div className="section-header">
-                            In preparation
-                        </div>
-                        <div className="campaigns-list">
-                            {campaignsStore.inPreparationCampaigns.length ?
-                                <span>
-                                    <div className="heading">
-                                        <div></div>
-                                        <div className="column">Name</div>
-                                        <div className="column">Created at</div>
-                                        <div className="column">Processed</div>
-                                        <div className="column">Affected</div>
-                                        <div className="column">Finished</div>
-                                        <div className="column">Failure rate</div>
-                                    </div>
-                                    {_.map(campaignsStore.inPreparationCampaigns, (campaign) => {
-                                        return (
-                                            <CampaignsTufListItem 
-                                                groupsStore={groupsStore}
-                                                goToCampaignDetails={goToCampaignDetails}
-                                                showRenameModal={showRenameModal}
-                                                campaign={campaign}
-                                                type="inPreparation"
-                                                key={campaign.id}
-                                            />
-                                        );
-                                    })}
-                                </span>
-                            :
-                                <div className="empty">
-                                    No running campaigns.
+                        {!onHomePage ?
+                            <span>
+                                <div className="section-header">
+                                    In preparation
                                 </div>
-                            }
-                        </div>
-                        <div className="section-header">
-                            Running campaigns
-                        </div>
-                        <div className="campaigns-list">
-                            {campaignsStore.runningCampaigns.length ?
-                                <span>
-                                    <div className="heading">
-                                        <div></div>
-                                        <div className="column">Name</div>
-                                        <div className="column">Created at</div>
-                                        <div className="column">Processed</div>
-                                        <div className="column">Affected</div>
-                                        <div className="column">Finished</div>
-                                        <div className="column">Failure rate</div>
-                                    </div>
-                                    {_.map(campaignsStore.runningCampaigns, (campaign) => {
-                                        return (
-                                            <CampaignsTufListItem 
-                                                groupsStore={groupsStore}
-                                                goToCampaignDetails={goToCampaignDetails}
-                                                showRenameModal={showRenameModal}
-                                                campaign={campaign}
-                                                type="running"
-                                                key={campaign.id}
-                                            />
-                                        );
-                                    })}
-                                </span>
-                            :
-                                <div className="empty">
-                                    No running campaigns.
+                                <div className="campaigns-list">
+                                    {campaignsStore.inPreparationCampaigns.length ?
+                                        <span>
+                                            <div className="heading">
+                                                <div></div>
+                                                <div className="column">Name</div>
+                                                <div className="column">Created at</div>
+                                                <div className="column">Processed</div>
+                                                <div className="column">Affected</div>
+                                                <div className="column">Finished</div>
+                                                <div className="column">Failure rate</div>
+                                            </div>
+                                            {_.map(campaignsStore.inPreparationCampaigns, (campaign) => {
+                                                return (
+                                                    <CampaignsTufListItem 
+                                                        groupsStore={groupsStore}
+                                                        goToCampaignDetails={goToCampaignDetails}
+                                                        showRenameModal={showRenameModal}
+                                                        campaign={campaign}
+                                                        onHomePage={onHomePage}
+                                                        type="inPreparation"
+                                                        key={campaign.id}
+                                                    />
+                                                );
+                                            })}
+                                        </span>
+                                    :
+                                        <div className="empty">
+                                            No running campaigns.
+                                        </div>
+                                    }
                                 </div>
-                            }
-                        </div>
-                        <div className="section-header">
-                            Finished campaigns
-                        </div>
-                        <div className="campaigns-list">
-                            {campaignsStore.finishedCampaigns.length ?
-                                <span>
-                                    <div className="heading">
-                                        <div></div>
-                                        <div className="column">Name</div>
-                                        <div className="column">Created at</div>
-                                        <div className="column">Processed</div>
-                                        <div className="column">Affected</div>
-                                        <div className="column">Finished</div>
-                                        <div className="column">Failure rate</div>
-                                    </div>
-                                    {_.map(campaignsStore.finishedCampaigns, (campaign) => {
-                                        return (
-                                            <CampaignsTufListItem 
-                                                groupsStore={groupsStore}
-                                                goToCampaignDetails={goToCampaignDetails}
-                                                showRenameModal={showRenameModal}
-                                                campaign={campaign}
-                                                type="finished"
-                                                key={campaign.id}
-                                            />
-                                        );
-                                    })}
-                                </span>
-                            :
-                                <div className="empty">
-                                    No finished campaigns.
+                                <div className="section-header">
+                                    Running campaigns
                                 </div>
-                            }
-                        </div>
+                                <div className="campaigns-list">
+                                    {campaignsStore.runningCampaigns.length ?
+                                        <span>
+                                            <div className="heading">
+                                                <div></div>
+                                                <div className="column">Name</div>
+                                                <div className="column">Created at</div>
+                                                <div className="column">Processed</div>
+                                                <div className="column">Affected</div>
+                                                <div className="column">Finished</div>
+                                                <div className="column">Failure rate</div>
+                                            </div>
+                                            {_.map(campaignsStore.runningCampaigns, (campaign) => {
+                                                return (
+                                                    <CampaignsTufListItem 
+                                                        groupsStore={groupsStore}
+                                                        goToCampaignDetails={goToCampaignDetails}
+                                                        showRenameModal={showRenameModal}
+                                                        campaign={campaign}
+                                                        onHomePage={onHomePage}
+                                                        type="running"
+                                                        key={campaign.id}
+                                                    />
+                                                );
+                                            })}
+                                        </span>
+                                    :
+                                        <div className="empty">
+                                            No running campaigns.
+                                        </div>
+                                    }
+                                </div>
+                                <div className="section-header">
+                                    Finished campaigns
+                                </div>
+                                <div className="campaigns-list">
+                                    {campaignsStore.finishedCampaigns.length ?
+                                        <span>
+                                            <div className="heading">
+                                                <div></div>
+                                                <div className="column">Name</div>
+                                                <div className="column">Created at</div>
+                                                <div className="column">Processed</div>
+                                                <div className="column">Affected</div>
+                                                <div className="column">Finished</div>
+                                                <div className="column">Failure rate</div>
+                                            </div>
+                                            {_.map(campaignsStore.finishedCampaigns, (campaign) => {
+                                                return (
+                                                    <CampaignsTufListItem 
+                                                        groupsStore={groupsStore}
+                                                        goToCampaignDetails={goToCampaignDetails}
+                                                        showRenameModal={showRenameModal}
+                                                        campaign={campaign}
+                                                        onHomePage={onHomePage}
+                                                        type="finished"
+                                                        key={campaign.id}
+                                                    />
+                                                );
+                                            })}
+                                        </span>
+                                    :
+                                        <div className="empty">
+                                            No finished campaigns.
+                                        </div>
+                                    }
+                                </div>
+                            </span>
+                        :
+                            <span>
+                                <div className="campaigns-list">
+                                    {campaignsStore.runningCampaigns.length ?
+                                        <span>
+                                            <div className="heading">
+                                                <div></div>
+                                                <div className="column">Name</div>
+                                                <div className="column">Created at</div>
+                                                <div className="column">Processed</div>
+                                                <div className="column">Affected</div>
+                                                <div className="column">Finished</div>
+                                                <div className="column">Failure rate</div>
+                                            </div>
+                                            {_.map(campaignsStore.runningCampaigns, (campaign) => {
+                                                return (
+                                                    <CampaignsTufListItem 
+                                                        groupsStore={groupsStore}
+                                                        goToCampaignDetails={goToCampaignDetails}
+                                                        showRenameModal={showRenameModal}
+                                                        campaign={campaign}
+                                                        onHomePage={onHomePage}
+                                                        type="running"
+                                                        key={campaign.id}
+                                                    />
+                                                );
+                                            })}
+                                        </span>
+                                    :
+                                        <div className="wrapper-center">
+                                            No running campaigns.
+                                        </div>
+                                    }
+                                </div>
+                            </span>
+                        }
                     </div>
                 : 
                     <span className="content-empty">
@@ -131,12 +173,7 @@ class TufList extends Component {
     }
 }
 
-TufList.contextTypes = {
-    router: React.PropTypes.object.isRequired
-}
-
 TufList.propTypes = {
-    
 }
 
 export default TufList;
