@@ -27,7 +27,8 @@ class Campaign extends Component {
             <FadeAnimation 
                 display="flex">
                 <div className="wrapper-flex">
-                    <Header 
+                    <Header
+                        title={campaignsStore.campaign.name}
                         backButtonShown={true}
                         backButtonAction={backButtonAction}
                     />
