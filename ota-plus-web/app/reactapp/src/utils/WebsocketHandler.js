@@ -1,6 +1,5 @@
 const WebsocketHandler = (function (wsUrl, stores) {
     const base = this;
-    let stop = false;
     this.init = function () {
         this.websocket = new WebSocket(wsUrl);
 
@@ -73,7 +72,7 @@ const WebsocketHandler = (function (wsUrl, stores) {
 
         this.websocket.onclose = function (msg) {
             console.log('WEBSOCKET: CLOSE');
-            if (msg.code === 1006 && !stop) {
+            if (msg.code === 1006) {
                 base.init();
             }
         };
@@ -81,8 +80,6 @@ const WebsocketHandler = (function (wsUrl, stores) {
         this.websocket.onerror = function (msg) {
             console.log('WEBSOCKET: ERROR');
             console.log(msg);
-            stop = true;
-            base.destroy();
         };
     };
 
