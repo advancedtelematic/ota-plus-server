@@ -131,6 +131,20 @@ class ListItemVersion extends Component {
                                 })}
                             </div>
                         </div>
+                        {version.targetFormat ?
+                            <div className="target-format" id={"package-" + packageName + "-target_format"}>
+                                <div className="heading">
+                                    Format:
+                                </div>
+                                <div className="value">
+                                    <span className="format-label" id={"package-" + packageName + "-format-label-" + version.targetFormat}>
+                                        {version.targetFormat}
+                                    </span>
+                                </div>
+                            </div>
+                        :
+                            null
+                        }
                     </div>
                 </div>
             </span>
