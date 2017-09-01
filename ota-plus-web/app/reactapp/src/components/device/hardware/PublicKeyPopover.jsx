@@ -18,11 +18,10 @@ class PublicKeyPopover extends Component {
                 className="hardware-pk-popover"
                 open={popoverShown}
                 anchorEl={anchorEl}
-                anchorOrigin={{horizontal: 'right', vertical: 'center'}}
-                targetOrigin={{horizontal: 'left', vertical: 'center'}}
                 onRequestClose={handleRequestClose}
                 useLayerForClickAway={false}
                 animated={false}
+                style={{'marginTop': '-32px', 'marginLeft': '35px'}}
             >
                 {!hardwareStore.hardwarePublicKeyFetchAsync.isFetching && hardwareStore.publicKey.keyval ?
                     <span>

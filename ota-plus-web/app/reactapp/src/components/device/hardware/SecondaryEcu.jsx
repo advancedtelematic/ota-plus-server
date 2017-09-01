@@ -34,15 +34,11 @@ class SecondaryEcu extends Component {
                             </span>
                     </div>
                 </a>
-                {keyModalShown ? 
-                    <PublicKeyPopover
-                        {...otherProps}
-                        ecu={ecu}
-                        hardwareStore={hardwareStore}
-                    />
-                :
-                    null
-                }
+                <PublicKeyPopover
+                    {...otherProps}
+                    ecu={ecu}
+                    hardwareStore={hardwareStore}
+                />
             </span>
         );
     }
