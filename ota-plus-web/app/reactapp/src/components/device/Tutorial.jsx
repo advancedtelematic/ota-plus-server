@@ -170,7 +170,7 @@ class Tutorial extends Component {
                         <div className="last-step">
                             <div className="wrapper-center">
                                 <div>
-                                    <img src="/assets/img/icons/check.png" alt="" />
+                                    <img src="/assets/img/icons/green_tick.png" alt="" />
                                     <br /><br />
                                     Your new device should now <br />
                                     appear online!

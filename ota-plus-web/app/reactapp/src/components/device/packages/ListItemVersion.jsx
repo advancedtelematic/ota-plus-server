@@ -57,7 +57,7 @@ class ListItemVersion extends Component {
                             </span>
                         : version.id.version === installedPackage ?
                             <span className="installed" id={"image-installed-" + version.id.version.substring(0,8)}>
-                                <img src="/assets/img/icons/check.png" alt="" />
+                                <img src="/assets/img/icons/green_tick.png" alt="" />
                             </span>
                         :
                             null
