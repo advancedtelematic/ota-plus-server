@@ -172,6 +172,18 @@ class Details extends Component {
 			                                    })}
 							        		</span>
 						        		</div>
+						        		{expandedPack.targetFormat ?
+					        				<div className="target-format">
+								        		<span className="sub-title">Format:</span>
+								        		<span id={this.generateIdTag('version-target-format-value', expandedPack)}>
+		                                            <span className="format-label">
+		                                            	{expandedPack.targetFormat}
+		                                            </span>
+								        		</span>
+							        		</div>
+					        			:
+					        				null
+					        			}
 			        				</span>
 					        	</div>
 					        	<div className="install multi-target">
