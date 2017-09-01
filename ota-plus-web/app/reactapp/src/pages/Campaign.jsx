@@ -25,8 +25,10 @@ class Campaign extends Component {
     render() {
         const { t, campaignsStore, groupsStore, backButtonAction, devicesStore } = this.props;
         let title = '';
+        let campaignType = '';
         if(!_.isEmpty(campaignsStore.campaign)) {
             title = campaignsStore.campaign.name ? campaignsStore.campaign.name : campaignsStore.campaign.meta.name;
+            campaignType = campaignsStore.campaign.isLegacy ? 'legacy' : 'tuf';
         }
         return (
             <FadeAnimation 
@@ -38,7 +40,8 @@ class Campaign extends Component {
                         backButtonAction={backButtonAction}
                     />
                     <MetaData
-                        title={title}>
+                        title={title}
+                        className={campaignType}>
                         <CampaignContainer
                             campaignsStore={campaignsStore}
                             groupsStore={groupsStore}

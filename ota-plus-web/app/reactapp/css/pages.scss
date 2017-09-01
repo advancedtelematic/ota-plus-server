@@ -2147,7 +2147,11 @@
     .content {
         background: #fff;
         overflow-y: hidden;
-        height: auto !important;
+
+        &.tuf {
+            height: auto!important;
+        }
+
         .stat-small-title {
             font-size: 15px;
         }
