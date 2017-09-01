@@ -224,7 +224,7 @@ class Preparation extends Component {
                                                         </span>
                                                         : this.userProfile ?
                                                         <span className="img">
-                                                            <img src="/assets/img/icons/check.png" alt="pass"/>
+                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
                                                         </span>
                                                         : finished ?
                                                             <span className="img">
@@ -238,7 +238,7 @@ class Preparation extends Component {
                                                             </span>
                                                             : this.activatedProvisioning ?
                                                             <span className="img">
-                                                                <img src="/assets/img/icons/check.png" alt="pass"/>
+                                                                <img src="/assets/img/icons/green_tick.png" alt="pass"/>
                                                             </span>
                                                             : finished ?
                                                                 <span className="img">
@@ -253,7 +253,7 @@ class Preparation extends Component {
                                                                 </span>
                                                                 : this.createdTuf ?
                                                                 <span className="img">
-                                                                    <img src="/assets/img/icons/check.png" alt="pass"/>
+                                                                    <img src="/assets/img/icons/green_tick.png" alt="pass"/>
                                                                 </span>
                                                                 : finished ?
                                                                     <span className="img">
@@ -268,7 +268,7 @@ class Preparation extends Component {
                                                                     </span>
                                                                     : this.createdDirector ?
                                                                     <span className="img">
-                                                                        <img src="/assets/img/icons/check.png" alt="pass"/>
+                                                                        <img src="/assets/img/icons/green_tick.png" alt="pass"/>
                                                                     </span>
                                                                     : finished ?
                                                                         <span className="img">
@@ -283,7 +283,7 @@ class Preparation extends Component {
                                                                         </span>
                                                                         : this.createdTreehub ?
                                                                         <span className="img">
-                                                                            <img src="/assets/img/icons/check.png" alt="pass"/>
+                                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
                                                                         </span>
                                                                         : finished ?
                                                                             <span className="img">
@@ -298,7 +298,7 @@ class Preparation extends Component {
                                                                         </span>
                                                                         : this.createdFileUploader ?
                                                                         <span className="img">
-                                                                            <img src="/assets/img/icons/check.png" alt="pass"/>
+                                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
                                                                         </span>
                                                                         : finished ?
                                                                             <span className="img">

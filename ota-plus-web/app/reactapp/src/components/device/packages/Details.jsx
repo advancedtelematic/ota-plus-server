@@ -108,7 +108,7 @@ class Details extends Component {
 			        					</div>
 			        				: isPackageInstalled || expandedPack.isInstalled ? 
 				        				<div className="status-container installed">
-				        					<img src="/assets/img/icons/check.png" alt="" id={this.generateIdTag('installed-icon', expandedPack)} />
+				        					<img src="/assets/img/icons/green_tick.png" alt="" id={this.generateIdTag('installed-icon', expandedPack)} />
 				        					<span id={this.generateIdTag('image-installed', expandedPack)}>
 				        						Installed
 				        					</span>
