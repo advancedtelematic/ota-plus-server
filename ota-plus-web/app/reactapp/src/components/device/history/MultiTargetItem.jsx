@@ -14,10 +14,10 @@ class MultiTargetItem extends Component {
     		<li>
             	<div className="main-info">
 					<div className="update-id">
-						Update ID {item.updateId}
+						Update ID <span id={"update-id-" + item.updateId}>{item.updateId}</span>
 					</div>
 					<div className="created-at">
-						Received at: {moment(item.receivedAt).format("ddd MMM DD YYYY, h:mm:ss A")}
+						Received at: <span id={"received-at-" + item.updateId}>{moment(item.receivedAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
 					</div>
 				</div>
         		<div className="operation-results">
@@ -26,21 +26,21 @@ class MultiTargetItem extends Component {
         					<div className="result" key={ecuSerial}>
 		    					<div className="result-info">
 									<div className="ecu-serial">
-										ECU Serial: {ecuSerial}
+										ECU Serial: <span id={"ecu-serial-" + item.updateId}>{ecuSerial}</span>
 									</div>
 									<div className="target">
-										Target: {result.target}
+										Target: <span id={"target-" + item.updateId}>{result.target}</span>
 									</div>
 									<div className="length">
-										Length: {result.length}
+										Length: <span id={"length-" + item.updateId}>{result.length}</span>
 									</div>
 								</div>
 		    					<div className="result-status">
 									<div className={`code ${result.resultCode <=1 ? 'success' : 'error'}`}>
-										<span>Result code</span> <span className="value">{result.resultCode}</span>
+										<span>Result code</span> <span className="value" id={"result-code-" + item.updateId}>{result.resultCode}</span>
 									</div>
 									<div className="text">
-										{result.resultText}
+										<span id={"result-text-" + item.updateId}>{result.resultText}</span>
 									</div>
 								</div>
 	    					</div>

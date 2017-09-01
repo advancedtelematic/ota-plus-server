@@ -13,19 +13,19 @@ class MultiTargetITem extends Component {
             <li id={"queued-entry-" + hash} className="multi-target-entry">
                 <div className="desc">
                     <div>
-                        Update ID {updateId}
+                        Update ID <span id={"update-id-" + updateId}>{updateId}</span>
                     </div>
                 </div>
 
                 <div className="result">
                     <div className="ecu">
-                        ECU Serial: {hardwareId}
+                        ECU Serial: <span id={"ecu-serial-" + updateId}>{hardwareId}</span>
                     </div>
                     <div className="name">
-                        Target: {hash}
+                        Target: <span id={"target-" + updateId}>{hash}</span>
                     </div>
                     <div className="length">
-                        Length: {length}
+                        Length: <span id={"length-" + updateId}>{length}</span>
                     </div>
                 </div>
             </li>
