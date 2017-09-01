@@ -44,10 +44,10 @@ class PublicKeyPopover extends Component {
                                     className="btn-main"
                                 />
                             </CopyToClipboard>
-                            <VelocityTransitionGroup 
+                            <VelocityTransitionGroup
                                 enter={{
-                                    animation: "fadeIn", 
-                                }} 
+                                    animation: "fadeIn",
+                                }}
                                 leave={{
                                     animation: "fadeOut"
                                 }}>
