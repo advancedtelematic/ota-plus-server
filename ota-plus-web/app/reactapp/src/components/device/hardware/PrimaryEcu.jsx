@@ -63,14 +63,10 @@ class PrimaryEcu extends Component {
 
                     </div>
                 </a>
-                {keyModalShown ? 
-                    <PublicKeyPopover
-                        {...otherProps}
-                        hardwareStore={hardwareStore}
-                    />
-                :
-                    null
-                }
+                <PublicKeyPopover
+                    {...otherProps}
+                    hardwareStore={hardwareStore}
+                />
             </span>
         );
     }
