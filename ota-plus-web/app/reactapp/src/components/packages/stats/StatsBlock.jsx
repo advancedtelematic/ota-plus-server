@@ -20,27 +20,29 @@ class StatsBlock extends Component {
             '#fff',
         ];
         let colorIndex = -1;
+        let statsPackIndex = 0;
         let stats = [];
         let installedOnEcusTotal = 0;
         _.each(pack.versions, (version, index) => {
             if(version.installedOnEcus > 0) {
-                if(index < availableColors.length) {
+                if(statsPackIndex < availableColors.length) {
                     colorIndex++;
+                    statsPackIndex++;
                     stats.push(
                         {
                             value: version.installedOnEcus,
                             color: availableColors[colorIndex],
                             highlight: availableColors[colorIndex],
-                            label: (index === availableColors.length - 1 ? "Other" : version.id.version)
+                            label: (statsPackIndex === availableColors.length - 1 ? "Other" : version.id.version)
                         }
                   );
-                } else if(index >= availableColors.length) {
+                } else if(statsPackIndex >= availableColors.length) {
                     stats[availableColors.length - 1].value = version.installedOnEcus + stats[availableColors.length - 1].value;
                 }
                 version.color = availableColors[colorIndex];
             }
             installedOnEcusTotal += version.installedOnEcus;
-        });        
+        });
         const content = (
             <div className="chart-panel" id={"package-" + pack.packageName + "-stats"}>
                 <div className={installedOnEcusTotal ? "wrapper-center" : "wrapper-center left"}>
