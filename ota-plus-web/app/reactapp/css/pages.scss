@@ -2119,6 +2119,7 @@
     .content {
         background: #fff;
         overflow-y: hidden;
+        height: auto !important;
         .stat-small-title {
             font-size: 15px;
         }
@@ -2132,8 +2133,13 @@
             padding: 0 0 30px;
             .tuf-campaign {
                 &>.row {
+                    position: relative;
+                    z-index: 1;
                     padding: 25px 0;
                     background-color: #f7f7f7;
+                    -webkit-box-shadow: 0px 1px 15px 0px rgba(0,0,0,0.5);
+                    -moz-box-shadow: 0px 1px 15px 0px rgba(0,0,0,0.5);
+                    box-shadow: 0px 1px 20px 0px rgba(0,0,0,0.5);
                 }
             }
         }
@@ -2169,7 +2175,7 @@
                 background-color: #F5A623;
             }
             .not-impacted::before {
-                background-color: #B9B9B9;
+                background-color: #ddd;
             }
             .not-proceed::before {
                 background-color: #FFF;
@@ -2210,10 +2216,12 @@
                     height: 50px;
                 }
                 .devices-progress {
-                    -webkit-box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.75);
-                    -moz-box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.75);
-                    box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.75);
+                    -webkit-box-shadow: 0px 8px 20px -10px rgba(0,0,0,0.75);
+                    -moz-box-shadow: 0px 8px 20px -10px rgba(0,0,0,0.75);
+                    box-shadow: 0px 8px 20px -10px rgba(0,0,0,0.75);
                     width: 100%;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
                     display: inline-block;
                     
                     .bar {
@@ -2241,7 +2249,7 @@
 
                         .not-impacted {
                             height: 50px;
-                            background-color: #b9b9b9;
+                            background-color: #ddd;
                             float: left;
                         }
                         .not-proceed {
@@ -2312,7 +2320,7 @@
             }
 
             .tuf-campaign {
-
+                height: 100vh;
                 ::-webkit-scrollbar {
                     display: none;
                 }
@@ -2329,7 +2337,7 @@
 
                 .group-list {
                     border-bottom: 1px solid #ddd;
-                    height: 350px;
+                    height: calc(100vh - 600px);
                     overflow-y: auto;
                     margin-bottom: 20px;
 
@@ -2349,6 +2357,16 @@
                         }
                     }
 
+                    .status-group {
+                        float: right;
+                        height: 100%;
+                        align-items: center;
+                        padding-right:10px;
+                        p {
+                            margin-bottom:0;
+                        }
+                    }
+
                     .stats {
                         padding: 0;
                         align-self: center;
@@ -2360,6 +2378,7 @@
                         }
 
                         .devices-progress {
+                            border-radius: 5px;
                             position: relative;
                             width: 100%;
                             display: inline-block;

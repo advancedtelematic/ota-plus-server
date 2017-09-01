@@ -9,7 +9,7 @@ class TufGroupsListItem extends Component {
         super(props);
     }
     render() {
-        const { t, group, statistics, showCancelGroupModal, foundGroup } = this.props;
+        const { t, group, statistics, showCancelGroupModal, foundGroup, campaign } = this.props;
         const progress = Math.min(Math.round(statistics.processed/Math.max(foundGroup.devices.total, 1) * 100), 100);
         const data = [
             {
@@ -35,7 +35,7 @@ class TufGroupsListItem extends Component {
             <div className="row display-flex">
                 <div className="name col-xs-3">
                     <div className="element-box group">
-                        <div className="icon"></div>
+                        <div className="icon"/>
                         <div className="desc">
                             <div className="title">
                                 {foundGroup.groupName}
@@ -49,13 +49,25 @@ class TufGroupsListItem extends Component {
                 <div className="stats col-xs-6">
                     <div className="devices-progress">
                         <div className="progress progress-blue">
-                            <div className={"progress-bar" + (progress != 100 ? ' progress-bar-striped active': '')} role="progressbar" style={{width: progress + '%'}}>
+                            <div className={"progress-bar" + (campaign.statistics.status !== 'finished' ? ' progress-bar-striped active': '')}
+                                 role="progressbar"
+                                 style={{width: campaign.statistics.status !== 'finished' ? '0%' : (foundGroup.devices.total !== 0 ? progress + '%' : '100%')}}>
                                 <div className="wrapper-rate">
-                                    {Math.round(statistics.affected/Math.max(statistics.processed, 1)*100)}%
-                                    <i className="fa fa-check" aria-hidden="true"></i>
+                                    {campaign.statistics.status !== 'finished'
+                                        ? '0%'
+                                        : (foundGroup.devices.total !== 0
+                                            ? progress + '%'
+                                            : '100%')
+                                    }
+                                    <i className="fa fa-check" aria-hidden="true" />
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div className="col-xs-3">
+                    <div className="status-group display-flex">
+                        <p>{statistics.processed} processed, {statistics.affected} affected</p>
                     </div>
                 </div>
             </div>
