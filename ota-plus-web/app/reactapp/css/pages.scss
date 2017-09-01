@@ -1263,10 +1263,28 @@
                             .hardware-label {
                                 color: $color-darkgrey;
                                 font-size: 12px;
-                                background: $color-mint;
-                                padding: 1px 5px;
-                                border-radius: 3px;
-                                margin: 0 5px;
+                                background: transparent;
+                                padding: 0px 10px;
+                                border-radius: 10px;
+                                margin-right: 5px;
+                                margin-bottom: 5px;
+                                display: inline-block;
+                                border: 1px solid #444;
+                            }
+                        }
+
+                        .target-format {
+                        
+                            .format-label {
+                                color: $color-darkgrey;
+                                font-size: 12px;
+                                background: transparent;
+                                padding: 0px 10px;
+                                border-radius: 10px;
+                                margin-right: 5px;
+                                margin-bottom: 5px;
+                                display: inline-block;
+                                border: 1px solid #444;
                             }
                         }
                     }
@@ -1964,7 +1982,7 @@
                         margin-bottom: 10px;
                     }
 
-                    .hardware-ids {
+                    .hardware-ids, .target-format {
                         overflow: hidden;
 
                         .heading {
@@ -1990,7 +2008,7 @@
             float: right;
         }
 
-        .hardware-label {
+        .hardware-label, .format-label {
             color: $color-darkgrey;
             font-size: 12px;
             background: transparent;
