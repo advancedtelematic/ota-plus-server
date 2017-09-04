@@ -21,7 +21,7 @@ class MultiTargetList extends Component {
                     hasMore={packagesStore.directorDeviceHistoryCurrentPage < packagesStore.directorDeviceHistoryTotalCount / packagesStore.directorDeviceHistoryLimit}
                     isLoading={packagesStore.packagesDirectorDeviceHistoryFetchAsync.isFetching}
                     useWindow={false}
-                    threshold={50}
+                    className={'wrapper-infinite-scroll'}
                     loadMore={() => {
                         packagesStore.fetchDirectorDevicePackagesHistory(device.uuid, packagesStore.directorDevicePackagesFilter)
                     }}
