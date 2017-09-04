@@ -49,11 +49,11 @@ class TufGroupsListItem extends Component {
                 <div className="stats col-xs-6">
                     <div className="devices-progress">
                         <div className="progress progress-blue">
-                            <div className={"progress-bar" + (campaign.statistics.status !== 'finished' ? ' progress-bar-striped active': '')}
+                            <div className={"progress-bar" + (campaign.statistics.status !== 'finished' && campaign.statistics.status !== 'cancelled' ? ' progress-bar-striped active': '')}
                                  role="progressbar"
-                                 style={{width: campaign.statistics.status !== 'finished' ? '0%' : (foundGroup.devices.total !== 0 ? progress + '%' : '100%')}}>
+                                 style={{width: campaign.statistics.status !== 'finished' && campaign.statistics.status !== 'cancelled' ? '0%' : (foundGroup.devices.total !== 0 ? progress + '%' : '100%')}}>
                                 <div className="wrapper-rate">
-                                    {campaign.statistics.status !== 'finished'
+                                    {campaign.statistics.status !== 'finished' && campaign.statistics.status !== 'cancelled'
                                         ? '0%'
                                         : (foundGroup.devices.total !== 0
                                             ? progress + '%'

@@ -187,20 +187,6 @@ class Tuf extends Component {
                                 campaignsStore={campaignsStore}
                                 groupsStore={groupsStore}
                             />
-                            <div>
-                                {campaignsStore.campaign.statistics.status !== 'cancelled' && campaignsStore.campaign.statistics.status !== 'finished' ?
-                                    <FlatButton
-                                        label="Cancel all"
-                                        title="Cancel the Campaign for all groups"
-                                        type="button"
-                                        onClick={showCancelCampaignModal}
-                                        className="btn-main btn-red"
-                                        id="campaign-detail-cancel-all"
-                                    />
-                                    :
-                                    null
-                                }
-                            </div>
                         </div>
                     </div>
                 </div>
