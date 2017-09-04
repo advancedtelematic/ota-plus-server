@@ -760,9 +760,9 @@ export default class PackagesStore {
         this.deviceQueue.push(queuedTuf);
     }
 
-    fetchDirectorDevicePackagesHistory(id, filter = '') {
+    fetchDirectorDevicePackagesHistory(id, filter = '', fetchFirstItems = false) {
         resetAsync(this.packagesDirectorDeviceHistoryFetchAsync, true);
-        if(this.directorDevicePackagesFilter !== filter) {
+        if((this.directorDevicePackagesFilter !== filter) || fetchFirstItems) {
             this.directorDeviceHistoryTotalCount = null;
             this.directorDeviceHistoryCurrentPage = 0;
             this.directorDeviceHistoryPerDevice[this.activeDeviceId] = [];

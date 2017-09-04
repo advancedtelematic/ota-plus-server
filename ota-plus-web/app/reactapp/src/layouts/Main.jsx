@@ -117,7 +117,7 @@ class Main extends Component {
     setQueueModalActiveTabId(tabId, device = null) {
         this.activeTabId = tabId;
         if(!_.isEmpty(device) && device.isDirector && tabId === 1) {
-            this.packagesStore.fetchDirectorDevicePackagesHistory(device.uuid);
+            this.packagesStore.fetchDirectorDevicePackagesHistory(device.uuid, this.packagesStore.directorDevicePackagesFilter);
         }
     }
     goToCampaignDetails(campaignId, e) {
@@ -189,8 +189,10 @@ class Main extends Component {
     backButtonAction() {
         window.history.go(-1);
     }
-    componentWillReceiveProps() {
-        this.hideQueueModal();
+    componentWillReceiveProps(nextProps) {
+        if(this.queueModalShown) {
+            this.hideQueueModal();
+        }
     }
     render() {
         const { children, ...rest } = this.props;
