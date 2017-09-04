@@ -740,7 +740,8 @@ export default class PackagesStore {
             })
         })
         if(!queuedHash) {
-            this.deviceQueue.splice(_.findIndex(this.deviceQueue, { hash: queuedHash }), 1);            
+            this.deviceQueue.splice(_.findIndex(this.deviceQueue, { hash: queuedHash }), 1); 
+            this._prepareDevicePackages();           
         }
     }
 
@@ -758,6 +759,7 @@ export default class PackagesStore {
             }
         }
         this.deviceQueue.push(queuedTuf);
+        this._prepareDevicePackages();
     }
 
     fetchDirectorDevicePackagesHistory(id, filter = '') {
