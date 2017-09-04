@@ -43,6 +43,7 @@ const WebsocketHandler = (function (wsUrl, stores) {
                 case "UpdateSpec":
                     if(window.location.href.indexOf('/device/') > -1 && stores.devicesStore.device.isDirector && stores.devicesStore.device.uuid === data.device) {
                         stores.devicesStore.fetchMultiTargetUpdates(data.device);
+                        stores.packagesStore.fetchDirectorDevicePackagesHistory(data.device, stores.packagesStore.directorDevicePackagesFilter, true);
                     }
                     if(stores.packagesStore.deviceQueue.length && stores.devicesStore.device.uuid === data.device) {
                         if(data.status !== 'Pending') {
