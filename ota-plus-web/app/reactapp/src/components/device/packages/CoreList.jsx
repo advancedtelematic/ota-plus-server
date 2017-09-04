@@ -171,7 +171,12 @@ class CoreList extends Component {
 
                         if(this.props.activeEcu.type === 'primary') {
                             if(version.id.version === this.props.devicesStore._getPrimaryHash()) {
-                                dirPacks[letter].push(pack);
+                                let packAdded = _.some(dirPacks[letter], (item, index) => {
+                                    return item.packageName == version.id.name;
+                                });
+                                if(!packAdded) {
+                                    dirPacks[letter].push(pack);
+                                }
                             }
                         } else {
                             _.map(this.props.device.directorAttributes.secondary, (secondaryObj, ind) => {
