@@ -22,7 +22,7 @@ class NavigationDropdown extends Component {
         this.props.hideQueueModal();
     }
     render() {
-        const { userStore } = this.props;
+        const { userStore, toggleOtaPlusMode, otaPlusMode, alphaPlusEnabled } = this.props;
         return (
             <Dropdown id="profile-dropdown" rootCloseEvent="mousedown">
                 <LinkWrapper
@@ -38,6 +38,9 @@ class NavigationDropdown extends Component {
                 <UserDropdown 
                     userStore={userStore}
                     bsRole="menu"
+                    toggleOtaPlusMode={toggleOtaPlusMode}
+                    otaPlusMode={otaPlusMode}
+                    alphaPlusEnabled={alphaPlusEnabled}
                 />
             </Dropdown>
         );

@@ -66,6 +66,132 @@ body {
         background-attachment: fixed;
         background-size: cover;
     }
+
+    &.ota-plus {
+        
+        .content-container {
+            .campaign-tabs {
+                .tab-item {
+                    &.active {
+                        background: $color-orange!important;
+                    }
+                }
+            }
+        }
+        .campaigns-list {
+            .column {
+                .more-info {
+                    background: $color-orange!important;
+                }
+            }
+        }
+
+        .btn-main {
+            background: $color-orange!important;
+        }
+
+      
+        .hardware-list {
+            a {
+                &.selected {
+                    border-color: $color-orange!important;
+                }
+            }
+        }
+
+        .wrapper-switch {
+            border-right: 4px solid $color-orange!important;
+
+            .show-hardware {
+                &.active {
+                    background: $color-orange!important;
+                }
+            }
+
+            .show-packages {
+                &.active {
+                    background: $color-orange!important;
+                }
+            }
+        }
+
+        .navbar-nav {
+            >li {
+                >a {
+                    &:hover {
+                        border-bottom: 5px solid $color-orange!important;
+                    }
+
+                    &.active {
+                        border-bottom: 5px solid $color-orange!important;
+                    }
+                }
+            }
+        }
+
+        .progress-blue {
+            .progress-bar {
+                background: $color-orange!important;
+            }
+        }
+
+        .btn-dashed {
+            border: 2px dashed $color-orange!important;
+            color: $color-orange!important;
+
+            &:hover {
+                background: $color-orange!important;
+                color: #fff!important;
+            }
+        }
+
+        .btn-small {
+            button {
+                background: $color-orange!important;
+            }
+        }
+
+        .campaigns-wizard {
+            .step {
+                &.active {
+                    & >.dot {
+                        background: $color-orange!important;
+                    }
+                }
+            }
+        }
+
+        .btn-checkbox {
+            &.checked {
+                background: $color-orange!important;
+            }
+        }
+
+        .versions-container {
+            .versions {
+                li {
+                    &.selected {
+                        border-bottom: 3px solid $color-orange!important;
+                    }
+                }
+            }
+        }
+
+        .switch {
+            &.switchOn {
+                &:before {
+                    background: $color-orange!important;
+                }
+            }
+        }
+
+        .navbar-inverse {
+            .navbar-brand {
+                background: url('/assets/img/otaplus.png') no-repeat;
+                background-size: 100%;
+            }
+        }
+    }
 }
 
 input {
@@ -248,6 +374,19 @@ input {
                                     text-transform: uppercase !important;
                                 }
                                 margin: 10px 0 10px 0;
+                            }
+
+                            .switch {
+                                margin: 0;
+                            }
+
+                            .switch-mode-heading {
+                                font-size: 12px;
+                                text-transform: uppercase;
+                                padding: 0;
+                                color: #888;
+                                display: inline-block;
+                                margin-right: 7px;
                             }
                         }
                     }
@@ -711,7 +850,7 @@ input {
                         .more-info {
                             color: #444;
                             font-size: 11px;
-                            background: #9ce2d8;
+                            background: $color-mint;
                             padding: 1px 10px;
                             border-radius: 10px;
                             display: inline-block;
@@ -3146,14 +3285,14 @@ div[role=presentation] {
                     left: 0;
                     top: 0px;
                     background: #F1F1F1;
-                    border-right: 4px solid #9ce2d8;
+                    border-right: 4px solid $color-mint;
 
                     .show-hardware {
                         padding: 12px;
                         cursor: pointer;
 
                         &.active {
-                            background: #9ce2d8;
+                            background: $color-mint;
                             box-shadow: 0 1px 10px -2px grey;
                         }
                     }
@@ -3163,7 +3302,7 @@ div[role=presentation] {
                         cursor: pointer;
 
                         &.active {
-                            background: #9ce2d8;
+                            background: $color-mint;
                             box-shadow: 0 1px 10px -2px grey;
                         }
                     }

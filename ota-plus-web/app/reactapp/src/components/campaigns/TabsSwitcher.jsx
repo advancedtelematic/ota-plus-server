@@ -8,10 +8,23 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 @observer
 class TabsSwitcher extends Component {
     @observable activeTabId = 0;
+    @observable bottomBorderColor = '#9ce2d8';
 
     constructor(props) {
         super(props);
         this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
+    }
+    componentWillMount() {
+        if(this.props.otaPlusMode) {
+            this.bottomBorderColor = '#fa9872';
+        }
+    }
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.otaPlusMode) {
+            this.bottomBorderColor = '#fa9872';
+        } else {
+            this.bottomBorderColor = '#9ce2d8';
+        }
     }
     setQueueModalActiveTabId(value) {
         this.activeTabId = value;
@@ -26,7 +39,7 @@ class TabsSwitcher extends Component {
                     className="campaign-tabs"
                     inkBarStyle={{display: 'none'}}
                     onChange={this.setQueueModalActiveTabId}
-                    tabItemContainerStyle={{borderBottom: '5px solid #9ce2d8', backgroundColor: 'transparent', height: '50px'}}
+                    tabItemContainerStyle={{borderBottom: '5px solid ' + this.bottomBorderColor, backgroundColor: 'transparent', height: '50px'}}
                     contentContainerClassName={'campaigns-wrapper'}
                     tabTemplateStyle={{height: '100%'}}
                 >

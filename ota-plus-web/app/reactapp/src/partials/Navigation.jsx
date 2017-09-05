@@ -9,13 +9,13 @@ class Navigation extends Component {
         super(props);
     }
     render() {
-        const { userStore, devicesStore, hideQueueModal } = this.props;
+        const { userStore, devicesStore, hideQueueModal, toggleOtaPlusMode, otaPlusMode, alphaPlusEnabled} = this.props;
         const logoLink = '/';
         return (
             <nav className="navbar navbar-inverse navbar-fixed-top">
                   <div className="container">
                     <div className="navbar-header">
-                          <Link to={logoLink} className="navbar-brand" id="logo"></Link>
+                        <Link to={logoLink} className="navbar-brand" id="logo"></Link>
                     </div>
                     <div id="navbar">
                           <ul className="nav navbar-nav">
@@ -45,6 +45,9 @@ class Navigation extends Component {
                             <NavigationDropdown 
                                 userStore={userStore}
                                 hideQueueModal={hideQueueModal}
+                                toggleOtaPlusMode={toggleOtaPlusMode}
+                                otaPlusMode={otaPlusMode}
+                                alphaPlusEnabled={alphaPlusEnabled}
                             />
                         </li>
                     </ul>

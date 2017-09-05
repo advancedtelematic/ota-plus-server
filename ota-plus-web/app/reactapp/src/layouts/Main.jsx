@@ -12,7 +12,8 @@ import {
     ImpactAnalysisStore,
     FeaturesStore,
     ProvisioningStore,
-    UserStore
+    UserStore,
+    OtaPlusStore
 } from '../stores';
 import { APP_LAYOUT } from '../config';
 import { 
@@ -45,7 +46,7 @@ class Main extends Component {
     @observable uploadBoxMinimized = false;
     @observable queueModalShown = false;
     @observable activeTabId = 0;
-
+  
     constructor(props) {
         super(props);
         axios.defaults.headers.common['Csrf-Token'] = document.getElementById('csrf-token-val').value;
@@ -68,6 +69,7 @@ class Main extends Component {
         this.hideQueueModal = this.hideQueueModal.bind(this);
         this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
         this.goToCampaignDetails = this.goToCampaignDetails.bind(this);
+        this.toggleOtaPlusMode = this.toggleOtaPlusMode.bind(this);
         this.devicesStore = new DevicesStore();
         this.hardwareStore = new HardwareStore();
         this.groupsStore = new GroupsStore();
@@ -77,6 +79,7 @@ class Main extends Component {
         this.featuresStore = new FeaturesStore();
         this.provisioningStore = new ProvisioningStore();
         this.userStore = new UserStore();
+        this.otaPlusStore = new OtaPlusStore();
         this.websocketHandler = new WebsocketHandler(document.getElementById('ws-url').value, {
             devicesStore: this.devicesStore,
             packagesStore: this.packagesStore,
@@ -96,6 +99,15 @@ class Main extends Component {
                 this.onlineDevicesCount = onlineDevicesCount;
             }
         });
+        this.featuresHandler = observe(this.featuresStore, (change) => {
+            if(change.name === 'featuresFetchAsync' && change.object[change.name].isFetching === false) {
+                console.log('handler')
+                console.log(this.featuresStore.features)
+                if(_.contains(this.featuresStore.features, 'alphaplus')) {
+                    this.otaPlusStore._enableAlphaPlus();
+                }
+            }
+        });
         this.makeBodyWhite();
     }
     componentWillMount() {
@@ -105,7 +117,24 @@ class Main extends Component {
         this.devicesStore.fetchInitialDevices();
         this.devicesStore.fetchDevices();
         this.hardwareStore.fetchHardwareIds();
+        this.featuresStore.fetchFeatures();
         this.websocketHandler.init();
+
+        if(Cookies.get('otaPlusMode') == 1) {
+            this.otaPlusStore._enableOtaPlusMode();
+            document.body.className += " ota-plus";
+        }
+    }
+    toggleOtaPlusMode() {
+        this.otaPlusStore._toggleOtaPlusMode();
+        if(this.otaPlusStore.otaPlusMode) {
+            Cookies.set('otaPlusMode', 1);
+            document.body.className += " ota-plus";
+        }
+        else {
+            Cookies.remove('otaPlusMode');
+            document.body.classList.remove("ota-plus");
+        }
     }
     showQueueModal() {
         this.queueModalShown = true;
@@ -176,7 +205,7 @@ class Main extends Component {
     makeBodyWhite() {
         let pageName = this.props.location.pathname.toLowerCase().split('/')[1];
         if(_.includes(this.pagesWithWhiteBackground, pageName)) {
-            document.body.className = "whitened";
+            document.body.className += " whitened";
         } else {
             document.body.classList.remove("whitened");
         }
@@ -185,6 +214,7 @@ class Main extends Component {
         this.logoutHandler();
         this.devicesHandler();
         this.provisioningStatusHandler();
+        this.featuresHandler();
     }
     backButtonAction() {
         window.history.go(-1);
@@ -211,6 +241,9 @@ class Main extends Component {
                             devicesStore={this.devicesStore}
                             logoLink={logoLink}
                             hideQueueModal={this.hideQueueModal}
+                            toggleOtaPlusMode={this.toggleOtaPlusMode}
+                            otaPlusMode={this.otaPlusStore.otaPlusMode}
+                            alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
                         />
                     : this.sanityCheckCompleted() ?
                             <Navigation
@@ -218,6 +251,9 @@ class Main extends Component {
                                 featuresStore={this.featuresStore}
                                 devicesStore={this.devicesStore}
                                 hideQueueModal={this.hideQueueModal}
+                                toggleOtaPlusMode={this.toggleOtaPlusMode}
+                                otaPlusMode={this.otaPlusStore.otaPlusMode}
+                                alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
                             />
                         :
                             null
@@ -248,6 +284,7 @@ class Main extends Component {
                         activeTabId={this.activeTabId}
                         setQueueModalActiveTabId={this.setQueueModalActiveTabId}
                         goToCampaignDetails={this.goToCampaignDetails}
+                        otaPlusMode={this.otaPlusStore.otaPlusMode}
                     />
                 </FadeAnimation>
                 <SizeVerify 
@@ -319,7 +356,7 @@ class Main extends Component {
 }
 
 Main.contextTypes = {
-    router: React.PropTypes.object.isRequired,
+    router: React.PropTypes.object.isRequired
 }
 
 Main.propTypes = {
