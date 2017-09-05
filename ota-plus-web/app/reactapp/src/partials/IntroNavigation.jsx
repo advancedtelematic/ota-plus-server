@@ -9,7 +9,7 @@ class IntroNavigation extends Component {
         super(props);
     }
     render() {
-        const { userStore, devicesStore, logoLink, hideQueueModal } = this.props;
+        const { userStore, devicesStore, logoLink, hideQueueModal, toggleOtaPlusMode, otaPlusMode, alphaPlusEnabled } = this.props;
         return (
             <nav className="navbar navbar-inverse navbar-fixed-top">
                   <div className="container">
@@ -28,6 +28,9 @@ class IntroNavigation extends Component {
                             <NavigationDropdown 
                                 userStore={userStore}
                                 hideQueueModal={hideQueueModal}
+                                toggleOtaPlusMode={toggleOtaPlusMode}
+                                otaPlusMode={otaPlusMode}
+                                alphaPlusEnabled={alphaPlusEnabled}
                             />
                         </li>
                     </ul>

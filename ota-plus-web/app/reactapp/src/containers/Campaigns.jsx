@@ -57,7 +57,7 @@ class Campaigns extends Component {
         this.props.campaignsStore._prepareCampaigns(filter, this.props.campaignsStore.campaignsSort);
     }
     render() {
-        const { campaignsStore, packagesStore, groupsStore, hardwareStore, addNewWizard, goToCampaignDetails } = this.props;
+        const { campaignsStore, packagesStore, groupsStore, hardwareStore, addNewWizard, goToCampaignDetails, otaPlusMode } = this.props;
         return (
             <span>
                 {campaignsStore.campaignsFetchAsync.isFetching || campaignsStore.campaignsLegacyFetchAsync.isFetching ?
@@ -72,6 +72,7 @@ class Campaigns extends Component {
                         showWizard={this.showWizard}
                         showRenameModal={this.showRenameModal}
                         goToCampaignDetails={goToCampaignDetails}
+                        otaPlusMode={otaPlusMode}
                     />
                 :
                     <div className="wrapper-center">
