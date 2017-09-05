@@ -7,6 +7,7 @@ import CampaignsStore from './CampaignsStore';
 import ImpactAnalysisStore from './ImpactAnalysisStore';
 import FeaturesStore from './FeaturesStore';
 import ProvisioningStore from './ProvisioningStore';
+import OtaPlusStore from './OtaPlusStore';
 
 export {
     UserStore,
@@ -17,5 +18,6 @@ export {
     CampaignsStore,
     ImpactAnalysisStore,
     FeaturesStore,
-    ProvisioningStore
+    ProvisioningStore,
+    OtaPlusStore,
 }

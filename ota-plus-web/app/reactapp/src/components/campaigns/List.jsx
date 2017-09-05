@@ -9,7 +9,7 @@ class List extends Component {
         super(props);
     }
     render() {
-        const { campaignsStore, groupsStore, addNewWizard, showRenameModal, goToCampaignDetails } = this.props;
+        const { campaignsStore, groupsStore, addNewWizard, showRenameModal, goToCampaignDetails, otaPlusMode } = this.props;
         return (
             <span>
                 <CampaignsHeader
@@ -21,6 +21,7 @@ class List extends Component {
                     showRenameModal={showRenameModal}
                     goToCampaignDetails={goToCampaignDetails}
                     onHomePage={false}
+                    otaPlusMode={otaPlusMode}
                 />
             </span>
         );

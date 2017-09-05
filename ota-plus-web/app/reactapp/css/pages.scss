@@ -197,7 +197,7 @@
             .more-info {
                 color: #444;
                 font-size: 11px;
-                background: #9ce2d8;
+                background: $color-mint;
                 padding: 1px 10px;
                 border-radius: 10px;
                 display: inline-block;
@@ -1080,7 +1080,7 @@
                             }
 
                             li.selected {
-                                border-bottom: 3px solid #9ce2d8;
+                                border-bottom: 3px solid $color-mint;
                             }
 
                             .right-box {
