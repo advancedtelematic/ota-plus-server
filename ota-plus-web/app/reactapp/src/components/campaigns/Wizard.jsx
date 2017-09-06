@@ -178,25 +178,37 @@ class Wizard extends Component {
         if(_.isUndefined(this.versions[data.packageName])) {
             this.versions[data.packageName] = {};
         }
+        let hash = data.imageName;
+        _.each(this.props.packagesStore.packages, (pack, index) => {
+            if(pack.imageName === data.imageName) {
+                hash = pack.packageHash;
+            }
+        })
         switch(data.type) {
             case 'from':                
                 this.versions[data.packageName] = {
-                    from: data.version, 
+                    from: hash, 
+                    fromFilepath: data.imageName, 
                     to: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].to : null,
+                    toFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toFilepath : null,
                     hardwareId: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].hardwareId : null
                 }
                 break;
             case 'to':
                 this.versions[data.packageName] = {
-                    to: data.version, 
+                    to: hash, 
+                    toFilepath: data.imageName,
                     from: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].from : null,
+                    fromFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].fromFilepath : null,
                     hardwareId: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].hardwareId : null
                 }
                 break;
             case 'hardwareId':
                 this.versions[data.packageName] = {
                     to: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].to : null,
+                    toFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toFilepath : null,
                     from: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].from : null,
+                    fromFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].fromFilepath : null,
                     hardwareId: data.hardwareId
                 }
                 break;
