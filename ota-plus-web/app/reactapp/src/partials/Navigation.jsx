@@ -10,7 +10,51 @@ class Navigation extends Component {
     }
     render() {
         const { userStore, devicesStore, hideQueueModal, toggleOtaPlusMode, otaPlusMode, alphaPlusEnabled} = this.props;
-        const logoLink = '/';
+        let logoLink = '/';
+        if(otaPlusMode) {
+            logoLink = '/dashboard';
+        }
+        const garageNavigation = (
+            <ul className="nav navbar-nav">
+                <li>
+                    <Link to="/devices" activeClassName="active" id="link-devices">Devices</Link>
+                </li>
+                <li>
+                    <Link to="/packages" activeClassName="active" id="link-packages">Packages</Link>
+                </li>
+                <li>
+                    <Link to="/campaigns" activeClassName="active" id="link-campaigns">Campaigns</Link>
+                </li>
+                <li>
+                    <Link to="/impact-analysis" activeClassName="active" id="link-impactanalysis">Impact analysis</Link>
+                </li>
+          </ul>
+        );
+        const otaPlusNavigation = (
+            <ul className="nav navbar-nav">
+                <li>
+                    <Link to="/fleet" activeClassName="active" id="link-fleet">Fleet</Link>
+                </li>
+                <li>
+                    <Link to="/software-repository" activeClassName="active" id="link-software-repository">Software repository</Link>
+                </li>
+                <li>
+                    <Link to="/features" activeClassName="active" id="link-features">Features</Link>
+                </li>
+                <li>
+                    <Link to="/advanced-campaigns" activeClassName="active" id="link-advanced-campaigns">Advanced campaigns</Link>
+                </li>
+                <li>
+                    <Link to="/connectors" activeClassName="active" id="link-connectors">Connectors</Link>
+                </li>
+                <li>
+                    <Link to="/gateway" activeClassName="active" id="link-gateway">Gateway</Link>
+                </li>
+                <li>
+                    <Link to="/auditor" activeClassName="active" id="link-uditor">Auditor</Link>
+                </li>
+          </ul>
+        );
         return (
             <nav className="navbar navbar-inverse navbar-fixed-top">
                   <div className="container">
@@ -18,20 +62,11 @@ class Navigation extends Component {
                         <Link to={logoLink} className="navbar-brand" id="logo"></Link>
                     </div>
                     <div id="navbar">
-                          <ul className="nav navbar-nav">
-                                <li>
-                                    <Link to="/devices" activeClassName="active" id="link-devices">Devices</Link>
-                                </li>
-                                <li>
-                                    <Link to="/packages" activeClassName="active" id="link-packages">Packages</Link>
-                                </li>
-                                <li>
-                                    <Link to="/campaigns" activeClassName="active" id="link-campaigns">Campaigns</Link>
-                                </li>
-                                <li>
-                                    <Link to="/impact-analysis" activeClassName="active" id="link-impactanalysis">Impact analysis</Link>
-                                </li>
-                          </ul>
+                        {otaPlusMode ?
+                            otaPlusNavigation
+                        :
+                            garageNavigation
+                        }
                     </div>
                     <ul className="right-nav">
                         <li className="text-link">

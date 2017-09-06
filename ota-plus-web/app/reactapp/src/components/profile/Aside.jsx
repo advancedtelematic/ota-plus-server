@@ -10,7 +10,21 @@ class Aside extends Component {
         super(props);
     }
     render() {
-        const { userStore } = this.props;
+        const { userStore, otaPlusStore } = this.props;
+        const otaPlusNewEntries = (
+            <span className="ota-plus-new-entries">
+                <li>
+                    <Link to="/profile/users-and-roles" activeClassName="active" id="link-users-and-roles">
+                        Users and roles
+                    </Link>
+                </li>
+                <li>
+                    <Link to="/profile/bl-settings" activeClassName="active" id="link-bl-settings">
+                        Bl settings
+                    </Link>
+                </li>
+            </span>
+        );
         return (
             <aside>
                 <div className="user-details">
@@ -54,6 +68,12 @@ class Aside extends Component {
                                 Provisioning keys
                             </Link>
                         </li>
+                        {otaPlusStore.otaPlusMode ?
+                            otaPlusNewEntries
+                        :
+                            null
+                        }
+                        
                     </ul>
                 </nav>
             </aside>

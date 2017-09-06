@@ -23,6 +23,30 @@ class UserDropdown extends Component {
     }
     render() {
         const { userStore, otaPlusMode, alphaPlusEnabled } = this.props;
+        const otaPlusBlock = (
+            <li>
+                <span className="switch-mode-heading">OTA Plus mode:</span>
+                <div className={"switch" + (otaPlusMode ? " switchOn" : "")} id="switch" onClick={this.toggleMode}>
+                    <div className="switch-status">
+                        {otaPlusMode ?
+                            <span id="switch-on">ON</span>
+                        :
+                            <span id="switch-off">OFF</span>
+                        }
+                    </div>
+                </div>
+            </li>
+        );
+        const otaPlusNewEntries = (
+            <span className="ota-plus-new-entries">
+                <li>
+                      <Link to="/profile/users-and-roles" id="link-users-and-roles" onClick={this.closeDropdown}>Users and roles</Link>
+                </li>
+                <li>
+                      <Link to="/profile/bl-settings" id="link-bl-settings" onClick={this.closeDropdown}>Bl settings</Link>
+                </li>
+            </span>
+        );
         return (
             <div className="dropdown-menu">
                 <Avatar 
@@ -54,22 +78,16 @@ class UserDropdown extends Component {
                     <li>
                           <a href="http://atsgarage.com/en/terms-conditions.html" target="_blank" id="terms-of-use" onClick={this.closeDropdown}>Terms of use</a>
                     </li>
-                    {alphaPlusEnabled ?
-                        <li>
-                            <span className="switch-mode-heading">OTA Plus mode:</span>
-                            <div className={"switch" + (otaPlusMode ? " switchOn" : "")} id="switch" onClick={this.toggleMode}>
-                                <div className="switch-status">
-                                    {otaPlusMode ?
-                                        <span id="switch-on">ON</span>
-                                    :
-                                        <span id="switch-off">OFF</span>
-                                    }
-                                </div>
-                            </div>
-                        </li>
+                    {otaPlusMode ?
+                        otaPlusNewEntries
                     :
                         null
                     }
+                    {alphaPlusEnabled ?                        
+                        otaPlusBlock
+                    :
+                        null
+                    }                    
                     <li className="signout">
                         <button className="btn-main btn-small" onClick={this.logout}><span>Sign out</span></button>
                     </li>
