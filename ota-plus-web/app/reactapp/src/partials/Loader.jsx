@@ -1,7 +1,6 @@
 import React, { PropTypes, PureComponent } from 'react';
 import { CircularProgress } from 'material-ui';
 import Cookies from 'js-cookie';
-import { OtaPlusStore } from '../stores';
 
 class Loader extends PureComponent {
     constructor(props) {
@@ -14,6 +13,7 @@ class Loader extends PureComponent {
                 <CircularProgress
                     size={size}
                     thickness={thickness}
+                    color={window.otaPlusMode ? "#fa9872" : ""}
                 />
             </div>
         );

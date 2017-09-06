@@ -121,6 +121,7 @@ class Main extends Component {
         if(Cookies.get('otaPlusMode') == 1) {
             this.otaPlusStore._enableOtaPlusMode();
             document.body.className += " ota-plus";
+            window.otaPlusMode = true;
         }
     }
     toggleOtaPlusMode() {
@@ -128,10 +129,12 @@ class Main extends Component {
         if(this.otaPlusStore.otaPlusMode) {
             Cookies.set('otaPlusMode', 1);
             document.body.className += " ota-plus";
+            window.otaPlusMode = true;
         }
         else {
             Cookies.remove('otaPlusMode');
             document.body.classList.remove("ota-plus");
+            window.otaPlusMode = false;
         }
     }
     showQueueModal() {
