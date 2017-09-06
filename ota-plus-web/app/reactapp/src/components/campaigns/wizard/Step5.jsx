@@ -29,21 +29,22 @@ class WizardStep5 extends Component {
 
         this.packages = packages;
     }
-    getCreatedAt(version) {
+    getDirectorCreatedAt(filepath) {
         let createdAt = null;
-        if(_.first(this.packages).inDirector) {
-            _.each(this.props.packagesStore.packages, (pack, index) => {
-                if(pack.packageHash === version) {
-                    createdAt = pack.createdAt;
-                }
-            });
-        } else {
-            _.each(this.props.packagesStore.packages, (pack, index) => {
-                if(pack.id.version === version) {
-                    createdAt = pack.createdAt;
-                }
-            });
-        }        
+        _.each(this.props.packagesStore.packages, (pack, index) => {
+            if(pack.imageName === filepath) {
+                createdAt = pack.createdAt;
+            }
+        });
+        return createdAt;
+    }
+    getLegacyCreatedAt(version) {
+        let createdAt = null;
+        _.each(this.props.packagesStore.packages, (pack, index) => {
+            if(pack.id.version === version) {
+                createdAt = pack.createdAt;
+            }
+        });
         return createdAt;
     }
     render() {
@@ -67,35 +68,51 @@ class WizardStep5 extends Component {
                                                 <span key={index}>
                                                     <div className="update-container">
                                                         {pack.inDirector ?
-                                                            <div className="update-from">
-                                                                <div className="text">
-                                                                    From:
-                                                                </div>
-                                                                <div className="value">
-                                                                    <div className="hash">
-                                                                        Hash: {update.from}
+                                                            <span className="director-updates">
+                                                                <div className="update-from">
+                                                                    <div className="text">
+                                                                        From:
                                                                     </div>
-                                                                    <div className="createdAt">
-                                                                        Created at: {moment(this.getCreatedAt(update.from)).format("ddd MMM DD YYYY, h:mm:ss A")}
+                                                                    <div className="value">
+                                                                        <div className="hash">
+                                                                            Hash: {update.from}
+                                                                        </div>
+                                                                        <div className="createdAt">
+                                                                            Created at: {moment(this.getDirectorCreatedAt(update.fromFilepath)).format("ddd MMM DD YYYY, h:mm:ss A")}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                                <div className="update-to">
+                                                                    <div className="text">
+                                                                        To:
+                                                                    </div>
+                                                                    <div className="value">
+                                                                        <div className="hash">
+                                                                            Hash: {update.to}
+                                                                        </div>
+                                                                        <div className="createdAt">
+                                                                            Created at: {moment(this.getDirectorCreatedAt(update.toFilepath)).format("ddd MMM DD YYYY, h:mm:ss A")}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </span>
                                                         :
-                                                            null
+                                                            <span className="legacy-updates">
+                                                                <div className="update-to">
+                                                                    <div className="text">
+                                                                        To:
+                                                                    </div>
+                                                                    <div className="value">
+                                                                        <div className="hash">
+                                                                            Hash: {update.to}
+                                                                        </div>
+                                                                        <div className="createdAt">
+                                                                            Created at: {moment(this.getLegacyCreatedAt(update.to)).format("ddd MMM DD YYYY, h:mm:ss A")}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </span>
                                                         }
-                                                        <div className="update-to">
-                                                            <div className="text">
-                                                                To:
-                                                            </div>
-                                                            <div className="value">
-                                                                <div className="hash">
-                                                                    Hash: {update.to}
-                                                                </div>
-                                                                <div className="createdAt">
-                                                                    Created at: {moment(this.getCreatedAt(update.to)).format("ddd MMM DD YYYY, h:mm:ss A")}
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                     {pack.inDirector ?
                                                         <div className="hardware-id-container">
