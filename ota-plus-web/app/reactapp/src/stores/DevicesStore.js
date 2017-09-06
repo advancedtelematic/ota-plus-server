@@ -368,6 +368,13 @@ export default class DevicesStore {
         return hashes;
     }
 
+    _getPrimaryByHardwareId(hardwareId) {
+        if(this.device.directorAttributes.primary.hardwareId === hardwareId) {
+            return this.device.directorAttributes.primary;
+        }
+        return null;
+    }
+
     _getSecondaryByHardwareId(hardwareId) {
         let secondaryObject = {};
         _.each(this.device.directorAttributes.secondary, (secondary, index) => {

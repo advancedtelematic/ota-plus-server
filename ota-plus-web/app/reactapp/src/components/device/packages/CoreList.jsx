@@ -200,22 +200,43 @@ class CoreList extends Component {
     }
     addUnmanagedPackage(preparedPackages) {
         const { devicesStore, packagesStore, device, activeEcu } = this.props;
-        if(activeEcu.type === 'secondary') {
-            let secondaryObject = devicesStore._getSecondaryByHardwareId(activeEcu.hardwareId);
-            let reportedHash = secondaryObject.image.hash.sha256;
-            let pack = packagesStore._getInstalledPackage(reportedHash);
-            if(!pack) {
-                let unmanagedPack = {
-                    filepath: secondaryObject.image.filepath,
-                    size: secondaryObject.image.size,
-                    hash: reportedHash,
-                    unmanaged: true
-                };
-                if(_.isUndefined(preparedPackages['#'])) {
-                    preparedPackages['#'] = [];
+        switch(activeEcu.type) {
+            case 'secondary':
+                let secondaryObject = devicesStore._getSecondaryByHardwareId(activeEcu.hardwareId);
+                let reportedHash = secondaryObject.image.hash.sha256;
+                let pack = packagesStore._getInstalledPackage(reportedHash);
+                if(!pack) {
+                    let unmanagedPack = {
+                        filepath: secondaryObject.image.filepath,
+                        size: secondaryObject.image.size,
+                        hash: reportedHash,
+                        unmanaged: true
+                    };
+                    if(_.isUndefined(preparedPackages['#'])) {
+                        preparedPackages['#'] = [];
+                    }
+                    preparedPackages['#'].push(unmanagedPack);
                 }
-                preparedPackages['#'].push(unmanagedPack);
-            }
+                break;
+            case 'primary':
+                let primaryObject = devicesStore._getPrimaryByHardwareId(activeEcu.hardwareId);
+                let hash = primaryObject.image.hash.sha256;
+                let packItem = packagesStore._getInstalledPackage(hash);
+                if(!packItem) {
+                    let unmanagedPack = {
+                        filepath: primaryObject.image.filepath,
+                        size: primaryObject.image.size,
+                        hash: hash,
+                        unmanaged: true
+                    };
+                    if(_.isUndefined(preparedPackages['#'])) {
+                        preparedPackages['#'] = [];
+                    }
+                    preparedPackages['#'].push(unmanagedPack);
+                }
+                break;
+            default:
+                break;
         }
     }
     render() {
