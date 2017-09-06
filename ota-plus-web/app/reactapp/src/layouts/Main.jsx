@@ -101,8 +101,6 @@ class Main extends Component {
         });
         this.featuresHandler = observe(this.featuresStore, (change) => {
             if(change.name === 'featuresFetchAsync' && change.object[change.name].isFetching === false) {
-                console.log('handler')
-                console.log(this.featuresStore.features)
                 if(_.contains(this.featuresStore.features, 'alphaplus')) {
                     this.otaPlusStore._enableAlphaPlus();
                 }
