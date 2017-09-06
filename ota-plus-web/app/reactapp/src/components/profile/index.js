@@ -3,6 +3,8 @@ import ProfileEditProfile from './EditProfile';
 import ProfileUsage from './Usage';
 import ProfileBilling from './Billing';
 import ProfileAccessKeys from './AccessKeys';
+import ProfileUsersAndRoles from './UsersAndRoles';
+import ProfileBlSettings from './BlSettings';
 
 export {
     ProfileAside,
@@ -10,4 +12,6 @@ export {
     ProfileUsage,
     ProfileBilling,
     ProfileAccessKeys,
+    ProfileUsersAndRoles,
+    ProfileBlSettings,
 }

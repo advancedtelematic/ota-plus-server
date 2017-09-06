@@ -1,3 +1,35 @@
+#page-fleet {
+    @include fullHeight;
+}
+
+#page-software-repository {
+    @include fullHeight;
+}
+
+#page-features {
+    @include fullHeight;
+}
+
+#page-advanced-campaigns {
+    @include fullHeight;
+}
+
+#page-connectors {
+    @include fullHeight;
+}
+
+#page-gateway {
+    @include fullHeight;
+}
+
+#page-auditor {
+    @include fullHeight;
+}
+
+#page-dashboard {
+    @include fullHeight;
+}
+
 #page-home {
     @include fullHeight;
     @include wrapperFlexDefault;

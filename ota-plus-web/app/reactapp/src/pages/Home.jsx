@@ -34,7 +34,7 @@ class Home extends Component {
         return this.props.systemReady || Cookies.get('systemReady') == 1;
     }
     componentWillReceiveProps(nextProps) {
-        if(this.sanityCheckCompleted()) {            
+        if(this.sanityCheckCompleted() && !this.props.otaPlusStore.otaPlusMode) {            
             this.router = nextProps.router;
             let initialDevicesCount = nextProps.initialDevicesCount;
             let onlineDevicesCount = nextProps.onlineDevicesCount;

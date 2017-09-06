@@ -101,8 +101,6 @@ class Main extends Component {
         });
         this.featuresHandler = observe(this.featuresStore, (change) => {
             if(change.name === 'featuresFetchAsync' && change.object[change.name].isFetching === false) {
-                console.log('handler')
-                console.log(this.featuresStore.features)
                 if(_.contains(this.featuresStore.features, 'alphaplus')) {
                     this.otaPlusStore._enableAlphaPlus();
                 }
@@ -228,9 +226,12 @@ class Main extends Component {
         const { children, ...rest } = this.props;
         const pageId = "page-" + (this.props.location.pathname.toLowerCase().split('/')[1] || "home");
         let logoLink = '/';
+        if(this.otaPlusStore.otaPlusMode) {
+            logoLink = '/dashboard';
+        }
         if(_.includes(this.pagesWithRedirectToWelcome, pageId)) {
             logoLink = '/welcome';
-        }        
+        }
         return (
             <div id={pageId}>
                 <FadeAnimation>
@@ -285,6 +286,7 @@ class Main extends Component {
                         setQueueModalActiveTabId={this.setQueueModalActiveTabId}
                         goToCampaignDetails={this.goToCampaignDetails}
                         otaPlusMode={this.otaPlusStore.otaPlusMode}
+                        otaPlusStore={this.otaPlusStore}
                     />
                 </FadeAnimation>
                 <SizeVerify 
