@@ -8,42 +8,28 @@ import moment from 'moment';
 class PackagesVersionList extends Component {
     constructor(props) {
         super(props);
-        this.formatFromVersions = this.formatFromVersions.bind(this);
+        this.formatTufVersions = this.formatTufVersions.bind(this);
+        this.formatLegacyVersions = this.formatLegacyVersions.bind(this);
         this.selectVersion = this.selectVersion.bind(this);
         this.formatHardwareIds = this.formatHardwareIds.bind(this);
         this.selectHardwareId = this.selectHardwareId.bind(this);
     }
-    formatFromVersions(pack) {
+    formatTufVersions(pack, idName) {
         let versions = pack.versions;
         return versions.map((version) => (
             <MenuItem
                 key={version.id.version}
                 insetChildren={true}
                 checked={false}
-                value={version.packageHash}
+                value={version.imageName}
                 primaryText={<span className='version-hash'>Version: {version.id.version}</span>}
                 secondaryText={<span className='version-created-at'>Created at: {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>}
-                id={"version-from-menu-item-" + version.id.version}
+                id={idName + version.id.version}
                 className={"version-menu-item"}
             />
         ));
     }
-    formatToVersions(pack) {
-        let versions = pack.versions;
-        return versions.map((version) => (
-            <MenuItem
-                key={version.id.version}
-                insetChildren={true}
-                checked={false}
-                value={version.packageHash}
-                primaryText={<span className='version-hash'>Version: {version.id.version}</span>}
-                secondaryText={<span className='version-created-at'>Created at: {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>}
-                id={"version-to-menu-item-" + version.id.version}
-                className={"version-menu-item"}
-            />
-        ));
-    }
-    formatLegacyToVersions(pack) {
+    formatLegacyVersions(pack) {
         let versions = pack.versions;
         return versions.map((version) => (
             <MenuItem
@@ -72,7 +58,7 @@ class PackagesVersionList extends Component {
         ));
     }
     selectVersion(data, event, index, value) {
-        data.version = value;
+        data.imageName = value;
         this.props.selectVersion(data);
     }
     selectHardwareId(data, event, index, value) {
@@ -170,10 +156,10 @@ class PackagesVersionList extends Component {
                                     multiple={false}
                                     onChange={this.selectVersion.bind(this, {type: 'from', packageName: pack.packageName})}
                                     hintText="Select from version"
-                                    value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].from : null}
+                                    value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].fromFilepath : null}
                                     style={{display: 'block', width : '100%'}}
                                 >
-                                    {this.formatFromVersions(pack)}
+                                    {this.formatTufVersions(pack, "version-to-menu-item-")}
                                 </SelectField>
                             </div>
                             <div className="to">
@@ -183,10 +169,10 @@ class PackagesVersionList extends Component {
                                     multiple={false}
                                     onChange={this.selectVersion.bind(this, {type: 'to', packageName: pack.packageName})}
                                     hintText="Select to version"
-                                    value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].to : null}
+                                    value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].toFilepath : null}
                                     style={{display: 'block', width : '100%'}}
                                 >
-                                    {this.formatToVersions(pack)}
+                                    {this.formatTufVersions(pack, "version-from-menu-item-")}
                                 </SelectField>
                             </div>
                             <div className="hardware-id">
@@ -213,7 +199,7 @@ class PackagesVersionList extends Component {
                                     value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].to : null}
                                     style={{display: 'block', width : '100%'}}
                                 >
-                                    {this.formatLegacyToVersions(pack)}
+                                    {this.formatLegacyVersions(pack)}
                                 </SelectField>
                             </div>
                         </span>
