@@ -15,6 +15,7 @@ import {
     WelcomePage,
     DestinyPage,
     FireworksPage,
+    KeysAndPackages,
 } from './pages';
 import {
     ProfileEditProfile,
@@ -30,6 +31,7 @@ const Routes = () => {
                 <IndexRoute component={HomePage}/>
                 <Route path="/" component={HomePage}/>
                 <Route path="/welcome" component={WelcomePage}/>
+                <Route path="/keys-and-packages" component={KeysAndPackages}/>
                 <Route path="/destiny" component={DestinyPage}/>
                 <Route path="/fireworks" component={FireworksPage}/>
                 <Route path="/devices" component={DevicesPage}/>
