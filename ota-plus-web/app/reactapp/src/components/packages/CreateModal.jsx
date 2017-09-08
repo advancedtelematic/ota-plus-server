@@ -161,6 +161,7 @@ class CreateModal extends Component {
                                     type="file"
                                     onChange={this._onFileChange.bind(this)}
                                     className="file"
+                                    id="file-input-hidden"
                                 />
                                 <FormsyText
                                     type="text"
@@ -285,6 +286,7 @@ class CreateModal extends Component {
                                     type="file"
                                     onChange={this._onFileChange.bind(this)}
                                     className="file"
+                                    id="file-input-hidden"
                                 />
                                 <FormsyText
                                     type="text"
@@ -482,6 +484,7 @@ class CreateModal extends Component {
                                         type="file"
                                         onChange={this._onFileChange.bind(this)}
                                         className="file"
+                                        id="file-input-hidden"
                                     />
                                     <FormsyText
                                         type="text"
