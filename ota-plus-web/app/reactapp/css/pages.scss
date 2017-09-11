@@ -16,6 +16,107 @@
 
 #page-connectors {
     @include fullHeight;
+    background: #fff;
+
+    .connectors {
+
+        .item {
+            border: 1px solid #9f9f9f;
+            padding: 15px;
+            width: 300px;
+            border-bottom: 10px solid #83CF63;
+            margin: auto;
+            margin-bottom: 75px;
+            position: relative;
+
+            &.error {
+                border-bottom: 10px solid #fd0104;
+            }
+
+            .actions {
+                display: flex;
+                justify-content: space-between;
+                position: absolute;
+                bottom: -45px;
+                left: 10px;
+                right: 10px;
+                background: #f7dfd7;
+                padding: 10px;
+                font-size: 11px;
+            }
+
+            .item-canvas {
+                position: absolute;
+                left: -299px;
+                top: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            .title {
+                font-weight: bold;
+                margin-bottom: 5px;
+
+                .bars {
+                    float: right;
+                    cursor: pointer;
+                }
+            }
+
+            .details {
+                font-size: 12px;
+                @include textoverflowEllipsis;
+
+                .text {
+                    display: block;
+                    width: 35%;
+                    float: left;
+                }
+
+                .value {
+                    display: block;
+                    width: 65%;
+                    float: left;
+                }
+            }
+        }
+
+        .right-box {
+
+            .item {
+                .item-canvas {
+                    left: 299px;
+                }
+            }
+        }
+
+        .center-container {
+            margin: 190px 0;
+
+            .item-canvas-center {
+                position: absolute;
+                top: 0;
+                left: -65px;
+                width: 555px;
+                height: 100%;
+            }
+
+            .logo {
+                margin: auto;
+                width: 170px;
+                height: 170px;
+                background: #fa9872;
+                padding: 15px;
+                display: flex;
+                align-items: center;
+                position: relative;
+
+                img {
+                    width: 100%;
+                }
+            }
+        }
+    }
 }
 
 #page-gateway {
