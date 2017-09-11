@@ -9,6 +9,7 @@ class UserDropdown extends Component {
         super(props);
         this.closeDropdown = this.closeDropdown.bind(this);
         this.logout = this.logout.bind(this);
+        this.otaPlusLogout = this.otaPlusLogout.bind(this);
         this.toggleMode = this.toggleMode.bind(this);
     }
     closeDropdown() {
@@ -17,6 +18,10 @@ class UserDropdown extends Component {
     logout(e) {
         e.preventDefault();
         this.props.userStore._logout();
+    }
+    otaPlusLogout(e) {
+        e.preventDefault();
+        this.context.router.push('/login/creds');
     }
     toggleMode() {
         this.props.toggleOtaPlusMode();
@@ -46,6 +51,11 @@ class UserDropdown extends Component {
                       <Link to="/profile/bl-settings" id="link-bl-settings" onClick={this.closeDropdown}>Bl settings</Link>
                 </li>
             </span>
+        );
+        const otaPlusSignOut = (
+            <li className="signout">
+                <button className="btn-main btn-small" onClick={this.otaPlusLogout}><span>Sign out</span></button>
+            </li>
         );
         return (
             <div className="dropdown-menu">
@@ -87,14 +97,22 @@ class UserDropdown extends Component {
                         otaPlusBlock
                     :
                         null
-                    }                    
-                    <li className="signout">
-                        <button className="btn-main btn-small" onClick={this.logout}><span>Sign out</span></button>
-                    </li>
+                    }
+                    {otaPlusMode ?
+                        otaPlusSignOut
+                    :
+                        <li className="signout">
+                            <button className="btn-main btn-small" onClick={this.logout}><span>Sign out</span></button>
+                        </li>
+                    }
                 </ul>
             </div>  
         );
     }
+}
+
+UserDropdown.contextTypes = {
+    router: React.PropTypes.object.isRequired
 }
 
 UserDropdown.propTypes = {

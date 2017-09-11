@@ -30,6 +30,81 @@
     @include fullHeight;
 }
 
+#page-login {
+    @include fullHeight;
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    ::-webkit-input-placeholder {color:#fff;}
+    ::-moz-placeholder          {color:#fff;}
+    :-moz-placeholder           {color:#fff;}
+    :-ms-input-placeholder      {color:#fff;}
+
+    .ota-plus-login-container {
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+
+            img {
+                height: 80px;
+            }
+        }
+
+        .form {            
+            input {
+                margin-bottom: 10px;
+                padding: 15px;
+                background: #998179;
+                border: 1px solid #f5dbd2;
+                border-radius: 5px;
+                text-align: center;
+                color: #fff;
+
+                &.digit {
+                    padding: 10px;
+                    color: black;
+                }
+            }
+
+            .submit {
+                text-align: center;
+                margin-top: 10px;
+                
+                .btn-main {
+                    background: white!important;
+                    font-weight: bold!important;
+                    width: 225px;
+                }
+            }
+
+            .lock {
+                width: 35px;
+                height: 35px;
+                float: left;
+                margin: 0 2px;
+                text-align: center;
+
+                img {
+                    width: 100%;
+                }
+            }
+
+            .digit {
+                width: 35px;
+                height: 35px;
+                background: #fff;
+                border-radius: 5px;
+                margin: 0 2px;
+                float: left;
+            }
+        }
+    }
+}
+
 #page-home {
     @include fullHeight;
     @include wrapperFlexDefault;
