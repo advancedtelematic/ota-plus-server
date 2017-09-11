@@ -40,6 +40,7 @@ class Main extends Component {
     @observable systemReady = false;
     @observable pagesWithRedirectToWelcome = ['page-welcome', 'page-destiny'];
     @observable pagesWithWhiteBackground = ['welcome', 'destiny', 'fireworks', 'device'];
+    @observable pagesWithGradientBackground = ['login'];
     @observable numOfWizards = 0;
     @observable wizards = [];    
     @observable minimizedWizards = [];
@@ -59,6 +60,7 @@ class Main extends Component {
         this.locationHasChanged = this.locationHasChanged.bind(this);
         this.setSystemReady = this.setSystemReady.bind(this);
         this.makeBodyWhite = this.makeBodyWhite.bind(this);
+        this.makeBodyGradient = this.makeBodyGradient.bind(this);
         this.backButtonAction = this.backButtonAction.bind(this);
         this.addNewWizard = this.addNewWizard.bind(this);
         this.hideWizard = this.hideWizard.bind(this);
@@ -101,12 +103,14 @@ class Main extends Component {
         });
         this.featuresHandler = observe(this.featuresStore, (change) => {
             if(change.name === 'featuresFetchAsync' && change.object[change.name].isFetching === false) {
+                this.featuresStore.features.push('alphaplus');
                 if(_.contains(this.featuresStore.features, 'alphaplus')) {
                     this.otaPlusStore._enableAlphaPlus();
                 }
             }
         });
         this.makeBodyWhite();
+        this.makeBodyGradient();
     }
     componentWillMount() {
         this.router = this.context.router;
@@ -196,12 +200,21 @@ class Main extends Component {
     }
     locationHasChanged() {
         this.makeBodyWhite();
+        this.makeBodyGradient();
     }
     setSystemReady(value) {
         this.systemReady = value;
     }
     sanityCheckCompleted() {
         return this.systemReady || Cookies.get('systemReady') == 1;
+    }
+    makeBodyGradient() {
+        let pageName = this.props.location.pathname.toLowerCase().split('/')[1];
+        if(_.includes(this.pagesWithGradientBackground, pageName)) {
+            document.body.className += " gradient";
+        } else {
+            document.body.classList.remove("gradient");
+        }
     }
     makeBodyWhite() {
         let pageName = this.props.location.pathname.toLowerCase().split('/')[1];

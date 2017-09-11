@@ -26,6 +26,10 @@ import {
     AuditorPage,
     DashboardPage,
 } from './pages/otaplus';
+import { 
+    LoginStep1Page,
+    LoginStep2Page,
+} from './pages/otaplus/login';
 import {
     ProfileEditProfile,
     ProfileUsage,
@@ -59,6 +63,8 @@ const Routes = () => {
                 <Route path="/connectors" component={ConnectorsPage}/>
                 <Route path="/gateway" component={GatewayPage}/>
                 <Route path="/auditor" component={AuditorPage}/>
+                <Route path="/login/creds" component={LoginStep1Page}/>
+                <Route path="/login/digits" component={LoginStep2Page}/>
                 <Route path="/profile" component={ProfilePage}>
                     <IndexRoute component={ProfileEditProfile}/>
                     <Route path="edit" component={ProfileEditProfile} />

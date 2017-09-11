@@ -67,6 +67,12 @@ body {
         background-size: cover;
     }
 
+    &.gradient {
+        background: url('/assets/img/ota-plus-login-gradient.png') no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+    }
+
     &.ota-plus {
         
         .content-container {
