@@ -46,6 +46,16 @@ a {
     color: $color-lightgrey;
 }
 
+.barchart {
+    width: 880px;
+    
+    svg {
+        &:first-child {
+            width: 100%;
+        }
+    }
+}
+
 html, body {
     overflow-y: hidden;
 }
