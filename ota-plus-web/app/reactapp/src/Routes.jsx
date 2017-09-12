@@ -15,6 +15,7 @@ import {
     WelcomePage,
     DestinyPage,
     FireworksPage,
+    KeysAndPackages,
 } from './pages';
 import { 
     FleetPage,
@@ -47,6 +48,7 @@ const Routes = () => {
                 <Route path="/" component={HomePage}/>
                 <Route path="/dashboard" component={DashboardPage}/>
                 <Route path="/welcome" component={WelcomePage}/>
+                <Route path="/keys-and-packages" component={KeysAndPackages}/>
                 <Route path="/destiny" component={DestinyPage}/>
                 <Route path="/fireworks" component={FireworksPage}/>
                 <Route path="/devices" component={DevicesPage}/>
