@@ -5,7 +5,7 @@ import { observable } from 'mobx';
 import _ from 'underscore';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 
-const data = {
+const keys = {
     animals: {
         children: {
             birds: {},
@@ -120,6 +120,94 @@ const data = {
     hen: {},
     hencock: {}
 }
+
+const packages = {
+    groups: {
+        A: { // Group name
+            A1: { // Group item
+                keys: ['L3', 'L4', 'L5'] //Associated keys
+            },
+            A2: {
+                keys: ['Birds', 'L4', 'L5']
+            },
+            A3: {
+                keys: ['L6','L7','L8']
+            },
+            A4: {
+                keys: ['L3','L4','Birds']
+            },
+            A5: {
+                keys: []
+            }
+        },
+        B: {
+            B1: {
+                keys: ['Animals','Mammals','Elephant']
+            },
+            B2: {
+                keys: ['Plants','Mammals','Elephant']
+            },
+            B3: {
+                keys: ['Mouse','Flowers','Tulip']
+            }
+        },
+        C: {
+            C1: {
+                keys: ['Birds','Plants']
+            },
+            C2: {
+                keys: ['L1','L21','L22']
+            },
+            C3: {
+                keys: ['Reptiles','Flowers','Tulip']
+            },
+            C4: {
+                keys: ['Birds','Trees']
+            }
+        }
+    }
+};
+
+const campaigns = {
+    groups: {
+        'Finished': {
+            'Finished Campaign 1': {
+                packages: ['A1','A4']
+            },
+            'Finished Campaign 2': {
+                packages: ['A2','A3']
+            },
+            'Finished Campaign 3': {
+                packages: ['B1','C1']
+            },
+        },
+        'In preparation': {
+            'In preparation 1': {
+                packages: ['C1']
+            },
+            'In preparation 2': {
+                packages: ['C2','C3']
+            },
+            'In preparation 3': {
+                packages: ['B3']
+            },
+        },
+        'Running': {
+            'Running 1': {
+                packages: ['B1','A5','A4']
+            },
+            'Running 2': {
+                packages: ['B2']
+            },
+            'Running 3': {
+                packages: ['A3']
+            },
+            'Running 4': {
+                packages: ['A3']
+            },
+        },
+    }
+};
 
 @observer
 export default class KeysAndPackages extends Component {
@@ -524,7 +612,7 @@ export default class KeysAndPackages extends Component {
                                 <canvas id="tree-canvas" width={this.treeCanvasWidth} height={this.canvasHeight}/>
                                 <div className="wrapper-software" onScroll={this.scroll}>
                                     <TreeUl
-                                        data={data}
+                                        data={keys}
                                         shown={true}
                                         drawLinesFromKeys={this.handleClickType}
                                         openTreeNode={this.openTreeNode}
@@ -535,63 +623,19 @@ export default class KeysAndPackages extends Component {
                                 <div className="section-header">Software</div>
                                 <canvas id="packages-canvas" width={this.packagesCanvasWidth} height={this.canvasHeight}/>
                                 <ul className="first-level">
-                                    <li>
-                                        <span className="title">A</span>
-                                        <ul className="second-level">
-                                            <li title="A1" data-keys={['L3','L4','L5']} onClick={this.selectPackageWithKeys}>A 1</li>
-                                            <li title="A2" data-keys={['Birds','L4','L5']} onClick={this.selectPackageWithKeys}>A 2</li>
-                                            <li title="A3" data-keys={['L6','L7','L8']} onClick={this.selectPackageWithKeys}>A 3</li>
-                                            <li title="A4" data-keys={['L3','L4','Birds']} onClick={this.selectPackageWithKeys}>A 4</li>
-                                            <li>A 5</li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <span className="title">B</span>
-                                        <ul className="second-level">
-                                            <li title="B1" data-keys={['Animals','Mammals','Elephant']} onClick={this.selectPackageWithKeys}>B 1</li>
-                                            <li title="B2" data-keys={['Plants','Mammals','Elephant']} onClick={this.selectPackageWithKeys}>B 2</li>
-                                            <li title="B3" data-keys={['Mouse','Flowers','Tulip']} onClick={this.selectPackageWithKeys}>B 3</li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <span className="title">C</span>
-                                        <ul className="second-level">
-                                            <li title="C1" data-keys={['Birds','Plants']} onClick={this.selectPackageWithKeys}>C 1</li>
-                                            <li title="C2" data-keys={['L1','L21','L22']} onClick={this.selectPackageWithKeys}>C 2</li>
-                                            <li title="C3" data-keys={['Reptiles','Flowers','Tulip']} onClick={this.selectPackageWithKeys}>C 3</li>
-                                            <li title="C4" data-keys={['Birds','Trees']} onClick={this.selectPackageWithKeys}>C 4</li>
-                                        </ul>
-                                    </li>
+                                    <List
+                                        data={packages}
+                                        clickHandler={this.selectPackageWithKeys}
+                                        dataType="keys"/>
                                 </ul>
                             </div>
                             <div className="col-xs-3 campaigns" onScroll={this.scroll}>
                                 <div className="section-header">Campaigns</div>
                                 <ul className="first-level">
-                                    <li>
-                                        <span className="title">Finished</span>
-                                        <ul className="second-level">
-                                            <li data-packages={['A1','A4']} onClick={this.drawLineFromCampaign}>Finished Campaign 1</li>
-                                            <li data-packages={['A2','A3']} onClick={this.drawLineFromCampaign}>Finished Campaign 2</li>
-                                            <li data-packages={['B1','C1']} onClick={this.drawLineFromCampaign}>Finished Campaign 3</li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <span className="title">In preparation</span>
-                                        <ul className="second-level">
-                                            <li data-packages={['C1']} onClick={this.drawLineFromCampaign}>In preparation 1</li>
-                                            <li data-packages={['C2','C3']} onClick={this.drawLineFromCampaign}>In preparation 2</li>
-                                            <li data-packages={['B3']} onClick={this.drawLineFromCampaign}>In preparation 3</li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <span className="title">Running </span>
-                                        <ul className="second-level">
-                                            <li data-packages={['B1','A5','A4']} onClick={this.drawLineFromCampaign}>Running 1</li>
-                                            <li data-packages={['B2']} onClick={this.drawLineFromCampaign}>Running 2</li>
-                                            <li data-packages={['A3']} onClick={this.drawLineFromCampaign}>Running3</li>
-                                            <li data-packages={['A3']} onClick={this.drawLineFromCampaign}>Running4</li>
-                                        </ul>
-                                    </li>
+                                    <List
+                                        data={campaigns}
+                                        clickHandler={this.drawLineFromCampaign}
+                                        dataType="campaigns"/>
                                 </ul>
                             </div>
                         </div>
@@ -640,5 +684,45 @@ class TreeUl extends PureComponent {
                 })}
             </CSSTransitionGroup>
         );
+    }
+}
+
+class List extends PureComponent {
+    render() {
+        const {data, clickHandler, dataType} = this.props;
+        const list = Object.keys(data.groups).map((group, groupKey) => {
+            return (
+                <li key={Math.floor((Math.random() * 30) + groupKey)}>
+                    <span className="title">{group}</span>
+                    <ul className="second-level">
+                        {Object.keys(data.groups[group]).map((item, itemKey) => {
+                            const groupItem = data.groups[group][item];
+                            if (dataType === 'keys') {
+                                return (
+                                    <li
+                                        key={Math.floor((Math.random() * 1000) + itemKey)}
+                                        onClick={clickHandler}
+                                        title={item}
+                                        data-keys={groupItem.keys}>{item}</li>
+                                )
+                            } else {
+                                return (
+                                    <li
+                                        key={Math.floor((Math.random() * 1000) + itemKey)}
+                                        onClick={clickHandler}
+                                        data-packages={groupItem.packages}>{item}</li>
+                                )
+                            }
+                        })}
+                    </ul>
+                </li>
+            )
+        });
+
+        return (
+            <div>
+                {list}
+            </div>
+        )
     }
 }
