@@ -11,6 +11,7 @@ import NoMatchPage from './NoMatch';
 import WelcomePage from './Welcome';
 import DestinyPage from './Destiny';
 import FireworksPage from './Fireworks';
+import KeysAndPackages from './KeysAndPackages';
 
 export {
     HomePage,
@@ -26,4 +27,5 @@ export {
     WelcomePage,
     DestinyPage,
     FireworksPage,
+    KeysAndPackages
 }

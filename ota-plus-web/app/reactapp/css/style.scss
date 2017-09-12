@@ -3400,3 +3400,142 @@ div[role=presentation] {
         }
     }
 }
+.software-repository {
+
+    #tree-canvas {
+        position: absolute;
+        top:0;
+        left:0;
+    }
+
+    .wrapper-software {
+        height: calc(100vh - 160px);
+        overflow-y: auto;
+        position: absolute;
+        right: -30px;
+        left: 0;
+        top: 0;
+    }
+
+    .wrapper-full {
+        .row {
+            background-color: #fff;
+            min-height:100vh;
+        }
+
+        .keys {
+            padding-top: 5px;
+            min-height: 100vh;
+            background-color: #F7F7F7;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .packages {
+            padding:0;
+
+            .selected {
+                background-color: #fa9872;
+            }
+
+            span.title {
+                background-color: #D3D3D3;
+                width:100%;
+                display: block;
+                padding: 15px 30px;
+            }
+            li {
+                cursor: pointer;
+                .second-level {
+                    li {
+                        border-bottom: 1px solid #ccc;
+                        padding: 15px 30px;
+                    }
+                }
+            }
+        }
+    }
+
+    .tree,
+    .tree ul {
+        margin: 0 0 0 1em;
+        padding: 0;
+        list-style: none;
+        color: #343434;
+        position: relative;
+    }
+
+    .tree.shown {
+        display: block;
+        ul.shown {
+            li {
+                div {
+                    background-color: #fa9872;
+                }
+            }
+        }
+    }
+
+    .tree.hidden {
+        display: none;
+    }
+
+    .tree ul {
+        margin-left: .5em;
+    }
+
+    .tree:before,
+    .tree ul:before {
+        content: "";
+        display: block;
+        width: 0;
+        position: absolute;
+        top: -5px;
+        bottom: 0;
+        left: 0;
+        border-left: 1px solid #4B4B4B;
+    }
+
+    .tree li {
+        margin: 0;
+        padding: 0 1.5em;
+        line-height: 2em;
+        font-weight: bold;
+        position: relative;
+    }
+
+    .tree li:before {
+        content: "";
+        display: block;
+        width: 20px;
+        height: 0;
+        border-top: 1px solid #4B4B4B;
+        margin-top: -1px;
+        position: absolute;
+        top: 20px;
+        left: 0;
+    }
+
+    .tree li:last-child:before {
+        background: #F7F7F7;
+        height: auto;
+        top: 20px;
+        bottom: 0;
+    }
+
+    .tree li div {
+        display: inline-block;
+        border: 1px solid #4B4B4B;
+        padding: 2px 30px;
+        margin: 5px 0;
+        position: relative;
+        i {
+            position: absolute;
+            left: 3px;
+            top: 7px;
+            width: 24px;
+            height: 20px;
+            text-align: center;
+        }
+    }
+}
