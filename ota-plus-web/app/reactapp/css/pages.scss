@@ -121,6 +121,11 @@
 
 #page-gateway {
     @include fullHeight;
+    background: #fff;
+
+    .wrapper-center {
+        height: calc(100% - 100px);
+    }
 }
 
 #page-auditor {
