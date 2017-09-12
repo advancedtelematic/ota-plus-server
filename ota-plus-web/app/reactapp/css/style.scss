@@ -3400,3 +3400,216 @@ div[role=presentation] {
         }
     }
 }
+.software-repository {
+
+    .container {
+        overflow: hidden;
+    }
+
+    #tree-canvas {
+        position: absolute;
+        top:0;
+        left:0;
+    }
+
+    .section-header {
+        background-color: #f7f7f7;
+        padding: 14px 15px 39px;
+        position: relative;
+        z-index: 50;
+        text-transform: uppercase;
+        font-size: 20px;
+        border-bottom-color: #4b4b4b;
+    }
+
+    .wrapper-software {
+        height: calc(100vh - 160px);
+        overflow-y: auto;
+        position: absolute;
+        right: -30px;
+        left: 0;
+        padding: 30px 0 50px 1px;
+        top: 50px;
+    }
+
+    .wrapper-full {
+        .row {
+            background-color: #fff;
+            min-height:100vh;
+        }
+
+        .keys {
+            min-height: 100vh;
+            background-color: #F7F7F7;
+            position: relative;
+            overflow: hidden;
+            -webkit-box-shadow: 4px 0px 8px -2px rgba(0,0,0,0.5);
+            -moz-box-shadow: 4px 0px 8px -2px rgba(0,0,0,0.5);
+            box-shadow: 4px 0px 8px -2px rgba(0,0,0,0.5);
+            z-index: 51;
+        }
+
+        .packages, .campaigns {
+            ::-webkit-scrollbar {display:none;}
+
+            .section-header {
+                border-bottom: none;
+            }
+
+            span.title {
+                background-color: #D3D3D3;
+                width:100%;
+                display: block;
+                padding: 15px 30px;
+            }
+            .selected {
+                background-color: #fa9872;
+            }
+
+            li {
+                cursor: pointer;
+                .second-level {
+                    li {
+                        border-bottom: 1px solid #ccc;
+                        padding: 15px 30px;
+                    }
+                }
+            }
+
+            canvas {
+                position: absolute;
+                top:0;
+            }
+
+            .first-level {
+                position: absolute;
+                left:0;
+                right:0;
+            }
+
+        }
+
+        .campaigns {
+            min-height: 100vh;
+            padding: 0;
+            width:18%;
+            background-color: #F7F7F7;
+            z-index: 50;
+            //-webkit-box-shadow: -4px 0px 8px -2px rgba(0,0,0,0.25);
+            //-moz-box-shadow: -4px 0px 8px -2px rgba(0,0,0,0.25);
+            //box-shadow: -4px 0px 8px -2px rgba(0,0,0,0.25);
+            position: relative;
+            left:7%;
+
+            .first-level {
+                height: 75vh;
+                padding-bottom: 15px;
+                overflow-y: scroll;
+                .second-level {
+                    li {
+                        border-bottom: none;
+                        min-height: 49px;
+                    }
+                }
+            }
+        }
+
+        .packages {
+            padding:0;
+            -webkit-box-shadow: 4px 0px 8px -2px rgba(0,0,0,0.25);
+            -moz-box-shadow: 4px 0px 8px -2px rgba(0,0,0,0.25);
+            box-shadow: 4px 0px 8px -2px rgba(0,0,0,0.25);
+            position: relative;
+            z-index:49;
+            min-height: 100vh;
+
+            .first-level {
+                height: 80vh;
+                overflow-y: auto;
+            }
+        }
+    }
+
+    .tree,
+    .tree ul {
+        margin: 0 0 0 1em;
+        padding: 0;
+        list-style: none;
+        color: #343434;
+        position: relative;
+    }
+
+    .tree.shown {
+        display: block;
+        ul.shown {
+            li {
+                div {
+                    background-color: #fa9872;
+                }
+            }
+        }
+    }
+
+    .tree.hidden {
+        display: none;
+    }
+
+    .tree ul {
+        margin-left: .5em;
+    }
+
+    .tree:before,
+    .tree ul:before {
+        content: "";
+        display: block;
+        width: 0;
+        position: absolute;
+        top: -5px;
+        bottom: 0;
+        left: 0;
+        border-left: 1px solid #4B4B4B;
+    }
+
+    .tree li {
+        margin: 0;
+        padding: 0 1.5em;
+        line-height: 2em;
+        font-weight: bold;
+        position: relative;
+    }
+
+    .tree li:before {
+        content: "";
+        display: block;
+        width: 20px;
+        height: 0;
+        border-top: 1px solid #4B4B4B;
+        margin-top: -1px;
+        position: absolute;
+        top: 20px;
+        left: 0;
+    }
+
+    .tree li:last-child:before {
+        background: #F7F7F7;
+        height: auto;
+        top: 20px;
+        bottom: 0;
+    }
+
+    .tree li div {
+        display: inline-block;
+        border: 1px solid #4B4B4B;
+        padding: 2px 30px;
+        margin: 5px 0;
+        position: relative;
+        i {
+            position: absolute;
+            left: 3px;
+            top: 7px;
+            width: 24px;
+            height: 20px;
+            text-align: center;
+        }
+    }
+}
