@@ -41,6 +41,7 @@ class Main extends Component {
     @observable pagesWithRedirectToWelcome = ['page-welcome', 'page-destiny'];
     @observable pagesWithWhiteBackground = ['welcome', 'destiny', 'fireworks', 'device'];
     @observable pagesWithGradientBackground = ['login'];
+    @observable pagesWithHiddenNavbar = ['page-login'];
     @observable numOfWizards = 0;
     @observable wizards = [];    
     @observable minimizedWizards = [];
@@ -251,30 +252,34 @@ class Main extends Component {
         return (
             <div id={pageId}>
                 <FadeAnimation>
-                    {!this.initialDevicesCount ?
-                        <IntroNavigation
-                            userStore={this.userStore}
-                            featuresStore={this.featuresStore}
-                            devicesStore={this.devicesStore}
-                            logoLink={logoLink}
-                            hideQueueModal={this.hideQueueModal}
-                            toggleOtaPlusMode={this.toggleOtaPlusMode}
-                            otaPlusMode={this.otaPlusStore.otaPlusMode}
-                            alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
-                        />
-                    : this.sanityCheckCompleted() ?
-                            <Navigation
+                    {!_.includes(this.pagesWithHiddenNavbar, pageId) ?
+                        !this.initialDevicesCount ?
+                            <IntroNavigation
                                 userStore={this.userStore}
                                 featuresStore={this.featuresStore}
                                 devicesStore={this.devicesStore}
+                                logoLink={logoLink}
                                 hideQueueModal={this.hideQueueModal}
                                 toggleOtaPlusMode={this.toggleOtaPlusMode}
                                 otaPlusMode={this.otaPlusStore.otaPlusMode}
                                 alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
                             />
-                        :
-                            null
+                        : this.sanityCheckCompleted() ?
+                                <Navigation
+                                    userStore={this.userStore}
+                                    featuresStore={this.featuresStore}
+                                    devicesStore={this.devicesStore}
+                                    hideQueueModal={this.hideQueueModal}
+                                    toggleOtaPlusMode={this.toggleOtaPlusMode}
+                                    otaPlusMode={this.otaPlusStore.otaPlusMode}
+                                    alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
+                                />
+                            :
+                                null                        
+                    :
+                        null
                     }
+                    
                     
                     <children.type
                         {...rest}
