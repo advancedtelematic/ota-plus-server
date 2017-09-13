@@ -183,15 +183,32 @@ class Wizard extends Component {
             if(pack.imageName === data.imageName) {
                 hash = pack.packageHash;
             }
-        })
+        });
+
+        let changedPackage = null;
+        _.each(this.props.packagesStore.preparedPackages, (packs, letter) => {
+            _.each(packs, (pack, index) => {
+                _.each(pack.versions, (version, i) => {
+                    if(version.id.name === data.imageName) {
+                        changedPackage = pack;
+                        this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].from = null : null;
+                        this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].fromFilepath = null : null;
+                    }
+                })
+            });
+        });
+
         switch(data.type) {
             case 'from':                
                 this.versions[data.packageName] = {
                     from: hash, 
-                    fromFilepath: data.imageName, 
+                    fromFilepath: data.imageName,
                     to: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].to : null,
                     toFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toFilepath : null,
-                    hardwareId: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].hardwareId : null
+                    toPackageName: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toPackageName : null,
+                    hardwareId: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].hardwareId : null,
+                    changedPackage: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].changedPackage : {},
+                    disableValidation: false
                 }
                 break;
             case 'to':
@@ -199,8 +216,11 @@ class Wizard extends Component {
                     to: hash, 
                     toFilepath: data.imageName,
                     from: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].from : null,
+                    toPackageName: data.packageName,
                     fromFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].fromFilepath : null,
-                    hardwareId: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].hardwareId : null
+                    hardwareId: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].hardwareId : null,
+                    changedPackage: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].changedPackage : {},
+                    disableValidation: false
                 }
                 break;
             case 'hardwareId':
@@ -209,9 +229,23 @@ class Wizard extends Component {
                     toFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toFilepath : null,
                     from: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].from : null,
                     fromFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].fromFilepath : null,
-                    hardwareId: data.hardwareId
+                    toPackageName: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toPackageName : null,
+                    hardwareId: data.hardwareId,
+                    changedPackage: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].changedPackage : {},
+                    disableValidation: false
                 }
                 break;
+            case 'package':
+                this.versions[data.packageName] = {
+                    to: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].to : null,
+                    toFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toFilepath : null,
+                    toPackageName: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toPackageName : null,
+                    from: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].from : null,
+                    fromFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].fromFilepath : null,
+                    hardwareId: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].hardwareId : null,
+                    changedPackage: changedPackage,
+                    disableValidation: true
+                }
             default:
                 break;
         }
@@ -265,21 +299,21 @@ class Wizard extends Component {
 
         if(_.first(packages).inDirector) {
             _.each(updates, (update, packageName) => {
-                let fromFilepath = null;
-                let toFilepath = null;
+                let fromHash = null;
+                let toHash = null;
                 let targetFormat = null;
                 let fromTargetLength = null;
                 let toTargetLength = null;
                 let packages = this.props.packagesStore.packages;
                 _.each(packages, (pack, index) => {
                     if(pack.inDirector) {
-                        if(pack.packageHash === update.from) {
-                            fromFilepath = pack.imageName;
+                        if(pack.imageName === update.fromFilepath) {
                             fromTargetLength = pack.targetLength;
+                            fromHash = pack.packageHash;
                         }
-                        if(pack.packageHash === update.to) {                    
-                            toFilepath = pack.imageName;
+                        if(pack.imageName === update.toFilepath) {                    
                             toTargetLength = pack.targetLength;
+                            toHash = pack.packageHash;
                         }
                         if(pack.id.name === packageName) {
                             targetFormat = pack.targetFormat;
@@ -289,14 +323,14 @@ class Wizard extends Component {
                 updateData.push({
                     hardwareId: update.hardwareId,
                     from: {
-                        target: fromFilepath,
+                        target: update.fromFilepath,
                         targetLength: fromTargetLength,
-                        hash: update.from
+                        hash: fromHash
                     },
                     to: {
-                        target: toFilepath,
+                        target: update.toFilepath,
                         targetLength: toTargetLength,
-                        hash: update.to
+                        hash: toHash
                     },
                     targetFormat: targetFormat,
                     generateDiff: false

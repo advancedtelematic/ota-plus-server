@@ -12,7 +12,6 @@ class Item extends Component {
 }
     toggleActions() {
         this.actionsShown = !this.actionsShown;
-        console.log('toggle')
     }
     render() {
         const { id } = this.props;
