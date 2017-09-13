@@ -18,6 +18,10 @@
     @include fullHeight;
     background: #fff;
 
+    .wrapper-center {
+        height: calc(100% - 100px);
+    }
+
     .connectors {
 
         .item {
