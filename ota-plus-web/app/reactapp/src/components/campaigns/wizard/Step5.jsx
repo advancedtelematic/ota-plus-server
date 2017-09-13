@@ -29,15 +29,6 @@ class WizardStep5 extends Component {
 
         this.packages = packages;
     }
-    getDirectorCreatedAt(filepath) {
-        let createdAt = null;
-        _.each(this.props.packagesStore.packages, (pack, index) => {
-            if(pack.imageName === filepath) {
-                createdAt = pack.createdAt;
-            }
-        });
-        return createdAt;
-    }
     getLegacyCreatedAt(version) {
         let createdAt = null;
         _.each(this.props.packagesStore.packages, (pack, index) => {
@@ -67,41 +58,58 @@ class WizardStep5 extends Component {
                             return (
                                 <span key={index}>
                                     <div className="package-container">
-                                        <div className="package-name">
-                                            {pack.packageName}
-                                        </div>
                                         {_.map(pack.updates, (update, i) => {
                                             return (
                                                 <span key={index}>
                                                     <div className="update-container">
                                                         {pack.inDirector ?
-                                                            <span className="director-updates">
-                                                                <div className="update-from">
-                                                                    <div className="text">
-                                                                        From:
+                                                            <span>
+                                                                <span className="director-updates">
+                                                                    <div className="update-from">
+                                                                        <div className="text">
+                                                                            From:
+                                                                        </div>
+                                                                        <div className="value">
+                                                                            {!_.isEmpty(update.changedPackage) ?
+                                                                                update.changedPackage.packageName
+                                                                            :
+                                                                                update.toPackageName
+                                                                            }
+                                                                            <span className="in-director">
+                                                                                <img src="/assets/img/icons/black/lock.png" alt="Director" />
+                                                                            </span>
+                                                                        </div>
                                                                     </div>
-                                                                    <div className="value">
-                                                                        <div className="hash">
+                                                                    <div className="update-to">
+                                                                        <div className="text">
+                                                                            To:
+                                                                        </div>
+                                                                        <div className="value">
+                                                                            Hash: {update.toPackageName}
+                                                                            <span className="in-director">
+                                                                                <img src="/assets/img/icons/black/lock.png" alt="Director" />
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </span>
+                                                                <span className="director-versions">
+                                                                    <div className="update-from">
+                                                                        <div className="text">
+                                                                            Version:
+                                                                        </div>
+                                                                        <div className="value">
                                                                             Hash: {update.from}
                                                                         </div>
-                                                                        <div className="createdAt">
-                                                                            Created at: {moment(this.getDirectorCreatedAt(update.fromFilepath)).format("ddd MMM DD YYYY, h:mm:ss A")}
+                                                                    </div>
+                                                                    <div className="update-to">
+                                                                        <div className="text">
+                                                                            Version:
+                                                                        </div>
+                                                                        <div className="value">
+                                                                            {update.to}
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                                <div className="update-to">
-                                                                    <div className="text">
-                                                                        To:
-                                                                    </div>
-                                                                    <div className="value">
-                                                                        <div className="hash">
-                                                                            Hash: {update.to}
-                                                                        </div>
-                                                                        <div className="createdAt">
-                                                                            Created at: {moment(this.getDirectorCreatedAt(update.toFilepath)).format("ddd MMM DD YYYY, h:mm:ss A")}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                                </span>
                                                             </span>
                                                         :
                                                             <span className="legacy-updates">
@@ -124,12 +132,10 @@ class WizardStep5 extends Component {
                                                     {pack.inDirector ?
                                                         <div className="hardware-id-container">
                                                             <div className="text">
-                                                                Hardware id:
+                                                                On:
                                                             </div>
-                                                            <div className="value">
-                                                                <div className="hash">
-                                                                    {update.hardwareId}
-                                                                </div>
+                                                            <div className="value hardware-label">
+                                                                {update.hardwareId}
                                                             </div>
                                                         </div>
                                                     :

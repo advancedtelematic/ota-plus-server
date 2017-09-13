@@ -1,20 +1,55 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
+import { observable } from 'mobx';
 import { SelectField, MenuItem } from 'material-ui';
 import _ from 'underscore';
 import moment from 'moment';
 
 @observer
 class PackagesVersionList extends Component {
+    @observable fromVersions = [];
+
     constructor(props) {
         super(props);
-        this.formatTufVersions = this.formatTufVersions.bind(this);
+        this.formatFromVersions = this.formatFromVersions.bind(this);
+        this.formatToVersions = this.formatToVersions.bind(this);
         this.formatLegacyVersions = this.formatLegacyVersions.bind(this);
         this.selectVersion = this.selectVersion.bind(this);
         this.formatHardwareIds = this.formatHardwareIds.bind(this);
         this.selectHardwareId = this.selectHardwareId.bind(this);
+        this.formatTufPackages = this.formatTufPackages.bind(this);
     }
-    formatTufVersions(pack, idName) {
+    formatTufPackages() {
+        let tufPackages = _.uniq(this.props.packagesStore.directorPackages, (item) => { return item.id.name });
+        return tufPackages.map((pack) => (
+            <MenuItem
+                key={pack.imageName}
+                insetChildren={true}
+                checked={false}
+                value={pack.id.name}
+                primaryText={<span className='pack-name'>{pack.id.name}</span>}
+                id={"tuf-package-item-" + pack.id.name}
+                className={"version-menu-item"}
+            />
+        ));
+    }
+    formatFromVersions(pack) {
+        let versions = pack.versions;
+        let fromVersions = versions.map((version) => (
+            <MenuItem
+                key={version.id.version}
+                insetChildren={true}
+                checked={false}
+                value={version.imageName}
+                primaryText={<span className='version-hash'>Version: {version.id.version}</span>}
+                secondaryText={<span className='version-created-at'>Created at: {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>}
+                id={"version-from-menu-item-" + version.id.version}
+                className={"version-menu-item"}
+            />
+        ));
+        this.fromVersions = fromVersions;
+    }
+    formatToVersions(pack) {
         let versions = pack.versions;
         return versions.map((version) => (
             <MenuItem
@@ -24,7 +59,7 @@ class PackagesVersionList extends Component {
                 value={version.imageName}
                 primaryText={<span className='version-hash'>Version: {version.id.version}</span>}
                 secondaryText={<span className='version-created-at'>Created at: {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>}
-                id={idName + version.id.version}
+                id={"version-to-menu-item-" + version.id.version}
                 className={"version-menu-item"}
             />
         ));
@@ -67,9 +102,20 @@ class PackagesVersionList extends Component {
     }
     componentWillMount() {
         this.props.markStepAsNotFinished();
+        let packageName = this.props.pack.packageName;
+        let data = {
+            type: 'package',
+            packageName: packageName
+        };
+        this.selectVersion(data, null, null, packageName);
+        this.formatFromVersions(this.props.pack);
     }
     componentWillReceiveProps(nextProps) {
         let selectedVersions = nextProps.selectedVersions;
+
+        if(!_.isEmpty(selectedVersions[this.props.pack.packageName].changedPackage)) {
+            this.formatFromVersions(selectedVersions[this.props.pack.packageName].changedPackage);
+        }
 
         let packsToValidate = {};
         _.each(selectedVersions, (version, packageName) => {
@@ -89,20 +135,21 @@ class PackagesVersionList extends Component {
             if(Object.keys(packsToValidate).length === nextProps.packsCount) {
                 let shouldPass = true;
                 let selectedHardwareIds = [];
-
                 _.each(packsToValidate, (version, index) => {
-                    selectedHardwareIds.push(version.hardwareId);
-                    if(_.isNull(version.to) || _.isNull(version.from) || _.isNull(version.hardwareId)) {
+                    if(!version.disableValidation) {
+                        selectedHardwareIds.push(version.hardwareId);
+                        if(_.isNull(version.hardwareId)) {
+                            shouldPass = false;
+                        }
+                    }
+                    if(_.isNull(version.to) || _.isNull(version.from)) {
                         shouldPass = false;
                     }                
                 });
-
                 let hardwareIdDuplicates = selectedHardwareIds.some((value, index)=>{
                     return selectedHardwareIds.indexOf(value) != index;
                 });
-
                 this.props.setHardwareIdDuplicates(hardwareIdDuplicates);
-
                 if(shouldPass && !hardwareIdDuplicates)
                     this.props.markStepAsFinished();
                 else
@@ -134,48 +181,65 @@ class PackagesVersionList extends Component {
         const { pack, selectedVersions} = this.props;
         return (
             <div className={"item" + (pack.inDirector ? " director" : " legacy")} id={"button-package-" + pack.packageName} title={pack.packageName} ref="item">
-                <div className="info">
-                    <span className="name">
-                        {pack.packageName}
-                    </span>
-                    {pack.inDirector ?
-                        <div className="in-director">
-                            <img src="/assets/img/icons/black/lock.png" alt="Director" />
-                        </div>
-                    :
-                        null
-                    }
-                </div>
-                <div className="versions">
+                <div className="select-container">
                     {pack.inDirector ?
                         <span>
-                            <div className="from">
-                                From: 
-                                <SelectField
-                                    id="version-from"
-                                    multiple={false}
-                                    onChange={this.selectVersion.bind(this, {type: 'from', packageName: pack.packageName})}
-                                    hintText="Select from version"
-                                    value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].fromFilepath : null}
-                                    style={{display: 'block', width : '100%'}}
-                                >
-                                    {this.formatTufVersions(pack, "version-to-menu-item-")}
-                                </SelectField>
+                            <div className="packages">
+                                <div className="from">
+                                    <div className="head">From:</div>
+                                    <SelectField
+                                        id="available-tuf-packages"
+                                        multiple={false}
+                                        onChange={this.selectVersion.bind(this, {type: 'package', packageName: pack.packageName})}
+                                        value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].changedPackage.packageName : null }
+                                        hintText="Select tuf package"
+                                        style={{display: 'block', width : '100%'}}
+                                    >
+                                        {this.formatTufPackages()}
+                                    </SelectField>
+                                </div>
+                                <div className="to">
+                                    <div className="head">To:</div>
+                                    <div className="info">
+                                        <span className="name">
+                                            {pack.packageName}
+                                        </span>
+                                        <div className="in-director">
+                                            <img src="/assets/img/icons/black/lock.png" alt="Director" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="to">
-                                To:
-                                <SelectField
-                                    id="version-to"
-                                    multiple={false}
-                                    onChange={this.selectVersion.bind(this, {type: 'to', packageName: pack.packageName})}
-                                    hintText="Select to version"
-                                    value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].toFilepath : null}
-                                    style={{display: 'block', width : '100%'}}
-                                >
-                                    {this.formatTufVersions(pack, "version-from-menu-item-")}
-                                </SelectField>
+                            <div className="versions">
+                                <div className="from">
+                                    <div className="head">Version:</div>
+                                    <SelectField
+                                        id="version-from"
+                                        multiple={false}
+                                        onChange={this.selectVersion.bind(this, {type: 'from', packageName: pack.packageName})}
+                                        hintText="Select from version"
+                                        value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].fromFilepath : null}
+                                        style={{display: 'block', width : '100%'}}
+                                    >
+                                        {this.fromVersions}
+                                    </SelectField>
+                                </div>
+                                <div className="to">
+                                    <div className="head">Version:</div>
+                                    <SelectField
+                                        id="version-to"
+                                        multiple={false}
+                                        onChange={this.selectVersion.bind(this, {type: 'to', packageName: pack.packageName})}
+                                        hintText="Select to version"
+                                        value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].toFilepath : null}
+                                        style={{display: 'block', width : '100%'}}
+                                    >
+                                        {this.formatToVersions(pack)}
+                                    </SelectField>
+                                </div>
                             </div>
                             <div className="hardware-id">
+                                <div className="head">On:</div>
                                 <SelectField
                                     id="hardware-ids-select-field"
                                     multiple={false}

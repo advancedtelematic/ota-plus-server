@@ -1492,19 +1492,32 @@ input {
                                 }
                             }
 
-                            .versions {
-                                overflow: hidden;
-                                margin: 25px 0 15px 0;
+                            .select-container {
+                                margin: 15px 0;
+
+                                .packages {
+                                    overflow: hidden;
+                                }
+
+                                .versions {
+                                    overflow: hidden;
+                                    margin: 15px 0;
+                                }
 
                                 .from {
-                                    width: 46%;
-                                    margin-right: 4%;
+                                    width: 42%;
+                                    margin-right: 8%;
                                     float: left;
                                 }
 
                                 .to {
                                     width: 50%;
                                     float: left;
+                                }
+
+                                .hardware-id {
+                                    width: 50%;
+                                    float: right;
                                 }
                             }
                         }
@@ -1776,12 +1789,10 @@ input {
                     .desc {
 
                         .package-container {
+                            overflow: hidden;
                             padding-bottom: 15px;
                             border-bottom: 2px solid #ddd;
-
-                            .package-name {
-                                margin: 15px 0;
-                            }
+                            margin: 15px 0;
 
                             .update-container {
                                 overflow: hidden;
@@ -1789,23 +1800,7 @@ input {
                                 .update-from {
                                     width: 46%;
                                     float: left;
-                                    margin-right: 4%;
-                                    
-
-                                    .text {
-                                        width: 10%;
-                                        margin-right: 5%;
-                                        float: left;
-                                        font-weight: bold;
-                                    }
-
-                                    .value {
-                                        width: 85%;
-                                        float: left;
-                                        text-overflow: ellipsis;
-                                        white-space: nowrap;
-                                        overflow: hidden;
-                                    }
+                                    margin-right: 4%; 
                                 }
 
                                 .update-to {
@@ -1814,39 +1809,50 @@ input {
                                     text-overflow: ellipsis;
                                     white-space: nowrap;
                                     overflow: hidden;
+                                }
 
-                                    .text {
-                                        width: 5%;
-                                        margin-right: 5%;
-                                        float: left;
-                                        font-weight: bold;
-                                    }
+                                .text {
+                                    font-weight: bold;
+                                    margin-bottom: 10px;
+                                }
 
-                                    .value {
-                                        width: 90%;
-                                        float: left;
-                                        text-overflow: ellipsis;
-                                        white-space: nowrap;
-                                        overflow: hidden;
+                                .value {
+                                    margin-bottom: 15px;
+                                    @include textoverflowEllipsis;
+
+                                    .in-director {
+                                        display: inline-block;
+                                        margin-left: 5px;
+
+                                        img {
+                                            width: 25px;
+                                        }
                                     }
                                 }
                             }
 
                             .hardware-id-container {
                                 overflow: hidden;
+                                width: 50%;
+                                float: right;
 
                                 .text {
-                                    width: 15%;
-                                    float: left;
                                     font-weight: bold;
+                                    margin-bottom: 10px;
                                 }
 
                                 .value {
-                                    width: 85%;
-                                    float: left;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
-                                    overflow: hidden;
+                                    @include textoverflowEllipsis;
+                                }
+
+                                .hardware-label {
+                                    color: $color-darkgrey;
+                                    font-size: 12px;
+                                    background: transparent;
+                                    padding: 0px 10px;
+                                    border-radius: 10px;
+                                    display: inline-block;
+                                    border: 1px solid #444;
                                 }
                             }
                         }
