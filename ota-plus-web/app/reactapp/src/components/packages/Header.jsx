@@ -13,7 +13,6 @@ class Header extends Component {
         const { showCreateModal, showFileUploaderModal } = this.props;
         return (
             <SubHeader>
-                <a href="#" className="setup-file-uploader" onClick={showFileUploaderModal.bind(this)}>or setup file uploader</a>
                 <FlatButton
                     label="Add new package"
                     onClick={showCreateModal.bind(this, null)}
