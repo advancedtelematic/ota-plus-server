@@ -106,6 +106,7 @@ class Wizard extends Component {
         this.selectVersion = this.selectVersion.bind(this);
         this.setRawSelectedPacks = this.setRawSelectedPacks.bind(this);
         this.removeSelectedPacksByKeys = this.removeSelectedPacksByKeys.bind(this);
+        this.handleLegacyCampaignLaunched = this.handleLegacyCampaignLaunched.bind(this);
 
         this.multiTargetUpdateCreatedHandler = observe(props.campaignsStore, (change) => {
             if(change.name === 'campaignsMultiTargetUpdateCreateAsync' && change.object[change.name].isFetching === false) {
@@ -133,7 +134,9 @@ class Wizard extends Component {
                     return wizard.id === props.wizardIdentifier;
                 });
                 if(!wizardMinimized) {
-                    this.handleLegacyCampaignCreated();
+                    if(change.object[change.name].status !== 'error') {
+                        this.handleLegacyCampaignCreated();
+                    }
                 }
             }
         });
@@ -156,13 +159,25 @@ class Wizard extends Component {
                     this.handleLegacyCampaignGroupsSaved();
                 }
             }
-        });        
+        });
+        this.legacyCampaignLaunchHandler = observe(props.campaignsStore, (change) => {
+            if(change.name === 'campaignsLegacyLaunchAsync' && change.object[change.name].isFetching === false) {
+                 let wizardMinimized = _.find(props.minimizedWizards, (wizard, index) => {
+                    return wizard.id === props.wizardIdentifier;
+                });
+                if(!wizardMinimized) {
+                    this.handleLegacyCampaignLaunched();
+                }
+            }
+        });
     }
     componentWillUnmount() {
         this.multiTargetUpdateCreatedHandler();
         this.campaignCreatedHandler();
         this.legacyCampaignCreatedHandler();
         this.legacyCampaignSavePackageHandler();
+        this.legacyCampaignSaveGroupsHandler();
+        this.legacyCampaignLaunchHandler();
     }
     setRawSelectedPacks(packs) {
         this.rawSelectedPacks = [];
@@ -342,6 +357,8 @@ class Wizard extends Component {
     }
     handleLegacyCampaignGroupsSaved() {
         this.props.campaignsStore.launchLegacyCampaign(this.props.campaignsStore.campaignData.campaignId);
+    }
+    handleLegacyCampaignLaunched() {
         this.props.hideWizard(this.props.wizardIdentifier);
         this.props.goToCampaignDetails(this.props.campaignsStore.campaignData.campaignId);
     }
@@ -379,6 +396,7 @@ class Wizard extends Component {
                                         :
                                             React.createElement(currentStep.class, {
                                                 campaign: {},
+                                                campaignsStore: campaignsStore,
                                                 setWizardData: this.setWizardData,
                                                 wizardData: this.wizardData,
                                                 markStepAsFinished: this.markStepAsFinished,
