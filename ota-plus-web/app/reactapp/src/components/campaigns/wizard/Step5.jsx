@@ -92,7 +92,7 @@ class WizardStep5 extends Component {
                                                                             To:
                                                                         </div>
                                                                         <div className="value">
-                                                                            Hash: {update.toPackageName}
+                                                                            {update.toPackageName}
                                                                             <span className="in-director">
                                                                                 <img src="/assets/img/icons/black/lock.png" alt="Director" />
                                                                             </span>
@@ -105,7 +105,7 @@ class WizardStep5 extends Component {
                                                                             Version:
                                                                         </div>
                                                                         <div className="value">
-                                                                            Hash: {update.from}
+                                                                            {update.from}
                                                                         </div>
                                                                     </div>
                                                                     <div className="update-to">
