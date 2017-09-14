@@ -30,7 +30,7 @@ class SecondaryEcu extends Component {
                          onClick={showKey}
                          onTouchTap={otherProps.handleTouchTap}>
                             <span className="hardware-icon">
-                                <img src="/assets/img/icons/key.png" alt="Icon" />
+                                <img src="/assets/img/icons/key.svg" alt="Icon" />
                             </span>
                     </div>
                 </a>
