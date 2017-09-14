@@ -41,7 +41,7 @@ class PackagesVersionList extends Component {
                 insetChildren={true}
                 checked={false}
                 value={version.imageName}
-                primaryText={<span className='version-hash'>Version: {version.id.version}</span>}
+                primaryText={<span className='version-hash'>{version.id.version}</span>}
                 secondaryText={<span className='version-created-at'>Created at: {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>}
                 id={"version-from-menu-item-" + version.id.version}
                 className={"version-menu-item"}
@@ -57,7 +57,7 @@ class PackagesVersionList extends Component {
                 insetChildren={true}
                 checked={false}
                 value={version.imageName}
-                primaryText={<span className='version-hash'>Version: {version.id.version}</span>}
+                primaryText={<span className='version-hash'>{version.id.version}</span>}
                 secondaryText={<span className='version-created-at'>Created at: {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>}
                 id={"version-to-menu-item-" + version.id.version}
                 className={"version-menu-item"}
@@ -102,13 +102,16 @@ class PackagesVersionList extends Component {
     }
     componentWillMount() {
         this.props.markStepAsNotFinished();
-        let packageName = this.props.pack.packageName;
-        let data = {
-            type: 'package',
-            packageName: packageName
-        };
-        this.selectVersion(data, null, null, packageName);
-        this.formatFromVersions(this.props.pack);
+
+        if(_.isUndefined(this.props.selectedVersions[this.props.pack.packageName])) {
+            let packageName = this.props.pack.packageName;
+            let data = {
+                type: 'package',
+                packageName: packageName
+            };
+            this.selectVersion(data, null, null, packageName);
+            this.formatFromVersions(this.props.pack);
+        }
     }
     componentWillReceiveProps(nextProps) {
         let selectedVersions = nextProps.selectedVersions;
@@ -201,6 +204,9 @@ class PackagesVersionList extends Component {
                                 <div className="to">
                                     <div className="head">To:</div>
                                     <div className="info">
+                                        <span className="icon">
+                                            <img src="/assets/img/icons/green_tick.png" alt="Icon" />
+                                        </span>
                                         <span className="name">
                                             {pack.packageName}
                                         </span>
