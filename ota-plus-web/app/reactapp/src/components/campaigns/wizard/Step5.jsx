@@ -49,6 +49,13 @@ class WizardStep5 extends Component {
                         "Campaign with given name already exists."
                     }
                 />
+                <AsyncResponse 
+                    handledStatus="error"
+                    action={campaignsStore.campaignsCreateAsync}
+                    errorMsg={
+                        "Campaign with given name already exists."
+                    }
+                />
                 <div className="box-bordered">
                     <div className="title">
                         Software & Version
