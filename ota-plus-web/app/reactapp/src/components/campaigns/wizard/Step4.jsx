@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { WizardGroupsList } from './step4';
 import { Loader } from '../../../partials';
+import _ from 'underscore';
 
 @observer
 class WizardStep4 extends Component {
@@ -13,11 +14,13 @@ class WizardStep4 extends Component {
         this.props.groupsStore.fetchGroups();
     }
     setWizardData(groupId) {
+        let group = _.findWhere(this.props.groupsStore.groups, {id: groupId});
+
         let stepWizardData = this.props.wizardData[3];
-        if(stepWizardData.groups.indexOf(groupId) > -1) {
-            stepWizardData.groups.splice(stepWizardData.groups.indexOf(groupId), 1);
+        if(stepWizardData.groups.indexOf(group) > -1) {
+            stepWizardData.groups.splice(stepWizardData.groups.indexOf(group), 1);
         } else {
-            stepWizardData.groups.push(groupId);
+            stepWizardData.groups.push(group);
         }
         if(stepWizardData.groups.length)
             this.props.markStepAsFinished();
