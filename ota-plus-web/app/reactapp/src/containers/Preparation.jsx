@@ -61,7 +61,7 @@ class Preparation extends Component {
         this.createdTufHandler = new AsyncConflictCallbackHandler(props.packagesStore, 'tufRepoExistsFetchAsync', this.checkCreatedTuf.bind(this));
         this.createTufHandler = new AsyncStatusCallbackHandler(props.packagesStore, 'tufRepoCreateFetchAsync', this.doubleCheckCreatedTuf.bind(this));
         this.createdDirectorHandler = new AsyncConflictCallbackHandler(props.packagesStore, 'directorRepoExistsFetchAsync', this.checkCreatedDirector.bind(this));
-        this.createDirectorHandler = new AsyncConflictCallbackHandler(props.packagesStore, 'directorRepoCreateFetchAsync', this.doubleCheckCreatedDirector.bind(this));
+        this.createDirectorHandler = new AsyncStatusCallbackHandler(props.packagesStore, 'directorRepoCreateFetchAsync', this.doubleCheckCreatedDirector.bind(this));
         this.createdTreehubHandler = new AsyncStatusCallbackHandler(props.featuresStore, 'featuresFetchAsync', this.checkCreatedTreehub.bind(this));
         this.createdFileUploaderHandler = new AsyncStatusCallbackHandler(props.featuresStore, 'featuresFetchAsync', this.checkCreatedFileUploader.bind(this));
     }
