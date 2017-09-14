@@ -50,7 +50,7 @@ class StatsBlock extends Component {
                         {installedOnEcusTotal}
                     </div>
                     {stats.length ?
-                        <div>
+                        <div className="canvas-wrapper">
                             <Doughnut 
                                 data={stats} 
                                 width="250" 
