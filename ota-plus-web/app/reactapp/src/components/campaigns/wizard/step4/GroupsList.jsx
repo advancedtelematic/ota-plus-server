@@ -100,7 +100,7 @@ class GroupsList extends Component {
                                                         group={group}
                                                         setWizardData={setWizardData}
                                                         groupsStore={groupsStore}
-                                                        isChosen={chosenGroups.indexOf(group.id) > -1}
+                                                        isChosen={_.findWhere(chosenGroups, {id: group.id}) ? true : false}
                                                     /> 
                                                 </span>
                                             );
