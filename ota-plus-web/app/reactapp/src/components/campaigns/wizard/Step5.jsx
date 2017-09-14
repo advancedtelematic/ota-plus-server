@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Loader } from '../../../partials';
+import { Loader, AsyncResponse } from '../../../partials';
 import { translate } from 'react-i18next';
 import _ from 'underscore';
 import moment from 'moment';
@@ -48,9 +48,16 @@ class WizardStep5 extends Component {
         return createdAt;
     }
     render() {
-        const { t, wizardData, groupsStore } = this.props;
+        const { t, wizardData, groupsStore, campaignsStore } = this.props;
         return (
             <div className="step-inner">
+                <AsyncResponse 
+                    handledStatus="error"
+                    action={campaignsStore.campaignsLegacyCreateAsync}
+                    errorMsg={
+                        "Campaign with given name already exists."
+                    }
+                />
                 <div className="box-bordered">
                     <div className="title">
                         Software & Version
