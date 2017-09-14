@@ -4,8 +4,14 @@ import { PropTypes as MobxPropTypes} from 'mobx-react';
 
 const AsyncConflictCallbackHandler = (store, actionName, callbackFunc) => {
       return observe(store, (change) => {
-        if(change.object[change.name].code === 409 || change.object[change.name].code === 200 || change.object[change.name].code === 201) {
+        switch (change.object[change.name].code) {
+            case 200:
+            case 201:
+            case 404:
+            case 409:
+            case 502:
               callbackFunc.call();
+              break;
         }
     });
 }
