@@ -315,7 +315,7 @@ class Wizard extends Component {
         let createData = {
             name: this.wizardData[0].name,
             update: this.props.campaignsStore.campaignData.mtuId,
-            groups: this.wizardData[3].groups
+            groups: _.map(this.wizardData[3].groups, (group, index) => { return group.id })
         };
         this.props.campaignsStore.createCampaign(createData);
     }
@@ -335,7 +335,10 @@ class Wizard extends Component {
     }
     handleLegacyCampaignPackageSaved() {
         let groupsData = this.wizardData[3];
-        this.props.campaignsStore.saveGroupsForCampaign(this.props.campaignsStore.campaignData.campaignId, groupsData);
+        let groupIds = _.map(groupsData.groups, (group, index) => {
+            return group.id;
+        });
+        this.props.campaignsStore.saveGroupsForCampaign(this.props.campaignsStore.campaignData.campaignId, {groups: groupIds });
     }
     handleLegacyCampaignGroupsSaved() {
         this.props.campaignsStore.launchLegacyCampaign(this.props.campaignsStore.campaignData.campaignId);

@@ -144,16 +144,15 @@ class WizardStep5 extends Component {
                     <div className="desc">
                         <div className="wrapper-groups">
                             {_.map(wizardData[3].groups, (group, index) => {
-                                const foundGroup = _.findWhere(groupsStore.groups, {id: group});
                                 return (
                                     <div className="element-box group" key={index}>
                                         <div className="icon"></div>
                                         <div className="desc">
                                             <div className="title" id="wizard-summary-group-name">
-                                                {foundGroup.groupName}
+                                                {group.groupName}
                                             </div>
                                             <div className="subtitle" id="wizard-summary-group-devices">
-                                                {t('common.deviceWithCount', {count: groupsStore._getGroupDevices(foundGroup).length})}
+                                                {t('common.deviceWithCount', {count: groupsStore._getGroupDevices(group).length})}
                                             </div>
                                         </div>
                                     </div>
