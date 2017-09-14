@@ -15,7 +15,7 @@ import {
     WelcomePage,
     DestinyPage,
     FireworksPage,
-    KeysAndPackages,
+    SoftwareRepository,
 } from './pages';
 import { 
     FleetPage,
@@ -48,7 +48,6 @@ const Routes = () => {
                 <Route path="/" component={HomePage}/>
                 <Route path="/dashboard" component={DashboardPage}/>
                 <Route path="/welcome" component={WelcomePage}/>
-                <Route path="/keys-and-packages" component={KeysAndPackages}/>
                 <Route path="/destiny" component={DestinyPage}/>
                 <Route path="/fireworks" component={FireworksPage}/>
                 <Route path="/devices" component={DevicesPage}/>
@@ -59,7 +58,7 @@ const Routes = () => {
                 <Route path="/impact-analysis" component={ImpactAnalysisPage}/>
                 <Route path="/treehub" component={TreehubPage}/>
                 <Route path="/fleet" component={FleetPage}/>
-                <Route path="/software-repository" component={SoftwareRepositoryPage}/>
+                <Route path="/software-repository" component={SoftwareRepository}/>
                 <Route path="/features" component={FeaturesPage}/>
                 <Route path="/advanced-campaigns" component={AdvancedCampaignsPage}/>
                 <Route path="/connectors" component={ConnectorsPage}/>
