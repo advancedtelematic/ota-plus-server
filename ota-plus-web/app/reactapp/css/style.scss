@@ -1480,6 +1480,8 @@ input {
 
                             .info {
                                 margin-top: 10px;
+                                display: flex;
+                                align-items: center;
 
                                 .in-director {
                                     display: inline-block;
@@ -1513,6 +1515,19 @@ input {
                                 .to {
                                     width: 50%;
                                     float: left;
+
+                                    .info {
+                                        .icon {
+                                            img {
+                                                width: 20px;
+                                            }
+                                            display: inline-block;
+                                            margin-right: 10px;
+                                        }
+                                        .name {
+                                            font-weight: bold;
+                                        }
+                                    }
                                 }
 
                                 .hardware-id {
