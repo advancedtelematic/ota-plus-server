@@ -3546,17 +3546,101 @@ div[role=presentation] {
         }
 
         .packages {
-            padding:0;
-            -webkit-box-shadow: 4px 0px 8px -2px rgba(0,0,0,0.25);
-            -moz-box-shadow: 4px 0px 8px -2px rgba(0,0,0,0.25);
-            box-shadow: 4px 0px 8px -2px rgba(0,0,0,0.25);
+            padding: 0;
+            -webkit-box-shadow: 4px 0px 8px -2px rgba(0, 0, 0, 0.25);
+            -moz-box-shadow: 4px 0px 8px -2px rgba(0, 0, 0, 0.25);
+            box-shadow: 4px 0px 8px -2px rgba(0, 0, 0, 0.25);
             position: relative;
-            z-index:49;
+            z-index: 49;
             min-height: 100vh;
 
             .first-level {
                 height: 80vh;
                 overflow-y: auto;
+            }
+
+            .hide {
+              position: absolute;
+              visibility: hidden;
+            }
+
+            .second-level {
+                li {
+                    padding: 0 !important;
+                    & > span.item {
+                        padding: 15px 30px;
+                        display: block;
+                    }
+                    .row {
+                        min-height: inherit;
+                    }
+                }
+            }
+
+            .versions-details {
+                background-color: #F5F5F5;
+                padding-top: 15px;
+                .right-box, .left-box {
+                    display: block;
+                    margin-bottom: 10px;
+                }
+
+                .director-details {
+                    margin-left: 20px;
+                    .chart-panel {
+                        min-height:250px;
+                    }
+                    .wrapper-center {
+                        justify-content: center;
+                        flex-direction: column;
+                    }
+                    .total-count {
+                        top:50%;
+                        transform: translateY(-50%);
+                    }
+                    .canvas-wrapper {
+                        width:250px;
+                        display: flex;
+                    }
+                }
+
+                span.bold {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    font-weight: 700;
+                    margin-bottom: 10px;
+                    display: block;
+                }
+
+                .hardware-label {
+                    color: #444;
+                    font-size: 12px;
+                    background: transparent;
+                    padding: 0 10px;
+                    border-radius: 10px;
+                    margin-right: 5px;
+                    margin-bottom: 5px;
+                    display: inline-block;
+                    border: 1px solid #444;
+                }
+
+                .versions {
+                    li {
+                        margin: 15px 0;
+                        &:last-child {
+                            border-bottom: none;
+                        }
+                    }
+                }
+
+                .version-info {
+
+                    p {
+                        margin-bottom: 0;
+                        line-height: 19px;
+                    }
+                }
             }
         }
     }

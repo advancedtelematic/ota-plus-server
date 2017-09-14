@@ -11,7 +11,7 @@ import NoMatchPage from './NoMatch';
 import WelcomePage from './Welcome';
 import DestinyPage from './Destiny';
 import FireworksPage from './Fireworks';
-import KeysAndPackages from './KeysAndPackages';
+import SoftwareRepository from './SoftwareRepository';
 
 export {
     HomePage,
@@ -27,5 +27,5 @@ export {
     WelcomePage,
     DestinyPage,
     FireworksPage,
-    KeysAndPackages
+    SoftwareRepository
 }

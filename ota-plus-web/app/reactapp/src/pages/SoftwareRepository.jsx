@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'underscore';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
+import { VelocityTransitionGroup } from 'velocity-react';
 import StatsBlock from '../components/packages/stats/StatsBlock';
 
 const keys = {
@@ -155,21 +156,75 @@ const packages = {
                     "Birds",
                     "L4",
                     "L5"
-                ]
+                ],
+                "versions": {
+                    "ff0c3e0411c9f4bcc530a9a39c3e8164c8f": {
+                        "created" : "Wed Jul 05 2017, 1:46:36 PM",
+                        "updated" : "Wed Jul 05 2017, 1:46:36 PM",
+                        "hash" : "ff0c3e0411c9f4bcc530a9a39c3e8164c8f4",
+                        "length" : "0",
+                        "id": "qemux86-64-ota",
+                        "installedOnEcus": 1
+                    },
+                    "b086ac1ba3c72d573bd92f8b69e13": {
+                        "created" : "Wed Jul 05 2017, 1:46:36 PM",
+                        "updated" : "Wed Jul 05 2017, 1:46:36 PM",
+                        "hash" : "b086ac1ba3c72d573bd92f8b69e13",
+                        "length" : "0",
+                        "id": "qemux86-64-ota",
+                        "installedOnEcus": 1
+                    },
+                }
             },
             "A3": {
                 "keys": [
                     "L6",
                     "L7",
                     "L8"
-                ]
+                ],
+                "versions": {
+                    "ff0c3e0411c9f4bcc530a9a39c3e8164c8f": {
+                        "created" : "Wed Jul 05 2017, 1:46:36 PM",
+                        "updated" : "Wed Jul 05 2017, 1:46:36 PM",
+                        "hash" : "ff0c3e0411c9f4bcc530a9a39c3e8164c8f4",
+                        "length" : "0",
+                        "id": "qemux86-64-ota",
+                        "installedOnEcus": 1
+                    },
+                    "b086ac1ba3c72d573bd92f8b69e13": {
+                        "created" : "Wed Jul 05 2017, 1:46:36 PM",
+                        "updated" : "Wed Jul 05 2017, 1:46:36 PM",
+                        "hash" : "b086ac1ba3c72d573bd92f8b69e13",
+                        "length" : "0",
+                        "id": "qemux86-64-ota",
+                        "installedOnEcus": 1
+                    },
+                }
             },
             "A4": {
                 "keys": [
                     "L3",
                     "L4",
                     "Birds"
-                ]
+                ],
+                "versions": {
+                    "ff0c3e0411c9f4bcc530a9a39c3e8164c8f": {
+                        "created" : "Wed Jul 05 2017, 1:46:36 PM",
+                        "updated" : "Wed Jul 05 2017, 1:46:36 PM",
+                        "hash" : "ff0c3e0411c9f4bcc530a9a39c3e8164c8f4",
+                        "length" : "0",
+                        "id": "qemux86-64-ota",
+                        "installedOnEcus": 1
+                    },
+                    "b086ac1ba3c72d573bd92f8b69e13": {
+                        "created" : "Wed Jul 05 2017, 1:46:36 PM",
+                        "updated" : "Wed Jul 05 2017, 1:46:36 PM",
+                        "hash" : "b086ac1ba3c72d573bd92f8b69e13",
+                        "length" : "0",
+                        "id": "qemux86-64-ota",
+                        "installedOnEcus": 1
+                    },
+                }
             },
             "A5": {
                 "keys": []
@@ -271,7 +326,7 @@ const campaigns = {
 };
 
 @observer
-export default class KeysAndPackages extends Component {
+export default class SoftwareRepository extends Component {
     @observable history = [];
     @observable treeCanvasWidth = 0;
     @observable packagesCanvasWidth = 0;
@@ -283,6 +338,9 @@ export default class KeysAndPackages extends Component {
     @observable clickNumber = 0;
     @observable clickCountObj = {};
     @observable multipleExpand = false;
+    @observable selectedItemObject = {
+        element: '',
+    };
 
     constructor(props) {
         super(props);
@@ -329,9 +387,8 @@ export default class KeysAndPackages extends Component {
         try {
             const { ctx, canvas } = this._getCanvasContext('packages-canvas');
             if (this.selectedDataType === 'package') {
-                let element = document.querySelectorAll('li[data-keys].selected');
-                element.target = element[0];
-                this.selectPackageWithKeys(element)
+                let element = document.querySelectorAll('li[data-keys].selected span.item');
+                this.selectPackageWithKeys(element[0], true)
             } else if (this.selectedDataType === 'campaign') {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 this.drawLineFromCampaign(this.lastClickedElementTitle);
@@ -531,12 +588,21 @@ export default class KeysAndPackages extends Component {
     }
 
     selectPackageWithKeys(e, clear = true, drawLinesToCampaigns = true, removeSelectedClass = true, changeDataType = true) {
+
         if (!e.target) {
             e.target = e;
         }
 
         if (changeDataType) {
             this.selectedDataType = 'package';
+            if (e.target.parentNode.title) {
+                e.target = e.target.parentNode;
+            }
+            if (e.target.title.length !== 0 && e.target !== this.selectedItemObject.element && e.target.title !== this.selectedItemObject.element.title) {
+                this.selectedItemObject = {
+                    element: e.target,
+                }
+            }
         }
 
         if (removeSelectedClass) {
@@ -613,7 +679,6 @@ export default class KeysAndPackages extends Component {
         if (!e.target) {
             e.target = e;
         }
-
         this.selectedDataType = selectedDataType;
 
         let elementsArray = [];
@@ -662,6 +727,34 @@ export default class KeysAndPackages extends Component {
     }
 
     render() {
+        const packagesList = Object.keys(packages.groups).map((group, groupKey) => {
+            return (
+                <li key={Math.floor((Math.random() * 30) + groupKey)}>
+                    <span className="title">{group}</span>
+                    <ul className="second-level">
+                        {Object.keys(packages.groups[group]).map((item, itemKey) => {
+                            const groupItem = packages.groups[group][item];
+                            return (
+                                <li
+                                    key={Math.floor((Math.random() * 1000) + itemKey)}
+                                    className={this.selectedItemObject.element.title === item ? 'selected' : ''}
+                                    onClick={(e) => {
+                                        if (this.selectedItemObject.element && this.selectedItemObject.element.title === item) {
+                                            this.selectedItemObject.element = '';
+                                        } else {
+                                            this.selectPackageWithKeys(e);
+                                        }
+                                    }}
+                                    title={item}
+                                    data-keys={groupItem.keys}><span className="item">{item}</span>
+                                    {this.selectedItemObject.element.title === item ? <ItemVersions groupItem={groupItem} /> : ''}
+                                </li>
+                            )
+                        })}
+                    </ul>
+                </li>
+            )
+        });
         return (
             <div className="software-repository" >
                 <Header title="Software repository" backButtonShown={true}/>
@@ -684,10 +777,7 @@ export default class KeysAndPackages extends Component {
                                 <div className="section-header">Software</div>
                                 <canvas id="packages-canvas" width={this.packagesCanvasWidth} height={this.canvasHeight}/>
                                 <ul className="first-level">
-                                    <List
-                                        data={packages}
-                                        clickHandler={this.selectPackageWithKeys}
-                                        dataType="keys"/>
+                                    {packagesList}
                                 </ul>
                             </div>
                             <div className="col-xs-3 campaigns" onScroll={this.scroll}>
@@ -748,9 +838,11 @@ class TreeUl extends PureComponent {
     }
 }
 
+@observer
 class List extends PureComponent {
+
     render() {
-        const {data, clickHandler, dataType} = this.props;
+        const {data, clickHandler, dataType, selectedItemsList} = this.props;
         const list = Object.keys(data.groups).map((group, groupKey) => {
             return (
                 <li key={Math.floor((Math.random() * 30) + groupKey)}>
@@ -762,44 +854,11 @@ class List extends PureComponent {
                                 return (
                                     <li
                                         key={Math.floor((Math.random() * 1000) + itemKey)}
+                                        className={_.includes(selectedItemsList, item) ? 'selected' : ''}
                                         onClick={clickHandler}
                                         title={item}
-                                        data-keys={groupItem.keys}><span>{item}</span>
-
-                                        <div className="row versions-details ">
-                                            <div className="director-details col-xs-5">
-                                                <p>Distribution by devices</p>
-                                                {groupItem.versions ? <StatsBlock pack={groupItem}/> : ''}
-                                            </div>
-                                            <div className="col-xs-6">
-                                                <p>All versions</p>
-                                                <ul className="versions">
-
-                                                    {groupItem.versions && Object.keys(groupItem.versions).map((version, versionKey) => {
-                                                        const versionItem = groupItem.versions[version];
-                                                        return (
-                                                            <li key={versionKey}>
-                                                                <div className="left-box">
-                                                                    <div className="version-info">
-                                                                        <span className="bold">Version: {version}</span>
-                                                                        <p>Created at: {versionItem.created}</p>
-                                                                        <p>Updated at: {versionItem.updated}</p>
-                                                                        <p>Hash: {versionItem.hash}</p>
-                                                                        <p>Length: {versionItem.length}</p>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="right-box">
-                                                                    <span className="bold">Installed on {versionItem.installedOnEcus} ECU(s)</span>
-                                                                    <span className="bold">Hardware ids: <span className="hardware-label">{versionItem.id}</span></span>
-                                                                </div>
-                                                            </li>
-                                                        )
-                                                    })}
-
-                                                </ul>
-                                            </div>
-                                        </div>
-
+                                        data-keys={groupItem.keys}><span className="item">{item}</span>
+                                        {_.includes(selectedItemsList, item) ? <ItemVersions groupItem={groupItem} /> : ''}
                                     </li>
                                 )
                             } else {
@@ -820,6 +879,60 @@ class List extends PureComponent {
             <div>
                 {list}
             </div>
+        )
+    }
+}
+
+class ItemVersions extends Component {
+    shouldComponentUpdate() {
+        return false;
+    }
+    render () {
+        const {groupItem} = this.props;
+        return (
+            <VelocityTransitionGroup
+                enter={{
+                    animation: "slideDown",
+                }}
+                leave={{
+                    animation: "slideUp",
+                }}
+            >
+                <div className='row versions-details'>
+                    <div className="director-details col-xs-5">
+                        <p>Distribution by devices</p>
+                        {groupItem.versions ? <StatsBlock pack={groupItem}/> : ''}
+                    </div>
+                    <div className="col-xs-6">
+                        <p>All versions</p>
+                        <ul className="versions">
+
+                            {groupItem.versions && Object.keys(groupItem.versions).map((version, versionKey) => {
+                                const versionItem = groupItem.versions[version];
+                                return (
+
+                                    <li key={versionKey}>
+                                        <div className="left-box">
+                                            <div className="version-info">
+                                                <span className="bold">Version: {version}</span>
+                                                <p>Created at: {versionItem.created}</p>
+                                                <p>Updated at: {versionItem.updated}</p>
+                                                <p>Hash: {versionItem.hash}</p>
+                                                <p>Length: {versionItem.length}</p>
+                                            </div>
+                                        </div>
+                                        <div className="right-box">
+                                            <span className="bold">Installed on {versionItem.installedOnEcus} ECU(s)</span>
+                                            <span className="bold">Hardware ids: <span className="hardware-label">{versionItem.id}</span></span>
+                                        </div>
+                                    </li>
+
+                                )
+                            })}
+                        </ul>
+                    </div>
+                </div>
+            </VelocityTransitionGroup>
         )
     }
 }
