@@ -46,7 +46,7 @@ class PrimaryEcu extends Component {
                             onClick={showHardwareOverlay}
                             data-id={dataId}
                         >
-                            <img src="/assets/img/icons/black/icon.png" alt="Icon" />
+                            <img src="/assets/img/icons/black/icon.svg" alt="Icon" />
                         </div>
                         {device.isDirector ? 
                             <div
@@ -55,7 +55,7 @@ class PrimaryEcu extends Component {
                                 onClick={showKey}
                                 onTouchTap={otherProps.handleTouchTap}
                             >
-                                <img src="/assets/img/icons/key.png" alt="Icon" />
+                                <img src="/assets/img/icons/key.svg" alt="Icon" />
                             </div>
                         :
                             null
