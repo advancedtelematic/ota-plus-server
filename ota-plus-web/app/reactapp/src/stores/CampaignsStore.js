@@ -324,7 +324,6 @@ export default class CampaignsStore {
         resetAsync(this.campaignsLaunchAsync, true);
         return axios.post(API_CAMPAIGNS_LAUNCH + '/' + id + '/launch')
             .then(function (response) {
-                this.fetchCampaigns('campaignsSafeFetchAsync');
                 this.campaignsLaunchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
@@ -336,7 +335,6 @@ export default class CampaignsStore {
         resetAsync(this.campaignsLegacyLaunchAsync, true);
         return axios.post(API_CAMPAIGNS_LEGACY_LAUNCH + '/' + id + '/launch')
             .then(function (response) {
-                this.fetchLegacyCampaigns('campaignsLegacySafeFetchAsync');
                 this.campaignsLegacyLaunchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
