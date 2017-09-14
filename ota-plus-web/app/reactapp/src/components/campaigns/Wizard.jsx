@@ -124,7 +124,9 @@ class Wizard extends Component {
                     return wizard.id === props.wizardIdentifier;
                 });
                 if(!wizardMinimized) {
-                    this.handleCampaignCreated();
+                    if(change.object[change.name].status !== 'error') {
+                        this.handleCampaignCreated();
+                    }
                 }
             }
         });
