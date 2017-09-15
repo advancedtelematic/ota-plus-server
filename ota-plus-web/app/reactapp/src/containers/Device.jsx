@@ -210,6 +210,7 @@ class Device extends Component {
                                 installPackage={this.installPackage}
                                 multiTargetUpdate={this.multiTargetUpdate}
                                 device={device}
+                                activeEcu={this.activeEcu}
                             />
                         </span>
                     :
