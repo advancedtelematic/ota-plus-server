@@ -14,7 +14,7 @@ class PropertiesPanel extends Component {
     this.props.packagesStore.fetchOndevicePackages(this.props.device.uuid);
     }
     render() {
-        const { devicesStore, showPackageBlacklistModal, packagesStore, expandedPack, installPackage, multiTargetUpdate, device } = this.props;
+        const { devicesStore, showPackageBlacklistModal, packagesStore, expandedPack, installPackage, multiTargetUpdate, device, activeEcu } = this.props;
         let attributesFetching = packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesForDeviceFetchAsync.isFetching;
         return (
             <div className="properties-panel">
@@ -36,6 +36,7 @@ class PropertiesPanel extends Component {
                                 installPackage={installPackage}
                                 multiTargetUpdate={multiTargetUpdate}
                                 device={device}
+                                activeEcu={activeEcu}
                             />
                         }
                     </div>
