@@ -30,6 +30,7 @@ const WebsocketHandler = (function (wsUrl, stores) {
                     stores.devicesStore._updateDeviceData(data.device, {deviceStatus: data.status});
                     break;
                 case "DeviceCreated":
+                    stores.devicesStore.fetchDevices();
                     break;
                 case "PackageCreated":
                     stores.packagesStore._addPackage(data);
