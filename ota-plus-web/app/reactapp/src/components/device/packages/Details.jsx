@@ -36,7 +36,19 @@ class Details extends Component {
 		let isPackageInstalled = _.find(this.props.packagesStore.installedPackagesPerDevice[this.props.device.uuid], (dev) => {
 			return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
 		});
-		return isPackageInstalled ? isPackageInstalled : false;
+		let installedOnPrimary = false;
+		let installedOnSecondary = false;
+		if(this.props.device.isDirector) {
+		    if(this.props.activeEcu.type === 'primary' && this.props.devicesStore._getPrimaryHash() === version.id.version) {
+			    installedOnPrimary = true;
+		    }
+		    if(this.props.activeEcu.type === 'secondary') {
+		        if(_.includes(this.props.devicesStore._getSecondaryHashes(), version.id.version)) {
+			        installedOnSecondary = true;
+		        }
+		    }
+		}
+		return isPackageInstalled || installedOnPrimary || installedOnSecondary;
 	}
 	isAutoInstallEnabled(version) {
 		let isAutoInstallEnabled = _.find(this.props.packagesStore.deviceAutoInstalledPackages, (packageName) => {
