@@ -7,323 +7,394 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 import { VelocityTransitionGroup } from 'velocity-react';
 import StatsBlock from '../components/packages/stats/StatsBlock';
 
-const keys = {
-    animals: {
-        children: {
-            birds: {},
-            mammals: {
-                children: {
-                    elephant: {},
-                    mouse: {}
-                }
-            },
-            reptiles: {}
+const roles = {
+    "root": {
+        "expires": "12-12-2018 14:15",
+        "keys": [
+            "827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173",
+            "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0",
+            "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd",
+            "d40aa432398d6ed7a41c6f673ef1a4442eb78139d4f8aa4d7dfbae72818dcb37",
+            "c15e364e972e5c2284efa289088ff46c56446a7c89520db45af24ce0190c5ade",
+            "d1772ba9645a816b2a35649887905e091b2baabe8c2f0def1496cebea4632116",
+            "e28adb4dc47b188d609a67b389a3beb61993737e5509d77fdd1b4009a32707f1"
+        ],
+        "thresholds": {
+            "management": 3,
+            "qa": 2
         },
-    },
-    plants: {
-        children: {
-            flowers: {
-                children: {
-                    rose: {},
-                    tulip: {
-                        children: {
-                            l1: {},
-                            l2: {
-                                children: {
-                                    l21: {},
-                                    l22: {},
-                                    l23: {},
-                                }
-                            },
-                            l3: {},
-                            l4: {},
-                            l5: {
-                                children: {
-                                    l51: {},
-                                    l52: {
-                                        children: {
-                                            l521: {},
-                                            l522: {},
-                                            l523: {},
-                                            l524: {},
-                                        }
+        "warnings": [
+            "Warning message 1",
+            "Warning message 2"
+        ],
+        "errors": [
+            "Error message 1"
+        ],
+        "authorises": {
+            "timestamp": {},
+            "snapshot": {},
+            "targets": {
+                "authorises": {
+                    "bsch": {
+                        "authorises": {
+                            "connectivity": {
+                                "authorises": {
+                                    "PL-BT-446 Bluetooth auto-grid TVU": {
+                                        "expires": "12-12-2018 14:15",
+                                        "keys": [
+                                            "827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173",
+                                            "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0",
+                                            "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd",
+                                            "d40aa432398d6ed7a41c6f673ef1a4442eb78139d4f8aa4d7dfbae72818dcb37",
+                                            "c15e364e972e5c2284efa289088ff46c56446a7c89520db45af24ce0190c5ade",
+                                            "d1772ba9645a816b2a35649887905e091b2baabe8c2f0def1496cebea4632116",
+                                            "e28adb4dc47b188d609a67b389a3beb61993737e5509d77fdd1b4009a32707f1"
+                                        ],
+                                        "thresholds": {
+                                            "management": 3,
+                                            "qa": 2
+                                        },
+                                        "warnings": [
+                                            "Warning message 1",
+                                            "Warning message 2"
+                                        ],
+                                        "errors": [
+                                            "Error message 1"
+                                        ]
                                     },
+                                    "PL-AFS-999 Aftersales low energy beamer mod. 2016-2017": {},
+                                    "PL-WF-165 On-board wifi dongle GenII": {}
                                 }
                             },
-                            l6: {},
-                            l7: {},
-                            l8: {},
+                            "diagnostic": {},
+                            "infotainment": {}
                         }
-                    }
-                }
-            },
-            trees: {}
-        }
-    },
-    girls: {
-        children: {
-            one: {
-                children: {
-                    sexy: {}
-                }
-            },
-            two: {
-                children: {
-                    silly: {}
-                }
-            },
-            three: {
-                children: {
-                    mad: {}
+                    },
+                    "cntl": {}
                 }
             }
-        },
-    },
-    boys: {
-        children: {
-            amazing: {},
-        },
-    },
-    cars: {
-        children: {
-            audi: {},
-            bmw: {},
-            mercedes: {},
-            honda: {},
-            porsche: {},
-        },
-    },
-    emotions: {
-        children: {
-            zaebis: {
-                children: {
-                    good: {
-                        children: {
-                            verygood: {
-                                children: {
-                                    pleasurable: {}
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            all: {},
-            ot: {},
-            them: {},
-        },
-    },
-    dogs: {
-        children: {
-            dog: {}
         }
-    },
-    cats: {},
-    hen: {},
-    hencock: {}
+    }
+}
+
+const keys = {
+    "keys": {
+        "827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173": {
+            "owner": {
+                "name": "John",
+                    "position": "SSII",
+                    "company": "ATS Advanced Telematic Systems",
+                    "location": "Kantstrasse 162, 10623 Berlin, Germany",
+                    "phone": "+49 123 45 67 89",
+                    "email": "john@advancedtelematic.com",
+                    "group": "management"
+            }
+        },
+        "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0": {
+            "owner": {
+                "name": "John",
+                    "position": "SSII",
+                    "company": "ATS Advanced Telematic Systems",
+                    "location": "Kantstrasse 162, 10623 Berlin, Germany",
+                    "phone": "+49 123 45 67 89",
+                    "email": "john@advancedtelematic.com",
+                    "group": "management"
+            }
+        },
+        "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd": {
+            "owner": {
+                "name": "John",
+                    "position": "SSII",
+                    "company": "ATS Advanced Telematic Systems",
+                    "location": "Kantstrasse 162, 10623 Berlin, Germany",
+                    "phone": "+49 123 45 67 89",
+                    "email": "john@advancedtelematic.com",
+                    "group": "management"
+            }
+        },
+        "d40aa432398d6ed7a41c6f673ef1a4442eb78139d4f8aa4d7dfbae72818dcb37": {
+            "owner": {
+                "name": "John",
+                    "position": "SSII",
+                    "company": "ATS Advanced Telematic Systems",
+                    "location": "Kantstrasse 162, 10623 Berlin, Germany",
+                    "phone": "+49 123 45 67 89",
+                    "email": "john@advancedtelematic.com",
+                    "group": "developer"
+            }
+        },
+        "c15e364e972e5c2284efa289088ff46c56446a7c89520db45af24ce0190c5ade": {
+            "owner": {
+                "name": "John",
+                    "position": "SSII",
+                    "company": "ATS Advanced Telematic Systems",
+                    "location": "Kantstrasse 162, 10623 Berlin, Germany",
+                    "phone": "+49 123 45 67 89",
+                    "email": "john@advancedtelematic.com",
+                    "group": "developer"
+            }
+        },
+        "d1772ba9645a816b2a35649887905e091b2baabe8c2f0def1496cebea4632116": {
+            "owner": {
+                "name": "John",
+                    "position": "SSII",
+                    "company": "ATS Advanced Telematic Systems",
+                    "location": "Kantstrasse 162, 10623 Berlin, Germany",
+                    "phone": "+49 123 45 67 89",
+                    "email": "john@advancedtelematic.com",
+                    "group": "developer"
+            }
+        },
+        "e28adb4dc47b188d609a67b389a3beb61993737e5509d77fdd1b4009a32707f1": {
+            "owner": {
+                "name": "John",
+                    "position": "SSII",
+                    "company": "ATS Advanced Telematic Systems",
+                    "location": "Kantstrasse 162, 10623 Berlin, Germany",
+                    "phone": "+49 123 45 67 89",
+                    "email": "john@advancedtelematic.com",
+                    "group": "developer"
+            }
+        },
+        "702f1df94aea175bbefa9792050a483754ab791f6c288fd8975182b72856204a": {
+            "owner": {
+                "name": "John",
+                    "position": "SSII",
+                    "company": "ATS Advanced Telematic Systems",
+                    "location": "Kantstrasse 162, 10623 Berlin, Germany",
+                    "phone": "+49 123 45 67 89",
+                    "email": "john@advancedtelematic.com",
+                    "group": "developer"
+            }
+        },
+        "ca22f6e876e25ac2f6415ec79ec5fb88f18259a4676f4317148a02701eaeb936": {
+            "owner": {
+                "name": "John",
+                    "position": "SSII",
+                    "company": "ATS Advanced Telematic Systems",
+                    "location": "Kantstrasse 162, 10623 Berlin, Germany",
+                    "phone": "+49 123 45 67 89",
+                    "email": "john@advancedtelematic.com",
+                    "group": "developer"
+            }
+        },
+        "31f0249019697a3d2f8ae97211b6f168aa7b71abc58e06453af83777df69e74d": {
+            "owner": {
+                "name": "John",
+                    "position": "SSII",
+                    "company": "ATS Advanced Telematic Systems",
+                    "location": "Kantstrasse 162, 10623 Berlin, Germany",
+                    "phone": "+49 123 45 67 89",
+                    "email": "john@advancedtelematic.com",
+                    "group": "qa"
+            }
+        },
+        "0cf1fd1c0ec856b2a3b63f2c43023737212f717b0f34cff48497d772980d433f": {
+            "owner": {
+                "name": "John",
+                    "position": "SSII",
+                    "company": "ATS Advanced Telematic Systems",
+                    "location": "Kantstrasse 162, 10623 Berlin, Germany",
+                    "phone": "+49 123 45 67 89",
+                    "email": "john@advancedtelematic.com",
+                    "group": "qa"
+            }
+        },
+        "e1a84816df7bde2d3f68f66b918d96117355f7c5c4540216a6cdb719251cbb4e": {
+            "owner": {
+                "name": "John",
+                    "position": "SSII",
+                    "company": "ATS Advanced Telematic Systems",
+                    "location": "Kantstrasse 162, 10623 Berlin, Germany",
+                    "phone": "+49 123 45 67 89",
+                    "email": "john@advancedtelematic.com",
+                    "group": "purchase"
+            }
+        },
+        "186a92d443b893b25a7066c81818fee46faabd419122835047579acac800d390": {
+            "owner": {
+                "name": "John",
+                    "position": "SSII",
+                    "company": "ATS Advanced Telematic Systems",
+                    "location": "Kantstrasse 162, 10623 Berlin, Germany",
+                    "phone": "+49 123 45 67 89",
+                    "email": "john@advancedtelematic.com",
+                    "group": "legal"
+            }
+        },
+        "bdaeedc545c02deeb4de7a75f191913ced4f5904bdc2f2c966f019324161a5bc": {
+            "owner": {
+                "name": "John",
+                    "position": "SSII",
+                    "company": "ATS Advanced Telematic Systems",
+                    "location": "Kantstrasse 162, 10623 Berlin, Germany",
+                    "phone": "+49 123 45 67 89",
+                    "email": "john@advancedtelematic.com",
+                    "group": "safety"
+            }
+        },
+        "7addade044409ef9fd6e2c559c67946148fd344904afc5b48eab6cade496750e": {
+            "owner": {
+                "name": "John",
+                    "position": "SSII",
+                    "company": "ATS Advanced Telematic Systems",
+                    "location": "Kantstrasse 162, 10623 Berlin, Germany",
+                    "phone": "+49 123 45 67 89",
+                    "email": "john@advancedtelematic.com",
+                    "group": "customer care"
+            }
+        }
+    }
 }
 
 const packages = {
     "groups": {
-        "A": {
-            "A1": {
-                "keys": [
-                    "L3",
-                    "L4",
-                    "L5"
-                ],
-                "versions": {
-                    "ff0c3e0411c9f4bcc530a9a39c3e8164c8f": {
-                        "created" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "updated" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "hash" : "ff0c3e0411c9f4bcc530a9a39c3e8164c8f4",
-                        "length" : "0",
-                        "id": "qemux86-64-ota",
-                        "installedOnEcus": 1
-                    },
-                    "b086ac1ba3c72d573bd92f8b69e13": {
-                        "created" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "updated" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "hash" : "b086ac1ba3c72d573bd92f8b69e13",
-                        "length" : "0",
-                        "id": "qemux86-64-ota",
-                        "installedOnEcus": 1
-                    },
-                }
-            },
-            "A2": {
-                "keys": [
-                    "Birds",
-                    "L4",
-                    "L5"
-                ],
-                "versions": {
-                    "ff0c3e0411c9f4bcc530a9a39c3e8164c8f": {
-                        "created" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "updated" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "hash" : "ff0c3e0411c9f4bcc530a9a39c3e8164c8f4",
-                        "length" : "0",
-                        "id": "qemux86-64-ota",
-                        "installedOnEcus": 1
-                    },
-                    "b086ac1ba3c72d573bd92f8b69e13": {
-                        "created" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "updated" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "hash" : "b086ac1ba3c72d573bd92f8b69e13",
-                        "length" : "0",
-                        "id": "qemux86-64-ota",
-                        "installedOnEcus": 1
-                    },
-                }
-            },
-            "A3": {
-                "keys": [
-                    "L6",
-                    "L7",
-                    "L8"
-                ],
-                "versions": {
-                    "ff0c3e0411c9f4bcc530a9a39c3e8164c8f": {
-                        "created" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "updated" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "hash" : "ff0c3e0411c9f4bcc530a9a39c3e8164c8f4",
-                        "length" : "0",
-                        "id": "qemux86-64-ota",
-                        "installedOnEcus": 1
-                    },
-                    "b086ac1ba3c72d573bd92f8b69e13": {
-                        "created" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "updated" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "hash" : "b086ac1ba3c72d573bd92f8b69e13",
-                        "length" : "0",
-                        "id": "qemux86-64-ota",
-                        "installedOnEcus": 1
-                    },
-                }
-            },
-            "A4": {
-                "keys": [
-                    "L3",
-                    "L4",
-                    "Birds"
-                ],
-                "versions": {
-                    "ff0c3e0411c9f4bcc530a9a39c3e8164c8f": {
-                        "created" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "updated" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "hash" : "ff0c3e0411c9f4bcc530a9a39c3e8164c8f4",
-                        "length" : "0",
-                        "id": "qemux86-64-ota",
-                        "installedOnEcus": 1
-                    },
-                    "b086ac1ba3c72d573bd92f8b69e13": {
-                        "created" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "updated" : "Wed Jul 05 2017, 1:46:36 PM",
-                        "hash" : "b086ac1ba3c72d573bd92f8b69e13",
-                        "length" : "0",
-                        "id": "qemux86-64-ota",
-                        "installedOnEcus": 1
-                    },
-                }
-            },
-            "A5": {
-                "keys": []
-            }
-        },
         "B": {
-            "B1": {
-                "keys": [
-                    "Animals",
-                    "Mammals",
-                    "Elephant"
-                ]
-            },
-            "B2": {
-                "keys": [
-                    "Plants",
-                    "Mammals",
-                    "Elephant"
-                ]
-            },
-            "b3": {
-                "keys": [
-                    "Mouse",
-                    "Flowers",
-                    "Tulip"
-                ]
+            "bootable-bluetooth_autogrid_tvu.img": {
+                "role": "PL-BT-446 Bluetooth auto-grid TVU",
+                "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
+                "warnings": ["Warning message 1", "Warning message 2"],
+                "errors": ["Error message 1"],
+                "versions": {
+                    "5.0-1.123.33129": {
+                        "created": "Wed Jul 05 2017, 14:45:33",
+                        "updated": "Thu Jul 06 2017, 5:34:56",
+                        "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
+                        "length": "1,2 MB",
+                        "ecus": 130000,
+                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                    },
+                    "4.2-3.775.43998": {
+                        "created": "Wed Jul 05 2017, 14:45:33",
+                        "updated": "Thu Jul 06 2017, 5:34:56",
+                        "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
+                        "length": "1,2 MB",
+                        "ecus": 15000,
+                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                    },
+                    "4.0-4.887.64663": {
+                        "created": "Wed Jul 05 2017, 14:45:33",
+                        "updated": "Thu Jul 06 2017, 5:34:56",
+                        "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
+                        "length": "1,2 MB",
+                        "ecus": 5000,
+                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                    }
+                }
             }
-        },
-        "C": {
-            "C1": {
-                "keys": [
-                    "Birds",
-                    "Plants"
-                ]
+        }, "W": {
+            "wifi_smartdongle.img": {
+                "role": "PL-BT-446 Bluetooth auto-grid TVU",
+                "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0",
+                    "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
+                "warnings": ["Warning message 1", "Warning message 2"],
+                "errors": ["Error message 1"],
+                "versions": {
+                    "5.0-1.123.33129": {
+                        "created": "Wed Jul 05 2017, 14:45:33",
+                        "updated": "Thu Jul 06 2017, 5:34:56",
+                        "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
+                        "length": "1,2 MB",
+                        "ecus": 130000,
+                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                    },
+                    "4.2-3.775.43998": {
+                        "created": "Wed Jul 05 2017, 14:45:33",
+                        "updated": "Thu Jul 06 2017, 5:34:56",
+                        "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
+                        "length": "1,2 MB",
+                        "ecus": 15000,
+                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                    },
+                    "4.0-4.887.64663": {
+                        "created": "Wed Jul 05 2017, 14:45:33",
+                        "updated": "Thu Jul 06 2017, 5:34:56",
+                        "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
+                        "length": "1,2 MB",
+                        "ecus": 5000,
+                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                    }
+                }
             },
-            "C2": {
-                "keys": [
-                    "L1",
-                    "L21",
-                    "L22"
-                ]
-            },
-            "C3": {
-                "keys": [
-                    "Reptiles",
-                    "Flowers",
-                    "Tulip"
-                ]
-            },
-            "c4": {
-                "keys": [
-                    "Birds",
-                    "Trees"
-                ]
+            "wireless2car-adapter.img": {
+                "role": "PL-BT-446 Bluetooth auto-grid TVU",
+                "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
+                "warnings": ["Warning message 1", "Warning message 2"],
+                "errors": ["Error message 1"],
+                "versions": {
+                    "5.0-1.123.33129": {
+                        "created": "Wed Jul 05 2017, 14:45:33",
+                        "updated": "Thu Jul 06 2017, 5:34:56",
+                        "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
+                        "length": "1,2 MB",
+                        "ecus": 130000,
+                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                    },
+                    "4.2-3.775.43998": {
+                        "created": "Wed Jul 05 2017, 14:45:33",
+                        "updated": "Thu Jul 06 2017, 5:34:56",
+                        "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
+                        "length": "1,2 MB",
+                        "ecus": 15000,
+                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                    },
+                    "4.0-4.887.64663": {
+                        "created": "Wed Jul 05 2017, 14:45:33",
+                        "updated": "Thu Jul 06 2017, 5:34:56",
+                        "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
+                        "length": "1,2 MB",
+                        "ecus": 5000,
+                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                    }
+                }
             }
         }
     }
-};
+}
 
 const campaigns = {
-    groups: {
-        'Finished': {
-            'Finished Campaign 1': {
-                packages: ['A1','A4']
+    "groups": {
+        "Nomad IV (2017)": {
+            "UPD-NM401-X33 Nomad 4 (all) wireless connectivity vulnerability BG7837 fix": {
+                "launched": "Mon Oct 02 2017, 12:00:00",
+                "started": "Mon Oct 02 2017, 12:00:00",
+                "end": "Fri Oct 27 2017, 23:59:59",
+                "dynamic": false,
+                "autostop": true,
+                "ecus": ["bluetooth controller", "wifi manager", "IVI"],
+                "packages": ["bootable-bluetooth_autogrid_tvu.img", "wifi_smartdongle.img", "wireless2car-adapter.img"],
+                "groups": ["Nomad 4 CC", "Nomad 4 3 doors diesel MT", "Nomad 4 3 doors gasoline AT", "Nomad 4 5 doors diesel MT", "Nomad 4 5 doors diesel AT", "Nomad 4 5 doors gasoline AT", "Nomad 4 SW diesel AT", "Nomad 4 SW gasoline AT"],
+                "impacted": 304003,
+                "success": 1,
+                "failure": 2,
+                "queued": 304000,
+                "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
+                "warnings": ["Warning message 1", "Warning message 2"],
+                "errors": ["Error message 1"]
             },
-            'Finished Campaign 2': {
-                packages: ['A2','A3']
-            },
-            'Finished Campaign 3': {
-                packages: ['B1','C1']
-            },
+            "UPD-NM401-X31 Nomad 4 (all) airbag sensor sensibility BG8852 fix": {
+                "launched": "Mon Oct 02 2017, 12:00:00",
+                "started": "Mon Oct 02 2017, 12:00:00",
+                "end": "Fri Oct 27 2017, 23:59:59",
+                "dynamic": false,
+                "autostop": true,
+                "ecus": ["bluetooth controller", "wifi manager", "IVI"],
+                "packages": ["bootable-bluetooth_autogrid_tvu.img", "wifi_smartdongle.img", "wireless2car-adapter.img"],
+                "groups": ["Nomad 4 CC", "Nomad 4 3 doors diesel MT", "Nomad 4 3 doors gasoline AT", "Nomad 4 5 doors diesel MT", "Nomad 4 5 doors diesel AT", "Nomad 4 5 doors gasoline AT", "Nomad 4 SW diesel AT", "Nomad 4 SW gasoline AT"],
+                "impacted": 304003,
+                "success": 1,
+                "failure": 2,
+                "queued": 304000,
+                "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
+                "warnings": ["Warning message 1", "Warning message 2"],
+                "errors": ["Error message 1"]
+            }
         },
-        'In preparation': {
-            'In preparation 1': {
-                packages: ['C1']
-            },
-            'In preparation 2': {
-                packages: ['C2','C3']
-            },
-            'In preparation 3': {
-                packages: ['B3']
-            },
-        },
-        'Running': {
-            'Running 1': {
-                packages: ['B1','A5','A4']
-            },
-            'Running 2': {
-                packages: ['B2']
-            },
-            'Running 3': {
-                packages: ['A3']
-            },
-            'Running 4': {
-                packages: ['A3']
-            },
-        },
+        "Nomad III Phase 2 (2012)": {},
+        "Roamer 6 (2016)": {},
+        "Colossus X Phase 3 (2010)": {}
     }
-};
+}
 
 @observer
 export default class SoftwareRepository extends Component {
@@ -728,6 +799,10 @@ export default class SoftwareRepository extends Component {
 
     render() {
         const packagesList = Object.keys(packages.groups).map((group, groupKey) => {
+            // let packages = [];
+            // groupItem.packages.map(packageItem => {
+            //     packages.push(packageItem.replace(/[&\/\\#,+()$~%_.'":*?<>{}]/g, ''))
+            // })
             return (
                 <li key={Math.floor((Math.random() * 30) + groupKey)}>
                     <span className="title">{group}</span>
@@ -745,7 +820,7 @@ export default class SoftwareRepository extends Component {
                                             this.selectPackageWithKeys(e);
                                         }
                                     }}
-                                    title={item}
+                                    title={item.replace(/[&\/\\#,+()$~%_.'":*?<>{}]/g, '')}
                                     data-keys={groupItem.keys}><span className="item">{item}</span>
                                     {this.selectedItemObject.element.title === item ? <ItemVersions groupItem={groupItem} /> : ''}
                                 </li>
@@ -766,7 +841,7 @@ export default class SoftwareRepository extends Component {
                                 <canvas id="tree-canvas" width={this.treeCanvasWidth} height={this.canvasHeight}/>
                                 <div className="wrapper-software" onScroll={this.scroll}>
                                     <TreeUl
-                                        data={keys}
+                                        data={roles}
                                         shown={true}
                                         drawLinesFromKeys={this.handleClickType}
                                         openTreeNode={this.openTreeNode}
@@ -799,10 +874,26 @@ export default class SoftwareRepository extends Component {
 
 @observer
 class TreeUl extends PureComponent {
-    @observable tmpIntervalId = null;
+    @observable showUserInfo = false;
+    @observable userInfo = {};
     constructor(props) {
         super(props);
     }
+
+    showInfo(e) {
+        e.stopPropagation();
+        e.target.nextSibling.classList.toggle('hide');
+    }
+
+    getUserInfo(object,e) {
+        if (this.userInfo.email && object.email === this.userInfo.email) {
+            this.showUserInfo = !this.showUserInfo;
+        } else {
+            this.showUserInfo = true;
+        }
+        this.userInfo = object;
+    }
+
     render() {
         const { data, shown, drawLinesFromKeys, openTreeNode } = this.props;
         return (
@@ -822,10 +913,48 @@ class TreeUl extends PureComponent {
                                 {Object.keys(items).length
                                     ? <i className="fa fa-angle-right" aria-hidden="true" onClick={openTreeNode}/>
                                     : null}
-                                {key}
+                                <span>{key}</span>
+                                <i onClick={this.showInfo.bind(this)} className="fa fa-bars" aria-hidden="true"/>
+                                <div className="info hide" onClick={(e) => {e.stopPropagation()}}>
+                                    <div className="owners">
+                                        {_.map(items.keys, (key, i) => {
+                                            const person = keys.keys[key].owner;
+                                            return <i className="fa fa-user-o" aria-hidden="true" onClick={this.getUserInfo.bind(this,person)}/>
+                                        })}
+                                    </div>
+                                    {this.showUserInfo ?
+                                        <div className="user-info">
+                                            <ul>
+                                                <li>Name: {this.userInfo.name}</li>
+                                                <li>Company: {this.userInfo.company}</li>
+                                                <li>Email: {this.userInfo.email}</li>
+                                                <li>Telephone: {this.userInfo.phone}</li>
+                                            </ul>
+                                        </div>
+                                    : ''}
+                                    {items.thresholds ?
+                                        <div className="thresholds">
+                                            <div>
+                                                <span className="total">{items.thresholds.qa + items.thresholds.management}</span>
+                                                {items.thresholds.qa} QA | {items.thresholds.management} DEV
+                                            </div>
+                                            <div className="expires">
+                                                Expire date: {items.expires}
+                                            </div>
+                                        </div>
+                                    : ''}
+                                    <div className="warnings">
+                                        {_.map(items.warnings, (warning, key) => {
+                                            return <p><i className="fa fa-exclamation-triangle" aria-hidden="true"/>{warning}</p>
+                                        })}
+                                        {_.map(items.errors, (error, key) => {
+                                            return <p><i className="fa fa-error" aria-hidden="true"/>{error}</p>
+                                        })}
+                                    </div>
+                                </div>
                             </div>
                             <TreeUl
-                                data={items.children}
+                                data={items.authorises}
                                 shown={false}
                                 openTreeNode={openTreeNode}
                                 drawLinesFromKeys={drawLinesFromKeys}
@@ -862,11 +991,15 @@ class List extends PureComponent {
                                     </li>
                                 )
                             } else {
+                                let packages = [];
+                                groupItem.packages.map(packageItem => {
+                                    packages.push(packageItem.replace(/[&\/\\#,+()$~%_.'":*?<>{}]/g, ''))
+                                })
                                 return (
                                     <li
                                         key={Math.floor((Math.random() * 1000) + itemKey)}
                                         onClick={clickHandler}
-                                        data-packages={groupItem.packages}>{item}</li>
+                                        data-packages={packages}>{item}</li>
                                 )
                             }
                         })}
