@@ -604,7 +604,7 @@ export default class SoftwareRepository extends Component {
 
         const { ctx, canvas } = this._getCanvasContext('packages-canvas');
         const elementCoordinates = e.target.getBoundingClientRect();
-        let packages = e.target.dataset.packages.split(',');
+        let packages = e.target.parentNode.dataset.packages.split(',');
 
         if (clear) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -658,14 +658,10 @@ export default class SoftwareRepository extends Component {
 
             ctx.moveTo(elementCoordinates.left - this.treeCanvasWidth + e.target.offsetWidth, elementCoordinates.top - 150 + e.target.offsetHeight / 2)
 
-            if (elementCoordinates.top === campaignCoordinates.top) {
-                ctx.lineTo(elementCoordinates.left - this.treeCanvasWidth + e.target.offsetWidth + 200,elementCoordinates.top - 150 + e.target.offsetHeight / 2);
-            } else {
-                let x = elementCoordinates.left - this.treeCanvasWidth + e.target.offsetWidth + 50;
-                ctx.lineTo(x, elementCoordinates.top - 150 + e.target.offsetHeight / 2);
-                ctx.lineTo(x, campaignCoordinates.top - 150 + campaign.offsetHeight / 2)
-                ctx.lineTo(x + 150, campaignCoordinates.top - 150 + campaign.offsetHeight / 2)
-            }
+            let x = elementCoordinates.left - this.treeCanvasWidth + e.target.offsetWidth + 50;
+            ctx.lineTo(x, elementCoordinates.top - 150 + e.target.offsetHeight / 2);
+            ctx.lineTo(x, campaignCoordinates.top - 150 + campaign.offsetHeight / 2)
+            ctx.lineTo(x + 150, campaignCoordinates.top - 150 + campaign.offsetHeight / 2)
             ctx.stroke();
         })
     }
@@ -736,7 +732,7 @@ export default class SoftwareRepository extends Component {
         if (section === 'all') {
             packagesArray = document.querySelectorAll(`li.selected`);
         } else {
-            packagesArray = document.querySelectorAll(`.${section} li.selected`);
+            packagesArray = document.querySelectorAll(`.${section} span.selected`);
         }
         packagesArray.forEach(packageItem => {
             packageItem.classList.remove('selected');
@@ -1020,8 +1016,12 @@ class TreeUl extends PureComponent {
 @observer
 class List extends PureComponent {
 
+    showInfo(e) {
+        e.target.nextSibling.classList.toggle('hide');
+    }
+
     render() {
-        const {data, clickHandler, dataType, selectedItemsList} = this.props;
+        const {data, clickHandler} = this.props;
         const list = Object.keys(data.groups).map((group, groupKey) => {
             return (
                 <li key={Math.floor((Math.random() * 30) + groupKey)}>
@@ -1029,29 +1029,62 @@ class List extends PureComponent {
                     <ul className="second-level">
                         {Object.keys(data.groups[group]).map((item, itemKey) => {
                             const groupItem = data.groups[group][item];
-                            if (dataType === 'keys') {
-                                return (
-                                    <li
-                                        key={Math.floor((Math.random() * 1000) + itemKey)}
-                                        className={_.includes(selectedItemsList, item) ? 'selected' : ''}
-                                        onClick={clickHandler}
-                                        title={item}
-                                        data-keys={groupItem.keys}><span className="item">{item}</span>
-                                        {_.includes(selectedItemsList, item) ? <ItemVersions groupItem={groupItem} /> : ''}
-                                    </li>
-                                )
-                            } else {
-                                let packages = [];
-                                groupItem.packages.map(packageItem => {
-                                    packages.push(packageItem.replace(/[&\/\\#,+()$~%_.'":*?<>{}]/g, ''))
-                                })
-                                return (
-                                    <li
-                                        key={Math.floor((Math.random() * 1000) + itemKey)}
-                                        onClick={clickHandler}
-                                        data-packages={packages}>{item}</li>
-                                )
-                            }
+
+                            let packages = [];
+                            groupItem.packages.map(packageItem => {
+                                packages.push(packageItem.replace(/[&\/\\#,+()$~%_.'":*?<>{}]/g, ''))
+                            });
+                            const errorWarningIcon = () => {
+                                if (groupItem.errors || (groupItem.errors && groupItem.warnings)) {
+                                    return <i key={Math.floor((Math.random() * 10000))} className="fa fa-error" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
+                                } else if (groupItem.warnings) {
+                                    return <i key={Math.floor((Math.random() * 10000))} className="fa fa-exclamation-triangle" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
+                                } else {
+                                    return null
+                                }
+                            };
+                            return (
+                                <li
+                                    key={Math.floor((Math.random() * 1000) + itemKey)}
+                                    onClick={(e) => {
+                                        this.showInfo(e);
+                                        clickHandler(e,true);
+                                    }}
+                                    data-packages={packages}>
+                                    <span>
+                                        {item}
+                                        {errorWarningIcon()}
+                                    </span>
+                                    <div className="info hide" onClick={e => {e.stopPropagation()}}>
+                                        <ul>
+                                            <li>Launched: <span className="value">{groupItem.launched}</span></li>
+                                            <li>Started: <span className="value">{groupItem.started}</span></li>
+                                            <li>End: <span className="value">{groupItem.end}</span></li>
+                                            <li>Dynamic: <span className="value">{groupItem.dynamic}</span></li>
+                                            <li>Autostop: <span className="value">{groupItem.autostop}</span></li>
+                                            <li>Ecus: <span className="value">{groupItem.ecus}</span></li>
+                                            <li>Groups: <span className="value groups">{
+                                                _.map(groupItem.groups, (group, key) => {
+                                                    return <p key={key}>{group}</p>
+                                                })
+                                            }</span></li>
+                                            <li>Impacted: <span className="value">{groupItem.impacted}</span></li>
+                                            <li>Success: <span className="value">{groupItem.success}</span></li>
+                                            <li>Failure: <span className="value">{groupItem.failure}</span></li>
+                                            <li>Queued: <span className="value">{groupItem.queued}</span></li>
+                                        </ul>
+                                        <div className="warnings">
+                                            {_.map(groupItem.warnings, (warning, key) => {
+                                                return <p><i key={key} className="fa fa-exclamation-triangle" aria-hidden="true"/>{warning}</p>
+                                            })}
+                                            {_.map(groupItem.errors, (error, key) => {
+                                                return <p><i key={key} className="fa fa-error" aria-hidden="true"/>{error}</p>
+                                            })}
+                                        </div>
+                                    </div>
+                                </li>
+                            )
+
                         })}
                     </ul>
                 </li>

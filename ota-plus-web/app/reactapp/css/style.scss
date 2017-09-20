@@ -3483,6 +3483,22 @@ div[role=presentation] {
         top: 50px;
     }
 
+    i.fa-exclamation-triangle {
+        color: #e3ae50;
+        padding-right: 15px;
+        padding-left:5px;
+        font-size: 18px;
+    }
+    i.fa-error {
+        background: url('/assets/img/icons/error.png') no-repeat center;
+        background-size: cover;
+        display: inline-block;
+        width: 28px;
+        height: 22px;
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+
     .wrapper-full {
         .row {
             background-color: #fff;
@@ -3556,8 +3572,53 @@ div[role=presentation] {
                 .second-level {
                     li {
                         border-bottom: none;
+                        padding: 0;
                         min-height: 49px;
+                        span:not(.value) {
+                            display: block;
+                            width:100%;
+                            padding: 15px 30px;
+                        }
                     }
+                }
+            }
+            li[data-packages] {
+
+                span:first-child {
+                    i {
+                        position: absolute;
+                        right:-5px;
+                    }
+                }
+
+                ul {
+                    padding: 15px 20px;
+                    border-top:1px solid #ccc;
+                    background-color: #F7F7F7;
+                    cursor: auto;
+                    li {
+                        padding:0 10px;
+                        min-height: inherit !important;
+                        line-height: 22px;
+                        cursor: auto;
+                        font-weight: bold;
+                        span {
+                            display: block;
+                            font-weight: normal;
+                        }
+
+                        .value {
+                            padding-left: 10px;
+
+                        }
+                    }
+                }
+                .warnings {
+                    background-color: #F7F7F7;
+                    cursor: auto;
+                    border-top: 1px solid #ccc;
+                    border-bottom: 1px solid #ccc;
+                    padding: 20px;
                 }
             }
         }
@@ -3570,22 +3631,6 @@ div[role=presentation] {
             position: relative;
             z-index: 49;
             min-height: 100vh;
-
-            i.fa-exclamation-triangle {
-                color: #e3ae50;
-                padding-right: 15px;
-                padding-left:5px;
-                font-size: 18px;
-            }
-            i.fa-error {
-                background: url('/assets/img/icons/error.png') no-repeat center;
-                background-size: cover;
-                display: inline-block;
-                width: 28px;
-                height: 22px;
-                vertical-align: middle;
-                margin-right: 10px;
-            }
 
             i.fa-owner-orange {
                 background: url('/assets/img/icons/person-hover.png') no-repeat center;
