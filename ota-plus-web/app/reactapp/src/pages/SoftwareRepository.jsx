@@ -254,31 +254,30 @@ const packages = {
                 "role": "PL-BT-446 Bluetooth auto-grid TVU",
                 "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
                 "warnings": ["Warning message 1", "Warning message 2"],
-                "errors": ["Error message 1"],
                 "versions": {
                     "5.0-1.123.33129": {
                         "created": "Wed Jul 05 2017, 14:45:33",
                         "updated": "Thu Jul 06 2017, 5:34:56",
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
                         "length": "1,2 MB",
-                        "ecus": 130000,
-                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                        "installedOnEcus": 130000,
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
                     },
                     "4.2-3.775.43998": {
                         "created": "Wed Jul 05 2017, 14:45:33",
                         "updated": "Thu Jul 06 2017, 5:34:56",
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
                         "length": "1,2 MB",
-                        "ecus": 15000,
-                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                        "installedOnEcus": 15000,
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
                     },
                     "4.0-4.887.64663": {
                         "created": "Wed Jul 05 2017, 14:45:33",
                         "updated": "Thu Jul 06 2017, 5:34:56",
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
                         "length": "1,2 MB",
-                        "ecus": 5000,
-                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                        "installedOnEcus": 5000,
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
                     }
                 }
             }
@@ -295,56 +294,54 @@ const packages = {
                         "updated": "Thu Jul 06 2017, 5:34:56",
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
                         "length": "1,2 MB",
-                        "ecus": 130000,
-                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                        "installedOnEcus": 130000,
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
                     },
                     "4.2-3.775.43998": {
                         "created": "Wed Jul 05 2017, 14:45:33",
                         "updated": "Thu Jul 06 2017, 5:34:56",
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
                         "length": "1,2 MB",
-                        "ecus": 15000,
-                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                        "installedOnEcus": 15000,
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
                     },
                     "4.0-4.887.64663": {
                         "created": "Wed Jul 05 2017, 14:45:33",
                         "updated": "Thu Jul 06 2017, 5:34:56",
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
                         "length": "1,2 MB",
-                        "ecus": 5000,
-                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                        "installedOnEcus": 5000,
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
                     }
                 }
             },
             "wireless2car-adapter.img": {
                 "role": "PL-BT-446 Bluetooth auto-grid TVU",
                 "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
-                "warnings": ["Warning message 1", "Warning message 2"],
-                "errors": ["Error message 1"],
                 "versions": {
                     "5.0-1.123.33129": {
                         "created": "Wed Jul 05 2017, 14:45:33",
                         "updated": "Thu Jul 06 2017, 5:34:56",
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
                         "length": "1,2 MB",
-                        "ecus": 130000,
-                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                        "installedOnEcus": 130000,
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
                     },
                     "4.2-3.775.43998": {
                         "created": "Wed Jul 05 2017, 14:45:33",
                         "updated": "Thu Jul 06 2017, 5:34:56",
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
                         "length": "1,2 MB",
-                        "ecus": 15000,
-                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                        "installedOnEcus": 15000,
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
                     },
                     "4.0-4.887.64663": {
                         "created": "Wed Jul 05 2017, 14:45:33",
                         "updated": "Thu Jul 06 2017, 5:34:56",
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
                         "length": "1,2 MB",
-                        "ecus": 5000,
-                        "hardwareids": ["bt-x91-64bits", "bt-x91-32bits"]
+                        "installedOnEcus": 5000,
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
                     }
                 }
             }
@@ -427,6 +424,7 @@ export default class SoftwareRepository extends Component {
         this.openTreeNode = this.openTreeNode.bind(this);
         this.drawLineBetweenPackagesAndCampaigns = this.drawLineBetweenPackagesAndCampaigns.bind(this);
         this.drawLineFromCampaign = this.drawLineFromCampaign.bind(this);
+        this.showUserInfo = this.showUserInfo.bind(this);
     }
 
     componentDidMount() {
@@ -477,6 +475,20 @@ export default class SoftwareRepository extends Component {
         }
     }
 
+    showUserInfo(e) {
+        const alreadySelectedElements = document.querySelectorAll('i.selected-user');
+        const parent = e.target.parentNode.parentNode.nextSibling;
+        alreadySelectedElements.forEach(el => {
+            el.classList.remove('selected-user');
+        });
+        parent.classList.toggle('hide');
+        if (parent.classList[1] === 'hide') {
+            e.target.classList.remove('selected-user');
+        } else {
+            e.target.classList.add('selected-user');
+        }
+    }
+
     resizeCanvas() {
         let windowWidth = window.innerWidth;
         let relativeElWidth = document.getElementById('keys').offsetWidth;
@@ -520,7 +532,7 @@ export default class SoftwareRepository extends Component {
     }
 
     handleClickType(e) {
-        let element = document.querySelectorAll(`div[title=${e.target.title}`)[0];
+        let element = document.querySelectorAll(`div[title=${e.target.parentNode.title}`)[0];
         this.clickNumber++;
         this.clickCountObj = {
             ...this.clickCountObj,
@@ -695,16 +707,18 @@ export default class SoftwareRepository extends Component {
         }
 
         keys.forEach(keyTitle => {
-            let key = null;
+            let key = [];
 
             if (e.target.dataset.keys) {
-                key = document.querySelectorAll(`div[title*=${keyTitle}`);
+                const iconWithKey = document.querySelectorAll(`i[title*="${keyTitle}"`);
+                const parentElements = this.getParentsUntil(iconWithKey[0],'li');
+                key.push(parentElements.pop());
             } else {
-                key = document.querySelectorAll(`li[title*=${keyTitle}`);
+                key = document.querySelectorAll(`li[title*="${keyTitle}"`);
             }
 
             this.showPackageChildren(key);
-            const keyCoordinates = key[0].getBoundingClientRect()
+            const keyCoordinates = key[0].getBoundingClientRect();
             ctx.beginPath();
             ctx.moveTo(elementCoordinates.right, elementCoordinates.top - 150 + e.target.offsetHeight / 2);
 
@@ -767,7 +781,10 @@ export default class SoftwareRepository extends Component {
                 this.lastClickedElementTitle = e.target.title;
             }
 
-            elementsArray = document.querySelectorAll(`li[data-keys*=${e.target.title}]`);
+            const titles = e.target.querySelectorAll('i[title]');
+            titles.forEach((element) => {
+                elementsArray.push(document.querySelectorAll(`li[data-keys*="${element.title}"]`))
+            });
 
             if (clear) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -778,20 +795,22 @@ export default class SoftwareRepository extends Component {
                 packages.ctx.clearRect(0, 0, packages.canvas.width, packages.canvas.height)
             }
 
-            elementsArray.forEach(element => {
-                this.drawLineBetweenPackagesAndCampaigns(element, false);
-                element.classList.add('selected');
+            elementsArray.forEach(elements => {
+                elements.forEach(element => {
+                    this.drawLineBetweenPackagesAndCampaigns(element, false);
+                    element.classList.add('selected');
 
-                ctx.beginPath();
+                    ctx.beginPath();
 
-                ctx.moveTo(elementCoordinates.left + e.target.offsetWidth, elementCoordinates.top - 150 + e.target.offsetHeight / 2);
-                ctx.lineTo(this.mainLineLength,elementCoordinates.top - 150 + e.target.offsetHeight / 2);
-                let itemOffset = element.getBoundingClientRect().top - 150 + element.offsetHeight / 2;
+                    ctx.moveTo(elementCoordinates.left + e.target.offsetWidth, elementCoordinates.top - 150 + e.target.offsetHeight / 2);
+                    ctx.lineTo(this.mainLineLength,elementCoordinates.top - 150 + e.target.offsetHeight / 2);
+                    let itemOffset = element.getBoundingClientRect().top - 150 + element.offsetHeight / 2;
 
-                ctx.lineTo(this.mainLineLength, itemOffset);
-                ctx.lineTo(this.mainLineLength + this.rightLineLength, itemOffset);
-                ctx.stroke();
-                ctx.beginPath();
+                    ctx.lineTo(this.mainLineLength, itemOffset);
+                    ctx.lineTo(this.mainLineLength + this.rightLineLength, itemOffset);
+                    ctx.stroke();
+                    ctx.beginPath();
+                })
             });
         }
 
@@ -799,30 +818,58 @@ export default class SoftwareRepository extends Component {
 
     render() {
         const packagesList = Object.keys(packages.groups).map((group, groupKey) => {
-            // let packages = [];
-            // groupItem.packages.map(packageItem => {
-            //     packages.push(packageItem.replace(/[&\/\\#,+()$~%_.'":*?<>{}]/g, ''))
-            // })
             return (
-                <li key={Math.floor((Math.random() * 30) + groupKey)}>
+                <li key={Math.floor((Math.random() * 300) + groupKey)}>
                     <span className="title">{group}</span>
                     <ul className="second-level">
                         {Object.keys(packages.groups[group]).map((item, itemKey) => {
                             const groupItem = packages.groups[group][item];
+                            const itemTitle = item.replace(/[&\/\\#,+()$~%_.'":*?<>{}]/g, '');
+                            let person = null;
+
+                            const errorWarningIcon = () => {
+                                if (groupItem.errors || (groupItem.errors && groupItem.warnings)) {
+                                    return <i key={Math.floor((Math.random() * 10000))} className="fa fa-error" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
+                                } else if (groupItem.warnings) {
+                                    return <i key={Math.floor((Math.random() * 10000))} className="fa fa-exclamation-triangle" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
+                                } else {
+                                    return null
+                                }
+                            };
                             return (
                                 <li
-                                    key={Math.floor((Math.random() * 1000) + itemKey)}
-                                    className={this.selectedItemObject.element.title === item ? 'selected' : ''}
+                                    key={Math.floor((Math.random() * 10000) + itemKey)}
+                                    className={this.selectedItemObject.element.title === itemTitle ? 'selected' : ''}
                                     onClick={(e) => {
-                                        if (this.selectedItemObject.element && this.selectedItemObject.element.title === item) {
+                                        if (this.selectedItemObject.element && this.selectedItemObject.element.title === itemTitle) {
                                             this.selectedItemObject.element = '';
                                         } else {
                                             this.selectPackageWithKeys(e);
                                         }
                                     }}
-                                    title={item.replace(/[&\/\\#,+()$~%_.'":*?<>{}]/g, '')}
-                                    data-keys={groupItem.keys}><span className="item">{item}</span>
-                                    {this.selectedItemObject.element.title === item ? <ItemVersions groupItem={groupItem} /> : ''}
+                                    title={itemTitle}
+                                    data-keys={groupItem.keys}>
+                                    <span className="item">
+                                        {item}
+                                        {errorWarningIcon()}
+                                    </span>
+                                    <div className="info" onClick={e => {e.stopPropagation()}}>
+                                        <div className="owners">
+                                            {_.map(groupItem.keys, (key, i) => {
+                                                person = keys.keys[key].owner;
+                                                return <i title={key} key={i} className="fa fa-user-o" aria-hidden="true" onClick={this.showUserInfo.bind(this)}/>
+                                            })}
+                                        </div>
+                                    </div>
+                                    <div className="user-info hide">
+                                        <ul>
+                                            <li>Name: {person.name}</li>
+                                            <li>Company: {person.company}</li>
+                                            <li>Email: {person.email}</li>
+                                            <li>Telephone: {person.phone}</li>
+                                        </ul>
+                                    </div>
+                                    {this.selectedItemObject.element.title === itemTitle ? <ItemVersions groupItem={groupItem} /> : ''}
                                 </li>
                             )
                         })}
@@ -891,7 +938,10 @@ class TreeUl extends PureComponent {
         } else {
             this.showUserInfo = true;
         }
-        this.userInfo = object;
+        this.userInfo = {
+            ...object,
+            element: e.target
+        };
     }
 
     render() {
@@ -909,7 +959,7 @@ class TreeUl extends PureComponent {
                 {_.map(data, (items, key) => {
                     return (
                         <li key={key}>
-                            <div title={key.charAt(0).toUpperCase() + key.slice(1)} onClick={drawLinesFromKeys}>
+                            <div title={key.replace(/[&\/\\#,+()$~%_.' ":*?<>{}]/g, '')} onClick={drawLinesFromKeys}>
                                 {Object.keys(items).length
                                     ? <i className="fa fa-angle-right" aria-hidden="true" onClick={openTreeNode}/>
                                     : null}
@@ -919,7 +969,7 @@ class TreeUl extends PureComponent {
                                     <div className="owners">
                                         {_.map(items.keys, (key, i) => {
                                             const person = keys.keys[key].owner;
-                                            return <i className="fa fa-user-o" aria-hidden="true" onClick={this.getUserInfo.bind(this,person)}/>
+                                            return <i title={key} className={`fa fa-owner ${this.userInfo.element && this.showUserInfo  && this.userInfo.element.title === key ? 'selected-user' : ''}`} aria-hidden="true" onClick={this.getUserInfo.bind(this,person)}/>
                                         })}
                                     </div>
                                     {this.showUserInfo ?
@@ -1017,9 +1067,6 @@ class List extends PureComponent {
 }
 
 class ItemVersions extends Component {
-    shouldComponentUpdate() {
-        return false;
-    }
     render () {
         const {groupItem} = this.props;
         return (
@@ -1031,7 +1078,19 @@ class ItemVersions extends Component {
                     animation: "slideUp",
                 }}
             >
-                <div className='row versions-details'>
+                <div className='row versions-details' onClick={(e) => {e.stopPropagation()}}>
+                    {groupItem.warnings || groupItem.errors ?
+                        <div className="col-xs-12">
+                            <div className="warnings">
+                                {_.map(groupItem.warnings, (warning, key) => {
+                                    return <p><i key={key} className="fa fa-exclamation-triangle" aria-hidden="true"/>{warning}</p>
+                                })}
+                                {_.map(groupItem.errors, (error, key) => {
+                                    return <p><i key={key} className="fa fa-error" aria-hidden="true"/>{error}</p>
+                                })}
+                            </div>
+                        </div>
+                    : ""}
                     <div className="director-details col-xs-5">
                         <p>Distribution by devices</p>
                         {groupItem.versions ? <StatsBlock pack={groupItem}/> : ''}
@@ -1056,7 +1115,9 @@ class ItemVersions extends Component {
                                         </div>
                                         <div className="right-box">
                                             <span className="bold">Installed on {versionItem.installedOnEcus} ECU(s)</span>
-                                            <span className="bold">Hardware ids: <span className="hardware-label">{versionItem.id}</span></span>
+                                            <span className="bold">Hardware ids: {_.map(versionItem.id, (id, key) => {
+                                                return <span key={key} className="hardware-label">{id}</span>
+                                            })}</span>
                                         </div>
                                     </li>
 
