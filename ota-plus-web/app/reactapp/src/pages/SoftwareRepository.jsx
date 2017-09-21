@@ -425,6 +425,7 @@ export default class SoftwareRepository extends Component {
         this.drawLineBetweenPackagesAndCampaigns = this.drawLineBetweenPackagesAndCampaigns.bind(this);
         this.drawLineFromCampaign = this.drawLineFromCampaign.bind(this);
         this.showUserInfo = this.showUserInfo.bind(this);
+        this.deselectAll = this.deselectAll.bind(this);
     }
 
     componentDidMount() {
@@ -439,7 +440,7 @@ export default class SoftwareRepository extends Component {
     _getCanvasContext(id = 'tree-canvas') {
         const canvas = document.getElementById(id);
         const ctx = canvas.getContext('2d');
-        ctx.strokeStyle = '#fa9872';
+        ctx.strokeStyle = '#000';
         ctx.lineCap="round";
         return {
             ctx,
@@ -531,31 +532,15 @@ export default class SoftwareRepository extends Component {
         return parents;
     }
 
-    handleClickType(e) {
+    handleClickType(e, clear = true) {
         let element = document.querySelectorAll(`div[title=${e.target.parentNode.title}`)[0];
-        this.clickNumber++;
-        this.clickCountObj = {
-            ...this.clickCountObj,
-            [this.clickNumber]: {
-                element
-            }
-        };
 
-        if (this.clickCountObj['2'] && this.clickCountObj['1'].element.title === this.clickCountObj['2'].element.title ) {
-            this.selectedDataType = 'key';
-            this.multipleExpand = true;
-            this.clickNumber = 0;
-            this.clickCountObj = {};
-            this.drawLinesFromAllChilds(element);
-        } else {
-            if (this.clickCountObj['2']) {
-                this.clickNumber = 0;
-                this.clickCountObj = {};
-            }
-            this.multipleExpand = false;
-            this.drawLines(element);
-            this.showPackageChildren(element);
+        if (clear) {
+            const { ctx, canvas } = this._getCanvasContext('tree-canvas');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
+
+        this.drawLinesFromAllChilds(element);
     }
 
     showPackageChildren(e) {
@@ -581,6 +566,7 @@ export default class SoftwareRepository extends Component {
             e.currentTarget.parentNode.nextSibling.classList.toggle('shown');
             e.currentTarget.classList.toggle('fa-angle-down');
             e.currentTarget.classList.toggle('fa-angle-right');
+            e.currentTarget.parentNode.classList.toggle('selected')
         } else {
             const ulList = this.getParentsUntil(e[0], 'ul.tree');
             ulList.forEach(ul => {
@@ -727,6 +713,37 @@ export default class SoftwareRepository extends Component {
         });
     }
 
+    resetContext(e) {
+        if (e.target.nextSibling.nextSibling.classList[1] === 'hide') {
+            try {
+                const tree = this._getCanvasContext('tree-canvas');
+                const packages = this._getCanvasContext('packages-canvas');
+                tree.ctx.clearRect(0, 0, tree.canvas.width, tree.canvas.height);
+                packages.ctx.clearRect(0, 0, packages.canvas.width, packages.canvas.height);
+                this.removeSelectedClasses();
+            } catch (e) {}
+        }
+    }
+
+    deselectAll(event) {
+        const selectedElements = document.querySelectorAll('div.info');
+        const version = document.querySelectorAll('.versions-details');
+        const selectedSpans = document.querySelectorAll('span.selected');
+        selectedSpans.forEach(el => {
+            el.classList.toggle('selected')
+        })
+        version.forEach(el => {
+            el.classList.add('hide');
+        });
+        selectedElements.forEach(el => {
+            if (!el.classList[1] && event.target.nextSibling !== el) {
+                el.parentNode.classList.remove('selected');
+                el.classList.toggle('hide')
+                event.target.classList.remove('hide');
+            }
+        })
+    }
+
     removeSelectedClasses(section = 'all') {
         let packagesArray = [];
         if (section === 'all') {
@@ -740,8 +757,8 @@ export default class SoftwareRepository extends Component {
     }
 
     drawLinesFromAllChilds(e) {
-        let allChilds = e.target.parentNode.querySelectorAll('div[title]');
-        this.lastClickedElementTitle = e.target.title;
+        let allChilds = e.parentNode.querySelectorAll('div[title]');
+        this.lastClickedElementTitle = e.title;
 
         if (this.multipleExpand) {
             const canvas = document.getElementById('tree-canvas');
@@ -837,8 +854,10 @@ export default class SoftwareRepository extends Component {
                                     key={Math.floor((Math.random() * 10000) + itemKey)}
                                     className={this.selectedItemObject.element.title === itemTitle ? 'selected' : ''}
                                     onClick={(e) => {
+                                        this.deselectAll(e);
                                         if (this.selectedItemObject.element && this.selectedItemObject.element.title === itemTitle) {
                                             this.selectedItemObject.element = '';
+                                            this.resetContext(e);
                                         } else {
                                             this.selectPackageWithKeys(e);
                                         }
@@ -849,7 +868,7 @@ export default class SoftwareRepository extends Component {
                                         {item}
                                         {errorWarningIcon()}
                                     </span>
-                                    <div className="info" onClick={e => {e.stopPropagation()}}>
+                                    <div className="user-info" onClick={e => {e.stopPropagation()}}>
                                         <div className="owners">
                                             {_.map(groupItem.keys, (key, i) => {
                                                 person = keys.keys[key].owner;
@@ -857,7 +876,7 @@ export default class SoftwareRepository extends Component {
                                             })}
                                         </div>
                                     </div>
-                                    <div className="user-info hide">
+                                    <div className="info hide">
                                         <ul>
                                             <li>Name: {person.name}</li>
                                             <li>Company: {person.company}</li>
@@ -888,6 +907,9 @@ export default class SoftwareRepository extends Component {
                                         shown={true}
                                         drawLinesFromKeys={this.handleClickType}
                                         openTreeNode={this.openTreeNode}
+                                        getCanvasContext={this._getCanvasContext}
+                                        removeClasses={this.removeSelectedClasses}
+                                        deselectAll={this.deselectAll}
                                     />
                                 </div>
                             </div>
@@ -904,7 +926,11 @@ export default class SoftwareRepository extends Component {
                                     <List
                                         data={campaigns}
                                         clickHandler={this.drawLineFromCampaign}
-                                        dataType="campaigns"/>
+                                        dataType="campaigns"
+                                        removeClasses={this.removeSelectedClasses}
+                                        getCanvasContext={this._getCanvasContext}
+                                        deselectAll={this.deselectAll}
+                                    />
                                 </ul>
                             </div>
                         </div>
@@ -921,6 +947,27 @@ class TreeUl extends PureComponent {
     @observable userInfo = {};
     constructor(props) {
         super(props);
+    }
+
+    resetContext(e) {
+        if (e.target.nextSibling.classList[1]) {
+            try {
+                const tree = this.props.getCanvasContext('tree-canvas');
+                const packages = this.props.getCanvasContext('packages-canvas');
+                tree.ctx.clearRect(0, 0, tree.canvas.width, tree.canvas.height);
+                packages.ctx.clearRect(0, 0, packages.canvas.width, packages.canvas.height);
+                this.props.removeClasses();
+            } catch (e) {
+            }
+        }
+        let alreadyOpenedTreeNodes = document.querySelectorAll('div[title] .info:not(.hide)');
+        if (alreadyOpenedTreeNodes.length > 1) {
+            if (e.target.nextSibling === alreadyOpenedTreeNodes[0]) {
+                alreadyOpenedTreeNodes[1].classList.add('hide');
+            } else {
+                alreadyOpenedTreeNodes[0].classList.add('hide');
+            }
+        }
     }
 
     showInfo(e) {
@@ -941,7 +988,7 @@ class TreeUl extends PureComponent {
     }
 
     render() {
-        const { data, shown, drawLinesFromKeys, openTreeNode } = this.props;
+        const { data, drawLinesFromKeys, openTreeNode, getCanvasContext, removeClasses, deselectAll } = this.props;
         return (
             <CSSTransitionGroup
                 transitionName="slide"
@@ -955,13 +1002,19 @@ class TreeUl extends PureComponent {
                 {_.map(data, (items, key) => {
                     return (
                         <li key={key}>
-                            <div title={key.replace(/[&\/\\#,+()$~%_.' ":*?<>{}]/g, '')} onClick={drawLinesFromKeys}>
+                            <div title={key.replace(/[&\/\\#,+()$~%_.' ":*?<>{}]/g, '')} onClick={e => {
+                                const packages = this.props.getCanvasContext('packages-canvas');
+                                packages.ctx.clearRect(0, 0, packages.canvas.width, packages.canvas.height);
+                                deselectAll(e);
+                                this.showInfo(e);
+                                drawLinesFromKeys(e, true);
+                                this.resetContext(e);
+                            }}>
                                 {Object.keys(items).length
                                     ? <i className="fa fa-angle-right" aria-hidden="true" onClick={openTreeNode}/>
                                     : null}
                                 <span>{key}</span>
-                                <i onClick={this.showInfo.bind(this)} className="fa fa-bars" aria-hidden="true"/>
-                                <div className="info hide" onClick={(e) => {e.stopPropagation()}}>
+                                <div className="info hide" onClick={e => {e.stopPropagation()}}>
                                     <div className="owners">
                                         {_.map(items.keys, (key, i) => {
                                             const person = keys.keys[key].owner;
@@ -1004,6 +1057,9 @@ class TreeUl extends PureComponent {
                                 shown={false}
                                 openTreeNode={openTreeNode}
                                 drawLinesFromKeys={drawLinesFromKeys}
+                                getCanvasContext={getCanvasContext}
+                                removeClasses={removeClasses}
+                                deselectAll={deselectAll}
                             />
                         </li>
                     );
@@ -1016,12 +1072,33 @@ class TreeUl extends PureComponent {
 @observer
 class List extends PureComponent {
 
+    resetContext(e) {
+        if (e.target.nextSibling.classList[1] === 'hide') {
+            try {
+                const tree = this.props.getCanvasContext('tree-canvas');
+                const packages = this.props.getCanvasContext('packages-canvas');
+                tree.ctx.clearRect(0, 0, tree.canvas.width, tree.canvas.height);
+                packages.ctx.clearRect(0, 0, packages.canvas.width, packages.canvas.height);
+                this.props.removeClasses();
+                e.target.classList.remove('selected')
+            } catch (e) {}
+        }
+        let alreadyOpenedTreeNodes = document.querySelectorAll('div[title] .info:not(.hide)');
+        if (alreadyOpenedTreeNodes.length > 1) {
+            if (e.target.nextSibling === alreadyOpenedTreeNodes[0]) {
+                alreadyOpenedTreeNodes[1].classList.add('hide');
+            } else {
+                alreadyOpenedTreeNodes[0].classList.add('hide');
+            }
+        }
+    }
+
     showInfo(e) {
         e.target.nextSibling.classList.toggle('hide');
     }
 
     render() {
-        const {data, clickHandler} = this.props;
+        const {data, clickHandler, deselectAll} = this.props;
         const list = Object.keys(data.groups).map((group, groupKey) => {
             return (
                 <li key={Math.floor((Math.random() * 30) + groupKey)}>
@@ -1047,8 +1124,10 @@ class List extends PureComponent {
                                 <li
                                     key={Math.floor((Math.random() * 1000) + itemKey)}
                                     onClick={(e) => {
+                                        deselectAll(e);
                                         this.showInfo(e);
                                         clickHandler(e,true);
+                                        this.resetContext(e);
                                     }}
                                     data-packages={packages}>
                                     <span>
