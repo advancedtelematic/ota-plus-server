@@ -3662,8 +3662,9 @@ div[role=presentation] {
                 }
             }
 
-            .info {
+            .user-info {
                 border-top: 1px solid #f1efef;
+                padding: 0 !important;
                 .owners, .warnings {
                     padding: 0 30px;
                     i {
@@ -3683,7 +3684,7 @@ div[role=presentation] {
                 }
             }
 
-            .user-info {
+            .info {
                 padding: 10px 30px 15px;
                 background-color: #fff;
                 cursor: auto;
@@ -3913,7 +3914,7 @@ div[role=presentation] {
             li {
                 div[title] {
                     span {
-                        background-color: #fa9872;
+                        background-color: #DADADA;
                     }
                 }
             }
