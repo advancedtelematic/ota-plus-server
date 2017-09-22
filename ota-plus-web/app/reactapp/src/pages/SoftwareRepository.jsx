@@ -254,6 +254,11 @@ const packages = {
                 "role": "PL-BT-446 Bluetooth auto-grid TVU",
                 "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
                 "warnings": ["Warning message 1", "Warning message 2"],
+                "errors": ["Error message 1"],
+                "stats": {
+                    "groups": {"Nomad": 70, "Roamer": 20, "Others": 10},
+                    "installationResults": {"success": 95, "failure": 5}
+                },
                 "versions": {
                     "5.0-1.123.33129": {
                         "created": "Wed Jul 05 2017, 14:45:33",
@@ -277,17 +282,21 @@ const packages = {
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
                         "length": "1,2 MB",
                         "installedOnEcus": 5000,
-                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"
+                        ]
                     }
                 }
             }
         }, "W": {
             "wifi_smartdongle.img": {
                 "role": "PL-BT-446 Bluetooth auto-grid TVU",
-                "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0",
-                    "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
+                "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
                 "warnings": ["Warning message 1", "Warning message 2"],
                 "errors": ["Error message 1"],
+                "stats": {
+                    "groups": {"Nomad": 70, "Roamer": 20, "Others": 10},
+                    "installationResults": {"success": 95, "failure": 5}
+                },
                 "versions": {
                     "5.0-1.123.33129": {
                         "created": "Wed Jul 05 2017, 14:45:33",
@@ -311,13 +320,19 @@ const packages = {
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
                         "length": "1,2 MB",
                         "installedOnEcus": 5000,
-                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
+                        "id": [
+                            "bt-x91-64bits", "bt-x91-32bits"]
                     }
                 }
-            },
-            "wireless2car-adapter.img": {
+            }, "wireless2car-adapter.img": {
                 "role": "PL-BT-446 Bluetooth auto-grid TVU",
                 "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
+                "warnings": ["Warning message 1", "Warning message 2"],
+                "errors": ["Error message 1"],
+                "stats": {
+                    "groups": {"Nomad": 70, "Roamer": 20, "Others": 10},
+                    "installationResults": {"success": 95, "failure": 5}
+                },
                 "versions": {
                     "5.0-1.123.33129": {
                         "created": "Wed Jul 05 2017, 14:45:33",
@@ -341,7 +356,8 @@ const packages = {
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
                         "length": "1,2 MB",
                         "installedOnEcus": 5000,
-                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
+                        "id": [
+                            "bt-x91-64bits", "bt-x91-32bits"]
                     }
                 }
             }
@@ -872,7 +888,7 @@ export default class SoftwareRepository extends Component {
                                         <div className="owners">
                                             {_.map(groupItem.keys, (key, i) => {
                                                 person = keys.keys[key].owner;
-                                                return <i title={key} key={i} className="fa fa-user-o" aria-hidden="true" onClick={this.showUserInfo.bind(this)}/>
+                                                return <i title={key} key={i} className="fa fa-owner" aria-hidden="true" onClick={this.showUserInfo.bind(this)}/>
                                             })}
                                         </div>
                                     </div>
@@ -899,7 +915,7 @@ export default class SoftwareRepository extends Component {
                     <div className="container">
                         <div className="row" >
                             <div className="col-xs-3 keys" id="keys">
-                                <div className="section-header">Metadata</div>
+                                <div className="section-header">Roles</div>
                                 <canvas id="tree-canvas" width={this.treeCanvasWidth} height={this.canvasHeight}/>
                                 <div className="wrapper-software" onScroll={this.scroll}>
                                     <TreeUl
@@ -1213,12 +1229,23 @@ class ItemVersions extends Component {
                             </div>
                         </div>
                     : ""}
-                    <div className="director-details col-xs-5">
-                        <p>Distribution by devices</p>
-                        {groupItem.versions ? <StatsBlock pack={groupItem}/> : ''}
+                    <div className="director-details col-xs-12">
+                        <div className="row">
+                            <div className="col-xs-4">
+                                <p>Distribution by devices</p>
+                                {groupItem.versions ? <StatsBlock type="devices" size={{width: '120', height: '120'}} pack={groupItem}/> : ''}
+                            </div>
+                            <div className="col-xs-4">
+                                <p>Distribution by group</p>
+                                {groupItem.stats && groupItem.stats.groups ? <StatsBlock type="groups" size={{width: '120', height: '120'}} pack={groupItem}/> : ''}
+                            </div>
+                            <div className="col-xs-4">
+                                <p>Failure rate</p>
+                                {groupItem.stats && groupItem.stats.installationResults ? <StatsBlock type="results" size={{width: '120', height: '120'}} pack={groupItem}/> : ''}
+                            </div>
+                        </div>
                     </div>
-                    <div className="col-xs-6">
-                        <p>All versions</p>
+                    <div className="col-xs-12">
                         <ul className="versions">
 
                             {groupItem.versions && Object.keys(groupItem.versions).map((version, versionKey) => {
@@ -1226,20 +1253,26 @@ class ItemVersions extends Component {
                                 return (
 
                                     <li key={versionKey}>
-                                        <div className="left-box">
-                                            <div className="version-info">
-                                                <span className="bold">Version: {version}</span>
-                                                <p>Created at: {versionItem.created}</p>
-                                                <p>Updated at: {versionItem.updated}</p>
-                                                <p>Hash: {versionItem.hash}</p>
-                                                <p>Length: {versionItem.length}</p>
+                                        <div className="row">
+                                            <div className="col-xs-6">
+                                                <div className="left-box">
+                                                    <div className="version-info">
+                                                        <span className="bold">Version: {version}</span>
+                                                        <span className="bold">Created at: {versionItem.created}</span>
+                                                        <span className="bold">Updated at: {versionItem.updated}</span>
+                                                        <span className="bold">Hash: {versionItem.hash}</span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="right-box">
-                                            <span className="bold">Installed on {versionItem.installedOnEcus} ECU(s)</span>
-                                            <span className="bold">Hardware ids: {_.map(versionItem.id, (id, key) => {
-                                                return <span key={key} className="hardware-label">{id}</span>
-                                            })}</span>
+                                            <div className="col-xs-6">
+                                                <div className="right-box">
+                                                    <span className="bold">Length: {versionItem.length}</span>
+                                                    <span className="bold">Installed on {versionItem.installedOnEcus} ECU(s)</span>
+                                                    <span className="bold">Hardware ids: {_.map(versionItem.id, (id, key) => {
+                                                        return <span key={key} className="hardware-label">{id}</span>
+                                                    })}</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </li>
 
