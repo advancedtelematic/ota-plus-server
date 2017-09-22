@@ -3433,6 +3433,13 @@ div[role=presentation] {
 }
 .software-repository {
 
+    i.fa-owner {
+        background: url('/assets/img/icons/black/personas_black.svg') no-repeat center;
+        width:24px;
+        height:20px;
+        background-size: contain;
+    }
+
     .page-heading {
         .icon {
             background-image: url('/assets/img/icons/software_repository.png');
@@ -3529,8 +3536,17 @@ div[role=presentation] {
                 display: block;
                 padding: 15px 30px;
             }
+
+            span.selected {
+                border-left: 30px solid #fa9872;
+                color: #000 !important;
+            }
+
             .selected {
-                background-color: #fa9872;
+                &>span:first-child {
+                    border-left: 30px solid #fa9872;
+                    color: #000 !important;
+                }
             }
 
             li {
@@ -3575,6 +3591,7 @@ div[role=presentation] {
                         padding: 0;
                         min-height: 49px;
                         span:not(.value) {
+                            color: #ccc;
                             display: block;
                             width:100%;
                             padding: 15px 30px;
@@ -3655,6 +3672,7 @@ div[role=presentation] {
                     & > span.item {
                         padding: 15px 30px;
                         display: block;
+                        color: #ccc;
                     }
                     .row {
                         min-height: inherit;
@@ -3696,17 +3714,19 @@ div[role=presentation] {
             }
 
             .versions-details {
-                background-color: #F5F5F5;
                 cursor: auto;
                 padding-top: 15px;
                 .right-box, .left-box {
-                    display: block;
+                    width: 100%;
+                    display: inline-block;
                     margin-bottom: 10px;
                 }
 
                 .col-xs-12 {
-                    border-bottom: 1px solid #ccc;
                     margin-bottom: 20px;
+                    &>p {
+                        margin-left: 30px;
+                    }
                 }
 
                 .warnings {
@@ -3731,20 +3751,46 @@ div[role=presentation] {
 
                 .director-details {
                     margin-left: 20px;
+                    display: flex;
+                    .row {
+                        display: flex;
+                        flex-basis: 100%;
+                    }
+                    .col-xs-4 {
+                        &>p {
+                            text-align: center;
+                        }
+                    }
                     .chart-panel {
                         min-height:250px;
+                        display: flex;
                     }
                     .wrapper-center {
                         justify-content: center;
                         flex-direction: column;
                     }
                     .total-count {
-                        top:50%;
+                        top:25%;
+                        font-size: 18px;
                         transform: translateY(-50%);
                     }
                     .canvas-wrapper {
-                        width:250px;
+                        flex-direction: column;
                         display: flex;
+                        justify-content: center;
+                        canvas {
+                            position: inherit;
+                        }
+                    }
+                    .colors-info {
+                        padding-top: 15px;
+                        text-align: left;
+                        .square {
+                            margin-right: 15px;
+                            width: 10px;
+                            height: 10px;
+                            display: inline-block;
+                        }
                     }
                 }
 
@@ -3753,6 +3799,7 @@ div[role=presentation] {
                     overflow: hidden;
                     text-overflow: ellipsis;
                     font-weight: 700;
+                    line-height: 16px;
                     margin-bottom: 10px;
                     display: block;
                 }
@@ -3772,6 +3819,8 @@ div[role=presentation] {
                 .versions {
                     li {
                         margin: 15px 0;
+                        padding: 0 30px !important;
+
                         &:last-child {
                             border-bottom: none;
                         }
@@ -3811,7 +3860,6 @@ div[role=presentation] {
 
                     .owners {
                         display: block;
-                        background-color: #4C5051;
                         padding:5px 15px;
                         -webkit-box-shadow: 0 3px 10px -2px rgba(0,0,0,0.25);
                         -moz-box-shadow: 0 3px 10px -2px rgba(0,0,0,0.25);
@@ -4000,10 +4048,6 @@ div[role=presentation] {
             position: relative !important;
             left: -2px;
             width: 26px;
-        }
-        i.fa-owner {
-            background: url('/assets/img/icons/white/personas_white.png') no-repeat center;
-            background-size: cover;
         }
         i.selected-user {
             &:after {
