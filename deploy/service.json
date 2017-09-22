@@ -11,7 +11,7 @@
     "docker": {
       "image": "${IMAGE_ARTIFACT}",
       "parameters": [{"key": "log-driver", "value": "syslog"},
-                     {"key": "log-opt", "value": "tag=${JOB_NAME}"}],
+                     {"key": "log-opt", "value": "tag=${SERVICE_NAME}"}],
       "forcePullImage": true,
       "network": "BRIDGE",
       "portMappings": [{
@@ -70,7 +70,7 @@
     "PLAY_CRYPTO_SECRET": "${PLAY_CRYPTO_SECRET}",
     "SERVICE_HEALTH_CHECK": "curl --show-error --silent %<host>s:%<port>s/health",
     "SERVICE_IMAGE": "${IMAGE_ARTIFACT}",
-    "SERVICE_NAME": "${JOB_NAME}",
+    "SERVICE_NAME": "${SERVICE_NAME}",
     "SERVICE_SCOPE": "public",
     "SERVICE_TYPE": "websockets",
     "SOTA_CORE_HOST": "${SOTA_CORE_HOST}",
