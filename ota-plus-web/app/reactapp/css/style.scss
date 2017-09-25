@@ -8,6 +8,25 @@
 
 $font: 'akkurat';
 
+.br {
+    width: 100%;
+    height: 85px;
+
+    .bar {
+        width: 3.5%;
+        display: inline-block;
+
+        &:not(:last-child) {
+            margin-right: 1px;
+        }
+
+        &.empty {
+            height: 1px!important;
+            background: transparent;
+        }
+    }
+}
+
 * {
     text-decoration: none;
     list-style: none;
@@ -47,7 +66,7 @@ a {
 }
 
 .barchart {
-    width: 880px;
+    width: 100%;
     
     svg {
         &:first-child {
