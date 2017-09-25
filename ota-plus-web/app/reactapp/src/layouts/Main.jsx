@@ -92,6 +92,14 @@ class Main extends Component {
         this.logoutHandler = observe(this.userStore, (change) => {
             if(change.name === 'ifLogout' && change.object[change.name]) {
                 this.ifLogout = true;
+                let wsUrl = document.getElementById('ws-url').value.replace('bearer', 'logout');
+                this.fakeWebsocketHandler = new WebsocketHandler(wsUrl, {
+                    devicesStore: this.devicesStore,
+                    packagesStore: this.packagesStore,
+                    hardwareStore: this.hardwareStore,
+                    campaignsStore: this.campaignsStore
+                });
+                this.fakeWebsocketHandler.init();
             }
         });
         this.devicesHandler = observe(this.devicesStore, (change) => {
