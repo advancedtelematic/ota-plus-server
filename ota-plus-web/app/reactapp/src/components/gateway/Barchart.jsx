@@ -92,7 +92,8 @@ class Barchart extends Component {
         div.style.left = values.leftPos + 'px';
         div.style.top = values.topPos + 'px';
         div.id = "rect-wrapper";
-        document.body.appendChild(div);
+        div.className = "rect-wrapper";
+        document.getElementsByClassName('barchart')[0].appendChild(div);
 
         let minutesPercentage = currentMinutes / 60 * 100;
         let percentageDiv = document.createElement('div');
@@ -115,7 +116,8 @@ class Barchart extends Component {
                 div.style.left = rectItem.left + 'px';
                 div.style.top = rectItem.top + 'px';
                 div.id = "rect-wrapper-" + index;
-                document.body.appendChild(div);
+                div.className = "rect-wrapper";
+                document.getElementsByClassName('barchart')[0].appendChild(div);
             }
         });
     }

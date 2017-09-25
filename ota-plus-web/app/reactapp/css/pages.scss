@@ -123,8 +123,148 @@
     @include fullHeight;
     background: #fff;
 
-    .wrapper-center {
-        height: calc(100% - 100px);
+    .col {
+        width: 10%;
+        float: left;
+        text-align: center;
+        padding: 10px;
+        position: relative;
+        color: #b8b8b8;
+
+        &:first-child {
+            width: 25%;
+            text-align: left;
+            color: black;
+        }
+
+        &:last-child {
+            width: 5%;
+        }
+    }
+
+    .head {
+        width: 100%;
+        overflow: hidden;
+        border-bottom: 1px solid #e8e8e8;
+
+        .col {
+            font-weight: bold;
+            color: black;
+        }
+    }
+
+    .gateway-list {
+
+        .list-item {
+            overflow: hidden;
+            border-bottom: 1px solid #e8e8e8;
+            cursor: pointer;
+
+            img {
+                width: 18px;
+            }
+
+            .up {
+                width: 0;
+                height: 0;
+                border-left: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-bottom: 10px solid #fe2911;
+                position: absolute;
+                right: 40px;
+                top: 13px;
+            }
+
+            .down {
+                width: 0; 
+                height: 0; 
+                border-left: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-top: 10px solid #77fa3a;
+                position: absolute;
+                right: 40px;
+                top: 13px;
+            }
+
+            .equal {
+                width: 15px;
+                height: 10px;
+                position: absolute;
+                border-top: 4px solid black;
+                border-bottom: 4px solid black;
+                right: 40px;
+                top: 13px;
+            }
+        }
+
+        .details {
+            padding: 15px;
+            border-bottom: 1px solid #e8e8e8;
+            background: #f6f6f6;
+
+            .name {
+                font-weight: bold;
+                margin-bottom: 10px;
+                width: 100%;
+            }
+
+            .top {
+                overflow: hidden;
+                margin-bottom: 35px;
+
+                .alerts {
+                    width: 50%;
+                    float: left;
+
+                    .message {
+                        .icon {
+                            img {
+                                width: 18px;
+                                display: inline-block;
+                                margin-right: 10px;
+                            }
+                        }
+                    }
+                }
+
+                .url {
+                    width: 50%;
+                    float: left;
+                    text-align: right;
+                    font-weight: bold;
+                }
+            }
+
+            .bottom {
+                overflow: hidden;
+                margin-bottom: 35px;
+
+                .item {
+                    display: flex;
+                    flex-direction: column;
+                    width: 18%;
+                    height: 100px;
+                    float: left;
+
+                    &:not(:last-child) {
+                        border-right: 1px solid #e8e8e8;
+                    }
+
+                    &:first-child {
+                        width: 25%;
+                    }
+
+                    .data {
+                        width: 50%;
+                        margin: auto;
+
+                        .field {
+                            margin-left: 15px;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
