@@ -11,9 +11,8 @@ class List extends Component {
     constructor(props) {
         super(props);
     }
-
     render() {
-        const {packagesStore, devicesStore, cancelInstallation, device } = this.props;
+        const {packagesStore, devicesStore, cancelInstallation, cancelMtuUpdate, device } = this.props;
         return (
             <div>
                 {device.isDirector ?
@@ -33,7 +32,10 @@ class List extends Component {
                                                 item={target}
                                                 hardwareId={hardwareId}
                                                 updateId={update.updateId}
+                                                inFlight={update.inFlight}
+                                                deviceId={device.uuid}
                                                 length={target.image.fileinfo.length}
+                                                cancelMtuUpdate={cancelMtuUpdate}
                                                 key={hardwareId}
                                             />
                                         );

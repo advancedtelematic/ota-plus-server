@@ -43,7 +43,6 @@ class Device extends Component {
         this.installPackage = this.installPackage.bind(this);
         this.multiTargetUpdate = this.multiTargetUpdate.bind(this);
         this.selectEcu = this.selectEcu.bind(this);
-        this.cancelInstallation = this.cancelInstallation.bind(this);
         this.clearStepsHistory = this.clearStepsHistory.bind(this);
         this.loadPackageVersionProperties = this.loadPackageVersionProperties.bind(this);
         this.toggleTufUpload = this.toggleTufUpload.bind(this);        
@@ -124,9 +123,6 @@ class Device extends Component {
         this.expandedPack = this.props.packagesStore._getInstalledPackage(installedHash);
         this.props.packagesStore.fetchDirectorDeviceAutoInstalledPackages(this.props.devicesStore.device.uuid, serial);
         this.props.packagesStore._setQueuedTufPackages(this.props.devicesStore.multiTargetUpdates[this.props.devicesStore.device.uuid], serial);
-    }
-    cancelInstallation(requestId) {
-        this.props.packagesStore.cancelInstallation(this.props.devicesStore.device.uuid, requestId);
     }
     clearStepsHistory(e) {
         if(e) e.preventDefault();
