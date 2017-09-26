@@ -55,6 +55,7 @@ class CreateModal extends Component {
                             floatingLabelText="Group name"
                             className="input-wrapper"
                             ref="groupName"
+                            id="group-name"
                             disabled={groupsStore.groupsCreateAsync.isFetching}
                             validations={{minLength: 2}}
                             updateImmediately
@@ -67,13 +68,15 @@ class CreateModal extends Component {
                         <div className="body-actions">
                             <a href="#"
                                 onClick={hide}
-                                className="link-cancel">
+                                className="link-cancel"
+                                id="cancel">
                                 Cancel
                             </a>
                             <FlatButton
                                 label="Add group"
                                 type="submit"
                                 className="btn-main"
+                                id="add"
                                 disabled={this.submitButtonDisabled || groupsStore.groupsCreateAsync.isFetching}
                             />
                         </div>

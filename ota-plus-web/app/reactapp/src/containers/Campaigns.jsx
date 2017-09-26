@@ -81,6 +81,7 @@ class Campaigns extends Component {
                             <div>
                                 <FlatButton
                                     label="Add new campaign"
+                                    id="add-new-campaign"
                                     type="button"
                                     className="btn-main"
                                     onClick={addNewWizard.bind(this, null)}

@@ -32,11 +32,11 @@ class MultiTargetITem extends Component {
                     <div className="right">
                         <div className="cancel">
                             {inFlight ?
-                                <button disabled>
+                                <button id="pending" disabled>
                                     Pending <img src="/assets/img/icons/loading_dots.gif" alt="Icon" />
                                 </button>
                             :
-                                <button onClick={cancelMtuUpdate.bind(this, updateId)}>
+                                <button id="cancel-mtu" onClick={cancelMtuUpdate.bind(this, updateId)}>
                                     Cancel
                                 </button>
                             }
