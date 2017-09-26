@@ -31,7 +31,7 @@ class QueueModal extends Component {
         super(props);
     }
     render() {
-        const { packagesStore, devicesStore, shown, hide, device, cancelInstallation, activeTabId, setQueueModalActiveTabId, anchorEl } = this.props;
+        const { packagesStore, devicesStore, shown, hide, device, cancelInstallation, cancelMtuUpdate, activeTabId, setQueueModalActiveTabId, anchorEl } = this.props;
         const installationStatus = QueueModal.checkStatus(device.deviceStatus);
         const content = (
             <span>
@@ -52,6 +52,7 @@ class QueueModal extends Component {
                                 packagesStore={packagesStore}
                                 devicesStore={devicesStore}
                                 cancelInstallation={cancelInstallation}
+                                cancelMtuUpdate={cancelMtuUpdate}
                                 device={device}
                             />
                         </div>

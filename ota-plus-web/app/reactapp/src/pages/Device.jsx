@@ -16,6 +16,7 @@ class Device extends Component {
     constructor(props) {
         super(props);
         this.cancelInstallation = this.cancelInstallation.bind(this);
+        this.cancelMtuUpdate = this.cancelMtuUpdate.bind(this);
     }
     componentWillMount() {
         this.props.packagesStore.page = 'device';
@@ -38,6 +39,13 @@ class Device extends Component {
     }
     cancelInstallation(requestId) {
         this.props.packagesStore.cancelInstallation(this.props.params.id, requestId);
+    }
+    cancelMtuUpdate(updateId) {
+        let data = {
+            updateId: updateId,
+            deviceId: this.props.params.id
+        };
+        this.props.packagesStore.cancelMtuUpdate(data);
     }
     render() {
         const { devicesStore, packagesStore, hardwareStore, showQueueModal, hideQueueModal, queueModalShown, activeTabId, setQueueModalActiveTabId } = this.props;
@@ -66,6 +74,7 @@ class Device extends Component {
                         hide={hideQueueModal}
                         device={devicesStore.device}
                         cancelInstallation={this.cancelInstallation}
+                        cancelMtuUpdate={this.cancelMtuUpdate}
                         activeTabId={activeTabId}
                         setQueueModalActiveTabId={setQueueModalActiveTabId}
                         anchorEl={this.anchorEl}
