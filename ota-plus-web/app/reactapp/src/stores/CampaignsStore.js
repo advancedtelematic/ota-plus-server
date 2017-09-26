@@ -495,6 +495,12 @@ export default class CampaignsStore {
         });
     }
 
+    @computed get cancelledCampaigns() {
+        return _.filter(this.preparedCampaigns, (campaign) => {
+            return !_.isUndefined(campaign.summary) && campaign.summary.status === "cancelled";
+        });
+    }
+
     @computed get runningCampaigns() {
         return _.filter(this.preparedCampaigns, (campaign) => {
             return !_.isUndefined(campaign.summary) && campaign.summary.status === "launched";
