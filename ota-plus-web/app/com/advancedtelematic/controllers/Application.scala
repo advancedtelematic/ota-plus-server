@@ -117,6 +117,7 @@ class Application @Inject() (ws: WSClient,
 
   private val campaignerProxiedPrefixes: Dispatcher = {
     case (ApiVersion.v2, "campaigns" :: _) => campaignerApiUri
+    case (ApiVersion.v2, "cancel_device_update_campaign" :: _) => campaignerApiUri
   }
 
   /**
