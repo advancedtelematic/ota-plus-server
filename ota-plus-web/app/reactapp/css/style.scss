@@ -25,6 +25,26 @@ $font: 'akkurat';
             background: transparent;
         }
     }
+
+}
+
+.x-axis {
+    border-top: 1px solid black;
+    font-size: 10px;
+    position: relative;
+    height: 25px;
+
+    .time {
+        position: absolute;
+        border-left: 1px solid grey;
+        width: 1px;
+        height: 5px;
+
+        .value {
+            margin-left: -15px;
+            margin-top: 5px;
+        }
+    }
 }
 
 * {
