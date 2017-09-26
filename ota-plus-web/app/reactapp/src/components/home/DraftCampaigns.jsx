@@ -38,6 +38,7 @@ class DraftCampaigns extends Component {
                         <div className="wrapper-center">
                             <FlatButton
                                 label="Add new campaign"
+                                id="add-new-campaign"
                                 type="button"
                                 className="btn-main btn-small btn-add"
                                 onClick={addNewWizard.bind(this, null)}

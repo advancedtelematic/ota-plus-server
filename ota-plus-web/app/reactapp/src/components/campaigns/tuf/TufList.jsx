@@ -21,7 +21,7 @@ class TufList extends Component {
                                 <div className="section-header">
                                     In preparation
                                 </div>
-                                <div className="campaigns-list">
+                                <div className="campaigns-list" id="in-preparation-campaigns">
                                     {campaignsStore.inPreparationCampaigns.length ?
                                         <span>
                                             <div className="heading">
@@ -56,7 +56,7 @@ class TufList extends Component {
                                 <div className="section-header">
                                     Running campaigns
                                 </div>
-                                <div className="campaigns-list">
+                                <div className="campaigns-list" id="running-campaigns">
                                     {campaignsStore.runningCampaigns.length ?
                                         <span>
                                             <div className="heading">
@@ -91,7 +91,7 @@ class TufList extends Component {
                                 <div className="section-header">
                                     Finished campaigns
                                 </div>
-                                <div className="campaigns-list">
+                                <div className="campaigns-list" id="finished-campaigns">
                                     {campaignsStore.finishedCampaigns.length ?
                                         <span>
                                             <div className="heading">
@@ -126,7 +126,7 @@ class TufList extends Component {
                                 <div className="section-header">
                                     Cancelled campaigns
                                 </div>
-                                <div className="campaigns-list">
+                                <div className="campaigns-list" id="cancelled-campaigns">
                                     {campaignsStore.cancelledCampaigns.length ?
                                         <span>
                                             <div className="heading">
@@ -161,7 +161,7 @@ class TufList extends Component {
                             </span>
                         :
                             <span>
-                                <div className="campaigns-list">
+                                <div className="campaigns-list" id="running-campaigns">
                                     {campaignsStore.runningCampaigns.length ?
                                         <span>
                                             <div className="heading">

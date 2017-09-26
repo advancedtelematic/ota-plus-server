@@ -96,10 +96,10 @@ class UploadBox extends Component {
             <div className="heading">
                 Uploading {t('common.packageWithCount', {count: packagesStore.packagesUploading.length})}
                 <a href="#" className="box-toggle pack-box-close" title="Toggle upload box size" onClick={this.close}>
-                    <i className="fa fa-times fa-times-thin" aria-hidden="true"></i>
+                    <i className="fa fa-times fa-times-thin" aria-hidden="true" id="close-upload-box"></i>
                 </a>
                 <a href="#" className="box-toggle pack-box-minimize" title="Toggle upload box size" onClick={this.toggleMode}>
-                    <i className="fa fa-angle-down" aria-hidden="true"></i>
+                    <i className="fa fa-angle-down" aria-hidden="true" id="minimize-upload-box"></i>
                 </a>
             </div>
         );
@@ -112,7 +112,7 @@ class UploadBox extends Component {
                                 Upload is finished
                             </span>
                         :
-                            <span>
+                            <span id="timeleft">
                                 <ConvertTime 
                                     seconds={secondsRemaining}
                                 />
@@ -122,7 +122,7 @@ class UploadBox extends Component {
                     </div>
                     <div className="right">
                         {!uploadFinished ? 
-                            <a href="#" onClick={this.showCancelAllUploadsModal.bind(this, false)}>Cancel all</a>
+                            <a href="#" onClick={this.showCancelAllUploadsModal.bind(this, false)} id="cancel-all-uploads">Cancel all</a>
                         :
                             null
                         }
@@ -133,13 +133,13 @@ class UploadBox extends Component {
                         {_.map(packagesStore.packagesUploading, (upload, index) => {
                             return (
                                 <li key={index}>
-                                    <div className="col name">
+                                    <div className="col name" id="package-name">
                                         {upload.package.name}
                                     </div>
-                                    <div className="col version">
+                                    <div className="col version" id="package-version">
                                         {upload.package.version}
                                     </div>
-                                    <div className="col uploaded">
+                                    <div className="col uploaded" id="uploaded-bytes">
                                         <ConvertBytes 
                                             bytes={upload.uploaded}
                                         />
@@ -148,7 +148,7 @@ class UploadBox extends Component {
                                             bytes={upload.size}
                                         />
                                     </div>
-                                    <div className="col status">
+                                    <div className="col status" id="upload-status">
                                         {upload.progress !== 100 && upload.status === null ?
                                             <Circle
                                                 progress={upload.progress / 100}
@@ -164,16 +164,16 @@ class UploadBox extends Component {
                                             />
                                         :
                                             upload.status == 'success' ?
-                                                <span>
+                                                <span id="success">
                                                     <i className="fa fa-check-circle" aria-hidden="true"></i> Success
                                                 </span>
                                             :
                                                 upload.status == 'error' ?
-                                                    <span>
+                                                    <span id="error">
                                                         <i className="fa fa-exclamation-triangle" aria-hidden="true"></i> Error
                                                     </span>
                                                 :
-                                                    <span>
+                                                    <span id="processing">
                                                         <i className="fa fa-square-o fa-spin"></i> &nbsp;
                                                         <span className="counting black">Processing</span>
                                                     </span>
@@ -181,11 +181,11 @@ class UploadBox extends Component {
                                     </div>
                                     <div className="col action">
                                         {upload.status === null ?
-                                            <a href="#" onClick={this.showCancelUploadModal.bind(this, index)}>
+                                            <a href="#" onClick={this.showCancelUploadModal.bind(this, index)} id="cancel-upload">
                                                 cancel
                                             </a>
                                         :
-                                            <a href="#" onClick={this.removeFromList.bind(this, index)}>
+                                            <a href="#" onClick={this.removeFromList.bind(this, index)} id="remove-from-list">
                                                 remove from list
                                             </a>
                                         }
