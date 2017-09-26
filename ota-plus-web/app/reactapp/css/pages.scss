@@ -2740,6 +2740,10 @@
                     overflow-y: auto;
                     margin-bottom: 20px;
 
+                    &.launched {
+                        height: calc(100vh - 600px);
+                    }
+
                     a.cancel-campaign {
                         &:hover {
                             color: red;

@@ -11,7 +11,7 @@ class TufGroupsList extends Component {
     render() {
         const { showCancelGroupModal, campaignsStore, groupsStore } = this.props;
         return (
-            <div className="container group-list">
+            <div className={"container group-list" + (campaignsStore.campaign.statistics.status === 'launched' ? " launched" : "")}>
                 <div className="row">
                     <div className="col-xs-12">
                         {_.map(campaignsStore.campaign.groups, (groupId, index) => {
