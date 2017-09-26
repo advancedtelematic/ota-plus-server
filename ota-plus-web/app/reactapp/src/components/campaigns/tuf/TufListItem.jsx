@@ -50,7 +50,7 @@ class TufListItem extends Component {
                     {moment(campaign.createdAt).format("DD.MM.YYYY")}
                 </div>
                 <div className="column" id={"campaign-processed-" + campaign.name}>
-                    {type === 'running' || type === 'finished' ?
+                    {type === 'running' || type === 'finished' || type === 'cancelled' ?
                         <span>
                             <span>{totalProcessed}</span>                            
                         </span>
@@ -59,7 +59,7 @@ class TufListItem extends Component {
                     }
                 </div>
                 <div className="column" id={"campaign-affected-" + campaign.name}>
-                    {type === 'running' || type === 'finished' ?
+                    {type === 'running' || type === 'finished' || type === 'cancelled' ?
                         <span>
                             <span>{totalAffected}</span>                            
                         </span>
@@ -68,7 +68,7 @@ class TufListItem extends Component {
                     }
                 </div>
                 <div className="column" id={"campaign-finished-" + campaign.name}>
-                    {type === 'running' || type === 'finished' ?
+                    {type === 'running' || type === 'finished' || type === 'cancelled' ?
                         <span>
                             <span>{totalFinished}</span>
                             /
@@ -79,7 +79,7 @@ class TufListItem extends Component {
                     }
                 </div>
                 <div className="column" id={"campaign-failure-rate-" + campaign.name}>
-                    {type === 'running' || type === 'finished' ?
+                    {type === 'running' || type === 'finished' || type === 'cancelled' ?
                         <span>
                             <span>{failureRate} %</span>
                         </span>
@@ -95,7 +95,7 @@ class TufListItem extends Component {
                                 thickness={5}
                             />
                         </div>
-                    : type === 'running' || type === 'finished' ?
+                    : type === 'running' || type === 'finished' || type === 'cancelled' ?
                         <div className="more-info" id="campaign-more-info">
                             More info
                         </div>
