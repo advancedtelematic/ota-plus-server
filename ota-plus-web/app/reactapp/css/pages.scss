@@ -2400,15 +2400,18 @@
         .director {
 
             .package-name {
-                display: inline-block;
+                float: left;
                 width: 30%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
 
             .in-director {
                 width: 10%;
                 text-align: center;
-                display: inline-block;
-                margin-top: -6px;
+                float: left;
+                margin-top: -4px;
                 margin-left: 10px;
                 margin-right: 5px;
 
@@ -2420,7 +2423,7 @@
             .installed-on-ecus {
                 width: 15%;
                 text-align: center;
-                display: inline-block;
+                float: left;
                 margin-left: 10px;
                 margin-right: 5px;
             }
@@ -2428,8 +2431,7 @@
             .package-versions-nr {
                 width: 10%;
                 text-align: center;
-                display: inline-block;
-                margin-top: -6px;
+                float: left;
                 margin-left: 5px;
                 margin-right: 10px;
             }
