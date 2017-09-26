@@ -123,6 +123,41 @@ class TufList extends Component {
                                         </div>
                                     }
                                 </div>
+                                <div className="section-header">
+                                    Cancelled campaigns
+                                </div>
+                                <div className="campaigns-list">
+                                    {campaignsStore.cancelledCampaigns.length ?
+                                        <span>
+                                            <div className="heading">
+                                                <div></div>
+                                                <div className="column">Name</div>
+                                                <div className="column">Created at</div>
+                                                <div className="column">Processed</div>
+                                                <div className="column">Affected</div>
+                                                <div className="column">Finished</div>
+                                                <div className="column">Failure rate</div>
+                                            </div>
+                                            {_.map(campaignsStore.cancelledCampaigns, (campaign) => {
+                                                return (
+                                                    <CampaignsTufListItem 
+                                                        groupsStore={groupsStore}
+                                                        goToCampaignDetails={goToCampaignDetails}
+                                                        showRenameModal={showRenameModal}
+                                                        campaign={campaign}
+                                                        onHomePage={onHomePage}
+                                                        type="cancelled"
+                                                        key={campaign.id}
+                                                    />
+                                                );
+                                            })}
+                                        </span>
+                                    :
+                                        <div className="empty">
+                                            No cancelled campaigns.
+                                        </div>
+                                    }
+                                </div>
                             </span>
                         :
                             <span>
