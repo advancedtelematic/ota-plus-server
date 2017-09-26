@@ -905,6 +905,13 @@ export default class PackagesStore {
             found.isInstalled = true;
             return found;
         }
+        let foundByHash = _.find(this.packages, (pack) => {
+            return pack.packageHash === version;
+        });
+        if(foundByHash) {
+            foundByHash.isInstalled = true;
+            return foundByHash;
+        }
         return null;
     }
 
