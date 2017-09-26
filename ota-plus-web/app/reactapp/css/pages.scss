@@ -164,15 +164,23 @@
                 width: 18px;
             }
 
+            i {
+                color: #cfaa5c;
+                width: 18px;
+            }
+
+            .value {
+                display: inline-block;
+            }
+
             .up {
                 width: 0;
                 height: 0;
                 border-left: 10px solid transparent;
                 border-right: 10px solid transparent;
                 border-bottom: 10px solid #fe2911;
-                position: absolute;
-                right: 40px;
-                top: 13px;
+                margin-left: 15px;
+                display: inline-block;
             }
 
             .down {
@@ -181,19 +189,17 @@
                 border-left: 10px solid transparent;
                 border-right: 10px solid transparent;
                 border-top: 10px solid #77fa3a;
-                position: absolute;
-                right: 40px;
-                top: 13px;
+                margin-left: 15px;
+                display: inline-block;
             }
 
             .equal {
                 width: 15px;
                 height: 10px;
-                position: absolute;
                 border-top: 4px solid black;
                 border-bottom: 4px solid black;
-                right: 40px;
-                top: 13px;
+                margin-left: 15px;
+                display: inline-block;
             }
         }
 
@@ -217,11 +223,20 @@
                     float: left;
 
                     .message {
+                        margin-bottom: 5px;
+                        
                         .icon {
                             img {
                                 width: 18px;
                                 display: inline-block;
                                 margin-right: 10px;
+                            }
+
+                            i {
+                                width: 18px;
+                                display: inline-block;
+                                margin-right: 10px;
+                                color: #cfaa5c;
                             }
                         }
                     }
@@ -236,22 +251,21 @@
             }
 
             .bottom {
-                overflow: hidden;
                 margin-bottom: 35px;
 
                 .item {
                     display: flex;
                     flex-direction: column;
                     width: 18%;
-                    height: 100px;
-                    float: left;
+                    height: 130px;
+                    display: inline-block;
 
                     &:not(:last-child) {
                         border-right: 1px solid #e8e8e8;
                     }
 
                     &:first-child {
-                        width: 25%;
+                        width: 26%;
                     }
 
                     .data {

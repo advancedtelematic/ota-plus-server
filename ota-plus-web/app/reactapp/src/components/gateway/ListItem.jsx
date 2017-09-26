@@ -23,7 +23,9 @@ class ListItem extends Component {
                 <div className="col">
                     {item.connections ? 
                         <span>
-                            {item.connections.max}/{item.connections.limit}
+                            <div className="value">
+                                {item.connections.max}/{item.connections.limit}
+                            </div>
                             <div className={item.connections.trend}></div>
                         </span>
                     : 
@@ -33,7 +35,9 @@ class ListItem extends Component {
                 <div className="col">
                     {item.bandwidth ? 
                         <span>
-                            {item.bandwidth.connections.total}
+                            <div className="value">
+                                {item.bandwidth.connections.total}
+                            </div>
                             <div className={item.connections.trend}></div>
                         </span>
                     : 
@@ -43,7 +47,9 @@ class ListItem extends Component {
                 <div className="col">
                     {item.bandwidth ? 
                         <span>
-                            {item.bandwidth.upload.total}
+                            <div className="value">
+                                {item.bandwidth.upload.total}
+                            </div>
                             <div className={item.bandwidth.upload.trend}></div>
                         </span>
                     : 
@@ -53,7 +59,9 @@ class ListItem extends Component {
                 <div className="col">
                     {item.bandwidth ? 
                         <span>
-                            {item.bandwidth.download.total}
+                            <div className="value">
+                                {item.bandwidth.download.total}
+                            </div>
                             <div className={item.bandwidth.download.trend}></div>
                         </span>
                     : 
@@ -75,7 +83,13 @@ class ListItem extends Component {
                     }
                 </div>
                 <div className="col">
-                    {item.errors ? <img src="/assets/img/icons/red_cross.png" alt="Icon" /> : null}
+                    {item.errors ? 
+                        <img src="/assets/img/icons/red_cross.png" alt="Icon" /> 
+                    : item.warnings ?
+                        <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    :
+                        null
+                    }
                 </div>
             </div>
         );
