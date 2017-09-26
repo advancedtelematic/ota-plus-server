@@ -6,7 +6,7 @@ import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
 import ListItem from './ListItem';
 import ListItemVersion from './ListItemVersion';
-import { PackagesStatsBlock } from './stats';
+import { PackagesVersionsStats } from './stats';
 import { Loader } from '../../partials';
 
 const headerHeight = 28;
@@ -169,7 +169,7 @@ class List extends Component {
                                                                         Distribution by devices
                                                                     </div>
                                                                     <div className="pie">
-                                                                        <PackagesStatsBlock
+                                                                        <PackagesVersionsStats
                                                                             pack={pack}
                                                                         />
                                                                     </div>
