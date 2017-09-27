@@ -23,8 +23,9 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
   val auth0Url    = s"https://$auth0Domain/api/v2/users/$userId"
   def auth0UserMetadata(value: JsValue): JsValue = JsArray()
 
-  val authPlusUri       = "http://localhost:9001/clients"
-  val authPlusClientUri = s"$authPlusUri/${clientId.underlying.get}"
+  val authPlusUri = "http://auth-plus.com"
+  val authPlusClientsUri = s"$authPlusUri/clients"
+  val authPlusClientUri = s"$authPlusClientsUri/${clientId.underlying.get}"
   val clientInfo = Json.obj(
     "client_id"                 -> clientId.underlying.get,
     "client_name"               -> "Test Client",
@@ -34,12 +35,13 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
   val userIdWithNoClients   = "auth0|useridwithnoclients"
   val auth0UrlWithNoClients = s"https://auth0test/api/v2/users/$userIdWithNoClients"
 
-  val userApplications = s"http://localhost:8085/api/v1/users/${userId}/applications"
-  val userNoApplications = s"http://localhost:8085/api/v1/users/${userIdWithNoClients}/applications"
+  val userProfileUri = "http://user-profile.com"
+  val userApplications = s"$userProfileUri/api/v1/users/${userId}/applications"
+  val userNoApplications = s"$userProfileUri/api/v1/users/${userIdWithNoClients}/applications"
   val userNoApplicationsClientId = s"${userNoApplications}/${clientId.underlying.get}"
 
   val mockClient = MockWS {
-    case (POST, `authPlusUri`) =>
+    case (POST, `authPlusClientsUri`) =>
       Action { Ok(clientInfo) }
     case (GET, `authPlusClientUri`) =>
       Action { Ok(clientInfo) }
@@ -55,6 +57,8 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
 
   val application = new GuiceApplicationBuilder()
     .configure("auth0.domain" -> auth0Domain)
+    .configure("authplus.uri" -> authPlusUri)
+    .configure("userprofile.uri" -> userProfileUri)
     .overrides(bind[WSClient].to(mockClient))
     .build
 
