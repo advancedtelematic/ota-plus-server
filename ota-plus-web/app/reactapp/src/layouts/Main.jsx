@@ -353,7 +353,7 @@ class Main extends Component {
                                 Uploading {this.props.t('common.packageWithCount', {count: this.packagesStore.packagesUploading.length})}
                             </div>
                             <div className="actions">
-                                <a href="#" className="box-toggle box-maximize" title="Maximize wizard" onClick={this.toggleUploadBoxMode.bind(this)}>
+                                <a href="#" id="maximize-upload-box" className="box-toggle box-maximize" onClick={this.toggleUploadBoxMode.bind(this)}>
                                     <i className="fa fa-angle-up" aria-hidden="true"></i>
                                 </a>                           
                             </div>
@@ -376,7 +376,7 @@ class Main extends Component {
                                     }
                                 </div>
                                 <div className="actions">
-                                    <a href="#" className="box-toggle box-maximize" title="Maximize wizard" onClick={this.toggleWizard.bind(this, wizard.id, wizard.name)}>
+                                    <a href="#" id="maximize-wizard" className="box-toggle box-maximize" title="Maximize wizard" onClick={this.toggleWizard.bind(this, wizard.id, wizard.name)}>
                                         <i className="fa fa-angle-up" aria-hidden="true"></i>
                                     </a>
                                 </div>
