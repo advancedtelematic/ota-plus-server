@@ -55,6 +55,7 @@ class Main extends Component {
         axios.interceptors.response.use(null, (error) => {
             if (error.response && (error.response.status === 401 || error.response.status === 403)) {
                 this.ifLogout = true;
+                this.callFakeWsHandler();
             }
             return Promise.reject(error);
         });
@@ -73,6 +74,7 @@ class Main extends Component {
         this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
         this.goToCampaignDetails = this.goToCampaignDetails.bind(this);
         this.toggleOtaPlusMode = this.toggleOtaPlusMode.bind(this);
+        this.callFakeWsHandler = this.callFakeWsHandler.bind(this);
         this.devicesStore = new DevicesStore();
         this.hardwareStore = new HardwareStore();
         this.groupsStore = new GroupsStore();
@@ -92,14 +94,7 @@ class Main extends Component {
         this.logoutHandler = observe(this.userStore, (change) => {
             if(change.name === 'ifLogout' && change.object[change.name]) {
                 this.ifLogout = true;
-                let wsUrl = document.getElementById('ws-url').value.replace('bearer', 'logout');
-                this.fakeWebsocketHandler = new WebsocketHandler(wsUrl, {
-                    devicesStore: this.devicesStore,
-                    packagesStore: this.packagesStore,
-                    hardwareStore: this.hardwareStore,
-                    campaignsStore: this.campaignsStore
-                });
-                this.fakeWebsocketHandler.init();
+                this.callFakeWsHandler();
             }
         });
         this.devicesHandler = observe(this.devicesStore, (change) => {
@@ -119,6 +114,16 @@ class Main extends Component {
         });
         this.makeBodyWhite();
         this.makeBodyGradient();
+    }
+    callFakeWsHandler() {
+        let wsUrl = document.getElementById('ws-url').value.replace('bearer', 'logout');
+        this.fakeWebsocketHandler = new WebsocketHandler(wsUrl, {
+            devicesStore: this.devicesStore,
+            packagesStore: this.packagesStore,
+            hardwareStore: this.hardwareStore,
+            campaignsStore: this.campaignsStore
+        });
+        this.fakeWebsocketHandler.init();
     }
     componentWillMount() {
         this.router = this.context.router;
