@@ -39,6 +39,7 @@ class WizardStep1 extends Component {
                                     className="input-wrapper"
                                     id="add-campaign-name"
                                     value={campaignName}
+                                    title="Select campaign name"
                                     updateImmediately
                                     required
                                 />
