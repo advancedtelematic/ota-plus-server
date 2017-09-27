@@ -27,9 +27,6 @@ const roles = {
             "Warning message 1",
             "Warning message 2"
         ],
-        "errors": [
-            "Error message 1"
-        ],
         "authorises": {
             "timestamp": {},
             "snapshot": {},
@@ -254,9 +251,8 @@ const packages = {
                 "role": "PL-BT-446 Bluetooth auto-grid TVU",
                 "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
                 "warnings": ["Warning message 1", "Warning message 2"],
-                "errors": ["Error message 1"],
                 "stats": {
-                    "groups": {"Nomad": 70, "Roamer": 20, "Others": 10},
+                    "groups": {"Nomad Fancy String": 70, "Roamer": 20, "Others": 10},
                     "installationResults": {"success": 95, "failure": 5}
                 },
                 "versions": {
@@ -376,36 +372,47 @@ const campaigns = {
                 "autostop": true,
                 "ecus": ["bluetooth controller", "wifi manager", "IVI"],
                 "packages": ["bootable-bluetooth_autogrid_tvu.img", "wifi_smartdongle.img", "wireless2car-adapter.img"],
-                "groups": ["Nomad 4 CC", "Nomad 4 3 doors diesel MT", "Nomad 4 3 doors gasoline AT", "Nomad 4 5 doors diesel MT", "Nomad 4 5 doors diesel AT", "Nomad 4 5 doors gasoline AT", "Nomad 4 SW diesel AT", "Nomad 4 SW gasoline AT"],
-                "impacted": 304003,
-                "success": 1,
-                "failure": 2,
-                "queued": 304000,
+                "groups": {
+                    "Nomad 4 CC": {"total": "10.000", "processed": 90},
+                    "Nomad 4 3 doors diesel MT": {"total": "10.000", "processed": 90},
+                    "Nomad 4 3 doors gasoline AT": {"total": "10.000", "processed": 90}
+                },
+                "processed": "90.000",
+                "affected": "80.000",
+                "success": "70.000",
+                "failure": "5.000",
+                "queued": "5.000",
+                "notImpacted": "10.000",
+                "notProcessed": "10.000",
                 "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
                 "warnings": ["Warning message 1", "Warning message 2"],
                 "errors": ["Error message 1"]
-            },
-            "UPD-NM401-X31 Nomad 4 (all) airbag sensor sensibility BG8852 fix": {
+            }, "UPD-NM401-X31 Nomad 4 (all) airbag sensor sensibility BG8852 fix": {
                 "launched": "Mon Oct 02 2017, 12:00:00",
                 "started": "Mon Oct 02 2017, 12:00:00",
                 "end": "Fri Oct 27 2017, 23:59:59",
                 "dynamic": false,
                 "autostop": true,
-                "ecus": ["bluetooth controller", "wifi manager", "IVI"],
+                "ecus": ["bluetooth controller", "wifi manager",
+                    "IVI"],
                 "packages": ["bootable-bluetooth_autogrid_tvu.img", "wifi_smartdongle.img", "wireless2car-adapter.img"],
-                "groups": ["Nomad 4 CC", "Nomad 4 3 doors diesel MT", "Nomad 4 3 doors gasoline AT", "Nomad 4 5 doors diesel MT", "Nomad 4 5 doors diesel AT", "Nomad 4 5 doors gasoline AT", "Nomad 4 SW diesel AT", "Nomad 4 SW gasoline AT"],
-                "impacted": 304003,
-                "success": 1,
-                "failure": 2,
-                "queued": 304000,
+                "groups": {
+                    "Nomad 4 CC": {"total": "10.000", "processed": 90},
+                    "Nomad 4 3 doors diesel MT": {"total": "10.000", "processed": 90},
+                    "Nomad 4 3 doors gasoline AT": {"total": "10.000", "processed": 90}
+                },
+                "processed": "90.000",
+                "affected": "80.000",
+                "success": "70.000",
+                "failure": "5.000",
+                "queued": "5.000",
+                "notImpacted": "10.000",
+                "notProcessed": "10.000",
                 "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
                 "warnings": ["Warning message 1", "Warning message 2"],
                 "errors": ["Error message 1"]
             }
-        },
-        "Nomad III Phase 2 (2012)": {},
-        "Roamer 6 (2016)": {},
-        "Colossus X Phase 3 (2010)": {}
+        }, "Nomad III Phase 2 (2012)": {}, "Roamer 6 (2016)": {}, "Colossus X Phase 3 (2010)": {}
     }
 }
 
@@ -419,8 +426,6 @@ export default class SoftwareRepository extends Component {
     @observable rightLineLength = 35;
     @observable lastClickedElementTitle = '';
     @observable selectedDataType = '';
-    @observable clickNumber = 0;
-    @observable clickCountObj = {};
     @observable multipleExpand = false;
     @observable selectedItemObject = {
         element: '',
@@ -549,7 +554,11 @@ export default class SoftwareRepository extends Component {
     }
 
     handleClickType(e, clear = true) {
+        if (!e.target) {
+            e.target = e;
+        }
         let element = document.querySelectorAll(`div[title=${e.target.parentNode.title}`)[0];
+        this.multipleExpand = true;
 
         if (clear) {
             const { ctx, canvas } = this._getCanvasContext('tree-canvas');
@@ -619,21 +628,20 @@ export default class SoftwareRepository extends Component {
 
         packages.forEach(packageTitle => {
             let packageItem = document.querySelector(`li[title*=${packageTitle}`);
-            let packageCoordinates = packageItem.getBoundingClientRect();
+            let packageCoordinates = packageItem.childNodes[0].getBoundingClientRect();
 
             this.selectPackageWithKeys(packageItem, false, false, false, false);
 
             ctx.beginPath();
             ctx.moveTo(window.innerWidth - e.target.offsetWidth, elementCoordinates.top - 150 + e.target.offsetHeight / 2);
-
             let x = window.innerWidth - this.treeCanvasWidth - e.target.offsetWidth;
 
             if (elementCoordinates.top === packageCoordinates.top) {
-                ctx.lineTo(x - 200,elementCoordinates.top - 150 + e.target.offsetHeight / 2);
+                ctx.lineTo(packageCoordinates.right - packageItem.childNodes[0].offsetWidth + 1, elementCoordinates.top - 150 + e.target.offsetHeight / 2);
             } else {
-                ctx.lineTo(x - 50,elementCoordinates.top - 150 + e.target.offsetHeight / 2);
-                ctx.lineTo(x - 50,packageCoordinates.top - 150 + packageItem.offsetHeight / 2);
-                ctx.lineTo(x - 150,packageCoordinates.top - 150 + packageItem.offsetHeight / 2);
+                ctx.lineTo(x - 15,elementCoordinates.top - 150 + e.target.offsetHeight / 2);
+                ctx.lineTo(x - 15,packageCoordinates.top - 150 + packageItem.childNodes[0].offsetHeight / 2);
+                ctx.lineTo(packageCoordinates.right - packageItem.childNodes[0].offsetWidth + 1, packageCoordinates.top - 150 + packageItem.childNodes[0].offsetHeight / 2);
             }
 
             ctx.stroke();
@@ -651,19 +659,22 @@ export default class SoftwareRepository extends Component {
         }
 
         const allCampaigns = document.querySelectorAll(`li[data-packages*=${e.target.title}`);
-        const elementCoordinates = e.target.getBoundingClientRect();
+        const elementCoordinates = e.target.childNodes[0].getBoundingClientRect();
 
         allCampaigns.forEach(campaign => {
             campaign.classList.add('selected');
-            const campaignCoordinates = campaign.getBoundingClientRect();
+            const campaignCoordinates = campaign.childNodes[0].getBoundingClientRect();
+            const targetOffsetHeight = e.target.childNodes[0].offsetHeight;
+            const targetOffsetWidth = e.target.childNodes[0].offsetWidth ;
+
             ctx.beginPath();
 
-            ctx.moveTo(elementCoordinates.left - this.treeCanvasWidth + e.target.offsetWidth, elementCoordinates.top - 150 + e.target.offsetHeight / 2)
+            ctx.moveTo(elementCoordinates.left - this.treeCanvasWidth + targetOffsetWidth, elementCoordinates.top - 150 + targetOffsetHeight / 2)
 
-            let x = elementCoordinates.left - this.treeCanvasWidth + e.target.offsetWidth + 50;
-            ctx.lineTo(x, elementCoordinates.top - 150 + e.target.offsetHeight / 2);
+            let x = elementCoordinates.left - this.treeCanvasWidth + targetOffsetWidth + 20;
+            ctx.lineTo(x, elementCoordinates.top - 150 + targetOffsetHeight / 2);
             ctx.lineTo(x, campaignCoordinates.top - 150 + campaign.offsetHeight / 2)
-            ctx.lineTo(x + 150, campaignCoordinates.top - 150 + campaign.offsetHeight / 2)
+            ctx.lineTo(x + 40, campaignCoordinates.top - 150 + campaign.offsetHeight / 2)
             ctx.stroke();
         })
     }
@@ -691,8 +702,10 @@ export default class SoftwareRepository extends Component {
         }
 
         e.target.classList.add('selected');
+
         const { ctx, canvas } = this._getCanvasContext();
-        const elementCoordinates = e.target.getBoundingClientRect();
+        const elementCoordinates = e.target.childNodes[0].getBoundingClientRect();
+        const elementSpan = e.target.childNodes[0];
 
         let keys = e.target.dataset.keys.split(',');
 
@@ -718,9 +731,9 @@ export default class SoftwareRepository extends Component {
             this.showPackageChildren(key);
             const keyCoordinates = key[0].getBoundingClientRect();
             ctx.beginPath();
-            ctx.moveTo(elementCoordinates.right, elementCoordinates.top - 150 + e.target.offsetHeight / 2);
+            ctx.moveTo(elementCoordinates.right, elementCoordinates.top - 150 + elementSpan.offsetHeight / 2);
 
-            ctx.lineTo(this.mainLineLength,elementCoordinates.top - 150 + e.target.offsetHeight / 2);
+            ctx.lineTo(this.mainLineLength,elementCoordinates.top - 150 + elementSpan.offsetHeight / 2);
             ctx.lineTo(this.mainLineLength,keyCoordinates.top - 150 + key[0].offsetHeight / 2);
             ctx.lineTo(keyCoordinates.left + key[0].offsetWidth ,keyCoordinates.top - 150 + key[0].offsetHeight / 2);
 
@@ -745,6 +758,14 @@ export default class SoftwareRepository extends Component {
         const selectedElements = document.querySelectorAll('div.info');
         const version = document.querySelectorAll('.versions-details');
         const selectedSpans = document.querySelectorAll('span.selected');
+        const selectedLis = document.querySelectorAll('li.selected');
+        const selectedTreeNodes = document.querySelectorAll('div[title].selected');
+        selectedTreeNodes.forEach(el => {
+            el.classList.toggle('selected')
+        })
+        selectedLis.forEach(el => {
+            el.classList.toggle('selected')
+        })
         selectedSpans.forEach(el => {
             el.classList.toggle('selected')
         })
@@ -828,9 +849,9 @@ export default class SoftwareRepository extends Component {
                 elements.forEach(element => {
                     this.drawLineBetweenPackagesAndCampaigns(element, false);
                     element.classList.add('selected');
+                    element = element.childNodes[0];
 
                     ctx.beginPath();
-
                     ctx.moveTo(elementCoordinates.left + e.target.offsetWidth, elementCoordinates.top - 150 + e.target.offsetHeight / 2);
                     ctx.lineTo(this.mainLineLength,elementCoordinates.top - 150 + e.target.offsetHeight / 2);
                     let itemOffset = element.getBoundingClientRect().top - 150 + element.offsetHeight / 2;
@@ -860,7 +881,7 @@ export default class SoftwareRepository extends Component {
                                 if (groupItem.errors || (groupItem.errors && groupItem.warnings)) {
                                     return <i key={Math.floor((Math.random() * 10000))} className="fa fa-error" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
                                 } else if (groupItem.warnings) {
-                                    return <i key={Math.floor((Math.random() * 10000))} className="fa fa-exclamation-triangle" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
+                                    return <i key={Math.floor((Math.random() * 10000))} className="fa warning" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
                                 } else {
                                     return null
                                 }
@@ -884,7 +905,7 @@ export default class SoftwareRepository extends Component {
                                         {item}
                                         {errorWarningIcon()}
                                     </span>
-                                    <div className="user-info" onClick={e => {e.stopPropagation()}}>
+                                    <div className={`user-info ${this.selectedItemObject.element.title === itemTitle ? '' : 'hide'}`} onClick={e => {e.stopPropagation()}}>
                                         <div className="owners">
                                             {_.map(groupItem.keys, (key, i) => {
                                                 person = keys.keys[key].owner;
@@ -914,7 +935,7 @@ export default class SoftwareRepository extends Component {
                 <div className="wrapper-full">
                     <div className="container">
                         <div className="row" >
-                            <div className="col-xs-3 keys" id="keys">
+                            <div className="col-xs-4 keys" id="keys">
                                 <div className="section-header">Roles</div>
                                 <canvas id="tree-canvas" width={this.treeCanvasWidth} height={this.canvasHeight}/>
                                 <div className="wrapper-software" onScroll={this.scroll}>
@@ -929,14 +950,14 @@ export default class SoftwareRepository extends Component {
                                     />
                                 </div>
                             </div>
-                            <div className="col-xs-6 packages" id="packages" onScroll={this.scroll}>
+                            <div className="col-xs-4 packages" id="packages" onScroll={this.scroll}>
                                 <div className="section-header">Software</div>
                                 <canvas id="packages-canvas" width={this.packagesCanvasWidth} height={this.canvasHeight}/>
                                 <ul className="first-level">
                                     {packagesList}
                                 </ul>
                             </div>
-                            <div className="col-xs-3 campaigns" onScroll={this.scroll}>
+                            <div className="col-xs-4 campaigns" onScroll={this.scroll}>
                                 <div className="section-header">Campaigns</div>
                                 <ul className="first-level">
                                     <List
@@ -1016,6 +1037,16 @@ class TreeUl extends PureComponent {
                 className={this.props.shown ? "tree shown" : "hidden"}
             >
                 {_.map(data, (items, key) => {
+                    const errorWarningIcon = () => {
+                        if (items.errors || (items.errors && items.warnings)) {
+                            return <i key={Math.floor((Math.random() * 10000))} className="fa fa-error" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
+                        } else if (items.warnings) {
+                            return <i key={Math.floor((Math.random() * 10000))} className="fa warning" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
+                        } else {
+                            return null
+                        }
+                    };
+
                     return (
                         <li key={key}>
                             <div title={key.replace(/[&\/\\#,+()$~%_.' ":*?<>{}]/g, '')} onClick={e => {
@@ -1029,7 +1060,10 @@ class TreeUl extends PureComponent {
                                 {Object.keys(items).length
                                     ? <i className="fa fa-angle-right" aria-hidden="true" onClick={openTreeNode}/>
                                     : null}
-                                <span>{key}</span>
+                                <span>
+                                    {key}
+                                    {errorWarningIcon()}
+                                </span>
                                 <div className="info hide" onClick={e => {e.stopPropagation()}}>
                                     <div className="owners">
                                         {_.map(items.keys, (key, i) => {
@@ -1060,7 +1094,7 @@ class TreeUl extends PureComponent {
                                     : ''}
                                     <div className="warnings">
                                         {_.map(items.warnings, (warning, key) => {
-                                            return <p><i className="fa fa-exclamation-triangle" aria-hidden="true"/>{warning}</p>
+                                            return <p><i className="fa warning" aria-hidden="true"/>{warning}</p>
                                         })}
                                         {_.map(items.errors, (error, key) => {
                                             return <p><i className="fa fa-error" aria-hidden="true"/>{error}</p>
@@ -1085,7 +1119,6 @@ class TreeUl extends PureComponent {
     }
 }
 
-@observer
 class List extends PureComponent {
 
     resetContext(e) {
@@ -1109,6 +1142,20 @@ class List extends PureComponent {
         }
     }
 
+    showUserInfo(e) {
+        const alreadySelectedElements = document.querySelectorAll('i.selected-user');
+        const parent = e.target.parentNode.parentNode.nextSibling;
+        alreadySelectedElements.forEach(el => {
+            el.classList.remove('selected-user');
+        });
+        parent.classList.toggle('hide');
+        if (parent.classList[1] === 'hide') {
+            e.target.classList.remove('selected-user');
+        } else {
+            e.target.classList.add('selected-user');
+        }
+    }
+
     showInfo(e) {
         e.target.nextSibling.classList.toggle('hide');
     }
@@ -1122,6 +1169,8 @@ class List extends PureComponent {
                     <ul className="second-level">
                         {Object.keys(data.groups[group]).map((item, itemKey) => {
                             const groupItem = data.groups[group][item];
+                            const totalProgressCount = +groupItem.processed+(+groupItem.notProcessed);
+                            let person = '';
 
                             let packages = [];
                             groupItem.packages.map(packageItem => {
@@ -1131,7 +1180,7 @@ class List extends PureComponent {
                                 if (groupItem.errors || (groupItem.errors && groupItem.warnings)) {
                                     return <i key={Math.floor((Math.random() * 10000))} className="fa fa-error" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
                                 } else if (groupItem.warnings) {
-                                    return <i key={Math.floor((Math.random() * 10000))} className="fa fa-exclamation-triangle" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
+                                    return <i key={Math.floor((Math.random() * 10000))} className="fa warning" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
                                 } else {
                                     return null
                                 }
@@ -1151,45 +1200,123 @@ class List extends PureComponent {
                                         {errorWarningIcon()}
                                     </span>
                                     <div className="info hide" onClick={e => {e.stopPropagation()}}>
-                                        <ul>
-                                            <li>Launched: <span className="value">{groupItem.launched}</span></li>
-                                            <li>Started: <span className="value">{groupItem.started}</span></li>
-                                            <li>End: <span className="value">{groupItem.end}</span></li>
-                                            <li>Dynamic: <span className="value">{groupItem.dynamic}</span></li>
-                                            <li>Autostop: <span className="value">{groupItem.autostop}</span></li>
-                                            <li>Ecus: <span className="value">{groupItem.ecus}</span></li>
-                                            <li>Packages: <span className="value">{
-                                                _.map(groupItem.packages, (packageItem) => {
-                                                    return <p>{packageItem}</p>
-                                                })
-                                            }</span></li>
-                                            <li>Groups: <span className="value groups">{
-                                                _.map(groupItem.groups, (group, key) => {
-                                                    return <p key={key}>{group}</p>
-                                                })
-                                            }</span></li>
-                                            <li>Impacted: <span className="value">{groupItem.impacted}</span></li>
-                                            <li>Success: <span className="value">{groupItem.success}</span></li>
-                                            <li>Failure: <span className="value">{groupItem.failure}</span></li>
-                                            <li>Queued: <span className="value">{groupItem.queued}</span></li>
-                                            <li>Keys: <span className="value">{
-                                                _.map(groupItem.keys, (key) => {
-                                                    return <p>{key}</p>
-                                                })
-                                            }</span></li>
+                                        <div className="user-info">
+                                            <div className="owners">
+                                                {_.map(groupItem.keys, (key, i) => {
+                                                    person = keys.keys[key].owner;
+                                                    return <i key={i} className="fa fa-owner" aria-hidden="true" onClick={this.showUserInfo.bind(this)}/>
+                                                })}
+                                            </div>
+                                        </div>
+                                        <ul className="hide">
+                                            <li>Name: {person.name}</li>
+                                            <li>Company: {person.company}</li>
+                                            <li>Email: {person.email}</li>
+                                            <li>Telephone: {person.phone}</li>
                                         </ul>
                                         <div className="warnings">
                                             {_.map(groupItem.warnings, (warning, key) => {
-                                                return <p><i key={key} className="fa fa-exclamation-triangle" aria-hidden="true"/>{warning}</p>
+                                                return <p><i key={key} className="fa warning" aria-hidden="true"/>{warning}</p>
                                             })}
                                             {_.map(groupItem.errors, (error, key) => {
                                                 return <p><i key={key} className="fa fa-error" aria-hidden="true"/>{error}</p>
                                             })}
                                         </div>
+                                        <div className="total-progress">
+                                            <div className="headers">
+                                                <h5>Total progress</h5>
+                                                <div>{groupItem.processed} <p>Processed</p></div>
+                                                <div>{groupItem.affected} <p>Affected</p></div>
+                                            </div>
+                                            <div className="bar">
+                                                <div className="failure" style={{width: Math.floor(+groupItem.failure/totalProgressCount * 100) + '%', backgroundColor: '#FE0001'}}>
+                                                </div>
+                                                <div className="success" style={{width: Math.floor(+groupItem.success/totalProgressCount * 100) + '%', backgroundColor: '#83D060'}}>
+                                                </div>
+                                                <div className="queued" style={{width: Math.floor(+groupItem.queued/totalProgressCount * 100) + '%', backgroundColor: '#F5A623'}}>
+                                                </div>
+                                                <div className="not-impacted" style={{width: Math.floor(+groupItem.notImpacted/totalProgressCount * 100) + '%', backgroundColor: '#8a8a8a'}}>
+                                                </div>
+                                                <div className="not-proceed" style={{width: Math.floor(+groupItem.notProcessed/totalProgressCount * 100) + '%', backgroundColor: '#FFFFFF'}}>
+                                                </div>
+                                            </div>
+                                            <div className="labels row">
+                                                <div className="col-xs-6">
+                                                    <p><span className="label" style={{backgroundColor: '#FE0001'}}/>Failure: {groupItem.failure}</p>
+                                                    <p><span className="label" style={{backgroundColor: '#83D060'}}/>Successed: {groupItem.success}</p>
+                                                    <p><span className="label" style={{backgroundColor: '#F5A623'}}/>Queued: {groupItem.queued}</p>
+                                                </div>
+                                                <div className="col-xs-6">
+                                                    <p><span className="label" style={{backgroundColor: '#8a8a8a', border: '1px solid #ccc'}}/>Not impacted: {groupItem.notImpacted}</p>
+                                                    <p><span className="label" style={{backgroundColor: '#FFFFFF', border: '1px solid #ccc'}}/>Not processed: {groupItem.notProcessed}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="version row">
+                                            <div className="col-xs-6">
+                                                <p>Launched: {groupItem.launched}</p>
+                                                <p>Started: {groupItem.started}</p>
+                                                <p>End: {groupItem.end}</p>
+                                            </div>
+                                            <div className="col-xs-6">
+                                                <p>Dynamic:
+                                                    <div className={`switch ${groupItem.dynamic ? 'switchOn' : ''}`} id="switch">
+                                                        <div className="switch-status">
+                                                        </div>
+                                                    </div>
+                                                </p>
+                                                <p>Autostop:
+                                                    <div className={`switch ${groupItem.autostop ? 'switchOn' : ''}`} id="switch">
+                                                        <div className="switch-status">
+                                                        </div>
+                                                    </div>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="ecus">
+                                            <h5>ECUs</h5>
+                                            {_.map(groupItem.ecus, (ecu) => {
+                                                return <p><i className="fa icon-ecu"></i>{ecu}</p>
+                                            })}
+                                        </div>
+                                        <div className="groups">
+                                            {_.map(groupItem.groups, (group,key) => {
+                                                return (
+                                                    <div className="row display-flex">
+                                                        <div className="name">
+                                                            <div className="element-box group">
+                                                                <div className="icon fa-groups"/>
+                                                                <div className="desc">
+                                                                    <div className="title" title={key}>
+                                                                        {key}
+                                                                    </div>
+                                                                    <div className="subtitle">
+                                                                        {group.total}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="stats">
+                                                            <div className="devices-progress">
+                                                                <div className="progress progress-blue">
+                                                                    <div className={"progress-bar"}
+                                                                         role="progressbar"
+                                                                         style={{width: group.processed+'%'}}>
+                                                                        <div className="wrapper-rate">
+                                                                            <i className="fa fa-check" aria-hidden="true" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <span className="value">{group.processed + '%'}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
                                     </div>
                                 </li>
                             )
-
                         })}
                     </ul>
                 </li>
@@ -1221,7 +1348,7 @@ class ItemVersions extends Component {
                         <div className="col-xs-12">
                             <div className="warnings">
                                 {_.map(groupItem.warnings, (warning, key) => {
-                                    return <p><i key={key} className="fa fa-exclamation-triangle" aria-hidden="true"/>{warning}</p>
+                                    return <p><i key={key} className="fa warning" aria-hidden="true"/>{warning}</p>
                                 })}
                                 {_.map(groupItem.errors, (error, key) => {
                                     return <p><i key={key} className="fa fa-error" aria-hidden="true"/>{error}</p>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="19px" height="19px" viewBox="0 0 19 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>ECUS Copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="-" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Software_repository_01" transform="translate(-1017.000000, -558.000000)" stroke="#000000">
+            <g id="Group-25" transform="translate(903.000000, 242.000000)">
+                <g id="Group-21" transform="translate(0.000000, 95.000000)">
+                    <g id="Group-22" transform="translate(115.000000, 222.000000)">
+                        <g id="ECUS">
+                            <g id="Group-3">
+                                <g id="Group-2" transform="translate(3.000000, 3.000000)" stroke-linecap="round" stroke-width="0.5" stroke-linejoin="round">
+                                    <g id="Group">
+                                        <g id="Page-1">
+                                            <polygon id="Stroke-1" points="1.563375 9.92333333 9.35504167 9.92333333 9.35504167 2.04454545 1.563375 2.04454545"></polygon>
+                                            <g id="Group-48" transform="translate(0.000000, 0.381194)">
+                                                <path d="M4.8125,0.31399287 L4.8125,1.66311943" id="Stroke-2"></path>
+                                                <path d="M3.4375,0.31399287 L3.4375,1.66311943" id="Stroke-4"></path>
+                                                <path d="M2.0625,0.31399287 L2.0625,1.66311943" id="Stroke-6"></path>
+                                                <path d="M6.875,0.31399287 L6.875,1.66311943" id="Stroke-8"></path>
+                                                <path d="M8.25,0.31399287 L8.25,1.66311943" id="Stroke-10"></path>
+                                                <path d="M4.8125,9.542 L4.8125,10.8911266" id="Stroke-12"></path>
+                                                <path d="M3.4375,9.542 L3.4375,10.8911266" id="Stroke-14"></path>
+                                                <path d="M2.0625,9.542 L2.0625,10.8911266" id="Stroke-16"></path>
+                                                <path d="M6.875,9.542 L6.875,10.8911266" id="Stroke-18"></path>
+                                                <path d="M8.25,9.542 L8.25,10.8911266" id="Stroke-20"></path>
+                                                <path d="M10.689525,4.86631016 L9.35531667,4.86631016" id="Stroke-22"></path>
+                                                <path d="M10.689525,3.47593583 L9.35531667,3.47593583" id="Stroke-24"></path>
+                                                <path d="M10.689525,2.0855615 L9.35531667,2.0855615" id="Stroke-26"></path>
+                                                <path d="M10.689525,6.95187166 L9.35531667,6.95187166" id="Stroke-28"></path>
+                                                <path d="M10.689525,8.34224599 L9.35531667,8.34224599" id="Stroke-30"></path>
+                                                <path d="M1.5635125,4.86631016 L0.229304167,4.86631016" id="Stroke-32"></path>
+                                                <path d="M1.5635125,3.47593583 L0.229304167,3.47593583" id="Stroke-34"></path>
+                                                <path d="M1.5635125,2.0855615 L0.229304167,2.0855615" id="Stroke-36"></path>
+                                                <path d="M1.5635125,6.95187166 L0.229304167,6.95187166" id="Stroke-38"></path>
+                                                <path d="M1.5635125,8.34224599 L0.229304167,8.34224599" id="Stroke-40"></path>
+                                                <path d="M4.89467917,4.81268806 C4.7081375,4.59022816 4.46017917,4.45443494 4.1883875,4.45443494 C3.6081375,4.45443494 3.13834583,5.07083422 3.13834583,5.83090553 C3.13834583,6.06958645 3.1846375,6.29390018 3.26622083,6.4894795" id="Stroke-42"></path>
+                                                <path d="M3.26640417,6.48971123 C3.26227917,6.45773262 3.25952917,6.42482709 3.25952917,6.39145811 C3.25952917,5.9368057 3.66057083,5.56835651 4.1551125,5.56835651 C4.64965417,5.56835651 5.05069583,5.9368057 5.05069583,6.39145811 C5.05069583,6.54486275 5.00440417,6.6880713 4.92465417,6.81135116 C4.7353625,7.05559358 4.47502917,7.20668093 4.1881125,7.20668093 C3.7907375,7.20668093 3.44469583,6.91701961 3.26640417,6.48971123" id="Stroke-44"></path>
+                                                <polyline id="Stroke-46" points="7.4295375 7.19792157 7.4295375 4.46305526 5.8084125 6.49531907 7.9149125 6.49531907"></polyline>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                                <circle id="Oval-6" stroke-width="0.5" cx="8.5" cy="8.5" r="8.5"></circle>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

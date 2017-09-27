@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="15px" viewBox="0 0 14 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>Personas Copy 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <ellipse id="path-1" cx="7" cy="7.32930432" rx="7" ry="7.25806452"></ellipse>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="14" height="14.516129" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="-" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Software_repository_01" transform="translate(-464.000000, -325.000000)" stroke="#707070">
+            <g id="Group-5" transform="translate(405.000000, 113.000000)">
+                <g id="Group-2" transform="translate(-3.000000, 204.000000)">
+                    <g id="Group-24">
+                        <g id="Group-23" transform="translate(21.000000, 8.000000)">
+                            <g id="Personas" transform="translate(41.000000, 0.000000)">
+                                <use id="Oval-19" mask="url(#mask-2)" stroke-width="1.4" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                                <path d="M10.5348133,9.21533658 C9.33744,8.73243335 8.00818667,8.13272367 7.89646667,7.75907851 L7.89646667,7.36714303 C8.14482667,7.10198174 8.34073333,6.73211077 8.45674667,6.29904626 C8.73553333,6.09475593 8.80450667,5.67398174 8.57397333,5.37804626 L8.57397333,4.50049787 C8.57397333,3.59459464 8.0906,2.97446561 6.98562667,2.97446561 C5.90921333,2.97446561 5.39672,3.59459464 5.39672,4.50049787 L5.39672,5.37833658 C5.16712,5.67340109 5.23525333,6.09407851 5.51404,6.29885271 C5.62996,6.732014 5.82605333,7.10188497 6.07450667,7.36714303 L6.07450667,7.75907851 C5.96316,8.13233658 4.63362667,8.73214303 3.43625333,9.21533658 C3.33424,9.25665916 3.26666667,9.36030432 3.26666667,9.47614303 L3.26666667,10.4564656 C3.26666667,10.6104334 3.38464,10.7355624 3.53014667,10.7355624 L10.44092,10.7355624 C10.5864267,10.7355624 10.7044,10.6104334 10.7044,10.4564656 L10.7044,9.47614303 C10.7044,9.36030432 10.6368267,9.25636884 10.5348133,9.21533658 L10.5348133,9.21533658 Z" id="Shape" stroke-width="0.7"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
