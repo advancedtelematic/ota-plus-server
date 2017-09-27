@@ -196,6 +196,7 @@ class PackagesVersionList extends Component {
                                         onChange={this.selectVersion.bind(this, {type: 'package', packageName: pack.packageName})}
                                         value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].changedPackage.packageName : null }
                                         hintText="Select tuf package"
+                                        title="Select from package"
                                         style={{display: 'block', width : '100%'}}
                                     >
                                         {this.formatTufPackages()}
@@ -225,6 +226,7 @@ class PackagesVersionList extends Component {
                                         onChange={this.selectVersion.bind(this, {type: 'from', packageName: pack.packageName})}
                                         hintText="Select from version"
                                         value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].fromFilepath : null}
+                                        title="Select from version"
                                         style={{display: 'block', width : '100%'}}
                                     >
                                         {this.fromVersions}
@@ -238,6 +240,7 @@ class PackagesVersionList extends Component {
                                         onChange={this.selectVersion.bind(this, {type: 'to', packageName: pack.packageName})}
                                         hintText="Select to version"
                                         value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].toFilepath : null}
+                                        title="Select to version"
                                         style={{display: 'block', width : '100%'}}
                                     >
                                         {this.formatToVersions(pack)}
@@ -252,6 +255,7 @@ class PackagesVersionList extends Component {
                                     onChange={this.selectHardwareId.bind(this, {type: 'hardwareId', packageName: pack.packageName})}
                                     hintText="Select hardware ids"
                                     value={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].hardwareId : null}
+                                    title="Select hardware id"
                                 >
                                     {this.formatHardwareIds()}
                                 </SelectField>
