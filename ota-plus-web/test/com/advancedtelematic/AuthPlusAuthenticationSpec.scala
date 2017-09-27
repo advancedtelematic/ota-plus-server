@@ -21,10 +21,11 @@ class AuthPlusAuthenticationSpec extends PlaySpec with OneServerPerSuite with Re
   val inactiveToken = "token.is.invalid"
   val invalidToken = "token.does.not.exist"
 
-  val authPlusUri = "http://localhost:9001/introspect"
+  val authPlusUri = "http://auth-plus.com"
+  val authPlusIntrospectUri = s"$authPlusUri/introspect"
 
   val mockClient = MockWS {
-    case (POST, `authPlusUri`) => Action { request =>
+    case (POST, `authPlusIntrospectUri`) => Action { request =>
       val result = for {
         params <- request.body.asFormUrlEncoded
         tokens <- params.get("token")
@@ -40,6 +41,7 @@ class AuthPlusAuthenticationSpec extends PlaySpec with OneServerPerSuite with Re
 
   val application = new GuiceApplicationBuilder()
     .configure("authplus.token_verify" -> true)
+    .configure("authplus.uri" -> authPlusUri)
     .overrides(bind[WSClient].to(mockClient))
     .build
 
