@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
+import _ from 'underscore';
 
 @observer
 class ListItem extends Component {
@@ -7,9 +8,9 @@ class ListItem extends Component {
         super(props);
     }
     render() {
-        const { item, groupName, selectGroup } = this.props;
+        const { item, groupName, selectGroup, selectedGroup } = this.props;
 		return (
-			<div className="list-item" onClick={selectGroup.bind(this, groupName)}>
+			<div className={"list-item" + (selectedGroup === groupName ? " opened" : "")} onClick={item.url ? selectGroup.bind(this, groupName) : null}>
                 <div className="col">
                     {groupName}
                 </div>
@@ -83,12 +84,12 @@ class ListItem extends Component {
                     }
                 </div>
                 <div className="col">
-                    {item.errors ? 
+                    {!_.isEmpty(item.errors) ? 
                         <img src="/assets/img/icons/red_cross.png" alt="Icon" /> 
-                    : item.warnings ?
+                    : !_.isEmpty(item.warnings) ?
                         <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
                     :
-                        null
+                        "-"
                     }
                 </div>
             </div>
