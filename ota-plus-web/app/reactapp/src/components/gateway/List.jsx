@@ -29,6 +29,7 @@ class List extends Component {
                                 item={item}
                                 groupName={groupName}
                                 selectGroup={this.selectGroup}
+                                selectedGroup={this.selectedGroup}
                             />
                             <VelocityTransitionGroup
                                 enter={{
@@ -41,6 +42,7 @@ class List extends Component {
                                 {this.selectedGroup === groupName ?
                                     <GatewayListItemDetails
                                         item={item}
+                                        selectedGroup={this.selectedGroup}
                                     />
                                 :
                                     null
