@@ -135,6 +135,9 @@
             width: 25%;
             text-align: left;
             color: black;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
         }
 
         &:last-child {
@@ -204,7 +207,7 @@
         }
 
         .details {
-            padding: 15px;
+            padding: 15px 15px 10px 0;
             border-bottom: 1px solid #e8e8e8;
             background: #f6f6f6;
 
@@ -251,29 +254,84 @@
             }
 
             .bottom {
-                margin-bottom: 35px;
+                overflow: hidden;
 
                 .item {
                     display: flex;
                     flex-direction: column;
-                    width: 18%;
-                    height: 130px;
-                    display: inline-block;
+                    width: 17%;
+                    float: left;
+                    position: relative;
+                    height: 315px;
+                    align-items: center;
 
                     &:not(:last-child) {
                         border-right: 1px solid #e8e8e8;
-                    }
+                    }                    
 
-                    &:first-child {
-                        width: 26%;
+                    &:nth-child(2) {
+                        align-items: initial;
+                        width: 32%;
+                        padding: 0 65px;
+
+                        .data {
+                            width: 100%;
+                            padding-left: 0;
+                        }
                     }
 
                     .data {
-                        width: 50%;
-                        margin: auto;
+                        width: auto;
+                        margin: 0 auto;
+                        margin-bottom: 10px;
+                        padding-left: 50px;
 
                         .field {
-                            margin-left: 15px;
+                            font-size: 11px;
+                            margin-bottom: 5px;
+
+                            .text {
+                                display: inline-block;
+                                width: 75px;
+                            }
+
+                            .value {
+                                display: inline-block;
+                                width: 75px;
+                            }
+                        }
+                    }
+
+                    .bar-chart {
+                        margin: 10px 0;
+                    }
+
+                    .stats {
+                        margin: 15px 0;
+
+                        .gateway-chart {
+                            width: auto;
+                            margin: 0 auto;
+
+                            canvas {
+                                margin-bottom: 25px;
+                            }                            
+                        }
+
+                        ul {
+
+                            li {
+                                display: flex;
+                                align-items: baseline;
+                                margin-bottom: 5px;
+                                font-size: 11px;
+
+                                .color-box {
+                                    width: 10px;
+                                    height: 10px;
+                                    margin-right: 10px;
+                                }
+                            }
                         }
                     }
                 }
