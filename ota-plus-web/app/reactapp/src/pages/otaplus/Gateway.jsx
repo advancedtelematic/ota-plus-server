@@ -13,15 +13,18 @@ class Gateway extends Component {
     }
     render() {
         return (
-            <FadeAnimation>
-                <Header 
-                    title={title}
-                    backButtonShown={true}
-                />
-	            <MetaData 
-                    title={title}>
-                    <GatewayContainer />
-                </MetaData>
+            <FadeAnimation
+                display="flex">
+                <div className="wrapper-flex">
+                    <Header 
+                        title={title}
+                        backButtonShown={true}
+                    />
+    	            <MetaData 
+                        title={title}>
+                        <GatewayContainer />
+                    </MetaData>
+                </div>
             </FadeAnimation>
         );
     }
