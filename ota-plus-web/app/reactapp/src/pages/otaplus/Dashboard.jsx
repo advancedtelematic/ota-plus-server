@@ -2,8 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../../utils';
 import { DashboardContainer } from '../../containers/otaplus';
+import { Header } from '../../partials';
 
-const title = "Dashboard";
+const title = "Home";
 
 @observer
 class Dashboard extends Component {
@@ -14,7 +15,10 @@ class Dashboard extends Component {
         return (
             <FadeAnimation
                 display="flex">
-                <div className="wrapper-center">
+                <div className="wrapper-flex">
+                    <Header
+                        title={title}
+                    />
                     <MetaData 
                         title={title}>
                         <DashboardContainer />
