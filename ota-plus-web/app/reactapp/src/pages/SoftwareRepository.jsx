@@ -463,6 +463,7 @@ export default class SoftwareRepository extends Component {
         const ctx = canvas.getContext('2d');
         ctx.strokeStyle = '#000';
         ctx.lineCap="round";
+        ctx.lineWidth = 1;
         return {
             ctx,
             canvas
@@ -582,20 +583,24 @@ export default class SoftwareRepository extends Component {
     }
 
     openTreeNode(e) {
-        if(e.currentTarget && e.currentTarget.parentNode.nextSibling) {
+        if (e.target) {
+            e.stopPropagation();
+        }
+
+        if(e.target && e.target.parentNode.nextSibling) {
             const { ctx, canvas } = this._getCanvasContext();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             this.removeSelectedClasses();
-            e.stopPropagation();
-            e.currentTarget.parentNode.nextSibling.classList.toggle('hidden');
-            e.currentTarget.parentNode.nextSibling.classList.toggle('shown');
-            e.currentTarget.classList.toggle('fa-angle-down');
-            e.currentTarget.classList.toggle('fa-angle-right');
-            e.currentTarget.parentNode.classList.toggle('selected')
+            e.target.parentNode.nextSibling.classList.toggle('hidden');
+            e.target.parentNode.nextSibling.classList.toggle('shown');
+            if (e.target.classList[0] === 'fa') {
+                e.target.classList.toggle('fa-angle-down');
+                e.target.classList.toggle('fa-angle-right');
+            }
         } else {
-            const ulList = this.getParentsUntil(e[0], 'ul.tree');
+            const ulList = this.getParentsUntil(e, 'ul.tree');
             ulList.forEach(ul => {
-                if (ul.className === 'shown') {
+                if (ul.className === 'shown' || ul.className === 'hidden') {
                     ul.parentNode.children[0].children[0].classList.add('fa-angle-down');
                     ul.parentNode.children[0].children[0].classList.remove('fa-angle-right');
                 }
@@ -624,8 +629,6 @@ export default class SoftwareRepository extends Component {
         const treeCanvas = this._getCanvasContext('tree-canvas');
         treeCanvas.ctx.clearRect(0, 0, treeCanvas.canvas.width, treeCanvas.canvas.height)
 
-        this.removeSelectedClasses('packages');
-
         packages.forEach(packageTitle => {
             let packageItem = document.querySelector(`li[title*=${packageTitle}`);
             let packageCoordinates = packageItem.childNodes[0].getBoundingClientRect();
@@ -637,11 +640,11 @@ export default class SoftwareRepository extends Component {
             let x = window.innerWidth - this.treeCanvasWidth - e.target.offsetWidth;
 
             if (elementCoordinates.top === packageCoordinates.top) {
-                ctx.lineTo(packageCoordinates.right - packageItem.childNodes[0].offsetWidth + 1, elementCoordinates.top - 150 + e.target.offsetHeight / 2);
+                ctx.lineTo(x - 50, elementCoordinates.top - 150 + e.target.offsetHeight / 2);
             } else {
                 ctx.lineTo(x - 15,elementCoordinates.top - 150 + e.target.offsetHeight / 2);
                 ctx.lineTo(x - 15,packageCoordinates.top - 150 + packageItem.childNodes[0].offsetHeight / 2);
-                ctx.lineTo(packageCoordinates.right - packageItem.childNodes[0].offsetWidth + 1, packageCoordinates.top - 150 + packageItem.childNodes[0].offsetHeight / 2);
+                ctx.lineTo(x - 50, packageCoordinates.top - 150 + packageItem.childNodes[0].offsetHeight / 2);
             }
 
             ctx.stroke();
@@ -668,9 +671,7 @@ export default class SoftwareRepository extends Component {
             const targetOffsetWidth = e.target.childNodes[0].offsetWidth ;
 
             ctx.beginPath();
-
             ctx.moveTo(elementCoordinates.left - this.treeCanvasWidth + targetOffsetWidth, elementCoordinates.top - 150 + targetOffsetHeight / 2)
-
             let x = elementCoordinates.left - this.treeCanvasWidth + targetOffsetWidth + 20;
             ctx.lineTo(x, elementCoordinates.top - 150 + targetOffsetHeight / 2);
             ctx.lineTo(x, campaignCoordinates.top - 150 + campaign.offsetHeight / 2)
@@ -680,7 +681,6 @@ export default class SoftwareRepository extends Component {
     }
 
     selectPackageWithKeys(e, clear = true, drawLinesToCampaigns = true, removeSelectedClass = true, changeDataType = true) {
-
         if (!e.target) {
             e.target = e;
         }
@@ -700,7 +700,6 @@ export default class SoftwareRepository extends Component {
         if (removeSelectedClass) {
             this.removeSelectedClasses();
         }
-
         e.target.classList.add('selected');
 
         const { ctx, canvas } = this._getCanvasContext();
@@ -708,6 +707,7 @@ export default class SoftwareRepository extends Component {
         const elementSpan = e.target.childNodes[0];
 
         let keys = e.target.dataset.keys.split(',');
+        let roles = e.target.dataset.role.split(',');
 
         if (drawLinesToCampaigns) {
             this.drawLineBetweenPackagesAndCampaigns(e,true);
@@ -717,16 +717,15 @@ export default class SoftwareRepository extends Component {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
-        keys.forEach(keyTitle => {
+        roles.forEach(role => {
             let key = [];
 
-            if (e.target.dataset.keys) {
-                const iconWithKey = document.querySelectorAll(`i[title*="${keyTitle}"`);
-                const parentElements = this.getParentsUntil(iconWithKey[0],'li');
-                key.push(parentElements.pop());
-            } else {
-                key = document.querySelectorAll(`li[title*="${keyTitle}"`);
+            if (e.target.dataset.role) {
+                const element = document.querySelectorAll(`div[title*="${role}"`);
+                key.push(element[0]);
             }
+
+            key[0].classList.toggle('selected');
 
             this.showPackageChildren(key);
             const keyCoordinates = key[0].getBoundingClientRect();
@@ -760,22 +759,30 @@ export default class SoftwareRepository extends Component {
         const selectedSpans = document.querySelectorAll('span.selected');
         const selectedLis = document.querySelectorAll('li.selected');
         const selectedTreeNodes = document.querySelectorAll('div[title].selected');
+        const selectedOwners = document.querySelectorAll('i.selected-user');
+        const visibleUserInfo = document.querySelectorAll('.packages div.user-info:not(.hide)');
+        visibleUserInfo.forEach(el => {
+            el.classList.toggle('hide');
+        });
+        selectedOwners.forEach(el => {
+            el.classList.toggle('selected-user');
+        });
         selectedTreeNodes.forEach(el => {
-            el.classList.toggle('selected')
-        })
+            el.classList.remove('selected')
+        });
         selectedLis.forEach(el => {
             el.classList.toggle('selected')
-        })
+        });
         selectedSpans.forEach(el => {
             el.classList.toggle('selected')
-        })
+        });
         version.forEach(el => {
             el.classList.add('hide');
         });
         selectedElements.forEach(el => {
             if (!el.classList[1] && event.target.nextSibling !== el) {
                 el.parentNode.classList.remove('selected');
-                el.classList.toggle('hide')
+                el.classList.toggle('hide');
                 event.target.classList.remove('hide');
             }
         })
@@ -818,7 +825,13 @@ export default class SoftwareRepository extends Component {
 
         let elementsArray = [];
         const { ctx, canvas } = this._getCanvasContext();
-        const elementCoordinates = e.target.getBoundingClientRect();
+        let elementCoordinates = null;
+        if (e.target.childNodes[0].className === 'fa') {
+            elementCoordinates = e.target.childNodes[1].getBoundingClientRect();
+        } else {
+            elementCoordinates = e.target.childNodes[0].getBoundingClientRect();
+        }
+
         this.showPackageChildren(e);
 
         if (removeClasses) {
@@ -852,8 +865,8 @@ export default class SoftwareRepository extends Component {
                     element = element.childNodes[0];
 
                     ctx.beginPath();
-                    ctx.moveTo(elementCoordinates.left + e.target.offsetWidth, elementCoordinates.top - 150 + e.target.offsetHeight / 2);
-                    ctx.lineTo(this.mainLineLength,elementCoordinates.top - 150 + e.target.offsetHeight / 2);
+                    ctx.moveTo(elementCoordinates.left + e.target.offsetWidth, elementCoordinates.top - 150 + elementCoordinates.height / 2);
+                    ctx.lineTo(this.mainLineLength,elementCoordinates.top - 150 +  elementCoordinates.height / 2);
                     let itemOffset = element.getBoundingClientRect().top - 150 + element.offsetHeight / 2;
 
                     ctx.lineTo(this.mainLineLength, itemOffset);
@@ -875,6 +888,7 @@ export default class SoftwareRepository extends Component {
                         {Object.keys(packages.groups[group]).map((item, itemKey) => {
                             const groupItem = packages.groups[group][item];
                             const itemTitle = item.replace(/[&\/\\#,+()$~%_.'":*?<>{}]/g, '');
+                            const role = groupItem.role.replace(/[&\/\\#,+()$~%_.' ":*?<>{}]/g, '');
                             let person = null;
 
                             const errorWarningIcon = () => {
@@ -900,7 +914,8 @@ export default class SoftwareRepository extends Component {
                                         }
                                     }}
                                     title={itemTitle}
-                                    data-keys={groupItem.keys}>
+                                    data-keys={groupItem.keys}
+                                    data-role={role}>
                                     <span className="item">
                                         {item}
                                         {errorWarningIcon()}
@@ -947,6 +962,7 @@ export default class SoftwareRepository extends Component {
                                         getCanvasContext={this._getCanvasContext}
                                         removeClasses={this.removeSelectedClasses}
                                         deselectAll={this.deselectAll}
+                                        getParentsUntil={this.getParentsUntil}
                                     />
                                 </div>
                             </div>
@@ -1149,7 +1165,7 @@ class List extends PureComponent {
             el.classList.remove('selected-user');
         });
         parent.classList.toggle('hide');
-        if (parent.classList[1] === 'hide') {
+        if (parent.classList[0] === 'hide') {
             e.target.classList.remove('selected-user');
         } else {
             e.target.classList.add('selected-user');
