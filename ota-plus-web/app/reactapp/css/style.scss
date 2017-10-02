@@ -1019,7 +1019,7 @@ input {
 }
 
 .section-header {
-    color: #202020;
+    color: #464646;
     font-size: 13px;
     font-weight: bold;
     background: #D3D3D3;
@@ -3538,6 +3538,18 @@ div[role=presentation] {
 }
 .software-repository {
 
+    .keys {
+        width: 24%;
+    }
+
+    .packages {
+        width: 36.9%;
+    }
+
+    .campaigns {
+        width: 36.8% !important;
+    }
+
     .switch {
         cursor: auto;
     }
@@ -3553,6 +3565,13 @@ div[role=presentation] {
         width:24px;
         height:20px;
         background-size: contain;
+        &:hover {
+            background-image: url('/assets/img/icons/person-hover.png');
+        }
+    }
+
+    i.fa-owner.selected-user {
+        background-image: url('/assets/img/icons/person-hover.png');
     }
 
     .icon-ecu {
@@ -3578,7 +3597,7 @@ div[role=presentation] {
             top:15px;
             border-left: 5px solid transparent;
             border-right: 5px solid transparent;
-            border-bottom: 5px solid #F99972;
+            border-bottom: 5px solid #707070;
         }
     }
 
@@ -3593,23 +3612,19 @@ div[role=presentation] {
     }
 
     .section-header {
-        background-color: #f7f7f7;
-        padding: 14px 15px 39px;
+        background-color: #fff;
+        padding: 40px 35px 39px;
         position: relative;
         z-index: 50;
         text-transform: uppercase;
         font-size: 20px;
-        border-bottom-color: #4b4b4b;
+        border-bottom-color: #C0C0C0;
     }
 
     .wrapper-software {
         height: calc(100vh - 160px);
         overflow-y: auto;
-        position: absolute;
-        right: -30px;
-        left: 0;
         padding: 30px 0 50px 1px;
-        top: 50px;
     }
 
     i.fa-exclamation-triangle {
@@ -3625,8 +3640,8 @@ div[role=presentation] {
     i.fa-error, i.warning {
         background-size: contain;
         display: inline-block;
-        width: 28px;
-        height: 22px;
+        width: 23px;
+        height: 16px;
         vertical-align: middle;
         margin-right: 10px;
         background-position: center;
@@ -3643,8 +3658,13 @@ div[role=presentation] {
         }
 
         .keys {
+            ::-webkit-scrollbar {
+                width: 0;
+                background:transparent;
+                display: none;
+            }
             min-height: 100vh;
-            background-color: #F7F7F7;
+            background-color: #fff;
             position: relative;
             overflow: hidden;
             -webkit-box-shadow: 4px 0px 8px -2px rgba(0,0,0,0.5);
@@ -3685,21 +3705,30 @@ div[role=presentation] {
                 border-bottom: none;
             }
 
+            i.selected-user {
+                &:after {
+                    border-bottom: 10px solid #707070;
+                }
+            }
+
             span.title {
                 background-color: #D3D3D3;
                 width:100%;
                 display: block;
-                padding: 15px 30px;
+                padding: 10px 35px;
+                font-weight: 700;
             }
 
             span.selected {
-                border-left: 30px solid #fa9872;
+                border-left: 20px solid #fa9872;
+                padding: 10px 15px !important;
                 color: #000 !important;
             }
 
             .selected {
                 &>span:first-child {
-                    border-left: 30px solid #fa9872;
+                    border-left: 20px solid #fa9872;
+                    padding: 10px 15px !important;
                     color: #000 !important;
                 }
             }
@@ -3733,7 +3762,7 @@ div[role=presentation] {
             background-color: #fff;
             z-index: 50;
             position: relative;
-            left:2.5%;
+            left:2.4%;
             width: 31%;
             -webkit-box-shadow: -4px 0 5px -2px rgba(0,0,0,.25);
             -moz-box-shadow: -4px 0 5px -2px rgba(0,0,0,.25);
@@ -3748,7 +3777,6 @@ div[role=presentation] {
                     top: 26px;
                     border-left: 13px solid transparent;
                     border-right: 13px solid transparent;
-                    border-bottom: 10px solid #f99972;
                 }
             }
 
@@ -3771,10 +3799,10 @@ div[role=presentation] {
                         padding: 0;
                         span:not(.value) {
                             position: relative;
-                            color: #ccc;
+                            color: #E0E0E0;
                             display: block;
                             width:100%;
-                            padding: 10px 30px;
+                            padding: 10px 35px;
                         }
                     }
                 }
@@ -3834,6 +3862,10 @@ div[role=presentation] {
                     border-top: 1px solid #f1efef;
                     border-bottom: 1px solid #f1efef;
                     padding: 20px;
+                    i.fa-error {
+                        background-size: cover;
+                        height: 22px;
+                    }
                 }
                 .user-info {
                     border-top: 1px solid #f1efef;
@@ -4010,10 +4042,9 @@ div[role=presentation] {
 
             i.fa-owner {
                 &:after {
-                    top: 33px;
+                    top: 22px;
                     border-left: 12px solid transparent;
                     border-right: 12px solid transparent;
-                    border-bottom: 10px solid #f99972;
                 }
             }
 
@@ -4031,9 +4062,9 @@ div[role=presentation] {
                 li {
                     padding: 0 !important;
                     & > span.item {
-                        padding: 10px 30px;
+                        padding: 10px 35px;
                         display: block;
-                        color: #ccc;
+                        color: #E0E0E0;
                         i.fa-error, i.warning {
                             position: absolute;
                             right: -1px;
@@ -4070,12 +4101,13 @@ div[role=presentation] {
                 }
 
                 .owners {
-                    padding: 15px 30px;
+                    padding: 10px 30px;
                     cursor: auto;
                     background-color: #fff;
                     border-bottom: 1px solid #f1efef;
                     i {
                         cursor: pointer;
+                        vertical-align: middle;
                     }
                 }
             }
@@ -4121,7 +4153,7 @@ div[role=presentation] {
                         background: url('/assets/img/icons/error.png') no-repeat center;
                         background-size: cover;
                         display: inline-block;
-                        width: 28px;
+                        width: 23px;
                         height: 22px;
                         vertical-align: middle;
                         margin-right: 10px;
@@ -4270,7 +4302,7 @@ div[role=presentation] {
                             margin-left: 0;
                             padding: 15px 0;
                             li {
-                                height: 20px;
+                                min-height: 20px;
                                 &:before {
                                     display: none;
                                 }
@@ -4345,7 +4377,7 @@ div[role=presentation] {
         div {
             &:first-child {
                 span {
-                    background-color: #DADADA;
+                    background-color: #F0F0F0;
                     cursor: pointer;
                 }
             }
@@ -4355,7 +4387,7 @@ div[role=presentation] {
             li {
                 div[title] {
                     span {
-                        background-color: #DADADA;
+                        background-color: #F0F0F0;
                     }
                 }
             }
@@ -4379,7 +4411,7 @@ div[role=presentation] {
         top: -15px;
         bottom: 0;
         left: 0;
-        border-left: 1px solid #FA9872;
+        border-left: 1px solid #CECECE;
         z-index: -5;
     }
 
@@ -4396,7 +4428,7 @@ div[role=presentation] {
         display: block;
         width: 20px;
         height: 0;
-        border-top: 1px solid #FA9872;
+        border-top: 1px solid #CECECE;
         margin-top: -1px;
         position: absolute;
         top: 20px;
@@ -4404,7 +4436,7 @@ div[role=presentation] {
     }
 
     .tree li:last-child:before {
-        background: #F7F7F7;
+        background: #fff;
         height: auto;
         top: 20px;
         bottom: 0;
@@ -4414,16 +4446,44 @@ div[role=presentation] {
         display: inline-block;
         margin: 5px 0 15px;
         position: relative;
+        .fa-angle-down {
+            color: #FA9872;
+            top: 6px;
+            font-size:20px;
+        }
+        &.selected {
+            .fa-angle-down {
+                color: #fff;
+            }
+            .fa-angle-right {
+                color: #fff;
+            }
+        }
+        &.selected + ul {
+            &:before {
+                border-left-color: #000;
+            }
+            li {
+                &:before {
+                    border-top-color: #000;
+                }
+            }
+        }
         span {
-            padding: 2px 30px;
+            padding: 4px 30px;
             display: block;
             position: relative;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
             i.fa-error, i.warning {
                 position: absolute !important;
                 right: -10px;
                 top: 50%;
                 transform: translateY(-50%);
                 left: auto;
+                width: 23px;
                 height: 100%;
                 vertical-align: middle;
                 background-position: center;
@@ -4436,6 +4496,13 @@ div[role=presentation] {
                 background-color: #E3AE50;
             }
         }
+
+        .fa-angle-right {
+            top: 6px;
+            font-size:20px;
+            color: #FA9872;
+        }
+
         i {
             cursor: pointer;
             color: #fff;
@@ -4452,13 +4519,9 @@ div[role=presentation] {
             left: inherit;
         }
         i.fa-error {
-            background: url('/assets/img/icons/error.png') no-repeat;
+            background: url('/assets/img/icons/error.png') no-repeat center;
             background-size: cover;
             display: inline-block;
-            top: 7px;
-            position: relative !important;
-            left: -2px;
-            width: 26px;
         }
         i.selected-user {
             &:after {
@@ -4466,6 +4529,12 @@ div[role=presentation] {
                 border-left: 12px solid transparent;
                 border-right: 12px solid transparent;
                 border-bottom: 10px solid #707070;
+            }
+        }
+        .warnings {
+            i.warning {
+                height: 16px;
+                width: 23px;
             }
         }
     }
