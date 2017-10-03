@@ -94,18 +94,7 @@ class ListItemDetails extends Component {
         .replace(/-+$/, '')
     }
     render() {        
-        const { item, selectedGroup } = this.props;
-        let averageConnections = 0;
-        if(!_.isUndefined(item.connections)) {
-            let allConnections = _.map(item.connections.live, (item, index) => {
-                return item;
-            });
-            let sum = 0;
-            for( var i = 0; i < allConnections.length; i++ ){
-                sum += parseInt(allConnections[i], 10);
-            }
-            averageConnections = sum/allConnections.length;
-        }
+        const { item, selectedGroup } = this.props;        
 		return (
             <div className={"details " + this.slugify(selectedGroup)}>
                 {!_.isEmpty(item) ?
@@ -192,18 +181,20 @@ class ListItemDetails extends Component {
                                     </div>
                                     <div className="field">
                                         <span className="text">avg: </span>
-                                        <span className="text">{Math.round(averageConnections)}</span>
+                                        <span className="text">{item.connections.avg}</span>
                                     </div>
                                 </div>
                                 <div className="bar-chart">
                                     <div className="br">
                                         {_.map(item.connections.live, (count, hour) => {
                                             let bgColor = hour < currentHour ? '#e7a539' : 'grey';
-                                            let percentageFilled = hour == currentHour ? currentMinutes / 60 * 100 : 100;
+                                            let percentageFilled = (hour == currentHour) ? currentMinutes / 60 * 100 : 100;
+                                            let limit = item.connections.limit.split('.').join("");
+
                                             return (
                                                 <div className={"bar" + (count === 0 ? " empty" : "")} 
                                                      style={{
-                                                        height: count / item.connections.limit * 100 + "%",
+                                                        height: count / limit * 100 + "%",
                                                         backgroundColor: bgColor,
                                                      }}
                                                      key={hour}
@@ -284,13 +275,13 @@ class ListItemDetails extends Component {
                                     </div>
                                     <div className="y-axis">
                                         <div className="devices">
-                                            <div className="value">
+                                            <div className="value" style={{'left': item.connections.limit.length > 3 ? '-28px' : '-20px'}}>
                                                 {item.connections.limit}
                                             </div>
                                         </div>
                                         <div className="devices">
-                                            <div className="value">
-                                                {item.connections.limit / 2}
+                                            <div className="value" style={{'left': item.connections.limit.length > 3 ? '-28px' : '-20px'}}>
+                                                {(item.connections.limit.split('.').join("") / 2).toLocaleString()}
                                             </div>
                                         </div>
                                     </div>
