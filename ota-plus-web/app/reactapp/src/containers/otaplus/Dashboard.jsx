@@ -74,24 +74,41 @@ const data = [
 
 @observer
 class Dashboard extends Component {
-	@observable filter = '';
+    @observable filter = '';
+	  @observable animationIsPlaying = true;
+
     constructor(props) {
         super(props);
         this.changeFilter = this.changeFilter.bind(this);
+        this.disableAnimation = this.disableAnimation.bind(this);
+        this.enableAnimation = this.enableAnimation.bind(this);
     }
     changeFilter(filter) {
+    }
+    disableAnimation(e) {
+      if(e) e.preventDefault();
+      this.animationIsPlaying = false;
+    }
+    enableAnimation(e) {
+      if(e) e.preventDefault();
+      this.animationIsPlaying = true;
     }
     render() {
         return (
             <div className="dashboard">
-            	<DashboardSubheader />
+            	<DashboardSubheader
+                data={data[0].systemStatus}
+              />
             	<DashboardFakeSubheader
                     filter={this.filter}
                     changeFilter={this.changeFilter}
+                    enableAnimation={this.enableAnimation}
+                    disableAnimation={this.disableAnimation}
                 />
             	<div className="content">
             		<DashboardList 
                         data={data[0].liveLogs}
+                        animationIsPlaying={this.animationIsPlaying}
                     />
             	</div>
             </div>
