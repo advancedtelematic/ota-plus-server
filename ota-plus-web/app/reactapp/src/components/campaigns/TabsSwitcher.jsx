@@ -30,7 +30,7 @@ class TabsSwitcher extends Component {
         this.activeTabId = value;
     }
     render() {
-        const { campaignsStore, groupsStore, showRenameModal, goToCampaignDetails, onHomePage } = this.props;
+        const { campaignsStore, showRenameModal, goToCampaignDetails, onHomePage } = this.props;
 
         return (
             <span className="content-container">
@@ -52,7 +52,6 @@ class TabsSwitcher extends Component {
                         <div className={"wrapper-list" + (this.activeTabId === 1 ? " hide" : "")}>
                             <CampaignsTufList 
                                 campaignsStore={campaignsStore}
-                                groupsStore={groupsStore}
                                 showRenameModal={showRenameModal}
                                 goToCampaignDetails={goToCampaignDetails}
                                 onHomePage={onHomePage}
@@ -68,7 +67,6 @@ class TabsSwitcher extends Component {
                         <div className={"wrapper-list" + (this.activeTabId === 0 ? " hide" : "")}>
                             <CampaignsLegacyList 
                                 campaignsStore={campaignsStore}
-                                groupsStore={groupsStore}
                                 showRenameModal={showRenameModal}
                                 goToCampaignDetails={goToCampaignDetails}
                                 onHomePage={onHomePage}

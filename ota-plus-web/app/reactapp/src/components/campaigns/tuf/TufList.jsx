@@ -11,7 +11,7 @@ class TufList extends Component {
         super(props);
     }
     render() {
-        const { campaignsStore, groupsStore, showRenameModal, goToCampaignDetails, onHomePage } = this.props;
+        const { campaignsStore, showRenameModal, goToCampaignDetails, onHomePage } = this.props;
         return (
             <span>
                 {campaignsStore.preparedCampaigns.length ?
@@ -36,7 +36,6 @@ class TufList extends Component {
                                             {_.map(campaignsStore.inPreparationCampaigns, (campaign) => {
                                                 return (
                                                     <CampaignsTufListItem 
-                                                        groupsStore={groupsStore}
                                                         goToCampaignDetails={goToCampaignDetails}
                                                         showRenameModal={showRenameModal}
                                                         campaign={campaign}
@@ -71,7 +70,6 @@ class TufList extends Component {
                                             {_.map(campaignsStore.runningCampaigns, (campaign) => {
                                                 return (
                                                     <CampaignsTufListItem 
-                                                        groupsStore={groupsStore}
                                                         goToCampaignDetails={goToCampaignDetails}
                                                         showRenameModal={showRenameModal}
                                                         campaign={campaign}
@@ -106,7 +104,6 @@ class TufList extends Component {
                                             {_.map(campaignsStore.finishedCampaigns, (campaign) => {
                                                 return (
                                                     <CampaignsTufListItem 
-                                                        groupsStore={groupsStore}
                                                         goToCampaignDetails={goToCampaignDetails}
                                                         showRenameModal={showRenameModal}
                                                         campaign={campaign}
@@ -141,7 +138,6 @@ class TufList extends Component {
                                             {_.map(campaignsStore.cancelledCampaigns, (campaign) => {
                                                 return (
                                                     <CampaignsTufListItem 
-                                                        groupsStore={groupsStore}
                                                         goToCampaignDetails={goToCampaignDetails}
                                                         showRenameModal={showRenameModal}
                                                         campaign={campaign}
@@ -176,7 +172,6 @@ class TufList extends Component {
                                             {_.map(campaignsStore.runningCampaigns, (campaign) => {
                                                 return (
                                                     <CampaignsTufListItem 
-                                                        groupsStore={groupsStore}
                                                         goToCampaignDetails={goToCampaignDetails}
                                                         showRenameModal={showRenameModal}
                                                         campaign={campaign}

@@ -22,7 +22,7 @@ class Home extends Component {
         this.uploadToTuf = !this.uploadToTuf;
     }
     render() {
-        const { devicesStore, hardwareStore, groupsStore, packagesStore, campaignsStore, addNewWizard, goToCampaignDetails, otaPlusMode } = this.props;
+        const { devicesStore, hardwareStore, packagesStore, campaignsStore, addNewWizard, goToCampaignDetails, otaPlusMode } = this.props;
         return (
             <span>
                 <div className="boxes-row">
@@ -81,7 +81,6 @@ class Home extends Component {
                             <div className="panel-body">
                                 <ActiveCampaigns 
                                     campaignsStore={campaignsStore}
-                                    groupsStore={groupsStore}
                                     goToCampaignDetails={goToCampaignDetails}
                                     otaPlusMode={otaPlusMode}
                                 />
@@ -97,7 +96,6 @@ class Home extends Component {
 Home.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
-    groupsStore: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired,
     campaignsStore: PropTypes.object.isRequired
 }
