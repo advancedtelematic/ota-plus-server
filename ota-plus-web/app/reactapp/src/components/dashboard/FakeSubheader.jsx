@@ -11,7 +11,7 @@ class FakeSubheader extends Component {
         super(props);
     }
     render() {
-        const {filter, changeFilter} = this.props;
+        const {filter, changeFilter, enableAnimation, disableAnimation} = this.props;
 		return (
             <div className="search-header">
                 <SubHeader>
@@ -24,10 +24,10 @@ class FakeSubheader extends Component {
                     </Form>
                     <div className="fake-actions">
                         <div className="animation">
-                            <a href="#" className="stop btn btn-main btn-small">
+                            <a href="#" className="stop btn btn-main btn-small" onClick={disableAnimation}>
                                 <i className="fa fa-pause" aria-hidden="true"></i>
                             </a>
-                            <a href="#" className="play btn btn-main btn-small">
+                            <a href="#" className="play btn btn-main btn-small" onClick={enableAnimation}>
                                 <i className="fa fa-play" aria-hidden="true"></i>
                             </a>
                         </div>
