@@ -50,6 +50,7 @@
     "react-progressbar.js": "^0.2.0",
     "react-tap-event-plugin": "^2.0.1",
     "react-timeseries-charts": "^0.12.8",
+    "react-transition-group": "^2.2.1",
     "style-loader": "^0.13.1",
     "underscore": "^1.8.3",
     "velocity-animate": "^1.4.3",
