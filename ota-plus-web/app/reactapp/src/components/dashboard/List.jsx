@@ -5,9 +5,6 @@ import _ from 'underscore';
 import ListItem from './ListItem';
 import moment from 'moment';
 
-const currentTime = moment();
-const realCurrentTime = moment().format("DD.MM.YYYY hh:mm");
-
 @observer
 class List extends Component {
     @observable tmpIntervalId = null;
@@ -18,17 +15,27 @@ class List extends Component {
         super(props);
         this.addItem = this.addItem.bind(this);
         this.getRandomInt = this.getRandomInt.bind(this);
-        setInterval(() => { this.addItem() }, 1000);
+        this.playAnimation = this.playAnimation.bind(this);
+        this.stopAnimation = this.stopAnimation.bind(this);
+        this.mixLogs = this.mixLogs.bind(this);
+        this.shuffleArray = this.shuffleArray.bind(this);
+        this.playAnimation();
     }
     componentWillMount() {
         _.each(this.props.data, (item, logCode) => {
             item.code = logCode;
-            item.time = currentTime.subtract(1, 'minutes').format("DD.MM.YYYY hh:mm");
+            item.time = moment().subtract(1, 'minutes').format("DD.MM.YYYY hh:mm");
             this.data.push(item);
         });
         this.keys = _.uniq(Object.keys(this.props.data));
     }
     componentWillUnmount() {
+        this.stopAnimation();
+    }
+    playAnimation() {
+        this.tmpIntervalId = setInterval(() => { this.addItem() }, 1000);
+    }
+    stopAnimation() {
         clearInterval(this.tmpIntervalId);
     }
     addItem() {
@@ -36,12 +43,34 @@ class List extends Component {
         if(randomInt !== this.keys.length) {
             let randomKey = this.keys[randomInt];
             let randomObject = this.props.data[randomKey];
-            randomObject.time = realCurrentTime;
+            randomObject.time = moment().format("DD.MM.YYYY hh:mm");
             this.data.unshift(randomObject);
         }
     }
     getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
+    }
+    mixLogs() {
+        let shuffledData = this.shuffleArray(this.data);
+        _.each(shuffledData, (item, index) => {
+            item.time = moment().format("DD.MM.YYYY hh:mm");
+        });
+        this.data = shuffledData;
+    }
+    shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.animationIsPlaying) {
+            this.playAnimation();
+            this.mixLogs();
+        } else {
+            this.stopAnimation();
+        }
     }
     render() {
 		return (

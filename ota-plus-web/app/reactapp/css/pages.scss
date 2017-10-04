@@ -470,7 +470,6 @@
                 width: 13%;
                 margin-right: 2%;
                 float: left;
-                background: red;
                 color: white;
                 height: 180px;
                 align-items: center;
@@ -478,6 +477,30 @@
                 flex-direction: column;
                 justify-content: center;
                 position: relative;
+
+                &.error {
+                    background: red;
+
+                    .triangle {
+                        border-left: 40px solid red;
+                    }
+                }
+
+                &.ok {
+                    background: green;
+
+                    .triangle {
+                        border-left: 40px solid green;
+                    }
+                }
+
+                &.warning {
+                    background: orange;
+
+                    .triangle {
+                        border-left: 40px solid orange;
+                    }
+                }
 
                 .title {
                     font-size: 15px;
@@ -497,8 +520,7 @@
                     width: 0;
                     height: 0;
                     border-top: 90px solid transparent;
-                    border-bottom: 90px solid transparent;
-                    border-left: 40px solid red;
+                    border-bottom: 90px solid transparent;                    
                 }
             }
 
