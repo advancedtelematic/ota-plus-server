@@ -674,8 +674,8 @@ export default class SoftwareRepository extends Component {
             ctx.moveTo(elementCoordinates.left - this.treeCanvasWidth + targetOffsetWidth, elementCoordinates.top - 150 + targetOffsetHeight / 2)
             let x = elementCoordinates.left - this.treeCanvasWidth + targetOffsetWidth + 20;
             ctx.lineTo(x, elementCoordinates.top - 150 + targetOffsetHeight / 2);
-            ctx.lineTo(x, campaignCoordinates.top - 150 + campaign.offsetHeight / 2)
-            ctx.lineTo(x + 40, campaignCoordinates.top - 150 + campaign.offsetHeight / 2)
+            ctx.lineTo(x, campaignCoordinates.top - 150 + campaign.childNodes[0].offsetHeight / 2)
+            ctx.lineTo(x + 40, campaignCoordinates.top - 150 + campaign.childNodes[0].offsetHeight / 2)
             ctx.stroke();
         })
     }
@@ -700,6 +700,7 @@ export default class SoftwareRepository extends Component {
         if (removeSelectedClass) {
             this.removeSelectedClasses();
         }
+
         e.target.classList.add('selected');
 
         const { ctx, canvas } = this._getCanvasContext();
@@ -725,7 +726,7 @@ export default class SoftwareRepository extends Component {
                 key.push(element[0]);
             }
 
-            key[0].classList.toggle('selected');
+            key[0].classList.add('selected');
 
             this.showPackageChildren(key);
             const keyCoordinates = key[0].getBoundingClientRect();
@@ -928,7 +929,7 @@ export default class SoftwareRepository extends Component {
                                             })}
                                         </div>
                                     </div>
-                                    <div className="info hide">
+                                    <div className="info hide" onClick={e => {e.stopPropagation()}}>
                                         <ul>
                                             <li>Name: {person.name}</li>
                                             <li>Company: {person.company}</li>
@@ -936,7 +937,14 @@ export default class SoftwareRepository extends Component {
                                             <li>Telephone: {person.phone}</li>
                                         </ul>
                                     </div>
-                                    {this.selectedItemObject.element.title === itemTitle ? <ItemVersions groupItem={groupItem} /> : ''}
+                                    <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+                                        {
+                                            this.selectedItemObject.element.title === itemTitle
+                                            ?
+                                            <ItemVersions groupItem={groupItem} />
+                                            : null
+                                        }
+                                    </VelocityTransitionGroup>
                                 </li>
                             )
                         })}
@@ -963,6 +971,7 @@ export default class SoftwareRepository extends Component {
                                         removeClasses={this.removeSelectedClasses}
                                         deselectAll={this.deselectAll}
                                         getParentsUntil={this.getParentsUntil}
+                                        scroll={this.scroll}
                                     />
                                 </div>
                             </div>
@@ -1029,6 +1038,7 @@ class TreeUl extends PureComponent {
     }
 
     getUserInfo(object,e) {
+        e.target.parentNode.nextSibling.classList.toggle('hide');
         if (this.userInfo.email && object.email === this.userInfo.email) {
             this.showUserInfo = !this.showUserInfo;
         } else {
@@ -1038,6 +1048,7 @@ class TreeUl extends PureComponent {
             ...object,
             element: e.target
         };
+        this.props.drawLinesFromKeys(e.target.parentNode.parentNode.previousSibling)
     }
 
     render() {
@@ -1087,16 +1098,14 @@ class TreeUl extends PureComponent {
                                             return <i title={key} className={`fa fa-owner ${this.userInfo.element && this.showUserInfo  && this.userInfo.element.title === key ? 'selected-user' : ''}`} aria-hidden="true" onClick={this.getUserInfo.bind(this,person)}/>
                                         })}
                                     </div>
-                                    {this.showUserInfo ?
-                                        <div className="user-info">
-                                            <ul>
-                                                <li>Name: {this.userInfo.name}</li>
-                                                <li>Company: {this.userInfo.company}</li>
-                                                <li>Email: {this.userInfo.email}</li>
-                                                <li>Telephone: {this.userInfo.phone}</li>
-                                            </ul>
-                                        </div>
-                                    : ''}
+                                    <div className="user-info hide">
+                                        <ul>
+                                            <li>Name: {this.userInfo.name}</li>
+                                            <li>Company: {this.userInfo.company}</li>
+                                            <li>Email: {this.userInfo.email}</li>
+                                            <li>Telephone: {this.userInfo.phone}</li>
+                                        </ul>
+                                    </div>
                                     {items.thresholds ?
                                         <div className="thresholds">
                                             <div>
@@ -1351,80 +1360,71 @@ class ItemVersions extends Component {
     render () {
         const {groupItem} = this.props;
         return (
-            <VelocityTransitionGroup
-                enter={{
-                    animation: "slideDown",
-                }}
-                leave={{
-                    animation: "slideUp",
-                }}
-            >
-                <div className='row versions-details' onClick={(e) => {e.stopPropagation()}}>
-                    {groupItem.warnings || groupItem.errors ?
-                        <div className="col-xs-12">
-                            <div className="warnings">
-                                {_.map(groupItem.warnings, (warning, key) => {
-                                    return <p><i key={key} className="fa warning" aria-hidden="true"/>{warning}</p>
-                                })}
-                                {_.map(groupItem.errors, (error, key) => {
-                                    return <p><i key={key} className="fa fa-error" aria-hidden="true"/>{error}</p>
-                                })}
-                            </div>
-                        </div>
-                    : ""}
-                    <div className="director-details col-xs-12">
-                        <div className="row">
-                            <div className="col-xs-4">
-                                <p>Distribution by devices</p>
-                                {groupItem.versions ? <StatsBlock type="devices" size={{width: '120', height: '120'}} pack={groupItem}/> : ''}
-                            </div>
-                            <div className="col-xs-4">
-                                <p>Distribution by group</p>
-                                {groupItem.stats && groupItem.stats.groups ? <StatsBlock type="groups" size={{width: '120', height: '120'}} pack={groupItem}/> : ''}
-                            </div>
-                            <div className="col-xs-4">
-                                <p>Failure rate</p>
-                                {groupItem.stats && groupItem.stats.installationResults ? <StatsBlock type="results" size={{width: '120', height: '120'}} pack={groupItem}/> : ''}
-                            </div>
+            <div className='row versions-details' onClick={(e) => {e.stopPropagation()}}>
+                {groupItem.warnings || groupItem.errors ?
+                    <div className="col-xs-12">
+                        <div className="warnings">
+                            {_.map(groupItem.warnings, (warning, key) => {
+                                return <p><i key={key} className="fa warning" aria-hidden="true"/>{warning}</p>
+                            })}
+                            {_.map(groupItem.errors, (error, key) => {
+                                return <p><i key={key} className="fa fa-error" aria-hidden="true"/>{error}</p>
+                            })}
                         </div>
                     </div>
-                    <div className="col-xs-12">
-                        <ul className="versions">
+                : ""}
+                <div className="director-details col-xs-12">
+                    <div className="row">
+                        <div className="col-xs-4">
+                            <p>Distribution by devices</p>
+                            {groupItem.versions ? <StatsBlock type="devices" size={{width: '120', height: '120'}} pack={groupItem}/> : ''}
+                        </div>
+                        <div className="col-xs-4">
+                            <p>Distribution by group</p>
+                            {groupItem.stats && groupItem.stats.groups ? <StatsBlock type="groups" size={{width: '120', height: '120'}} pack={groupItem}/> : ''}
+                        </div>
+                        <div className="col-xs-4">
+                            <p>Failure rate</p>
+                            {groupItem.stats && groupItem.stats.installationResults ? <StatsBlock type="results" size={{width: '120', height: '120'}} pack={groupItem}/> : ''}
+                        </div>
+                    </div>
+                </div>
+                <div className="col-xs-12">
+                    <ul className="versions">
 
-                            {groupItem.versions && Object.keys(groupItem.versions).map((version, versionKey) => {
-                                const versionItem = groupItem.versions[version];
-                                return (
+                        {groupItem.versions && Object.keys(groupItem.versions).map((version, versionKey) => {
+                            const versionItem = groupItem.versions[version];
+                            return (
 
-                                    <li key={versionKey}>
-                                        <div className="row">
-                                            <div className="col-xs-6">
-                                                <div className="left-box">
-                                                    <div className="version-info">
-                                                        <span className="bold">Version: {version}</span>
-                                                        <span className="bold">Created at: {versionItem.created}</span>
-                                                        <span className="bold">Updated at: {versionItem.updated}</span>
-                                                        <span className="bold">Hash: {versionItem.hash}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-xs-6">
-                                                <div className="right-box">
-                                                    <span className="bold">Length: {versionItem.length}</span>
-                                                    <span className="bold">Installed on {versionItem.installedOnEcus} ECU(s)</span>
-                                                    <span className="bold">Hardware ids: {_.map(versionItem.id, (id, key) => {
-                                                        return <span key={key} className="hardware-label">{id}</span>
-                                                    })}</span>
+                                <li key={versionKey}>
+                                    <div className="row">
+                                        <div className="col-xs-6">
+                                            <div className="left-box">
+                                                <div className="version-info">
+                                                    <span className="bold">Version: {version}</span>
+                                                    <span className="bold">Created at: {versionItem.created}</span>
+                                                    <span className="bold">Updated at: {versionItem.updated}</span>
+                                                    <span className="bold">Hash: {versionItem.hash}</span>
                                                 </div>
                                             </div>
                                         </div>
-                                    </li>
+                                        <div className="col-xs-6">
+                                            <div className="right-box">
+                                                <span className="bold">Length: {versionItem.length}</span>
+                                                <span className="bold">Installed on {versionItem.installedOnEcus} ECU(s)</span>
+                                                <span className="bold">Hardware ids: {_.map(versionItem.id, (id, key) => {
+                                                    return <span key={key} className="hardware-label">{id}</span>
+                                                })}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
 
-                                )
-                            })}
-                        </ul>
-                    </div>
+                            )
+                        })}
+                    </ul>
                 </div>
-            </VelocityTransitionGroup>
+            </div>
         )
     }
 }
