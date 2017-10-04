@@ -15,7 +15,7 @@ class LegacyListItem extends Component {
         this.props.showRenameModal(this.props.campaign.id);
     }
     render() {
-        const { groupsStore, campaign, goToCampaignDetails, onHomePage } = this.props;
+        const { campaign, goToCampaignDetails, onHomePage } = this.props;
 
         if(campaign.status === "Active") {
             var progress = Math.min(Math.round(campaign.summary.overallUpdatedDevicesCount/Math.max(campaign.summary.overallDevicesCount, 1) * 100), 100);
@@ -91,7 +91,6 @@ class LegacyListItem extends Component {
 }
 
 LegacyListItem.propTypes = {
-    groupsStore: PropTypes.object.isRequired,
     campaign: PropTypes.object.isRequired,
     goToCampaignDetails: PropTypes.func.isRequired
 }

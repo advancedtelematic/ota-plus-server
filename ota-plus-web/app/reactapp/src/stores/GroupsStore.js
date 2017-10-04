@@ -32,7 +32,7 @@ export default class GroupsStore {
 
     @observable groupsCurrentPage = 0;
     @observable groupsTotalCount = null;
-    @observable groupsLimit = 1000;
+    @observable groupsLimit = 10;
 
     constructor() {
         resetAsync(this.groupsFetchAsync);
@@ -44,14 +44,13 @@ export default class GroupsStore {
 
     fetchGroups() {
         resetAsync(this.groupsFetchAsync, true);
-        this.groupsCurrentPage = 0;
         return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsLimit + '&offset=' + this.groupsCurrentPage * this.groupsLimit)
             .then(function (response) {
                 let groups = response.data.values;
                 if(groups.length) {
                     let after = _.after(groups.length, () => {
                         this.groups = _.uniq(this.groups.concat(groups), group => group.id);
-                        this._prepareGroups();                        
+                        this._prepareGroups();
                         this.groupsFetchAsync = handleAsyncSuccess(response);
                     }, this);
                     _.each(groups, (group, index) => {
