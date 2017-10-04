@@ -77,39 +77,33 @@ class GroupsList extends Component {
                         groupsStore.fetchGroups()
                     }}
                 >
-                    {groupsStore.groupsFetchAsync.isFetching ? 
-                        <div className="wrapper-center">
-                            <Loader />
+                    <span>
+                        <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
+                            {this.fakeHeaderLetter}
                         </div>
-                    :
-                        <span>
-                            <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
-                                {this.fakeHeaderLetter}
-                            </div>
-                            
-                            {_.map(groupsStore.preparedGroups, (groups, letter) => {
-                                return (
-                                    <span key={letter}>
-                                        <div className="header">
-                                            {letter}
-                                        </div>
-                                        {_.map(groups, (group, index) => {
-                                            return (
-                                                <span key={index}>
-                                                    <GroupsListItem 
-                                                        group={group}
-                                                        setWizardData={setWizardData}
-                                                        groupsStore={groupsStore}
-                                                        isChosen={_.findWhere(chosenGroups, {id: group.id}) ? true : false}
-                                                    /> 
-                                                </span>
-                                            );
-                                        })}
-                                    </span>
-                                );
-                            })}
-                        </span>
-                    }
+                        
+                        {_.map(groupsStore.preparedGroups, (groups, letter) => {
+                            return (
+                                <span key={letter}>
+                                    <div className="header">
+                                        {letter}
+                                    </div>
+                                    {_.map(groups, (group, index) => {
+                                        return (
+                                            <span key={index}>
+                                                <GroupsListItem 
+                                                    group={group}
+                                                    setWizardData={setWizardData}
+                                                    groupsStore={groupsStore}
+                                                    isChosen={_.findWhere(chosenGroups, {id: group.id}) ? true : false}
+                                                /> 
+                                            </span>
+                                        );
+                                    })}
+                                </span>
+                            );
+                        })}
+                    </span>
                 </InfiniteScroll>
             </div>
         );
