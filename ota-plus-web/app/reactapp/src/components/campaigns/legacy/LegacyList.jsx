@@ -11,7 +11,7 @@ class LegacyList extends Component {
         super(props);
     }
     render() {
-        const { campaignsStore, groupsStore, showRenameModal, goToCampaignDetails, onHomePage } = this.props;
+        const { campaignsStore, showRenameModal, goToCampaignDetails, onHomePage } = this.props;
         return (
             <span>
                 {campaignsStore.preparedLegacyCampaigns.length ?
@@ -35,7 +35,6 @@ class LegacyList extends Component {
                                             {_.map(campaignsStore.runningLegacyCampaigns, (campaign) => {
                                                 return (
                                                     <CampaignsLegacyListItem 
-                                                        groupsStore={groupsStore}
                                                         goToCampaignDetails={goToCampaignDetails}
                                                         showRenameModal={showRenameModal}
                                                         campaign={campaign}
@@ -68,7 +67,6 @@ class LegacyList extends Component {
                                             {_.map(campaignsStore.finishedLegacyCampaigns, (campaign) => {
                                                 return (
                                                     <CampaignsLegacyListItem 
-                                                        groupsStore={groupsStore}
                                                         goToCampaignDetails={goToCampaignDetails}
                                                         showRenameModal={showRenameModal}
                                                         campaign={campaign}
@@ -101,7 +99,6 @@ class LegacyList extends Component {
                                             {_.map(campaignsStore.runningLegacyCampaigns, (campaign) => {
                                                 return (
                                                     <CampaignsLegacyListItem 
-                                                        groupsStore={groupsStore}
                                                         goToCampaignDetails={goToCampaignDetails}
                                                         showRenameModal={showRenameModal}
                                                         campaign={campaign}

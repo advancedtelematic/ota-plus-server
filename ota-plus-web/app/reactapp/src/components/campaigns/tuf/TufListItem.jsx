@@ -14,7 +14,7 @@ class TufListItem extends Component {
         this.props.showRenameModal(this.props.campaign.id);
     }
     render() {
-        const { groupsStore, campaign, goToCampaignDetails, rename, type, onHomePage } = this.props;
+        const { campaign, goToCampaignDetails, rename, type, onHomePage } = this.props;
 
         let totalAffected = 0;
         let totalProcessed = 0;
@@ -110,7 +110,6 @@ class TufListItem extends Component {
 }
 
 TufListItem.propTypes = {
-    groupsStore: PropTypes.object.isRequired,
     campaign: PropTypes.object.isRequired,
     goToCampaignDetails: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired

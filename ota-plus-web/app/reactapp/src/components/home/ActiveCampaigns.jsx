@@ -10,7 +10,7 @@ class ActiveCampaigns extends Component {
         super(props);        
     }    
     render() {
-        const { campaignsStore, groupsStore, goToCampaignDetails, otaPlusMode } = this.props;
+        const { campaignsStore, goToCampaignDetails, otaPlusMode } = this.props;
         return (
             campaignsStore.campaignsFetchAsync.isFetching || campaignsStore.campaignsLegacyFetchAsync.isFetching ?
                 <div className="wrapper-center">
@@ -19,7 +19,6 @@ class ActiveCampaigns extends Component {
             :
                 <CampaignsTabsSwitcher 
                     campaignsStore={campaignsStore}
-                    groupsStore={groupsStore}
                     showRenameModal={null}
                     goToCampaignDetails={goToCampaignDetails}
                     onHomePage={true}

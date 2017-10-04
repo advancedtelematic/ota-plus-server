@@ -22,13 +22,11 @@ class Home extends Component {
         this.props.packagesStore.fetchPackages();
         this.props.campaignsStore.fetchCampaigns();
         this.props.campaignsStore.fetchLegacyCampaigns();
-        this.props.groupsStore.fetchGroups();
     }
     componentWillUnmount() {
         this.props.devicesStore._reset();
         this.props.packagesStore._reset();
         this.props.campaignsStore._reset();
-        this.props.groupsStore._reset();
     }
     sanityCheckCompleted() {
         return this.props.systemReady || Cookies.get('systemReady') == 1;
@@ -60,7 +58,7 @@ class Home extends Component {
         }
     }
     render() {
-        const { devicesStore, packagesStore, campaignsStore, groupsStore, hardwareStore, userStore, provisioningStore, featuresStore, setSystemReady, addNewWizard, goToCampaignDetails, otaPlusMode } = this.props;
+        const { devicesStore, packagesStore, campaignsStore, hardwareStore, userStore, provisioningStore, featuresStore, setSystemReady, addNewWizard, goToCampaignDetails, otaPlusMode } = this.props;
         return (
             <FadeAnimation
                 display="flex">
@@ -75,7 +73,6 @@ class Home extends Component {
                                     devicesStore={devicesStore}
                                     packagesStore={packagesStore}
                                     campaignsStore={campaignsStore}
-                                    groupsStore={groupsStore}
                                     hardwareStore={hardwareStore}
                                     addNewWizard={addNewWizard}
                                     goToCampaignDetails={goToCampaignDetails}
@@ -104,7 +101,6 @@ Home.contextTypes = {
 Home.propTypes = {
     devicesStore: PropTypes.object,
     hardwareStore: PropTypes.object,
-    groupsStore: PropTypes.object,
     packagesStore: PropTypes.object,
     campaignsStore: PropTypes.object,
     userStore: PropTypes.object,
