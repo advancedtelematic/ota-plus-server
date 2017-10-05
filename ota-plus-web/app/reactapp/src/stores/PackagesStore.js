@@ -111,8 +111,6 @@ export default class PackagesStore {
     @observable directorDeviceHistoryTotalCount = null;
     @observable directorDeviceHistoryLimit = 10;
 
-    @observable packagesLimit = 100;
-
     constructor() {
         resetAsync(this.directorRepoExistsFetchAsync);
         resetAsync(this.directorRepoCreateFetchAsync);
@@ -197,8 +195,9 @@ export default class PackagesStore {
         resetAsync(this.packagesFetchAsync, true);
         return axios.get(API_PACKAGES + '?regex=' + (filter ? filter : ''))
             .then(function(response) {
-                this.initialPackages = response.data.splice(0, this.packagesLimit);
-                this.packages = response.data.splice(0, this.packagesLimit);
+                this.initialPackages = response.data;
+                this.packages = response.data;
+                
                 let directorPackages = [];
                 let after = _.after(directorPackages.length, () => {
                     this._prepareDirectorPackages(directorPackages);
