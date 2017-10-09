@@ -2,9 +2,11 @@ package com.advancedtelematic
 
 import _root_.akka.stream.Materializer
 import cats.syntax.show._
-import mockws.{MockWS, Route}
+import com.advancedtelematic.AuthPlusAuthentication.AuthenticatedApiAction
+import mockws.{MockWS, MockWSHelpers, Route}
 import org.genivi.sota.data.Uuid
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json._
@@ -12,10 +14,11 @@ import play.api.libs.ws.WSClient
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import scala.concurrent.Future
+
+import scala.concurrent.{ExecutionContext, Future}
 
 
-class AuthPlusAuthenticationSpec extends PlaySpec with OneServerPerSuite with Results {
+class AuthPlusAuthenticationSpec extends PlaySpec with GuiceOneServerPerSuite with Results {
 
   val activeToken = "token.is.valid"
   val inactiveToken = "token.is.invalid"
@@ -46,10 +49,15 @@ class AuthPlusAuthenticationSpec extends PlaySpec with OneServerPerSuite with Re
     .build
 
   implicit val mat = application.injector.instanceOf[Materializer]
+  implicit val ec = application.injector.instanceOf[ExecutionContext]
 
-  val authAction = application.injector.instanceOf[AuthPlusAuthentication]
+  val BodyParser: PlayBodyParsers = PlayBodyParsers()
 
-  def fakeRoute() : Action[AnyContent] = authAction.AuthenticatedApiAction.async { implicit request =>
+  val Action: DefaultActionBuilder = DefaultActionBuilder(BodyParser.anyContent)
+
+  val authAction = application.injector.instanceOf[AuthenticatedApiAction]
+
+  def fakeRoute() : Action[AnyContent] = authAction.async { implicit request =>
     Future.successful(Ok(""))
   }
 

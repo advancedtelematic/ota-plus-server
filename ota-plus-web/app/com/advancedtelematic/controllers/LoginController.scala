@@ -2,30 +2,37 @@ package com.advancedtelematic.controllers
 
 import akka.{Done, NotUsed}
 import akka.actor.ActorSystem
-import org.genivi.sota.data.Namespace
-import org.genivi.sota.messaging.Messages.UserLogin
 import com.advancedtelematic._
-import com.advancedtelematic.api.{UnexpectedResponse, MalformedResponse}
+import com.advancedtelematic.api.{MalformedResponse, UnexpectedResponse}
 import java.time.Instant
 import javax.inject.{Inject, Singleton}
 
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
-import org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
+import com.advancedtelematic.libats.auth.NsFromToken
+import com.advancedtelematic.libats.data.Namespace
+import com.advancedtelematic.libats.messaging.{MessageBus, MessageBusPublisher}
+import com.advancedtelematic.libats.messaging.Messages.MessageLike
 import play.api.Logger
 import play.api.http.{HeaderNames, MimeTypes}
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{Json, JsValue}
 import play.api.Configuration
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.ws.{WSAuthScheme, WSClient, WSResponse}
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{ Failure, Success, Try }
-
-import cats.data.Xor
-import org.genivi.sota.messaging.{MessageBus, MessageBusPublisher}
+import scala.util.{Failure, Success, Try}
+import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 
 final case class LoginData(username: String, password: String)
+
+final case class UserLogin(id: String, timestamp: Instant)
+
+object UserLogin {
+  import com.advancedtelematic.libats.codecs.AkkaCirce._
+
+  implicit val MessageLikeInstance = MessageLike[UserLogin](_.id)
+}
 
 final case class UnexpectedToken(token: IdToken, msg: String) extends Throwable {
   override def getMessage: String =
@@ -38,11 +45,12 @@ final case class UnexpectedToken(token: IdToken, msg: String) extends Throwable 
 @Singleton
 class LoginController @Inject()(
   val conf: Configuration,
-  val messagesApi: MessagesApi,
   val ws: WSClient,
-  val clientExec: ApiClientExec)
+  val clientExec: ApiClientExec,
+  authAction: AuthenticatedAction,
+  components: ControllerComponents)
   (implicit system: ActorSystem, context: ExecutionContext)
-    extends Controller
+    extends AbstractController(components)
     with I18nSupport
     with ApiClientSupport {
 
@@ -64,8 +72,8 @@ class LoginController @Inject()(
 
   lazy val messageBus =
     MessageBus.publisher(system, config) match {
-      case Xor.Right(v) => v
-      case Xor.Left(error) =>
+      case Right(v) => v
+      case Left(error) =>
         log.error("Could not initialize message bus publisher", error)
         MessageBusPublisher.ignore
     }
@@ -74,7 +82,7 @@ class LoginController @Inject()(
     Ok(views.html.login(auth0Config))
   }
 
-  def logout: Action[AnyContent] = AuthenticatedAction { implicit req =>
+  def logout: Action[AnyContent] = authAction { implicit req =>
     ws.url(s"${authPlusConfig.uri}/revoke")
       .withAuth(authPlusConfig.clientId, authPlusConfig.clientSecret, WSAuthScheme.BASIC)
       .post(Map("token" -> Seq(req.authPlusAccessToken.value)))
@@ -167,7 +175,9 @@ class LoginController @Inject()(
 
         tokens.run
           .map("Processing authorization callback" ~< _)
-          .foreach(computation => log.info(computation.run.written.shows))
+          .foreach(computation =>
+            log.info(computation.run.written.shows)
+          )
 
         tokens.run.map(_.fold[Result](_ => Redirect(routes.LoginController.login()), {
           case (idToken, auth0AccessToken, authPlusAccessToken, ns) =>
@@ -182,13 +192,13 @@ class LoginController @Inject()(
   }
 
   def getAuth0Tokens(code: String): AsyncDescribedComputation[(IdToken, Auth0AccessToken)] = {
-    import scalaz.syntax.either._
+    import cats.syntax.either._
     def extractTokens(response: WSResponse): DescribedComputation[(IdToken, Auth0AccessToken)] =
       for {
         status  <- checkStatusOk(response)
         json    <- \/.fromTryCatchNonFatal { response.json } ~>? "Parse response to json"
-        idToken <- (json \ "id_token").asOpt[String]
-                     .flatMap(IdToken.fromTokenValue(_).toOption) ~>? "Read id_token from response"
+        idToken <- Either.fromOption((json \ "id_token").asOpt[String], "No id_token in response")
+                     .flatMap(IdToken.fromTokenValue).fold(failure, _ ~> "Read id_token from response")
         accessToken <- (response.json \ "access_token")
                         .asOpt[String]
                         .map(Auth0AccessToken.apply) ~>? "Read access token from response"
@@ -199,7 +209,7 @@ class LoginController @Inject()(
                           s"https://${auth0Config.domain}/oauth/token" ~> ("Token endpoint " + _))
       response <- ws
                    .url(tokenEndpoint)
-                   .withHeaders(HeaderNames.ACCEPT -> MimeTypes.JSON)
+                   .withHttpHeaders(HeaderNames.ACCEPT -> MimeTypes.JSON)
                    .post(
                        Json.obj(
                            "client_id"     -> auth0Config.clientId,
@@ -239,7 +249,7 @@ class LoginController @Inject()(
     (for {
       response <- ws
                    .url(tokensEndpoint)
-                   .withHeaders(HeaderNames.ACCEPT -> MimeTypes.JSON)
+                   .withHttpHeaders(HeaderNames.ACCEPT -> MimeTypes.JSON)
                    .withAuth(authPlusConfig.clientId, authPlusConfig.clientSecret, WSAuthScheme.BASIC)
                    .post(payload)
                    .describe(s"Send request to $tokensEndpoint")
@@ -247,15 +257,8 @@ class LoginController @Inject()(
     } yield accessToken).run.map("Request access token from Auth+" ~< _) |> AsyncDescribedComputation.apply
   }
 
-  import org.genivi.sota.http.{IdToken => IdTokenSub, NsFromToken}
-  private[this] def extractNsFromToken(token: IdToken)
-    (implicit nsFromToken: NsFromToken[IdTokenSub]) : DescribedComputation[Namespace] = {
-
-    import cats.data.Xor
-    NsFromToken.parseToken(token.value) match {
-      case Xor.Right(t) => success(nsFromToken.toNamespaceScope(t).namespace, "Extracted namespace")
-      case Xor.Left(msg) => failure(msg) ~~ UnexpectedToken(token, msg)
-    }
+  private[this] def extractNsFromToken(token: IdToken): DescribedComputation[Namespace] = {
+    success(Namespace(token.userId.id), "Extracted namespace")
   }
 
 }
@@ -269,12 +272,12 @@ final case class Auth0Config(secret: String,
 object Auth0Config {
   def apply(configuration: Configuration): Option[Auth0Config] = {
     for {
-      clientSecret     <- configuration.getString("auth0.clientSecret")
-      clientId         <- configuration.getString("auth0.clientId")
-      callbackUrl      <- configuration.getString("auth0.callbackURL")
-      domain           <- configuration.getString("auth0.domain")
-      authPlusClientId <- configuration.getString("auth0.authPlusClientId")
-      dbConnection     <- configuration.getString("auth0.dbConnection")
+      clientSecret     <- configuration.get[Option[String]]("auth0.clientSecret")
+      clientId         <- configuration.get[Option[String]]("auth0.clientId")
+      callbackUrl      <- configuration.get[Option[String]]("auth0.callbackURL")
+      domain           <- configuration.get[Option[String]]("auth0.domain")
+      authPlusClientId <- configuration.get[Option[String]]("auth0.authPlusClientId")
+      dbConnection     <- configuration.get[Option[String]]("auth0.dbConnection")
     } yield Auth0Config(clientSecret, clientId, callbackUrl, domain, authPlusClientId, dbConnection)
   }
 }

@@ -7,13 +7,17 @@ package com.advancedtelematic.controllers
 
 import javax.inject.{Inject, Named, Singleton}
 
+import akka.stream.scaladsl.Source
+import akka.util.ByteString
 import com.advancedtelematic.api.ApiVersion
 import com.advancedtelematic.api.OtaPlusConfig
 import com.advancedtelematic.{AuthenticatedAction, AuthenticatedRequest, AuthPlusAuthentication}
+import com.advancedtelematic.AuthPlusAuthentication.AuthenticatedApiAction
 import org.slf4j.LoggerFactory
 import play.api._
 import play.api.http.HttpEntity
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.streams.Accumulator
 import play.api.libs.ws._
 import play.api.mvc._
 import play.filters.csrf.CSRF
@@ -26,13 +30,14 @@ import scala.concurrent.Future
  */
 @Singleton
 class Application @Inject() (ws: WSClient,
-                             val messagesApi: MessagesApi,
+                             components: ControllerComponents,
                              val conf: Configuration,
-                             val authAction: AuthPlusAuthentication)
-  extends Controller with I18nSupport with OtaPlusConfig {
+                             val authAction: AuthenticatedApiAction)
+  extends AbstractController(components) with I18nSupport with OtaPlusConfig {
 
   import ApiVersion.ApiVersion
 
+  implicit val ec = components.executionContext
   val auditLogger = LoggerFactory.getLogger("audit")
 
   private[this] val auth0Config = Auth0Config(conf).get
@@ -45,8 +50,6 @@ class Application @Inject() (ws: WSClient,
     // Useful to debug instances running in the cloud.
     auditLogger.info(s"[Application.$caller()] $msg")
   }
-
-  implicit val context = play.api.libs.concurrent.Execution.Implicits.defaultContext
 
   /**
    * Returns the uri of the service to proxy to.
@@ -119,7 +122,13 @@ class Application @Inject() (ws: WSClient,
     case (ApiVersion.v2, "campaigns" :: _) => campaignerApiUri
     case (ApiVersion.v2, "cancel_device_update_campaign" :: _) => campaignerApiUri
   }
+  val allowedHeaders = Seq("content-type")
+  private def passHeaders(hdrs: Headers) = hdrs.toSimpleMap.filter(h => allowedHeaders.contains(h._1.toLowerCase))
 
+
+  val bodySource = BodyParser { req =>
+    Accumulator.source[ByteString].map(Right.apply)
+  }
   /**
    * Proxies the request to the given service
    *
@@ -127,34 +136,29 @@ class Application @Inject() (ws: WSClient,
    * @param req request to proxy
    * @return The proxied request
    */
-  private def proxyTo(apiUri: String, req: AuthenticatedRequest[RawBuffer]) : Future[Result] = {
+  private def proxyTo(apiUri: String, req: AuthenticatedRequest[Source[ByteString, _]]) : Future[Result] = {
 
-    val allowedHeaders = Seq("content-type", "x-ats-traceid")
+    val allowedHeaders = Seq("content-type")
     def passHeaders(hdrs: Headers) = hdrs.toSimpleMap.filter(h => allowedHeaders.contains(h._1.toLowerCase)) +
           ("x-ats-namespace" -> req.namespace.get)
 
-    val w = ws.url(apiUri + req.path)
+    val wreq = ws.url(apiUri + req.path)
       .withFollowRedirects(false)
       .withMethod(req.method)
-      .withQueryString(req.queryString.mapValues(_.head).toSeq :_*)
-      .withHeaders(passHeaders(req.headers).toSeq :_*)
-      .withHeaders(("Authorization", "Bearer " + req.authPlusAccessToken.value))
-
-    val wreq = req.body.asBytes() match {
-      case Some(b) => w.withBody(b)
-      case None => w.withBody(FileBody(req.body.asFile))
-    }
+      .withQueryStringParameters(req.queryString.mapValues(_.head).toSeq :_*)
+      .addHttpHeaders(passHeaders(req.headers).toSeq :_*)
+      .addHttpHeaders(("Authorization", "Bearer " + req.authPlusAccessToken.value))
+      .withBody(req.body)
 
     wreq.stream().map { resp =>
-      val rStatus = resp.headers.status
+      val rStatus = resp.status
       val rHeaders = resp.headers
-        .headers
         .filterNot { case(k, v) => k == "Content-Length" }
         .mapValues(_.head)
 
       Result(
         header = ResponseHeader(rStatus, rHeaders),
-        body = play.api.http.HttpEntity.Streamed(resp.body, contentLength = None, contentType = None)
+        body = play.api.http.HttpEntity.Streamed(resp.bodyAsSource, contentLength = None, contentType = None)
       )
     }
   }
@@ -165,8 +169,8 @@ class Application @Inject() (ws: WSClient,
    * @param path Path of the request
    * @return
    */
-  def apiProxy(version: ApiVersion, path: String): Action[RawBuffer] =
-    authAction.AuthenticatedApiAction.async(parse.raw) { req =>
+  def apiProxy(version: ApiVersion, path: String): Action[Source[ByteString, _]] =
+    authAction.async(bodySource) { req =>
       apiByPath(version, path) match {
         case Some(p) => proxyTo(p, req)
         case None => Future.successful(NotFound("Could not proxy request to requested path"))
@@ -178,7 +182,7 @@ class Application @Inject() (ws: WSClient,
    *
    * @return OK response and index html
    */
-  def index : Action[AnyContent] = AuthenticatedAction { implicit req =>
+  def index : Action[AnyContent] = authAction { implicit req =>
     val wsUrl = s"$wsScheme://bearer:${req.authPlusAccessToken.value}@$wsHost:$wsPort$wsPath"
     Ok(views.html.main(auth0Config, CSRF.getToken, wsUrl))
   }

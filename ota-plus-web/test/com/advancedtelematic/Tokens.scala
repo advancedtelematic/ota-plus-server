@@ -21,7 +21,7 @@ object Tokens {
     val HmacKeySize    = 32
     val bytes          = Array.fill[Byte](HmacKeySize)(Random.nextInt().toByte)
     val key: SecretKey = new SecretKeySpec(bytes, "HmacSHA256")
-    val keyInfo        = HS256.signingKey(key).toOption.get
+    val keyInfo        = HS256.signingKey(key).right.get
     CompactSerialization(HS256.withKey(JwsPayload(payload), keyInfo))
   }
 }

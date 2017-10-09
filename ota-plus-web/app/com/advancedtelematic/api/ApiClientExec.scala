@@ -5,9 +5,10 @@ import javax.inject.Inject
 import com.fasterxml.jackson.core.JsonParseException
 import play.api.http.HttpEntity
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Reads}
-import play.api.libs.ws.{StreamedResponse, WSClient, WSRequest, WSResponse}
+import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.{ResponseHeader, Result}
 import play.api.mvc.Results.Ok
+import play.libs.ws.ahc.StreamedResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -42,19 +43,19 @@ class ApiClientExec @Inject()(wsClient: WSClient)(implicit ec: ExecutionContext)
   }
 
   def runStreamedResult(request: WSClient => WSRequest): Future[Result] = {
-    request(wsClient).stream().map {
-      case StreamedResponse(resp, body) =>
-        val contentType = resp.headers.get("Content-Type").flatMap(_.headOption)
-          .getOrElse("application/octet-stream")
+    request(wsClient).stream().map { resp =>
+      val body = resp.bodyAsSource
+      val contentType = resp.headers.get("Content-Type").flatMap(_.headOption)
+        .getOrElse("application/octet-stream")
 
-        // If there's a content length, send that, otherwise return the body chunked
-        val resultBody = resp.headers.get("Content-Length") match {
-          case Some(Seq(length)) =>
-            HttpEntity.Streamed(body, Some(length.toLong), Some(contentType))
-          case _ =>
-            Ok.chunked(body).as(contentType).body
-        }
-        Result(toResultHeader(resp.status, resp.headers), resultBody)
+      // If there's a content length, send that, otherwise return the body chunked
+      val resultBody = resp.headers.get("Content-Length") match {
+        case Some(Seq(length)) =>
+          HttpEntity.Streamed(body, Some(length.toLong), Some(contentType))
+        case _ =>
+          Ok.chunked(body).as(contentType).body
+      }
+      Result(toResultHeader(resp.status, resp.headers), resultBody)
     }
   }
 
@@ -73,7 +74,7 @@ class ApiClientExec @Inject()(wsClient: WSClient)(implicit ec: ExecutionContext)
   }
 
   protected def run(request: WSRequest): Future[WSResponse] = {
-    request.execute
+    request.execute()
   }
 
   private def isSuccess(response: WSResponse): Boolean = {
@@ -82,7 +83,7 @@ class ApiClientExec @Inject()(wsClient: WSClient)(implicit ec: ExecutionContext)
 
   private val toResult: WSResponse => Result = { resp =>
     Result(
-      header = toResultHeader(resp.status, resp.allHeaders),
+      header = toResultHeader(resp.status, resp.headers),
       body = HttpEntity.Strict(resp.bodyAsBytes, None)
     )
   }

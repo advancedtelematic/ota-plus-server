@@ -20,8 +20,6 @@ testOptions in UnitTests += Tests.Argument(TestFrameworks.ScalaTest, "-l", "Brow
 
 testOptions in BrowserTests += Tests.Argument(TestFrameworks.ScalaTest, "-n", "BrowserTests")
 
-//resolvers += "scalaz-bintray"  at "http://dl.bintray.com/scalaz/releases"
-
 dockerExposedPorts := Seq(9000)
 
 maintainer in Docker := "dev@advancedtelematic.com"
@@ -34,23 +32,23 @@ dockerUpdateLatest in Docker := true
 
 bashScriptExtraDefines ++= Seq("""addJava "-Xmx800m"""")
 
-libraryDependencies ++= Seq (
-    Dependencies.AkkaHttp,
-    Dependencies.AkkaStream,
-    Dependencies.AkkaPersistence,
-    Dependencies.CassandraForAkkaPersistence,
-    Dependencies.AkkaTestKit,
-    "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.0",
-    "org.webjars" %% "webjars-play" % "2.4.0-1",
-    "org.webjars" % "webjars-locator" % "0.27",
-    "com.amazonaws" % "aws-java-sdk-ses" % "1.11.13",
-    ws, Dependencies.MockWs,
-    play.sbt.Play.autoImport.cache,
-    Dependencies.SotaCommonMessaging,
-    Dependencies.SotaCommonTest
-    ) ++ Dependencies.JsonWebSecurity ++ Dependencies.LogTree
+dependencyOverrides ++= Dependencies.Netty
 
-enablePlugins(PlayScala, Versioning.Plugin)
+libraryDependencies ++= Seq (
+    Dependencies.CassandraForAkkaPersistence,
+    ws,
+    guice,
+    Dependencies.PlayJson
+    ) ++
+  Dependencies.TestFrameworks ++
+  Dependencies.JsonWebSecurity ++
+  Dependencies.LogTree ++
+  Dependencies.SotaCommon ++
+  Dependencies.LibAts
+
+enablePlugins(PlayScala, PlayNettyServer, Versioning.Plugin)
+
+disablePlugins(PlayAkkaHttpServer)
 
 Versioning.settings
 
