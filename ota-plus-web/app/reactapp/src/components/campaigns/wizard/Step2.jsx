@@ -17,6 +17,7 @@ class WizardStep2 extends Component {
     }
     componentWillMount() {
         this.props.packagesStore.fetchPackages();
+        this.props.packagesStore.fetchTufPackages();
     }
     componentDidMount() {
         this.disableItemsOnEnter(this.props.wizardData[1].packages);
@@ -77,7 +78,7 @@ class WizardStep2 extends Component {
         const { wizardData, packagesStore } = this.props;
         let chosenPackagesList = wizardData[1].packages;
         return (
-            !packagesStore.packagesCount && packagesStore.packagesFetchAsync.isFetching ? 
+            !packagesStore.packagesCount && packagesStore.packagesFetchAsync.isFetching && packagesStore.packagesTufFetchAsync.isFetching ? 
                 <div className="wrapper-center">
                     <Loader />
                 </div>

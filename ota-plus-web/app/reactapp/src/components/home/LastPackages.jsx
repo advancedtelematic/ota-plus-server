@@ -31,7 +31,7 @@ class LastPackages extends Component {
         const { lastPackages } = packagesStore;
         return (
             <span>
-                {packagesStore.packagesFetchAsync.isFetching ?
+                {packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching ?
                     <div className="wrapper-center">
                         <Loader 
                             className="dark"

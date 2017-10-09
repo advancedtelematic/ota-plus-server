@@ -29,7 +29,7 @@ class SoftwarePanel extends Component {
                 </div>
                 <div className="wrapper-full">
                     <div className="wrapper-software">
-                        {packagesStore.packagesFetchAsync.isFetching ?
+                        {packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching ?
                             <div className="wrapper-loader">
                                 <Loader />
                             </div>

@@ -15,6 +15,7 @@ class Packages extends Component {
     componentWillMount() {
         this.props.packagesStore.page = 'packages';
         this.props.packagesStore.fetchPackages();
+        this.props.packagesStore.fetchTufPackages();
         this.props.packagesStore.fetchBlacklist();        
         this.props.devicesStore.fetchDevicesCount();
     }
@@ -31,7 +32,7 @@ class Packages extends Component {
                         title={title}
                         subtitle={(
                             <span>
-                                {packagesStore.overallPackagesCount === null && packagesStore.packagesFetchAsync.isFetching ?
+                                {packagesStore.overallPackagesCount === null && packagesStore.packagesFetchAsync.isFetching && packagesStore.packagesTufFetchAsync.isFetching ?
                                     <span>
                                         <i className="fa fa-square-o fa-spin"></i> packages counting
                                     </span>
@@ -39,7 +40,7 @@ class Packages extends Component {
                                     null
                                 }
                                 <FadeAnimation>
-                                    {!packagesStore.packagesFetchAsync.isFetching ?
+                                    {!packagesStore.packagesFetchAsync.isFetching && !packagesStore.packagesTufFetchAsync.isFetching ?
                                         <span id="packages-count">
                                             {t('common.packageWithCount', {count: packagesStore.overallPackagesCount})}
                                         </span>
