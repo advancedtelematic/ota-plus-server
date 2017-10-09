@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { observer } from 'mobx-react';
 import NavigationDropdown from './NavigationDropdown';
+import AsyncResponse from './AsyncResponse';
 
 @observer
 class Navigation extends Component {
@@ -9,7 +10,7 @@ class Navigation extends Component {
         super(props);
     }
     render() {
-        const { userStore, devicesStore, hideQueueModal, toggleOtaPlusMode, otaPlusMode, alphaPlusEnabled} = this.props;
+        const { userStore, devicesStore, hideQueueModal, toggleOtaPlusMode, otaPlusMode, alphaPlusEnabled, packagesStore} = this.props;
         let logoLink = '/';
         if(otaPlusMode) {
             logoLink = '/dashboard';
@@ -68,6 +69,11 @@ class Navigation extends Component {
                             garageNavigation
                         }
                     </div>
+                    <AsyncResponse 
+                        handledStatus="error"
+                        action={packagesStore.packagesFetchAsync}
+                        errorMsg={'Too much packages'}
+                    />
                     <ul className="right-nav">
                         <li className="text-link">
                             <a href="http://docs.atsgarage.com" target="_blank" id="docs-link">DOCS</a>

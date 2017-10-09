@@ -314,6 +314,21 @@ input {
     border: 0;
     box-shadow: 1px 1px 4px #888;
 
+    .alert {
+        width: 150px;
+        position: absolute;
+        left: calc(50% - 75px);
+        text-align: center;
+        height: 25px;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 12px;
+        background: #f9edbe;
+        color: black;
+    }
+
     .navbar-header {
         float: left;
         margin-left: 0;
