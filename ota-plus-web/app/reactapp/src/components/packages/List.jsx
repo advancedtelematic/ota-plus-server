@@ -125,7 +125,7 @@ class List extends Component {
     render() {
         const { showBlacklistModal, packagesStore, onFileDrop, highlightedPackage } = this.props;
         return (
-            <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching ? " fetching" : "")} ref="list">
+            <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching ? " fetching" : "")} ref="list">
                 {packagesStore.packagesCount ? 
                     <Dropzone 
                         ref="dropzone" 

@@ -72,7 +72,7 @@ class PackagesList extends Component {
     render() {
         const { chosenPackagesList, setWizardData, packagesStore } = this.props;
         return (
-            <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching ? " fetching" : "")} ref="list">
+            <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching ? " fetching" : "")} ref="list">
                 {packagesStore.packagesCount ? 
                     <span>
                         <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>

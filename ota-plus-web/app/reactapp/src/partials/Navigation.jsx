@@ -72,7 +72,7 @@ class Navigation extends Component {
                     <AsyncResponse 
                         handledStatus="error"
                         action={packagesStore.packagesFetchAsync}
-                        errorMsg={'Too much packages'}
+                        errorMsg={'Timeout: core packages not loaded, too many items to load'}
                     />
                     <ul className="right-nav">
                         <li className="text-link">

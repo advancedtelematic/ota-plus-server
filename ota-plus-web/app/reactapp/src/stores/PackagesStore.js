@@ -39,6 +39,7 @@ export default class PackagesStore {
     @observable tufRepoExistsFetchAsync = {};
     @observable tufRepoCreateFetchAsync = {};
     @observable packagesFetchAsync = {};
+    @observable packagesTufFetchAsync = {};
     @observable packageStatisticsFetchAsync = {};
     @observable packagesCreateAsync = {};
     @observable packagesTufCreateAsync = {};
@@ -117,6 +118,7 @@ export default class PackagesStore {
         resetAsync(this.tufRepoExistsFetchAsync);
         resetAsync(this.tufRepoCreateFetchAsync);
         resetAsync(this.packagesFetchAsync);
+        resetAsync(this.packagesTufFetchAsync);
         resetAsync(this.packageStatisticsFetchAsync);
         resetAsync(this.packagesCreateAsync);
         resetAsync(this.packagesTufCreateAsync);
@@ -189,7 +191,6 @@ export default class PackagesStore {
             }.bind(this));
     }
 
-
     fetchPackages(filter = this.packagesFilter) {
         let CancelToken = axios.CancelToken;
         let source = CancelToken.source();
@@ -197,7 +198,7 @@ export default class PackagesStore {
         let secondsPassed = 0;
         let tmpIntervalId = setInterval(function(){
             secondsPassed++;
-            if(secondsPassed === 5 && !that.packages.length) {
+            if(secondsPassed === 5 && !that.initialPackages.length) {
                 clearInterval(tmpIntervalId);
                 source.cancel();
             }
@@ -207,49 +208,61 @@ export default class PackagesStore {
         return axios.get(API_PACKAGES + '?regex=' + (filter ? filter : ''), {cancelToken: source.token})
             .then(function(response) {
                 this.initialPackages = response.data;
-                this.packages = response.data;
-                let directorPackages = [];
-                let after = _.after(directorPackages.length, () => {
-                    this._prepareDirectorPackages(directorPackages);
-                    let filepaths = this._getAllDirectorFilepaths();
-                    let that = this;
-                    axios.post(API_PACKAGES_COUNT_INSTALLED_ECUS, filepaths)
-                        .then(function(resp) {
-                            that._prepareFilePaths(resp.data);
-                            switch (that.page) {
-                                case 'device':                        
-                                    that._prepareDevicePackages();
-                                    break;
-                                default:
-                                    that._preparePackages();
-                                    break;
-                            }
-                            that.packagesFetchAsync = handleAsyncSuccess(response);
-                        })
-                        .catch(function(e) {
-                            switch (that.page) {
-                                case 'device':                        
-                                    that._prepareDevicePackages();
-                                    break;
-                                default:
-                                    that._preparePackages();
-                                    break;
-                            }
-                        });
-                    
-                }, this);
-                axios.get(API_TUF_PACKAGES)
-                    .then(function(responseDirector) {
-                        directorPackages.push(responseDirector.data.signed.targets);
-                        after();
-                    })
-                    .catch(function() {
-                        after();
-                    });                
+                this.packages = _.uniq(this.packages.concat(response.data), pack => pack.id.name); 
+
+                switch (that.page) {
+                    case 'device':                        
+                        that._prepareDevicePackages();
+                        break;
+                    default:
+                        that._preparePackages();
+                        break;
+                }
+
+                this.packagesFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
                 this.packagesFetchAsync = handleAsyncError(error);
             }.bind(this));
+    }
+
+    fetchTufPackages() {
+        let that = this;
+        resetAsync(that.packagesTufFetchAsync, true);        
+        return axios.get(API_TUF_PACKAGES)
+            .then(function(responseDirector) {
+                let packages = responseDirector.data.signed.targets;
+                that._prepareDirectorPackages(packages);
+                let filepaths = that._getAllDirectorFilepaths();
+                
+                axios.post(API_PACKAGES_COUNT_INSTALLED_ECUS, filepaths)
+                    .then(function(resp) {
+                        that._prepareFilePaths(resp.data);
+                        switch (that.page) {
+                            case 'device':                        
+                                that._prepareDevicePackages();
+                                break;
+                            default:
+                                that._preparePackages();
+                                break;
+                        }
+                    })
+                    .catch(function(e) {
+                        switch (that.page) {
+                            case 'device':                        
+                                that._prepareDevicePackages();
+                                break;
+                            default:
+                                that._preparePackages();
+                                break;
+                        }
+                    });
+
+                that.packagesTufFetchAsync = handleAsyncSuccess(responseDirector);
+            })
+            .catch(function(error) {
+                that.packagesTufFetchAsync = handleAsyncError(error);
+            });
     }
 
     _getAllDirectorFilepaths() {
@@ -268,10 +281,8 @@ export default class PackagesStore {
         });
     }
 
-    _prepareDirectorPackages(directorPackages) {
-        let packages = _.first(directorPackages);
+    _prepareDirectorPackages(packages) {
         let preparedPackages = [];
-
         _.each(packages, (pack, imageName) => {
             let formattedPack = {
                 customExists: pack.custom ? true : false,
@@ -310,7 +321,7 @@ export default class PackagesStore {
         });
 
         this.directorPackages = preparedPackages;        
-        this.packages = mergedPackages;
+        this.packages = _.uniq(this.packages.concat(mergedPackages), pack => pack.id.name);
 
         if (this.overallPackagesCount === null) {
             this.overallPackagesCount = this.packages.length;
@@ -1233,6 +1244,7 @@ export default class PackagesStore {
         resetAsync(this.tufRepoExistsFetchAsync);
         resetAsync(this.tufRepoCreateFetchAsync);
         resetAsync(this.packagesFetchAsync);
+        resetAsync(this.packagesTufFetchAsync);
         resetAsync(this.packagesCreateAsync);
         resetAsync(this.packagesTufCreateAsync);
         resetAsync(this.packagesUpdateDetailsAsync);
@@ -1293,6 +1305,7 @@ export default class PackagesStore {
 
     _resetWizard() {
         resetAsync(this.packagesFetchAsync);
+        resetAsync(this.packagesTufFetchAsync);
         this.packages = [];
         this.overallPackagesCount = null;
         this.preparedPackages = [];
