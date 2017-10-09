@@ -191,13 +191,23 @@ export default class PackagesStore {
 
 
     fetchPackages(filter = this.packagesFilter) {
+        let CancelToken = axios.CancelToken;
+        let source = CancelToken.source();
+        let that = this;
+        let secondsPassed = 0;
+        let tmpIntervalId = setInterval(function(){
+            secondsPassed++;
+            if(secondsPassed === 5 && !that.packages.length) {
+                clearInterval(tmpIntervalId);
+                source.cancel();
+            }
+        }, 1000);
         this.packagesFilter = filter;
         resetAsync(this.packagesFetchAsync, true);
-        return axios.get(API_PACKAGES + '?regex=' + (filter ? filter : ''))
+        return axios.get(API_PACKAGES + '?regex=' + (filter ? filter : ''), {cancelToken: source.token})
             .then(function(response) {
                 this.initialPackages = response.data;
                 this.packages = response.data;
-                
                 let directorPackages = [];
                 let after = _.after(directorPackages.length, () => {
                     this._prepareDirectorPackages(directorPackages);
