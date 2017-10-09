@@ -24,6 +24,7 @@ class Device extends Component {
         this.props.devicesStore.fetchDevice(this.props.params.id);
         this.props.packagesStore.activeDeviceId = this.props.params.id;
         this.props.packagesStore.fetchPackages();
+        this.props.packagesStore.fetchTufPackages();
         this.props.packagesStore.fetchBlacklist();
         this.props.packagesStore.fetchInitialDevicePackages(this.props.params.id);
         this.props.packagesStore.fetchDeviceAutoInstalledPackages(this.props.params.id);

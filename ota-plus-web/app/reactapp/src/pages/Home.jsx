@@ -20,6 +20,7 @@ class Home extends Component {
     componentWillMount() {
         this.props.devicesStore.fetchDevices();
         this.props.packagesStore.fetchPackages();
+        this.props.packagesStore.fetchTufPackages();
         this.props.campaignsStore.fetchCampaigns();
         this.props.campaignsStore.fetchLegacyCampaigns();
     }
