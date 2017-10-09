@@ -7,23 +7,18 @@ import java.net.{HttpURLConnection, URL}
 
 import play.api.test.Helpers._
 import org.scalatestplus.play._
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.libs.ws.WSClient
 
 /**
  * Test the Application controller
  */
-class ApplicationSpec extends PlaySpec with OneServerPerSuite {
+class ApplicationSpec extends PlaySpec with GuiceOneServerPerSuite {
 
   "send 404 on a bad request" in {
     val wsClient = app.injector.instanceOf[WSClient]
     val response = await(wsClient.url(s"http://localhost:$port/invalid").get())
     response.status mustBe NOT_FOUND
-  }
-
-  "render the index page" in {
-    val wsClient = app.injector.instanceOf[WSClient]
-    val response = await(wsClient.url(s"http://localhost:$port/").get())
-    response.status mustBe OK
   }
 
   "bad request with invalid character returns security headers" in {

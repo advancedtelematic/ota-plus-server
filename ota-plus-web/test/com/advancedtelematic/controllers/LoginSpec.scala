@@ -1,18 +1,17 @@
 package com.advancedtelematic.controllers
 
 import com.advancedtelematic.Tokens
-import mockws.MockWS
+import mockws.{MockWS, MockWSHelpers}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.play._
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
-import play.api.mvc.Action
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.api.mvc.BodyParsers.parse
 
-class LoginSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAll {
+class LoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpers with BeforeAndAfterAll {
 
   import play.api.inject.bind
   import play.api.mvc.Results._
@@ -52,7 +51,7 @@ class LoginSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAll {
 
   val mockClient = MockWS {
     case ("POST", `tokenEndpointUrl`) =>
-      Action(parse.tolerantJson) { implicit request =>
+      Action(BodyParser.tolerantJson) { implicit request =>
         (request.body \ "code").as[String] match {
           case "AUTHORIZATIONCODE" =>
             Ok(Json.obj("id_token" -> idToken, "access_token" -> "AUTH0_ACCESS_TOKEN"))
@@ -66,7 +65,7 @@ class LoginSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAll {
       }
 
     case ("POST", `delegatEndpointUrl`) =>
-      Action(parse.tolerantJson) { implicit request =>
+      Action(BodyParser.tolerantJson) { implicit request =>
         (request.body \ "id_token").as[String] match {
           case "DELEGATION_FAIL" =>
             Unauthorized(
@@ -77,7 +76,7 @@ class LoginSpec extends PlaySpec with OneAppPerSuite with BeforeAndAfterAll {
       }
 
     case ("POST", `authPlusTokenEndpoint`) =>
-      Action(parse.form(tokenRequestForm)) { implicit request =>
+      Action(BodyParser.form(tokenRequestForm)) { implicit request =>
         request.body match {
           case (_, token) if token == idToken =>
             Ok(Json.obj("access_token" -> "AUTHPLUS_ACCESS_TOKEN"))

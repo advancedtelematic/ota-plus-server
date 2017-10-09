@@ -40,7 +40,7 @@ object ClientInfo {
 
   implicit val UriReads: Reads[Uri] = Reads[Uri] {
     case JsString(uri) => JsSuccess(Uri(uri))
-    case _ => JsError(Seq(JsPath() -> Seq(ValidationError("error.expected.jsstring"))))
+    case _ => JsError(Seq(JsPath() -> Seq(JsonValidationError("error.expected.jsstring"))))
   }
 
   implicit val FromInformationResponseReads: Reads[ClientInfo] = (

@@ -9,7 +9,6 @@ import _root_.akka.stream.Materializer
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
-import org.genivi.sota.http.TraceId
 
 class LoggingFilter @Inject()(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
   lazy val serviceName = sys.env.getOrElse("SERVICE_NAME", "ota-plus-web")
@@ -34,7 +33,6 @@ class LoggingFilter @Inject()(implicit val mat: Materializer, ec: ExecutionConte
 
     val metrics = Map(
       "service_name" -> serviceName,
-      "traceid" -> requestHeader.headers.get(TraceId.TRACEID_HEADER).getOrElse("?"),
       "method" -> requestHeader.method,
       "path" -> requestHeader.path,
       "stime" -> serviceTime.toString,

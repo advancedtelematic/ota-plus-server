@@ -1,17 +1,18 @@
 package com.advancedtelematic.controllers
 
-import cats.data.Xor
 import cats.syntax.show._
 import com.advancedtelematic.AuthenticatedAction
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport, RemoteApiError}
 import javax.inject.{Inject, Singleton}
+
 import org.genivi.sota.data.Uuid
 import play.api.Configuration
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.libs.ws.WSClient
 import play.api.mvc.Results.EmptyContent
-import play.api.mvc.{Action, AnyContent, BodyParsers, Controller}
+import play.api.mvc.{AbstractController, Action, AnyContent, BodyParsers, Controller, ControllerComponents}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 
@@ -32,15 +33,16 @@ object UserProfile {
 }
 
 @Singleton
-class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient, val clientExec: ApiClientExec)(
+class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient, val clientExec: ApiClientExec,
+                                      authAction: AuthenticatedAction, components: ControllerComponents)(
     implicit exec: ExecutionContext)
-    extends Controller
+    extends AbstractController(components)
     with ApiClientSupport {
 
   import com.advancedtelematic.JsResultSyntax._
   import com.advancedtelematic.controllers.FeatureName
 
-  def getUserProfile: Action[AnyContent] = AuthenticatedAction.async { request =>
+  def getUserProfile: Action[AnyContent] = authAction.async { request =>
     val fut = for {
       user <- auth0Api.queryUserProfile(request.auth0AccessToken)
       profile <- userProfileApi.getUser(request.idToken.userId)
@@ -54,31 +56,32 @@ class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient,
     }
   }
 
-  val changePassword: Action[AnyContent] = AuthenticatedAction.async { request =>
+  val changePassword: Action[AnyContent] = authAction.async { request =>
     for {
       _     <- auth0Api.changePassword(request.idToken.email)
     } yield Ok(EmptyContent())
   }
 
-  def updateUserProfile(): Action[JsValue] = AuthenticatedAction.async(BodyParsers.parse.json) { request =>
-    (request.body \ "name").validate[String].toXor match {
-      case Xor.Right(newName) =>
+  def updateUserProfile(): Action[JsValue] = authAction.async(components.parsers.json) { request =>
+    import com.advancedtelematic.JsResultSyntax._
+    (request.body \ "name").validate[String].toEither match {
+      case Right(newName) =>
         auth0Api.saveUserMetadata(request.idToken, "name", JsString(newName)).map { userInfo =>
           Ok(Json.toJson(userInfo))
         }
 
-      case Xor.Left(err) =>
+      case Left(err) =>
         Future.successful(BadRequest(err))
     }
   }
 
-  def updateBillingInfo(): Action[JsValue] = AuthenticatedAction.async(BodyParsers.parse.json) { request =>
+  def updateBillingInfo(): Action[JsValue] = authAction.async(components.parsers.json) { request =>
     userProfileApi.updateBillingInfo(request.idToken.userId, request.queryString, request.body)
   }
 
   implicit val featureW: Writes[FeatureName] = Writes.StringWrites.contramap(_.get)
 
-  def getFeatures(): Action[AnyContent] = AuthenticatedAction.async { request =>
+  def getFeatures(): Action[AnyContent] = authAction.async { request =>
     val userId = request.idToken.userId
     userProfileApi.getFeatures(userId)
       .map { features => Ok(Json.toJson(features)) }
@@ -89,9 +92,9 @@ class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient,
       }
   }
 
-  val apiDomain = conf.getString("api.domain").get
+  val apiDomain = conf.get[String]("api.domain")
 
-  def activateFeature(feature: FeatureName): Action[AnyContent] = AuthenticatedAction.async { request =>
+  def activateFeature(feature: FeatureName): Action[AnyContent] = authAction.async { request =>
     val userId = request.idToken.userId
     val token = request.authPlusAccessToken
 
@@ -112,7 +115,7 @@ class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient,
     }
   }
 
-  def getFeatureClient(feature: FeatureName): Action[AnyContent] = AuthenticatedAction.async { request =>
+  def getFeatureClient(feature: FeatureName): Action[AnyContent] = authAction.async { request =>
     val userId = request.idToken.userId
     val token = request.authPlusAccessToken
 
@@ -124,7 +127,7 @@ class UserProfileController @Inject()(val conf: Configuration, val ws: WSClient,
     }
   }
 
-  def getFeatureConfig(feature: FeatureName): Action[AnyContent] = AuthenticatedAction.async { request =>
+  def getFeatureConfig(feature: FeatureName): Action[AnyContent] = authAction.async { request =>
     val userId = request.idToken.userId
     val token = request.authPlusAccessToken
 

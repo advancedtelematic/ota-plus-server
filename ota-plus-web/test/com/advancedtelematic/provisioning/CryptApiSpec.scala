@@ -2,14 +2,22 @@ package com.advancedtelematic.provisioning
 
 import com.advancedtelematic.api.{ApiClientExec, CryptApi}
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import org.scalatest.time.{Millis, Seconds, Span}
+import org.scalatestplus.play.PlaySpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 
-class CryptApiSpec extends PlaySpec with OneAppPerSuite with ScalaFutures {
+import scala.concurrent.ExecutionContext
+
+class CryptApiSpec extends PlaySpec with GuiceOneAppPerSuite with ScalaFutures {
   implicit override lazy val app: Application =
     new GuiceApplicationBuilder().configure("crypt.uri" -> MockCrypt.CryptHost).build()
-  import play.api.libs.concurrent.Execution.Implicits.defaultContext
+
+  implicit val defaultPatience =
+    PatienceConfig(timeout = Span(5, Seconds), interval = Span(200, Millis))
+
+  implicit val ec = app.injector.instanceOf[ExecutionContext]
   val cryptApi = new CryptApi(app.configuration, new ApiClientExec(MockCrypt.mockClient))
   "registerAccount" should {
     "return account info if response 204 created" in {

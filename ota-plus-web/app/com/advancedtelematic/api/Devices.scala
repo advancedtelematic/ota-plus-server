@@ -5,9 +5,9 @@ import eu.timepit.refined._
 import eu.timepit.refined.api.{Refined, Validate}
 import java.time.Instant
 
+import com.advancedtelematic.libats.codecs.{DeserializationException, RefinementError}
 import org.genivi.sota.data.DeviceStatus
 import org.genivi.sota.data.{Device, DeviceT, Namespace, Uuid}
-import org.genivi.sota.marshalling.{DeserializationException, RefinementError}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -27,8 +27,6 @@ object Devices {
     }
 
   implicit def idReads(implicit r: Reads[Refined[String, Uuid.Valid]]): Reads[Uuid] = r.map(Uuid(_))
-
-  implicit val deviceNameReads: Reads[DeviceName] = Reads.StringReads.map(DeviceName)
 
   implicit val deviceIdReads: Reads[DeviceId] = Reads.StringReads.map(DeviceId)
 
@@ -57,7 +55,7 @@ object Devices {
 
   // Writes
 
-  implicit def refinedWriter[T, P](implicit w: Writes[T]): Writes[Refined[T, P]] = w.contramap(_.get)
+  implicit def refinedWriter[T, P](implicit w: Writes[T]): Writes[Refined[T, P]] = w.contramap(_.value)
 
   implicit def showWrites[T, P](implicit ev: Show[T]): Writes[T] = Writes.StringWrites.contramap(p => ev.show(p))
 
