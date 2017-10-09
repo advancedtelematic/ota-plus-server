@@ -2,9 +2,10 @@ package com.advancedtelematic.controllers
 
 import akka.stream.Materializer
 import com.advancedtelematic.Tokens
-import mockws.MockWS
+import mockws.{MockWS, MockWSHelpers}
 import org.genivi.sota.data.Uuid
-import org.scalatestplus.play.{ OneServerPerSuite, PlaySpec }
+import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json._
@@ -13,11 +14,11 @@ import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results {
+class ClientsControllerSpec extends PlaySpec with GuiceOneServerPerSuite with MockWSHelpers with Results {
 
   val userId    = "auth0|userid1"
   val clientId  = Uuid.generate()
-  val clientIds = Seq(clientId.underlying.get)
+  val clientIds = Seq(clientId.underlying.value)
 
   val auth0Domain = "auth0test"
   val auth0Url    = s"https://$auth0Domain/api/v2/users/$userId"
@@ -25,9 +26,9 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
 
   val authPlusUri = "http://auth-plus.com"
   val authPlusClientsUri = s"$authPlusUri/clients"
-  val authPlusClientUri = s"$authPlusClientsUri/${clientId.underlying.get}"
+  val authPlusClientUri = s"$authPlusClientsUri/${clientId.underlying.value}"
   val clientInfo = Json.obj(
-    "client_id"                 -> clientId.underlying.get,
+    "client_id"                 -> clientId.underlying.value,
     "client_name"               -> "Test Client",
     "registration_client_uri"   -> authPlusClientUri,
     "registration_access_token" -> "something")
@@ -38,7 +39,7 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
   val userProfileUri = "http://user-profile.com"
   val userApplications = s"$userProfileUri/api/v1/users/${userId}/applications"
   val userNoApplications = s"$userProfileUri/api/v1/users/${userIdWithNoClients}/applications"
-  val userNoApplicationsClientId = s"${userNoApplications}/${clientId.underlying.get}"
+  val userNoApplicationsClientId = s"${userNoApplications}/${clientId.underlying.value}"
 
   val mockClient = MockWS {
     case (POST, `authPlusClientsUri`) =>
@@ -61,8 +62,6 @@ class ClientsControllerSpec extends PlaySpec with OneServerPerSuite with Results
     .configure("userprofile.uri" -> userProfileUri)
     .overrides(bind[WSClient].to(mockClient))
     .build
-
-  implicit val mat = application.injector.instanceOf[Materializer]
 
   val controller = application.injector.instanceOf[ClientsController]
 

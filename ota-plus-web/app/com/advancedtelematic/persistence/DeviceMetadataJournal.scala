@@ -22,7 +22,7 @@ class MetadataEntity(device: Uuid) extends PersistentActor {
   import MetadataEntity.{Event, MetadataRegistered}
   import com.advancedtelematic.persistence.Commands._
 
-  override def persistenceId: String = device.underlying.get
+  override def persistenceId: String = device.underlying.value
 
   var state: Option[DeviceMetadata] = None
 
@@ -60,8 +60,8 @@ class DeviceMetadataRegistry extends Actor {
 
   private[this] def entityRef(device: Uuid): ActorRef =
     context
-      .child(device.underlying.get)
-      .getOrElse( context.actorOf( MetadataEntity.props(device), device.underlying.get ))
+      .child(device.underlying.value)
+      .getOrElse( context.actorOf( MetadataEntity.props(device), device.underlying.value ))
 
   override def receive: Receive = {
     case cmd@RegisterMetadata(deviceMeta) =>

@@ -4,19 +4,21 @@ import akka.util.ByteString
 import com.advancedtelematic.Tokens
 import java.time.{Instant, LocalDate, ZoneOffset}
 import java.time.temporal.ChronoField
+
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{ Millis, Seconds, Span }
-import org.scalatestplus.play.{ OneServerPerSuite, PlaySpec }
+import org.scalatest.time.{Millis, Seconds, Span}
+import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
-import play.api.libs.ws.WSClient
+import play.api.libs.ws.{EmptyBody, WSClient}
 import play.api.mvc.Results.EmptyContent
-import play.api.mvc.{ Cookies, Session }
+import play.api.mvc.{Cookies, Session}
 import play.api.test.WsTestClient
 import play.filters.csrf.CSRF
 
-class AutoProvisioningSpec extends PlaySpec with OneServerPerSuite with ScalaFutures {
+class AutoProvisioningSpec extends PlaySpec with GuiceOneServerPerSuite with ScalaFutures {
   import play.api.inject.bind
   import play.api.test.Helpers._
 
@@ -53,7 +55,7 @@ class AutoProvisioningSpec extends PlaySpec with OneServerPerSuite with ScalaFut
         wsClient
           .url(s"http://$endpointAddress/api/v1/provisioning/status")
           .withFollowRedirects(false)
-          .withHeaders("Cookie" -> makeSessionCookie(MockCrypt.TestAccount.name), "Csrf-Token" -> csrfToken)
+          .withHttpHeaders("Cookie" -> makeSessionCookie(MockCrypt.TestAccount.name), "Csrf-Token" -> csrfToken)
           .get()
           .futureValue
       }
@@ -66,7 +68,7 @@ class AutoProvisioningSpec extends PlaySpec with OneServerPerSuite with ScalaFut
         wsClient
           .url(s"http://$endpointAddress/api/v1/provisioning/status")
           .withFollowRedirects(false)
-          .withHeaders("Cookie" -> makeSessionCookie("not|registered"), "Csrf-Token" -> csrfToken)
+          .withHttpHeaders("Cookie" -> makeSessionCookie("not|registered"), "Csrf-Token" -> csrfToken)
           .get()
           .futureValue
       }
@@ -81,7 +83,7 @@ class AutoProvisioningSpec extends PlaySpec with OneServerPerSuite with ScalaFut
         wsClient
           .url(s"http://$endpointAddress/api/v1/provisioning")
           .withFollowRedirects(false)
-          .withHeaders("Cookie" -> makeSessionCookie(MockCrypt.TestAccount.name), "Csrf-Token" -> csrfToken)
+          .withHttpHeaders("Cookie" -> makeSessionCookie(MockCrypt.TestAccount.name), "Csrf-Token" -> csrfToken)
           .get()
           .futureValue
       }
@@ -95,7 +97,7 @@ class AutoProvisioningSpec extends PlaySpec with OneServerPerSuite with ScalaFut
         wsClient
           .url(s"http://$endpointAddress/api/v1/provisioning")
           .withFollowRedirects(false)
-          .withHeaders("Cookie" -> makeSessionCookie("not_active"), "Csrf-Token" -> csrfToken)
+          .withHttpHeaders("Cookie" -> makeSessionCookie("not_active"), "Csrf-Token" -> csrfToken)
           .get()
           .futureValue
       }
@@ -109,8 +111,8 @@ class AutoProvisioningSpec extends PlaySpec with OneServerPerSuite with ScalaFut
         wsClient
           .url(s"http://$endpointAddress/api/v1/provisioning/activate")
           .withFollowRedirects(false)
-          .withHeaders("Cookie" -> makeSessionCookie(MockCrypt.TestAccount.name), "Csrf-Token" -> csrfToken)
-          .put(EmptyContent())
+          .withHttpHeaders("Cookie" -> makeSessionCookie(MockCrypt.TestAccount.name), "Csrf-Token" -> csrfToken)
+          .put(EmptyBody)
           .futureValue
       }
       response.status mustBe OK
@@ -127,7 +129,7 @@ class AutoProvisioningSpec extends PlaySpec with OneServerPerSuite with ScalaFut
         wsClient
           .url(s"http://$endpointAddress/api/v1/provisioning/credentials/registration")
           .withFollowRedirects(false)
-          .withHeaders("Cookie" -> makeSessionCookie(MockCrypt.TestAccount.name), "Csrf-Token" -> csrfToken)
+          .withHttpHeaders("Cookie" -> makeSessionCookie(MockCrypt.TestAccount.name), "Csrf-Token" -> csrfToken)
           .post(Json.obj("description" -> description, "until" -> Json.toJson(untilDate)))
           .futureValue
       }
@@ -149,7 +151,7 @@ class AutoProvisioningSpec extends PlaySpec with OneServerPerSuite with ScalaFut
         wsClient
           .url(s"http://$endpointAddress/api/v1/provisioning/credentials/registration/${MockCrypt.TestDeviceUuid}")
           .withFollowRedirects(false)
-          .withHeaders("Cookie" -> makeSessionCookie(MockCrypt.TestAccount.name), "Csrf-Token" -> csrfToken)
+          .withHttpHeaders("Cookie" -> makeSessionCookie(MockCrypt.TestAccount.name), "Csrf-Token" -> csrfToken)
           .get()
           .futureValue
       }

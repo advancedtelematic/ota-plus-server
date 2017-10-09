@@ -6,12 +6,13 @@ import akka.util.ByteString
 import com.advancedtelematic.api.CryptAccountInfo
 import java.time.{Clock, Instant}
 import java.time.temporal.ChronoUnit
-import mockws.MockWS
+
+import mockws.{MockWS, MockWSHelpers, Route}
 import play.api.http.{HeaderNames, HttpEntity}
 import play.api.libs.json.Json
 import play.api.mvc.Action
 
-object MockCrypt {
+object MockCrypt extends MockWSHelpers {
   val CryptHost = "http://crypt.ats.com"
 
   val now = Instant.now(Clock.systemUTC())
