@@ -5,11 +5,12 @@ import org.genivi.sota.data._
 import org.scalatest.Tag
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.http.Status
 import play.api.libs.ws.{WSClient, WSRequest}
 
 class ClientSdkControllerSpec extends PlaySpec
-    with OneServerPerSuite
+    with GuiceOneServerPerSuite
     with GeneratorDrivenPropertyChecks with DeviceIdGenerators with DeviceGenerators {
 
   import play.api.test.Helpers._
@@ -17,13 +18,12 @@ class ClientSdkControllerSpec extends PlaySpec
   import Device._
   import UuidGenerator._
 
-  override lazy val port = app.configuration.getString("test.webserver.port").map(_.toInt).getOrElse(9010)
+  override lazy val port = app.configuration.get[Option[String]]("test.webserver.port").map(_.toInt).getOrElse(9010)
 
   "test download a preconfigured client" ignore { // TODO PRO-341
     import com.advancedtelematic.controllers.{Architecture, ArtifactType}
-    val attempts = 5
     val wsClient = app.injector.instanceOf[WSClient]
-    forAll (minSuccessful(attempts)) {
+    forAll (minSuccessful(5)) {
       (device: Uuid, artifact: ArtifactType, arch: Architecture) =>
 
         def fullUri(suffix: String): WSRequest = {

@@ -6,11 +6,12 @@ import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import java.time.Instant
 import java.util.UUID
-import org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
+
 import play.api.Configuration
 import play.api.libs.json._
+import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 final case class CryptAccountInfo(name: String, hostName: NamedHost)
 
@@ -54,7 +55,7 @@ object DeviceRegistrationCredentials {
 }
 
 class CryptApi(conf: Configuration, val apiExec: ApiClientExec)(implicit exec: ExecutionContext) {
-  import org.asynchttpclient.util.HttpConstants.Methods._
+  import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.Methods._
 
   val baseUri = ApiRequest.base(conf.underlying.getString("crypt.uri"))
 

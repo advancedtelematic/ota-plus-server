@@ -7,16 +7,18 @@ import com.advancedtelematic.api.Devices._
 import com.advancedtelematic.controllers.FeatureName
 import com.advancedtelematic.controllers.Auth0Config
 import com.advancedtelematic.persistence.ClientInfo
-import com.advancedtelematic.controllers.{ UserId, UserProfile }
-import com.advancedtelematic.{ Auth0AccessToken, AuthPlusAccessToken, IdToken }
+import com.advancedtelematic.controllers.{UserId, UserProfile}
+import com.advancedtelematic.{Auth0AccessToken, AuthPlusAccessToken, IdToken}
 import java.util.UUID
-import org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
-import org.genivi.sota.data.{ Device, Namespace, Uuid }
+
+import org.genivi.sota.data.{Device, Namespace, Uuid}
 import play.api.libs.json._
-import play.api.libs.ws.{ WSAuthScheme, WSClient, WSRequest, WSResponse }
+import play.api.libs.ws.{WSAuthScheme, WSClient, WSRequest, WSResponse}
 import play.api.mvc.Result
 import play.api.Configuration
-import scala.concurrent.{ ExecutionContext, Future }
+import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
+
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.NoStackTrace
 
@@ -38,7 +40,6 @@ case class Feature(feature: FeatureName, client_id: Option[Uuid], enabled: Boole
 object ApiRequest {
   case class UserOptions(token: Option[String] = None,
                          authuser: Option[UserPass] = None,
-                         traceId: Option[String] = None,
                          namespace: Option[Namespace] = None)
 
   def base(baserUrl: String): String => ApiRequest = apply(baserUrl)
@@ -62,7 +63,6 @@ trait ApiRequest { self =>
       .withAuth(userOptions.authuser)
       .withNamespace(userOptions.namespace)
       .withToken(userOptions.token)
-      .withTraceId(userOptions.traceId)
   }
 
   def withAuth(auth: Option[UserPass]): ApiRequest = {
@@ -73,18 +73,12 @@ trait ApiRequest { self =>
 
   def withNamespace(ns: Option[Namespace]): ApiRequest = {
     ns map { n =>
-      transform(_.withHeaders("x-ats-namespace" -> n.get))
-    } getOrElse self
-  }
-
-  def withTraceId(traceId: Option[String]): ApiRequest = {
-    traceId map { t =>
-      transform(_.withHeaders("x-ats-traceid" -> t))
+      transform(_.withHttpHeaders("x-ats-namespace" -> n.get))
     } getOrElse self
   }
 
   def withToken(token: String): ApiRequest =
-    transform(_.withHeaders(("Authorization", "Bearer " + token)))
+    transform(_.withHttpHeaders(("Authorization", "Bearer " + token)))
 
   def withToken(token: Option[String]): ApiRequest =
     token.map(withToken).getOrElse(self)
@@ -130,8 +124,8 @@ class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends Ot
   */
 class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
 
-  private val clientId: String     = conf.getString("authplus.client_id").get
-  private val clientSecret: String = conf.getString("authplus.secret").get
+  private val clientId: String     = conf.get[String]("authplus.client_id")
+  private val clientSecret: String = conf.get[String]("authplus.secret")
 
   private val authPlusRequest = ApiRequest.base(authPlusApiUri + "/")
 
@@ -162,14 +156,14 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
   }
 
   def getClient(clientId: Uuid, token: AuthPlusAccessToken)(implicit ec: ExecutionContext): Future[Result] = {
-    authPlusRequest(s"clients/${clientId.underlying.get}")
+    authPlusRequest(s"clients/${clientId.underlying.value}")
       .withToken(token.value)
       .transform(_.withMethod("GET"))
       .execResult(apiExec)
   }
 
   def getClientJsValue(clientId: Uuid, token: AuthPlusAccessToken)(implicit ec: ExecutionContext): Future[JsValue] = {
-    authPlusRequest(s"clients/${clientId.underlying.get}")
+    authPlusRequest(s"clients/${clientId.underlying.value}")
       .withToken(token.value)
       .transform(_.withMethod("GET"))
       .execJsonValue(apiExec)
@@ -297,7 +291,7 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
     userProfileRequest(s"users/${userId.id}/billing_info")
       .transform(
         _.withMethod("PUT")
-          .withQueryString(query.mapValues(_.head).toSeq :_*)
+          .withQueryStringParameters(query.mapValues(_.head).toSeq :_*)
           .withBody(body))
       .execResult(apiExec)
 
@@ -305,7 +299,7 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
     userProfileRequest(s"users/${userId.id}/applications").execJson[Seq[Uuid]](apiExec)
 
   private def applicationIdRequest(method: String, userId: UserId, clientId: Uuid): Future[Result] =
-    userProfileRequest(s"users/${userId.id}/applications/${clientId.underlying.get}").transform(_.withMethod(method))
+    userProfileRequest(s"users/${userId.id}/applications/${clientId.underlying.value}").transform(_.withMethod(method))
       .execResult(apiExec)
 
   def addApplicationId(userId: UserId, clientId: Uuid): Future[Result] =
@@ -335,7 +329,7 @@ class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
     buildSrvRequest(s"api/v1/artifacts/$artifact_type/download")
       .transform(
         _.withMethod("POST")
-          .withBody(Map("client_id" -> Seq(clientId.underlying.get), "client_secret" -> Seq(clientSecret))))
+          .withBody(Map("client_id" -> Seq(clientId.underlying.value), "client_secret" -> Seq(clientSecret))))
       .execStreamedResult(apiExec)
   }
 }

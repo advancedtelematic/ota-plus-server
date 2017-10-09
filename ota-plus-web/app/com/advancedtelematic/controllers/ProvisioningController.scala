@@ -1,38 +1,40 @@
 package com.advancedtelematic.controllers
 
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 
-import com.advancedtelematic.{ AuthenticatedAction, AuthenticatedRequest }
-import com.advancedtelematic.api.{ ApiClientExec, CryptApi }
+import com.advancedtelematic.{AuthenticatedAction, AuthenticatedRequest}
+import com.advancedtelematic.api.{ApiClientExec, CryptApi}
 import java.time.{LocalDate, ZonedDateTime, ZoneOffset}
 import java.time.temporal.ChronoUnit
+
 import org.genivi.sota.data.Uuid
 import play.api.Configuration
 import play.api.http.{HeaderNames, HttpEntity}
 import play.api.libs.json.{Json, JsValue}
 import play.api.libs.ws.WSClient
-import play.api.mvc.{ Action, AnyContent, Controller, ResponseHeader, Result }
+import play.api.mvc.{AbstractController, Action, AnyContent, Controller, ControllerComponents, ResponseHeader, Result}
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class ProvisioningController @Inject()(config: Configuration, wsClient: WSClient)(
+class ProvisioningController @Inject()(config: Configuration, wsClient: WSClient, authAction: AuthenticatedAction,
+                                       components: ControllerComponents)(
     implicit executionContext: ExecutionContext)
-    extends Controller {
+    extends AbstractController(components) {
   val cryptApi = new CryptApi(config, new ApiClientExec(wsClient))
-  val gatewayPort = config.getInt("crypt.gateway.port").getOrElse(8000)
+  val gatewayPort = config.get[Option[Int]]("crypt.gateway.port").getOrElse(8000)
 
   def accountName(request: AuthenticatedRequest[_]): String = request.idToken.userId.id
 
-  val provisioningStatus: Action[AnyContent] = AuthenticatedAction.async { implicit request =>
+  val provisioningStatus: Action[AnyContent] = authAction.async { implicit request =>
     cryptApi.getAccountInfo(accountName(request)).map(x => Ok(Json.obj("active" -> x.isDefined)))
   }
 
-  val activateAutoProvisioning: Action[AnyContent] = AuthenticatedAction.async { implicit request =>
+  val activateAutoProvisioning: Action[AnyContent] = authAction.async { implicit request =>
     cryptApi.registerAccount(accountName(request)).map(x => Ok(Json.toJson(x)))
   }
 
-  val provisioningInfo: Action[AnyContent] = AuthenticatedAction.async { implicit request =>
+  val provisioningInfo: Action[AnyContent] = authAction.async { implicit request =>
     cryptApi.getAccountInfo(accountName(request)).map {
       case Some(x) => Ok(Json.obj(
         "hostName" -> x.hostName.toString,
@@ -42,7 +44,7 @@ class ProvisioningController @Inject()(config: Configuration, wsClient: WSClient
     }
   }
 
-  val getCredentials: Action[AnyContent] = AuthenticatedAction.async { implicit request =>
+  val getCredentials: Action[AnyContent] = authAction.async { implicit request =>
     cryptApi.getCredentials(accountName(request)).map {
       case Some(x) => Ok(Json.toJson(x))
       case None    => NotFound
@@ -50,7 +52,7 @@ class ProvisioningController @Inject()(config: Configuration, wsClient: WSClient
   }
 
   val credentialsRegistration: Action[JsValue] =
-    AuthenticatedAction.async(parse.json) { implicit request =>
+    authAction.async(parse.json) { implicit request =>
       val description = (request.body \ "description").as[String]
       val until = (request.body \ "until").as[LocalDate]
       val now = ZonedDateTime.now(ZoneOffset.UTC)
@@ -65,7 +67,7 @@ class ProvisioningController @Inject()(config: Configuration, wsClient: WSClient
       )
     }
 
-  def downloadCredentials(uuid: Uuid): Action[AnyContent] = AuthenticatedAction.async { implicit request =>
+  def downloadCredentials(uuid: Uuid): Action[AnyContent] = authAction.async { implicit request =>
     cryptApi.downloadCredentials(accountName(request), uuid.toJava).map { source =>
         Ok.sendEntity(HttpEntity.Streamed(source, None, Some("application/x-pkcs12")))
           .withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=credentials.p12")
