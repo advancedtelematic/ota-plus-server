@@ -285,6 +285,7 @@ class Main extends Component {
                                     toggleOtaPlusMode={this.toggleOtaPlusMode}
                                     otaPlusMode={this.otaPlusStore.otaPlusMode}
                                     alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
+                                    packagesStore={this.packagesStore}
                                 />
                             :
                                 null                        
