@@ -96,7 +96,7 @@ class LoginController @Inject()(
       case Failure(t) =>
         log.error(s"Revocation request for token '${req.authPlusAccessToken.value}' failed.", t)
       }
-    Redirect(com.advancedtelematic.controllers.routes.Application.index()).withNewSession
+    Redirect(com.advancedtelematic.controllers.routes.LoginController.login()).withNewSession
   }
 
   val authorizationError: Action[AnyContent] = Action { implicit request =>

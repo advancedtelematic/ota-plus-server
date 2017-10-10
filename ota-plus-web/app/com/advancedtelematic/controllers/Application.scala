@@ -32,7 +32,8 @@ import scala.concurrent.Future
 class Application @Inject() (ws: WSClient,
                              components: ControllerComponents,
                              val conf: Configuration,
-                             val authAction: AuthenticatedApiAction)
+                             val authAction: AuthenticatedAction,
+                             val authApiAction: AuthenticatedApiAction)
   extends AbstractController(components) with I18nSupport with OtaPlusConfig {
 
   import ApiVersion.ApiVersion
@@ -170,7 +171,7 @@ class Application @Inject() (ws: WSClient,
    * @return
    */
   def apiProxy(version: ApiVersion, path: String): Action[Source[ByteString, _]] =
-    authAction.async(bodySource) { req =>
+    authApiAction.async(bodySource) { req =>
       apiByPath(version, path) match {
         case Some(p) => proxyTo(p, req)
         case None => Future.successful(NotFound("Could not proxy request to requested path"))
