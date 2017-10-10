@@ -11,7 +11,7 @@ import com.advancedtelematic.controllers.{UserId, UserProfile}
 import com.advancedtelematic.{Auth0AccessToken, AuthPlusAccessToken, IdToken}
 import java.util.UUID
 
-import org.genivi.sota.data.{Device, Namespace, Uuid}
+import org.genivi.sota.data.{Device, DeviceT, Namespace, Uuid}
 import play.api.libs.json._
 import play.api.libs.ws.{WSAuthScheme, WSClient, WSRequest, WSResponse}
 import play.api.mvc.Result
@@ -47,7 +47,7 @@ object ApiRequest {
   def apply(baseUrl: String)(path: String): ApiRequest = new ApiRequest {
     override def build = ws => ws.url(baseUrl + path).withFollowRedirects(false)
   }
-}
+} 
 
 /**
   * Common utilities to simplify building requests for micro-services.
@@ -61,8 +61,8 @@ trait ApiRequest { self =>
   def withUserOptions(userOptions: UserOptions): ApiRequest = {
     self
       .withAuth(userOptions.authuser)
-      .withNamespace(userOptions.namespace)
       .withToken(userOptions.token)
+      .withNamespace(userOptions.namespace)
   }
 
   def withAuth(auth: Option[UserPass]): ApiRequest = {
@@ -112,11 +112,40 @@ trait ApiRequest { self =>
   * Controllers extending [[ApiClientSupport]] access [[DevicesApi]] endpoints using a singleton.
   */
 class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
+  import com.advancedtelematic.persistence.DeviceMetadata
   private val devicesRequest = ApiRequest.base(devicesApiUri + "/api/v1/")
 
   def getDevice(options: UserOptions, id: Uuid): Future[Device] = {
     devicesRequest("devices/" + id.show).withUserOptions(options).execJson(apiExec)(DeviceR)
   }
+
+  def fetchDeviceMetadata(options: UserOptions, id: Uuid)
+                         (implicit ec: ExecutionContext): Future[Option[DeviceMetadata]] = {
+    devicesRequest("devices/" + id.show + "/public_credentials")
+      .withUserOptions(options)
+      .execResponse(apiExec)
+      .map{ wresp =>
+      for {
+        resp <- Try(wresp.json).toOption
+        credentials <- (resp \ "credentials").validate[String].asOpt
+        clientInfo <- Json.parse(credentials).validate[ClientInfo].asOpt
+      } yield DeviceMetadata(id, clientInfo)
+    }
+  }
+
+  def setDeviceMetadata(options: UserOptions, devT: DeviceT)
+                       (implicit ec: ExecutionContext): Future[Done] =
+    devicesRequest("devices")
+      .withUserOptions(options)
+      .transform(_.withBody(Json.toJson(devT)).withMethod("PUT"))
+      .execResponse(apiExec)
+      .flatMap { response =>
+        if (response.status == ResponseStatusCodes.OK_200) {
+          Future.successful(Done)
+        } else {
+          Future.failed(UnexpectedResponse(response))
+        }
+      }
 }
 
 /**
