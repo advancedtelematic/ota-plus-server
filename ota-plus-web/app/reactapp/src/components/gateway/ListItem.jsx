@@ -85,9 +85,9 @@ class ListItem extends Component {
                 </div>
                 <div className="col">
                     {!_.isEmpty(item.errors) ? 
-                        <img src="/assets/img/icons/red_cross.png" alt="Icon" /> 
+                        <img src="/assets/img/icons/red_cross.svg" alt="Icon" />
                     : !_.isEmpty(item.warnings) ?
-                        <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                        <img src="/assets/img/icons/warning.svg" alt="Icon" />
                     :
                         "-"
                     }

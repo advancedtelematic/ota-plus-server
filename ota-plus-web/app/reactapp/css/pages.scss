@@ -2,6 +2,18 @@
     @include fullHeight;
     background: #fff;
 
+    .wrapper-center {
+        height: calc(100% - 150px);
+    }
+
+    .page-heading {
+        .icon {
+            background-image: url('/assets/img/icons/black/registry.svg');
+            background-size: 35px 35px;
+            background-position: center;
+        }
+    }
+
     .item {
         .icon {
             text-align: center;
@@ -17,6 +29,18 @@
 #page-advanced-campaigns {
     @include fullHeight;
     background: #fff;
+
+    .wrapper-center {
+        height: calc(100% - 150px);
+    }
+
+    .page-heading {
+        .icon {
+            background-image: url('/assets/img/icons/black/campaigns.svg');
+            background-size: 35px 35px;
+            background-position: center;
+        }
+    }
 
     .item {
         .icon {
@@ -34,8 +58,12 @@
     @include fullHeight;
     background: #fff;
 
-    .wrapper-center {
-        height: calc(100% - 100px);
+    .page-heading {
+        .icon {
+            background-image: url('/assets/img/icons/black/connectors.svg');
+            background-size: 35px 35px;
+            background-position: center;
+        }
     }
 
     .connectors {
@@ -142,6 +170,14 @@
 #page-device-gateway {
     @include fullHeight;
     background: #fff;
+
+    .page-heading {
+        .icon {
+            background-image: url('/assets/img/icons/black/gateway.svg');
+            background-size: 35px 35px;
+            background-position: center;
+        }
+    }
 
     .col {
         width: 10%;
@@ -254,13 +290,6 @@
                                 display: inline-block;
                                 margin-right: 10px;
                             }
-
-                            i {
-                                width: 18px;
-                                display: inline-block;
-                                margin-right: 10px;
-                                color: #cfaa5c;
-                            }
                         }
                     }
                 }
@@ -364,6 +393,14 @@
     @include fullHeight;
     background: #fff;
 
+    .page-heading {
+        .icon {
+            background-image: url('/assets/img/icons/black/auditor.svg');
+            background-size: 35px 35px;
+            background-position: center;
+        }
+    }
+
     .item {
         .icon {
             text-align: center;
@@ -373,6 +410,10 @@
                 width: 50px;
             }
         }
+    }
+
+    .wrapper-center {
+        height: calc(100% - 150px);
     }
 }
 
@@ -407,11 +448,6 @@
                 display: flex;
 
                 a {
-                    padding: 6px 8px!important;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-
                     &:first-child {
                         margin-right: 5px;
                     }
@@ -444,8 +480,8 @@
 
     .page-heading {
         .icon {
-            background-image: url('/assets/img/icons/black/home.png');
-            background-size: 45px 45px;
+            background-image: url('/assets/img/icons/black/home.svg');
+            background-size: 35px 35px;
             background-position: center;
         }
     }

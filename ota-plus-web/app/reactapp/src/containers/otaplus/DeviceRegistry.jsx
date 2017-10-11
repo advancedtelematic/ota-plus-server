@@ -10,7 +10,7 @@ class DeviceRegistry extends Component {
         return (
             <div className="item">
                 <div className="icon">
-                    <img src="/assets/img/icons/green_tick.png" alt="Icon" />
+                    <img src="/assets/img/icons/green_tick.svg" alt="Icon" />
                 </div>
                 <div className="status">
                     all services online and running
