@@ -45,7 +45,7 @@ class List extends Component {
     }
     addItem() {
         let randomInt = this.getRandomInt(0, this.keys.length + 1);
-        if(randomInt !== this.keys.length) {
+        if(randomInt % 2) {
             let randomKey = this.keys[randomInt];
             let randomObject = this.props.data[randomKey];
             randomObject.time = moment().format("DD.MM.YYYY hh:mm:ss") + ':' + this.getRandomMiliseconds();
