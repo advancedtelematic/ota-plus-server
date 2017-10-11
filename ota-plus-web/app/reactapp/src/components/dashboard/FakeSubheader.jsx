@@ -24,11 +24,11 @@ class FakeSubheader extends Component {
                     </Form>
                     <div className="fake-actions">
                         <div className="animation">
-                            <a href="#" className="stop btn btn-main btn-small" onClick={disableAnimation}>
-                                <i className="fa fa-pause" aria-hidden="true"></i>
+                            <a href="#" className="stop" onClick={disableAnimation}>
+                                <img src="/assets/img/icons/pause_icon.svg" alt="Icon" />
                             </a>
-                            <a href="#" className="play btn btn-main btn-small" onClick={enableAnimation}>
-                                <i className="fa fa-play" aria-hidden="true"></i>
+                            <a href="#" className="play" onClick={enableAnimation}>
+                                <img src="/assets/img/icons/play_icon.svg" alt="Icon" />
                             </a>
                         </div>
                         <div className="list-actions">

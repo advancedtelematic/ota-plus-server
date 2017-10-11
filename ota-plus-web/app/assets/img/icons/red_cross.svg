@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>Red_Cross</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Red_Cross">
+            <path d="M15.368,1 C7.432,1 1,7.431 1,15.367 C1,23.305 7.432,29.738 15.368,29.738 C23.305,29.738 29.741,23.305 29.741,15.367 C29.741,7.431 23.305,1 15.368,1 L15.368,1 Z" id="Stroke-3" fill="#FF0000"></path>
+            <path d="M20.7037,9.0358 L9.0367,20.7028" id="Stroke-1" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M9.0372,9.0358 L20.7042,20.7028" id="Stroke-2" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round"></path>
+        </g>
+    </g>
+</svg>
