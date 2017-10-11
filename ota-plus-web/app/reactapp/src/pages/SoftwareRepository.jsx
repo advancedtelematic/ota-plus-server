@@ -10,64 +10,31 @@ import StatsBlock from '../components/packages/stats/StatsBlock';
 const roles = {
     "root": {
         "expires": "12-12-2018 14:15",
-        "keys": [
-            "827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173",
-            "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0",
-            "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd",
-            "d40aa432398d6ed7a41c6f673ef1a4442eb78139d4f8aa4d7dfbae72818dcb37",
-            "c15e364e972e5c2284efa289088ff46c56446a7c89520db45af24ce0190c5ade",
-            "d1772ba9645a816b2a35649887905e091b2baabe8c2f0def1496cebea4632116",
-            "e28adb4dc47b188d609a67b389a3beb61993737e5509d77fdd1b4009a32707f1"
-        ],
-        "thresholds": {
-            "management": 3,
-            "qa": 2
-        },
-        "warnings": [
-            "Warning message 1",
-            "Warning message 2"
-        ],
+        "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd", "d40aa432398d6ed7a41c6f673ef1a4442eb78139d4f8aa4d7dfbae72818dcb37", "c15e364e972e5c2284efa289088ff46c56446a7c89520db45af24ce0190c5ade", "d1772ba9645a816b2a35649887905e091b2baabe8c2f0def1496cebea4632116", "e28adb4dc47b188d609a67b389a3beb61993737e5509d77fdd1b4009a32707f1"],
+        "thresholds": {"management": 3, "qa": 2},
+        "warnings": [],
+        "errors": [],
         "authorises": {
-            "timestamp": {},
-            "snapshot": {},
-            "targets": {
+            "timestamp": {}, "snapshot": {}, "targets": {
                 "authorises": {
-                    "bsch": {
+                    "BSCH": {
                         "authorises": {
                             "connectivity": {
                                 "authorises": {
                                     "PL-BT-446 Bluetooth auto-grid TVU": {
                                         "expires": "12-12-2018 14:15",
-                                        "keys": [
-                                            "827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173",
-                                            "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0",
-                                            "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd",
-                                            "d40aa432398d6ed7a41c6f673ef1a4442eb78139d4f8aa4d7dfbae72818dcb37",
-                                            "c15e364e972e5c2284efa289088ff46c56446a7c89520db45af24ce0190c5ade",
-                                            "d1772ba9645a816b2a35649887905e091b2baabe8c2f0def1496cebea4632116",
-                                            "e28adb4dc47b188d609a67b389a3beb61993737e5509d77fdd1b4009a32707f1"
-                                        ],
-                                        "thresholds": {
-                                            "management": 3,
-                                            "qa": 2
-                                        },
-                                        "warnings": [
-                                            "Warning message 1",
-                                            "Warning message 2"
-                                        ],
-                                        "errors": [
-                                            "Error message 1"
-                                        ]
+                                        "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd", "d40aa432398d6ed7a41c6f673ef1a4442eb78139d4f8aa4d7dfbae72818dcb37", "c15e364e972e5c2284efa289088ff46c56446a7c89520db45af24ce0190c5ade", "d1772ba9645a816b2a35649887905e091b2baabe8c2f0def1496cebea4632116", "e28adb4dc47b188d609a67b389a3beb61993737e5509d77fdd1b4009a32707f1"],
+                                        "thresholds": {"DEV": 3, "QA": 2},
+                                        "warnings": [],
+                                        "errors": []
                                     },
-                                    "PL-AFS-999 Aftersales low energy beamer mod. 2016-2017": {},
-                                    "PL-WF-165 On-board wifi dongle GenII": {}
+                                    "PL-AS-999 After sales network beamer": {},
+                                    "PL-WF-165 On-board wifi dongle G2": {}
                                 }
-                            },
-                            "diagnostic": {},
-                            "infotainment": {}
+                            }, "diagnostic": {}, "infotainment": {}
                         }
-                    },
-                    "cntl": {}
+                    }, "CNTL": {}, "DNSO": {}, "FJTS": {},
+                    "FRCIA": {}, "MTSBSH": {}, "SGEM": {}
                 }
             }
         }
@@ -247,16 +214,17 @@ const keys = {
 const packages = {
     "groups": {
         "B": {
-            "bootable-bluetooth_autogrid_tvu.img": {
+            "bootable-bluetooth_autogrid_rvu.img": {
                 "role": "PL-BT-446 Bluetooth auto-grid TVU",
-                "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
-                "warnings": ["Warning message 1", "Warning message 2"],
+                "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
+                "warnings": ["1 associated role about to expire. Included in 2 running campaigns."],
+                "errors": [],
                 "stats": {
-                    "groups": {"Nomad Fancy String": 70, "Roamer": 20, "Others": 10},
+                    "groups": {"Nomad": 70, "Roamer": 20, "Others": 10},
                     "installationResults": {"success": 95, "failure": 5}
                 },
                 "versions": {
-                    "5.0-1.123.33129": {
+                    "5.0-1.123": {
                         "created": "Wed Jul 05 2017, 14:45:33",
                         "updated": "Thu Jul 06 2017, 5:34:56",
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
@@ -264,7 +232,7 @@ const packages = {
                         "installedOnEcus": 130000,
                         "id": ["bt-x91-64bits", "bt-x91-32bits"]
                     },
-                    "4.2-3.775.43998": {
+                    "4.2-3.775": {
                         "created": "Wed Jul 05 2017, 14:45:33",
                         "updated": "Thu Jul 06 2017, 5:34:56",
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
@@ -272,7 +240,7 @@ const packages = {
                         "installedOnEcus": 15000,
                         "id": ["bt-x91-64bits", "bt-x91-32bits"]
                     },
-                    "4.0-4.887.64663": {
+                    "4.0-4.887": {
                         "created": "Wed Jul 05 2017, 14:45:33",
                         "updated": "Thu Jul 06 2017, 5:34:56",
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
@@ -282,13 +250,55 @@ const packages = {
                         ]
                     }
                 }
+            }, "bootable-bluetooth_autogrid_tvu.img": {
+                "role": "PL-BT-446 Bluetooth auto-grid TVU",
+                "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
+                "warnings": [],
+                "errors": [],
+                "stats": {
+                    "groups": {"Nomad": 70, "Roamer": 20, "Others": 10},
+                    "installationResults": {"success": 95, "failure": 5}
+                },
+                "versions": {
+                    "5.0-1.123": {
+                        "created": "Wed Jul 05 2017, 14:45:33",
+                        "updated": "Thu Jul 06 2017, 5:34:56",
+                        "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
+                        "length": "1,2 MB",
+                        "installedOnEcus": 130000,
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
+                    },
+                    "4.2-3.775": {
+                        "created": "Wed Jul 05 2017, 14:45:33",
+                        "updated": "Thu Jul 06 2017, 5:34:56",
+                        "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
+                        "length": "1,2 MB",
+                        "installedOnEcus": 15000,
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
+                    },
+                    "4.0-4.887": {
+                        "created": "Wed Jul 05 2017, 14:45:33",
+                        "updated": "Thu Jul 06 2017, 5:34:56",
+                        "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
+                        "length": "1,2 MB",
+                        "installedOnEcus": 5000,
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
+                    },
+                    "3.9-3.783": {
+                        "created": "Wed Jul 05 2017, 14:45:33",
+                        "updated": "Thu Jul 06 2017, 5:34:56",
+                        "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
+                        "length": "1,2 MB",
+                        "installedOnEcus": 5000,
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
+                    }
+                }
             }
         }, "W": {
             "wifi_smartdongle.img": {
-                "role": "PL-BT-446 Bluetooth auto-grid TVU",
+                "role": "PL-AS-999 After sales network beamer",
                 "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
-                "warnings": ["Warning message 1", "Warning message 2"],
-                "errors": ["Error message 1"],
+                "warnings": [],
                 "stats": {
                     "groups": {"Nomad": 70, "Roamer": 20, "Others": 10},
                     "installationResults": {"success": 95, "failure": 5}
@@ -316,15 +326,14 @@ const packages = {
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
                         "length": "1,2 MB",
                         "installedOnEcus": 5000,
-                        "id": [
-                            "bt-x91-64bits", "bt-x91-32bits"]
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
                     }
                 }
             }, "wireless2car-adapter.img": {
-                "role": "PL-BT-446 Bluetooth auto-grid TVU",
+                "role": "PL-WF-165 On-board wifi dongle G2",
                 "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
-                "warnings": ["Warning message 1", "Warning message 2"],
-                "errors": ["Error message 1"],
+                "warnings": [],
+                "errors": ["1 signature missing to match requested role's requirements. Included in 0 running campaigns."],
                 "stats": {
                     "groups": {"Nomad": 70, "Roamer": 20, "Others": 10},
                     "installationResults": {"success": 95, "failure": 5}
@@ -352,8 +361,7 @@ const packages = {
                         "hash": "d5385e86b89e0008d06174e3f1985624c09ae1ba6d9f3532452a72213fd688dd",
                         "length": "1,2 MB",
                         "installedOnEcus": 5000,
-                        "id": [
-                            "bt-x91-64bits", "bt-x91-32bits"]
+                        "id": ["bt-x91-64bits", "bt-x91-32bits"]
                     }
                 }
             }
@@ -923,6 +931,7 @@ export default class SoftwareRepository extends Component {
                                     </span>
                                     <div className={`user-info ${this.selectedItemObject.element.title === itemTitle ? '' : 'hide'}`} onClick={e => {e.stopPropagation()}}>
                                         <div className="owners">
+                                            <p style={{paddingRight: '5px',display: 'inline-block', margin: '0'}}>Approved by:</p>
                                             {_.map(groupItem.keys, (key, i) => {
                                                 person = keys.keys[key].owner;
                                                 return <i title={key} key={i} className="fa fa-owner" aria-hidden="true" onClick={this.showUserInfo.bind(this)}/>
@@ -959,6 +968,7 @@ export default class SoftwareRepository extends Component {
                     <div className="container">
                         <div className="row" >
                             <div className="col-xs-4 keys" id="keys">
+                                <div className="background-wrapper"/>
                                 <div className="section-header">Roles</div>
                                 <canvas id="tree-canvas" width={this.treeCanvasWidth} height={this.canvasHeight}/>
                                 <div className="wrapper-software" onScroll={this.scroll}>
@@ -1227,6 +1237,7 @@ class List extends PureComponent {
                                     <div className="info hide" onClick={e => {e.stopPropagation()}}>
                                         <div className="user-info">
                                             <div className="owners">
+                                                <p style={{paddingRight: '5px',display: 'inline-block', margin: '0'}}>Approved by:</p>
                                                 {_.map(groupItem.keys, (key, i) => {
                                                     person = keys.keys[key].owner;
                                                     return <i key={i} className="fa fa-owner" aria-hidden="true" onClick={this.showUserInfo.bind(this)}/>
