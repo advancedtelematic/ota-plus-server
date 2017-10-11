@@ -26,9 +26,9 @@ maintainer in Docker := "dev@advancedtelematic.com"
 
 packageName in Docker := "ota-plus-web"
 
-dockerRepository in Docker := Some("advancedtelematic")
+dockerRepository := Some("advancedtelematic")
 
-dockerUpdateLatest in Docker := true
+dockerUpdateLatest := true
 
 bashScriptExtraDefines ++= Seq("""addJava "-Xmx800m"""")
 
