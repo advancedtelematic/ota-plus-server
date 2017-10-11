@@ -56,6 +56,8 @@ class Subheader extends Component {
                                 <div className="icon">
                                     {item.errors ?
                                         <img src="/assets/img/icons/red_cross.svg" alt="Icon" />
+                                    : item.warnings ? 
+                                        <img src="/assets/img/icons/warning.svg" alt="Icon" />
                                     :
                                         <img src="/assets/img/icons/green_tick.svg" alt="Icon" />
                                     }
