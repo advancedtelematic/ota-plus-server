@@ -2,12 +2,14 @@ import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'underscore';
+import { Loader } from '../../../partials';
 
 const inputs = [1,2,3,4,5,6];
 
 @observer
 class Step2 extends Component {
-	@observable focusedElement = 1;
+    @observable focusedElement = 1;
+	@observable isLoading = false;
 
     constructor(props) {
         super(props);
@@ -22,7 +24,11 @@ class Step2 extends Component {
     		this.focusedElement = ++this.focusedElement;
     		this.makeFocus();
     	} else {
-    		this.context.router.push('/dashboard');
+            this.isLoading = true;
+            setTimeout(() => {
+                this.context.router.push('/dashboard');
+                this.isLoading = false;
+            }, 2000);
     	}
     }
     makeFocus(id) {
@@ -44,6 +50,13 @@ class Step2 extends Component {
 			    				<input key={i} type="number" name="digit" className="digit" min="0" max="9" onChange={this.validateInput} id={id} />
 							);
         				})}
+                        {this.isLoading ?
+                            <div className="loading">
+                                <Loader />
+                            </div>
+                        :
+                            null
+                        }
 	                </form>
             	</div>
             </div>

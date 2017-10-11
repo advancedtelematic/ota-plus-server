@@ -15,6 +15,7 @@ class List extends Component {
         super(props);
         this.addItem = this.addItem.bind(this);
         this.getRandomInt = this.getRandomInt.bind(this);
+        this.getRandomMiliseconds = this.getRandomMiliseconds.bind(this);
         this.playAnimation = this.playAnimation.bind(this);
         this.stopAnimation = this.stopAnimation.bind(this);
         this.mixLogs = this.mixLogs.bind(this);
@@ -26,7 +27,7 @@ class List extends Component {
         _.each(this.props.data, (item, logCode) => {
             if(index < 25) {
                 item.code = logCode;
-                item.time = moment().subtract(1, 'minutes').format("DD.MM.YYYY hh:mm");
+                item.time = moment().subtract(1, 'minutes').format("DD.MM.YYYY hh:mm:ss")  + ':' + this.getRandomMiliseconds();
                 this.data.push(item);
                 index++;
             }
@@ -47,7 +48,7 @@ class List extends Component {
         if(randomInt !== this.keys.length) {
             let randomKey = this.keys[randomInt];
             let randomObject = this.props.data[randomKey];
-            randomObject.time = moment().format("DD.MM.YYYY hh:mm");
+            randomObject.time = moment().format("DD.MM.YYYY hh:mm:ss") + ':' + this.getRandomMiliseconds();
             randomObject.code = this.keys[randomInt];
             this.data.unshift(randomObject);
         }
@@ -55,10 +56,13 @@ class List extends Component {
     getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     }
+    getRandomMiliseconds(min = 100, max = 999) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
     mixLogs() {
         let shuffledData = this.shuffleArray(this.data);
         _.each(shuffledData, (item, index) => {
-            item.time = moment().format("DD.MM.YYYY hh:mm");
+            item.time = moment().format("DD.MM.YYYY hh:mm:ss") + ':' + this.getRandomMiliseconds();;
         });
         this.data = shuffledData;
     }
