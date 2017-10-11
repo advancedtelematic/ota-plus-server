@@ -8,7 +8,14 @@ class AdvancedCampaigns extends Component {
     }
     render() {
         return (
-            <span>Container</span>
+            <div className="item">
+                <div className="icon">
+                    <img src="/assets/img/icons/green_tick.png" alt="Icon" />
+                </div>
+                <div className="status">
+                    all services online and running
+                </div>
+            </div>
         );
     }
 }
