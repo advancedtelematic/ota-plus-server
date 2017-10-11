@@ -242,7 +242,7 @@
                 margin-bottom: 35px;
 
                 .alerts {
-                    width: 50%;
+                    width: calc(100% - 460px);
                     float: left;
 
                     .message {
@@ -266,8 +266,8 @@
                 }
 
                 .url {
-                    width: 50%;
-                    float: left;
+                    width: 460px;
+                    float: right;
                     text-align: right;
                     font-weight: bold;
                 }
