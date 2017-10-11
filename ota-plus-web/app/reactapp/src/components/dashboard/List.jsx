@@ -22,10 +22,14 @@ class List extends Component {
         this.playAnimation();
     }
     componentWillMount() {
+        let index = 0;
         _.each(this.props.data, (item, logCode) => {
-            item.code = logCode;
-            item.time = moment().subtract(1, 'minutes').format("DD.MM.YYYY hh:mm");
-            this.data.push(item);
+            if(index < 25) {
+                item.code = logCode;
+                item.time = moment().subtract(1, 'minutes').format("DD.MM.YYYY hh:mm");
+                this.data.push(item);
+                index++;
+            }
         });
         this.keys = _.uniq(Object.keys(this.props.data));
     }
@@ -44,6 +48,7 @@ class List extends Component {
             let randomKey = this.keys[randomInt];
             let randomObject = this.props.data[randomKey];
             randomObject.time = moment().format("DD.MM.YYYY hh:mm");
+            randomObject.code = this.keys[randomInt];
             this.data.unshift(randomObject);
         }
     }
