@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>Green_Tick Copy 3</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Green_Tick-Copy-3">
+            <path d="M1,15.367 C1,23.305 7.431,29.738 15.368,29.738 C23.305,29.738 29.741,23.305 29.741,15.367 C29.741,7.431 23.305,1 15.368,1 C7.431,1 1,7.431 1,15.367 Z" id="Stroke-5" fill="#FC9774"></path>
+            <path d="M16.2566613,10.149894 C16.425491,9.92793608 16.6977045,9.92594621 16.8680478,10.149894 L24.0547224,19.5981096 C24.2235521,19.8200675 24.139944,20 23.8591688,20 L9.26554033,20 C8.98870934,20 8.89964344,19.8220574 9.06998672,19.5981096 L16.2566613,10.149894 Z" id="Triangle-2" fill="#202020" transform="translate(16.562543, 15.000000) rotate(-270.000000) translate(-16.562543, -15.000000) "></path>
+        </g>
+    </g>
+</svg>

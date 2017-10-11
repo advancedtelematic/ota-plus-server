@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>Page 1</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Software-repository" stroke-width="0.7" stroke="#000000">
+            <g id="Page-1">
+                <polyline id="Stroke-1" points="23.5337 5.4621 19.1907 0.5001 4.8427 0.5001 0.4997 5.4621"></polyline>
+                <path d="M16.2515,5.4621 L16.2515,7.7871 C16.2515,8.7331 15.4985,9.4991 14.5685,9.4991 L9.4655,9.4991 C8.5355,9.4991 7.7825,8.7331 7.7825,7.7871 L7.7825,5.4621 L0.5005,5.4621 L0.5005,21.6121 C0.5005,22.6531 1.3375,23.5061 2.3605,23.5061 L21.6725,23.5061 C22.6965,23.5061 23.5335,22.6531 23.5335,21.6121 L23.5335,5.4621 L16.2515,5.4621 Z" id="Stroke-3"></path>
+                <path d="M23.5337,11.4627 L16.2517,11.4627 L16.2517,13.7697 C16.2517,14.7087 15.4977,15.4697 14.5687,15.4697 L9.4647,15.4697 C8.5357,15.4697 7.7827,14.7087 7.7827,13.7697 L7.7827,11.4627 L0.4997,11.4627" id="Stroke-5"></path>
+                <path d="M23.5337,17.4633 L16.2517,17.4633 L16.2517,19.7703 C16.2517,20.7093 15.4977,21.4703 14.5687,21.4703 L9.4647,21.4703 C8.5357,21.4703 7.7827,20.7093 7.7827,19.7703 L7.7827,17.4633 L0.4997,17.4633" id="Stroke-7"></path>
+            </g>
+        </g>
+    </g>
+</svg>

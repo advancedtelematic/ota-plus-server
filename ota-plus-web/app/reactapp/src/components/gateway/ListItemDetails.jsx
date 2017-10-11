@@ -102,7 +102,7 @@ class ListItemDetails extends Component {
                                         return (
                                             <div className="message" key={index}>
                                                 <span className="icon">
-                                                    <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                                    <img src="/assets/img/icons/warning.svg" alt="Icon" />
                                                 </span>
                                                 {warning}
                                             </div>
@@ -116,7 +116,7 @@ class ListItemDetails extends Component {
                                         return (
                                             <div className="message" key={index}>
                                                 <span className="icon">
-                                                    <img src="/assets/img/icons/red_cross.png" alt="Icon" />
+                                                    <img src="/assets/img/icons/red_cross.svg" alt="Icon" />
                                                 </span>
                                                 {error}
                                             </div>
@@ -128,7 +128,7 @@ class ListItemDetails extends Component {
                                 {_.isEmpty(item.warnings) && _.isEmpty(item.errors) ?
                                     <div className="message">
                                         <span className="icon">
-                                            <img src="/assets/img/icons/green_tick.png" alt="Icon" />
+                                            <img src="/assets/img/icons/green_tick.svg" alt="Icon" />
                                         </span>
                                         none reported!
                                     </div>

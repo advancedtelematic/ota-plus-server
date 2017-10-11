@@ -14,9 +14,9 @@ class ListItem extends Component {
             <div className="item">
                 <div className="col">
                     {item.type === 'Error' ?
-                        <img src="/assets/img/icons/red_cross.png" alt="Icon" /> 
+                        <img src="/assets/img/icons/red_cross.svg" alt="Icon" /> 
                     : item.type === 'Warning' ?
-                        <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                        <img src="/assets/img/icons/warning.svg" alt="Icon" /> 
                     :
                         '-'
                     }
