@@ -4,6 +4,7 @@ import { observable } from 'mobx';
 import _ from 'underscore';
 import { Form } from 'formsy-react';
 import { SubHeader, SearchBar } from '../../partials';
+import { Link } from 'react-router';
 
 @observer
 class Subheader extends Component {
@@ -13,17 +14,26 @@ class Subheader extends Component {
 
     constructor(props) {
         super(props);
+        this.slugify = this.slugify.bind(this);
     }
     componentWillMount() {
         _.each(Object.keys(this.props.data), (name, index) => {
             let objectItem = this.props.data[name];
-            objectItem.name = name;
+            objectItem.name = name.replace(/([A-Z])/g, ' $1');
             this.data.push(objectItem);
             this.totalErrors += objectItem.errors;
             this.totalWarnings += objectItem.warnings;
         });
     }
-    render() {
+    slugify(text) {
+      return text.toString().toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '')
+    }
+    render() {        
 		return (
             <div className="dashboard-subheader">
                 <div className={"system" + (this.totalErrors ? " error" : this.totalWarnings ? " warning" : " ok")}>
@@ -31,7 +41,7 @@ class Subheader extends Component {
                         System status
                     </div>                      
                     <div className="status">
-                        {this.totalErrors} errors, {this.totalWarnings} warnings
+                        {this.totalErrors + (this.totalErrors === 1 ? ' error, ' : ' errors, ') + this.totalWarnings + (this.totalWarnings === 1 ? ' warning' : ' warnings')}
                     </div>
                     <div className="triangle">
                     </div>
@@ -39,7 +49,7 @@ class Subheader extends Component {
                 <div className="sub-systems">
                     {_.map(this.data, (item, index) => {
                         return (
-                            <div className="item" key={index}>
+                            <Link to={item.name === 'campaigns' ? '/advanced-campaigns' : this.slugify(item.name)} className="item" key={index}>
                                 <div className="title">
                                     {item.name}
                                 </div>
@@ -52,12 +62,12 @@ class Subheader extends Component {
                                 </div>
                                 <div className="status">
                                     {item.errors || item.warnings ?
-                                        item.errors + ' errors, ' + item.warnings + ' warnings'
+                                        item.errors + (item.errors === 1 ? ' error, ' : ' errors, ') + item.warnings + (item.warnings === 1 ? ' warning' : ' warnings')
                                     :
                                         'all services online and running'
                                     }
                                 </div>
-                            </div>
+                            </Link>
                         );
                     })}
                 </div>
@@ -65,5 +75,11 @@ class Subheader extends Component {
         );
     }
 }
+
+
+Subheader.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
+
 
 export default Subheader;

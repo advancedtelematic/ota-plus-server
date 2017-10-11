@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 
 @observer
-class Auditor extends Component {
+class DeviceRegistry extends Component {
     constructor(props) {
         super(props);
     }
@@ -20,4 +20,4 @@ class Auditor extends Component {
     }
 }
 
-export default Auditor;
+export default DeviceRegistry;

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { observer } from 'mobx-react';
 import NavigationDropdown from './NavigationDropdown';
+import OtaPlusTabs from './OtaPlusTabs';
 import AsyncResponse from './AsyncResponse';
 
 @observer
@@ -32,29 +33,7 @@ class Navigation extends Component {
           </ul>
         );
         const otaPlusNavigation = (
-            <ul className="nav navbar-nav">
-                <li>
-                    <Link to="/fleet" activeClassName="active" id="link-fleet">Fleet</Link>
-                </li>
-                <li>
-                    <Link to="/software-repository" activeClassName="active" id="link-software-repository">Software repository</Link>
-                </li>
-                <li>
-                    <Link to="/features" activeClassName="active" id="link-features">Features</Link>
-                </li>
-                <li>
-                    <Link to="/advanced-campaigns" activeClassName="active" id="link-advanced-campaigns">Advanced campaigns</Link>
-                </li>
-                <li>
-                    <Link to="/connectors" activeClassName="active" id="link-connectors">Connectors</Link>
-                </li>
-                <li>
-                    <Link to="/gateway" activeClassName="active" id="link-gateway">Gateway</Link>
-                </li>
-                <li>
-                    <Link to="/auditor" activeClassName="active" id="link-uditor">Auditor</Link>
-                </li>
-          </ul>
+            <OtaPlusTabs />
         );
         return (
             <nav className="navbar navbar-inverse navbar-fixed-top">

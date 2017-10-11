@@ -1,13 +1,33 @@
-#page-fleet {
+#page-device-registry {
     @include fullHeight;
-}
+    background: #fff;
 
-#page-features {
-    @include fullHeight;
+    .item {
+        .icon {
+            text-align: center;
+            margin-bottom: 10px;
+
+            img {
+                width: 50px;
+            }
+        }
+    }
 }
 
 #page-advanced-campaigns {
     @include fullHeight;
+    background: #fff;
+
+    .item {
+        .icon {
+            text-align: center;
+            margin-bottom: 10px;
+
+            img {
+                width: 50px;
+            }
+        }
+    }
 }
 
 #page-connectors {
@@ -119,7 +139,7 @@
     }
 }
 
-#page-gateway {
+#page-device-gateway {
     @include fullHeight;
     background: #fff;
 
@@ -342,6 +362,18 @@
 
 #page-auditor {
     @include fullHeight;
+    background: #fff;
+
+    .item {
+        .icon {
+            text-align: center;
+            margin-bottom: 10px;
+
+            img {
+                width: 50px;
+            }
+        }
+    }
 }
 
 #page-dashboard {
@@ -383,6 +415,12 @@
                     &:first-child {
                         margin-right: 5px;
                     }
+                }
+            }
+
+            .list-actions {
+                .edit-filters {
+                    margin-right: 5px;
                 }
             }
 
@@ -530,6 +568,7 @@
                 justify-content: space-evenly;
 
                 .item {
+                    cursor: pointer;
                     width: 100%;
                     text-align: center;
                     height: 130px;
@@ -612,7 +651,9 @@
             }
         }
 
-        .form {            
+        .form {
+            float: left;
+
             input {
                 margin-bottom: 10px;
                 padding: 15px;
@@ -649,6 +690,11 @@
                 img {
                     width: 100%;
                 }
+            }
+
+            .loading {
+                float: left;
+                margin-left: 5px;
             }
 
             .digit {

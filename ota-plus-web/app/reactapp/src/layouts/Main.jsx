@@ -105,6 +105,7 @@ class Main extends Component {
                 this.onlineDevicesCount = onlineDevicesCount;
             }
         });
+
         this.featuresHandler = observe(this.featuresStore, (change) => {
             if(change.name === 'featuresFetchAsync' && change.object[change.name].isFetching === false) {
                 if(_.contains(this.featuresStore.features, 'alphaplus')) {
@@ -292,8 +293,6 @@ class Main extends Component {
                     :
                         null
                     }
-                    
-                    
                     <children.type
                         {...rest}
                         children={children.props.children}
