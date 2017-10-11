@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../../utils';
-import { FeaturesContainer } from '../../containers/otaplus';
+import { DeviceRegistryContainer } from '../../containers/otaplus';
+import { Header } from '../../partials';
 
-const title = "Features";
+const title = "Device registry";
 
 @observer
-class Features extends Component {
+class DeviceRegistry extends Component {
     constructor(props) {
         super(props);
     }
@@ -14,10 +15,13 @@ class Features extends Component {
         return (
             <FadeAnimation
                 display="flex">
+                <Header
+                    title={title}
+                />
                 <div className="wrapper-center">
     	           <MetaData 
                         title={title}>
-                        <FeaturesContainer />
+                        <DeviceRegistryContainer />
                     </MetaData>
                 </div>
             </FadeAnimation>
@@ -25,4 +29,4 @@ class Features extends Component {
     }
 }
 
-export default Features;
+export default DeviceRegistry;
