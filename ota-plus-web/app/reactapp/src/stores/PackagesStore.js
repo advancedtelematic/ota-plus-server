@@ -208,7 +208,7 @@ export default class PackagesStore {
         return axios.get(API_PACKAGES + '?regex=' + (filter ? filter : ''), {cancelToken: source.token})
             .then(function(response) {
                 this.initialPackages = response.data;
-                this.packages = _.uniq(this.packages.concat(response.data), pack => pack.id.name); 
+                this.packages = response.data;
 
                 switch (that.page) {
                     case 'device':                        
@@ -321,7 +321,7 @@ export default class PackagesStore {
         });
 
         this.directorPackages = preparedPackages;        
-        this.packages = _.uniq(this.packages.concat(mergedPackages), pack => pack.id.name);
+        this.packages = mergedPackages;
 
         if (this.overallPackagesCount === null) {
             this.overallPackagesCount = this.packages.length;
