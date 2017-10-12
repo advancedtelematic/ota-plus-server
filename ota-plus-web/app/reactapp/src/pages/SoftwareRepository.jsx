@@ -28,7 +28,7 @@ const roles = {
                                         "warnings": [],
                                         "errors": []
                                     },
-                                    "PL-AS-999 After sales network beamer": {},
+                                    "PL-AS-999 After sales network": {},
                                     "PL-WF-165 On-board wifi dongle G2": {}
                                 }
                             }, "diagnostic": {}, "infotainment": {}
@@ -296,9 +296,10 @@ const packages = {
             }
         }, "W": {
             "wifi_smartdongle.img": {
-                "role": "PL-AS-999 After sales network beamer",
+                "role": "PL-AS-999 After sales network",
                 "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
                 "warnings": [],
+                "errors": [],
                 "stats": {
                     "groups": {"Nomad": 70, "Roamer": 20, "Others": 10},
                     "installationResults": {"success": 95, "failure": 5}
@@ -899,14 +900,15 @@ export default class SoftwareRepository extends Component {
                             const itemTitle = item.replace(/[&\/\\#,+()$~%_.'":*?<>{}]/g, '');
                             const role = groupItem.role.replace(/[&\/\\#,+()$~%_.' ":*?<>{}]/g, '');
                             let person = null;
-
                             const errorWarningIcon = () => {
                                 if (groupItem.errors || (groupItem.errors && groupItem.warnings)) {
-                                    return <i key={Math.floor((Math.random() * 10000))} className="fa fa-error" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
-                                } else if (groupItem.warnings) {
-                                    return <i key={Math.floor((Math.random() * 10000))} className="fa warning" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
-                                } else {
-                                    return null
+                                    if (groupItem.errors.length > 0 || (groupItem.warnings.length > 0 && groupItem.errors.length > 0)) {
+                                        return <i key={Math.floor((Math.random() * 10000))} className="fa fa-error" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
+                                    } else if (groupItem.warnings.length > 0) {
+                                        return <i key={Math.floor((Math.random() * 10000))} className="fa warning" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
+                                    } else {
+                                        return <i key={Math.floor((Math.random() * 10000))} className="fa empty" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
+                                    }
                                 }
                             };
                             return (
@@ -1021,6 +1023,34 @@ class TreeUl extends PureComponent {
         super(props);
     }
 
+    componentDidMount() {
+        let treeLevels = document.querySelectorAll('.wrapper-software div[title]+ul');
+        let root = document.querySelector('.tree.shown i.fa');
+        root.classList.add('fa-angle-down');
+        root.classList.remove('fa-angle-right');
+        treeLevels.forEach((level, i) => {
+            if (i <= 3) {
+                const angleIcon = level.querySelector('i.fa.fa-angle-right:first-child');
+                if (angleIcon) {
+                    if (i === 0) {
+                        angleIcon.classList.add('fa-angle-down');
+                        angleIcon.classList.remove('fa-angle-right');
+                    }
+                    level.classList.remove('hidden');
+                    level.classList.add('shown');
+                }
+            }
+        });
+        // let arrowsDown = document.querySelectorAll('.wrapper-software i.fa.fa-angle-down');
+        // arrowsDown.forEach((arrow,i) => {
+        //     if (i === arrowsDown.length - 1 && arrow.offsetWidth > 0) {
+        //         console.log(arrow)
+        //         arrow.classList.add('fa-angle-down');
+        //         arrow.classList.remove('fa-angle-right');
+        //     }
+        // })
+    }
+
     resetContext(e) {
         if (e.target.nextSibling.classList[1]) {
             try {
@@ -1063,6 +1093,7 @@ class TreeUl extends PureComponent {
 
     render() {
         const { data, drawLinesFromKeys, openTreeNode, getCanvasContext, removeClasses, deselectAll } = this.props;
+        let totalCount = 0;
         return (
             <CSSTransitionGroup
                 transitionName="slide"
@@ -1076,14 +1107,15 @@ class TreeUl extends PureComponent {
                 {_.map(data, (items, key) => {
                     const errorWarningIcon = () => {
                         if (items.errors || (items.errors && items.warnings)) {
-                            return <i key={Math.floor((Math.random() * 10000))} className="fa fa-error" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
-                        } else if (items.warnings) {
-                            return <i key={Math.floor((Math.random() * 10000))} className="fa warning" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
-                        } else {
-                            return null
+                            if (items.errors.length > 0 || items.warnings.length > 0) {
+                                return <i key={Math.floor((Math.random() * 10000))} className="fa fa-error" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
+                            } else if (items.warnings.length > 0) {
+                                return <i key={Math.floor((Math.random() * 10000))} className="fa warning" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
+                            } else {
+                                return null
+                            }
                         }
                     };
-
                     return (
                         <li key={key}>
                             <div title={key.replace(/[&\/\\#,+()$~%_.' ":*?<>{}]/g, '')} onClick={e => {
@@ -1116,25 +1148,39 @@ class TreeUl extends PureComponent {
                                             <li>Telephone: {this.userInfo.phone}</li>
                                         </ul>
                                     </div>
+                                    {_.map(items.thresholds, (obj, i) => {
+                                        totalCount += obj;
+                                    })}
                                     {items.thresholds ?
                                         <div className="thresholds">
                                             <div>
-                                                <span className="total">{items.thresholds.qa + items.thresholds.management}</span>
-                                                {items.thresholds.qa} QA | {items.thresholds.management} DEV
+                                                <span className="total">{totalCount}</span>
+                                                <div className="align-right">
+                                                    {_.map(items.thresholds, (obj, i) => {
+                                                        return (
+                                                            <p>
+                                                                {' '+ obj + ' ' + i}
+                                                            </p>
+                                                        )
+                                                    })}
+                                                </div>
                                             </div>
                                             <div className="expires">
                                                 Expire date: {items.expires}
                                             </div>
                                         </div>
                                     : ''}
-                                    <div className="warnings">
-                                        {_.map(items.warnings, (warning, key) => {
-                                            return <p><i className="fa warning" aria-hidden="true"/>{warning}</p>
-                                        })}
-                                        {_.map(items.errors, (error, key) => {
-                                            return <p><i className="fa fa-error" aria-hidden="true"/>{error}</p>
-                                        })}
-                                    </div>
+                                    {items.warnings && items.warnings.length > 0
+                                    || items.errors && items.errors.length > 0 ?
+                                        <div className="warnings">
+                                            {_.map(items.warnings, (warning, key) => {
+                                                return <p><i className="fa warning" aria-hidden="true"/>{warning}</p>
+                                            })}
+                                            {_.map(items.errors, (error, key) => {
+                                                return <p><i className="fa fa-error" aria-hidden="true"/>{error}</p>
+                                            })}
+                                        </div>
+                                        : ''}
                                 </div>
                             </div>
                             <TreeUl
@@ -1213,11 +1259,13 @@ class List extends PureComponent {
                             });
                             const errorWarningIcon = () => {
                                 if (groupItem.errors || (groupItem.errors && groupItem.warnings)) {
-                                    return <i key={Math.floor((Math.random() * 10000))} className="fa fa-error" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
-                                } else if (groupItem.warnings) {
-                                    return <i key={Math.floor((Math.random() * 10000))} className="fa warning" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
-                                } else {
-                                    return null
+                                    if (groupItem.errors.length > 0 || (groupItem.warnings.length > 0 && groupItem.errors.length > 0)) {
+                                        return <i key={Math.floor((Math.random() * 10000))} className="fa fa-error" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
+                                    } else if (groupItem.warnings.length > 0) {
+                                        return <i key={Math.floor((Math.random() * 10000))} className="fa warning" aria-hidden="true" onClick={e => {e.stopPropagation()}}/>
+                                    } else {
+                                        return null
+                                    }
                                 }
                             };
                             return (
@@ -1250,14 +1298,16 @@ class List extends PureComponent {
                                             <li>Email: {person.email}</li>
                                             <li>Telephone: {person.phone}</li>
                                         </ul>
-                                        <div className="warnings">
-                                            {_.map(groupItem.warnings, (warning, key) => {
-                                                return <p><i key={key} className="fa warning" aria-hidden="true"/>{warning}</p>
-                                            })}
-                                            {_.map(groupItem.errors, (error, key) => {
-                                                return <p><i key={key} className="fa fa-error" aria-hidden="true"/>{error}</p>
-                                            })}
-                                        </div>
+                                        {groupItem.warnings && groupItem.warnings.length > 0 || groupItem.errors && groupItem.errors.length > 0 ?
+                                            <div className="warnings">
+                                                {_.map(groupItem.warnings, (warning, key) => {
+                                                    return <p><i key={key} className="fa warning" aria-hidden="true"/>{warning}</p>
+                                                })}
+                                                {_.map(groupItem.errors, (error, key) => {
+                                                    return <p><i key={key} className="fa fa-error" aria-hidden="true"/>{error}</p>
+                                                })}
+                                            </div>
+                                        : ''}
                                         <div className="total-progress">
                                             <div className="headers">
                                                 <h5>Total progress</h5>
@@ -1372,7 +1422,7 @@ class ItemVersions extends Component {
         const {groupItem} = this.props;
         return (
             <div className='row versions-details' onClick={(e) => {e.stopPropagation()}}>
-                {groupItem.warnings || groupItem.errors ?
+                {groupItem.warnings && groupItem.warnings.length > 0 || groupItem.errors && groupItem.errors.length > 0 ?
                     <div className="col-xs-12">
                         <div className="warnings">
                             {_.map(groupItem.warnings, (warning, key) => {
