@@ -321,7 +321,7 @@ export default class PackagesStore {
         });
 
         this.directorPackages = preparedPackages;        
-        this.packages = _.uniq(this.packages.concat(mergedPackages), pack => pack.id.name);
+        this.packages = _.uniq(this.packages.concat(mergedPackages), pack => pack.imageName || pack.id.name);
 
         if (this.overallPackagesCount === null) {
             this.overallPackagesCount = this.packages.length;
