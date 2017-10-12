@@ -208,7 +208,9 @@ export default class PackagesStore {
         return axios.get(API_PACKAGES + '?regex=' + (filter ? filter : ''), {cancelToken: source.token})
             .then(function(response) {
                 this.initialPackages = response.data;
-                this.packages = response.data;
+                _.each(response.data, (item, index) => {
+                    this.packages.push(item);
+                });
 
                 switch (that.page) {
                     case 'device':                        
