@@ -3622,7 +3622,7 @@ div[role=presentation] {
             top:15px;
             border-left: 5px solid transparent;
             border-right: 5px solid transparent;
-            border-bottom: 5px solid #707070;
+            border-bottom: 5px solid rgb(93, 93, 93);
         }
     }
 
@@ -3661,6 +3661,15 @@ div[role=presentation] {
     i.fa-error {
         background-image: url('/assets/img/icons/error.png');
         cursor: auto;
+    }
+    i.empty {
+        width:30px;
+        height:30px;
+        border-bottom: 1px solid #f1efef;
+        background-color: #fff;
+        position: absolute;
+        right:0;
+        margin-top: -5px;
     }
     i.fa-error, i.warning {
         background-size: contain;
@@ -3718,6 +3727,9 @@ div[role=presentation] {
 
             .user-info {
                 background-color: #707070;
+                -webkit-box-shadow: inset 0 0 15px -2px rgba(0,0,0,.5);
+                -moz-box-shadow: inset 0 0 15px -2px rgba(0,0,0,.5);
+                box-shadow: inset 0 0 15px -2px rgba(0,0,0,.5);
                 li {
                     color: #fff;
                     font-weight: 400;
@@ -3747,7 +3759,7 @@ div[role=presentation] {
 
             i.selected-user {
                 &:after {
-                    border-bottom: 10px solid #707070;
+                    border-bottom: 10px solid rgb(93, 93, 93);
                 }
             }
 
@@ -3949,6 +3961,9 @@ div[role=presentation] {
                 }
                 .user-info+ul {
                     background-color: #707070;
+                    -webkit-box-shadow: inset 0 0 15px -2px rgba(0,0,0,.5);
+                    -moz-box-shadow: inset 0 0 15px -2px rgba(0,0,0,.5);
+                    box-shadow: inset 0 0 15px -2px rgba(0,0,0,.5);
                     color: #fff;
                 }
 
@@ -4137,6 +4152,11 @@ div[role=presentation] {
             .second-level {
                 li {
                     padding: 0 !important;
+                    .info {
+                        -webkit-box-shadow: inset 0 0 15px -2px rgba(0,0,0,0.5);
+                        -moz-box-shadow: inset 0 0 15px -2px rgba(0,0,0,0.5);
+                        box-shadow: inset 0 0 15px -2px rgba(0,0,0,0.5);
+                    }
                     & > span.item {
                         padding: 6px 35px;
                         display: block;
@@ -4412,24 +4432,51 @@ div[role=presentation] {
                     .thresholds {
                         vertical-align: middle;
                         border-bottom: 1px solid #ccc;
+                        display: flex;
+                        flex-wrap: wrap;
+                        padding: 0;
                         .total {
                             text-align: center;
                             margin-right: 10px;
                             color: #fff;
-                            display: inline-block;
                             background-color: #FA9872;
                             border-radius: 50%;
                             padding: 0;
-                            width: 25px;
-                            height: 25px;
+                            width: 45px;
+                            height: 45px;
+                            display: flex;
+                            align-items: center;
+                            font-size: 20px;
+                            justify-content: center;
+                        }
+
+                        .expires {
+                            display: block;
+                            border-top: 1px solid #ccc;
+                            flex-basis: 100%;
+                            padding: 5px 15px;
+                            font-size: 14px;
                         }
 
                         &>div:first-child {
-                            border-right: 1px solid #ccc;
+                            align-items: center;
+                            flex-basis: 100%;
+                            padding: 10px 15px;
+                        }
+
+                        .align-right {
+                            align-items: center;
+                            flex-wrap: wrap;
+                            font-size: 14px;
+                            p {
+                                flex-basis: 100%;
+                                margin: 0;
+                                line-height: 18px;
+                            }
                         }
 
                         div {
-                            display: inline-block;
+                            display: flex;
                             &:not(:last-child) {
                                 padding-right: 10px;
                                 margin-right: 10px;
@@ -4577,7 +4624,7 @@ div[role=presentation] {
             }
         }
         span {
-            padding: 2px 50px 2px 30px;
+            padding: 2px 40px 2px 30px;
             display: block;
             font-weight: 300;
             position: relative;
@@ -4642,7 +4689,7 @@ div[role=presentation] {
                 top: 21px;
                 border-left: 12px solid transparent;
                 border-right: 12px solid transparent;
-                border-bottom: 10px solid #707070;
+                border-bottom: 10px solid rgb(93, 93, 93);
             }
         }
         .warnings {
