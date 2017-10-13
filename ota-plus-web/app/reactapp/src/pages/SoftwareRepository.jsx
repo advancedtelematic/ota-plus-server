@@ -421,7 +421,32 @@ const campaigns = {
                 "warnings": ["Warning message 1", "Warning message 2"],
                 "errors": ["Error message 1"]
             }
-        }, "Nomad III Phase 2 (2012)": {}, "Roamer 6 (2016)": {}, "Colossus X Phase 3 (2010)": {}
+        }, "Nomad III Phase 2 (2012)": {
+            "UPD-TST01-Y42 Nomad 3 BT TVU BG5592 update": {
+                "launched": "Mon Oct 02 2017, 12:00:00",
+                "started": "Mon Oct 02 2017, 12:00:00",
+                "end": "Fri Oct 27 2017, 23:59:59",
+                "dynamic": true,
+                "autostop": false,
+                "ecus": ["bluetooth controller"],
+                "packages": ["bootable-bluetooth_autogrid_rvu.img"],
+                "groups": {
+                    "Nomad 4 CC": {"total": "10.000", "processed": 90},
+                    "Nomad 4 3 doors diesel MT": {"total": "10.000", "processed": 90},
+                    "Nomad 4 3 doors gasoline AT": {"total": "10.000", "processed": 90}
+                },
+                "processed": "90.000",
+                "affected": "80.000",
+                "success": "70.000",
+                "failure": "5.000",
+                "queued": "5.000",
+                "notImpacted": "10.000",
+                "notProcessed": "10.000",
+                "keys": ["827018f53c8eb899e15d9724e091088dbddf628bd87c81380a10bbb281d1f173", "686f771d7e5993b2895b6180660ab29d2eb12c1815e3be75862eb459ad0bc3c0", "fac3cfbce415443befc88cd8db75d555fab2813fdbda7d1abdb329d91389fffd"],
+                "warnings": ["Warning message 1", "Warning message 2"],
+                "errors": ["Error message 1"]
+            }
+        }, "Roamer 6 (2016)": {}, "Colossus X Phase 3 (2010)": {}
     }
 }
 
@@ -461,6 +486,30 @@ export default class SoftwareRepository extends Component {
     componentDidMount() {
         this.resizeCanvas();
         window.addEventListener("resize", this.resize);
+        let treeLevels = document.querySelectorAll('.wrapper-software div[title]+ul');
+        let root = document.querySelector('.tree.shown i.fa');
+        root.classList.add('fa-angle-down');
+        root.classList.remove('fa-angle-right');
+        treeLevels.forEach((level, i) => {
+            if (i <= 3) {
+                const angleIcon = level.querySelector('i.fa.fa-angle-right:first-child');
+                if (angleIcon) {
+                    if (i === 0) {
+                        angleIcon.classList.add('fa-angle-down');
+                        angleIcon.classList.remove('fa-angle-right');
+                    }
+                    level.classList.remove('hidden');
+                    level.classList.add('shown');
+                }
+            }
+        });
+        let arrowsDown = document.querySelectorAll('.wrapper-software i.fa.fa-angle-down');
+        arrowsDown.forEach((arrow,i) => {
+            if (i === arrowsDown.length - 1 && arrow.offsetWidth > 0) {
+                arrow.classList.add('fa-angle-down');
+                arrow.classList.remove('fa-angle-right');
+            }
+        })
     }
 
     componentWillUnmount() {
@@ -833,7 +882,6 @@ export default class SoftwareRepository extends Component {
         }
         this.selectedDataType = selectedDataType;
 
-        let elementsArray = [];
         const { ctx, canvas } = this._getCanvasContext();
         let elementCoordinates = null;
         if (e.target.childNodes[0].className === 'fa') {
@@ -854,10 +902,7 @@ export default class SoftwareRepository extends Component {
                 this.lastClickedElementTitle = e.target.title;
             }
 
-            const titles = e.target.querySelectorAll('i[title]');
-            titles.forEach((element) => {
-                elementsArray.push(document.querySelectorAll(`li[data-keys*="${element.title}"]`))
-            });
+            const associatedPackages = document.querySelectorAll(`li[data-role*="${e.target.title}"]`);
 
             if (clear) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -868,22 +913,20 @@ export default class SoftwareRepository extends Component {
                 packages.ctx.clearRect(0, 0, packages.canvas.width, packages.canvas.height)
             }
 
-            elementsArray.forEach(elements => {
-                elements.forEach(element => {
-                    this.drawLineBetweenPackagesAndCampaigns(element, false);
-                    element.classList.add('selected');
-                    element = element.childNodes[0];
+            associatedPackages.forEach(element => {
+                this.drawLineBetweenPackagesAndCampaigns(element, false);
+                element.classList.add('selected');
+                element = element.childNodes[0];
 
-                    ctx.beginPath();
-                    ctx.moveTo(elementCoordinates.left + e.target.offsetWidth, elementCoordinates.top - 150 + elementCoordinates.height / 2);
-                    ctx.lineTo(this.mainLineLength,elementCoordinates.top - 150 +  elementCoordinates.height / 2);
-                    let itemOffset = element.getBoundingClientRect().top - 150 + element.offsetHeight / 2;
+                ctx.beginPath();
+                ctx.moveTo(elementCoordinates.left + e.target.offsetWidth, elementCoordinates.top - 150 + elementCoordinates.height / 2);
+                ctx.lineTo(this.mainLineLength,elementCoordinates.top - 150 +  elementCoordinates.height / 2);
+                let itemOffset = element.getBoundingClientRect().top - 150 + element.offsetHeight / 2;
 
-                    ctx.lineTo(this.mainLineLength, itemOffset);
-                    ctx.lineTo(this.mainLineLength + this.rightLineLength, itemOffset);
-                    ctx.stroke();
-                    ctx.beginPath();
-                })
+                ctx.lineTo(this.mainLineLength, itemOffset);
+                ctx.lineTo(this.mainLineLength + this.rightLineLength, itemOffset);
+                ctx.stroke();
+                ctx.beginPath();
             });
         }
 
@@ -1021,34 +1064,6 @@ class TreeUl extends PureComponent {
     @observable userInfo = {};
     constructor(props) {
         super(props);
-    }
-
-    componentDidMount() {
-        let treeLevels = document.querySelectorAll('.wrapper-software div[title]+ul');
-        let root = document.querySelector('.tree.shown i.fa');
-        root.classList.add('fa-angle-down');
-        root.classList.remove('fa-angle-right');
-        treeLevels.forEach((level, i) => {
-            if (i <= 3) {
-                const angleIcon = level.querySelector('i.fa.fa-angle-right:first-child');
-                if (angleIcon) {
-                    if (i === 0) {
-                        angleIcon.classList.add('fa-angle-down');
-                        angleIcon.classList.remove('fa-angle-right');
-                    }
-                    level.classList.remove('hidden');
-                    level.classList.add('shown');
-                }
-            }
-        });
-        // let arrowsDown = document.querySelectorAll('.wrapper-software i.fa.fa-angle-down');
-        // arrowsDown.forEach((arrow,i) => {
-        //     if (i === arrowsDown.length - 1 && arrow.offsetWidth > 0) {
-        //         console.log(arrow)
-        //         arrow.classList.add('fa-angle-down');
-        //         arrow.classList.remove('fa-angle-right');
-        //     }
-        // })
     }
 
     resetContext(e) {
