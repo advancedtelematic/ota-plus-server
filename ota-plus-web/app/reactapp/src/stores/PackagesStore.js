@@ -1338,6 +1338,7 @@ export default class PackagesStore {
         let formattedPack = {
             customExists: pack.custom ? true : false,
             packageHash: pack.checksum.hash,
+            imageName: pack.filename,
             createdAt: pack.custom ? pack.custom.createdAt : null,
             updatedAt: pack.custom ? pack.custom.updatedAt : null,
             targetFormat: pack.custom ? pack.custom.targetFormat : 'OSTREE',
