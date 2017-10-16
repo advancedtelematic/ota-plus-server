@@ -9,7 +9,7 @@ import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.persistence.DeviceMetadata
 import com.advancedtelematic.AuthPlusAuthentication.AuthenticatedApiAction
-import org.genivi.sota.data.{Device, Uuid}
+import org.genivi.sota.data.{CredentialsType, Device, Uuid}
 import play.api.http.HttpEntity
 import play.api.{Configuration, Logger}
 import play.api.libs.json.Json
@@ -42,7 +42,8 @@ extends AbstractController(components) with ApiClientSupport {
   private def registerDeviceMetadata(device: Device, token: AuthPlusAccessToken,
                                      devMeta: DeviceMetadata): Future[Done] = {
     val credentials = Some(Json.stringify(Json.toJson(devMeta.credentials)))
-    val devT = device.toResponse.copy(credentials = credentials)
+    val devT = device.toResponse.copy(credentials = credentials,
+      credentialsType = Some(CredentialsType.OAuthClientCredentials))
     devicesApi.setDeviceMetadata(UserOptions(Some(token.value), namespace = Some(device.namespace)), devT)
   }
 
