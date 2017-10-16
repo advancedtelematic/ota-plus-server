@@ -73,12 +73,12 @@ trait ApiRequest { self =>
 
   def withNamespace(ns: Option[Namespace]): ApiRequest = {
     ns map { n =>
-      transform(_.withHttpHeaders("x-ats-namespace" -> n.get))
+      transform(_.addHttpHeaders("x-ats-namespace" -> n.get))
     } getOrElse self
   }
 
   def withToken(token: String): ApiRequest =
-    transform(_.withHttpHeaders(("Authorization", "Bearer " + token)))
+    transform(_.addHttpHeaders(("Authorization", "Bearer " + token)))
 
   def withToken(token: Option[String]): ApiRequest =
     token.map(withToken).getOrElse(self)
