@@ -2695,9 +2695,12 @@ export default class SoftwareRepository extends Component {
                                     <div className="info hide" onClick={e => {e.stopPropagation()}}>
                                         <ul>
                                             <li>Name: {person.name}</li>
+                                            <li>Position: {person.position}</li>
                                             <li>Company: {person.company}</li>
+                                            <li>Location: {person.location}</li>
                                             <li>Email: {person.email}</li>
                                             <li>Telephone: {person.phone}</li>
+                                            <li>Group: {person.group}</li>
                                         </ul>
                                     </div>
                                     <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
@@ -2867,9 +2870,12 @@ class TreeUl extends PureComponent {
                                     <div className="user-info hide">
                                         <ul>
                                             <li>Name: {this.userInfo.name}</li>
+                                            <li>Position: {this.userInfo.position}</li>
                                             <li>Company: {this.userInfo.company}</li>
+                                            <li>Location: {this.userInfo.location}</li>
                                             <li>Email: {this.userInfo.email}</li>
                                             <li>Telephone: {this.userInfo.phone}</li>
+                                            <li>Group: {this.userInfo.group}</li>
                                         </ul>
                                     </div>
                                     {_.map(items.thresholds, (obj, i) => {
@@ -3018,9 +3024,12 @@ class List extends PureComponent {
                                         </div>
                                         <ul className="hide">
                                             <li>Name: {person.name}</li>
+                                            <li>Position: {person.position}</li>
                                             <li>Company: {person.company}</li>
+                                            <li>Location: {person.location}</li>
                                             <li>Email: {person.email}</li>
                                             <li>Telephone: {person.phone}</li>
+                                            <li>Group: {person.group}</li>
                                         </ul>
                                         {groupItem.warnings && groupItem.warnings.length > 0 || groupItem.errors && groupItem.errors.length > 0 ?
                                             <div className="warnings">
