@@ -40,8 +40,6 @@ libraryDependencies ++= Seq (
     Dependencies.PlayJson
     ) ++
   Dependencies.TestFrameworks ++
-  Dependencies.JsonWebSecurity ++
-  Dependencies.LogTree ++
   Dependencies.SotaCommon ++
   Dependencies.LibAts
 

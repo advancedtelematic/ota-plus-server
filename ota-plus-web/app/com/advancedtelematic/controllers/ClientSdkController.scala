@@ -4,11 +4,11 @@ import javax.inject.{Inject, Named, Singleton}
 
 import akka.Done
 import akka.actor.ActorSystem
-import com.advancedtelematic.{AuthenticatedRequest, AuthPlusAccessToken, AuthPlusAuthentication}
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
 import com.advancedtelematic.api.ApiRequest.UserOptions
+import com.advancedtelematic.auth.{AccessToken, ApiAuthAction}
+import org.genivi.sota.data.{Device, Uuid}
 import com.advancedtelematic.persistence.DeviceMetadata
-import com.advancedtelematic.AuthPlusAuthentication.AuthenticatedApiAction
 import org.genivi.sota.data.{CredentialsType, Device, Uuid}
 import play.api.http.HttpEntity
 import play.api.{Configuration, Logger}
@@ -24,7 +24,7 @@ import scala.util.{Failure, Try}
 class ClientSdkController @Inject() (system: ActorSystem,
                                      val ws: WSClient,
                                      val conf: Configuration,
-                                     val authAction: AuthenticatedApiAction,
+                                     val authAction: ApiAuthAction,
                                      val clientExec: ApiClientExec,
                                      components: ControllerComponents
                                     )
@@ -35,11 +35,11 @@ extends AbstractController(components) with ApiClientSupport {
 
   val logger = Logger(this.getClass)
 
-  private def getDeviceMetadata(device: Device, token: AuthPlusAccessToken): Future[Option[DeviceMetadata]] = {
+  private def getDeviceMetadata(device: Device, token: AccessToken): Future[Option[DeviceMetadata]] = {
     devicesApi.fetchDeviceMetadata(UserOptions(Some(token.value), namespace = Some(device.namespace)), device.uuid)
   }
 
-  private def registerDeviceMetadata(device: Device, token: AuthPlusAccessToken,
+  private def registerDeviceMetadata(device: Device, token: AccessToken,
                                      devMeta: DeviceMetadata): Future[Done] = {
     val credentials = Some(Json.stringify(Json.toJson(devMeta.credentials)))
     val devT = device.toResponse.copy(credentials = credentials,
@@ -51,7 +51,7 @@ extends AbstractController(components) with ApiClientSupport {
     * Contact Auth+ to register for the first time the given [[Uuid]],
     * to later persist (in Device Registry) the resulting [[DeviceMetadata]]
     */
-  private def registerAuthPlusDeviceClient(device: Device, token: AuthPlusAccessToken): Future[DeviceMetadata] = {
+  private def registerAuthPlusDeviceClient(device: Device, token: AccessToken): Future[DeviceMetadata] = {
     for {
       clientInfo <- authPlusApi.createClient(device.uuid, token)
       devMeta = DeviceMetadata(device.uuid, clientInfo)
@@ -62,7 +62,7 @@ extends AbstractController(components) with ApiClientSupport {
   /**
     * Generate client credentials for a device if it has not been generated before.
     */
-  private def getRegisterDevice(device: Device, token: AuthPlusAccessToken) : Future[DeviceMetadata] = {
+  private def getRegisterDevice(device: Device, token: AccessToken) : Future[DeviceMetadata] = {
     for {
       opt <- getDeviceMetadata(device, token)
       devMeta <- opt match {
@@ -86,9 +86,9 @@ extends AbstractController(components) with ApiClientSupport {
     authAction.async { implicit request =>
       for (
         dev <- devicesApi.getDevice(
-          UserOptions(Some(request.authPlusAccessToken.value), namespace = Some(request.namespace)), device);
-        vMetadata <- getRegisterDevice(dev, request.authPlusAccessToken) if dev.namespace == request.namespace;
-        secret <- authPlusApi.fetchSecret(vMetadata.credentials.clientId, request.authPlusAccessToken);
+          UserOptions(Some(request.accessToken.value), namespace = Some(request.namespace)), device);
+        vMetadata <- getRegisterDevice(dev, request.accessToken) if dev.namespace == request.namespace;
+        secret <- authPlusApi.fetchSecret(vMetadata.credentials.clientId, request.accessToken);
         result <- buildSrvApi.download(s"sota_client_${artifact.toString}", Map(
           "device_uuid" -> Seq(device.underlying.value),
           "client_id" -> Seq(vMetadata.credentials.clientId.toString),

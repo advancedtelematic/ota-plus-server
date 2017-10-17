@@ -1,5 +1,6 @@
 package com.advancedtelematic.api
 
+import com.advancedtelematic.auth.garage.Auth0Api
 import play.api.Configuration
 import play.api.libs.ws.WSClient
 
