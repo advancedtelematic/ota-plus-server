@@ -31,6 +31,7 @@ module.exports = {
     path: join(__dirname, '../assets/js'),
     filename: "app.js"
   },
+  devtool: 'source-map',
   module: {
     rules: [
       {

@@ -2,8 +2,7 @@ object Version {
   val Akka = "2.5.4"
   val JsonWebSecurity = "0.4.5"
   val MockWs = "2.6.2"
-  val GeniviSota = "0.3.19"
-  val AkkaCassandra = "0.56"
+  val GeniviSota = "0.3.20"
   val LogTree = "1.3.0"
   val Scalaz = "7.2.0"
   val PlayJson = "2.6.0"
@@ -19,8 +18,6 @@ object Dependencies {
   lazy val PlayJson = "com.typesafe.play" %% "play-json" % Version.PlayJson
 
   lazy val AkkaTestKit = "com.typesafe.akka" %% "akka-testkit" % Version.Akka
-
-  lazy val CassandraForAkkaPersistence = "com.typesafe.akka" %% "akka-persistence-cassandra" % Version.AkkaCassandra
 
   lazy val ScalaCheck = "org.scalacheck" %% "scalacheck" % Version.ScalaCheck
 
