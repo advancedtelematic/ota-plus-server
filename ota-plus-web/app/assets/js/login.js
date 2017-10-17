@@ -38,16 +38,20 @@ $(function () {
 
   lock.show();
 
-//  lock.on('ready', function () {
-//    var appUrl = location.protocol + '//' + location.host;
-//    $(".a0-image").append('<img src="' + appUrl + '/assets/img/ATS-Garage_Logo_white.svg" alt="">');
-//  });
-//  lock.on('signin ready', function () {
-//    $(".a0-forgot-pass").detach().appendTo('.bottom-content');
-//  });
-//  lock.on('signup ready', function () {
-//    var link = $("<div class='terms-conditions'>By registering I agree to <a href='http://atsgarage.com/en/terms-conditions.html' target='_blank'>ATS Garage's Terms of Use.</a></div>");
-//    if(!$('.terms-conditions').length)
-//      link.appendTo('.bottom-content');
-//  });
+ lock.on('signin ready', function () {
+   $('.auth0-lock').addClass('signin');
+   $('.auth0-lock').removeClass('signup');
+
+   if($('.terms-conditions').length) {
+    $('.terms-conditions').remove();
+   }
+ });
+ lock.on('signup ready', function () {
+   $('.auth0-lock').removeClass('signin');
+   $('.auth0-lock').addClass('signup');
+
+   var link = $("<div class='terms-conditions'>By registering I agree to <a href='http://atsgarage.com/en/terms-conditions.html' target='_blank'>ATS Garage's Terms of Use.</a></div>");
+   if(!$('.terms-conditions').length)
+     link.appendTo('.auth0-lock-center');
+ });
 });
