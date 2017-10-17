@@ -7,7 +7,7 @@ import java.time.Instant
 
 import com.advancedtelematic.libats.codecs.{DeserializationException, RefinementError}
 import org.genivi.sota.data.DeviceStatus
-import org.genivi.sota.data.{Device, DeviceT, Namespace, Uuid}
+import org.genivi.sota.data.{CredentialsType, Device, DeviceT, Namespace, Uuid}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -37,6 +37,8 @@ object Devices {
   implicit val InstantR: Reads[Instant] = Reads[Instant] { js => Reads.DefaultDateReads.reads(js).map(_.toInstant) }
 
   implicit val DeviceStatusR: Reads[DeviceStatus.Value] = Reads.enumNameReads(DeviceStatus)
+
+  implicit val CrededentialsTypeR: Reads[CredentialsType.Value] = Reads.enumNameReads(CredentialsType)
 
   implicit val DeviceTR: Reads[DeviceT] = Json.reads[DeviceT]
 

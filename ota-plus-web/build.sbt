@@ -35,7 +35,6 @@ bashScriptExtraDefines ++= Seq("""addJava "-Xmx800m"""")
 dependencyOverrides ++= Dependencies.Netty
 
 libraryDependencies ++= Seq (
-    Dependencies.CassandraForAkkaPersistence,
     ws,
     guice,
     Dependencies.PlayJson
