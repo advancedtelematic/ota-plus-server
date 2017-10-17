@@ -3,9 +3,8 @@ package com.advancedtelematic.controllers
 import akka.actor.ActorSystem
 import javax.inject.{Inject, Singleton}
 
-import com.advancedtelematic.{AuthPlusAccessToken, AuthPlusAuthentication, IdToken}
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport}
-import com.advancedtelematic.AuthPlusAuthentication.AuthenticatedApiAction
+import com.advancedtelematic.auth.{AccessToken, ApiAuthAction}
 import org.genivi.sota.data.{Namespace, Uuid}
 import play.api.{Configuration, Logger}
 import play.api.libs.json._
@@ -20,7 +19,7 @@ class ClientsController @Inject() (system: ActorSystem,
                                    val ws: WSClient,
                                    val conf: Configuration,
                                    components: ControllerComponents,
-                                   val authAction: AuthenticatedApiAction,
+                                   val authAction: ApiAuthAction,
                                    val clientExec: ApiClientExec)
 extends AbstractController(components) with ApiClientSupport {
 
@@ -54,18 +53,18 @@ extends AbstractController(components) with ApiClientSupport {
       scope <- toScope(scopeStr)
     } yield for {
       clientInfo <- authPlusApi.createClientForUser(
-        clientName, s"namespace.${request.namespace.get} $scope", request.authPlusAccessToken)
-      clientIds <- userProfileApi.addApplicationId(request.idToken.userId, Uuid.fromJava(clientInfo.clientId))
+        clientName, s"namespace.${request.namespace.get} $scope", request.accessToken)
+      clientIds <- userProfileApi.addApplicationId(request.idToken.claims.userId, Uuid.fromJava(clientInfo.clientId))
     } yield Created
 
     result.fold(err => Future.successful(BadRequest(err)), r => r)
   }
 
   def getClient(clientId: Uuid) : Action[AnyContent] = authAction.async { implicit request =>
-    authPlusApi.getClient(clientId, request.authPlusAccessToken)
+    authPlusApi.getClient(clientId, request.accessToken)
   }
 
-  def getClients(clientIds: Seq[Uuid], token: AuthPlusAccessToken) : Future[Seq[JsValue]] = {
+  def getClients(clientIds: Seq[Uuid], token: AccessToken) : Future[Seq[JsValue]] = {
 
     def toFutureTry[T](f: Future[T]): Future[Try[T]] = f.map(Success(_)).recover({ case e => Failure(e) })
 
@@ -75,8 +74,8 @@ extends AbstractController(components) with ApiClientSupport {
 
   def getClients() : Action[AnyContent] = authAction.async { implicit request =>
     for {
-      clientIds <- userProfileApi.getApplicationIds(request.idToken.userId)
-      clients <- getClients(clientIds, request.authPlusAccessToken)
+      clientIds <- userProfileApi.getApplicationIds(request.idToken.claims.userId)
+      clients <- getClients(clientIds, request.accessToken)
     } yield Ok(Json.toJson(clients))
   }
 

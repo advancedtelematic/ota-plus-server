@@ -11,8 +11,7 @@ import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import com.advancedtelematic.api.ApiVersion
 import com.advancedtelematic.api.OtaPlusConfig
-import com.advancedtelematic.{AuthenticatedAction, AuthenticatedRequest, AuthPlusAuthentication}
-import com.advancedtelematic.AuthPlusAuthentication.AuthenticatedApiAction
+import com.advancedtelematic.auth.{ApiAuthAction, AuthenticatedAction, AuthenticatedRequest, OAuthConfig, UiAuthAction}
 import org.slf4j.LoggerFactory
 import play.api._
 import play.api.http.HttpEntity
@@ -32,8 +31,8 @@ import scala.concurrent.Future
 class Application @Inject() (ws: WSClient,
                              components: ControllerComponents,
                              val conf: Configuration,
-                             val authAction: AuthenticatedAction,
-                             val authApiAction: AuthenticatedApiAction)
+                             uiAuth: UiAuthAction,
+                             val apiAuth: ApiAuthAction)
   extends AbstractController(components) with I18nSupport with OtaPlusConfig {
 
   import ApiVersion.ApiVersion
@@ -41,7 +40,7 @@ class Application @Inject() (ws: WSClient,
   implicit val ec = components.executionContext
   val auditLogger = LoggerFactory.getLogger("audit")
 
-  private[this] val auth0Config = Auth0Config(conf).get
+  private[this] val oauthConfig = OAuthConfig(conf)
   private[this] val wsScheme = conf.underlying.getString("ws.scheme")
   private[this] val wsHost = conf.underlying.getString("ws.host")
   private[this] val wsPort = conf.underlying.getString("ws.port")
@@ -148,7 +147,7 @@ class Application @Inject() (ws: WSClient,
       .withMethod(req.method)
       .withQueryStringParameters(req.queryString.mapValues(_.head).toSeq :_*)
       .addHttpHeaders(passHeaders(req.headers).toSeq :_*)
-      .addHttpHeaders(("Authorization", "Bearer " + req.authPlusAccessToken.value))
+      .addHttpHeaders(("Authorization", "Bearer " + req.accessToken.value))
       .withBody(req.body)
 
     wreq.stream().map { resp =>
@@ -171,7 +170,7 @@ class Application @Inject() (ws: WSClient,
    * @return
    */
   def apiProxy(version: ApiVersion, path: String): Action[Source[ByteString, _]] =
-    authApiAction.async(bodySource) { req =>
+    apiAuth.async(bodySource) { req =>
       apiByPath(version, path) match {
         case Some(p) => proxyTo(p, req)
         case None => Future.successful(NotFound("Could not proxy request to requested path"))
@@ -183,8 +182,8 @@ class Application @Inject() (ws: WSClient,
    *
    * @return OK response and index html
    */
-  def index : Action[AnyContent] = authAction { implicit req =>
-    val wsUrl = s"$wsScheme://bearer:${req.authPlusAccessToken.value}@$wsHost:$wsPort$wsPath"
-    Ok(views.html.main(auth0Config, CSRF.getToken, wsUrl))
+  def index : Action[AnyContent] = uiAuth { implicit req =>
+    val wsUrl = s"$wsScheme://bearer:${req.accessToken.value}@$wsHost:$wsPort$wsPath"
+    Ok(views.html.main(oauthConfig, CSRF.getToken, wsUrl))
   }
 }

@@ -33,17 +33,6 @@ object Dependencies {
     "com.advancedtelematic" %% "libats-messaging",
     "com.advancedtelematic" %% "libats-auth"
   ).map(_ % Version.LibAts)
-  val JsonWebSecurity = Seq(
-    "com.advancedtelematic" %% "jw-security-core" % Version.JsonWebSecurity,
-    "com.advancedtelematic" %% "jw-security-jca" % Version.JsonWebSecurity
-  )
-
-  val LogTree = Seq(
-    "com.casualmiracles" %% "treelog" % Version.LogTree,
-    "org.scalaz" %% "scalaz-core" % Version.Scalaz
-  )
-
-  val JsonWebSecurityAkka = "com.advancedtelematic" %% "jw-security-akka-http" % Version.JsonWebSecurity
 
   val SotaCommon = Set(
     "org.genivi" %% "sota-common-data" % Version.GeniviSota

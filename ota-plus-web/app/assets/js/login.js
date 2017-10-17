@@ -4,14 +4,16 @@ $(function () {
   var appUrl = location.protocol + '//' + location.host;
   var logoUrl = appUrl + '/assets/img/ATS-Garage_Logo_white.svg';
   var options = {
+    oidcConformant: true,
     theme: {
       logo: logoUrl
     },
     socialButtonStyle: 'small',
     auth: {
       redirectUrl: $('#auth0-callback-url').val(),
+      audience: "KSjTVr20nLwDtCiRAmJCjNyfmr20YK6J",
       params: {
-        scope: 'openid email'
+        scope: 'openid profile email'
       }
     },
     container: 'widget-container',

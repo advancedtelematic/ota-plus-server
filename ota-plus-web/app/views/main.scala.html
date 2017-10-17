@@ -1,6 +1,6 @@
-@import com.advancedtelematic.controllers.Auth0Config
+@import com.advancedtelematic.auth.OAuthConfig
 @import play.filters.csrf.CSRF
-@(config: Auth0Config, csrf: Option[CSRF.Token], wsUrl: String)()(implicit req: RequestHeader)
+@(config: OAuthConfig, csrf: Option[CSRF.Token], wsUrl: String)()(implicit req: RequestHeader)
 <!DOCTYPE html>
 <html lang="en">
   <head>
