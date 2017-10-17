@@ -4145,7 +4145,7 @@ div[role=presentation] {
             }
 
             .first-level {
-                height: 80vh;
+                height: 75vh;
                 overflow-y: auto;
             }
 
@@ -4189,7 +4189,7 @@ div[role=presentation] {
                 padding: 0 !important;
 
                 & + .info{
-                    max-height: 130px;
+                    max-height: 145px;
                     overflow-y: hidden;
                     transition: max-height 0.6s cubic-bezier(0, 1, 0.5, 1);
                     &.hide {
