@@ -35,16 +35,16 @@ class Home extends Component {
     componentWillReceiveProps(nextProps) {
         if(this.sanityCheckCompleted() && !this.props.otaPlusStore.otaPlusMode) {            
             this.router = nextProps.router;
-            let initialDevicesCount = nextProps.initialDevicesCount;
-            let onlineDevicesCount = nextProps.onlineDevicesCount;
+            let allDevicesCount = nextProps.allDevicesCount;
+            let directorDevicesCount = nextProps.directorDevicesCount;
 
-            if(initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') != 1) {
+            if(allDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') != 1) {
                 this.redirectTo('welcome');
             }
-            if(initialDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') == 1) {
+            if(allDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') == 1) {
                 this.redirectTo('destiny');
             }
-            if(onlineDevicesCount === 1 && Cookies.get('fireworksPageAcknowledged') != 1            
+            if(directorDevicesCount === 1 && Cookies.get('fireworksPageAcknowledged') != 1            
                 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') 
                 && !this.router.isActive('/fireworks')) {
                     this.redirectTo('fireworks');

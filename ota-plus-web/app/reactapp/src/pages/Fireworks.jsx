@@ -12,13 +12,10 @@ class Fireworks extends Component {
     }
     componentWillMount() {
         Cookies.set('fireworksPageAcknowledged', 1);
-        if(this.props.devicesStore.onlineDevices.length === 0) {
-            this.props.devicesStore.fetchInitialDevices();
-        }
     }    
     acknowledgeFireworks() {
-        let deviceOnline = _.first(this.props.devicesStore.onlineDevices);
-        this.context.router.push(`/device/` + deviceOnline.uuid);
+        let directorDeviceId = _.first(this.props.devicesStore.directorDevicesIds);
+        this.context.router.push(`/device/` + directorDeviceId);
     }
     render() {
         const { devicesStore } = this.props;
