@@ -33,7 +33,6 @@ export default class DevicesStore {
     @observable devicesRenameAsync = {};
     @observable multiTargetUpdateCreateAsync = {};
     @observable multiTargetUpdatesFetchAsync = {};
-    @observable initialDevices = [];
     @observable devices = [];
     @observable devicesInitialTotalCount = null;
     @observable devicesTotalCount = null;
@@ -46,11 +45,11 @@ export default class DevicesStore {
     @observable deviceQueue = [];
     @observable deviceHistory = [];
     @observable deviceUpdatesLogs = [];
-    @observable onlineDevices = [];
     @observable stepsHistory = [];
     @observable multiTargetUpdates = {};
     @observable legacyDevicesCount = 0;
     @observable directorDevicesCount = 0;
+    @observable directorDevicesIds = [];
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
@@ -145,25 +144,12 @@ export default class DevicesStore {
             .then(axios.spread(function (all, director) {
                 let allDevicesCount = all.data.total;
                 that.directorDevicesCount = director.data.total;
+                that.directorDevicesIds = director.data.values;
                 that.legacyDevicesCount = allDevicesCount - that.directorDevicesCount;
                 that.devicesCountFetchAsync = handleAsyncSuccess(all);
             }))
             .catch((error) => {
                 that.devicesCountFetchAsync = handleAsyncError(error);
-            });
-    }
-
-    fetchInitialDevices() {
-        resetAsync(this.devicesInitialFetchAsync, true);
-        let apiAddress = `${API_DEVICES_SEARCH}`;
-        return axios.get(apiAddress)
-            .then((response) => {
-                this.initialDevices = response.data.values;
-                this._countOnlineDevices();
-                this.devicesInitialFetchAsync = handleAsyncSuccess(response);
-            })
-            .catch((error) => {
-                this.devicesInitialFetchAsync = handleAsyncError(error);
             });
     }
 
@@ -421,7 +407,6 @@ export default class DevicesStore {
         resetAsync(this.multiTargetUpdateCreateAsync);
         resetAsync(this.multiTargetUpdatesFetchAsync);
         this.devices = [];
-        this.initialDevices = [];
         this.devicesInitialTotalCount = null;
         this.devicesTotalCount = null;
         this.devicesCurrentPage = 0;
@@ -436,6 +421,7 @@ export default class DevicesStore {
         this.multiTargetUpdates = {};
         this.legacyDevicesCount = 0;
         this.directorDevicesCount = 0;
+        this.directorDevicesIds = [];
     }
 
     _getDevice(id) {
@@ -443,24 +429,17 @@ export default class DevicesStore {
     }
 
     _updateDeviceData(id, data) {
-        let currentOnlineDeviceUuids = this.onlineDevices.map(field => field.uuid);
         let device = this._getDevice(id);
         if (!_.isEmpty(this.device)) {
             if (this.device.uuid === id) {
                 _.each(data, (value, attr) => {
                     this.device[attr] = value;
                 });
-                if (!_.includes(currentOnlineDeviceUuids, this.device.uuid)) {
-                    this.onlineDevices.push(this.device);
-                }
             }
         } else if (device) {
             _.each(data, (value, attr) => {
                 device[attr] = value;
             });
-            if (!_.includes(currentOnlineDeviceUuids, device.uuid)) {
-                this.onlineDevices.push(device);
-            }
         }
     }
 
@@ -474,15 +453,6 @@ export default class DevicesStore {
                 return bName.localeCompare(aName);
             else
                 return aName.localeCompare(bName);
-        });
-    }
-
-    _countOnlineDevices() {
-        let currentOnlineDeviceUuids = this.onlineDevices.map(field => field.uuid);
-        _.each(this.initialDevices, (device, index) => {
-            if ((device.deviceStatus === "UpToDate" || device.deviceStatus === "Outdated") && !_.includes(currentOnlineDeviceUuids, device.uuid)) {
-                this.onlineDevices.push(device);
-            }
         });
     }
 

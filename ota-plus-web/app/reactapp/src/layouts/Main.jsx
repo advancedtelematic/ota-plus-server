@@ -34,8 +34,8 @@ import { CampaignsWizard } from '../components/campaigns';
 @observer
 class Main extends Component {
     @observable ifLogout = false;
-    @observable initialDevicesCount = null;
-    @observable onlineDevicesCount = null;
+    @observable directorDevicesCount = null;
+    @observable allDevicesCount = null;
     @observable router = null;
     @observable systemReady = false;
     @observable pagesWithRedirectToWelcome = ['page-welcome', 'page-destiny'];
@@ -98,11 +98,9 @@ class Main extends Component {
             }
         });
         this.devicesHandler = observe(this.devicesStore, (change) => {
-            if(change.name === 'devicesInitialFetchAsync' && change.object[change.name].isFetching === false) {
-                this.initialDevicesCount = this.devicesStore.initialDevices.length;
-                let onlineDevices = this.devicesStore.onlineDevices;
-                let onlineDevicesCount = onlineDevices.length;
-                this.onlineDevicesCount = onlineDevicesCount;
+            if(change.name === 'devicesCountFetchAsync' && change.object[change.name].isFetching === false) {
+                this.allDevicesCount = this.devicesStore.directorDevicesCount + this.devicesStore.legacyDevicesCount;
+                this.directorDevicesCount = this.devicesStore.directorDevicesCount;
             }
         });
 
@@ -130,8 +128,8 @@ class Main extends Component {
         this.router = this.context.router;
         this.router.listen(this.locationHasChanged);
         this.userStore.fetchUser();
-        this.devicesStore.fetchInitialDevices();
         this.devicesStore.fetchDevices();
+        this.devicesStore.fetchDevicesCount();
         this.hardwareStore.fetchHardwareIds();
         this.featuresStore.fetchFeatures();
         this.websocketHandler.init();
@@ -266,7 +264,7 @@ class Main extends Component {
             <div id={pageId}>
                 <FadeAnimation>
                     {!_.includes(this.pagesWithHiddenNavbar, pageId) ?
-                        !this.initialDevicesCount ?
+                        !this.allDevicesCount ?
                             <IntroNavigation
                                 userStore={this.userStore}
                                 featuresStore={this.featuresStore}
@@ -305,8 +303,8 @@ class Main extends Component {
                         featuresStore={this.featuresStore}
                         provisioningStore={this.provisioningStore}
                         userStore={this.userStore}
-                        initialDevicesCount={this.initialDevicesCount}
-                        onlineDevicesCount={this.onlineDevicesCount}
+                        directorDevicesCount={this.directorDevicesCount}
+                        allDevicesCount={this.allDevicesCount}
                         router={this.router}
                         backButtonAction={this.backButtonAction}
                         systemReady={this.systemReady}
