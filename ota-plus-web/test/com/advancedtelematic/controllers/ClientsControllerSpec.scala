@@ -1,7 +1,11 @@
 package com.advancedtelematic.controllers
 
+import java.time.Instant
+
 import akka.stream.Materializer
-import com.advancedtelematic.Tokens
+import com.advancedtelematic.TokenUtils
+import com.advancedtelematic.auth.{AccessToken, Tokens, TokenVerification}
+import com.advancedtelematic.TokenUtils.NoVerification
 import mockws.{MockWS, MockWSHelpers}
 import org.genivi.sota.data.Uuid
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -61,17 +65,20 @@ class ClientsControllerSpec extends PlaySpec with GuiceOneServerPerSuite with Mo
     .configure("authplus.uri" -> authPlusUri)
     .configure("userprofile.uri" -> userProfileUri)
     .overrides(bind[WSClient].to(mockClient))
+    .overrides(bind[TokenVerification].to[NoVerification])
     .build
 
   val controller = application.injector.instanceOf[ClientsController]
 
   implicit class RequestSyntax[A](request: FakeRequest[A]) {
-    def withAuthSession(ns: String): FakeRequest[A] =
+    def withAuthSession(ns: String): FakeRequest[A] = {
+      import com.advancedtelematic.auth.SessionCodecs.AccessTokenFormat
       request.withSession(
-        "id_token"               -> Tokens.identityTokenFor(ns).value,
-        "access_token"           -> "",
+        "id_token"               -> TokenUtils.identityTokenFor(ns).value,
+        "access_token"           -> Json.toJson(AccessToken("XXXX", Instant.now().plusSeconds(3600))).toString(),
         "auth_plus_access_token" -> "",
         "namespace"              -> ns)
+    }
   }
 
   "ClientsController" should {

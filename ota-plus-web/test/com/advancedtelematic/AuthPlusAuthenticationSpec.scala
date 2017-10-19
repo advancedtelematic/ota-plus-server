@@ -1,8 +1,10 @@
 package com.advancedtelematic
 
+import java.time.Instant
+
 import _root_.akka.stream.Materializer
 import cats.syntax.show._
-import com.advancedtelematic.AuthPlusAuthentication.AuthenticatedApiAction
+import com.advancedtelematic.auth.{AccessToken, ApiAuthAction}
 import mockws.{MockWS, MockWSHelpers, Route}
 import org.genivi.sota.data.Uuid
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -55,15 +57,21 @@ class AuthPlusAuthenticationSpec extends PlaySpec with GuiceOneServerPerSuite wi
 
   val Action: DefaultActionBuilder = DefaultActionBuilder(BodyParser.anyContent)
 
-  val authAction = application.injector.instanceOf[AuthenticatedApiAction]
+  val authAction = application.injector.instanceOf[ApiAuthAction]
 
   def fakeRoute() : Action[AnyContent] = authAction.async { implicit request =>
     Future.successful(Ok(""))
   }
 
   implicit class RequestSyntax[A](request: FakeRequest[A]) {
+    import com.advancedtelematic.auth.SessionCodecs.AccessTokenFormat
     def withAuthSession(token: String): FakeRequest[A] =
-      request.withSession("id_token" -> Tokens.identityTokenFor("test").value, "access_token" -> "", "auth_plus_access_token" -> token, "namespace" -> "")
+      request.withSession(
+        "id_token" -> TokenUtils.identityTokenFor("test").value,
+        "access_token" -> Json.toJson(AccessToken(token, Instant.now().plusSeconds(3600))).toString(),
+        "auth_plus_access_token" -> token,
+        "namespace" -> ""
+      )
   }
 
   "AuthPlusAuthentication" should {
@@ -81,11 +89,11 @@ class AuthPlusAuthenticationSpec extends PlaySpec with GuiceOneServerPerSuite wi
       status(result) must be(403)
     }
 
-    "accept an invalid token" in {
+    "reject an invalid token" in {
       val request = FakeRequest(GET, "/")
         .withAuthSession(invalidToken)
       val result = call(fakeRoute(), request)
-      status(result) must be(200)
+      status(result) must be(403)
     }
   }
 }
