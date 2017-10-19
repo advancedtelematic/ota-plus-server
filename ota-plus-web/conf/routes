@@ -33,10 +33,10 @@ DELETE  /api/:version/*path                      com.advancedtelematic.controlle
 
 GET     /login                                   com.advancedtelematic.controllers.LoginController.login
 GET     /logout                                  com.advancedtelematic.controllers.LoginController.logout
-GET     /callback                                com.advancedtelematic.controllers.LoginController.callback
 GET     /account_confirmation                    com.advancedtelematic.controllers.LoginController.accountConfirmation
-GET     /authorization_error                     com.advancedtelematic.controllers.LoginController.authorizationError
 GET     /welcome                                 com.advancedtelematic.controllers.LoginController.accountActivated
+GET     /callback                                com.advancedtelematic.controllers.OAuthOidcController.callback
+GET     /authorization_error                     com.advancedtelematic.controllers.OAuthOidcController.authorizationError
 
 GET     /health                                  com.advancedtelematic.controllers.HealthController.health
 GET     /health/version                          com.advancedtelematic.controllers.HealthController.version

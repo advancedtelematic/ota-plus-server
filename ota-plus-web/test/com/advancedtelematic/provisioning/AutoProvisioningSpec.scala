@@ -1,10 +1,12 @@
 package com.advancedtelematic.provisioning
 
 import akka.util.ByteString
-import com.advancedtelematic.Tokens
 import java.time.{Instant, LocalDate, ZoneOffset}
 import java.time.temporal.ChronoField
 
+import com.advancedtelematic.TokenUtils
+import com.advancedtelematic.auth.{AccessToken, Tokens, TokenVerification}
+import com.advancedtelematic.TokenUtils.NoVerification
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -18,6 +20,8 @@ import play.api.mvc.{Cookies, Session}
 import play.api.test.WsTestClient
 import play.filters.csrf.CSRF
 
+import scala.concurrent.Future
+
 class AutoProvisioningSpec extends PlaySpec with GuiceOneServerPerSuite with ScalaFutures {
   import play.api.inject.bind
   import play.api.test.Helpers._
@@ -26,6 +30,7 @@ class AutoProvisioningSpec extends PlaySpec with GuiceOneServerPerSuite with Sca
     new GuiceApplicationBuilder()
       .configure("crypt.uri" -> MockCrypt.CryptHost)
       .overrides(bind[WSClient].toInstance(MockCrypt.mockClient))
+      .overrides(bind[TokenVerification].to[NoVerification])
       .build()
 
   implicit val defaultPatience =
@@ -36,10 +41,11 @@ class AutoProvisioningSpec extends PlaySpec with GuiceOneServerPerSuite with Sca
   val csrfToken = csrfTokenProvider.generateToken
 
   def makeSessionCookie(subj: String): String = {
+    import com.advancedtelematic.auth.SessionCodecs.AccessTokenFormat
     val session = Session(
       Map(
-        "id_token"               -> Tokens.identityTokenFor(subj).value,
-        "access_token"           -> "",
+        "id_token"               -> TokenUtils.identityTokenFor(subj).value,
+        "access_token"           -> Json.toJson(AccessToken("XXXX", Instant.now().plusSeconds(3600))).toString(),
         "auth_plus_access_token" -> "",
         "namespace"              -> "",
         "csrfToken"              -> csrfToken
