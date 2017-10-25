@@ -174,7 +174,7 @@ class List extends Component {
                                                                         />
                                                                     </div>
                                                                 </div>
-                                                                <ul className="versions">
+                                                                <ul className="versions" id="versions">
                                                                     <div className="heading">
                                                                         All versions
                                                                     </div>
@@ -193,7 +193,7 @@ class List extends Component {
                                                             </div>
                                                         :
                                                             <div className="legacy-details">
-                                                                <ul className="versions">
+                                                                <ul className="versions" id="versions">
                                                                     {_.map(pack.versions, (version, i) => {
                                                                         return (
                                                                             <ListItemVersion 
