@@ -81,29 +81,29 @@ class ListItemVersion extends Component {
                         {version.customExists ? 
                             <span>
                                 <div className="version-info">
-                                    <div className="version" id={"package-" + packageName + "-version-" + version.id.version}>
+                                    <div className="version" id={"package-" + packageName + "-version"}>
                                         <span className="value">Version: {version.id.version}</span>
                                     </div>                                 
-                                    <div className="created_at" id={"package-" + packageName + "-created_at-" + moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}>
+                                    <div className="created_at" id={"package-" + packageName + "-created_at"}>
                                         Created at: {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}
                                     </div>
-                                    <div className="updated_at" id={"package-" + packageName + "-updated_at-" + moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}>
+                                    <div className="updated_at" id={"package-" + packageName + "-updated_at"}>
                                         Updated at: {moment(version.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}
                                     </div>
-                                    <div className="hash" id={"package-" + packageName + "-hash-" + version.packageHash}>
+                                    <div className="hash" id={"package-" + packageName + "-hash"}>
                                         <span className="value">Hash: {version.packageHash}</span>
                                     </div>
-                                    <div className="target-length" id={"package-" + packageName + "-target-length-" + version.targetLength}>
+                                    <div className="target-length" id={"package-" + packageName + "-target-length"}>
                                         Length: {version.targetLength}
                                     </div>
                                 </div>
                             </span>
                         :
                             <span>
-                                <div className="hash" id={"package-" + packageName + "-hash-" + version.packageHash}>
+                                <div className="hash" id={"package-" + packageName + "-hash"}>
                                     Hash: {version.packageHash}
                                 </div>
-                                <div className="target-length" id={"package-" + packageName + "-target-length-" + version.targetLength}>
+                                <div className="target-length" id={"package-" + packageName + "-target-length"}>
                                     Length: {version.targetLength}
                                 </div>
                             </span>
@@ -124,7 +124,7 @@ class ListItemVersion extends Component {
                             <div className="value">
                                 {_.map(version.hardwareIds, (hardwareId, index) => {
                                     return (
-                                        <span className="hardware-label" key={index} id={"package-" + packageName + "-hardware-label-" + hardwareId}>
+                                        <span className="hardware-label" key={index} id={"package-" + packageName + "-hardware-label"}>
                                             {hardwareId}
                                         </span>
                                     );
@@ -137,7 +137,7 @@ class ListItemVersion extends Component {
                                     Format:
                                 </div>
                                 <div className="value">
-                                    <span className="format-label" id={"package-" + packageName + "-format-label-" + version.targetFormat}>
+                                    <span className="format-label" id={"package-" + packageName + "-format-label"}>
                                         {version.targetFormat}
                                     </span>
                                 </div>
@@ -201,7 +201,7 @@ class ListItemVersion extends Component {
             </span>
         );
         return (
-            <li className={isBlacklisted ? "blacklist" : ""}>
+            <li className={isBlacklisted ? "blacklist" : ""} id={"package-" + packageName + "-version"}>
                 {version.inDirector ?
                     directorBlock
                 :
