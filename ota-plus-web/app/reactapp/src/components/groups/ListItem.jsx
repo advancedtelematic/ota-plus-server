@@ -51,7 +51,7 @@ class ListItem extends Component {
                             {group.groupName}
                         </div>
                         <div className="subtitle">
-                            {t('common.deviceWithCount', {count: groupsStore._getGroupDevices(group).length})}
+                            {t('common.deviceWithCount', {count: group.devices.total})}
                         </div>
                     </div>
                     <div className="pointer">
