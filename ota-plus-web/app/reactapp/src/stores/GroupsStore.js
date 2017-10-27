@@ -33,6 +33,7 @@ export default class GroupsStore {
     @observable groupsCurrentPage = 0;
     @observable groupsTotalCount = null;
     @observable groupsLimit = 10;
+    @observable groupsDevicesCountLimit = 250;
 
     constructor() {
         resetAsync(this.groupsFetchAsync);
@@ -54,7 +55,7 @@ export default class GroupsStore {
                         this.groupsFetchAsync = handleAsyncSuccess(response);
                     }, this);
                     _.each(groups, (group, index) => {
-                        axios.get(API_GROUPS_DEVICES_FETCH + '/' + group.id + '/devices')
+                        axios.get(API_GROUPS_DEVICES_FETCH + '/' + group.id + '/devices?limit=' + this.groupsDevicesCountLimit)
                             .then(function(resp) {
                                 group.devices = resp.data;
                                 after();
@@ -124,7 +125,7 @@ export default class GroupsStore {
     }
 
     fetchDevicesForGroup(groupId) {
-        return axios.get(API_GROUPS_DEVICES_FETCH + '/' + groupId + '/devices')
+        return axios.get(API_GROUPS_DEVICES_FETCH + '/' + groupId + '/devices?limit=' + this.groupsDevicesCountLimit)
             .then(function(resp) {
                 const foundGroup = this._getGroup(groupId);
                 if(foundGroup)
