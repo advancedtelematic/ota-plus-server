@@ -23,6 +23,16 @@ import play.filters.csrf.CSRF
 
 import scala.concurrent.Future
 
+final case class UiToggles(autoFeatureActivation: Boolean, userProfileMenu: Boolean)
+
+object UiToggles {
+  def apply(configuration: Configuration): UiToggles = {
+    val autoFeatureActivation = configuration.get[Boolean]("ui.toggle.autoFeatureActivation")
+    val userProfileMenu = configuration.get[Boolean]("ui.toggle.userProfileMenu")
+    UiToggles(autoFeatureActivation, userProfileMenu)
+  }
+}
+
 /**
  * The main application controller. Handles authentication and request proxying.
  *
@@ -41,6 +51,7 @@ class Application @Inject() (ws: WSClient,
   val auditLogger = LoggerFactory.getLogger("audit")
 
   private[this] val oauthConfig = OAuthConfig(conf)
+  private[this] val uiToggles = UiToggles(conf)
   private[this] val wsScheme = conf.underlying.getString("ws.scheme")
   private[this] val wsHost = conf.underlying.getString("ws.host")
   private[this] val wsPort = conf.underlying.getString("ws.port")
@@ -184,6 +195,6 @@ class Application @Inject() (ws: WSClient,
    */
   def index : Action[AnyContent] = uiAuth { implicit req =>
     val wsUrl = s"$wsScheme://bearer:${req.accessToken.value}@$wsHost:$wsPort$wsPath"
-    Ok(views.html.main(oauthConfig, CSRF.getToken, wsUrl))
+    Ok(views.html.main(oauthConfig, CSRF.getToken, wsUrl, uiToggles))
   }
 }

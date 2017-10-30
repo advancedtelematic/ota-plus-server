@@ -1,6 +1,7 @@
 @import com.advancedtelematic.auth.OAuthConfig
+@import com.advancedtelematic.controllers.UiToggles
 @import play.filters.csrf.CSRF
-@(config: OAuthConfig, csrf: Option[CSRF.Token], wsUrl: String)()(implicit req: RequestHeader)
+@(config: OAuthConfig, csrf: Option[CSRF.Token], wsUrl: String, uiToggles: UiToggles)()(implicit req: RequestHeader)
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -16,6 +17,8 @@
     </form>
     <input type="hidden" id="csrf-token-val" value="@csrf.get.value"/>
     <input type="hidden" id="ws-url" value="@wsUrl"/>
+    <input type="hidden" id="toggle-autoFeatureActivation" value="@{uiToggles.autoFeatureActivation}"/>
+    <input type="hidden" id="toggle-userProfileMenu" value="@{uiToggles.userProfileMenu}"/>
 
     <div id="app"></div>
     <script src="@routes.Assets.versioned("js/app.js")"></script>
