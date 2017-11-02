@@ -60,7 +60,7 @@ class Welcome extends Component {
                 			</div>
                 		</div>
                 		<div className="start">
-                			<button className="btn btn-main btn-start" onClick={this.acknowledgeWelcomePage}>
+                			<button className="btn btn-main btn-start" id="welcome-button" onClick={this.acknowledgeWelcomePage}>
                                 Start
                             </button>
                 		</div>
