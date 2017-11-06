@@ -52,7 +52,7 @@ const roles = {
                                 "errors": [],
                                 "authorises": {
                                     "PL-BT-446 Bluetooth auto-grid": {
-                                        "expires": "1-11-2017 12:00",
+                                        "expires": "18-11-2017 12:00",
                                         "keys": ["z1", "z2", "z3", "z4", "z5"],
                                         "thresholds": {"DEV": 2, "QA": 2},
                                         "warnings": ["Key expires in less than 15 days."],
