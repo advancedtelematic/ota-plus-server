@@ -30,7 +30,11 @@ class Home extends Component {
         this.props.campaignsStore._reset();
     }
     sanityCheckCompleted() {
-        return this.props.systemReady || Cookies.get('systemReady') == 1;
+        if (this.props.uiAutoFeatureActivation !== 'true') {
+            return true
+        } else {
+            return this.props.systemReady || Cookies.get('systemReady') == 1;
+        }
     }
     componentWillReceiveProps(nextProps) {
         if(this.sanityCheckCompleted() && !this.props.otaPlusStore.otaPlusMode) {            

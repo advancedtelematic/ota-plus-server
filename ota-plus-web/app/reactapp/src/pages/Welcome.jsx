@@ -10,8 +10,10 @@ class Welcome extends Component {
         this.acknowledgeWelcomePage = this.acknowledgeWelcomePage.bind(this);
     }
     componentWillMount() {
-        this.props.provisioningStore.activateProvisioning();
-        this.props.featuresStore.activateTreehub();
+    	if (this.props.uiAutoFeatureActivation === 'true') {
+            this.props.provisioningStore.activateProvisioning();
+            this.props.featuresStore.activateTreehub();
+		}
     }
     acknowledgeWelcomePage() {
         Cookies.set('welcomePageAcknowledged', 1);

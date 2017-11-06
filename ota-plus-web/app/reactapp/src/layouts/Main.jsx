@@ -48,7 +48,9 @@ class Main extends Component {
     @observable uploadBoxMinimized = false;
     @observable queueModalShown = false;
     @observable activeTabId = 0;
-  
+    @observable uiAutoFeatureActivation = document.getElementById('toggle-autoFeatureActivation').value;
+    @observable uiUserProfileMenu = document.getElementById('toggle-userProfileMenu').value;
+
     constructor(props) {
         super(props);
         axios.defaults.headers.common['Csrf-Token'] = document.getElementById('csrf-token-val').value;
@@ -218,7 +220,11 @@ class Main extends Component {
         this.systemReady = value;
     }
     sanityCheckCompleted() {
-        return this.systemReady || Cookies.get('systemReady') == 1;
+        if (this.uiAutoFeatureActivation !== 'true') {
+            return true
+        } else {
+            return this.systemReady || Cookies.get('systemReady') == 1;
+        }
     }
     makeBodyGradient() {
         let pageName = this.props.location.pathname.toLowerCase().split('/')[1];
@@ -274,6 +280,7 @@ class Main extends Component {
                                 toggleOtaPlusMode={this.toggleOtaPlusMode}
                                 otaPlusMode={this.otaPlusStore.otaPlusMode}
                                 alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
+                                uiUserProfileMenu={this.uiUserProfileMenu}
                             />
                         : this.sanityCheckCompleted() ?
                                 <Navigation
@@ -285,6 +292,7 @@ class Main extends Component {
                                     otaPlusMode={this.otaPlusStore.otaPlusMode}
                                     alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
                                     packagesStore={this.packagesStore}
+                                    uiUserProfileMenu={this.uiUserProfileMenu}
                                 />
                             :
                                 null                        
@@ -318,6 +326,7 @@ class Main extends Component {
                         goToCampaignDetails={this.goToCampaignDetails}
                         otaPlusMode={this.otaPlusStore.otaPlusMode}
                         otaPlusStore={this.otaPlusStore}
+                        uiAutoFeatureActivation={this.uiAutoFeatureActivation}
                     />
                 </FadeAnimation>
                 <SizeVerify 

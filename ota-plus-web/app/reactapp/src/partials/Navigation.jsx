@@ -61,15 +61,17 @@ class Navigation extends Component {
                         <li className="text-link">
                             <a href="mailto:support@atsgarage.com" id="support-link">SUPPORT</a>
                         </li>
-                        <li id="menu-login">
-                            <NavigationDropdown 
-                                userStore={userStore}
-                                hideQueueModal={hideQueueModal}
-                                toggleOtaPlusMode={toggleOtaPlusMode}
-                                otaPlusMode={otaPlusMode}
-                                alphaPlusEnabled={alphaPlusEnabled}
-                            />
-                        </li>
+                        {this.props.uiUserProfileMenu === "true" ?
+                            <li id="menu-login">
+                                <NavigationDropdown
+                                    userStore={userStore}
+                                    hideQueueModal={hideQueueModal}
+                                    toggleOtaPlusMode={toggleOtaPlusMode}
+                                    otaPlusMode={otaPlusMode}
+                                    alphaPlusEnabled={alphaPlusEnabled}
+                                />
+                            </li>
+                        : ''}
                     </ul>
                 </div>
             </nav>
