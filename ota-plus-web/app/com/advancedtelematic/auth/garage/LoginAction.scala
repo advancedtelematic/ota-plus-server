@@ -14,8 +14,9 @@ class LoginAction @Inject()(conf: Configuration,
     extends com.advancedtelematic.auth.LoginAction {
 
   private[this] val oauthConfig = OAuthConfig(conf)
+  private[this] val auth0Config = Auth0Config(conf)
   override def apply(request: Request[AnyContent]): Future[Result] = {
-    Future.successful(Results.Ok(views.html.login(oauthConfig)))
+    Future.successful(Results.Ok(views.html.login(oauthConfig, auth0Config)))
   }
 
 }

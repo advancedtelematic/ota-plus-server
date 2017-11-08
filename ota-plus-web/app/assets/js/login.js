@@ -11,7 +11,7 @@ $(function () {
     socialButtonStyle: 'small',
     auth: {
       redirectUrl: $('#auth0-callback-url').val(),
-      audience: "KSjTVr20nLwDtCiRAmJCjNyfmr20YK6J",
+      audience: $('#auth0-token-audience').val(),
       params: {
         scope: 'openid profile email'
       }
