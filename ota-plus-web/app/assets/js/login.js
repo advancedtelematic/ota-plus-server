@@ -44,6 +44,9 @@ $(function () {
    $('.auth0-lock').addClass('signin');
    $('.auth0-lock').removeClass('signup');
 
+   $('input.auth0-lock-input[name="email"]').attr('id','a0-signin_easy_email');
+   $('input.auth0-lock-input[name="password"]').attr('id','a0-signin_easy_password');
+
    if($('.terms-conditions').length) {
     $('.terms-conditions').remove();
    }
@@ -52,8 +55,16 @@ $(function () {
    $('.auth0-lock').removeClass('signin');
    $('.auth0-lock').addClass('signup');
 
+   $('input.auth0-lock-input[name="email"]').attr('id','a0-signup_easy_email');
+   $('input.auth0-lock-input[name="password"]').attr('id','a0-signup_easy_password');
+
    var link = $("<div class='terms-conditions'>By registering I agree to <a href='http://atsgarage.com/en/terms-conditions.html' target='_blank'>ATS Garage's Terms of Use.</a></div>");
    if(!$('.terms-conditions').length)
      link.appendTo('.auth0-lock-center');
  });
+  lock.on('forgot_password ready', function () {
+
+    $('input.auth0-lock-input[name="email"]').attr('id','a0-reset_easy_email');
+
+  });
 });
