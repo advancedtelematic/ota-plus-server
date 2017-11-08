@@ -107,7 +107,7 @@ class Packages extends Component {
         const { packagesStore, hardwareStore, highlightedPackage, featuresStore, devicesStore } = this.props;
         return (
             <span ref="component">
-                {packagesStore.overallPackagesCount === null && packagesStore.packagesFetchAsync.isFetching && packagesStore.packagesTufFetchAsync.isFetching ?
+                {packagesStore.overallPackagesCount === null || packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching ?
                     <div className="wrapper-center">
                         <Loader />
                     </div>
