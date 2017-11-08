@@ -1,6 +1,7 @@
 @import com.advancedtelematic.auth.OAuthConfig
+@import com.advancedtelematic.auth.garage.Auth0Config
 
-@(config: OAuthConfig)
+@(oauthConfig: OAuthConfig, auth0Config: Auth0Config)
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -26,9 +27,10 @@
             </section>
         </div>
 
-        <input type="hidden" id="auth0-client-id" value="@config.clientId"/>
-        <input type="hidden" id="auth0-domain" value="@config.domain"/>
-        <input type="hidden" id="auth0-callback-url" value="@config.callbackURL"/>
+        <input type="hidden" id="auth0-client-id" value="@oauthConfig.clientId"/>
+        <input type="hidden" id="auth0-domain" value="@oauthConfig.domain"/>
+        <input type="hidden" id="auth0-callback-url" value="@oauthConfig.callbackURL"/>
+        <input type="hidden" id="auth0-token-audience" value="@auth0Config.audience"/>
         <script type="text/javascript" src='@routes.Assets.versioned("js/login.js")'></script>
 
     </body>
