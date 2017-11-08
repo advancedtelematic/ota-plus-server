@@ -284,7 +284,6 @@ export default class PackagesStore {
     }
 
     _prepareDirectorPackages(packages) {
-        let preparedPackages = [];
         _.each(packages, (pack, imageName) => {
             let formattedPack = {
                 customExists: pack.custom ? true : false,
@@ -311,23 +310,9 @@ export default class PackagesStore {
                 inDirector: true,
                 hardwareIds: pack.custom ? pack.custom.hardwareIds : [],
             };
-            preparedPackages.push(formattedPack);
+            this.directorPackages.push(formattedPack);
+            this.packages.push(formattedPack);
         });
-
-        let mergedPackages = [];
-        _.each(preparedPackages, (pack, index) => {
-            mergedPackages.push(pack);
-        });
-        _.each(this.packages, (pack, index) => {
-            mergedPackages.push(pack);
-        });
-
-        this.directorPackages = preparedPackages;        
-        this.packages = mergedPackages;
-
-        if (this.overallPackagesCount === null) {
-            this.overallPackagesCount = this.packages.length;
-        }
     }
 
     fetchPackageStatistics(packageName) {
@@ -518,7 +503,7 @@ export default class PackagesStore {
                                     this._prepareDevicePackages();
                                     break;
                                 case 'packages':
-                                    this._preparePackages();
+                                    this._preparePackages(this.packagesSort, true);
                                     break;
                                 default:
                                     break;
@@ -539,7 +524,7 @@ export default class PackagesStore {
                     } else {
                         this.blacklist = blacklist;
                         if (ifPrepareBlacklist) {
-                            this._prepareBlacklist();
+                            this._preparePackages(this.packagesSort, true);
                         }
                         this.packagesBlacklistFetchAsync = handleAsyncSuccess(response);
                     }
@@ -959,7 +944,7 @@ export default class PackagesStore {
         });
     }
 
-    _preparePackages(packagesSort = this.packagesSort) {
+    _preparePackages(packagesSort = this.packagesSort, isFromBlacklistRequest = false) {
         let packages = this.packages;
         let groupedPackages = {};
         let sortedPackages = {};
@@ -1005,6 +990,9 @@ export default class PackagesStore {
             sortedPackages = (packagesSort !== 'undefined' && packagesSort == 'desc' ? Object.assign(specialGroup, sortedPackages) : Object.assign(sortedPackages, specialGroup));
         }
         this.preparedPackages = sortedPackages;
+        if(!isFromBlacklistRequest) {
+            this.overallPackagesCount = packages.length;
+        }
     }
 
     _prepareDevicePackages(packagesSort = this.packagesSort) {
