@@ -2,7 +2,7 @@ package com.advancedtelematic.auth.garage
 
 import play.api.Configuration
 
-private[garage] final case class Auth0Config(
+final case class Auth0Config(
     audience: String,
     dbConnection: String
 )
