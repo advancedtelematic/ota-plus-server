@@ -53,11 +53,6 @@ Step 2: Stop web container
 
 Step 3:`cd ota-plus-server` and run tests, for example:
 
-- Browser tests
-```
-  sbt "ota-plus-web/testOnly ApplicationFunTests"
-```
-- Other tests
 ```
   sbt "ota-plus-web/testOnly com.advancedtelematic.ota.ClientSdkControllerSpec"
 ```

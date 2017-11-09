@@ -6,7 +6,8 @@ object Version {
   val LogTree = "1.3.0"
   val Scalaz = "7.2.0"
   val PlayJson = "2.6.0"
-  val LibAts = "0.0.1-105-g8ae2ff0"
+  val LibAts = "0.1.0-5-g6b585f0"
+  val LibTuf = "0.2.0-44-gda9b1e2"
   val Netty = "4.1.15.Final"
   val ScalaCheck = "1.12.4"
   val ScalaTestPlay = "3.1.2"
@@ -33,6 +34,8 @@ object Dependencies {
     "com.advancedtelematic" %% "libats-messaging",
     "com.advancedtelematic" %% "libats-auth"
   ).map(_ % Version.LibAts)
+
+  lazy val LibTuf = "com.advancedtelematic" %% "libtuf" % Version.LibTuf
 
   val SotaCommon = Set(
     "org.genivi" %% "sota-common-data" % Version.GeniviSota

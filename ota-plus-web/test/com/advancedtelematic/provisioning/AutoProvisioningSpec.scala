@@ -5,7 +5,7 @@ import java.time.{Instant, LocalDate, ZoneOffset}
 import java.time.temporal.ChronoField
 
 import com.advancedtelematic.TokenUtils
-import com.advancedtelematic.auth.{AccessToken, Tokens, TokenVerification}
+import com.advancedtelematic.auth.{AccessToken, TokenVerification}
 import com.advancedtelematic.TokenUtils.NoVerification
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
@@ -15,12 +15,9 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.libs.ws.{EmptyBody, WSClient}
-import play.api.mvc.Results.EmptyContent
 import play.api.mvc.{Cookies, Session}
 import play.api.test.WsTestClient
 import play.filters.csrf.CSRF
-
-import scala.concurrent.Future
 
 class AutoProvisioningSpec extends PlaySpec with GuiceOneServerPerSuite with ScalaFutures {
   import play.api.inject.bind

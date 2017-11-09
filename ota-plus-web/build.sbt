@@ -11,7 +11,8 @@ play.sbt.routes.RoutesKeys.routesImport ++= Seq(
   "com.advancedtelematic.controllers.Architecture",
   "com.advancedtelematic.controllers.FeatureName",
   "org.genivi.sota.data.Namespace",
-  "org.genivi.sota.data.Uuid"
+  "org.genivi.sota.data.Uuid",
+  "java.util.UUID"
 )
 
 RoutesKeys.routesGenerator := InjectedRoutesGenerator
@@ -37,7 +38,8 @@ dependencyOverrides ++= Dependencies.Netty
 libraryDependencies ++= Seq (
     ws,
     guice,
-    Dependencies.PlayJson
+    Dependencies.PlayJson,
+    Dependencies.LibTuf
     ) ++
   Dependencies.TestFrameworks ++
   Dependencies.SotaCommon ++

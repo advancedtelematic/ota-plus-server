@@ -6,24 +6,14 @@ import javax.inject.{Inject, Singleton}
 import akka.Done
 import akka.actor.ActorSystem
 import com.advancedtelematic.api.UnexpectedResponse
-import com.advancedtelematic.auth.{
-  AccessToken,
-  AuthPlusConfig,
-  IdToken,
-  LoginAction,
-  OAuthConfig,
-  SessionCodecs,
-  TokenExchange,
-  Tokens,
-  UiAuthAction
-}
+import com.advancedtelematic.auth.{AccessToken, AuthPlusConfig, IdToken, LoginAction, OAuthConfig, SessionCodecs,
+                                                                                TokenExchange, Tokens, UiAuthAction}
 import com.advancedtelematic.auth.oidc.NamespaceProvider
-import com.advancedtelematic.libats.data.Namespace
 import com.advancedtelematic.libats.messaging.{MessageBus, MessageBusPublisher}
-import com.advancedtelematic.libats.messaging.Messages.MessageLike
+import com.advancedtelematic.libats.messaging_datatype.MessageLike
 import play.api.{Configuration, Logger}
 import play.api.http.{HeaderNames, MimeTypes}
-import play.api.libs.json.{Json, JsResult, JsValue}
+import play.api.libs.json.{JsResult, JsValue, Json}
 import play.api.libs.ws.{WSAuthScheme, WSClient, WSResponse}
 import play.api.mvc._
 import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
@@ -37,7 +27,7 @@ final case class UserLogin(id: String, timestamp: Instant)
 
 object UserLogin {
 
-  import com.advancedtelematic.libats.codecs.AkkaCirce._
+  import com.advancedtelematic.libats.codecs.CirceCodecs._
 
   implicit val MessageLikeInstance = MessageLike[UserLogin](_.id)
 }

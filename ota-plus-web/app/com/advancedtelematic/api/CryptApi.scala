@@ -110,4 +110,12 @@ class CryptApi(conf: Configuration, val apiExec: ApiClientExec)(implicit exec: E
       .execResult(apiExec)
       .map(_.body.dataStream)
   }
+
+  def downloadCredentialsEntity(accountName: String, id: UUID): Future[play.api.http.HttpEntity] = {
+    baseUri(s"/accounts/$accountName/credentials/registration/$id")
+      .transform(_.withMethod(GET))
+      .execResult(apiExec)
+      .map(_.body)
+  }
+
 }

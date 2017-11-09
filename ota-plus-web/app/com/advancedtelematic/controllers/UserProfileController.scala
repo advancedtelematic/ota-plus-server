@@ -4,14 +4,14 @@ import cats.syntax.show._
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport, RemoteApiError}
 import javax.inject.{Inject, Singleton}
 
-import com.advancedtelematic.auth.{ApiAuthAction, AuthenticatedAction}
+import com.advancedtelematic.auth.{AccessToken, ApiAuthAction, AuthenticatedAction}
 import org.genivi.sota.data.Uuid
 import play.api.Configuration
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.libs.ws.WSClient
 import play.api.mvc.Results.EmptyContent
-import play.api.mvc.{AbstractController, Action, AnyContent, BodyParsers, Controller, ControllerComponents}
+import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -145,19 +145,7 @@ class UserProfileController @Inject()(val conf: Configuration,
   }
 
   def getFeatureConfig(feature: FeatureName): Action[AnyContent] = authAction.async { request =>
-    val userId = request.idToken.claims.userId
-    val token  = request.accessToken
-
-    userProfileApi.getFeature(userId, feature).flatMap { f =>
-      f.client_id match {
-        case Some(id) =>
-          for {
-            secret <- authPlusApi.fetchSecret(id.toJava, token)
-            result <- buildSrvApi.download(feature.get, id, secret)
-          } yield result
-        case None => Future.successful(NotFound)
-      }
-    }
+    getFeatureConfig(feature, request.idToken.claims.userId, request.accessToken)
   }
 
 }
