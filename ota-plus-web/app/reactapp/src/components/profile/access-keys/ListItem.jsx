@@ -7,8 +7,8 @@ class ListItem extends Component {
         super(props);
     }
     _onDownload() {
-        const { provisioningStore, provisioningKey } = this.props;
-        provisioningStore.downloadProvisioningKeyBundle(provisioningKey.id);
+	const { provisioningStore, provisioningKey } = this.props;
+        location.href="/api/v1/provisioning/credentials/archive/" + provisioningKey.id;
     }
     render() {
         const { provisioningKey, width } = this.props; 
