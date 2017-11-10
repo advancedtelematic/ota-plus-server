@@ -119,6 +119,52 @@ a, a:hover, a:focus {
             }
         }
     }
+
+    .top-alert {
+        text-align: center;
+        height: 75px;
+        background: #FB9773;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        padding: 10px 25px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+
+        img {
+            margin-right: 15px;
+            width: 40px;
+        }
+    }
+
+    .maintenance-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(100% - 75px);
+
+        .notificaiton {
+            text-align: center;
+            
+            .header {
+                font-size: 30px;
+                width: 450px;
+                margin: auto;
+            }
+
+            .construction {
+                margin-bottom: 50px;
+
+                img {
+                    width: 150px;
+                }
+            }
+        }
+    }
     
 }
 

@@ -1,7 +1,8 @@
 @import com.advancedtelematic.auth.OAuthConfig
 @import com.advancedtelematic.auth.garage.Auth0Config
+@import com.advancedtelematic.auth.garage.DowntimeConfig
 
-@(oauthConfig: OAuthConfig, auth0Config: Auth0Config)
+@(oauthConfig: OAuthConfig, auth0Config: Auth0Config, downtimeConfig: DowntimeConfig)
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12,6 +13,37 @@
     </head>
     <body class="login">
         <div id="ats-page" style="display: none;">
+
+            @if(downtimeConfig.isPlanned) {
+
+            <div class="top-alert">
+                <img src='@routes.Assets.versioned("img/icons/white/warning.png")' alt="Icon" />
+                <p>
+                  Planned outage: ATS Garage will be offline for approximately @downtimeConfig.duration.toHours hours
+                  beginning on @downtimeConfig.startDateTime
+                </p>
+            </div>
+
+            }
+
+            @if(downtimeConfig.isDown) {
+
+            <div class="maintenance-container">
+                <div class="notificaiton">
+                    <div class="logo text-center">
+                        <a href="#"><img src='@routes.Assets.versioned("img/atsgarage_white.png")' id="logo"></a>
+                    </div>
+                    <div class="construction text-center">
+                        <img src='@routes.Assets.versioned("img/icons/construction.png")' id="Construction">
+                    </div>
+                    <div class="header">
+                        <p>ATS Garage is currently offline for scheduled maintenance</p>
+                    </div>
+                </div>
+            </div>
+
+            } else {
+
             <div class="container ats">
                 <div class="row">
                     <div class="login-content">
@@ -21,6 +53,8 @@
                     </div>
                 </div>
             </div>
+
+            }
 
             <section class="footer-panel"> 
                 <a href="mailto:support@@atsgarage.com" class="clickme">Need Support?</a>
