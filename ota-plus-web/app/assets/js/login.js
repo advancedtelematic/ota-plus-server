@@ -46,6 +46,10 @@ $(function () {
 
    $('input.auth0-lock-input[name="email"]').attr('id','a0-signin_easy_email');
    $('input.auth0-lock-input[name="password"]').attr('id','a0-signin_easy_password');
+   $('.auth0-lock-form .auth0-lock-tabs-current + li > a').attr('id','login-signup-switch');
+   $('.auth0-lock-alternative > a').attr('id','forgot_password_link');
+   $('.auth0-lock-social-button[data-provider="github"]').attr('id','github_social_link');
+   $('.auth0-lock-social-button[data-provider="google-oauth2"]').attr('id','google_social_link');
 
    if($('.terms-conditions').length) {
     $('.terms-conditions').remove();
@@ -57,7 +61,10 @@ $(function () {
 
    $('input.auth0-lock-input[name="email"]').attr('id','a0-signup_easy_email');
    $('input.auth0-lock-input[name="password"]').attr('id','a0-signup_easy_password');
-
+   $('.auth0-lock-form .auth0-lock-tabs li:not(.auth0-lock-tabs-current) > a').attr('id','login-signup-switch');
+   $('.auth0-lock-social-button[data-provider="github"]').attr('id','github_social_link');
+   $('.auth0-lock-social-button[data-provider="google-oauth2"]').attr('id','google_social_link');
+   
    var link = $("<div class='terms-conditions'>By registering I agree to <a href='http://atsgarage.com/en/terms-conditions.html' target='_blank'>ATS Garage's Terms of Use.</a></div>");
    if(!$('.terms-conditions').length)
      link.appendTo('.auth0-lock-center');
