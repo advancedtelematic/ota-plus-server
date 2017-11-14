@@ -228,6 +228,10 @@ body {
         .auth0-lock-center {
             .terms-conditions {
                 margin: 15px 0;
+
+                a {
+                    text-decoration: underline;
+                }
             }
         }
 
@@ -296,6 +300,12 @@ body {
                 a {
                     color: #fff;
                     font-size: 16px;
+                    transition: all .3s ease-in;
+                    text-decoration: underline;
+
+                    &:hover {
+                        color: #9ce2d8;
+                    }
                 }
             }
         }
@@ -323,6 +333,7 @@ body {
                 background: $color-mint-active !important;
                 -webkit-box-shadow: none;
                 box-shadow: none;
+                font-weight: 400;
             }
 
             span {
