@@ -19,7 +19,7 @@ $(function () {
     container: 'widget-container',
     languageDictionary: {
       title: "Login to ATS Garage.",
-      signupTitle: "Get started with ATS Garage.",
+      signupTitle: "Register to ATS Garage.",
       loginLabel: "Already registered? Login here.",
       loginSubmitLabel: "Login",
       forgotPasswordTitle: 'Password reset',
@@ -43,6 +43,8 @@ $(function () {
    $('.auth0-lock').addClass('signin');
    $('.auth0-lock').removeClass('signup');
 
+   $('.auth0-lock-name').text(options.languageDictionary.title);
+
    $('input.auth0-lock-input[name="email"]').attr('id','a0-signin_easy_email');
    $('input.auth0-lock-input[name="password"]').attr('id','a0-signin_easy_password');
    $('.auth0-lock-form .auth0-lock-tabs-current + li > a').attr('id','login-signup-switch');
@@ -57,6 +59,8 @@ $(function () {
  lock.on('signup ready', function () {
    $('.auth0-lock').removeClass('signin');
    $('.auth0-lock').addClass('signup');
+
+   $('.auth0-lock-name').text(options.languageDictionary.signupTitle);
 
    $('input.auth0-lock-input[name="email"]').attr('id','a0-signup_easy_email');
    $('input.auth0-lock-input[name="password"]').attr('id','a0-signup_easy_password');
