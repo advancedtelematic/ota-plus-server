@@ -387,6 +387,7 @@ export default class DevicesStore {
         return axios.put(API_DEVICES_RENAME + '/' + id, data)
             .then((response) => {
                 this.devicesRenameAsync = handleAsyncSuccess(response);
+                this.fetchDevicesCount();
             })
             .catch((error) => {
                 this.devicesRenameAsync = handleAsyncError(error);
