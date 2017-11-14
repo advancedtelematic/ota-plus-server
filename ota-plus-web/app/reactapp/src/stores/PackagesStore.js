@@ -951,13 +951,23 @@ export default class PackagesStore {
         this.packagesSort = packagesSort;
         _.each(packages, (obj, index) => {
             if (_.isUndefined(groupedPackages[obj.id.name]) || !groupedPackages[obj.id.name] instanceof Array) {
-                groupedPackages[obj.id.name] = new Object();
-                groupedPackages[obj.id.name].versions = [];
-                groupedPackages[obj.id.name].packageName = obj.id.name;
-                groupedPackages[obj.id.name].inDirector = obj.inDirector;
+                groupedPackages = {
+                    ...groupedPackages,
+                    [obj.id.name]: {
+                        packageName: obj.id.name,
+                        inDirector: obj.inDirector,
+                    },
+                }
             }
             if(!(groupedPackages[obj.id.name].inDirector && !obj.inDirector)) {
-                groupedPackages[obj.id.name].versions.push(obj);
+                groupedPackages = {
+                    ...groupedPackages,
+                    [obj.id.name]: {
+                        packageName: obj.id.name,
+                        inDirector: obj.inDirector,
+                        versions: [obj]
+                    },
+                }
             }
         }, this);
         _.each(groupedPackages, (obj, index) => {
@@ -965,6 +975,7 @@ export default class PackagesStore {
                 return pack.createdAt;
             }).reverse();
         });
+
         let specialGroup = {
             '#': []
         };
@@ -991,7 +1002,7 @@ export default class PackagesStore {
         }
         this.preparedPackages = sortedPackages;
         if(!isFromBlacklistRequest) {
-            this.overallPackagesCount = packages.length;
+            this.overallPackagesCount = Object.keys( groupedPackages).length;
         }
     }
 
