@@ -26,7 +26,6 @@ $(function () {
       forgotPasswordAction: "Forgot Password >",
       forgotPasswordInstructions: "Please enter your email address. We will send you a link to reset your password.",
       forgotPasswordSubmitLabel: "Send",
-      socialLoginInstructions: 'Or use an existing account:',
       signUpLabel: 'Not registered yet? Sign up here.',
       signUpSubmitLabel: 'Start now!'
     }
