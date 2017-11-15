@@ -946,29 +946,35 @@ export default class PackagesStore {
 
     _preparePackages(packagesSort = this.packagesSort, isFromBlacklistRequest = false) {
         let packages = this.packages;
+        let inDirectorPackages = {};
+        let legacyPackages = {};
+        _.each(packages, (obj, index) => {
+            if(obj.inDirector) {
+                if (_.isUndefined(inDirectorPackages[obj.id.name])) {
+                    inDirectorPackages[obj.id.name] = [];
+                }
+                inDirectorPackages[obj.id.name].push(obj)
+            } else {
+                if (_.isUndefined(legacyPackages[obj.id.name])) {
+                    legacyPackages[obj.id.name] = [];
+                }
+                legacyPackages[obj.id.name].push(obj);
+            }
+        });
+        let mergedPackages = Object.assign(legacyPackages, inDirectorPackages);
         let groupedPackages = {};
         let sortedPackages = {};
-        this.packagesSort = packagesSort;
-        _.each(packages, (obj, index) => {
-            if (_.isUndefined(groupedPackages[obj.id.name]) || !groupedPackages[obj.id.name] instanceof Array) {
-                groupedPackages = {
-                    ...groupedPackages,
-                    [obj.id.name]: {
-                        packageName: obj.id.name,
-                        inDirector: obj.inDirector,
-                    },
+        this.packagesSort = packagesSort;        
+        _.each(mergedPackages, (objArray, index) => {
+            _.each(objArray, (obj, i) => {
+                if (_.isUndefined(groupedPackages[obj.id.name]) || !groupedPackages[obj.id.name] instanceof Array) {
+                    groupedPackages[obj.id.name] = new Object();
+                    groupedPackages[obj.id.name].versions = [];
+                    groupedPackages[obj.id.name].packageName = obj.id.name;
+                    groupedPackages[obj.id.name].inDirector = obj.inDirector;
                 }
-            }
-            if(!(groupedPackages[obj.id.name].inDirector && !obj.inDirector)) {
-                groupedPackages = {
-                    ...groupedPackages,
-                    [obj.id.name]: {
-                        packageName: obj.id.name,
-                        inDirector: obj.inDirector,
-                        versions: [obj]
-                    },
-                }
-            }
+                groupedPackages[obj.id.name].versions.push(obj);
+            });
         }, this);
         _.each(groupedPackages, (obj, index) => {
             groupedPackages[index].versions = _.sortBy(obj.versions, (pack) => {
@@ -1326,7 +1332,12 @@ export default class PackagesStore {
                     this._preparePackages();
                     break;
             }
-            this.overallPackagesCount++;
+            let found = _.find(this.packages, (pack) => {
+                return pack.id.name === data.id.name && pack.id.version === data.id.version;
+            });
+            if(!found) {
+                this.overallPackagesCount++;
+            }
         }
     }
 
@@ -1363,6 +1374,7 @@ export default class PackagesStore {
             found.hardwareIds = hardwareIds;
         } else {
             this.packages.push(formattedPack);
+            this.overallPackagesCount++;
         }
         switch (this.page) {
             case 'device':
@@ -1372,7 +1384,6 @@ export default class PackagesStore {
                 this._preparePackages();
                 break;
         }
-        this.overallPackagesCount++;
     }
 
     @computed
