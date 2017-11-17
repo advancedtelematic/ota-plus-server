@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observer, observable } from 'mobx-react';
 import _ from 'underscore';
-import DeviceHardwareOverlayItem from './OverlayItem';
 import { Modal } from '../../../partials';
 import { FlatButton } from 'material-ui';
 

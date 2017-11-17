@@ -25,7 +25,6 @@ class OnDeviceList extends Component {
         this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
         this.generateItemsPositions = this.generateItemsPositions.bind(this);
         this.listScroll = this.listScroll.bind(this);
-        this.changeSort = this.changeSort.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
         this.packagesChangeHandler = observe(props.packagesStore, (change) => {
             if(change.name === 'preparedOndevicePackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
@@ -106,11 +105,7 @@ class OnDeviceList extends Component {
     stopIntervalListScroll() {
         clearInterval(this.tmpIntervalId);
         this.tmpIntervalId = null;
-    }
-    changeSort(sort, e) {
-        if(e) e.preventDefault();
-        this.props.packagesStore._prepareOndevicePackages(sort);
-    }
+    }    
     changeFilter(filter) {
         this.props.packagesStore.fetchOndevicePackages(this.props.device.uuid, filter);
     }
@@ -126,17 +121,6 @@ class OnDeviceList extends Component {
                             id="search-installed-packages-input"
                         />
                     </Form>
-                    <div className="sort-box">
-                        {packagesStore.packagesOndeviceSort == 'asc' ?
-                            <a href="#" onClick={this.changeSort.bind(this, 'desc')} id="link-sort-packages-desc">
-                                <i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z
-                            </a>
-                        :
-                            <a href="#" onClick={this.changeSort.bind(this, 'asc')} id="link-sort-packages-asc">
-                                <i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A
-                            </a>
-                        }
-                    </div>
                 </SubHeader>
                 <div className="ios-list" ref="list">
                     <InfiniteScroll
