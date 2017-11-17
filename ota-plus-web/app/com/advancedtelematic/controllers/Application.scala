@@ -23,13 +23,17 @@ import play.filters.csrf.CSRF
 
 import scala.concurrent.Future
 
-final case class UiToggles(autoFeatureActivation: Boolean, userProfileMenu: Boolean)
+final case class UiToggles(
+  atsGarageTheme: Boolean,
+  autoFeatureActivation: Boolean,
+  userProfileMenu: Boolean)
 
 object UiToggles {
   def apply(configuration: Configuration): UiToggles = {
+    val atsGarageTheme = configuration.get[Boolean]("ui.toggle.atsGarageTheme")
     val autoFeatureActivation = configuration.get[Boolean]("ui.toggle.autoFeatureActivation")
     val userProfileMenu = configuration.get[Boolean]("ui.toggle.userProfileMenu")
-    UiToggles(autoFeatureActivation, userProfileMenu)
+    UiToggles(atsGarageTheme, autoFeatureActivation, userProfileMenu)
   }
 }
 
