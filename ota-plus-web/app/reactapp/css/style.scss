@@ -962,19 +962,6 @@ input {
                         position: relative;
                         @include transition;
 
-                        &:not(.off) {
-                            &:hover {
-                                background: rgba(0,0,0,0.02);
-                                margin-left: 65px;
-                            }
-                        }
-
-                        &.off {
-                            &:hover {
-                                background: rgba(0,0,0,.05);
-                            }
-                        }
-
                         .actions {
                             background: #4B5151;
                             width: 65px;

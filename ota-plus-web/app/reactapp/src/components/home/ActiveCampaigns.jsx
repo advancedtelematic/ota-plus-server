@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { Loader } from '../../partials';
 import _ from 'underscore';
-import { CampaignsTabsSwitcher } from '../../components/campaigns';
+import ActiveCampaignItem from './ActiveCampaignItem';
 
 @observer
 class ActiveCampaigns extends Component {
@@ -10,20 +10,30 @@ class ActiveCampaigns extends Component {
         super(props);        
     }    
     render() {
-        const { campaignsStore, goToCampaignDetails, otaPlusMode } = this.props;
+        const { campaignsStore } = this.props;
+        const noCampaigns = 'No active campaigns';
         return (
-            campaignsStore.campaignsFetchAsync.isFetching || campaignsStore.campaignsLegacyFetchAsync.isFetching ?
-                <div className="wrapper-center">
-                    <Loader />
-                </div>
-            :
-                <CampaignsTabsSwitcher 
-                    campaignsStore={campaignsStore}
-                    showRenameModal={null}
-                    goToCampaignDetails={goToCampaignDetails}
-                    onHomePage={true}
-                    otaPlusMode={otaPlusMode}
-                />                     
+            <span>
+                {campaignsStore.campaignsFetchAsync.isFetching || campaignsStore.campaignsLegacyFetchAsync.isFetching ?
+                    <div className="wrapper-center">
+                        <Loader />
+                    </div>
+                :
+                    campaignsStore.lastActiveMixedCampaigns.length ?
+                        _.map(campaignsStore.lastActiveMixedCampaigns, (campaign) => {
+                            return (
+                                <ActiveCampaignItem
+                                    campaign={campaign}
+                                    key={campaign.id}
+                                />
+                            );
+                        })
+                    :
+                        <div className="wrapper-center">
+                            {noCampaigns}
+                        </div>
+                }
+            </span>
         );
     }
 }

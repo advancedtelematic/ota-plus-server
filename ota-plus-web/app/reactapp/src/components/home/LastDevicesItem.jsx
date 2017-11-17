@@ -32,7 +32,6 @@ class LastDevicesItem extends Component {
                 className="element-box device" 
                 title={device.deviceName}
                 id={"link-devicedetails-" + device.uuid}>
-                <div className="icon"></div>
                 <div className="desc">
                     <div className="title">
                         {device.deviceName}

@@ -19,6 +19,7 @@ class Home extends Component {
     }
     componentWillMount() {
         this.props.devicesStore.fetchDevices();
+        this.props.devicesStore.fetchDevicesCount();
         this.props.packagesStore.fetchPackages();
         this.props.packagesStore.fetchTufPackages();
         this.props.campaignsStore.fetchCampaigns();
@@ -63,7 +64,7 @@ class Home extends Component {
         }
     }
     render() {
-        const { devicesStore, packagesStore, campaignsStore, hardwareStore, userStore, provisioningStore, featuresStore, setSystemReady, addNewWizard, goToCampaignDetails, otaPlusMode } = this.props;
+        const { devicesStore, packagesStore, campaignsStore, hardwareStore, userStore, provisioningStore, featuresStore, setSystemReady, addNewWizard, otaPlusMode } = this.props;
         return (
             <FadeAnimation
                 display="flex">
@@ -80,8 +81,6 @@ class Home extends Component {
                                     campaignsStore={campaignsStore}
                                     hardwareStore={hardwareStore}
                                     addNewWizard={addNewWizard}
-                                    goToCampaignDetails={goToCampaignDetails}
-                                    otaPlusMode={otaPlusMode}
                                 />
                             </MetaData>
                         </div>
