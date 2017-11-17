@@ -20,7 +20,6 @@ class List extends Component {
                     groupsStore={groupsStore}
                     showRenameModal={showRenameModal}
                     goToCampaignDetails={goToCampaignDetails}
-                    onHomePage={false}
                     otaPlusMode={otaPlusMode}
                 />
             </span>

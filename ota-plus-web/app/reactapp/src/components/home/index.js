@@ -1,11 +1,14 @@
 import ActiveCampaigns from './ActiveCampaigns';
-import DraftCampaigns from './DraftCampaigns';
+import ActiveCampaignItem from './ActiveCampaignItem';
 import LastDevices from './LastDevices';
 import LastPackages from './LastPackages';
 
 export {
     ActiveCampaigns,
-    DraftCampaigns,
     LastDevices,
-    LastPackages
+    LastPackages,
+    ActiveCampaignsTabs,
+    ActiveCampaignsTufItem,
+    ActiveCampaignsLegacyItem,
+    ActiveCampaignItem,
 }
