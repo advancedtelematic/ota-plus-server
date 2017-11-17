@@ -10,7 +10,7 @@ class SecondaryEcu extends Component {
     }
     render() {
         const { active, ecu, hardwareStore, showKey, keyModalShown, shownIds, device, selectEcu, ...otherProps} = this.props;
-        const hardware = hardwareStore.hardware[device.uuid];
+        const hardware = hardwareStore.hardware;
         return (
             <span>
                 <a

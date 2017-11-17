@@ -1406,17 +1406,6 @@
                             margin-bottom: 10px;
                             border-bottom: 1px solid #fff;
                         }
-
-                        .table {
-                            & > tbody {
-                                & > tr {
-                                    th, td {
-                                        padding: 2px 15px;
-                                        border: 0;
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             }

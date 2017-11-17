@@ -1,11 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
-import { observable } from 'mobx';
+import { observable, isObservableArray } from 'mobx';
 import _ from 'underscore';
 import DeviceHardwareOverlayItem from './OverlayItem';
 import Popover from 'material-ui/Popover';
 import { Switch, Loader } from '../../../partials';
 import { PropertiesOnDeviceList } from '../properties';
+import { Form } from 'formsy-react';
+import { SubHeader, SearchBar } from '../../../partials';
 
 @observer
 class Overlay extends Component {
@@ -15,20 +17,26 @@ class Overlay extends Component {
         super(props);
         this.showPackagesList = this.showPackagesList.bind(this);
         this.showHardwareInfo = this.showHardwareInfo.bind(this);
+        this.changeFilter = this.changeFilter.bind(this);
     }
     componentWillReceiveProps(nextProps) {
-        if(this.props.shown !== nextProps.shown) {
+        if(this.props.shown !== nextProps.shown && nextProps.shown) {
             this.props.hardwareStore.fetchHardware(this.props.device.uuid);
             this.props.packagesStore.fetchInitialDevicePackages(this.props.device.uuid);
+        } else {
+            this.props.hardwareStore._reset();
         }
     }
-    showPackagesList(e) {
+    showPackagesList(e) { 
         if(e) e.preventDefault();
         this.hardwareInfoShown = false;
     }
     showHardwareInfo(e) {
         if(e) e.preventDefault();
         this.hardwareInfoShown = true;
+    }
+    changeFilter(filter) {
+        this.props.hardwareStore._filterHardware(filter);
     }
     render() {
         const { hardwareStore, hideHardwareOverlay, shown, packagesStore, device, showPackageBlacklistModal, onFileDrop, hardwareOverlayAnchor } = this.props;
@@ -37,7 +45,7 @@ class Overlay extends Component {
                 <div className="wrapper-center">
                     <Loader />
                 </div>
-            : _.isEmpty(hardwareStore.hardware[device.uuid]) ?
+            : (isObservableArray(hardwareStore.hardware) ? !hardwareStore.hardware.length : !Object.keys(hardwareStore.hardware).length) ?
                 <div className="wrapper-center">
                     This device hasn’t reported any information about
                     its hardware or system components yet.
@@ -52,9 +60,17 @@ class Overlay extends Component {
                         />
                         {this.hardwareInfoShown ?
                             <div className="hardware-details">
+                                <SubHeader>
+                                    <Form>
+                                        <SearchBar
+                                            value={hardwareStore.hardwareFilter}
+                                            changeAction={this.changeFilter}
+                                            id="search-installed-hardware-input"
+                                        />
+                                    </Form>
+                                </SubHeader>
                                 <DeviceHardwareOverlayItem
-                                    hardware={hardwareStore.hardware[device.uuid]}
-                                    mainLevel={true}
+                                    hardware={hardwareStore.filteredHardware}
                                 />
                             </div>
                         :
