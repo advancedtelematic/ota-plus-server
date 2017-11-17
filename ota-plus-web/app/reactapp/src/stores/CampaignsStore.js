@@ -207,6 +207,7 @@ export default class CampaignsStore {
                                 };
                                 campaign.statistics = statistics;
                                 campaign.summary = summary;
+                                campaign.isLegacy = true;
                                 after();
                             })
                             .catch(function() {
@@ -525,11 +526,27 @@ export default class CampaignsStore {
         });
     }
 
-    @computed get lastActiveCampaigns() {
+    @computed get lastActiveTufCampaigns() {
         let campaigns = this.runningCampaigns;
         _.sortBy(campaigns, function(campaign) {
           return campaign.createdAt;
-        }).reverse()
+        }).reverse();
+        return campaigns.slice(0,10);
+    }
+
+    @computed get lastActiveLegacyCampaigns() {
+        let campaigns = this.runningLegacyCampaigns;
+        _.sortBy(campaigns, function(campaign) {
+          return campaign.createdAt;
+        }).reverse();
+        return campaigns.slice(0,10);
+    }
+
+    @computed get lastActiveMixedCampaigns() {
+        let campaigns = this.runningCampaigns.concat(this.runningLegacyCampaigns);
+        _.sortBy(campaigns, function(campaign) {
+          return campaign.createdAt;
+        }).reverse();
         return campaigns.slice(0,10);
     }
 

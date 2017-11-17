@@ -14,7 +14,7 @@ class TufListItem extends Component {
         this.props.showRenameModal(this.props.campaign.id);
     }
     render() {
-        const { campaign, goToCampaignDetails, rename, type, onHomePage } = this.props;
+        const { campaign, goToCampaignDetails, rename, type } = this.props;
 
         let totalAffected = 0;
         let totalProcessed = 0;
@@ -34,7 +34,7 @@ class TufListItem extends Component {
         }
         
         return (
-            <div className={"item" + (onHomePage ? " off" : "")} onClick={goToCampaignDetails.bind(this, campaign.id)}>
+            <div className="item" onClick={goToCampaignDetails.bind(this, campaign.id)}>
                 <div className="actions">
                     <ul>
                         <li id={"rename-campaign-" + campaign.name} onClick={this.rename.bind(this)}>

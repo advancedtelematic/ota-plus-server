@@ -15,7 +15,7 @@ class LegacyListItem extends Component {
         this.props.showRenameModal(this.props.campaign.id);
     }
     render() {
-        const { campaign, goToCampaignDetails, onHomePage } = this.props;
+        const { campaign, goToCampaignDetails } = this.props;
 
         if(campaign.status === "Active") {
             var progress = Math.min(Math.round(campaign.summary.overallUpdatedDevicesCount/Math.max(campaign.summary.overallDevicesCount, 1) * 100), 100);
@@ -42,7 +42,7 @@ class LegacyListItem extends Component {
         }
         
         return (
-            <div className={"item" + (onHomePage ? " off" : "")} onClick={goToCampaignDetails.bind(this, campaign.id)}>
+            <div className="item" onClick={goToCampaignDetails.bind(this, campaign.id)}>
                 <div className="actions">
                     <ul>
                         <li id={"rename-campaign-" + campaign.name} onClick={this.rename.bind(this)}>

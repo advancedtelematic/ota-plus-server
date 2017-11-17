@@ -766,24 +766,21 @@
 
             .boxes-row {
                 width: 100%;
-                height: 50%;
+                height: 100%;
                 padding: 15px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding-top: 30px;
 
-                &:first-child {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    padding-top: 30px;
+                .column {
+                    width: 33.3333333%;
+                    height: 100%;
+                    display: inline-block;
+                    padding-right: 15px;
 
-                    .column {
-                        width: 33.3333333%;
-                        height: 100%;
-                        display: inline-block;
-                        padding-right: 15px;
-
-                        &:last-child {
-                            padding-right: 0;
-                        }
+                    &:last-child {
+                        padding-right: 0;
                     }
                 }
 
@@ -800,54 +797,58 @@
                         height: 100%;
 
                         .panel-heading {
-                            text-align: center;
+                            overflow: hidden;
+                            height: 85px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+
+                            .icon {
+                                text-align: center;
+                                background-color: #fff;
+                                background-repeat: no-repeat;
+                                background-size: cover;
+                                width: 60px;
+                                height: 60px;
+                                border-radius: 10px;
+
+                                &.device {
+                                    background-image: url('/assets/img/icons/black/devices.png');
+                                    border: 2px solid #ddd;
+                                    background-size: 45px 45px;
+                                    background-position: center;
+                                }
+
+                                &.package {
+                                    background-image: url('/assets/img/icons/black/packages.png');
+                                    border: 2px solid #ddd;
+                                }
+
+                                &.campaign {
+                                    background-image: url('/assets/img/icons/black/campaigns.png');
+                                    border: 2px solid #ddd;
+                                }
+                            }
+
+                            .add {
+                                button {
+                                    margin: 0!important;
+                                }
+                            }
                         }
 
                         .panel-body {
-                            height: calc(100% - 50px);
+                            height: calc(100% - 85px);
                             padding: 0;
 
                             .element-box {
-                                .package-name img {
-                                    height: 17px;
-                                    width: 17px;
+
+                                .desc {
+                                    width: 90%;
                                 }
                             }
                         }
                     }
-                }
-            }
-        }
-
-        .element-box {
-            &.device {
-                .icon {
-                    background-image: url('/assets/img/icons/black/devices.png');
-                    border: 2px solid #ddd;
-                    background-size: 45px 45px;
-                    background-position: center;
-                }
-            }
-
-            &.package {
-                .icon {
-                    background-image: url('/assets/img/icons/black/packages.png');
-                    border: 2px solid #ddd;
-                }
-
-                .desc {
-                    .subtitle {
-                        color: $color-darkgrey;
-                        font-size: 14px;
-                        font-weight: bold;
-                    }
-                }
-            }
-
-            &.campaign {
-                .icon {
-                    background-image: url('/assets/img/icons/black/campaigns.png');
-                    border: 2px solid #ddd;
                 }
             }
         }
