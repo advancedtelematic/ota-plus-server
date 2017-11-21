@@ -1,28 +1,36 @@
 package com.advancedtelematic.controllers
 
+import java.io.FileOutputStream
+import java.nio.file.Files
 import javax.inject.{Inject, Singleton}
-
-import com.advancedtelematic.api.{ApiClientExec, CryptApi}
-import java.time.{LocalDate, ZonedDateTime, ZoneOffset}
+import java.time.{LocalDate, ZoneOffset, ZonedDateTime}
 import java.time.temporal.ChronoUnit
+import java.util.UUID
+import java.util.zip._
 
-import com.advancedtelematic.auth.{ApiAuthAction, AuthenticatedAction, AuthenticatedRequest}
+import akka.actor.ActorSystem
+import akka.stream.ActorMaterializer
+import com.advancedtelematic.api._
+import com.advancedtelematic.auth.{ApiAuthAction, AuthenticatedRequest}
 import org.genivi.sota.data.Uuid
 import play.api.Configuration
 import play.api.http.{HeaderNames, HttpEntity}
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.WSClient
-import play.api.mvc.{AbstractController, Action, AnyContent, Controller, ControllerComponents, ResponseHeader, Result}
-
+import play.api.mvc._
+import scala.async.Async.{async, await}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class ProvisioningController @Inject()(config: Configuration, wsClient: WSClient, authAction: ApiAuthAction,
+class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient, val authAction: ApiAuthAction,
+                                       val clientExec: ApiClientExec,
                                        components: ControllerComponents)(
-    implicit executionContext: ExecutionContext)
-    extends AbstractController(components) {
-  val cryptApi = new CryptApi(config, new ApiClientExec(wsClient))
-  val gatewayPort = config.get[Option[Int]]("crypt.gateway.port").getOrElse(8000)
+    implicit executionContext: ExecutionContext, actorSystem: ActorSystem)
+    extends AbstractController(components) with OtaPlusConfig with ApiClientSupport {
+
+  val gatewayPort = conf.get[Option[Int]]("crypt.gateway.port").getOrElse(8000)
+
+  val cryptApi = new CryptApi(conf, clientExec)
 
   def accountName(request: AuthenticatedRequest[_]): String = request.idToken.claims.userId.id
 
@@ -73,4 +81,61 @@ class ProvisioningController @Inject()(config: Configuration, wsClient: WSClient
           .withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=credentials.p12")
     }
   }
+
+  private def numberSuffix(i: Int) =
+    if (i > 0) i.toString else ""
+
+
+  def downloadCredentialArchive(keyUUID: UUID): Action[AnyContent] = authAction.async { implicit request =>
+    implicit val materializer: ActorMaterializer = ActorMaterializer()
+
+    async {
+      val d = Files.createTempDirectory("ota-plus")
+      val f = d.resolve("credentials.zip").toFile
+      val outputStream = new FileOutputStream(f)
+
+      val zip = new ZipOutputStream(outputStream)
+
+      def writeZipEntry(name: String, data: Array[Byte]): Unit = {
+        zip.putNextEntry(new ZipEntry(name))
+        zip.write(data)
+        zip.closeEntry()
+      }
+
+      writeZipEntry("tufrepo.url", repoApiUri.getBytes)
+
+      val accountInfoO = await(cryptApi.getAccountInfo(accountName(request)))
+      accountInfoO.foreach { accountInfo =>
+        writeZipEntry("autoprov.url", s"https://${accountInfo.hostName}:$gatewayPort".getBytes)
+      }
+
+      val credentials = await(cryptApi.downloadCredentialsEntity(accountName(request), keyUUID))
+      val data = await(credentials.consumeData(materializer))
+      writeZipEntry("autoprov_credentials.p12", data.toArray)
+
+      val rootJsonResult = await(repoServerApi.rootJsonResult)
+      val repoId = rootJsonResult.header.headers.get("x-ats-tuf-repo-id")
+      val rootJsonData = await(rootJsonResult.body.consumeData(materializer))
+      writeZipEntry("root.json", rootJsonData.toArray)
+
+      // can't use a foreach here because of await
+      if(repoId.isDefined) {
+        val keyPairs = await(keyServerApi.secretTargetKeys(repoId.get))
+        keyPairs.indices.zip(keyPairs).foreach { case (i, pair) =>
+          writeZipEntry(s"targets${numberSuffix(i)}.pub", pair.pubkey.keyval.getEncoded)
+          writeZipEntry(s"targets${numberSuffix(i)}.sec", pair.pubkey.keyval.getEncoded)
+        }
+      }
+
+      val treehubResult = await(getFeatureConfig(FeatureName("treehub"), request.idToken.claims.userId,
+                                                                         request.accessToken))
+      val treehubData = await(treehubResult.body.consumeData(materializer))
+      writeZipEntry("treehub.json", treehubData.toArray)
+
+      zip.close()
+
+      Ok.sendFile(f, onClose = () => { f.delete() })
+    }
+  }
+
 }

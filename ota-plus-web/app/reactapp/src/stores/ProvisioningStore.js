@@ -128,26 +128,6 @@ export default class ProvisioningStore {
             }.bind(this));
     }
 
-    downloadProvisioningKeyBundle(keyUuid) {
-        return axios.all([
-                axios.get(API_PROVISIONING_KEYS_FETCH + '/' + keyUuid, { responseType: 'arraybuffer' }),
-                axios.get(API_FEATURES_TREEHUB_ACTIVATE + '/config')])
-            .then(axios.spread(function (provResp, treehubResp) {
-                var zip = new JSZip();
-                zip.file("autoprov.url", this.provisioningDetails.uri);
-                zip.file("autoprov_credentials.p12", provResp.data, { binary: true });
-                zip.file("treehub.json", JSON.stringify(treehubResp.data, null, 2));
-                zip.generateAsync({type: "blob"})
-                    .then(function (content) {
-                        FileSaver.saveAs(content, "credentials.zip");
-                    }
-                );
-            }.bind(this)))
-            .catch(function (error) {
-                handleAsyncError(error);
-            }.bind(this));
-    }
-
     _reset() {
         resetAsync(this.provisioningStatusFetchAsync);
         resetAsync(this.provisioningActivateAsync);
