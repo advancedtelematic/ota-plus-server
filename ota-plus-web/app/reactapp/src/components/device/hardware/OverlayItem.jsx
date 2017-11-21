@@ -1,138 +1,141 @@
 import React, { Component, PropTypes } from 'react';
-import { observer, observable } from 'mobx-react';
+import { observer } from 'mobx-react';
+import { observable, observe } from 'mobx';
 import _ from 'underscore';
+
+const headerHeight = 28;
 
 @observer
 class OverlayItem extends Component {
+    @observable firstShownIndex = 0;
+    @observable lastShownIndex = 50;
+    @observable fakeHeaderText = null;
+    @observable fakeHeaderTopPosition = 0;
+    @observable expandedPackageName = null;
+    @observable tmpIntervalId = null;
+
     constructor(props) {
         super(props);
+        this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
+        this.generateItemsPositions = this.generateItemsPositions.bind(this);
+        this.listScroll = this.listScroll.bind(this);
+    }
+    componentDidMount() {
+        if(this.refs.list) {
+            this.refs.list.addEventListener('scroll', this.listScroll);
+            this.listScroll();
+        }
+    }
+    componentWillUnmount() {
+        if(this.refs.list) {
+            this.refs.list.removeEventListener('scroll', this.listScroll);            
+        }
+    }
+    generateHeadersPositions() {
+        const headers = this.refs.list.getElementsByClassName('header');
+        const wrapperPosition = this.refs.list.getBoundingClientRect();
+        let positions = [];
+        _.each(headers, (header) => {
+            let position = header.getBoundingClientRect().top - wrapperPosition.top + this.refs.list.scrollTop;
+            positions.push(position);
+        }, this);
+        return positions;
+    }
+    generateItemsPositions() {
+        const items = this.refs.list.getElementsByClassName('item');
+        const wrapperPosition = this.refs.list.getBoundingClientRect();
+        let positions = [];
+        _.each(items, (item) => {
+            let position = item.getBoundingClientRect().top - wrapperPosition.top + this.refs.list.scrollTop;
+            positions.push(position);
+        }, this);
+        return positions;
+    }
+    listScroll() {
+        if(this.refs.list) {
+            const headersPositions = this.generateHeadersPositions();
+            const itemsPositions = this.generateItemsPositions();
+            let scrollTop = this.refs.list.scrollTop;
+            let listHeight = this.refs.list.getBoundingClientRect().height;
+            let newFakeHeaderText = this.fakeHeaderText;
+            let firstShownIndex = null;
+            let lastShownIndex = null;
+            _.each(headersPositions, (position, index) => {
+                if(scrollTop >= position) {
+                    newFakeHeaderText = this.props.hardware[index].name;
+                    return true;
+                } else if(scrollTop >= position - headerHeight) {
+                    scrollTop -= scrollTop - (position - headerHeight);
+                    return true;
+                }
+            }, this);
+            _.each(itemsPositions, (position, index) => {
+                if(firstShownIndex === null && scrollTop <= position) {
+                    firstShownIndex = index;
+                } else if(lastShownIndex === null && scrollTop + listHeight <= position) {
+                    lastShownIndex = index;
+                }
+            }, this);
+            this.firstShownIndex = firstShownIndex;
+            this.lastShownIndex = lastShownIndex !== null ? lastShownIndex : itemsPositions.length - 1;
+            this.fakeHeaderText = newFakeHeaderText;
+            this.fakeHeaderTopPosition = scrollTop;
+        }
+    }
+    componentWillReceiveProps(nextProps) {
+        const that = this;
+        setTimeout(() => {
+            that.listScroll();
+        }, 50);
     }
     render() {
-        const { hardware, mainLevel } = this.props;
-        let result;
-        if (this.props.mainLevel) {
-            if (!_.isUndefined(hardware.id) && (!_.isUndefined(hardware.description) || !_.isUndefined(hardware.class))) {
-                result = (
-                    <li>
-                        <div className="header">
-                            <span className="name">
-                                {hardware.description ? hardware.description : hardware.class}
-                            </span>
-                        </div>
-                        <div>
-                            <div className="details-header">
-                                <span>
-                                    <strong>General Informations</strong>
-                                </span>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-6 col-md-offset-1">
+        const { hardware } = this.props;
+        _.map(hardware, (obj, index) => {
+            if(obj.hasOwnProperty('showId') && !obj.showId) {
+                delete obj.showId;
+                delete obj.id;
+            }
+        });
+        let that = this;
+        let indexOne = 0;
+        let result = (
+            hardware.length ? 
+                <ul className="ios-list" ref="list">
+                    {_.map(hardware, (hwItem, index) => {
+                        return (
+                            <li key={index}>
+                                <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
+                                    {that.fakeHeaderText}
+                                </div>
+                                <div className="header">
+                                    {hwItem.name}
+                                </div>
+                                <div>
                                     <table className="table">
                                         <tbody>
-                                            {_.map(hardware, function(d, i) {
-                                                if(i !== 'children' && typeof(hardware[i]) !== 'object') {
+                                            {_.map(hwItem, function(value, property) {
+                                                indexOne++;
+                                                if(property !== 'children' && property !== 'name' && property !== 'capabilities' && property !== 'configuration') {
                                                     return (
-                                                        <tr key={i}>
-                                                            <th>{i}:</th>
-                                                            <td>{d}</td>
+                                                        <tr key={indexOne} className="item">
+                                                            <th>{property}:</th>
+                                                            <td>{value.toString()}</td>
                                                         </tr>
                                                     );
-                                                } else if(typeof(hardware[i]) === 'object') {
-                                                    {_.map(hardware[i], function(dd, ii) {
-                                                        return (
-                                                            <tr key={ii}>
-                                                                <th>{ii}:</th>
-                                                                <td>{dd}</td>
-                                                            </tr>
-                                                        );
-                                                    })}
                                                 }
                                             })}
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
-                        </div>
-                        <ul>
-                            <OverlayItem
-                              hardware={hardware.children}
-                              mainLevel={false}
-                            />
-                        </ul>
-                    </li>
-                );
-            } else {
-                result = (
-                    <div className="text-center center-xy padding-15">
-                          This device hasn’t reported any information about
-                          its hardware or system components yet.
-                    </div>
-                );
-            }
-        } else {
-            result = (
-                <li>
-                    {_.map(hardware, function(child, i) {
-                        if(!_.isUndefined(child.id) && (!_.isUndefined(child.description) || !_.isUndefined(child.class))) {
-                            return (
-                                <span key={"components-list-menu-" + child['id-nr'] + "-" + child.class}>
-                                    <div className="header">
-                                        <span className="name">
-                                            {!_.isUndefined(child.description) ? child.description : child.class}
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <div className="details-header">
-                                            <span>
-                                                <strong>General Informations</strong>
-                                            </span>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-md-6 col-md-offset-1">
-                                                <table className="table">
-                                                    <tbody>
-                                                        {_.map(child, function(d, i) {
-                                                            let res;
-                                                            if(i !== 'children' && typeof(child[i]) !== 'object') {
-                                                                return (
-                                                                    <tr key={i}>
-                                                                        <th>{i}:</th>
-                                                                        <td>{d}</td>
-                                                                    </tr>
-                                                                );
-                                                            } else if(i !== 'children' && typeof(child[i]) === 'object') {
-                                                                return _.map(child[i], function(dd, ii) {
-                                                                    return (
-                                                                        <tr key={ii}>
-                                                                            <th>{ii}:</th>
-                                                                            <td>{dd}</td>
-                                                                        </tr>
-                                                                    );
-                                                                })
-                                                            }
-                                                        })}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {!_.isUndefined(child.children) && typeof child.children === 'object' ? 
-                                        <ul>
-                                            <OverlayItem
-                                                hardware={child.children}
-                                                mainLevel={false}
-                                            />
-                                        </ul>
-                                    : null}
-                                </span>
-                            );
-                        } else {
-                            return false;
-                        }
+                            </li>
+                        );
                     })}
-                </li>
-            );
-        }
+                </ul>   
+            :
+                <div className="wrapper-center">
+                    No search results
+                </div>
+        );
         return (
             result
         );
@@ -140,11 +143,7 @@ class OverlayItem extends Component {
 }
 
 OverlayItem.propTypes = {
-    hardware: PropTypes.oneOfType([
-        PropTypes.object,
-        PropTypes.array,
-    ]),
-    mainLevel: PropTypes.bool.isRequired,
+    hardware: PropTypes.object.isRequired,
 }
 
 export default OverlayItem;
