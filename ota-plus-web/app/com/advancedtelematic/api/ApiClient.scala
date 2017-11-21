@@ -3,11 +3,14 @@ package com.advancedtelematic.api
 import java.util.UUID
 
 import akka.Done
+import akka.stream.Materializer
 import cats.syntax.show.toShowOps
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.api.Devices._
 import com.advancedtelematic.auth.AccessToken
 import com.advancedtelematic.controllers.{FeatureName, UserId}
+import com.advancedtelematic.libtuf.data.TufCodecs
+import com.advancedtelematic.libtuf.data.TufDataType.TufKeyPair
 import com.advancedtelematic.persistence.ClientInfo
 import org.genivi.sota.data.{Device, DeviceT, Namespace, Uuid}
 import play.api.Configuration
@@ -305,4 +308,39 @@ class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
           .withBody(Map("client_id" -> Seq(clientId.underlying.value), "client_secret" -> Seq(clientSecret))))
       .execStreamedResult(apiExec)
   }
+}
+
+class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
+  private val request = ApiRequest.base(repoApiUri + "/api/v1/")
+
+  def rootJsonResult: Future[Result] =
+    request("user_repo/root.json").execResult(apiExec)
+}
+
+class KeyServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
+  private val request = ApiRequest.base(keyServerApiUri + "/api/v1/")
+
+  def secretTargetKeys(repoId: String)(implicit ec: ExecutionContext, mat: Materializer): Future[Seq[TufKeyPair]] = {
+    // using circe since there is a decoder for it in the lib
+    import io.circe.{ parser => CirceParser }
+
+    for {
+      result <- request(s"root/${repoId}/keys/targets/pairs").execResult(apiExec)
+      byteString <- result.body.consumeData
+    } yield {
+      val parsed = CirceParser.parse(byteString.utf8String) match {
+        case Left(t) => throw t
+        case Right(json) => json
+      }
+
+      val vector = parsed.asArray.getOrElse(throw new Exception("Vector expected"))
+      vector.map { json =>
+        TufCodecs.tufKeyPairDecoder.decodeJson(json) match {
+          case Left(t) => throw t
+          case Right(keyPair) => keyPair
+        }
+      }
+    }
+  }
+
 }
