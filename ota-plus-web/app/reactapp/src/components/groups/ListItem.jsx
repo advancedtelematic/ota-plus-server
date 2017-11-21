@@ -36,14 +36,6 @@ class ListItem extends Component {
                         selectGroup({type: 'real', name: group.groupName, id: group.id});
                     }}>
                     <div className="actions">
-                        <ul>
-                            <li onClick={null} title="Rename group" onClick={() => {
-                                showRenameGroupModal(group.id);
-                            }}>
-                                <img src="/assets/img/icons/edit_white.png" alt="" />
-                                <div>Rename</div>
-                            </li>
-                        </ul>
                     </div>
                     <div className="icon"></div>
                     <div className="desc">
