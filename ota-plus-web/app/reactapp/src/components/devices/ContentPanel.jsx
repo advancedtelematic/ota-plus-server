@@ -7,21 +7,24 @@ import DeviceItem from './Item';
 import ContentPanelHeader from './ContentPanelHeader';
 import { Loader } from '../../partials';
 import { InfiniteScroll } from '../../utils';
+import GroupNameHeader from '../groups/GroupNameHeader';
 
 @observer
-class ContentPanel extends Component {
+export default class ContentPanel extends Component {
     @observable boxWidth = 350;
 
     constructor(props) {
         super(props);
         this.goToDetails = this.goToDetails.bind(this);
     }
+
     goToDetails(deviceId, e) {
         if(e) e.preventDefault();
         this.context.router.push(`/device/${deviceId}`);
     }
+
     render() {
-        const { devicesStore, groupsStore, showRenameModal, changeSort, changeFilter } = this.props;
+        const {devicesStore, groupsStore, showRenameModal, changeSort, changeFilter } = this.props;
         return (
             <div className="content-panel">
                 <ContentPanelHeader 
@@ -29,6 +32,10 @@ class ContentPanel extends Component {
                     changeSort={changeSort}
                     devicesFilter={devicesStore.devicesFilter}
                     changeFilter={changeFilter}
+                />
+                <GroupNameHeader
+                    groupsStore={groupsStore}
+                    devicesStore={devicesStore}
                 />
                 <div className="wrapper">
                     <InfiniteScroll
@@ -104,4 +111,3 @@ ContentPanel.propTypes = {
     changeFilter: PropTypes.func.isRequired
 }
 
-export default ContentPanel;

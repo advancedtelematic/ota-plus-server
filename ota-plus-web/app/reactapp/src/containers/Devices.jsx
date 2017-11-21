@@ -116,6 +116,7 @@ class Devices extends Component {
                                 <DevicesContentPanel 
                                     devicesStore={devicesStore}
                                     groupsStore={groupsStore}
+                                    showRenameGroupModal={this.showRenameGroupModal}
                                     showRenameModal={this.showRenameModal}
                                     changeSort={this.changeSort}
                                     changeFilter={this.changeFilter}
