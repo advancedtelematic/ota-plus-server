@@ -117,8 +117,8 @@ export default class HardwareStore {
             _.each(data, (value, property) => {
                 pairs[property] = value;
                 pairs['name'] = data.description ? this._capitalize(data.description) : this._capitalize(data.class);
-                if(_.isObject(value)) {
-                    that._prepareHardware(data[property]);
+                if(property === 'children') {
+                    that._prepareHardware(data.children);
                 }
             });
             that.hardware.push(pairs);
