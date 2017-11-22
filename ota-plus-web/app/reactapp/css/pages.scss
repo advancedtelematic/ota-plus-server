@@ -1247,6 +1247,16 @@
             }
 
             .common-box {
+
+                &:hover {
+                    .actions {
+                        margin-left: -60px;
+                    }
+                    .desc {
+                        width: 62%;
+                    }
+                }
+
                 .device-status {
                     position: relative;
                     top: -5px;
@@ -1257,28 +1267,6 @@
                     background-image: url('/assets/img/icons/black/devices.png');
                     background-size: 45px 45px;
                     background-position: center;
-                }
-
-                .actions {
-                    &:hover {
-                        width: 90px;
-
-                        ul {
-                            li {
-                                & > div {
-                                    font-size: 11px;
-                                    display: inline-block;
-                                    vertical-align: sub;
-                                    opacity: 1;
-                                }
-                            }
-                        }
-
-                        & ~ .desc {
-                            width: 45%;
-                            @include transition;
-                        }
-                    }
                 }
             }
         }
@@ -1292,6 +1280,54 @@
             background-image: url('/assets/img/icons/black/devices.png');
             background-size: 45px 45px;
             background-position: center;
+        }
+
+        .text {
+            .title {
+                input {
+                    background-color: rgba(0,0,0,0);
+                    border: none;
+                    outline: none;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    color: #fff;
+                    appearance: none;
+                    transition: all 0.3s ease;
+                    padding: 10px 65px 10px 10px;
+                    text-overflow: ellipsis;
+                    
+                    &:focus {
+                        outline: auto;
+                        background-color: rgba(0,0,0,0.2);
+                    }                    
+                }
+                .icons {
+                    position: relative;
+                    display: inline-block;
+                    left: -25px;
+                    z-index: 10;
+                    i {
+                        margin-right: 5px;
+                    }
+                }
+                i.fa.fa-pencil {
+                    opacity: 0;
+                }
+                i.fa {
+                    transition: opacity 0.3s ease;
+                    position: relative;
+                    color: #fff;
+                    left: -30px;
+                }
+                &:hover {
+                    i.fa {
+                        opacity: 1;
+                    }
+                    input {
+                        background-color: rgba(255,255,255,.2);
+                    }
+                }
+            }
         }
 
         .dates {
@@ -1410,7 +1446,10 @@
                         }
 
                         .desc {
-                            width: 85%;
+                            width: 70%;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            overflow: hidden;
                         }
                         .icons {
                             position: absolute;
@@ -2888,6 +2927,54 @@
     .page-heading {
         .icon {
             background-image: url(/assets/img/icons/black/campaigns.png);
+        }
+
+        .text {
+            .title {
+                input {
+                    background-color: rgba(0,0,0,0);
+                    border: none;
+                    outline: none;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    color: #fff;
+                    appearance: none;
+                    transition: all 0.3s ease;
+                    padding: 10px 65px 10px 10px;
+                    text-overflow: ellipsis;
+                    
+                    &:focus {
+                        outline: auto;
+                        background-color: rgba(0,0,0,0.2);
+                    }                    
+                }
+                .icons {
+                    position: relative;
+                    display: inline-block;
+                    left: -25px;
+                    z-index: 10;
+                    i {
+                        margin-right: 5px;
+                    }
+                }
+                i.fa.fa-pencil {
+                    opacity: 0;
+                }
+                i.fa {
+                    transition: opacity 0.3s ease;
+                    position: relative;
+                    color: #fff;
+                    left: -30px;
+                }
+                &:hover {
+                    i.fa {
+                        opacity: 1;
+                    }
+                    input {
+                        background-color: rgba(255,255,255,.2);
+                    }
+                }
+            }
         }
     }
 

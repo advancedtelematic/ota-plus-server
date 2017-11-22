@@ -1,16 +1,79 @@
 import React, { Component, PropTypes } from 'react';
 import { browserHistory } from 'react-router';
 import { observer } from 'mobx-react';
+import { observable } from 'mobx';
+import _ from 'underscore';
 import { Header as BaseHeader, Loader } from '../../partials';
-import { FadeAnimation } from '../../utils';
+import { FadeAnimation, AsyncStatusCallbackHandler } from '../../utils';
 
 @observer
 class Header extends Component {
+    @observable renameDisabled = true;
+    @observable oldDeviceName = '';
+    @observable newDeviceName = '';
+
     constructor(props) {
         super(props);
+        this.enableDeviceRename = this.enableDeviceRename.bind(this);
+        this.cancelDeviceRename = this.cancelDeviceRename.bind(this);
+        this.renameDevice = this.renameDevice.bind(this);
+        this.focusTextInput = this.focusTextInput.bind(this);
+        this.userTypesName = this.userTypesName.bind(this);
+        this.keyPressed = this.keyPressed.bind(this);
+        this.renameHandler = new AsyncStatusCallbackHandler(props.devicesStore, 'devicesRenameAsync', this.handleResponse.bind(this));
+    }
+    componentWillReceiveProps(nextProps) {
+        const { device } = nextProps.devicesStore;
+        if(!_.isEmpty(device)) {
+            this.renameDisabled = true;
+            this.oldDeviceName = device.deviceName;
+            this.newDeviceName = device.deviceName;
+        }
+    }
+    componentWillUnmount() {
+        this.renameHandler();
     }
     backButtonAction() {
         window.history.go(-1);
+    }
+    enableDeviceRename() {
+        this.renameDisabled = false;
+        this.focusTextInput();
+    }
+    cancelDeviceRename() {
+        const { device } = this.props.devicesStore;
+        this.renameDisabled = true; 
+        this.newDeviceName = this.oldDeviceName;
+        this.focusTextInput();
+    }
+    userTypesName(e) {
+        this.newDeviceName = e.target.value;
+    }
+    keyPressed(e) {
+        if(e.key === 'Enter') {
+            this.renameDevice();
+        }
+    }
+    renameDevice() {
+        const { device } = this.props.devicesStore;
+        this.props.devicesStore.renameDevice(device.uuid, {
+            deviceId: this.newDeviceName,
+            deviceName: this.newDeviceName,
+            deviceType: "Other"
+        });
+    }
+    handleResponse() {
+        this.renameDisabled = true;
+        this.oldDeviceName = this.newDeviceName;
+        this.focusTextInput();
+    }
+    focusTextInput() {
+        if (this.renameDisabled) {
+            this.deviceNameInput.setAttribute('disabled','true');
+        } else {
+            this.deviceNameInput.removeAttribute('disabled');
+            this.deviceNameInput.focus();
+        }
     }
     render() {
         const { devicesStore, showQueueModal, queueButtonRef } = this.props;
@@ -38,7 +101,22 @@ class Header extends Component {
                     <FadeAnimation>
                         {!devicesStore.devicesOneFetchAsync.isFetching ?
                             <span id="device-name">
-                                {device.deviceName}
+                                <input type="text"
+                                   ref={(input) => {this.deviceNameInput = input}}
+                                   size={this.newDeviceName.length + 5}
+                                   maxLength={100}
+                                   disabled
+                                   onKeyPress={this.keyPressed}
+                                   value={this.newDeviceName} onChange={this.userTypesName} />
+
+                                {this.renameDisabled ?
+                                    <i className="fa fa-pencil" aria-hidden="true" onClick={this.enableDeviceRename} />
+                                :
+                                    <div className="icons">
+                                        <i className="fa fa-check-square" aria-hidden="true" onClick={this.renameDevice} />
+                                        <i className="fa fa-window-close" aria-hidden="true" onClick={this.cancelDeviceRename} />
+                                    </div>
+                                }
                             </span>
                         :
                             null
