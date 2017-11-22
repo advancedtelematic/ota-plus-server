@@ -961,6 +961,8 @@ input {
                         border-bottom: 1px solid #ddd;
                         position: relative;
                         @include transition;
+                        display: flex;
+                        align-items: center;
 
                         .actions {
                             background: #4B5151;
