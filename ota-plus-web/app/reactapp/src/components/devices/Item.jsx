@@ -63,15 +63,6 @@ class Item extends Component {
             connectDragSource(
                 <div className="common-box" style={{width, opacity}} onClick={goToDetails.bind(this, device.uuid)} id={"link-devicedetails-" + device.uuid}>
                     <div className="actions">
-                        <ul>
-                            <li title="Rename device" id={"rename-device-" + device.uuid} onClick={(e) => {
-                                e.stopPropagation();
-                                showRenameModal(device.uuid)
-                            }}>
-                                <img src="/assets/img/icons/edit_white.png" alt="" />
-                                <div>Rename</div>
-                            </li>
-                        </ul>
                     </div>
                     <div className="icon">
                         <div className={"device-status device-status-" + device.deviceStatus} title={deviceStatus}></div>
