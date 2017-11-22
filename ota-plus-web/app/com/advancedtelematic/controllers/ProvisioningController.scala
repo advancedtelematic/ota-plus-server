@@ -12,12 +12,14 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import com.advancedtelematic.api._
 import com.advancedtelematic.auth.{ApiAuthAction, AuthenticatedRequest}
+import com.advancedtelematic.libtuf.data.TufDataType.{EdKeyType, EdTufKeyPair, RSATufKeyPair, RsaKeyType, TufKeyPair}
 import org.genivi.sota.data.Uuid
 import play.api.Configuration
 import play.api.http.{HeaderNames, HttpEntity}
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.WSClient
 import play.api.mvc._
+
 import scala.async.Async.{async, await}
 import scala.concurrent.ExecutionContext
 
@@ -119,11 +121,13 @@ class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient
       writeZipEntry("root.json", rootJsonData.toArray)
 
       // can't use a foreach here because of await
-      if(repoId.isDefined) {
+      if (repoId.isDefined) {
         val keyPairs = await(keyServerApi.secretTargetKeys(repoId.get))
+
         keyPairs.indices.zip(keyPairs).foreach { case (i, pair) =>
-          writeZipEntry(s"targets${numberSuffix(i)}.pub", pair.pubkey.keyval.getEncoded)
-          writeZipEntry(s"targets${numberSuffix(i)}.sec", pair.pubkey.keyval.getEncoded)
+          val (pub, priv) = encode(pair)
+          writeZipEntry(s"targets${numberSuffix(i)}.pub", pub.spaces2.getBytes)
+          writeZipEntry(s"targets${numberSuffix(i)}.sec", priv.spaces2.getBytes)
         }
       }
 
@@ -131,11 +135,15 @@ class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient
                                                                          request.accessToken))
       val treehubData = await(treehubResult.body.consumeData(materializer))
       writeZipEntry("treehub.json", treehubData.toArray)
-
       zip.close()
 
       Ok.sendFile(f, onClose = () => { f.delete() })
     }
+  }
+
+  private def encode(pair: TufKeyPair) = pair match {
+    case RSATufKeyPair(pubkey, privkey) => (RsaKeyType.crypto.encode(pubkey), RsaKeyType.crypto.encode(privkey))
+    case EdTufKeyPair(pubkey, privkey) => (EdKeyType.crypto.encode(pubkey), EdKeyType.crypto.encode(privkey))
   }
 
 }
