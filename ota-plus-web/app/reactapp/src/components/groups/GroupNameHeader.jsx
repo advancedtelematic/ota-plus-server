@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { translate } from 'react-i18next';
+import { FadeAnimation } from '../../utils';
 
 @observer
 class GroupNameHeader extends Component {
@@ -68,6 +69,7 @@ class GroupNameHeader extends Component {
                                onKeyPress={(e) => {
                                    this.renameGroup(groupsStore,e)
                                }}
+                               className={groupsStore.selectedGroup.type === 'artificial' ? 'artificial' : null}
                                value={this.newTitle} onChange={(e) => {this.newTitle = e.target.value}}/>
 
                         {this.renameDisabled
@@ -90,9 +92,18 @@ class GroupNameHeader extends Component {
                                 }} />
                             </div>
                         }
-
                     </h3>
-                    <span>{t('common.deviceWithCount', {count: devicesStore.devicesTotalCount})}</span>
+                    <FadeAnimation>
+                        {devicesStore.devicesTotalCount === null && devicesStore.devicesFetchAsync.isFetching ?
+                            <span>
+                                <i className="fa fa-square-o fa-spin"></i> devices counting
+                            </span>
+                        :
+                            <span>
+                                {t('common.deviceWithCount', {count: devicesStore.devicesTotalCount})}
+                            </span>
+                        }
+                    </FadeAnimation>
                 </div>
             </div>
         )
