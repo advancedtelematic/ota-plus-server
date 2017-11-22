@@ -1123,7 +1123,10 @@
             overflow-y: hidden;
 
             .selected-group-title {
-                padding: 40px 25px;
+                height: 150px;
+                display: flex;
+                align-items: center;
+                padding: 0 25px;
                 overflow: hidden;
                 background-color: rgba(150, 222, 210,0.15);
 
@@ -1198,14 +1201,14 @@
                         i.fa {
                             opacity: 1;
                         }
-                        input {
+                        input:not(.artificial) {
                             background-color: rgba(0,0,0,0.2);
                         }
                     }
                 }
 
                 span {
-                    padding-left: 10px;
+                    padding-left: 5px;
                     display: block;
                     color: #fff;
                     font-size: 11px;
@@ -1224,7 +1227,7 @@
             }
 
             .wrapper {
-                height: calc(100% - 40px);
+                height: calc(100% - 190px);
                 padding: 10px;
                 overflow-y: scroll;
 
