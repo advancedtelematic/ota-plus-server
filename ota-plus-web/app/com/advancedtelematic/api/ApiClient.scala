@@ -313,8 +313,10 @@ class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
 class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
   private val request = ApiRequest.base(repoApiUri + "/api/v1/")
 
-  def rootJsonResult: Future[Result] =
-    request("user_repo/root.json").execResult(apiExec)
+  def rootJsonResult(namespace: Namespace)(implicit ec: ExecutionContext): Future[Result] =
+    request("user_repo/root.json")
+      .withNamespace(Some(namespace))
+      .execResult(apiExec)
 }
 
 class KeyServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
