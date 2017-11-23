@@ -21,7 +21,8 @@ import play.api.libs.ws.WSClient
 import play.api.mvc._
 
 import scala.async.Async.{async, await}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Success
 
 @Singleton
 class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient, val authAction: ApiAuthAction,
@@ -78,8 +79,8 @@ class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient
     }
 
   def downloadCredentials(uuid: Uuid): Action[AnyContent] = authAction.async { implicit request =>
-    cryptApi.downloadCredentials(accountName(request), uuid.toJava).map { source =>
-        Ok.sendEntity(HttpEntity.Streamed(source, None, Some("application/x-pkcs12")))
+    cryptApi.downloadCredentials(accountName(request), uuid.toJava).map { entity =>
+        Ok.sendEntity(HttpEntity.Streamed(entity.dataStream, None, Some("application/x-pkcs12")))
           .withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=credentials.p12")
     }
   }
@@ -88,54 +89,70 @@ class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient
     if (i > 0) i.toString else ""
 
 
-  def downloadCredentialArchive(keyUUID: UUID): Action[AnyContent] = authAction.async { implicit request =>
+  private def writeZip(request: AuthenticatedRequest[AnyContent], keyUUID: UUID, zip: ZipOutputStream): Future[Unit] = {
+    import io.circe.syntax._
+    import com.advancedtelematic.libtuf.data.TufCodecs.{tufKeyEncoder, tufPrivateKeyEncoder}
+
     implicit val materializer: ActorMaterializer = ActorMaterializer()
+
+    def writeZipEntry(name: String, data: Array[Byte]): Unit = {
+      zip.putNextEntry(new ZipEntry(name))
+      zip.write(data)
+      zip.closeEntry()
+    }
+
+    writeZipEntry("tufrepo.url", repoApiUri.getBytes)
+
     async {
-      val d = Files.createTempDirectory("ota-plus")
-      val f = d.resolve("credentials.zip").toFile
-      val zip = new ZipOutputStream(new FileOutputStream(f))
+      val accountInfo = await(cryptApi.getAccountInfo(accountName(request))).getOrElse(
+        throw new Exception("Couldn't get account info"))
 
-      def writeZipEntry(name: String, data: Array[Byte]): Unit = {
-        zip.putNextEntry(new ZipEntry(name))
-        zip.write(data)
-        zip.closeEntry()
-      }
+      writeZipEntry("autoprov.url", s"https://${accountInfo.hostName}:$gatewayPort".getBytes)
 
-      writeZipEntry("tufrepo.url", repoApiUri.getBytes)
-
-      val accountInfoO = await(cryptApi.getAccountInfo(accountName(request)))
-      accountInfoO.foreach { accountInfo =>
-        writeZipEntry("autoprov.url", s"https://${accountInfo.hostName}:$gatewayPort".getBytes)
-      }
-
-      val credentials = await(cryptApi.downloadCredentialsEntity(accountName(request), keyUUID))
+      val credentials = await(cryptApi.downloadCredentials(accountName(request), keyUUID))
       val data = await(credentials.consumeData(materializer))
       writeZipEntry("autoprov_credentials.p12", data.toArray)
 
-      val rootJsonResult = await(repoServerApi.rootJsonResult)
-      val repoId = rootJsonResult.header.headers.get("x-ats-tuf-repo-id")
-      val rootJsonData = await(rootJsonResult.body.consumeData(materializer))
-      writeZipEntry("root.json", rootJsonData.toArray)
+      val rootJsonResult = await(repoServerApi.rootJsonResult(request.namespace))
+      val repoId = rootJsonResult.header.headers.getOrElse("x-ats-tuf-repo-id",
+        throw RemoteApiError(rootJsonResult, s"error downloading root.json: missing repo id header"))
 
-      // can't use a foreach here because of await
-      if (repoId.isDefined) {
-        import io.circe.syntax._
-        import com.advancedtelematic.libtuf.data.TufCodecs.{tufKeyEncoder, tufPrivateKeyEncoder}
+      val rootJsonBody = await(rootJsonResult.body.consumeData(materializer))
 
-        val keyPairs = await(keyServerApi.targetKeys(repoId.get))
-        keyPairs.indices.zip(keyPairs).foreach { case (i, pair) =>
-          writeZipEntry(s"targets${numberSuffix(i)}.pub", pair.pubkey.asJson.spaces2.getBytes)
-          writeZipEntry(s"targets${numberSuffix(i)}.sec", pair.privkey.asJson.spaces2.getBytes)
-        }
+      if (rootJsonResult.header.status >= 400) {
+        throw RemoteApiError(rootJsonResult, s"error downloading root.json: ${rootJsonBody.toString}")
+      }
+
+      writeZipEntry("root.json", rootJsonBody.toArray)
+
+      val keyPairs = await(keyServerApi.targetKeys(repoId))
+      keyPairs.indices.zip(keyPairs).foreach { case (i, pair) =>
+        writeZipEntry(s"targets${numberSuffix(i)}.pub", pair.pubkey.asJson.spaces2.getBytes)
+        writeZipEntry(s"targets${numberSuffix(i)}.sec", pair.privkey.asJson.spaces2.getBytes)
       }
 
       val treehubResult = await(getFeatureConfig(FeatureName("treehub"), request.idToken.claims.userId,
-                                                                         request.accessToken))
+        request.accessToken))
       val treehubData = await(treehubResult.body.consumeData(materializer))
       writeZipEntry("treehub.json", treehubData.toArray)
-      zip.close()
+    }
+  }
 
+  def downloadCredentialArchive(keyUUID: UUID): Action[AnyContent] = authAction.async { implicit request =>
+    val d = Files.createTempDirectory("ota-plus")
+    val f = d.resolve("credentials.zip").toFile
+
+    val zip = new ZipOutputStream(new FileOutputStream(f))
+    writeZip(request, keyUUID, zip).map { _ =>
+      zip.close()
       Ok.sendFile(f, onClose = () => { f.delete() })
+    }.recover {
+      case e: RemoteApiError =>
+        f.delete()
+        InternalServerError("remote api error")
+      case _ =>
+        f.delete()
+        InternalServerError
     }
   }
 
