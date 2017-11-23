@@ -211,6 +211,30 @@ body {
             }
         }
 
+        .dropdown {
+            .links {
+                a {
+                    &:hover {
+                        color: $color-orange;
+                    }
+                }
+            }
+        }
+
+        #page-devices {
+            .groups-panel {
+                .wrapper-groups {
+                    button.selected, .group-btn.selected {
+                        border-left-color: $color-orange;
+                    }
+                }
+            }
+        }
+
+        #page-device .content .guide-install-device .inner .step.active .body .actions a.btn-main {
+            background-color: $color-orange !important;
+        }
+
         .progress-blue {
             .progress-bar {
                 background: $color-orange!important;
@@ -230,6 +254,12 @@ body {
         .btn-small {
             button {
                 background: $color-orange!important;
+            }
+        }
+
+        .link-cancel {
+            &:hover {
+                color: $color-orange!important;
             }
         }
 

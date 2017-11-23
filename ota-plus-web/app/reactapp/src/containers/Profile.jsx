@@ -70,6 +70,8 @@ class Profile extends Component {
                                         name="name"
                                         floatingLabelText="Display name"
                                         className="input-wrapper"
+                                        underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
+                                        floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
                                         value={userStore.user.fullName}
                                         updateImmediately
                                         required
@@ -79,6 +81,8 @@ class Profile extends Component {
                                         name="login"
                                         floatingLabelText="Login"
                                         className="input-wrapper"
+                                        underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
+                                        floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
                                         value={userStore.user.email}
                                         updateImmediately
                                         disabled={true}
