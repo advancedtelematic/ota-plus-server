@@ -192,26 +192,15 @@ export default class PackagesStore {
     }
 
     fetchPackages(filter = this.packagesFilter) {
-        let CancelToken = axios.CancelToken;
-        let source = CancelToken.source();
         let that = this;
-        let secondsPassed = 0;
-        let tmpIntervalId = setInterval(function(){
-            secondsPassed++;
-            if(secondsPassed === 5 && !that.initialPackages.length) {
-                clearInterval(tmpIntervalId);
-                source.cancel();
-            }
-        }, 1000);
         this.packagesFilter = filter;
         resetAsync(this.packagesFetchAsync, true);
-        return axios.get(API_PACKAGES + '?regex=' + (filter ? filter : ''), {cancelToken: source.token})
+        return axios.get(API_PACKAGES + '?regex=' + (filter ? filter : ''), { timeout: 5000 })
             .then(function(response) {
                 this.initialPackages = response.data;
                 _.each(response.data, (item, index) => {
                     this.packages.push(item);
                 });
-
                 switch (that.page) {
                     case 'device':                        
                         that._prepareDevicePackages();
@@ -220,7 +209,6 @@ export default class PackagesStore {
                         that._preparePackages();
                         break;
                 }
-
                 this.packagesFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {

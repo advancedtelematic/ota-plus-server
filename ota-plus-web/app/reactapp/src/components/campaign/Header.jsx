@@ -9,6 +9,7 @@ class Header extends Component {
     @observable renameDisabled = true;
     @observable oldCampaignName = '';
     @observable newCampaignName = '';
+    @observable newCampaignNameLength = 0;
 
     constructor(props) {
         super(props);
@@ -24,6 +25,7 @@ class Header extends Component {
         if(!_.isEmpty(nextProps.title)) {
             this.oldCampaignName = nextProps.title;
             this.newCampaignName = nextProps.title;
+            this.newCampaignNameLength = nextProps.title.length;
         }
     }
     componentWillUnmount() {
@@ -36,10 +38,12 @@ class Header extends Component {
     cancelCampaignRename() {
         this.renameDisabled = true; 
         this.newCampaignName = this.oldCampaignName;
+        this.newCampaignNameLength = this.oldCampaignName.length;
         this.focusTextInput();
     }
     userTypesName(e) {
         this.newCampaignName = e.target.value;
+        this.newCampaignNameLength = e.target.value.length;
     }
     keyPressed(e) {
         if(e.key === 'Enter') {
@@ -91,7 +95,11 @@ class Header extends Component {
                                 <i className="fa fa-pencil" aria-hidden="true" onClick={this.enableCampaignRename} />
                             :
                                 <div className="icons">
-                                    <i className="fa fa-check-square" aria-hidden="true" onClick={this.renameCampaign} />
+                                    {this.newCampaignNameLength ?
+                                        <i className="fa fa-check-square" aria-hidden="true" onClick={this.renameCampaign} />
+                                    :
+                                        null
+                                    }
                                     <i className="fa fa-window-close" aria-hidden="true" onClick={this.cancelCampaignRename} />
                                 </div>
                             }
