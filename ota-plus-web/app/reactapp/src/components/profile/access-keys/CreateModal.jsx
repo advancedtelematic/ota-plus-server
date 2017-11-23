@@ -50,6 +50,8 @@ class CreateModal extends Component {
                             floatingLabelText="Description"
                             className="input-wrapper"
                             id="add-new-key-description"
+                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
+                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
                             disabled={provisioningStore.provisioningKeyCreateAsync.isFetching}
                             updateImmediately
                             required
