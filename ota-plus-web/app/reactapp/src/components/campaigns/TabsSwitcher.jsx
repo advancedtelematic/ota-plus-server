@@ -8,7 +8,7 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 @observer
 class TabsSwitcher extends Component {
     @observable activeTabId = 0;
-    @observable bottomBorderColor = '#9ce2d8';
+    @observable bottomBorderColor = !window.atsGarageTheme ? '#fa9872' : '#9ce2d8';
 
     constructor(props) {
         super(props);
