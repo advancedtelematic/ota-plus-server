@@ -4,7 +4,7 @@ scalafmtConfig in ThisBuild := Some(file(".scalafmt"))
 
 def otaPlusProject(name: String): Project = Project(name, file(name))
     .settings(organization := "com.advancedtelematic")
-    .settings(scalaVersion := "2.11.8")
+    .settings(scalaVersion := "2.11.11")
     .settings(scalacOptions in Compile ++= Seq(
       "-encoding", "UTF-8",
       "-target:jvm-1.7",
