@@ -1,4 +1,4 @@
-#page-device-registry {
+    #page-device-registry {
     @include fullHeight;
     background: #fff;
 
@@ -1229,7 +1229,7 @@
             .wrapper {
                 height: calc(100% - 190px);
                 padding: 10px;
-                overflow-y: scroll;
+                overflow-y: auto;
 
                 & > div {
                     width: 100%;
@@ -1284,6 +1284,11 @@
 
         .text {
             .title {
+                .device-name {
+                    position: relative;
+                    display: block!important;
+                }
+
                 input {
                     background-color: rgba(0,0,0,0);
                     border: none;
@@ -1302,9 +1307,10 @@
                     }                    
                 }
                 .icons {
-                    position: relative;
-                    display: inline-block;
-                    left: -25px;
+                    position: fabsolute;
+                    z-index: 10;
+                    right: -25px;
+                    top: 10px;
                     z-index: 10;
                     i {
                         margin-right: 5px;
@@ -2931,6 +2937,8 @@
 
         .text {
             .title {
+                position: relative;
+
                 input {
                     background-color: rgba(0,0,0,0);
                     border: none;
@@ -2949,10 +2957,10 @@
                     }                    
                 }
                 .icons {
-                    position: relative;
-                    display: inline-block;
-                    left: -25px;
+                    position: absolute;
                     z-index: 10;
+                    right: -25px;
+                    top: 10px;
                     i {
                         margin-right: 5px;
                     }

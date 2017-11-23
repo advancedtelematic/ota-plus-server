@@ -11,6 +11,7 @@ class Header extends Component {
     @observable renameDisabled = true;
     @observable oldDeviceName = '';
     @observable newDeviceName = '';
+    @observable newDeviceNameLength = 0;
 
     constructor(props) {
         super(props);
@@ -28,6 +29,7 @@ class Header extends Component {
             this.renameDisabled = true;
             this.oldDeviceName = device.deviceName;
             this.newDeviceName = device.deviceName;
+            this.newDeviceNameLength = device.deviceName.length;
         }
     }
     componentWillUnmount() {
@@ -44,10 +46,12 @@ class Header extends Component {
         const { device } = this.props.devicesStore;
         this.renameDisabled = true; 
         this.newDeviceName = this.oldDeviceName;
+        this.newDeviceNameLength = this.oldDeviceName.length;
         this.focusTextInput();
     }
     userTypesName(e) {
         this.newDeviceName = e.target.value;
+        this.newDeviceNameLength = e.target.value.length;
     }
     keyPressed(e) {
         if(e.key === 'Enter') {
@@ -100,7 +104,7 @@ class Header extends Component {
                 title={
                     <FadeAnimation>
                         {!devicesStore.devicesOneFetchAsync.isFetching ?
-                            <span id="device-name">
+                            <span id="device-name" className="device-name">
                                 <input type="text"
                                    ref={(input) => {this.deviceNameInput = input}}
                                    size={this.newDeviceName.length + 5}
@@ -113,7 +117,11 @@ class Header extends Component {
                                     <i className="fa fa-pencil" aria-hidden="true" onClick={this.enableDeviceRename} />
                                 :
                                     <div className="icons">
-                                        <i className="fa fa-check-square" aria-hidden="true" onClick={this.renameDevice} />
+                                        {this.newDeviceNameLength ?
+                                            <i className="fa fa-check-square" aria-hidden="true" onClick={this.renameDevice} />
+                                        :
+                                            null
+                                        }
                                         <i className="fa fa-window-close" aria-hidden="true" onClick={this.cancelDeviceRename} />
                                     </div>
                                 }
