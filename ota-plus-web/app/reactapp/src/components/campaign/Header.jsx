@@ -86,8 +86,6 @@ class Header extends Component {
                         <div className="title">
                              <input type="text"
                                ref={(input) => {this.campaignNameInput = input}}
-                               size={this.newCampaignName.length + 5}
-                               maxLength={100}
                                disabled
                                onKeyPress={this.keyPressed}
                                value={this.newCampaignName} onChange={this.userTypesName} />
