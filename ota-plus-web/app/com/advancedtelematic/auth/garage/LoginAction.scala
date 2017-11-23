@@ -1,12 +1,13 @@
 package com.advancedtelematic.auth.garage
 
 import javax.inject.Inject
-
-import com.advancedtelematic.auth.OAuthConfig
-import play.api.Configuration
-import play.api.mvc.{AnyContent, BodyParsers, Request, Result, Results}
+import com.advancedtelematic.auth._
+import play.api.{Configuration, Logger}
+import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
+
+
 
 class LoginAction @Inject()(conf: Configuration,
                             val parser: BodyParsers.Default,
@@ -19,7 +20,6 @@ class LoginAction @Inject()(conf: Configuration,
   override def apply(request: Request[AnyContent]): Future[Result] = {
     Future.successful(Results.Ok(views.html.login(oauthConfig, auth0Config, downtimeConfig)))
   }
-
 }
 
 import java.time.{Instant, ZoneId}

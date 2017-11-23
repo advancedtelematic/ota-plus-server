@@ -8,6 +8,7 @@ import play.api.{Configuration, Logger}
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NoStackTrace
 import scala.util.{Failure, Success, Try}
 
 final case class AuthenticatedRequest[A](idToken: IdToken,
@@ -17,7 +18,8 @@ final case class AuthenticatedRequest[A](idToken: IdToken,
     extends WrappedRequest[A](request)
 
 object AuthenticatedRequest {
-  final case class MissingSessionKey(key: String) extends Throwable(s"Key '$key' not found in session")
+  final case class MissingSessionKey(key: String)
+    extends Throwable(s"Key '$key' not found in session") with NoStackTrace
 
   private[this] def readValue(session: Session, key: String): Try[String] = {
     session.get(key) match {
@@ -31,6 +33,7 @@ object AuthenticatedRequest {
 
   def fromRequest[A](request: Request[A]): Try[AuthenticatedRequest[A]] = {
     val session = request.session
+
     for {
       idToken     <- readValue(session, "id_token").flatMap(IdToken.fromTokenValue)
       accessToken <- readValue(session, "access_token").flatMap(SessionCodecs.parseAccessToken)

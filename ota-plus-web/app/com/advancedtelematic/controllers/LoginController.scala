@@ -5,11 +5,11 @@ import javax.inject.{Inject, Singleton}
 
 import akka.Done
 import akka.actor.ActorSystem
+import com.advancedtelematic.PlayMessageBusPublisher
 import com.advancedtelematic.api.UnexpectedResponse
-import com.advancedtelematic.auth.{AccessToken, AuthPlusConfig, IdToken, LoginAction, OAuthConfig, SessionCodecs,
-                                                                                TokenExchange, Tokens, UiAuthAction}
+import com.advancedtelematic.auth.{AccessToken, AuthPlusConfig, IdToken, LoginAction,
+  OAuthConfig, SessionCodecs, TokenExchange, Tokens, UiAuthAction}
 import com.advancedtelematic.auth.oidc.NamespaceProvider
-import com.advancedtelematic.libats.messaging.{MessageBus, MessageBusPublisher}
 import com.advancedtelematic.libats.messaging_datatype.MessageLike
 import play.api.{Configuration, Logger}
 import play.api.http.{HeaderNames, MimeTypes}
@@ -57,6 +57,7 @@ class LoginController @Inject()(components: ControllerComponents,
   val accountActivated: Action[AnyContent] = Action {
     Ok(views.html.activated())
   }
+
   def logout: Action[AnyContent] = authAction { implicit req =>
     ws.url(s"${authPlusConfig.uri}/revoke")
       .withAuth(authPlusConfig.clientId, authPlusConfig.clientSecret, WSAuthScheme.BASIC)
@@ -80,6 +81,7 @@ class LoginController @Inject()(components: ControllerComponents,
   */
 @Singleton
 class OAuthOidcController @Inject()(
+    messageBus: PlayMessageBusPublisher,
     conf: Configuration,
     ws: WSClient,
     tokenExchange: TokenExchange,
@@ -97,14 +99,6 @@ class OAuthOidcController @Inject()(
   lazy val config = system.settings.config
 
   private[this] val RedirectToLogin = Redirect(com.advancedtelematic.controllers.routes.LoginController.login())
-
-  lazy val messageBus =
-    MessageBus.publisher(system, config) match {
-      case Right(v) => v
-      case Left(error) =>
-        log.error("Could not initialize message bus publisher", error)
-        MessageBusPublisher.ignore
-    }
 
   val authorizationError: Action[AnyContent] = Action { implicit request =>
     Unauthorized(views.html.authorizationError())
