@@ -13,7 +13,7 @@ class Loader extends PureComponent {
                 <CircularProgress
                     size={size}
                     thickness={thickness}
-                    color={window.otaPlusMode ? "#fa9872" : ""}
+                    color={window.otaPlusMode || !window.atsGarageTheme ? "#fa9872" : ""}
                 />
             </div>
         );

@@ -13,8 +13,9 @@ class VersionsStats extends Component {
     }
     render() {
         const { pack } = this.props;
+        const mainColor = !window.atsGarageTheme || window.otaPlusMode ? '#fa9872' : '#1D5E6F';
         const availableColors = [
-            '#1D5E6F',
+            mainColor,
             '#9DDDD4',
             '#D3D3D3',
             '#fff',

@@ -54,6 +54,8 @@ class CreateModal extends Component {
                             name="deviceName"
                             id="new-device-name"
                             floatingLabelText="Device name"
+                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
+                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
                             className="input-wrapper"
                             disabled={devicesStore.devicesCreateAsync.isFetching}
                             updateImmediately

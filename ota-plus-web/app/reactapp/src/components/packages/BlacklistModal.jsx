@@ -152,6 +152,8 @@ class BlacklistModal extends Component {
                                 name="comment"
                                 value={!_.isEmpty(packagesStore.blacklistedPackage) ? packagesStore.blacklistedPackage.comment : ''}
                                 floatingLabelText="Comment"
+                                underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
+                                floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
                                 className="input-wrapper"
                                 updateImmediately
                             />
@@ -180,7 +182,7 @@ class BlacklistModal extends Component {
                 </div>
                 {blacklistAction.mode === 'edit' ?
                     <div className="subactions">
-                        <a href="#" onClick={this.removeFromBlacklist}>Remove from Blacklist</a>
+                        <a href="#" style={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''} onClick={this.removeFromBlacklist}>Remove from Blacklist</a>
                     </div>
                 : 
                     null

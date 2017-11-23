@@ -136,7 +136,14 @@ class Main extends Component {
         this.featuresStore.fetchFeatures();
         this.websocketHandler.init();
 
-        if(Cookies.get('otaPlusMode') == 1) {
+        if (!this.otaPlusStore.atsGarageTheme) {
+            document.body.className += " ota-plus";
+            window.atsGarageTheme = false;
+        } else {
+            window.atsGarageTheme = true;
+        }
+
+        if (Cookies.get('otaPlusMode') == 1 ) {
             this.otaPlusStore._enableOtaPlusMode();
             document.body.className += " ota-plus";
             window.otaPlusMode = true;
@@ -151,7 +158,9 @@ class Main extends Component {
         }
         else {
             Cookies.remove('otaPlusMode');
-            document.body.classList.remove("ota-plus");
+            if (this.otaPlusStore.atsGarageTheme) {
+                document.body.classList.remove("ota-plus");
+            }
             window.otaPlusMode = false;
         }
     }
@@ -279,6 +288,7 @@ class Main extends Component {
                                 hideQueueModal={this.hideQueueModal}
                                 toggleOtaPlusMode={this.toggleOtaPlusMode}
                                 otaPlusMode={this.otaPlusStore.otaPlusMode}
+                                atsGarageTheme={this.otaPlusStore.atsGarageTheme}
                                 alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
                                 uiUserProfileMenu={this.uiUserProfileMenu}
                             />
