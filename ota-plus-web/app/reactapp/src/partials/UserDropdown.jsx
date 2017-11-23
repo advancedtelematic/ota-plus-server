@@ -27,7 +27,7 @@ class UserDropdown extends Component {
         this.props.toggleOtaPlusMode();
     }
     render() {
-        const { userStore, otaPlusMode, alphaPlusEnabled } = this.props;
+        const { userStore, otaPlusMode, alphaPlusEnabled, uiCredentialsDownload, settings } = this.props;
         const otaPlusBlock = (
             <li>
                 <span className="switch-mode-heading">OTA Plus mode:</span>
@@ -59,53 +59,87 @@ class UserDropdown extends Component {
         );
         return (
             <div className="dropdown-menu">
-                <Avatar 
-                    src={userStore.user.picture ? userStore.user.picture : "/assets/img/icons/profile.png"}
-                    className="icon-profile"
-                />
-                <div className="user-data">
-                    <div className="full-name">
-                        <span className="username">{userStore.user.fullName}</span>
-                    </div>
-                    <div className="email">
-                        <span className="email">{userStore.user.email}</span>
-                    </div>
-                </div>
-                <hr />
-                <ul className="links">
-                    <li>
-                        <Link to="/profile/edit" id="link-editprofile" onClick={this.closeDropdown}>Edit profile</Link>
-                    </li>
-                    <li>
-                          <Link to="/profile/usage" id="link-usage" onClick={this.closeDropdown}>Usage</Link>
-                    </li>
-                    <li>
-                          <Link to="/profile/billing" id="link-billing" onClick={this.closeDropdown}>Billing</Link>
-                    </li>
-                    <li>
-                          <Link to="/profile/access-keys" id="link-access-keys" onClick={this.closeDropdown}>Provisioning keys</Link>
-                    </li>
-                    <li>
-                          <a href="http://atsgarage.com/en/terms-conditions.html" target="_blank" id="terms-of-use" onClick={this.closeDropdown}>Terms of use</a>
-                    </li>
-                    {otaPlusMode ?
-                        otaPlusNewEntries
-                    :
-                        null
-                    }
-                    {alphaPlusEnabled ?                        
-                        otaPlusBlock
-                    :
-                        null
-                    }
-                    {otaPlusMode ?
-                        otaPlusSignOut
-                    :
-                        <li className="signout">
-                            <button className="btn-main btn-small" onClick={this.logout}><span>Sign out</span></button>
-                        </li>
-                    }
-                </ul>
+                {settings ? 
+                    <ul className="links">
+                        {uiCredentialsDownload === 'true' ?
+                            <li>
+                                  <Link to="/profile/access-keys" id="link-access-keys" onClick={this.closeDropdown}>Provisioning keys</Link>
+                            </li>
+                        :
+                            null
+                        }
+                        {otaPlusMode ?
+                            otaPlusNewEntries
+                        :
+                            null
+                        }
+                        {alphaPlusEnabled ?                        
+                            otaPlusBlock
+                        :
+                            null
+                        }
+                        {otaPlusMode ?
+                            otaPlusSignOut
+                        :
+                            null
+                        }
+                    </ul>
+                :
+                    <span>
+                        <Avatar 
+                            src={userStore.user.picture ? userStore.user.picture : "/assets/img/icons/profile.png"}
+                            className="icon-profile"
+                        />
+                        <div className="user-data">
+                            <div className="full-name">
+                                <span className="username">{userStore.user.fullName}</span>
+                            </div>
+                            <div className="email">
+                                <span className="email">{userStore.user.email}</span>
+                            </div>
+                        </div>
+                        <hr />
+                        <ul className="links">
+                            <li>
+                                <Link to="/profile/edit" id="link-editprofile" onClick={this.closeDropdown}>Edit profile</Link>
+                            </li>
+                            <li>
+                                  <Link to="/profile/usage" id="link-usage" onClick={this.closeDropdown}>Usage</Link>
+                            </li>
+                            <li>
+                                  <Link to="/profile/billing" id="link-billing" onClick={this.closeDropdown}>Billing</Link>
+                            </li>
+                            {uiCredentialsDownload === 'true' ?
+                                <li>
+                                      <Link to="/profile/access-keys" id="link-access-keys" onClick={this.closeDropdown}>Provisioning keys</Link>
+                                </li>
+                            :
+                                null
+                            }
+                            <li>
+                                  <a href="http://atsgarage.com/en/terms-conditions.html" target="_blank" id="terms-of-use" onClick={this.closeDropdown}>Terms of use</a>
+                            </li>
+                            {otaPlusMode ?
+                                otaPlusNewEntries
+                            :
+                                null
+                            }
+                            {alphaPlusEnabled ?                        
+                                otaPlusBlock
+                            :
+                                null
+                            }
+                            {otaPlusMode ?
+                                otaPlusSignOut
+                            :
+                                <li className="signout">
+                                    <button className="btn-main btn-small" onClick={this.logout}><span>Sign out</span></button>
+                                </li>
+                            }
+                        </ul>
+                    </span>
+                }
+                
             </div>  
         );
     }

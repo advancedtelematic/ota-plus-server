@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { observer } from 'mobx-react';
 import NavigationDropdown from './NavigationDropdown';
+import SettingsDropdown from './SettingsDropdown';
 import OtaPlusTabs from './OtaPlusTabs';
 
 @observer
@@ -10,7 +11,17 @@ class IntroNavigation extends Component {
         super(props);
     }
     render() {
-        const { userStore, devicesStore, logoLink, hideQueueModal, toggleOtaPlusMode, otaPlusMode, alphaPlusEnabled } = this.props;
+        const { 
+          userStore, 
+          devicesStore, 
+          logoLink, 
+          hideQueueModal, 
+          toggleOtaPlusMode, 
+          otaPlusMode, 
+          alphaPlusEnabled,
+          uiUserProfileMenu,
+          uiCredentialsDownload,
+        } = this.props;
         const otaPlusNavigation = (
             <OtaPlusTabs />
         );
@@ -35,17 +46,31 @@ class IntroNavigation extends Component {
                         <li className="text-link">
                             <a href="mailto:support@atsgarage.com" id="support-link">SUPPORT</a>
                         </li>
-                       {this.props.uiUserProfileMenu === "true" ?
-                           <li id="menu-login">
-                               <NavigationDropdown
-                                   userStore={userStore}
-                                   hideQueueModal={hideQueueModal}
-                                   toggleOtaPlusMode={toggleOtaPlusMode}
-                                   otaPlusMode={otaPlusMode}
-                                   alphaPlusEnabled={alphaPlusEnabled}
-                               />
-                           </li>
-                       : ''}
+                         {uiUserProfileMenu === "true" ?
+                              <li id="menu-login">
+                                  <NavigationDropdown
+                                      userStore={userStore}
+                                      hideQueueModal={hideQueueModal}
+                                      toggleOtaPlusMode={toggleOtaPlusMode}
+                                      otaPlusMode={otaPlusMode}
+                                      alphaPlusEnabled={alphaPlusEnabled}
+                                      uiCredentialsDownload={uiCredentialsDownload}
+                                  />
+                              </li>
+                          : uiCredentialsDownload === "true" ?
+                              <li id="menu-login">
+                                  <SettingsDropdown
+                                      userStore={userStore}
+                                      hideQueueModal={hideQueueModal}
+                                      toggleOtaPlusMode={toggleOtaPlusMode}
+                                      otaPlusMode={otaPlusMode}
+                                      alphaPlusEnabled={alphaPlusEnabled}
+                                      uiCredentialsDownload={uiCredentialsDownload}
+                                  />
+                              </li>
+                          :
+                              null
+                          }
                     </ul>
                 </div>
             </nav>

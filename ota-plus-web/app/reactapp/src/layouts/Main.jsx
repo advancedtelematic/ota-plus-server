@@ -50,6 +50,8 @@ class Main extends Component {
     @observable activeTabId = 0;
     @observable uiAutoFeatureActivation = document.getElementById('toggle-autoFeatureActivation').value;
     @observable uiUserProfileMenu = document.getElementById('toggle-userProfileMenu').value;
+    @observable uiCredentialsDownload = document.getElementById('toggle-credentialsDownload').value;
+    @observable prebuiltDebrpm = document.getElementById('toggle-prebuiltDebrpm').value;
 
     constructor(props) {
         super(props);
@@ -291,6 +293,7 @@ class Main extends Component {
                                 atsGarageTheme={this.otaPlusStore.atsGarageTheme}
                                 alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
                                 uiUserProfileMenu={this.uiUserProfileMenu}
+                                uiCredentialsDownload={this.uiCredentialsDownload}
                             />
                         : this.sanityCheckCompleted() ?
                                 <Navigation
@@ -303,6 +306,7 @@ class Main extends Component {
                                     alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
                                     packagesStore={this.packagesStore}
                                     uiUserProfileMenu={this.uiUserProfileMenu}
+                                    uiCredentialsDownload={this.uiCredentialsDownload}
                                 />
                             :
                                 null                        
@@ -337,6 +341,9 @@ class Main extends Component {
                         otaPlusMode={this.otaPlusStore.otaPlusMode}
                         otaPlusStore={this.otaPlusStore}
                         uiAutoFeatureActivation={this.uiAutoFeatureActivation}
+                        uiUserProfileMenu={this.uiUserProfileMenu}
+                        uiCredentialsDownload={this.uiCredentialsDownload}
+                        prebuiltDebrpm={this.prebuiltDebrpm}
                     />
                 </FadeAnimation>
                 <SizeVerify 

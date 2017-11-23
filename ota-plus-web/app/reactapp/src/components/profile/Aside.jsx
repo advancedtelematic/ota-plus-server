@@ -10,7 +10,7 @@ class Aside extends Component {
         super(props);
     }
     render() {
-        const { userStore, otaPlusStore } = this.props;
+        const { userStore, otaPlusStore, uiUserProfileMenu, uiCredentialsDownload } = this.props;
         const otaPlusNewEntries = (
             <span className="ota-plus-new-entries">
                 <li>
@@ -25,7 +25,7 @@ class Aside extends Component {
                 </li>
             </span>
         );
-        return (
+        const fullAside = (
             <aside>
                 <div className="user-details">
                     {userStore.userFetchAsync.isFetching ?
@@ -77,6 +77,93 @@ class Aside extends Component {
                     </ul>
                 </nav>
             </aside>
+        );
+        const fullAsideWithoutProvisioningKeys = (
+            <aside>
+                <div className="user-details">
+                    {userStore.userFetchAsync.isFetching ?
+                        <div className="wrapper-center">
+                            <Loader />
+                        </div>
+                    :
+                        <span>
+                            <Avatar
+                                src={userStore.user.picture ?
+                                    userStore.user.picture
+                                :
+                                    "/assets/img/icons/profile.png"
+                                }
+                                className="icon-profile"
+                                id="icon-profile-min"
+                            />
+                        </span>
+                    }
+                </div>
+                <nav>
+                    <ul>
+                        <li>
+                            <Link to="/profile/edit" activeClassName="active" id="link-edit-profile">
+                                Edit profile
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/profile/usage" activeClassName="active" id="link-usage">
+                                Usage
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/profile/billing" activeClassName="active" id="link-billing">
+                                Billing
+                            </Link>
+                        </li>
+                        {otaPlusStore.otaPlusMode ?
+                            otaPlusNewEntries
+                        :
+                            null
+                        }
+                        
+                    </ul>
+                </nav>
+            </aside>
+        );
+        const onlyProvisioningKeys = (
+            <aside>
+                <div className="user-details">
+                    <span>
+                        <Avatar
+                            src="/assets/img/device_step_two.png"
+                            className="icon-profile"
+                            id="icon-profile-min"
+                        />
+                    </span>
+                </div>
+                <nav>
+                    <ul>
+                        <li>
+                            <Link to="/profile/access-keys" activeClassName="active" id="link-access-keys">
+                                Provisioning keys
+                            </Link>
+                        </li>
+                        {otaPlusStore.otaPlusMode ?
+                            otaPlusNewEntries
+                        :
+                            null
+                        }                        
+                    </ul>
+                </nav>
+            </aside>
+        );
+        return (
+            uiUserProfileMenu === "true" ?
+                uiCredentialsDownload === "true" ?
+                    fullAside
+                :
+                    fullAsideWithoutProvisioningKeys
+            :
+                uiCredentialsDownload === "true" ?
+                    onlyProvisioningKeys
+                :
+                    null            
         );
     }
 }
