@@ -107,8 +107,6 @@ class Header extends Component {
                             <span id="device-name" className="device-name">
                                 <input type="text"
                                    ref={(input) => {this.deviceNameInput = input}}
-                                   size={this.newDeviceName.length + 5}
-                                   maxLength={100}
                                    disabled
                                    onKeyPress={this.keyPressed}
                                    value={this.newDeviceName} onChange={this.userTypesName} />
