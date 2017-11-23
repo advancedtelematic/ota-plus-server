@@ -19,11 +19,14 @@ import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import play.api.libs.ws.WSClient
 import play.api.mvc.Results
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+
+import scala.io.Source
+import scala.util.parsing.json.JSONObject
 
 class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite with ScalaFutures with MockWSHelpers
   with Results {
@@ -68,13 +71,13 @@ class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite wi
       Action(_ => Ok(TreehubFeatureJson))
 
     case (GET, `rootJsonUrl`) =>
-      Action(_ => Ok("root.json").withHeaders("x-ats-tuf-repo-id" -> "repoid"))
+      Action(_ => Ok("{}").withHeaders("x-ats-tuf-repo-id" -> "repoid"))
 
     case (GET, `authPlusClientUrl`) =>
       Action(_ => Ok(ClientSecret))
 
     case (POST, `treehubDownloadUrl`) =>
-      Action(_ => Ok("treehub"))
+      Action(_ => Ok("{}"))
 
     case (GET, url) if url.startsWith(registrationUrl) =>
       Action(_ => Ok("registration"))
@@ -114,9 +117,17 @@ class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite wi
       contentType(result).get mustBe "application/zip"
 
       val zip = new ZipInputStream(new ByteArrayInputStream(contentAsBytes(result).toArray))
-      val packedFiles = Seq("tufrepo.url", "autoprov.url", "autoprov_credentials.p12", "root.json",
-                            "targets.pub", "targets.sec", "treehub.json")
-      packedFiles.foreach(zip.getNextEntry.getName mustBe _)
+
+      val nonJsonFiles = Seq("tufrepo.url", "autoprov.url", "autoprov_credentials.p12")
+      nonJsonFiles.foreach(zip.getNextEntry.getName mustBe _)
+
+      val jsonFiles = Seq("root.json", "targets.pub", "targets.sec", "treehub.json")
+      jsonFiles.foreach { entry =>
+        zip.getNextEntry.getName mustBe entry
+        Json.parse(Source.fromInputStream(zip).mkString) mustBe a[JsObject]
+        zip.closeEntry()
+      }
+
     }
   }
 
