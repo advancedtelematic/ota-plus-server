@@ -320,7 +320,7 @@ class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends
 class KeyServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
   private val request = ApiRequest.base(keyServerApiUri + "/api/v1/")
 
-  def secretTargetKeys(repoId: String)(implicit ec: ExecutionContext, mat: Materializer): Future[Seq[TufKeyPair]] = {
+  def targetKeys(repoId: String)(implicit ec: ExecutionContext, mat: Materializer): Future[Seq[TufKeyPair]] = {
     // using circe since there is a decoder for it in the lib
     import io.circe.{ parser => CirceParser }
 
