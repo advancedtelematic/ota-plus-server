@@ -24,9 +24,7 @@ import play.api.libs.ws.WSClient
 import play.api.mvc.Results
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-
 import scala.io.Source
-import scala.util.parsing.json.JSONObject
 
 class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite with ScalaFutures with MockWSHelpers
   with Results {
@@ -71,7 +69,10 @@ class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite wi
       Action(_ => Ok(TreehubFeatureJson))
 
     case (GET, `rootJsonUrl`) =>
-      Action(_ => Ok("{}").withHeaders("x-ats-tuf-repo-id" -> "repoid"))
+      Action { request =>
+        request.headers.get("x-ats-namespace").getOrElse(throw new Exception("missing namespace"))
+        Ok("{}").withHeaders("x-ats-tuf-repo-id" -> "repoid")
+      }
 
     case (GET, `authPlusClientUrl`) =>
       Action(_ => Ok(ClientSecret))
@@ -86,6 +87,10 @@ class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite wi
       Action(_ => Ok(s"[${tufKeyPairEncoder(keyPair).noSpaces}]"))
   }
 
+  val failingClient = MockWS {
+    case _ => Action(_ => InternalServerError)
+  }
+
   implicit class RequestSyntax[A](request: FakeRequest[A]) {
     def withAuthSession(ns: String): FakeRequest[A] = {
       import com.advancedtelematic.auth.SessionCodecs.AccessTokenFormat
@@ -97,21 +102,19 @@ class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite wi
     }
   }
 
-  val application = new GuiceApplicationBuilder()
+  val builder = new GuiceApplicationBuilder()
     .configure("auth0.domain" -> auth0Domain)
     .configure("authplus.uri" -> authPlusUri)
     .configure("userprofile.uri" -> userProfileUri)
     .configure("crypt.uri" -> CryptHost)
-    .overrides(bind[WSClient].to(mockClient))
     .overrides(bind[TokenVerification].to[NoVerification])
-    .build
-
+  val application = builder.overrides(bind[WSClient].to(mockClient)).build
   val controller = application.injector.instanceOf[ProvisioningController]
 
   "GET /api/v1/provisioning/credentials/archive" should {
+    val request = FakeRequest(GET, "/api/v1/provisioning/credentials/archive").withAuthSession(namespace)
 
     "return a ZIP archive" in {
-      val request = FakeRequest(GET, "/api/v1/provisioning/credentials/archive").withAuthSession(namespace)
       val result = call(controller.downloadCredentialArchive(UUID.randomUUID()), request)
       status(result) mustBe OK
       contentType(result).get mustBe "application/zip"
@@ -128,6 +131,13 @@ class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite wi
         zip.closeEntry()
       }
 
+    }
+
+    "return a 500 status when a client does" in {
+      val application = builder.overrides(bind[WSClient].to(failingClient)).build
+      val controller = application.injector.instanceOf[ProvisioningController]
+      val result = call(controller.downloadCredentialArchive(UUID.randomUUID()), request)
+      status(result) mustBe INTERNAL_SERVER_ERROR
     }
   }
 

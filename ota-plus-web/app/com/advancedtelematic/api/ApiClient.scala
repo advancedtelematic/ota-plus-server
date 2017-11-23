@@ -18,7 +18,6 @@ import play.api.libs.json._
 import play.api.libs.ws.{WSAuthScheme, WSClient, WSRequest, WSResponse}
 import play.api.mvc.Result
 import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.NoStackTrace
@@ -309,12 +308,13 @@ class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
       .execStreamedResult(apiExec)
   }
 }
-
 class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
   private val request = ApiRequest.base(repoApiUri + "/api/v1/")
 
-  def rootJsonResult: Future[Result] =
-    request("user_repo/root.json").execResult(apiExec)
+  def rootJsonResult(namespace: Namespace)(implicit ec: ExecutionContext): Future[Result] =
+    request("user_repo/root.json")
+      .withNamespace(Some(namespace))
+      .execResult(apiExec)
 }
 
 class KeyServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
