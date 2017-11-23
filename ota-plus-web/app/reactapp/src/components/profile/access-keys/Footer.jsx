@@ -7,7 +7,19 @@ class Footer extends Component {
         super(props);
     }
     render() {
-        const { provisioningStore, showDevicesCreateModal } = this.props;
+        const { provisioningStore, showDevicesCreateModal, uiCredentialsDownload, prebuiltDebrpm } = this.props;
+        const prebuiltDebrpmBlock = (
+            <li>
+                <div className="prebuilds">
+                    <div className="text" id="access-keys-prebuilds-description">
+                        get pre-builds <a href="#" id="access-keys-prebuilds-link" onClick={showDevicesCreateModal}>DEB/RPM</a>
+                        <a href="https://docs.atsgarage.com/quickstarts/install-from-a-prebuilt-deb-or-rpm-package.html" target="_blank" className="icon">
+                            <img src="/assets/img/icons/questionmark.png" alt=""/>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        );
         return (
             <div className="footer">
                 <ul>
@@ -21,16 +33,14 @@ class Footer extends Component {
                                                         </pre>
                         </div>
                     </li>
-                    <li>
-                        <div className="prebuilds">
-                            <div className="text" id="access-keys-prebuilds-description">
-                                get pre-builds <a href="#" id="access-keys-prebuilds-link" onClick={showDevicesCreateModal}>DEB/RPM</a>
-                                <a href="https://docs.atsgarage.com/quickstarts/install-from-a-prebuilt-deb-or-rpm-package.html" target="_blank" className="icon">
-                                    <img src="/assets/img/icons/questionmark.png" alt=""/>
-                                </a>
-                            </div>
-                        </div>
-                    </li>
+                    {uiCredentialsDownload === "true" ?
+                        prebuiltDebrpm === "true" ?
+                            prebuiltDebrpmBlock
+                        :
+                            null
+                    :
+                        prebuiltDebrpmBlock
+                    }
                 </ul>
             </div>
         );
