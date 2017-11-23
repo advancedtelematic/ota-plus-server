@@ -1,5 +1,6 @@
 import Navigation from './Navigation';
 import UserDropdown from './UserDropdown';
+import SettingsDropdown from './SettingsDropdown';
 import Header from './Header';
 import SubHeader from './SubHeader';
 import Modal from './Modal';
@@ -15,6 +16,7 @@ import IntroNavigation from './IntroNavigation';
 export {
     Navigation,
     UserDropdown,
+    SettingsDropdown,
     Header,
     SubHeader,
     Modal,

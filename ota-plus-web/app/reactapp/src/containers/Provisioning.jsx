@@ -63,7 +63,7 @@ class Provisioning extends Component {
         this.props.provisioningStore._prepareProvisioningKeys(sort);
     }
     render() {
-        const { provisioningStore, devicesStore, groupsStore } = this.props;
+        const { provisioningStore, devicesStore, groupsStore, uiCredentialsDownload, prebuiltDebrpm } = this.props;
         return (
             <span>
                 {provisioningStore.provisioningStatusFetchAsync.isFetching ?
@@ -88,6 +88,8 @@ class Provisioning extends Component {
                             <ProvisioningFooter 
                                 provisioningStore={provisioningStore}
                                 showDevicesCreateModal={this.showDevicesCreateModal}
+                                uiCredentialsDownload={uiCredentialsDownload}
+                                prebuiltDebrpm={prebuiltDebrpm}
                             />
                         </span>
                     :
