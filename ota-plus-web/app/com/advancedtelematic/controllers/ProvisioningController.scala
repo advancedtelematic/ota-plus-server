@@ -90,13 +90,10 @@ class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient
 
   def downloadCredentialArchive(keyUUID: UUID): Action[AnyContent] = authAction.async { implicit request =>
     implicit val materializer: ActorMaterializer = ActorMaterializer()
-
     async {
       val d = Files.createTempDirectory("ota-plus")
       val f = d.resolve("credentials.zip").toFile
-      val outputStream = new FileOutputStream(f)
-
-      val zip = new ZipOutputStream(outputStream)
+      val zip = new ZipOutputStream(new FileOutputStream(f))
 
       def writeZipEntry(name: String, data: Array[Byte]): Unit = {
         zip.putNextEntry(new ZipEntry(name))
@@ -122,12 +119,13 @@ class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient
 
       // can't use a foreach here because of await
       if (repoId.isDefined) {
-        val keyPairs = await(keyServerApi.secretTargetKeys(repoId.get))
+        import io.circe.syntax._
+        import com.advancedtelematic.libtuf.data.TufCodecs.{tufKeyEncoder, tufPrivateKeyEncoder}
 
+        val keyPairs = await(keyServerApi.targetKeys(repoId.get))
         keyPairs.indices.zip(keyPairs).foreach { case (i, pair) =>
-          val (pub, priv) = encode(pair)
-          writeZipEntry(s"targets${numberSuffix(i)}.pub", pub.spaces2.getBytes)
-          writeZipEntry(s"targets${numberSuffix(i)}.sec", priv.spaces2.getBytes)
+          writeZipEntry(s"targets${numberSuffix(i)}.pub", pair.pubkey.asJson.spaces2.getBytes)
+          writeZipEntry(s"targets${numberSuffix(i)}.sec", pair.privkey.asJson.spaces2.getBytes)
         }
       }
 
@@ -139,11 +137,6 @@ class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient
 
       Ok.sendFile(f, onClose = () => { f.delete() })
     }
-  }
-
-  private def encode(pair: TufKeyPair) = pair match {
-    case RSATufKeyPair(pubkey, privkey) => (RsaKeyType.crypto.encode(pubkey), RsaKeyType.crypto.encode(privkey))
-    case EdTufKeyPair(pubkey, privkey) => (EdKeyType.crypto.encode(pubkey), EdKeyType.crypto.encode(privkey))
   }
 
 }
