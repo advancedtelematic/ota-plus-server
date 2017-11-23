@@ -19,8 +19,12 @@
     <input type="hidden" id="ws-url" value="@wsUrl"/>
     <input type="hidden" id="toggle-atsGarageTheme" value="@{uiToggles.atsGarageTheme}"/>
     <input type="hidden" id="toggle-autoFeatureActivation" value="@{uiToggles.autoFeatureActivation}"/>
+    <!-- Hides user dropdown -->
     <input type="hidden" id="toggle-userProfileMenu" value="@{uiToggles.userProfileMenu}"/>
-
+    <!-- Hides provisioning keys -->
+    <input type="hidden" id="toggle-credentialsDownload" value="true"/>
+    <!-- Shows the pre-built link at the bottom of the "Provisioning keys" page -->
+    <input type="hidden" id="toggle-prebuiltDebrpm" value="true"/>
     <div id="app"></div>
     <script src="@routes.Assets.versioned("js/app.js")"></script>
   </body>
