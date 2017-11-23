@@ -80,6 +80,7 @@ export default class GroupsStore {
         return axios.post(API_GROUPS_CREATE + '?groupName=' + name)
             .then(function (response) {
                 this.latestCreatedGroupId = response.data;
+                this.groupsCurrentPage = 0;
                 this.fetchGroups();
                 this.groupsCreateAsync = handleAsyncSuccess(response);
             }.bind(this))
