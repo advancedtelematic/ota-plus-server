@@ -332,6 +332,7 @@ body {
                 text-decoration: none;
                 background: $color-mint-active !important;
                 -webkit-box-shadow: none;
+                transform: none;
                 box-shadow: none;
                 font-weight: 400;
             }
@@ -344,6 +345,9 @@ body {
 
                 &:not(.auth0-label-submit) {
                     display: none;
+                }
+                &.auth0-label-submit {
+                    transform: scale(1) !important;
                 }
             }
         }
