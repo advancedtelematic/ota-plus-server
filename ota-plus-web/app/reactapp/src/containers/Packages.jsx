@@ -162,13 +162,17 @@ class Packages extends Component {
                     hardwareStore={hardwareStore}
                     devicesStore={devicesStore}
                 />
-                <PackagesFileUploaderModal 
-                    shown={this.fileUploaderModalShown}
-                    hide={this.hideFileUploaderModal}
-                    handleCopy={this.handleCopy}
-                    copied={this.copied}
-                    featuresStore={featuresStore}
-                />
+                {this.fileUploaderModalShown ?
+                    <PackagesFileUploaderModal 
+                        shown={this.fileUploaderModalShown}
+                        hide={this.hideFileUploaderModal}
+                        handleCopy={this.handleCopy}
+                        copied={this.copied}
+                        featuresStore={featuresStore}
+                    />
+                :
+                    null
+                }
                 <PackagesBlacklistModal 
                     shown={this.blacklistModalShown}
                     hide={this.hideBlacklistModal}
