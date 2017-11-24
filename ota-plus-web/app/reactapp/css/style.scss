@@ -1282,23 +1282,36 @@ input {
                 float: left;
 
                 .fields {
-                    padding: 10px;
-
-                    .hash {
-                        @include textoverflowEllipsis;
-                    }
+                    padding: 20px 10px;
 
                     .version-info {
-
-                        .version {
-                            @include textoverflowEllipsis;
-                            font-weight: bold;
-                            margin-bottom: 10px;
-                        }
-
                         padding-left: 25px;
+
+                        div {
+                            overflow: hidden;
+
+                            &:not(:last-child) {
+                                margin-bottom: 5px;
+                            }
+
+                            .sub-title {
+                                display: block;
+                                float: left;
+                                width: 25%;
+                            }
+
+                            .value {
+                                @include textoverflowEllipsis;
+                                display: block;
+                                float: left;
+                                width: 75%;
+                            }
+
+                            &.version {
+                                font-weight: bold;
+                            }
+                        }
                     }
-                    
                 }
 
                 .input-comment {

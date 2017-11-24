@@ -82,29 +82,36 @@ class ListItemVersion extends Component {
                             <span>
                                 <div className="version-info">
                                     <div className="version" id={"package-" + packageName + "-version"}>
-                                        <span className="value">Version: {version.id.version}</span>
+                                        <span className="sub-title">Version:</span>
+                                        <span className="value">{version.id.version}</span>
                                     </div>                                 
                                     <div className="created_at" id={"package-" + packageName + "-created_at"}>
-                                        Created at: {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}
+                                        <span className="sub-title">Created at:</span>
+                                        <span className="value">{moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
                                     </div>
                                     <div className="updated_at" id={"package-" + packageName + "-updated_at"}>
-                                        Updated at: {moment(version.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}
+                                        <span className="sub-title">Updated at:</span>
+                                        <span className="value">{moment(version.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
                                     </div>
                                     <div className="hash" id={"package-" + packageName + "-hash"}>
-                                        <span className="value">Hash: {version.packageHash}</span>
+                                        <span className="sub-title">Hash:</span>
+                                        <span className="value">{version.packageHash}</span>
                                     </div>
                                     <div className="target-length" id={"package-" + packageName + "-target-length"}>
-                                        Length: {version.targetLength}
+                                        <span className="sub-title">Length:</span>
+                                        <span className="value">{version.targetLength}</span>
                                     </div>
                                 </div>
                             </span>
                         :
                             <span>
                                 <div className="hash" id={"package-" + packageName + "-hash"}>
-                                    Hash: {version.packageHash}
+                                    <span className="sub-title">Hash:</span>
+                                    <span className="value">{version.packageHash}</span>
                                 </div>
                                 <div className="target-length" id={"package-" + packageName + "-target-length"}>
-                                    Length: {version.targetLength}
+                                    <span className="sub-title">Length:</span>
+                                    <span className="value">{version.targetLength}</span>
                                 </div>
                             </span>
                         }
