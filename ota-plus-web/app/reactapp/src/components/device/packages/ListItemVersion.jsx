@@ -27,19 +27,22 @@ class ListItemVersion extends Component {
         return (
             <li className={selectedPackageVersion === version.id.version ? "selected" : ""} id={version.uuid === expandedPackUuid ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={this.handlePackageVersionClick}>
                 <div className="left-box">
-                      <div className="hash">
-                        <span className="text">Hash / version:</span> <span className="value" id={"version-value-" + version.id.version.substring(0,8)}>{version.id.version}</span>
-                      </div>
-                      <div className="created_at">
-                        <span className="text">Created at:</span> <span className="value">{moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
-                      </div>
-                      {version.inDirector ?
+                    <div className="hash">
+                        <span className="sub-title">Hash / version:</span> 
+                        <span className="value" id={"version-value-" + version.id.version.substring(0,8)}>{version.id.version}</span>
+                    </div>
+                    <div className="created_at">
+                        <span className="sub-title">Created at:</span>
+                        <span className="value">{moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
+                    </div>
+                    {version.inDirector ?
                         <div className="updated_at">
-                            <span className="text">Updated at:</span> <span className="value">{moment(version.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
+                            <span className="sub-title">Updated at:</span>
+                            <span className="value">{moment(version.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
                         </div>
-                      :
+                    :
                         null
-                      }
+                    }
                 </div>
                 <div className="right-box">
                     {blacklistedPackage && version.id.version === installedPackage ?
