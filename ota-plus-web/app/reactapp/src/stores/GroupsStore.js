@@ -27,7 +27,7 @@ export default class GroupsStore {
     @observable latestCreatedGroupId = null;
     @observable selectedGroup = {
         type: 'artificial',
-        name: 'all'
+        name: 'All'
     };
 
     @observable groupsCurrentPage = 0;
