@@ -37,8 +37,8 @@ class Home extends Component {
     }
     render() {
         const { devicesStore, hardwareStore, packagesStore, campaignsStore, addNewWizard } = this.props;
-        const lastDevicesTitle = 'Latest devices';
-        const lastPackagesTitle = 'Latest packages';
+        const lastDevicesTitle = 'Latest created devices';
+        const lastPackagesTitle = 'Latest added packages';
         const activeCampaignsTitle = 'Active campaigns';
         return (
             <span>
@@ -46,7 +46,6 @@ class Home extends Component {
                     <div className="column">
                         <div className="panel panel-lightgrey">
                             <div className="panel-heading">
-                                <div className="icon device"></div>
                                 <div className="title">
                                     {lastDevicesTitle}
                                 </div>
@@ -64,7 +63,6 @@ class Home extends Component {
                     <div className="column">
                         <div className="panel panel-lightgrey">
                             <div className="panel-heading">
-                                <div className="icon package"></div>
                                 <div className="title">
                                     {lastPackagesTitle}
                                 </div>
@@ -92,7 +90,6 @@ class Home extends Component {
                     <div className="column">
                         <div className="panel panel-lightgrey">
                             <div className="panel-heading">
-                                <div className="icon campaign"></div>
                                 <div className="title">
                                     {activeCampaignsTitle}
                                 </div>

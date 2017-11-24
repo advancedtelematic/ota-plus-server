@@ -37,6 +37,7 @@ class ActiveCampaignItem extends Component {
                 className="element-box campaign" 
                 title={campaign.name}
                 id={"link-campaignwizard-" + campaign.id}>
+                    <div className="icon"></div>
                     <div className="desc">
                         <div className="title">
                             {campaign.name}
