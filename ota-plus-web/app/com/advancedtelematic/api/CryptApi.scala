@@ -2,12 +2,11 @@ package com.advancedtelematic.api
 
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.model.Uri.{NamedHost, Path}
-import akka.stream.scaladsl.Source
-import akka.util.ByteString
 import java.time.Instant
 import java.util.UUID
 
 import play.api.Configuration
+import play.api.http.HttpEntity
 import play.api.libs.json._
 import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 
@@ -104,18 +103,10 @@ class CryptApi(conf: Configuration, val apiExec: ApiClientExec)(implicit exec: E
       .execJson[DeviceRegistrationCredentials](apiExec)
   }
 
-  def downloadCredentials(accountName: String, id: UUID): Future[Source[ByteString, _]] = {
-    baseUri(s"/accounts/$accountName/credentials/registration/$id")
-      .transform(_.withMethod(GET))
-      .execResult(apiExec)
-      .map(_.body.dataStream)
-  }
-
-  def downloadCredentialsEntity(accountName: String, id: UUID): Future[play.api.http.HttpEntity] = {
+  def downloadCredentials(accountName: String, id: UUID): Future[HttpEntity] =
     baseUri(s"/accounts/$accountName/credentials/registration/$id")
       .transform(_.withMethod(GET))
       .execResult(apiExec)
       .map(_.body)
-  }
 
 }
