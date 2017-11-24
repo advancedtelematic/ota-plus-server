@@ -772,6 +772,7 @@
                 justify-content: center;
                 align-items: center;
                 padding-top: 30px;
+                background: $color-grey;
 
                 .column {
                     width: 33.3333333%;
@@ -802,33 +803,8 @@
                             display: flex;
                             align-items: center;
                             justify-content: space-between;
-
-                            .icon {
-                                text-align: center;
-                                background-color: #fff;
-                                background-repeat: no-repeat;
-                                background-size: cover;
-                                width: 60px;
-                                height: 60px;
-                                border-radius: 10px;
-
-                                &.device {
-                                    background-image: url('/assets/img/icons/black/devices.png');
-                                    border: 2px solid #ddd;
-                                    background-size: 45px 45px;
-                                    background-position: center;
-                                }
-
-                                &.package {
-                                    background-image: url('/assets/img/icons/black/packages.png');
-                                    border: 2px solid #ddd;
-                                }
-
-                                &.campaign {
-                                    background-image: url('/assets/img/icons/black/campaigns.png');
-                                    border: 2px solid #ddd;
-                                }
-                            }
+                            background: $color-darkgrey;
+                            color: $color-white;
 
                             .add {
                                 button {
@@ -842,9 +818,27 @@
                             padding: 0;
 
                             .element-box {
-
-                                .desc {
-                                    width: 90%;
+                                &.device {
+                                    .icon {
+                                        background-image: url('/assets/img/icons/black/devices.png');
+                                        border: 2px solid #ddd;
+                                        background-size: 45px 45px;
+                                        background-position: center;
+                                    }
+                                }
+                 
+                                &.package {
+                                    .icon {
+                                        background-image: url('/assets/img/icons/black/packages.png');
+                                        border: 2px solid #ddd;
+                                    }
+                                }
+                 
+                                &.campaign {
+                                    .icon {
+                                        background-image: url('/assets/img/icons/black/campaigns.png');
+                                        border: 2px solid #ddd;
+                                    }
                                 }
                             }
                         }
