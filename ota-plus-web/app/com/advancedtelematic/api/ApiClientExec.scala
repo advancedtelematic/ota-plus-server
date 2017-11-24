@@ -8,8 +8,6 @@ import play.api.libs.json.{JsError, JsSuccess, JsValue, Reads}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.{ResponseHeader, Result}
 import play.api.mvc.Results.Ok
-import play.libs.ws.ahc.StreamedResponse
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
