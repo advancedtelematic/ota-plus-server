@@ -13,7 +13,7 @@ class LastDevices extends Component {
     render() {
         const { devicesStore } = this.props;
         const { lastDevices } = devicesStore;
-        const noDevices = 'No devices found';
+        const noDevices = 'No created devices.';
         return (
             <span>
                 {devicesStore.devicesFetchAsync.isFetching ?
@@ -33,7 +33,9 @@ class LastDevices extends Component {
                             );
                         })
                     :
-                        noDevices
+                        <div className="wrapper-center">
+                            {noDevices}
+                        </div>
                 }
             </span>
         );

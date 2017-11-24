@@ -11,7 +11,7 @@ class ActiveCampaigns extends Component {
     }    
     render() {
         const { campaignsStore } = this.props;
-        const noCampaigns = 'No active campaigns';
+        const noCampaigns = 'No running campaigns.';
         return (
             <span>
                 {campaignsStore.campaignsFetchAsync.isFetching || campaignsStore.campaignsLegacyFetchAsync.isFetching ?

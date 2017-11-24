@@ -13,7 +13,7 @@ class LastPackages extends Component {
     render() {
         const { packagesStore } = this.props;
         const { lastPackages } = packagesStore;
-        const noPackages = 'No packages found';
+        const noPackages = 'No added packages.';
         return (
             <span>
                 {packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching ?
@@ -33,7 +33,9 @@ class LastPackages extends Component {
                             );
                         })
                     :
-                        noPackages
+                        <div className="wrapper-center">
+                            {noPackages}
+                        </div>
                 }
                 
             </span>
