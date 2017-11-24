@@ -118,8 +118,12 @@ class OverlayItem extends Component {
                                                 if(property !== 'children' && property !== 'name' && property !== 'capabilities' && property !== 'configuration') {
                                                     return (
                                                         <tr key={indexOne} className="item">
-                                                            <th>{property}:</th>
-                                                            <td>{value.toString()}</td>
+                                                            <th>
+                                                                <div>{property}:</div>
+                                                            </th>
+                                                            <td>
+                                                                <div>{value.toString()}</div>
+                                                            </td>
                                                         </tr>
                                                     );
                                                 }
