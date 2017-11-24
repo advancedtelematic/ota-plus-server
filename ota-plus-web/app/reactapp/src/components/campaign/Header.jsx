@@ -90,15 +90,15 @@ class Header extends Component {
                                onKeyPress={this.keyPressed}
                                value={this.newCampaignName} onChange={this.userTypesName} />
                             {this.renameDisabled ?
-                                <i className="fa fa-pencil" aria-hidden="true" onClick={this.enableCampaignRename} />
+                                <img src="/assets/img/icons/white/Rename.svg" className="edit" alt="Icon" onClick={this.enableCampaignRename} />
                             :
                                 <div className="icons">
                                     {this.newCampaignNameLength ?
-                                        <i className="fa fa-check-square" aria-hidden="true" onClick={this.renameCampaign} />
+                                        <img src="/assets/img/icons/white/Tick.svg" className="rename" alt="Icon" onClick={this.renameCampaign} />
                                     :
                                         null
                                     }
-                                    <i className="fa fa-window-close" aria-hidden="true" onClick={this.cancelCampaignRename} />
+                                    <img src="/assets/img/icons/white/X.svg" alt="Icon" className="cancel" onClick={this.cancelCampaignRename} />
                                 </div>
                             }
                         </div>

@@ -112,15 +112,15 @@ class Header extends Component {
                                    value={this.newDeviceName} onChange={this.userTypesName} />
 
                                 {this.renameDisabled ?
-                                    <i className="fa fa-pencil" aria-hidden="true" onClick={this.enableDeviceRename} />
+                                    <img src="/assets/img/icons/white/Rename.svg" className="edit" alt="Icon" onClick={this.enableDeviceRename} />
                                 :
                                     <div className="icons">
                                         {this.newDeviceNameLength ?
-                                            <i className="fa fa-check-square" aria-hidden="true" onClick={this.renameDevice} />
+                                            <img src="/assets/img/icons/white/Tick.svg" className="rename" alt="Icon" onClick={this.renameDevice} />
                                         :
                                             null
                                         }
-                                        <i className="fa fa-window-close" aria-hidden="true" onClick={this.cancelDeviceRename} />
+                                        <img src="/assets/img/icons/white/X.svg" alt="Icon" className="cancel" onClick={this.cancelDeviceRename} />
                                     </div>
                                 }
                             </span>

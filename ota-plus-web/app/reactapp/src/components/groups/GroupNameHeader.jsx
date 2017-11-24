@@ -93,15 +93,15 @@ class GroupNameHeader extends Component {
                         />
 
                         {this.renameDisabled ?
-                            <i className="fa fa-pencil" aria-hidden="true" onClick={this.enableGroupRename} />
+                            <img src="/assets/img/icons/white/Rename.svg" className="edit" alt="Icon" onClick={this.enableGroupRename} />
                         :
                             <div className="icons">
                                 {this.newGroupNameLength ?
-                                    <i className="fa fa-check-square" aria-hidden="true" onClick={this.renameGroup} />
+                                    <img src="/assets/img/icons/white/Tick.svg" className="rename" alt="Icon" onClick={this.renameGroup} />
                                 :
                                     null
                                 }
-                                <i className="fa fa-window-close" aria-hidden="true" onClick={this.cancelGroupRename} />
+                                <img src="/assets/img/icons/white/X.svg" alt="Icon" className="cancel" onClick={this.cancelGroupRename} />
                             </div>
                         }
                     </h3>

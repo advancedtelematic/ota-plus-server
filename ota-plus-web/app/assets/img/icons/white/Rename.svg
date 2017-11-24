@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>Rename</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="-" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Rename" transform="translate(-323.000000, -110.000000)" stroke="#FFFFFF">
+            <g transform="translate(324.000000, 111.000000)" id="Page-1">
+                <g>
+                    <g id="Group-2" stroke-width="0.6">
+                        <path d="M10.635944,2.378728 C10.635944,2.284568 10.597224,2.193928 10.531664,2.127048 L8.728544,0.324368 C8.659024,0.254848 8.567504,0.220088 8.476424,0.220088 C8.384904,0.220088 8.293824,0.254848 8.224744,0.324368 L1.507704,7.041408 C1.424544,7.124568 0.253264,10.074768 0.209264,10.183448 C0.155144,10.315888 0.186384,10.467248 0.287584,10.568008 C0.387904,10.668768 0.539264,10.700448 0.672584,10.646768 C0.776424,10.604528 3.735424,9.427968 3.813744,9.347448 C3.862584,9.298608 10.482824,2.678808 10.531664,2.630408 C10.597664,2.563968 10.635944,2.473768 10.635944,2.378728 Z" id="Stroke-1"></path>
+                        <path d="M8.989508,2.51218 L2.979548,8.5151" id="Stroke-3"></path>
+                        <path d="M1.507616,7.04154 L3.813656,9.34758" id="Stroke-5"></path>
+                        <path d="M0.422576,9.655096 L1.203136,10.435656" id="Stroke-7"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
