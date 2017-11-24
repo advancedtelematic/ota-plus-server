@@ -7,7 +7,7 @@ import { InfiniteScroll } from '../../utils';
 
 const groupsArtificial = [
     {
-        name: 'all',
+        name: 'All',
         devicesCount: null,
         friendlyName: 'All devices',
         identifier: 'all-devices',
@@ -15,7 +15,7 @@ const groupsArtificial = [
         isDND: false
     },
     {
-        name: 'ungrouped',
+        name: 'Ungrouped',
         devicesCount: null,
         friendlyName: 'Ungrouped devices',
         identifier: 'ungrouped-devices',
