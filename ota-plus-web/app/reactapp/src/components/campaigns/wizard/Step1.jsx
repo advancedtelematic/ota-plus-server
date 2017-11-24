@@ -36,8 +36,8 @@ class WizardStep1 extends Component {
                                 <FormsyText
                                     name="name"
                                     floatingLabelText="Campaign name"
-                                    underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
-                                    floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
+                                    underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
+                                    floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                                     className="input-wrapper"
                                     id="add-campaign-name"
                                     value={campaignName}

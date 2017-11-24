@@ -54,8 +54,8 @@ class CreateModal extends Component {
                             name="groupName"
                             floatingLabelText="Group name"
                             className="input-wrapper"
-                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
-                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
+                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
+                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                             ref="groupName"
                             id="group-name"
                             disabled={groupsStore.groupsCreateAsync.isFetching}
