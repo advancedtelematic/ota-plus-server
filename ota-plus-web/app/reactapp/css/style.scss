@@ -3500,14 +3500,29 @@ div[role=presentation] {
                     margin-bottom: 0;
                 }
 
-                .table>tbody>tr th, .table>tbody>tr td {
+                .table>tbody>tr th {
                     border: 0;
                     padding: 11px 15px;
                     vertical-align: middle;
+                    width: 20%;
+
+                    div {
+                        width: 125px;
+                        @include textoverflowEllipsis;
+                    }
                 }
 
                 .table>tbody>tr td {
-                    text-align: right;
+                    width: 80%;
+                    border: 0;
+                    padding: 11px 15px;
+                    vertical-align: middle;
+                    text-align: left;
+
+                    div {
+                        width: 520px;
+                        @include textoverflowEllipsis;
+                    }
                 }
             }
 
