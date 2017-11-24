@@ -1141,15 +1141,6 @@
                     width: 100%;
                     position: relative;
 
-                    .icons {
-                        position: absolute;
-                        right: 5px;
-                        top: 5px;
-                        z-index: 10;
-                        i {
-                            margin-right: 5px;
-                        }
-                    }
                     input {
                         width: 100%;
                         background-color: rgba(0,0,0,0);
@@ -1159,45 +1150,43 @@
                         -moz-appearance: none;
                         color: #fff;
                         appearance: none;
-                        padding: 5px 60px 5px 10px;
                         transition: all 0.3s ease;
+                        padding: 5px 60px 5px 10px;
+                        text-overflow: ellipsis;
+                        
                         &:focus {
                             outline: auto;
                             background-color: rgba(0,0,0,0.2);
+                        }                    
+                    }
+                    img {
+                        width: 20px;
+                        transition: opacity 0.3s ease;
+                        cursor: pointer;
+
+                        &.edit {
+                            opacity: 0;
+                            position: absolute;
+                            right: 15px;
+                            top: 7px;
                         }
                     }
-                    ::-webkit-input-placeholder {
-                        color: #fff;
-                        text-transform: capitalize;
-                    }
-                    ::-moz-placeholder {
-                        color: #fff;
-                        text-transform: capitalize;
-                    }
-                    :-ms-input-placeholder {
-                        color: #fff;
-                        text-transform: capitalize;
-                    }
-                    :-moz-placeholder {
-                        color: #fff;
-                        text-transform: capitalize;
-                    }
-                    i.fa.fa-pencil {
-                        opacity: 0;
+                    .icons {
                         position: absolute;
-                        right: 15px;
+                        right: 5px;
                         top: 5px;
-                    }
-                    i.fa {
-                        transition: opacity 0.3s ease;
-                        color: #fff;
+                        z-index: 10;
+                        img {
+                            margin-right: 5px;
+                            width: 15px;
+                        }
                     }
                     &:not(.artificial):hover {
-                        i.fa {
+                        img {
                             opacity: 1;
                         }
                         input {
-                            background-color: rgba(0,0,0,0.2);
+                            background-color: rgba(255,255,255,.2);
                         }
                     }
                 }
@@ -1304,27 +1293,30 @@
                         background-color: rgba(0,0,0,0.2);
                     }                    
                 }
+                img {
+                    width: 20px;
+                    transition: opacity 0.3s ease;
+                    cursor: pointer;
+
+                    &.edit {
+                        opacity: 0;
+                        position: absolute;
+                        right: 15px;
+                        top: 15px;
+                    }
+                }
                 .icons {
                     position: absolute;
                     right: 5px;
-                    top: 12px;
+                    top: 10px;
                     z-index: 10;
-                    i {
+                    img {
                         margin-right: 5px;
+                        width: 15px;
                     }
                 }
-                i.fa.fa-pencil {
-                    opacity: 0;
-                    position: absolute;
-                    right: 15px;
-                    top: 15px;
-                }
-                i.fa {
-                    transition: opacity 0.3s ease;
-                    color: #fff;
-                }
                 &:hover {
-                    i.fa {
+                    img {
                         opacity: 1;
                     }
                     input {
@@ -2957,27 +2949,30 @@
                         background-color: rgba(0,0,0,0.2);
                     }                    
                 }
+                img {
+                    width: 20px;
+                    transition: opacity 0.3s ease;
+                    cursor: pointer;
+
+                    &.edit {
+                        opacity: 0;
+                        position: absolute;
+                        right: 15px;
+                        top: 15px;
+                    }
+                }
                 .icons {
                     position: absolute;
                     right: 5px;
-                    top: 12px;
+                    top: 10px;
                     z-index: 10;
-                    i {
+                    img {
                         margin-right: 5px;
+                        width: 15px;
                     }
                 }
-                i.fa.fa-pencil {
-                    opacity: 0;
-                    position: absolute;
-                    right: 15px;
-                    top: 15px;
-                }
-                i.fa {
-                    transition: opacity 0.3s ease;
-                    color: #fff;
-                }
                 &:hover {
-                    i.fa {
+                    img {
                         opacity: 1;
                     }
                     input {
