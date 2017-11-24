@@ -96,8 +96,8 @@ class CreateModal extends Component {
                             name="packageName"
                             floatingLabelText="Package name"
                             className="input-wrapper"
-                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
-                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
+                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
+                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                             id="add-new-package-name"
                             updateImmediately
                             required
@@ -108,8 +108,8 @@ class CreateModal extends Component {
                             name="version"
                             floatingLabelText="Version"
                             className="input-wrapper"
-                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
-                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
+                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
+                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                             id="add-new-package-version"
                             updateImmediately
                             required
@@ -122,8 +122,8 @@ class CreateModal extends Component {
                             name="description"
                             value=""
                             floatingLabelText="Description"
-                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
-                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
+                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
+                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                             className="input-wrapper"
                             id="add-new-package-description"
                             updateImmediately
@@ -134,8 +134,8 @@ class CreateModal extends Component {
                             name="vendor"
                             value=""
                             floatingLabelText="Vendor"
-                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
-                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
+                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
+                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                             className="input-wrapper"
                             id="add-new-package-vendor"
                             updateImmediately
@@ -231,8 +231,8 @@ class CreateModal extends Component {
                             name="packageName"
                             floatingLabelText="Package name"
                             className="input-wrapper"
-                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
-                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
+                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
+                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                             id="add-new-package-name"
                             updateImmediately
                             required
@@ -243,8 +243,8 @@ class CreateModal extends Component {
                             name="version"
                             floatingLabelText="Version"
                             className="input-wrapper"
-                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
-                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
+                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
+                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                             id="add-new-package-version"
                             updateImmediately
                             required
@@ -303,8 +303,8 @@ class CreateModal extends Component {
                                 <FormsyText
                                     type="text"
                                     name="fake-file"
-                                    underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
-                                    floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
+                                    underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
+                                    floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                                     value={fileDropped ?
                                         fileDropped.name
                                         :
@@ -405,8 +405,8 @@ class CreateModal extends Component {
                                 name="packageName"
                                 floatingLabelText="Package name"
                                 className="input-wrapper"
-                                underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
-                                floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
+                                underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
+                                floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                                 id="add-new-package-name"
                                 updateImmediately
                                 required
@@ -417,8 +417,8 @@ class CreateModal extends Component {
                                 name="version"
                                 floatingLabelText="Version"
                                 className="input-wrapper"
-                                underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
-                                floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
+                                underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
+                                floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                                 id="add-new-package-version"
                                 updateImmediately
                                 required
@@ -433,8 +433,8 @@ class CreateModal extends Component {
                                     value=""
                                     floatingLabelText="Description"
                                     className="input-wrapper"
-                                    underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
-                                    floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
+                                    underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
+                                    floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                                     id="add-new-package-description"
                                     updateImmediately
                                 />
@@ -445,8 +445,8 @@ class CreateModal extends Component {
                                     value=""
                                     floatingLabelText="Vendor"
                                     className="input-wrapper"
-                                    underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
-                                    floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
+                                    underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
+                                    floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                                     id="add-new-package-vendor"
                                     updateImmediately
                                 />

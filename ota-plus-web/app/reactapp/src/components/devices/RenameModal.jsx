@@ -61,8 +61,8 @@ class RenameModal extends Component {
                                 value={device.deviceName}
                                 floatingLabelText="Device name"
                                 className="input-wrapper"
-                                underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : ''}
-                                floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : ''}
+                                underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
+                                floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                                 id="rename-device-new-name"
                                 disabled={devicesStore.devicesRenameAsync.isFetching}
                                 updateImmediately
