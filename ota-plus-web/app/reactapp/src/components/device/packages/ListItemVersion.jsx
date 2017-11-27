@@ -35,14 +35,6 @@ class ListItemVersion extends Component {
                         <span className="sub-title">Created at:</span>
                         <span className="value">{moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
                     </div>
-                    {version.inDirector ?
-                        <div className="updated_at">
-                            <span className="sub-title">Updated at:</span>
-                            <span className="value">{moment(version.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
-                        </div>
-                    :
-                        null
-                    }
                 </div>
                 <div className="right-box">
                     {blacklistedPackage && version.id.version === installedPackage ?
