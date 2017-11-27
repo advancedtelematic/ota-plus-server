@@ -129,13 +129,13 @@ class Header extends Component {
                         }
                     </FadeAnimation>
                 }
+                device={device}
                 backButtonShown={true}
                 backButtonAction={this.backButtonAction}>
                 <FadeAnimation>
                     {!devicesStore.devicesOneFetchAsync.isFetching ?
                         <span className="pull-right">
                             <button className="queue-button" id="queue-button" onClick={showQueueModal} ref={queueButtonRef}>
-                                <div className={"status status-" + device.deviceStatus} id={"status=" + device.deviceStatus}></div>
                             </button>
                             <div className="dates">
                                 <div className="date director">
