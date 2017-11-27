@@ -101,7 +101,7 @@ class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient
       zip.closeEntry()
     }
 
-    writeZipEntry("tufrepo.url", repoApiUri.getBytes)
+    writeZipEntry("tufrepo.url", repoPubApiUri.getBytes)
 
     async {
       val accountInfo = await(cryptApi.getAccountInfo(accountName(request))).getOrElse(
