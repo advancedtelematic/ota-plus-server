@@ -21,8 +21,8 @@ class SecondaryEcu extends Component {
                 >
                     <div className="desc">
                         <span>
-                            Serial: <span id={"hardware-serial-" + ecu.id}>{ecu.id}</span> <br />
-                            Hardware ID: <span id={"hardware-id-" + ecu.hardwareId}>{ecu.hardwareId}</span>
+                            <span id={"hardware-id-" + ecu.hardwareId} className="hardware-label">{ecu.hardwareId}</span> <br />
+                            Serial: <span id={"hardware-serial-" + ecu.id}>{ecu.id}</span>
                         </span>
                     </div>
                     <div className="icons"
