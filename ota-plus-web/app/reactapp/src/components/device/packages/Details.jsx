@@ -199,21 +199,25 @@ class Details extends Component {
 			        				</span>
 					        	</div>
 					        	<div className="install multi-target">
-				                	<button 
-			                            className="btn-main btn-install"
-			                            label="Install"
-			                            title="Install"
-			                            id={"button-install-package-" + expandedPack.id.name + "-" + expandedPack.id.version}
-			                            onClick={multiTargetUpdate.bind(this, {
-			                            	target: expandedPack.imageName, 
-			                            	hash: expandedPack.packageHash, 
-			                            	targetLength: expandedPack.targetLength,
-			                            	targetFormat: expandedPack.targetFormat, 
-			                            	generateDiff: false 
-			                            })}
-			                            disabled={isPackageBlacklisted || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || expandedPack.isInstalled || Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length }>
-			                            Install
-			                        </button>
+									{!isPackageInstalled
+										?
+										<button
+											className="btn-main btn-install"
+											label="Install"
+											title="Install"
+											id={"button-install-package-" + expandedPack.id.name + "-" + expandedPack.id.version}
+											onClick={multiTargetUpdate.bind(this, {
+                                                target: expandedPack.imageName,
+                                                hash: expandedPack.packageHash,
+                                                targetLength: expandedPack.targetLength,
+                                                targetFormat: expandedPack.targetFormat,
+                                                generateDiff: false
+                                            })}
+											disabled={isPackageBlacklisted || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || expandedPack.isInstalled || Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length }>
+											Install
+										</button>
+										: ''
+									}
 					        	</div>
 				        	</div>
 						:
@@ -296,8 +300,29 @@ class Details extends Component {
     				unmanagedPackage
     			:
 		        	noPackage
-	        	}
-        	</div>
+                }
+                {isPackageBlacklisted && (isPackageInstalled || (expandedPack && expandedPack.isInstalled)) ?
+					<div className="additional-status bg-green">
+						Installed
+					</div>
+                    : isPackageBlacklisted ?
+						<div className="additional-status bg-green">
+							Installed
+					</div>
+					: isPackageQueued ?
+						<div className="additional-status bg-orange">
+							Queued
+						</div>
+					: isPackageInstalled || (expandedPack && expandedPack.isInstalled) ?
+						<div className="additional-status bg-green">
+							Installed
+						</div>
+					:
+					<div className="additional-status bg-grey">
+						Not installed
+					</div>
+                }
+			</div>
 
         );
     }

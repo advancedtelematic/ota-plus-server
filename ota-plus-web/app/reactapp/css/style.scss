@@ -283,7 +283,7 @@ body {
             .versions {
                 li {
                     &.selected {
-                        border-bottom: 3px solid $color-orange!important;
+                        border-left-color: $color-orange!important;
                     }
                 }
             }

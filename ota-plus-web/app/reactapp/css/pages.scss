@@ -1264,6 +1264,12 @@
             background-image: url('/assets/img/icons/black/devices.png');
             background-size: 45px 45px;
             background-position: center;
+            position: relative;
+            .status {
+                position: absolute;
+                right: -10px;
+                top: 15px;
+            }
         }
 
         .text {
@@ -1426,10 +1432,9 @@
                         color: #555;
                         font-size: 11px;
                         text-decoration: none;
-                        padding: 10px 0;
-                        margin-left: 15px;
+                        padding: 15px 0 15px 10px;
                         display: block;
-                        border-bottom: 5px solid transparent;
+                        border-left: 15px solid transparent;
                         position: relative;
                         @include transition;
 
@@ -1441,11 +1446,27 @@
                             border-color: $color-mint;
                         }
 
+                        .hardware-label {
+                            color: #444;
+                            font-size: 12px;
+                            background: transparent;
+                            padding: 0 10px;
+                            border-radius: 10px;
+                            margin-right: 5px;
+                            margin-bottom: 5px;
+                            display: inline-block;
+                            border: 1px solid #444;
+                        }
+
                         .desc {
                             width: 70%;
                             text-overflow: ellipsis;
                             white-space: nowrap;
                             overflow: hidden;
+                            span {
+                                font-size: 13px;
+                                line-height: 24px;
+                            }
                         }
                         .icons {
                             position: absolute;
@@ -1814,6 +1835,8 @@
 
                             li {
                                 cursor: pointer;
+                                padding-left: 15px;
+                                display: flex;
 
                                 &:not(:last-child) {
                                     margin-bottom: 8px;
@@ -1822,6 +1845,10 @@
                                 .left-box {
                                     width: 80%;
                                     padding: 8px 0 8px 10px;
+
+                                    span {
+                                        line-height: 24px;
+                                    }
 
                                     div {
                                         overflow: hidden;
@@ -1843,6 +1870,10 @@
 
                                 .right-box {
                                     width: 20%;
+                                    height: auto;
+                                    align-items: center;
+                                    display: flex;
+                                    justify-content: flex-end;
 
                                     .fa-stack {
                                         float: right;
@@ -1871,7 +1902,8 @@
                             }
 
                             li.selected {
-                                border-bottom: 3px solid $color-mint;
+                                border-left: 16px solid $color-mint;
+                                padding-left: 0;
                             }
 
                             .right-box {
@@ -1942,8 +1974,8 @@
             .wrapper-full {
                 height: calc(100% - 36px);
                 position: relative;
-
-                
+                background-color: #F5F5F5;
+                padding: 20px 15px 0 20px;
 
                 .negative-margin-top {
                     margin-top: -40px;
@@ -1955,7 +1987,10 @@
             }            
 
             .wrapper-properties {
-                height: calc(100% - 64px);   
+                height: calc(100% - 64px);
+                background-color: #fff;
+                position: relative;
+                border: 1px solid #e1e1e1;
 
                 .details-wrapper {
 
@@ -1968,7 +2003,28 @@
 
                 .details-wrapper.fetching {
                     display: none;
-                }             
+                }
+
+                .additional-status {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    padding: 10px 0;
+                    text-align: center;
+                    width: 100%;
+                    display: inline-block;
+                    vertical-align: middle;
+                    color: #fff;
+                    &.bg-green {
+                        background-color: #369e47;
+                    }
+                    &.bg-orange {
+                        background-color: #F2A721;
+                    }
+                    &.bg-grey {
+                        background-color: #666666;
+                    }
+                }
 
                 .details {
                     padding: 30px;
@@ -1993,6 +2049,7 @@
                             top: 0;
 
                             .status-container {
+                                font-size: 13px;
 
                                 img {
                                     width: 18px;
@@ -2003,21 +2060,15 @@
                             }
 
                             .status-container.installed {
-                                color: #369E47;
                                 font-weight: bold;
-                                font-size: 16px;
                             }
 
                             .status-container.not-installed {
-                                color: #D3D3D3;
                                 font-weight: bold;
-                                font-size: 16px;
                             }
 
                             .status-container.queued {
-                                color: #FB9773;
                                 font-weight: bold;
-                                font-size: 16px;
                                 margin-top: -4px;
 
                                 .fa-stack i {
@@ -2028,19 +2079,21 @@
                             .status-container.blacklisted {
                                 color: red;
                                 font-weight: bold;
-                                font-size: 16px;
                             }
 
                             .status-container.blacklisted-installed {
                                 color: red;
                                 font-weight: bold;
-                                font-size: 16px;
                             }
                         }
                     }
 
                     .bottom {
-                        margin-bottom: 25px;
+                        margin-bottom: 60px;
+
+                        span:not(.hardware-label) {
+                            line-height: 26px;
+                        }
 
                         div {
                             overflow: hidden;
@@ -2064,11 +2117,11 @@
                             .hardware-label {
                                 color: $color-darkgrey;
                                 font-size: 12px;
+                                line-height: 18px;
                                 background: transparent;
                                 padding: 0px 10px;
                                 border-radius: 10px;
                                 margin-right: 5px;
-                                margin-bottom: 5px;
                                 display: inline-block;
                                 border: 1px solid #444;
                             }
@@ -2079,6 +2132,7 @@
                             .format-label {
                                 color: $color-darkgrey;
                                 font-size: 12px;
+                                line-height: 18px;
                                 background: transparent;
                                 padding: 0px 10px;
                                 border-radius: 10px;
@@ -2166,9 +2220,12 @@
 
                     .install {
                         overflow: hidden;
+                        width: auto;
+                        text-align: center;
+                        margin-top: 15px;
 
                         .btn-main {
-                            float: right;
+                            display: inline-block;
                             width: 300px;
                             
                             span {

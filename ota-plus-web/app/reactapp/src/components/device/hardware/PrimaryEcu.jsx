@@ -30,8 +30,8 @@ class PrimaryEcu extends Component {
                     <div className="desc">
                         { device.isDirector ? 
                             <span>
-                                Serial: <span id="hardware-serial-value">{devicesStore._getPrimarySerial()}</span> <br />
-                                Hardware ID: <span id="hardware-id-value">{devicesStore._getPrimaryHardwareId()}</span>
+                                <span id="hardware-id-value" className="hardware-label">{devicesStore._getPrimaryHardwareId()}</span> <br />
+                                Serial: <span id="hardware-serial-value">{devicesStore._getPrimarySerial()}</span>
                             </span>
                         :
                             <span>

@@ -1,7 +1,7 @@
 import React, { PropTypes, defaultProps } from 'react';
 
 const Header = (props) => {
-    const { title, subtitle, backButtonShown, backButtonAction, children } = props;
+    const { title, subtitle, backButtonShown, backButtonAction, children, device } = props;
     return (
         <div className="page-heading">
             <div className="container">
@@ -10,7 +10,9 @@ const Header = (props) => {
                         <img src="/assets/img/icons/back.png" className="icon-back" alt="" />
                     </a>
                 : null}
-                <div className="icon"></div>
+                <div className="icon">
+                    {device ? <div className={"status status-" + device.deviceStatus} id={"status=" + device.deviceStatus}></div> : ''}
+                </div>
                 <div className="text">
                     <div className="title">{title}</div>
                     {subtitle ?
