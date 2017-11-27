@@ -1823,10 +1823,21 @@
                                     width: 80%;
                                     padding: 8px 0 8px 10px;
 
-                                    .hash {
-                                        white-space: nowrap;
+                                    div {
                                         overflow: hidden;
-                                        text-overflow: ellipsis;
+
+                                        .sub-title {
+                                            float: left;
+                                            display: block;
+                                            width: 25%;
+                                        }
+
+                                        .value {
+                                            float: left;
+                                            display: block;
+                                            width: 75%;
+                                            @include textoverflowEllipsis;
+                                        }
                                     }
                                 }
 
@@ -2765,7 +2776,7 @@
                 .right-box {
                     text-align: left;
                     height: auto;
-                    padding: 10px;
+                    padding: 20px 10px;
 
                     .ecus-installed {
                         font-weight: bold;
