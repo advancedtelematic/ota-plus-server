@@ -888,35 +888,15 @@ export default class PackagesStore {
         });
     }
 
-    _getPackageVersionByUuid(uuid) {
-        let found = _.find(this.packages, (pack) => {
-            return pack.uuid === uuid;
-        });
-        return found ? found : null;
-    }
-
     _getInstalledPackage(version) {
-        let found = _.find(this.packages, (pack) => {
-            return pack.id.version === version;
+        let result = _.find(this.packages, (pack) => {
+            return pack.packageHash ? pack.packageHash === version : pack.id.version === version;
         });
-        if(found) {
-            found.isInstalled = true;
-            return found;
-        }
-        let foundByHash = _.find(this.packages, (pack) => {
-            return pack.packageHash === version;
-        });
-        if(foundByHash) {
-            foundByHash.isInstalled = true;
-            return foundByHash;
+        if(result) {
+            result.isInstalled = true;
+            return result;
         }
         return null;
-    }
-
-    _getDevicePackage(data) {
-        return _.find(this.devicePackages, (pack) => {
-            return pack.name === data.name && pack.version === data.version;
-        });
     }
 
     _preparePackages(packagesSort = this.packagesSort, isFromBlacklistRequest = false) {
@@ -1372,14 +1352,5 @@ export default class PackagesStore {
     @computed
     get blacklistCount() {
         return this.blacklist.length;
-    }
-
-    @computed
-    get uniqueGroupsCount() {
-        let groups = [];
-        _.each(this.blacklist, (obj, index) => {
-            groups = _.union(obj.statistics.groupIds, groups);
-        })
-        return groups.length;
     }
 }
