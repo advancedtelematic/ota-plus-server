@@ -10,7 +10,7 @@ class Welcome extends Component {
         this.acknowledgeWelcomePage = this.acknowledgeWelcomePage.bind(this);
     }
     componentWillMount() {
-    	if (this.props.uiAutoFeatureActivation === 'true') {
+    	if (this.props.uiAutoFeatureActivation) {
             this.props.provisioningStore.activateProvisioning();
             this.props.featuresStore.activateTreehub();
 		}

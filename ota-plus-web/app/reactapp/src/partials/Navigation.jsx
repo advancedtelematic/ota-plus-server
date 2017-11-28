@@ -72,7 +72,7 @@ class Navigation extends Component {
                         <li className="text-link">
                             <a href="mailto:support@atsgarage.com" id="support-link">SUPPORT</a>
                         </li>
-                        {uiUserProfileMenu === "true" ?
+                        {uiUserProfileMenu ?
                             <li id="menu-login">
                                 <NavigationDropdown
                                     userStore={userStore}
@@ -83,7 +83,7 @@ class Navigation extends Component {
                                     uiCredentialsDownload={uiCredentialsDownload}
                                 />
                             </li>
-                        : uiCredentialsDownload === "true" ?
+                        : uiCredentialsDownload ?
                             <li id="menu-login">
                                 <SettingsDropdown
                                     userStore={userStore}

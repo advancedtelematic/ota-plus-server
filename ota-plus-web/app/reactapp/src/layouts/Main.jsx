@@ -48,10 +48,10 @@ class Main extends Component {
     @observable uploadBoxMinimized = false;
     @observable queueModalShown = false;
     @observable activeTabId = 0;
-    @observable uiAutoFeatureActivation = document.getElementById('toggle-autoFeatureActivation').value;
-    @observable uiUserProfileMenu = document.getElementById('toggle-userProfileMenu').value;
-    @observable uiCredentialsDownload = document.getElementById('toggle-credentialsDownload').value;
-    @observable prebuiltDebrpm = document.getElementById('toggle-prebuiltDebrpm').value;
+    @observable uiAutoFeatureActivation = document.getElementById('toggle-autoFeatureActivation').value === "true";
+    @observable uiUserProfileMenu = document.getElementById('toggle-userProfileMenu').value === "true";
+    @observable uiCredentialsDownload = document.getElementById('toggle-credentialsDownload').value === "true";
+    @observable prebuiltDebrpm = document.getElementById('toggle-prebuiltDebrpm').value === "true";
 
     constructor(props) {
         super(props);
@@ -231,8 +231,8 @@ class Main extends Component {
         this.systemReady = value;
     }
     sanityCheckCompleted() {
-        if (this.uiAutoFeatureActivation !== 'true') {
-            return true
+        if (!this.uiAutoFeatureActivation) {
+            return true;
         } else {
             return this.systemReady || Cookies.get('systemReady') == 1;
         }
