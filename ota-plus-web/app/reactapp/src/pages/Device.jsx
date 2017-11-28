@@ -42,8 +42,8 @@ class Device extends Component {
     }
     cancelMtuUpdate(updateId) {
         let data = {
-            updateId: updateId,
-            deviceId: this.props.params.id
+            update: updateId,
+            device: this.props.params.id
         };
         this.props.packagesStore.cancelMtuUpdate(data);
     }

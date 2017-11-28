@@ -1181,6 +1181,11 @@
                             width: 15px;
                         }
                     }
+                    &.artificial {
+                        input {
+                            text-transform: capitalize;
+                        }
+                    }
                     &:not(.artificial):hover {
                         img {
                             opacity: 1;
