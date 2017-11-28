@@ -144,10 +144,10 @@ class CoreList extends Component {
         });
     }
     selectPackagesToDisplay() {
-        let preparedPackages = this.props.packagesStore.preparedPackagesPerDevice[this.props.device.uuid];
+        let preparedPackages = this.props.packagesStore.preparedPackages;
         let dirPacks = {};
         let corePacks = {};
-        _.map(this.props.packagesStore.preparedPackagesPerDevice[this.props.device.uuid], (packages, letter) => {
+        _.map(this.props.packagesStore.preparedPackages, (packages, letter) => {
             dirPacks[letter] = [];
             corePacks[letter] = [];
             _.map(packages, (pack, index) => {
