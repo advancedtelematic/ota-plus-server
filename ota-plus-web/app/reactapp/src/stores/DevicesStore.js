@@ -46,7 +46,7 @@ export default class DevicesStore {
     @observable deviceHistory = [];
     @observable deviceUpdatesLogs = [];
     @observable stepsHistory = [];
-    @observable multiTargetUpdates = {};
+    @observable multiTargetUpdates = [];
     @observable legacyDevicesCount = 0;
     @observable directorDevicesCount = 0;
     @observable directorDevicesIds = [];
@@ -107,7 +107,7 @@ export default class DevicesStore {
         resetAsync(this.multiTargetUpdatesFetchAsync, true);
         return axios.get(API_FETCH_MULTI_TARGET_UPDATES + '/' + id + '/queue')
             .then((response) => {
-                this.multiTargetUpdates[id] = response.data;
+                this.multiTargetUpdates = response.data;
                 this.multiTargetUpdatesFetchAsync = handleAsyncSuccess(response);
             })
             .catch((error) => {
@@ -419,7 +419,7 @@ export default class DevicesStore {
         this.deviceHistory = [];
         this.deviceUpdatesLogs = [];
         this.stepsHistory = [];
-        this.multiTargetUpdates = {};
+        this.multiTargetUpdates = [];
         this.legacyDevicesCount = 0;
         this.directorDevicesCount = 0;
         this.directorDevicesIds = [];
