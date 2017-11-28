@@ -1,5 +1,7 @@
 package com.advancedtelematic.controllers
 
+import java.util.Base64
+
 import _root_.akka.stream.Materializer
 import com.advancedtelematic.auth.UiAuthAction
 import org.scalatestplus.play.PlaySpec
@@ -65,6 +67,14 @@ class GarageNoLoginSpec extends PlaySpec with GuiceOneServerPerSuite with Result
       session(result).data.keys must contain("id_token")
       session(result).data.keys must contain("namespace")
       session(result).data.keys must contain("access_token")
+    }
+
+    "set namespace from basic auth if set" in {
+      val auth = Base64.getEncoder.encodeToString("MyNamespace:mypass".getBytes())
+      val request = FakeRequest(GET, "/login").withHeaders("Authorization" -> s"Basic $auth")
+      val result = call(loginAction, request)
+
+      session(result).data("namespace") must be("MyNamespace")
     }
 
     "set namespace from config" in {
