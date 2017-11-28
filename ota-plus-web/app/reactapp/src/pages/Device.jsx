@@ -21,7 +21,6 @@ class Device extends Component {
     componentWillMount() {
         this.props.packagesStore.page = 'device';
         this.props.devicesStore.fetchDevice(this.props.params.id);
-        this.props.packagesStore.activeDeviceId = this.props.params.id;
         this.props.packagesStore.fetchPackages();
         this.props.packagesStore.fetchTufPackages();
         this.props.packagesStore.fetchBlacklist();

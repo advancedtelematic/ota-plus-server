@@ -33,7 +33,7 @@ class Details extends Component {
 		return isPackageQueued ? isPackageQueued : false;
 	}
 	isPackageInstalled(version) {
-		let isPackageInstalled = _.find(this.props.packagesStore.installedPackagesPerDevice[this.props.device.uuid], (dev) => {
+		let isPackageInstalled = _.find(this.props.packagesStore.initialDevicePackages, (dev) => {
 			return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
 		});
 		let installedOnPrimary = false;
