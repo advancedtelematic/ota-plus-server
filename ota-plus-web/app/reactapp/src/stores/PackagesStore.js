@@ -33,7 +33,6 @@ import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Commo
 import _ from 'underscore';
 
 export default class PackagesStore {
-
     @observable directorRepoExistsFetchAsync = {};
     @observable directorRepoCreateFetchAsync = {};
     @observable tufRepoExistsFetchAsync = {};
@@ -72,8 +71,7 @@ export default class PackagesStore {
     @observable directorPackages = [];
     @observable packageStats = [];
     @observable overallPackagesCount = null;
-    @observable preparedPackages = {};
-    @observable preparedPackagesPerDevice = {};
+    @observable preparedPackages = [];
     @observable packagesFilter = null;
     @observable packagesSort = 'asc';
     @observable preparedOndevicePackages = {};
@@ -85,7 +83,6 @@ export default class PackagesStore {
     @observable blacklistedPackage = {};
     @observable affectedDevicesCount = {};
     @observable initialDevicePackages = [];
-    @observable installedPackagesPerDevice = {};
     @observable devicePackages = [];
     @observable devicePackagesFilter = '';
     @observable deviceAutoInstalledPackages = [];
@@ -103,7 +100,6 @@ export default class PackagesStore {
     @observable ondevicePackagesTotalCount = null;
     @observable ondevicePackagesLimit = 25;
     @observable ondeviceFilter = '';
-    @observable activeDeviceId = null;
 
     @observable directorDevicePackagesFilter = '';
     @observable directorDeviceHistoryCurrentPage = 0;
@@ -599,10 +595,7 @@ export default class PackagesStore {
         resetAsync(this.initialPackagesForDeviceFetchAsync, true);
         return axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages?regex=' + '&limit=' + this.devicePackagesLimit)
                 .then(function(response) {
-                    this.initialDevicePackages = response.data.values;
-                    extendObservable(this.installedPackagesPerDevice, {
-                        [id]: response.data.values
-                    });
+                    this.initialDevicePackages = response.data.values;                    
                     switch (this.page) {
                         case 'device':
                             this._prepareDevicePackages();
@@ -997,8 +990,9 @@ export default class PackagesStore {
     _prepareDevicePackages(packagesSort = this.packagesSort) {
         this.packagesSort = packagesSort;
         let packages = JSON.parse(JSON.stringify(this.packages));
+
         if(packages.length) {
-            const installedPackages = this.installedPackagesPerDevice[this.activeDeviceId];
+            const installedPackages = this.initialDevicePackages;
             const autoInstalledPackages = this.deviceAutoInstalledPackages;
             const directorAutoInstalledPackages = this.directorDeviceAutoInstalledPackages;
             const blacklist = this.blacklist;
@@ -1110,16 +1104,10 @@ export default class PackagesStore {
                 sortedPackages = (packagesSort !== 'undefined' && packagesSort == 'desc' ? Object.assign(specialGroup, sortedPackages) : Object.assign(sortedPackages, specialGroup));
             }
             this.preparedPackages = sortedPackages;
-            extendObservable(this.preparedPackagesPerDevice, {
-                [this.activeDeviceId]: sortedPackages
-            });
             this.devicePackagesQueuedCount = queuedCount;
             this.devicePackagesInstalledCount = installedCount;
         } else {
-            this.preparedPackages = {};
-            extendObservable(this.preparedPackagesPerDevice, {
-                [this.activeDeviceId]: {}
-            });
+            this.preparedPackages = [];           
             this.devicePackagesQueuedCount = 0;
             this.devicePackagesInstalledCount = 0;
         }
@@ -1260,18 +1248,22 @@ export default class PackagesStore {
         this.initialPackages = [];
         this.packages = [];
         this.directorPackages = [];
+        this.packageStats = [];
         this.overallPackagesCount = null;
-        this.preparedPackages = {};
-        this.preparedPackagesPerDevice = {};
+        this.preparedPackages = [];
         this.packagesFilter = null;
         this.packagesSort = 'asc';
+        this.preparedOndevicePackages = {};
+        this.packagesOndeviceFilter = null;
+        this.packagesOndeviceSort = 'asc';
+        this.packagesUploading = [];
         this.blacklist = [];
         this.preparedBlacklist = [];
         this.blacklistedPackage = {};
         this.affectedDevicesCount = {};
         this.initialDevicePackages = [];
-        this.installedPackagesPerDevice = [];
         this.devicePackages = [];
+        this.devicePackagesFilter = '';
         this.deviceAutoInstalledPackages = [];
         this.directorDeviceAutoInstalledPackages = [];
         this.devicePackagesInstalledCount = 0;
@@ -1284,7 +1276,6 @@ export default class PackagesStore {
         this.ondevicePackagesCurrentPage = 0;
         this.ondevicePackagesTotalCount = 0;
         this.ondeviceFilter = '';
-        this.activeDeviceId = null;
         this.directorDeviceHistoryCurrentPage = 0;
         this.directorDeviceHistoryTotalCount = 0;
         this.directorDevicePackagesFilter = '';

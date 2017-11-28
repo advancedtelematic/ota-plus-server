@@ -34,7 +34,7 @@ class SoftwarePanel extends Component {
                                 <Loader />
                             </div>
                         :
-                            Object.keys(packagesStore.preparedPackagesPerDevice[device.uuid]).length ?
+                            Object.keys(packagesStore.preparedPackages).length ?
                                 <PackagesCoreList
                                     packagesStore={packagesStore}
                                     devicesStore={devicesStore}
