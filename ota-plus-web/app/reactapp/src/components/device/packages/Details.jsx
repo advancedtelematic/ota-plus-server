@@ -213,7 +213,7 @@ class Details extends Component {
                                                 targetFormat: expandedPack.targetFormat,
                                                 generateDiff: false
                                             })}
-											disabled={isPackageBlacklisted || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || expandedPack.isInstalled || Object.keys(devicesStore.multiTargetUpdates[device.uuid]).length }>
+											disabled={isPackageBlacklisted || isPackageQueued || isAutoInstallEnabled || isPackageInstalled || expandedPack.isInstalled || devicesStore.multiTargetUpdates.length }>
 											Install
 										</button>
 										: ''

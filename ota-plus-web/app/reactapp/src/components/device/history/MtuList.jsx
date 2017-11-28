@@ -3,12 +3,12 @@ import { observer } from 'mobx-react';
 import _ from 'underscore';
 import { Loader } from '../../../partials';
 import ListItem from './ListItem';
-import MultiTargetItem from './MultiTargetItem';
+import MtuListItem from './MtuListItem';
 import { InfiniteScroll } from '../../../utils';
 
 @observer
 
-class MultiTargetList extends Component {
+class MtuList extends Component {
     constructor(props) {
         super(props);
     }
@@ -26,31 +26,29 @@ class MultiTargetList extends Component {
                         packagesStore.fetchDirectorDevicePackagesHistory(device.uuid, packagesStore.directorDevicePackagesFilter)
                     }}
                 >
-                    {!_.isEmpty(packagesStore.directorDeviceHistoryPerDevice[device.uuid]) ?
-                        _.map(packagesStore.directorDeviceHistoryPerDevice[device.uuid], (historyItem, index) => {
+                    {packagesStore.directorDeviceHistory.length ?
+                        _.map(packagesStore.directorDeviceHistory, (historyItem, index) => {
                             return (
-                                <MultiTargetItem
+                                <MtuListItem
                                     item={historyItem}
                                     key={index}
                                 />
                             );
                         })
                     :
-                        !packagesStore.packagesDirectorDeviceHistoryFetchAsync.isFetching ?
-                            <div className="queue-empty-center">
-                                Multi target update history is empty.
-                            </div>
-                        :
-                            null                        
+                        <div className="wrapper-center">
+                            Multi target update history is empty.
+                        </div>
                     }
-                     
                 </InfiniteScroll>
             </ul>
         );
     }
 }
-MultiTargetList.propTypes = {
+
+MtuList.propTypes = {
     packagesStore: PropTypes.object.isRequired,
     device: PropTypes.object.isRequired
 }
-export default MultiTargetList;
+
+export default MtuList;

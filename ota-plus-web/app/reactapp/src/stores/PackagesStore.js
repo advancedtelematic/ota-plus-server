@@ -95,8 +95,6 @@ export default class PackagesStore {
     @observable deviceQueue = [];
     @observable deviceHistory = [];
     @observable directorDeviceHistory = [];
-    @observable deviceHistoryPerDevice = {};
-    @observable directorDeviceHistoryPerDevice = {};
     @observable deviceUpdatesLogs = [];
     @observable devicePackagesLimit = 2000;
 
@@ -767,16 +765,13 @@ export default class PackagesStore {
         if((this.directorDevicePackagesFilter !== filter) || fetchFirstItems) {
             this.directorDeviceHistoryTotalCount = null;
             this.directorDeviceHistoryCurrentPage = 0;
-            this.directorDeviceHistoryPerDevice[this.activeDeviceId] = [];
         }
         this.directorDevicePackagesFilter = filter;
         return axios.get(API_PACKAGES_DIRECTOR_DEVICE_HISTORY + '/' + id + '?limit=' + this.directorDeviceHistoryLimit + 
             '&offset=' + this.directorDeviceHistoryCurrentPage * this.directorDeviceHistoryLimit)
             .then(function(response) {
                 let data = response.data.values;
-                let prevData = this.directorDeviceHistoryPerDevice[this.activeDeviceId] ? this.directorDeviceHistoryPerDevice[this.activeDeviceId] : [];
-                this.directorDeviceHistory = data;
-                this.directorDeviceHistoryPerDevice[this.activeDeviceId] = _.uniq(prevData.concat(data), obj => obj.updateId);
+                this.directorDeviceHistory = _.uniq(this.directorDeviceHistory.concat(data), item => item.updateId);
                 this.directorDeviceHistoryCurrentPage++;
                 this.directorDeviceHistoryTotalCount = response.data.total;
                 this.packagesDirectorDeviceHistoryFetchAsync = handleAsyncSuccess(response);
@@ -792,7 +787,6 @@ export default class PackagesStore {
             .then(function(response) {
                 let data = response.data.reverse();
                 this.deviceHistory = data;
-                this.deviceHistoryPerDevice[this.activeDeviceId] = data;
                 this.packagesDeviceHistoryFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
@@ -1285,8 +1279,6 @@ export default class PackagesStore {
         this.deviceQueue = [];
         this.deviceHistory = [];
         this.directorDeviceHistory = [];
-        this.deviceHistoryPerDevice = {};
-        this.directorDeviceHistoryPerDevice = {};
         this.deviceUpdatesLogs = [];
         this.ondevicePackages = [];
         this.ondevicePackagesCurrentPage = 0;

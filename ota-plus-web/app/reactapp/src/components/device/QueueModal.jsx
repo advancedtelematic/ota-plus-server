@@ -3,9 +3,8 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { Popover } from 'material-ui';
-import { Modal } from '../../partials';
-import { QueueList } from './queue';
-import { HistoryList } from './history';
+import { QueueList, QueueMtuList } from './queue';
+import { HistoryList, HistoryMtuList } from './history';
 import _ from 'underscore';
 
 @observer
@@ -33,6 +32,7 @@ class QueueModal extends Component {
     render() {
         const { packagesStore, devicesStore, shown, hide, device, cancelInstallation, cancelMtuUpdate, activeTabId, setQueueModalActiveTabId, anchorEl } = this.props;
         const installationStatus = QueueModal.checkStatus(device.deviceStatus);
+        const isDeviceDirector = device.isDirector;
         const content = (
             <span>
                 <Tabs
@@ -48,13 +48,17 @@ class QueueModal extends Component {
                         onActive={setQueueModalActiveTabId.bind(this, 0)}
                     >
                         <div className={"wrapper-list" + (activeTabId === 1 ? " hide" : "")}>
-                            <QueueList 
-                                packagesStore={packagesStore}
-                                devicesStore={devicesStore}
-                                cancelInstallation={cancelInstallation}
-                                cancelMtuUpdate={cancelMtuUpdate}
-                                device={device}
-                            />
+                            {isDeviceDirector ?
+                                <QueueMtuList 
+                                    devicesStore={devicesStore}
+                                    cancelMtuUpdate={cancelMtuUpdate}
+                                />
+                            :
+                                <QueueList 
+                                    packagesStore={packagesStore}
+                                    cancelInstallation={cancelInstallation}
+                                />
+                            }
                         </div>
                     </Tab>
                     <Tab
@@ -65,10 +69,18 @@ class QueueModal extends Component {
                         onActive={setQueueModalActiveTabId.bind(this, 1, !_.isEmpty(device) ? device : null)}
                     >
                         <div className={"wrapper-list" + (activeTabId === 0 ? " hide" : "")}>
-                            <HistoryList 
-                                packagesStore={packagesStore}
-                                device={device}
-                            />
+                            {isDeviceDirector ?
+                                <HistoryMtuList
+                                    packagesStore={packagesStore}
+                                    device={device}
+                                />
+                            :
+                                <HistoryList 
+                                    packagesStore={packagesStore}
+                                    device={device}
+                                />
+                            }
+                            
                         </div>
                     </Tab>
                 </Tabs>

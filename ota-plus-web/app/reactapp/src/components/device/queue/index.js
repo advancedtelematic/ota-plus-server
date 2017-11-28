@@ -1,9 +1,11 @@
 import QueueList from './List';
+import QueueMtuList from './MtuList';
 import QueueListItem from './ListItem';
-import QueueMultiTargetItem from './MultiTargetItem';
+import QueueMtuListItem from './MtuListItem';
 
 export {
     QueueList,
+    QueueMtuList,
     QueueListItem,
-    QueueMultiTargetItem
+    QueueMtuListItem
 }
