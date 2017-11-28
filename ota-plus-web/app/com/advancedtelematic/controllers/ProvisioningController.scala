@@ -35,7 +35,7 @@ class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient
 
   val cryptApi = new CryptApi(conf, clientExec)
 
-  def accountName(request: AuthenticatedRequest[_]): String = request.idToken.claims.userId.id
+  def accountName(request: AuthenticatedRequest[_]): String = request.namespace.get
 
   val provisioningStatus: Action[AnyContent] = authAction.async { implicit request =>
     cryptApi.getAccountInfo(accountName(request)).map(x => Ok(Json.obj("active" -> x.isDefined)))

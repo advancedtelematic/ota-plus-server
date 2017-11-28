@@ -44,7 +44,7 @@ class AutoProvisioningSpec extends PlaySpec with GuiceOneServerPerSuite with Sca
         "id_token"               -> TokenUtils.identityTokenFor(subj).value,
         "access_token"           -> Json.toJson(AccessToken("XXXX", Instant.now().plusSeconds(3600))).toString(),
         "auth_plus_access_token" -> "",
-        "namespace"              -> "",
+        "namespace"              -> subj,
         "csrfToken"              -> csrfToken
       ))
     Cookies.encodeCookieHeader(Seq(Session.encodeAsCookie(session)))
