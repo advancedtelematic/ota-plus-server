@@ -61,7 +61,7 @@ class UserDropdown extends Component {
             <div className="dropdown-menu">
                 {settings ? 
                     <ul className="links">
-                        {uiCredentialsDownload === 'true' ?
+                        {uiCredentialsDownload ?
                             <li>
                                   <Link to="/profile/access-keys" id="link-access-keys" onClick={this.closeDropdown}>Provisioning keys</Link>
                             </li>
@@ -109,7 +109,7 @@ class UserDropdown extends Component {
                             <li>
                                   <Link to="/profile/billing" id="link-billing" onClick={this.closeDropdown}>Billing</Link>
                             </li>
-                            {uiCredentialsDownload === 'true' ?
+                            {uiCredentialsDownload ?
                                 <li>
                                       <Link to="/profile/access-keys" id="link-access-keys" onClick={this.closeDropdown}>Provisioning keys</Link>
                                 </li>
