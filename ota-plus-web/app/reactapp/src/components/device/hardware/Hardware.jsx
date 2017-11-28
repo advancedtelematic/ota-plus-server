@@ -25,11 +25,10 @@ class Hardware extends Component {
         this.packagesFetchHandler = observe(props.packagesStore, (change) => {
             if((change.name === 'packagesFetchAsync' || change.name === 'packagesTufFetchAsync') && change.object[change.name].isFetching === false) {
                 if(props.device.isDirector) {
-                    props.selectEcu(this.props.devicesStore._getPrimaryHardwareId(), this.props.devicesStore._getPrimarySerial(), this.props.devicesStore._getPrimaryHash(), 'primary');                    
+                    props.selectEcu(props.devicesStore._getPrimaryHardwareId(), props.devicesStore._getPrimarySerial(), props.devicesStore._getPrimaryHash(), 'primary');                    
                 }
             }
         });
-        
     }
     componentWillUnmount() {
         this.packagesFetchHandler();
