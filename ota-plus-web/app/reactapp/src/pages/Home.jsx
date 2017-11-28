@@ -31,8 +31,8 @@ class Home extends Component {
         this.props.campaignsStore._reset();
     }
     sanityCheckCompleted() {
-        if (this.props.uiAutoFeatureActivation !== 'true') {
-            return true
+        if (!this.props.uiAutoFeatureActivation) {
+            return true;
         } else {
             return this.props.systemReady || Cookies.get('systemReady') == 1;
         }

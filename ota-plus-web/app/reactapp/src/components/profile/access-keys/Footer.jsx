@@ -33,8 +33,8 @@ class Footer extends Component {
                                                         </pre>
                         </div>
                     </li>
-                    {uiCredentialsDownload === "true" ?
-                        prebuiltDebrpm === "true" ?
+                    {uiCredentialsDownload ?
+                        prebuiltDebrpm ?
                             prebuiltDebrpmBlock
                         :
                             null

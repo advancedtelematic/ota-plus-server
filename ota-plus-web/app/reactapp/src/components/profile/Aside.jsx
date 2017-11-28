@@ -154,13 +154,13 @@ class Aside extends Component {
             </aside>
         );
         return (
-            uiUserProfileMenu === "true" ?
-                uiCredentialsDownload === "true" ?
+            uiUserProfileMenu ?
+                uiCredentialsDownload ?
                     fullAside
                 :
                     fullAsideWithoutProvisioningKeys
             :
-                uiCredentialsDownload === "true" ?
+                uiCredentialsDownload ?
                     onlyProvisioningKeys
                 :
                     null            
