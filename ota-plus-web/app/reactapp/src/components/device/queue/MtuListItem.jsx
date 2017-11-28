@@ -7,7 +7,7 @@ class MultiTargetITem extends Component {
         super(props);
     }
     render() {
-        const { item, hardwareId, updateId, deviceId, length, cancelMtuUpdate, inFlight } = this.props;
+        const { item, hardwareId, updateId, length, cancelMtuUpdate, inFlight } = this.props;
         let hash = item.image.fileinfo.hashes.sha256;
         return (
             <li id={"queued-entry-" + hash} className={"multi-target-entry" + (inFlight ? " pending" : "")}>

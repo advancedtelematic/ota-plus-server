@@ -122,7 +122,7 @@ class Device extends Component {
         };
         this.expandedPack = this.props.packagesStore._getInstalledPackage(installedHash);
         this.props.packagesStore.fetchDirectorDeviceAutoInstalledPackages(this.props.devicesStore.device.uuid, serial);
-        this.props.packagesStore._setQueuedTufPackages(this.props.devicesStore.multiTargetUpdates[this.props.devicesStore.device.uuid], serial);
+        this.props.packagesStore._setQueuedTufPackages(this.props.devicesStore.multiTargetUpdates, serial);
     }
     clearStepsHistory(e) {
         if(e) e.preventDefault();

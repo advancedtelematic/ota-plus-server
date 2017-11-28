@@ -4,7 +4,7 @@ import _ from 'underscore';
 import moment from 'moment';
 
 @observer
-class MultiTargetItem extends Component {
+class MtuListItem extends Component {
     constructor(props) {
         super(props);
     }
@@ -52,7 +52,7 @@ class MultiTargetItem extends Component {
     }
 }
 
-MultiTargetItem.propTypes = {
+MtuListItem.propTypes = {
 }
 
-export default MultiTargetItem;
+export default MtuListItem;
