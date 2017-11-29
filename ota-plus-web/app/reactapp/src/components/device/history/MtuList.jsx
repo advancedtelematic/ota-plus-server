@@ -7,13 +7,17 @@ import MtuListItem from './MtuListItem';
 import { InfiniteScroll } from '../../../utils';
 
 @observer
-
 class MtuList extends Component {
     constructor(props) {
         super(props);
     }
     render() {
         const { packagesStore, device } = this.props;
+        const emptyHistory = (
+            <div className="wrapper-center">
+                Multi target update history is empty.
+            </div>
+        );
         return (
             <ul className="list history">
                 <InfiniteScroll
@@ -36,9 +40,7 @@ class MtuList extends Component {
                             );
                         })
                     :
-                        <div className="wrapper-center">
-                            Multi target update history is empty.
-                        </div>
+                        emptyHistory
                     }
                 </InfiniteScroll>
             </ul>

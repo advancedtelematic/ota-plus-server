@@ -2,12 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { observable, isObservableArray } from 'mobx';
 import _ from 'underscore';
-import DeviceHardwareOverlayItem from './OverlayItem';
+import DeviceHardwareReportedList from './ReportedList';
+import { DeviceHardwarePackagesInstalledList } from './packages';
 import Popover from 'material-ui/Popover';
 import { Switch, Loader } from '../../../partials';
 import { PropertiesOnDeviceList } from '../properties';
 import { Form } from 'formsy-react';
 import { SubHeader, SearchBar } from '../../../partials';
+
+const noHardwareReported = "This device hasn’t reported any information about its hardware or system components yet.";
 
 @observer
 class Overlay extends Component {
@@ -22,7 +25,8 @@ class Overlay extends Component {
     componentWillReceiveProps(nextProps) {
         if(this.props.shown !== nextProps.shown && nextProps.shown) {
             this.props.hardwareStore.fetchHardware(this.props.device.uuid);
-            this.props.packagesStore.fetchInitialDevicePackages(this.props.device.uuid);
+            this.props.packagesStore.fetchOndevicePackages(this.props.device.uuid);
+            this.props.packagesStore.fetchBlacklist();
         } else {
             this.props.hardwareStore._reset();
         }
@@ -48,8 +52,7 @@ class Overlay extends Component {
                 </div>
             : (isObservableArray(hardwareStore.hardware) ? !hardwareStore.hardware.length : !Object.keys(hardwareStore.hardware).length) ?
                 <div className="wrapper-center">
-                    This device hasn’t reported any information about
-                    its hardware or system components yet.
+                    {noHardwareReported}
                 </div>
             :
                 <div id="hardware-overlay">
@@ -70,13 +73,13 @@ class Overlay extends Component {
                                         />
                                     </Form>
                                 </SubHeader>
-                                <DeviceHardwareOverlayItem
+                                <DeviceHardwareReportedList
                                     hardware={hardwareStore.filteredHardware}
                                 />
                             </div>
                         :
                             <div className="packages-details">
-                                <PropertiesOnDeviceList
+                                <DeviceHardwarePackagesInstalledList
                                     packagesStore={packagesStore}
                                     device={device}
                                     showPackageBlacklistModal={showPackageBlacklistModal}

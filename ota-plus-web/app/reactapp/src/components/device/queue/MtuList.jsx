@@ -11,6 +11,11 @@ class MtuQueueList extends Component {
     }
     render() {
         const {devicesStore, cancelMtuUpdate } = this.props;
+        const emptyQueue = (
+            <div className="queue-empty-center">
+                You haven't got any multi target updates pending. <br />
+            </div>
+        );
         return (
             <div>
                 {devicesStore.multiTargetUpdatesFetchAsync.isFetching || devicesStore.multiTargetUpdateCreateAsync.isFetching ?
@@ -39,9 +44,7 @@ class MtuQueueList extends Component {
                             })}
                         </ul>
                 :
-                    <div className="queue-empty-center">
-                        You haven't got any multi target updates pending. <br />
-                    </div>
+                    emptyQueue
                 }
             </div>
         );

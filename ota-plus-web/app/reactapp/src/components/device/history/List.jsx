@@ -12,6 +12,13 @@ class List extends Component {
     }
     render() {
         const { packagesStore, device } = this.props;
+        const emptyHistory = (
+            <div className="queue-empty-center">
+                Installation history is empty. <br />
+                The installation of the queued packages will start
+                automatically when your device connects.
+            </div> 
+        );
         return (
             <div>
                 {packagesStore.packagesDeviceHistoryFetchAsync.isFetching || packagesStore.packagesDeviceUpdatesLogsFetchAsync.isFetching ?
@@ -36,11 +43,7 @@ class List extends Component {
                             })}
                         </ul>
                     :
-                        <div className="queue-empty-center">
-                            Installation history is empty. <br />
-                            The installation of the queued packages will start
-                            automatically when your device connects.
-                        </div>                    
+                        emptyHistory                
                 }
             </div>
         );

@@ -820,7 +820,7 @@
 
                             .element-box {
                                 padding-right: 15px;
-                                    
+
                                 &.device {
                                     .icon {
                                         background-image: url('/assets/img/icons/black/devices.png');
@@ -2031,6 +2031,9 @@
                     }
                     &.bg-grey {
                         background-color: #666666;
+                    }
+                    &.bg-red {
+                        background-color: red;
                     }
                 }
 

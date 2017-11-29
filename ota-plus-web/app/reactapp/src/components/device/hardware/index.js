@@ -1,13 +1,15 @@
-import DeviceHardware from './Hardware';
 import DeviceHardwareList from './List';
 import DeviceHardwareOverlay from './Overlay';
-import DeviceHardwareOverlayItem from './OverlayItem';
+import DeviceHardwareReportedList from './ReportedList';
 import DeviceHardwareSecondaryEcuDetails from './SecondaryEcuDetails';
+import DevicePrimaryEcu from './PrimaryEcu';
+import DeviceSecondaryEcu from './SecondaryEcu';
 
 export {
-    DeviceHardware,
     DeviceHardwareList,
     DeviceHardwareOverlay,
-    DeviceHardwareOverlayItem,
-    DeviceHardwareSecondaryEcuDetails
+    DeviceHardwareReportedList,
+    DeviceHardwareSecondaryEcuDetails,
+    DevicePrimaryEcu,
+    DeviceSecondaryEcu,
 }

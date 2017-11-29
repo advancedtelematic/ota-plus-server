@@ -11,6 +11,9 @@ class UpdateLog extends Component {
     render() {
         const { request, updateLog } = this.props;
         const time = new Date(request.completionTime);
+        const emptyLog = (
+            <span>Log is empty</span>
+        );
         return (
             <div className="log">
                 <div className="desc">
@@ -32,7 +35,7 @@ class UpdateLog extends Component {
                     {updateLog.resultText ?
                         updateLog.resultText
                     :
-                        <span>Log is empty</span>
+                        emptyLog
                     }
                 </div>
             </div>

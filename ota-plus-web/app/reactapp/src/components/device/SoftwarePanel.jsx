@@ -3,8 +3,11 @@ import { observe } from 'mobx';
 import { observer } from 'mobx-react';
 import { Form } from 'formsy-react';
 import { SubHeader, SearchBar, Loader } from '../../partials';
-import { PackagesCoreList } from './packages';
+import { PackagesList } from './packages';
 import _ from 'underscore';
+
+const title = "Software";
+const noSearchResults = "No matching packages found.";
 
 @observer
 class SoftwarePanel extends Component {
@@ -21,38 +24,33 @@ class SoftwarePanel extends Component {
         this.props.packagesStore.fetchPackages(filter);
     }
     render() {
-        const { devicesStore, packagesStore, hardwareStore, device, togglePackageAutoUpdate, toggleTufPackageAutoUpdate, onFileDrop, expandedPack, loadPackageVersionProperties, activeEcu } = this.props;
+        const { devicesStore, packagesStore, hardwareStore, togglePackageAutoUpdate, toggleTufPackageAutoUpdate, onFileDrop, showPackageDetails, packagesReady } = this.props;
         return (
             <div className="software-panel">
                 <div className="darkgrey-header">
-                    Software
+                    {title}
                 </div>
                 <div className="wrapper-full">
                     <div className="wrapper-software">
-                        {packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching ?
+                        {!packagesReady ?
                             <div className="wrapper-loader">
                                 <Loader />
                             </div>
                         :
-                            Object.keys(packagesStore.preparedPackages).length ?
-                                <PackagesCoreList
+                            Object.keys(packagesStore.preparedPackages).length ?                                
+                                <PackagesList
                                     packagesStore={packagesStore}
                                     devicesStore={devicesStore}
                                     hardwareStore={hardwareStore}
-                                    device={device}
                                     onFileDrop={onFileDrop}
                                     togglePackageAutoUpdate={togglePackageAutoUpdate}
                                     toggleTufPackageAutoUpdate={toggleTufPackageAutoUpdate}
-                                    expandedPack={expandedPack}
-                                    loadPackageVersionProperties={loadPackageVersionProperties}
-                                    activeEcu={activeEcu}
+                                    showPackageDetails={showPackageDetails}
                                 />
                             :
-                                <span className="content-empty">
-                                    <div className="wrapper-center">
-                                        No matching packages found.
-                                    </div>
-                                </span>
+                                <div className="wrapper-center">
+                                    {noSearchResults}
+                                </div>
                         }
                     </div>
                 </div>
@@ -65,13 +63,10 @@ SoftwarePanel.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
-    device: PropTypes.object.isRequired,
     togglePackageAutoUpdate: PropTypes.func.isRequired,
     toggleTufPackageAutoUpdate: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,
-    expandedPack: PropTypes.object,
-    loadPackageVersionProperties: PropTypes.func.isRequired,
-    activeEcu: PropTypes.object,
+    showPackageDetails: PropTypes.func.isRequired,
 }
 
 export default SoftwarePanel;
