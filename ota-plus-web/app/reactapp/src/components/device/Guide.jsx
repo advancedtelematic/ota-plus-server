@@ -1,29 +1,14 @@
 import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { FlatButton } from 'material-ui';
-import { Modal } from '../../partials';
-import CredentialsTooltip from './CredentialsTooltip';
 import _ from 'underscore';
 
 @observer
 class Guide extends Component {
-    @observable shownTooltipInfoName = null;
-
     constructor(props) {
         super(props);
-        this.showTooltipInfo = this.showTooltipInfo.bind(this);
-        this.hideTooltipInfo = this.hideTooltipInfo.bind(this);
         this.downloadClient = this.downloadClient.bind(this);
         this.selectStep = this.selectStep.bind(this);
-    }
-    showTooltipInfo(name, e) {
-        if(e) e.preventDefault();
-        this.shownTooltipInfoName = name;
-    }
-    hideTooltipInfo(e) {
-        if(e) e.preventDefault();
-        this.shownTooltipInfoName = null;
     }
     componentWillMount() {
         if(!_.includes(this.props.devicesStore.stepsHistory, 3)) {
@@ -31,9 +16,9 @@ class Guide extends Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if(nextProps.device.lastSeen && !nextProps.device.fetched) {
+        if(nextProps.devicesStore.device.lastSeen && !nextProps.devicesStore.device.fetched) {
             this.props.devicesStore.addStepToHistory(3);
-            this.props.devicesStore.fetchDevice(this.props.device.uuid, 'once');
+            this.props.devicesStore.fetchDevice(nextProps.devicesStore.device.uuid, 'once');
         }
     }
     downloadClient(e) {
@@ -46,8 +31,9 @@ class Guide extends Component {
         }
     }
     render() {
-        const { device, devicesStore, clearStepsHistory } = this.props;        
-        let activeStep = _.last(devicesStore.stepsHistory);
+        const { devicesStore, clearStepsHistory } = this.props;     
+        const device = devicesStore.device;   
+        const activeStep = _.last(devicesStore.stepsHistory);
         const bodyActions = (
             <div className="body-actions">
                 <FlatButton
@@ -173,34 +159,12 @@ class Guide extends Component {
                         </div>
                     </div>
                 </div>
-                <Modal 
-                    title="How to copy the Package to your device"
-                    content={copyProcessTooltipContent}
-                    shown={this.shownTooltipInfoName === 'copy_process'}
-                />
-                <Modal 
-                    title="How to configure other init systems"
-                    content={otherSystemTooltipContent}
-                    shown={this.shownTooltipInfoName === 'other_system'}
-                />
-                <Modal 
-                    title="How to build device"
-                    content={buildDeviceTooltipContent}
-                    shown={this.shownTooltipInfoName === 'build_device'}
-                />
-                <CredentialsTooltip 
-                    shown={this.shownTooltipInfoName === 'unique_credentials'}
-                    hide={this.hideTooltipInfo}
-                    deviceId={device.uuid}
-                    className="tooltip-credentials"
-                />
             </div>
         );
     }
 }
 
 Guide.propTypes = {
-    device: PropTypes.object.isRequired
 }
 
 export default Guide;

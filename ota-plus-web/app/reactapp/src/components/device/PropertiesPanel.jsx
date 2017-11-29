@@ -3,40 +3,36 @@ import { observer } from 'mobx-react';
 import { observe, observable } from 'mobx';
 import { FlatButton, DropDownMenu, MenuItem } from 'material-ui';
 import { Loader } from '../../partials';
-import { PackagesDetails } from './packages';
+import { PropertiesList } from './properties';
+
+const title = "Properties";
 
 @observer
 class PropertiesPanel extends Component {
     constructor(props) {
         super(props);
     }
-    componentWillMount() {
-    this.props.packagesStore.fetchOndevicePackages(this.props.device.uuid);
-    }
     render() {
-        const { devicesStore, showPackageBlacklistModal, packagesStore, expandedPack, installPackage, multiTargetUpdate, device, activeEcu } = this.props;
-        let attributesFetching = packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching || packagesStore.packagesForDeviceFetchAsync.isFetching;
+        const { packagesStore, devicesStore, hardwareStore, showPackageBlacklistModal, installPackage, installTufPackage, packagesReady } = this.props;
         return (
             <div className="properties-panel">
                 <div className="darkgrey-header">
-                    Properties
+                    {title}
                 </div>
                 <div className="wrapper-full">                    
                     <div className="wrapper-properties recalculated-properties-height">
-                        {attributesFetching ?
+                        {!packagesReady ?
                             <div className="wrapper-loader">
                                 <Loader />
                             </div>
                         :
-                            <PackagesDetails
+                            <PropertiesList
                                 packagesStore={packagesStore}
                                 devicesStore={devicesStore}
-                                expandedPack={expandedPack}
+                                hardwareStore={hardwareStore}
                                 showPackageBlacklistModal={showPackageBlacklistModal}
                                 installPackage={installPackage}
-                                multiTargetUpdate={multiTargetUpdate}
-                                device={device}
-                                activeEcu={activeEcu}
+                                installTufPackage={installTufPackage}
                             />
                         }
                     </div>
@@ -49,11 +45,10 @@ class PropertiesPanel extends Component {
 PropertiesPanel.propTypes = {
     packagesStore: PropTypes.object.isRequired,
     devicesStore: PropTypes.object.isRequired,
+    hardwareStore: PropTypes.object.isRequired,
     showPackageBlacklistModal: PropTypes.func.isRequired,
-    expandedPack: PropTypes.object,
     installPackage: PropTypes.func.isRequired,
-    multiTargetUpdate: PropTypes.func.isRequired,
-    device: PropTypes.object.isRequired,
+    installTufPackage: PropTypes.func.isRequired,
 }
 
 export default PropertiesPanel;

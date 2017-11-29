@@ -24,7 +24,7 @@ class Header extends Component {
         this.renameHandler = new AsyncStatusCallbackHandler(props.devicesStore, 'devicesRenameAsync', this.handleResponse.bind(this));
     }
     componentWillReceiveProps(nextProps) {
-        const { device } = nextProps.devicesStore;
+        const device = nextProps.device;
         if(!_.isEmpty(device)) {
             this.renameDisabled = true;
             this.oldDeviceName = device.deviceName;
@@ -35,16 +35,11 @@ class Header extends Component {
     componentWillUnmount() {
         this.renameHandler();
     }
-    backButtonAction(e) {
-        if(e) e.preventDefault();
-        window.history.go(-1);
-    }
     enableDeviceRename() {
         this.renameDisabled = false;
         this.focusTextInput();
     }
     cancelDeviceRename() {
-        const { device } = this.props.devicesStore;
         this.renameDisabled = true; 
         this.newDeviceName = this.oldDeviceName;
         this.newDeviceNameLength = this.oldDeviceName.length;
@@ -60,7 +55,7 @@ class Header extends Component {
         }
     }
     renameDevice() {
-        const { device } = this.props.devicesStore;
+        const { devicesStore, device } = this.props;
         this.props.devicesStore.renameDevice(device.uuid, {
             deviceId: this.newDeviceName,
             deviceName: this.newDeviceName,
@@ -81,8 +76,7 @@ class Header extends Component {
         }
     }
     render() {
-        const { devicesStore, showQueueModal, queueButtonRef } = this.props;
-        const { device } = devicesStore;
+        const { devicesStore, device, showQueueModal, queueButtonRef, backButtonAction } = this.props;
         const lastSeenDate = new Date(device.lastSeen);
         const createdDate = new Date(device.createdAt);
         const activatedDate = new Date(device.activatedAt);
@@ -137,7 +131,7 @@ class Header extends Component {
                 }
                 device={device}
                 backButtonShown={true}
-                backButtonAction={this.backButtonAction}>
+                backButtonAction={backButtonAction}>
                 <FadeAnimation>
                     {!devicesStore.devicesOneFetchAsync.isFetching ?
                         <span className="pull-right">

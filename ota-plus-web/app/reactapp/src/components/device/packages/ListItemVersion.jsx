@@ -11,21 +11,29 @@ class ListItemVersion extends Component {
         this.handlePackageVersionClick = this.handlePackageVersionClick.bind(this);
     }
     handlePackageVersionClick() {
-        if(this.props.selectedPackageVersion !== this.props.version.id.version) {
-            this.props.loadPackageVersionProperties(this.props.version);
-            this.props.togglePackageVersion(this.props.version.id.version);
+        const { version, selectedPackageVersion, showPackageDetails, togglePackageVersion } = this.props;
+        if(selectedPackageVersion !== version.id.version) {
+            showPackageDetails(version);
+            togglePackageVersion(version.id.version);
         }
     }
     isPackageBlacklisted(version) {
-        let isPackageBlacklisted = _.find(this.props.packagesStore.blacklist, (dev) => {
+        const { packagesStore } = this.props;
+        let isPackageBlacklisted = _.find(packagesStore.blacklist, (dev) => {
             return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
         });
         return isPackageBlacklisted ? isPackageBlacklisted : false;
     }
     render() {
-        const { version, queuedPackage, installedPackage, expandedPack, loadPackageVersionProperties, selectedPackageVersion } = this.props;
+        const { 
+            packagesStore, 
+            version, 
+            queuedPackage, 
+            installedPackage, 
+            selectedPackageVersion
+        } = this.props;
         let blacklistedPackage = this.isPackageBlacklisted(version);
-        let expandedPackUuid = expandedPack ? expandedPack.uuid : null;
+        let expandedPackUuid = packagesStore.expandedPackage ? packagesStore.expandedPackage.uuid : null;
         return (
             <li className={selectedPackageVersion === version.id.version ? "selected" : ""} id={version.uuid === expandedPackUuid ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={this.handlePackageVersionClick}>
                 <div className="left-box">
@@ -70,8 +78,6 @@ ListItemVersion.propTypes = {
     version: PropTypes.object.isRequired,
     queuedPackage: PropTypes.string,
     installedPackage: PropTypes.string,
-    expandedPack: PropTypes.object,
-    loadPackageVersionProperties: PropTypes.func.isRequired,
     togglePackageVersion: PropTypes.func.isRequired,
 }
 

@@ -6,13 +6,13 @@ import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
 import ListItem from './ListItem';
 import ListItemVersion from './ListItemVersion';
-import ListItemOnDevice from './ListItemOnDevice';
 import { Loader } from '../../../partials';
 
 const headerHeight = 28;
+const autoUpdateInfo = "Automatic update activated. The latest version of this package will automatically be installed on this device.";
 
 @observer
-class CoreList extends Component {
+class List extends Component {
     @observable firstShownIndex = 0;
     @observable lastShownIndex = 50;
     @observable fakeHeaderLetter = null;
@@ -40,16 +40,18 @@ class CoreList extends Component {
         });
     }
     componentWillMount() {
-        if(!this.props.device.isDirector) {
+        const { devicesStore } = this.props;
+        if(!devicesStore.device.isDirector) {
             this.preparedPackages = this.selectPackagesToDisplay();
         }
     }
     componentWillReceiveProps(nextProps) {
+        const { devicesStore } = nextProps;
         this.preparedPackages = this.selectPackagesToDisplay();
-        if(this.props.device.isDirector) {
-            if(nextProps.expandedPack && !nextProps.expandedPack.unmanaged && !this.packageExpandedManually) {
-                this.expandedPackageName = nextProps.expandedPack.id.name;
-                this.selectedPackageVersion = nextProps.expandedPack.id.version;
+        if(devicesStore.device.isDirector) {
+            if(nextProps.packagesStore.expandedPackage && !nextProps.packagesStore.expandedPackage.unmanaged && !this.packageExpandedManually) {
+                this.expandedPackageName = nextProps.packagesStore.expandedPackage.id.name;
+                this.selectedPackageVersion = nextProps.packagesStore.expandedPackage.id.version;
             }
             else if(!this.packageExpandedManually) {
                 this.expandedPackageName = null;
@@ -112,7 +114,7 @@ class CoreList extends Component {
                 }
             }, this);
             this.firstShownIndex = firstShownIndex;
-              this.lastShownIndex = lastShownIndex !== null ? lastShownIndex : itemsPositions.length - 1;
+            this.lastShownIndex = lastShownIndex !== null ? lastShownIndex : itemsPositions.length - 1;
             this.fakeHeaderLetter = newFakeHeaderLetter;
             this.fakeHeaderTopPosition = scrollTop;
         }
@@ -144,6 +146,7 @@ class CoreList extends Component {
         });
     }
     selectPackagesToDisplay() {
+        const { devicesStore } = this.props;
         let preparedPackages = this.props.packagesStore.preparedPackages;
         let dirPacks = {};
         let corePacks = {};
@@ -154,7 +157,7 @@ class CoreList extends Component {
                 if(pack.inDirector) {
                     let filteredVersions = [];
                     _.each(pack.versions, (version, i) => {
-                        if(_.includes(version.hardwareIds, this.props.activeEcu.hardwareId)) {
+                        if(_.includes(version.hardwareIds, this.props.hardwareStore.activeEcu.hardwareId)) {
                             filteredVersions.push(version);
                         }
                     })
@@ -166,10 +169,10 @@ class CoreList extends Component {
                 if(!pack.inDirector) {
                     corePacks[letter].push(pack);
                 }
-                if(this.props.device.isDirector) {
+                if(devicesStore.device.isDirector) {
                     _.map(pack.versions, (version, ind) => {
 
-                        if(this.props.activeEcu.type === 'primary') {
+                        if(this.props.hardwareStore.activeEcu.type === 'primary') {
                             if(version.id.version === this.props.devicesStore._getPrimaryHash()) {
                                 let packAdded = _.some(dirPacks[letter], (item, index) => {
                                     return item.packageName == version.id.name;
@@ -179,7 +182,7 @@ class CoreList extends Component {
                                 }
                             }
                         } else {
-                            _.map(this.props.device.directorAttributes.secondary, (secondaryObj, ind) => {
+                            _.map(devicesStore.device.directorAttributes.secondary, (secondaryObj, ind) => {
                                 if(version.id.version === secondaryObj.image.hash.sha256) {
                                     let packAdded = _.some(dirPacks[letter], (item, index) => {
                                         return item.packageName == version.id.name;
@@ -196,15 +199,15 @@ class CoreList extends Component {
         });
         this.clearArray(dirPacks);
         this.clearArray(corePacks);
-        return this.props.device.isDirector ? dirPacks : corePacks;
+        return devicesStore.device.isDirector ? dirPacks : corePacks;
     }
     addUnmanagedPackage(preparedPackages) {
-        const { devicesStore, packagesStore, device, activeEcu } = this.props;
-        switch(activeEcu.type) {
+        const { devicesStore, packagesStore, hardwareStore } = this.props;
+        switch(hardwareStore.activeEcu.type) {
             case 'secondary':
-                let secondaryObject = devicesStore._getSecondaryByHardwareId(activeEcu.hardwareId);
+                let secondaryObject = devicesStore._getSecondaryByHardwareId(hardwareStore.activeEcu.hardwareId);
                 let reportedHash = secondaryObject.image.hash.sha256;
-                let pack = packagesStore._getInstalledPackage(reportedHash);
+                let pack = packagesStore._getInstalledPackage(reportedHash, hardwareStore.activeEcu.hardwareId);
                 if(!pack) {
                     let unmanagedPack = {
                         filepath: secondaryObject.image.filepath,
@@ -219,9 +222,9 @@ class CoreList extends Component {
                 }
                 break;
             case 'primary':
-                let primaryObject = devicesStore._getPrimaryByHardwareId(activeEcu.hardwareId);
+                let primaryObject = devicesStore._getPrimaryByHardwareId(hardwareStore.activeEcu.hardwareId);
                 let hash = primaryObject.image.hash.sha256;
-                let packItem = packagesStore._getInstalledPackage(hash);
+                let packItem = packagesStore._getInstalledPackage(hash, hardwareStore.activeEcu.hardwareId);
                 if(!packItem) {
                     let unmanagedPack = {
                         filepath: primaryObject.image.filepath,
@@ -240,8 +243,9 @@ class CoreList extends Component {
         }
     }
     render() {
-        const { devicesStore, packagesStore, hardwareStore, device, onFileDrop, togglePackageAutoUpdate, toggleTufPackageAutoUpdate, expandedPack, loadPackageVersionProperties, activeEcu } = this.props;
-        let preparedPackages = this.preparedPackages;
+        const { devicesStore, packagesStore, hardwareStore, onFileDrop, togglePackageAutoUpdate, toggleTufPackageAutoUpdate, showPackageDetails } = this.props;
+        const device = devicesStore.device;
+        const preparedPackages = this.preparedPackages;
         return (
             <div className="ios-list" ref="list">
                 <Dropzone
@@ -274,15 +278,15 @@ class CoreList extends Component {
                                         
                                         installedPackage = foundInstalled ? foundInstalled.id.version : null;
 
-                                        if(device.isDirector && activeEcu) {
+                                        if(device.isDirector && hardwareStore.activeEcu) {
                                             {_.map(pack.versions, (version, i) => {
-                                                if(activeEcu.type === 'primary') {
-                                                    if(version.id.version === devicesStore._getPrimaryHash()) {
+                                                if(hardwareStore.activeEcu.type === 'primary') {
+                                                    if(version.packageHash === devicesStore._getPrimaryHash()) {
                                                         installedPackage = version.id.version;
                                                     }
                                                 } else {
                                                     _.map(device.directorAttributes.secondary, (secondaryObj, ind) => {
-                                                        if(version.id.version === secondaryObj.image.hash.sha256) {
+                                                        if(version.packageHash === secondaryObj.image.hash.sha256) {
                                                             installedPackage = version.id.version;
                                                         }
                                                     });
@@ -307,7 +311,7 @@ class CoreList extends Component {
                                                 togglePackage={this.togglePackage}
                                                 toggleAutoInstall={togglePackageAutoUpdate}
                                                 toggleTufAutoInstall={toggleTufPackageAutoUpdate}
-                                                loadPackageVersionProperties={loadPackageVersionProperties}
+                                                showPackageDetails={showPackageDetails}
                                             />
                                             <VelocityTransitionGroup
                                                 enter={{
@@ -352,10 +356,7 @@ class CoreList extends Component {
                                                                 }}>
                                                                 {pack.isAutoInstallEnabled ?
                                                                     <div className="info-auto-update">
-                                                                        Automatic update activated. The latest
-                                                                        version of this package will
-                                                                        automatically be installed on this
-                                                                        device.
+                                                                        {autoUpdateInfo}
                                                                     </div>
                                                                 :
                                                                     null
@@ -371,8 +372,7 @@ class CoreList extends Component {
                                                                             version={version}
                                                                             queuedPackage={queuedPackage}
                                                                             installedPackage={installedPackage}
-                                                                            expandedPack={expandedPack}
-                                                                            loadPackageVersionProperties={loadPackageVersionProperties}
+                                                                            showPackageDetails={showPackageDetails}
                                                                             togglePackageVersion={this.togglePackageVersion}
                                                                             selectedPackageVersion={this.selectedPackageVersion}
                                                                             key={i}
@@ -400,17 +400,14 @@ class CoreList extends Component {
     }
 }
 
-CoreList.propTypes = {
+List.propTypes = {
     packagesStore: PropTypes.object.isRequired,
     devicesStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
-    device: PropTypes.object.isRequired,
     onFileDrop: PropTypes.func.isRequired,
     togglePackageAutoUpdate: PropTypes.func.isRequired,
     toggleTufPackageAutoUpdate: PropTypes.func.isRequired,
-    expandedPack: PropTypes.object,
-    loadPackageVersionProperties: PropTypes.func.isRequired,
-    activeEcu: PropTypes.object,
+    showPackageDetails: PropTypes.func.isRequired,
 }
 
-export default CoreList;
+export default List;

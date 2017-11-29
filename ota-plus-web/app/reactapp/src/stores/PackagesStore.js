@@ -90,11 +90,12 @@ export default class PackagesStore {
     @observable devicePackagesInstalledCount = 0;
     @observable devicePackagesQueuedCount = 0;
     @observable deviceQueue = [];
+    @observable deviceQueueIds = {};
     @observable deviceHistory = [];
     @observable directorDeviceHistory = [];
     @observable deviceUpdatesLogs = [];
     @observable devicePackagesLimit = 2000;
-    @observable installedIds = [];
+    @observable installedIds = {};
 
     @observable ondevicePackages = [];
     @observable ondevicePackagesCurrentPage = 0;
@@ -106,6 +107,8 @@ export default class PackagesStore {
     @observable directorDeviceHistoryCurrentPage = 0;
     @observable directorDeviceHistoryTotalCount = null;
     @observable directorDeviceHistoryLimit = 10;
+
+    @observable expandedPackage = null;
 
     constructor() {
         resetAsync(this.directorRepoExistsFetchAsync);
@@ -231,6 +234,7 @@ export default class PackagesStore {
                                 that._preparePackages();
                                 break;
                         }
+                        that.packagesTufFetchAsync = handleAsyncSuccess(responseDirector);
                     })
                     .catch(function(e) {
                         switch (that.page) {
@@ -241,9 +245,8 @@ export default class PackagesStore {
                                 that._preparePackages();
                                 break;
                         }
+                        that.packagesTufFetchAsync = handleAsyncSuccess(responseDirector);
                     });
-
-                that.packagesTufFetchAsync = handleAsyncSuccess(responseDirector);
             })
             .catch(function(error) {
                 that.packagesTufFetchAsync = handleAsyncError(error);
@@ -717,40 +720,34 @@ export default class PackagesStore {
             }.bind(this));
     }
 
-    _setQueuedTufPackages(multiTargetUpdates, ecuSerial) {
-        let queuedHash = null;
-        _.each(multiTargetUpdates, (update, index) => {
-            let targets = update.targets;
-            _.each(targets, (target, serial) => {
-                if(ecuSerial === serial) {
-                    queuedHash = target.image.fileinfo.hashes.sha256;
-                    let data = {
-                        hash: queuedHash
+    _addPackagesToQueue(multiTargetUpdates, ecuSerial) {
+        if(multiTargetUpdates.length) {
+            multiTargetUpdates.map(update => {
+                let targets = update.targets;
+                _.mapObject(targets, (target, serial) => {
+                    if(ecuSerial === serial) {
+                        let hash = target.image.fileinfo.hashes.sha256;
+                        this._queuePackage(hash);
                     }
-                    this._addQueuedTufPackage(data);
-                }
-            })
-        })
-        if(!queuedHash) {
-            this.deviceQueue.splice(_.findIndex(this.deviceQueue, { hash: queuedHash }), 1); 
-            this._prepareDevicePackages();           
+                });
+            });
+        } else {
+            this.deviceQueue = [];
+            this.deviceQueueIds = {};
         }
     }
 
-    _addQueuedTufPackage(data) {
-        let packageName = null;
-        _.each(this.packages, (pack, index) => {
-            if(pack.packageHash === data.hash) {
-                packageName = pack.id.name;
-            }
+    _queuePackage(hash) {
+        let pack = _.find(this.packages, (pack) => {
+            return pack.packageHash === hash;
         });
-        let queuedTuf = {
+        let queuedPack = {
             packageId: {
-                name: packageName,
-                version: data.hash
+                name: pack.id.name,
+                version: pack.id.version
             }
-        }
-        this.deviceQueue.push(queuedTuf);
+        };
+        this.deviceQueue.push(queuedPack);
         this._prepareDevicePackages();
     }
 
@@ -872,6 +869,7 @@ export default class PackagesStore {
         return axios.put(API_PACKAGES_DEVICE_CANCEL_INSTALLATION + '/' + deviceId + '/' + requestId + '/cancelupdate')
             .then(function(response) {
                 this.fetchDevicePackagesQueue(deviceId);
+                this.deviceQueueIds = {};
                 this.packagesDeviceCancelInstallationAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
@@ -896,9 +894,24 @@ export default class PackagesStore {
         });
     }
 
-    _getInstalledPackage(version) {
-        let result = _.find(this.packages, (pack) => {
-            return pack.packageHash ? pack.packageHash === version : pack.id.version === version;
+    _getInstalledPackage(version, hardwareId) {
+        let filteredPacks = _.filter(this.packages, (pack) => {
+            return _.contains(pack.hardwareIds, hardwareId) ? pack : null;
+        });
+        let result = _.find(filteredPacks, (pack) => {            
+            return pack.packageHash === version;
+        });
+        if(result) {
+            result.isInstalled = true;
+            return result;
+        } else {
+            return this._getReportedPackage(version, hardwareId);
+        }
+    }
+
+    _getReportedPackage(version, hardwareId) {
+        let result = _.find(this.packages, (pack) => {            
+            return pack.packageHash === version;
         });
         if(result) {
             result.isInstalled = true;
@@ -985,6 +998,7 @@ export default class PackagesStore {
             const directorAutoInstalledPackages = this.directorDeviceAutoInstalledPackages;
             const blacklist = this.blacklist;
             const queuedPackages = this.deviceQueue;
+            const queuedIds = this.deviceQueueIds;
             let groupedPackages = {};
             let sortedPackages = {};
             let parsedBlacklist = [];
@@ -1011,7 +1025,6 @@ export default class PackagesStore {
                     packInstalled.isAutoInstallEnabled = true;
             });
 
-            let queuedIds = [];
             _.each(queuedPackages, (pack) => {
                 queuedIds[pack.packageId.name + '_' + pack.packageId.version] = pack.packageId.name + '_' + pack.packageId.version;
             });
@@ -1257,6 +1270,7 @@ export default class PackagesStore {
         this.devicePackagesInstalledCount = 0;
         this.devicePackagesQueuedCount = 0;
         this.deviceQueue = [];
+        this.deviceQueueIds = {};
         this.deviceHistory = [];
         this.directorDeviceHistory = [];
         this.deviceUpdatesLogs = [];
@@ -1267,7 +1281,7 @@ export default class PackagesStore {
         this.directorDeviceHistoryCurrentPage = 0;
         this.directorDeviceHistoryTotalCount = 0;
         this.directorDevicePackagesFilter = '';
-        this.installedIds = [];
+        this.installedIds = {};
     }
 
     _resetWizard() {

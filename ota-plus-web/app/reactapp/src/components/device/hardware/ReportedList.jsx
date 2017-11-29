@@ -4,9 +4,10 @@ import { observable, observe } from 'mobx';
 import _ from 'underscore';
 
 const headerHeight = 28;
+const noSearchResults = "No search results";
 
 @observer
-class OverlayItem extends Component {
+class ReportedList extends Component {
     @observable firstShownIndex = 0;
     @observable lastShownIndex = 50;
     @observable fakeHeaderText = null;
@@ -137,7 +138,7 @@ class OverlayItem extends Component {
                 </ul>   
             :
                 <div className="wrapper-center">
-                    No search results
+                    {noSearchResults}
                 </div>
         );
         return (
@@ -146,8 +147,8 @@ class OverlayItem extends Component {
     }
 }
 
-OverlayItem.propTypes = {
+ReportedList.propTypes = {
     hardware: PropTypes.object.isRequired,
 }
 
-export default OverlayItem;
+export default ReportedList;
