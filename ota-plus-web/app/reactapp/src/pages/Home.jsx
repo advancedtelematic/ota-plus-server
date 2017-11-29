@@ -43,10 +43,10 @@ class Home extends Component {
             let allDevicesCount = nextProps.allDevicesCount;
             let directorDevicesCount = nextProps.directorDevicesCount;
 
-            if(allDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') != 1) {
+            if(allDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') != 1 && window.atsGarageTheme) {
                 this.redirectTo('welcome');
             }
-            if(allDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') == 1) {
+            if(allDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') == 1 && window.atsGarageTheme) {
                 this.redirectTo('destiny');
             }
             if(directorDevicesCount === 1 && Cookies.get('fireworksPageAcknowledged') != 1            

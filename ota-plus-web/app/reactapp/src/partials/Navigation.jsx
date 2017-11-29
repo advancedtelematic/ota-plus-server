@@ -65,13 +65,16 @@ class Navigation extends Component {
                         errorMsg={'Timeout: core packages not loaded, too many items to load'}
                     />
                     <ul className="right-nav">
-                        <li className="text-link">
-                            <a href="http://docs.atsgarage.com" target="_blank" id="docs-link">DOCS</a>
-                        </li>
-                        <li className="separator">|</li>
-                        <li className="text-link">
-                            <a href="mailto:support@atsgarage.com" id="support-link">SUPPORT</a>
-                        </li>
+                        {window.atsGarageTheme ?
+                            <span>
+                            <li className="text-link">
+                                <a href="http://docs.atsgarage.com" target="_blank" id="docs-link">DOCS</a>
+                            </li>
+                            <li className="separator">|</li>
+                            <li className="text-link">
+                                <a href="mailto:support@atsgarage.com" id="support-link">SUPPORT</a>
+                            </li>
+                        </span> : ''}
                         {uiUserProfileMenu ?
                             <li id="menu-login">
                                 <NavigationDropdown
