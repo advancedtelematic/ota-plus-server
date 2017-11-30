@@ -94,6 +94,7 @@ export default class PackagesStore {
     @observable directorDeviceHistory = [];
     @observable deviceUpdatesLogs = [];
     @observable devicePackagesLimit = 2000;
+    @observable installedIds = [];
 
     @observable ondevicePackages = [];
     @observable ondevicePackagesCurrentPage = 0;
@@ -767,11 +768,18 @@ export default class PackagesStore {
                 this.directorDeviceHistory = _.uniq(this.directorDeviceHistory.concat(data), item => item.updateId);
                 this.directorDeviceHistoryCurrentPage++;
                 this.directorDeviceHistoryTotalCount = response.data.total;
+                this._prepareDirectorDevicePackagesHistory();
                 this.packagesDirectorDeviceHistoryFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
                 this.packagesDirectorDeviceHistoryFetchAsync = handleAsyncError(error);
             }.bind(this));
+    }
+
+    _prepareDirectorDevicePackagesHistory() {
+        this.directorDeviceHistory = _.sortBy(this.directorDeviceHistory, (pack) => {
+            return pack.receivedAt;
+        }).reverse();
     }
 
     fetchDevicePackagesHistory(id) {
@@ -980,7 +988,7 @@ export default class PackagesStore {
             let groupedPackages = {};
             let sortedPackages = {};
             let parsedBlacklist = [];
-            let installedIds = [];
+            let installedIds = this.installedIds;
             let queuedCount = 0;
             let installedCount = 0;
 
@@ -1259,6 +1267,7 @@ export default class PackagesStore {
         this.directorDeviceHistoryCurrentPage = 0;
         this.directorDeviceHistoryTotalCount = 0;
         this.directorDevicePackagesFilter = '';
+        this.installedIds = [];
     }
 
     _resetWizard() {
