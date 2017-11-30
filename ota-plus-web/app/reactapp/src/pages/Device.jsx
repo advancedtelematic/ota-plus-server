@@ -17,24 +17,30 @@ class Device extends Component {
         super(props);
         this.cancelInstallation = this.cancelInstallation.bind(this);
         this.cancelMtuUpdate = this.cancelMtuUpdate.bind(this);
+
+        this.deviceFetchHandler = observe(props.devicesStore, (change) => {
+            if(change.name === 'devicesOneFetchAsync' && !change.object[change.name].isFetching) {
+                this.props.packagesStore.fetchPackages();
+                this.props.packagesStore.fetchTufPackages();
+                this.props.packagesStore.fetchBlacklist();
+                this.props.packagesStore.fetchInitialDevicePackages(this.props.params.id);
+                this.props.packagesStore.fetchDeviceAutoInstalledPackages(this.props.params.id);
+                this.props.packagesStore.fetchDevicePackagesQueue(this.props.params.id);
+                this.props.packagesStore.fetchDevicePackagesHistory(this.props.params.id);
+                this.props.packagesStore.fetchDevicePackagesUpdatesLogs(this.props.params.id);
+                this.props.devicesStore.fetchMultiTargetUpdates(this.props.params.id);
+            }
+        });
     }
     componentWillMount() {
         this.props.packagesStore.page = 'device';
         this.props.devicesStore.fetchDevice(this.props.params.id);
-        this.props.packagesStore.fetchPackages();
-        this.props.packagesStore.fetchTufPackages();
-        this.props.packagesStore.fetchBlacklist();
-        this.props.packagesStore.fetchInitialDevicePackages(this.props.params.id);
-        this.props.packagesStore.fetchDeviceAutoInstalledPackages(this.props.params.id);
-        this.props.packagesStore.fetchDevicePackagesQueue(this.props.params.id);
-        this.props.packagesStore.fetchDevicePackagesHistory(this.props.params.id);
-        this.props.packagesStore.fetchDevicePackagesUpdatesLogs(this.props.params.id);
-        this.props.devicesStore.fetchMultiTargetUpdates(this.props.params.id);
     }
     componentWillUnmount() {
         this.props.devicesStore._reset();
         this.props.packagesStore._reset();
         this.props.hardwareStore._reset();
+        this.deviceFetchHandler();
     }
     cancelInstallation(requestId) {
         this.props.packagesStore.cancelInstallation(this.props.params.id, requestId);
