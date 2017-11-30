@@ -35,7 +35,8 @@ class Header extends Component {
     componentWillUnmount() {
         this.renameHandler();
     }
-    backButtonAction() {
+    backButtonAction(e) {
+        if(e) e.preventDefault();
         window.history.go(-1);
     }
     enableDeviceRename() {

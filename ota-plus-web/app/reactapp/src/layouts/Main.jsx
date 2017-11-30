@@ -259,7 +259,8 @@ class Main extends Component {
         this.provisioningStatusHandler();
         this.featuresHandler();
     }
-    backButtonAction() {
+    backButtonAction(e) {
+        if(e) e.preventDefault();
         window.history.go(-1);
     }
     componentWillReceiveProps(nextProps) {
