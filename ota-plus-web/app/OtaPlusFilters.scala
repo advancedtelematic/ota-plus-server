@@ -12,6 +12,6 @@ class OtaPlusFilters  @Inject() (
                           log: LoggingFilter
                         ) extends HttpFilters {
 
-  val filters = Seq(securityHeadersFilter, csrfFilter, log)
+  val filters = Seq(securityHeadersFilter, log)
 }
 

@@ -3,17 +3,21 @@ package com.advancedtelematic.api
 import java.util.UUID
 
 import akka.Done
+import akka.http.scaladsl.util.FastFuture
 import akka.stream.Materializer
 import cats.syntax.show.toShowOps
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.api.Devices._
 import com.advancedtelematic.auth.AccessToken
+import com.advancedtelematic.controllers.NamespaceSetupController.AlreadyExists
 import com.advancedtelematic.controllers.{FeatureName, UserId}
+import com.advancedtelematic.libats.http.Errors.EntityAlreadyExists
 import com.advancedtelematic.libtuf.data.TufCodecs
 import com.advancedtelematic.libtuf.data.TufDataType.TufKeyPair
 import com.advancedtelematic.persistence.ClientInfo
 import org.genivi.sota.data.{Device, DeviceT, Namespace, Uuid}
-import play.api.Configuration
+import play.api.http.Status
+import play.api.{Configuration, Logger}
 import play.api.libs.json._
 import play.api.libs.ws.{WSAuthScheme, WSClient, WSRequest, WSResponse}
 import play.api.mvc.Result
@@ -300,7 +304,7 @@ class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
   }
 
   def download(artifact_type: String, clientId: Uuid, clientSecret: String)
-    (implicit ec: ExecutionContext) : Future[Result] = {
+              (implicit ec: ExecutionContext) : Future[Result] = {
 
     buildSrvRequest(s"api/v1/artifacts/$artifact_type/download")
       .transform(
@@ -310,13 +314,80 @@ class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
   }
 }
 
+class DirectorApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
+  private val request = ApiRequest.base(directorApiUri + "/api/v1/")
+
+  private val log = Logger(this.getClass)
+
+  case class DirectorApiError(msg: String) extends Exception(msg) with NoStackTrace
+
+  def repoExists(namespace: Namespace)(implicit ec: ExecutionContext): Future[Boolean] = {
+    request("admin/repo/root.json")
+      .withNamespace(Some(namespace))
+      .execResult(apiExec)
+      .map { result =>
+        if(result.header.status == Status.OK) {
+          true
+        } else {
+          log.info(s"Resource not ready: $result")
+          false
+        }
+      }
+  }
+
+  def createRepo(namespace: Namespace)(implicit ec: ExecutionContext): Future[Unit] = {
+    request("admin/repo")
+      .transform(_.withMethod("POST"))
+      .withNamespace(Some(namespace))
+      .execResult(apiExec)
+      .flatMap { result =>
+        if(result.header.status == Status.CREATED) {
+          log.info(s"director repo created for $namespace")
+          FastFuture.successful(())
+        } else {
+          FastFuture.failed(DirectorApiError(s"Error creating director repo. Response from director: $result"))
+        }
+      }
+  }
+}
+
 class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
   private val request = ApiRequest.base(repoApiUri + "/api/v1/")
+
+  case class RepoServerError(msg: String) extends Exception(msg) with NoStackTrace
+
+  private val log = Logger(this.getClass)
 
   def rootJsonResult(namespace: Namespace)(implicit ec: ExecutionContext): Future[Result] =
     request("user_repo/root.json")
       .withNamespace(Some(namespace))
       .execResult(apiExec)
+
+  def repoExists(namespace: Namespace)(implicit ec: ExecutionContext): Future[Boolean] = {
+    rootJsonResult(namespace).map { result =>
+      if(result.header.status == 200) {
+        true
+      } else {
+        log.info(s"Resource not ready: $result")
+        false
+      }
+    }
+  }
+
+  def createRepo(namespace: Namespace)(implicit ec: ExecutionContext): Future[Unit] = {
+    request("user_repo")
+      .transform(_.withMethod("POST"))
+      .withNamespace(Some(namespace))
+      .execResult(apiExec)
+      .flatMap { result =>
+        if(result.header.status == 200) {
+          log.info(s"tuf repo created for $namespace")
+          FastFuture.successful(())
+        } else {
+          FastFuture.failed(RepoServerError(s"Error creating repo. Response from tuf-reposerver: $result"))
+        }
+      }
+  }
 }
 
 class KeyServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
@@ -327,7 +398,7 @@ class KeyServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends 
     import io.circe.{ parser => CirceParser }
 
     for {
-      result <- request(s"root/${repoId}/keys/targets/pairs").execResult(apiExec)
+      result <- request(s"root/$repoId/keys/targets/pairs").execResult(apiExec)
       byteString <- result.body.consumeData
     } yield {
       val parsed = CirceParser.parse(byteString.utf8String) match {
