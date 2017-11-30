@@ -26,6 +26,8 @@ trait ApiClientSupport {
 
   val repoServerApi = new RepoServerApi(conf, clientExec)
 
+  val directorApi = new DirectorApi(conf, clientExec)
+
   val keyServerApi = new KeyServerApi(conf, clientExec)
 
   def getFeatureConfig(feature: FeatureName, userId: UserId, token: AccessToken)
