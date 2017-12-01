@@ -84,11 +84,16 @@ class Header extends Component {
                     <div className="icon"></div>
                     <div className="text">
                         <div className="title">
+                            <div onClick={this.enableCampaignRename}
+                                 className="clickable-area"
+                                 style={{width: '85%', height: '51px', position: 'absolute'}}/>
+
                              <input type="text"
                                ref={(input) => {this.campaignNameInput = input}}
                                disabled
                                onKeyPress={this.keyPressed}
                                value={this.newCampaignName} onChange={this.userTypesName} />
+
                             {this.renameDisabled ?
                                 <img src="/assets/img/icons/white/Rename.svg" className="edit" alt="Icon" onClick={this.enableCampaignRename} />
                             :
