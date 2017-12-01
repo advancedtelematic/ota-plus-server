@@ -18,6 +18,11 @@ class TabsSwitcher extends Component {
         if(this.props.otaPlusMode) {
             this.bottomBorderColor = '#fa9872';
         }
+        if(this.props.campaignsStore.preparedCampaigns.length) {
+            this.setQueueModalActiveTabId(0);
+        } else if(this.props.campaignsStore.preparedLegacyCampaigns.length) {
+            this.setQueueModalActiveTabId(1);
+        }
     }
     componentWillReceiveProps(nextProps) {
         if(nextProps.otaPlusMode) {
@@ -31,7 +36,6 @@ class TabsSwitcher extends Component {
     }
     render() {
         const { campaignsStore, showRenameModal, goToCampaignDetails } = this.props;
-
         return (
             <span className="content-container">
                 <Tabs
@@ -43,34 +47,43 @@ class TabsSwitcher extends Component {
                     contentContainerClassName={'campaigns-wrapper'}
                     tabTemplateStyle={{height: '100%'}}
                 >
-                    <Tab
-                        label="Multi-targets campaigns"
-                        className={"tab-item" + (this.activeTabId === 0 ? " active" : "")}
-                        id="multi-target-campaigns"
-                        value={0}
-                    >
-                        <div className={"wrapper-list" + (this.activeTabId === 1 ? " hide" : "")}>
-                            <CampaignsTufList 
-                                campaignsStore={campaignsStore}
-                                showRenameModal={showRenameModal}
-                                goToCampaignDetails={goToCampaignDetails}
-                            />
-                        </div>
-                    </Tab>
-                    <Tab
-                        label="Single package campaigns" 
-                        className={"tab-item" + (this.activeTabId === 1 ? " active" : "")}
-                        id="single-package-campaigns"
-                        value={1}
-                    >
-                        <div className={"wrapper-list" + (this.activeTabId === 0 ? " hide" : "")}>
-                            <CampaignsLegacyList 
-                                campaignsStore={campaignsStore}
-                                showRenameModal={showRenameModal}
-                                goToCampaignDetails={goToCampaignDetails}
-                            /> 
-                        </div>
-                    </Tab>
+                    {campaignsStore.preparedCampaigns.length ?
+                        <Tab
+                            label="Multi-targets campaigns"
+                            className={"tab-item" + (this.activeTabId === 0 ? " active" : "")}
+                            id="multi-target-campaigns"
+                            value={0}
+                        >
+                            <div className={"wrapper-list" + (this.activeTabId === 1 ? " hide" : "")}>
+                                <CampaignsTufList 
+                                    campaignsStore={campaignsStore}
+                                    showRenameModal={showRenameModal}
+                                    goToCampaignDetails={goToCampaignDetails}
+                                />
+                            </div>
+                        </Tab>
+                    :
+                        null
+                    }
+                    {campaignsStore.preparedLegacyCampaigns.length ?
+                        <Tab
+                            label="Single package campaigns" 
+                            className={"tab-item" + (this.activeTabId === 1 ? " active" : "")}
+                            id="single-package-campaigns"
+                            value={1}
+                        >
+                            <div className={"wrapper-list" + (this.activeTabId === 0 ? " hide" : "")}>
+                                <CampaignsLegacyList 
+                                    campaignsStore={campaignsStore}
+                                    showRenameModal={showRenameModal}
+                                    goToCampaignDetails={goToCampaignDetails}
+                                /> 
+                            </div>
+                        </Tab>
+                    :
+                        null
+                    }
+                    
                 </Tabs>
             </span>
         );
