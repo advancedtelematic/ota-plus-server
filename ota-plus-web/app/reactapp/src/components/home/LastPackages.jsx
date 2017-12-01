@@ -24,10 +24,10 @@ class LastPackages extends Component {
                     </div>
                 :
                     Object.keys(lastPackages).length ? 
-                        _.map(lastPackages, (pack) => {
+                        _.map(lastPackages, (pack, index) => {
                             return (
                                 <LastPackagesItem 
-                                    key={pack.uuid}
+                                    key={index}
                                     pack={pack}
                                 />
                             );
