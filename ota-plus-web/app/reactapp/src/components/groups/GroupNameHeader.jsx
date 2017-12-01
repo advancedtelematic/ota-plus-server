@@ -84,6 +84,11 @@ class GroupNameHeader extends Component {
                 </div>
                 <div className="right">
                     <h3 className={groupsStore.selectedGroup.type === 'artificial' ? 'artificial' : null}>
+
+                        <div onClick={this.enableGroupRename}
+                             className="clickable-area"
+                             style={{width: '90%', height: '36px', position: 'absolute'}}/>
+
                         <input type="text"
                            ref={(input) => {this.groupNameInput = input}}
                            disabled

@@ -106,6 +106,11 @@ class Header extends Component {
                     <FadeAnimation>
                         {!devicesStore.devicesOneFetchAsync.isFetching ?
                             <span id="device-name" className="device-name">
+
+                                <div onClick={this.enableDeviceRename}
+                                     className="clickable-area"
+                                     style={{width: '85%', height: '51px', position: 'absolute'}}/>
+
                                 <input type="text"
                                    ref={(input) => {this.deviceNameInput = input}}
                                    disabled
