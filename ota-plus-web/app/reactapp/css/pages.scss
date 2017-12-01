@@ -799,25 +799,28 @@
 
                         .panel-heading {
                             overflow: hidden;
-                            height: 85px;
+                            height: 60px;
                             display: flex;
                             align-items: center;
                             justify-content: space-between;
                             background: $color-darkgrey;
                             color: $color-white;
+                            padding-left: 35px;
 
                             .add {
-                                button {
+                                button, a {
                                     margin: 0!important;
                                 }
                             }
                         }
 
                         .panel-body {
-                            height: calc(100% - 85px);
+                            height: calc(100% - 60px);
                             padding: 0;
 
                             .element-box {
+                                padding-right: 15px;
+                                    
                                 &.device {
                                     .icon {
                                         background-image: url('/assets/img/icons/black/devices.png');
