@@ -34,6 +34,7 @@ class Overlay extends Component {
     showHardwareInfo(e) {
         if(e) e.preventDefault();
         this.hardwareInfoShown = true;
+        this.changeFilter('');
     }
     changeFilter(filter) {
         this.props.hardwareStore._filterHardware(filter);
