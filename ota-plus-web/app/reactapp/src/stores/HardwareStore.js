@@ -47,6 +47,7 @@ export default class HardwareStore {
         let searchResults = [];
         _.each(this.hardware, (objects, index) => {
             _.each(objects, (value, property) => {
+                property += ':';
                 if(value.toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0 || property.toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
                     searchResults.push({
                         [property]: value,

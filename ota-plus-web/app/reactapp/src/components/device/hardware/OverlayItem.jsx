@@ -119,7 +119,7 @@ class OverlayItem extends Component {
                                                     return (
                                                         <tr key={indexOne} className="item">
                                                             <th>
-                                                                <div>{property}:</div>
+                                                                <div>{property}</div>
                                                             </th>
                                                             <td>
                                                                 <div>{value.toString()}</div>
