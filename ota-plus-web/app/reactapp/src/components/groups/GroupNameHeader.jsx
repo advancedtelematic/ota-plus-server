@@ -62,6 +62,7 @@ class GroupNameHeader extends Component {
     handleResponse() {
         const { groupsStore } = this.props;
         groupsStore._updateGroupData(groupsStore.selectedGroup.id, {groupName: this.newGroupName});
+        groupsStore._prepareGroups();
         groupsStore.selectedGroup.name =  this.newGroupName;
         this.oldGroupName = this.newGroupName;
         this.renameDisabled = true;
