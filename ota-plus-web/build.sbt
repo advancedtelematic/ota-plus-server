@@ -3,6 +3,8 @@ import play.sbt.routes.RoutesKeys
 
 PlaySettings.defaultScalaSettings
 
+scalacOptions += "-Ypartial-unification"
+
 play.sbt.routes.RoutesKeys.routesImport ++= Seq(
   "com.advancedtelematic.api.ApiVersion._",
   "com.advancedtelematic.controllers.PathBinders._",

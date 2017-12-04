@@ -3,8 +3,9 @@ package com.advancedtelematic.auth
 import java.time.Instant
 
 import com.advancedtelematic.controllers.UserId
-import com.advancedtelematic.jws.CompactSerialization
-import play.api.libs.json.{Format, Json, JsPath, JsResult, Reads}
+import com.advancedtelematic.jwk.KeyInfoCodec.toJson
+import com.advancedtelematic.jws.{Base64Url, CompactSerialization}
+import play.api.libs.json.{Format, JsPath, JsResult, Json, Reads}
 
 import scala.util.{Failure, Success, Try}
 
@@ -45,6 +46,19 @@ object IdToken {
     (JsPath \ "email").format[String]
   )(IdentityClaims.apply, unlift(IdentityClaims.unapply))
   // format: on
+
+  def from(id: String, name: String, pic: String, email: String): IdToken = {
+    val claims = IdentityClaims(UserId(id), name, pic, email)
+
+    val payload = Json.toBytes(Json.toJson(claims))
+
+    val value =
+      s"""${Base64Url("header".getBytes()).underlying}.
+         |${Base64Url(payload).underlying}.
+         |${Base64Url("https://sig".getBytes()).underlying}""".stripMargin
+
+    new IdToken(value, claims) {}
+  }
 
   def fromTokenValue(tokenValue: String): Try[IdToken] = {
     for {
