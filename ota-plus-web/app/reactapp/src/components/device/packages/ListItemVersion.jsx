@@ -11,8 +11,10 @@ class ListItemVersion extends Component {
         this.handlePackageVersionClick = this.handlePackageVersionClick.bind(this);
     }
     handlePackageVersionClick() {
-        this.props.loadPackageVersionProperties(this.props.version);
-        this.props.togglePackageVersion(this.props.version.id.version);
+        if(this.props.selectedPackageVersion !== this.props.version.id.version) {
+            this.props.loadPackageVersionProperties(this.props.version);
+            this.props.togglePackageVersion(this.props.version.id.version);
+        }
     }
     isPackageBlacklisted(version) {
         let isPackageBlacklisted = _.find(this.props.packagesStore.blacklist, (dev) => {
