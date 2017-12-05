@@ -34,4 +34,6 @@ trait OtaPlusConfig {
   val campaignerApiUri = conf.underlying.getString("campaigner.uri")
 
   val keyServerApiUri = conf.underlying.getString("keyserver.uri")
+
+  val cryptApiUri = conf.underlying.getString("crypt.uri")
 }
