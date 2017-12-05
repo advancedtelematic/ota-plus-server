@@ -25,6 +25,7 @@ import play.api.mvc.Results
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import scala.io.Source
+import AuthUtils._
 
 class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite with ScalaFutures with MockWSHelpers
   with Results {
@@ -89,17 +90,6 @@ class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite wi
 
   val failingClient = MockWS {
     case _ => Action(_ => InternalServerError)
-  }
-
-  implicit class RequestSyntax[A](request: FakeRequest[A]) {
-    def withAuthSession(ns: String): FakeRequest[A] = {
-      import com.advancedtelematic.auth.SessionCodecs.AccessTokenFormat
-      request.withSession(
-        "id_token"               -> TokenUtils.identityTokenFor(ns).value,
-        "access_token"           -> Json.toJson(AccessToken("XXXX", Instant.now().plusSeconds(3600))).toString(),
-        "auth_plus_access_token" -> "",
-        "namespace"              -> ns)
-    }
   }
 
   val builder = new GuiceApplicationBuilder()
