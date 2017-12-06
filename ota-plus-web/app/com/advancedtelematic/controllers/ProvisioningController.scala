@@ -147,12 +147,9 @@ class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient
       zip.close()
       Ok.sendFile(f, onClose = () => { f.delete() })
     }.recover {
-      case e: RemoteApiError =>
+      case t =>
         f.delete()
-        InternalServerError("remote api error")
-      case _ =>
-        f.delete()
-        InternalServerError
+        throw t
     }
   }
 
