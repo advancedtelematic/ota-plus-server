@@ -8,6 +8,7 @@ import java.util.zip.ZipInputStream
 
 import com.advancedtelematic.TokenUtils
 import com.advancedtelematic.TokenUtils.NoVerification
+import com.advancedtelematic.api.UnexpectedResponse
 import com.advancedtelematic.auth.{AccessToken, TokenVerification}
 import com.advancedtelematic.libtuf.crypt.TufCrypto
 import com.advancedtelematic.libtuf.data.TufDataType.RsaKeyType
@@ -24,8 +25,11 @@ import play.api.libs.ws.WSClient
 import play.api.mvc.Results
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+
 import scala.io.Source
 import AuthUtils._
+
+import scala.concurrent.Await
 
 class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite with ScalaFutures with MockWSHelpers
   with Results {
@@ -123,11 +127,16 @@ class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite wi
 
     }
 
-    "return a 500 status when a client does" in {
+    "throw an exception when a client returns a 500" in {
       val application = builder.overrides(bind[WSClient].to(failingClient)).build
       val controller = application.injector.instanceOf[ProvisioningController]
-      val result = call(controller.downloadCredentialArchive(UUID.randomUUID()), request)
-      status(result) mustBe INTERNAL_SERVER_ERROR
+
+      try {
+        status(call(controller.downloadCredentialArchive(UUID.randomUUID()), request))
+        throw new Exception("shouldn't happen")
+      } catch {
+        case _: UnexpectedResponse =>
+      }
     }
   }
 
