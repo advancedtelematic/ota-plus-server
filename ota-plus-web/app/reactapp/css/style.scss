@@ -2160,6 +2160,17 @@ input {
     }
 }
 
+.relatives-modal {
+    .content {
+        width: 85%!important;
+        max-width: 1250px!important;
+
+        .rv-sankey {
+            margin: auto;
+        }
+    }
+}
+
 .blacklist-modal {
     .content {
         width: 550px !important;
