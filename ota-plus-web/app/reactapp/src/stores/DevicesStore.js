@@ -107,7 +107,11 @@ export default class DevicesStore {
         resetAsync(this.multiTargetUpdatesFetchAsync, true);
         return axios.get(API_FETCH_MULTI_TARGET_UPDATES + '/' + id + '/queue')
             .then((response) => {
-                this.multiTargetUpdates = response.data;
+                let data = response.data;
+                _.each(data, (item, index) => {
+                    item.device = id;
+                });
+                this.multiTargetUpdates = _.uniq(this.multiTargetUpdates.concat(response.data), item => item.updateId);
                 this.multiTargetUpdatesFetchAsync = handleAsyncSuccess(response);
             })
             .catch((error) => {
