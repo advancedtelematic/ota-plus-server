@@ -10,7 +10,14 @@ class List extends Component {
         super(props);
     }
     render() {
-        const {packagesStore, cancelInstallation } = this.props;
+        const { packagesStore, cancelInstallation } = this.props;
+        const emptyQueue = (
+            <div className="queue-empty-center">
+                Installation queue is empty. <br />
+                Click on a package you want to install and
+                select a version to add it to the queue.
+            </div>
+        );
         return (
             <div>
                 {packagesStore.packagesDeviceQueueFetchAsync.isFetching ?
@@ -33,11 +40,7 @@ class List extends Component {
                             })}
                         </ul>
                     :
-                        <div className="queue-empty-center">
-                            Installation queue is empty. <br />
-                            Click on a package you want to install and
-                            select a version to add it to the queue.
-                        </div>
+                        emptyQueue
                 }
             </div>
         );

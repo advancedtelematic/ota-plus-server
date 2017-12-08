@@ -30,9 +30,10 @@ class QueueModal extends Component {
         super(props);
     }
     render() {
-        const { packagesStore, devicesStore, shown, hide, device, cancelInstallation, cancelMtuUpdate, activeTabId, setQueueModalActiveTabId, anchorEl } = this.props;
-        const installationStatus = QueueModal.checkStatus(device.deviceStatus);
+        const { packagesStore, devicesStore, shown, hide, cancelInstallation, cancelMtuUpdate, activeTabId, setQueueModalActiveTabId, anchorEl } = this.props;
+        const device = devicesStore.device;
         const isDeviceDirector = device.isDirector;
+        const installationStatus = QueueModal.checkStatus(device.deviceStatus);
         const content = (
             <span>
                 <Tabs
@@ -120,7 +121,6 @@ QueueModal.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
-    device: PropTypes.object.isRequired,
     cancelInstallation: PropTypes.func.isRequired,
     activeTabId: PropTypes.number.isRequired,
     setQueueModalActiveTabId: PropTypes.func.isRequired,

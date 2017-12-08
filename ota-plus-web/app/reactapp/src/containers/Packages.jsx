@@ -103,7 +103,6 @@ class Packages extends Component {
         this.showCreateModal(files);
     }
     render() {
-
         const { packagesStore, hardwareStore, highlightedPackage, featuresStore, devicesStore } = this.props;
         return (
             <span ref="component">

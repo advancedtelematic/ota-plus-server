@@ -9,7 +9,7 @@ class SecondaryEcu extends Component {
         super(props);
     }
     render() {
-        const { active, ecu, hardwareStore, showKey, keyModalShown, shownIds, device, selectEcu, ...otherProps} = this.props;
+        const { active, ecu, hardwareStore, showKey, selectEcu, ...otherProps} = this.props;
         const hardware = hardwareStore.hardware;
         return (
             <span>
@@ -21,8 +21,13 @@ class SecondaryEcu extends Component {
                 >
                     <div className="desc">
                         <span>
-                            <span id={"hardware-id-" + ecu.hardwareId} className="hardware-label">{ecu.hardwareId}</span> <br />
-                            Serial: <span id={"hardware-serial-" + ecu.id}>{ecu.id}</span>
+                            <span id={"hardware-id-" + ecu.hardwareId} className="hardware-label">
+                                {ecu.hardwareId}
+                            </span> <br />
+                            Serial: 
+                            <span id={"hardware-serial-" + ecu.id}>
+                                {ecu.id}
+                            </span>
                         </span>
                     </div>
                     <div className="icons"

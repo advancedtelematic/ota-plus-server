@@ -42,6 +42,7 @@ class OnDeviceList extends Component {
     componentWillUnmount() {
         this.packagesChangeHandler();
         this.refs.list.removeEventListener('scroll', this.listScroll);
+        this.changeFilter('');
     }
     generateHeadersPositions() {
         const headers = this.refs.list.getElementsByClassName('header');
@@ -177,7 +178,6 @@ class OnDeviceList extends Component {
 
 OnDeviceList.propTypes = {
     packagesStore: PropTypes.object.isRequired,
-    expandedPack: PropTypes.object,
     device: PropTypes.object.isRequired,
     showPackageBlacklistModal: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,

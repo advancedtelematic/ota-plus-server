@@ -21,13 +21,7 @@ class Device extends Component {
     @observable fileDropped = null;
     @observable packageBlacklistModalShown = false;
     @observable packageBlacklistAction = {};
-    @observable expandedPack = null;
     @observable uploadToTuf = true;
-    @observable activeEcu = {
-        hardwareId: null,
-        serial: null,
-        type: null,
-    };
     @observable hardwareOverlayShown = false;
     @observable hardwareOverlayAnchor = null;
     
@@ -41,10 +35,9 @@ class Device extends Component {
         this.togglePackageAutoUpdate = this.togglePackageAutoUpdate.bind(this);
         this.toggleTufPackageAutoUpdate = this.toggleTufPackageAutoUpdate.bind(this);
         this.installPackage = this.installPackage.bind(this);
-        this.multiTargetUpdate = this.multiTargetUpdate.bind(this);
-        this.selectEcu = this.selectEcu.bind(this);
+        this.installTufPackage = this.installTufPackage.bind(this);
         this.clearStepsHistory = this.clearStepsHistory.bind(this);
-        this.loadPackageVersionProperties = this.loadPackageVersionProperties.bind(this);
+        this.showPackageDetails = this.showPackageDetails.bind(this);
         this.toggleTufUpload = this.toggleTufUpload.bind(this);        
         this.showHardwareOverlay = this.showHardwareOverlay.bind(this);        
         this.hideHardwareOverlay = this.hideHardwareOverlay.bind(this);        
@@ -74,10 +67,11 @@ class Device extends Component {
         this.hideHardwareOverlay();
     }
     hidePackageBlacklistModal(e) {
+        const { packagesStore } = this.props;
         if(e) e.preventDefault();
         this.packageBlacklistModalShown = false;
         this.packageBlacklistAction = {};
-        this.props.packagesStore._resetBlacklistActions();
+        packagesStore._resetBlacklistActions();
     }
     showHardwareOverlay(e) {
         e.preventDefault();
@@ -92,75 +86,84 @@ class Device extends Component {
         this.showPackageCreateModal(files);
     }
     togglePackageAutoUpdate(packageName, deviceId, isAutoInstallEnabled) {
+        const { packagesStore } = this.props;
         if(isAutoInstallEnabled) 
-            this.props.packagesStore.disableDevicePackageAutoInstall(packageName, deviceId);
+            packagesStore.disableDevicePackageAutoInstall(packageName, deviceId);
         else
-            this.props.packagesStore.enableDevicePackageAutoInstall(packageName, deviceId);
+            packagesStore.enableDevicePackageAutoInstall(packageName, deviceId);
     }
     toggleTufPackageAutoUpdate(packageName, deviceId, isAutoInstallEnabled) {
+        const { packagesStore, hardwareStore } = this.props;
+        let activeEcuSerial = hardwareStore.activeEcu.serial;
         if(isAutoInstallEnabled)
-            this.props.packagesStore.disableTufPackageAutoInstall(packageName, deviceId, this.activeEcu.serial);
+            packagesStore.disableTufPackageAutoInstall(
+                packageName,
+                deviceId, 
+                activeEcuSerial
+            );
         else
-            this.props.packagesStore.enableTufPackageAutoInstall(packageName, deviceId, this.activeEcu.serial);
+            packagesStore.enableTufPackageAutoInstall(
+                packageName, 
+                deviceId, 
+                activeEcuSerial
+            );
     }
     installPackage(data) {
-        this.props.packagesStore.installPackage(this.props.devicesStore.device.uuid, data);
+        const { packagesStore, devicesStore } = this.props;
+        packagesStore.installPackage(devicesStore.device.uuid, data);
         this.props.showQueueModal();
     }
-    multiTargetUpdate(data) {
-        data.hardwareId = this.activeEcu.hardwareId;
-        this.props.devicesStore.createMultiTargetUpdate(data, this.props.devicesStore.device.uuid);
+    installTufPackage(data) {
+        const { packagesStore, devicesStore, hardwareStore } = this.props;
+        data.hardwareId = hardwareStore.activeEcu.hardwareId;
+        devicesStore.createMultiTargetUpdate(data, devicesStore.device.uuid);
         this.props.showQueueModal();
-        this.props.packagesStore._addQueuedTufPackage(data);
-    }
-    selectEcu(hardwareId, serial, installedHash, ecuType, e) {
-        if(e) e.preventDefault();
-        this.activeEcu = {
-            hardwareId: hardwareId,
-            serial: serial,
-            type: ecuType
-        };
-        this.expandedPack = this.props.packagesStore._getInstalledPackage(installedHash);
-        this.props.packagesStore.fetchDirectorDeviceAutoInstalledPackages(this.props.devicesStore.device.uuid, serial);
-        this.props.packagesStore._setQueuedTufPackages(this.props.devicesStore.multiTargetUpdates, serial);
     }
     clearStepsHistory(e) {
         if(e) e.preventDefault();
-        this.props.devicesStore.clearStepsHistory();
+        const { devicesStore } = this.props;
+        devicesStore.clearStepsHistory();
     }
-    loadPackageVersionProperties(version, e) {
-        if(version === 'unmanaged') {
-            this.expandedPack = {
-                unmanaged: true,
-                isInstalled: true
+    showPackageDetails(pack, e) {
+        if(e) e.preventDefault();
+        const { packagesStore } = this.props;
+        let isPackageUnmanaged = pack === 'unmanaged';
+        if(isPackageUnmanaged) {
+            packagesStore.expandedPackage = {
+                unmanaged: true
             };
         } else {
-            let versionUuid = version.uuid;
-            if(e) e.preventDefault();
-            this.expandedPack = version;
-            this.expandedPack.isInstalled = this.isPackInstalled(version);
+            packagesStore.expandedPackage = pack;
+            packagesStore.expandedPackage.isInstalled = this.isPackInstalled(pack);
         }
     }
-    isPackInstalled(version) {
-        const { devicesStore } = this.props;
+    isPackInstalled(pack) {
+        const { devicesStore, hardwareStore } = this.props;
         let installedOnPrimary = false;
         let installedOnSecondary = false;
         let installedOnLegacy = false;
         if(devicesStore.device.isDirector) {
-            if(this.activeEcu.type === 'primary' && devicesStore._getPrimaryHash() === version.id.version) {
+            if(hardwareStore.activeEcu.type === 'primary' && devicesStore._getPrimaryHash() === pack.id.version) {
                 installedOnPrimary = true;
             }
-            if(this.activeEcu.type === 'secondary') {
-                if(_.includes(devicesStore._getSecondaryHashes(), version.id.version)) {
+            if(hardwareStore.activeEcu.type === 'secondary') {
+                if(_.includes(devicesStore._getSecondaryHashes(), pack.id.version)) {
                     installedOnSecondary = true;
                 }
             }
+        } else {
+            installedOnLegacy = pack.attributes.status === 'installed';
         }
-        installedOnLegacy = version.attributes.status === 'installed';
         return installedOnPrimary || installedOnSecondary || installedOnLegacy;
     }
     render() {
-        const { devicesStore, packagesStore, hardwareStore } = this.props;
+        const { 
+            devicesStore, 
+            packagesStore, 
+            hardwareStore, 
+            selectEcu,
+            packagesReady
+        } = this.props;
         const device = devicesStore.device;
         return (
             <span>
@@ -175,9 +178,7 @@ class Device extends Component {
                                 devicesStore={devicesStore}
                                 hardwareStore={hardwareStore}
                                 packagesStore={packagesStore}
-                                device={device}                                
-                                activeEcu={this.activeEcu}
-                                selectEcu={this.selectEcu}
+                                selectEcu={selectEcu}
                                 showPackageBlacklistModal={this.showPackageBlacklistModal}
                                 onFileDrop={this.onFileDrop}
                                 hardwareOverlayShown={this.hardwareOverlayShown}
@@ -189,29 +190,25 @@ class Device extends Component {
                                 devicesStore={devicesStore}
                                 packagesStore={packagesStore}
                                 hardwareStore={hardwareStore}
-                                device={device}
                                 togglePackageAutoUpdate={this.togglePackageAutoUpdate}
                                 toggleTufPackageAutoUpdate={this.toggleTufPackageAutoUpdate}
                                 installPackage={this.installPackage}
                                 onFileDrop={this.onFileDrop}
-                                expandedPack={this.expandedPack}
-                                loadPackageVersionProperties={this.loadPackageVersionProperties}
-                                activeEcu={this.activeEcu}
+                                showPackageDetails={this.showPackageDetails}
+                                packagesReady={packagesReady}
                             />
                             <DevicePropertiesPanel
                                 packagesStore={packagesStore}
                                 devicesStore={devicesStore}
+                                hardwareStore={hardwareStore}
                                 showPackageBlacklistModal={this.showPackageBlacklistModal}
-                                expandedPack={this.expandedPack}
                                 installPackage={this.installPackage}
-                                multiTargetUpdate={this.multiTargetUpdate}
-                                device={device}
-                                activeEcu={this.activeEcu}
+                                installTufPackage={this.installTufPackage}
+                                packagesReady={packagesReady}
                             />
                         </span>
                     :
                         <DeviceGuide
-                            device={device}
                             devicesStore={devicesStore}
                             clearStepsHistory={this.clearStepsHistory}
                         />
@@ -241,7 +238,8 @@ Device.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
-    showQueueModal: PropTypes.func.isRequired
+    showQueueModal: PropTypes.func.isRequired,
+    selectEcu: PropTypes.func.isRequired,
 }
 
 export default Device;

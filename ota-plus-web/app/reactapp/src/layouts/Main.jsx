@@ -115,6 +115,24 @@ class Main extends Component {
                 }
             }
         });
+
+        this.directorAttributesHandler = observe(this.devicesStore, (change) => {
+            if(change.name === 'devicesDirectorAttributesFetchAsync' && change.object[change.name].isFetching === false) {
+                let expandedPackage = this.packagesStore.expandedPackage;
+                let installed = false;
+                if(this.devicesStore.device.isDirector) {
+                    if(this.hardwareStore.activeEcu.type === 'primary' && this.devicesStore._getPrimaryHash() === expandedPackage.id.version) {
+                        installed = true;
+                    }
+                    if(this.hardwareStore.activeEcu.type === 'secondary') {
+                        if(_.includes(this.devicesStore._getSecondaryHashes(), expandedPackage.id.version)) {
+                            installed = true;
+                        }
+                    }
+                }
+                expandedPackage.isInstalled = installed;
+            }
+        });
         this.makeBodyWhite();
         this.makeBodyGradient();
     }
@@ -258,6 +276,7 @@ class Main extends Component {
         this.devicesHandler();
         this.provisioningStatusHandler();
         this.featuresHandler();
+        this.directorAttributesHandler();
     }
     backButtonAction(e) {
         if(e) e.preventDefault();
