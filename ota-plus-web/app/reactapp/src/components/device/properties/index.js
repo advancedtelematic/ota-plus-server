@@ -1,7 +1,5 @@
-import PropertiesOnDeviceList from './OnDeviceList';
-import PropertiesListItemOnDevice from './ListItemOnDevice';
+import PropertiesList from './List';
 
 export {
-    PropertiesOnDeviceList,
-    PropertiesListItemOnDevice
+	PropertiesList,
 }

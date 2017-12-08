@@ -7,7 +7,7 @@ class ListItem extends Component {
         super(props);
     }
     render() {
-        const { pack, device, queuedPackage, installedPackage, blacklistedAndInstalled, isSelected, togglePackage, toggleAutoInstall, toggleTufAutoInstall, loadPackageVersionProperties } = this.props;
+        const { pack, device, queuedPackage, installedPackage, blacklistedAndInstalled, isSelected, togglePackage, toggleAutoInstall, toggleTufAutoInstall, showPackageDetails } = this.props;
         return (
             <span className="wrapper-item">
                 {!pack.unmanaged ?
@@ -98,7 +98,7 @@ class ListItem extends Component {
                     </span>
                 :
                     <span>
-                        <button className="item unmanaged" id={"button-package-" + pack.hash} onClick={loadPackageVersionProperties.bind(this, 'unmanaged')}>
+                        <button className="item unmanaged" id={"button-package-" + pack.hash} onClick={showPackageDetails.bind(this, 'unmanaged')}>
                             <div className="filepath">
                                 Filepath: {pack.filepath}
                             </div>
@@ -127,7 +127,7 @@ ListItem.propTypes = {
     togglePackage: PropTypes.func.isRequired,
     toggleAutoInstall: PropTypes.func.isRequired,
     toggleTufAutoInstall: PropTypes.func.isRequired,
-    loadPackageVersionProperties: PropTypes.func.isRequired,
+    showPackageDetails: PropTypes.func.isRequired,
 }
 
 export default ListItem;

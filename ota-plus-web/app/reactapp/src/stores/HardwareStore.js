@@ -25,6 +25,12 @@ export default class HardwareStore {
     @observable hardwareIdsLimit = 1000;
     @observable hardwareIdsCurrentPage = 0;
     @observable hardwareFilter = '';
+    
+    @observable activeEcu = {
+        hardwareId: null,
+        serial: null,
+        type: null,
+    };
 
     constructor() {
         resetAsync(this.hardwareFetchAsync);

@@ -9,26 +9,25 @@ class PrimaryEcu extends Component {
         super(props);
     }    
     render() {
-        const { active, devicesStore, hardwareStore, showKey, showHardwareOverlay, keyModalShown, device, selectEcu, ...otherProps} = this.props;
+        const { active, devicesStore, hardwareStore, showHardwareOverlay, selectEcu, ...otherProps} = this.props;
+        const device = devicesStore.device;
         const hardware = hardwareStore.hardware;
-        let dataId = 0;
-        if(!_.isUndefined(hardware) && !_.isUndefined(hardware.id) && (!_.isUndefined(hardware.description) || !_.isUndefined(hardware.class))) {
-            dataId = hardware['id-nr'];
-        }
         return (
             <span>
-                <div className="section-header">
-                    Primary ECUs
-                </div>
                 <a
                     href="#" 
-                    data-id={dataId}
                     className={active ? " selected" : ""}
                     id="hardware-primary-details"
-                    onClick={device.isDirector ? selectEcu.bind(this, devicesStore._getPrimaryHardwareId(), devicesStore._getPrimarySerial(), devicesStore._getPrimaryHash(), 'primary') : e => e.preventDefault()}
+                    onClick={device.isDirector ? selectEcu.bind(
+                        this, 
+                        devicesStore._getPrimaryHardwareId(), 
+                        devicesStore._getPrimarySerial(), 
+                        devicesStore._getPrimaryHash(), 
+                        'primary'
+                    ) : e => e.preventDefault()}
                 >
                     <div className="desc">
-                        { device.isDirector ? 
+                        {device.isDirector ? 
                             <span>
                                 <span id="hardware-id-value" className="hardware-label">{devicesStore._getPrimaryHardwareId()}</span> <br />
                                 Serial: <span id="hardware-serial-value">{devicesStore._getPrimarySerial()}</span>
@@ -44,7 +43,6 @@ class PrimaryEcu extends Component {
                         <div className="hardware-icon details" 
                             id="hardware-details-icon"
                             onClick={showHardwareOverlay}
-                            data-id={dataId}
                         >
                             <img src="/assets/img/icons/black/icon.svg" alt="Icon" />
                         </div>
@@ -52,7 +50,6 @@ class PrimaryEcu extends Component {
                             <div
                                 className="hardware-icon key" 
                                 id="hardware-key-icon"
-                                onClick={showKey}
                                 onTouchTap={otherProps.handleTouchTap}
                             >
                                 <img src="/assets/img/icons/key.svg" alt="Icon" />
@@ -60,7 +57,6 @@ class PrimaryEcu extends Component {
                         :
                             null
                         }
-
                     </div>
                 </a>
                 <PublicKeyPopover
