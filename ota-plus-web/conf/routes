@@ -24,7 +24,6 @@ GET     /api/v1/provisioning/credentials/archive/:keyuuid com.advancedtelematic.
 GET     /api/v1/features                         com.advancedtelematic.controllers.UserProfileController.getFeatures
 PUT     /api/v1/features/:feature                com.advancedtelematic.controllers.UserProfileController.activateFeature(feature: FeatureName)
 GET     /api/v1/features/:feature/client         com.advancedtelematic.controllers.UserProfileController.getFeatureClient(feature: FeatureName)
-GET     /api/v1/features/:feature/config         com.advancedtelematic.controllers.UserProfileController.getFeatureConfig(feature: FeatureName)
 
 POST    /api/v1/setup                            com.advancedtelematic.controllers.NamespaceSetupController.setup()
 GET     /api/v1/setup                            com.advancedtelematic.controllers.NamespaceSetupController.status()
