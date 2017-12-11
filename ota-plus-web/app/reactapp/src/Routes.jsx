@@ -9,7 +9,6 @@ import {
     CampaignsPage,
     CampaignPage,
     ImpactAnalysisPage,
-    TreehubPage,
     ProfilePage,
     NoMatchPage,
     WelcomePage,
@@ -55,7 +54,6 @@ const Routes = () => {
                 <Route path="/campaigns" component={CampaignsPage}/>
                 <Route path="/campaign/:id" component={CampaignPage}/>
                 <Route path="/impact-analysis" component={ImpactAnalysisPage}/>
-                <Route path="/treehub" component={TreehubPage}/>
                 <Route path="/software-repository" component={SoftwareRepository}/>
                 <Route path="/advanced-campaigns" component={AdvancedCampaignsPage}/>
                 <Route path="/connectors" component={ConnectorsPage}/>

@@ -144,8 +144,4 @@ class UserProfileController @Inject()(val conf: Configuration,
     }
   }
 
-  def getFeatureConfig(feature: FeatureName): Action[AnyContent] = authAction.async { request =>
-    getFeatureConfig(feature, request.idToken.claims.userId, request.accessToken)
-  }
-
 }

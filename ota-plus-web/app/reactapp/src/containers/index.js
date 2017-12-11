@@ -5,7 +5,6 @@ import PackagesContainer from './Packages';
 import CampaignsContainer from './Campaigns';
 import CampaignContainer from './Campaign';
 import ImpactAnalysisContainer from './ImpactAnalysis';
-import TreehubContainer from './Treehub';
 import ProvisioningContainer from './Provisioning';
 import NoMatchContainer from './NoMatch';
 import PreparationContainer from './Preparation';
@@ -18,7 +17,6 @@ export {
     CampaignsContainer,
     CampaignContainer,
     ImpactAnalysisContainer,
-    TreehubContainer,
     ProvisioningContainer,
     NoMatchContainer,
     PreparationContainer
