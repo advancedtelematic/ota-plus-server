@@ -1,6 +1,7 @@
 package com.advancedtelematic.api
 
 import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.model.Uri
 import akka.http.scaladsl.model.Uri.{NamedHost, Path}
 import java.time.Instant
 import java.util.UUID
@@ -19,6 +20,7 @@ object CryptAccountInfo {
 
   implicit val NamedHostReads: Reads[NamedHost] = Reads.StringReads.map(NamedHost.apply)
   implicit val NamedHostWrites: Writes[NamedHost] = Writes.StringWrites.contramap(_.address)
+  implicit val UriWrites: Writes[Uri] = Writes.StringWrites.contramap(_.toString)
   implicit val ReadsInstance: Format[CryptAccountInfo] =
     ((__ \ "subject").format[String] and (__ \ "hostName")
       .format[NamedHost])(CryptAccountInfo.apply, unlift(CryptAccountInfo.unapply))
@@ -58,6 +60,8 @@ class CryptApi(conf: Configuration, val apiExec: ApiClientExec)(implicit exec: E
 
   val baseUri = ApiRequest.base(conf.underlying.getString("crypt.uri"))
 
+  val gatewayPort = conf.get[Option[Int]]("crypt.gateway.port").getOrElse(443)
+
   def registerAccount(accountName: String): Future[CryptAccountInfo] = {
     baseUri(s"/accounts/$accountName").transform(_.withMethod(PUT)).execJson[CryptAccountInfo](apiExec)
   }
@@ -86,6 +90,9 @@ class CryptApi(conf: Configuration, val apiExec: ApiClientExec)(implicit exec: E
   def getAccountInfo(accountName: String): Future[Option[CryptAccountInfo]] = {
     getAccount(accountName, _.validate[CryptAccountInfo])
   }
+
+  def getAccountGatewayUri(accountInfo: CryptAccountInfo) =
+    Uri("https", Uri.Authority(accountInfo.hostName, gatewayPort))
 
   def getCredentials(accountName: String): Future[Option[Seq[DeviceRegistrationCredentials]]] = {
     getAccount(accountName, x =>
