@@ -8,7 +8,7 @@ class ListItem extends Component {
     }
     _onDownload() {
 	const { provisioningStore, provisioningKey } = this.props;
-        location.href="/api/v1/provisioning/credentials/archive/" + provisioningKey.id;
+        location.href="/api/v1/clienttools/provisioning/" + provisioningKey.id;
     }
     render() {
         const { provisioningKey, width } = this.props; 

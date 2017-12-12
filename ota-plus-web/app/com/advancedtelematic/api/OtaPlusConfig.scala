@@ -36,4 +36,6 @@ trait OtaPlusConfig {
   val keyServerApiUri = conf.underlying.getString("keyserver.uri")
 
   val cryptApiUri = conf.underlying.getString("crypt.uri")
+
+  val treehubPubApiUri = conf.underlying.getString("treehub.pub.uri")
 }
