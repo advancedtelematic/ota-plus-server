@@ -22,7 +22,7 @@ object AccessToken {
     import play.api.libs.functional.syntax._
     (
       (JsPath \ "access_token").read[String] and
-        (JsPath \ "expires_in").read[Long].map(Instant.now().plusSeconds)
+        (JsPath \ "expires_in").read[Long].map(x => Instant.now().plusSeconds(x))
       )(AccessToken.apply _)
     // format: on
   }
