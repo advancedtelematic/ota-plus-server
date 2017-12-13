@@ -136,7 +136,7 @@ class NamespaceSetupController @Inject() (val ws: WSClient,
 
   private lazy val enabledResources: Namespace => List[ResourceCreation] = { ns =>
     val crypt =
-      if(conf.get[Boolean]("crypt.create"))
+      if(conf.getOptional[String]("crypt.host").isDefined)
         List(new CryptAccountCreation(ns, cryptApi))
       else
         List.empty
