@@ -18,7 +18,6 @@ class List extends Component {
     @observable fakeHeaderLetter = null;
     @observable fakeHeaderTopPosition = 0;
     @observable expandedPackageName = null;
-    @observable packageAlreadyHighlighted = false;
     @observable tmpIntervalId = null;
 
     constructor(props) {
@@ -37,13 +36,10 @@ class List extends Component {
             }
         });
     }
-    componentWillMount() {
-        this.expandedPackageName = this.props.highlightPackage;
-    }
     componentDidMount() {
         this.refs.list.addEventListener('scroll', this.listScroll);
         this.listScroll();
-        this.highlightPackage();
+        this.highlightPackage(this.props.highlightedPackage);
     }
     componentWillUnmount() {
         this.packagesChangeHandler();
@@ -100,11 +96,16 @@ class List extends Component {
             this.fakeHeaderTopPosition = scrollTop;
         }
     }
-    highlightPackage() {
-        if(this.refs.list && this.props.highlightedPackage) {
+    highlightPackage(pack) {
+        if(this.refs.list && pack) {
             const wrapperPosition = this.refs.list.getBoundingClientRect();
-            this.refs.list.scrollTop = document.getElementById("button-package-" + this.props.highlightedPackage).getBoundingClientRect().top - wrapperPosition.top - headerHeight;
-            this.packageAlreadyHighlighted = true;
+            this.refs.list.scrollTop = document.getElementById("button-package-" + pack).getBoundingClientRect().top - wrapperPosition.top - headerHeight;
+            this.expandedPackageName = pack;
+        }
+    }
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.highlightedPackage !== this.props.highlightedPackage) {
+            this.highlightPackage(nextProps.highlightedPackage);
         }
     }
     togglePackage(packageName, e) {
