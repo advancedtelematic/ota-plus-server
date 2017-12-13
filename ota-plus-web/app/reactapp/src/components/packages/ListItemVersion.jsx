@@ -71,7 +71,7 @@ class ListItemVersion extends Component {
         return isPackageBlacklisted ? isPackageBlacklisted : false;
     }
     render() {
-        const { version } = this.props;
+        const { version } = this.props;        
         let isBlacklisted = this.isPackageBlacklisted(version);
         let packageName = version.id.name;
         const directorBlock = (

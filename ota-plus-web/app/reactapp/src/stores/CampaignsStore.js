@@ -406,11 +406,13 @@ export default class CampaignsStore {
           let bName = b.name;
             return aName.localeCompare(bName);
         });
-        this.preparedLegacyCampaigns = legacyCampaigns.sort((a, b) => {
-          let aName = a.name;
-          let bName = b.name;
-            return aName.localeCompare(bName);
-        });
+        if(legacyCampaigns) {
+            this.preparedLegacyCampaigns = legacyCampaigns.sort((a, b) => {
+              let aName = a.name;
+              let bName = b.name;
+                return aName.localeCompare(bName);
+            });
+        }
     }
 
     _getCampaign(id) {

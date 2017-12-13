@@ -7,6 +7,7 @@ import PackagesTooltip from './Tooltip';
 import PackagesList from './List';
 import PackagesCancelUploadModal from './CancelUploadModal';
 import PackagesCancelAllUploadsModal from './CancelAllUploadsModal';
+import PackagesRelativesModal from './RelativesModal';
 
 export {
     PackagesCreateModal,
@@ -17,5 +18,6 @@ export {
     PackagesTooltip,
     PackagesList,
     PackagesCancelUploadModal,
-    PackagesCancelAllUploadsModal
+    PackagesCancelAllUploadsModal,
+    PackagesRelativesModal,
 }

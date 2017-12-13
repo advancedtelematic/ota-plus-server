@@ -123,7 +123,7 @@ class List extends Component {
         this.tmpIntervalId = null;
     }
     render() {
-        const { showBlacklistModal, packagesStore, onFileDrop, highlightedPackage } = this.props;
+        const { showBlacklistModal, packagesStore, onFileDrop, highlightedPackage, showRelativesModal } = this.props;
         return (
             <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching ? " fetching" : "")} ref="list">
                 {packagesStore.packagesCount ? 
@@ -148,6 +148,7 @@ class List extends Component {
                                                 <ListItem 
                                                     pack={pack}
                                                     togglePackage={this.togglePackage}
+                                                    showRelativesModal={showRelativesModal}
                                                 />
                                                 <VelocityTransitionGroup 
                                                     enter={{
