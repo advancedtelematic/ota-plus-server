@@ -553,6 +553,8 @@ class CreateModal extends Component {
             shownForm = legacyForm;
         } else if(devicesStore.directorDevicesCount) {
             shownForm = directorForm;
+        } else {
+            shownForm = commonForm;
         }
         return (
             <Modal 
