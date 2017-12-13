@@ -8,7 +8,8 @@ import {
     PackagesFileUploaderModal, 
     PackagesHeader, 
     PackagesList,
-    PackagesBlacklistModal
+    PackagesBlacklistModal,
+    PackagesRelativesModal
 } from '../components/packages';
 import { FlatButton } from 'material-ui';
 
@@ -22,6 +23,8 @@ class Packages extends Component {
     @observable blacklistAction = {};
     @observable uploadToTuf = true;
     @observable copied = false;
+    @observable relativesModalShown = false;
+    @observable activePackage = null;
 
     constructor(props) {
         super(props);
@@ -39,6 +42,8 @@ class Packages extends Component {
         this.onFileDrop = this.onFileDrop.bind(this);
         this.toggleTufUpload = this.toggleTufUpload.bind(this);
         this.handleCopy = this.handleCopy.bind(this);
+        this.showRelativesModal = this.showRelativesModal.bind(this);
+        this.hideRelativesModal = this.hideRelativesModal.bind(this);
     }
     showTooltip(e) {
         if(e) e.preventDefault();
@@ -47,6 +52,16 @@ class Packages extends Component {
     hideTooltip(e) {
         if(e) e.preventDefault();
         this.tooltipShown = false;
+    }
+    showRelativesModal(activePackage, e) {
+        if(e) e.preventDefault();
+        this.relativesModalShown = true;
+        this.activePackage = activePackage;
+    }
+    hideRelativesModal(e) {
+        if(e) e.preventDefault();
+        this.relativesModalShown = false;
+        this.activePackage = null;
     }
     showCreateModal(files, e) {
         if(e) e.preventDefault();
@@ -103,7 +118,7 @@ class Packages extends Component {
         this.showCreateModal(files);
     }
     render() {
-        const { packagesStore, hardwareStore, highlightedPackage, featuresStore, devicesStore } = this.props;
+        const { packagesStore, hardwareStore, highlightedPackage, featuresStore, devicesStore, campaignsStore } = this.props;
         return (
             <span ref="component">
                 {packagesStore.overallPackagesCount === null || packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching ?
@@ -122,6 +137,7 @@ class Packages extends Component {
                                 packagesStore={packagesStore}
                                 onFileDrop={this.onFileDrop}
                                 highlightedPackage={highlightedPackage}
+                                showRelativesModal={this.showRelativesModal}
                             />
                             {packagesStore.overallPackagesCount && packagesStore.packagesFetchAsync.isFetching ? 
                                 <div className="wrapper-loader">
@@ -178,6 +194,18 @@ class Packages extends Component {
                     blacklistAction={this.blacklistAction}
                     packagesStore={packagesStore}
                 />
+                {this.relativesModalShown ?
+                    <PackagesRelativesModal 
+                        shown={this.relativesModalShown}
+                        hide={this.hideRelativesModal}
+                        activePackage={this.activePackage}
+                        packagesStore={packagesStore}
+                        campaignsStore={campaignsStore}
+                        devicesStore={devicesStore}
+                    />
+                :
+                    null
+                }
             </span>
         );
     }

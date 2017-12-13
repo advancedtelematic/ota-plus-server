@@ -16,14 +16,14 @@ class Packages extends Component {
         this.props.packagesStore.page = 'packages';
         this.props.packagesStore.fetchPackages();
         this.props.packagesStore.fetchTufPackages();
-        this.props.packagesStore.fetchBlacklist();        
+        this.props.packagesStore.fetchBlacklist();
         this.props.devicesStore.fetchDevicesCount();
     }
     componentWillUnmount() {
         this.props.packagesStore._reset();
     }
     render() {
-        const { t, packagesStore, hardwareStore, featuresStore, devicesStore } = this.props;
+        const { t, packagesStore, hardwareStore, featuresStore, devicesStore, campaignsStore } = this.props;
         return (
             <FadeAnimation 
                 display="flex">
@@ -58,6 +58,7 @@ class Packages extends Component {
                             hardwareStore={hardwareStore}
                             featuresStore={featuresStore}
                             devicesStore={devicesStore}
+                            campaignsStore={campaignsStore}
                             highlightedPackage={this.props.params.packageName}
                         />
                     </MetaData>

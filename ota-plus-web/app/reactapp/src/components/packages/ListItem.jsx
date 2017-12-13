@@ -20,7 +20,7 @@ class ListItem extends Component {
         return this.props.pack.versions.length;
     }
     render() {
-        const { pack, togglePackage } = this.props;
+        const { pack, togglePackage, showRelativesModal } = this.props;
         let installedOnEcus = this.countInstalledOnEcus();
         let packVersionsNumber = this.countPackVersionsNumber();
         const directorBlock = (
@@ -42,6 +42,9 @@ class ListItem extends Component {
                     <span id={"package-" + pack.packageName + "-installed-on-ecus"}>
                         Installed on <span id={"package-" + pack.packageName + "-installed-on-ecus-count"}>{installedOnEcus}</span> Ecu(s)
                     </span>
+                </div>
+                <div className="show-relatives">
+                    <a href="#" onClick={showRelativesModal.bind(this.pack)}>Open modal</a>
                 </div>
             </div>
         );
