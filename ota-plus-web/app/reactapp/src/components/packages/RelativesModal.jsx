@@ -27,6 +27,7 @@ class RelativesModal extends Component {
       this.devicesFetchHandler = new AsyncStatusCallbackHandler(props.devicesStore, 'devicesFetchAsync', this.devicesFetched.bind(this));
       this.campaignsFetchHandler = new AsyncStatusCallbackHandler(props.campaignsStore, 'campaignsFetchAsync', this.campaignsFetched.bind(this));
       this.onLinkMouseAction = this.onLinkMouseAction.bind(this);
+      this.onLinkClick = this.onLinkClick.bind(this);
       this.getNodeStatus = this.getNodeStatus.bind(this);
   }
   componentWillMount() {
@@ -61,6 +62,30 @@ class RelativesModal extends Component {
           this.highlightSources(link.source.targetLinks, opacity);
         }
       });
+  }
+  onLinkClick(linkdata, event) {
+    const { packagesStore, campaignsStore, hide } = this.props;
+    let clickedItemType = linkdata.target.type;
+    switch(clickedItemType) {
+      case 'pack':
+        let packName = linkdata.target.originalName;
+        this.context.router.push(`/packages/${packName}`);
+        hide();
+        break;
+      case 'mtu':
+        break;
+      case 'node':
+        let campaignName = linkdata.target.originalName;
+        let campaign = _.find(campaignsStore.campaigns, campaign => campaign.name === campaignName);
+        this.context.router.push(`/campaigns/#${campaign.id}`);
+        break;
+      case 'device':
+        let deviceId = linkdata.target.uuid;
+        this.context.router.push(`/device/${deviceId}`);
+        break;
+      default: 
+        break;
+    }
   }
   getNodeStatus(node) {
     return node.summary.status === 'finished' || node.summary.status === 'cancelled' ? 'finished' : node.summary.status === 'launched' ? 'running' : 'other';
@@ -172,6 +197,7 @@ class RelativesModal extends Component {
     _.map(this.packages, (item, index) => {
       nodes.push({
         name: item.id.name.substring(0, 15) + " - " + item.id.version.substring(0, 5),
+        originalName: item.id.name,
         type: 'pack',
         color: "#FFA726",
       });
@@ -188,6 +214,7 @@ class RelativesModal extends Component {
         _.map(mtu.nodes, (node, i) => {
           nodes.push({
             name: node.name.substring(0, 15) + "(" + this.getNodeStatus(node) + ")",
+            originalName: node.name,
             type: 'node',
             status: this.getNodeStatus(node),
             color: "#FF8A65",
@@ -200,6 +227,7 @@ class RelativesModal extends Component {
       nodes.push({
         name: device.deviceName.substring(0, 15) + (device.section === 'queued' ? '(queued on)' : '(installed on)'),
         originalName: device.deviceName,
+        uuid: device.uuid,
         section: device.section,
         type: 'device',
         color: "#FF8A65",
@@ -332,6 +360,7 @@ class RelativesModal extends Component {
               height={sankeyHeight}
               onLinkMouseOver={this.onLinkMouseAction.bind(this, 'in')}
               onLinkMouseOut={this.onLinkMouseAction.bind(this, 'out')}
+              onLinkClick={this.onLinkClick.bind(this)}
             >
             </Sankey>
           :
@@ -353,6 +382,10 @@ class RelativesModal extends Component {
 }
 
 RelativesModal.propTypes = {
+}
+
+RelativesModal.contextTypes = {
+    router: React.PropTypes.object.isRequired
 }
 
 export default RelativesModal;
