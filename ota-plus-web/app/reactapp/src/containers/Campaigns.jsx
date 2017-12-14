@@ -87,7 +87,6 @@ class Campaigns extends Component {
                                     onClick={addNewWizard.bind(this, null)}
                                 />
                             </div>
-                            <a href="#" onClick={this.showTooltip}>What is this?</a>
                         </div>
                     </div>
                 }

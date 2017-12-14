@@ -127,15 +127,6 @@ class Devices extends Component {
                         <div className="wrapper-center">
                             <div className="page-intro">
                                 <div>You haven't created any devices yet.</div>
-                                <div>
-                                    <FlatButton
-                                        label="Add new device"
-                                        type="button"
-                                        className="btn-main"
-                                        onClick={this.showCreateModal}
-                                    />
-                                </div>
-                                <a href="#" onClick={this.showTooltip}>What is this?</a>
                             </div>
                         </div>
                 }
