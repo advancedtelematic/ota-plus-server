@@ -370,10 +370,10 @@ class Wizard extends Component {
         };
         this.props.campaignsStore.createCampaign(createData);
     }
-    handleCampaignCreated() {        
+    handleCampaignCreated() {
         this.props.campaignsStore.launchCampaign(this.props.campaignsStore.campaignData.campaignId);
         this.props.hideWizard(this.props.wizardIdentifier);
-        this.props.goToCampaignDetails(this.props.campaignsStore.campaignData.campaignId);
+        this.props.campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
     }
     handleLegacyCampaignCreated() {
         let pack = _.first(this.wizardData[1].packages);
@@ -396,7 +396,7 @@ class Wizard extends Component {
     }
     handleLegacyCampaignLaunched() {
         this.props.hideWizard(this.props.wizardIdentifier);
-        this.props.goToCampaignDetails(this.props.campaignsStore.campaignData.campaignId);
+        this.props.campaignsStore.fetchLegacyCampaigns('campaignsLegacySafeFetchAsync');
     }
     changeFilter(filterValue) {
         this.filterValue = filterValue;

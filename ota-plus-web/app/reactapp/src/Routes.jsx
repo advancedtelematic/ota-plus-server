@@ -7,7 +7,6 @@ import {
     DevicePage,
     PackagesPage,
     CampaignsPage,
-    CampaignPage,
     ImpactAnalysisPage,
     ProfilePage,
     NoMatchPage,
@@ -51,8 +50,7 @@ const Routes = () => {
                 <Route path="/devices" component={DevicesPage}/>
                 <Route path="/device/:id" component={DevicePage}/>
                 <Route path="/packages(/:packageName)" component={PackagesPage}/>
-                <Route path="/campaigns" component={CampaignsPage}/>
-                <Route path="/campaign/:id" component={CampaignPage}/>
+                <Route path="/campaigns(/:campaignName)" component={CampaignsPage}/>
                 <Route path="/impact-analysis" component={ImpactAnalysisPage}/>
                 <Route path="/software-repository" component={SoftwareRepository}/>
                 <Route path="/advanced-campaigns" component={AdvancedCampaignsPage}/>

@@ -2815,10 +2815,21 @@
         .ios-list {
             height: calc(100% - 40px);
 
+            .item {
+                &.expanded {
+                    background: #f5f5f5;
+                }
+            }
+
             .director-details {
                 background: #f5f5f5;
                 overflow: hidden;
                 padding: 25px;
+
+                .pack-name {
+                    font-size: 30px;
+                    margin-bottom: 25px;
+                }
 
                 .distribution {
                     width: 20%;
@@ -2842,6 +2853,7 @@
                 }
 
                 .right-box {
+                    position: relative;
                     text-align: left;
                     height: auto;
                     padding: 20px 10px;
@@ -2862,6 +2874,39 @@
                         .value {
                             width: 75%;
                             float: left;
+                        }
+                    }
+
+                    .show-dependencies {
+                        position: absolute;
+                        right: 30px;
+                        top: calc(50% - 10px);
+
+                        &:hover {
+                            .my-tooltip {
+                                opacity: 1;
+                            }
+                        }
+
+                        .my-tooltip {
+                            opacity: 0;
+                            position: absolute;
+                            top: -25px;
+                            text-align: center;
+                            width: 140px;
+                            right: -15px;
+                            border: 1px solid #ccc;
+                            height: 20px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            -webkit-transition: opacity 1s;
+                            transition: opacity 1s;
+                        }
+
+                        img {
+                            width: 50px;
+                            cursor: pointer;
                         }
                     }
                 }
@@ -2992,478 +3037,6 @@
 
 .display-flex {
     display: flex;
-}
-
-#page-campaign {
-    @include fullHeight;
-    .white-bg {
-        background-color: #FFF;
-    }
-    .page-heading {
-        .icon {
-            background-image: url(/assets/img/icons/black/campaigns.png);
-        }
-
-        .text {
-            width: 425px;
-
-            .title {
-                position: relative;
-
-                input {
-                    width: 100%;
-                    background-color: rgba(0,0,0,0);
-                    border: none;
-                    outline: none;
-                    -webkit-appearance: none;
-                    -moz-appearance: none;
-                    color: #fff;
-                    appearance: none;
-                    transition: all 0.3s ease;
-                    padding: 10px 65px 10px 10px;
-                    text-overflow: ellipsis;
-                    
-                    &:focus {
-                        outline: auto;
-                        background-color: rgba(0,0,0,0.2);
-                    }                    
-                }
-                img {
-                    width: 20px;
-                    transition: opacity 0.3s ease;
-                    cursor: pointer;
-
-                    &.edit {
-                        opacity: 0;
-                        position: absolute;
-                        right: 15px;
-                        top: 15px;
-                    }
-                }
-                .icons {
-                    position: absolute;
-                    right: 5px;
-                    top: 10px;
-                    z-index: 10;
-                    img {
-                        margin-right: 5px;
-                        width: 15px;
-                    }
-                }
-                &:hover {
-                    img {
-                        opacity: 1;
-                    }
-                    input {
-                        background-color: rgba(255,255,255,.2);
-                    }
-                }
-            }
-        }
-    }
-
-    .content {
-        background: #fff;
-        overflow-y: hidden;
-
-        &.tuf {
-            height: auto!important;
-        }
-
-        .stat-small-title {
-            font-size: 15px;
-        }
-        .stat-big-count {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        div.tuf-campaign-wrapper {
-            padding: 0 0 30px;
-            .tuf-campaign {
-                &>.row {
-                    position: relative;
-                    z-index: 1;
-                    padding: 25px 0;
-                    background-color: #f7f7f7;
-                    -webkit-box-shadow: 0px 1px 15px 0px rgba(0,0,0,0.5);
-                    -moz-box-shadow: 0px 1px 15px 0px rgba(0,0,0,0.5);
-                    box-shadow: 0px 1px 20px 0px rgba(0,0,0,0.5);
-                }
-            }
-        }
-        .subcontent {
-            height: calc(100% - 36px);
-            padding: 30px 0;
-            display: block;
-            overflow-y: hidden;
-            overflow-x: hidden;
-            .status-block {
-                margin: 20px 0;
-            }
-            .status-row {
-                margin-top: 10px;
-            }
-            .status::before{
-                content: '';
-                display: inline-block;
-                width: 20px;
-                height: 20px;
-                -moz-border-radius: 10px;
-                -webkit-border-radius: 10px;
-                border-radius: 10px;
-                margin: -2px 10px 0 0;
-            }
-            .failure::before {
-                background-color: #FE0001;
-            }
-            .successed::before {
-                background-color: #83D060;
-            }
-            .queued::before {
-                background-color: #F5A623;
-            }
-            .not-impacted::before {
-                background-color: #ddd;
-            }
-            .not-proceed::before {
-                background-color: #FFF;
-                border: 1px #B9B9B9 solid;
-            }
-            .status {
-                color: #8a8a8a;
-                font-size: 15px;
-                height: 20px;
-                display: flex;
-                align-items: center;
-            }
-            .status-value {
-                color: #8a8a8a;
-                font-size: 15px;
-            }
-            .campaign-name-block {
-                @include textoverflowEllipsis;
-                overflow:hidden !important;
-            }
-            .campaign-name {
-                margin: 0 0 0 30px;
-                font-size: 36px;
-            }
-            .section-title {
-                font-size: 18px;                
-            }
-            .devices-stats {
-                color: $color-lightgrey;
-                width: 25%;
-                padding: 0 15px;
-                display: inline-block;
-                vertical-align: super;
-            }
-            .total-progress {
-                margin: 50px 0 0;
-                .progress-blue {
-                    height: 50px;
-                }
-                .devices-progress {
-                    -webkit-box-shadow: 0px 8px 20px -10px rgba(0,0,0,0.75);
-                    -moz-box-shadow: 0px 8px 20px -10px rgba(0,0,0,0.75);
-                    box-shadow: 0px 8px 20px -10px rgba(0,0,0,0.75);
-                    width: 100%;
-                    border: 1px solid #ccc;
-                    border-radius: 5px;
-                    display: inline-block;
-                    
-                    .bar {
-                        height: 50px;
-                        overflow: hidden;
-                        border-radius: 5px;
-
-                        .failure {
-                            height: 50px;
-                            background-color: #fe0001;
-                            float: left;
-                        }
-
-                        .success {
-                            height: 50px;
-                            background-color: #83d060;
-                            float: left;
-                        }
-
-                        .queued {
-                            height: 50px;
-                            background-color: #f5a623;
-                            float: left;
-                        }
-
-                        .not-impacted {
-                            height: 50px;
-                            background-color: #ddd;
-                            float: left;
-                        }
-                        .not-proceed {
-                            height: 50px;
-                            background-color: #fff;
-                            float: left;
-                        }
-                    }
-                }
-            }
-
-            .total-failure-rate {
-                margin: 10px 0 30px 10px;
-
-                .rate {
-                    font-size: 18px;
-                    font-weight: bold;
-                    text-align: center;
-                    width: 48px;
-                    position: absolute;
-                    top: 105px;
-                    left: 73px;
-                }
-            }
-
-            .btn-red {
-                margin: 0 15px 0 0 !important;
-                float: right !important;
-
-                span {
-                    text-transform: uppercase !important;
-                }
-            }
-
-            .element-box {
-                width: auto;
-                height: auto;
-                margin: 0;
-                border: 0;
-
-                &:hover {
-                    background: transparent;
-                }
-
-                &.group {
-                    .icon {
-                        background-image: url('/assets/img/icons/groups.png');
-                        border: 2px solid #ddd;
-                        margin: 0;
-                        float: none;
-                        display: inline-block;
-                        vertical-align: middle;
-                    }
-
-                    .desc {
-                        width: auto;
-                        margin: 0 0 0 15px;
-                        float: none;
-                        display: inline-block;
-                        vertical-align: middle;
-
-                        .title {
-                            font-size: 14px;
-                            font-weight: normal;
-                        }
-                    }
-                }
-            }
-
-            .tuf-campaign {
-                height: 100vh;
-                ::-webkit-scrollbar {
-                    display: none;
-                }
-
-                .section-title {
-                    font-size: 25px;
-                    margin: 4px 0 20px 0;
-                    padding: 0 0 0 10px;
-                }
-
-                .total-progress {
-                    margin: 10px 0 0;
-                }
-
-                .group-list {
-                    border-bottom: 1px solid #ddd;
-                    height: calc(100vh - 505px);
-                    overflow-y: auto;
-                    margin-bottom: 20px;
-
-                    &.launched {
-                        height: calc(100vh - 600px);
-                    }
-
-                    a.cancel-campaign {
-                        &:hover {
-                            color: red;
-                            text-decoration: underline;
-                            @include transition;
-                        }
-                    }
-
-                    .col-xs-12 .row {
-                        padding: 20px 15px;
-                        border-bottom: 1px solid #ddd;
-                        &:first-child {
-                            border-top: 1px solid #ddd;
-                        }
-                    }
-
-                    .status-group {
-                        float: right;
-                        height: 100%;
-                        align-items: center;
-                        padding-right:10px;
-                        p {
-                            margin-bottom:0;
-                        }
-                    }
-
-                    .stats {
-                        padding: 0;
-                        align-self: center;
-                        .devices-stats {
-                            color: $color-lightgrey;
-                            width: 30%;
-                            display: inline-block;
-                            vertical-align: super;
-                        }
-
-                        .devices-progress {
-                            border-radius: 5px;
-                            position: relative;
-                            width: 100%;
-                            display: inline-block;
-                            -webkit-box-shadow: 0px 8px 20px -10px rgba(0,0,0,0.75);
-                            -moz-box-shadow: 0px 8px 20px -10px rgba(0,0,0,0.75);
-                            box-shadow: 0px 8px 20px -10px rgba(0,0,0,0.75);
-                            .wrapper-rate {
-                                position: absolute;
-                                top:2px;
-                                right: 10px;
-                                color: #000;
-                                .fa.fa-check {
-                                    margin-left: 5px;
-                                    background-color: #fff;
-                                    display: inline-block;
-                                    border: 2px solid #fff;
-                                    font-size: 8px;
-                                    border-radius: 50%;
-                                    color:#000;
-                                }
-                            }
-                            .progress-bar {
-                                background-color: #96DED2;
-                            }
-                        }
-                    }
-                }
-            }
-
-            .legacy-campaign {
-
-                .total-progress {
-
-                    .progress-blue {
-                        height: 25px;
-                    }
-                }
-
-                .total-failure-rate {
-
-                    .rate {
-                        top: 50%;
-                        left: 65px;
-                        transform: translateY(-50%);
-                    }
-                }
-
-                .table {
-                    border-bottom: 1px solid #ddd;
-
-                    & > thead {
-                        & > tr {
-                            background: #eee;
-
-                            & > th {
-                                padding-left: 15px;
-                                padding-right: 15px;
-                                border-bottom-width: 1px;
-
-                                &:nth-child(1) {
-                                    width: 33.3333333%;
-                                }
-
-                                &:nth-child(2) {
-                                    text-align: center;
-                                    width: 33.3333333%;
-                                }
-
-                                &:nth-child(3) {
-                                    width: 25%;
-                                }
-
-                                &:nth-child(4) {
-                                    width: 8.33333333%;
-                                }
-                            }
-                        }
-                    }
-
-                    & > tbody {
-                        & > tr {
-                            & > td {
-                                padding-left: 15px;
-                                padding-right: 15px;
-                                vertical-align: middle;
-
-                                a.cancel-campaign {
-                                    &:hover {
-                                        color: red;
-                                        text-decoration: underline;
-                                        @include transition;
-                                    }
-                                }
-
-                                &.name {
-                                    
-                                }
-
-                                &.stats {
-                                    .devices-stats {
-                                        color: $color-lightgrey;
-                                        width: 30%;
-                                        display: inline-block;
-                                        vertical-align: super;
-                                    }
-
-                                    .devices-progress {
-                                        width: 70%;
-                                        display: inline-block;
-                                    }
-                                }
-
-                                &.chart {
-                                    .wrapper-chart {
-                                        padding: 0 0 0 30px;
-                                        display: inline-block;
-                                    }
-
-                                    .wrapper-rate {
-                                        padding: 20px 0 0 20px;
-                                        display: inline-block;
-                                        vertical-align: top;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 
 #page-impact-analysis {

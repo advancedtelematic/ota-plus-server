@@ -20,7 +20,7 @@ class ListItem extends Component {
         return this.props.pack.versions.length;
     }
     render() {
-        const { pack, togglePackage, showRelativesModal } = this.props;
+        const { pack, togglePackage, expandedPackageName } = this.props;
         let installedOnEcus = this.countInstalledOnEcus();
         let packVersionsNumber = this.countPackVersionsNumber();
         const directorBlock = (
@@ -42,10 +42,7 @@ class ListItem extends Component {
                     <span id={"package-" + pack.packageName + "-installed-on-ecus"}>
                         Installed on <span id={"package-" + pack.packageName + "-installed-on-ecus-count"}>{installedOnEcus}</span> Ecu(s)
                     </span>
-                </div>
-                <div className="show-relatives">
-                    <a href="#" onClick={showRelativesModal.bind(this, pack)}>Open modal</a>
-                </div>
+                </div>                
             </div>
         );
         const legacyBlock = (
@@ -63,13 +60,20 @@ class ListItem extends Component {
             </div>
         );
         return (
-            <div className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
-                {pack.inDirector ?
-                    directorBlock
-                :
-                    legacyBlock
-                }
-            </div>
+            expandedPackageName === pack.packageName ?
+                <div className="item expanded" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
+                    <div className="wrapper-center">
+                        <i className="fa fa-angle-up fa-2x" aria-hidden="true"></i>
+                    </div>
+                </div>
+            :
+                <div className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
+                    {pack.inDirector ?
+                        directorBlock
+                    :
+                        legacyBlock
+                    }
+                </div>
         );
     }
 }

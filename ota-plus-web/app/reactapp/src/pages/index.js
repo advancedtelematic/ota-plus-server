@@ -3,7 +3,6 @@ import DevicesPage from './Devices';
 import DevicePage from './Device';
 import PackagesPage from './Packages';
 import CampaignsPage from './Campaigns';
-import CampaignPage from './Campaign';
 import ImpactAnalysisPage from './ImpactAnalysis';
 import ProfilePage from './Profile';
 import NoMatchPage from './NoMatch';
@@ -18,7 +17,6 @@ export {
     DevicePage,
     PackagesPage,
     CampaignsPage,
-    CampaignPage,
     ImpactAnalysisPage,
     ProfilePage,
     NoMatchPage,

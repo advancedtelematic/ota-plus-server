@@ -12,18 +12,6 @@ class LegacyGroupsList extends Component {
         const { showCancelGroupModal, campaignsStore, groupsStore } = this.props;
         return (
             <table className="table">
-                <thead>
-                    <tr>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Status
-                        </th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
                 <tbody>
                     {_.map(campaignsStore.campaign.groups, (group, index) => {
                         const foundGroup = _.findWhere(groupsStore.groups, {id: group.group});
