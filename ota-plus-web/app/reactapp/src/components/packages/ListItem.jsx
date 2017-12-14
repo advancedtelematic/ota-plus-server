@@ -44,7 +44,7 @@ class ListItem extends Component {
                     </span>
                 </div>
                 <div className="show-relatives">
-                    <a href="#" onClick={showRelativesModal.bind(this.pack)}>Open modal</a>
+                    <a href="#" onClick={showRelativesModal.bind(this, pack)}>Open modal</a>
                 </div>
             </div>
         );
