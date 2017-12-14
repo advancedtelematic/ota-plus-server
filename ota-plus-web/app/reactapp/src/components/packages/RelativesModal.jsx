@@ -25,14 +25,19 @@ class RelativesModal extends Component {
   constructor(props) {
       super(props);
       this.devicesFetchHandler = new AsyncStatusCallbackHandler(props.devicesStore, 'devicesFetchAsync', this.devicesFetched.bind(this));
-      this.campaignsFetchHandler = new AsyncStatusCallbackHandler(props.campaignsStore, 'campaignsFetchAsync', this.campaignsFetched.bind(this));
+      this.campaignsFetchHandler = new AsyncStatusCallbackHandler(props.campaignsStore, 'campaignsSafeFetchAsync', this.campaignsFetched.bind(this));
+      this.packagesFetchHandler = new AsyncStatusCallbackHandler(props.packagesStore, 'packagesTufFetchAsync', this.packagesFetched.bind(this));
       this.onLinkMouseAction = this.onLinkMouseAction.bind(this);
       this.onLinkClick = this.onLinkClick.bind(this);
       this.getNodeStatus = this.getNodeStatus.bind(this);
   }
   componentWillMount() {
       this.props.devicesStore.fetchDevices();
-      this.props.campaignsStore.fetchCampaigns();
+      if(window.location.href.indexOf('/packages') > -1) {
+        this.props.campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
+      } else {
+        this.props.packagesStore.fetchTufPackages();
+      }
   }
   onLinkMouseAction(actionType, linkdata, event) {
     let opacity = defaultOpacity;
@@ -77,7 +82,7 @@ class RelativesModal extends Component {
       case 'node':
         let campaignName = linkdata.target.originalName;
         let campaign = _.find(campaignsStore.campaigns, campaign => campaign.name === campaignName);
-        this.context.router.push(`/campaigns/#${campaign.id}`);
+        this.context.router.push(`/campaigns/${campaign.name}`);
         break;
       case 'device':
         let deviceId = linkdata.target.uuid;
@@ -96,6 +101,9 @@ class RelativesModal extends Component {
       devicesStore.fetchMultiTargetUpdates(device.uuid);
       packagesStore.fetchDirectorDevicePackagesHistory(device.uuid, packagesStore.directorDevicePackagesFilter, true);
     });
+  }
+  packagesFetched() {
+    this.props.campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
   }
   campaignsFetched() {
     const { campaignsStore, devicesStore, packagesStore } = this.props;
@@ -192,13 +200,14 @@ class RelativesModal extends Component {
     let nodes = [{
       name: 'targets.json',
       type: 'root',
-      color: "#607D8B"
+      color: "#744FFF"
     }];
     let activePackagesWithRelations = [];
 
     _.map(this.packages, (item, index) => {
-      let activePackageName = this.props.activePackage.packageName;
-      if(activePackageName === item.id.name) {
+      let activeItemName = this.props.activeItemName;
+
+      if(activeItemName === item.packageHash) {
         activePackagesWithRelations.push(item);
       }
 
@@ -206,7 +215,7 @@ class RelativesModal extends Component {
         name: item.id.name.substring(0, 15) + " - " + item.id.version.substring(0, 5),
         originalName: item.id.name,
         type: 'pack',
-        color: "#FFA726",
+        color: "#62B1FF",
       });
 
       _.map(item.mtus, (mtu, i) => {
@@ -219,12 +228,17 @@ class RelativesModal extends Component {
           installedOn: mtu.installedOn
         });
         _.map(mtu.nodes, (node, i) => {
+
+          if(activeItemName === node.name) {
+            activePackagesWithRelations.push(item);
+          }
+
           nodes.push({
             name: node.name.substring(0, 15) + "(" + this.getNodeStatus(node) + ")",
             originalName: node.name,
             type: 'node',
             status: this.getNodeStatus(node),
-            color: "#FF8A65",
+            color: this.getNodeStatus(node) === 'finished' ? "#76FF3E" : '#5B9260',
           });
         });
       });
@@ -237,7 +251,7 @@ class RelativesModal extends Component {
         uuid: device.uuid,
         section: device.section,
         type: 'device',
-        color: "#FF8A65",
+        color: device.section === 'queued' ? "#FE9819" : "#DDF96C",
       });
     });
 
@@ -267,7 +281,7 @@ class RelativesModal extends Component {
                 source: index,
                 target: indexInternal,
                 value: 1,
-                color: "#607D8B",
+                color: "#B2B2B2",
                 opacity: parseFloat(defaultOpacity)
               });
             }
@@ -286,7 +300,7 @@ class RelativesModal extends Component {
                 source: index,
                 target: indexInternal,
                 value: 1,
-                color: "#FFA726",
+                color: "#B2B2B2",
                 opacity: parseFloat(defaultOpacity)
               });
             }
@@ -305,7 +319,7 @@ class RelativesModal extends Component {
                 source: index,
                 target: indexInternal,
                 value: 1,
-                color: "#FF8A65",
+                color: "#B2B2B2",
                 opacity: parseFloat(defaultOpacity)
               });
             }
@@ -325,7 +339,7 @@ class RelativesModal extends Component {
                     source: indexInternal,
                     target: index,
                     value: 1,
-                    color: "#FF8A65",
+                    color: "#B2B2B2",
                     opacity: parseFloat(defaultOpacity)
                   });
                 }
@@ -338,7 +352,7 @@ class RelativesModal extends Component {
                     source: indexInternal,
                     target: index,
                     value: 1,
-                    color: "#FF8A65",
+                    color: "#B2B2B2",
                     opacity: parseFloat(defaultOpacity)
                   });
                 }
@@ -391,7 +405,7 @@ class RelativesModal extends Component {
   unescapeHTML(html) {
     return html.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
   }
-  render() {        
+  render() {
       const { shown, hide, packagesStore, campaignsStore, devicesStore } = this.props;
       const content = (
           this.loaded ?

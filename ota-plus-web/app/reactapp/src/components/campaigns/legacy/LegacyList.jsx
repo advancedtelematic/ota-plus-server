@@ -1,17 +1,38 @@
 import React, { PropTypes, Component } from 'react';
 import { observer } from 'mobx-react';
+import { observable } from 'mobx';
 import moment from 'moment';
 import _ from 'underscore';
 import { Loader } from '../../../partials';
 import CampaignsLegacyListItem from './LegacyListItem';
+import { VelocityTransitionGroup } from 'velocity-react';
+import CampaignsLegacyStatistics from './Statistics';
 
 @observer
 class LegacyList extends Component {
+    @observable tmpIntervalId = null;
+    @observable expandedCampaignName = null;
+
     constructor(props) {
         super(props);
+        this.toggleCampaign = this.toggleCampaign.bind(this);
+    }
+    toggleCampaign(campaignName, e) {
+        if(e) e.preventDefault();
+        this.expandedCampaignName = (this.expandedCampaignName !== campaignName ? campaignName : null);
+    }
+    startIntervalListScroll() {
+        clearInterval(this.tmpIntervalId);
+        let intervalId = setInterval(() => {
+        }, 10);
+        this.tmpIntervalId = intervalId;
+    }
+    stopIntervalListScroll() {
+        clearInterval(this.tmpIntervalId);
+        this.tmpIntervalId = null;
     }
     render() {
-        const { campaignsStore, showRenameModal, goToCampaignDetails } = this.props;
+        const { campaignsStore, groupsStore, showRenameModal, showCancelCampaignModal, showCancelGroupModal } = this.props;
         return (
             <div className="legacy-list">
                 <div className="section-header">
@@ -30,12 +51,38 @@ class LegacyList extends Component {
                             </div>
                             {_.map(campaignsStore.runningLegacyCampaigns, (campaign) => {
                                 return (
-                                    <CampaignsLegacyListItem 
-                                        goToCampaignDetails={goToCampaignDetails}
-                                        showRenameModal={showRenameModal}
-                                        campaign={campaign}
-                                        key={campaign.id}
-                                    />
+                                    <span key={campaign.id}>
+                                        <CampaignsLegacyListItem 
+                                            toggleCampaign={this.toggleCampaign}
+                                            showRenameModal={showRenameModal}
+                                            campaign={campaign}
+                                            key={campaign.id}
+                                        />
+                                        <VelocityTransitionGroup 
+                                            enter={{
+                                                animation: "slideDown",
+                                                begin: () => {this.startIntervalListScroll();},
+                                                complete: () => {this.stopIntervalListScroll();}
+                                            }}
+                                            leave={{
+                                                animation: "slideUp",
+                                                begin: () => {this.startIntervalListScroll();},
+                                                complete: () => {this.stopIntervalListScroll();}
+                                            }}
+                                        >
+                                            {this.expandedCampaignName === campaign.name ?
+                                                <CampaignsLegacyStatistics 
+                                                    campaignsStore={campaignsStore}
+                                                    groupsStore={groupsStore}
+                                                    showCancelCampaignModal={showCancelCampaignModal}
+                                                    showCancelGroupModal={showCancelGroupModal}
+                                                    campaignId={campaign.id}
+                                                />
+                                            :
+                                                null
+                                            }
+                                        </VelocityTransitionGroup>
+                                    </span>
                                 );
                             })}
                         </span>
@@ -61,12 +108,38 @@ class LegacyList extends Component {
                             </div>
                             {_.map(campaignsStore.finishedLegacyCampaigns, (campaign) => {
                                 return (
-                                    <CampaignsLegacyListItem 
-                                        goToCampaignDetails={goToCampaignDetails}
-                                        showRenameModal={showRenameModal}
-                                        campaign={campaign}
-                                        key={campaign.id}
-                                    />
+                                    <span key={campaign.id}>
+                                        <CampaignsLegacyListItem 
+                                            toggleCampaign={this.toggleCampaign}
+                                            showRenameModal={showRenameModal}
+                                            campaign={campaign}
+                                            key={campaign.id}
+                                        />
+                                        <VelocityTransitionGroup 
+                                            enter={{
+                                                animation: "slideDown",
+                                                begin: () => {this.startIntervalListScroll();},
+                                                complete: () => {this.stopIntervalListScroll();}
+                                            }}
+                                            leave={{
+                                                animation: "slideUp",
+                                                begin: () => {this.startIntervalListScroll();},
+                                                complete: () => {this.stopIntervalListScroll();}
+                                            }}
+                                        >
+                                            {this.expandedCampaignName === campaign.name ?
+                                                <CampaignsLegacyStatistics 
+                                                    campaignsStore={campaignsStore}
+                                                    groupsStore={groupsStore}
+                                                    showCancelCampaignModal={showCancelCampaignModal}
+                                                    showCancelGroupModal={showCancelGroupModal}
+                                                    campaignId={campaign.id}
+                                                />
+                                            :
+                                                null
+                                            }
+                                        </VelocityTransitionGroup>
+                                    </span>
                                 );
                             })}
                         </span>

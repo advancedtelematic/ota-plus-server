@@ -9,7 +9,7 @@ class TufGroupsListItem extends Component {
         super(props);
     }
     render() {
-        const { t, group, statistics, showCancelGroupModal, foundGroup, campaign } = this.props;
+        const { t, group, statistics, foundGroup, campaign } = this.props;
         const progress = Math.min(Math.round(statistics.processed/Math.max(foundGroup.devices.total, 1) * 100), 100);
         const data = [
             {
@@ -32,8 +32,8 @@ class TufGroupsListItem extends Component {
             }
         ];
         return (
-            <div className="row display-flex">
-                <div className="name col-xs-3">
+            <div className="display-flex">
+                <div className="name">
                     <div className="element-box group">
                         <div className="icon"/>
                         <div className="desc">
@@ -46,7 +46,7 @@ class TufGroupsListItem extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="stats col-xs-6">
+                <div className="stats">
                     <div className="devices-progress">
                         <div className="progress progress-blue">
                             <div className={"progress-bar" + (campaign.statistics.status !== 'finished' && campaign.statistics.status !== 'cancelled' ? ' progress-bar-striped active': '')}
@@ -65,10 +65,8 @@ class TufGroupsListItem extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="col-xs-3">
-                    <div className="status-group display-flex">
-                        <p>{statistics.processed} processed, {statistics.affected} affected</p>
-                    </div>
+                <div className="status-group">
+                    <p>{statistics.processed} processed, {statistics.affected} affected</p>
                 </div>
             </div>
         );
@@ -79,7 +77,6 @@ TufGroupsListItem.propTypes = {
     group: PropTypes.string.isRequired,
     foundGroup: PropTypes.object.isRequired,
     statistics: PropTypes.object.isRequired,
-    showCancelGroupModal: PropTypes.func.isRequired
 }
 
 export default translate()(TufGroupsListItem);

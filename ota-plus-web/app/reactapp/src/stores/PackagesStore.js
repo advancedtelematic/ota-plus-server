@@ -214,7 +214,7 @@ export default class PackagesStore {
             }.bind(this));
     }
 
-    fetchTufPackages() {
+    fetchTufPackages(startFromEmpty = false) {
         let that = this;
         resetAsync(that.packagesTufFetchAsync, true);        
         return axios.get(API_TUF_PACKAGES)

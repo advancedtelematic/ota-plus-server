@@ -24,7 +24,7 @@ class Packages extends Component {
     @observable uploadToTuf = true;
     @observable copied = false;
     @observable relativesModalShown = false;
-    @observable activePackage = null;
+    @observable activeVersionHash = null;
 
     constructor(props) {
         super(props);
@@ -53,15 +53,15 @@ class Packages extends Component {
         if(e) e.preventDefault();
         this.tooltipShown = false;
     }
-    showRelativesModal(activePackage, e) {
+    showRelativesModal(activeVersionHash, e) {
         if(e) e.preventDefault();
         this.relativesModalShown = true;
-        this.activePackage = activePackage;
+        this.activeVersionHash = activeVersionHash;
     }
     hideRelativesModal(e) {
         if(e) e.preventDefault();
         this.relativesModalShown = false;
-        this.activePackage = null;
+        this.activeVersionHash = null;
     }
     showCreateModal(files, e) {
         if(e) e.preventDefault();
@@ -197,7 +197,7 @@ class Packages extends Component {
                     <PackagesRelativesModal 
                         shown={this.relativesModalShown}
                         hide={this.hideRelativesModal}
-                        activePackage={this.activePackage}
+                        activeItemName={this.activeVersionHash}
                         packagesStore={packagesStore}
                         campaignsStore={campaignsStore}
                         devicesStore={devicesStore}

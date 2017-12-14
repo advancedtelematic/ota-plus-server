@@ -76,7 +76,6 @@ class Main extends Component {
         this.showQueueModal = this.showQueueModal.bind(this);
         this.hideQueueModal = this.hideQueueModal.bind(this);
         this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
-        this.goToCampaignDetails = this.goToCampaignDetails.bind(this);
         this.toggleOtaPlusMode = this.toggleOtaPlusMode.bind(this);
         this.callFakeWsHandler = this.callFakeWsHandler.bind(this);
         this.devicesStore = new DevicesStore();
@@ -196,10 +195,7 @@ class Main extends Component {
         if(!_.isEmpty(device) && device.isDirector && tabId === 1) {
             this.packagesStore.fetchDirectorDevicePackagesHistory(device.uuid, this.packagesStore.directorDevicePackagesFilter);
         }
-    }
-    goToCampaignDetails(campaignId, e) {
-        this.context.router.push(`/campaign/${campaignId}`);
-    }
+    }    
     toggleWizard(wizardId, wizardName, e) {
         if(e) e.preventDefault();
         let minimizedWizard = {
@@ -223,7 +219,6 @@ class Main extends Component {
                 hideWizard={this.hideWizard}
                 toggleWizard={this.toggleWizard}
                 minimizedWizards={this.minimizedWizards}
-                goToCampaignDetails={this.goToCampaignDetails}
                 key={this.wizards.length}
             />
         );
@@ -358,7 +353,6 @@ class Main extends Component {
                         queueModalShown={this.queueModalShown}
                         activeTabId={this.activeTabId}
                         setQueueModalActiveTabId={this.setQueueModalActiveTabId}
-                        goToCampaignDetails={this.goToCampaignDetails}
                         otaPlusMode={this.otaPlusStore.otaPlusMode}
                         otaPlusStore={this.otaPlusStore}
                         uiAutoFeatureActivation={this.uiAutoFeatureActivation}

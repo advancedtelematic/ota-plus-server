@@ -1,19 +1,48 @@
 import React, { PropTypes, Component } from 'react';
 import { observer } from 'mobx-react';
+import { observable } from 'mobx';
 import moment from 'moment';
 import _ from 'underscore';
 import { Loader } from '../../../partials';
 import CampaignsTufListItem from './TufListItem';
+import CampaignsTufStatistics from './Statistics';
+import { VelocityTransitionGroup } from 'velocity-react';
+
+const headerHeight = 40;
 
 @observer
 class TufList extends Component {
+    @observable prevExpandedCampaignName = null;
+    @observable expandedCampaignName = null;
+
     constructor(props) {
         super(props);
+        this.toggleCampaign = this.toggleCampaign.bind(this);
+    }
+    componentDidMount() {
+        this.highlightCampaign(this.props.highlightedCampaign);
+    }
+    toggleCampaign(campaignName, e) {
+        if(e) e.preventDefault();
+        this.prevExpandedCampaignName = this.expandedCampaignName;
+        this.expandedCampaignName = null;
+        let that = this;
+        setTimeout(() => {
+            that.expandedCampaignName = (campaignName !== that.prevExpandedCampaignName) ? campaignName : null; 
+        }, 400);
+    }
+    highlightCampaign(name) {
+        if(this.refs.list && name) {
+            const wrapperPosition = this.refs.list.getBoundingClientRect();
+            let scrollTo = document.getElementById("item-" + name).getBoundingClientRect().top - wrapperPosition.top - headerHeight;
+            this.refs.list.scrollTop = scrollTo;
+            this.expandedCampaignName = name;
+        }
     }
     render() {
-        const { campaignsStore, showRenameModal, goToCampaignDetails } = this.props;
+        const { campaignsStore, groupsStore, showRenameModal, highlightedCampaign, showCancelCampaignModal, showRelativesModal } = this.props;
         return (
-            <div className="tuf-list">
+            <div className="tuf-list" ref="list">
                 <div className="section-header">
                     In preparation
                 </div>
@@ -31,13 +60,37 @@ class TufList extends Component {
                             </div>
                             {_.map(campaignsStore.inPreparationCampaigns, (campaign) => {
                                 return (
-                                    <CampaignsTufListItem 
-                                        goToCampaignDetails={goToCampaignDetails}
-                                        showRenameModal={showRenameModal}
-                                        campaign={campaign}
-                                        type="inPreparation"
-                                        key={campaign.id}
-                                    />
+                                    <span key={campaign.id}>
+                                        <CampaignsTufListItem 
+                                            toggleCampaign={this.toggleCampaign}
+                                            showRenameModal={showRenameModal}
+                                            campaign={campaign}
+                                            expandedCampaignName={this.expandedCampaignName}
+                                            type="inPreparation"
+                                        />
+                                        <VelocityTransitionGroup 
+                                            enter={{
+                                                animation: "slideDown",
+                                            }}
+                                            leave={{
+                                                animation: "slideUp",
+                                                duration: 1000
+                                            }}
+                                        >
+                                            {this.expandedCampaignName === campaign.name ?
+                                                <CampaignsTufStatistics 
+                                                    campaignsStore={campaignsStore}
+                                                    groupsStore={groupsStore}
+                                                    campaignId={campaign.id}
+                                                    showCancelCampaignModal={showCancelCampaignModal}
+                                                    showRelativesModal={showRelativesModal}
+                                                    key={campaign.id}
+                                                />
+                                            :
+                                                null
+                                            }
+                                        </VelocityTransitionGroup>
+                                    </span>
                                 );
                             })}
                         </span>
@@ -64,13 +117,35 @@ class TufList extends Component {
                             </div>
                             {_.map(campaignsStore.runningCampaigns, (campaign) => {
                                 return (
-                                    <CampaignsTufListItem 
-                                        goToCampaignDetails={goToCampaignDetails}
-                                        showRenameModal={showRenameModal}
-                                        campaign={campaign}
-                                        type="running"
-                                        key={campaign.id}
-                                    />
+                                    <span key={campaign.id}>
+                                        <CampaignsTufListItem 
+                                            toggleCampaign={this.toggleCampaign}
+                                            showRenameModal={showRenameModal}
+                                            campaign={campaign}
+                                            expandedCampaignName={this.expandedCampaignName}
+                                            type="running"
+                                        />
+                                        <VelocityTransitionGroup 
+                                            enter={{
+                                                animation: "slideDown",
+                                            }}
+                                            leave={{
+                                                animation: "slideUp",
+                                            }}
+                                        >
+                                        {this.expandedCampaignName === campaign.name ?
+                                            <CampaignsTufStatistics
+                                                campaignsStore={campaignsStore}
+                                                groupsStore={groupsStore}
+                                                showCancelCampaignModal={showCancelCampaignModal}
+                                                showRelativesModal={showRelativesModal}
+                                                campaignId={campaign.id}
+                                            />
+                                        :
+                                            null
+                                        }
+                                        </VelocityTransitionGroup>
+                                    </span>
                                 );
                             })}
                         </span>
@@ -97,13 +172,35 @@ class TufList extends Component {
                             </div>
                             {_.map(campaignsStore.finishedCampaigns, (campaign) => {
                                 return (
-                                    <CampaignsTufListItem 
-                                        goToCampaignDetails={goToCampaignDetails}
-                                        showRenameModal={showRenameModal}
-                                        campaign={campaign}
-                                        type="finished"
-                                        key={campaign.id}
-                                    />
+                                    <span key={campaign.id}>
+                                        <CampaignsTufListItem 
+                                            toggleCampaign={this.toggleCampaign}
+                                            showRenameModal={showRenameModal}
+                                            campaign={campaign}
+                                            expandedCampaignName={this.expandedCampaignName}
+                                            type="finished"
+                                        />
+                                        <VelocityTransitionGroup 
+                                            enter={{
+                                                animation: "slideDown",
+                                            }}
+                                            leave={{
+                                                animation: "slideUp",
+                                            }}
+                                        >
+                                        {this.expandedCampaignName === campaign.name ?
+                                            <CampaignsTufStatistics
+                                                campaignsStore={campaignsStore}
+                                                groupsStore={groupsStore}
+                                                showCancelCampaignModal={showCancelCampaignModal}
+                                                showRelativesModal={showRelativesModal}
+                                                campaignId={campaign.id}
+                                            />
+                                        :
+                                            null
+                                        }
+                                        </VelocityTransitionGroup>
+                                    </span>
                                 );
                             })}
                         </span>
@@ -130,13 +227,35 @@ class TufList extends Component {
                             </div>
                             {_.map(campaignsStore.cancelledCampaigns, (campaign) => {
                                 return (
-                                    <CampaignsTufListItem 
-                                        goToCampaignDetails={goToCampaignDetails}
-                                        showRenameModal={showRenameModal}
-                                        campaign={campaign}
-                                        type="cancelled"
-                                        key={campaign.id}
-                                    />
+                                    <span key={campaign.id}>
+                                        <CampaignsTufListItem 
+                                            toggleCampaign={this.toggleCampaign}
+                                            showRenameModal={showRenameModal}
+                                            campaign={campaign}
+                                            expandedCampaignName={this.expandedCampaignName}
+                                            type="cancelled"
+                                        />
+                                        <VelocityTransitionGroup 
+                                            enter={{
+                                                animation: "slideDown",
+                                            }}
+                                            leave={{
+                                                animation: "slideUp",
+                                            }}
+                                        >
+                                        {this.expandedCampaignName === campaign.name ?
+                                            <CampaignsTufStatistics
+                                                campaignsStore={campaignsStore}
+                                                groupsStore={groupsStore}
+                                                showCancelCampaignModal={showCancelCampaignModal}
+                                                showRelativesModal={showRelativesModal}
+                                                campaignId={campaign.id}
+                                            />
+                                        :
+                                            null
+                                        }
+                                        </VelocityTransitionGroup>
+                                    </span>
                                 );
                             })}
                         </span>
