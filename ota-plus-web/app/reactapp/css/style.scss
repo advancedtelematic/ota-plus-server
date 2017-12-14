@@ -172,13 +172,24 @@ body {
             background: $color-orange!important;
         }
 
-      
+        .navbar-inverse .right-nav li a:hover {
+            color: $color-orange !important;
+        }
+
         .hardware-list {
             a {
                 &.selected {
                     border-color: $color-orange!important;
                 }
             }
+        }
+
+        .size-verify-modal {
+           .content {
+               h3.heading {
+                   background-color: $color-orange !important;
+               }
+           }
         }
 
         .wrapper-switch {

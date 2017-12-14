@@ -21,9 +21,26 @@ class IntroNavigation extends Component {
           alphaPlusEnabled,
           uiUserProfileMenu,
           uiCredentialsDownload,
+          allDevicesCount
         } = this.props;
         const otaPlusNavigation = (
             <OtaPlusTabs />
+        );
+        const garageNavigation = (
+            <ul className="nav navbar-nav">
+                <li>
+                    <Link to="/devices" activeClassName="active" id="link-devices">Devices</Link>
+                </li>
+                <li>
+                    <Link to="/packages" activeClassName="active" id="link-packages">Packages</Link>
+                </li>
+                <li>
+                    <Link to="/campaigns" activeClassName="active" id="link-campaigns">Campaigns</Link>
+                </li>
+                <li>
+                    <Link to="/impact-analysis" activeClassName="active" id="link-impactanalysis">Impact analysis</Link>
+                </li>
+            </ul>
         );
         return (
             <nav className="navbar navbar-inverse navbar-fixed-top">
@@ -35,17 +52,24 @@ class IntroNavigation extends Component {
                         {otaPlusMode ?
                             otaPlusNavigation
                         :
-                            null
+                            !this.context.router.isActive('/welcome') && !this.context.router.isActive('/destiny') ?
+                                garageNavigation
+                            :
+                                null
                         }
                     </div>
                    <ul className="right-nav">
-                        <li className="text-link">
-                            <a href="http://docs.atsgarage.com" target="_blank" id="docs-link">DOCS</a>
-                        </li>
-                        <li className="separator">|</li>
-                        <li className="text-link">
-                            <a href="mailto:support@atsgarage.com" id="support-link">SUPPORT</a>
-                        </li>
+                       {allDevicesCount > 0 ?
+                        <span>
+                            <li className="text-link">
+                                <a href="http://docs.atsgarage.com" target="_blank" id="docs-link">DOCS</a>
+                            </li>
+                            <li className="separator">|</li>
+                            <li className="text-link">
+                                <a href="mailto:support@atsgarage.com" id="support-link">SUPPORT</a>
+                            </li>
+                        </span>
+                       : ''}
                          {uiUserProfileMenu ?
                               <li id="menu-login">
                                   <NavigationDropdown
@@ -80,6 +104,10 @@ class IntroNavigation extends Component {
 
 IntroNavigation.propTypes = {
     userStore: PropTypes.object.isRequired
+}
+
+IntroNavigation.contextTypes = {
+    router: React.PropTypes.object.isRequired
 }
 
 export default IntroNavigation;

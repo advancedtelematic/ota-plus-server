@@ -28,11 +28,19 @@ class SettingsDropdown extends Component {
                 <LinkWrapper
                     onClick={this.onDropdownClick.bind(this)}
                     bsRole="toggle">
-                    <Avatar 
-                        src="/assets/img/device_step_two.png"
-                        className="icon-profile"
-                        id="icon-profile-min"
-                    />
+                    {window.atsGarageTheme ?
+                        <Avatar
+                            src="/assets/img/device_step_two.png"
+                            className="icon-profile"
+                            id="icon-profile-min"
+                        />
+                    :
+                        <Avatar
+                            src="/assets/img/icons/Settings_Icon_small.svg"
+                            className="icon-profile"
+                            id="icon-profile-min"
+                        />
+                    }
                     &nbsp; <i className="fa fa-caret-down"></i>
                 </LinkWrapper>
                 <UserDropdown 
