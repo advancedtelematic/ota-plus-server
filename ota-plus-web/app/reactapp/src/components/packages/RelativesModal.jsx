@@ -194,7 +194,14 @@ class RelativesModal extends Component {
       type: 'root',
       color: "#607D8B"
     }];
+    let activePackagesWithRelations = [];
+
     _.map(this.packages, (item, index) => {
+      let activePackageName = this.props.activePackage.packageName;
+      if(activePackageName === item.id.name) {
+        activePackagesWithRelations.push(item);
+      }
+
       nodes.push({
         name: item.id.name.substring(0, 15) + " - " + item.id.version.substring(0, 5),
         originalName: item.id.name,
@@ -347,9 +354,45 @@ class RelativesModal extends Component {
     this.nodes = nodes;
     this.links = links;
     this.loaded = true;
+
+    this.hightlightActiveItems(activePackagesWithRelations);
+  }
+  hightlightActiveItems(activePackagesWithRelations) {
+    let dataToFind = [];
+    
+    _.each(activePackagesWithRelations, (pack, ind) => {
+      let packName = pack.id.name.substring(0, 15);
+      let packVersion = pack.id.version.substring(0, 5);
+      let packString = packName + " - " + packVersion;
+      dataToFind.push(packString);
+      dataToFind.push('targets.json');
+
+      _.each(pack.mtus, (mtu, index) => {
+        dataToFind.push(mtu.updateId.substring(0, 15));
+
+        let deviceStatus = mtu.queuedOn.length ? 'queued on' : 'installed on';
+        dataToFind.push(mtu.deviceName.substring(0, 15) + "(" + deviceStatus + ")");
+
+        _.each(mtu.nodes, (node, i) => {
+          dataToFind.push(node.name.substring(0, 15) + "(" + this.getNodeStatus(node) + ")");
+        })
+      });
+    });
+
+    let allTextElements = document.querySelectorAll('text');
+    _.each(allTextElements, (item, index) => {
+      if(_.contains(dataToFind, this.unescapeHTML(item.innerHTML))) {
+        item.style.fontWeight = 'bold';
+      } else if(dataToFind.length) {
+        item.style.opacity = .5;
+      }
+    });
+  }
+  unescapeHTML(html) {
+    return html.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
   }
   render() {        
-      const { shown, hide, activePackage, packagesStore, campaignsStore, devicesStore } = this.props;
+      const { shown, hide, packagesStore, campaignsStore, devicesStore } = this.props;
       const content = (
           this.loaded ?
             <Sankey
@@ -361,6 +404,7 @@ class RelativesModal extends Component {
               onLinkMouseOver={this.onLinkMouseAction.bind(this, 'in')}
               onLinkMouseOut={this.onLinkMouseAction.bind(this, 'out')}
               onLinkClick={this.onLinkClick.bind(this)}
+              layout={1000}
             >
             </Sankey>
           :
