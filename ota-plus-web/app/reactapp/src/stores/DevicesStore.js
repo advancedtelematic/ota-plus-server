@@ -45,7 +45,6 @@ export default class DevicesStore {
     @observable deviceQueue = [];
     @observable deviceHistory = [];
     @observable deviceUpdatesLogs = [];
-    @observable stepsHistory = [];
     @observable multiTargetUpdates = [];
     @observable legacyDevicesCount = 0;
     @observable directorDevicesCount = 0;
@@ -65,14 +64,6 @@ export default class DevicesStore {
         resetAsync(this.multiTargetUpdateCreateAsync);
         resetAsync(this.multiTargetUpdatesFetchAsync);
         this.devicesLimit = 30;
-    }
-
-    addStepToHistory(step) {
-        this.stepsHistory.push(step);
-    }
-
-    clearStepsHistory() {
-        this.stepsHistory = [];
     }
 
     createMultiTargetUpdate(data, id) {
@@ -422,7 +413,6 @@ export default class DevicesStore {
         this.deviceQueue = [];
         this.deviceHistory = [];
         this.deviceUpdatesLogs = [];
-        this.stepsHistory = [];
         this.multiTargetUpdates = [];
         this.legacyDevicesCount = 0;
         this.directorDevicesCount = 0;

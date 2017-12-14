@@ -3,9 +3,7 @@ import { observable, extendObservable, observe } from 'mobx';
 import { observer } from 'mobx-react';
 import { Loader } from '../partials';
 import { 
-    DeviceTutorial,
-    DeviceGuide,
-    DeviceHardwarePanel, 
+    DeviceHardwarePanel,
     DevicePropertiesPanel, 
     DeviceSoftwarePanel
 } from '../components/device';
@@ -36,7 +34,6 @@ class Device extends Component {
         this.toggleTufPackageAutoUpdate = this.toggleTufPackageAutoUpdate.bind(this);
         this.installPackage = this.installPackage.bind(this);
         this.installTufPackage = this.installTufPackage.bind(this);
-        this.clearStepsHistory = this.clearStepsHistory.bind(this);
         this.showPackageDetails = this.showPackageDetails.bind(this);
         this.toggleTufUpload = this.toggleTufUpload.bind(this);        
         this.showHardwareOverlay = this.showHardwareOverlay.bind(this);        
@@ -119,11 +116,6 @@ class Device extends Component {
         devicesStore.createMultiTargetUpdate(data, devicesStore.device.uuid);
         this.props.showQueueModal();
     }
-    clearStepsHistory(e) {
-        if(e) e.preventDefault();
-        const { devicesStore } = this.props;
-        devicesStore.clearStepsHistory();
-    }
     showPackageDetails(pack, e) {
         if(e) e.preventDefault();
         const { packagesStore } = this.props;
@@ -172,7 +164,7 @@ class Device extends Component {
                         <Loader />
                     </div>
                 :
-                    device.lastSeen && devicesStore.stepsHistory.length === 0 ?
+                    device.lastSeen ?
                         <span>
                             <DeviceHardwarePanel 
                                 devicesStore={devicesStore}
@@ -208,10 +200,13 @@ class Device extends Component {
                             />
                         </span>
                     :
-                        <DeviceGuide
-                            devicesStore={devicesStore}
-                            clearStepsHistory={this.clearStepsHistory}
-                        />
+                        <div className="wrapper-center wrapper-responsive">
+                            <div className="guide-install-device">
+                                <div className="title">
+                                    Device never seen online.
+                                </div>
+                            </div>
+                        </div>
                 }
                 <PackagesCreateModal 
                     shown={this.packageCreateModalShown}

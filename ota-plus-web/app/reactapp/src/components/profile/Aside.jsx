@@ -34,15 +34,23 @@ class Aside extends Component {
                         </div>
                     :
                         <span>
-                            <Avatar
-                                src={userStore.user.picture ?
-                                    userStore.user.picture
+                            {window.atsGarageTheme ?
+                                <Avatar
+                                    src={userStore.user.picture ?
+                                        userStore.user.picture
+                                        :
+                                        "/assets/img/icons/profile.png"
+                                    }
+                                    className="icon-profile"
+                                    id="icon-profile-min"
+                                />
                                 :
-                                    "/assets/img/icons/profile.png"
-                                }
-                                className="icon-profile"
-                                id="icon-profile-min"
-                            />
+                                <Avatar
+                                    src="/assets/img/icons/Settings_Icon_big.svg"
+                                    className="icon-profile"
+                                    id="icon-profile-min"
+                                />
+                            }
                         </span>
                     }
                 </div>
@@ -87,15 +95,23 @@ class Aside extends Component {
                         </div>
                     :
                         <span>
-                            <Avatar
-                                src={userStore.user.picture ?
-                                    userStore.user.picture
+                            {window.atsGarageTheme ?
+                                <Avatar
+                                    src={userStore.user.picture ?
+                                        userStore.user.picture
+                                        :
+                                        "/assets/img/icons/profile.png"
+                                    }
+                                    className="icon-profile"
+                                    id="icon-profile-min"
+                                />
                                 :
-                                    "/assets/img/icons/profile.png"
-                                }
-                                className="icon-profile"
-                                id="icon-profile-min"
-                            />
+                                <Avatar
+                                    src="/assets/img/icons/Settings_Icon_big.svg"
+                                    className="icon-profile"
+                                    id="icon-profile-min"
+                                />
+                            }
                         </span>
                     }
                 </div>
@@ -130,11 +146,23 @@ class Aside extends Component {
             <aside>
                 <div className="user-details">
                     <span>
-                        <Avatar
-                            src="/assets/img/device_step_two.png"
-                            className="icon-profile"
-                            id="icon-profile-min"
-                        />
+                        {window.atsGarageTheme ?
+                            <Avatar
+                                src={userStore.user.picture ?
+                                    userStore.user.picture
+                                    :
+                                    "/assets/img/icons/profile.png"
+                                }
+                                className="icon-profile"
+                                id="icon-profile-min"
+                            />
+                            :
+                            <Avatar
+                                src="/assets/img/icons/Settings_Icon_big.svg"
+                                className="icon-profile"
+                                id="icon-profile-min"
+                            />
+                        }
                     </span>
                 </div>
                 <nav>

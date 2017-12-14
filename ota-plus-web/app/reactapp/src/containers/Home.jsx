@@ -37,6 +37,7 @@ class Home extends Component {
     }
     render() {
         const { devicesStore, hardwareStore, packagesStore, campaignsStore, addNewWizard } = this.props;
+        const allDevicesCount = devicesStore.directorDevicesCount + devicesStore.legacyDevicesCount;
         const lastDevicesTitle = 'Latest created devices';
         const lastPackagesTitle = 'Latest added packages';
         const activeCampaignsTitle = 'Active campaigns';
@@ -50,7 +51,11 @@ class Home extends Component {
                                     {lastDevicesTitle}
                                 </div>
                                 <div className="add">
-                                    <a href="https://docs.atsgarage.com/index.html" className="btn-main btn-small btn-add" id="add-new-device" target="_blank" >Add new device</a>
+                                    {allDevicesCount > 0
+                                        ?
+                                        <a href="https://docs.atsgarage.com/index.html" className="btn-main btn-small btn-add" id="add-new-device" target="_blank" >Add new device</a>
+                                        :
+                                    ''}
                                 </div>
                             </div>
                             <div className="panel-body">

@@ -306,6 +306,7 @@ class Main extends Component {
                                 userStore={this.userStore}
                                 featuresStore={this.featuresStore}
                                 devicesStore={this.devicesStore}
+                                allDevicesCount={this.allDevicesCount}
                                 logoLink={logoLink}
                                 hideQueueModal={this.hideQueueModal}
                                 toggleOtaPlusMode={this.toggleOtaPlusMode}
