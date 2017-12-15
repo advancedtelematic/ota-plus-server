@@ -13,7 +13,8 @@ import com.advancedtelematic.auth.{AccessToken, ApiAuthAction, AuthenticatedRequ
 import com.advancedtelematic.libtuf.data.TufDataType.{EdKeyType, EdTufKeyPair, RSATufKeyPair, RsaKeyType, TufKeyPair}
 import play.api.Configuration
 import play.api.http.{HeaderNames, HttpEntity}
-import play.api.libs.json.{JsValue, Json, Writes}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, JsValue, Json, Writes}
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 
@@ -25,25 +26,35 @@ object ClientToolController {
 
   final case class OAuth2Params(
     server: String,
-    clientId: Option[String] = None,
-    clientSecret: Option[String] = None)
+    clientId: String ,
+    clientSecret: String)
+
+  final case class AuthParams(
+    oauth2: Option[OAuth2Params] = None,
+    noAuth: Option[Boolean] = None)
+
   final case class OSTreeParams(server: String)
-  final case class AllParams(oauth2: OAuth2Params, treehub: OSTreeParams)
+
+  final case class AllParams(auth: AuthParams, ostree: OSTreeParams)
 
   implicit val oauth2ParamsWrites: Writes[OAuth2Params] = Writes { p =>
     Json.obj(
       "server" -> p.server,
-      // Note: The Garage-Push tool will not authenticate when `client_id` is empty,
-      // but it requires the field for parsing.
-      "client_id" -> p.clientId.getOrElse[String](""),
-      "client_secret" -> p.clientSecret.getOrElse[String](""))
+      "client_id" -> p.clientId,
+      "client_secret" -> p.clientSecret)
   }
-  implicit val treehubParamsWrites: Writes[OSTreeParams] = Writes { p =>
-    Json.obj("server" -> p.server)
-  }
-  implicit val allParamsWrites: Writes[AllParams] = Writes { p =>
-    Json.obj("oauth2" -> p.oauth2, "ostree" -> p.treehub)
-  }
+
+  implicit val authParamsWrites: Writes[AuthParams] = (
+    (JsPath \ "oauth2").writeNullable[OAuth2Params] and
+    (JsPath \ "no_auth").writeNullable[Boolean]
+  )(unlift(AuthParams.unapply))
+
+  implicit val treehubParamsWrites: Writes[OSTreeParams] = Json.writes[OSTreeParams]
+
+  implicit val allParamsWrites: Writes[AllParams] = (
+    JsPath.write[AuthParams] and
+    (JsPath \ "ostree").write[OSTreeParams]
+  ) (unlift(AllParams.unapply _))
 }
 
 @Singleton
@@ -62,18 +73,23 @@ class ClientToolController @Inject()(
 
   def accountName(request: AuthenticatedRequest[_]): String = request.namespace.get
 
-  def getAuthParams(userId: UserId, token: AccessToken) : Future[OAuth2Params] =
+  def getOAuth2Params(userId: UserId, token: AccessToken) : Future[AuthParams] =
     userProfileApi.getFeature(userId, FeatureName("treehub"))
-      .map { _.client_id }
-      .recover { case RemoteApiError(r, _) if (r.header.status == 404) => None }
-      .flatMap { client_id =>
-        client_id match {
+      .flatMap { feat =>
+        feat.client_id match {
           case Some(id) => for {
             secret <- authPlusApi.fetchSecret(id.toJava, token)
-          } yield OAuth2Params(authPlusApiUri, Some(id.underlying.value), Some(secret))
-          case None => Future.successful(OAuth2Params(authPlusApiUri))
+          } yield AuthParams(oauth2 = Some(OAuth2Params(authPlusApiUri, id.underlying.value, secret)))
+          case None => Future.successful(AuthParams(noAuth = Some(true)))
         }
       }
+
+  def getAuthParams(userId: UserId, token: AccessToken) : Future[AuthParams] =
+    if(conf.getOptional[String]("authplus.host").isDefined) {
+      getOAuth2Params(userId, token)
+    } else {
+      Future.successful(AuthParams(noAuth = Some(true)))
+    }
 
   private def numberSuffix(i: Int) =
     if (i > 0) i.toString else ""
