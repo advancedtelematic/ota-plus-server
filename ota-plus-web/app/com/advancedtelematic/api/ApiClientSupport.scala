@@ -1,6 +1,5 @@
 package com.advancedtelematic.api
 
-import com.advancedtelematic.auth.AccessToken
 import com.advancedtelematic.auth.garage.Auth0Api
 import com.advancedtelematic.controllers.{FeatureName, UserId}
 import play.api.Configuration
@@ -29,18 +28,5 @@ trait ApiClientSupport {
   val directorApi = new DirectorApi(conf, clientExec)
 
   val keyServerApi = new KeyServerApi(conf, clientExec)
-
-  def getFeatureConfig(feature: FeatureName, userId: UserId, token: AccessToken)
-                      (implicit ec: ExecutionContext): Future[Result] =
-    userProfileApi.getFeature(userId, feature).flatMap { f =>
-      f.client_id match {
-        case Some(id) =>
-          for {
-            secret <- authPlusApi.fetchSecret(id.toJava, token)
-            result <- buildSrvApi.download(feature.get, id, secret)
-          } yield result
-        case None => Future.successful(Results.NotFound)
-      }
-    }
 
 }
