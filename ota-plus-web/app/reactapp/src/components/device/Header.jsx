@@ -35,15 +35,19 @@ class Header extends Component {
     componentWillUnmount() {
         this.renameHandler();
     }
-    enableDeviceRename() {
-        this.renameDisabled = false;
-        this.focusTextInput();
+    enableDeviceRename(e) {
+        if (this.renameDisabled) {
+            this.renameDisabled = false;
+            this.focusTextInput();
+            e.target.classList.add('hide')
+        }
     }
     cancelDeviceRename() {
         this.renameDisabled = true; 
         this.newDeviceName = this.oldDeviceName;
         this.newDeviceNameLength = this.oldDeviceName.length;
         this.focusTextInput();
+        this.clickableArea.classList.remove('hide');
     }
     userTypesName(e) {
         this.newDeviceName = e.target.value;
@@ -56,6 +60,7 @@ class Header extends Component {
     }
     renameDevice() {
         const { devicesStore, device } = this.props;
+        this.clickableArea.classList.remove('hide');
         this.props.devicesStore.renameDevice(device.uuid, {
             deviceId: this.newDeviceName,
             deviceName: this.newDeviceName,
@@ -102,6 +107,7 @@ class Header extends Component {
                             <span id="device-name" className="device-name">
 
                                 <div onClick={this.enableDeviceRename}
+                                     ref={(clickableArea) => {this.clickableArea = clickableArea}}
                                      className="clickable-area"
                                      style={{width: '85%', height: '51px', position: 'absolute'}}/>
 
@@ -112,7 +118,7 @@ class Header extends Component {
                                    value={this.newDeviceName} onChange={this.userTypesName} />
 
                                 {this.renameDisabled ?
-                                    <img src="/assets/img/icons/white/Rename.svg" className="edit" alt="Icon" onClick={this.enableDeviceRename} />
+                                    <img src="/assets/img/icons/white/Rename.svg" className="edit" alt="Icon" style={{cursor: 'auto'}} />
                                 :
                                     <div className="icons">
                                         {this.newDeviceNameLength ?

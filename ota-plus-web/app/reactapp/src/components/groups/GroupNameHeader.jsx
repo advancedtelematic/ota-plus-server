@@ -36,15 +36,19 @@ class GroupNameHeader extends Component {
         this.newGroupName = nextProps.groupsStore.selectedGroup.name;
         this.newGroupNameLength = nextProps.groupsStore.selectedGroup.name.length;
     }
-    enableGroupRename() {
-        this.renameDisabled = false;
-        this.focusTextInput();
+    enableGroupRename(e) {
+        if (this.renameDisabled) {
+            this.renameDisabled = false;
+            this.focusTextInput();
+            e.target.classList.add('hide')
+        }
     }
     cancelGroupRename() {
         this.renameDisabled = true; 
         this.newGroupName = this.oldGroupName;
         this.newGroupNameLength = this.oldGroupName.length;
         this.focusTextInput();
+        this.clickableArea.classList.remove('hide');
     }
     userTypesName(e) {
         this.newGroupName = e.target.value;
@@ -57,6 +61,7 @@ class GroupNameHeader extends Component {
     }
     renameGroup() {
         const { groupsStore } = this.props;
+        this.clickableArea.classList.remove('hide');
         groupsStore.renameGroup(groupsStore.selectedGroup.id, this.newGroupName);
     }
     handleResponse() {
@@ -87,6 +92,7 @@ class GroupNameHeader extends Component {
                     <h3 className={groupsStore.selectedGroup.type === 'artificial' ? 'artificial' : null}>
 
                         <div onClick={this.enableGroupRename}
+                             ref={(clickableArea) => {this.clickableArea = clickableArea}}
                              className="clickable-area"
                              style={{width: '90%', height: '36px', position: 'absolute'}}/>
 
@@ -99,7 +105,7 @@ class GroupNameHeader extends Component {
                         />
 
                         {this.renameDisabled ?
-                            <img src="/assets/img/icons/white/Rename.svg" className="edit" alt="Icon" onClick={this.enableGroupRename} />
+                            <img src="/assets/img/icons/white/Rename.svg" className="edit" alt="Icon" style={{cursor: 'auto'}} />
                         :
                             <div className="icons">
                                 {this.newGroupNameLength ?
