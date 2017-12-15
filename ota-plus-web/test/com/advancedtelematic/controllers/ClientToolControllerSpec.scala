@@ -31,16 +31,16 @@ import AuthUtils._
 
 import scala.concurrent.Await
 
-class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite with ScalaFutures with MockWSHelpers
+class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with ScalaFutures with MockWSHelpers
   with Results {
 
   Security.addProvider(new BouncyCastleProvider)
 
-  val webServer = "http://localhost:80"
   val auth0Domain = "auth0test"
   val authPlusUri = "http://auth-plus.com"
   val userProfileUri = "http://user-profile.com"
-  val keyServerUri = "http://localhost:8084"
+  val keyServerUri = "http://keyserver"
+  val repoServerUri = "http://reposerver"
   val namespace = "ns"
 
   import mockws.MockWS
@@ -49,9 +49,8 @@ class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite wi
 
   val testAccountUrl  = s"$CryptHost/accounts/ns"
   val treehubJsonUrl = s"$userProfileUri/api/v1/users/ns/features/treehub"
-  val rootJsonUrl = s"$webServer/api/v1/user_repo/root.json"
+  val rootJsonUrl = s"$repoServerUri/api/v1/user_repo/root.json"
   val authPlusClientUrl =  s"$authPlusUri/clients/$clientId"
-  val treehubDownloadUrl = "http://localhost:9200/api/v1/artifacts/treehub/download"
   val registrationUrl = s"$CryptHost/accounts/ns/credentials/registration"
   val keyPairsUrl = s"$keyServerUri/api/v1/root/repoid/keys/targets/pairs"
 
@@ -82,9 +81,6 @@ class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite wi
     case (GET, `authPlusClientUrl`) =>
       Action(_ => Ok(ClientSecret))
 
-    case (POST, `treehubDownloadUrl`) =>
-      Action(_ => Ok("{}"))
-
     case (GET, url) if url.startsWith(registrationUrl) =>
       Action(_ => Ok("registration"))
 
@@ -101,15 +97,17 @@ class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite wi
     .configure("authplus.uri" -> authPlusUri)
     .configure("userprofile.uri" -> userProfileUri)
     .configure("crypt.uri" -> CryptHost)
+    .configure("keyserver.uri" -> keyServerUri)
+    .configure("repo.uri" -> repoServerUri)
     .overrides(bind[TokenVerification].to[NoVerification])
   val application = builder.overrides(bind[WSClient].to(mockClient)).build
-  val controller = application.injector.instanceOf[ProvisioningController]
+  val controller = application.injector.instanceOf[ClientToolController]
 
-  "GET /api/v1/provisioning/credentials/archive" should {
-    val request = FakeRequest(GET, "/api/v1/provisioning/credentials/archive").withAuthSession(namespace)
+  "GET /api/v1/clienttools/provisioning" should {
+    val request = FakeRequest(GET, "/api/v1/clienttools/provisioning").withAuthSession(namespace)
 
     "return a ZIP archive" in {
-      val result = call(controller.downloadCredentialArchive(UUID.randomUUID()), request)
+      val result = call(controller.downloadClientToolBundle(UUID.randomUUID()), request)
       status(result) mustBe OK
       contentType(result).get mustBe "application/zip"
 
@@ -129,10 +127,10 @@ class ProvisioningControllerSpec extends PlaySpec with GuiceOneServerPerSuite wi
 
     "throw an exception when a client returns a 500" in {
       val application = builder.overrides(bind[WSClient].to(failingClient)).build
-      val controller = application.injector.instanceOf[ProvisioningController]
+      val controller = application.injector.instanceOf[ClientToolController]
 
       try {
-        status(call(controller.downloadCredentialArchive(UUID.randomUUID()), request))
+        status(call(controller.downloadClientToolBundle(UUID.randomUUID()), request))
         throw new Exception("shouldn't happen")
       } catch {
         case _: UnexpectedResponse =>
