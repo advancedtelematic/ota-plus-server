@@ -82,7 +82,7 @@ class RelativesModal extends Component {
       case 'node':
         let campaignName = linkdata.target.originalName;
         let campaign = _.find(campaignsStore.campaigns, campaign => campaign.name === campaignName);
-        this.context.router.push(`/campaigns/${campaign.name}`);
+        this.context.router.push(`/campaigns/${campaign.id}`);
         break;
       case 'device':
         let deviceId = linkdata.target.uuid;

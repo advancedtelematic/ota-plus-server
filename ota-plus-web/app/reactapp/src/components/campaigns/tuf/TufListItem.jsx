@@ -32,16 +32,15 @@ class TufListItem extends Component {
             });
             failureRate = Math.round(totalFailed/Math.max(totalFinished, 1) * 100);
         }
-        
         return (
-            expandedCampaignName === campaign.name ?
+            expandedCampaignName === campaign.name?
                 <div className="item expanded" id={"item-" + campaign.name} onClick={toggleCampaign.bind(this, campaign.name)}>
                     <div className="wrapper-center">
                         <i className="fa fa-angle-up fa-2x" aria-hidden="true"></i>
                     </div>
                 </div>
             :
-                <div className="item" id={"item-" + campaign.name} onClick={toggleCampaign.bind(this, campaign.name)}>
+                <div className="item" id={"item-" + campaign.id} onClick={toggleCampaign.bind(this, campaign.name)}>
                     <div className="actions">
                         <ul>
                             <li id={"rename-campaign-" + campaign.name} onClick={this.rename.bind(this)}>
