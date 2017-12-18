@@ -952,7 +952,7 @@ input {
                 .campaigns-list {
                     width: 100%;
                     overflow-x: hidden;
-                    overflow-y: hidden;       
+                    overflow-y: hidden;
 
                     .empty {
                         padding: 15px;
@@ -1005,6 +1005,14 @@ input {
                         display: flex;
                         align-items: center;
 
+                        &:hover {
+                            background: #f5f5f5;
+                        }
+
+                        &.expanded {
+                            background: #f5f5f5;
+                        }
+
                         .actions {
                             background: #4B5151;
                             width: 65px;
@@ -1046,19 +1054,449 @@ input {
                             }
                         }
                     }
+
+                    .statistic-details {
+                        padding: 25px 0;
+                        border-bottom: 1px solid #ddd;
+                        background: #f5f5f5;
+                        overflow: hidden;
+
+                        .campaign-name {
+                            position: relative;
+                            padding: 0 15px;
+                            margin-bottom: 25px;
+                            width: 400px;
+                            cursor: pointer;
+                            font-size: 30px;
+
+                            input {
+                                width: 100%;
+                                background-color: rgba(0,0,0,0);
+                                border: none;
+                                outline: none;
+                                -webkit-appearance: none;
+                                -moz-appearance: none;
+                                appearance: none;
+                                transition: all 0.3s ease;
+                                padding: 10px 65px 10px 10px;
+                                text-overflow: ellipsis;
+                                
+                                &:focus {
+                                    outline: auto;
+                                    background-color: rgba(0,0,0,0.2);
+                                }
+                            }
+                            img {
+                                width: 20px;
+                                transition: opacity 0.3s ease;
+                                cursor: pointer;
+
+                                &.edit {
+                                    opacity: 0;
+                                    position: absolute;
+                                    right: 25px;
+                                    top: 20px;
+                                }
+                            }
+                            .icons {
+                                position: absolute;
+                                right: 20px;
+                                top: 10px;
+                                z-index: 10;
+                                img {
+                                    margin-right: 5px;
+                                    width: 15px;
+                                }
+                            }
+                            &:hover {
+                                img {
+                                    opacity: 1;
+                                }
+                                input {
+                                    background-color: #ddd;
+                                }
+                            }
+                        }
+
+                        .title {
+                            font-weight: bold;
+                            margin-bottom: 20px;
+                        }
+
+                        .left-box {
+                            width: 20%;
+                            float: left;
+                            padding: 0 30px;
+
+                            .failure-rate-container {
+                                text-align: center;
+
+                                .failure-rate {
+                                    position: relative;
+
+                                    .rate {
+                                        position: absolute;
+                                        top: 46%;
+                                        right: 46%;
+                                    }
+                                }
+
+                                .cancel-campaign {
+                                    margin-top: 20px;
+
+                                    button {
+                                        margin: auto!important;
+                                        padding: 0!important;
+                                        height: 25px!important;
+                                        display: flex!important;
+                                        justify-content: center;
+                                        align-items: center;
+
+                                        div {
+                                            display: flex;
+                                            justify-content: center;
+                                            align-items: center;
+
+                                            span {
+                                                text-transform: uppercase!important;
+                                                font-size: 12px!important;
+                                                vertical-align: none!important;
+                                                padding: 0 30px!important;
+                                            }
+                                        }
+
+                                        
+                                    }
+                                }
+                            }
+                        }
+
+                        .right-box {
+                            width: 70%;
+                            float: left;
+
+                            .total-progress-container {
+                                background: #fff;
+                                padding: 20px 50px;
+
+                                .top-stats {
+                                    color: #8a8a8a;
+
+                                    .block {
+                                        display: inline-block;
+
+                                        &:first-child {
+                                            margin-right: 25px;
+                                        }
+
+                                        div {
+                                            display: inline-block;
+
+                                            &:first-child {
+                                                font-size: 18px;
+                                                margin-right: 5px;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                .devices-progress {
+                                    width: 90%;
+                                    border: 1px solid #ccc;
+                                    border-radius: 5px;
+                                    float: left;
+
+                                    &.with-bar {
+                                        margin: 20px 0;
+                                    }
+
+                                    .bar {
+                                        height: 25px;
+                                        overflow: hidden;
+                                        border-radius: 5px;
+
+                                        .failure {
+                                            height: 25px;
+                                            background-color: #fe0001;
+                                            float: left;
+                                        }
+
+                                        .success {
+                                            height: 25px;
+                                            background-color: #83d060;
+                                            float: left;
+                                        }
+
+                                        .queued {
+                                            height: 25px;
+                                            background-color: #f5a623;
+                                            float: left;
+                                        }
+
+                                        .not-impacted {
+                                            height: 25px;
+                                            background-color: #ddd;
+                                            float: left;
+                                        }
+                                        .not-proceed {
+                                            height: 25px;
+                                            background-color: #fff;
+                                            float: left;
+                                        }
+                                    }
+                                }
+
+                                .show-dependencies {
+                                    position: relative;
+                                    width: 10%;
+                                    float: left;
+                                    margin: 20px 0;
+                                    display: flex;
+                                    justify-content: flex-end;
+                                    align-items: center;
+                                    height: 25px;
+
+                                    &:hover {
+                                        .my-tooltip {
+                                            opacity: 1;
+                                        }
+                                    }
+
+                                    .my-tooltip {
+                                        opacity: 0;
+                                        position: absolute;
+                                        top: -40px;
+                                        text-align: center;
+                                        width: 140px;
+                                        right: -40px;
+                                        border: 1px solid #ccc;
+                                        height: 20px;
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+                                        -webkit-transition: opacity 1s;
+                                        transition: opacity 1s;
+                                    }
+
+                                    img {
+                                        width: 50px;
+                                        cursor: pointer;
+                                    }
+                                }
+
+                                .status-block {
+                                    div {
+                                        display: inline-block;
+                                        width: 33%;
+
+                                        &.failure {
+                                            span {
+                                                &:first-child {
+                                                    background-color: #FE0001;
+                                                }
+                                            }
+                                        }
+
+                                        &.success {
+                                            span {
+                                                &:first-child {
+                                                    background-color: #83D060;
+                                                }
+                                            }
+                                        }
+
+                                        &.queued {
+                                            span {
+                                                &:first-child {
+                                                    background-color: #F5A623;
+                                                }
+                                            }
+                                        }
+
+                                        &.not-impacted {
+                                            span {
+                                                &:first-child {
+                                                    background-color: #ddd;
+                                                }
+                                            }
+                                        }
+
+                                        &.not-proceed {
+                                            span {
+                                                &:first-child {
+                                                    background-color: #FFF;
+                                                    border: 1px #B9B9B9 solid;
+                                                }
+                                            }
+                                        }
+
+                                        span {
+                                            display: inline-block;
+
+                                            &:first-child {
+                                                width: 15px;
+                                                height: 15px;
+                                                border-radius: 50%;
+                                            }
+
+                                            &:nth-child(2) {
+                                                width: 100px;
+                                            }
+
+                                            &:not(:last-child) {
+                                                margin-right: 15px;
+                                            }
+                                        }                                        
+                                    }                                    
+                                }
+                            }
+
+                            .group-list {
+                                margin-top: 10px;
+
+                                .display-flex {
+                                    align-items: center;
+                                    background: #fff;
+                                    padding: 15px 50px;
+
+                                    &:not(:last-child) {
+                                        margin-bottom: 10px;
+                                    }
+
+                                    p {
+                                        margin: 0;
+                                    }
+
+                                    .name {
+                                        width: 25%;
+
+                                        .title {
+                                            margin-bottom: 0;
+                                        }
+                                    }
+
+                                    .stats {
+                                        width: 50%;
+
+                                        .devices-progress {
+
+                                            .wrapper-rate {
+                                                position: absolute;
+                                                top:2px;
+                                                right: 10px;
+                                                color: #000;
+
+                                                .fa.fa-check {
+                                                    margin-left: 5px;
+                                                    background-color: #fff;
+                                                    display: inline-block;
+                                                    border: 2px solid #fff;
+                                                    font-size: 8px;
+                                                    border-radius: 50%;
+                                                    color:#000;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    .status-group {
+                                        width: 25%;
+                                        text-align: center;
+                                    }
+                                }
+                            }
+
+                            .table {
+                                margin-bottom: 0;
+                                margin-top: 10px;
+
+                                & > tbody {
+                                    & > tr {
+                                        background: #fff;
+                                        
+                                        & > td {
+                                            padding-left: 15px;
+                                            padding-right: 15px;
+                                            vertical-align: middle;
+
+                                            a.cancel-campaign {
+                                                &:hover {
+                                                    color: red;
+                                                    text-decoration: underline;
+                                                    @include transition;
+                                                }
+                                            }
+
+                                            &.name {
+                                                
+                                            }
+
+                                            &.stats {
+                                                .devices-stats {
+                                                    color: $color-lightgrey;
+                                                    width: 30%;
+                                                    display: inline-block;
+                                                    vertical-align: super;
+                                                }
+
+                                                .devices-progress {
+                                                    width: 70%;
+                                                    display: inline-block;
+                                                }
+                                            }
+
+                                            &.chart {
+                                                .wrapper-chart {
+                                                    padding: 0 0 0 30px;
+                                                    display: inline-block;
+                                                }
+
+                                                .wrapper-rate {
+                                                    padding: 20px 0 0 20px;
+                                                    display: inline-block;
+                                                    vertical-align: top;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }                        
+
+                        .element-box {
+                            width: auto;
+                            height: auto;
+                            margin: 0;
+                            border: 0;
+
+                            &.group {
+                                .icon {
+                                    background-image: url(/assets/img/icons/groups.png);
+                                    border: 2px solid #ddd;
+                                    margin: 0;
+                                    float: none;
+                                    display: inline-block;
+                                    vertical-align: middle;
+                                }
+
+                                .desc {
+                                    width: auto;
+                                    margin: 0 0 0 15px;
+                                    float: none;
+                                    display: inline-block;
+                                    vertical-align: middle;
+
+                                    .title {
+                                        font-size: 14px;
+                                        font-weight: 400;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
-        }
-    }
-
-    .legacy-list {
-
-        .progress {
-            margin-top: -4px;
-        }
-
-        .pie {
-            margin-top: -6px;
         }
     }
 }

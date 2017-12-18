@@ -19,9 +19,10 @@ class Campaigns extends Component {
     }
     componentWillUnmount() {
         this.props.campaignsStore._reset();
+        this.props.packagesStore._reset();
     }
     render() {
-        const { t, campaignsStore, packagesStore, groupsStore, hardwareStore, addNewWizard, goToCampaignDetails, otaPlusMode } = this.props;
+        const { t, campaignsStore, packagesStore, groupsStore, hardwareStore, devicesStore, addNewWizard, otaPlusMode } = this.props;
         return (
             <FadeAnimation 
                 display="flex">
@@ -54,9 +55,10 @@ class Campaigns extends Component {
                             packagesStore={packagesStore}
                             groupsStore={groupsStore}
                             hardwareStore={hardwareStore}
+                            devicesStore={devicesStore}
                             addNewWizard={addNewWizard}
-                            goToCampaignDetails={goToCampaignDetails}
                             otaPlusMode={otaPlusMode}
+                            highlightedCampaign={this.props.params.campaignName}
                         />
                     </MetaData>
                 </div>

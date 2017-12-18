@@ -1,9 +1,9 @@
 import CampaignTufGroupsList from './TufGroupsList';
 import CampaignTufGroupsListItem from './TufGroupsListItem';
-import CampaignTuf from './Tuf';
+import CampaignTufSubHeader from './SubHeader';
 
 export {
     CampaignTufGroupsList,
     CampaignTufGroupsListItem,
-    CampaignTuf,
+    CampaignTufSubHeader,
 }

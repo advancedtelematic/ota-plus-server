@@ -4,6 +4,8 @@ import { observer } from 'mobx-react';
 import moment from 'moment';
 import _ from 'underscore';
 
+const tooltipText = "Show dependencies";
+
 @observer
 class ListItemVersion extends Component {
     @observable activeEditField = false;
@@ -71,7 +73,7 @@ class ListItemVersion extends Component {
         return isPackageBlacklisted ? isPackageBlacklisted : false;
     }
     render() {
-        const { version } = this.props;        
+        const { version, showRelativesModal } = this.props;        
         let isBlacklisted = this.isPackageBlacklisted(version);
         let packageName = version.id.name;
         const directorBlock = (
@@ -152,6 +154,12 @@ class ListItemVersion extends Component {
                         :
                             null
                         }
+                    </div>
+                    <div className="show-dependencies">
+                        <div className="my-tooltip">
+                            {tooltipText}
+                        </div>
+                        <img src="/assets/img/icons/dependencies-icon.svg" alt="icon" onClick={showRelativesModal.bind(this, version.packageHash)} />
                     </div>
                 </div>
             </span>
