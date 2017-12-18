@@ -62,8 +62,8 @@ class StatisticDetails extends Component {
             totalDevicesAmount += foundGroup.devices.total;
         });
 
-        let notProceed = totalDevicesAmount - overallStatistics.processed;
-        let notProceedRate = Math.min(Math.round(notProceed/Math.max(overallStatistics.processed, 1) * 100), 100);
+        let notProcessed  = totalDevicesAmount - overallStatistics.processed;
+        let notProcessedRate = Math.min(Math.round(notProcessed /Math.max(overallStatistics.processed, 1) * 100), 100);
         return (
             <div className="statistic-details">
 
@@ -140,7 +140,7 @@ class StatisticDetails extends Component {
                                 </div>
                                 <div className="not-impacted" style={{width: notImpactedRate + '%'}}>
                                 </div>
-                                <div className="not-proceed" style={{width: notProceedRate + '%'}}>
+                                <div className="not-proceed" style={{width: notProcessedRate + '%'}}>
                                 </div>
                             </div>
                         </div>
@@ -156,6 +156,11 @@ class StatisticDetails extends Component {
                                 <span>Failure</span>
                                 <span>{overallStatistics.failed}</span>
                             </div>
+                            <div className="cancelled">
+                                <span></span>
+                                <span>Cancelled</span>
+                                <span>{overallStatistics.cancelled}</span>
+                            </div>
                             <div className="queued">
                                 <span></span>
                                 <span>Queued</span>
@@ -163,8 +168,8 @@ class StatisticDetails extends Component {
                             </div>
                             <div className="not-proceed">
                                 <span></span>
-                                <span>Not proceed</span>
-                                <span>{notProceed}</span>
+                                <span>Not processed</span>
+                                <span>{notProcessed }</span>
                             </div>
                             <div className="success">
                                 <span></span>
