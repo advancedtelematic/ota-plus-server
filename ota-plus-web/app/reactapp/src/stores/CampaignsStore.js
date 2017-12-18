@@ -493,44 +493,68 @@ export default class CampaignsStore {
     }
 
     @computed get inPreparationCampaigns() {
-        return _.filter(this.preparedCampaigns, (campaign) => {
+        let campaigns = this.preparedCampaigns;
+        campaigns = _.sortBy(campaigns, function(campaign) {
+          return campaign.createdAt;
+        }).reverse();
+        return _.filter(campaigns, (campaign) => {
             return !_.isUndefined(campaign.summary) && campaign.summary.status === "scheduled";
         });
     }
 
     @computed get cancelledCampaigns() {
-        return _.filter(this.preparedCampaigns, (campaign) => {
+        let campaigns = this.preparedCampaigns;
+        campaigns = _.sortBy(campaigns, function(campaign) {
+          return campaign.createdAt;
+        }).reverse();
+        return _.filter(campaigns, (campaign) => {
             return !_.isUndefined(campaign.summary) && campaign.summary.status === "cancelled";
         });
     }
 
     @computed get runningCampaigns() {
-        return _.filter(this.preparedCampaigns, (campaign) => {
+        let campaigns = this.preparedCampaigns;
+        campaigns = _.sortBy(campaigns, function(campaign) {
+          return campaign.createdAt;
+        });
+        return _.filter(campaigns, (campaign) => {
             return !_.isUndefined(campaign.summary) && campaign.summary.status === "launched";
         });
     }
 
     @computed get runningLegacyCampaigns() {
-        return _.filter(this.preparedLegacyCampaigns, (campaign) => {
+        let campaigns = this.preparedLegacyCampaigns;
+        campaigns = _.sortBy(campaigns, function(campaign) {
+          return campaign.createdAt;
+        });
+        return _.filter(campaigns, (campaign) => {
             return campaign.status === "Active" && campaign.summary.overallDevicesCount !== campaign.summary.overallUpdatedDevicesCount
         });
     }
 
     @computed get finishedCampaigns() {
-        return _.filter(this.preparedCampaigns, (campaign) => {
+        let campaigns = this.preparedCampaigns;
+        campaigns = _.sortBy(campaigns, function(campaign) {
+          return campaign.createdAt;
+        }).reverse();
+        return _.filter(campaigns, (campaign) => {
             return !_.isUndefined(campaign.summary) && (campaign.summary.status === "finished" || campaign.summary.status === "cancelled");
         });
     }
 
     @computed get finishedLegacyCampaigns() {
-        return _.filter(this.preparedLegacyCampaigns, (campaign) => {
+        let campaigns = this.preparedLegacyCampaigns;
+        campaigns = _.sortBy(campaigns, function(campaign) {
+          return campaign.createdAt;
+        }).reverse();
+        return _.filter(campaigns, (campaign) => {
             return campaign.status === "Active" && campaign.summary.overallDevicesCount === campaign.summary.overallUpdatedDevicesCount;
         });
     }
 
     @computed get lastActiveTufCampaigns() {
         let campaigns = this.runningCampaigns;
-        _.sortBy(campaigns, function(campaign) {
+        campaigns = _.sortBy(campaigns, function(campaign) {
           return campaign.createdAt;
         }).reverse();
         return campaigns.slice(0,10);
@@ -538,7 +562,7 @@ export default class CampaignsStore {
 
     @computed get lastActiveLegacyCampaigns() {
         let campaigns = this.runningLegacyCampaigns;
-        _.sortBy(campaigns, function(campaign) {
+        campaigns = _.sortBy(campaigns, function(campaign) {
           return campaign.createdAt;
         }).reverse();
         return campaigns.slice(0,10);
@@ -546,7 +570,7 @@ export default class CampaignsStore {
 
     @computed get lastActiveMixedCampaigns() {
         let campaigns = this.runningCampaigns.concat(this.runningLegacyCampaigns);
-        _.sortBy(campaigns, function(campaign) {
+        campaigns = _.sortBy(campaigns, function(campaign) {
           return campaign.createdAt;
         }).reverse();
         return campaigns.slice(0,10);
