@@ -14,7 +14,7 @@ class TufListItem extends Component {
         this.props.showRenameModal(this.props.campaign.id);
     }
     render() {
-        const { campaign, goToCampaignDetails, rename, type } = this.props;
+        const { campaign, toggleCampaign, rename, type, expandedCampaignName } = this.props;
 
         let totalAffected = 0;
         let totalProcessed = 0;
@@ -34,84 +34,91 @@ class TufListItem extends Component {
         }
         
         return (
-            <div className="item" onClick={goToCampaignDetails.bind(this, campaign.id)}>
-                <div className="actions">
-                    <ul>
-                        <li id={"rename-campaign-" + campaign.name} onClick={this.rename.bind(this)}>
-                            <img src="/assets/img/icons/edit_white.png" alt="" />
-                            <span>Rename</span>
-                        </li>
-                    </ul>
+            expandedCampaignName === campaign.name ?
+                <div className="item expanded" id={"item-" + campaign.name} onClick={toggleCampaign.bind(this, campaign.name)}>
+                    <div className="wrapper-center">
+                        <i className="fa fa-angle-up fa-2x" aria-hidden="true"></i>
+                    </div>
                 </div>
-                <div className="column" id={"campaign-" + campaign.name}>
-                    {campaign.name}
+            :
+                <div className="item" id={"item-" + campaign.name} onClick={toggleCampaign.bind(this, campaign.name)}>
+                    <div className="actions">
+                        <ul>
+                            <li id={"rename-campaign-" + campaign.name} onClick={this.rename.bind(this)}>
+                                <img src="/assets/img/icons/edit_white.png" alt="" />
+                                <span>Rename</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="column" id={"campaign-" + campaign.name}>
+                        {campaign.name}
+                    </div>
+                    <div className="column" id={"campaign-start-date-" + campaign.name}>
+                        {moment(campaign.createdAt).format("DD.MM.YYYY")}
+                    </div>
+                    <div className="column" id={"campaign-processed-" + campaign.name}>
+                        {type === 'running' || type === 'finished' || type === 'cancelled' ?
+                            <span>
+                                <span>{totalProcessed}</span>                            
+                            </span>
+                        :
+                            null
+                        }
+                    </div>
+                    <div className="column" id={"campaign-affected-" + campaign.name}>
+                        {type === 'running' || type === 'finished' || type === 'cancelled' ?
+                            <span>
+                                <span>{totalAffected}</span>                            
+                            </span>
+                        :
+                            null
+                        }
+                    </div>
+                    <div className="column" id={"campaign-finished-" + campaign.name}>
+                        {type === 'running' || type === 'finished' || type === 'cancelled' ?
+                            <span>
+                                <span>{totalFinished}</span>
+                                /
+                                <span>{totalAffected}</span>
+                            </span>
+                        :
+                            null
+                        }
+                    </div>
+                    <div className="column" id={"campaign-failure-rate-" + campaign.name}>
+                        {type === 'running' || type === 'finished' || type === 'cancelled' ?
+                            <span>
+                                <span>{failureRate} %</span>
+                            </span>
+                        :
+                            null
+                        }
+                    </div>
+                    <div className="column additional-info" id={"campaign-additional-info-" + campaign.name}>
+                        {type === 'inPreparation' ?
+                            <div className="wrapper-center">
+                                <Loader 
+                                    size={30}
+                                    thickness={5}
+                                />
+                            </div>
+                        : type === 'running' || type === 'finished' || type === 'cancelled' ?
+                            <div className="more-info" id="campaign-more-info">
+                                More info
+                            </div>
+                        :
+                            null
+                        }
+                    </div>
+                    
                 </div>
-                <div className="column" id={"campaign-start-date-" + campaign.name}>
-                    {moment(campaign.createdAt).format("DD.MM.YYYY")}
-                </div>
-                <div className="column" id={"campaign-processed-" + campaign.name}>
-                    {type === 'running' || type === 'finished' || type === 'cancelled' ?
-                        <span>
-                            <span>{totalProcessed}</span>                            
-                        </span>
-                    :
-                        null
-                    }
-                </div>
-                <div className="column" id={"campaign-affected-" + campaign.name}>
-                    {type === 'running' || type === 'finished' || type === 'cancelled' ?
-                        <span>
-                            <span>{totalAffected}</span>                            
-                        </span>
-                    :
-                        null
-                    }
-                </div>
-                <div className="column" id={"campaign-finished-" + campaign.name}>
-                    {type === 'running' || type === 'finished' || type === 'cancelled' ?
-                        <span>
-                            <span>{totalFinished}</span>
-                            /
-                            <span>{totalAffected}</span>
-                        </span>
-                    :
-                        null
-                    }
-                </div>
-                <div className="column" id={"campaign-failure-rate-" + campaign.name}>
-                    {type === 'running' || type === 'finished' || type === 'cancelled' ?
-                        <span>
-                            <span>{failureRate} %</span>
-                        </span>
-                    :
-                        null
-                    }
-                </div>
-                <div className="column additional-info" id={"campaign-additional-info-" + campaign.name}>
-                    {type === 'inPreparation' ?
-                        <div className="wrapper-center">
-                            <Loader 
-                                size={30}
-                                thickness={5}
-                            />
-                        </div>
-                    : type === 'running' || type === 'finished' || type === 'cancelled' ?
-                        <div className="more-info" id="campaign-more-info">
-                            More info
-                        </div>
-                    :
-                        null
-                    }
-                </div>
-                
-            </div>
         );
     }
 }
 
 TufListItem.propTypes = {
     campaign: PropTypes.object.isRequired,
-    goToCampaignDetails: PropTypes.func.isRequired,
+    toggleCampaign: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired
 }
 

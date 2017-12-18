@@ -8,6 +8,13 @@ import {
     CampaignsRenameModal,
     CampaignsList,
 } from '../components/campaigns';
+import { 
+    CampaignCancelCampaignModal,
+    CampaignCancelGroupModal
+} from '../components/campaign';
+import { 
+    PackagesRelativesModal
+} from '../components/packages';
 import { FlatButton } from 'material-ui';
 import _ from 'underscore';
 
@@ -16,6 +23,11 @@ class Campaigns extends Component {
     @observable tooltipShown = false;
     @observable renameModalShown = false;
     @observable campaignIdToAction = null;
+    @observable cancelGroupModalShown = false;
+    @observable cancelCampaignModalShown = false;
+    @observable updateRequestToCancel = {};
+    @observable relativesModalShown = false;
+    @observable activeCampaign = null;
 
     constructor(props) {
         super(props);
@@ -26,6 +38,12 @@ class Campaigns extends Component {
         this.changeFilter = this.changeFilter.bind(this);
         this.showWizard = this.showWizard.bind(this);
         this.showRenameModal = this.showRenameModal.bind(this);
+        this.showCancelGroupModal = this.showCancelGroupModal.bind(this);
+        this.hideCancelGroupModal = this.hideCancelGroupModal.bind(this);
+        this.showCancelCampaignModal = this.showCancelCampaignModal.bind(this);
+        this.hideCancelCampaignModal = this.hideCancelCampaignModal.bind(this);
+        this.showRelativesModal = this.showRelativesModal.bind(this);
+        this.hideRelativesModal = this.hideRelativesModal.bind(this);
     }
     showWizard(campaignId) {
         this.campaignIdToAction = campaignId;
@@ -34,6 +52,36 @@ class Campaigns extends Component {
         if(e) e.preventDefault();
         this.renameModalShown = true;
         this.campaignIdToAction = campaignId;
+    }
+    showCancelGroupModal(updateRequest, e) {
+        if(e) e.preventDefault();
+        this.cancelGroupModalShown = true;
+        this.updateRequestToCancel = updateRequest;
+    }
+    hideCancelGroupModal(e) {
+        if(e) e.preventDefault();
+        this.cancelGroupModalShown = false;
+        this.updateRequestToCancel = {};
+        resetAsync(this.props.campaignsStore.campaignsCancelRequestAsync);
+    }
+    showCancelCampaignModal(e) {
+        if(e) e.preventDefault();
+        this.cancelCampaignModalShown = true;
+    }
+    hideCancelCampaignModal(e) {
+        if(e) e.preventDefault();
+        this.cancelCampaignModalShown = false;
+        resetAsync(this.props.campaignsStore.campaignsCancelAsync);
+    }
+    showRelativesModal(activeCampaign, e) {
+        if(e) e.preventDefault();
+        this.relativesModalShown = true;
+        this.activeCampaign = activeCampaign;
+    }
+    hideRelativesModal(e) {
+        if(e) e.preventDefault();
+        this.relativesModalShown = false;
+        this.activeCampaign = null;
     }
     showTooltip(e) {
         if(e) e.preventDefault();
@@ -57,7 +105,7 @@ class Campaigns extends Component {
         this.props.campaignsStore._prepareCampaigns(filter, this.props.campaignsStore.campaignsSort);
     }
     render() {
-        const { campaignsStore, packagesStore, groupsStore, hardwareStore, addNewWizard, goToCampaignDetails, otaPlusMode } = this.props;
+        const { campaignsStore, packagesStore, groupsStore, hardwareStore, devicesStore, addNewWizard, otaPlusMode, highlightedCampaign } = this.props;
         return (
             <span>
                 {campaignsStore.campaignsFetchAsync.isFetching || campaignsStore.campaignsLegacyFetchAsync.isFetching ?
@@ -71,8 +119,11 @@ class Campaigns extends Component {
                         addNewWizard={addNewWizard}
                         showWizard={this.showWizard}
                         showRenameModal={this.showRenameModal}
-                        goToCampaignDetails={goToCampaignDetails}
                         otaPlusMode={otaPlusMode}
+                        highlightedCampaign={highlightedCampaign}
+                        showCancelCampaignModal={this.showCancelCampaignModal}
+                        showCancelGroupModal={this.showCancelGroupModal}
+                        showRelativesModal={this.showRelativesModal}
                     />
                 :
                     <div className="wrapper-center">
@@ -99,7 +150,32 @@ class Campaigns extends Component {
                     hide={this.hideRenameModal}
                     campaignsStore={campaignsStore}
                     campaignId={this.campaignIdToAction}
-                />                
+                />
+                <CampaignCancelCampaignModal
+                    shown={this.cancelCampaignModalShown}
+                    hide={this.hideCancelCampaignModal}
+                    campaignsStore={campaignsStore}
+                    campaign={campaignsStore.campaign}
+                />
+                <CampaignCancelGroupModal
+                    shown={this.cancelGroupModalShown}
+                    hide={this.hideCancelGroupModal}
+                    campaign={campaignsStore.campaign}
+                    campaignsStore={campaignsStore}
+                    updateRequest={this.updateRequestToCancel}
+                />
+                {this.relativesModalShown ?
+                    <PackagesRelativesModal 
+                        shown={this.relativesModalShown}
+                        hide={this.hideRelativesModal}
+                        activeItemName={this.activeCampaign}
+                        packagesStore={packagesStore}
+                        campaignsStore={campaignsStore}
+                        devicesStore={devicesStore}
+                    />
+                :
+                    null
+                }
             </span>
         );
     }

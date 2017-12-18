@@ -149,7 +149,7 @@ class List extends Component {
                                                 <ListItem 
                                                     pack={pack}
                                                     togglePackage={this.togglePackage}
-                                                    showRelativesModal={showRelativesModal}
+                                                    expandedPackageName={this.expandedPackageName}
                                                 />
                                                 <VelocityTransitionGroup 
                                                     enter={{
@@ -166,6 +166,9 @@ class List extends Component {
                                                     {this.expandedPackageName === pack.packageName ?
                                                         pack.inDirector ?
                                                             <div className="director-details">
+                                                                <div className="pack-name">
+                                                                    {pack.packageName}
+                                                                </div>
                                                                 <div className="distribution">
                                                                     <div className="heading">
                                                                         Distribution by devices
@@ -175,7 +178,7 @@ class List extends Component {
                                                                             pack={pack}
                                                                         />
                                                                     </div>
-                                                                </div>
+                                                                </div>                                                                
                                                                 <ul className="versions" id="versions">
                                                                     <div className="heading">
                                                                         All versions
@@ -187,6 +190,7 @@ class List extends Component {
                                                                                 version={version}
                                                                                 showBlacklistModal={showBlacklistModal}
                                                                                 packagesStore={packagesStore}
+                                                                                showRelativesModal={showRelativesModal}
                                                                                 key={i}
                                                                             />
                                                                         );
@@ -203,6 +207,7 @@ class List extends Component {
                                                                                 version={version}
                                                                                 showBlacklistModal={showBlacklistModal}
                                                                                 packagesStore={packagesStore}
+                                                                                showRelativesModal={showRelativesModal}
                                                                                 key={i}
                                                                             />
                                                                         );

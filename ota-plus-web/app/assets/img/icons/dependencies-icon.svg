@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="56px" height="56px" viewBox="0 0 56 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>Root Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Root-Icon">
+            <g id="Group-5">
+                <circle id="Oval-5" fill="#9CE2D8" cx="28" cy="28" r="28"></circle>
+                <g id="Group-4" transform="translate(27.500000, 28.186047) scale(-1, -1) translate(-27.500000, -28.186047) translate(13.000000, 11.186047)" stroke-linecap="round" stroke="#4A4A4A" stroke-linejoin="round">
+                    <polygon id="Stroke-5" transform="translate(14.371797, 16.067366) scale(1, -1) rotate(-90.000000) translate(-14.371797, -16.067366) " points="4.31184102 18.2096815 24.4317538 18.2096815 24.4317538 13.9250506 4.31184102 13.9250506"></polygon>
+                    <g id="Group-3" transform="translate(16.757267, 12.853893)">
+                        <polygon id="Stroke-3" transform="translate(9.831628, 10.355953) scale(1, -1) rotate(-90.000000) translate(-9.831628, -10.355953) " points="-0.228327943 12.4982685 19.8915848 12.4982685 19.8915848 8.21363751 -0.228327943 8.21363751"></polygon>
+                        <path d="M1.20809012,2.49708291 L1.20809012,2.4956547 C1.20809012,4.0738271 2.4943274,5.35207533 4.08236337,5.35207533 L4.08236337,5.35207533 C5.67039935,5.35207533 6.95663663,6.63175177 6.95663663,8.20849596 L6.95663663,9.63956269" id="Stroke-6" transform="translate(4.082363, 6.067609) scale(1, -1) rotate(-90.000000) translate(-4.082363, -6.067609) "></path>
+                    </g>
+                    <g id="Group-2">
+                        <polygon id="Stroke-1" transform="translate(2.156136, 10.354525) scale(1, -1) rotate(-90.000000) translate(-2.156136, -10.354525) " points="-7.90382031 12.4968402 12.2160925 12.4968402 12.2160925 8.2122093 -7.90382031 8.2122093"></polygon>
+                        <path d="M5.74955251,9.63713473 C5.74955251,11.2138789 7.03578979,12.4921271 8.62382576,12.4921271 C10.2118617,12.4921271 11.498099,13.7718036 11.498099,15.3485478 L11.498099,16.7796145" id="Stroke-8" transform="translate(8.623826, 13.208375) scale(1, -1) rotate(-90.000000) translate(-8.623826, -13.208375) "></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
