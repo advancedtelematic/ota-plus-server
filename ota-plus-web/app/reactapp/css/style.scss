@@ -2618,12 +2618,49 @@ input {
 }
 
 .relatives-modal {
+
+    .wrapper-center {
+        height: 250px;
+    }
+
     .content {
         width: 85%!important;
         max-width: 1250px!important;
 
         .rv-sankey {
             margin: auto;
+        }
+
+        .body {
+            padding: 0!important;
+            overflow-y: hidden!important;
+
+            .heading {
+                .close-sankey {
+                    color: #fff;
+                    font-size: 40px;
+                    float: right;
+                    margin-top: -17px;
+                    height: 50px;
+
+                    .fa-times-thin {
+                        font-size: 1.5em;
+
+                        &:before {
+                            content: '\00d7';
+                        }
+                    }
+                }
+            }
+
+            .footer {
+                padding: 20px!important;
+                border-top: 1px solid #e5e5e5;
+                background: #f7f7f7;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
         }
     }
 }

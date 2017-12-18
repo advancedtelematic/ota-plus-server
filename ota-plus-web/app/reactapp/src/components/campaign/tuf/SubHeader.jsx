@@ -92,15 +92,15 @@ class SubHeader extends Component {
                    value={this.newCampaignName} onChange={this.userTypesName} />
 
                 {this.renameDisabled ?
-                    <img src="/assets/img/icons/white/Rename.svg" className="edit" alt="Icon" style={{cursor: 'auto'}} />
+                    <img src="/assets/img/icons/black/edit.svg" className="edit" alt="Icon" style={{cursor: 'auto'}} />
                 :
                     <div className="icons">
                         {this.newCampaignNameLength ?
-                            <img src="/assets/img/icons/white/Tick.svg" className="rename" alt="Icon" onClick={this.renameCampaign} />
+                            <img src="/assets/img/icons/accept_icon.png" className="rename" alt="Icon" onClick={this.renameCampaign} />
                         :
                             null
                         }
-                        <img src="/assets/img/icons/white/X.svg" alt="Icon" className="cancel" onClick={this.cancelCampaignRename} />
+                        <img src="/assets/img/icons/close_icon.png" alt="Icon" className="cancel" onClick={this.cancelCampaignRename} />
                     </div>
                 }
             </div>
