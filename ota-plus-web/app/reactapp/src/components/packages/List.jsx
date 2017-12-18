@@ -98,9 +98,14 @@ class List extends Component {
     }
     highlightPackage(pack) {
         if(this.refs.list && pack) {
-            const wrapperPosition = this.refs.list.getBoundingClientRect();
-            this.refs.list.scrollTop = document.getElementById("button-package-" + pack).getBoundingClientRect().top - wrapperPosition.top - headerHeight;
             this.expandedPackageName = pack;
+            const wrapperPosition = this.refs.list.getBoundingClientRect();
+            const elementCoords = document.getElementById("button-package-" + pack).getBoundingClientRect();
+            let scrollTop = elementCoords.top - wrapperPosition.top - headerHeight + elementCoords.height;
+            let page = document.querySelector('span.content');
+            setTimeout(() => {
+                page.scrollTop = scrollTo;
+            }, 400)
         }
     }
     componentWillReceiveProps(nextProps) {

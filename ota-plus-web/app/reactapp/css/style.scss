@@ -1321,6 +1321,14 @@ input {
                                             }
                                         }
 
+                                        &.cancelled {
+                                            span {
+                                                &:first-child {
+                                                    background-color: #a5a5a5;
+                                                }
+                                            }
+                                        }
+
                                         &.not-proceed {
                                             span {
                                                 &:first-child {
