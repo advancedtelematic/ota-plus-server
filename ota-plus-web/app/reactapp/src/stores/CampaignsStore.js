@@ -601,7 +601,8 @@ export default class CampaignsStore {
                 queued: 0,
                 successful: 0,
                 notImpacted: 0,
-                failed: 0
+                failed: 0,
+                cancelled: 0,
             };
             _.each(this.campaign.statistics.stats, (statistic) => {
                 stats.affected += statistic.affected;
@@ -609,7 +610,8 @@ export default class CampaignsStore {
             });
             stats.notImpacted = stats.processed - stats.affected;
             stats.finished = this.campaign.statistics.finished;
-            stats.queued = stats.affected - stats.finished;
+            stats.cancelled = this.campaign.statistics.cancelled;
+            stats.queued = stats.affected - (stats.finished + stats.cancelled);
             stats.failed = this.campaign.statistics.failed.length;
             stats.successful = stats.finished - stats.failed;
             
