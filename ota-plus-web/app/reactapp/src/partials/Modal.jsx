@@ -30,7 +30,7 @@ class Modal extends Component {
 }
 
 Modal.propTypes = {
-    title: PropTypes.any.isRequired,
+    title: PropTypes.any,
     content: PropTypes.any.isRequired,
     actions: PropTypes.array,
     shown: PropTypes.bool,
