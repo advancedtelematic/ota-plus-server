@@ -36,7 +36,7 @@ class TufListItem extends Component {
             expandedCampaignName === campaign.name?
                 <div className="item expanded" id={"item-" + campaign.name} onClick={toggleCampaign.bind(this, campaign.name)}>
                     <div className="wrapper-center">
-                        <i className="fa fa-angle-up fa-2x" aria-hidden="true"></i>
+                        <img src="assets/img/icons/black/arrow-up.svg" alt="Icon" />
                     </div>
                 </div>
             :

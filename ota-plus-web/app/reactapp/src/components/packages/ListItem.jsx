@@ -63,7 +63,7 @@ class ListItem extends Component {
             expandedPackageName === pack.packageName ?
                 <div className="item expanded" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
                     <div className="wrapper-center">
-                        <i className="fa fa-angle-up fa-2x" aria-hidden="true"></i>
+                        <img src="assets/img/icons/black/arrow-up.svg" alt="Icon" />
                     </div>
                 </div>
             :
