@@ -12,6 +12,7 @@ import UploadBox from './UploadBox';
 import PopoverWrapper from './PopoverWrapper';
 import Switch from './Switch';
 import IntroNavigation from './IntroNavigation';
+import DependenciesModal from './DependenciesModal';
 
 export {
     Navigation,
@@ -28,4 +29,5 @@ export {
     PopoverWrapper,
     Switch,
     IntroNavigation,
+    DependenciesModal,
 }

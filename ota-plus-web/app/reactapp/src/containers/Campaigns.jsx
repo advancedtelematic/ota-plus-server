@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Loader } from '../partials';
+import { Loader, DependenciesModal } from '../partials';
 import { resetAsync } from '../utils/Common';
 import { 
     CampaignsTooltip, 
@@ -12,9 +12,6 @@ import {
     CampaignCancelCampaignModal,
     CampaignCancelGroupModal
 } from '../components/campaign';
-import { 
-    PackagesRelativesModal
-} from '../components/packages';
 import { FlatButton } from 'material-ui';
 import _ from 'underscore';
 
@@ -26,7 +23,7 @@ class Campaigns extends Component {
     @observable cancelGroupModalShown = false;
     @observable cancelCampaignModalShown = false;
     @observable updateRequestToCancel = {};
-    @observable relativesModalShown = false;
+    @observable dependenciesModalShown = false;
     @observable activeCampaign = null;
 
     constructor(props) {
@@ -42,8 +39,8 @@ class Campaigns extends Component {
         this.hideCancelGroupModal = this.hideCancelGroupModal.bind(this);
         this.showCancelCampaignModal = this.showCancelCampaignModal.bind(this);
         this.hideCancelCampaignModal = this.hideCancelCampaignModal.bind(this);
-        this.showRelativesModal = this.showRelativesModal.bind(this);
-        this.hideRelativesModal = this.hideRelativesModal.bind(this);
+        this.showDependenciesModal = this.showDependenciesModal.bind(this);
+        this.hideDependenciesModal = this.hideDependenciesModal.bind(this);
     }
     showWizard(campaignId) {
         this.campaignIdToAction = campaignId;
@@ -73,14 +70,14 @@ class Campaigns extends Component {
         this.cancelCampaignModalShown = false;
         resetAsync(this.props.campaignsStore.campaignsCancelAsync);
     }
-    showRelativesModal(activeCampaign, e) {
+    showDependenciesModal(activeCampaign, e) {
         if(e) e.preventDefault();
-        this.relativesModalShown = true;
+        this.dependenciesModalShown = true;
         this.activeCampaign = activeCampaign;
     }
-    hideRelativesModal(e) {
+    hideDependenciesModal(e) {
         if(e) e.preventDefault();
-        this.relativesModalShown = false;
+        this.dependenciesModalShown = false;
         this.activeCampaign = null;
     }
     showTooltip(e) {
@@ -123,7 +120,7 @@ class Campaigns extends Component {
                         highlightedCampaign={highlightedCampaign}
                         showCancelCampaignModal={this.showCancelCampaignModal}
                         showCancelGroupModal={this.showCancelGroupModal}
-                        showRelativesModal={this.showRelativesModal}
+                        showDependenciesModal={this.showDependenciesModal}
                     />
                 :
                     <div className="wrapper-center">
@@ -164,10 +161,10 @@ class Campaigns extends Component {
                     campaignsStore={campaignsStore}
                     updateRequest={this.updateRequestToCancel}
                 />
-                {this.relativesModalShown ?
-                    <PackagesRelativesModal 
-                        shown={this.relativesModalShown}
-                        hide={this.hideRelativesModal}
+                {this.dependenciesModalShown ?
+                    <DependenciesModal 
+                        shown={this.dependenciesModalShown}
+                        hide={this.hideDependenciesModal}
                         activeItemName={this.activeCampaign}
                         packagesStore={packagesStore}
                         campaignsStore={campaignsStore}

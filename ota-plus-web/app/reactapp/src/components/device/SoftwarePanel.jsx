@@ -17,11 +17,13 @@ class SoftwarePanel extends Component {
         this.changeFilter = this.changeFilter.bind(this);
     }
     changeSort(sort, e) {
+        const { packagesStore } = this.props;
         if(e) e.preventDefault();
-        this.props.packagesStore._prepareDevicePackages(sort);
+        packagesStore._prepareDevicePackages(sort);
     }
     changeFilter(filter) {
-        this.props.packagesStore.fetchPackages(filter);
+        const { packagesStore } = this.props;
+        packagesStore.fetchPackages(filter);
     }
     render() {
         const { devicesStore, packagesStore, hardwareStore, togglePackageAutoUpdate, toggleTufPackageAutoUpdate, onFileDrop, showPackageDetails, packagesReady } = this.props;

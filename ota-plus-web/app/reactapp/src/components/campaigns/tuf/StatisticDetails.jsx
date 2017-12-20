@@ -28,7 +28,7 @@ class StatisticDetails extends Component {
         clearInterval(this.tmpIntervalId);
     }
     render() {
-        const { campaignsStore, groupsStore, showCancelCampaignModal, showRelativesModal } = this.props;
+        const { campaignsStore, groupsStore, showCancelCampaignModal, showDependenciesModal } = this.props;
         let overallStatistics = campaignsStore.overallCampaignStatistics;
         const progress = Math.min(Math.round(overallStatistics.finished/Math.max(overallStatistics.affected, 1) * 100), 100);
         const failureRateData = [
@@ -148,7 +148,7 @@ class StatisticDetails extends Component {
                             <div className="my-tooltip">
                                 {tooltipText}
                             </div>
-                            <img src="/assets/img/icons/dependencies-icon.svg" alt="icon" onClick={showRelativesModal.bind(this, campaignsStore.campaign.name)} />
+                            <img src="/assets/img/icons/dependencies-icon.svg" alt="icon" onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)} />
                         </div>
                         <div className="status-block">
                             <div className="failure">
