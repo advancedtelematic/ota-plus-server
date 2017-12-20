@@ -2,20 +2,21 @@ import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { observable, toJS, observe } from 'mobx';
 import _ from 'underscore';
-import { Modal, Loader } from '../../partials';
+import Modal from './Modal';
+import Loader from './Loader';
 import { Sankey } from 'react-vis';
-import { AsyncStatusCallbackHandler } from '../../utils';
+import { AsyncStatusCallbackHandler } from '../utils';
 
 const defaultOpacity = "0.2";
 const highlightedOpacity = "0.5";
 const sankeyAlign = "left";
 const nodeColor = "grey";
 const linkColor = "grey";
-const sankeyWidth = 1000;
-const sankeyHeight = 700;
+let sankeyWidth = 1000;
+let sankeyHeight = 700;
 
 @observer
-class RelativesModal extends Component {
+class DependenciesModal extends Component {
   @observable loaded = false;
   @observable packages = [];
   @observable devices = [];
@@ -219,7 +220,7 @@ class RelativesModal extends Component {
     let nodes = [{
       name: 'targets.json',
       type: 'root',
-      color: "#744FFF"
+      color: "#8B60A5"
     }];
 
     _.map(source, (item, index) => {
@@ -227,7 +228,7 @@ class RelativesModal extends Component {
         name: item.id.name.substring(0, 15) + " - " + item.id.version.substring(0, 5),
         originalName: item.id.name,
         type: 'pack',
-        color: "#62B1FF",
+        color: "#6A9CD3",
         queuedOn: [],
         installedOn: [],
         campaign: null
@@ -239,13 +240,13 @@ class RelativesModal extends Component {
         if(mtu.installedOn.length) {
           packObj.installedOn.push(mtu.installedOn[0]);
         }
-        _.map(mtu.campaigns, (campaign, i) => {          
+        _.map(mtu.campaigns, (campaign, i) => {      
           nodes.push({
             originalName: campaign.name,
             name: campaign.name.substring(0, 15) + "(" + this.getCampaignStatus(campaign) + ")",
             type: 'campaign',
             status: this.getCampaignStatus(campaign),
-            color: this.getCampaignStatus(campaign) === 'finished' ? "#76FF3E" : '#5B9260',
+            color: this.getCampaignStatus(campaign) === 'finished' ? "#88c062" : '#738771',
           });
           packObj.campaign = campaign;
         });
@@ -261,7 +262,7 @@ class RelativesModal extends Component {
         uuid: device.uuid,
         section: device.section,
         type: 'device',
-        color: device.section === 'queued' ? "#FE9819" : "#DDF96C",
+        color: device.section === 'queued' ? "#F6A623" : "#e9e587",
       });
     });
     let packIndexes = [];
@@ -272,6 +273,13 @@ class RelativesModal extends Component {
     });
     let links = [];
     let nextPackIndex = 0;
+
+    if(nodes.length <= 3) {
+      sankeyHeight = 200;
+    } else {
+      sankeyHeight = 700;
+    }
+
     _.map(nodes, (node, index) => {
       switch(node.type) {
         case 'root':
@@ -345,6 +353,11 @@ class RelativesModal extends Component {
     this.links = links;
     this.loaded = true;
 
+    const that = this;
+    setTimeout(() => {
+      that.animateChart();
+    }, 5);
+
     if(highlight) {
       let itemsToHighlight = [];
       let activeItemName = this.props.activeItemName;
@@ -364,11 +377,44 @@ class RelativesModal extends Component {
         });
       });
       this.itemsToHighlight = itemsToHighlight;
-      const that = this;
       setTimeout(() => {
         that.hightlightActiveItems();
       }, 5);
     }
+  }
+  animateChart() {
+    let allTextElements = document.querySelectorAll('text');
+    let packs = [];
+    let campaigns = [];
+    let devices = [];
+    _.each(this.nodes, (node, i) => {
+      switch(node.type) {
+        case 'pack':
+          packs.push(node.name);
+          break;
+        case 'campaign':
+          campaigns.push(node.name);
+        case 'device':
+          devices.push(node.name);
+        default:
+          break;
+      }
+    });
+    _.each(allTextElements, (item, index) => {
+      item.style.transition = "transform 0.5s";
+      if(_.contains(packs, this.unescapeHTML(item.innerHTML))) {
+        item.style.transform = "translate(-30px)"; 
+      }
+      if(_.contains(campaigns, this.unescapeHTML(item.innerHTML))) {
+        item.style.transform = "translate(-5px)"; 
+      }
+      if(_.contains(devices, this.unescapeHTML(item.innerHTML))) {
+        item.style.transform = "translate(-5px)"; 
+      }
+      if(item.innerHTML === 'targets.json') {
+        item.style.transform = "translate(10px)"; 
+      }
+    });
   }
   formatData(removeHandler = false) {
     const { devicesStore, packagesStore, campaignsStore } = this.props;
@@ -479,27 +525,28 @@ class RelativesModal extends Component {
                 </a>
               </div>
               {this.nodes.length && this.links.length ?
-                <Sankey
-                  align={sankeyAlign}
-                  nodes={toJS(this.nodes)}
-                  links={toJS(this.links)}
-                  width={sankeyWidth}
-                  height={sankeyHeight}
-                  onLinkMouseOver={this.onLinkMouseAction.bind(this, 'in')}
-                  onLinkMouseOut={this.onLinkMouseAction.bind(this, 'out')}
-                  onLinkClick={this.onLinkClick.bind(this)}
-                  layout={1000}
-                  style={{
-                    labels: {
-                    },
-                    links: {
-                    },
-                    rects: {
-                      width: '15px',
-                    }
-                  }}
-                  
-                />
+                <div className={(this.nodes.length <= 3 ? "sankey-minimized" : "")}>
+                  <Sankey
+                    align={sankeyAlign}
+                    nodes={toJS(this.nodes)}
+                    links={toJS(this.links)}
+                    width={sankeyWidth}
+                    height={sankeyHeight}
+                    onLinkMouseOver={this.onLinkMouseAction.bind(this, 'in')}
+                    onLinkMouseOut={this.onLinkMouseAction.bind(this, 'out')}
+                    onLinkClick={this.onLinkClick.bind(this)}
+                    layout={1000}
+                    style={{
+                      labels: {
+                      },
+                      links: {
+                      },
+                      rects: {
+                        width: '15px',
+                      }
+                    }}
+                  />
+                </div>
               :
                 <div className="wrapper-center">
                   This item is not on the chart.
@@ -525,7 +572,7 @@ class RelativesModal extends Component {
         <Modal
           content={content}
           shown={shown}
-          className="relatives-modal"
+          className="dependencies-modal"
           hideOnClickOutside={true}
           onRequestClose={hide}
         />
@@ -533,11 +580,11 @@ class RelativesModal extends Component {
   }
 }
 
-RelativesModal.propTypes = {
+DependenciesModal.propTypes = {
 }
 
-RelativesModal.contextTypes = {
+DependenciesModal.contextTypes = {
     router: React.PropTypes.object.isRequired
 }
 
-export default RelativesModal;
+export default DependenciesModal;

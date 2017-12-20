@@ -146,18 +146,18 @@ class List extends Component {
         });
     }
     selectPackagesToDisplay() {
-        const { devicesStore } = this.props;
-        let preparedPackages = this.props.packagesStore.preparedPackages;
+        const { devicesStore, packagesStore, hardwareStore } = this.props;
+        let preparedPackages = packagesStore.preparedPackages;
         let dirPacks = {};
         let corePacks = {};
-        _.map(this.props.packagesStore.preparedPackages, (packages, letter) => {
+        _.map(packagesStore.preparedPackages, (packages, letter) => {
             dirPacks[letter] = [];
             corePacks[letter] = [];
             _.map(packages, (pack, index) => {
                 if(pack.inDirector) {
                     let filteredVersions = [];
                     _.each(pack.versions, (version, i) => {
-                        if(_.includes(version.hardwareIds, this.props.hardwareStore.activeEcu.hardwareId)) {
+                        if(_.includes(version.hardwareIds, hardwareStore.activeEcu.hardwareId)) {
                             filteredVersions.push(version);
                         }
                     })
@@ -172,8 +172,8 @@ class List extends Component {
                 if(devicesStore.device.isDirector) {
                     _.map(pack.versions, (version, ind) => {
 
-                        if(this.props.hardwareStore.activeEcu.type === 'primary') {
-                            if(version.id.version === this.props.devicesStore._getPrimaryHash()) {
+                        if(hardwareStore.activeEcu.type === 'primary') {
+                            if(version.id.version === devicesStore._getPrimaryHash()) {
                                 let packAdded = _.some(dirPacks[letter], (item, index) => {
                                     return item.packageName == version.id.name;
                                 });
