@@ -73,7 +73,7 @@ class ListItemVersion extends Component {
         return isPackageBlacklisted ? isPackageBlacklisted : false;
     }
     render() {
-        const { version, showRelativesModal } = this.props;        
+        const { version, showDependenciesModal } = this.props;        
         let isBlacklisted = this.isPackageBlacklisted(version);
         let packageName = version.id.name;
         const directorBlock = (
@@ -159,7 +159,7 @@ class ListItemVersion extends Component {
                         <div className="my-tooltip">
                             {tooltipText}
                         </div>
-                        <img src="/assets/img/icons/dependencies-icon.svg" alt="icon" onClick={showRelativesModal.bind(this, version.packageHash)} />
+                        <img src="/assets/img/icons/dependencies-icon.svg" alt="icon" onClick={showDependenciesModal.bind(this, version.packageHash)} />
                     </div>
                 </div>
             </span>

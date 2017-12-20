@@ -46,7 +46,6 @@ class TufList extends Component {
     }
 
     highlightCampaign(id) {
-        console.log(id)
         const name = _.filter(this.props.campaignsStore.campaigns, (obj) => {
             return obj.id === id
         });
@@ -54,7 +53,7 @@ class TufList extends Component {
         this.scrollToElement(id);
     }
     render() {
-        const { campaignsStore, groupsStore, showRenameModal, highlightedCampaign, showCancelCampaignModal, showRelativesModal } = this.props;
+        const { campaignsStore, groupsStore, showRenameModal, highlightedCampaign, showCancelCampaignModal, showDependenciesModal } = this.props;
         return (
             <div className="tuf-list" ref="list">
                 <div className="section-header">
@@ -97,7 +96,7 @@ class TufList extends Component {
                                                     groupsStore={groupsStore}
                                                     campaignId={campaign.id}
                                                     showCancelCampaignModal={showCancelCampaignModal}
-                                                    showRelativesModal={showRelativesModal}
+                                                    showDependenciesModal={showDependenciesModal}
                                                     key={campaign.id}
                                                 />
                                             :
@@ -152,7 +151,7 @@ class TufList extends Component {
                                                 campaignsStore={campaignsStore}
                                                 groupsStore={groupsStore}
                                                 showCancelCampaignModal={showCancelCampaignModal}
-                                                showRelativesModal={showRelativesModal}
+                                                showDependenciesModal={showDependenciesModal}
                                                 campaignId={campaign.id}
                                             />
                                         :
@@ -207,7 +206,7 @@ class TufList extends Component {
                                                 campaignsStore={campaignsStore}
                                                 groupsStore={groupsStore}
                                                 showCancelCampaignModal={showCancelCampaignModal}
-                                                showRelativesModal={showRelativesModal}
+                                                showDependenciesModal={showDependenciesModal}
                                                 campaignId={campaign.id}
                                             />
                                         :
@@ -262,7 +261,7 @@ class TufList extends Component {
                                                 campaignsStore={campaignsStore}
                                                 groupsStore={groupsStore}
                                                 showCancelCampaignModal={showCancelCampaignModal}
-                                                showRelativesModal={showRelativesModal}
+                                                showDependenciesModal={showDependenciesModal}
                                                 campaignId={campaign.id}
                                             />
                                         :

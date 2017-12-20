@@ -37,7 +37,7 @@ class List extends Component {
         this.activeTabId = value;
     }
     render() {
-        const { campaignsStore, groupsStore, showRenameModal, addNewWizard, highlightedCampaign, showCancelCampaignModal, showCancelGroupModal, showRelativesModal } = this.props;
+        const { campaignsStore, groupsStore, showRenameModal, addNewWizard, highlightedCampaign, showCancelCampaignModal, showCancelGroupModal, showDependenciesModal } = this.props;
         return (
             <span>
                 <CampaignsHeader
@@ -67,7 +67,7 @@ class List extends Component {
                                         showRenameModal={showRenameModal}
                                         highlightedCampaign={highlightedCampaign}
                                         showCancelCampaignModal={showCancelCampaignModal}
-                                        showRelativesModal={showRelativesModal}
+                                        showDependenciesModal={showDependenciesModal}
                                     />
                                 </div>
                             </Tab>
