@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Loader } from '../partials';
+import { Loader, DependenciesModal } from '../partials';
 import { 
     PackagesTooltip, 
     PackagesCreateModal,
@@ -9,7 +9,6 @@ import {
     PackagesHeader, 
     PackagesList,
     PackagesBlacklistModal,
-    PackagesRelativesModal
 } from '../components/packages';
 import { FlatButton } from 'material-ui';
 
@@ -23,7 +22,7 @@ class Packages extends Component {
     @observable blacklistAction = {};
     @observable uploadToTuf = true;
     @observable copied = false;
-    @observable relativesModalShown = false;
+    @observable dependenciesModalShown = false;
     @observable activeVersionHash = null;
 
     constructor(props) {
@@ -42,8 +41,8 @@ class Packages extends Component {
         this.onFileDrop = this.onFileDrop.bind(this);
         this.toggleTufUpload = this.toggleTufUpload.bind(this);
         this.handleCopy = this.handleCopy.bind(this);
-        this.showRelativesModal = this.showRelativesModal.bind(this);
-        this.hideRelativesModal = this.hideRelativesModal.bind(this);
+        this.showDependenciesModal = this.showDependenciesModal.bind(this);
+        this.hideDependenciesModal = this.hideDependenciesModal.bind(this);
     }
     showTooltip(e) {
         if(e) e.preventDefault();
@@ -53,14 +52,14 @@ class Packages extends Component {
         if(e) e.preventDefault();
         this.tooltipShown = false;
     }
-    showRelativesModal(activeVersionHash, e) {
+    showDependenciesModal(activeVersionHash, e) {
         if(e) e.preventDefault();
-        this.relativesModalShown = true;
+        this.dependenciesModalShown = true;
         this.activeVersionHash = activeVersionHash;
     }
-    hideRelativesModal(e) {
+    hideDependenciesModal(e) {
         if(e) e.preventDefault();
-        this.relativesModalShown = false;
+        this.dependenciesModalShown = false;
         this.activeVersionHash = null;
     }
     showCreateModal(files, e) {
@@ -137,7 +136,7 @@ class Packages extends Component {
                                 packagesStore={packagesStore}
                                 onFileDrop={this.onFileDrop}
                                 highlightedPackage={highlightedPackage}
-                                showRelativesModal={this.showRelativesModal}
+                                showDependenciesModal={this.showDependenciesModal}
                             />
                             {packagesStore.overallPackagesCount && packagesStore.packagesFetchAsync.isFetching ? 
                                 <div className="wrapper-loader">
@@ -193,10 +192,10 @@ class Packages extends Component {
                     blacklistAction={this.blacklistAction}
                     packagesStore={packagesStore}
                 />
-                {this.relativesModalShown ?
-                    <PackagesRelativesModal 
-                        shown={this.relativesModalShown}
-                        hide={this.hideRelativesModal}
+                {this.dependenciesModalShown ?
+                    <DependenciesModal 
+                        shown={this.dependenciesModalShown}
+                        hide={this.hideDependenciesModal}
                         activeItemName={this.activeVersionHash}
                         packagesStore={packagesStore}
                         campaignsStore={campaignsStore}
