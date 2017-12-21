@@ -1016,7 +1016,7 @@
 
                     &.selected {
                         background: #eee;
-                        border-left: 15px solid #96DED2;
+                        border-left: 10px solid #96DED2;
 
                         .pointer {
                             display: block;
@@ -1450,7 +1450,7 @@
                         text-decoration: none;
                         padding: 15px 0 15px 10px;
                         display: block;
-                        border-left: 15px solid transparent;
+                        border-left: 10px solid transparent;
                         position: relative;
                         @include transition;
 
