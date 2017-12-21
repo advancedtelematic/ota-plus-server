@@ -94,10 +94,13 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
 
   val builder = new GuiceApplicationBuilder()
     .configure("auth0.domain" -> auth0Domain)
+    .configure("authplus.host" -> "auth-plus")
     .configure("authplus.uri" -> authPlusUri)
     .configure("userprofile.uri" -> userProfileUri)
+    .configure("crypt.host" -> "crypt")
     .configure("crypt.uri" -> CryptHost)
     .configure("keyserver.uri" -> keyServerUri)
+    .configure("repo.pub.host" -> "reposerver")
     .configure("repo.uri" -> repoServerUri)
     .overrides(bind[TokenVerification].to[NoVerification])
   val application = builder.overrides(bind[WSClient].to(mockClient)).build
@@ -113,7 +116,7 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
 
       val zip = new ZipInputStream(new ByteArrayInputStream(contentAsBytes(result).toArray))
 
-      val nonJsonFiles = Seq("tufrepo.url", "autoprov.url", "autoprov_credentials.p12")
+      val nonJsonFiles = Seq("autoprov.url", "autoprov_credentials.p12", "tufrepo.url")
       nonJsonFiles.foreach(zip.getNextEntry.getName mustBe _)
 
       val jsonFiles = Seq("root.json", "targets.pub", "targets.sec", "treehub.json")
