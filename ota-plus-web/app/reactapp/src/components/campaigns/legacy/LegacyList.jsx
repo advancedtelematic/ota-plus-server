@@ -35,13 +35,13 @@ class LegacyList extends Component {
         const { campaignsStore, groupsStore, showRenameModal, showCancelCampaignModal, showCancelGroupModal } = this.props;
         return (
             <div className="legacy-list">
-                <div className="section-header">
+                <div className="section-header font-medium">
                     Running campaigns
                 </div>
                 <div className="campaigns-list">
                     {campaignsStore.runningLegacyCampaigns.length ?
                         <span>
-                            <div className="heading">
+                            <div className="heading font-medium">
                                 <div></div>
                                 <div className="column">Name</div>
                                 <div className="column">Start date</div>
@@ -51,7 +51,7 @@ class LegacyList extends Component {
                             </div>
                             {_.map(campaignsStore.runningLegacyCampaigns, (campaign) => {
                                 return (
-                                    <span key={campaign.id}>
+                                    <span key={campaign.id} className="font-small">
                                         <CampaignsLegacyListItem 
                                             toggleCampaign={this.toggleCampaign}
                                             showRenameModal={showRenameModal}
@@ -87,18 +87,18 @@ class LegacyList extends Component {
                             })}
                         </span>
                     :
-                        <div className="empty">
+                        <div className="empty font-small">
                             No running campaigns.
                         </div>
                     }
                 </div>
-                <div className="section-header">
+                <div className="section-header font-medium">
                     Finished campaigns
                 </div>
                 <div className="campaigns-list">
                     {campaignsStore.finishedLegacyCampaigns.length ?
                         <span>
-                            <div className="heading">
+                            <div className="heading font-medium">
                                 <div></div>
                                 <div className="column">Name</div>
                                 <div className="column">Start date</div>
@@ -108,7 +108,7 @@ class LegacyList extends Component {
                             </div>
                             {_.map(campaignsStore.finishedLegacyCampaigns, (campaign) => {
                                 return (
-                                    <span key={campaign.id}>
+                                    <span key={campaign.id} className="font-small">
                                         <CampaignsLegacyListItem 
                                             toggleCampaign={this.toggleCampaign}
                                             showRenameModal={showRenameModal}
@@ -144,7 +144,7 @@ class LegacyList extends Component {
                             })}
                         </span>
                     :
-                        <div className="empty">
+                        <div className="empty font-small">
                             No finished campaigns.
                         </div>
                     }

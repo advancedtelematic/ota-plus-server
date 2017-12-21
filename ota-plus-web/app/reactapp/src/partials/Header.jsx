@@ -14,9 +14,9 @@ const Header = (props) => {
                     {device ? <div className={"status status-" + device.deviceStatus} id={"status=" + device.deviceStatus}></div> : ''}
                 </div>
                 <div className="text">
-                    <div className="title">{title}</div>
+                    <div className="title font-big">{title}</div>
                     {subtitle ?
-                        <div className="subtitle">{subtitle}</div>
+                        <div className="subtitle font-small">{subtitle}</div>
                     :
                         null
                     }

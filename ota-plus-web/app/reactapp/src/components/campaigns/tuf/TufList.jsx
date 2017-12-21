@@ -56,13 +56,13 @@ class TufList extends Component {
         const { campaignsStore, groupsStore, showRenameModal, highlightedCampaign, showCancelCampaignModal, showDependenciesModal } = this.props;
         return (
             <div className="tuf-list" ref="list">
-                <div className="section-header">
+                <div className="section-header font-medium">
                     In preparation
                 </div>
                 <div className="campaigns-list" id="in-preparation-campaigns">
                     {campaignsStore.inPreparationCampaigns.length ?
                         <span>
-                            <div className="heading">
+                            <div className="heading font-medium">
                                 <div></div>
                                 <div className="column">Name</div>
                                 <div className="column">Created at</div>
@@ -73,7 +73,7 @@ class TufList extends Component {
                             </div>
                             {_.map(campaignsStore.inPreparationCampaigns, (campaign) => {
                                 return (
-                                    <span key={campaign.id}>
+                                    <span key={campaign.id} className="font-small">
                                         <CampaignsTufListItem 
                                             toggleCampaign={this.toggleCampaign}
                                             showRenameModal={showRenameModal}
@@ -108,18 +108,18 @@ class TufList extends Component {
                             })}
                         </span>
                     :
-                        <div className="empty">
+                        <div className="empty font-small">
                             No running campaigns.
                         </div>
                     }
                 </div>
-                <div className="section-header">
+                <div className="section-header font-medium">
                     Running campaigns
                 </div>
                 <div className="campaigns-list" id="running-campaigns">
                     {campaignsStore.runningCampaigns.length ?
                         <span>
-                            <div className="heading">
+                            <div className="heading font-medium">
                                 <div></div>
                                 <div className="column">Name</div>
                                 <div className="column">Created at</div>
@@ -130,7 +130,7 @@ class TufList extends Component {
                             </div>
                             {_.map(campaignsStore.runningCampaigns, (campaign) => {
                                 return (
-                                    <span key={campaign.id}>
+                                    <span key={campaign.id} className="font-small">
                                         <CampaignsTufListItem 
                                             toggleCampaign={this.toggleCampaign}
                                             showRenameModal={showRenameModal}
@@ -163,18 +163,18 @@ class TufList extends Component {
                             })}
                         </span>
                     :
-                        <div className="empty">
+                        <div className="empty font-small">
                             No running campaigns.
                         </div>
                     }
                 </div>
-                <div className="section-header">
+                <div className="section-header font-medium">
                     Finished campaigns
                 </div>
                 <div className="campaigns-list" id="finished-campaigns">
                     {campaignsStore.finishedCampaigns.length ?
                         <span>
-                            <div className="heading">
+                            <div className="heading font-medium">
                                 <div></div>
                                 <div className="column">Name</div>
                                 <div className="column">Created at</div>
@@ -185,7 +185,7 @@ class TufList extends Component {
                             </div>
                             {_.map(campaignsStore.finishedCampaigns, (campaign) => {
                                 return (
-                                    <span key={campaign.id}>
+                                    <span key={campaign.id} className="font-small">
                                         <CampaignsTufListItem 
                                             toggleCampaign={this.toggleCampaign}
                                             showRenameModal={showRenameModal}
@@ -218,18 +218,18 @@ class TufList extends Component {
                             })}
                         </span>
                     :
-                        <div className="empty">
+                        <div className="empty font-small">
                             No finished campaigns.
                         </div>
                     }
                 </div>
-                <div className="section-header">
+                <div className="section-header font-medium">
                     Cancelled campaigns
                 </div>
                 <div className="campaigns-list" id="cancelled-campaigns">
                     {campaignsStore.cancelledCampaigns.length ?
                         <span>
-                            <div className="heading">
+                            <div className="heading font-medium">
                                 <div></div>
                                 <div className="column">Name</div>
                                 <div className="column">Created at</div>
@@ -240,7 +240,7 @@ class TufList extends Component {
                             </div>
                             {_.map(campaignsStore.cancelledCampaigns, (campaign) => {
                                 return (
-                                    <span key={campaign.id}>
+                                    <span key={campaign.id} className="font-small">
                                         <CampaignsTufListItem 
                                             toggleCampaign={this.toggleCampaign}
                                             showRenameModal={showRenameModal}
@@ -273,7 +273,7 @@ class TufList extends Component {
                             })}
                         </span>
                     :
-                        <div className="empty">
+                        <div className="empty font-small">
                             No cancelled campaigns.
                         </div>
                     }

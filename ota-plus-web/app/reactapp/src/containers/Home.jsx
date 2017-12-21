@@ -47,7 +47,7 @@ class Home extends Component {
                     <div className="column">
                         <div className="panel panel-lightgrey">
                             <div className="panel-heading">
-                                <div className="title">
+                                <div className="title font-medium-bold">
                                     {lastDevicesTitle}
                                 </div>
                                 <div className="add">
@@ -68,7 +68,7 @@ class Home extends Component {
                     <div className="column">
                         <div className="panel panel-lightgrey">
                             <div className="panel-heading">
-                                <div className="title">
+                                <div className="title font-medium-bold">
                                     {lastPackagesTitle}
                                 </div>
                                 <div className="add">
@@ -95,7 +95,7 @@ class Home extends Component {
                     <div className="column">
                         <div className="panel panel-lightgrey">
                             <div className="panel-heading">
-                                <div className="title">
+                                <div className="title font-medium-bold">
                                     {activeCampaignsTitle}
                                 </div>
                                 <div className="add">

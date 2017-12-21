@@ -22,11 +22,11 @@ class ContentPanelHeader extends Component {
                 </Form>                
                 <div className="sort-box">
                     {devicesSort == 'asc' ? 
-                        <a href="#" onClick={changeSort.bind(this, 'desc')} id="link-sort-devices-desc">
+                        <a href="#" className="font-small" onClick={changeSort.bind(this, 'desc')} id="link-sort-devices-desc">
                             <i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z
                         </a>
                     :
-                        <a href="#" onClick={changeSort.bind(this, 'asc')} id="link-sort-devices-asc">
+                        <a href="#" className="font-small" onClick={changeSort.bind(this, 'asc')} id="link-sort-devices-asc">
                             <i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A
                         </a>
                     }
