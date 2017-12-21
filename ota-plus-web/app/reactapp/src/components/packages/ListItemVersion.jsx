@@ -154,13 +154,13 @@ class ListItemVersion extends Component {
                         :
                             null
                         }
+                    </div>                    
+                </div>
+                <div className="show-dependencies">
+                    <div className="my-tooltip">
+                        {tooltipText}
                     </div>
-                    <div className="show-dependencies">
-                        <div className="my-tooltip">
-                            {tooltipText}
-                        </div>
-                        <img src="/assets/img/icons/dependencies-icon.svg" alt="icon" onClick={showDependenciesModal.bind(this, version.packageHash)} />
-                    </div>
+                    <img src="/assets/img/icons/dependencies-icon.svg" alt="icon" onClick={showDependenciesModal.bind(this, version.packageHash)} />
                 </div>
             </span>
         );

@@ -1179,8 +1179,12 @@ input {
                                 background: #fff;
                                 padding: 20px 50px;
 
-                                .top-stats {
-                                    color: #8a8a8a;
+                                .top-container {
+                                    height: 35px;
+                                    display: flex;
+                                    align-items: center;
+                                    position: relative;
+                                    top: 3px;
 
                                     .block {
                                         display: inline-block;
@@ -1200,162 +1204,173 @@ input {
                                     }
                                 }
 
-                                .devices-progress {
-                                    width: 90%;
-                                    border: 1px solid #ccc;
-                                    border-radius: 5px;
-                                    float: left;
+                                .middle-container {
+                                    overflow: hidden;
 
-                                    &.with-bar {
-                                        margin: 20px 0;
-                                    }
-
-                                    .bar {
-                                        height: 25px;
-                                        overflow: hidden;
-                                        border-radius: 5px;
-
-                                        .failure {
-                                            height: 25px;
-                                            background-color: #fe0001;
-                                            float: left;
-                                        }
-
-                                        .success {
-                                            height: 25px;
-                                            background-color: #83d060;
-                                            float: left;
-                                        }
-
-                                        .queued {
-                                            height: 25px;
-                                            background-color: #f5a623;
-                                            float: left;
-                                        }
-
-                                        .not-impacted {
-                                            height: 25px;
-                                            background-color: #ddd;
-                                            float: left;
-                                        }
-                                        .not-proceed {
-                                            height: 25px;
-                                            background-color: #fff;
-                                            float: left;
-                                        }
-                                    }
-                                }
-
-                                .show-dependencies {
-                                    position: relative;
-                                    width: 10%;
-                                    float: left;
-                                    margin: 20px 0;
-                                    display: flex;
-                                    justify-content: flex-end;
-                                    align-items: center;
-                                    height: 25px;
-
-                                    &:hover {
-                                        .my-tooltip {
-                                            opacity: 1;
-                                        }
-                                    }
-
-                                    .my-tooltip {
-                                        opacity: 0;
-                                        position: absolute;
-                                        top: -40px;
-                                        text-align: center;
-                                        width: 140px;
-                                        right: -40px;
+                                    .devices-progress {
+                                        width: 90%;
                                         border: 1px solid #ccc;
-                                        height: 20px;
-                                        display: flex;
-                                        justify-content: center;
-                                        align-items: center;
-                                        -webkit-transition: opacity 1s;
-                                        transition: opacity 1s;
+                                        border-radius: 5px;
+                                        float: left;
+
+                                        &.with-bar {
+                                            margin: 20px 0;
+                                        }
+
+                                        .bar {
+                                            height: 25px;
+                                            overflow: hidden;
+                                            border-radius: 5px;
+
+                                            .failure {
+                                                height: 25px;
+                                                background-color: #fe0001;
+                                                float: left;
+                                            }
+
+                                            .success {
+                                                height: 25px;
+                                                background-color: #83d060;
+                                                float: left;
+                                            }
+
+                                            .queued {
+                                                height: 25px;
+                                                background-color: #f5a623;
+                                                float: left;
+                                            }
+
+                                            .not-impacted {
+                                                height: 25px;
+                                                background-color: #ddd;
+                                                float: left;
+                                            }
+                                            .not-proceed {
+                                                height: 25px;
+                                                background-color: #fff;
+                                                float: left;
+                                            }
+                                        }
                                     }
 
-                                    img {
-                                        width: 50px;
-                                        cursor: pointer;
+                                    .show-dependencies {
+                                        position: relative;
+                                        width: 10%;
+                                        float: left;
+                                        margin: 20px 0;
+                                        display: flex;
+                                        justify-content: flex-end;
+                                        align-items: center;
+                                        height: 25px;
+
+                                        &:hover {
+                                            .my-tooltip {
+                                                opacity: 1;
+                                            }
+                                        }
+
+                                        .my-tooltip {
+                                            opacity: 0;
+                                            position: absolute;
+                                            top: -40px;
+                                            text-align: center;
+                                            width: 140px;
+                                            right: -40px;
+                                            border: 1px solid #ccc;
+                                            height: 20px;
+                                            display: flex;
+                                            justify-content: center;
+                                            align-items: center;
+                                            -webkit-transition: opacity 1s;
+                                            transition: opacity 1s;
+                                        }
+
+                                        img {
+                                            width: 50px;
+                                            cursor: pointer;
+                                        }
                                     }
                                 }
 
-                                .status-block {
-                                    div {
-                                        display: inline-block;
-                                        width: 33%;
+                                .bottom-container {
+                                    height: 35px;
 
-                                        &.failure {
-                                            span {
-                                                &:first-child {
-                                                    background-color: #FE0001;
-                                                }
-                                            }
-                                        }
-
-                                        &.success {
-                                            span {
-                                                &:first-child {
-                                                    background-color: #83D060;
-                                                }
-                                            }
-                                        }
-
-                                        &.queued {
-                                            span {
-                                                &:first-child {
-                                                    background-color: #F5A623;
-                                                }
-                                            }
-                                        }
-
-                                        &.not-impacted {
-                                            span {
-                                                &:first-child {
-                                                    background-color: #ddd;
-                                                }
-                                            }
-                                        }
-
-                                        &.cancelled {
-                                            span {
-                                                &:first-child {
-                                                    background-color: #a5a5a5;
-                                                }
-                                            }
-                                        }
-
-                                        &.not-proceed {
-                                            span {
-                                                &:first-child {
-                                                    background-color: #FFF;
-                                                    border: 1px #B9B9B9 solid;
-                                                }
-                                            }
-                                        }
-
-                                        span {
+                                    .status-block {
+                                        div {
                                             display: inline-block;
+                                            width: 33%;
+                                            font-size: 10px;
 
-                                            &:first-child {
-                                                width: 15px;
-                                                height: 15px;
-                                                border-radius: 50%;
+                                            &.failure {
+                                                span {
+                                                    &:first-child {
+                                                        background-color: #FE0001;
+                                                    }
+                                                }
                                             }
 
-                                            &:nth-child(2) {
-                                                width: 100px;
+                                            &.success {
+                                                span {
+                                                    &:first-child {
+                                                        background-color: #83D060;
+                                                    }
+                                                }
                                             }
 
-                                            &:not(:last-child) {
-                                                margin-right: 15px;
+                                            &.queued {
+                                                span {
+                                                    &:first-child {
+                                                        background-color: #F5A623;
+                                                    }
+                                                }
                                             }
-                                        }                                        
-                                    }                                    
+
+                                            &.not-impacted {
+                                                span {
+                                                    &:first-child {
+                                                        background-color: #ddd;
+                                                    }
+                                                }
+                                            }
+
+                                            &.cancelled {
+                                                span {
+                                                    &:first-child {
+                                                        background-color: #a5a5a5;
+                                                    }
+                                                }
+                                            }
+
+                                            &.not-proceed {
+                                                span {
+                                                    &:first-child {
+                                                        background-color: #FFF;
+                                                        border: 1px #B9B9B9 solid;
+                                                    }
+                                                }
+                                            }
+
+                                            span {
+                                                display: inline-block;
+
+                                                &:first-child {
+                                                    width: 12px;
+                                                    height: 12px;
+                                                    border-radius: 50%;
+                                                    position: relative;
+                                                    top: 2px;
+                                                }
+
+                                                &:nth-child(2) {
+                                                    width: 100px;
+                                                }
+
+                                                &:not(:last-child) {
+                                                    margin-right: 15px;
+                                                }
+                                            }                                        
+                                        }                                    
+                                    }
                                 }
                             }
 
@@ -1959,20 +1974,27 @@ input {
                 padding: 14px 15px;
                 border: 0;
                 position: relative;
+                display: flex!important;
+                align-items: center;
+                justify-content: center;
 
-                .box-toggle {
-                    color: #fff;
-                    font-size: 40px;
-                    float: right;
-                    margin-top: -15px;
-                    height: 50px;
+                .wizard-actions {
+                    position: absolute;
+                    right: 10px;
+                    top: -5px;
 
-                    &:last-child {
-                        margin-right: 15px;
-                    }
+                    .box-toggle {
+                        color: #fff;
+                        font-size: 40px;
+                        float: right;
 
-                    .fa-times-thin:before {
-                        content: '\00d7';
+                        &:last-child {
+                            margin-right: 10px;
+                        }
+
+                        .fa-times-thin:before {
+                            content: '\00d7';
+                        }
                     }
                 }
             }
@@ -2640,16 +2662,18 @@ input {
             overflow-y: hidden!important;
 
             .heading {
+                display: flex!important;
+                align-items: center;
+                justify-content: center;
+
                 .close-sankey {
                     color: #fff;
                     font-size: 40px;
-                    float: right;
-                    margin-top: -17px;
-                    height: 50px;
+                    position: absolute;
+                    right: 10px;
+                    top: -3px;
 
                     .fa-times-thin {
-                        font-size: 1.5em;
-
                         &:before {
                             content: '\00d7';
                         }
