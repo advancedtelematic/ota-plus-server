@@ -12,8 +12,6 @@ const highlightedOpacity = "0.5";
 const sankeyAlign = "left";
 const nodeColor = "grey";
 const linkColor = "grey";
-let sankeyWidth = 1000;
-let sankeyHeight = 700;
 
 @observer
 class DependenciesModal extends Component {
@@ -24,6 +22,8 @@ class DependenciesModal extends Component {
   @observable links = [];
   @observable itemsToHighlight = [];
   @observable showOnlyActive = true;
+  @observable sankeyWidth = 1000;
+  @observable sankeyHeight = 700;
 
   constructor(props) {
       super(props);
@@ -33,12 +33,16 @@ class DependenciesModal extends Component {
       this.onLinkMouseAction = this.onLinkMouseAction.bind(this);
       this.onLinkClick = this.onLinkClick.bind(this);
       this.getCampaignStatus = this.getCampaignStatus.bind(this);
+      this.resizeSankey = this.resizeSankey.bind(this);
 
       this.sankeyModeHandler = observe(this, (change) => {
           if(change['object'].showOnlyActive === false) {
             this.formatData(true);
           }
       });
+  }
+  componentDidMount() {
+    window.addEventListener("resize", this.resizeSankey);
   }
   componentWillMount() {
       this.props.devicesStore.fetchDevices();
@@ -48,10 +52,20 @@ class DependenciesModal extends Component {
         this.props.packagesStore.fetchTufPackages();
       }
   }
+  resizeSankey() {
+    if(window.innerHeight >= 1000) {
+      this.sankeyHeight = 700;
+    } else if(window.innerHeight < 1000 && window.innerHeight > 870) {
+      this.sankeyHeight = 600;
+    } else {
+      this.sankeyHeight = 500;
+    }
+  }
   componentWillUnmount() {
     this.devicesFetchHandler();
     this.campaignsFetchHandler();
     this.packagesFetchHandler();
+    window.removeEventListener("resize", this.resizeSankey);
   }
   showFullGraph() {
     this.showOnlyActive = false;
@@ -275,11 +289,10 @@ class DependenciesModal extends Component {
     let nextPackIndex = 0;
 
     if(nodes.length <= 3) {
-      sankeyHeight = 200;
+      this.sankeyHeight = 200;
     } else {
-      sankeyHeight = 700;
+      this.resizeSankey();
     }
-
     _.map(nodes, (node, index) => {
       switch(node.type) {
         case 'root':
@@ -421,8 +434,7 @@ class DependenciesModal extends Component {
     if(removeHandler) {
       this.sankeyModeHandler();
     }
-    if(this.showOnlyActive) {
-
+    if(this.showOnlyActive) {      
       _.each(this.packages, (pack, index) => {
         pack.mtus = [];
         _.each(devicesStore.multiTargetUpdates, (mtu, i) => {
@@ -530,8 +542,8 @@ class DependenciesModal extends Component {
                     align={sankeyAlign}
                     nodes={toJS(this.nodes)}
                     links={toJS(this.links)}
-                    width={sankeyWidth}
-                    height={sankeyHeight}
+                    width={this.sankeyWidth}
+                    height={this.sankeyHeight}
                     onLinkMouseOver={this.onLinkMouseAction.bind(this, 'in')}
                     onLinkMouseOut={this.onLinkMouseAction.bind(this, 'out')}
                     onLinkClick={this.onLinkClick.bind(this)}
