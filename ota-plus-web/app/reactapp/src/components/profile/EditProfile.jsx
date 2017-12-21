@@ -39,7 +39,7 @@ class EditProfile extends Component {
         const { userStore } = this.props;
         return (
             <main id="edit-profile">
-                <div className="title">
+                <div className="title font-big">
                     <img src="/assets/img/icons/edit_black.png" alt=""/>
                     Edit profile
                 </div>
@@ -47,7 +47,7 @@ class EditProfile extends Component {
                 <hr />
 
                 <div className="panel panel-grey">
-                    <div className="panel-heading">Personal information</div>
+                    <div className="panel-heading font-big">Personal information</div>
                     <div className="panel-body">
                         {!userStore.user.fullName && userStore.userFetchAsync.isFetching ? 
                             <div className="wrapper-center">

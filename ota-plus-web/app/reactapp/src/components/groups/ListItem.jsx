@@ -39,15 +39,15 @@ class ListItem extends Component {
                     </div>
                     <div className="icon"></div>
                     <div className="desc">
-                        <div className="title">
+                        <div className="title font-medium">
                             {group.groupName}
                         </div>
-                        <div className="subtitle">
+                        <div className="subtitle font-small">
                             {t('common.deviceWithCount', {count: group.devices.total})}
                         </div>
                     </div>
                     <div className="pointer">
-                        <i className="fa fa-angle-right fa-3x"></i>
+                        <i className="fa fa-angle-right fa-2x"/>
                     </div>
                 </div>
             )

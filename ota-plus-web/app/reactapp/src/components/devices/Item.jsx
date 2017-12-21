@@ -68,7 +68,7 @@ class Item extends Component {
                         <div className={"device-status device-status-" + device.deviceStatus} title={deviceStatus}></div>
                     </div>
                     <div className="desc">
-                        <div className="title" title={device.deviceName}>{device.deviceName}</div>
+                        <div className="title font-medium" title={device.deviceName}>{device.deviceName}</div>
                         <div className="subtitle">
                             {deviceStatus !== 'Status unknown' ?
                                 <span>Last seen: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
