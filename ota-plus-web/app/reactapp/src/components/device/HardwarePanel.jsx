@@ -119,10 +119,10 @@ class HardwarePanel extends Component {
                 </div>
                 <div className="inner-container">
                     <div className="hardware-list">
-                        <div className="primary-ecus">
+                        <div className="primary-ecus font-small">
                             {primaryEcus}
                         </div>
-                        <div className="secondary-ecus">
+                        <div className="secondary-ecus font-small">
                             {secondaryEcus}
                         </div>
                     </div>

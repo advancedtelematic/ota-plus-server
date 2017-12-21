@@ -29,7 +29,7 @@ class Billing extends Component {
         const { userStore } = this.props;
         return (
             <main id="billing">
-                <div className="title">
+                <div className="title font-big">
                     <img src="/assets/img/icons/black/billing.png" alt=""/>
                     Billing
                 </div>

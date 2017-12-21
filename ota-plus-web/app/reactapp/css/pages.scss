@@ -975,6 +975,12 @@
                 padding: 30px 0 0 0;
             }
 
+            .btn-dashed {
+                span {
+                    font-size: 14px !important;
+                }
+            }
+
             .wrapper-groups {
                 height: calc(100% - 130px);
                 overflow-y: auto;
@@ -1093,19 +1099,17 @@
                         transition: width 0.2s ease-in;
 
                         .title {
-                            font-size: 20px;
                             @include textoverflowEllipsis;
                         }
 
                         .subtitle {
                             color: #ccc;
-                            font-size: 12px;
                         }
                     }
 
                     .pointer {
                         position: absolute;
-                        top: 25px;
+                        top: 31px;
                         right: 15px;
                         display: none;
                     }
@@ -1265,7 +1269,11 @@
     }
 }
 
-#page-device {    
+#page-device {
+
+    .wrapper-flex {
+        font-size: 12px!important;
+    }
 
     .page-heading {
         .icon {
@@ -1438,7 +1446,7 @@
                 .hardware-list {
                     a {
                         color: #555;
-                        font-size: 11px;
+                        font-size: 12px;
                         text-decoration: none;
                         padding: 15px 0 15px 10px;
                         display: block;
@@ -1472,7 +1480,6 @@
                             white-space: nowrap;
                             overflow: hidden;
                             span {
-                                font-size: 13px;
                                 line-height: 24px;
                             }
                         }
@@ -2827,7 +2834,6 @@
                 padding: 25px;
 
                 .pack-name {
-                    font-size: 30px;
                     margin-bottom: 25px;
                 }
 

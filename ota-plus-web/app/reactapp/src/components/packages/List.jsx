@@ -146,11 +146,11 @@ class List extends Component {
                         {_.map(packagesStore.preparedPackages, (packages, letter) => {
                             return (
                                 <span key={letter}>
-                                    <div className="header">{letter}</div>
+                                    <div className="header font-medium">{letter}</div>
                                     {_.map(packages, (pack, index) => {
                                         const that = this;
                                         return (
-                                            <span key={index}>
+                                            <span key={index} className="font-small">
                                                 <ListItem 
                                                     pack={pack}
                                                     togglePackage={this.togglePackage}
@@ -171,7 +171,7 @@ class List extends Component {
                                                     {this.expandedPackageName === pack.packageName ?
                                                         pack.inDirector ?
                                                             <div className="director-details">
-                                                                <div className="pack-name">
+                                                                <div className="pack-name font-big">
                                                                     {pack.packageName}
                                                                 </div>
                                                                 <div className="distribution">

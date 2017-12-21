@@ -55,7 +55,7 @@ class Aside extends Component {
                     }
                 </div>
                 <nav>
-                    <ul>
+                    <ul className="font-medium">
                         <li>
                             <Link to="/profile/edit" activeClassName="active" id="link-edit-profile">
                                 Edit profile
@@ -116,7 +116,7 @@ class Aside extends Component {
                     }
                 </div>
                 <nav>
-                    <ul>
+                    <ul className="font-medium">
                         <li>
                             <Link to="/profile/edit" activeClassName="active" id="link-edit-profile">
                                 Edit profile
@@ -166,7 +166,7 @@ class Aside extends Component {
                     </span>
                 </div>
                 <nav>
-                    <ul>
+                    <ul className="font-medium">
                         <li>
                             <Link to="/profile/access-keys" activeClassName="active" id="link-access-keys">
                                 Provisioning keys

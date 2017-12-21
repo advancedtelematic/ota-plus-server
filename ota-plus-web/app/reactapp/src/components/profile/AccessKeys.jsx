@@ -22,7 +22,7 @@ class AccessKeys extends Component {
         const { provisioningStore, devicesStore, groupsStore, uiCredentialsDownload, prebuiltDebrpm } = this.props;
         return (
             <main id="access-keys">
-                <div className="title top">
+                <div className="title top font-big">
                     <img src="/assets/img/icons/black/key.png" alt=""/>
                     Provisioning keys
                 </div>

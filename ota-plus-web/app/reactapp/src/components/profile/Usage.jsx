@@ -36,7 +36,7 @@ class Usage extends Component {
         const { userStore } = this.props;
         return (
             <main id="usage">
-                <div className="title">
+                <div className="title font-big">
                     <img src="/assets/img/icons/black/usage.png" alt=""/>
                     Usage
                 </div>

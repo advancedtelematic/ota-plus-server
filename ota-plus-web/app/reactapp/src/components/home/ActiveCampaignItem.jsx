@@ -39,13 +39,13 @@ class ActiveCampaignItem extends Component {
                 id={"link-campaignwizard-" + campaign.id}>
                     <div className="icon"></div>
                     <div className="desc">
-                        <div className="title">
+                        <div className="title font-medium-bold">
                             {campaign.name}
                         </div>
-                        <div className="subtitle">
+                        <div className="subtitle font-small">
                             Finished: {totalFinished}/{totalAffected}
                         </div>
-                        <div className="subtitle">
+                        <div className="subtitle font-small">
                             Failure rate: {failureRate}%
                         </div>
                     </div>
