@@ -112,7 +112,7 @@ class StatisticDetails extends Component {
                     </div>
 
                     <div className="total-progress-container">
-                        <div className="top-stats">
+                        <div className="top-container">
                             <div className="block">
                                 <div id="campaign-detail-devices-stats-processed">
                                    {overallStatistics.processed}
@@ -130,58 +130,63 @@ class StatisticDetails extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="devices-progress with-bar">
-                            <div className="bar">
-                                <div className="failure" style={{width: failureRate + '%'}}>
+                        <div className="middle-container">
+                            <div className="devices-progress with-bar">
+                                <div className="bar">
+                                    <div className="failure" style={{width: failureRate + '%'}}>
+                                    </div>
+                                    <div className="success" style={{width: successRate + '%'}}>
+                                    </div>
+                                    <div className="queued" style={{width: queuedRate + '%'}}>
+                                    </div>
+                                    <div className="not-impacted" style={{width: notImpactedRate + '%'}}>
+                                    </div>
+                                    <div className="not-proceed" style={{width: notProcessedRate + '%'}}>
+                                    </div>
                                 </div>
-                                <div className="success" style={{width: successRate + '%'}}>
+                            </div>
+                            <div className="show-dependencies">
+                                <div className="my-tooltip">
+                                    {tooltipText}
                                 </div>
-                                <div className="queued" style={{width: queuedRate + '%'}}>
-                                </div>
-                                <div className="not-impacted" style={{width: notImpactedRate + '%'}}>
-                                </div>
-                                <div className="not-proceed" style={{width: notProcessedRate + '%'}}>
-                                </div>
+                                <img src="/assets/img/icons/dependencies-icon.svg" alt="icon" onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)} />
                             </div>
                         </div>
-                        <div className="show-dependencies">
-                            <div className="my-tooltip">
-                                {tooltipText}
-                            </div>
-                            <img src="/assets/img/icons/dependencies-icon.svg" alt="icon" onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)} />
+                        <div className="bottom-container">
+                            <div className="status-block">
+                                <div className="failure">
+                                    <span></span>
+                                    <span>Failure</span>
+                                    <span>{overallStatistics.failed}</span>
+                                </div>
+                                <div className="cancelled">
+                                    <span></span>
+                                    <span>Cancelled</span>
+                                    <span>{overallStatistics.cancelled}</span>
+                                </div>
+                                <div className="queued">
+                                    <span></span>
+                                    <span>Queued</span>
+                                    <span>{overallStatistics.queued}</span>
+                                </div>
+                                <div className="not-proceed">
+                                    <span></span>
+                                    <span>Not processed</span>
+                                    <span>{notProcessed }</span>
+                                </div>
+                                <div className="success">
+                                    <span></span>
+                                    <span>Successful</span>
+                                    <span>{overallStatistics.successful}</span>
+                                </div>
+                                <div className="not-impacted">
+                                    <span></span>
+                                    <span>Not impacted</span>
+                                    <span>{overallStatistics.notImpacted}</span>
+                                </div>
+                            </div> 
                         </div>
-                        <div className="status-block">
-                            <div className="failure">
-                                <span></span>
-                                <span>Failure</span>
-                                <span>{overallStatistics.failed}</span>
-                            </div>
-                            <div className="cancelled">
-                                <span></span>
-                                <span>Cancelled</span>
-                                <span>{overallStatistics.cancelled}</span>
-                            </div>
-                            <div className="queued">
-                                <span></span>
-                                <span>Queued</span>
-                                <span>{overallStatistics.queued}</span>
-                            </div>
-                            <div className="not-proceed">
-                                <span></span>
-                                <span>Not processed</span>
-                                <span>{notProcessed }</span>
-                            </div>
-                            <div className="success">
-                                <span></span>
-                                <span>Successful</span>
-                                <span>{overallStatistics.successful}</span>
-                            </div>
-                            <div className="not-impacted">
-                                <span></span>
-                                <span>Not impacted</span>
-                                <span>{overallStatistics.notImpacted}</span>
-                            </div>
-                        </div>                        
+                                               
                     </div>
 
                     <CampaignTufGroupsList

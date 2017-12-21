@@ -416,12 +416,14 @@ class Wizard extends Component {
                         <span>
                             <div className="heading">
                                 {this.wizardSteps[this.currentStepId].title}
-                                <a href="#" id="close-wizard" className="box-toggle pack-box-close" title="Close wizard" onClick={hideWizard.bind(this, wizardIdentifier)}>
-                                    <i className="fa fa-times fa-times-thin" aria-hidden="true"></i>
-                                </a>
-                                <a href="#" id="minimize-wizard" className="box-toggle pack-box-minimize" title="Minimize wizard" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)}>
-                                    <i className="fa fa-angle-down" aria-hidden="true"></i>
-                                </a>
+                                <div className="wizard-actions">
+                                    <a href="#" id="close-wizard" className="box-toggle pack-box-close" title="Close wizard" onClick={hideWizard.bind(this, wizardIdentifier)}>
+                                        <i className="fa fa-times fa-times-thin" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="#" id="minimize-wizard" className="box-toggle pack-box-minimize" title="Minimize wizard" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)}>
+                                        <i className="fa fa-angle-down" aria-hidden="true"></i>
+                                    </a>
+                                </div>
                             </div>
                                 <span>
                                     <div className={"content-step step-" + currentStep.name}>
