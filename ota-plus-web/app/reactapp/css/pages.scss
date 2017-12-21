@@ -1910,7 +1910,7 @@
                             }
 
                             li.selected {
-                                border-left: 16px solid $color-mint;
+                                border-left: 10px solid $color-mint;
                                 padding-left: 0;
                             }
 
@@ -2846,41 +2846,47 @@
                     width: 70%;
                     float: left;
 
+                    li {
+                        position: relative;
+                    }
+
                     .heading {
                         margin-bottom: 10px;
                         font-weight: bold;
                     }
-                }
 
-                .right-box {
-                    position: relative;
-                    text-align: left;
-                    height: auto;
-                    padding: 20px 10px;
+                    .right-box {
+                        text-align: left;
+                        height: auto;
+                        padding: 20px 10px;
+                        width: 40%;
+                        float: left;
 
-                    .ecus-installed {
-                        font-weight: bold;
-                        margin-bottom: 10px;
-                    }
-
-                    .hardware-ids, .target-format {
-                        overflow: hidden;
-
-                        .heading {
-                            width: 25%;
-                            float: left;
+                        .ecus-installed {
+                            font-weight: bold;
+                            margin-bottom: 10px;
                         }
 
-                        .value {
-                            width: 75%;
-                            float: left;
-                        }
+                        .hardware-ids, .target-format {
+                            overflow: hidden;
+
+                            .heading {
+                                width: 25%;
+                                float: left;
+                            }
+
+                            .value {
+                                width: 75%;
+                                float: left;
+                            }
+                        }                        
                     }
 
                     .show-dependencies {
                         position: absolute;
                         right: 30px;
-                        top: calc(50% - 10px);
+                        top: 50%;
+                        transform: translateY(-50%);
 
                         &:hover {
                             .my-tooltip {
@@ -3075,7 +3081,6 @@
                     height: 34px;
                     padding: 0 15px;
                     border-bottom: 1px solid #ddd;
-                    border-right: 1px solid #ddd;
                     position: absolute;
                     top: 0;
                     left: 0;
