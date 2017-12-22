@@ -418,10 +418,10 @@ class Wizard extends Component {
                                 {this.wizardSteps[this.currentStepId].title}
                                 <div className="wizard-actions">
                                     <a href="#" id="close-wizard" className="box-toggle pack-box-close" title="Close wizard" onClick={hideWizard.bind(this, wizardIdentifier)}>
-                                        <i className="fa fa-times fa-times-thin" aria-hidden="true"></i>
+                                        <img src="/assets/img/icons/white/cross.svg" alt="Icon" />
                                     </a>
                                     <a href="#" id="minimize-wizard" className="box-toggle pack-box-minimize" title="Minimize wizard" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)}>
-                                        <i className="fa fa-angle-down" aria-hidden="true"></i>
+                                        <img src="/assets/img/icons/white/minimize.svg" alt="Icon" />
                                     </a>
                                 </div>
                             </div>

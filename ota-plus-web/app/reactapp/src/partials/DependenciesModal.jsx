@@ -534,7 +534,7 @@ class DependenciesModal extends Component {
               <div className="heading">
                 <span>Dependencies</span>
                 <a href="#" id="close-sankey" className="close-sankey" title="Close sankey" onClick={hide.bind(this)}>
-                    <i className="fa fa-times fa-times-thin" aria-hidden="true"></i>
+                    <img src="/assets/img/icons/white/cross.svg" alt="Icon" />
                 </a>
               </div>
               {this.nodes.length && this.links.length ?
