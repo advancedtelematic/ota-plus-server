@@ -4,9 +4,10 @@ export const APP_TITLE = 'ATS Garage';
 export const APP_LAYOUT = 'atsgarage';
 
 /* API end-points config */
-export const API_GET_MULTI_TARGET_UPDATE_INDENTIFIER='/api/v1/multi_target_updates'
-export const API_CREATE_MULTI_TARGET_UPDATE='/api/v1/admin/devices'
-export const API_FETCH_MULTI_TARGET_UPDATES='/api/v1/admin/devices'
+export const API_GET_MULTI_TARGET_UPDATE_INDENTIFIER='/api/v1/multi_target_updates';
+export const API_CREATE_MULTI_TARGET_UPDATE='/api/v1/admin/devices';
+export const API_FETCH_MULTI_TARGET_UPDATES='/api/v1/admin/devices';
+export const API_CANCEL_MULTI_TARGET_UPDATE = '/api/v2/cancel_device_update_campaign';
 
 export const API_USER_DETAILS = '/user/profile';
 export const API_USER_UPDATE = '/user/profile';
@@ -60,7 +61,6 @@ export const API_PACKAGES_DEVICE_AUTO_INSTALL = '/api/v1/auto_install';
 export const API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL = '/api/v1/admin/devices';
 export const API_PACKAGES_DEVICE_INSTALL = '/api/v1/device_updates';
 export const API_PACKAGES_DEVICE_CANCEL_INSTALLATION = '/api/v1/device_updates';
-export const API_PACKAGES_DEVICE_CANCEL_MTU_UPDATE = '/api/v2/cancel_device_update_campaign';
 export const API_PACKAGES_COUNT_INSTALLED_ECUS = '/api/v1/admin/images/installed_count';
 
 export const API_CREATE_TUF_REPO = '/api/v1/user_repo';
