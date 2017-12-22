@@ -104,7 +104,7 @@ class List extends Component {
 	        	{expandedPackage && !unmanaged ? 
     				<div className="details">
     					<div className="top">
-			        		<div className="title" id={"image-title-" + expandedPackage.id.name}>{expandedPackage.id.name}</div>
+			        		<div className="title font-medium" id={"image-title-" + expandedPackage.id.name}>{expandedPackage.id.name}</div>
 				        		<div className="status">
 				        			{isPackageBlacklisted && isPackageInstalled ?
 				        				<div className="status-container blacklisted-installed">

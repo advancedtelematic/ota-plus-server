@@ -12,7 +12,7 @@ class MtuQueueList extends Component {
     render() {
         const {devicesStore, cancelMtuUpdate } = this.props;
         const emptyQueue = (
-            <div className="queue-empty-center">
+            <div className="queue-empty-center font-small">
                 You haven't got any multi target updates pending. <br />
             </div>
         );

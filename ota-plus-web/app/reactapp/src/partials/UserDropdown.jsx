@@ -92,7 +92,7 @@ class UserDropdown extends Component {
                         />
                         <div className="user-data">
                             <div className="full-name">
-                                <span className="username">{userStore.user.fullName}</span>
+                                <span className="username font-medium">{userStore.user.fullName}</span>
                             </div>
                             <div className="email">
                                 <span className="email">{userStore.user.email}</span>

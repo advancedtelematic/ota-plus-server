@@ -16,7 +16,7 @@ class MtuListItem extends Component {
 					<div className="update-id">
 						Update ID <span id={"update-id-" + item.updateId}>{item.updateId}</span>
 					</div>
-					<div className="created-at">
+					<div className="created-at font-small">
 						Received at: <span id={"received-at-" + item.updateId}>{moment(item.receivedAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
 					</div>
 				</div>

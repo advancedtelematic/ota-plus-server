@@ -87,7 +87,7 @@ export default class ContentPanel extends Component {
                                         </div>
                                     :
                                     <span className="content-empty">
-                                        <div className="wrapper-center">
+                                        <div className="wrapper-center font-big">
                                             Oops, there are no devices to show.
                                         </div>
                                     </span>

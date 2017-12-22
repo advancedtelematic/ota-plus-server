@@ -54,7 +54,7 @@ class HardwarePanel extends Component {
         }
         const primaryEcus = (
             <span>
-                <div className="section-header">
+                <div className="section-header font-medium">
                     {primaryEcusTitle}
                 </div>
                 <PopoverWrapper
@@ -77,7 +77,7 @@ class HardwarePanel extends Component {
         );
         const secondaryEcus = (
             <span>
-                <div className="section-header">
+                <div className="section-header font-medium">
                     {secondaryEcusTitle}
                     <img src="/assets/img/icons/questionmark.png" alt="" className="hardware-secondary-details" 
                          onClick={this.showSecondaryDescription} id="hardware-secondary-ecu-details" 

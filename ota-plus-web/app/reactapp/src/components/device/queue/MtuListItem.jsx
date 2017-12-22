@@ -10,7 +10,7 @@ class MultiTargetITem extends Component {
         const { item, hardwareId, updateId, length, cancelMtuUpdate, inFlight } = this.props;
         let hash = item.image.fileinfo.hashes.sha256;
         return (
-            <li id={"queued-entry-" + hash} className={"multi-target-entry" + (inFlight ? " pending" : "")}>
+            <li id={"queued-entry-" + hash} className={"multi-target-entry font-small" + (inFlight ? " pending" : "")}>
                 <div className="desc">
                     <div>
                         Update ID <span id={"update-id-" + updateId}>{updateId}</span>
