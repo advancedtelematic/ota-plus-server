@@ -28,7 +28,7 @@ class List extends Component {
                     </ul>
                 :
                     packagesStore.deviceQueue.length ?
-                        <ul className={"list queue" + (!packagesStore.deviceQueue.length ? " empty" : "")}>
+                        <ul className={"list queue font-small" + (!packagesStore.deviceQueue.length ? " empty" : "")}>
                             {_.map(packagesStore.deviceQueue, (request, index) => {
                                 return (
                                     <ListItem

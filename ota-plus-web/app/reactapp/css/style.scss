@@ -25,6 +25,74 @@ $font: 'akkurat';
     font-size: 12px !important;
 }
 
+.dialog {
+    .content {
+        .heading {
+            @extend .font-medium;
+        }
+        .body {
+            @extend .font-small;
+
+            input, label {
+                @extend .font-medium;
+            }
+
+            .hardware-ids-select#hardware-ids-select {
+                &>div {
+                    @extend .font-medium;
+                }
+            }
+
+            .ios-list {
+                span, div {
+                    @extend .font-medium;
+                }
+
+                div.subtitle {
+                    @extend .font-small;
+                }
+                .step-summary {
+                    .title {
+                        @extend .font-big;
+                    }
+                }
+            }
+        }
+    }
+}
+
+main#edit-profile {
+    form {
+        div {
+            @extend .font-medium;
+        }
+    }
+}
+
+main#billing {
+    .billing-features {
+        li {
+            @extend .font-small;
+        }
+        .billing-subdesc {
+            @extend .font-small;
+        }
+    }
+    .billing-plan-body {
+        .text-center {
+            @extend .font-small;
+        }
+    }
+}
+
+main#access-keys {
+    .desc {
+        .title {
+            @extend .font-medium;
+        }
+    }
+}
+
 .bar-chart {
     padding-left: 25px;
 
@@ -153,6 +221,12 @@ body {
     background-size: cover;
     padding-top: 50px;
     overflow-y: hidden;
+
+    .btn-main {
+        span {
+            font-size: 14px !important;
+        }
+    }
 
     &.whitened {
         background: url('/assets/img/bg_white.png') no-repeat;
@@ -2788,6 +2862,7 @@ input {
 .create-group-modal, .rename-group-modal,
 .create-device-modal, .rename-device-modal,
 .create-campaign-modal, .rename-campaign-modal {
+
     .content {
         width: 500px !important;
     }
@@ -2980,8 +3055,6 @@ div[role=presentation] {
 }    
 
 .add-package-modal {
-
-
 
     .content {
 
@@ -3806,6 +3879,14 @@ div[role=presentation] {
 .hardware-pk-popover {
     overflow-y: visible!important;
 
+    .headring {
+        font-size: 14px;
+    }
+
+    pre {
+        font-size: 12px;
+    }
+
     div {
 
         &:first-child {
@@ -4012,7 +4093,7 @@ div[role=presentation] {
             height: 50px;
             text-align: left;
             color: white;
-            font-size: 16px;
+            @extend .font-medium;
             font-family: akkurat;
             text-transform: uppercase;
             font-weight: bold;
@@ -4074,6 +4155,14 @@ div[role=presentation] {
 
                 .table {
                     margin-bottom: 0;
+
+                    .item {
+                        font-size: 12px;
+                    }
+                }
+
+                .header, .fake-header {
+                    font-size: 14px;
                 }
 
                 .table>tbody>tr th {
@@ -4108,11 +4197,16 @@ div[role=presentation] {
                 .ios-list {
                     height: 610px;
 
+                    .header, .fake-header {
+                        font-size: 14px;
+                    }
+
                     .dnd-zone {
                         position: relative;
                     }
 
                     .item {
+                        font-size: 12px;
 
                         &.ondevice {
 
