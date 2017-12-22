@@ -13,7 +13,7 @@ class List extends Component {
     render() {
         const { packagesStore, device } = this.props;
         const emptyHistory = (
-            <div className="queue-empty-center">
+            <div className="queue-empty-center font-small">
                 Installation history is empty. <br />
                 The installation of the queued packages will start
                 automatically when your device connects.
@@ -29,7 +29,7 @@ class List extends Component {
                     </ul>
                 :
                     packagesStore.deviceHistory.length ?
-                        <ul className="list history">
+                        <ul className="list history font-small">
                             {_.map(packagesStore.deviceHistory, (request, index) => {
                                 const foundUpdateLog = _.findWhere(packagesStore.deviceUpdatesLogs, {updateId: request.updateId});
                                 return (

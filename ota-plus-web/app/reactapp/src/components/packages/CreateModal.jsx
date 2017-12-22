@@ -358,7 +358,7 @@ class CreateModal extends Component {
                                         </div>
                                     </div>
                                     <div className="col-xs-10">
-                                        <div className="tuf-title" id="tuf-title">
+                                        <div className="tuf-title font-medium" id="tuf-title">
                                             TUF repository
                                         </div>
                                     </div>
@@ -368,12 +368,12 @@ class CreateModal extends Component {
                                 <div className="col-xs-10 col-xs-offset-2">
                                     <div className="tuf-description" id="tuf-description">
                                         {uploadToTuf ?
-                                            <span>
+                                            <span className="font-small">
                                                 Upload package to the TUF repository and regenerate signed metadata. 
                                                 This package will only be installable on devices that were automatically provisioned.
                                             </span>
                                         :
-                                            <span>
+                                            <span className="font-small">
                                                 This package will only be installable on devices that were created with the pre-builds DEB/RPM.
                                             </span>
                                         }

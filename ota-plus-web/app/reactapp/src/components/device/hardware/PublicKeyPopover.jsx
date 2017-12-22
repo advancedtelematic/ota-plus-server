@@ -41,7 +41,7 @@ class PublicKeyPopover extends Component {
                                 <FlatButton
                                     label="Copy to clipboard"
                                     type="button"
-                                    className="btn-main"
+                                    className="btn-main font-medium"
                                 />
                             </CopyToClipboard>
                             <VelocityTransitionGroup
