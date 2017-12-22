@@ -1102,6 +1102,11 @@ input {
                             padding: 1px 10px;
                             border-radius: 10px;
                             display: inline-block;
+                            @include transition;
+
+                            &:hover {
+                                background: $color-mint2;
+                            }
                         }
                     }
 
@@ -2084,20 +2089,18 @@ input {
 
                 .wizard-actions {
                     position: absolute;
-                    right: 10px;
-                    top: -5px;
+                    right: 15px;
+                    top: 10px;
 
                     .box-toggle {
-                        color: #fff;
-                        font-size: 40px;
                         float: right;
 
                         &:last-child {
-                            margin-right: 5px;
+                            margin-right: 10px;
                         }
 
-                        .fa-times-thin:before {
-                            content: '\00d7';
+                        img {
+                            width: 19px;
                         }
                     }
                 }
@@ -2771,16 +2774,12 @@ input {
                 justify-content: center;
 
                 .close-sankey {
-                    color: #fff;
-                    font-size: 40px;
                     position: absolute;
-                    right: 10px;
-                    top: -3px;
+                    right: 15px;
+                    top: 10px;
 
-                    .fa-times-thin {
-                        &:before {
-                            content: '\00d7';
-                        }
+                    img {
+                        width: 19px;
                     }
                 }
             }
