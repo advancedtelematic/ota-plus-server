@@ -2894,31 +2894,23 @@
                         top: 50%;
                         transform: translateY(-50%);
 
-                        &:hover {
-                            .my-tooltip {
-                                opacity: 1;
-                            }
-                        }
-
-                        .my-tooltip {
-                            opacity: 0;
-                            position: absolute;
-                            top: -25px;
-                            text-align: center;
-                            width: 140px;
-                            right: -15px;
-                            border: 1px solid #ccc;
-                            height: 20px;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            -webkit-transition: opacity 1s;
-                            transition: opacity 1s;
-                        }
-
-                        img {
+                        .icon {
+                            background: url(/assets/img/icons/dependencies-icon.svg);
                             width: 50px;
+                            height: 50px;
+                            background-size: cover;
                             cursor: pointer;
+                            transition: all 0.5s;
+                        }
+                        
+                        &:hover {
+                            .icon {
+                                background: url(/assets/img/icons/dependencies-icon-active.svg);
+                                width: 50px;
+                                height: 50px;
+                                background-size: cover;
+                                cursor: pointer;
+                            }
                         }
                     }
                 }

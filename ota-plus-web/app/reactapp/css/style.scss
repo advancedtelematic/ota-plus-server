@@ -1256,7 +1256,7 @@ input {
                                         .bar {
                                             height: 25px;
                                             overflow: hidden;
-                                            border-radius: 5px;
+                                            border-radius: 4px;
 
                                             .failure {
                                                 height: 25px;
@@ -1299,32 +1299,26 @@ input {
                                         align-items: center;
                                         height: 25px;
 
+                                        .icon {
+                                            background: url(/assets/img/icons/dependencies-icon.svg);
+                                            width: 50px;
+                                            height: 50px;
+                                            background-size: cover;
+                                            cursor: pointer;
+                                            transition: all 0.5s;
+                                        }
+                                        
                                         &:hover {
-                                            .my-tooltip {
-                                                opacity: 1;
+                                            .icon {
+                                                background: url(/assets/img/icons/dependencies-icon-active.svg);
+                                                width: 50px;
+                                                height: 50px;
+                                                background-size: cover;
+                                                cursor: pointer;
                                             }
                                         }
 
-                                        .my-tooltip {
-                                            opacity: 0;
-                                            position: absolute;
-                                            top: -40px;
-                                            text-align: center;
-                                            width: 140px;
-                                            right: -40px;
-                                            border: 1px solid #ccc;
-                                            height: 20px;
-                                            display: flex;
-                                            justify-content: center;
-                                            align-items: center;
-                                            -webkit-transition: opacity 1s;
-                                            transition: opacity 1s;
-                                        }
 
-                                        img {
-                                            width: 50px;
-                                            cursor: pointer;
-                                        }
                                     }
                                 }
 
@@ -2025,7 +2019,7 @@ input {
                         float: right;
 
                         &:last-child {
-                            margin-right: 10px;
+                            margin-right: 5px;
                         }
 
                         .fa-times-thin:before {

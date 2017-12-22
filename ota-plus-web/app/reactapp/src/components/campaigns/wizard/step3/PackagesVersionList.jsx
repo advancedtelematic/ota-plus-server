@@ -212,7 +212,7 @@ class PackagesVersionList extends Component {
                                             {pack.packageName}
                                         </span>
                                         <div className="in-director">
-                                            <img src="/assets/img/icons/black/lock.png" alt="Director" />
+                                            <img src="/assets/img/icons/black/lock.svg" alt="Director" />
                                         </div>
                                     </div>
                                 </div>

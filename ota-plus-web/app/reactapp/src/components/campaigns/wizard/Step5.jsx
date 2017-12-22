@@ -83,7 +83,7 @@ class WizardStep5 extends Component {
                                                                                 update.toPackageName
                                                                             }
                                                                             <span className="in-director">
-                                                                                <img src="/assets/img/icons/black/lock.png" alt="Director" />
+                                                                                <img src="/assets/img/icons/black/lock.svg" alt="Director" />
                                                                             </span>
                                                                         </div>
                                                                     </div>
@@ -94,7 +94,7 @@ class WizardStep5 extends Component {
                                                                         <div className="value">
                                                                             {update.toPackageName}
                                                                             <span className="in-director">
-                                                                                <img src="/assets/img/icons/black/lock.png" alt="Director" />
+                                                                                <img src="/assets/img/icons/black/lock.svg" alt="Director" />
                                                                             </span>
                                                                         </div>
                                                                     </div>

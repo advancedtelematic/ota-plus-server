@@ -80,12 +80,13 @@ class Device extends Component {
         packagesStore.cancelInstallation(this.props.params.id, requestId);
     }
     cancelMtuUpdate(updateId) {
-        const { packagesStore } = this.props;
+        const { devicesStore } = this.props;
+        let deviceId = this.props.params.id;
         let data = {
             update: updateId,
-            device: this.props.params.id
+            device: deviceId
         };
-        packagesStore.cancelMtuUpdate(data);
+        devicesStore.cancelMtuUpdate(data);
     }
     selectEcu(hardwareId, serial, hash, type, e) {
         if(e) e.preventDefault();

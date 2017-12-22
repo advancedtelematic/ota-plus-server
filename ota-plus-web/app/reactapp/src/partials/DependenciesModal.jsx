@@ -114,6 +114,7 @@ class DependenciesModal extends Component {
         let campaignName = linkdata.target.originalName;
         let campaign = _.find(campaignsStore.campaigns, campaign => campaign.name === campaignName);
         this.context.router.push(`/campaigns/${campaign.id}`);
+        hide();
         break;
       case 'device':
         let deviceId = linkdata.target.uuid;

@@ -64,7 +64,6 @@ export default class PackagesStore {
     @observable packagesDirectorDeviceDisableAutoInstallAsync = {};
     @observable packagesDeviceInstallAsync = {};
     @observable packagesDeviceCancelInstallationAsync = {};
-    @observable packagesDeviceCancelMtuUpdateAsync = {};
     @observable page = null;
     @observable initialPackages = [];
     @observable packages = [];
@@ -142,7 +141,6 @@ export default class PackagesStore {
         resetAsync(this.packagesDirectorDeviceDisableAutoInstallAsync);
         resetAsync(this.packagesDeviceInstallAsync);
         resetAsync(this.packagesDeviceCancelInstallationAsync);
-        resetAsync(this.packagesDeviceCancelMtuUpdateAsync);
     }
 
     fetchDirectorRepoExists() {
@@ -874,17 +872,6 @@ export default class PackagesStore {
             }.bind(this))
             .catch(function(error) {
                 this.packagesDeviceCancelInstallationAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    cancelMtuUpdate(data) {
-        resetAsync(this.packagesDeviceCancelMtuUpdateAsync, true);
-        return axios.post(API_PACKAGES_DEVICE_CANCEL_MTU_UPDATE, data)
-            .then(function(response) {
-                this.packagesDeviceCancelMtuUpdateAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.packagesDeviceCancelMtuUpdateAsync = handleAsyncError(error);
             }.bind(this));
     }
 

@@ -23,6 +23,11 @@ class TufList extends Component {
     componentDidMount() {
         this.highlightCampaign(this.props.highlightedCampaign);
     }
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.highlightedCampaign !== this.props.highlightedCampaign) {
+            this.highlightCampaign(nextProps.highlightedCampaign);
+        }
+    }
     toggleCampaign(campaignName, e) {
         if(e) e.preventDefault();
         this.prevExpandedCampaignName = this.expandedCampaignName;
@@ -32,25 +37,23 @@ class TufList extends Component {
             that.expandedCampaignName = (campaignName !== that.prevExpandedCampaignName) ? campaignName : null;
         }, 400);
     }
-
     scrollToElement(id) {
-        if (id) {
-            const wrapperPosition = this.refs.list.getBoundingClientRect();
-            const elementCoords = document.getElementById("item-" + id).getBoundingClientRect();
-            let scrollTo = elementCoords.top - wrapperPosition.top + elementCoords.height;
-            let page = document.querySelector('span.content-container');
-            setTimeout(() => {
-                page.scrollTop = scrollTo;
-            }, 400)
-        }
+        const wrapperPosition = this.refs.list.getBoundingClientRect();
+        const elementCoords = document.getElementById("item-" + id).getBoundingClientRect();
+        let scrollTo = elementCoords.top - wrapperPosition.top + elementCoords.height;
+        let page = document.querySelector('span.content-container');
+        setTimeout(() => {
+            page.scrollTop = scrollTo;
+        }, 400)
     }
-
     highlightCampaign(id) {
-        const name = _.filter(this.props.campaignsStore.campaigns, (obj) => {
-            return obj.id === id
-        });
-        this.expandedCampaignName = name[0].name;
-        this.scrollToElement(id);
+        if(this.refs.list && id) {
+            const name = _.filter(this.props.campaignsStore.campaigns, (obj) => {
+                return obj.id === id;
+            });
+            this.expandedCampaignName = name[0].name;
+            this.scrollToElement(id);
+        }
     }
     render() {
         const { campaignsStore, groupsStore, showRenameModal, highlightedCampaign, showCancelCampaignModal, showDependenciesModal } = this.props;
