@@ -7,20 +7,22 @@ import java.util.UUID
 import java.util.zip._
 
 import akka.actor.ActorSystem
+import akka.http.scaladsl.model.Uri
 import akka.stream.ActorMaterializer
+import akka.util.ByteString
 import com.advancedtelematic.api._
-import com.advancedtelematic.auth.{AccessToken, ApiAuthAction, AuthenticatedRequest}
-import com.advancedtelematic.libtuf.data.TufDataType.{EdKeyType, EdTufKeyPair, RSATufKeyPair, RsaKeyType, TufKeyPair}
+import com.advancedtelematic.auth.{AccessToken, ApiAuthAction}
+import com.advancedtelematic.libtuf.data.TufDataType.TufKeyPair
+import org.genivi.sota.data.Namespace
 import play.api.Configuration
-import play.api.http.{HeaderNames, HttpEntity}
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, JsValue, Json, Writes}
+import play.api.libs.json.{JsPath, Json, Writes}
 import play.api.libs.ws.WSClient
-import play.api.mvc._
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 
 import scala.async.Async.{async, await}
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Success
+import scala.util.control.NoStackTrace
 
 object ClientToolController {
 
@@ -54,7 +56,14 @@ object ClientToolController {
   implicit val allParamsWrites: Writes[AllParams] = (
     JsPath.write[AuthParams] and
     (JsPath \ "ostree").write[OSTreeParams]
-  ) (unlift(AllParams.unapply _))
+  ) (unlift(AllParams.unapply))
+
+  final case class AccountNotActivated(accountName: String)
+    extends Throwable(s"Account '$accountName' not activated") with NoStackTrace
+
+  final val RepoIdHeader = "x-ats-tuf-repo-id"
+  final case class MissingRepoIdHeader()
+    extends Throwable(s"Missing header '$RepoIdHeader'") with NoStackTrace
 }
 
 @Singleton
@@ -69,9 +78,9 @@ class ClientToolController @Inject()(
 
   import ClientToolController._
 
-  val cryptApi = new CryptApi(conf, clientExec)
+  implicit val materializer: ActorMaterializer = ActorMaterializer()
 
-  def accountName(request: AuthenticatedRequest[_]): String = request.namespace.get
+  val cryptApi = new CryptApi(conf, clientExec)
 
   def getOAuth2Params(userId: UserId, token: AccessToken) : Future[AuthParams] =
     userProfileApi.getFeature(userId, FeatureName("treehub"))
@@ -84,22 +93,33 @@ class ClientToolController @Inject()(
         }
       }
 
-  def getAuthParams(userId: UserId, token: AccessToken) : Future[AuthParams] =
-    if(conf.getOptional[String]("authplus.host").isDefined) {
-      getOAuth2Params(userId, token)
-    } else {
-      Future.successful(AuthParams(noAuth = Some(true)))
-    }
+  type CredentialsData = ByteString
 
-  private def numberSuffix(i: Int) =
-    if (i > 0) i.toString else ""
+  def getCryptCredentials(namespace: Namespace, keyUuid: UUID) : Future[(Uri,CredentialsData)] = for {
+    accountInfo <- cryptApi.getAccountInfo(namespace.get)
+    gatewayUri = cryptApi.getAccountGatewayUri(accountInfo.getOrElse(throw AccountNotActivated(namespace.get)))
+    credentials <- cryptApi.downloadCredentials(namespace.get, keyUuid)
+    credentialsData <- credentials.consumeData(materializer)
+  } yield (gatewayUri, credentialsData)
 
+  type RootJsonData = ByteString
 
-  private def writeZip(request: AuthenticatedRequest[AnyContent], keyUUID: UUID, zip: ZipOutputStream): Future[Unit] = {
+  def getTufRepoCredentials(namespace: Namespace) : Future[(RootJsonData,Seq[TufKeyPair])] = for {
+    result <- repoServerApi.rootJsonResult(namespace)
+    body <- result.body.consumeData(materializer)
+    repoId = if (result.header.status == play.api.http.Status.OK) {
+        result.header.headers.getOrElse(RepoIdHeader, throw MissingRepoIdHeader())
+      } else {
+        throw RemoteApiError(result, s"GET root.json returns error: ${body.toString}")
+      }
+    targetKeys <- keyServerApi.targetKeys(repoId)
+  } yield (body, targetKeys)
+
+  private def writeZip(namespace: Namespace, accessToken: AccessToken, keyUUID: UUID, zip: ZipOutputStream)
+    : Future[Unit] = {
+
     import io.circe.syntax._
     import com.advancedtelematic.libtuf.data.TufCodecs.{tufKeyEncoder, tufPrivateKeyEncoder}
-
-    implicit val materializer: ActorMaterializer = ActorMaterializer()
 
     def writeZipEntry(name: String, data: Array[Byte]): Unit = {
       zip.putNextEntry(new ZipEntry(name))
@@ -107,53 +127,44 @@ class ClientToolController @Inject()(
       zip.closeEntry()
     }
 
-    writeZipEntry("tufrepo.url", repoPubApiUri.getBytes)
-
     async {
-      val accountInfo = await(cryptApi.getAccountInfo(accountName(request))).getOrElse(
-        throw new Exception("Couldn't get account info"))
-
-      writeZipEntry("autoprov.url", cryptApi.getAccountGatewayUri(accountInfo).toString.getBytes)
-
-      val credentials = await(cryptApi.downloadCredentials(accountName(request), keyUUID))
-      val data = await(credentials.consumeData(materializer))
-      writeZipEntry("autoprov_credentials.p12", data.toArray)
-
-      val rootJsonResult = await(repoServerApi.rootJsonResult(request.namespace))
-      val repoId = rootJsonResult.header.headers.getOrElse("x-ats-tuf-repo-id",
-        throw RemoteApiError(rootJsonResult, "error downloading root.json: missing repo id header"))
-
-      val rootJsonBody = await(rootJsonResult.body.consumeData(materializer))
-
-      if (rootJsonResult.header.status >= 400) {
-        throw RemoteApiError(rootJsonResult, s"error downloading root.json: ${rootJsonBody.toString}")
+      if(conf.getOptional[String]("crypt.host").isDefined) {
+        val (gatewayUri, credentialsData) = await(getCryptCredentials(namespace, keyUUID))
+        writeZipEntry("autoprov.url", gatewayUri.toString.getBytes)
+        writeZipEntry("autoprov_credentials.p12", credentialsData.toArray)
       }
+      if(conf.getOptional[String]("repo.pub.host").isDefined) {
+        val (rootJson, targetKeys) = await(getTufRepoCredentials(namespace))
+        writeZipEntry("tufrepo.url", repoPubApiUri.getBytes)
+        writeZipEntry("root.json", rootJson.toArray)
 
-      writeZipEntry("root.json", rootJsonBody.toArray)
-
-      val keyPairs = await(keyServerApi.targetKeys(repoId))
-      keyPairs.indices.zip(keyPairs).foreach { case (i, pair) =>
-        writeZipEntry(s"targets${numberSuffix(i)}.pub", pair.pubkey.asJson.spaces2.getBytes)
-        writeZipEntry(s"targets${numberSuffix(i)}.sec", pair.privkey.asJson.spaces2.getBytes)
+        def numberSuffix(i: Int) = if (i > 0) i.toString else ""
+        targetKeys.indices.zip(targetKeys).foreach { case (i, pair) =>
+          writeZipEntry(s"targets${numberSuffix(i)}.pub", pair.pubkey.asJson.spaces2.getBytes)
+          writeZipEntry(s"targets${numberSuffix(i)}.sec", pair.privkey.asJson.spaces2.getBytes)
+        }
       }
-
-      val authParams = await(getAuthParams(request.idToken.claims.userId, request.accessToken))
+      val authParams = if(conf.getOptional[String]("authplus.host").isDefined) {
+        await(getOAuth2Params(UserId(namespace.get), accessToken))
+      } else {
+        AuthParams(noAuth = Some(true))
+      }
       writeZipEntry("treehub.json", Json.prettyPrint(Json.toJson(
         AllParams(authParams, OSTreeParams(treehubPubApiUri)))).getBytes())
     }
   }
 
   def downloadClientToolBundle(keyUUID: UUID): Action[AnyContent] = authAction.async { implicit request =>
-    val d = Files.createTempDirectory("ota-plus")
-    val f = d.resolve("credentials.zip").toFile
+    val dir = Files.createTempDirectory("ota-plus")
+    val file = dir.resolve("credentials.zip").toFile
+    val zip = new ZipOutputStream(new FileOutputStream(file))
 
-    val zip = new ZipOutputStream(new FileOutputStream(f))
-    writeZip(request, keyUUID, zip).map { _ =>
+    writeZip(request.namespace, request.accessToken, keyUUID, zip).map { _ =>
       zip.close()
-      Ok.sendFile(f, onClose = () => { f.delete() })
+      Ok.sendFile(file, onClose = () => { file.delete() })
     }.recover {
       case t =>
-        f.delete()
+        file.delete()
         throw t
     }
   }
