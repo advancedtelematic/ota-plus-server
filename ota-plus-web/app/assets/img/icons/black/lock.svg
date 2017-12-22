@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>Lock_Icon_small</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M5.99780078,11.9956016 C9.31029469,11.9956016 11.9956016,9.31029469 11.9956016,5.99780078 C11.9956016,2.68530688 9.31029469,0 5.99780078,0 C2.68530688,0 0,2.68530688 0,5.99780078 C0,9.31029469 2.68530688,11.9956016 5.99780078,11.9956016 Z" id="path-1"></path>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="11.9956016" height="11.9956016" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Lock_Icon_small" stroke="#707070">
+            <g id="Group-3">
+                <g id="Page-1" transform="translate(3.194321, 2.129547)" stroke-linecap="round" stroke-width="0.3" stroke-linejoin="round">
+                    <g id="Group-2">
+                        <path d="M0.778467909,2.71094351 C0.430937592,2.71094351 0.147885241,2.98275658 0.147885241,3.33058267 L0.426796806,6.23120379 C0.426796806,6.57932564 0.709849157,6.85173026 1.05737947,6.85173026 L4.29222124,6.85173026 C4.63975155,6.85173026 4.9228039,6.573706 4.9228039,6.22558415 L5.20201124,3.3282165 C5.20201124,2.98039042 4.91895889,2.71094351 4.5711328,2.71094351 L0.778467909,2.71094351 Z" id="Stroke-1"></path>
+                        <path d="M3.00496894,5.66864833 L2.34480923,5.66864833 L2.22058563,4.64616977 C2.22058563,4.39979296 2.42407572,4.20488021 2.67459332,4.20488021 C2.92540668,4.20488021 3.12889678,4.39713103 3.12889678,4.64350784 L3.00496894,5.66864833 Z" id="Stroke-3"></path>
+                        <path d="M1.34424726,2.71094351 L1.34424726,1.39091985 C1.34424726,0.705323869 1.97335108,0.14779651 2.67521443,0.14779651 C3.37766933,0.14779651 4.0061816,0.705323869 4.0061816,1.39091985 L4.0061816,2.71094351" id="Stroke-5"></path>
+                    </g>
+                </g>
+                <use id="Oval-3" mask="url(#mask-2)" stroke-width="0.6" xlink:href="#path-1"></use>
+            </g>
+        </g>
+    </g>
+</svg>

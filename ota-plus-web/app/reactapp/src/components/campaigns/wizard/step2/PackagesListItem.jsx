@@ -20,7 +20,7 @@ class PackagesListItem extends Component {
                         </span>
                         {pack.inDirector ?
                             <div className="in-director">
-                                <img src="/assets/img/icons/black/lock.png" alt="Director" />
+                                <img src="/assets/img/icons/black/lock.svg" alt="Director" />
                             </div>
                         :
                             null

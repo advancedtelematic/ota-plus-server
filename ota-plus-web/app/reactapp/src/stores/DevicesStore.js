@@ -10,7 +10,8 @@ import {
     API_DEVICES_UPDATES_LOGS,
     API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
     API_CREATE_MULTI_TARGET_UPDATE,
-    API_FETCH_MULTI_TARGET_UPDATES
+    API_FETCH_MULTI_TARGET_UPDATES,
+    API_CANCEL_MULTI_TARGET_UPDATE
 } from '../config';
 import {
     resetAsync,
@@ -49,6 +50,7 @@ export default class DevicesStore {
     @observable legacyDevicesCount = 0;
     @observable directorDevicesCount = 0;
     @observable directorDevicesIds = [];
+    @observable multiTargetUpdatesCancelAsync = {};
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
@@ -63,6 +65,7 @@ export default class DevicesStore {
         resetAsync(this.devicesRenameAsync);
         resetAsync(this.multiTargetUpdateCreateAsync);
         resetAsync(this.multiTargetUpdatesFetchAsync);
+        resetAsync(this.multiTargetUpdatesCancelAsync);
         this.devicesLimit = 30;
     }
 
@@ -108,6 +111,17 @@ export default class DevicesStore {
             .catch((error) => {
                 this.multiTargetUpdatesFetchAsync = handleAsyncError(error);
             });
+    }
+
+    cancelMtuUpdate(data) {
+        resetAsync(this.multiTargetUpdatesCancelAsync, true);
+        return axios.post(API_CANCEL_MULTI_TARGET_UPDATE, data)
+            .then(function(response) {
+                this.multiTargetUpdatesCancelAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function(error) {
+                this.multiTargetUpdatesCancelAsync = handleAsyncError(error);
+            }.bind(this));
     }
 
     _prepareUpdateObject(data) {

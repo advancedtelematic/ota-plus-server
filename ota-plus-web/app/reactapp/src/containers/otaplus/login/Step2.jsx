@@ -43,7 +43,7 @@ class Step2 extends Component {
             	<div className="form">
             		<form>
             			<div className="lock">
-            				<img src="/assets/img/icons/white/lock.png" alt="Icon" />
+            				<img src="/assets/img/icons/white/lock.svg" alt="Icon" />
             			</div>
         				{_.map(inputs, (id, i) => {
         					return (

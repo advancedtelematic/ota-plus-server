@@ -146,10 +146,7 @@ class StatisticDetails extends Component {
                                 </div>
                             </div>
                             <div className="show-dependencies">
-                                <div className="my-tooltip">
-                                    {tooltipText}
-                                </div>
-                                <img src="/assets/img/icons/dependencies-icon.svg" alt="icon" onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)} />
+                                <div className="icon" title="Show dependencies" onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}></div>
                             </div>
                         </div>
                         <div className="bottom-container">
