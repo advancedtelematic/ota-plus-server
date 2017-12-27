@@ -1444,6 +1444,13 @@
                 overflow-y: auto;
 
                 .hardware-list {
+
+                    .secondary-ecus {
+                        a {
+                            border-bottom: 1px solid #bbb;
+                        }
+                    }
+
                     a {
                         color: #555;
                         font-size: 12px;
@@ -1452,6 +1459,7 @@
                         display: block;
                         border-left: 10px solid transparent;
                         position: relative;
+                        margin-left: -10px;
                         @include transition;
 
                         &:hover {
@@ -1459,7 +1467,8 @@
                         }
 
                         &.selected {
-                            border-color: $color-mint;
+                            margin-left: 0;
+                            border-left-color: $color-mint;
                         }
 
                         .hardware-label {
