@@ -14,10 +14,20 @@ class MtuListItem extends Component {
     		<li>
             	<div className="main-info">
 					<div className="update-id">
-						Update ID <span id={"update-id-" + item.updateId}>{item.updateId}</span>
+						<span id={"update-id-title-" + item.updateId} className="top-title">
+	                        Update ID
+	                    </span>
+						<span id={"update-id-" + item.updateId}>
+							{item.updateId}
+						</span>
 					</div>
 					<div className="created-at font-small">
-						Received at: <span id={"received-at-" + item.updateId}>{moment(item.receivedAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
+						<span id={"received-at-title-" + item.updateId} className="top-title">
+	                        Received at:
+	                    </span>
+						<span id={"received-at-" + item.updateId}>
+						 	{moment(item.receivedAt).format("ddd MMM DD YYYY, h:mm:ss A")}
+					 	</span>
 					</div>
 				</div>
         		<div className="operation-results">
@@ -26,13 +36,28 @@ class MtuListItem extends Component {
         					<div className="result" key={ecuSerial}>
 		    					<div className="result-info">
 									<div className="ecu-serial">
-										ECU Serial: <span id={"ecu-serial-" + item.updateId}>{ecuSerial}</span>
+										<span id={"ecu-serial-title-" + item.updateId} className="title">
+			                                ECU Serial:
+			                            </span>
+										<span id={"ecu-serial-" + item.updateId}>
+											{ecuSerial}
+										</span>
 									</div>
 									<div className="target">
-										Target: <span id={"target-" + item.updateId}>{result.target}</span>
+										<span id={"target-title-" + item.updateId} className="title">
+			                                Target:
+			                            </span>
+										<span id={"target-" + item.updateId}>
+											{result.target}
+										</span>
 									</div>
 									<div className="length">
-										Length: <span id={"length-" + item.updateId}>{result.length}</span>
+										<span id={"length-title-" + item.updateId} className="title">
+			                                Length:
+			                            </span>
+										<span id={"length-" + item.updateId}>
+											{result.length}
+										</span>
 									</div>
 								</div>
 		    					<div className="result-status">
