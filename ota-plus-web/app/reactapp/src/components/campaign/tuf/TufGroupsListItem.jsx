@@ -66,7 +66,14 @@ class TufGroupsListItem extends Component {
                     </div>
                 </div>
                 <div className="status-group">
-                    <p>{statistics.processed} processed, {statistics.affected} affected</p>
+                    <p>
+                        <span>
+                            {statistics.processed} processed
+                        </span>
+                        <span>
+                            {statistics.affected} affected
+                        </span>
+                    </p>
                 </div>
             </div>
         );
