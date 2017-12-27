@@ -1088,6 +1088,7 @@ input {
 
                         &.additional-info {
                             padding: 8px;
+                            text-align: right;
                         }
 
                         &:nth-child(2) {
@@ -1501,6 +1502,7 @@ input {
 
                                     .name {
                                         width: 25%;
+                                        flex-grow: 1;
 
                                         .title {
                                             margin-bottom: 0;
@@ -1509,6 +1511,7 @@ input {
 
                                     .stats {
                                         width: 50%;
+                                        flex-grow: 3;
 
                                         .devices-progress {
 
@@ -1532,8 +1535,12 @@ input {
                                     }
 
                                     .status-group {
-                                        width: 25%;
-                                        text-align: center;
+                                        flex-grow: 1;
+                                        text-align: right;
+                                        span {
+                                            display: block;
+                                            padding: 1px 0;
+                                        }
                                     }
                                 }
                             }
