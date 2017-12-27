@@ -3545,6 +3545,11 @@ div[role=presentation] {
                             border-bottom: 1px solid #ddd;
                             position: relative;
 
+                            .top-title {
+                                display: inline-block;
+                                margin-right: 5px;
+                            }
+
                             .main-info {
                                 padding-bottom: 10px;
                                 font-size: 14px;
@@ -3572,11 +3577,15 @@ div[role=presentation] {
                                 }
                                 .result-info {
                                     padding: 20px 20px 0;
-                                    .target {
+
+                                    .title {
+                                        width: 78px;
+                                        display: inline-block;
+                                    }
+
+                                    div {
                                         width: auto;
-                                        white-space: nowrap;
-                                        text-overflow: ellipsis;
-                                        overflow: hidden;
+                                        @include textoverflowEllipsis;
                                     }
                                 }
                             }
@@ -3596,20 +3605,22 @@ div[role=presentation] {
                                 }
 
                                 .code {
-                                    flex-basis: 20%;
+                                    flex-basis: 19%;
                                     font-weight: 300;
                                     text-align: center;
-                                  .value {
+
+                                    .value {
                                         display: block;
                                         font-size: 22px;
                                     }
+
                                     span {
                                         align-self: stretch;
                                     }
                                 }
 
                                 .text {
-                                    flex-basis: 80%;
+                                    flex-basis: 81%;
                                     background-color: #4B4B4B;
                                 }
 
@@ -3620,12 +3631,6 @@ div[role=presentation] {
                                 .success {
                                     background-color: #369e47;
                                 }
-                            }
-
-                            .name {
-                                font-weight: bold;
-                                width: calc(100% - 160px);
-                                @include textoverflowEllipsis;
                             }
 
                             .itemactions {
@@ -3703,14 +3708,6 @@ div[role=presentation] {
 
                         &.director-queue {
                             li {
-
-                                div.name {
-                                    font-weight: 400;
-                                    width: auto;
-                                    white-space: nowrap;
-                                    text-overflow: ellipsis;
-                                }
-
                                 .desc {
                                     padding:0 25px;
                                     font-size: 14px;
@@ -3728,8 +3725,17 @@ div[role=presentation] {
                                     border-radius: 5px;
 
                                     .left {
-                                        width: 70%;
+                                        width: 80%;
                                         float: left;
+
+                                        .title {
+                                            width: 78px;
+                                            display: inline-block;
+                                        }
+
+                                        div {
+                                            @include textoverflowEllipsis;
+                                        }
                                     }
 
                                     .right {

@@ -12,21 +12,34 @@ class MultiTargetITem extends Component {
         return (
             <li id={"queued-entry-" + hash} className={"multi-target-entry font-small" + (inFlight ? " pending" : "")}>
                 <div className="desc">
-                    <div>
-                        Update ID <span id={"update-id-" + updateId}>{updateId}</span>
-                    </div>
+                    Update ID <span id={"update-id-" + updateId}>{updateId}</span>
                 </div>
 
                 <div className="result">
                     <div className="left">
                         <div className="ecu">
-                            ECU Serial: <span id={"ecu-serial-" + updateId}>{hardwareId}</span>
+                            <span id={"ecu-serial-title-" + updateId} className="title">
+                                ECU Serial:
+                            </span>
+                            <span id={"ecu-serial-" + updateId}>
+                                {hardwareId}
+                            </span>
                         </div>
                         <div className="name">
-                            Target: <span id={"target-" + updateId}>{hash}</span>
+                            <span id={"target-title-" + updateId} className="title">
+                                Target:
+                            </span>
+                            <span id={"target-" + updateId}>
+                                {hash}
+                            </span>
                         </div>
                         <div className="length">
-                            Length: <span id={"length-" + updateId}>{length}</span>
+                            <span id={"length-title-" + updateId} className="title">
+                                Length:
+                            </span>
+                            <span id={"length-" + updateId}>
+                                {length}
+                            </span>
                         </div>
                     </div>
                     <div className="right">
