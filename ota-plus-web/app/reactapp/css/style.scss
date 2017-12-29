@@ -25,6 +25,10 @@ $font: 'akkurat';
     font-size: 12px !important;
 }
 
+.link-cancel {
+    font-size: 12px !important;
+}
+
 .dialog {
     .content {
         .heading {
@@ -534,7 +538,7 @@ input {
             }
 
             &.separator {
-                line-height: 1.2em;
+                line-height: 1.5em;
                 padding: 15px 0;
             }
 
@@ -1024,6 +1028,7 @@ input {
             &.active {
                 background: #9ce2d8!important;
                 color: #000000!important;
+                font-size: 12px!important;
             }
         }
 
@@ -1034,7 +1039,7 @@ input {
                         -webkit-box-shadow: 8px 0px 12px -7px rgba(0,0,0,0.25);
                         -moz-box-shadow: 8px 0px 12px -7px rgba(0,0,0,0.25);
                         box-shadow: 8px 0px 12px -7px rgba(0,0,0,0.25);
-                        height: 44px !important;
+                        height: 30px!important;
                     }
                 }
             }
@@ -1047,7 +1052,7 @@ input {
                         -webkit-box-shadow: -8px 0px 12px -7px rgba(0,0,0,0.25);
                         -moz-box-shadow: -8px 0px 12px -7px rgba(0,0,0,0.25);
                         box-shadow: -8px 0px 12px -7px rgba(0,0,0,0.25);
-                        height: 44px !important;
+                        height: 30px!important;
                     }
                 }
             }
@@ -1070,6 +1075,7 @@ input {
 
                     .heading {
                         border-bottom: 1px solid #ddd;
+                        color: #464646;
 
                         .column {
                             font-weight: bold;
@@ -1527,9 +1533,17 @@ input {
 
                                             .wrapper-rate {
                                                 position: absolute;
-                                                top:2px;
                                                 right: 10px;
                                                 color: #000;
+                                                height: 100%;
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;
+
+                                                .wrapper-rate-value {
+                                                    position: relative;
+                                                    top: 2px;
+                                                }
 
                                                 .fa.fa-check {
                                                     margin-left: 5px;
@@ -2146,6 +2160,7 @@ input {
                         .header, .fake-header {
                             padding-left: 30px;
                             padding-right: 30px;
+                            color: #464646;
                         }
 
                         .item {
@@ -2164,10 +2179,6 @@ input {
                             .btn-checkbox {
                                 float: left;
                                 margin: 0 10px 0 0;
-
-                                i {
-                                    padding: 0;
-                                }
                             }
 
                             .info {
@@ -2263,9 +2274,16 @@ input {
                             height: auto;
 
                             .btn-checkbox {
-                                width: 30px;
-                                height: 30px;
+                                width: 20px;
+                                height: 20px;
                                 display: inline-block;
+                                position: relative;
+
+                                i {
+                                    position: relative;
+                                    right: -2.5px;
+                                    top: -1px;
+                                }
                             }
 
                             .element-box {
@@ -2639,11 +2657,11 @@ input {
 
         & > .stepnum {
             color: #ccc;
-            font-weight: bold;
             font-size: 12px;
             text-align: center;
             padding: 0 20%;
             margin: 20px 0 0 0;
+            line-height: 1.1;
         }
 
         & > .dot {
@@ -2669,7 +2687,7 @@ input {
 
         & > .progress {
             background: #ddd;
-            height: 2px;
+            height: 1px;
             padding: 0;
             border: 0;
             position: relative;
@@ -3183,8 +3201,8 @@ div[role=presentation] {
     }
 
     i {
-        font-size: 15px;
-        padding: 7px;
+        font-size: 12px;
+        padding: 1px;
     }
 }
 

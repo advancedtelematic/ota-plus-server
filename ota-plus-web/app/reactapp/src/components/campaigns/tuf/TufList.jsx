@@ -65,7 +65,7 @@ class TufList extends Component {
                 <div className="campaigns-list" id="in-preparation-campaigns">
                     {campaignsStore.inPreparationCampaigns.length ?
                         <span>
-                            <div className="heading font-medium">
+                            <div className="heading font-small">
                                 <div></div>
                                 <div className="column">Name</div>
                                 <div className="column">Created at</div>
@@ -122,7 +122,7 @@ class TufList extends Component {
                 <div className="campaigns-list" id="running-campaigns">
                     {campaignsStore.runningCampaigns.length ?
                         <span>
-                            <div className="heading font-medium">
+                            <div className="heading font-small">
                                 <div></div>
                                 <div className="column">Name</div>
                                 <div className="column">Created at</div>
@@ -177,7 +177,7 @@ class TufList extends Component {
                 <div className="campaigns-list" id="finished-campaigns">
                     {campaignsStore.finishedCampaigns.length ?
                         <span>
-                            <div className="heading font-medium">
+                            <div className="heading font-small">
                                 <div></div>
                                 <div className="column">Name</div>
                                 <div className="column">Created at</div>
@@ -232,7 +232,7 @@ class TufList extends Component {
                 <div className="campaigns-list" id="cancelled-campaigns">
                     {campaignsStore.cancelledCampaigns.length ?
                         <span>
-                            <div className="heading font-medium">
+                            <div className="heading font-small">
                                 <div></div>
                                 <div className="column">Name</div>
                                 <div className="column">Created at</div>

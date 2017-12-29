@@ -49,7 +49,7 @@ class List extends Component {
                         className="campaign-tabs"
                         inkBarStyle={{display: 'none'}}
                         onChange={this.setQueueModalActiveTabId}
-                        tabItemContainerStyle={{borderBottom: '5px solid ' + this.bottomBorderColor, backgroundColor: 'transparent', height: '50px'}}
+                        tabItemContainerStyle={{borderBottom: '5px solid ' + this.bottomBorderColor, backgroundColor: 'transparent'}}
                         contentContainerClassName={'campaigns-wrapper'}
                         tabTemplateStyle={{height: '100%'}}
                     >
