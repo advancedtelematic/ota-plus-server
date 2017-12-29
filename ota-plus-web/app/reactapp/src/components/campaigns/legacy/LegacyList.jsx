@@ -41,7 +41,7 @@ class LegacyList extends Component {
                 <div className="campaigns-list">
                     {campaignsStore.runningLegacyCampaigns.length ?
                         <span>
-                            <div className="heading font-medium">
+                            <div className="heading font-small">
                                 <div></div>
                                 <div className="column">Name</div>
                                 <div className="column">Start date</div>
@@ -98,7 +98,7 @@ class LegacyList extends Component {
                 <div className="campaigns-list">
                     {campaignsStore.finishedLegacyCampaigns.length ?
                         <span>
-                            <div className="heading font-medium">
+                            <div className="heading font-small">
                                 <div></div>
                                 <div className="column">Name</div>
                                 <div className="column">Start date</div>

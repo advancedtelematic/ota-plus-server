@@ -20,14 +20,11 @@ class SecondaryEcu extends Component {
                     onClick={selectEcu.bind(this, ecu.hardwareId, ecu.id, ecu.image.hash.sha256, 'secondary')}
                 >
                     <div className="desc">
-                        <span>
-                            <span id={"hardware-id-" + ecu.hardwareId} className="hardware-label">
-                                {ecu.hardwareId}
-                            </span> <br />
-                            Serial: 
-                            <span id={"hardware-serial-" + ecu.id}>
-                                {ecu.id}
-                            </span>
+                        <span id={"hardware-id-" + ecu.hardwareId} className="hardware-label">
+                            {ecu.hardwareId}
+                        </span> <br />
+                        Serial: <span id={"hardware-serial-" + ecu.id}>
+                            {ecu.id}
                         </span>
                     </div>
                     <div className="icons"
