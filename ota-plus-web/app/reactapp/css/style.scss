@@ -787,6 +787,15 @@ input {
     float: right !important;
     margin: 6px 15px 0 0 !important;
     color: black!important;
+    display: flex !important;
+    align-items: center;
+
+    div {
+        display: flex !important;
+        span {
+
+        }
+    }
 
     &:before {
         font-size: 10px;
