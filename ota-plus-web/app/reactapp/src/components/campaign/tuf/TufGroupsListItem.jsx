@@ -53,12 +53,14 @@ class TufGroupsListItem extends Component {
                                  role="progressbar"
                                  style={{width: campaign.statistics.status !== 'finished' && campaign.statistics.status !== 'cancelled' ? '0%' : (foundGroup.devices.total !== 0 ? progress + '%' : '100%')}}>
                                 <div className="wrapper-rate">
-                                    {campaign.statistics.status !== 'finished' && campaign.statistics.status !== 'cancelled'
-                                        ? '0%'
-                                        : (foundGroup.devices.total !== 0
-                                            ? progress + '%'
-                                            : '100%')
-                                    }
+                                    <span className="wrapper-rate-value">
+                                        {campaign.statistics.status !== 'finished' && campaign.statistics.status !== 'cancelled'
+                                            ? '0%'
+                                            : (foundGroup.devices.total !== 0
+                                                ? progress + '%'
+                                                : '100%')
+                                        }
+                                    </span>
                                     <i className="fa fa-check" aria-hidden="true" />
                                 </div>
                             </div>
