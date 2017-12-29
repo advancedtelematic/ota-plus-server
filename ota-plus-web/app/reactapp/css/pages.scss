@@ -810,6 +810,11 @@
                             .add {
                                 button, a {
                                     margin: 0!important;
+                                    &#add-new-device {
+                                        span {
+                                            line-height: 8px;
+                                        }
+                                    }
                                 }
                             }
                         }

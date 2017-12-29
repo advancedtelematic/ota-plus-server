@@ -53,7 +53,9 @@ class Home extends Component {
                                 <div className="add">
                                     {allDevicesCount > 0
                                         ?
-                                        <a href="https://docs.atsgarage.com/index.html" className="btn-main btn-small btn-add" id="add-new-device" target="_blank" >Add new device</a>
+                                        <a href="https://docs.atsgarage.com/index.html" className="btn-main btn-small btn-add" id="add-new-device" target="_blank" >
+                                            <span>Add new device</span>
+                                        </a>
                                         :
                                     ''}
                                 </div>
