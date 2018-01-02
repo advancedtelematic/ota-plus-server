@@ -227,3 +227,7 @@ The callback function name for this endpoint is `deviceSeen`.
 
 The endpoint for this event is `/api/v1/events/devices/{uuid}`, where {uuid} is a valid device which
 exists in the OTA+ system.
+
+## License
+
+This code is licensed under the [Mozilla Public License 2.0](LICENSE), a copy of which can be found in this repository. All code is copyright [ATS Advanced Telematic Systems GmbH](https://www.advancedtelematic.com), 2016-2018.
