@@ -39,7 +39,7 @@ class StatisticDetails extends Component {
                 label: "Failure rate"
             },
             {
-                value: overallStatistics.finished,
+                value: overallStatistics.failed === 0 ? 1 : overallStatistics.finished,
                 color: "#83D060",
                 highlight: "#83D060",
                 label: "Success rate"
