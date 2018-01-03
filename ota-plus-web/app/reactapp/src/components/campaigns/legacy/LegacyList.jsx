@@ -35,7 +35,7 @@ class LegacyList extends Component {
         const { campaignsStore, groupsStore, showRenameModal, showCancelCampaignModal, showCancelGroupModal } = this.props;
         return (
             <div className="legacy-list">
-                <div className="section-header font-medium">
+                <div className="section-header">
                     Running campaigns
                 </div>
                 <div className="campaigns-list">
@@ -92,7 +92,7 @@ class LegacyList extends Component {
                         </div>
                     }
                 </div>
-                <div className="section-header font-medium">
+                <div className="section-header">
                     Finished campaigns
                 </div>
                 <div className="campaigns-list">

@@ -1025,8 +1025,34 @@ input {
     width: 100%;
     display: block;
 
+    &.padding-top {
+        .campaigns-wrapper {
+            padding-top: 50px;
+        }
+    }
+
     .campaign-tabs {
         height: 100%;
+
+        .fake-header {
+            position: absolute;
+            z-index: 2;
+            color: #202020;
+            font-size: 13px;
+            font-weight: 700;
+            background: #d3d3d3;
+            width: 100%;
+            height: 40px;
+            padding: 12px 15px;
+            margin: 0;
+            border-bottom: 1px solid #bbb;
+        }
+
+        &>div:first-child {
+            background-color: #fff !important;
+            position: fixed;
+            z-index: 15;
+        }
 
         .tab-item {
             color: #666!important;
@@ -1674,7 +1700,7 @@ input {
 }
 
 .section-header {
-    color: #464646;
+    color: #202020;
     font-size: 13px;
     font-weight: bold;
     background: #D3D3D3;
