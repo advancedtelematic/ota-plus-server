@@ -59,7 +59,7 @@ class TufList extends Component {
         const { campaignsStore, groupsStore, showRenameModal, highlightedCampaign, showCancelCampaignModal, showDependenciesModal } = this.props;
         return (
             <div className="tuf-list" ref="list">
-                <div className="section-header font-medium">
+                <div className="section-header">
                     In preparation
                 </div>
                 <div className="campaigns-list" id="in-preparation-campaigns">
@@ -116,7 +116,7 @@ class TufList extends Component {
                         </div>
                     }
                 </div>
-                <div className="section-header font-medium">
+                <div className="section-header">
                     Running campaigns
                 </div>
                 <div className="campaigns-list" id="running-campaigns">
@@ -171,7 +171,7 @@ class TufList extends Component {
                         </div>
                     }
                 </div>
-                <div className="section-header font-medium">
+                <div className="section-header">
                     Finished campaigns
                 </div>
                 <div className="campaigns-list" id="finished-campaigns">
@@ -226,7 +226,7 @@ class TufList extends Component {
                         </div>
                     }
                 </div>
-                <div className="section-header font-medium">
+                <div className="section-header">
                     Cancelled campaigns
                 </div>
                 <div className="campaigns-list" id="cancelled-campaigns">
