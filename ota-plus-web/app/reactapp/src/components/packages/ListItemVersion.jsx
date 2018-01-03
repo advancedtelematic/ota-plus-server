@@ -157,7 +157,7 @@ class ListItemVersion extends Component {
                     </div>                    
                 </div>
                 <div className="show-dependencies">
-                    <div className="icon" title="Show dependencies" onClick={showDependenciesModal.bind(this, version.packageHash)}></div>
+                    <div className="icon" title="Show dependencies" onClick={showDependenciesModal.bind(this, version.imageName)}></div>
                 </div>
             </span>
         );
