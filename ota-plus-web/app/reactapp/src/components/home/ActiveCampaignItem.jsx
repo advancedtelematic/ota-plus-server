@@ -10,7 +10,7 @@ class ActiveCampaignItem extends Component {
     }
     render() {
         const { campaign } = this.props;
-        const link = "campaign/" + campaign.id;
+        const link = "campaigns/" + campaign.id;
 
         let totalFailed = 0;
         let totalFinished = 0;
