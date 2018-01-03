@@ -7,7 +7,7 @@ import akka.Done
 import akka.actor.ActorSystem
 import com.advancedtelematic.PlayMessageBusPublisher
 import com.advancedtelematic.api.UnexpectedResponse
-import com.advancedtelematic.auth.{AccessToken, AuthPlusConfig, IdToken, LoginAction,
+import com.advancedtelematic.auth.{AccessToken, AuthPlusConfig, IdToken, LoginAction, LogoutAction,
   OAuthConfig, SessionCodecs, TokenExchange, Tokens, UiAuthAction}
 import com.advancedtelematic.auth.oidc.NamespaceProvider
 import com.advancedtelematic.libats.messaging_datatype.MessageLike
@@ -43,12 +43,9 @@ class LoginController @Inject()(components: ControllerComponents,
                                 conf: Configuration,
                                 ws: WSClient,
                                 authAction: UiAuthAction,
-                                val login: LoginAction)
+                                val login: LoginAction,
+                                val logout: LogoutAction)
     extends AbstractController(components) {
-
-  private[this] val log = Logger(this.getClass)
-
-  private[this] val authPlusConfig = AuthPlusConfig(conf).get
 
   val accountConfirmation: Action[AnyContent] = Action {
     Ok(views.html.accountConfirmation())
@@ -56,23 +53,6 @@ class LoginController @Inject()(components: ControllerComponents,
 
   val accountActivated: Action[AnyContent] = Action {
     Ok(views.html.activated())
-  }
-
-  def logout: Action[AnyContent] = authAction { implicit req =>
-    ws.url(s"${authPlusConfig.uri}/revoke")
-      .withAuth(authPlusConfig.clientId, authPlusConfig.clientSecret, WSAuthScheme.BASIC)
-      .post(Map("token" -> Seq(req.accessToken.value)))
-      .onComplete {
-        case Success(response) if response.status == ResponseStatusCodes.OK_200 =>
-          log.debug(s"Access token '${req.accessToken.value}' revoked.")
-
-        case Success(response) =>
-          log.error(s"Revocation request for token '${req.accessToken.value}' failed with response $response")
-
-        case Failure(t) =>
-          log.error(s"Revocation request for token '${req.accessToken.value}' failed.", t)
-      }(components.executionContext)
-    Redirect(com.advancedtelematic.controllers.routes.LoginController.login()).withNewSession
   }
 }
 
