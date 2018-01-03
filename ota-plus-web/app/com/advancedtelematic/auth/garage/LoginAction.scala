@@ -1,12 +1,15 @@
 package com.advancedtelematic.auth.garage
 
-import javax.inject.Inject
 import com.advancedtelematic.auth._
+
+import javax.inject.Inject
 import play.api.{Configuration, Logger}
+import play.api.libs.ws.{WSAuthScheme, WSClient, WSResponse}
 import play.api.mvc._
+import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 
 import scala.concurrent.{ExecutionContext, Future}
-
+import scala.util.{Failure, Success, Try}
 
 
 class LoginAction @Inject()(conf: Configuration,
@@ -19,6 +22,39 @@ class LoginAction @Inject()(conf: Configuration,
   private[this] val downtimeConfig = DowntimeConfig(conf)
   override def apply(request: Request[AnyContent]): Future[Result] = {
     Future.successful(Results.Ok(views.html.login(oauthConfig, auth0Config, downtimeConfig)))
+  }
+}
+
+class LogoutAction @Inject()(conf: Configuration,
+                             ws: WSClient,
+                             authAction: UiAuthAction,
+                             val parser: BodyParsers.Default)
+                            (implicit val executionContext: ExecutionContext)
+  extends com.advancedtelematic.auth.LogoutAction {
+
+  private[this] val log = Logger(this.getClass)
+  private[this] val authPlusConfig = AuthPlusConfig(conf).get
+
+  override def apply(request: Request[AnyContent]): Future[Result] = {
+    Future.fromTry(AuthenticatedRequest.fromRequest(request).map(revoke)).map { _ =>
+      Results.Redirect(com.advancedtelematic.controllers.routes.LoginController.login()).withNewSession
+    }
+  }
+
+  private[this] def revoke[A](req: AuthenticatedRequest[A]): Unit = {
+    ws.url(s"${authPlusConfig.uri}/revoke")
+      .withAuth(authPlusConfig.clientId, authPlusConfig.clientSecret, WSAuthScheme.BASIC)
+      .post(Map("token" -> Seq(req.accessToken.value)))
+      .onComplete {
+        case Success(response) if response.status == ResponseStatusCodes.OK_200 =>
+          log.debug(s"Access token '${req.accessToken.value}' revoked.")
+
+        case Success(response) =>
+          log.error(s"Revocation request for token '${req.accessToken.value}' failed with response $response")
+
+        case Failure(t) =>
+          log.error(s"Revocation request for token '${req.accessToken.value}' failed.", t)
+      }
   }
 }
 

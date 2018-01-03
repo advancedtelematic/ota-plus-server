@@ -16,6 +16,7 @@ class OidcModule extends Module {
     Seq(
       bindToClass[TokenVerification]("oidc.tokenVerification"),
       bindToClass[com.advancedtelematic.auth.LoginAction]("oidc.loginAction"),
+      bindToClass[com.advancedtelematic.auth.LogoutAction]("oidc.logoutAction"),
       bindToClass[TokenExchange]("oidc.tokenExchange"),
       bindToClass[NamespaceProvider]("oidc.namespaceProvider")
     )

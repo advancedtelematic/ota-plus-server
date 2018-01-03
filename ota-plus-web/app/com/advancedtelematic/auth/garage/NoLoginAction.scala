@@ -12,7 +12,7 @@ import com.advancedtelematic.auth.{IdToken, SessionCodecs}
 import com.advancedtelematic.controllers.UserLogin
 import com.advancedtelematic.jws.{CompactSerialization, JwsPayload}
 import play.api.libs.json.Json
-import play.api.mvc.{AnyContent, BodyParsers, Request, Results}
+import play.api.mvc.{AnyContent, BodyParsers, Request, Result, Results}
 import play.api.{Configuration, Logger}
 import io.circe.syntax._
 
@@ -60,3 +60,14 @@ class NoLoginAction @Inject()(messageBus: PlayMessageBusPublisher,
     Future.successful(result)
   }
 }
+
+class NoLogoutAction @Inject()(val parser: BodyParsers.Default,
+                               val executionContext: ExecutionContext)
+  extends com.advancedtelematic.auth.LogoutAction {
+
+  override def apply(request: Request[AnyContent]): Future[Result] = {
+    Future.successful(
+      Results.Redirect(com.advancedtelematic.controllers.routes.LoginController.login()).withNewSession)
+  }
+}
+
