@@ -201,7 +201,6 @@ class Preparation extends Component {
         if (allIsPassed) {
             for (let i = 1; i < 100; i++)
                 window.clearInterval(i);
-
             setTimeout(this.doorOpen, 2000);
         }
         return (
@@ -219,98 +218,112 @@ class Preparation extends Component {
                                             <div className="stepnum">
                                                 {step.nr === 1 ?
                                                     userStore.userFetchAsync.isFetching ?
-                                                        <span className="img">
+                                                        <span className="pending">
                                                             <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
                                                         </span>
-                                                        : this.userProfile ?
-                                                        <span className="img">
+                                                    : this.userProfile ?
+                                                        <span>
                                                             <img src="/assets/img/icons/green_tick.png" alt="pass"/>
                                                         </span>
-                                                        : finished ?
-                                                            <span className="img">
+                                                    : finished ?
+                                                        <span>
                                                             <img src="/assets/img/icons/red_cross.png" alt="fail"/>
-                                                        </span> : null
+                                                        </span> 
+                                                    : 
+                                                        <span className="pending">
+                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                        </span>
+                                                : step.nr === 2 ?
+                                                    provisioningStore.provisioningStatusFetchAsync.isFetching || provisioningStore.provisioningActivateAsync.isFetching ?
+                                                        <span className="pending">
+                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                        </span>
+                                                    : this.activatedProvisioning ?
+                                                        <span>
+                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
+                                                        </span>
+                                                    : finished ?
+                                                        <span>
+                                                            <img src="/assets/img/icons/red_cross.png" alt="fail"/>
+                                                        </span>
                                                     :
-                                                    step.nr === 2 ?
-                                                        provisioningStore.provisioningStatusFetchAsync.isFetching ?
-                                                            <span className="img">
-                                                                <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
-                                                            </span>
-                                                            : this.activatedProvisioning ?
-                                                            <span className="img">
-                                                                <img src="/assets/img/icons/green_tick.png" alt="pass"/>
-                                                            </span>
-                                                            : finished ?
-                                                                <span className="img">
-                                                                    <img src="/assets/img/icons/red_cross.png" alt="fail"/>
-                                                                </span>
-                                                                : null
-                                                        :
-                                                        step.nr === 3 ?
-                                                            packagesStore.tufRepoExistsFetchAsync.isFetching || !this.checkedCreatedTufCalled ?
-                                                                <span className="img">
-                                                                    <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
-                                                                </span>
-                                                                : this.createdTuf ?
-                                                                <span className="img">
-                                                                    <img src="/assets/img/icons/green_tick.png" alt="pass"/>
-                                                                </span>
-                                                                : finished ?
-                                                                    <span className="img">
-                                                                        <img src="/assets/img/icons/red_cross.png" alt="fail"/>
-                                                                    </span>
-                                                                    : null
-                                                            :
-                                                            step.nr === 4 ?
-                                                                packagesStore.directorRepoExistsFetchAsync.isFetching || !this.checkedCreatedDirectorCalled ?
-                                                                    <span className="img">
-                                                                        <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
-                                                                    </span>
-                                                                    : this.createdDirector ?
-                                                                    <span className="img">
-                                                                        <img src="/assets/img/icons/green_tick.png" alt="pass"/>
-                                                                    </span>
-                                                                    : finished ?
-                                                                        <span className="img">
-                                                                            <img src="/assets/img/icons/red_cross.png" alt="fail"/>
-                                                                        </span>
-                                                                        : null
-                                                                :
-                                                                step.nr === 5 ?
-                                                                    featuresStore.featuresFetchAsync.isFetching ?
-                                                                        <span className="img">
-                                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
-                                                                        </span>
-                                                                        : this.createdTreehub ?
-                                                                        <span className="img">
-                                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
-                                                                        </span>
-                                                                        : finished ?
-                                                                            <span className="img">
-                                                                                <img src="/assets/img/icons/red_cross.png" alt="fail"/>
-                                                                            </span>
-                                                                            : null
-                                                                :
-                                                                step.nr === 6 ?
-                                                                    featuresStore.featuresFetchAsync.isFetching ?
-                                                                        <span className="img">
-                                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
-                                                                        </span>
-                                                                        : this.createdFileUploader ?
-                                                                        <span className="img">
-                                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
-                                                                        </span>
-                                                                        : finished ?
-                                                                            <span className="img">
-                                                                                <img src="/assets/img/icons/red_cross.png" alt="fail"/>
-                                                                            </span>
-                                                                            : null
-                                                                :
-                                                                    <span className="img">
-                                                                        <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
-                                                                    </span>
+                                                        <span className="pending">
+                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                        </span>
+                                                : step.nr === 3 ?
+                                                    packagesStore.tufRepoExistsFetchAsync.isFetching || !this.checkedCreatedTufCalled ?
+                                                        <span className="pending">
+                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                        </span>
+                                                    : this.createdTuf ?
+                                                        <span>
+                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
+                                                        </span>
+                                                    : finished ?
+                                                        <span>
+                                                            <img src="/assets/img/icons/red_cross.png" alt="fail"/>
+                                                        </span>
+                                                    : 
+                                                        <span className="pending">
+                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                        </span>
+                                                : step.nr === 4 ?
+                                                    packagesStore.directorRepoExistsFetchAsync.isFetching || !this.checkedCreatedDirectorCalled ?
+                                                        <span className="pending">
+                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                        </span>
+                                                    : this.createdDirector ?
+                                                        <span>
+                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
+                                                        </span>
+                                                    : finished ?
+                                                        <span>
+                                                            <img src="/assets/img/icons/red_cross.png" alt="fail"/>
+                                                        </span>
+                                                    :
+                                                        <span className="pending">
+                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                        </span>
+                                                : step.nr === 5 ?
+                                                    featuresStore.featuresFetchAsync.isFetching ?
+                                                        <span className="pending">
+                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                        </span>
+                                                    : this.createdTreehub ?
+                                                        <span>
+                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
+                                                        </span>
+                                                    : finished ?
+                                                        <span>
+                                                            <img src="/assets/img/icons/red_cross.png" alt="fail"/>
+                                                        </span>
+                                                    :
+                                                        <span className="pending">
+                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                        </span> 
+                                                : step.nr === 6 ?
+                                                    featuresStore.featuresFetchAsync.isFetching ?
+                                                        <span className="pending">
+                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                        </span>
+                                                    : this.createdFileUploader ?
+                                                        <span>
+                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
+                                                        </span>
+                                                    : finished ?
+                                                        <span>
+                                                            <img src="/assets/img/icons/red_cross.png" alt="fail"/>
+                                                        </span>
+                                                    :
+                                                        <span className="pending">
+                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                        </span>
+                                                :
+                                                    <span className="pending">
+                                                        <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                    </span>
                                                 }
-                                                <span>{step.name}</span>
+                                                <span className="feature-name">{step.name}</span>
                                             </div>
                                         </li>
                                     );

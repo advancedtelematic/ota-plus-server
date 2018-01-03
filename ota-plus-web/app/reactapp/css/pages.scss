@@ -716,6 +716,13 @@
 
                     .stepnum {
                         overflow: hidden;
+                        display: flex;
+
+                        .feature-name {
+                            font-size: 15px;
+                            display: flex;
+                            align-items: center;
+                        }
 
                         img {
                             height: 30px;
@@ -723,9 +730,19 @@
                             margin-right: 15px;
                         }
 
-                        span {
+                        .pending {
+                            width: 30px;
                             height: 30px;
-                            font-size: 15px;
+                            background: #cdcdcd;
+                            border-radius: 50%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            margin-right: 15px;
+
+                            img {
+                                margin-right: 0;
+                            }
                         }
                     }
                 }
@@ -734,6 +751,9 @@
             .setting-up {
                 text-align: center;
                 margin: 25px 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
 
                 .loader {
                     display: inline-block;
