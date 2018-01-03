@@ -40,18 +40,18 @@ class TufList extends Component {
     scrollToElement(id) {
         const wrapperPosition = this.refs.list.getBoundingClientRect();
         const elementCoords = document.getElementById("item-" + id).getBoundingClientRect();
-        let scrollTo = elementCoords.top - wrapperPosition.top + elementCoords.height;
+        let scrollTo = elementCoords.top - wrapperPosition.top + 35;
         let page = document.querySelector('span.content-container');
         setTimeout(() => {
             page.scrollTop = scrollTo;
-        }, 400)
+        }, 1000);
     }
     highlightCampaign(id) {
         if(this.refs.list && id) {
             const name = _.filter(this.props.campaignsStore.campaigns, (obj) => {
                 return obj.id === id;
             });
-            this.expandedCampaignName = name[0].name;
+            this.toggleCampaign(name[0].name);
             this.scrollToElement(id);
         }
     }
