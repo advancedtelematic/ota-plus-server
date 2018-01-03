@@ -131,7 +131,9 @@ class DependenciesModal extends Component {
     const { devicesStore, packagesStore } = this.props;
     _.each(devicesStore.devices, (device, index) => {
       devicesStore.fetchMultiTargetUpdates(device.uuid);
-      packagesStore.fetchDirectorDevicePackagesHistory(device.uuid, packagesStore.directorDevicePackagesFilter, true);
+      devicesStore.fetchPrimaryAndSecondaryFilepaths(device.uuid).then((filepaths) => {
+        device.installedFilepaths = filepaths;
+      });      
     });
   }
   packagesFetched() {
@@ -146,16 +148,18 @@ class DependenciesModal extends Component {
       });
       this.packages.push(pack);
     });
-    _.each(packagesStore.directorDeviceHistory, (historyUpdate, i) => {
-      if(!_.isEmpty(historyUpdate.operationResult)) {
-        let packageHash = historyUpdate.operationResult[Object.keys(historyUpdate.operationResult)[0]].hashes.sha256;
+    _.each(devicesStore.devices, (device, i) => {
+      let filepaths = device.installedFilepaths;
+      _.each(filepaths, (filepath, index) => {
         let pack = _.find(packagesStore.directorPackages, (pack) => {
-          return pack.packageHash === packageHash;
+          return pack.imageName === filepath;
         });
-        this.packages.push(pack);
-      }
+        if(!_.isUndefined(pack)) {
+          this.packages.push(pack);
+        }
+      });
     });
-    this.packages = _.uniq(this.packages, pack => pack.packageHash);
+    this.packages = _.uniq(this.packages, pack => pack.imageName);
     this.packages = _.sortBy(this.packages, pack => pack.id.name);
     this.formatData();
   }
@@ -173,14 +177,18 @@ class DependenciesModal extends Component {
           pack.mtus.push(mtu);
         }
       });
-      _.each(packagesStore.directorDeviceHistory, (mtu, i) => {
-        if(!_.isEmpty(mtu.operationResult)) {
-          mtu.type = 'history';
-          let packageHash = mtu.operationResult[Object.keys(mtu.operationResult)[0]].hashes.sha256;
-          if(pack.packageHash === packageHash) {
+
+      _.each(devicesStore.devices, (device, ind) => {
+        let filepaths = device.installedFilepaths;
+        _.each(filepaths, (filepath, index) => {
+          if(pack.imageName === filepath) {
+            let mtu = {
+              type: 'history',
+              device: device.uuid
+            };
             pack.mtus.push(mtu);
           }
-        }
+        });
       });
 
       _.each(pack.mtus, (mtu, i) => {
@@ -192,8 +200,7 @@ class DependenciesModal extends Component {
             mtu.campaigns.push(campaign);
           }
         });
-        _.each(devicesStore.devices, (device, ind) => {          
-
+        _.each(devicesStore.devices, (device, ind) => {
           if(device.uuid === mtu.device) {            
             mtu.deviceName = device.deviceName;
 
@@ -378,7 +385,7 @@ class DependenciesModal extends Component {
 
       _.map(source, (item, index) => {
 
-        if(activeItemName === item.packageHash) {
+        if(activeItemName === item.imageName) {
           itemsToHighlight.push(item);
         }
 
@@ -445,15 +452,7 @@ class DependenciesModal extends Component {
             pack.mtus.push(mtu);
           }
         });
-        _.each(packagesStore.directorDeviceHistory, (mtu, i) => {
-          if(!_.isEmpty(mtu.operationResult)) {
-            mtu.type = 'history';
-            let packageHash = mtu.operationResult[Object.keys(mtu.operationResult)[0]].hashes.sha256;
-            if(pack.packageHash === packageHash) {
-              pack.mtus.push(mtu);
-            }
-          }
-        });
+
         _.each(pack.mtus, (mtu, i) => {
           mtu.campaigns = [];
           _.each(campaignsStore.campaigns, (campaign, ind) => {
@@ -468,7 +467,7 @@ class DependenciesModal extends Component {
       let activeItemName = this.props.activeItemName;
 
       _.map(this.packages, (item, index) => {
-        if(activeItemName === item.packageHash) {
+        if(activeItemName === item.imageName) {
           activePackages.push(item);
         }
 
@@ -503,8 +502,6 @@ class DependenciesModal extends Component {
       dataToFind.push('targets.json');
 
       _.each(pack.mtus, (mtu, index) => {
-        dataToFind.push(mtu.updateId.substring(0, 15));
-
         let deviceStatus = mtu.queuedOn.length ? 'queued on' : 'installed on';
         dataToFind.push(mtu.deviceName.substring(0, 15) + "(" + deviceStatus + ")");
 

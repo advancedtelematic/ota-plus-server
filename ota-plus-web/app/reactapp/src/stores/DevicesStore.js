@@ -30,6 +30,7 @@ export default class DevicesStore {
     @observable devicesOneFetchAsync = {};
     @observable devicesCountFetchAsync = {};
     @observable devicesDirectorAttributesFetchAsync = {};
+    @observable devicesDirectorPrimaryAndSecondaryHashesFetchAsync = {};
     @observable devicesCreateAsync = {};
     @observable devicesRenameAsync = {};
     @observable multiTargetUpdateCreateAsync = {};
@@ -61,6 +62,7 @@ export default class DevicesStore {
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesCountFetchAsync);
         resetAsync(this.devicesDirectorAttributesFetchAsync);
+        resetAsync(this.devicesDirectorPrimaryAndSecondaryHashesFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
         resetAsync(this.multiTargetUpdateCreateAsync);
@@ -343,6 +345,21 @@ export default class DevicesStore {
         }
     }
 
+    fetchPrimaryAndSecondaryFilepaths(id) {
+        resetAsync(this.devicesDirectorPrimaryAndSecondaryHashesFetchAsync, true);
+        return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
+            .then((response) => {
+                let filepaths = _.map(response.data, (item, i) => {
+                    return item.image.filepath;
+                });
+                this.devicesDirectorPrimaryAndSecondaryHashesFetchAsync = handleAsyncSuccess(response);
+                return filepaths;
+            })
+            .catch((error) => {
+                this.devicesDirectorPrimaryAndSecondaryHashesFetchAsync = handleAsyncError(error);
+            });
+    }
+
     _getPrimaryHash() {
         return this.device.directorAttributes.primary.image.hash.sha256;
     }
@@ -412,6 +429,7 @@ export default class DevicesStore {
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesCountFetchAsync);
         resetAsync(this.devicesDirectorAttributesFetchAsync);
+        resetAsync(this.devicesDirectorPrimaryAndSecondaryHashesFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
         resetAsync(this.multiTargetUpdateCreateAsync);
