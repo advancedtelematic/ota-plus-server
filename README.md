@@ -2,9 +2,10 @@
 
 The OTA Plus Web Server Application consists of a Single-Page Application frontend (in Javascript) and a backend application (in Scala).
 
-The backend application acts as an API gateway, routing API requests from the UI to the appropriate services. The APIs of the services are documented in their separate repositories.
+The backend application acts as an API gateway, routing API requests from the UI to the appropriate services. The APIs of the services are documented in their respective repositories.
 
-The frontend UI is implemented with https://reactjs.org/[ReactJs], a declarative, component-based Javascript library. The backend application uses the https://www.playframework.com/[Play Framework] for a scalable, stateless, fully asynchronous web architecture built on top of Akka.
+The backend application uses the [Play Framework](https://www.playframework.com) for a scalable, stateless, fully asynchronous web architecture built on top of Akka.
+The frontend UI is implemented with [ReactJs](https://reactjs.org), a declarative component-based Javascript library.
 
 ## Build
 
@@ -27,27 +28,31 @@ The `sbt runWebpack` command runs `npm/webpack` (inside a docker container) to c
 
 This step is necessary because there is currently no sbt plugin for webpack.
 
-## Test
+## Run
 
-To run the unit tests:
-
-```
-  sbt ota-plus-web/ut:test
-```
-
-To run a specific test:
+To run the application as a docker container:
 
 ```
-  sbt "ota-plus-web/testOnly com.advancedtelematic.ota.ClientSdkControllerSpec"
+  docker run -d -p 9000:9000 --env ENV_NAME=env-value --name ota-plus-web advancedtelematic/ota-plus-web:latest
 ```
+
+To run the application from `sbt` without docker:
+
+```
+  sbt ota-plus-web/run
+```
+
+The application is now accessible at `localhost:9000`.
 
 ## Deployment
+
+The application is configured by setting environment variables.
 
 ### Authentication
 
 #### Quickstart without authentication
 
-The simple quickstart default is to run without authentication. Set the following environment variables:
+To quickly start the application without any login authentication, set the following environment variables:
 
 Variable                    | Value
 -------------------:        | :------------------
@@ -95,6 +100,7 @@ Variable                    | Description
 -------------------:        | :------------------
 `AUTHPLUS_CLIENT_ID`        | Client ID in Auth+ with the proper scope
 `AUTHPLUS_SECRET`           | Client Secret
+`AUTHPLUS_TOKEN_VERIFY`     | Whether to verify tokens with Auth+
 
 To configure the Auth0 client application, set the following environment variables:
 
@@ -106,6 +112,73 @@ Variable                    | Description
 `AUTH0_CLIENT_SECRET`       | Client Secret
 `AUTH0_AUTH_PLUS_CLIENT_ID` | Client ID of Auth+ client in Auth0
 `AUTH0_DB_CONNECTION`       | User database connection in Auth0
+
+### Services
+
+To point the application to the OTA Services that provide the APIs, set the following environment Variables:
+
+Variable                    | Description
+-------------------:        | :------------------
+`AUDITOR_HOST`              | Host of Auditor service
+`AUDITOR_PORT`              | Port of Auditor service
+`AUTH_PLUS_HOST`            | Host of Auth Plus service
+`AUTH_PLUS_PORT`            | Port of Auth Plus service
+`AUTH_PLUS_SCHEME`          | Scheme of Auth Plus service
+`CAMPAIGNER_HOST`           | Host of Campaigner service
+`CAMPAIGNER_PORT`           | Port of Campaigner service
+`DEVICE_REGISTRY_HOST`      | Host of Device Registry service
+`DEVICE_REGISTRY_PORT`      | Port of Device Registry service
+`DIRECTOR_HOST`             | Host of Director service
+`DIRECTOR_PORT`             | Port of Director service
+`KAFKA_HOST`                | Kafka bootstrap servers
+`TREEHUB_HOST_PUB`          | Host of public Treehub service
+`TREEHUB_PORT_PUB`          | Port of public Treehub service
+`TREEHUB_SCHEME_PUB`        | Scheme of public Treehub service
+`TUF_KEYSERVER_HOST`        | Host of TUF Keyserver service
+`TUF_KEYSERVER_PORT`        | Port of TUF Keyserver service
+`TUF_REPOSERVER_HOST`       | Host of TUF Reposerver service
+`TUF_REPOSERVER_PORT`       | Port of TUF Reposerver service
+`TUF_REPOSERVER_HOST_PUB`   | Host of public TUF Reposerver service
+`TUF_REPOSERVER_PORT_PUB`   | Port of public TUF Reposerver service
+`TUF_REPOSERVER_SCHEME_PUB` | Scheme of public TUF Reposerver service
+`USER_PROFILE_HOST`         | Host of User Profile service
+`USER_PROFILE_PORT`         | Port of User Profile service
+`WS_HOST`                   | Host of Websocket Events service
+`WS_PORT`                   | Port of Websocket Events service
+`WS_SCHEME`                 | Scheme of Websocket Events service
+
+For a description of the services and their APIs, refer to their respective repositories:
+
+Service                     | Repository
+-------------------:        | :------------------
+Auditor                     | https://github.com/advancedtelematic/auditor
+Campaigner                  | https://github.com/advancedtelematic/campaigner
+Device Registry             | https://github.com/advancedtelematic/ota-device-registry
+Director                    | https://github.com/advancedtelematic/director
+Treehub                     | https://github.com/advancedtelematic/treehub
+TUF Keyserver               | https://github.com/advancedtelematic/ota-tuf
+TUF Reposerver              | https://github.com/advancedtelematic/ota-tuf
+Web Events                  | https://github.com/advancedtelematic/web-events
+
+## Test
+
+To run all tests:
+
+```
+  sbt test
+```
+
+To run only unit tests:
+
+```
+  sbt ota-plus-web/ut:test
+```
+
+To run a specific test:
+
+```
+  sbt "ota-plus-web/testOnly com.advancedtelematic.ota.ClientSdkControllerSpec"
+```
 
 ## License
 
