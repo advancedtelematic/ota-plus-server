@@ -1217,13 +1217,22 @@
                         input {
                             text-transform: capitalize;
                         }
+                        .clickable-area {
+                            display: none;
+                        }
                     }
+
                     &:not(.artificial):hover {
                         img {
                             opacity: 1;
                         }
                         input {
                             background-color: rgba(255,255,255,.2);
+                        }
+                        .clickable-area {
+                            width: 90%;
+                            height: 36px;
+                            position: absolute;
                         }
                     }
                 }
