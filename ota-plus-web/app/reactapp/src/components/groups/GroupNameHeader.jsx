@@ -93,8 +93,7 @@ class GroupNameHeader extends Component {
 
                         <div onClick={this.enableGroupRename}
                              ref={(clickableArea) => {this.clickableArea = clickableArea}}
-                             className="clickable-area"
-                             style={{width: '90%', height: '36px', position: 'absolute'}}/>
+                             className="clickable-area"></div>
 
                         <input type="text"
                            ref={(input) => {this.groupNameInput = input}}
