@@ -73,12 +73,18 @@ class ListItemVersion extends Component {
         return isPackageBlacklisted ? isPackageBlacklisted : false;
     }
     render() {
-        const { version, showDependenciesModal } = this.props;        
+        const { version, showDependenciesModal } = this.props;
         let isBlacklisted = this.isPackageBlacklisted(version);
         let packageName = version.id.name;
+        let borderStyle = {};
+        if(version.installedOnEcus > 0) {
+            borderStyle = {
+                borderLeft: '10px solid ' + version.color,
+            };
+        }
         const directorBlock = (
             <span>
-                <div className="left-box" style={{borderLeft: '10px solid ' + version.color}}>                        
+                <div className="left-box" style={borderStyle}>
                     <div className="fields">
                         {version.customExists ? 
                             <span>
