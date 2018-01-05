@@ -107,7 +107,7 @@ export default class DevicesStore {
                 _.each(data, (item, index) => {
                     item.device = id;
                 });
-                this.multiTargetUpdates = _.uniq(this.multiTargetUpdates.concat(response.data), item => item.updateId);
+                this.multiTargetUpdates = _.uniq(this.multiTargetUpdates.concat(response.data), item => item.device);
                 this.multiTargetUpdatesFetchAsync = handleAsyncSuccess(response);
             })
             .catch((error) => {

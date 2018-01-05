@@ -1269,6 +1269,7 @@ export default class PackagesStore {
         this.directorDeviceHistoryTotalCount = 0;
         this.directorDevicePackagesFilter = '';
         this.installedIds = {};
+        this.expandedPackage = null;
     }
 
     _resetWizard() {

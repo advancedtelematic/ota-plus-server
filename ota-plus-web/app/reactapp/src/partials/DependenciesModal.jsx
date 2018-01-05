@@ -191,13 +191,15 @@ class DependenciesModal extends Component {
         });
       });
 
+      let pushedCampaigns = [];
       _.each(pack.mtus, (mtu, i) => {
         mtu.campaigns = [];
         mtu.queuedOn = [];
         mtu.installedOn = [];
         _.each(campaignsStore.campaigns, (campaign, ind) => {
-          if(campaign.update === mtu.updateId) {
+          if(campaign.update === mtu.updateId && pushedCampaigns.indexOf(campaign.update) === -1) {
             mtu.campaigns.push(campaign);
+            pushedCampaigns.push(campaign.update);
           }
         });
         _.each(devicesStore.devices, (device, ind) => {
