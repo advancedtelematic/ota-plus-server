@@ -151,30 +151,30 @@ class StatisticDetails extends Component {
                         </div>
                         <div className="bottom-container">
                             <div className="status-block">
-                                <div className="failure">
+                                <div className="success">
                                     <span></span>
-                                    <span>Failure</span>
-                                    <span>{overallStatistics.failed}</span>
-                                </div>
-                                <div className="cancelled">
-                                    <span></span>
-                                    <span>Cancelled</span>
-                                    <span>{overallStatistics.cancelled}</span>
+                                    <span>Success</span>
+                                    <span>{overallStatistics.successful}</span>
                                 </div>
                                 <div className="queued">
                                     <span></span>
                                     <span>Queued</span>
                                     <span>{overallStatistics.queued}</span>
                                 </div>
+                                <div className="cancelled">
+                                    <span></span>
+                                    <span>Cancelled</span>
+                                    <span>{overallStatistics.cancelled}</span>
+                                </div>
+                                <div className="failure">
+                                    <span></span>
+                                    <span>Failure</span>
+                                    <span>{overallStatistics.failed}</span>
+                                </div>
                                 <div className="not-proceed">
                                     <span></span>
                                     <span>Not processed</span>
                                     <span>{notProcessed }</span>
-                                </div>
-                                <div className="success">
-                                    <span></span>
-                                    <span>Successful</span>
-                                    <span>{overallStatistics.successful}</span>
                                 </div>
                                 <div className="not-impacted">
                                     <span></span>
