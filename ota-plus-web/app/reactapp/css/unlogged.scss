@@ -142,6 +142,48 @@ a, a:hover, a:focus {
         }
     }
 
+    .privay-notification {
+        text-align: center;
+        background: #48dad0;
+        padding: 25px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        color: #000;
+
+        .content {
+            width: 70%;
+            margin: auto;
+
+            @media(max-width: 1550px) {
+                width: 80%;
+            }
+
+            @media(max-width: 1366px) {
+                width: 85%;
+            }
+
+            @media(max-width: 1280px) {
+                width: 100%;
+            }
+
+            .title {
+                font-size: 21px;
+                margin-bottom: 15px;
+            }
+            .text {
+                font-size: 11px;
+                line-height: 1.5;
+            }
+            a {
+                font-size: 11px;
+                color: #000;
+                text-decoration: underline;
+            }
+        }
+    }
+
     .maintenance-container {
         display: flex;
         justify-content: center;
@@ -254,6 +296,10 @@ body {
                         background-image: none!important;
                         opacity: 1;
                     }
+                }
+
+                .auth0-lock-header-logo {
+                    height: 90px;
                 }
 
                 .auth0-lock-header-welcome {
