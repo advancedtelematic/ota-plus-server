@@ -37,7 +37,7 @@ class TufGroupsListItem extends Component {
                     <div className="element-box group">
                         <div className="icon"/>
                         <div className="desc">
-                            <div className="title">
+                            <div className="title" title={foundGroup.groupName}>
                                 {foundGroup.groupName}
                             </div>
                             <div className="subtitle">
@@ -49,16 +49,16 @@ class TufGroupsListItem extends Component {
                 <div className="stats">
                     <div className="devices-progress">
                         <div className="progress progress-blue">
-                            <div className={"progress-bar" + (campaign.statistics.status !== 'finished' && campaign.statistics.status !== 'cancelled' ? ' progress-bar-striped active': '')}
+                            <div className={"progress-bar" + (campaign.statistics.status !== 'finished'
+                                                                && campaign.statistics.status !== 'cancelled'
+                                                                && progress !== 100 ? ' progress-bar-striped active': '')}
                                  role="progressbar"
-                                 style={{width: campaign.statistics.status !== 'finished' && campaign.statistics.status !== 'cancelled' ? '0%' : (foundGroup.devices.total !== 0 ? progress + '%' : '100%')}}>
+                                 style={{width: foundGroup.devices.total !== 0 ? progress + '%' : '100%'}}>
                                 <div className="wrapper-rate">
                                     <span className="wrapper-rate-value">
-                                        {campaign.statistics.status !== 'finished' && campaign.statistics.status !== 'cancelled'
-                                            ? '0%'
-                                            : (foundGroup.devices.total !== 0
-                                                ? progress + '%'
-                                                : '100%')
+                                        {foundGroup.devices.total !== 0
+                                            ? progress + '%'
+                                            : '100%'
                                         }
                                     </span>
                                     <i className="fa fa-check" aria-hidden="true" />
