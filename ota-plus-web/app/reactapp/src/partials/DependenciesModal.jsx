@@ -65,6 +65,7 @@ class DependenciesModal extends Component {
     this.devicesFetchHandler();
     this.campaignsFetchHandler();
     this.packagesFetchHandler();
+    this.props.devicesStore._reset();
     window.removeEventListener("resize", this.resizeSankey);
   }
   showFullGraph() {
