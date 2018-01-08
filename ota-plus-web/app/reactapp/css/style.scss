@@ -1662,7 +1662,7 @@ input {
                         }                        
 
                         .element-box {
-                            width: auto;
+                            display: flex;
                             height: auto;
                             margin: 0;
                             border: 0;
@@ -1675,12 +1675,13 @@ input {
                                     float: none;
                                     display: inline-block;
                                     vertical-align: middle;
+                                    flex-grow: 1;
                                 }
 
                                 .desc {
-                                    width: auto;
                                     margin: 0 0 0 15px;
                                     float: none;
+                                    padding: 11px 0;
                                     display: inline-block;
                                     vertical-align: middle;
 
