@@ -473,10 +473,12 @@ class DependenciesModal extends Component {
           activePackages.push(item);
         }
 
+        let pushedPackages = [];
         _.map(item.mtus, (mtu, i) => {
           _.map(mtu.campaigns, (campaign, i) => {
-            if(activeItemName === campaign.name) {
+            if(activeItemName === campaign.name && pushedPackages.indexOf(item.imageName) === -1) {
               activePackages.push(item);
+              pushedPackages.push(item.imageName);
             }
           });
         });
