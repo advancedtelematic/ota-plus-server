@@ -145,12 +145,14 @@ a, a:hover, a:focus {
     .privay-notification {
         text-align: center;
         background: #48dad0;
-        padding: 25px;
+        padding: 15px;
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         color: #000;
+        z-index: 1;
+        cursor: pointer;
 
         .content {
             width: 70%;
@@ -170,11 +172,24 @@ a, a:hover, a:focus {
 
             .title {
                 font-size: 21px;
-                margin-bottom: 15px;
+                display: flex;
+                justify-content: center;
+
+                .fa {
+                    display: none;
+                    display: block;
+                    margin-left: 10px;
+
+                    &.fa-angle-up {
+                        display: none;
+                    }
+                }
             }
             .text {
                 font-size: 11px;
                 line-height: 1.5;
+                margin-top: 15px;
+                display: none;
             }
             a {
                 font-size: 11px;
