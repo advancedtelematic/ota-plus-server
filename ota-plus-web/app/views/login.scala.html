@@ -8,6 +8,7 @@
     <head>
         <title>ATS Garage - Log in</title>
         <link href="/assets/css/unlogged.css" rel="stylesheet" type="text/css"/>
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
         <script type="text/javascript" src='@routes.Assets.versioned("js/jquery-2.2.4.min.js")'></script>
         <script type="text/javascript" src='https://cdn.auth0.com/js/lock/10.22/lock.min.js'></script>
     </head>
@@ -41,6 +42,8 @@
                     <div class="content">
                         <div class="title">
                             IMPORTANT: Changes related to the sale of ATS
+                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                            <i class="fa fa-angle-down" aria-hidden="true"></i>
                         </div>
                         <div class="text">
                             Following the sale of ATS to HERE Technologies, HERE Technologies assumes responsibility for the provision of the service and personal data of ATS’ customers. HERE Technologies continues to collect and use your personal data in the ways described by HERE Privacy Policy, as available from <a href="https://legal.here.com/privacy" target="_blank">https://legal.here.com/privacy</a> and provides the service in accordance with the General <a href="https://atsgarage.com/en/terms-conditions.html" target="_blank">Terms and Conditions</a>. If you want to contact HERE about your personal data, you can do so by using the address: HERE Global B.V., c/o Privacy, De Run 1115, 5503 LB Veldhoven, Netherlands. We have updated our terms and policies to reflect this change.
@@ -69,6 +72,6 @@
         <input type="hidden" id="auth0-callback-url" value="@oauthConfig.callbackURL"/>
         <input type="hidden" id="auth0-token-audience" value="@auth0Config.audience"/>
         <script type="text/javascript" src='@routes.Assets.versioned("js/login.js")'></script>
-
+        <script type="text/javascript" src='@routes.Assets.versioned("js/privay-notification.js")'></script>
     </body>
 </html>
