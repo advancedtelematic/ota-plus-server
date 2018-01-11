@@ -12,6 +12,7 @@ class Fireworks extends Component {
     }
     componentWillMount() {
         Cookies.set('fireworksPageAcknowledged', 1);
+        this.props.devicesStore.fetchDevicesCount();
     }    
     acknowledgeFireworks() {
         let directorDeviceId = _.first(this.props.devicesStore.directorDevicesIds);
