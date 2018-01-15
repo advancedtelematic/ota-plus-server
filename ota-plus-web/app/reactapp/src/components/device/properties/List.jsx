@@ -39,7 +39,7 @@ class List extends Component {
 		return isPackageQueued ? isPackageQueued : false;
 	}
 	isPackageInstalled(version) {
-		const { devicesStore } = this.props;
+		const { devicesStore, hardwareStore } = this.props;
 		let installed = version.isInstalled;
 		let installedOnLegacy = _.find(this.props.packagesStore.initialDevicePackages, (dev) => {
 			return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
@@ -47,11 +47,12 @@ class List extends Component {
 		let installedOnPrimary = false;
 		let installedOnSecondary = false;
 		if(devicesStore.device.isDirector) {
-		    if(this.props.hardwareStore.activeEcu.type === 'primary' && this.props.devicesStore._getPrimaryHash() === version.packageHash) {
+		    if(hardwareStore.activeEcu.type === 'primary' && this.props.devicesStore._getPrimaryHash() === version.packageHash) {
 			    installedOnPrimary = true;
 		    }
-		    if(this.props.hardwareStore.activeEcu.type === 'secondary') {
-		        if(_.includes(this.props.devicesStore._getSecondaryHashes(), version.packageHash)) {
+		    if(hardwareStore.activeEcu.type === 'secondary') {
+		    	let serial = hardwareStore.activeEcu.serial;
+		        if(_.includes(this.props.devicesStore._getSecondaryHashesBySerial(serial), version.packageHash)) {
 			        installedOnSecondary = true;
 		        }
 		    }
