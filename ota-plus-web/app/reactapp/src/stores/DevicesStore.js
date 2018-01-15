@@ -372,10 +372,12 @@ export default class DevicesStore {
         return this.device.directorAttributes.primary.hardwareId;
     }
 
-    _getSecondaryHashes() {
+    _getSecondaryHashesBySerial(serial) {
         let hashes = [];
         _.map(this.device.directorAttributes.secondary, (secondary, index) => {
-            hashes.push(secondary.image.hash.sha256);
+            if(secondary.id === serial) {
+                hashes.push(secondary.image.hash.sha256);
+            }
         })
         return hashes;
     }
@@ -387,10 +389,10 @@ export default class DevicesStore {
         return null;
     }
 
-    _getSecondaryByHardwareId(hardwareId) {
+    _getSecondaryBySerial(serial) {
         let secondaryObject = {};
         _.each(this.device.directorAttributes.secondary, (secondary, index) => {
-            if(secondary.hardwareId === hardwareId) {
+            if(secondary.id === serial) {
                 secondaryObject = secondary;
             }
         });
