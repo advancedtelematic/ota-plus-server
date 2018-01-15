@@ -97,7 +97,7 @@ class HardwarePanel extends Component {
                                 key={index}
                             >
                                 <DeviceSecondaryEcu
-                                    active={hardwareStore.activeEcu.hardwareId === item.hardwareId}
+                                    active={hardwareStore.activeEcu.serial === item.id}
                                     ecu={item}
                                     hardwareStore={hardwareStore}
                                     selectEcu={selectEcu}

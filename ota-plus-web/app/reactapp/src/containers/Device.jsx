@@ -139,7 +139,8 @@ class Device extends Component {
                 installedOnPrimary = true;
             }
             if(hardwareStore.activeEcu.type === 'secondary') {
-                if(_.includes(devicesStore._getSecondaryHashes(), pack.id.version)) {
+                let serial = hardwareStore.activeEcu.serial;
+                if(_.includes(devicesStore._getSecondaryHashesBySerial(serial), pack.id.version)) {
                     installedOnSecondary = true;
                 }
             }

@@ -205,7 +205,7 @@ class List extends Component {
         const { devicesStore, packagesStore, hardwareStore } = this.props;
         switch(hardwareStore.activeEcu.type) {
             case 'secondary':
-                let secondaryObject = devicesStore._getSecondaryByHardwareId(hardwareStore.activeEcu.hardwareId);
+                let secondaryObject = devicesStore._getSecondaryBySerial(hardwareStore.activeEcu.serial);
                 let reportedHash = secondaryObject.image.hash.sha256;
                 let pack = packagesStore._getInstalledPackage(reportedHash, hardwareStore.activeEcu.hardwareId);
                 if(!pack) {
@@ -286,8 +286,9 @@ class List extends Component {
                                                     }
                                                 } else {
                                                     _.map(device.directorAttributes.secondary, (secondaryObj, ind) => {
-                                                        if(version.packageHash === secondaryObj.image.hash.sha256) {
-                                                            installedPackage = version.id.version;
+                                                        if(secondaryObj.id === hardwareStore.activeEcu.serial && 
+                                                            version.packageHash === secondaryObj.image.hash.sha256) {
+                                                                installedPackage = version.id.version;
                                                         }
                                                     });
                                                 }
