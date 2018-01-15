@@ -124,7 +124,8 @@ class Main extends Component {
                         installed = true;
                     }
                     if(this.hardwareStore.activeEcu.type === 'secondary') {
-                        if(_.includes(this.devicesStore._getSecondaryHashes(), expandedPackage.id.version)) {
+                        let serial = this.hardwareStore.activeEcu.serial;
+                        if(_.includes(this.devicesStore._getSecondaryHashesBySerial(serial), expandedPackage.id.version)) {
                             installed = true;
                         }
                     }
