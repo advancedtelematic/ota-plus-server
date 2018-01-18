@@ -17,9 +17,7 @@ class List extends Component {
     @observable lastShownIndex = 50;
     @observable fakeHeaderLetter = null;
     @observable fakeHeaderTopPosition = 0;
-    @observable packageExpandedManually = false;
     @observable expandedPackageName = null;
-    @observable selectedPackageVersion = null;
     @observable tmpIntervalId = null;
     @observable preparedPackages = {};
 
@@ -29,7 +27,6 @@ class List extends Component {
         this.generateItemsPositions = this.generateItemsPositions.bind(this);
         this.listScroll = this.listScroll.bind(this);
         this.togglePackage = this.togglePackage.bind(this);
-        this.togglePackageVersion = this.togglePackageVersion.bind(this);
         this.packagesChangeHandler = observe(props.packagesStore, (change) => {
             if(change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
@@ -49,13 +46,11 @@ class List extends Component {
         const { devicesStore } = nextProps;
         this.preparedPackages = this.selectPackagesToDisplay();
         if(devicesStore.device.isDirector) {
-            if(nextProps.packagesStore.expandedPackage && !nextProps.packagesStore.expandedPackage.unmanaged && !this.packageExpandedManually) {
+            if(nextProps.packagesStore.expandedPackage && !nextProps.packagesStore.expandedPackage.unmanaged) {
                 this.expandedPackageName = nextProps.packagesStore.expandedPackage.id.name;
-                this.selectedPackageVersion = nextProps.packagesStore.expandedPackage.id.version;
             }
-            else if(!this.packageExpandedManually) {
+            else {
                 this.expandedPackageName = null;
-                this.selectedPackageVersion = null;
             }
             this.addUnmanagedPackage(this.preparedPackages);
         }
@@ -121,10 +116,6 @@ class List extends Component {
     }
     togglePackage(packageName) {
         this.expandedPackageName = (this.expandedPackageName !== packageName ? packageName : null);
-        this.packageExpandedManually = true;
-    }
-    togglePackageVersion(hash) {
-        this.selectedPackageVersion = (this.selectedPackageVersion !== hash ? hash : null);;
     }
     startIntervalListScroll() {
         clearInterval(this.tmpIntervalId);
@@ -374,8 +365,6 @@ class List extends Component {
                                                                             queuedPackage={queuedPackage}
                                                                             installedPackage={installedPackage}
                                                                             showPackageDetails={showPackageDetails}
-                                                                            togglePackageVersion={this.togglePackageVersion}
-                                                                            selectedPackageVersion={this.selectedPackageVersion}
                                                                             key={i}
                                                                         />
                                                                     );
