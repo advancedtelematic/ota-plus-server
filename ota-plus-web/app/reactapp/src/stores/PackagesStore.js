@@ -881,24 +881,24 @@ export default class PackagesStore {
         });
     }
 
-    _getInstalledPackage(version, hardwareId) {
+    _getInstalledPackage(filepath, hardwareId) {
         let filteredPacks = _.filter(this.packages, (pack) => {
             return _.contains(pack.hardwareIds, hardwareId) ? pack : null;
         });
         let result = _.find(filteredPacks, (pack) => {            
-            return pack.packageHash === version;
+            return pack.imageName === filepath;
         });
         if(result) {
             result.isInstalled = true;
             return result;
         } else {
-            return this._getReportedPackage(version, hardwareId);
+            return this._getReportedPackage(filepath, hardwareId);
         }
     }
 
-    _getReportedPackage(version, hardwareId) {
+    _getReportedPackage(filepath, hardwareId) {
         let result = _.find(this.packages, (pack) => {            
-            return pack.packageHash === version;
+            return pack.imageName === filepath;
         });
         if(result) {
             result.isInstalled = true;

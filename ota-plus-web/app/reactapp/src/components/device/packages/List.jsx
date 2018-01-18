@@ -164,7 +164,7 @@ class List extends Component {
                     _.map(pack.versions, (version, ind) => {
 
                         if(hardwareStore.activeEcu.type === 'primary') {
-                            if(version.id.version === devicesStore._getPrimaryHash()) {
+                            if(version.imageName === devicesStore._getPrimaryFilepath()) {
                                 let packAdded = _.some(dirPacks[letter], (item, index) => {
                                     return item.packageName == version.id.name;
                                 });
@@ -174,7 +174,7 @@ class List extends Component {
                             }
                         } else {
                             _.map(devicesStore.device.directorAttributes.secondary, (secondaryObj, ind) => {
-                                if(version.id.version === secondaryObj.image.hash.sha256) {
+                                if(version.imageName === secondaryObj.image.filepath && hardwareStore.activeEcu.serial === secondaryObj.id) {
                                     let packAdded = _.some(dirPacks[letter], (item, index) => {
                                         return item.packageName == version.id.name;
                                     });
@@ -197,7 +197,7 @@ class List extends Component {
         switch(hardwareStore.activeEcu.type) {
             case 'secondary':
                 let secondaryObject = devicesStore._getSecondaryBySerial(hardwareStore.activeEcu.serial);
-                let reportedHash = secondaryObject.image.hash.sha256;
+                let reportedHash = secondaryObject.image.filepath;
                 let pack = packagesStore._getInstalledPackage(reportedHash, hardwareStore.activeEcu.hardwareId);
                 if(!pack) {
                     let unmanagedPack = {
@@ -214,7 +214,7 @@ class List extends Component {
                 break;
             case 'primary':
                 let primaryObject = devicesStore._getPrimaryByHardwareId(hardwareStore.activeEcu.hardwareId);
-                let hash = primaryObject.image.hash.sha256;
+                let hash = primaryObject.image.filepath;
                 let packItem = packagesStore._getInstalledPackage(hash, hardwareStore.activeEcu.hardwareId);
                 if(!packItem) {
                     let unmanagedPack = {
@@ -272,13 +272,13 @@ class List extends Component {
                                         if(device.isDirector && hardwareStore.activeEcu) {
                                             {_.map(pack.versions, (version, i) => {
                                                 if(hardwareStore.activeEcu.type === 'primary') {
-                                                    if(version.packageHash === devicesStore._getPrimaryHash()) {
+                                                    if(version.imageName === devicesStore._getPrimaryFilepath()) {
                                                         installedPackage = version.id.version;
                                                     }
                                                 } else {
                                                     _.map(device.directorAttributes.secondary, (secondaryObj, ind) => {
                                                         if(secondaryObj.id === hardwareStore.activeEcu.serial && 
-                                                            version.packageHash === secondaryObj.image.hash.sha256) {
+                                                            version.imageName === secondaryObj.image.filepath) {
                                                                 installedPackage = version.id.version;
                                                         }
                                                     });
