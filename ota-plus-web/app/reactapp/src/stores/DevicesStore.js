@@ -360,8 +360,8 @@ export default class DevicesStore {
             });
     }
 
-    _getPrimaryHash() {
-        return this.device.directorAttributes.primary.image.hash.sha256;
+    _getPrimaryFilepath() {
+        return this.device.directorAttributes.primary.image.filepath;
     }
 
     _getPrimarySerial() {
@@ -372,14 +372,14 @@ export default class DevicesStore {
         return this.device.directorAttributes.primary.hardwareId;
     }
 
-    _getSecondaryHashesBySerial(serial) {
-        let hashes = [];
+    _getSecondaryFilepathsBySerial(serial) {
+        let filepaths = [];
         _.map(this.device.directorAttributes.secondary, (secondary, index) => {
             if(secondary.id === serial) {
-                hashes.push(secondary.image.hash.sha256);
+                filepaths.push(secondary.image.filepath);
             }
         })
-        return hashes;
+        return filepaths;
     }
 
     _getPrimaryByHardwareId(hardwareId) {

@@ -17,7 +17,7 @@ class SecondaryEcu extends Component {
                     href="#"
                     id={"hardware-secondary-" + ecu.id}
                     className={active ? " selected" : ""}
-                    onClick={selectEcu.bind(this, ecu.hardwareId, ecu.id, ecu.image.hash.sha256, 'secondary')}
+                    onClick={selectEcu.bind(this, ecu.hardwareId, ecu.id, ecu.image.filepath, 'secondary')}
                 >
                     <div className="desc">
                         <span id={"hardware-id-" + ecu.hardwareId} className="hardware-label">

@@ -135,12 +135,12 @@ class Device extends Component {
         let installedOnSecondary = false;
         let installedOnLegacy = false;
         if(devicesStore.device.isDirector) {
-            if(hardwareStore.activeEcu.type === 'primary' && devicesStore._getPrimaryHash() === pack.id.version) {
+            if(hardwareStore.activeEcu.type === 'primary' && devicesStore._getPrimaryFilepath() === pack.imageName) {
                 installedOnPrimary = true;
             }
             if(hardwareStore.activeEcu.type === 'secondary') {
                 let serial = hardwareStore.activeEcu.serial;
-                if(_.includes(devicesStore._getSecondaryHashesBySerial(serial), pack.id.version)) {
+                if(_.includes(devicesStore._getSecondaryFilepathsBySerial(serial), pack.imageName)) {
                     installedOnSecondary = true;
                 }
             }
