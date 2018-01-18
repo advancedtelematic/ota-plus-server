@@ -11,11 +11,8 @@ class ListItemVersion extends Component {
         this.handlePackageVersionClick = this.handlePackageVersionClick.bind(this);
     }
     handlePackageVersionClick() {
-        const { version, selectedPackageVersion, showPackageDetails, togglePackageVersion } = this.props;
-        if(selectedPackageVersion !== version.id.version) {
-            showPackageDetails(version);
-            togglePackageVersion(version.id.version);
-        }
+        const { showPackageDetails, version } = this.props;
+        showPackageDetails(version);
     }
     isPackageBlacklisted(version) {
         const { packagesStore } = this.props;
@@ -30,12 +27,13 @@ class ListItemVersion extends Component {
             version, 
             queuedPackage, 
             installedPackage, 
-            selectedPackageVersion
         } = this.props;
         let blacklistedPackage = this.isPackageBlacklisted(version);
-        let expandedPackUuid = packagesStore.expandedPackage ? packagesStore.expandedPackage.uuid : null;
+
+        let isSelected = version.imageName === packagesStore.expandedPackage.imageName;
+        
         return (
-            <li className={selectedPackageVersion === version.id.version ? "selected" : ""} id={version.uuid === expandedPackUuid ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={this.handlePackageVersionClick}>
+            <li className={isSelected ? " selected" : ""} id={isSelected ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={this.handlePackageVersionClick}>
                 <div className="left-box">
                     <div className="hash">
                         <span className="sub-title">Hash / version:</span> 
@@ -78,7 +76,6 @@ ListItemVersion.propTypes = {
     version: PropTypes.object.isRequired,
     queuedPackage: PropTypes.string,
     installedPackage: PropTypes.string,
-    togglePackageVersion: PropTypes.func.isRequired,
 }
 
 export default ListItemVersion;
