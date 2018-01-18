@@ -47,12 +47,12 @@ class List extends Component {
 		let installedOnPrimary = false;
 		let installedOnSecondary = false;
 		if(devicesStore.device.isDirector) {
-		    if(hardwareStore.activeEcu.type === 'primary' && this.props.devicesStore._getPrimaryHash() === version.packageHash) {
+		    if(hardwareStore.activeEcu.type === 'primary' && this.props.devicesStore._getPrimaryFilepath() === version.imageName) {
 			    installedOnPrimary = true;
 		    }
 		    if(hardwareStore.activeEcu.type === 'secondary') {
 		    	let serial = hardwareStore.activeEcu.serial;
-		        if(_.includes(this.props.devicesStore._getSecondaryHashesBySerial(serial), version.packageHash)) {
+		        if(_.includes(this.props.devicesStore._getSecondaryFilepathsBySerial(serial), version.imageName)) {
 			        installedOnSecondary = true;
 		        }
 		    }

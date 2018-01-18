@@ -43,7 +43,7 @@ class Device extends Component {
                 this.selectEcu(
                     props.devicesStore._getPrimaryHardwareId(), 
                     props.devicesStore._getPrimarySerial(), 
-                    props.devicesStore._getPrimaryHash(), 
+                    props.devicesStore._getPrimaryFilepath(), 
                     'primary'
                 );
                 this.packagesReady = true;
@@ -88,7 +88,7 @@ class Device extends Component {
         };
         devicesStore.cancelMtuUpdate(data);
     }
-    selectEcu(hardwareId, serial, hash, type, e) {
+    selectEcu(hardwareId, serial, filepath, type, e) {
         if(e) e.preventDefault();
         const { packagesStore, devicesStore, hardwareStore } = this.props;
         hardwareStore.activeEcu = {
@@ -96,7 +96,7 @@ class Device extends Component {
             serial: serial,
             type: type
         };
-        let expandedPackage = packagesStore._getInstalledPackage(hash, hardwareId);
+        let expandedPackage = packagesStore._getInstalledPackage(filepath, hardwareId);
         if(!expandedPackage) {
             packagesStore.expandedPackage = {
                 unmanaged: true

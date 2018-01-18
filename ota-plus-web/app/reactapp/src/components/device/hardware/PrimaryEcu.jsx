@@ -22,7 +22,7 @@ class PrimaryEcu extends Component {
                         this, 
                         devicesStore._getPrimaryHardwareId(), 
                         devicesStore._getPrimarySerial(), 
-                        devicesStore._getPrimaryHash(), 
+                        devicesStore._getPrimaryFilepath(), 
                         'primary'
                     ) : e => e.preventDefault()}
                 >

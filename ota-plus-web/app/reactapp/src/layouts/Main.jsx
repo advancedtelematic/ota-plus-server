@@ -120,12 +120,12 @@ class Main extends Component {
                 let expandedPackage = this.packagesStore.expandedPackage;
                 let installed = false;
                 if(this.devicesStore.device.isDirector) {
-                    if(this.hardwareStore.activeEcu.type === 'primary' && this.devicesStore._getPrimaryHash() === expandedPackage.id.version) {
+                    if(this.hardwareStore.activeEcu.type === 'primary' && this.devicesStore._getPrimaryFilepath() === expandedPackage.imageName) {
                         installed = true;
                     }
                     if(this.hardwareStore.activeEcu.type === 'secondary') {
                         let serial = this.hardwareStore.activeEcu.serial;
-                        if(_.includes(this.devicesStore._getSecondaryHashesBySerial(serial), expandedPackage.id.version)) {
+                        if(_.includes(this.devicesStore._getSecondaryHashesBySerial(serial), expandedPackage.imageName)) {
                             installed = true;
                         }
                     }
