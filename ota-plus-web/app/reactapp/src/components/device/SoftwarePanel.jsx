@@ -13,17 +13,6 @@ const noSearchResults = "No matching packages found.";
 class SoftwarePanel extends Component {
     constructor(props) {
         super(props);
-        this.changeSort = this.changeSort.bind(this);
-        this.changeFilter = this.changeFilter.bind(this);
-    }
-    changeSort(sort, e) {
-        const { packagesStore } = this.props;
-        if(e) e.preventDefault();
-        packagesStore._prepareDevicePackages(sort);
-    }
-    changeFilter(filter) {
-        const { packagesStore } = this.props;
-        packagesStore.fetchPackages(filter);
     }
     render() {
         const { devicesStore, packagesStore, hardwareStore, togglePackageAutoUpdate, toggleTufPackageAutoUpdate, onFileDrop, showPackageDetails, packagesReady } = this.props;

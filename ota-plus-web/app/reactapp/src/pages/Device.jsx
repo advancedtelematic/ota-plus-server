@@ -27,7 +27,9 @@ class Device extends Component {
                     props.packagesStore.fetchTufPackages();
                     props.devicesStore.fetchMultiTargetUpdates(props.params.id);
                 } else {
-                    props.packagesStore.fetchPackages();
+                    if(this.props.isLegacyShown) {
+                        props.packagesStore.fetchPackages();
+                    }
                     props.packagesStore.fetchInitialDevicePackages(props.params.id);
                     props.packagesStore.fetchBlacklist();
                     props.packagesStore.fetchDeviceAutoInstalledPackages(props.params.id);

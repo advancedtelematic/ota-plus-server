@@ -14,7 +14,9 @@ class Packages extends Component {
     }
     componentWillMount() {
         this.props.packagesStore.page = 'packages';
-        this.props.packagesStore.fetchPackages();
+        if(this.props.isLegacyShown) {
+            this.props.packagesStore.fetchPackages();
+        }
         this.props.packagesStore.fetchTufPackages();
         this.props.packagesStore.fetchBlacklist();
         this.props.devicesStore.fetchDevicesCount();
