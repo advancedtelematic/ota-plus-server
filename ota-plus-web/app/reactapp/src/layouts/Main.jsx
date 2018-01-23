@@ -52,6 +52,7 @@ class Main extends Component {
     @observable uiUserProfileMenu = document.getElementById('toggle-userProfileMenu').value === "true";
     @observable uiCredentialsDownload = document.getElementById('toggle-credentialsDownload').value === "true";
     @observable prebuiltDebrpm = document.getElementById('toggle-prebuiltDebrpm').value === "true";
+    @observable isLegacyShown = document.getElementById('toggle-legacyCampaigns').value === "false";
 
     constructor(props) {
         super(props);
@@ -220,6 +221,7 @@ class Main extends Component {
                 hideWizard={this.hideWizard}
                 toggleWizard={this.toggleWizard}
                 minimizedWizards={this.minimizedWizards}
+                isLegacyShown={this.isLegacyShown}
                 key={this.wizards.length}
             />
         );
@@ -360,6 +362,7 @@ class Main extends Component {
                         uiUserProfileMenu={this.uiUserProfileMenu}
                         uiCredentialsDownload={this.uiCredentialsDownload}
                         prebuiltDebrpm={this.prebuiltDebrpm}
+                        isLegacyShown={this.isLegacyShown}
                     />
                 </FadeAnimation>
                 <SizeVerify 

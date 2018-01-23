@@ -20,10 +20,12 @@ class Home extends Component {
     componentWillMount() {
         this.props.devicesStore.fetchDevices();
         this.props.devicesStore.fetchDevicesCount();
-        this.props.packagesStore.fetchPackages();
+        if(this.props.isLegacyShown) {
+            this.props.packagesStore.fetchPackages();
+            this.props.campaignsStore.fetchLegacyCampaigns();
+        }
         this.props.packagesStore.fetchTufPackages();
         this.props.campaignsStore.fetchCampaigns();
-        this.props.campaignsStore.fetchLegacyCampaigns();
     }
     componentWillUnmount() {
         this.props.devicesStore._reset();

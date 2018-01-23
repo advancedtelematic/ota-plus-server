@@ -14,7 +14,9 @@ class Campaigns extends Component {
     }
     componentWillMount() {
         this.props.campaignsStore.fetchCampaigns();
-        this.props.campaignsStore.fetchLegacyCampaigns();
+        if(this.props.isLegacyShown) {
+            this.props.campaignsStore.fetchLegacyCampaigns();
+        }
         this.props.groupsStore.fetchGroups();
     }
     componentWillUnmount() {

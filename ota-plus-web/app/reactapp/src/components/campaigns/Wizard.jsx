@@ -402,7 +402,7 @@ class Wizard extends Component {
         this.filterValue = filterValue;
     }
     render() {
-        const { campaignsStore, packagesStore, groupsStore, hardwareStore, wizardIdentifier, hideWizard, toggleWizard, minimizedWizards } = this.props;
+        const { campaignsStore, packagesStore, groupsStore, hardwareStore, wizardIdentifier, hideWizard, toggleWizard, minimizedWizards, isLegacyShown } = this.props;
         const currentStep = this.wizardSteps[this.currentStepId];
 
         let wizardMinimized = _.find(minimizedWizards, (wizard, index) => {
@@ -450,6 +450,7 @@ class Wizard extends Component {
                                                 setRawSelectedPacks: this.setRawSelectedPacks,
                                                 rawSelectedPacks: this.rawSelectedPacks,
                                                 removeSelectedPacksByKeys: this.removeSelectedPacksByKeys,
+                                                isLegacyShown: isLegacyShown,
                                             })
                                         }
                                         {currentStep.isSearchBarShown ?

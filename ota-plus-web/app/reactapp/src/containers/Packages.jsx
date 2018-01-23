@@ -35,9 +35,6 @@ class Packages extends Component {
         this.hideFileUploaderModal = this.hideFileUploaderModal.bind(this);
         this.showBlacklistModal = this.showBlacklistModal.bind(this);
         this.hideBlacklistModal = this.hideBlacklistModal.bind(this);
-        this.changeSort = this.changeSort.bind(this);
-        this.changeFilter = this.changeFilter.bind(this);
-        this.changeType = this.changeType.bind(this);
         this.onFileDrop = this.onFileDrop.bind(this);
         this.toggleTufUpload = this.toggleTufUpload.bind(this);
         this.handleCopy = this.handleCopy.bind(this);
@@ -102,16 +99,6 @@ class Packages extends Component {
         this.blacklistModalShown = false;
         this.blacklistAction = {};
         this.props.packagesStore._resetBlacklistActions();
-    }
-    changeSort(sort, e) {
-        if(e) e.preventDefault();
-        this.props.packagesStore._preparePackages(sort);
-    }
-    changeFilter(filter) {
-        this.props.packagesStore.fetchPackages(filter);
-    }
-    changeType(type) {
-        this.props.packagesStore._preparePackages(this.props.packagesStore.packagesSort, type);
     }
     onFileDrop(files) {
         this.showCreateModal(files);
