@@ -52,7 +52,7 @@ class Main extends Component {
     @observable uiUserProfileMenu = document.getElementById('toggle-userProfileMenu').value === "true";
     @observable uiCredentialsDownload = document.getElementById('toggle-credentialsDownload').value === "true";
     @observable prebuiltDebrpm = document.getElementById('toggle-prebuiltDebrpm').value === "true";
-    @observable isLegacyShown = document.getElementById('toggle-legacyCampaigns').value === "false";
+    @observable isLegacyShown = document.getElementById('toggle-legacyCampaigns').value === "true";
 
     constructor(props) {
         super(props);
