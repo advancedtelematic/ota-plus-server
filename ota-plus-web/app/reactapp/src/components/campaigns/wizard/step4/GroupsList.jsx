@@ -68,43 +68,49 @@ class GroupsList extends Component {
         const { chosenGroups, setWizardData, groupsStore } = this.props;
         return (
             <div className="ios-list" ref="list">
-                <InfiniteScroll
-                    className="wrapper-infinite-scroll"
-                    hasMore={groupsStore.groupsCurrentPage < groupsStore.groupsTotalCount / groupsStore.groupsLimit}
-                    isLoading={groupsStore.groupsFetchAsync.isFetching}
-                    useWindow={false}
-                    loadMore={() => {
-                        groupsStore.fetchGroups()
-                    }}
-                >
-                    <span>
-                        <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
-                            {this.fakeHeaderLetter}
-                        </div>
-                        
-                        {_.map(groupsStore.preparedGroups, (groups, letter) => {
-                            return (
-                                <span key={letter}>
-                                    <div className="header">
-                                        {letter}
-                                    </div>
-                                    {_.map(groups, (group, index) => {
-                                        return (
-                                            <span key={index}>
-                                                <GroupsListItem 
-                                                    group={group}
-                                                    setWizardData={setWizardData}
-                                                    groupsStore={groupsStore}
-                                                    isChosen={_.findWhere(chosenGroups, {id: group.id}) ? true : false}
-                                                /> 
-                                            </span>
-                                        );
-                                    })}
-                                </span>
-                            );
-                        })}
-                    </span>
-                </InfiniteScroll>
+                {Object.keys(groupsStore.preparedGroups).length ?
+                    <InfiniteScroll
+                        className="wrapper-infinite-scroll"
+                        hasMore={groupsStore.groupsCurrentPage < groupsStore.groupsTotalCount / groupsStore.groupsLimit}
+                        isLoading={groupsStore.groupsFetchAsync.isFetching}
+                        useWindow={false}
+                        loadMore={() => {
+                            groupsStore.fetchGroups()
+                        }}
+                    >
+                        <span>
+                            <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
+                                {this.fakeHeaderLetter}
+                            </div>
+                            
+                            {_.map(groupsStore.preparedGroups, (groups, letter) => {
+                                return (
+                                    <span key={letter}>
+                                        <div className="header">
+                                            {letter}
+                                        </div>
+                                        {_.map(groups, (group, index) => {
+                                            return (
+                                                <span key={index}>
+                                                    <GroupsListItem 
+                                                        group={group}
+                                                        setWizardData={setWizardData}
+                                                        groupsStore={groupsStore}
+                                                        isChosen={_.findWhere(chosenGroups, {id: group.id}) ? true : false}
+                                                    /> 
+                                                </span>
+                                            );
+                                        })}
+                                    </span>
+                                );
+                            })}
+                        </span>
+                    </InfiniteScroll>
+                :
+                    <div className="wrapper-center">
+                        No groups found.
+                    </div>
+                }                
             </div>
         );
     }

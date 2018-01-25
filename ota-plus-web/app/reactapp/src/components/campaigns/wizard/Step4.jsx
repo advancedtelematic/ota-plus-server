@@ -31,7 +31,7 @@ class WizardStep4 extends Component {
         const { wizardData, groupsStore } = this.props;
         const chosenGroups = wizardData[3].groups;
         return (
-            !groupsStore.groupsTotalCount ?
+            groupsStore.groupsFetchAsync.isFetching ?
                 <div className="wrapper-center">
                     <Loader />
                 </div>
