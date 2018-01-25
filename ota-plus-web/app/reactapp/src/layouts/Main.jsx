@@ -150,11 +150,13 @@ class Main extends Component {
     componentWillMount() {
         this.router = this.context.router;
         this.router.listen(this.locationHasChanged);
-        this.userStore.fetchUser();
+        if(this.uiUserProfileMenu) {
+            this.userStore.fetchUser();
+            this.featuresStore.fetchFeatures();
+        }
         this.devicesStore.fetchDevices();
         this.devicesStore.fetchDevicesCount();
         this.hardwareStore.fetchHardwareIds();
-        this.featuresStore.fetchFeatures();
         this.websocketHandler.init();
 
         if (!this.otaPlusStore.atsGarageTheme) {
