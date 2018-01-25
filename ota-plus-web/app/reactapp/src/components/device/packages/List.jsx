@@ -266,9 +266,7 @@ class List extends Component {
                                         const foundInstalled = _.find(pack.versions, (version) => {
                                             return version.attributes.status == 'installed';
                                         });
-                                        
                                         installedPackage = foundInstalled ? foundInstalled.id.version : null;
-
                                         if(device.isDirector && hardwareStore.activeEcu) {
                                             {_.map(pack.versions, (version, i) => {
                                                 if(hardwareStore.activeEcu.type === 'primary') {
@@ -285,7 +283,6 @@ class List extends Component {
                                                 }
                                             })};
                                         }
-
                                         const foundBlacklistedAndInstalled = _.find(pack.versions, (version) => {
                                             return version.isBlackListed && version.attributes.status == 'installed';
                                         });

@@ -48,6 +48,7 @@ export default class DevicesStore {
     @observable deviceHistory = [];
     @observable deviceUpdatesLogs = [];
     @observable multiTargetUpdates = [];
+    @observable multiTargetUpdatesSaved = [];
     @observable legacyDevicesCount = 0;
     @observable directorDevicesCount = 0;
     @observable directorDevicesIds = [];
@@ -107,7 +108,8 @@ export default class DevicesStore {
                 _.each(data, (item, index) => {
                     item.device = id;
                 });
-                this.multiTargetUpdates = _.uniq(this.multiTargetUpdates.concat(response.data), item => item.device);
+                this.multiTargetUpdates = response.data;
+                this.multiTargetUpdatesSaved = _.uniq(this.multiTargetUpdates.concat(response.data), item => item.device);
                 this.multiTargetUpdatesFetchAsync = handleAsyncSuccess(response);
             })
             .catch((error) => {
@@ -312,7 +314,6 @@ export default class DevicesStore {
                             primary: _.first(primary),
                             secondary: secondary
                         };
-
                         this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
                     })
                     .catch((error) => {
@@ -448,6 +449,7 @@ export default class DevicesStore {
         this.deviceHistory = [];
         this.deviceUpdatesLogs = [];
         this.multiTargetUpdates = [];
+        this.multiTargetUpdatesSaved = [];
         this.legacyDevicesCount = 0;
         this.directorDevicesCount = 0;
         this.directorDevicesIds = [];

@@ -142,7 +142,7 @@ class DependenciesModal extends Component {
   }
   campaignsFetched() {
     const { campaignsStore, devicesStore, packagesStore } = this.props;
-    _.each(devicesStore.multiTargetUpdates, (mtuUpdate, i) => {
+    _.each(devicesStore.multiTargetUpdatesSaved, (mtuUpdate, i) => {
       let packageHash = mtuUpdate.targets[Object.keys(mtuUpdate.targets)[0]].image.fileinfo.hashes.sha256;
       let pack = _.find(packagesStore.directorPackages, (pack) => {
         return pack.packageHash === packageHash;
@@ -171,7 +171,7 @@ class DependenciesModal extends Component {
 
     _.each(source, (pack, index) => {
       pack.mtus = [];
-      _.each(devicesStore.multiTargetUpdates, (mtu, i) => {
+      _.each(devicesStore.multiTargetUpdatesSaved, (mtu, i) => {
         mtu.type = 'queue';
         let packageHash = mtu.targets[Object.keys(mtu.targets)[0]].image.fileinfo.hashes.sha256;
         if(pack.packageHash === packageHash) {
@@ -448,7 +448,7 @@ class DependenciesModal extends Component {
     if(this.showOnlyActive) {      
       _.each(this.packages, (pack, index) => {
         pack.mtus = [];
-        _.each(devicesStore.multiTargetUpdates, (mtu, i) => {
+        _.each(devicesStore.multiTargetUpdatesSaved, (mtu, i) => {
           mtu.type = 'queue';
           let packageHash = mtu.targets[Object.keys(mtu.targets)[0]].image.fileinfo.hashes.sha256;
           if(pack.packageHash === packageHash) {
