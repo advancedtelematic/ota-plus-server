@@ -13,6 +13,7 @@ import {
     WizardStep3,
     WizardStep4,
     WizardStep5,
+    WizardStep6,
 } from './wizard';
 
 const initialCurrentStepId = 0;
@@ -64,6 +65,13 @@ const initialWizardStep = [
     },
     {
         class: WizardStep5,
+        title: "Dependencies management",
+        name: "dependencies-management",
+        isFinished: false,
+        isSearchBarShown: false,
+    },
+    {
+        class: WizardStep6,
         title: "Summary",
         name: "summary",
         finishButtonLabel: "Launch",
@@ -87,6 +95,7 @@ class Wizard extends Component {
 
     constructor(props) {
         super(props);
+        this.addToCampaign = this.addToCampaign.bind(this);
         this.isFirstStep = this.isFirstStep.bind(this);
         this.isLastStep = this.isLastStep.bind(this);
         this.prevStep = this.prevStep.bind(this);
@@ -180,6 +189,19 @@ class Wizard extends Component {
         this.legacyCampaignSavePackageHandler();
         this.legacyCampaignSaveGroupsHandler();
         this.legacyCampaignLaunchHandler();
+    }
+    addToCampaign(packName, e) {
+        if(e) e.preventDefault();
+        this.currentStepId = 2;
+        let sortedPacks = this.props.packagesStore.preparedPackages;
+        _.each(sortedPacks, (packs, letter) => {
+            let pack = _.find(packs, pack => pack.packageName === packName);
+            if(pack) {
+                if(this.wizardData[1].packages.indexOf(pack) === -1) {
+                    this.wizardData[1].packages.push(pack);
+                }
+            }
+        });
     }
     setRawSelectedPacks(packs) {
         this.rawSelectedPacks = [];
@@ -451,6 +473,7 @@ class Wizard extends Component {
                                                 rawSelectedPacks: this.rawSelectedPacks,
                                                 removeSelectedPacksByKeys: this.removeSelectedPacksByKeys,
                                                 isLegacyShown: isLegacyShown,
+                                                addToCampaign: this.addToCampaign,
                                             })
                                         }
                                         {currentStep.isSearchBarShown ?
