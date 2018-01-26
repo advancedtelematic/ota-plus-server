@@ -129,7 +129,7 @@ class List extends Component {
         this.tmpIntervalId = null;
     }
     render() {
-        const { showBlacklistModal, packagesStore, onFileDrop, highlightedPackage, showDependenciesModal } = this.props;
+        const { showBlacklistModal, packagesStore, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager } = this.props;
         return (
             <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching ? " fetching" : "")} ref="list">
                 {packagesStore.packagesCount ? 
@@ -196,6 +196,7 @@ class List extends Component {
                                                                                 showBlacklistModal={showBlacklistModal}
                                                                                 packagesStore={packagesStore}
                                                                                 showDependenciesModal={showDependenciesModal}
+                                                                                showDependenciesManager={showDependenciesManager}
                                                                                 key={i}
                                                                             />
                                                                         );
@@ -213,6 +214,7 @@ class List extends Component {
                                                                                 showBlacklistModal={showBlacklistModal}
                                                                                 packagesStore={packagesStore}
                                                                                 showDependenciesModal={showDependenciesModal}
+                                                                                showDependenciesManager={showDependenciesManager}
                                                                                 key={i}
                                                                             />
                                                                         );

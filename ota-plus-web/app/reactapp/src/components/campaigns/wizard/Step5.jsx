@@ -1,197 +1,180 @@
 import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Loader, AsyncResponse } from '../../../partials';
-import { translate } from 'react-i18next';
+import { observable, extendObservable } from 'mobx';
 import _ from 'underscore';
-import moment from 'moment';
+import { SelectField, MenuItem } from 'material-ui';
+import { Loader } from '../../../partials';
+import { FlatButton } from 'material-ui';
 
 @observer
 class WizardStep5 extends Component {
-    @observable packages = null;
+    @observable blocks = [];
+    @observable isLoading = false;
 
     constructor(props) {
         super(props);
+        this.addBlock = this.addBlock.bind(this);
+        this.formatVersions = this.formatVersions.bind(this);
+        this.getPackVersions = this.getPackVersions.bind(this);
+        this.onParentVersionChange = this.onParentVersionChange.bind(this);
     }
     componentWillMount() {
-        const { wizardData } = this.props;
-        let packages = wizardData[1].packages;
-        let versions = wizardData[2].versions;
-
-        _.each(packages, (pack, index) => {
-            pack.updates = [];
-            _.each(versions, (version, packageName) => {
-                if(pack.packageName === packageName) {
-                    pack.updates.push(version);
+        const { wizardData, packagesStore, markStepAsNotFinished } = this.props;
+        markStepAsNotFinished();
+        let chosenVersions = wizardData[2].versions;
+        _.each(chosenVersions, (values, packName) => {
+            let obj = {
+                packName: packName,
+                filepath: values.toFilepath
+            };
+            this.checkVersion(obj);
+        });
+    }
+    checkVersion(data) {
+        const { packagesStore, wizardData } = this.props;
+        let chosenVersions = wizardData[2].versions;
+        let requiredPackages = JSON.parse(localStorage.getItem(data.filepath + '-required'));
+        let incompatiblePackages = JSON.parse(localStorage.getItem(data.filepath + '-incompatibles'));
+        if(requiredPackages) {
+            _.each(requiredPackages, (filepath, index) => {
+                let skipAdd = false;
+                _.each(chosenVersions, (values, pName) => {
+                    if(values.toFilepath === filepath) {                        
+                        skipAdd = true;
+                    }
+                });
+                if(!skipAdd) {
+                    let childPack = _.find(packagesStore.directorPackages, pack => pack.imageName === filepath);
+                    let obj = {
+                        parentPack: data.packName,
+                        parentFilepath: data.filepath,
+                        childPack: childPack.id.name,
+                        childRequiredVersion: childPack.id.version
+                    };
+                    this.addBlock(obj);
+                }
+            });
+        }
+        if(!this.blocks.length) {
+            this.props.markStepAsFinished();
+        }
+    }
+    addBlock(data) {
+        this.blocks.push(data);
+    }
+    getPackVersions(packName) {
+        const { packagesStore } = this.props;
+        let versions = [];
+        _.each(packagesStore.preparedPackages, (packs, letter) => {
+            _.each(packs, (pack, i) => {
+                if(pack.packageName === packName) {
+                    versions = pack.versions;
                 }
             });
         });
-
-        this.packages = packages;
+        return versions;
     }
-    getLegacyCreatedAt(version) {
-        let createdAt = null;
-        _.each(this.props.packagesStore.packages, (pack, index) => {
-            if(pack.id.version === version) {
-                createdAt = pack.createdAt;
-            }
+    formatVersions(packName) {
+        let versions = this.getPackVersions(packName);
+        let menuItems = _.map(versions, (version, i) => {
+            return (
+                <MenuItem
+                    key={version.id.version}
+                    insetChildren={true}
+                    checked={false}
+                    value={version.imageName}
+                    primaryText={<span className='version-hash' style={{
+                        fontSize: '12px',
+                    }}>{version.id.version}</span>}
+                    id={"version-from-menu-item-" + version.id.version}
+                    className={"version-menu-item"}
+                />
+            );
         });
-        return createdAt;
+        return menuItems;
+    }
+    onParentVersionChange(data, event, index, filepath) {        
+        data.imageName = filepath;
+        this.props.selectVersion(data);
+
+        let block = _.find(this.blocks, block => block.parentPack === data.packageName);
+        block.parentFilepath = filepath;
+
+        this.isLoading = true;
+        this.blocks = [];
+        let obj = {
+            packName: data.packageName,
+            filepath: filepath,
+        };
+        this.checkVersion(obj);
+
+        let that = this;
+        setTimeout(() => {
+            that.isLoading = false;
+        }, 500);
     }
     render() {
-        const { t, wizardData, groupsStore, campaignsStore } = this.props;
+        const { addToCampaign } = this.props;
         return (
-            <div className="step-inner">
-                <AsyncResponse 
-                    handledStatus="error"
-                    action={campaignsStore.campaignsLegacyCreateAsync}
-                    errorMsg={
-                        "Campaign with given name already exists."
-                    }
-                />
-                <AsyncResponse 
-                    handledStatus="error"
-                    action={campaignsStore.campaignsCreateAsync}
-                    errorMsg={
-                        "Campaign with given name already exists."
-                    }
-                />
-                <div className="box-bordered">
-                    <div className="title">
-                        Software & Version
+            <div className="content">
+                {this.isLoading ?
+                    <div className="wrapper-center">
+                        <Loader />
                     </div>
-                    <div className="desc">
-                        {_.map(this.packages, (pack, index) => {
+                :
+                    this.blocks.length ? 
+                        _.map(this.blocks, (block, index) => {
                             return (
-                                <span key={index}>
-                                    <div className="package-container">
-                                        {_.map(pack.updates, (update, i) => {
-                                            return (
-                                                <span key={index}>
-                                                    <div className="update-container">
-                                                        {pack.inDirector ?
-                                                            <span>
-                                                                <span className="director-updates">
-                                                                    <div className="update-from">
-                                                                        <div className="text">
-                                                                            From:
-                                                                        </div>
-                                                                        <div className="value">
-                                                                            {!_.isEmpty(update.changedPackage) ?
-                                                                                update.changedPackage.packageName
-                                                                            :
-                                                                                update.toPackageName
-                                                                            }
-                                                                            <span className="in-director">
-                                                                                <img src="/assets/img/icons/black/lock.svg" alt="Director" />
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="update-to">
-                                                                        <div className="text">
-                                                                            To:
-                                                                        </div>
-                                                                        <div className="value">
-                                                                            {update.toPackageName}
-                                                                            <span className="in-director">
-                                                                                <img src="/assets/img/icons/black/lock.svg" alt="Director" />
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                </span>
-                                                                <span className="director-versions">
-                                                                    <div className="update-from">
-                                                                        <div className="text">
-                                                                            Version:
-                                                                        </div>
-                                                                        <div className="value">
-                                                                            {update.from}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="update-to">
-                                                                        <div className="text">
-                                                                            Version:
-                                                                        </div>
-                                                                        <div className="value">
-                                                                            {update.to}
-                                                                        </div>
-                                                                    </div>
-                                                                </span>
-                                                            </span>
-                                                        :
-                                                            <span className="legacy-updates">
-                                                                <div className="update-to">
-                                                                    <div className="text">
-                                                                        To:
-                                                                    </div>
-                                                                    <div className="value">
-                                                                        <div className="hash">
-                                                                            Hash: {update.to}
-                                                                        </div>
-                                                                        <div className="createdAt">
-                                                                            Created at: {moment(this.getLegacyCreatedAt(update.to)).format("ddd MMM DD YYYY, h:mm:ss A")}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </span>
-                                                        }
-                                                    </div>
-                                                    {pack.inDirector ?
-                                                        <div className="hardware-id-container">
-                                                            <div className="text">
-                                                                On:
-                                                            </div>
-                                                            <div className="value hardware-label">
-                                                                {update.hardwareId}
-                                                            </div>
-                                                        </div>
-                                                    :
-                                                        null
-                                                    }
-                                                </span>
-                                            );
-                                        })}
-                                    </div>
-                                </span>
-                            );
-                        })}
-                    </div>
-                </div>
-                <div className="box-bordered groups">
-                    <div className="title">
-                        Groups & Devices
-                    </div>
-                    <div className="desc">
-                        <div className="wrapper-groups">
-                            {_.map(wizardData[3].groups, (group, index) => {
-                                return (
-                                    <div className="element-box group" key={index}>
-                                        <div className="icon"></div>
-                                        <div className="desc">
-                                            <div className="title" id="wizard-summary-group-name">
-                                                {group.groupName}
-                                            </div>
-                                            <div className="subtitle" id="wizard-summary-group-devices">
-                                                {t('common.deviceWithCount', {count: groupsStore._getGroupDevices(group).length})}
-                                            </div>
+                                <section className="pair" key={index}>
+                                    <div className="item">
+                                        <div className="name">
+                                            {block.parentPack}
+                                        </div>
+                                        <div className="version">
+                                            <SelectField
+                                                id="from-pack-versions"
+                                                multiple={false}
+                                                onChange={this.onParentVersionChange.bind(this, {type: 'to', packageName: block.parentPack})}
+                                                value={block.parentFilepath}
+                                                style={{display: 'block', width : '100%'}}
+                                                selectedMenuItemStyle={{color: '#000', fontWeight: 'bold'}}
+                                            >
+                                                {this.formatVersions(block.parentPack)}
+                                            </SelectField>
                                         </div>
                                     </div>
-                                );
-                            })}
-                            
+                                    <div className="item">
+                                        <div className="name">
+                                            <div className="warning">
+                                                {block.childPack}/{block.childRequiredVersion}
+                                            </div>
+                                            <div>
+                                                is required
+                                            </div>
+                                        </div>
+                                        <div className="version">
+                                            <FlatButton
+                                                label="Add to campaign"
+                                                type="button"
+                                                className="btn-main btn-small"
+                                                onClick={addToCampaign.bind(this, block.childPack)}
+                                            />
+                                        </div>
+                                    </div>
+                                </section>
+                            );
+                        })
+                    :
+                        <div className="wrapper-center">
+                            <img src="/assets/img/icons/green_tick.png" alt="Icon" style={{width: '50px'}} />
                         </div>
-                        <div className="fade-wrapper-groups bottom"></div>
-                    </div>
-                </div>
+                }
             </div>
         );
     }
 }
 
 WizardStep5.propTypes = {
-    wizardData: PropTypes.object.isRequired,
-    groupsStore: PropTypes.object.isRequired
 }
 
-export default translate()(WizardStep5);
-
+export default WizardStep5;

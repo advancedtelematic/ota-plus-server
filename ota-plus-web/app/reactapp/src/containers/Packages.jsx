@@ -9,6 +9,7 @@ import {
     PackagesHeader, 
     PackagesList,
     PackagesBlacklistModal,
+    PackagesDependenciesManager
 } from '../components/packages';
 import { FlatButton } from 'material-ui';
 
@@ -23,7 +24,9 @@ class Packages extends Component {
     @observable uploadToTuf = true;
     @observable copied = false;
     @observable dependenciesModalShown = false;
+    @observable dependenciesManagerShown = false;
     @observable activeVersionFilepath = null;
+    @observable activeManagerVersion = null;
 
     constructor(props) {
         super(props);
@@ -40,6 +43,8 @@ class Packages extends Component {
         this.handleCopy = this.handleCopy.bind(this);
         this.showDependenciesModal = this.showDependenciesModal.bind(this);
         this.hideDependenciesModal = this.hideDependenciesModal.bind(this);
+        this.showDependenciesManager = this.showDependenciesManager.bind(this);
+        this.hideDependenciesManager = this.hideDependenciesManager.bind(this);
     }
     showTooltip(e) {
         if(e) e.preventDefault();
@@ -58,6 +63,16 @@ class Packages extends Component {
         if(e) e.preventDefault();
         this.dependenciesModalShown = false;
         this.activeVersionFilepath = null;
+    }
+    showDependenciesManager(activeManagerVersion, e) {
+        if(e) e.preventDefault();
+        this.dependenciesManagerShown = true;
+        this.activeManagerVersion = activeManagerVersion;
+    }
+    hideDependenciesManager(e) {
+        if(e) e.preventDefault();
+        this.dependenciesManagerShown = false;
+        this.activeManagerVersion = null;
     }
     showCreateModal(files, e) {
         if(e) e.preventDefault();
@@ -124,6 +139,7 @@ class Packages extends Component {
                                 onFileDrop={this.onFileDrop}
                                 highlightedPackage={highlightedPackage}
                                 showDependenciesModal={this.showDependenciesModal}
+                                showDependenciesManager={this.showDependenciesManager}
                             />
                             {packagesStore.overallPackagesCount && packagesStore.packagesFetchAsync.isFetching ? 
                                 <div className="wrapper-loader">
@@ -187,6 +203,16 @@ class Packages extends Component {
                         packagesStore={packagesStore}
                         campaignsStore={campaignsStore}
                         devicesStore={devicesStore}
+                    />
+                :
+                    null
+                }
+                {this.dependenciesManagerShown ?
+                    <PackagesDependenciesManager 
+                        shown={this.dependenciesManagerShown}
+                        hide={this.hideDependenciesManager}
+                        packages={packagesStore.preparedPackages}
+                        activePackage={this.activeManagerVersion}
                     />
                 :
                     null

@@ -2121,11 +2121,11 @@ input {
 
 .campaigns-wizard {
     z-index: 2000;
-    width: 768px;
+    width: 1000px;
     top: 50%;
     position: absolute;
     left: 50%;
-    margin-left: -384px;
+    margin-left: -500px;
     margin-top: -340px;
     box-shadow: 0 14px 45px rgba(0,0,0,.25),0 10px 18px rgba(0,0,0,.22);
 
@@ -2317,8 +2317,8 @@ input {
 
                                 i {
                                     position: relative;
-                                    right: -2.5px;
-                                    top: -1px;
+                                    right: -2px;
+                                    top: -2px;
                                 }
                             }
 
@@ -2334,6 +2334,57 @@ input {
                                         .title {
                                             @include textoverflowEllipsis;
                                         }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &.step-dependencies-management {
+                    padding: 20px;
+
+                    .content {
+                        height: 100%;
+                    
+                        section.pair {
+                            background: #fff;
+                            border-bottom: 1px solid #e5e5e5;
+                            padding: 20px 30px;
+
+                            &.incompatible {
+                                border-bottom: 1px solid red;
+                            }
+
+                            &:not(:last-child) {
+                                margin-bottom: 20px;
+                            }
+
+                            .item {
+                                display: flex;
+
+                                &:not(:last-child) {
+                                    margin-bottom: 20px;
+                                }
+
+                                .name, .version {
+                                    @include textoverflowEllipsis;
+                                    flex-basis: 50%;
+                                    font-weight: bold;
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+
+                                .name {
+                                    display: flex;
+                                    flex-direction: row;
+
+                                    .warning {
+                                        max-width: 200px;
+                                        @include textoverflowEllipsis;
+                                        margin-right: 3px;
                                     }
                                 }
                             }
@@ -2648,12 +2699,12 @@ input {
         .actions {
             padding: 20px !important;
             border-top: 1px solid #e5e5e5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
 
             .wrapper-close {
-                width: 16.66666667%;
-                padding: 20px 0 0 0;
-                display: inline-block;
-                vertical-align: top;
+                flex-basis: 15%;
 
                 .link-close {
                     color: $color-darkgrey;
@@ -2661,22 +2712,20 @@ input {
             }
 
             .wrapper-steps-no {
-                width: 58.33333333%;
-                display: inline-block;
+                flex-basis: 60%;
+                display: flex;
+                justify-content: center;
             }
 
             .wrapper-confirm {
+                flex-basis: 15%;
                 text-align: right;
-                width: 25%;
-                padding: 10px 0 0 0;
-                display: inline-block;
-                vertical-align: top;
             }
         }
     }
 
     .step {
-        width: 20%;
+        width: 90px;
         padding: 0;
         margin: 20px 0 0 0;
         float: left;
@@ -2694,7 +2743,7 @@ input {
             color: #ccc;
             font-size: 12px;
             text-align: center;
-            padding: 0 20%;
+            padding: 0 5px;
             margin: 20px 0 0 0;
             line-height: 1.1;
         }
@@ -2846,7 +2895,7 @@ input {
                 .close-sankey {
                     position: absolute;
                     right: 15px;
-                    top: 10px;
+                    top: 15px;
 
                     img {
                         width: 19px;
@@ -2861,6 +2910,115 @@ input {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+            }
+        }
+    }
+}
+
+.dependencies-manager-modal {
+
+    .body {
+        background: #f7f7f7;
+        padding: 15px!important;
+        overflow-y: hidden!important;
+
+        .footer {
+            padding: 20px!important;
+            border-top: 1px solid #e5e5e5;
+            background: #f7f7f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+
+    .close-manager {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+
+        img {
+            width: 19px;
+        }
+    }
+
+    .content {
+        section {
+            background: #fff;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 15px 30px;
+            display: flex;
+
+            &:not(:last-child) {
+                margin-bottom: 5px;
+            }
+
+            &.head {
+                font-size: 11px;
+                padding: 5px 30px;
+                margin-bottom: 0;
+            }
+
+            &.current-pack {
+                font-size: 14px;
+                font-weight: bold;
+            }
+
+            div {
+                @include textoverflowEllipsis;
+
+                &:first-child {
+                    width: 40%;
+                }
+
+                &:last-child {
+                    width: 60%;
+                }
+            }            
+        }
+
+        .other-packs-list {
+            overflow-y: auto;
+            max-height: 400px;
+
+            .versions {
+                display: flex;
+                flex-direction: column;
+
+                .item {
+                    display: flex;
+                    align-items: center;
+
+                    &:not(:last-child) {
+                        margin-bottom: 10px;
+                    }
+
+                    .circle {
+                        width: 15px;
+                        height: 15px;
+                        background: #fff;
+                        border: 1px solid #D3D3D3;
+                        display: inline-block;
+                        border-radius: 50%;
+                        margin-right: 5px;
+                        cursor: pointer;
+
+                        &.green {
+                            background: green;
+                            border: none;
+                        }
+
+                        &.red {
+                            background: red;
+                            border: none;
+                        }
+                    }
+
+                    .value {
+                        @include textoverflowEllipsis;
+                        width: calc(100% - 15px);
+                    }
+                }
             }
         }
     }
