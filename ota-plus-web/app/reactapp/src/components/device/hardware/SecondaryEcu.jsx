@@ -7,9 +7,25 @@ import _ from 'underscore';
 class SecondaryEcu extends Component {
     constructor(props) {
         super(props);
+        this.onEcuClick = this.onEcuClick.bind(this);
+        this.onKeyIconClick = this.onKeyIconClick.bind(this);
+    }
+    onEcuClick(ecu, e) {
+        if(e) e.preventDefault();
+        const { selectEcu, hideHardwareOverlay } = this.props;
+        selectEcu(ecu.hardwareId, ecu.id, ecu.image.filepath, 'secondary');
+        hideHardwareOverlay();
+    }
+    onKeyIconClick(e) {
+        if(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        const { handleTouchTap, handleRequestClose } = this.props;
+        handleTouchTap(e);
     }
     render() {
-        const { active, ecu, hardwareStore, showKey, selectEcu, ...otherProps} = this.props;
+        const { active, ecu, hardwareStore, showKey, ...otherProps} = this.props;
         const hardware = hardwareStore.hardware;
         return (
             <span>
@@ -17,7 +33,7 @@ class SecondaryEcu extends Component {
                     href="#"
                     id={"hardware-secondary-" + ecu.id}
                     className={active ? " selected" : ""}
-                    onClick={selectEcu.bind(this, ecu.hardwareId, ecu.id, ecu.image.filepath, 'secondary')}
+                    onClick={this.onEcuClick.bind(this, ecu)}
                 >
                     <div className="desc">
                         <span id={"hardware-id-" + ecu.hardwareId} className="hardware-label">
@@ -30,7 +46,7 @@ class SecondaryEcu extends Component {
                     <div className="icons"
                          id="hardware-key-icon"
                          onClick={showKey}
-                         onTouchTap={otherProps.handleTouchTap}>
+                         onTouchTap={this.onKeyIconClick.bind(this)}>
                             <span className="hardware-icon">
                                 <img src="/assets/img/icons/key.svg" alt="Icon" />
                             </span>
