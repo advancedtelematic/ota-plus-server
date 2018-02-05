@@ -101,6 +101,7 @@ class HardwarePanel extends Component {
                                     ecu={item}
                                     hardwareStore={hardwareStore}
                                     selectEcu={selectEcu}
+                                    hideHardwareOverlay={hideHardwareOverlay}
                                 />
                             </PopoverWrapper>
                         );

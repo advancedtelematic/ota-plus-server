@@ -23,13 +23,9 @@ class Overlay extends Component {
         this.changeFilter = this.changeFilter.bind(this);
     }
     componentWillReceiveProps(nextProps) {
-        if(this.props.shown !== nextProps.shown && nextProps.shown) {
-            this.props.hardwareStore.fetchHardware(this.props.device.uuid);
-            this.props.packagesStore.fetchOndevicePackages(this.props.device.uuid);
-            this.props.packagesStore.fetchBlacklist();
-        } else {
-            this.props.hardwareStore._reset();
-        }
+        this.props.hardwareStore.fetchHardware(this.props.device.uuid);
+        this.props.packagesStore.fetchOndevicePackages(this.props.device.uuid);
+        this.props.packagesStore.fetchBlacklist();
     }
     showPackagesList(e) { 
         if(e) e.preventDefault();
