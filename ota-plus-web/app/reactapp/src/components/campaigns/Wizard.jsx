@@ -14,6 +14,7 @@ import {
     WizardStep4,
     WizardStep5,
     WizardStep6,
+    WizardStep7,
 } from './wizard';
 
 const initialCurrentStepId = 0;
@@ -72,6 +73,13 @@ const initialWizardStep = [
     },
     {
         class: WizardStep6,
+        title: "Programming sequencer",
+        name: "programming-sequencer",
+        isFinished: true,
+        isSearchBarShown: false,
+    },
+    {
+        class: WizardStep7,
         title: "Summary",
         name: "summary",
         finishButtonLabel: "Launch",
@@ -91,6 +99,8 @@ class Wizard extends Component {
     @observable wizardData = initialWizardData;
     @observable filterValue = initialFilterValue;
     @observable rawSelectedPacks = [];
+    @observable fullScreenMode = false;
+    @observable transitionsEnabled = true;
     versions = {};
 
     constructor(props) {
@@ -116,6 +126,8 @@ class Wizard extends Component {
         this.setRawSelectedPacks = this.setRawSelectedPacks.bind(this);
         this.removeSelectedPacksByKeys = this.removeSelectedPacksByKeys.bind(this);
         this.handleLegacyCampaignLaunched = this.handleLegacyCampaignLaunched.bind(this);
+        this.showFullScreen = this.showFullScreen.bind(this);
+        this.hideFullScreen = this.hideFullScreen.bind(this);
 
         this.multiTargetUpdateCreatedHandler = observe(props.campaignsStore, (change) => {
             if(change.name === 'campaignsMultiTargetUpdateCreateAsync' && change.object[change.name].isFetching === false) {
@@ -183,12 +195,28 @@ class Wizard extends Component {
         });
     }
     componentWillUnmount() {
+        setTimeout(() => {
+            localStorage.removeItem('matrix');
+        }, 1000);
         this.multiTargetUpdateCreatedHandler();
         this.campaignCreatedHandler();
         this.legacyCampaignCreatedHandler();
         this.legacyCampaignSavePackageHandler();
         this.legacyCampaignSaveGroupsHandler();
         this.legacyCampaignLaunchHandler();
+    }
+    showFullScreen(e) {
+        if(e) e.preventDefault();
+        this.fullScreenMode = true;
+        this.transitionsEnabled = false;
+    }
+    hideFullScreen(e) {
+        if(e) e.preventDefault();
+        this.fullScreenMode = false;
+        let that = this;
+        setTimeout(() => {
+            that.transitionsEnabled = true;
+        }, 500);
     }
     addToCampaign(packName, e) {
         if(e) e.preventDefault();
@@ -432,7 +460,7 @@ class Wizard extends Component {
         });
 
         const modalContent = (
-            <div className={"campaigns-wizard campaigns-wizard-" + wizardIdentifier}>
+            <div className={"campaigns-wizard campaigns-wizard-" + wizardIdentifier + (this.fullScreenMode ? ' full-screen' : '')}>
                 <div className="draggable-content">
                     <div className="body">
                         <span>
@@ -474,6 +502,9 @@ class Wizard extends Component {
                                                 removeSelectedPacksByKeys: this.removeSelectedPacksByKeys,
                                                 isLegacyShown: isLegacyShown,
                                                 addToCampaign: this.addToCampaign,
+                                                showFullScreen: this.showFullScreen,
+                                                hideFullScreen: this.hideFullScreen,
+                                                fullScreenMode: this.fullScreenMode,
                                             })
                                         }
                                         {currentStep.isSearchBarShown ?
@@ -543,6 +574,7 @@ class Wizard extends Component {
                 content={modalContent}
                 shown={!wizardMinimized}
                 onRequestClose={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)}
+                className={"dialog-campaign-wizard " + (this.fullScreenMode ? "full-screen" : "") + (this.transitionsEnabled ? "" : " disable-transitions")}
             />
         );
     }
