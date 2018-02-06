@@ -8,6 +8,24 @@
 
 $font: 'akkurat';
 
+@keyframes colorchange
+{
+    0%   {background-color: #a4d18f;}
+    25%  {background-color: #5cec1a ;}
+    50%  {background-color: #a4d18f;}
+    75%  {background-color: #5cec1a;}
+    100%  {background-color: #a4d18f;}
+}
+
+@-webkit-keyframes colorchange
+{
+    0%   {background-color: #a4d18f;}
+    25%  {background-color: #5cec1a ;}
+    50%  {background-color: #a4d18f;}
+    75%  {background-color: #5cec1a;}
+    100%  {background-color: #a4d18f;}
+}
+
 .font-big {
     font-size: 21px !important;
 }
@@ -2119,6 +2137,64 @@ input {
     }
 }
 
+.dialog-campaign-wizard {
+
+    &.disable-transitions {
+
+        .content {
+            transition: none!important;
+
+            > div {
+                transition: none!important;
+            }
+        }
+    }
+
+    &.full-screen {
+        padding-top: 50px!important;
+
+        > div {
+            height: 100%;            
+        }
+
+        .content {
+            height: 100%;
+            width: 100%!important;
+            max-width: 100%!important;
+            transform: none!important;
+            transition: none!important;
+
+            > div {
+                transition: none!important;
+            }
+        }
+
+        .campaigns-wizard {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%!important;
+            left: 50%;
+            margin-left: -50vw;
+            margin-top: 0!important;
+            width: 100vw;
+
+            .draggable-content {
+                height: 100%;
+
+                .body {
+                    height: 100%;
+
+                    .content-step {
+                        height: calc(100% - 170px);
+                    }
+                }
+            }
+        }
+    }
+}
+
 .campaigns-wizard {
     z-index: 2000;
     width: 1000px;
@@ -2467,6 +2543,189 @@ input {
                             .text {
                                 color: #ccc;
                                 margin: 10px 0 0 0;
+                            }
+                        }
+                    }
+                }
+
+                &.step-programming-sequencer {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    .sequencer {
+                        position: relative;
+                        display: flex;
+                        flex-direction: row;
+                        -webkit-touch-callout: none;
+                        -webkit-user-select: none;
+                        -khtml-user-select: none;
+                        -moz-user-select: none;
+                        -ms-user-select: none;
+                        user-select: none;
+                        height: 100%;
+                        width: 100%;
+                        align-items: center;
+                        justify-content: center;
+
+                        .show-fullscreen, .hide-fullscreen {
+                            position: absolute;
+                            right: 15px;
+                            top: 15px;
+                            z-index: 100;
+                        }
+
+                        svg {
+                            position: absolute;
+                        }
+
+                        .init, .termination {
+                            position: absolute;
+                            top:10%;
+                            font-size: 22px;
+                        }
+
+                        .init {
+                            left: 5%;
+                        }
+
+                        .termination {
+                            right: 3.5%;
+                        }
+
+                        #end-point {
+                            width: 42px;
+                            height: 42px;
+                            background-color: #83D060;
+                            position: absolute;
+                            top: 50%;
+                            right: 5%;
+                            transform: translateY(-50%);
+                            border-radius: 50%;
+                        }
+
+                        #starter-point {
+                            width: 42px;
+                            height: 42px;
+                            background-color: #484848;
+                            position: absolute;
+                            top: 50%;
+                            left: 5%;
+                            transform: translateY(-50%);
+                            border-radius: 50%;
+                            
+                            &.active {
+                                cursor: pointer;
+                                animation: colorchange 2.5s infinite;
+                                -webkit-animation: colorchange 2.5s infinite;
+                            }
+                        }
+
+                        .flexrow {
+                            display: flex;
+                            padding: 15px 30px;
+                            border-left: 1px solid #ccc;
+                            flex-direction: column;
+                            height: 100%;
+                            justify-content: flex-start;
+                            align-items: center;
+
+                            &:last-child {
+                                border-right: 1px solid #ccc;
+                            }
+
+                            .phase {
+                                font-size: 14px;
+                                padding: 15px 0;
+                            }
+                        }
+
+                        .empty-node {
+                            height: 1px;
+                            display: flex;
+
+                            &:not(:last-child) {
+                                margin-right: 50px;
+                            }
+                        }
+
+                        .item {
+                            position: relative;
+                            border: 1px solid #000;
+                            border-radius: 15px;
+                            display: flex;
+                            flex-direction: row;
+                            max-width: 250px;
+
+                            &:not(:last-child) {
+                                margin-bottom: 50px;
+                            }
+
+                            .entry-point {
+                                cursor: pointer;
+                                display: block;
+                                position: absolute;
+                                top: 15px;
+                                left: -10px;
+                                border-bottom-left-radius: 10px;
+                                border-top-left-radius: 10px;
+                                width: 10px;
+                                height: 20px;
+                                background-color: #484848;
+                            }
+
+                            .info {
+                                cursor: auto;
+                                margin: 10px 30px 10px 10px;
+                                flex-basis: 75%;
+                                @include textoverflowEllipsis;
+
+                                div {
+                                    font-size: 10px;
+                                    @include textoverflowEllipsis;
+
+                                    &.hardware-id {
+                                        color: #444;
+                                        background: transparent;
+                                        padding: 0 10px;
+                                        border-radius: 10px;
+                                        margin-bottom: 5px;
+                                        display: inline-block;
+                                        border: 1px solid #444;
+                                    }
+
+                                    &.pack-name {
+                                        font-weight: bold;
+                                        font-size: 13px;
+                                        margin-bottom: 5px;
+                                    }
+                                }
+                            }
+
+                            .exit-nodes {
+                                cursor: auto;
+                                flex-basis: 25%;
+
+                                div {
+                                    height: 50%;
+                                    width: 100%;                                    
+
+                                    &.success {
+                                        background: #83D060;
+                                        border-top-right-radius: 15px;
+
+                                        &.active {
+                                            animation: colorchange 2.5s infinite;
+                                            -webkit-animation: colorchange 2.5s infinite;
+                                            cursor: pointer;
+                                        }
+                                    }
+
+                                    &.failure {
+                                        background: #f2060a;
+                                        border-bottom-right-radius: 15px;
+                                    }
+                                }
                             }
                         }
                     }
