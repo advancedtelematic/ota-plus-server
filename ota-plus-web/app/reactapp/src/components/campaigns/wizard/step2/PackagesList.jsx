@@ -67,6 +67,7 @@ class PackagesList extends Component {
         }
     }
     togglePackage(packageName) {
+        localStorage.removeItem('matrix');
         this.expandedPackageName = (this.expandedPackageName !== packageName ? packageName : null);
     }
     render() {
