@@ -224,6 +224,7 @@ class Main extends Component {
                 toggleWizard={this.toggleWizard}
                 minimizedWizards={this.minimizedWizards}
                 isLegacyShown={this.isLegacyShown}
+                alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
                 key={this.wizards.length}
             />
         );

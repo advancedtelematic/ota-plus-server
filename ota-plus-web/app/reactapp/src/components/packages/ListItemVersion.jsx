@@ -73,7 +73,7 @@ class ListItemVersion extends Component {
         return isPackageBlacklisted ? isPackageBlacklisted : false;
     }
     render() {
-        const { version, showDependenciesModal, showDependenciesManager } = this.props;
+        const { version, showDependenciesModal, showDependenciesManager, alphaPlusEnabled } = this.props;
         let isBlacklisted = this.isPackageBlacklisted(version);
         let packageName = version.id.name;
         let borderStyle = {};
@@ -165,9 +165,11 @@ class ListItemVersion extends Component {
                 <div className="show-dependencies">
                     <div className="icon" title="Show dependencies" onClick={showDependenciesModal.bind(this, version.imageName)}></div>
                 </div>
-                <div className="show-dependencies-manager">
-                    <div className="icon" title="Show dependencies manager" onClick={showDependenciesManager.bind(this, version)}></div>
-                </div>
+                {alphaPlusEnabled ?
+                    <div className="show-dependencies-manager">
+                        <div className="icon" title="Show dependencies manager" onClick={showDependenciesManager.bind(this, version)}></div>
+                    </div>
+                : null}
             </span>
         );
         const legacyBlock = (

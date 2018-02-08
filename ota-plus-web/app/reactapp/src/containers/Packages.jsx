@@ -119,7 +119,7 @@ class Packages extends Component {
         this.showCreateModal(files);
     }
     render() {
-        const { packagesStore, hardwareStore, highlightedPackage, featuresStore, devicesStore, campaignsStore } = this.props;
+        const { packagesStore, hardwareStore, highlightedPackage, featuresStore, devicesStore, campaignsStore, alphaPlusEnabled } = this.props;
         return (
             <span ref="component">
                 {packagesStore.overallPackagesCount === null || packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching ?
@@ -137,6 +137,7 @@ class Packages extends Component {
                                 showBlacklistModal={this.showBlacklistModal}
                                 packagesStore={packagesStore}
                                 onFileDrop={this.onFileDrop}
+                                alphaPlusEnabled={alphaPlusEnabled}
                                 highlightedPackage={highlightedPackage}
                                 showDependenciesModal={this.showDependenciesModal}
                                 showDependenciesManager={this.showDependenciesManager}
