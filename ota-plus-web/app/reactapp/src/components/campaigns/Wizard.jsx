@@ -35,7 +35,7 @@ const initialWizardData = [
         isActivated: false,
     },
 ];
-const initialWizardStep = [
+const initialWizardStepForAlphaPlus = [
     {
         class: WizardStep1,
         name: "name",
@@ -88,6 +88,45 @@ const initialWizardStep = [
     },
 ];
 
+const initialWizardStep = [
+    {
+        class: WizardStep1,
+        name: "name",
+        title: "Choose name",
+        isFinished: false,
+        isSearchBarShown: false,
+    },
+    {
+        class: WizardStep2,
+        name: "packages",
+        title: "Select Package",
+        isFinished: false,
+        isSearchBarShown: false,
+    },
+    {
+        class: WizardStep3,
+        name: "versions",
+        title: "Select software version",
+        isFinished: false,
+        isSearchBarShown: false,
+    },
+    {
+        class: WizardStep4,
+        title: "Select Group(s)",
+        name: "groups",
+        isFinished: false,
+        isSearchBarShown: false,
+    },
+    {
+        class: WizardStep7,
+        title: "Summary",
+        name: "summary",
+        finishButtonLabel: "Launch",
+        isFinished: true,
+        isSearchBarShown: false,
+    },
+];
+
 const initialFilterValue = null;
 const minimizedWizardWidth = 400;
 const minimizedWizardPadding = 25;
@@ -95,7 +134,7 @@ const minimizedWizardPadding = 25;
 @observer
 class Wizard extends Component {
     @observable currentStepId = initialCurrentStepId;
-    @observable wizardSteps = initialWizardStep;
+    @observable wizardSteps = (this.props.alphaPlusEnabled ? initialWizardStepForAlphaPlus : initialWizardStep);
     @observable wizardData = initialWizardData;
     @observable filterValue = initialFilterValue;
     @observable rawSelectedPacks = [];
