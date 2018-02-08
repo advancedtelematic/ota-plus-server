@@ -78,9 +78,7 @@ class DependenciesManager extends Component {
                         {_.map(packages, (packs, letter) => {
                             return _.map(packs, (pack, i) => {
                                 return (
-                                    pack.packageName === activePackage.id.name && pack.versions.length === 1 ?
-                                        null
-                                    :
+                                    pack.packageName !== activePackage.id.name ?
                                         <section className="other-pack" key={i}>
                                             <div className="name">
                                                 {pack.packageName}
@@ -105,6 +103,8 @@ class DependenciesManager extends Component {
                                                 })}
                                             </div>
                                         </section>
+                                    :
+                                        null
                                 );
                             }); 
                         })}
