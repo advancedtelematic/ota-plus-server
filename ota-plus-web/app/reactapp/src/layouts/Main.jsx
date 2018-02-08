@@ -307,6 +307,7 @@ class Main extends Component {
                                 userStore={this.userStore}
                                 featuresStore={this.featuresStore}
                                 devicesStore={this.devicesStore}
+                                packagesStore={this.packagesStore}
                                 allDevicesCount={this.allDevicesCount}
                                 logoLink={logoLink}
                                 hideQueueModal={this.hideQueueModal}
@@ -322,11 +323,11 @@ class Main extends Component {
                                     userStore={this.userStore}
                                     featuresStore={this.featuresStore}
                                     devicesStore={this.devicesStore}
+                                    packagesStore={this.packagesStore}
                                     hideQueueModal={this.hideQueueModal}
                                     toggleOtaPlusMode={this.toggleOtaPlusMode}
                                     otaPlusMode={this.otaPlusStore.otaPlusMode}
                                     alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
-                                    packagesStore={this.packagesStore}
                                     uiUserProfileMenu={this.uiUserProfileMenu}
                                     uiCredentialsDownload={this.uiCredentialsDownload}
                                 />
