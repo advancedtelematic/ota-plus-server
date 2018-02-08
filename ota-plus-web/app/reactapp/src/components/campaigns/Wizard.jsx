@@ -235,7 +235,7 @@ class Wizard extends Component {
     }
     componentWillUnmount() {
         setTimeout(() => {
-            localStorage.removeItem('matrix');
+            localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);
         }, 1000);
         this.multiTargetUpdateCreatedHandler();
         this.campaignCreatedHandler();
