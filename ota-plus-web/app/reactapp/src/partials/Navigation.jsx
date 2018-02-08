@@ -79,6 +79,7 @@ class Navigation extends Component {
                             <li id="menu-login">
                                 <NavigationDropdown
                                     userStore={userStore}
+                                    packagesStore={packagesStore}
                                     hideQueueModal={hideQueueModal}
                                     toggleOtaPlusMode={toggleOtaPlusMode}
                                     otaPlusMode={otaPlusMode}

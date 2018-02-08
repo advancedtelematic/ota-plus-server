@@ -108,6 +108,7 @@ export default class PackagesStore {
     @observable directorDeviceHistoryLimit = 10;
 
     @observable expandedPackage = null;
+    @observable compatibilityData = [];
 
     constructor() {
         resetAsync(this.directorRepoExistsFetchAsync);
@@ -1270,6 +1271,7 @@ export default class PackagesStore {
         this.directorDevicePackagesFilter = '';
         this.installedIds = {};
         this.expandedPackage = null;
+        this.compatibilityData = [];
     }
 
     _resetWizard() {
@@ -1278,6 +1280,55 @@ export default class PackagesStore {
         this.packages = [];
         this.overallPackagesCount = null;
         this.preparedPackages = [];
+    }
+
+    _findLocalItems(query) {
+        let i, results = [];
+        for (i in localStorage) {
+            if (localStorage.hasOwnProperty(i)) {
+                if (i.match(query) || (!query && typeof i === 'string')) {
+                    let value = JSON.parse(localStorage.getItem(i));
+                    results.push({
+                        key:i,
+                        val:value
+                    });
+                }
+            }
+        }
+        return results;
+    }
+
+    _handleCompatibles() {
+        let required = this._findLocalItems('required');
+        let incompatibles = this._findLocalItems('incompatibles');
+        let additionalRequired = [];
+        if(required) {
+            _.each(required, (item, i) => {
+                let values = item.val;
+                _.each(values, (value, index) => {
+                    additionalRequired.push({
+                        key: value + '-required-by',
+                        val: [item.key.replace('-required', '')]
+                    });
+                });
+            });
+        }
+        let additionalIncompatibles = [];
+        if(incompatibles) {
+            _.each(incompatibles, (item, i) => {
+                let values = item.val;
+                _.each(values, (value, index) => {
+                    additionalIncompatibles.push({
+                        key: value + '-incompatibles',
+                        val: [item.key.replace('-incompatibles', '')]
+                    });
+                });
+            });
+        }
+        let allRequired = required.concat(additionalRequired);
+        let allIncompatibles = incompatibles.concat(additionalIncompatibles);
+        let compatibilityData = allRequired.concat(allIncompatibles);
+        this.compatibilityData = compatibilityData;
     }
 
     _addPackage(data) {

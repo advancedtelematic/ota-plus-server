@@ -22,33 +22,54 @@ class DependenciesManager extends Component {
             this.required.push(version);
         }
     }
+    componentWillMount() {
+        const { activePackage, packagesStore } = this.props;
+        let compatibilityData = packagesStore.compatibilityData;
+        _.each(compatibilityData, (item, index) => {
+            if(activePackage.imageName + '-required' === item.key) {
+                activePackage.required = item.val;
+            }
+            if(activePackage.imageName + '-required-by' === item.key) {
+                activePackage.requiredBy = item.val;
+            }
+            if(activePackage.imageName + '-incompatibles' === item.key) {
+                activePackage.incompatibles = item.val;
+            }
+        });
+        
+    }
     componentWillUnmount() {
+        const { activePackage, packagesStore } = this.props;
         if(this.required.length) {
-            let currentRequired = JSON.parse(localStorage.getItem(this.props.activePackage.imageName + "-required"));
+            let currentRequired = JSON.parse(localStorage.getItem(activePackage.imageName + "-required"));
             if(currentRequired) {
                 _.each(this.required, (item, i) => {
                     if(currentRequired.indexOf(item) === -1) {
                         currentRequired.push(item);
                     }
                 });
-                localStorage.setItem(this.props.activePackage.imageName + "-required", JSON.stringify(currentRequired));
+                localStorage.setItem(activePackage.imageName + "-required", JSON.stringify(currentRequired));
             } else {
-                localStorage.setItem(this.props.activePackage.imageName + "-required", JSON.stringify(this.required));
+                localStorage.setItem(activePackage.imageName + "-required", JSON.stringify(this.required));
             }
         }
         if(this.incompatibles.length) {
-            let currentIncompatibles = JSON.parse(localStorage.getItem(this.props.activePackage.imageName + "-incompatibles"));
+            let currentIncompatibles = JSON.parse(localStorage.getItem(activePackage.imageName + "-incompatibles"));
             if(currentIncompatibles) {
                 _.each(this.incompatibles, (item, i) => {
                     if(currentIncompatibles.indexOf(item) === -1) {
                         currentIncompatibles.push(item);
                     }
                 });
-                localStorage.setItem(this.props.activePackage.imageName + "-incompatibles", JSON.stringify(currentIncompatibles));
+                localStorage.setItem(activePackage.imageName + "-incompatibles", JSON.stringify(currentIncompatibles));
             } else {
-                localStorage.setItem(this.props.activePackage.imageName + "-incompatibles", JSON.stringify(this.incompatibles));
+                localStorage.setItem(activePackage.imageName + "-incompatibles", JSON.stringify(this.incompatibles));
             }
         }
+        packagesStore._handleCompatibles();
+        activePackage.required = [];
+        activePackage.requiredBy = [];
+        activePackage.incompatibles = [];
     }
     render() {
         const { shown, hide, packages, activePackage } = this.props;
@@ -90,12 +111,34 @@ class DependenciesManager extends Component {
                                                         version.id.version !== activePackage.id.version ?
                                                             <span className="item" key={index}>
                                                                 <span 
-                                                                    className={"circle" + (this.required.indexOf(versionString) > -1 ? " green" : this.incompatibles.indexOf(versionString) > -1 ? " red" : "")} 
+                                                                    className={"circle" + 
+                                                                        (this.required.indexOf(versionString) > -1 || _.contains(activePackage.required, version.imageName) ? 
+                                                                            " green"
+                                                                        : this.incompatibles.indexOf(versionString) > -1 || _.contains(activePackage.incompatibles, version.imageName)? 
+                                                                            " red" 
+                                                                        : 
+                                                                            ""
+                                                                        )} 
                                                                     onClick={this.addVersion.bind(this, versionString)}>
                                                                 </span>
                                                                 <span className="value">
                                                                     {version.id.version}
                                                                 </span>
+                                                                {_.contains(activePackage.required, version.imageName) ?
+                                                                    <span>
+                                                                        Required
+                                                                    </span>
+                                                                : _.contains(activePackage.requiredBy, version.imageName) ?
+                                                                    <span>
+                                                                        Required by
+                                                                    </span>
+                                                                : _.contains(activePackage.incompatibles, version.imageName) ?
+                                                                    <span>
+                                                                        Incompatible
+                                                                    </span>
+                                                                :
+                                                                    null
+                                                                }
                                                             </span>
                                                         :
                                                             null

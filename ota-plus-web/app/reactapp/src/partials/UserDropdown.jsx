@@ -9,6 +9,7 @@ class UserDropdown extends Component {
         super(props);
         this.closeDropdown = this.closeDropdown.bind(this);
         this.logout = this.logout.bind(this);
+        this.clearLocalStorage = this.clearLocalStorage.bind(this);
         this.otaPlusLogout = this.otaPlusLogout.bind(this);
         this.toggleMode = this.toggleMode.bind(this);
     }
@@ -18,6 +19,11 @@ class UserDropdown extends Component {
     logout(e) {
         e.preventDefault();
         this.props.userStore._logout();
+    }
+    clearLocalStorage(e) {
+        e.preventDefault();
+        localStorage.clear();
+        this.props.packagesStore._handleCompatibles();
     }
     otaPlusLogout(e) {
         e.preventDefault();
@@ -132,9 +138,18 @@ class UserDropdown extends Component {
                             {otaPlusMode ?
                                 otaPlusSignOut
                             :
-                                <li className="signout">
-                                    <button className="btn-main btn-small" onClick={this.logout}><span>Sign out</span></button>
-                                </li>
+                                <span>
+                                    {alphaPlusEnabled ?
+                                        <li className="clear-localstorage">
+                                            <button className="btn-main btn-small" onClick={this.clearLocalStorage}><span>Reset demo</span></button>
+                                        </li>
+                                    :
+                                        null
+                                    }
+                                    <li className="signout">
+                                        <button className="btn-main btn-small" onClick={this.logout}><span>Sign out</span></button>
+                                    </li>
+                                </span>
                             }
                         </ul>
                     </span>
