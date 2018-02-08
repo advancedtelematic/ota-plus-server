@@ -77,7 +77,7 @@ class WizardStep2 extends Component {
         }
     }
     render() {
-        const { wizardData, packagesStore } = this.props;
+        const { wizardData, packagesStore, wizardIdentifier } = this.props;
         let chosenPackagesList = wizardData[1].packages;
         return (
             packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching ? 
@@ -88,6 +88,7 @@ class WizardStep2 extends Component {
                 <WizardPackagesList
                     chosenPackagesList={chosenPackagesList}
                     setWizardData={this.setWizardData}
+                    wizardIdentifier={wizardIdentifier}
                     packagesStore={packagesStore}
                 />
         );
