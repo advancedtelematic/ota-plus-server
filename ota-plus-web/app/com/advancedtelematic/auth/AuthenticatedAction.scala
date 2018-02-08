@@ -3,6 +3,8 @@ package com.advancedtelematic.auth
 import javax.inject.Inject
 
 import cats.syntax.either._
+import com.advancedtelematic.jwt.JsonWebToken
+import com.advancedtelematic.libats.auth.{AuthedNamespaceScope, NsFromToken}
 import org.genivi.sota.data.Namespace
 import play.api.{Configuration, Logger}
 import play.api.mvc._
@@ -40,6 +42,32 @@ object AuthenticatedRequest {
       ns          <- readValue(session, "namespace").map(Namespace.apply)
     } yield AuthenticatedRequest(idToken, accessToken, ns, request)
   }
+
+  def fromAuthHeader[A](request: Request[A]): Try[AuthenticatedRequest[A]] = {
+    extractBearerToken(request).map { case (token, jwt) =>
+      // TODO: Use com.advancedtelematic.libats.data.DataType.Namespace
+      val ns = AuthedNamespaceScope(jwt).namespace.get
+      // TODO: Refactor to allow no IdToken
+      AuthenticatedRequest(
+        IdToken.from(ns, jwt.clientId.toString, "", ""),
+        AccessToken(token, jwt.expirationTime),
+        Namespace(ns),
+        request)
+    }
+  }
+
+  final case class InvalidJwt(error: String) extends Throwable(error) with NoStackTrace
+
+  private[this] def extractBearerToken[A](request: Request[A]): Try[(String, JsonWebToken)] =
+    request.headers.get("Authorization")
+      .map { _.split(' ') match {
+        case Array(bearer, token) if bearer.toLowerCase == "bearer" =>
+          NsFromToken.parseToken[JsonWebToken](token)
+            .fold(e => Failure(InvalidJwt(e)), jwt => Success((token, jwt)))
+        case _ => Failure(InvalidJwt("Missing bearer token"))
+        }
+      }
+      .getOrElse(Failure(InvalidJwt("Missing 'Authorization' header")))
 }
 
 abstract class AuthenticatedAction extends ActionBuilder[AuthenticatedRequest, AnyContent] {
@@ -50,10 +78,12 @@ abstract class AuthenticatedAction extends ActionBuilder[AuthenticatedRequest, A
   def unauthorizedResult: Result
   def tokenVerification: TokenVerification
 
+  def authRequest[A](request: Request[A]): Try[AuthenticatedRequest[A]]
+
   val log = Logger(this.getClass)
 
   def invokeBlock[A](request: Request[A], block: (AuthenticatedRequest[A]) => Future[Result]): Future[Result] = {
-    AuthenticatedRequest.fromRequest(request) match {
+    authRequest(request) match {
       case Success(x) =>
         tokenVerification(x.accessToken)
           .flatMap(isValid => if (isValid) block(x) else Future.successful(unauthorizedResult))
@@ -69,6 +99,10 @@ class UiAuthAction @Inject()(val tokenVerification: TokenVerification,
                              val parser: BodyParsers.Default)(
     implicit val executionContext: ExecutionContext
 ) extends AuthenticatedAction {
+
+  override def authRequest[A](request: Request[A]): Try[AuthenticatedRequest[A]] =
+    AuthenticatedRequest.fromRequest(request)
+
   override val unauthorizedResult: Result =
     Results.Redirect(com.advancedtelematic.controllers.routes.LoginController.login())
 }
@@ -78,5 +112,9 @@ class ApiAuthAction @Inject()(val tokenVerification: TokenVerification,
                               val parser: BodyParsers.Default)(
     implicit val executionContext: ExecutionContext
 ) extends AuthenticatedAction {
+
+  override def authRequest[A](request: Request[A]): Try[AuthenticatedRequest[A]] =
+    AuthenticatedRequest.fromAuthHeader(request) orElse AuthenticatedRequest.fromRequest(request)
+
   override def unauthorizedResult: Result = Results.Forbidden("Not authenticated")
 }
