@@ -24,7 +24,7 @@ class WizardStep6 extends Component {
         this.moveElement = this.moveElement.bind(this);
     }
     componentWillMount() {
-        let matrixFromStorage = JSON.parse(localStorage.getItem('matrix'));
+        let matrixFromStorage = JSON.parse(localStorage.getItem(`matrix-${this.props.wizardIdentifier}`));
         if (_.isEmpty(matrixFromStorage)) {
             this._createCampaignUpdates();
             this._createMatrix();
@@ -38,7 +38,7 @@ class WizardStep6 extends Component {
     }
 
     componentWillUnmount() {
-        localStorage.setItem('matrix', JSON.stringify(this.updateMatrix));
+        localStorage.setItem(`matrix-${this.props.wizardIdentifier}`, JSON.stringify(this.updateMatrix));
     }
 
     _createCampaignUpdates() {

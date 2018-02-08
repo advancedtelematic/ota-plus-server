@@ -67,7 +67,7 @@ class PackagesList extends Component {
         }
     }
     togglePackage(packageName) {
-        localStorage.removeItem('matrix');
+        localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);
         this.expandedPackageName = (this.expandedPackageName !== packageName ? packageName : null);
     }
     render() {
