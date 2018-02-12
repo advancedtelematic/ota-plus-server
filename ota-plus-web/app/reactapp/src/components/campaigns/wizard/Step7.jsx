@@ -8,47 +8,14 @@ import moment from 'moment';
 
 @observer
 class WizardStep7 extends Component {
-    @observable packages = null;
-
     constructor(props) {
         super(props);
     }
-    componentWillMount() {
-        const { wizardData } = this.props;
-        let packages = wizardData[1].packages;
-        let versions = wizardData[2].versions;
-
-        _.each(packages, (pack, index) => {
-            pack.updates = [];
-            _.each(versions, (version, packageName) => {
-                if(pack.packageName === packageName) {
-                    pack.updates.push(version);
-                }
-            });
-        });
-
-        this.packages = packages;
-    }
-    getLegacyCreatedAt(version) {
-        let createdAt = null;
-        _.each(this.props.packagesStore.packages, (pack, index) => {
-            if(pack.id.version === version) {
-                createdAt = pack.createdAt;
-            }
-        });
-        return createdAt;
-    }
     render() {
         const { t, wizardData, groupsStore, campaignsStore } = this.props;
+        const updates = wizardData[2].versions;
         return (
             <div className="step-inner">
-                <AsyncResponse 
-                    handledStatus="error"
-                    action={campaignsStore.campaignsLegacyCreateAsync}
-                    errorMsg={
-                        "Campaign with given name already exists."
-                    }
-                />
                 <AsyncResponse 
                     handledStatus="error"
                     action={campaignsStore.campaignsCreateAsync}
@@ -61,98 +28,66 @@ class WizardStep7 extends Component {
                         Software & Version
                     </div>
                     <div className="desc">
-                        {_.map(this.packages, (pack, index) => {
+                        {_.map(updates, (update, packName) => {
                             return (
-                                <span key={index}>
-                                    <div className="package-container">
-                                        {_.map(pack.updates, (update, i) => {
-                                            return (
-                                                <span key={index}>
-                                                    <div className="update-container">
-                                                        {pack.inDirector ?
-                                                            <span>
-                                                                <span className="director-updates">
-                                                                    <div className="update-from">
-                                                                        <div className="text">
-                                                                            From:
-                                                                        </div>
-                                                                        <div className="value">
-                                                                            {!_.isEmpty(update.changedPackage) ?
-                                                                                update.changedPackage.packageName
-                                                                            :
-                                                                                update.toPackageName
-                                                                            }
-                                                                            <span className="in-director">
-                                                                                <img src="/assets/img/icons/black/lock.svg" alt="Director" />
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="update-to">
-                                                                        <div className="text">
-                                                                            To:
-                                                                        </div>
-                                                                        <div className="value">
-                                                                            {update.toPackageName}
-                                                                            <span className="in-director">
-                                                                                <img src="/assets/img/icons/black/lock.svg" alt="Director" />
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                </span>
-                                                                <span className="director-versions">
-                                                                    <div className="update-from">
-                                                                        <div className="text">
-                                                                            Version:
-                                                                        </div>
-                                                                        <div className="value">
-                                                                            {update.from}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="update-to">
-                                                                        <div className="text">
-                                                                            Version:
-                                                                        </div>
-                                                                        <div className="value">
-                                                                            {update.to}
-                                                                        </div>
-                                                                    </div>
-                                                                </span>
-                                                            </span>
-                                                        :
-                                                            <span className="legacy-updates">
-                                                                <div className="update-to">
-                                                                    <div className="text">
-                                                                        To:
-                                                                    </div>
-                                                                    <div className="value">
-                                                                        <div className="hash">
-                                                                            Hash: {update.to}
-                                                                        </div>
-                                                                        <div className="createdAt">
-                                                                            Created at: {moment(this.getLegacyCreatedAt(update.to)).format("ddd MMM DD YYYY, h:mm:ss A")}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </span>
-                                                        }
-                                                    </div>
-                                                    {pack.inDirector ?
-                                                        <div className="hardware-id-container">
-                                                            <div className="text">
-                                                                On:
-                                                            </div>
-                                                            <div className="value hardware-label">
-                                                                {update.hardwareId}
-                                                            </div>
-                                                        </div>
+                                <div className="package-container" key={packName}>
+                                    <div className="update-container">
+                                        <span className="director-updates">
+                                            <div className="update-from">
+                                                <div className="text">
+                                                    From:
+                                                </div>
+                                                <div className="value">
+                                                    {!_.isEmpty(update.changedPackage) ?
+                                                        update.changedPackage.packageName
                                                     :
-                                                        null
+                                                        update.toPackageName
                                                     }
-                                                </span>
-                                            );
-                                        })}
+                                                    <span className="in-director">
+                                                        <img src="/assets/img/icons/black/lock.svg" alt="Director" />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="update-to">
+                                                <div className="text">
+                                                    To:
+                                                </div>
+                                                <div className="value">
+                                                    {update.toPackageName}
+                                                    <span className="in-director">
+                                                        <img src="/assets/img/icons/black/lock.svg" alt="Director" />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </span>
+                                        <span className="director-versions">
+                                            <div className="update-from">
+                                                <div className="text">
+                                                    Version:
+                                                </div>
+                                                <div className="value">
+                                                    {update.from}
+                                                </div>
+                                            </div>
+                                            <div className="update-to">
+                                                <div className="text">
+                                                    Version:
+                                                </div>
+                                                <div className="value">
+                                                    {update.to}
+                                                </div>
+                                            </div>
+                                        </span>
                                     </div>
-                                </span>
+                                    <div className="hardware-id-container">
+                                        <div className="text">
+                                            On:
+                                        </div>
+                                        <div className="value hardware-label">
+                                            {update.hardwareId}
+                                        </div>
+                                    </div>
+                                </div>
                             );
                         })}
                     </div>
