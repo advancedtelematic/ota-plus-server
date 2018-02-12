@@ -13,7 +13,8 @@ class IntroNavigation extends Component {
     render() {
         const { 
           userStore, 
-          devicesStore, 
+          devicesStore,
+          packagesStore,
           logoLink, 
           hideQueueModal, 
           toggleOtaPlusMode, 
@@ -74,6 +75,7 @@ class IntroNavigation extends Component {
                               <li id="menu-login">
                                   <NavigationDropdown
                                       userStore={userStore}
+                                      packagesStore={packagesStore}
                                       hideQueueModal={hideQueueModal}
                                       toggleOtaPlusMode={toggleOtaPlusMode}
                                       otaPlusMode={otaPlusMode}
