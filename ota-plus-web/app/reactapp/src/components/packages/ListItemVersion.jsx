@@ -73,7 +73,7 @@ class ListItemVersion extends Component {
         return isPackageBlacklisted ? isPackageBlacklisted : false;
     }
     render() {
-        const { version, showDependenciesModal, showDependenciesManager, alphaPlusEnabled } = this.props;
+        const { version, showDependenciesModal, showDependenciesManager, packagesStore, alphaPlusEnabled } = this.props;
         let isBlacklisted = this.isPackageBlacklisted(version);
         let packageName = version.id.name;
         let borderStyle = {};
@@ -82,6 +82,7 @@ class ListItemVersion extends Component {
                 borderLeft: '10px solid ' + version.color,
             };
         }
+        let compatibilityData = packagesStore.compatibilityData;
         const directorBlock = (
             <span>
                 <div className="left-box" style={borderStyle}>
@@ -160,6 +161,67 @@ class ListItemVersion extends Component {
                         :
                             null
                         }
+                        {alphaPlusEnabled ?
+                            _.map(compatibilityData, (data, index) => {
+                                return (
+                                    data.key === version.imageName + '-required' ?
+                                        <div className="compatibility-item" id={"package-" + version.imageName + "-required-packages"} key={index}>
+                                            <div className="heading">
+                                                Requires:
+                                            </div>
+
+                                            <div className="value">
+                                                {_.map(data.val, (filepath, i) => {
+                                                    let pack = _.find(packagesStore.directorPackages, pack => pack.imageName === filepath);
+                                                    return (
+                                                        <div className="required-package-filepath" key={i} id={"package-" + pack.id.name + "-required"}>
+                                                            {pack.id.name} / {pack.id.version}
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    : data.key === version.imageName + '-required-by' ?
+                                        <div className="compatibility-item" id={"package-" + version.imageName + "-required-by-packages"} key={index}>
+                                                <div className="heading">
+                                                    Required by:
+                                                </div>
+
+                                                <div className="value">
+                                                    {_.map(data.val, (filepath, i) => {
+                                                        let pack = _.find(packagesStore.directorPackages, pack => pack.imageName === filepath);
+                                                        return (
+                                                            <div className="required-by-package-filepath" key={i} id={"package-" + pack.id.name + "-required-by"}>
+                                                                {pack.id.name} / {pack.id.version}
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                    : data.key === version.imageName + '-incompatibles' ?
+                                        <div className="compatibility-item" id={"package-" + version.imageName + "-incompatible-packages"} key={index}>
+                                                <div className="heading">
+                                                    Incompatible with:
+                                                </div>
+
+                                                <div className="value">
+                                                    {_.map(data.val, (filepath, i) => {
+                                                        let pack = _.find(packagesStore.directorPackages, pack => pack.imageName === filepath);
+                                                        return (
+                                                            <div className="incompatible-package-filepath" key={i} id={"package-" + pack.id.name + "-incompatible"}>
+                                                                {pack.id.name} / {pack.id.version}
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                    :
+                                        null
+                                );
+                            })
+                        :
+                            null
+                        }                        
                     </div>                    
                 </div>
                 <div className="show-dependencies">

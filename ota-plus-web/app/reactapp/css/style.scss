@@ -616,6 +616,8 @@ input {
                             }
 
                             &.signout {
+                                display: inline-block;
+
                                 button {
                                     font-size: 16px !important;
                                 }
@@ -624,6 +626,19 @@ input {
                                     text-transform: uppercase !important;
                                 }
                                 margin: 10px 0 10px 0;
+                            }
+
+                            &.clear-localstorage {
+                                display: inline-block;
+
+                                button {
+                                    font-size: 16px !important;
+                                }
+                                span {
+                                    color: #333;
+                                    text-transform: uppercase !important;
+                                }
+                                margin: 10px 5px 10px 0;
                             }
 
                             .switch {
@@ -1955,10 +1970,7 @@ input {
 
                         div {
                             overflow: hidden;
-
-                            &:not(:last-child) {
-                                margin-bottom: 5px;
-                            }
+                            margin-bottom: 5px;
 
                             .sub-title {
                                 display: block;

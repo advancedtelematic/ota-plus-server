@@ -12,6 +12,7 @@ import {
     PackagesDependenciesManager
 } from '../components/packages';
 import { FlatButton } from 'material-ui';
+import _ from 'underscore';
 
 @observer
 class Packages extends Component {
@@ -45,6 +46,10 @@ class Packages extends Component {
         this.hideDependenciesModal = this.hideDependenciesModal.bind(this);
         this.showDependenciesManager = this.showDependenciesManager.bind(this);
         this.hideDependenciesManager = this.hideDependenciesManager.bind(this);
+    }
+    componentWillMount() {
+        const { packagesStore } = this.props;
+        packagesStore._handleCompatibles();
     }
     showTooltip(e) {
         if(e) e.preventDefault();
@@ -214,6 +219,7 @@ class Packages extends Component {
                         hide={this.hideDependenciesManager}
                         packages={packagesStore.preparedPackages}
                         activePackage={this.activeManagerVersion}
+                        packagesStore={packagesStore}
                     />
                 :
                     null
