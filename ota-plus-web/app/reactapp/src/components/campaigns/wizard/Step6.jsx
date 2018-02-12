@@ -22,6 +22,8 @@ class WizardStep6 extends Component {
         this.resetHighlightedSpaces = this.resetHighlightedSpaces.bind(this);
         this.selectSlot = this.selectSlot.bind(this);
         this.moveElement = this.moveElement.bind(this);
+        this.handleWindowClose = this.handleWindowClose.bind(this);
+        this.deselectSlot = this.deselectSlot.bind(this);
     }
     componentWillMount() {
         let matrixFromStorage = JSON.parse(localStorage.getItem(`matrix-${this.props.wizardIdentifier}`));
@@ -37,8 +39,18 @@ class WizardStep6 extends Component {
         }
     }
 
+    handleWindowClose(e) {
+        e.preventDefault();
+        localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);
+    }
+
+    componentDidMount() {
+        window.addEventListener("beforeunload",this.handleWindowClose);
+    }
+
     componentWillUnmount() {
         localStorage.setItem(`matrix-${this.props.wizardIdentifier}`, JSON.stringify(this.updateMatrix));
+        window.removeEventListener('onbeforeunload',this.handleWindowClose);
     }
 
     _createCampaignUpdates() {
@@ -52,7 +64,6 @@ class WizardStep6 extends Component {
     }
 
     _createMatrix() {
-        let updates = Array.reverse(this.props.wizardData[2].versions);
         let campaignUpdates = this.campaignUpdates;
         let alreadyCreated = false;
 
@@ -92,34 +103,36 @@ class WizardStep6 extends Component {
         this.updateMatrix = updatesMatrix;
     }
 
-    moveElement(item) {
-        this.destinationElement = item;
-        if(!_.isEqual(this.selectedElement, this.destinationElement)) {
+    moveElement(item, e) {
+        if (e.target.className.indexOf('highlighted') !== -1) {
+            this.destinationElement = item;
             this.handleMove();
+            this.resetHighlightedSpaces();
+            this.selectedElement = null;
+            this.destinationElement = null;
         }
-        this.resetHighlightedSpaces();
-        this.selectedElement = null;
-        this.destinationElement = null;
     }
 
-    highlightAvailableSpaces() {
-        let successNodes = $('.exit-nodes .success');
-        let starterPoint = $('#starter-point');
-        _.each(successNodes, (node) => {
-            node.classList.add("active");
-        });
-        if(this.selectedElement.row > 0) {
-            starterPoint[0].classList.add("active");
-        }
+    highlightAvailableSpaces(selectedElementRow) {
+        let nextRow  = $(`.row-${selectedElementRow+1}`);
+        let prevRow  = $(`.row-${selectedElementRow-1}`);
+
+        nextRow[0] ? nextRow[0].classList.remove('hide') : null;
+        prevRow[0] ? prevRow[0].classList.remove('hide') : null;
+
+        let nextRowNode = nextRow.children.length ?  _.first(nextRow.children('.empty-node')) : null;
+        let prevRowNode = prevRow.children.length ? _.first(prevRow.children('.empty-node')) : null;
+
+        nextRowNode ? nextRowNode.classList.add('highlighted') : null;
+        prevRowNode ? prevRowNode.classList.add('highlighted') : null;
     }
 
     resetHighlightedSpaces() {
-        let successNodes = $('.exit-nodes .success');
-        let starterPoint = $('#starter-point');
-        _.each(successNodes, (node) => {
-            node.classList.remove("active");
+        let emptyNodes  = $('.empty-node');
+
+        _.each(emptyNodes, (val) => {
+            val.classList.remove('highlighted')
         });
-        starterPoint[0].classList.remove("active");
     }
 
     selectSlot(item, e) {
@@ -127,8 +140,13 @@ class WizardStep6 extends Component {
         this.selectedElement = item;
         if (item.value.name) {
             this.resetHighlightedSpaces();
-            this.highlightAvailableSpaces();
+            this.highlightAvailableSpaces(item.row);
         }
+    }
+
+    deselectSlot() {
+        this.selectedElement = null;
+        this.resetHighlightedSpaces();
     }
 
     handleMove() {
@@ -142,7 +160,6 @@ class WizardStep6 extends Component {
         let initialSourceRow = source.row;
         let targetColumn = initialTargetColumn;
         let targetRow = initialTargetRow;
-        targetRow += 1;
         for (let i = 0; i < updatesMatrix.length; i++) {
             if(_.isEmpty(updatesMatrix[targetRow][i])) {
                 targetColumn = i;
@@ -157,6 +174,7 @@ class WizardStep6 extends Component {
         const { showFullScreen, hideFullScreen, fullScreenMode } = this.props;
         const updatesMatrix = this.updateMatrix;
         const updatesArray = this.campaignUpdates;
+
         return (
             <div className="sequencer">
                 {fullScreenMode ?
@@ -183,7 +201,7 @@ class WizardStep6 extends Component {
                     return (
                         <div className={`flexrow row-${rowIndex} `} key={rowIndex}>
                             <span className="phase">Phase {rowIndex + 1}</span>
-                            {updatesMatrix[rowIndex].length>0
+                            {updatesMatrix[rowIndex] && updatesMatrix[rowIndex].length>0
                             ?
                                 _.map(updatesMatrix[rowIndex], (value, columnIndex) => {
                                     if (!_.isEmpty(value)) {
@@ -192,6 +210,7 @@ class WizardStep6 extends Component {
                                                 value={value}
                                                 selectSlot={this.selectSlot}
                                                 selectedElement={this.selectedElement}
+                                                deselectSlot={this.deselectSlot}
                                                 moveElement={this.moveElement}
                                                 row={rowIndex}
                                                 column={columnIndex}
@@ -199,11 +218,15 @@ class WizardStep6 extends Component {
                                             />
                                         )
                                     } else {
-                                        return <div className="empty-node" key={columnIndex}/>
+                                        return <div className="empty-node"
+                                                    onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, {column: columnIndex, row: rowIndex, value}) : null}
+                                                    key={columnIndex}/>
                                     }
                                 })
-                            :   _.map(updatesArray, () => {
-                                    return <div className="empty-node" key={rowIndex}/>
+                            :   _.map(updatesArray, (value, columnIndex) => {
+                                    return <div className="empty-node"
+                                                onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, {column: columnIndex, row: rowIndex, value}) : null}
+                                                key={rowIndex}/>
                                 })
                             }
                         </div>

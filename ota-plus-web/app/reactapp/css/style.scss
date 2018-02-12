@@ -8,24 +8,6 @@
 
 $font: 'akkurat';
 
-@keyframes colorchange
-{
-    0%   {background-color: #a4d18f;}
-    25%  {background-color: #5cec1a ;}
-    50%  {background-color: #a4d18f;}
-    75%  {background-color: #5cec1a;}
-    100%  {background-color: #a4d18f;}
-}
-
-@-webkit-keyframes colorchange
-{
-    0%   {background-color: #a4d18f;}
-    25%  {background-color: #5cec1a ;}
-    50%  {background-color: #a4d18f;}
-    75%  {background-color: #5cec1a;}
-    100%  {background-color: #a4d18f;}
-}
-
 .font-big {
     font-size: 21px !important;
 }
@@ -2643,9 +2625,14 @@ input {
                         .empty-node {
                             height: 1px;
                             display: flex;
-
-                            &:not(:last-child) {
-                                margin-right: 50px;
+                            width: 250px;
+                            &.highlighted {
+                                border: 5px dotted #7EE9DA !important;
+                                cursor: pointer;
+                                height: 99px;
+                                &:not(:last-child) {
+                                    margin-bottom: 50px;
+                                }
                             }
                         }
 
@@ -2656,13 +2643,13 @@ input {
                             display: flex;
                             flex-direction: row;
                             max-width: 250px;
+                            cursor: pointer;
 
                             &:not(:last-child) {
                                 margin-bottom: 50px;
                             }
 
                             .entry-point {
-                                cursor: pointer;
                                 display: block;
                                 position: absolute;
                                 top: 15px;
@@ -2675,7 +2662,6 @@ input {
                             }
 
                             .info {
-                                cursor: auto;
                                 margin: 10px 30px 10px 10px;
                                 flex-basis: 75%;
                                 @include textoverflowEllipsis;
@@ -2703,7 +2689,6 @@ input {
                             }
 
                             .exit-nodes {
-                                cursor: auto;
                                 flex-basis: 25%;
 
                                 div {
@@ -2713,12 +2698,6 @@ input {
                                     &.success {
                                         background: #83D060;
                                         border-top-right-radius: 15px;
-
-                                        &.active {
-                                            animation: colorchange 2.5s infinite;
-                                            -webkit-animation: colorchange 2.5s infinite;
-                                            cursor: pointer;
-                                        }
                                     }
 
                                     &.failure {
