@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21px" height="18px" viewBox="0 0 21 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 13</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="-" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-2" transform="translate(-464.000000, -130.000000)">
+            <g id="Group-4-Copy" transform="translate(287.000000, 71.000000)">
+                <g id="Group-2">
+                    <g id="Group" transform="translate(0.521258, 0.000000)">
+                        <g id="Group-5">
+                            <g id="Group-14" filter="url(#filter-1)" transform="translate(121.478742, 35.000000)">
+                                <g id="Group-13" transform="translate(56.000000, 21.000000)">
+                                    <g id="Group-9-Copy" stroke-linecap="round" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round">
+                                        <g id="Page-1" transform="translate(8.688122, 8.958582) rotate(-135.000000) translate(-8.688122, -8.958582) translate(2.688122, 3.458582)">
+                                            <polyline id="Stroke-1" points="11.9694375 4.0271202 10.8196099 5.40972118 9.3869806 4.30004631"></polyline>
+                                            <path d="M5.55961422,10.4500936 C2.64954957,10.4500936 0.291122845,8.17346305 0.291122845,5.36558128 C0.291122845,2.55713793 2.64954957,0.280507389 5.55961422,0.280507389 C8.46909698,0.280507389 10.8193772,2.60150246 10.8193772,5.40994581" id="Stroke-3"></path>
+                                        </g>
+                                    </g>
+                                    <g id="Group-10-Copy" transform="translate(9.000000, 5.000000)">
+                                        <circle id="Oval-5" fill="#FFFFFF" cx="3.5" cy="3.5" r="3.5"></circle>
+                                        <text id="all" font-family="AkkuratStd-Bold, AkkuratStd" font-size="4" font-weight="bold" letter-spacing="-0.200000003" fill="#FF0000">
+                                            <tspan x="1.20001221" y="5">al</tspan>
+                                            <tspan x="4.2560122" y="5">l</tspan>
+                                        </text>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
