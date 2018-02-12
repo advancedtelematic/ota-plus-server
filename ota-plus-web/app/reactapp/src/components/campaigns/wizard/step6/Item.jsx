@@ -7,12 +7,10 @@ export default class Item extends  Component {
     }
 
     render() {
-        const { value, selectSlot, selectedElement, moveElement, column, row } = this.props;
+        const { value, selectSlot, selectedElement, moveElement, column, row, deselectSlot } = this.props;
         return (
-            <div className="item">
-                <div className="entry-point"
-                    onClick={_.isNull(selectedElement) ? selectSlot.bind(this, {column, row, value}) : null}
-                />
+            <div className="item" onClick={_.isNull(selectedElement) ? selectSlot.bind(this, {column, row, value}) : deselectSlot}>
+                <div className="entry-point"/>
                 <div className="info">
                     <div className="hardware-id">
                         {value.hardwareId}
@@ -28,9 +26,7 @@ export default class Item extends  Component {
                     </div>
                 </div>
                 <div className="exit-nodes">
-                    <div className="success"
-                        onClick={!_.isNull(selectedElement) ? moveElement.bind(this, {column, row, value}) : null}
-                    ></div>
+                    <div className="success"/>
                     <div className="failure"></div>
                 </div>
             </div>
