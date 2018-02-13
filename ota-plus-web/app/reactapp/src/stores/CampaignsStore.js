@@ -58,6 +58,8 @@ export default class CampaignsStore {
     @observable campaignsSort = 'asc';
     @observable campaign = {};
     @observable campaignData = {};
+    @observable fullScreenMode = false;
+    @observable transitionsEnabled = true;
 
     constructor() {
         resetAsync(this.campaignsFetchAsync);
@@ -449,6 +451,19 @@ export default class CampaignsStore {
        this._prepareCampaigns();
     }
 
+    _showFullScreen() {
+        this.fullScreenMode = true;
+        this.transitionsEnabled = false;
+    }
+
+    _hideFullScreen() {
+        this.fullScreenMode = false;
+        let that = this;
+        setTimeout(() => {
+            that.transitionsEnabled = true;
+        })
+    }
+
     _resetWizard() {
         resetAsync(this.campaignsOneFetchAsync);
         resetAsync(this.campaignsOneSafeFetchAsync);
@@ -459,6 +474,11 @@ export default class CampaignsStore {
         resetAsync(this.campaignsLaunchAsync);
         resetAsync(this.campaignsLegacyLaunchAsync);
         this.campaign = {};
+    }
+
+    _resetFullScreen() {
+        this.fullScreenMode = false;
+        this.transitionsEnabled = true;
     }
 
     _reset() {
@@ -490,6 +510,8 @@ export default class CampaignsStore {
         this.campaign = {};
         this.campaignData = {};
         this.camapignMultiTargetUpdateIdentifier = null;
+        this.fullScreenMode = false;
+        this.transitionsEnabled = true;
     }
 
     @computed get inPreparationCampaigns() {

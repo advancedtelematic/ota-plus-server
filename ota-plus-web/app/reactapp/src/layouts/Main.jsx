@@ -237,6 +237,7 @@ class Main extends Component {
             }
         })
         this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, { id: wizardIdentifier }), 1);
+        this.campaignsStore._resetFullScreen();
     }
     toggleUploadBoxMode(e) {
         if(e) e.preventDefault();
@@ -367,6 +368,7 @@ class Main extends Component {
                         uiCredentialsDownload={this.uiCredentialsDownload}
                         prebuiltDebrpm={this.prebuiltDebrpm}
                         isLegacyShown={this.isLegacyShown}
+                        alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
                     />
                 </FadeAnimation>
                 <SizeVerify 

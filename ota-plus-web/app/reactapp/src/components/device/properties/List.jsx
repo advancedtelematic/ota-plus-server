@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import { observe, observable } from 'mobx';
 import { FlatButton } from 'material-ui';
 import { PackagesComment } from '../packages';
+import { Sequencer } from '../../../partials';
 import _ from 'underscore';
 import moment from 'moment';
 
@@ -69,7 +70,16 @@ class List extends Component {
 		return tagName + '-' + obj.id.version.substring(0,8);
 	}
     render() {
-    	const { packagesStore, devicesStore, showPackageBlacklistModal, installPackage, installTufPackage } = this.props;
+    	const { 
+    		packagesStore, 
+    		devicesStore, 
+    		campaignsStore, 
+    		showPackageBlacklistModal,
+    		installPackage, 
+    		installTufPackage, 
+    		showSequencer,
+    		alphaPlusEnabled,
+    	} = this.props;
 
     	let blacklistComment = null;
     	let isPackageBlacklisted = false;
@@ -210,8 +220,8 @@ class List extends Component {
 					        			}
 			        				</span>
 					        	</div>
-					        	<div className="install multi-target">
-									{!isPackageInstalled ?
+								{!isPackageInstalled ?
+									<div className="install multi-target">
 										<button
 											className="btn-main btn-install"
 											label="Install"
@@ -233,10 +243,18 @@ class List extends Component {
 											}>
 												{install}
 										</button>
-									:
-										null
-									}
-					        	</div>
+			        				</div>
+								:
+									null
+								}
+								{alphaPlusEnabled ?
+									<div className="open-sequencer" onClick={showSequencer.bind(this)}>
+										Show sequencer(click here)
+									</div>
+								:
+									null
+								}
+								
 				        	</div>
 						:
 							<div>

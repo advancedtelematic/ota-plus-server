@@ -113,13 +113,15 @@ class Device extends Component {
         const { 
             devicesStore, 
             packagesStore, 
+            campaignsStore, 
             hardwareStore, 
             showQueueModal, 
             hideQueueModal, 
             queueModalShown, 
             activeTabId, 
             setQueueModalActiveTabId,
-            backButtonAction
+            backButtonAction,
+            alphaPlusEnabled
         } = this.props;
         return (
             <FadeAnimation 
@@ -137,10 +139,12 @@ class Device extends Component {
                         <DeviceContainer 
                             devicesStore={devicesStore}
                             packagesStore={packagesStore}
+                            campaignsStore={campaignsStore}
                             hardwareStore={hardwareStore}
                             showQueueModal={showQueueModal}
                             selectEcu={this.selectEcu}
                             packagesReady={this.packagesReady}
+                            alphaPlusEnabled={alphaPlusEnabled}
                         />
                     </MetaData>
                     <DeviceQueueModal
@@ -163,6 +167,7 @@ class Device extends Component {
 Device.propTypes = {
     devicesStore: PropTypes.object,
     packagesStore: PropTypes.object,
+    campaignsStore: PropTypes.object,
     hardwareStore: PropTypes.object,
     showQueueModal: PropTypes.func,
     hideQueueModal: PropTypes.func,
