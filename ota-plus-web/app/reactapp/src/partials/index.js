@@ -13,6 +13,7 @@ import PopoverWrapper from './PopoverWrapper';
 import Switch from './Switch';
 import IntroNavigation from './IntroNavigation';
 import DependenciesModal from './DependenciesModal';
+import Sequencer from './Sequencer';
 
 export {
     Navigation,
@@ -30,4 +31,5 @@ export {
     Switch,
     IntroNavigation,
     DependenciesModal,
+    Sequencer,
 }

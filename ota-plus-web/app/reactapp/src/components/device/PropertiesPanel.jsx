@@ -13,7 +13,18 @@ class PropertiesPanel extends Component {
         super(props);
     }
     render() {
-        const { packagesStore, devicesStore, hardwareStore, showPackageBlacklistModal, installPackage, installTufPackage, packagesReady } = this.props;
+        const { 
+            packagesStore, 
+            devicesStore, 
+            campaignsStore, 
+            hardwareStore, 
+            showPackageBlacklistModal, 
+            installPackage, 
+            installTufPackage, 
+            packagesReady, 
+            showSequencer,
+            alphaPlusEnabled,
+        } = this.props;
         return (
             <div className="properties-panel">
                 <div className="darkgrey-header">
@@ -29,10 +40,13 @@ class PropertiesPanel extends Component {
                             <PropertiesList
                                 packagesStore={packagesStore}
                                 devicesStore={devicesStore}
+                                campaignsStore={campaignsStore}
                                 hardwareStore={hardwareStore}
                                 showPackageBlacklistModal={showPackageBlacklistModal}
                                 installPackage={installPackage}
                                 installTufPackage={installTufPackage}
+                                showSequencer={showSequencer}
+                                alphaPlusEnabled={alphaPlusEnabled}
                             />
                         }
                     </div>
@@ -45,6 +59,7 @@ class PropertiesPanel extends Component {
 PropertiesPanel.propTypes = {
     packagesStore: PropTypes.object.isRequired,
     devicesStore: PropTypes.object.isRequired,
+    campaignsStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
     showPackageBlacklistModal: PropTypes.func.isRequired,
     installPackage: PropTypes.func.isRequired,

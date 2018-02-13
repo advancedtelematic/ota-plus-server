@@ -5,7 +5,8 @@ import { Loader } from '../partials';
 import { 
     DeviceHardwarePanel,
     DevicePropertiesPanel, 
-    DeviceSoftwarePanel
+    DeviceSoftwarePanel,
+    DeviceSequencerModal
 } from '../components/device';
 import {
     PackagesCreateModal,
@@ -22,6 +23,7 @@ class Device extends Component {
     @observable uploadToTuf = true;
     @observable hardwareOverlayShown = false;
     @observable hardwareOverlayAnchor = null;
+    @observable sequencerShown = false;
     
     constructor(props) {
         super(props);
@@ -38,6 +40,16 @@ class Device extends Component {
         this.toggleTufUpload = this.toggleTufUpload.bind(this);        
         this.showHardwareOverlay = this.showHardwareOverlay.bind(this);        
         this.hideHardwareOverlay = this.hideHardwareOverlay.bind(this);        
+        this.showSequencer = this.showSequencer.bind(this);
+        this.hideSequencer = this.hideSequencer.bind(this);
+    }
+    showSequencer(e) {
+        if(e) e.preventDefault();
+        this.sequencerShown = true;
+    }
+    hideSequencer(e) {
+        if(e) e.preventDefault();
+        this.sequencerShown = false;
     }
     toggleTufUpload(e) {
         if(e) e.preventDefault();
@@ -153,9 +165,11 @@ class Device extends Component {
         const { 
             devicesStore, 
             packagesStore, 
-            hardwareStore, 
+            hardwareStore,
+            campaignsStore,
             selectEcu,
-            packagesReady
+            packagesReady,
+            alphaPlusEnabled
         } = this.props;
         const device = devicesStore.device;
         return (
@@ -193,11 +207,14 @@ class Device extends Component {
                             <DevicePropertiesPanel
                                 packagesStore={packagesStore}
                                 devicesStore={devicesStore}
+                                campaignsStore={campaignsStore}
                                 hardwareStore={hardwareStore}
                                 showPackageBlacklistModal={this.showPackageBlacklistModal}
                                 installPackage={this.installPackage}
                                 installTufPackage={this.installTufPackage}
                                 packagesReady={packagesReady}
+                                showSequencer={this.showSequencer}
+                                alphaPlusEnabled={alphaPlusEnabled}
                             />
                         </span>
                     :
@@ -225,6 +242,16 @@ class Device extends Component {
                     blacklistAction={this.packageBlacklistAction}
                     packagesStore={packagesStore}
                 />
+                {this.sequencerShown ?
+                    <DeviceSequencerModal 
+                        shown={this.sequencerShown}
+                        hide={this.hideSequencer}
+                        campaignsStore={campaignsStore}
+                        devicesStore={devicesStore}
+                    />
+                :
+                    null
+                }
             </span>
         );
     }
