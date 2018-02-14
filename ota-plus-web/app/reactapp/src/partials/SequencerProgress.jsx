@@ -22,7 +22,7 @@ class SequencerProgress extends  Component {
             } else {
                 clearInterval(that.tmpIntervalId);
             }
-        }, 200);
+        }, 100 / this.props.duration);
     }
 
     render() {

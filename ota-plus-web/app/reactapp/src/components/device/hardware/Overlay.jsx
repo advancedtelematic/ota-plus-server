@@ -22,7 +22,7 @@ class Overlay extends Component {
         this.showHardwareInfo = this.showHardwareInfo.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
     }
-    componentWillReceiveProps(nextProps) {
+    componentWillMount() {
         this.props.hardwareStore.fetchHardware(this.props.device.uuid);
         this.props.packagesStore.fetchOndevicePackages(this.props.device.uuid);
         this.props.packagesStore.fetchBlacklist();
