@@ -20,7 +20,7 @@ class SequencerItem extends  Component {
     }
 
     render() {
-        const { value, delay, selectSlot, selectedElement, column, row, deselectSlot, readOnly, selectAction } = this.props;
+        const { value, delay, duration, selectSlot, selectedElement, column, row, deselectSlot, readOnly, selectAction } = this.props;
         return (
             <span>
                 <div className="c-sequencer__item" onClick={_.isNull(selectedElement) && !readOnly ? selectSlot.bind(this, {column, row, value}) : deselectSlot}>
@@ -73,6 +73,7 @@ class SequencerItem extends  Component {
                 {readOnly ?
                     <SequencerProgress 
                         delay={delay}
+                        duration={duration}
                         className={"c-sequencer__progress"}
                     />
                 :

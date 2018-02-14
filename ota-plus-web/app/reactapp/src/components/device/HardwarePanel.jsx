@@ -45,7 +45,7 @@ class HardwarePanel extends Component {
             hardwareOverlayShown, 
             hardwareOverlayAnchor, 
             showHardwareOverlay, 
-            hideHardwareOverlay 
+            hideHardwareOverlay
         } = this.props;
         const device = devicesStore.device;
         let isPrimaryEcuActive = true;
@@ -127,16 +127,20 @@ class HardwarePanel extends Component {
                             {secondaryEcus}
                         </div>
                     </div>
-                    <DeviceHardwareOverlay
-                        hardwareStore={hardwareStore}
-                        hideHardwareOverlay={hideHardwareOverlay}
-                        shown={hardwareOverlayShown}
-                        packagesStore={packagesStore}
-                        device={device}
-                        showPackageBlacklistModal={showPackageBlacklistModal}
-                        onFileDrop={onFileDrop}
-                        hardwareOverlayAnchor={hardwareOverlayAnchor}
-                    />
+                    {hardwareOverlayShown ?
+                        <DeviceHardwareOverlay
+                            hardwareStore={hardwareStore}
+                            hideHardwareOverlay={hideHardwareOverlay}
+                            shown={hardwareOverlayShown}
+                            packagesStore={packagesStore}
+                            device={device}
+                            showPackageBlacklistModal={showPackageBlacklistModal}
+                            onFileDrop={onFileDrop}
+                            hardwareOverlayAnchor={hardwareOverlayAnchor}
+                        />
+                    :
+                        null
+                    }
                     {this.secondaryDescriptionShown ?
                         <FadeAnimation>
                             <div className="overlay-animation-container">
