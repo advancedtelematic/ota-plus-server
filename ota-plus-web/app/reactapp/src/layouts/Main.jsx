@@ -156,7 +156,6 @@ class Main extends Component {
         }
         this.devicesStore.fetchDevices();
         this.devicesStore.fetchDevicesCount();
-        this.hardwareStore.fetchHardwareIds();
         this.websocketHandler.init();
 
         if (!this.otaPlusStore.atsGarageTheme) {
