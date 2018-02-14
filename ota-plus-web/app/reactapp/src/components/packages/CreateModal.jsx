@@ -18,6 +18,11 @@ class CreateModal extends Component {
         super(props);
         this.selectHardwareIds = this.selectHardwareIds.bind(this);
     }
+    componentWillReceiveProps(nextProps) {
+        if(this.props.shown !== nextProps.shown && nextProps.shown) {
+            this.props.hardwareStore.fetchHardwareIds();
+        }
+    }
     enableButton() {
         this.submitButtonDisabled = false;
     }
