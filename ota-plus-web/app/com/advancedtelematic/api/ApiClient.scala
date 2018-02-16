@@ -401,16 +401,22 @@ class KeyServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends 
       result <- request(s"root/$repoId/keys/targets/pairs").execResult(apiExec)
       byteString <- result.body.consumeData
     } yield {
-      val parsed = CirceParser.parse(byteString.utf8String) match {
-        case Left(t) => throw t
-        case Right(json) => json
-      }
+      if (result.header.status == Status.NOT_FOUND) {
+        Seq.empty
+      } else {
+        val parsed = CirceParser.parse(byteString.utf8String) match {
+          case Left(t) =>
+            throw RemoteApiParseError(s"error parsing target keys (${byteString.utf8String}): ${t.message}")
+          case Right(json) =>
+            json
+        }
 
-      val vector = parsed.asArray.getOrElse(throw new Exception("Vector expected"))
-      vector.map { json =>
-        TufCodecs.tufKeyPairDecoder.decodeJson(json) match {
-          case Left(t) => throw t
-          case Right(keyPair) => keyPair
+        val vector = parsed.asArray.getOrElse(throw new Exception("Vector expected"))
+        vector.map { json =>
+          TufCodecs.tufKeyPairDecoder.decodeJson(json) match {
+            case Left(t) => throw t
+            case Right(keyPair) => keyPair
+          }
         }
       }
     }

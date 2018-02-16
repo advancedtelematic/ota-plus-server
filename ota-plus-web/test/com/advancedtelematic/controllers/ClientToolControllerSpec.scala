@@ -41,18 +41,23 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
   val userProfileUri = "http://user-profile.com"
   val keyServerUri = "http://keyserver"
   val repoServerUri = "http://reposerver"
-  val namespace = "ns"
+  val namespaceWithOnlineKeys = "namespace-online"
+  val namespaceWithOfflineKeys = "namespace-offline"
 
   import mockws.MockWS
 
   val clientId = UUID.randomUUID().toString
 
-  val testAccountUrl  = s"$CryptHost/accounts/ns"
-  val treehubJsonUrl = s"$userProfileUri/api/v1/users/ns/features/treehub"
-  val rootJsonUrl = s"$repoServerUri/api/v1/user_repo/root.json"
+  val cryptAccountUrl  = s"$CryptHost/accounts/"
+  val registrationUrl = s"$CryptHost/accounts/$namespaceWithOnlineKeys/credentials/registration"
+
   val authPlusClientUrl =  s"$authPlusUri/clients/$clientId"
-  val registrationUrl = s"$CryptHost/accounts/ns/credentials/registration"
-  val keyPairsUrl = s"$keyServerUri/api/v1/root/repoid/keys/targets/pairs"
+  val treehubJsonUrl = s"$userProfileUri/api/v1/users/$namespaceWithOnlineKeys/features/treehub"
+  val treehubJsonOfflineUrl = s"$userProfileUri/api/v1/users/$namespaceWithOfflineKeys/features/treehub"
+
+  val rootJsonUrl = s"$repoServerUri/api/v1/user_repo/root.json"
+  val keyPairsUrl = s"$keyServerUri/api/v1/root/$namespaceWithOnlineKeys/keys/targets/pairs"
+  val keyOfflineUrl = s"$keyServerUri/api/v1/root/$namespaceWithOfflineKeys/keys/targets/pairs"
 
   val TreehubFeatureJson = Json.obj("feature" -> "feature",
                                     "client_id" -> clientId,
@@ -66,26 +71,33 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
   import com.advancedtelematic.libtuf.data.TufCodecs.tufKeyPairEncoder
 
   val mockClient = MockWS {
-    case (GET, `testAccountUrl`) =>
-      Action(_ => Ok(TestAccountJson))
+    case (GET, url) if url.startsWith(cryptAccountUrl) =>
+      if (url.contains("/credentials/registration/")) {
+        Action(_ => Ok("registration"))
+      } else {
+        Action(_ => Ok(TestAccountJson))
+      }
 
     case (GET, `treehubJsonUrl`) =>
       Action(_ => Ok(TreehubFeatureJson))
 
+    case (GET, `treehubJsonOfflineUrl`) =>
+      Action(_ => Ok(TreehubFeatureJson))
+
     case (GET, `rootJsonUrl`) =>
       Action { request =>
-        request.headers.get("x-ats-namespace").getOrElse(throw new Exception("missing namespace"))
-        Ok("{}").withHeaders("x-ats-tuf-repo-id" -> "repoid")
+        val ns = request.headers.get("x-ats-namespace").getOrElse(throw new Exception("missing namespace"))
+        Ok("{}").withHeaders("x-ats-tuf-repo-id" -> ns)
       }
 
     case (GET, `authPlusClientUrl`) =>
       Action(_ => Ok(ClientSecret))
 
-    case (GET, url) if url.startsWith(registrationUrl) =>
-      Action(_ => Ok("registration"))
-
     case (GET, `keyPairsUrl`) =>
       Action(_ => Ok(s"[${tufKeyPairEncoder(keyPair).noSpaces}]"))
+
+    case (GET, `keyOfflineUrl`) =>
+      Action(_ => NotFound)
   }
 
   val failingClient = MockWS {
@@ -107,7 +119,7 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
   val controller = application.injector.instanceOf[ClientToolController]
 
   "GET /api/v1/clienttools/provisioning" should {
-    val request = FakeRequest(GET, "/api/v1/clienttools/provisioning").withAuthSession(namespace)
+    val request = FakeRequest(GET, "/api/v1/clienttools/provisioning").withAuthSession(namespaceWithOnlineKeys)
 
     "return a ZIP archive" in {
       val result = call(controller.downloadClientToolBundle(UUID.randomUUID()), request)
@@ -139,6 +151,14 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
         case _: UnexpectedResponse =>
       }
     }
-  }
 
+    "return a ZIP archive even when TUF keys are offline" in {
+      val request = FakeRequest(GET, "/api/v1/clienttools/provisioning")
+        .withAuthSession(namespaceWithOfflineKeys)
+
+      val result = call(controller.downloadClientToolBundle(UUID.randomUUID()), request)
+      status(result) mustBe OK
+      contentType(result).get mustBe "application/zip"
+    }
+  }
 }
