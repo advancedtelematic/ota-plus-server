@@ -1282,53 +1282,22 @@ export default class PackagesStore {
         this.preparedPackages = [];
     }
 
-    _findLocalItems(query) {
-        let i, results = [];
-        for (i in localStorage) {
-            if (localStorage.hasOwnProperty(i)) {
-                if (i.match(query) || (!query && typeof i === 'string')) {
-                    let value = JSON.parse(localStorage.getItem(i));
-                    results.push({
-                        key:i,
-                        val:value
-                    });
-                }
+    _getAllStorage() {
+        var values = [],
+            keys = Object.keys(localStorage),
+            i = keys.length;
+        while ( i-- ) {
+            try {
+                values.push( JSON.parse(localStorage.getItem(keys[i])) );
+            } catch(e) {
             }
         }
-        return results;
+        return values;
     }
 
-    _handleCompatibles() {
-        let required = this._findLocalItems('required');
-        let incompatibles = this._findLocalItems('incompatibles');
-        let additionalRequired = [];
-        if(required) {
-            _.each(required, (item, i) => {
-                let values = item.val;
-                _.each(values, (value, index) => {
-                    additionalRequired.push({
-                        key: value + '-required-by',
-                        val: [item.key.replace('-required', '')]
-                    });
-                });
-            });
-        }
-        let additionalIncompatibles = [];
-        if(incompatibles) {
-            _.each(incompatibles, (item, i) => {
-                let values = item.val;
-                _.each(values, (value, index) => {
-                    additionalIncompatibles.push({
-                        key: value + '-incompatibles',
-                        val: [item.key.replace('-incompatibles', '')]
-                    });
-                });
-            });
-        }
-        let allRequired = required.concat(additionalRequired);
-        let allIncompatibles = incompatibles.concat(additionalIncompatibles);
-        let compatibilityData = allRequired.concat(allIncompatibles);
-        this.compatibilityData = compatibilityData;
+    _handleCompatibles(compatibilityData = null) {
+        let data = this._getAllStorage();
+        this.compatibilityData = data;
     }
 
     _addPackage(data) {

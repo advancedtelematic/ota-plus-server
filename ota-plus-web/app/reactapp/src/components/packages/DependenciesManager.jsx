@@ -6,73 +6,48 @@ import { Modal } from '../../partials';
 
 @observer
 class DependenciesManager extends Component {
-    @observable required = [];
-    @observable incompatibles = [];
+    @observable obj = {};
 
     constructor(props) {
         super(props);
-    }
-    addVersion(version) {
-        if(this.required.indexOf(version) > -1) {
-            this.incompatibles.push(version);
-            this.required.splice(this.required.indexOf(version), 1);
-        } else if(this.incompatibles.indexOf(version) > -1) {
-            this.incompatibles.splice(this.incompatibles.indexOf(version), 1);
-        } else {
-            this.required.push(version);
-        }
+        this.obj = {
+            name: props.activePackage.imageName,
+            required: [],
+            incompatibles: [],
+        };
     }
     componentWillMount() {
-        const { activePackage, packagesStore } = this.props;
-        let compatibilityData = packagesStore.compatibilityData;
-        _.each(compatibilityData, (item, index) => {
-            if(activePackage.imageName + '-required' === item.key) {
-                activePackage.required = item.val;
-            }
-            if(activePackage.imageName + '-required-by' === item.key) {
-                activePackage.requiredBy = item.val;
-            }
-            if(activePackage.imageName + '-incompatibles' === item.key) {
-                activePackage.incompatibles = item.val;
-            }
-        });
-        
+        const { activePackage } = this.props;
+        let pack = localStorage.getItem(activePackage.imageName);
+        if(pack) {
+            pack = JSON.parse(pack);
+            this.obj = pack;
+        }
     }
-    componentWillUnmount() {
+    addVersion(version) {
         const { activePackage, packagesStore } = this.props;
-        if(this.required.length) {
-            let currentRequired = JSON.parse(localStorage.getItem(activePackage.imageName + "-required"));
-            if(currentRequired) {
-                _.each(this.required, (item, i) => {
-                    if(currentRequired.indexOf(item) === -1) {
-                        currentRequired.push(item);
-                    }
-                });
-                localStorage.setItem(activePackage.imageName + "-required", JSON.stringify(currentRequired));
-            } else {
-                localStorage.setItem(activePackage.imageName + "-required", JSON.stringify(this.required));
-            }
+        if(_.indexOf(this.obj.required, version) > -1) {
+            this.obj.incompatibles.push(version);
+            this.obj.required.splice(_.indexOf(this.obj.required, version), 1);            
+        } else if(_.indexOf(this.obj.incompatibles, version) > -1) {
+            this.obj.incompatibles.splice(_.indexOf(this.obj.required, version), 1);
+        } else {
+            this.obj.required.push(version);
         }
-        if(this.incompatibles.length) {
-            let currentIncompatibles = JSON.parse(localStorage.getItem(activePackage.imageName + "-incompatibles"));
-            if(currentIncompatibles) {
-                _.each(this.incompatibles, (item, i) => {
-                    if(currentIncompatibles.indexOf(item) === -1) {
-                        currentIncompatibles.push(item);
-                    }
-                });
-                localStorage.setItem(activePackage.imageName + "-incompatibles", JSON.stringify(currentIncompatibles));
-            } else {
-                localStorage.setItem(activePackage.imageName + "-incompatibles", JSON.stringify(this.incompatibles));
-            }
-        }
+        localStorage.setItem(activePackage.imageName, JSON.stringify(this.obj));
         packagesStore._handleCompatibles();
-        activePackage.required = [];
-        activePackage.requiredBy = [];
-        activePackage.incompatibles = [];
     }
     render() {
-        const { shown, hide, packages, activePackage } = this.props;
+        const { shown, hide, packages, activePackage, packagesStore } = this.props;
+
+        let requiredBy = [];
+        _.each(packagesStore.compatibilityData, (data, index) => {
+            let found = _.find(data.required, item => item === activePackage.imageName);
+            if(found) {
+                requiredBy.push(data.name);
+            }
+        });
+
         const content = (
             <span>
                 <a href="#" id="close-manager" className="close-manager" title="Close sankey" onClick={hide.bind(this)}>
@@ -87,21 +62,21 @@ class DependenciesManager extends Component {
                             Version
                         </div>
                     </section>
-                    <section className="current-pack">
-                        <div className="name">
+                    <section className="current-pack" id="current-pack">
+                        <div className="name" id={"current-pack-" + activePackage.id.name}>
                             {activePackage.id.name}
                         </div>
-                        <div className="version">
+                        <div className="version" id={"current-pack-" + activePackage.id.version}>
                             {activePackage.id.version}
                         </div>
                     </section>
-                    <div className="other-packs-list">
+                    <div className="other-packs-list" id="other-packs-list">
                         {_.map(packages, (packs, letter) => {
                             return _.map(packs, (pack, i) => {
                                 return (
                                     pack.packageName !== activePackage.id.name ?
                                         <section className="other-pack" key={i}>
-                                            <div className="name">
+                                            <div className="name" id={"other-pack-" + pack.packageName}>
                                                 {pack.packageName}
                                             </div>
                                             <div className="versions">
@@ -110,35 +85,33 @@ class DependenciesManager extends Component {
                                                     return (
                                                         version.id.version !== activePackage.id.version ?
                                                             <span className="item" key={index}>
-                                                                <span 
-                                                                    className={"circle" + 
-                                                                        (this.required.indexOf(versionString) > -1 || _.contains(activePackage.required, version.imageName) ? 
-                                                                            " green"
-                                                                        : this.incompatibles.indexOf(versionString) > -1 || _.contains(activePackage.incompatibles, version.imageName)? 
-                                                                            " red" 
-                                                                        : 
-                                                                            ""
-                                                                        )} 
-                                                                    onClick={this.addVersion.bind(this, versionString)}>
-                                                                </span>
-                                                                <span className="value">
+                                                                <span className="value" id={"other-pack-" + version.id.version}>
                                                                     {version.id.version}
                                                                 </span>
-                                                                {_.contains(activePackage.required, version.imageName) ?
-                                                                    <span>
-                                                                        Required
+                                                                {this.obj.required.indexOf(versionString) > -1 ?
+                                                                    <span className="label orange"
+                                                                          id={"other-pack-mandatory-" + version.id.version}
+                                                                          onClick={this.addVersion.bind(this, versionString)}>
+                                                                          Mandatory
                                                                     </span>
-                                                                : _.contains(activePackage.requiredBy, version.imageName) ?
-                                                                    <span>
-                                                                        Required by
+                                                                : this.obj.incompatibles.indexOf(versionString) > -1 ?
+                                                                    <span className="label red"
+                                                                          id={"other-pack-incompatible-" + version.id.version}
+                                                                          onClick={this.addVersion.bind(this, versionString)}>
+                                                                          Not compatible
                                                                     </span>
-                                                                : _.contains(activePackage.incompatibles, version.imageName) ?
-                                                                    <span>
-                                                                        Incompatible
+                                                                : requiredBy.indexOf(versionString) > -1 ?
+                                                                    <span className="label green"
+                                                                          id={"other-pack-required-by-" + version.id.version}
+                                                                          >
+                                                                          Required by
                                                                     </span>
                                                                 :
-                                                                    null
-                                                                }
+                                                                    <span className="label"
+                                                                          id={"other-pack-not-selected-" + version.id.version}
+                                                                          onClick={this.addVersion.bind(this, versionString)}>
+                                                                    </span>
+                                                                }                                                                
                                                             </span>
                                                         :
                                                             null
@@ -151,10 +124,10 @@ class DependenciesManager extends Component {
                                 );
                             }); 
                         })}
-                    </div>                    
+                    </div>
                 </div>
                 <div className="footer">
-                    <a href="#" onClick={hide.bind(this)} className="link-cancel">Close</a>
+                    <a href="#" onClick={hide.bind(this)} className="link-cancel" id="link-close">Close</a>
                 </div>
             </span>
         );
