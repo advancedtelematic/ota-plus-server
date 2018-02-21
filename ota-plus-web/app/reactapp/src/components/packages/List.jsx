@@ -115,6 +115,7 @@ class List extends Component {
     }
     togglePackage(packageName, e) {
         if(e) e.preventDefault();
+        this.props.packagesStore._handleCompatibles();
         this.expandedPackageName = (this.expandedPackageName !== packageName ? packageName : null);
     }
     startIntervalListScroll() {
@@ -150,7 +151,7 @@ class List extends Component {
                                     {_.map(packages, (pack, index) => {
                                         const that = this;
                                         return (
-                                            <span key={index} className="font-small">
+                                            <span key={index} className="c-package font-small">
                                                 <ListItem 
                                                     pack={pack}
                                                     togglePackage={this.togglePackage}
@@ -170,22 +171,20 @@ class List extends Component {
                                                 >
                                                     {this.expandedPackageName === pack.packageName ?
                                                         pack.inDirector ?
-                                                            <div className="director-details">
-                                                                <div className="pack-name font-big">
+                                                            <div className="c-package__details">
+                                                                <div className="c-package__main-name font-big">
                                                                     {pack.packageName}
                                                                 </div>
-                                                                <div className="distribution">
-                                                                    <div className="heading">
+                                                                <div className="c-package__chart">
+                                                                    <div className="c-package__heading">
                                                                         Distribution by devices
                                                                     </div>
-                                                                    <div className="pie">
-                                                                        <PackagesVersionsStats
-                                                                            pack={pack}
-                                                                        />
-                                                                    </div>
+                                                                    <PackagesVersionsStats
+                                                                        pack={pack}
+                                                                    />
                                                                 </div>                                                                
-                                                                <ul className="versions" id="versions">
-                                                                    <div className="heading">
+                                                                <ul className="c-package__versions" id="versions">
+                                                                    <div className="c-package__heading">
                                                                         All versions
                                                                     </div>
                                                                     {_.map(pack.versions, (version, i) => {

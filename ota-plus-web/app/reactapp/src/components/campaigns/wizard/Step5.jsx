@@ -33,27 +33,52 @@ class WizardStep5 extends Component {
     checkVersion(data) {
         const { packagesStore, wizardData } = this.props;
         let chosenVersions = wizardData[2].versions;
-        let requiredPackages = JSON.parse(localStorage.getItem(data.filepath + '-required'));
-        let incompatiblePackages = JSON.parse(localStorage.getItem(data.filepath + '-incompatibles'));
-        if(requiredPackages) {
-            _.each(requiredPackages, (filepath, index) => {
-                let skipAdd = false;
-                _.each(chosenVersions, (values, pName) => {
-                    if(values.toFilepath === filepath) {                        
-                        skipAdd = true;
+        let objWithRelations = JSON.parse(localStorage.getItem(data.filepath));
+        if(objWithRelations) {
+            let requiredPackages = objWithRelations.required;
+            let incompatiblePackages = objWithRelations.incompatibles;
+            if(requiredPackages) {
+                _.each(requiredPackages, (filepath, index) => {
+                    let skipAdd = false;
+                    _.each(chosenVersions, (values, pName) => {
+                        if(values.toFilepath === filepath) {                        
+                            skipAdd = true;
+                        }
+                    });
+                    if(!skipAdd) {
+                        let childPack = _.find(packagesStore.directorPackages, pack => pack.imageName === filepath);
+                        let obj = {
+                            parentPack: data.packName,
+                            parentFilepath: data.filepath,
+                            childPack: childPack.id.name,
+                            childRequiredVersion: childPack.id.version,
+                            isCompatible: true
+                        };
+                        this.addBlock(obj);
                     }
                 });
-                if(!skipAdd) {
-                    let childPack = _.find(packagesStore.directorPackages, pack => pack.imageName === filepath);
-                    let obj = {
-                        parentPack: data.packName,
-                        parentFilepath: data.filepath,
-                        childPack: childPack.id.name,
-                        childRequiredVersion: childPack.id.version
-                    };
-                    this.addBlock(obj);
-                }
-            });
+            }
+            if(incompatiblePackages) {
+                _.each(incompatiblePackages, (filepath, index) => {
+                    let isTryingToInstall = false;
+                    _.each(chosenVersions, (values, pName) => {
+                        if(values.toFilepath === filepath) {                        
+                            isTryingToInstall = true;
+                        }
+                    });
+                    if(isTryingToInstall) {
+                        let childPack = _.find(packagesStore.directorPackages, pack => pack.imageName === filepath);
+                        let obj = {
+                            parentPack: data.packName,
+                            parentFilepath: data.filepath,
+                            childPack: childPack.id.name,
+                            childRequiredVersion: childPack.id.version,
+                            isCompatible: false
+                        };
+                        this.addBlock(obj);
+                    }
+                });
+            }
         }
         if(!this.blocks.length) {
             this.props.markStepAsFinished();
@@ -86,7 +111,7 @@ class WizardStep5 extends Component {
                     primaryText={<span className='version-hash' style={{
                         fontSize: '12px',
                     }}>{version.id.version}</span>}
-                    id={"version-from-menu-item-" + version.id.version}
+                    id={"parent-pack-" + version.id.version}
                     className={"version-menu-item"}
                 />
             );
@@ -115,58 +140,121 @@ class WizardStep5 extends Component {
     }
     render() {
         const { addToCampaign } = this.props;
+        let isOneIncompatible = _.find(this.blocks, block => !block.isCompatible);
         return (
             <div className="content">
+                {this.blocks.length ?
+                    isOneIncompatible ?
+                        <div className="top-alert danger" id="compatibility-issue">
+                            <img src="/assets/img/icons/white/manager-danger.png" alt="Icon" />
+                            Compatibility issue
+                        </div>
+                    :
+                        <div className="top-alert warning" id="missing-dependencies">
+                            <img src="/assets/img/icons/white/manager-warning.png" alt="Icon" />
+                            Missing dependencies
+                        </div>
+                :
+                    <div className="top-alert success" id="success">
+                        <img src="/assets/img/icons/white/manager-success.png" alt="Icon" />
+                        Dependencies check
+                    </div>
+                }
                 {this.isLoading ?
                     <div className="wrapper-center">
                         <Loader />
                     </div>
                 :
                     this.blocks.length ? 
-                        _.map(this.blocks, (block, index) => {
-                            return (
-                                <section className="pair" key={index}>
-                                    <div className="item">
-                                        <div className="name">
-                                            {block.parentPack}
-                                        </div>
-                                        <div className="version">
-                                            <SelectField
-                                                id="from-pack-versions"
-                                                multiple={false}
-                                                onChange={this.onParentVersionChange.bind(this, {type: 'to', packageName: block.parentPack})}
-                                                value={block.parentFilepath}
-                                                style={{display: 'block', width : '100%'}}
-                                                selectedMenuItemStyle={{color: '#000', fontWeight: 'bold'}}
-                                            >
-                                                {this.formatVersions(block.parentPack)}
-                                            </SelectField>
-                                        </div>
-                                    </div>
-                                    <div className="item">
-                                        <div className="name">
-                                            <div className="warning">
-                                                {block.childPack}/{block.childRequiredVersion}
+                        <span>                            
+                            {_.map(this.blocks, (block, index) => {
+                                return (
+                                    <section className="pair" key={index}>
+                                        <div className="item">
+                                            <div className="name">
+                                                <div className="title">
+                                                    Package:
+                                                </div>
+                                                <div className="value" id={"parent-pack-" + block.parentPack}>
+                                                    {block.parentPack}
+                                                </div>
                                             </div>
-                                            <div>
-                                                is required
+                                            <div className="version select">
+                                                <div className="title">
+                                                    Version:
+                                                </div>
+                                                <SelectField
+                                                    id="from-pack-versions"
+                                                    multiple={false}
+                                                    onChange={this.onParentVersionChange.bind(this, {type: 'to', packageName: block.parentPack})}
+                                                    value={block.parentFilepath}
+                                                    style={{display: 'block', width: '100%', height: '30px'}}
+                                                    iconStyle={{height: '30px', padding: 0}}
+                                                    labelStyle={{height: '30px', lineHeight: '20px'}}
+                                                    selectedMenuItemStyle={{color: '#000', fontWeight: 'bold'}}
+                                                >
+                                                    {this.formatVersions(block.parentPack)}
+                                                </SelectField>
                                             </div>
                                         </div>
-                                        <div className="version">
-                                            <FlatButton
-                                                label="Add to campaign"
-                                                type="button"
-                                                className="btn-main btn-small"
-                                                onClick={addToCampaign.bind(this, block.childPack)}
-                                            />
+                                        {block.isCompatible ?
+                                            <div className="status required" id="required">
+                                                Requires:
+                                            </div>
+                                        :
+                                            <div className="status incompatible" id="incompatible">
+                                                Not compatible with:
+                                            </div>
+                                        }
+                                        
+                                        <div className="item">
+                                            <div className="name">
+                                                <div className="title">
+                                                    Package:
+                                                </div>
+                                                <div className="value" id={"child-pack-" + block.parentPack}>
+                                                    {block.childPack}
+                                                </div>
+                                            </div>
+                                            <div className="version">
+                                                <div className="title">
+                                                    Version:
+                                                </div>
+                                                <div className="value" id={"child-pack-" + block.childRequiredVersion}>
+                                                    {block.childRequiredVersion}                                                
+                                                </div>
+                                            </div>                                            
                                         </div>
-                                    </div>
-                                </section>
-                            );
-                        })
+                                        <div className="add">
+                                            {block.isCompatible ?
+                                                <FlatButton
+                                                    label="Add to campaign"
+                                                    type="button"
+                                                    className="btn-main btn-small"
+                                                    id="add-to-campaign"
+                                                    onClick={addToCampaign.bind(this, block.childPack)}
+                                                />
+                                            :
+                                                <FlatButton
+                                                    label="Change version"
+                                                    type="button"
+                                                    className="btn-main btn-small"
+                                                    id="change-version"
+                                                    onClick={addToCampaign.bind(this, block.childPack)}
+                                                />
+                                            }
+                                        </div>
+                                        
+                                    </section>
+                                );
+                            })}
+                        </span>
                     :
                         <div className="wrapper-center">
-                            <img src="/assets/img/icons/green_tick.png" alt="Icon" style={{width: '50px'}} />
+                            <div className="step-pass" id="step-pass">
+                                <img src="/assets/img/icons/manager-success.svg" alt="Icon" />
+                                All dependencies compatible
+                            </div>
                         </div>
                 }
             </div>

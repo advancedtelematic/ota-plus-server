@@ -1941,38 +1941,6 @@ input {
             }
 
             .left-box {
-                width: 50%;
-                float: left;
-
-                .fields {
-                    padding: 20px 10px;
-
-                    .version-info {
-                        padding-left: 25px;
-
-                        div {
-                            overflow: hidden;
-                            margin-bottom: 5px;
-
-                            .sub-title {
-                                display: block;
-                                float: left;
-                                width: 25%;
-                            }
-
-                            .value {
-                                @include textoverflowEllipsis;
-                                display: block;
-                                float: left;
-                                width: 75%;
-                            }
-
-                            &.version {
-                                font-weight: bold;
-                            }
-                        }
-                    }
-                }
 
                 .input-comment {
                     width: 80%;
@@ -2716,50 +2684,131 @@ input {
                 }
 
                 &.step-dependencies-management {
-                    padding: 20px;
 
                     .content {
                         height: 100%;
+
+                        .wrapper-center {
+                            height: calc(100% - 60px);
+                        }
+
+                        .step-pass {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            font-weight: bold;
+                            color: #83d062;
+                            font-size: 16px;
+
+                            img {
+                                width: 100px;
+                                margin-bottom: 15px;
+                            }
+                        }
+
+                        .top-alert {
+                            padding: 15px;                            
+                            color: #fff;
+                            font-size: 16px;
+                            font-weight: bold;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+
+                            img {
+                                margin-right: 10px;
+                                width: 30px;
+                            }
+
+                            &.danger {
+                                background-color: #ff0100;
+                            }
+
+                            &.warning {
+                                background-color: #f5a623;
+                            }
+
+                            &.success {
+                                background-color: #83d062;
+                            }
+                        }
                     
                         section.pair {
                             background: #fff;
                             border-bottom: 1px solid #e5e5e5;
                             padding: 20px 30px;
-
-                            &.incompatible {
-                                border-bottom: 1px solid red;
-                            }
+                            overflow: hidden;
 
                             &:not(:last-child) {
                                 margin-bottom: 20px;
                             }
 
                             .item {
+                                padding-left: 50px;
+                                overflow: hidden;
                                 display: flex;
+                                align-items: center;
 
                                 &:not(:last-child) {
                                     margin-bottom: 20px;
                                 }
 
-                                .name, .version {
-                                    @include textoverflowEllipsis;
-                                    flex-basis: 50%;
-                                    font-weight: bold;
-                                    display: flex;
-                                    flex-direction: column;
-                                    align-items: flex-start;
-                                    justify-content: flex-start;
+                                .title {
+                                    margin-bottom: 10px;
                                 }
 
-                                .name {
-                                    display: flex;
-                                    flex-direction: row;
+                                .name {                                    
+                                    width: 35%;
+                                    margin-right: 15%;
+                                    float: left;
+                                    padding-bottom: 5px;
+                                    border-bottom: 1px solid #e0e0e0;
+                                    font-weight: bold;
 
-                                    .warning {
-                                        max-width: 200px;
+                                    .value {
                                         @include textoverflowEllipsis;
-                                        margin-right: 3px;
                                     }
+                                }
+
+                                .version {
+                                    width: 35%;
+                                    margin-right: 15%;
+                                    float: left;
+                                    font-weight: bold;
+
+                                    &:not(.select) {
+                                        padding-bottom: 5px;
+                                        border-bottom: 1px solid #e0e0e0;
+                                    }
+
+                                    &.select {
+
+                                        .title {
+                                            margin-bottom: 15px;
+                                        }
+                                    }
+
+                                    .value {
+                                        @include textoverflowEllipsis;
+                                    }
+                                }
+                            }
+
+                            .add {
+                                float: right;
+                            }
+
+                            .status {                                
+                                font-weight: bold;
+                                margin-bottom: 20px;
+
+                                &.required {
+                                    color: #f5a623;
+                                }
+
+                                &.incompatible {
+                                    color: #ff0100;
                                 }
                             }
                         }
@@ -3368,23 +3417,26 @@ input {
                 .item {
                     display: flex;
                     align-items: center;
+                    margin-left: 8px;
 
                     &:not(:last-child) {
                         margin-bottom: 10px;
                     }
 
-                    .circle {
-                        width: 15px;
+                    .label {
+                        width: 100px;
                         height: 15px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
                         background: #fff;
                         border: 1px solid #D3D3D3;
-                        display: inline-block;
-                        border-radius: 50%;
-                        margin-right: 5px;
+                        border-radius: 10px;
+                        margin-left: 10px;
                         cursor: pointer;
 
-                        &.green {
-                            background: green;
+                        &.orange {
+                            background: #f4a623;
                             border: none;
                         }
 
@@ -3392,11 +3444,16 @@ input {
                             background: red;
                             border: none;
                         }
+
+                        &.green {
+                            background: #84cf61;
+                            border: none;
+                        }
                     }
 
                     .value {
                         @include textoverflowEllipsis;
-                        width: calc(100% - 15px);
+                        width: calc(100% - 100px);
                     }
                 }
             }
