@@ -8,7 +8,6 @@ class SecondaryEcu extends Component {
     constructor(props) {
         super(props);
         this.onEcuClick = this.onEcuClick.bind(this);
-        this.onKeyIconClick = this.onKeyIconClick.bind(this);
     }
     onEcuClick(ecu, e) {
         if(e) e.preventDefault();
@@ -16,16 +15,8 @@ class SecondaryEcu extends Component {
         selectEcu(ecu.hardwareId, ecu.id, ecu.image.filepath, 'secondary');
         hideHardwareOverlay();
     }
-    onKeyIconClick(e) {
-        if(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        const { handleTouchTap, handleRequestClose } = this.props;
-        handleTouchTap(e);
-    }
     render() {
-        const { active, ecu, hardwareStore, showKey, ...otherProps} = this.props;
+        const { active, ecu, hardwareStore, ...otherProps} = this.props;
         const hardware = hardwareStore.hardware;
         return (
             <span>
@@ -45,8 +36,7 @@ class SecondaryEcu extends Component {
                     </div>
                     <div className="icons"
                          id="hardware-key-icon"
-                         onClick={showKey}
-                         onTouchTap={this.onKeyIconClick.bind(this)}>
+                         onClick={otherProps.handleTouchTap}>
                             <span className="hardware-icon">
                                 <img src="/assets/img/icons/key.svg" alt="Icon" />
                             </span>

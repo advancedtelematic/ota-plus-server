@@ -34,31 +34,32 @@ class List extends Component {
 		return isPackageBlacklisted ? isPackageBlacklisted : false;
 	}
 	isPackageQueued(version) {
-		let isPackageQueued = _.find(this.props.packagesStore.deviceQueue, (dev) => {
-			return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
+		let isPackageQueued = false;
+		let serial = this.props.hardwareStore.activeEcu.serial;
+		_.each(this.props.devicesStore.multiTargetUpdates, (update, i) => {
+			if(!_.isEmpty(update.targets[serial])) {
+				if(version.imageName === update.targets[serial].image.filepath) {
+					isPackageQueued = true;
+				}
+			}
 		});
-		return isPackageQueued ? isPackageQueued : false;
+		return isPackageQueued;
 	}
 	isPackageInstalled(version) {
 		const { devicesStore, hardwareStore } = this.props;
-		let installed = version.isInstalled;
-		let installedOnLegacy = _.find(this.props.packagesStore.initialDevicePackages, (dev) => {
-			return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
-		});
-		let installedOnPrimary = false;
-		let installedOnSecondary = false;
+		let installed = false;
 		if(devicesStore.device.isDirector) {
 		    if(hardwareStore.activeEcu.type === 'primary' && this.props.devicesStore._getPrimaryFilepath() === version.imageName) {
-			    installedOnPrimary = true;
+			    installed = true;
 		    }
 		    if(hardwareStore.activeEcu.type === 'secondary') {
 		    	let serial = hardwareStore.activeEcu.serial;
 		        if(_.includes(this.props.devicesStore._getSecondaryFilepathsBySerial(serial), version.imageName)) {
-			        installedOnSecondary = true;
+			        installed = true;
 		        }
 		    }
 		}
-		return installed || installedOnLegacy || installedOnPrimary || installedOnSecondary;
+		return installed;
 	}
 	isAutoInstallEnabled(version) {
 		let isAutoInstallEnabled = _.find(this.props.packagesStore.deviceAutoInstalledPackages, (packageName) => {
@@ -73,7 +74,6 @@ class List extends Component {
     	const { 
     		packagesStore, 
     		devicesStore, 
-    		campaignsStore, 
     		showPackageBlacklistModal,
     		installPackage, 
     		installTufPackage, 
