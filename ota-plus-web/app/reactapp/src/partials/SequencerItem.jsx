@@ -23,8 +23,12 @@ class SequencerItem extends  Component {
         const { value, delay, duration, selectSlot, selectedElement, column, row, deselectSlot, readOnly, selectAction } = this.props;
         return (
             <span>
-                <div className="c-sequencer__item" onClick={_.isNull(selectedElement) && !readOnly ? selectSlot.bind(this, {column, row, value}) : deselectSlot}>
-                    <div className="c-sequencer__entry-point"/>
+                <div className="c-sequencer__item" style={
+                        {
+                            borderColor: `${selectedElement && selectedElement.value.name === value.name ? '#7ee9da' : ''}`,
+                            boxShadow: `${selectedElement && selectedElement.value.name === value.name ? '0px 5px 10px -2px rgba(0,0,0,0.4)' : ''}`
+                        }}
+                     onClick={_.isNull(selectedElement) && !readOnly ? selectSlot.bind(this, {column, row, value}) : deselectSlot}>
                     <div className="c-sequencer__info">
                         <div className="c-sequencer__hardware-id">
                             {value.hardwareId}
@@ -40,7 +44,6 @@ class SequencerItem extends  Component {
                         </div>
                     </div>
                     <div className="c-sequencer__exit-nodes">
-                        <div className="c-sequencer__success"></div>
                         <div className="c-sequencer__failure" onClick={!readOnly ? this.toggleDropDown : null}>
                             <i className={"c-sequencer__icon c-sequencer__icon--top " + (value.selectedAction ? 'c-sequencer__icon--' + value.selectedAction : 'c-sequencer__icon--skip')}/>
                             {this.showDropDown ?

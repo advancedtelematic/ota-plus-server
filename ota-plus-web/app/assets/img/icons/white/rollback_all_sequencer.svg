@@ -1,44 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="21px" height="18px" viewBox="0 0 21 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
-    <title>Group 13</title>
+<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>Rollback all</title>
     <desc>Created with Sketch.</desc>
-    <defs>
-        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-1">
-            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
-            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
-            <feMerge>
-                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
-                <feMergeNode in="SourceGraphic"></feMergeNode>
-            </feMerge>
-        </filter>
-    </defs>
-    <g id="-" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Artboard-2" transform="translate(-464.000000, -130.000000)">
-            <g id="Group-4-Copy" transform="translate(287.000000, 71.000000)">
-                <g id="Group-2">
-                    <g id="Group" transform="translate(0.521258, 0.000000)">
-                        <g id="Group-5">
-                            <g id="Group-14" filter="url(#filter-1)" transform="translate(121.478742, 35.000000)">
-                                <g id="Group-13" transform="translate(56.000000, 21.000000)">
-                                    <g id="Group-9-Copy" stroke-linecap="round" stroke="#FFFFFF" stroke-width="0.8" stroke-linejoin="round">
-                                        <g id="Page-1" transform="translate(8.688122, 8.958582) rotate(-135.000000) translate(-8.688122, -8.958582) translate(2.688122, 3.458582)">
-                                            <polyline id="Stroke-1" points="11.9694375 4.0271202 10.8196099 5.40972118 9.3869806 4.30004631"></polyline>
-                                            <path d="M5.55961422,10.4500936 C2.64954957,10.4500936 0.291122845,8.17346305 0.291122845,5.36558128 C0.291122845,2.55713793 2.64954957,0.280507389 5.55961422,0.280507389 C8.46909698,0.280507389 10.8193772,2.60150246 10.8193772,5.40994581" id="Stroke-3"></path>
-                                        </g>
-                                    </g>
-                                    <g id="Group-10-Copy" transform="translate(9.000000, 5.000000)">
-                                        <circle id="Oval-5" fill="#FFFFFF" cx="3.5" cy="3.5" r="3.5"></circle>
-                                        <text id="all" font-family="AkkuratStd-Bold, AkkuratStd" font-size="4" font-weight="bold" letter-spacing="-0.200000003" fill="#FF0000">
-                                            <tspan x="1.20001221" y="5">al</tspan>
-                                            <tspan x="4.2560122" y="5">l</tspan>
-                                        </text>
-                                    </g>
-                                </g>
-                            </g>
-                        </g>
-                    </g>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Rollback-all">
+            <g id="Group-13" transform="translate(-2.000000, -2.000000)">
+                <g id="Page-1" transform="translate(8.688122, 8.958582) rotate(-135.000000) translate(-8.688122, -8.958582) translate(2.688122, 3.458582)" stroke="#FFFFFF" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline id="Stroke-1" points="11.9694375 4.0271202 10.8196099 5.40972118 9.3869806 4.30004631"></polyline>
+                    <path d="M5.55961422,10.4500936 C2.64954957,10.4500936 0.291122845,8.17346305 0.291122845,5.36558128 C0.291122845,2.55713793 2.64954957,0.280507389 5.55961422,0.280507389 C8.46909698,0.280507389 10.8193772,2.60150246 10.8193772,5.40994581" id="Stroke-3"></path>
+                </g>
+                <g id="Group-10-Copy" transform="translate(9.000000, 5.000000)">
+                    <circle id="Oval-5" fill="#FFFFFF" cx="3.5" cy="3.5" r="3.5"></circle>
+                    <path d="M3.32401221,4.976 C3.24001221,5.012 3.19601221,5.032 3.07601221,5.032 C2.86001221,5.032 2.74001221,4.896 2.72401221,4.74 C2.62801221,4.908 2.38801221,5.052 2.09201221,5.052 C1.59601221,5.052 1.34001221,4.74 1.34001221,4.4 C1.34001221,4.004 1.64801221,3.776 2.04401221,3.748 L2.65601221,3.704 L2.65601221,3.576 C2.65601221,3.38 2.58801221,3.248 2.30401221,3.248 C2.07201221,3.248 1.93601221,3.352 1.92401221,3.544 L1.44001221,3.544 C1.46801221,3.076 1.84001221,2.868 2.30401221,2.868 C2.66001221,2.868 2.96401221,2.98 3.08401221,3.292 C3.13601221,3.424 3.14401221,3.572 3.14401221,3.712 L3.14401221,4.484 C3.14401221,4.58 3.17601221,4.616 3.26001221,4.616 C3.29201221,4.616 3.32401221,4.608 3.32401221,4.608 L3.32401221,4.976 Z M2.65601221,4.172 L2.65601221,4.076 L2.12801221,4.116 C1.97601221,4.128 1.82801221,4.22 1.82801221,4.388 C1.82801221,4.548 1.96801221,4.648 2.12401221,4.648 C2.43601221,4.648 2.65601221,4.48 2.65601221,4.172 Z M4.3360122,4.996 L4.3360122,4.576 C4.3080122,4.576 4.2960122,4.58 4.2520122,4.58 C4.0800122,4.58 4.0520122,4.5 4.0520122,4.38 L4.0520122,2.108 L3.5480122,2.108 L3.5480122,4.464 C3.5480122,4.86 3.7760122,5.024 4.1160122,5.024 C4.2160122,5.024 4.2360122,5.016 4.3360122,4.996 Z M5.3440122,4.996 L5.3440122,4.576 C5.3160122,4.576 5.3040122,4.58 5.2600122,4.58 C5.0880122,4.58 5.0600122,4.5 5.0600122,4.38 L5.0600122,2.108 L4.5560122,2.108 L4.5560122,4.464 C4.5560122,4.86 4.7840122,5.024 5.1240122,5.024 C5.2240122,5.024 5.2440122,5.016 5.3440122,4.996 Z" id="all" fill="#FF0000"></path>
                 </g>
             </g>
         </g>
