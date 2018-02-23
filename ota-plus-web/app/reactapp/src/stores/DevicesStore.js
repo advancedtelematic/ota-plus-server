@@ -1,4 +1,4 @@
-import {observable, computed} from 'mobx';
+import {observable, computed, extendObservable} from 'mobx';
 import axios from 'axios';
 import {
     API_DEVICES_SEARCH,
@@ -295,53 +295,26 @@ export default class DevicesStore {
     }
 
     fetchDirectorAttributes(id) {
-        let device = this._getDevice(id);
-        if(!_.isEmpty(this.device) && this.device.uuid === id) {
-            if(this.device.isDirector) {
-                resetAsync(this.devicesDirectorAttributesFetchAsync, true);
-                return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
-                    .then((response) => {
-
-                        let primary = _.filter(response.data, (data, index) => {
-                            return data.primary;
-                        });
-                        let secondary = _.filter(response.data, (data, index) => {
-                            return !data.primary;
-                        });
-                        this.device.directorAttributes = {
-                            primary: _.first(primary),
-                            secondary: secondary
-                        };
-                        this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
-                    })
-                    .catch((error) => {
-                        this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
-                    });
-            }
-        } else if(device) {
-            if(device.isDirector) {
-                resetAsync(this.devicesDirectorAttributesFetchAsync, true);
-                return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
-                    .then((response) => {
-
-                        let primary = _.filter(response.data, (data, index) => {
-                            return data.primary;
-                        });
-                        let secondary = _.filter(response.data, (data, index) => {
-                            return !data.primary;
-                        });
-                        this.device.directorAttributes = {
-                            primary: _.first(primary),
-                            secondary: secondary
-                        };
-
-                        this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
-                    })
-                    .catch((error) => {
-                        this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
-                    });
-            }
-        }
+        resetAsync(this.devicesDirectorAttributesFetchAsync, true);
+        return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
+            .then((response) => {
+                let primary = _.filter(response.data, (data, index) => {
+                    return data.primary;
+                });
+                let secondary = _.filter(response.data, (data, index) => {
+                    return !data.primary;
+                });
+                extendObservable(this.device, {
+                    directorAttributes: {
+                        primary: _.first(primary),
+                        secondary: secondary
+                    }
+                });
+                this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
+            });
     }
 
     fetchPrimaryAndSecondaryFilepaths(id) {
