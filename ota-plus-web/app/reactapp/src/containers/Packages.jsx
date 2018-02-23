@@ -49,7 +49,6 @@ class Packages extends Component {
     }
     componentWillMount() {
         const { packagesStore } = this.props;
-        packagesStore._handleCompatibles();
     }
     showTooltip(e) {
         if(e) e.preventDefault();

@@ -2869,148 +2869,19 @@
         }
 
         .ios-list {
-            height: calc(100% - 40px);
+            height: calc(100% - 40px);            
+        }
 
-            .item {
-                &.expanded {
+        .c-package {
+
+            &__item {
+
+                &--expanded {
                     background: #f5f5f5;
                 }
             }
 
-            .director-details {
-                background: #f5f5f5;
-                overflow: hidden;
-                padding: 25px;
-
-                .pack-name {
-                    margin-bottom: 25px;
-                }
-
-                .distribution {
-                    width: 20%;
-                    float: left;
-
-                    .heading {
-                        margin-bottom: 10px;
-                        font-weight: bold;
-                    }
-                }
-
-                ul.versions {
-                    padding: 0 25px;
-                    width: 70%;
-                    float: left;
-
-                    li {
-                        position: relative;
-                        @include transition;
-
-                        &:hover {
-                            background: #eee;
-                        }
-                    }
-
-                    .heading {
-                        margin-bottom: 10px;
-                        font-weight: bold;
-                    }
-
-                    .right-box {
-                        text-align: left;
-                        height: auto;
-                        padding: 20px 10px;
-                        width: 40%;
-                        float: left;
-
-                        .ecus-installed {
-                            font-weight: bold;
-                            margin-bottom: 10px;
-                        }
-
-                        .hardware-ids, .target-format {
-                            overflow: hidden;
-
-                            .heading {
-                                width: 25%;
-                                float: left;
-                            }
-
-                            .value {
-                                width: 75%;
-                                float: left;
-                            }
-                        }                        
-                    }
-
-                    .show-dependencies {
-                        position: absolute;
-                        right: 80px;
-                        top: 50%;
-                        transform: translateY(-50%);
-
-                        .icon {
-                            background: url(/assets/img/icons/dependencies-icon.svg);
-                            width: 50px;
-                            height: 50px;
-                            background-size: cover;
-                            cursor: pointer;
-                            transition: all 0.5s;
-                        }
-                        
-                        &:hover {
-                            .icon {
-                                background: url(/assets/img/icons/dependencies-icon-active.svg);
-                                width: 50px;
-                                height: 50px;
-                                background-size: cover;
-                                cursor: pointer;
-                            }
-                        }
-                    }
-
-                    .show-dependencies-manager {
-                        position: absolute;
-                        right: 30px;
-                        top: 50%;
-                        transform: translateY(-50%);
-
-                        .icon {
-                            background: url(/assets/img/icons/black/letter-M.png);
-                            width: 50px;
-                            height: 50px;
-                            background-size: cover;
-                            cursor: pointer;
-                            transition: all 0.5s;
-                        }
-                    }
-                }
-            }
-        }
-
-        .btn-status {
-            color: $color-darkgrey;
-            font-size: 12px;
-            background: $color-mint;
-            padding: 1px 5px;
-            border-radius: 3px;
-            float: right;
-        }
-
-        .hardware-label, .format-label {
-            color: $color-darkgrey;
-            font-size: 12px;
-            background: transparent;
-            padding: 0px 10px;
-            border-radius: 10px;
-            margin-right: 5px;
-            margin-bottom: 5px;
-            display: inline-block;
-            border: 1px solid #444;
-        }
-
-        .director {
-
-            .package-name {
+            &__name {
                 float: left;
                 width: 30%;
                 overflow: hidden;
@@ -3018,7 +2889,7 @@
                 white-space: nowrap;
             }
 
-            .in-director {
+            &__icon {
                 width: 10%;
                 text-align: center;
                 float: left;
@@ -3031,7 +2902,15 @@
                 }
             }
 
-            .installed-on-ecus {
+            &__versions-nr {
+                width: 10%;
+                text-align: center;
+                float: left;
+                margin-left: 5px;
+                margin-right: 10px;
+            }
+
+            &__installed {
                 width: 15%;
                 text-align: center;
                 float: left;
@@ -3039,12 +2918,207 @@
                 margin-right: 5px;
             }
 
-            .package-versions-nr {
-                width: 10%;
-                text-align: center;
+            &__details {
+                background: #f5f5f5;
+                overflow: hidden;
+                padding: 25px;
+            }
+
+            &__main-name {
+                margin-bottom: 25px;
+            }
+
+            &__chart {
+                width: 20%;
                 float: left;
-                margin-left: 5px;
-                margin-right: 10px;
+            }
+
+            &__heading {
+                margin-bottom: 10px;
+                font-weight: bold;
+
+                &--strict {
+                    width: 25%;
+                    float: left;
+                }
+            }
+
+            &__versions {
+                background: #f5f5f5;
+                padding: 0 25px;
+                width: 70%;
+                float: left;
+                margin: 0;
+            }
+
+            &__version-item {
+                position: relative;
+                @include transition;
+                background: #fff;
+                overflow: hidden;
+                border: 1px solid #e1e1e1;
+                -webkit-box-shadow: 0px 1px 10px 0px rgba(150,150,150,0.2);
+                -moz-box-shadow: 0px 1px 10px 0px rgba(150,150,150,0.2);
+                box-shadow: 0px 1px 10px 0px rgba(150,150,150,0.2);
+
+                &:hover {
+                    background: #eee;
+                }
+            }
+
+            &__software-box {
+                width: 50%;
+                float: left;
+                padding: 20px 10px 20px 35px;
+            }
+
+            &__sw-row {
+                overflow: hidden;
+                margin-bottom: 5px;
+
+                &--version {
+                    font-weight: bold;
+                }
+            }
+
+            &__sw-subtitle {
+                display: block;
+                float: left;
+                width: 25%;
+            }
+
+            &__sw-value {
+                @include textoverflowEllipsis;
+                display: block;
+                float: left;
+                width: 75%;
+            }
+
+            &__hardware-box {
+                text-align: left;
+                height: auto;
+                padding: 20px 10px;
+                width: 40%;
+                float: left;
+            }
+
+            &__hw-row {
+                
+                &--installed {
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }
+
+                &--hardware-ids {
+                    overflow: hidden;
+                }
+
+                &--format {
+                    overflow: hidden;
+                }
+            }
+
+            &__hw-value {
+                width: 75%;
+                float: left;
+            }
+
+            &__label {
+                color: $color-darkgrey;
+                font-size: 12px;
+                background: transparent;
+                padding: 0px 10px;
+                border-radius: 10px;
+                margin-right: 5px;
+                margin-bottom: 5px;
+                display: inline-block;
+                border: 1px solid #444;
+            }
+
+            &__show-dependencies {
+                position: absolute;
+                right: 35px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            &__dependencies-icon {
+                background: url(/assets/img/icons/dependencies-icon.svg);
+                width: 50px;
+                height: 50px;
+                background-size: cover;
+                cursor: pointer;
+                transition: all 0.5s;
+
+                &:hover {
+                    background: url(/assets/img/icons/dependencies-icon-active.svg);
+                    width: 50px;
+                    height: 50px;
+                    background-size: cover;
+                    cursor: pointer;
+                }
+            }
+
+            &__manager {
+                display: flex;
+                justify-content: flex-end;
+                background-color: #fafafa;
+                margin-bottom: 10px;
+                padding: 15px 35px;
+                margin-left: 10px;
+
+                &--aligned {
+                    justify-content: space-between;
+                }
+
+                &--full {
+                    margin-left: 0;
+                }
+            }
+
+            &__manage-dependencies {
+                width: 25%;
+                text-align: right;
+                align-items: center;
+                display: flex;
+                justify-content: flex-end;
+
+                &--small {
+                    width: 12%;
+                }
+            }
+
+            &__relations {
+                width: 30%;
+
+                &:first-child {
+                    padding-right: 20px;
+                }
+
+                &:not(:first-child) {
+                    padding: 0 20px;
+                }
+            }
+
+            &__relation-item {
+                @include textoverflowEllipsis;
+
+                &:not(:last-child) {
+                    margin-bottom: 5px;
+                }
+            }
+
+            &__relation-name {
+                width: 30%;
+                float: left;
+                @include textoverflowEllipsis;
+                margin-right: 10%;
+            }
+
+            &__relation-version {
+                width: 60%;
+                float: left;
+                @include textoverflowEllipsis;
             }
         }
 

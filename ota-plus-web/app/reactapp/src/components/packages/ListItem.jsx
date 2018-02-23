@@ -24,21 +24,21 @@ class ListItem extends Component {
         let installedOnEcus = this.countInstalledOnEcus();
         let packVersionsNumber = this.countPackVersionsNumber();
         const directorBlock = (
-            <div className="director">
-                <div className="package-name">
+            <div className="c-package__teaser director">
+                <div className="c-package__name">
                     {pack.packageName}
                 </div> 
-                <div className="in-director">
+                <div className="c-package__icon">
                     <img src="/assets/img/icons/black/lock.svg" alt="Director" />
                 </div>
-                <div className="package-versions-nr" id="package-versions-nr">
+                <div className="c-package__versions-nr" id="package-versions-nr">
                     {packVersionsNumber === 1 ?
                         packVersionsNumber + " version"
                     :
                         packVersionsNumber + " versions"
                     }
                 </div>
-                <div className="installed-on-ecus">
+                <div className="c-package__installed">
                     <span id={"package-" + pack.packageName + "-installed-on-ecus"}>
                         Installed on <span id={"package-" + pack.packageName + "-installed-on-ecus-count"}>{installedOnEcus}</span> Ecu(s)
                     </span>
@@ -61,13 +61,13 @@ class ListItem extends Component {
         );
         return (
             expandedPackageName === pack.packageName ?
-                <div className="item expanded" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
+                <div className="c-package__item c-package__item--expanded item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
                     <div className="wrapper-center">
                         <img src="assets/img/icons/black/arrow-up.svg" alt="Icon" />
                     </div>
                 </div>
             :
-                <div className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
+                <div className="c-package__item item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
                     {pack.inDirector ?
                         directorBlock
                     :
