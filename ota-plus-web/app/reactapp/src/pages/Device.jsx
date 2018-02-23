@@ -57,12 +57,6 @@ class Device extends Component {
                 this.packagesReady = true;              
             }
         });
-
-        this.mtuFetchHandler = observe(props.devicesStore, (change) => {
-            if(change.name === 'multiTargetUpdatesFetchAsync' && !change.object[change.name].isFetching) {
-                props.packagesStore._addPackagesToQueue(props.devicesStore.multiTargetUpdates, props.hardwareStore.activeEcu.serial);
-            }
-        });
     }
     componentWillMount() {
         this.props.packagesStore.page = 'device';
@@ -75,7 +69,6 @@ class Device extends Component {
         this.deviceFetchHandler();
         this.tufPackagesFetchHandler();
         this.packagesFetchHandler();
-        this.mtuFetchHandler();
     }
     cancelInstallation(requestId) {
         const { packagesStore } = this.props;
@@ -107,7 +100,6 @@ class Device extends Component {
              packagesStore.expandedPackage = expandedPackage;
         }
         packagesStore.fetchDirectorDeviceAutoInstalledPackages(devicesStore.device.uuid, serial);
-        packagesStore._addPackagesToQueue(devicesStore.multiTargetUpdates, serial);
     }
     render() {
         const { 

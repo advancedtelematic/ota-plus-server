@@ -16,7 +16,6 @@ class PropertiesPanel extends Component {
         const { 
             packagesStore, 
             devicesStore, 
-            campaignsStore, 
             hardwareStore, 
             showPackageBlacklistModal, 
             installPackage, 
@@ -40,7 +39,6 @@ class PropertiesPanel extends Component {
                             <PropertiesList
                                 packagesStore={packagesStore}
                                 devicesStore={devicesStore}
-                                campaignsStore={campaignsStore}
                                 hardwareStore={hardwareStore}
                                 showPackageBlacklistModal={showPackageBlacklistModal}
                                 installPackage={installPackage}
@@ -59,7 +57,6 @@ class PropertiesPanel extends Component {
 PropertiesPanel.propTypes = {
     packagesStore: PropTypes.object.isRequired,
     devicesStore: PropTypes.object.isRequired,
-    campaignsStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
     showPackageBlacklistModal: PropTypes.func.isRequired,
     installPackage: PropTypes.func.isRequired,

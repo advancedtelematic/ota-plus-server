@@ -18,6 +18,8 @@ class PopoverWrapper extends Component {
         this.handleCopy = this.handleCopy.bind(this);
     }
     handleTouchTap(e) {
+        e.preventDefault();
+        e.stopPropagation();
         const { onOpen } = this.props;
         this.anchorEl = e.currentTarget;
         this.popoverShown = true;
