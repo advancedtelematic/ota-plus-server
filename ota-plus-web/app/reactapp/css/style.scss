@@ -2115,6 +2115,19 @@ input {
     &.full-screen {
         padding-top: 50px!important;
 
+        .body {
+            padding: 0 !important;
+        }
+
+        .step-programming-sequencer {
+            padding: 30px 15px;
+            background-color: #F7F7F7;
+
+            .c-sequencer {
+                background-color: #fff;
+            }
+        }
+
         > div {
             height: 100%;            
         }
@@ -2174,6 +2187,19 @@ input {
     &.full-screen {
         padding-top: 50px!important;
 
+        .body {
+            padding: 0 !important;
+        }
+
+        .sequencer-wrapper {
+            padding: 30px 15px;
+            background-color: #F7F7F7;
+
+            .c-sequencer {
+                background-color: #fff;
+            }
+        }
+
         > div {
             height: 100%;            
         }
@@ -2223,45 +2249,50 @@ input {
     width: 100%;
     align-items: center;
     justify-content: center;
+    padding: 15px 0;
 
     &__fullscreen-hide, &__fullscreen-show {
         position: absolute;
         right: 15px;
         top: 15px;
         z-index: 100;
+        background-color: #fff;
     }
 
     &__init {
         font-size: 14px;
         padding: 15px 0;
+        color: #9b9b9b;
     }
 
     &__termination {
         font-size: 14px;
         padding: 15px 0;
+        color: #9b9b9b;
     }
 
     &__starter-point {
-        border: 1px solid #000;
         border-radius: 15px;
         display: flex;
         min-width: 250px;
         height: 99px;
-        background-color: #4B4B4B;
+        background-color: #9B9B9B;
         color: #fff;
         flex-direction: column;
         justify-content: center;
+        margin-bottom: 50px;
     }
 
     &__end-point {
-        border: 1px solid #000;
         border-radius: 15px;
         display: flex;
         min-width: 250px;
         height: 99px;
-        background-color: #82D262;
+        color: #fff;
+        background-color: #9B9B9B;
         flex-direction: column;
         justify-content: center;
+        margin-bottom: 50px;
     }
 
     &__text {
@@ -2269,7 +2300,7 @@ input {
         width: 100%;
         justify-content: center;
         align-items: center;
-        font-size: 21px;
+        font-size: 19px;
     }
 
     &__flexrow {
@@ -2278,11 +2309,24 @@ input {
         border-left: 1px solid #ccc;
         flex-direction: column;
         height: 100%;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
+        transition: width 0.4s, opacity 0.8s;
+        transition-timing-function: ease;
 
         &:last-child {
             border-right: 1px solid #ccc;
+        }
+
+        &--hide {
+            display: flex;
+            width: 0;
+            padding: 0;
+            opacity: 0;
+        }
+
+        &--show {
+            width: 311px;
         }
 
         &--default-phase {
@@ -2294,15 +2338,20 @@ input {
     &__phase {
         font-size: 14px;
         padding: 15px 0;
+        position: absolute;
+        color: #9b9b9b;
+        top: 30px;
     }
 
     &__empty-node {
         height: 1px;
         display: flex;
         width: 250px;
+        transition: height 0.4s ease;
 
         &--highlighted {
-            border: 5px dotted #7EE9DA !important;
+            border: 2px dashed #9b9b9b!important;
+            border-radius: 15px;
             cursor: pointer;
             height: 99px;
 
@@ -2321,18 +2370,6 @@ input {
         width: 250px;
         cursor: pointer;
         margin-bottom: 50px;
-    }
-
-    &__entry-point {
-        display: block;
-        position: absolute;
-        top: 15px;
-        left: -10px;
-        border-bottom-left-radius: 10px;
-        border-top-left-radius: 10px;
-        width: 10px;
-        height: 20px;
-        background-color: #484848;
     }
 
     &__info {
@@ -2375,32 +2412,26 @@ input {
         flex-basis: 25%;
     }
 
-    &__success {
-        height: 50%;
-        width: 100%;
-        background: rgba(0,0,0,0);
-        border-top-right-radius: 15px;
-    }
-
     &__failure {
-        height: 50%;
+        height: 100%;
         width: 100%;
-        background: #f2060a;
+        background: #FC0003;
         border-bottom-right-radius: 15px;
-        position: relative;        
+        border-top-right-radius: 15px;
+        position: relative;
     }
 
     &__dropdown {
         position: absolute;
         z-index: 10;
-        top: 15px;
-        left: 15px;
+        top: 70px;
+        left: 5px;
     }
 
     &__list {
         min-width: 100px;
         margin: 0;
-        background-color: #f2060a;
+        background-color: #FC0003;
         padding: 0 2px;
         box-shadow: 0 14px 45px rgba(0,0,0,.25), 0 10px 18px rgba(0,0,0,.22);
     }
@@ -2437,19 +2468,19 @@ input {
         display: flex;
 
         &--rollback {
-            background: url('/assets/img/icons/white/rollback_sequencer.svg') no-repeat center;
+            background: url('/assets/img/icons/white/rollback_sequencer.svg') no-repeat 50%;
         }
 
         &--rollback-all {
-            background: url('/assets/img/icons/white/rollback_all_sequencer.svg')  no-repeat bottom;
+            background: url('/assets/img/icons/white/rollback_all_sequencer.svg')  no-repeat 50%;
         }
 
         &--skip {
-            background: url('/assets/img/icons/white/skip_sequencer.svg')  no-repeat 100% 13px;
+            background: url('/assets/img/icons/white/skip_sequencer.svg')  no-repeat 100% 50%;
         } 
 
         &--cancel-all {
-            background: url('/assets/img/icons/white/cancel_sequencer.svg')  no-repeat center 7px;
+            background: url('/assets/img/icons/white/cancel_sequencer.svg')  no-repeat center 50%;
         }
 
         &--top {

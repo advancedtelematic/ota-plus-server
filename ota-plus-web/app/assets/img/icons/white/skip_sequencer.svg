@@ -1,35 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="21px" height="13px" viewBox="0 0 21 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
-    <title>Group 11</title>
+<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>Skip</title>
     <desc>Created with Sketch.</desc>
-    <defs>
-        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-1">
-            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
-            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
-            <feMerge>
-                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
-                <feMergeNode in="SourceGraphic"></feMergeNode>
-            </feMerge>
-        </filter>
-    </defs>
-    <g id="-" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Artboard-2" transform="translate(-463.000000, -151.000000)" stroke-width="0.8" stroke="#FFFFFF">
-            <g id="Group-4-Copy" transform="translate(287.000000, 71.000000)">
-                <g id="Group-2">
-                    <g id="Group" transform="translate(0.521258, 0.000000)">
-                        <g id="Group-5">
-                            <g id="Group-14" filter="url(#filter-1)" transform="translate(121.478742, 35.000000)">
-                                <g id="Group-11" transform="translate(58.000000, 47.000000)">
-                                    <g id="Page-1">
-                                        <path d="M11.6071429,4.58030625 C10.8952381,2.11530625 8.61590476,0.31218125 5.94409524,0.31218125 C3.27228571,0.31218125 1.02142857,2.11530625 0.30952381,4.58030625" id="Stroke-1"></path>
-                                        <polyline id="Stroke-3" points="12.4184667 2.47099375 11.6068952 4.58036875 9.59127619 3.78974375"></polyline>
-                                    </g>
-                                </g>
-                            </g>
-                        </g>
-                    </g>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Skip" stroke-width="0.8" stroke="#FFFFFF">
+            <g id="Group-11" transform="translate(1.000000, 5.000000)">
+                <g id="Page-1">
+                    <path d="M11.6071429,4.58030625 C10.8952381,2.11530625 8.61590476,0.31218125 5.94409524,0.31218125 C3.27228571,0.31218125 1.02142857,2.11530625 0.30952381,4.58030625" id="Stroke-1"></path>
+                    <polyline id="Stroke-3" points="12.4184667 2.47099375 11.6068952 4.58036875 9.59127619 3.78974375"></polyline>
                 </g>
             </g>
         </g>
