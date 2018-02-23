@@ -141,7 +141,7 @@ class UserDropdown extends Component {
                                 <span>
                                     {alphaPlusEnabled ?
                                         <li className="clear-localstorage">
-                                            <button className="btn-main btn-small" onClick={this.clearLocalStorage}><span>Reset demo</span></button>
+                                            <button className="btn-main btn-small" onClick={this.clearLocalStorage} id="reset-demo"><span>Reset demo</span></button>
                                         </li>
                                     :
                                         null
