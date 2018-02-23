@@ -269,7 +269,7 @@ class Sequencer extends Component {
                 {_.map(updatesArray, (val, rowIndex) => {
                     let rowIsEmpty = _.find(updatesMatrix[rowIndex], (obj) => { return !_.isEmpty(obj) });
                     return (
-                        <div className={`c-sequencer__flexrow c-sequencer__flexrow--${rowIndex} ${rowIsEmpty || this.selectedElement ? '' : 'hide'}`} key={rowIndex}>
+                        <div className={`c-sequencer__flexrow c-sequencer__flexrow--${rowIndex} ${rowIsEmpty || this.selectedElement ? 'c-sequencer__flexrow--show' : 'c-sequencer__flexrow--hide'}`} key={rowIndex}>
                             <span className="c-sequencer__phase">Phase {rowIndex + 2}</span>
                             {updatesMatrix[rowIndex] && updatesMatrix[rowIndex].length > 0 ?
                                 _.map(updatesMatrix[rowIndex], (value, columnIndex) => {
