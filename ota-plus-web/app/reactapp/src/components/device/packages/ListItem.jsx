@@ -7,7 +7,7 @@ class ListItem extends Component {
         super(props);
     }
     render() {
-        const { pack, device, queuedPackage, installedPackage, blacklistedAndInstalled, isSelected, togglePackage, toggleAutoInstall, toggleTufAutoInstall, showPackageDetails } = this.props;
+        const { pack, device, queuedPackage, installedPackage, isSelected, togglePackage, toggleAutoInstall, toggleTufAutoInstall, showPackageDetails } = this.props;
         return (
             <span className="wrapper-item">
                 {!pack.unmanaged ?
@@ -28,17 +28,6 @@ class ListItem extends Component {
                                 null
                             }
                             {!isSelected ?
-                                blacklistedAndInstalled ?
-                                    pack.isAutoInstallEnabled ?
-                                        <div className="labels">
-                                            <label className="label label-auto-update">Auto</label>
-                                            <label className="label label-package-blacklisted">Blacklisted</label>
-                                        </div>
-                                    :
-                                        <div className="labels">
-                                            <label className="label label-package-blacklisted">Blacklisted</label>
-                                        </div>
-                                :
                                 queuedPackage ?
                                     <span>
                                         {pack.isAutoInstallEnabled ?
@@ -122,7 +111,6 @@ ListItem.propTypes = {
     device: PropTypes.object.isRequired,
     queuedPackage: PropTypes.string,
     installedPackage: PropTypes.string,
-    blacklistedAndInstalled: PropTypes.string,
     isSelected: PropTypes.bool.isRequired,
     togglePackage: PropTypes.func.isRequired,
     toggleAutoInstall: PropTypes.func.isRequired,

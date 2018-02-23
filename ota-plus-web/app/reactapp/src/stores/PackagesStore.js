@@ -89,7 +89,6 @@ export default class PackagesStore {
     @observable devicePackagesInstalledCount = 0;
     @observable devicePackagesQueuedCount = 0;
     @observable deviceQueue = [];
-    @observable deviceQueueIds = {};
     @observable deviceHistory = [];
     @observable directorDeviceHistory = [];
     @observable deviceUpdatesLogs = [];
@@ -719,37 +718,6 @@ export default class PackagesStore {
             }.bind(this));
     }
 
-    _addPackagesToQueue(multiTargetUpdates, ecuSerial) {
-        if(multiTargetUpdates.length) {
-            multiTargetUpdates.map(update => {
-                let targets = update.targets;
-                _.mapObject(targets, (target, serial) => {
-                    if(ecuSerial === serial) {
-                        let hash = target.image.fileinfo.hashes.sha256;
-                        this._queuePackage(hash);
-                    }
-                });
-            });
-        } else {
-            this.deviceQueue = [];
-            this.deviceQueueIds = {};
-        }
-    }
-
-    _queuePackage(hash) {
-        let pack = _.find(this.packages, (pack) => {
-            return pack.packageHash === hash;
-        });
-        let queuedPack = {
-            packageId: {
-                name: pack.id.name,
-                version: pack.id.version
-            }
-        };
-        this.deviceQueue.push(queuedPack);
-        this._prepareDevicePackages();
-    }
-
     fetchDirectorDevicePackagesHistory(id, filter = '', fetchFirstItems = false) {
         resetAsync(this.packagesDirectorDeviceHistoryFetchAsync, true);
         if((this.directorDevicePackagesFilter !== filter) || fetchFirstItems) {
@@ -868,7 +836,6 @@ export default class PackagesStore {
         return axios.put(API_PACKAGES_DEVICE_CANCEL_INSTALLATION + '/' + deviceId + '/' + requestId + '/cancelupdate')
             .then(function(response) {
                 this.fetchDevicePackagesQueue(deviceId);
-                this.deviceQueueIds = {};
                 this.packagesDeviceCancelInstallationAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
@@ -986,7 +953,7 @@ export default class PackagesStore {
             const directorAutoInstalledPackages = this.directorDeviceAutoInstalledPackages;
             const blacklist = this.blacklist;
             const queuedPackages = this.deviceQueue;
-            const queuedIds = this.deviceQueueIds;
+            const queuedIds = [];
             let groupedPackages = {};
             let sortedPackages = {};
             let parsedBlacklist = [];
@@ -1258,7 +1225,6 @@ export default class PackagesStore {
         this.devicePackagesInstalledCount = 0;
         this.devicePackagesQueuedCount = 0;
         this.deviceQueue = [];
-        this.deviceQueueIds = {};
         this.deviceHistory = [];
         this.directorDeviceHistory = [];
         this.deviceUpdatesLogs = [];

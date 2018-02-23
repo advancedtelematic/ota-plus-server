@@ -50,7 +50,7 @@ class PrimaryEcu extends Component {
                             <div
                                 className="hardware-icon key" 
                                 id="hardware-key-icon"
-                                onTouchTap={otherProps.handleTouchTap}
+                                onClick={otherProps.handleTouchTap}
                             >
                                 <img src="/assets/img/icons/key.svg" alt="Icon" />
                             </div>

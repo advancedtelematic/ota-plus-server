@@ -45,12 +45,13 @@ class DependenciesModal extends Component {
     window.addEventListener("resize", this.resizeSankey);
   }
   componentWillMount() {
-      this.props.devicesStore.fetchDevices();
-      if(window.location.href.indexOf('/packages') > -1) {
-        this.props.campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
-      } else {
-        this.props.packagesStore.fetchTufPackages();
-      }
+      this.props.devicesStore.fetchDevices().then(() => {
+        if(window.location.href.indexOf('/packages') > -1) {
+          this.props.campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
+        } else {
+          this.props.packagesStore.fetchTufPackages();
+        }
+      });
   }
   resizeSankey() {
     if(window.innerHeight >= 1000) {

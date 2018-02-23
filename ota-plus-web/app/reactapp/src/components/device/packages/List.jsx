@@ -233,6 +233,39 @@ class List extends Component {
                 break;
         }
     }
+    checkQueued(version) {
+        const { devicesStore, hardwareStore } = this.props;
+        let queuedPackage = null;
+        let serial = hardwareStore.activeEcu.serial;                                        
+        _.each(devicesStore.multiTargetUpdates, (update, i) => {
+
+            if(!_.isEmpty(update.targets[serial])) {
+                if(update.targets[serial].image.filepath === version.imageName) {
+                    queuedPackage = version.imageName;
+                }
+            }
+            
+        });
+        return queuedPackage;
+    }
+    checkInstalled(version) {
+        const { devicesStore, hardwareStore } = this.props;
+        const device = devicesStore.device;
+        let installedPackage = null;
+        if(hardwareStore.activeEcu.type === 'primary') {
+            if(version.imageName === devicesStore._getPrimaryFilepath()) {
+                installedPackage = version.id.version;
+            }
+        } else {
+            _.each(device.directorAttributes.secondary, (secondaryObj, ind) => {
+                if(secondaryObj.id === hardwareStore.activeEcu.serial && 
+                    version.imageName === secondaryObj.image.filepath) {
+                        installedPackage = version.id.version;
+                }                                                       
+            });
+        }
+        return installedPackage;
+    }
     render() {
         const { devicesStore, packagesStore, hardwareStore, onFileDrop, togglePackageAutoUpdate, toggleTufPackageAutoUpdate, showPackageDetails } = this.props;
         const device = devicesStore.device;
@@ -257,36 +290,17 @@ class List extends Component {
                                         const that = this;
                                         let queuedPackage = null;
                                         let installedPackage = null;
-                                        let blacklistedPackage = null;
-                                        let blacklistedAndInstalled = null;
-                                        const foundQueued = _.find(pack.versions, (version) => {
-                                            return version.attributes.status == 'queued';
-                                        });
-                                        queuedPackage = foundQueued ? foundQueued.id.version : null;
-                                        const foundInstalled = _.find(pack.versions, (version) => {
-                                            return version.attributes.status == 'installed';
-                                        });
-                                        installedPackage = foundInstalled ? foundInstalled.id.version : null;
-                                        if(device.isDirector && hardwareStore.activeEcu) {
-                                            {_.map(pack.versions, (version, i) => {
-                                                if(hardwareStore.activeEcu.type === 'primary') {
-                                                    if(version.imageName === devicesStore._getPrimaryFilepath()) {
-                                                        installedPackage = version.id.version;
-                                                    }
-                                                } else {
-                                                    _.map(device.directorAttributes.secondary, (secondaryObj, ind) => {
-                                                        if(secondaryObj.id === hardwareStore.activeEcu.serial && 
-                                                            version.imageName === secondaryObj.image.filepath) {
-                                                                installedPackage = version.id.version;
-                                                        }
-                                                    });
+
+                                        if(device.isDirector) {
+                                            _.each(pack.versions, (version, i) => {
+                                                if(!installedPackage) {
+                                                    installedPackage = this.checkInstalled(version);
                                                 }
-                                            })};
+                                                if(!queuedPackage) {
+                                                    queuedPackage = this.checkQueued(version);
+                                                }
+                                            });
                                         }
-                                        const foundBlacklistedAndInstalled = _.find(pack.versions, (version) => {
-                                            return version.isBlackListed && version.attributes.status == 'installed';
-                                        });
-                                        blacklistedAndInstalled = foundBlacklistedAndInstalled ? foundBlacklistedAndInstalled.id.version : null;
 
                                         return (
                                             <span key={index}>
@@ -295,7 +309,6 @@ class List extends Component {
                                                 device={device}
                                                 queuedPackage={queuedPackage}
                                                 installedPackage={installedPackage}
-                                                blacklistedAndInstalled={blacklistedAndInstalled}
                                                 isSelected={this.expandedPackageName === pack.packageName}
                                                 togglePackage={this.togglePackage}
                                                 toggleAutoInstall={togglePackageAutoUpdate}

@@ -101,7 +101,7 @@ class List extends Component {
             this.expandedPackageName = pack;
             const wrapperPosition = this.refs.list.getBoundingClientRect();
             const elementCoords = document.getElementById("button-package-" + pack).getBoundingClientRect();
-            let scrollTop = elementCoords.top - wrapperPosition.top - headerHeight + elementCoords.height;
+            let scrollTo = elementCoords.top - wrapperPosition.top - headerHeight + elementCoords.height;
             let page = document.querySelector('span.content');
             setTimeout(() => {
                 page.scrollTop = scrollTo;

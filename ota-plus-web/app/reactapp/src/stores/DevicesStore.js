@@ -44,8 +44,6 @@ export default class DevicesStore {
     @observable devicesGroupFilter = null;
     @observable devicesSort = 'asc';
     @observable device = {};
-    @observable deviceQueue = [];
-    @observable deviceHistory = [];
     @observable deviceUpdatesLogs = [];
     @observable multiTargetUpdates = [];
     @observable multiTargetUpdatesSaved = [];
@@ -445,8 +443,6 @@ export default class DevicesStore {
         this.devicesFilter = '';
         this.devicesSort = 'asc';
         this.device = {};
-        this.deviceQueue = [];
-        this.deviceHistory = [];
         this.deviceUpdatesLogs = [];
         this.multiTargetUpdates = [];
         this.multiTargetUpdatesSaved = [];

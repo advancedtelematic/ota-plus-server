@@ -37,7 +37,7 @@ class PackagesVersionList extends Component {
         let versions = pack.versions;
         let fromVersions = versions.map((version) => (
             <MenuItem
-                key={version.id.version}
+                key={version.imageName}
                 insetChildren={true}
                 checked={false}
                 value={version.imageName}
@@ -53,7 +53,7 @@ class PackagesVersionList extends Component {
         let versions = pack.versions;
         return versions.map((version) => (
             <MenuItem
-                key={version.id.version}
+                key={version.imageName}
                 insetChildren={true}
                 checked={false}
                 value={version.imageName}
@@ -68,7 +68,7 @@ class PackagesVersionList extends Component {
         let versions = pack.versions;
         return versions.map((version) => (
             <MenuItem
-                key={version.id.version}
+                key={version.imageName}
                 insetChildren={true}
                 checked={false}
                 value={version.id.version}
