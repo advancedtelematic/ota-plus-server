@@ -132,7 +132,7 @@ class List extends Component {
     render() {
         const { showBlacklistModal, packagesStore, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, alphaPlusEnabled } = this.props;        
         return (
-            <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching ? " fetching" : "")} ref="list">
+            <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching ? " fetching" : "")} ref="list">
                 {packagesStore.packagesCount ? 
                     <Dropzone 
                         ref="dropzone" 
@@ -170,57 +170,38 @@ class List extends Component {
                                                     }}
                                                 >
                                                     {this.expandedPackageName === pack.packageName ?
-                                                        pack.inDirector ?
-                                                            <div className="c-package__details">
-                                                                <div className="c-package__main-name font-big">
-                                                                    {pack.packageName}
+                                                        <div className="c-package__details">
+                                                            <div className="c-package__main-name font-big">
+                                                                {pack.packageName}
+                                                            </div>
+                                                            <div className="c-package__chart">
+                                                                <div className="c-package__heading">
+                                                                    Distribution by devices
                                                                 </div>
-                                                                <div className="c-package__chart">
-                                                                    <div className="c-package__heading">
-                                                                        Distribution by devices
-                                                                    </div>
-                                                                    <PackagesVersionsStats
-                                                                        pack={pack}
-                                                                    />
-                                                                </div>                                                                
-                                                                <ul className="c-package__versions" id="versions">
-                                                                    <div className="c-package__heading">
-                                                                        All versions
-                                                                    </div>
-                                                                    {_.map(pack.versions, (version, i) => {
-                                                                        return (
-                                                                            <ListItemVersion 
-                                                                                pack={pack}
-                                                                                version={version}
-                                                                                showBlacklistModal={showBlacklistModal}
-                                                                                packagesStore={packagesStore}
-                                                                                showDependenciesModal={showDependenciesModal}
-                                                                                showDependenciesManager={showDependenciesManager}
-                                                                                alphaPlusEnabled={alphaPlusEnabled}
-                                                                                key={i}
-                                                                            />
-                                                                        );
-                                                                    })}
-                                                                </ul>
-                                                            </div>
-                                                        :
-                                                            <div className="legacy-details">
-                                                                <ul className="versions" id="versions">
-                                                                    {_.map(pack.versions, (version, i) => {
-                                                                        return (
-                                                                            <ListItemVersion 
-                                                                                pack={pack}
-                                                                                version={version}
-                                                                                showBlacklistModal={showBlacklistModal}
-                                                                                packagesStore={packagesStore}
-                                                                                showDependenciesModal={showDependenciesModal}
-                                                                                showDependenciesManager={showDependenciesManager}
-                                                                                key={i}
-                                                                            />
-                                                                        );
-                                                                    })}
-                                                                </ul>
-                                                            </div>
+                                                                <PackagesVersionsStats
+                                                                    pack={pack}
+                                                                />
+                                                            </div>                                                                
+                                                            <ul className="c-package__versions" id="versions">
+                                                                <div className="c-package__heading">
+                                                                    All versions
+                                                                </div>
+                                                                {_.map(pack.versions, (version, i) => {
+                                                                    return (
+                                                                        <ListItemVersion 
+                                                                            pack={pack}
+                                                                            version={version}
+                                                                            showBlacklistModal={showBlacklistModal}
+                                                                            packagesStore={packagesStore}
+                                                                            showDependenciesModal={showDependenciesModal}
+                                                                            showDependenciesManager={showDependenciesManager}
+                                                                            alphaPlusEnabled={alphaPlusEnabled}
+                                                                            key={i}
+                                                                        />
+                                                                    );
+                                                                })}
+                                                            </ul>
+                                                        </div>
                                                     : 
                                                         null
                                                     }

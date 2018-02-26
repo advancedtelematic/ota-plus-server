@@ -29,7 +29,12 @@ class SequencerProgress extends  Component {
         const { className } = this.props;
         return (
             <div className={className}>
-                <div className="c-sequencer__fill" style={{width: this.progress + '%'}}></div>
+                <div className="c-sequencer__fill" style={{width: this.progress + '%'}}>
+                    <span className="c-sequencer__progress-status">
+                        {this.progress + '%'}
+                        <i className="c-sequencer__progress-icon fa fa-check"/>
+                    </span>
+                </div>
             </div>
         );
     }

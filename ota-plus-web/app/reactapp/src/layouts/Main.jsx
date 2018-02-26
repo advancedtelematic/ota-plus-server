@@ -52,7 +52,6 @@ class Main extends Component {
     @observable uiUserProfileMenu = document.getElementById('toggle-userProfileMenu').value === "true";
     @observable uiCredentialsDownload = document.getElementById('toggle-credentialsDownload').value === "true";
     @observable prebuiltDebrpm = document.getElementById('toggle-prebuiltDebrpm').value === "true";
-    @observable isLegacyShown = document.getElementById('toggle-legacyCampaigns').value === "true";
 
     constructor(props) {
         super(props);
@@ -93,7 +92,8 @@ class Main extends Component {
             devicesStore: this.devicesStore,
             packagesStore: this.packagesStore,
             hardwareStore: this.hardwareStore,
-            campaignsStore: this.campaignsStore
+            campaignsStore: this.campaignsStore,
+            groupsStore: this.groupsStore,
         });
         this.logoutHandler = observe(this.userStore, (change) => {
             if(change.name === 'ifLogout' && change.object[change.name]) {
@@ -103,7 +103,7 @@ class Main extends Component {
         });
         this.devicesHandler = observe(this.devicesStore, (change) => {
             if(change.name === 'devicesCountFetchAsync' && change.object[change.name].isFetching === false) {
-                this.allDevicesCount = this.devicesStore.directorDevicesCount + this.devicesStore.legacyDevicesCount;
+                this.allDevicesCount = this.devicesStore.directorDevicesCount;
                 this.directorDevicesCount = this.devicesStore.directorDevicesCount;
             }
         });
@@ -116,24 +116,6 @@ class Main extends Component {
             }
         });
 
-        this.directorAttributesHandler = observe(this.devicesStore, (change) => {
-            if(change.name === 'devicesDirectorAttributesFetchAsync' && change.object[change.name].isFetching === false) {
-                let expandedPackage = this.packagesStore.expandedPackage;
-                let installed = false;
-                if(this.devicesStore.device.isDirector) {
-                    if(this.hardwareStore.activeEcu.type === 'primary' && this.devicesStore._getPrimaryFilepath() === expandedPackage.imageName) {
-                        installed = true;
-                    }
-                    if(this.hardwareStore.activeEcu.type === 'secondary') {
-                        let serial = this.hardwareStore.activeEcu.serial;
-                        if(_.includes(this.devicesStore._getSecondaryHashesBySerial(serial), expandedPackage.imageName)) {
-                            installed = true;
-                        }
-                    }
-                }
-                expandedPackage.isInstalled = installed;
-            }
-        });
         this.makeBodyWhite();
         this.makeBodyGradient();
     }
@@ -143,7 +125,8 @@ class Main extends Component {
             devicesStore: this.devicesStore,
             packagesStore: this.packagesStore,
             hardwareStore: this.hardwareStore,
-            campaignsStore: this.campaignsStore
+            campaignsStore: this.campaignsStore,
+            groupsStore: this.groupsStore,
         });
         this.fakeWebsocketHandler.init();
     }
@@ -195,8 +178,8 @@ class Main extends Component {
     }
     setQueueModalActiveTabId(tabId, device = null) {
         this.activeTabId = tabId;
-        if(!_.isEmpty(device) && device.isDirector && tabId === 1) {
-            this.packagesStore.fetchDirectorDevicePackagesHistory(device.uuid, this.packagesStore.directorDevicePackagesFilter);
+        if(!_.isEmpty(device) && tabId === 1) {
+            this.packagesStore.fetchPackagesHistory(device.uuid, this.packagesStore.packagesHistoryFilter);
         }
     }    
     toggleWizard(wizardId, wizardName, e) {
@@ -222,7 +205,6 @@ class Main extends Component {
                 hideWizard={this.hideWizard}
                 toggleWizard={this.toggleWizard}
                 minimizedWizards={this.minimizedWizards}
-                isLegacyShown={this.isLegacyShown}
                 alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
                 key={this.wizards.length}
             />
@@ -277,7 +259,6 @@ class Main extends Component {
         this.devicesHandler();
         this.provisioningStatusHandler();
         this.featuresHandler();
-        this.directorAttributesHandler();
     }
     backButtonAction(e) {
         if(e) e.preventDefault();
@@ -366,7 +347,6 @@ class Main extends Component {
                         uiUserProfileMenu={this.uiUserProfileMenu}
                         uiCredentialsDownload={this.uiCredentialsDownload}
                         prebuiltDebrpm={this.prebuiltDebrpm}
-                        isLegacyShown={this.isLegacyShown}
                         alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
                     />
                 </FadeAnimation>

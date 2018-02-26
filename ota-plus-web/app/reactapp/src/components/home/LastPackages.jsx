@@ -16,7 +16,7 @@ class LastPackages extends Component {
         const noPackages = 'No added packages.';
         return (
             <span>
-                {packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching ?
+                {packagesStore.packagesFetchAsync.isFetching ?
                     <div className="wrapper-center">
                         <Loader 
                             className="dark"

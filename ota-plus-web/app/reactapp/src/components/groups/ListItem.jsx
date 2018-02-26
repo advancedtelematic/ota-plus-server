@@ -24,7 +24,7 @@ class ListItem extends Component {
         super(props);
     }
     render() {
-        const { t, group, isSelected, selectGroup, showRenameGroupModal, groupsStore } = this.props;
+        const { t, group, isSelected, selectGroup, groupsStore } = this.props;
         const { isOver, canDrop, connectDropTarget } = this.props;
         return (
             connectDropTarget(
@@ -59,7 +59,6 @@ ListItem.propTypes = {
     group: PropTypes.object.isRequired,
     isSelected: PropTypes.bool.isRequired,
     selectGroup: PropTypes.func.isRequired,
-    showRenameGroupModal: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired,
     canDrop: PropTypes.bool.isRequired,

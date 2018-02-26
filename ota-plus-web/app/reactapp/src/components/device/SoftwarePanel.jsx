@@ -15,7 +15,7 @@ class SoftwarePanel extends Component {
         super(props);
     }
     render() {
-        const { devicesStore, packagesStore, hardwareStore, togglePackageAutoUpdate, toggleTufPackageAutoUpdate, onFileDrop, showPackageDetails, packagesReady } = this.props;
+        const { devicesStore, packagesStore, hardwareStore, toggleTufPackageAutoUpdate, onFileDrop, showPackageDetails, packagesReady } = this.props;
         return (
             <div className="software-panel">
                 <div className="darkgrey-header">
@@ -34,7 +34,6 @@ class SoftwarePanel extends Component {
                                     devicesStore={devicesStore}
                                     hardwareStore={hardwareStore}
                                     onFileDrop={onFileDrop}
-                                    togglePackageAutoUpdate={togglePackageAutoUpdate}
                                     toggleTufPackageAutoUpdate={toggleTufPackageAutoUpdate}
                                     showPackageDetails={showPackageDetails}
                                 />
@@ -54,7 +53,6 @@ SoftwarePanel.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
-    togglePackageAutoUpdate: PropTypes.func.isRequired,
     toggleTufPackageAutoUpdate: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,
     showPackageDetails: PropTypes.func.isRequired,

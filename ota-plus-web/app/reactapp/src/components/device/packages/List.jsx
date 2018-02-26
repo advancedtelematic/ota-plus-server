@@ -36,23 +36,15 @@ class List extends Component {
             }
         });
     }
-    componentWillMount() {
-        const { devicesStore } = this.props;
-        if(!devicesStore.device.isDirector) {
-            this.preparedPackages = this.selectPackagesToDisplay();
-        }
-    }
     componentWillReceiveProps(nextProps) {
         const { devicesStore } = nextProps;
-        this.preparedPackages = this.selectPackagesToDisplay();
-        if(devicesStore.device.isDirector) {
-            if(nextProps.packagesStore.expandedPackage && !nextProps.packagesStore.expandedPackage.unmanaged) {
-                this.expandedPackageName = nextProps.packagesStore.expandedPackage.id.name;
-            }
-            else {
-                this.expandedPackageName = null;
-            }
-            this.addUnmanagedPackage(this.preparedPackages);
+        this.selectPackagesToDisplay();
+        this.addUnmanagedPackage();
+        if(nextProps.packagesStore.expandedPackage && !nextProps.packagesStore.expandedPackage.unmanaged) {
+            this.expandedPackageName = nextProps.packagesStore.expandedPackage.id.name;
+        }
+        else {
+            this.expandedPackageName = null;
         }
     }
     componentDidMount() {
@@ -140,31 +132,32 @@ class List extends Component {
         const { devicesStore, packagesStore, hardwareStore } = this.props;
         let preparedPackages = packagesStore.preparedPackages;
         let dirPacks = {};
-        let corePacks = {};
         _.map(packagesStore.preparedPackages, (packages, letter) => {
             dirPacks[letter] = [];
-            corePacks[letter] = [];
             _.map(packages, (pack, index) => {
-                if(pack.inDirector) {
-                    let filteredVersions = [];
-                    _.each(pack.versions, (version, i) => {
-                        if(_.includes(version.hardwareIds, hardwareStore.activeEcu.hardwareId)) {
-                            filteredVersions.push(version);
-                        }
-                    })
-                    if(!_.isEmpty(filteredVersions)) {
-                        pack.versions = filteredVersions;
-                        dirPacks[letter].push(pack);
+                let filteredVersions = [];
+                _.each(pack.versions, (version, i) => {
+                    if(_.includes(version.hardwareIds, hardwareStore.activeEcu.hardwareId)) {
+                        filteredVersions.push(version);
                     }
+                })
+                if(!_.isEmpty(filteredVersions)) {
+                    pack.versions = filteredVersions;
+                    dirPacks[letter].push(pack);
                 }
-                if(!pack.inDirector) {
-                    corePacks[letter].push(pack);
-                }
-                if(devicesStore.device.isDirector) {
-                    _.map(pack.versions, (version, ind) => {
-
-                        if(hardwareStore.activeEcu.type === 'primary') {
-                            if(version.imageName === devicesStore._getPrimaryFilepath()) {
+                _.map(pack.versions, (version, ind) => {
+                    if(hardwareStore.activeEcu.type === 'primary') {
+                        if(version.filepath === devicesStore._getPrimaryFilepath()) {
+                            let packAdded = _.some(dirPacks[letter], (item, index) => {
+                                return item.packageName == version.id.name;
+                            });
+                            if(!packAdded) {
+                                dirPacks[letter].push(pack);
+                            }
+                        }
+                    } else {
+                        _.map(devicesStore.device.directorAttributes.secondary, (secondaryObj, ind) => {
+                            if(version.filepath === secondaryObj.image.filepath && hardwareStore.activeEcu.serial === secondaryObj.id) {
                                 let packAdded = _.some(dirPacks[letter], (item, index) => {
                                     return item.packageName == version.id.name;
                                 });
@@ -172,28 +165,17 @@ class List extends Component {
                                     dirPacks[letter].push(pack);
                                 }
                             }
-                        } else {
-                            _.map(devicesStore.device.directorAttributes.secondary, (secondaryObj, ind) => {
-                                if(version.imageName === secondaryObj.image.filepath && hardwareStore.activeEcu.serial === secondaryObj.id) {
-                                    let packAdded = _.some(dirPacks[letter], (item, index) => {
-                                        return item.packageName == version.id.name;
-                                    });
-                                    if(!packAdded) {
-                                        dirPacks[letter].push(pack);
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
+                        });
+                    }
+                });
             });
         });
         this.clearArray(dirPacks);
-        this.clearArray(corePacks);
-        return devicesStore.device.isDirector ? dirPacks : corePacks;
+        this.preparedPackages = dirPacks;
     }
-    addUnmanagedPackage(preparedPackages) {
+    addUnmanagedPackage() {
         const { devicesStore, packagesStore, hardwareStore } = this.props;
+        let preparedPackages = this.preparedPackages;
         switch(hardwareStore.activeEcu.type) {
             case 'secondary':
                 let secondaryObject = devicesStore._getSecondaryBySerial(hardwareStore.activeEcu.serial);
@@ -238,13 +220,11 @@ class List extends Component {
         let queuedPackage = null;
         let serial = hardwareStore.activeEcu.serial;                                        
         _.each(devicesStore.multiTargetUpdates, (update, i) => {
-
             if(!_.isEmpty(update.targets[serial])) {
-                if(update.targets[serial].image.filepath === version.imageName) {
-                    queuedPackage = version.imageName;
+                if(update.targets[serial].image.filepath === version.filepath) {
+                    queuedPackage = version.filepath;
                 }
             }
-            
         });
         return queuedPackage;
     }
@@ -253,21 +233,21 @@ class List extends Component {
         const device = devicesStore.device;
         let installedPackage = null;
         if(hardwareStore.activeEcu.type === 'primary') {
-            if(version.imageName === devicesStore._getPrimaryFilepath()) {
+            if(version.filepath === devicesStore._getPrimaryFilepath()) {
                 installedPackage = version.id.version;
             }
         } else {
             _.each(device.directorAttributes.secondary, (secondaryObj, ind) => {
                 if(secondaryObj.id === hardwareStore.activeEcu.serial && 
-                    version.imageName === secondaryObj.image.filepath) {
+                    version.filepath === secondaryObj.image.filepath) {
                         installedPackage = version.id.version;
                 }                                                       
             });
         }
         return installedPackage;
     }
-    render() {
-        const { devicesStore, packagesStore, hardwareStore, onFileDrop, togglePackageAutoUpdate, toggleTufPackageAutoUpdate, showPackageDetails } = this.props;
+    render() {        
+        const { devicesStore, packagesStore, hardwareStore, onFileDrop, toggleTufPackageAutoUpdate, showPackageDetails } = this.props;
         const device = devicesStore.device;
         const preparedPackages = this.preparedPackages;
         return (
@@ -290,18 +270,14 @@ class List extends Component {
                                         const that = this;
                                         let queuedPackage = null;
                                         let installedPackage = null;
-
-                                        if(device.isDirector) {
-                                            _.each(pack.versions, (version, i) => {
-                                                if(!installedPackage) {
-                                                    installedPackage = this.checkInstalled(version);
-                                                }
-                                                if(!queuedPackage) {
-                                                    queuedPackage = this.checkQueued(version);
-                                                }
-                                            });
-                                        }
-
+                                        _.each(pack.versions, (version, i) => {
+                                            if(!installedPackage) {
+                                                installedPackage = this.checkInstalled(version);
+                                            }
+                                            if(!queuedPackage) {
+                                                queuedPackage = this.checkQueued(version);
+                                            }
+                                        });
                                         return (
                                             <span key={index}>
                                             <ListItem
@@ -311,7 +287,6 @@ class List extends Component {
                                                 installedPackage={installedPackage}
                                                 isSelected={this.expandedPackageName === pack.packageName}
                                                 togglePackage={this.togglePackage}
-                                                toggleAutoInstall={togglePackageAutoUpdate}
                                                 toggleTufAutoInstall={toggleTufPackageAutoUpdate}
                                                 showPackageDetails={showPackageDetails}
                                             />
@@ -405,7 +380,6 @@ List.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
     onFileDrop: PropTypes.func.isRequired,
-    togglePackageAutoUpdate: PropTypes.func.isRequired,
     toggleTufPackageAutoUpdate: PropTypes.func.isRequired,
     showPackageDetails: PropTypes.func.isRequired,
 }

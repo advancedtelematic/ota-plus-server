@@ -10,7 +10,7 @@ class PackagesListItem extends Component {
         const { pack, togglePackage, setWizardData, chosen } = this.props;
         return (
             <span>
-                <div className={"item" + (pack.inDirector ? " director" : " legacy") + (chosen && chosen.packageName === pack.packageName ? " chosen" : "")} id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)} title={pack.packageName} ref="item">
+                <div className={"item director" + (chosen && chosen.packageName === pack.packageName ? " chosen" : "")} id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)} title={pack.packageName} ref="item">
                     <button className={"btn-checkbox" + (chosen && chosen.packageName === pack.packageName ? " checked" : "")} id={"wizard-select-package-" + pack.packageName} onClick={setWizardData.bind(this, pack)}>
                         <i className="fa fa-check" aria-hidden="true"></i>
                     </button>
@@ -18,13 +18,9 @@ class PackagesListItem extends Component {
                         <span className="name">
                             {pack.packageName}
                         </span>
-                        {pack.inDirector ?
-                            <div className="in-director">
-                                <img src="/assets/img/icons/black/lock.svg" alt="Director" />
-                            </div>
-                        :
-                            null
-                        }
+                        <div className="in-director">
+                            <img src="/assets/img/icons/black/lock.svg" alt="Director" />
+                        </div>
                     </div>
                 </div>
             </span>

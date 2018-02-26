@@ -18,11 +18,8 @@ class PropertiesPanel extends Component {
             devicesStore, 
             hardwareStore, 
             showPackageBlacklistModal, 
-            installPackage, 
             installTufPackage, 
             packagesReady, 
-            showSequencer,
-            alphaPlusEnabled,
         } = this.props;
         return (
             <div className="properties-panel">
@@ -41,10 +38,7 @@ class PropertiesPanel extends Component {
                                 devicesStore={devicesStore}
                                 hardwareStore={hardwareStore}
                                 showPackageBlacklistModal={showPackageBlacklistModal}
-                                installPackage={installPackage}
                                 installTufPackage={installTufPackage}
-                                showSequencer={showSequencer}
-                                alphaPlusEnabled={alphaPlusEnabled}
                             />
                         }
                     </div>
@@ -59,7 +53,6 @@ PropertiesPanel.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
     showPackageBlacklistModal: PropTypes.func.isRequired,
-    installPackage: PropTypes.func.isRequired,
     installTufPackage: PropTypes.func.isRequired,
 }
 

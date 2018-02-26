@@ -16,16 +16,10 @@ class CancelCampaignModal extends Component {
         this.cancelHandler();
     }
     cancelCampaign() {
-        if(this.props.campaign.isLegacy) 
-            this.props.campaignsStore.cancelLegacyCampaign(this.props.campaign.meta.id);
-        else 
-            this.props.campaignsStore.cancelCampaign(this.props.campaign.id);        
+        this.props.campaignsStore.cancelCampaign(this.props.campaign.id);        
     }
     handleResponse() {
-        if(this.props.campaign.isLegacy)
-            this.props.campaignsStore.fetchLegacyCampaign(this.props.campaign.meta.id);
-        else
-            this.props.campaignsStore.fetchCampaign(this.props.campaign.id);
+        this.props.campaignsStore.fetchCampaign(this.props.campaign.id);
         this.props.hide();
     }
     render() {

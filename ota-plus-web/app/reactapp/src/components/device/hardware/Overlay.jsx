@@ -42,7 +42,7 @@ class Overlay extends Component {
     render() {
         const { hardwareStore, hideHardwareOverlay, shown, packagesStore, device, showPackageBlacklistModal, onFileDrop, hardwareOverlayAnchor } = this.props;
         let content = (
-            hardwareStore.hardwareFetchAsync.isFetching || packagesStore.initialPackagesForDeviceFetchAsync.isFetching ?
+            hardwareStore.hardwareFetchAsync.isFetching ?
                 <div className="wrapper-center">
                     <Loader />
                 </div>
@@ -87,36 +87,36 @@ class Overlay extends Component {
                 </div>
         );
         return (
-                <Popover
-                    className="hardware-overlay-modal"
-                    open={shown}
-                    anchorEl={hardwareOverlayAnchor}
-                    anchorOrigin={{horizontal: 'right', vertical: 'center'}}
-                    targetOrigin={{horizontal: 'left', vertical: 'center'}}
-                    onRequestClose={hideHardwareOverlay}
-                    useLayerForClickAway={false}
-                    animated={false}
-                >
-                    <div className="triangle"></div>
-                    <div className="content">
-                        <div>
-                            <div className="heading">
-                                {this.hardwareInfoShown ?
-                                    <span>
-                                        Hardware reported by this ECU
-                                    </span>
-                                :
-                                    <span>
-                                        Packages reported by this ECU
-                                    </span>
-                                }
-                            </div>
-                            <div className="body">
-                                {content}
-                            </div>
+            <Popover
+                className="hardware-overlay-modal"
+                open={shown}
+                anchorEl={hardwareOverlayAnchor}
+                anchorOrigin={{horizontal: 'right', vertical: 'center'}}
+                targetOrigin={{horizontal: 'left', vertical: 'center'}}
+                onRequestClose={hideHardwareOverlay}
+                useLayerForClickAway={false}
+                animated={false}
+            >
+                <div className="triangle"></div>
+                <div className="content">
+                    <div>
+                        <div className="heading">
+                            {this.hardwareInfoShown ?
+                                <span>
+                                    Hardware reported by this ECU
+                                </span>
+                            :
+                                <span>
+                                    Packages reported by this ECU
+                                </span>
+                            }
+                        </div>
+                        <div className="body">
+                            {content}
                         </div>
                     </div>
-                </Popover>
+                </div>
+            </Popover>
         );
     }
 }

@@ -14,14 +14,12 @@ class Campaigns extends Component {
     }
     componentWillMount() {
         this.props.campaignsStore.fetchCampaigns();
-        if(this.props.isLegacyShown) {
-            this.props.campaignsStore.fetchLegacyCampaigns();
-        }
         this.props.groupsStore.fetchGroups();
     }
     componentWillUnmount() {
         this.props.campaignsStore._reset();
         this.props.packagesStore._reset();
+        this.props.groupsStore._reset();
     }
     render() {
         const { t, campaignsStore, packagesStore, groupsStore, hardwareStore, devicesStore, addNewWizard, otaPlusMode } = this.props;
@@ -33,16 +31,16 @@ class Campaigns extends Component {
                         title={title}
                         subtitle={(
                             <span>
-                                {campaignsStore.overallCampaignsCount === null && (campaignsStore.campaignsFetchAsync.isFetching || campaignsStore.campaignsLegacyFetchAsync.isFetching) ?
+                                {campaignsStore.overallCampaignsCount === null && campaignsStore.campaignsFetchAsync.isFetching ?
                                     <span>
                                         <i className="fa fa-square-o fa-spin"></i> campaigns counting
                                     </span>
                                 :
                                     null
                                 }
-                                {!campaignsStore.campaignsFetchAsync.isFetching && !campaignsStore.campaignsLegacyFetchAsync.isFetching ?
+                                {!campaignsStore.campaignsFetchAsync.isFetching ?
                                     <span id="campaigns-count﻿">
-                                        {t('common.campaignWithCount', {count: campaignsStore.overallCampaignsCount + campaignsStore.overallLegacyCampaignsCount})}
+                                        {t('common.campaignWithCount', {count: campaignsStore.overallCampaignsCount})}
                                     </span>
                                 :
                                     null

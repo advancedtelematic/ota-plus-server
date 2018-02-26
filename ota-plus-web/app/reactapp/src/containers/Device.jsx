@@ -6,7 +6,6 @@ import {
     DeviceHardwarePanel,
     DevicePropertiesPanel, 
     DeviceSoftwarePanel,
-    DeviceSequencerModal
 } from '../components/device';
 import {
     PackagesCreateModal,
@@ -20,10 +19,8 @@ class Device extends Component {
     @observable fileDropped = null;
     @observable packageBlacklistModalShown = false;
     @observable packageBlacklistAction = {};
-    @observable uploadToTuf = true;
     @observable hardwareOverlayShown = false;
     @observable hardwareOverlayAnchor = null;
-    @observable sequencerShown = false;
     
     constructor(props) {
         super(props);
@@ -32,28 +29,11 @@ class Device extends Component {
         this.showPackageBlacklistModal = this.showPackageBlacklistModal.bind(this);
         this.hidePackageBlacklistModal = this.hidePackageBlacklistModal.bind(this);
         this.onFileDrop = this.onFileDrop.bind(this);
-        this.togglePackageAutoUpdate = this.togglePackageAutoUpdate.bind(this);
         this.toggleTufPackageAutoUpdate = this.toggleTufPackageAutoUpdate.bind(this);
-        this.installPackage = this.installPackage.bind(this);
         this.installTufPackage = this.installTufPackage.bind(this);
         this.showPackageDetails = this.showPackageDetails.bind(this);
-        this.toggleTufUpload = this.toggleTufUpload.bind(this);        
         this.showHardwareOverlay = this.showHardwareOverlay.bind(this);        
         this.hideHardwareOverlay = this.hideHardwareOverlay.bind(this);        
-        this.showSequencer = this.showSequencer.bind(this);
-        this.hideSequencer = this.hideSequencer.bind(this);
-    }
-    showSequencer(e) {
-        if(e) e.preventDefault();
-        this.sequencerShown = true;
-    }
-    hideSequencer(e) {
-        if(e) e.preventDefault();
-        this.sequencerShown = false;
-    }
-    toggleTufUpload(e) {
-        if(e) e.preventDefault();
-        this.uploadToTuf = !this.uploadToTuf;
     }
     showPackageCreateModal(files, e) {
         if(e) e.preventDefault();
@@ -94,33 +74,21 @@ class Device extends Component {
     onFileDrop(files) {
         this.showPackageCreateModal(files);
     }
-    togglePackageAutoUpdate(packageName, deviceId, isAutoInstallEnabled) {
-        const { packagesStore } = this.props;
-        if(isAutoInstallEnabled) 
-            packagesStore.disableDevicePackageAutoInstall(packageName, deviceId);
-        else
-            packagesStore.enableDevicePackageAutoInstall(packageName, deviceId);
-    }
     toggleTufPackageAutoUpdate(packageName, deviceId, isAutoInstallEnabled) {
         const { packagesStore, hardwareStore } = this.props;
         let activeEcuSerial = hardwareStore.activeEcu.serial;
         if(isAutoInstallEnabled)
-            packagesStore.disableTufPackageAutoInstall(
+            packagesStore.disablePackageAutoInstall(
                 packageName,
                 deviceId, 
                 activeEcuSerial
             );
         else
-            packagesStore.enableTufPackageAutoInstall(
+            packagesStore.enablePackageAutoInstall(
                 packageName, 
                 deviceId, 
                 activeEcuSerial
             );
-    }
-    installPackage(data) {
-        const { packagesStore, devicesStore } = this.props;
-        packagesStore.installPackage(devicesStore.device.uuid, data);
-        this.props.showQueueModal();
     }
     installTufPackage(data) {
         const { packagesStore, devicesStore, hardwareStore } = this.props;
@@ -138,28 +106,7 @@ class Device extends Component {
             };
         } else {
             packagesStore.expandedPackage = pack;
-            packagesStore.expandedPackage.isInstalled = this.isPackInstalled(pack);
         }
-    }
-    isPackInstalled(pack) {
-        const { devicesStore, hardwareStore } = this.props;
-        let installedOnPrimary = false;
-        let installedOnSecondary = false;
-        let installedOnLegacy = false;
-        if(devicesStore.device.isDirector) {
-            if(hardwareStore.activeEcu.type === 'primary' && devicesStore._getPrimaryFilepath() === pack.imageName) {
-                installedOnPrimary = true;
-            }
-            if(hardwareStore.activeEcu.type === 'secondary') {
-                let serial = hardwareStore.activeEcu.serial;
-                if(_.includes(devicesStore._getSecondaryFilepathsBySerial(serial), pack.imageName)) {
-                    installedOnSecondary = true;
-                }
-            }
-        } else {
-            installedOnLegacy = pack.attributes.status === 'installed';
-        }
-        return installedOnPrimary || installedOnSecondary || installedOnLegacy;
     }
     render() {
         const { 
@@ -169,7 +116,6 @@ class Device extends Component {
             campaignsStore,
             selectEcu,
             packagesReady,
-            alphaPlusEnabled
         } = this.props;
         const device = devicesStore.device;
         return (
@@ -197,9 +143,7 @@ class Device extends Component {
                                 devicesStore={devicesStore}
                                 packagesStore={packagesStore}
                                 hardwareStore={hardwareStore}
-                                togglePackageAutoUpdate={this.togglePackageAutoUpdate}
                                 toggleTufPackageAutoUpdate={this.toggleTufPackageAutoUpdate}
-                                installPackage={this.installPackage}
                                 onFileDrop={this.onFileDrop}
                                 showPackageDetails={this.showPackageDetails}
                                 packagesReady={packagesReady}
@@ -210,11 +154,8 @@ class Device extends Component {
                                 campaignsStore={campaignsStore}
                                 hardwareStore={hardwareStore}
                                 showPackageBlacklistModal={this.showPackageBlacklistModal}
-                                installPackage={this.installPackage}
                                 installTufPackage={this.installTufPackage}
                                 packagesReady={packagesReady}
-                                showSequencer={this.showSequencer}
-                                alphaPlusEnabled={alphaPlusEnabled}
                             />
                         </span>
                     :
@@ -226,32 +167,24 @@ class Device extends Component {
                             </div>
                         </div>
                 }
-                <PackagesCreateModal 
-                    shown={this.packageCreateModalShown}
-                    hide={this.hidePackageCreateModal}
-                    packagesStore={packagesStore}
-                    hardwareStore={hardwareStore}
-                    devicesStore={devicesStore}
-                    fileDropped={this.fileDropped}
-                    toggleTufUpload={this.toggleTufUpload}
-                    uploadToTuf={this.uploadToTuf}
-                />
+                {this.packageCreateModalShown ?
+                    <PackagesCreateModal 
+                        shown={this.packageCreateModalShown}
+                        hide={this.hidePackageCreateModal}
+                        packagesStore={packagesStore}
+                        hardwareStore={hardwareStore}
+                        devicesStore={devicesStore}
+                        fileDropped={this.fileDropped}
+                    />
+                :
+                    null
+                }
                 <PackagesBlacklistModal 
                     shown={this.packageBlacklistModalShown}
                     hide={this.hidePackageBlacklistModal}
                     blacklistAction={this.packageBlacklistAction}
                     packagesStore={packagesStore}
-                />
-                {this.sequencerShown ?
-                    <DeviceSequencerModal 
-                        shown={this.sequencerShown}
-                        hide={this.hideSequencer}
-                        campaignsStore={campaignsStore}
-                        devicesStore={devicesStore}
-                    />
-                :
-                    null
-                }
+                />                
             </span>
         );
     }

@@ -48,10 +48,7 @@ class HardwarePanel extends Component {
             hideHardwareOverlay
         } = this.props;
         const device = devicesStore.device;
-        let isPrimaryEcuActive = true;
-        if(device.isDirector) {
-            isPrimaryEcuActive = hardwareStore.activeEcu.hardwareId === devicesStore._getPrimaryHardwareId();
-        }
+        const isPrimaryEcuActive = hardwareStore.activeEcu.hardwareId === devicesStore._getPrimaryHardwareId();
         const primaryEcus = (
             <span>
                 <div className="section-header font-medium">
@@ -83,7 +80,7 @@ class HardwarePanel extends Component {
                          onClick={this.showSecondaryDescription} id="hardware-secondary-ecu-details" 
                      />
                 </div>
-                {device.isDirector && !_.isEmpty(device.directorAttributes.secondary) ?
+                {!_.isEmpty(device.directorAttributes.secondary) ?
                     _.map(device.directorAttributes.secondary, (item, index) => {
                         return (
                             <PopoverWrapper

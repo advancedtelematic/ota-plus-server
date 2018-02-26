@@ -45,20 +45,6 @@ class ListItem extends Component {
                 </div>                
             </div>
         );
-        const legacyBlock = (
-            <div className="legacy">
-                <div className="package-name">
-                    {pack.packageName}
-                </div>
-                <div className="package-versions-nr" id="package-versions-nr">
-                    {packVersionsNumber === 1 ?
-                        packVersionsNumber + " version"
-                    :
-                        packVersionsNumber + " versions"
-                    }
-                </div>
-            </div>
-        );
         return (
             expandedPackageName === pack.packageName ?
                 <div className="c-package__item c-package__item--expanded item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
@@ -68,11 +54,7 @@ class ListItem extends Component {
                 </div>
             :
                 <div className="c-package__item item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
-                    {pack.inDirector ?
-                        directorBlock
-                    :
-                        legacyBlock
-                    }
+                    {directorBlock}
                 </div>
         );
     }
