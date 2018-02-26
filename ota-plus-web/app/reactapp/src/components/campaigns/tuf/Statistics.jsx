@@ -27,7 +27,7 @@ class Statistics extends Component {
             			campaignsStore={campaignsStore}
                         groupsStore={groupsStore}
                         showCancelCampaignModal={showCancelCampaignModal}
-            			showDependenciesModal={showDependenciesModal}
+                        showDependenciesModal={showDependenciesModal}
             		/>
                 }
             </div>

@@ -11,14 +11,14 @@ class DependenciesManager extends Component {
     constructor(props) {
         super(props);
         this.obj = {
-            name: props.activePackage.imageName,
+            name: props.activePackage.filepath,
             required: [],
             incompatibles: [],
         };
     }
     componentWillMount() {
         const { activePackage } = this.props;
-        let pack = localStorage.getItem(activePackage.imageName);
+        let pack = localStorage.getItem(activePackage.filepath);
         if(pack) {
             pack = JSON.parse(pack);
             this.obj = pack;
@@ -34,7 +34,7 @@ class DependenciesManager extends Component {
         } else {
             this.obj.required.push(version);
         }
-        localStorage.setItem(activePackage.imageName, JSON.stringify(this.obj));
+        localStorage.setItem(activePackage.filepath, JSON.stringify(this.obj));
         packagesStore._handleCompatibles();
     }
     render() {
@@ -42,7 +42,7 @@ class DependenciesManager extends Component {
 
         let requiredBy = [];
         _.each(packagesStore.compatibilityData, (data, index) => {
-            let found = _.find(data.required, item => item === activePackage.imageName);
+            let found = _.find(data.required, item => item === activePackage.filepath);
             if(found) {
                 requiredBy.push(data.name);
             }
@@ -81,7 +81,7 @@ class DependenciesManager extends Component {
                                             </div>
                                             <div className="versions">
                                                 {_.map(pack.versions, (version, index) => {
-                                                    let versionString = version.imageName;
+                                                    let versionString = version.filepath;
                                                     return (
                                                         version.id.version !== activePackage.id.version ?
                                                             <span className="item" key={index}>

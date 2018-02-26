@@ -12,12 +12,8 @@ const headerHeight = 40;
 
 @observer
 class TufList extends Component {
-    @observable prevExpandedCampaignName = null;
-    @observable expandedCampaignName = null;
-
     constructor(props) {
         super(props);
-        this.toggleCampaign = this.toggleCampaign.bind(this);
         this.scrollToElement = this.scrollToElement.bind(this);
     }
     componentDidMount() {
@@ -27,15 +23,6 @@ class TufList extends Component {
         if(nextProps.highlightedCampaign !== this.props.highlightedCampaign) {
             this.highlightCampaign(nextProps.highlightedCampaign);
         }
-    }
-    toggleCampaign(campaignName, e) {
-        if(e) e.preventDefault();
-        this.prevExpandedCampaignName = this.expandedCampaignName;
-        this.expandedCampaignName = null;
-        let that = this;
-        setTimeout(() => {
-            that.expandedCampaignName = (campaignName !== that.prevExpandedCampaignName) ? campaignName : null;
-        }, 400);
     }
     scrollToElement(id) {
         const wrapperPosition = this.refs.list.getBoundingClientRect();
@@ -51,12 +38,12 @@ class TufList extends Component {
             const name = _.filter(this.props.campaignsStore.campaigns, (obj) => {
                 return obj.id === id;
             });
-            this.toggleCampaign(name[0].name);
+            this.props.toggleCampaign(name[0].name);
             this.scrollToElement(id);
         }
     }
     render() {
-        const { campaignsStore, groupsStore, showRenameModal, highlightedCampaign, showCancelCampaignModal, showDependenciesModal } = this.props;
+        const { campaignsStore, groupsStore, highlightedCampaign, showCancelCampaignModal, showDependenciesModal, expandedCampaignName, toggleCampaign } = this.props;
         return (
             <div className="tuf-list" ref="list">
                 <div className="section-header">
@@ -78,10 +65,9 @@ class TufList extends Component {
                                 return (
                                     <span key={campaign.id} className="font-small">
                                         <CampaignsTufListItem 
-                                            toggleCampaign={this.toggleCampaign}
-                                            showRenameModal={showRenameModal}
+                                            toggleCampaign={toggleCampaign}
                                             campaign={campaign}
-                                            expandedCampaignName={this.expandedCampaignName}
+                                            expandedCampaignName={expandedCampaignName}
                                             type="inPreparation"
                                         />
                                         <VelocityTransitionGroup 
@@ -93,7 +79,7 @@ class TufList extends Component {
                                                 duration: 1000
                                             }}
                                         >
-                                            {this.expandedCampaignName === campaign.name ?
+                                            {expandedCampaignName === campaign.name ?
                                                 <CampaignsTufStatistics 
                                                     campaignsStore={campaignsStore}
                                                     groupsStore={groupsStore}
@@ -135,10 +121,9 @@ class TufList extends Component {
                                 return (
                                     <span key={campaign.id} className="font-small">
                                         <CampaignsTufListItem 
-                                            toggleCampaign={this.toggleCampaign}
-                                            showRenameModal={showRenameModal}
+                                            toggleCampaign={toggleCampaign}
                                             campaign={campaign}
-                                            expandedCampaignName={this.expandedCampaignName}
+                                            expandedCampaignName={expandedCampaignName}
                                             type="running"
                                         />
                                         <VelocityTransitionGroup 
@@ -149,7 +134,7 @@ class TufList extends Component {
                                                 animation: "slideUp",
                                             }}
                                         >
-                                        {this.expandedCampaignName === campaign.name?
+                                        {expandedCampaignName === campaign.name?
                                             <CampaignsTufStatistics
                                                 campaignsStore={campaignsStore}
                                                 groupsStore={groupsStore}
@@ -190,10 +175,9 @@ class TufList extends Component {
                                 return (
                                     <span key={campaign.id} className="font-small">
                                         <CampaignsTufListItem 
-                                            toggleCampaign={this.toggleCampaign}
-                                            showRenameModal={showRenameModal}
+                                            toggleCampaign={toggleCampaign}
                                             campaign={campaign}
-                                            expandedCampaignName={this.expandedCampaignName}
+                                            expandedCampaignName={expandedCampaignName}
                                             type="finished"
                                         />
                                         <VelocityTransitionGroup 
@@ -204,7 +188,7 @@ class TufList extends Component {
                                                 animation: "slideUp",
                                             }}
                                         >
-                                        {this.expandedCampaignName === campaign.name ?
+                                        {expandedCampaignName === campaign.name ?
                                             <CampaignsTufStatistics
                                                 campaignsStore={campaignsStore}
                                                 groupsStore={groupsStore}
@@ -245,10 +229,9 @@ class TufList extends Component {
                                 return (
                                     <span key={campaign.id} className="font-small">
                                         <CampaignsTufListItem 
-                                            toggleCampaign={this.toggleCampaign}
-                                            showRenameModal={showRenameModal}
+                                            toggleCampaign={toggleCampaign}
                                             campaign={campaign}
-                                            expandedCampaignName={this.expandedCampaignName}
+                                            expandedCampaignName={expandedCampaignName}
                                             type="cancelled"
                                         />
                                         <VelocityTransitionGroup 
@@ -259,7 +242,7 @@ class TufList extends Component {
                                                 animation: "slideUp",
                                             }}
                                         >
-                                        {this.expandedCampaignName === campaign.name ?
+                                        {expandedCampaignName === campaign.name ?
                                             <CampaignsTufStatistics
                                                 campaignsStore={campaignsStore}
                                                 groupsStore={groupsStore}

@@ -9,12 +9,8 @@ class TufListItem extends Component {
     constructor(props) {
         super(props);
     }
-    rename(e) {
-        e.stopPropagation();
-        this.props.showRenameModal(this.props.campaign.id);
-    }
     render() {
-        const { campaign, toggleCampaign, rename, type, expandedCampaignName } = this.props;
+        const { campaign, toggleCampaign, type, expandedCampaignName } = this.props;
 
         let totalAffected = 0;
         let totalProcessed = 0;
@@ -43,7 +39,7 @@ class TufListItem extends Component {
                 <div className="item" id={"item-" + campaign.id} onClick={toggleCampaign.bind(this, campaign.name)}>
                     <div className="actions">
                         <ul>
-                            <li id={"rename-campaign-" + campaign.name} onClick={this.rename.bind(this)}>
+                            <li id={"rename-campaign-" + campaign.name}>
                                 <img src="/assets/img/icons/edit_white.png" alt="" />
                                 <span>Rename</span>
                             </li>

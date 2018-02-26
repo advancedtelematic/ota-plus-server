@@ -28,21 +28,12 @@ class RenameModal extends Component {
     submitForm() {
         let data = serialize(document.querySelector('#campaign-rename-form'), { hash: true });
         let campaign = this.props.campaignsStore._getCampaign(this.props.campaignId);
-        if(campaign.isLegacy) {
-            this.props.campaignsStore.renameLegacyCampaign(this.props.campaignId, data);
-        } else {
-            this.props.campaignsStore.renameCampaign(this.props.campaignId, data);
-        }
+        this.props.campaignsStore.renameCampaign(this.props.campaignId, data);
     }
     handleResponse() {
         let data = serialize(document.querySelector('#campaign-rename-form'), { hash: true });
         let campaign = this.props.campaignsStore._getCampaign(this.props.campaignId);
-        if(campaign.isLegacy) {
-            this.props.campaignsStore._updateLegacyCampaignData(this.props.campaignId, data);
-        } else {
-            this.props.campaignsStore._updateTufCampaignData(this.props.campaignId, data);
-        }
-        
+        this.props.campaignsStore._updateTufCampaignData(this.props.campaignId, data);
         this.props.hide();
     }
     render() {

@@ -14,12 +14,7 @@ class Packages extends Component {
     }
     componentWillMount() {
         this.props.packagesStore.page = 'packages';
-        if(this.props.isLegacyShown) {
-            this.props.packagesStore.fetchPackages();
-            this.props.packagesStore.fetchBlacklist();
-        }
-        this.props.packagesStore.fetchTufPackages();
-        this.props.devicesStore.fetchDevicesCount();
+        this.props.packagesStore.fetchPackages();
     }
     componentWillUnmount() {
         this.props.packagesStore._reset();
@@ -34,22 +29,17 @@ class Packages extends Component {
                         title={title}
                         subtitle={(
                             <span>
-                                {packagesStore.overallPackagesCount === null && packagesStore.packagesFetchAsync.isFetching && packagesStore.packagesTufFetchAsync.isFetching ?
+                                {packagesStore.packagesFetchAsync.isFetching ?
                                     <span>
                                         <i className="fa fa-square-o fa-spin"></i> packages counting
                                     </span>
                                 :
-                                    null
-                                }
-                                <FadeAnimation>
-                                    {!packagesStore.packagesFetchAsync.isFetching && !packagesStore.packagesTufFetchAsync.isFetching ?
+                                    <FadeAnimation>
                                         <span id="packages-count">
-                                            {t('common.packageWithCount', {count: packagesStore.overallPackagesCount})}
+                                            {t('common.packageWithCount', {count: packagesStore.packagesCount})}
                                         </span>
-                                    :
-                                        null
-                                    }
-                                </FadeAnimation>
+                                    </FadeAnimation>
+                                }
                             </span>
                         )}
                     />

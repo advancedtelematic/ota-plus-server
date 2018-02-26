@@ -145,11 +145,7 @@ class Header extends Component {
                             </button>
                             <div className="dates">
                                 <div className="date director">
-                                    { device.isDirector ? 
-                                        <img src="/assets/img/icons/white/director-device-icon.png" alt="Director" id="director-device-icon" />
-                                    :
-                                        null
-                                    }
+                                    <img src="/assets/img/icons/white/director-device-icon.png" alt="Director" id="director-device-icon" />
                                 </div>                               
                                 <div className="date" id="created-info">
                                     <span className="date-label">Created</span>

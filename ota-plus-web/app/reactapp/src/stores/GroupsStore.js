@@ -42,6 +42,13 @@ export default class GroupsStore {
         resetAsync(this.groupsRemoveDeviceAsync);
     }
 
+    selectDefaultGroup() {
+        this.selectedGroup = {
+            type: 'artificial',
+            name: 'all'
+        };   
+    }
+
     fetchGroups() {
         resetAsync(this.groupsFetchAsync, true);
         return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsLimit + '&offset=' + this.groupsCurrentPage * this.groupsLimit)

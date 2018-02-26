@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import _ from 'underscore';
 import { Loader } from '../../../partials';
-import ListItem from './ListItem';
 import MtuListItem from './MtuListItem';
 import { InfiniteScroll } from '../../../utils';
 
@@ -22,16 +21,16 @@ class MtuList extends Component {
             <ul className="list history font-small">
                 <InfiniteScroll
                     className="wrapper-infinite-scroll"
-                    hasMore={packagesStore.directorDeviceHistoryCurrentPage < packagesStore.directorDeviceHistoryTotalCount / packagesStore.directorDeviceHistoryLimit}
-                    isLoading={packagesStore.packagesDirectorDeviceHistoryFetchAsync.isFetching}
+                    hasMore={packagesStore.packagesHistoryCurrentPage < packagesStore.packagesHistoryTotalCount / packagesStore.packagesHistoryLimit}
+                    isLoading={packagesStore.packagesHistoryFetchAsync.isFetching}
                     useWindow={false}
                     className={'wrapper-infinite-scroll'}
                     loadMore={() => {
-                        packagesStore.fetchDirectorDevicePackagesHistory(device.uuid, packagesStore.directorDevicePackagesFilter)
+                        packagesStore.fetchPackagesHistory(device.uuid, packagesStore.packagesHistoryFilter)
                     }}
                 >
-                    {packagesStore.directorDeviceHistory.length ?
-                        _.map(packagesStore.directorDeviceHistory, (historyItem, index) => {
+                    {packagesStore.packagesHistory.length ?
+                        _.map(packagesStore.packagesHistory, (historyItem, index) => {
                             return (
                                 <MtuListItem
                                     item={historyItem}

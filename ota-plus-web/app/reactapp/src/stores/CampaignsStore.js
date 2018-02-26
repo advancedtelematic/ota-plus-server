@@ -33,27 +33,20 @@ export default class CampaignsStore {
 
     @observable campaignsFetchAsync = {};
     @observable campaignsSafeFetchAsync = {};
-    @observable campaignsLegacyFetchAsync = {};
-    @observable campaignsLegacySafeFetchAsync = {};
     @observable campaignsOneFetchAsync = {};
     @observable campaignsOneSafeFetchAsync = {};
     @observable campaignsOneStatisticsFetchAsync = {};
     @observable campaignsOneSafeStatisticsFetchAsync = {};
     @observable campaignsCreateAsync = {};
-    @observable campaignsLegacyCreateAsync = {};
     @observable campaignsLaunchAsync = {};
-    @observable campaignsLegacyLaunchAsync = {};
-    @observable campaignsPackageSaveAsync = {};
-    @observable campaignsGroupsSaveAsync = {};
     @observable campaignsRenameAsync = {};
     @observable campaignsCancelAsync = {};
     @observable campaignsCancelRequestAsync = {};
-    @observable campaignsMultiTargetUpdateCreateAsync = {};
+    @observable campaignsMtuCreateAsync = {};
+    
     @observable campaigns = [];
     @observable preparedCampaigns = [];
-    @observable preparedLegacyCampaigns = [];
     @observable overallCampaignsCount = null;
-    @observable overallLegacyCampaignsCount = null;
     @observable campaignsFilter = '';
     @observable campaignsSort = 'asc';
     @observable campaign = {};
@@ -64,34 +57,28 @@ export default class CampaignsStore {
     constructor() {
         resetAsync(this.campaignsFetchAsync);
         resetAsync(this.campaignsSafeFetchAsync);
-        resetAsync(this.campaignsLegacyFetchAsync);
-        resetAsync(this.campaignsLegacySafeFetchAsync);
         resetAsync(this.campaignsOneFetchAsync);
         resetAsync(this.campaignsOneSafeFetchAsync);
         resetAsync(this.campaignsOneStatisticsFetchAsync);
         resetAsync(this.campaignsOneSafeStatisticsFetchAsync);
         resetAsync(this.campaignsCreateAsync);
-        resetAsync(this.campaignsLegacyCreateAsync);
-        resetAsync(this.campaignsPackageSaveAsync);
-        resetAsync(this.campaignsGroupsSaveAsync);
         resetAsync(this.campaignsLaunchAsync);
-        resetAsync(this.campaignsLegacyLaunchAsync);
         resetAsync(this.campaignsRenameAsync);
         resetAsync(this.campaignsCancelAsync);
         resetAsync(this.campaignsCancelRequestAsync);
-        resetAsync(this.campaignsMultiTargetUpdateCreateAsync);
+        resetAsync(this.campaignsMtuCreateAsync);
     }
 
     createMultiTargetUpdate(data) {
         let updateObject = this._prepareUpdateObject(data);
-        resetAsync(this.campaignsMultiTargetUpdateCreateAsync, true);
+        resetAsync(this.campaignsMtuCreateAsync, true);
         return axios.post(API_GET_MULTI_TARGET_UPDATE_INDENTIFIER, updateObject)
             .then((response) => {
                 this.campaignData.mtuId = response.data;
-                this.campaignsMultiTargetUpdateCreateAsync = handleAsyncSuccess(response);
+                this.campaignsMtuCreateAsync = handleAsyncSuccess(response);
             })
             .catch((error) => {
-                this.campaignsMultiTargetUpdateCreateAsync = handleAsyncError(error);
+                this.campaignsMtuCreateAsync = handleAsyncError(error);
             });
     }
 
@@ -170,66 +157,6 @@ export default class CampaignsStore {
             }.bind(this));    
     }
 
-    fetchLegacyCampaigns(async = 'campaignsLegacyFetchAsync') {
-        resetAsync(this[async], true);
-        return axios.get(API_CAMPAIGNS_LEGACY_FETCH)
-            .then(function (response) {
-                let campaigns = response.data;
-                if(campaigns.length) {
-                    let after = _.after(campaigns.length, () => {
-                        this.legacyCampaigns = campaigns;
-                        this._prepareCampaigns();
-                        this.overallLegacyCampaignsCount = campaigns.length;
-                        this[async] = handleAsyncSuccess(response);
-                    }, this);
-                    _.each(campaigns, (campaign, index) => {
-                        if(campaign.status === "Active")
-                            axios.get(API_CAMPAIGNS_LEGACY_CAMPAIGN_STATISTICS + '/' + campaign.id + '/statistics')
-                            .then(function(resp) {
-                                let statistics = resp.data;
-                                var summary = {};
-                                let overallDevicesCount = 0;
-                                let overallUpdatedDevicesCount = 0;
-                                let overallFailedUpdates = 0;
-                                let overallSuccessfulUpdates = 0;
-                                let overallCancelledUpdates = 0;
-                                _.each(statistics, (statistic) => {
-                                    overallDevicesCount += statistic.deviceCount;
-                                    overallUpdatedDevicesCount += statistic.updatedDevices;
-                                    overallFailedUpdates += statistic.failedUpdates;
-                                    overallSuccessfulUpdates += statistic.successfulUpdates;
-                                    overallCancelledUpdates += statistic.cancelledUpdates;
-                                });
-                                summary = {
-                                    overallDevicesCount: overallDevicesCount,
-                                    overallUpdatedDevicesCount: overallUpdatedDevicesCount,
-                                    overallFailedUpdates: overallFailedUpdates,
-                                    overallSuccessfulUpdates: overallSuccessfulUpdates,
-                                    overallCancelledUpdates: overallCancelledUpdates
-                                };
-                                campaign.statistics = statistics;
-                                campaign.summary = summary;
-                                campaign.isLegacy = true;
-                                after();
-                            })
-                            .catch(function() {
-                                after();
-                            });
-                    else
-                      after();
-                  });
-                } else {
-                    this.legacyCampaigns = campaigns;
-                    this._prepareCampaigns(this.campaignsFilter, this.campaignsSort);
-                    this.overallLegacyCampaignsCount = campaigns.length;
-                    this[async] = handleAsyncSuccess(response);
-                }
-            }.bind(this))
-            .catch(function (error) {
-                this[async] = handleAsyncError(error);
-            }.bind(this));
-    }
-
     fetchCampaign(id, mainAsync = 'campaignsOneFetchAsync', statsAsync = 'campaignsOneStatisticsFetchAsync') {
         resetAsync(this[mainAsync], true);
         return axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + id)
@@ -248,32 +175,7 @@ export default class CampaignsStore {
                     }.bind(this));
             }.bind(this))
             .catch(function (error) {
-                this.fetchLegacyCampaign(id, mainAsync, statsAsync);
-            }.bind(this));
-    }
-
-    fetchLegacyCampaign(id, mainAsync = 'campaignsOneFetchAsync', statsAsync = 'campaignsOneStatisticsFetchAsync') {
-        resetAsync(this[mainAsync], true);
-        return axios.get(API_CAMPAIGNS_LEGACY_INDIVIDUAL_FETCH + '/' + id)
-            .then(function (response) {
-                resetAsync(this[statsAsync], true);
-                this[mainAsync] = handleAsyncSuccess(response);
-                axios.get(API_CAMPAIGNS_LEGACY_CAMPAIGN_STATISTICS + '/' + id + '/statistics')
-                    .then(function (resp) {
-                        let data = response.data;
-                        data.statistics = resp.data;
-                        this.campaign = {
-                            ...data,
-                            isLegacy: true
-                        };
-                        this[statsAsync] = handleAsyncSuccess(resp);
-                    }.bind(this))
-                    .catch(function (err) {
-                        this[statsAsync] = handleAsyncError(err);
-                    }.bind(this));
-            }.bind(this))
-            .catch(function (error) {
-                this[mainAsync] = handleAsyncError(error);
+                this[statsAsync] = handleAsyncError(err);
             }.bind(this));
     }
 
@@ -287,41 +189,7 @@ export default class CampaignsStore {
             .catch(function (error) {
                 this.campaignsCreateAsync = handleAsyncError(error);
             }.bind(this));
-    }
-
-    createLegacyCampaign(data) {
-        resetAsync(this.campaignsLegacyCreateAsync, true);
-        return axios.post(API_CAMPAIGNS_LEGACY_CREATE, data)
-            .then(function (response) {
-                this.campaignData.campaignId = response.data;
-                this.campaignsLegacyCreateAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function (error) {
-                this.campaignsLegacyCreateAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    savePackageForCampaign(id, data) {
-        resetAsync(this.campaignsPackageSaveAsync, true);
-        return axios.put(API_CAMPAIGNS_PACKAGE_SAVE + '/' + id + '/package', data)
-            .then(function (response) {
-                this.campaignsPackageSaveAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function (error) {
-                this.campaignsPackageSaveAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    saveGroupsForCampaign(id, data) {
-        resetAsync(this.campaignsGroupsSaveAsync, true);
-        return axios.put(API_CAMPAIGNS_GROUPS_SAVE + '/' + id + '/groups', data)
-            .then(function (response) {
-                this.campaignsGroupsSaveAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function (error) {
-                this.campaignsGroupsSaveAsync = handleAsyncError(error);
-            }.bind(this));
-    }
+    }    
 
     launchCampaign(id) {
         resetAsync(this.campaignsLaunchAsync, true);
@@ -334,32 +202,14 @@ export default class CampaignsStore {
             }.bind(this));
     }
 
-    launchLegacyCampaign(id) {
-        resetAsync(this.campaignsLegacyLaunchAsync, true);
-        return axios.post(API_CAMPAIGNS_LEGACY_LAUNCH + '/' + id + '/launch')
-            .then(function (response) {
-                this.campaignsLegacyLaunchAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function (error) {
-                this.campaignsLegacyLaunchAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
     renameCampaign(id, data) {
         resetAsync(this.campaignsRenameAsync, true);
         return axios.put(API_CAMPAIGNS_RENAME + '/' + id, data)
-            .then(function (response) {
-                this.campaignsRenameAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function (error) {
-                this.campaignsRenameAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    renameLegacyCampaign(id, data) {
-        resetAsync(this.campaignsRenameAsync, true);
-        return axios.put(API_CAMPAIGNS_LEGACY_RENAME + '/' + id + '/name', data)
-            .then(function (response) {
+            .then(function (response) {                
+                let campaign = _.find(this.campaigns, campaign => {
+                    return campaign.id === id;
+                });
+                campaign.name = data.name;
                 this.campaignsRenameAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
@@ -370,17 +220,6 @@ export default class CampaignsStore {
     cancelCampaign(id) {
         resetAsync(this.campaignsCancelAsync, true);
         return axios.post(API_CAMPAIGNS_CANCEL + '/' + id + '/cancel')
-            .then(function (response) {
-                this.campaignsCancelAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function (error) {
-                this.campaignsCancelAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    cancelLegacyCampaign(id) {
-        resetAsync(this.campaignsCancelAsync, true);
-        return axios.put(API_CAMPAIGNS_LEGACY_CANCEL + '/' + id + '/cancel')
             .then(function (response) {
                 this.campaignsCancelAsync = handleAsyncSuccess(response);
             }.bind(this))
@@ -402,45 +241,19 @@ export default class CampaignsStore {
 
     _prepareCampaigns() {
         let campaigns = this.campaigns;
-        let legacyCampaigns = this.legacyCampaigns;
         this.preparedCampaigns = campaigns.sort((a, b) => {
           let aName = a.name;
           let bName = b.name;
             return aName.localeCompare(bName);
         });
-        if(legacyCampaigns) {
-            this.preparedLegacyCampaigns = legacyCampaigns.sort((a, b) => {
-              let aName = a.name;
-              let bName = b.name;
-                return aName.localeCompare(bName);
-            });
-        }
     }
 
     _getCampaign(id) {
-        let campaign = null;
-        campaign = this._getTufCampaign(id);
-        if(!campaign) {
-            campaign = this._getLegacyCampaign(id);
-            campaign.isLegacy = true;
-        }
-        return campaign;
+        return this._getTufCampaign(id);
     }
 
     _getTufCampaign(id) {
         return _.findWhere(this.campaigns, {id: id});
-    }
-
-    _getLegacyCampaign(id) {
-        return _.findWhere(this.legacyCampaigns, {id: id});
-    }
-
-    _updateLegacyCampaignData(id, data) {
-        let legacyCampaign = this._getLegacyCampaign(id);
-        _.each(data, (value, attr) => {
-            legacyCampaign[attr] = value;
-        });
-        this._prepareCampaigns();
     }
 
     _updateTufCampaignData(id, data) {
@@ -469,10 +282,7 @@ export default class CampaignsStore {
         resetAsync(this.campaignsOneSafeFetchAsync);
         resetAsync(this.campaignsOneStatisticsFetchAsync);
         resetAsync(this.campaignsOneSafeStatisticsFetchAsync);
-        resetAsync(this.campaignsPackageSaveAsync);
-        resetAsync(this.campaignsGroupsSaveAsync);
         resetAsync(this.campaignsLaunchAsync);
-        resetAsync(this.campaignsLegacyLaunchAsync);
         this.campaign = {};
     }
 
@@ -484,27 +294,19 @@ export default class CampaignsStore {
     _reset() {
         resetAsync(this.campaignsFetchAsync);
         resetAsync(this.campaignsSafeFetchAsync);
-        resetAsync(this.campaignsLegacyFetchAsync);
-        resetAsync(this.campaignsLegacySafeFetchAsync);
         resetAsync(this.campaignsOneFetchAsync);
         resetAsync(this.campaignsOneSafeFetchAsync);
         resetAsync(this.campaignsOneStatisticsFetchAsync);
         resetAsync(this.campaignsOneSafeStatisticsFetchAsync);
         resetAsync(this.campaignsCreateAsync);
-        resetAsync(this.campaignsLegacyCreateAsync);
-        resetAsync(this.campaignsPackageSaveAsync);
-        resetAsync(this.campaignsGroupsSaveAsync);
         resetAsync(this.campaignsLaunchAsync);
-        resetAsync(this.campaignsLegacyLaunchAsync);
         resetAsync(this.campaignsRenameAsync);
         resetAsync(this.campaignsCancelAsync);
         resetAsync(this.campaignsCancelRequestAsync);
-        resetAsync(this.campaignsMultiTargetUpdateCreateAsync);
+        resetAsync(this.campaignsMtuCreateAsync);
         this.campaigns = [];
         this.preparedCampaigns = [];
-        this.preparedLegacyCampaigns = [];
         this.overallCampaignsCount = null;
-        this.overallLegacyCampaignsCount = null;
         this.campaignsFilter = null;
         this.campaignsSort = 'asc';
         this.campaign = {};
@@ -544,16 +346,6 @@ export default class CampaignsStore {
         });
     }
 
-    @computed get runningLegacyCampaigns() {
-        let campaigns = this.preparedLegacyCampaigns;
-        campaigns = _.sortBy(campaigns, function(campaign) {
-          return campaign.createdAt;
-        });
-        return _.filter(campaigns, (campaign) => {
-            return campaign.status === "Active" && campaign.summary.overallDevicesCount !== campaign.summary.overallUpdatedDevicesCount
-        });
-    }
-
     @computed get finishedCampaigns() {
         let campaigns = this.preparedCampaigns;
         campaigns = _.sortBy(campaigns, function(campaign) {
@@ -561,16 +353,6 @@ export default class CampaignsStore {
         }).reverse();
         return _.filter(campaigns, (campaign) => {
             return !_.isUndefined(campaign.summary) && (campaign.summary.status === "finished" || campaign.summary.status === "cancelled");
-        });
-    }
-
-    @computed get finishedLegacyCampaigns() {
-        let campaigns = this.preparedLegacyCampaigns;
-        campaigns = _.sortBy(campaigns, function(campaign) {
-          return campaign.createdAt;
-        }).reverse();
-        return _.filter(campaigns, (campaign) => {
-            return campaign.status === "Active" && campaign.summary.overallDevicesCount === campaign.summary.overallUpdatedDevicesCount;
         });
     }
 
@@ -582,62 +364,27 @@ export default class CampaignsStore {
         return campaigns.slice(0,10);
     }
 
-    @computed get lastActiveLegacyCampaigns() {
-        let campaigns = this.runningLegacyCampaigns;
-        campaigns = _.sortBy(campaigns, function(campaign) {
-          return campaign.createdAt;
-        }).reverse();
-        return campaigns.slice(0,10);
-    }
-
-    @computed get lastActiveMixedCampaigns() {
-        let campaigns = this.runningCampaigns.concat(this.runningLegacyCampaigns);
-        campaigns = _.sortBy(campaigns, function(campaign) {
-          return campaign.createdAt;
-        }).reverse();
-        return campaigns.slice(0,10);
-    }
-
     @computed get overallCampaignStatistics() {
-        if(this.campaign.isLegacy) {
-            let stats = {
-                devicesCount: 0,
-                updatedDevicesCount: 0,
-                failedUpdates: 0,
-                successfulUpdates: 0,
-                cancelledUpdates: 0
-            };
-            _.each(this.campaign.statistics, (statistic) => {
-                stats.devicesCount += statistic.deviceCount;
-                stats.updatedDevicesCount += statistic.updatedDevices;
-                stats.failedUpdates += statistic.failedUpdates;
-                stats.successfulUpdates += statistic.successfulUpdates;
-                stats.cancelledUpdates += statistic.cancelledUpdates;
-            });
-            return stats;
-        } else {
-            let stats = {
-                processed: 0,
-                affected: 0,
-                finished: 0,
-                queued: 0,
-                successful: 0,
-                notImpacted: 0,
-                failed: 0,
-                cancelled: 0,
-            };
-            _.each(this.campaign.statistics.stats, (statistic) => {
-                stats.affected += statistic.affected;
-                stats.processed += statistic.processed;
-            });
-            stats.notImpacted = stats.processed - stats.affected;
-            stats.finished = this.campaign.statistics.finished;
-            stats.cancelled = this.campaign.statistics.cancelled;
-            stats.queued = stats.affected - (stats.finished + stats.cancelled);
-            stats.failed = this.campaign.statistics.failed.length;
-            stats.successful = stats.finished - stats.failed;
-            
-            return stats;
-        }
+        let stats = {
+            processed: 0,
+            affected: 0,
+            finished: 0,
+            queued: 0,
+            successful: 0,
+            notImpacted: 0,
+            failed: 0,
+            cancelled: 0,
+        };
+        _.each(this.campaign.statistics.stats, (statistic) => {
+            stats.affected += statistic.affected;
+            stats.processed += statistic.processed;
+        });
+        stats.notImpacted = stats.processed - stats.affected;
+        stats.finished = this.campaign.statistics.finished;
+        stats.cancelled = this.campaign.statistics.cancelled;
+        stats.queued = stats.affected - (stats.finished + stats.cancelled);
+        stats.failed = this.campaign.statistics.failed.length;
+        stats.successful = stats.finished - stats.failed;
+        return stats;
     }
 }

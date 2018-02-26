@@ -46,7 +46,7 @@ class WizardStep5 extends Component {
                         }
                     });
                     if(!skipAdd) {
-                        let childPack = _.find(packagesStore.directorPackages, pack => pack.imageName === filepath);
+                        let childPack = _.find(packagesStore.packages, pack => pack.filepath === filepath);
                         let obj = {
                             parentPack: data.packName,
                             parentFilepath: data.filepath,
@@ -67,7 +67,7 @@ class WizardStep5 extends Component {
                         }
                     });
                     if(isTryingToInstall) {
-                        let childPack = _.find(packagesStore.directorPackages, pack => pack.imageName === filepath);
+                        let childPack = _.find(packagesStore.packages, pack => pack.filepath === filepath);
                         let obj = {
                             parentPack: data.packName,
                             parentFilepath: data.filepath,
@@ -107,7 +107,7 @@ class WizardStep5 extends Component {
                     key={version.id.version}
                     insetChildren={true}
                     checked={false}
-                    value={version.imageName}
+                    value={version.filepath}
                     primaryText={<span className='version-hash' style={{
                         fontSize: '12px',
                     }}>{version.id.version}</span>}
@@ -119,7 +119,7 @@ class WizardStep5 extends Component {
         return menuItems;
     }
     onParentVersionChange(data, event, index, filepath) {        
-        data.imageName = filepath;
+        data.filepath = filepath;
         this.props.selectVersion(data);
 
         let block = _.find(this.blocks, block => block.parentPack === data.packageName);
