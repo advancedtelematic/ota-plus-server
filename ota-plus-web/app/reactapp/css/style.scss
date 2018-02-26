@@ -1686,6 +1686,8 @@ input {
                                 .icon {
                                     background-image: url(/assets/img/icons/groups.png);
                                     border: 2px solid #ddd;
+                                    background-position: center;
+                                    height: auto;
                                     margin: 0;
                                     float: none;
                                     display: inline-block;
@@ -3456,7 +3458,9 @@ input {
 
                     .label {
                         width: 100px;
-                        height: 15px;
+                        min-height: 16px;
+                        height: 100%;
+                        line-height: normal;
                         display: flex;
                         justify-content: center;
                         align-items: center;

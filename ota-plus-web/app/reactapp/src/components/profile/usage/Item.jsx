@@ -37,7 +37,7 @@ class Item extends Component {
                                         thickness={2.5}
                                     />
                                 :
-                                    usage.active.deviceCount
+                                    usage.active
                                 }
                             </div>
                             <div className="desc">
@@ -50,7 +50,7 @@ class Item extends Component {
                                         thickness={2.5}
                                     />
                                 :
-                                    usage.activated.deviceCount
+                                    usage.activated
                                 }
                             </div>
                             <div className="desc">
