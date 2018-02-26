@@ -253,7 +253,7 @@ class WizardStep5 extends Component {
                         <div className="wrapper-center">
                             <div className="step-pass" id="step-pass">
                                 <img src="/assets/img/icons/manager-success.svg" alt="Icon" />
-                                All dependencies compatible
+                                No dependency issues
                             </div>
                         </div>
                 }
