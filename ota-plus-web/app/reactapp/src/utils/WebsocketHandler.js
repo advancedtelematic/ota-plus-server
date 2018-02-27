@@ -30,44 +30,30 @@ const WebsocketHandler = (function (wsUrl, stores) {
                     stores.devicesStore._updateDeviceData(data.device, {deviceStatus: data.status});
                     break;
                 case "DeviceCreated":
+                    stores.groupsStore.selectDefaultGroup();
                     stores.devicesStore.fetchDevices();
-                    break;
-                case "PackageCreated":
-                    stores.packagesStore._addPackage(data);
+                    stores.devicesStore._increaseDeviceInitialTotalCount();
                     break;
                 case "TufTargetAdded":
-                    stores.packagesStore._addTufPackage(data);
+                    stores.packagesStore._addPackage(data);
                     break;
                 case "PackageBlacklisted":
                     stores.packagesStore.fetchBlacklist();
                     break;
                 case "UpdateSpec":
-                    if(window.location.href.indexOf('/device/') > -1 && stores.devicesStore.device.isDirector && stores.devicesStore.device.uuid === data.device) {
+                    if(window.location.href.indexOf('/device/') > -1 && stores.devicesStore.device.uuid === data.device) {
                         stores.devicesStore.fetchMultiTargetUpdates(data.device);
                         if(data.status === 'Finished') {
-                            stores.packagesStore.fetchDirectorDevicePackagesHistory(data.device, stores.packagesStore.directorDevicePackagesFilter, true);
-                        }
-                    }
-                    if(stores.packagesStore.deviceQueue.length && stores.devicesStore.device.uuid === data.device) {
-                        if(data.status !== 'Pending') {
-                            stores.packagesStore.fetchDevicePackagesQueue(data.device);
-                        }
-                        if(data.status === 'Finished' || data.status === 'Failed') {
-                            stores.packagesStore.fetchDevicePackagesHistory(data.device);
-                            stores.packagesStore.fetchDevicePackagesUpdatesLogs(data.device);
+                            stores.packagesStore.fetchPackagesHistory(data.device, stores.packagesStore.packagesHistoryFilter, true);
                             stores.packagesStore.fetchOndevicePackages(data.device, null);
                         }
-                    } else {
-                        if(data.status === 'Finished') {
-                            if(Object.keys(stores.campaignsStore.campaign).length) {
-                                let campaignId = stores.campaignsStore.campaign.id;
-                                if(!campaignId) {
-                                    campaignId = stores.campaignsStore.campaign.meta.id;
-                                }
-                                stores.campaignsStore.fetchCampaign(campaignId);
-                            }
-                            stores.campaignsStore.fetchCampaigns();
+                    }
+                    if(data.status === 'Finished') {
+                        if(Object.keys(stores.campaignsStore.campaign).length) {
+                            let campaignId = stores.campaignsStore.campaign.id;
+                            stores.campaignsStore.fetchCampaign(campaignId);
                         }
+                        stores.campaignsStore.fetchCampaigns();
                     }
                     break;
                 default:

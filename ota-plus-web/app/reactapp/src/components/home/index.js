@@ -7,8 +7,5 @@ export {
     ActiveCampaigns,
     LastDevices,
     LastPackages,
-    ActiveCampaignsTabs,
-    ActiveCampaignsTufItem,
-    ActiveCampaignsLegacyItem,
     ActiveCampaignItem,
 }

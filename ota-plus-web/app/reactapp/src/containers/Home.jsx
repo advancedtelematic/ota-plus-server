@@ -13,18 +13,12 @@ import { PackagesCreateModal } from '../components/packages';
 
 @observer
 class Home extends Component {
-    @observable uploadToTuf = true;
     @observable packagesCreateModalShown = false;
 
     constructor(props) {
         super(props);
-        this.toggleTufUpload = this.toggleTufUpload.bind(this);
         this.showPackagesCreateModal = this.showPackagesCreateModal.bind(this);
         this.hidePackagesCreateModal = this.hidePackagesCreateModal.bind(this);
-    }
-    toggleTufUpload(e) {
-        if(e) e.preventDefault();
-        this.uploadToTuf = !this.uploadToTuf;
     }
     showPackagesCreateModal(e) {
         if(e) e.preventDefault();
@@ -33,11 +27,10 @@ class Home extends Component {
     hidePackagesCreateModal(e) {
         if(e) e.preventDefault();
         this.packagesCreateModalShown = false;
-        resetAsync(this.props.packagesStore.packagesCreateAsync);
     }
     render() {
         const { devicesStore, hardwareStore, packagesStore, campaignsStore, addNewWizard } = this.props;
-        const allDevicesCount = devicesStore.directorDevicesCount + devicesStore.legacyDevicesCount;
+        const allDevicesCount = devicesStore.directorDevicesCount;
         const lastDevicesTitle = 'Latest created devices';
         const lastPackagesTitle = 'Latest added packages';
         const activeCampaignsTitle = 'Active campaigns';
@@ -51,13 +44,15 @@ class Home extends Component {
                                     {lastDevicesTitle}
                                 </div>
                                 <div className="add">
-                                    {allDevicesCount > 0
-                                        ?
+                                    {allDevicesCount > 0 ?
                                         <a href="https://docs.atsgarage.com/index.html" className="btn-main btn-small btn-add" id="add-new-device" target="_blank" >
-                                            <span>Add new device</span>
+                                            <span>
+                                                Add new device
+                                            </span>
                                         </a>
-                                        :
-                                    ''}
+                                    :
+                                        null
+                                    }
                                 </div>
                             </div>
                             <div className="panel-body">
@@ -88,8 +83,6 @@ class Home extends Component {
                                     packagesStore={packagesStore}
                                     hardwareStore={hardwareStore}
                                     devicesStore={devicesStore}
-                                    toggleTufUpload={this.toggleTufUpload}
-                                    uploadToTuf={this.uploadToTuf}
                                 />
                             </div>
                         </div>
@@ -118,15 +111,17 @@ class Home extends Component {
                         </div>
                     </div>
                 </div>
-                <PackagesCreateModal 
-                    shown={this.packagesCreateModalShown}
-                    hide={this.hidePackagesCreateModal}
-                    packagesStore={packagesStore}
-                    hardwareStore={hardwareStore}
-                    devicesStore={devicesStore}
-                    toggleTufUpload={this.toggleTufUpload}
-                    uploadToTuf={this.uploadToTuf}
-                />
+                {this.packagesCreateModalShown ?
+                    <PackagesCreateModal 
+                        shown={this.packagesCreateModalShown}
+                        hide={this.hidePackagesCreateModal}
+                        packagesStore={packagesStore}
+                        hardwareStore={hardwareStore}
+                        devicesStore={devicesStore}
+                    />
+                :
+                    null
+                }
             </span>
         );
     }

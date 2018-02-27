@@ -58,15 +58,11 @@ class SubHeader extends Component {
     renameCampaign() {
         const { campaign } = this.props.campaignsStore;
         this.clickableArea.classList.remove('hide');
-        if(campaign.isLegacy) {
-            this.props.campaignsStore.renameLegacyCampaign(campaign.meta.id, { name: this.newCampaignName });
-        } else {
-            this.props.campaignsStore.renameCampaign(campaign.id, { name: this.newCampaignName }).then(() => {
-                this.renameDisabled = true;
-                this.oldCampaignName = this.newCampaignName;
-                this.focusTextInput();
-            });
-        }
+        this.props.campaignsStore.renameCampaign(campaign.id, { name: this.newCampaignName }).then(() => {
+            this.renameDisabled = true;
+            this.oldCampaignName = this.newCampaignName;
+            this.focusTextInput();
+        });
     }
     focusTextInput() {
         if (this.renameDisabled) {

@@ -29,7 +29,7 @@ class ListItemVersion extends Component {
             installedPackage, 
         } = this.props;
         let blacklistedPackage = this.isPackageBlacklisted(version);
-        let isSelected = version.imageName === packagesStore.expandedPackage.imageName;
+        let isSelected = version.filepath === packagesStore.expandedPackage.filepath;
         return (
             <li className={isSelected ? " selected" : ""} id={isSelected ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={this.handlePackageVersionClick}>
                 <div className="left-box">
@@ -52,7 +52,7 @@ class ListItemVersion extends Component {
                             <span className="blacklisted" id={"image-blacklisted-" + version.id.version.substring(0,8)}>
                                 <img src="/assets/img/icons/ban_red.png" alt="" />
                             </span>
-                        : version.imageName === queuedPackage ?
+                        : version.filepath === queuedPackage ?
                             <span className="fa-stack queued" id={"image-queued-" + version.id.version.substring(0,8)}>
                                 <i className="fa fa-dot-circle-o fa-stack-2x" aria-hidden="true"></i>
                             </span>

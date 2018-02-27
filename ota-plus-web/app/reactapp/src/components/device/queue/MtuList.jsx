@@ -10,7 +10,7 @@ class MtuQueueList extends Component {
         super(props);
     }
     render() {
-        const {devicesStore, cancelMtuUpdate } = this.props;
+        const { devicesStore, cancelMtuUpdate, alphaPlusEnabled, showSequencer } = this.props;
         const emptyQueue = (
             <div className="queue-empty-center font-small">
                 You haven't got any multi target updates pending. <br />
@@ -18,7 +18,7 @@ class MtuQueueList extends Component {
         );
         return (
             <div>
-                {devicesStore.multiTargetUpdatesFetchAsync.isFetching || devicesStore.multiTargetUpdateCreateAsync.isFetching ?
+                {devicesStore.mtuFetchAsync.isFetching || devicesStore.mtuCreateAsync.isFetching ?
                     <ul className="list queue">
                         <div className="wrapper-loader">
                             <Loader />
@@ -37,6 +37,8 @@ class MtuQueueList extends Component {
                                             inFlight={update.inFlight}
                                             length={target.image.fileinfo.length}
                                             cancelMtuUpdate={cancelMtuUpdate}
+                                            alphaPlusEnabled={alphaPlusEnabled}
+                                            showSequencer={showSequencer}
                                             key={hardwareId}
                                         />
                                     );

@@ -9,35 +9,26 @@ class PrimaryEcu extends Component {
         super(props);
     }    
     render() {
-        const { active, devicesStore, hardwareStore, showHardwareOverlay, selectEcu, ...otherProps} = this.props;
-        const device = devicesStore.device;
-        const hardware = hardwareStore.hardware;
+        const { active, devicesStore, showHardwareOverlay, selectEcu, ...otherProps} = this.props;
         return (
             <span>
                 <a
                     href="#" 
                     className={active ? " selected" : ""}
                     id="hardware-primary-details"
-                    onClick={device.isDirector ? selectEcu.bind(
+                    onClick={selectEcu.bind(
                         this, 
                         devicesStore._getPrimaryHardwareId(), 
                         devicesStore._getPrimarySerial(), 
                         devicesStore._getPrimaryFilepath(), 
                         'primary'
-                    ) : e => e.preventDefault()}
+                    )}
                 >
                     <div className="desc">
-                        {device.isDirector ? 
-                            <span>
-                                <span id="hardware-id-value" className="hardware-label">{devicesStore._getPrimaryHardwareId()}</span> <br />
-                                Serial: <span id="hardware-serial-value">{devicesStore._getPrimarySerial()}</span>
-                            </span>
-                        :
-                            <span>
-                                Serial: <span id="hardware-serial-value">not reported</span> <br />
-                                Hardware ID: <span id="hardware-id-value">not reported</span>
-                            </span>
-                        }
+                        <span>
+                            <span id="hardware-id-value" className="hardware-label">{devicesStore._getPrimaryHardwareId()}</span> <br />
+                            Serial: <span id="hardware-serial-value">{devicesStore._getPrimarySerial()}</span>
+                        </span>
                     </div>
                     <div className="icons">
                         <div className="hardware-icon details" 
@@ -46,22 +37,17 @@ class PrimaryEcu extends Component {
                         >
                             <img src="/assets/img/icons/black/icon.svg" alt="Icon" />
                         </div>
-                        {device.isDirector ? 
-                            <div
-                                className="hardware-icon key" 
-                                id="hardware-key-icon"
-                                onClick={otherProps.handleTouchTap}
-                            >
-                                <img src="/assets/img/icons/key.svg" alt="Icon" />
-                            </div>
-                        :
-                            null
-                        }
+                        <div
+                            className="hardware-icon key" 
+                            id="hardware-key-icon"
+                            onClick={otherProps.handleTouchTap}
+                        >
+                            <img src="/assets/img/icons/key.svg" alt="Icon" />
+                        </div>
                     </div>
                 </a>
                 <PublicKeyPopover
                     {...otherProps}
-                    hardwareStore={hardwareStore}
                 />
             </span>
         );

@@ -7,8 +7,8 @@ class MultiTargetITem extends Component {
         super(props);
     }
     render() {
-        const { item, hardwareId, updateId, length, cancelMtuUpdate, inFlight } = this.props;
-        let hash = item.image.fileinfo.hashes.sha256;
+        const { item, hardwareId, updateId, length, cancelMtuUpdate, inFlight, alphaPlusEnabled, showSequencer } = this.props;
+        const hash = item.image.fileinfo.hashes.sha256;
         return (
             <li id={"queued-entry-" + hash} className={"multi-target-entry font-small" + (inFlight ? " pending" : "")}>
                 <div className="desc">
@@ -56,6 +56,13 @@ class MultiTargetITem extends Component {
                         </div>
                     </div>
                 </div>
+                {alphaPlusEnabled && inFlight ?
+                    <a href="#" style={{'display': 'block', 'textAlign': 'center', 'marginTop': '15px'}} onClick={showSequencer.bind(this)}>
+                        Live installation progress
+                    </a>
+                :
+                    null
+                }
             </li>
         );
     }

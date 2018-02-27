@@ -14,13 +14,13 @@ class ActiveCampaigns extends Component {
         const noCampaigns = 'No running campaigns.';
         return (
             <span>
-                {campaignsStore.campaignsFetchAsync.isFetching || campaignsStore.campaignsLegacyFetchAsync.isFetching ?
+                {campaignsStore.campaignsFetchAsync.isFetching ?
                     <div className="wrapper-center">
                         <Loader />
                     </div>
                 :
-                    campaignsStore.lastActiveMixedCampaigns.length ?
-                        _.map(campaignsStore.lastActiveMixedCampaigns, (campaign) => {
+                    campaignsStore.lastActiveTufCampaigns.length ?
+                        _.map(campaignsStore.lastActiveTufCampaigns, (campaign) => {
                             return (
                                 <ActiveCampaignItem
                                     campaign={campaign}

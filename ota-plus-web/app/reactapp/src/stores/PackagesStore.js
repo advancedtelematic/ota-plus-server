@@ -37,41 +37,25 @@ export default class PackagesStore {
     @observable directorRepoCreateFetchAsync = {};
     @observable tufRepoExistsFetchAsync = {};
     @observable tufRepoCreateFetchAsync = {};
+    
     @observable packagesFetchAsync = {};
-    @observable packagesTufFetchAsync = {};
-    @observable packageStatisticsFetchAsync = {};
+    @observable packagesSafeFetchAsync = {};
     @observable packagesCreateAsync = {};
-    @observable packagesTufCreateAsync = {};
-    @observable packagesUpdateDetailsAsync = {};
     @observable packagesBlacklistFetchAsync = {};
     @observable packagesOneBlacklistedFetchAsync = {};
     @observable packagesBlacklistAsync = {};
     @observable packagesUpdateBlacklistedAsync = {};
     @observable packagesRemoveFromBlacklistAsync = {};
     @observable packagesAffectedDevicesCountFetchAsync = {};
-    @observable packagesForDeviceFetchAsync = {};
-    @observable initialPackagesForDeviceFetchAsync = {};
     @observable packagesOndeviceFetchAsync = {};
-    @observable packagesAutoInstalledForDeviceFetchAsync = {};
-    @observable packagesAutoInstalledForDirectorDeviceFetchAsync = {};
-    @observable packagesDeviceQueueFetchAsync = {};
-    @observable packagesDeviceHistoryFetchAsync = {};
-    @observable packagesDirectorDeviceHistoryFetchAsync = {};
-    @observable packagesDeviceUpdatesLogsFetchAsync = {};
-    @observable packagesDeviceEnableAutoInstallAsync = {};
-    @observable packagesDirectorDeviceEnableAutoInstallAsync = {};
-    @observable packagesDeviceDisableAutoInstallAsync = {};
-    @observable packagesDirectorDeviceDisableAutoInstallAsync = {};
-    @observable packagesDeviceInstallAsync = {};
-    @observable packagesDeviceCancelInstallationAsync = {};
+    @observable packagesAutoInstalledFetchAsync = {};
+    @observable packagesHistoryFetchAsync = {};
+    @observable packagesEnableAutoInstallAsync = {};
+    @observable packagesDisableAutoInstallAsync = {};
+
     @observable page = null;
-    @observable initialPackages = [];
     @observable packages = [];
-    @observable directorPackages = [];
-    @observable packageStats = [];
-    @observable overallPackagesCount = null;
     @observable preparedPackages = [];
-    @observable packagesFilter = null;
     @observable packagesSort = 'asc';
     @observable preparedOndevicePackages = {};
     @observable packagesOndeviceFilter = null;
@@ -81,19 +65,7 @@ export default class PackagesStore {
     @observable preparedBlacklist = [];
     @observable blacklistedPackage = {};
     @observable affectedDevicesCount = {};
-    @observable initialDevicePackages = [];
-    @observable devicePackages = [];
-    @observable devicePackagesFilter = '';
-    @observable deviceAutoInstalledPackages = [];
-    @observable directorDeviceAutoInstalledPackages = [];
-    @observable devicePackagesInstalledCount = 0;
-    @observable devicePackagesQueuedCount = 0;
-    @observable deviceQueue = [];
-    @observable deviceHistory = [];
-    @observable directorDeviceHistory = [];
-    @observable deviceUpdatesLogs = [];
-    @observable devicePackagesLimit = 2000;
-    @observable installedIds = {};
+    @observable autoInstalledPackages = [];
 
     @observable ondevicePackages = [];
     @observable ondevicePackagesCurrentPage = 0;
@@ -101,10 +73,11 @@ export default class PackagesStore {
     @observable ondevicePackagesLimit = 25;
     @observable ondeviceFilter = '';
 
-    @observable directorDevicePackagesFilter = '';
-    @observable directorDeviceHistoryCurrentPage = 0;
-    @observable directorDeviceHistoryTotalCount = null;
-    @observable directorDeviceHistoryLimit = 10;
+    @observable packagesHistory = [];
+    @observable packagesHistoryFilter = '';
+    @observable packagesHistoryCurrentPage = 0;
+    @observable packagesHistoryTotalCount = null;
+    @observable packagesHistoryLimit = 10;
 
     @observable expandedPackage = null;
     @observable compatibilityData = [];
@@ -115,32 +88,19 @@ export default class PackagesStore {
         resetAsync(this.tufRepoExistsFetchAsync);
         resetAsync(this.tufRepoCreateFetchAsync);
         resetAsync(this.packagesFetchAsync);
-        resetAsync(this.packagesTufFetchAsync);
-        resetAsync(this.packageStatisticsFetchAsync);
+        resetAsync(this.packagesSafeFetchAsync);
         resetAsync(this.packagesCreateAsync);
-        resetAsync(this.packagesTufCreateAsync);
-        resetAsync(this.packagesUpdateDetailsAsync);
         resetAsync(this.packagesBlacklistFetchAsync);
         resetAsync(this.packagesOneBlacklistedFetchAsync);
         resetAsync(this.packagesBlacklistAsync);
         resetAsync(this.packagesUpdateBlacklistedAsync);
         resetAsync(this.packagesRemoveFromBlacklistAsync);
         resetAsync(this.packagesAffectedDevicesCountFetchAsync);
-        resetAsync(this.packagesForDeviceFetchAsync);
-        resetAsync(this.initialPackagesForDeviceFetchAsync);
         resetAsync(this.packagesOndeviceFetchAsync);
-        resetAsync(this.packagesAutoInstalledForDeviceFetchAsync);
-        resetAsync(this.packagesAutoInstalledForDirectorDeviceFetchAsync);
-        resetAsync(this.packagesDeviceQueueFetchAsync);
-        resetAsync(this.packagesDeviceHistoryFetchAsync);
-        resetAsync(this.packagesDirectorDeviceHistoryFetchAsync);
-        resetAsync(this.packagesDeviceUpdatesLogsFetchAsync);
-        resetAsync(this.packagesDeviceEnableAutoInstallAsync);
-        resetAsync(this.packagesDirectorDeviceEnableAutoInstallAsync);
-        resetAsync(this.packagesDeviceDisableAutoInstallAsync);
-        resetAsync(this.packagesDirectorDeviceDisableAutoInstallAsync);
-        resetAsync(this.packagesDeviceInstallAsync);
-        resetAsync(this.packagesDeviceCancelInstallationAsync);
+        resetAsync(this.packagesAutoInstalledFetchAsync);
+        resetAsync(this.packagesHistoryFetchAsync);
+        resetAsync(this.packagesEnableAutoInstallAsync);
+        resetAsync(this.packagesDisableAutoInstallAsync);
     }
 
     fetchDirectorRepoExists() {
@@ -187,40 +147,14 @@ export default class PackagesStore {
             }.bind(this));
     }
 
-    fetchPackages(filter = this.packagesFilter) {
+    fetchPackages(async = 'packagesFetchAsync') {
         let that = this;
-        this.packagesFilter = filter;
-        resetAsync(this.packagesFetchAsync, true);
-        return axios.get(API_PACKAGES + '?regex=' + (filter ? filter : ''), { timeout: 5000 })
-            .then(function(response) {
-                this.initialPackages = response.data;
-                _.each(response.data, (item, index) => {
-                    this.packages.push(item);
-                });
-                switch (that.page) {
-                    case 'device':                        
-                        that._prepareDevicePackages();
-                        break;
-                    default:
-                        that._preparePackages();
-                        break;
-                }
-                this.packagesFetchAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.packagesFetchAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    fetchTufPackages(startFromEmpty = false) {
-        let that = this;
-        resetAsync(that.packagesTufFetchAsync, true);        
+        resetAsync(that[async], true);
         return axios.get(API_TUF_PACKAGES)
-            .then(function(responseDirector) {
-                let packages = responseDirector.data.signed.targets;
-                that._prepareDirectorPackages(packages);
-                let filepaths = that._getAllDirectorFilepaths();
-                
+            .then(function(response) {
+                let packages = response.data.signed.targets;
+                that._formatPackages(packages);
+                let filepaths = that._getFilepaths();
                 axios.post(API_PACKAGES_COUNT_INSTALLED_ECUS, filepaths)
                     .then(function(resp) {
                         that._prepareFilePaths(resp.data);
@@ -232,7 +166,7 @@ export default class PackagesStore {
                                 that._preparePackages();
                                 break;
                         }
-                        that.packagesTufFetchAsync = handleAsyncSuccess(responseDirector);
+                        that[async] = handleAsyncSuccess(response);
                     })
                     .catch(function(e) {
                         switch (that.page) {
@@ -243,43 +177,44 @@ export default class PackagesStore {
                                 that._preparePackages();
                                 break;
                         }
-                        that.packagesTufFetchAsync = handleAsyncSuccess(responseDirector);
+                        that[async] = handleAsyncSuccess(response);
                     });
             })
             .catch(function(error) {
-                that.packagesTufFetchAsync = handleAsyncError(error);
+                that[async] = handleAsyncError(error);
             });
     }
 
-    _getAllDirectorFilepaths() {
+    _getFilepaths() {
         return {
-            filepaths: this.directorPackages.map(function(pack) { return pack.imageName; })
+            filepaths: this.packages.map(function(pack) { return pack.filepath; })
         }
     }
 
     _prepareFilePaths(filepaths) {
         _.each(this.packages, (pack, index) => {
             _.each(filepaths, (installedOn, filepath) => {
-                if(pack.imageName === filepath) {                    
+                if(pack.filepath === filepath) {                    
                     pack.installedOnEcus = installedOn;
                 }
             });
         });
     }
 
-    _prepareDirectorPackages(packages) {
-        _.each(packages, (pack, imageName) => {
+    _formatPackages(packages) {
+        let packs = [];
+        _.each(packages, (pack, filepath) => {
             let formattedPack = {
                 customExists: pack.custom ? true : false,
                 packageHash: pack.hashes.sha256,
-                imageName: imageName,
+                filepath: filepath,
                 createdAt: pack.custom ? pack.custom.createdAt : null,
                 updatedAt: pack.custom ? pack.custom.updatedAt : null,
                 description: pack.hashes.sha256,
                 targetFormat: pack.custom ? pack.custom.targetFormat : 'OSTREE',
                 targetLength: pack.length,
                 id: {
-                    name: pack.custom ? pack.custom.name : imageName,
+                    name: pack.custom ? pack.custom.name : filepath,
                     version: pack.custom ? pack.custom.version : pack.hashes.sha256
                 },
                 installedOnEcus: 0,
@@ -291,125 +226,18 @@ export default class PackagesStore {
                     uri: null
                 },
                 uuid: pack.hashes.sha256,
-                inDirector: true,
                 hardwareIds: pack.custom ? pack.custom.hardwareIds : [],
             };
-            this.directorPackages.push(formattedPack);
-            this.packages.push(formattedPack);
+            packs.push(formattedPack);
         });
+        this.packages = packs;
     }
 
-    fetchPackageStatistics(packageName) {
-        resetAsync(this.packageStatisticsFetchAsync, true);
-        return axios.get(API_PACKAGES_COUNT_VERSION_BY_NAME + '/' + packageName)
-            .then(function(response) {
-                let countByVersion = response.data;
-                let countOnDeviceAndGroup = [];
-
-                if (countByVersion.values.length) {
-                    let after = _.after(countByVersion.values.length, () => {
-                        this.packageStats = countOnDeviceAndGroup;
-                        this.packageStatisticsFetchAsync = handleAsyncSuccess(response);
-                    }, this);
-                    _.each(countByVersion.values, (statistics, index) => {
-                        let packageVersion = statistics.packageVersion;
-                        axios.get(API_PACKAGES_COUNT_DEVICE_AND_GROUP + '/' + packageName + '/' + packageVersion)
-                            .then(function(response) {
-                                countOnDeviceAndGroup.push({
-                                    packageVersion: packageVersion,
-                                    deviceCount: response.data.deviceCount,
-                                    groupsCount: response.data.groupIds.length
-                                });
-                                after();
-                            })
-                            .catch(function() {
-                                after();
-                            });
-                    });
-                } else {
-                    this.packageStats = countOnDeviceAndGroup;
-                    this.packageStatisticsFetchAsync = handleAsyncSuccess(response);
-                }
-
-            }.bind(this))
-            .catch(function(error) {
-                this.packageStatisticsFetchAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    _packageURI(name, version) {
-        return API_PACKAGES + '/' +
-            encodeURIComponent(name) + '/' +
-            encodeURIComponent(version);
-    }
-
-    createPackage(data, formData) {
-        resetAsync(this.packagesCreateAsync, true);
-        return axios.get(this._packageURI(data.packageName, data.version))
-            .then(function(resp) {
-                let error = {
-                    response: {
-                        status: 400,
-                        data: {
-                            description: "Package already exists."
-                        }
-                    }
-                }
-                this.packagesCreateAsync = handleAsyncError(error);
-            }.bind(this))
-            .catch(function(err) {
-                let success = {
-                    status: 200,
-                    data: null
-                }
-                this.packagesCreateAsync = handleAsyncSuccess(success);
-                let source = axios.CancelToken.source();
-                let length = this.packagesUploading.push({
-                    status: null,
-                    size: 0,
-                    uploaded: 0,
-                    progress: 0,
-                    upSpeed: 0,
-                    package: {
-                        name: data.packageName,
-                        version: data.version
-                    }
-                });
-                const uploadObj = this.packagesUploading[length - 1];
-                const config = {
-                    onUploadProgress: function(progressEvent) {
-                        let currentTime = new Date().getTime();
-                        let lastUpTime = uploadObj.lastUpTime || currentTime;
-                        let upSpeed = ((progressEvent.loaded - uploadObj.uploaded) * 1000) / ((currentTime - lastUpTime) * 1024)
-                        uploadObj.progress = progressEvent.loaded * 100 / progressEvent.total;
-                        uploadObj.size = progressEvent.total;
-                        uploadObj.uploaded = progressEvent.loaded;
-                        uploadObj.upSpeed = upSpeed;
-                        uploadObj.lastUpTime = currentTime;
-                    }.bind(this),
-                    cancelToken: source.token
-                };
-                const request = axios.put(
-                        this._packageURI(data.packageName, data.version) +
-                            '?description=' + encodeURIComponent(data.description) +
-                            '&vendor=' + encodeURIComponent(data.vendor),
-                        formData,
-                        config)
-                    .then(function(response) {
-                        uploadObj.status = 'success';
-                    }.bind(this))
-                    .catch(function(error) {
-                        uploadObj.status = 'error';
-                    }.bind(this));
-                uploadObj.source = source;
-            }.bind(this));
-    }
-
-    _tufPackageURI(entryName, name, version, hardwareIds) {
+    _packageURI(entryName, name, version, hardwareIds) {
         return API_UPLOAD_TUF_PACKAGE + '/' + entryName + '?name=' + encodeURIComponent(name) + '&version=' + encodeURIComponent(version) + '&hardwareIds=' + hardwareIds;
     }
 
-    createTufPackage(data, formData, hardwareIds) {
+    createPackage(data, formData, hardwareIds) {
         let source = axios.CancelToken.source();
         let length = this.packagesUploading.push({
             status: null,
@@ -438,36 +266,18 @@ export default class PackagesStore {
         };
         const entryName = data.packageName + '_' + data.version;
         const request = axios.put(
-                this._tufPackageURI(entryName, data.packageName, data.version, hardwareIds),
+                this._packageURI(entryName, data.packageName, data.version, hardwareIds),
                 formData,
                 config)
             .then(function(response) {
                 uploadObj.status = 'success';
-                this.packagesTufCreateAsync = handleAsyncSuccess(response);
+                this.packagesCreateAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
                 uploadObj.status = 'error';
-                this.packagesTufCreateAsync = handleAsyncError(error);
+                this.packagesCreateAsync = handleAsyncError(error);
             }.bind(this));
         uploadObj.source = source;
-    }
-
-    updatePackageDetails(data) {
-        resetAsync(this.packagesUpdateDetailsAsync, true);
-        return axios.put(this._packageURI(data.name, data.version) + '/info', data.details)
-            .then(function(response) {
-                this._updatePackageComment(data);
-                this.packagesUpdateDetailsAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.packagesUpdateDetailsAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    _updatePackageComment(data) {
-        let comment = data.details.description;
-        let pack = this._getPackage(data);
-        pack.description = comment;
     }
 
     fetchBlacklist(ifWithStats = false, ifPrepareBlacklist = false) {
@@ -591,45 +401,7 @@ export default class PackagesStore {
             .catch(function(error) {
                 this.packagesAffectedDevicesCountFetchAsync = handleAsyncError(error);
             }.bind(this));
-    }
-
-    fetchInitialDevicePackages(id, filter = this.devicePackagesFilter) {
-        resetAsync(this.initialPackagesForDeviceFetchAsync, true);
-        return axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages?regex=' + '&limit=' + this.devicePackagesLimit)
-                .then(function(response) {
-                    this.initialDevicePackages = response.data.values;                    
-                    switch (this.page) {
-                        case 'device':
-                            this._prepareDevicePackages();
-                            break;
-                        default:
-                            break;
-                    }
-                    this.initialPackagesForDeviceFetchAsync = handleAsyncSuccess(response);      
-                }.bind(this))
-                .catch(function(error) {
-                    this.initialPackagesForDeviceFetchAsync = handleAsyncError(error);
-                }.bind(this));
-    }
-
-    fetchDevicePackages(id, filter = this.devicePackagesFilter) {
-        resetAsync(this.packagesForDeviceFetchAsync, true);
-        return axios.get(API_PACKAGES_DEVICE_PACKAGES + '/' + id + '/packages?regex=' + (this.devicePackagesFilter ? this.devicePackagesFilter : ''))
-            .then(function(response) {
-                this.devicePackages = response.data.values;
-                switch (this.page) {
-                    case 'device':
-                        this._prepareDevicePackages();
-                        break;
-                    default:
-                        break;
-                }
-                this.packagesForDeviceFetchAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.packagesForDeviceFetchAsync = handleAsyncError(error);
-            }.bind(this));
-    }
+    }  
 
     fetchOndevicePackages(id, filter = '') {
         resetAsync(this.packagesOndeviceFetchAsync, true);
@@ -660,30 +432,11 @@ export default class PackagesStore {
             }.bind(this));
     }
 
-    fetchDeviceAutoInstalledPackages(id) {
-        resetAsync(this.packagesAutoInstalledForDeviceFetchAsync, true);
-        return axios.get(API_PACKAGES_DEVICE_AUTO_INSTALLED_PACKAGES + '?device=' + id)
-            .then(function(response) {
-                this.deviceAutoInstalledPackages = response.data;
-                switch (this.page) {
-                    case 'device':
-                        this._prepareDevicePackages();
-                        break;
-                    default:
-                        break;
-                }
-                this.packagesAutoInstalledForDeviceFetchAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.packagesAutoInstalledForDeviceFetchAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    fetchDirectorDeviceAutoInstalledPackages(deviceId, ecuSerial) {
-        resetAsync(this.packagesAutoInstalledForDirectorDeviceFetchAsync, true);
+    fetchAutoInstalledPackages(deviceId, ecuSerial) {
+        resetAsync(this.packagesAutoInstalledFetchAsync, true);
         return axios.get(API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL + '/' + deviceId + '/ecus/' + ecuSerial + '/auto_update')
             .then(function(response) {
-                this.directorDeviceAutoInstalledPackages = response.data;
+                this.autoInstalledPackages = response.data;
                 switch (this.page) {
                     case 'device':
                         this._prepareDevicePackages();
@@ -691,155 +444,62 @@ export default class PackagesStore {
                     default:
                         break;
                 }
-                this.packagesAutoInstalledForDirectorDeviceFetchAsync = handleAsyncSuccess(response);
+                this.packagesAutoInstalledFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
-                this.packagesAutoInstalledForDirectorDeviceFetchAsync = handleAsyncError(error);
+                this.packagesAutoInstalledFetchAsync = handleAsyncError(error);
             }.bind(this));
     }
 
-    fetchDevicePackagesQueue(id) {
-        resetAsync(this.packagesDeviceQueueFetchAsync, true);
-        return axios.get(API_PACKAGES_DEVICE_QUEUE + '/' + id + '/queued')
-            .then(function(response) {
-                this.deviceQueue = response.data;
-                switch (this.page) {
-                    case 'device':
-                        this._prepareDevicePackages();
-                        break;
-                    default:
-                        break;
-                }
-                this.packagesDeviceQueueFetchAsync = handleAsyncSuccess(response);
-
-            }.bind(this))
-            .catch(function(error) {
-                this.packagesDeviceQueueFetchAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    fetchDirectorDevicePackagesHistory(id, filter = '', fetchFirstItems = false) {
-        resetAsync(this.packagesDirectorDeviceHistoryFetchAsync, true);
-        if((this.directorDevicePackagesFilter !== filter) || fetchFirstItems) {
-            this.directorDeviceHistoryTotalCount = null;
-            this.directorDeviceHistoryCurrentPage = 0;
+    fetchPackagesHistory(id, filter = '', fetchFirstItems = false) {
+        resetAsync(this.packagesHistoryFetchAsync, true);
+        if(this.packagesHistoryFilter !== filter || fetchFirstItems) {
+            this.packagesHistoryTotalCount = null;
+            this.packagesHistoryCurrentPage = 0;
         }
-        this.directorDevicePackagesFilter = filter;
-        return axios.get(API_PACKAGES_DIRECTOR_DEVICE_HISTORY + '/' + id + '?limit=' + this.directorDeviceHistoryLimit + 
-            '&offset=' + this.directorDeviceHistoryCurrentPage * this.directorDeviceHistoryLimit)
+        this.packagesHistoryFilter = filter;
+        return axios.get(API_PACKAGES_DIRECTOR_DEVICE_HISTORY + '/' + id + '?limit=' + this.packagesHistoryLimit + 
+            '&offset=' + this.packagesHistoryCurrentPage * this.packagesHistoryLimit)
             .then(function(response) {
                 let data = response.data.values;
-                this.directorDeviceHistory = _.uniq(this.directorDeviceHistory.concat(data), item => item.updateId);
-                this.directorDeviceHistoryCurrentPage++;
-                this.directorDeviceHistoryTotalCount = response.data.total;
-                this._prepareDirectorDevicePackagesHistory();
-                this.packagesDirectorDeviceHistoryFetchAsync = handleAsyncSuccess(response);
+                this.packagesHistory = _.uniq(this.packagesHistory.concat(data), item => item.updateId);
+                this.packagesHistoryCurrentPage++;
+                this.packagesHistoryTotalCount = response.data.total;
+                this._preparePackagesHistory();
+                this.packagesHistoryFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
-                this.packagesDirectorDeviceHistoryFetchAsync = handleAsyncError(error);
+                this.packagesHistoryFetchAsync = handleAsyncError(error);
             }.bind(this));
     }
 
-    _prepareDirectorDevicePackagesHistory() {
-        this.directorDeviceHistory = _.sortBy(this.directorDeviceHistory, (pack) => {
+    _preparePackagesHistory() {
+        this.packagesHistory = _.sortBy(this.packagesHistory, (pack) => {
             return pack.receivedAt;
         }).reverse();
     }
 
-    fetchDevicePackagesHistory(id) {
-        resetAsync(this.packagesDeviceHistoryFetchAsync, true);
-        return axios.get(API_PACKAGES_DEVICE_HISTORY + '?uuid=' + id)
-            .then(function(response) {
-                let data = response.data.reverse();
-                this.deviceHistory = data;
-                this.packagesDeviceHistoryFetchAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.packagesDeviceHistoryFetchAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    fetchDevicePackagesUpdatesLogs(id) {
-        resetAsync(this.packagesDeviceUpdatesLogsFetchAsync, true);
-        return axios.get(API_PACKAGES_DEVICE_UPDATES_LOGS + '/' + id + '/results')
-            .then(function(response) {
-                this.deviceUpdatesLogs = response.data;
-                this.packagesDeviceUpdatesLogsFetchAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.packagesDeviceUpdatesLogsFetchAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    enableDevicePackageAutoInstall(packageName, deviceId) {
-        resetAsync(this.packagesDeviceEnableAutoInstallAsync, true);
-        return axios.put(API_PACKAGES_DEVICE_AUTO_INSTALL + '/' + packageName + '/' + deviceId)
-            .then(function(response) {
-                this.fetchDeviceAutoInstalledPackages(deviceId);
-                this.packagesDeviceEnableAutoInstallAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.packagesDeviceEnableAutoInstallAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    enableTufPackageAutoInstall(targetName, deviceId, ecuSerial) {
-        resetAsync(this.packagesDirectorDeviceEnableAutoInstallAsync, true);
+    enablePackageAutoInstall(targetName, deviceId, ecuSerial) {
+        resetAsync(this.packagesEnableAutoInstallAsync, true);
         return axios.put(API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL + '/' + deviceId + '/ecus/' + ecuSerial + '/auto_update/' + targetName)
             .then(function(response) {
-                this.fetchDirectorDeviceAutoInstalledPackages(deviceId, ecuSerial);
-                this.packagesDirectorDeviceEnableAutoInstallAsync = handleAsyncSuccess(response);
+                this.fetchAutoInstalledPackages(deviceId, ecuSerial);
+                this.packagesEnableAutoInstallAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
-                this.packagesDirectorDeviceEnableAutoInstallAsync = handleAsyncError(error);
+                this.packagesEnableAutoInstallAsync = handleAsyncError(error);
             }.bind(this));
     }
 
-    disableDevicePackageAutoInstall(packageName, deviceId) {
-        resetAsync(this.packagesDeviceDisableAutoInstallAsync, true);
-        return axios.delete(API_PACKAGES_DEVICE_AUTO_INSTALL + '/' + packageName + '/' + deviceId)
-            .then(function(response) {
-                this.fetchDeviceAutoInstalledPackages(deviceId);
-                this.packagesDeviceDisableAutoInstallAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.packagesDeviceDisableAutoInstallAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    disableTufPackageAutoInstall(packageName, deviceId, ecuSerial) {
-        resetAsync(this.packagesDirectorDeviceDisableAutoInstallAsync, true);
+    disablePackageAutoInstall(packageName, deviceId, ecuSerial) {
+        resetAsync(this.packagesDisableAutoInstallAsync, true);
         return axios.delete(API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL + '/' + deviceId + '/ecus/' + ecuSerial + '/auto_update/' + packageName)
             .then(function(response) {
-                this.fetchDirectorDeviceAutoInstalledPackages(deviceId, ecuSerial);
-                this.packagesDirectorDeviceDisableAutoInstallAsync = handleAsyncSuccess(response);
+                this.fetchAutoInstalledPackages(deviceId, ecuSerial);
+                this.packagesDisableAutoInstallAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function(error) {
-                this.packagesDirectorDeviceDisableAutoInstallAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    installPackage(id, data) {
-        resetAsync(this.packagesDeviceInstallAsync, true);
-        return axios.post(API_PACKAGES_DEVICE_INSTALL + '/' + id, data)
-            .then(function(response) {
-                this.fetchDevicePackagesQueue(id);
-                this.packagesDeviceInstallAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.packagesDeviceInstallAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    cancelInstallation(deviceId, requestId) {
-        resetAsync(this.packagesDeviceCancelInstallationAsync, true);
-        return axios.put(API_PACKAGES_DEVICE_CANCEL_INSTALLATION + '/' + deviceId + '/' + requestId + '/cancelupdate')
-            .then(function(response) {
-                this.fetchDevicePackagesQueue(deviceId);
-                this.packagesDeviceCancelInstallationAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.packagesDeviceCancelInstallationAsync = handleAsyncError(error);
+                this.packagesDisableAutoInstallAsync = handleAsyncError(error);
             }.bind(this));
     }
 
@@ -854,7 +514,7 @@ export default class PackagesStore {
             return _.contains(pack.hardwareIds, hardwareId) ? pack : null;
         });
         let result = _.find(filteredPacks, (pack) => {            
-            return pack.imageName === filepath;
+            return pack.filepath === filepath;
         });
         if(result) {
             result.isInstalled = true;
@@ -866,7 +526,7 @@ export default class PackagesStore {
 
     _getReportedPackage(filepath, hardwareId) {
         let result = _.find(this.packages, (pack) => {            
-            return pack.imageName === filepath;
+            return pack.filepath === filepath;
         });
         if(result) {
             result.isInstalled = true;
@@ -877,42 +537,22 @@ export default class PackagesStore {
 
     _preparePackages(packagesSort = this.packagesSort, isFromBlacklistRequest = false) {
         let packages = this.packages;
-        let inDirectorPackages = {};
-        let legacyPackages = {};
-        _.each(packages, (obj, index) => {
-            if(obj.inDirector) {
-                if (_.isUndefined(inDirectorPackages[obj.id.name])) {
-                    inDirectorPackages[obj.id.name] = [];
-                }
-                inDirectorPackages[obj.id.name].push(obj)
-            } else {
-                if (_.isUndefined(legacyPackages[obj.id.name])) {
-                    legacyPackages[obj.id.name] = [];
-                }
-                legacyPackages[obj.id.name].push(obj);
-            }
-        });
-        let mergedPackages = Object.assign(legacyPackages, inDirectorPackages);
         let groupedPackages = {};
         let sortedPackages = {};
         this.packagesSort = packagesSort;        
-        _.each(mergedPackages, (objArray, index) => {
-            _.each(objArray, (obj, i) => {
-                if (_.isUndefined(groupedPackages[obj.id.name]) || !groupedPackages[obj.id.name] instanceof Array) {
-                    groupedPackages[obj.id.name] = new Object();
-                    groupedPackages[obj.id.name].versions = [];
-                    groupedPackages[obj.id.name].packageName = obj.id.name;
-                    groupedPackages[obj.id.name].inDirector = obj.inDirector;
-                }
-                groupedPackages[obj.id.name].versions.push(obj);
-            });
+        _.each(packages, (obj, index) => {
+            if (_.isUndefined(groupedPackages[obj.id.name]) || !groupedPackages[obj.id.name] instanceof Array) {
+                groupedPackages[obj.id.name] = new Object();
+                groupedPackages[obj.id.name].versions = [];
+                groupedPackages[obj.id.name].packageName = obj.id.name;
+            }
+            groupedPackages[obj.id.name].versions.push(obj);
         }, this);
         _.each(groupedPackages, (obj, index) => {
             groupedPackages[index].versions = _.sortBy(obj.versions, (pack) => {
                 return pack.createdAt;
             }).reverse();
         });
-
         let specialGroup = {
             '#': []
         };
@@ -938,9 +578,6 @@ export default class PackagesStore {
             sortedPackages = (packagesSort !== 'undefined' && packagesSort == 'desc' ? Object.assign(specialGroup, sortedPackages) : Object.assign(sortedPackages, specialGroup));
         }
         this.preparedPackages = sortedPackages;
-        if(!isFromBlacklistRequest) {
-            this.overallPackagesCount = Object.keys( groupedPackages).length;
-        }
     }
 
     _prepareDevicePackages(packagesSort = this.packagesSort) {
@@ -948,18 +585,11 @@ export default class PackagesStore {
         let packages = JSON.parse(JSON.stringify(this.packages));
 
         if(packages.length) {
-            const installedPackages = this.initialDevicePackages;
-            const autoInstalledPackages = this.deviceAutoInstalledPackages;
-            const directorAutoInstalledPackages = this.directorDeviceAutoInstalledPackages;
+            const autoInstalledPackages = this.autoInstalledPackages;
             const blacklist = this.blacklist;
-            const queuedPackages = this.deviceQueue;
-            const queuedIds = [];
             let groupedPackages = {};
             let sortedPackages = {};
             let parsedBlacklist = [];
-            let installedIds = this.installedIds;
-            let queuedCount = 0;
-            let installedCount = 0;
 
             _.each(blacklist, (pack) => {
                 parsedBlacklist[pack.packageId.name + '-' + pack.packageId.version] = {
@@ -968,77 +598,31 @@ export default class PackagesStore {
                 };
             });
 
-            _.each(installedPackages, (pack) => {
-                installedIds[pack.packageId.name + '_' + pack.packageId.version] = pack.packageId.name + '_' + pack.packageId.version;
-            });
-
             _.each(packages, (packInstalled) => {
                 if(!_.isUndefined(parsedBlacklist[packInstalled.id.name + '-' + packInstalled.id.version])) {
                     packInstalled.isBlackListed = true;
                 }
-                if(autoInstalledPackages.indexOf(packInstalled.id.name) > -1 || directorAutoInstalledPackages.indexOf(packInstalled.id.name) > -1)
+                if(autoInstalledPackages.indexOf(packInstalled.id.name) > -1)
                     packInstalled.isAutoInstallEnabled = true;
             });
 
-            _.each(queuedPackages, (pack) => {
-                queuedIds[pack.packageId.name + '_' + pack.packageId.version] = pack.packageId.name + '_' + pack.packageId.version;
-            });
-
             _.each(packages, (pack, index) => {
-                const packageKey = pack.id.name + '_' + pack.id.version;
-                let isQueued = false;
-                let isInstalled = false;
-
-                if(packageKey in installedIds) {
-                    pack.attributes = {
-                        status: 'installed'
-                    };
-                    isInstalled = true;
-                } else if(packageKey in queuedIds) {
-                    pack.attributes = {
-                        status: 'queued'
-                    };
-                    isQueued = true;
-                } else {
-                    pack.attributes = {
-                        status: 'notinstalled'
-                    };
-                }
-
                 if(_.isUndefined(groupedPackages[pack.id.name]) || !groupedPackages[pack.id.name] instanceof Object ) {
                     groupedPackages[pack.id.name] = {
                         versions: [],
                         packageName: pack.id.name,
-                        inDirector: pack.inDirector ? true : false,
                         hardwareIds: pack.hardwareIds,
-                        isQueued: isQueued,
-                        isInstalled: isInstalled,
-                        isBlackListed: pack.isBlackListed && isInstalled ? true : false,
-                        isAutoInstallEnabled: !_.isUndefined(pack.isAutoInstallEnabled) ? pack.isAutoInstallEnabled : false
+                        isBlackListed: pack.isBlackListed,
+                        isAutoInstallEnabled: pack.isAutoInstallEnabled
                     };
                 }
-
-                if(!groupedPackages[pack.id.name].isQueued && isQueued)
-                    groupedPackages[pack.id.name].isQueued = true;
-                if(!groupedPackages[pack.id.name].isInstalled && isInstalled)
-                    groupedPackages[pack.id.name].isInstalled = true;
-                if(!groupedPackages[pack.id.name].isBlackListed && pack.isBlackListed && isInstalled)
-                    groupedPackages[pack.id.name].isBlackListed = true;
-
-                if(!(groupedPackages[pack.id.name].inDirector && !pack.inDirector)) {
-                    groupedPackages[pack.id.name].versions.push(pack);
-                }
+                groupedPackages[pack.id.name].versions.push(pack);
             });
-
             _.each(groupedPackages, (pack, index) => {
                 groupedPackages[index].versions = _.sortBy(pack.versions, (element) => {
                     return element.createdAt;
                 }).reverse();
-
-                pack.isQueued ? queuedCount++ : null;
-                pack.isInstalled ? installedCount++ : null;
             });
-            
             let specialGroup = {'#' : []};
             Object.keys(groupedPackages).sort((a, b) => {
                 if(packagesSort !== 'undefined' && packagesSort == 'desc')
@@ -1060,12 +644,8 @@ export default class PackagesStore {
                 sortedPackages = (packagesSort !== 'undefined' && packagesSort == 'desc' ? Object.assign(specialGroup, sortedPackages) : Object.assign(sortedPackages, specialGroup));
             }
             this.preparedPackages = sortedPackages;
-            this.devicePackagesQueuedCount = queuedCount;
-            this.devicePackagesInstalledCount = installedCount;
         } else {
             this.preparedPackages = [];           
-            this.devicePackagesQueuedCount = 0;
-            this.devicePackagesInstalledCount = 0;
         }
     }
 
@@ -1177,37 +757,21 @@ export default class PackagesStore {
         resetAsync(this.tufRepoExistsFetchAsync);
         resetAsync(this.tufRepoCreateFetchAsync);
         resetAsync(this.packagesFetchAsync);
-        resetAsync(this.packagesTufFetchAsync);
+        resetAsync(this.packagesSafeFetchAsync);
         resetAsync(this.packagesCreateAsync);
-        resetAsync(this.packagesTufCreateAsync);
-        resetAsync(this.packagesUpdateDetailsAsync);
         resetAsync(this.packagesBlacklistFetchAsync);
         resetAsync(this.packagesOneBlacklistedFetchAsync);
         resetAsync(this.packagesBlacklistAsync);
         resetAsync(this.packagesUpdateBlacklistedAsync);
         resetAsync(this.packagesRemoveFromBlacklistAsync);
         resetAsync(this.packagesAffectedDevicesCountFetchAsync);
-        resetAsync(this.packagesForDeviceFetchAsync);
-        resetAsync(this.packagesAutoInstalledForDeviceFetchAsync);
-        resetAsync(this.packagesAutoInstalledForDirectorDeviceFetchAsync);
-        resetAsync(this.packagesDeviceQueueFetchAsync);
-        resetAsync(this.packagesDeviceHistoryFetchAsync);
-        resetAsync(this.packagesDirectorDeviceHistoryFetchAsync);
-        resetAsync(this.packagesDeviceUpdatesLogsFetchAsync);
-        resetAsync(this.packagesDeviceEnableAutoInstallAsync);
-        resetAsync(this.packagesDirectorDeviceEnableAutoInstallAsync);
-        resetAsync(this.packagesDeviceDisableAutoInstallAsync);
-        resetAsync(this.packagesDirectorDeviceDisableAutoInstallAsync);
-        resetAsync(this.packagesDeviceInstallAsync);
-        resetAsync(this.packagesDeviceCancelInstallationAsync);
+        resetAsync(this.packagesAutoInstalledFetchAsync);
+        resetAsync(this.packagesHistoryFetchAsync);
+        resetAsync(this.packagesEnableAutoInstallAsync);
+        resetAsync(this.packagesDisableAutoInstallAsync);
         this.page = null;
-        this.initialPackages = [];
         this.packages = [];
-        this.directorPackages = [];
-        this.packageStats = [];
-        this.overallPackagesCount = null;
         this.preparedPackages = [];
-        this.packagesFilter = null;
         this.packagesSort = 'asc';
         this.preparedOndevicePackages = {};
         this.packagesOndeviceFilter = null;
@@ -1217,34 +781,22 @@ export default class PackagesStore {
         this.preparedBlacklist = [];
         this.blacklistedPackage = {};
         this.affectedDevicesCount = {};
-        this.initialDevicePackages = [];
-        this.devicePackages = [];
-        this.devicePackagesFilter = '';
-        this.deviceAutoInstalledPackages = [];
-        this.directorDeviceAutoInstalledPackages = [];
-        this.devicePackagesInstalledCount = 0;
-        this.devicePackagesQueuedCount = 0;
-        this.deviceQueue = [];
-        this.deviceHistory = [];
-        this.directorDeviceHistory = [];
-        this.deviceUpdatesLogs = [];
+        this.autoInstalledPackages = [];
+        this.packagesHistory = [];
         this.ondevicePackages = [];
         this.ondevicePackagesCurrentPage = 0;
         this.ondevicePackagesTotalCount = 0;
         this.ondeviceFilter = '';
-        this.directorDeviceHistoryCurrentPage = 0;
-        this.directorDeviceHistoryTotalCount = 0;
-        this.directorDevicePackagesFilter = '';
-        this.installedIds = {};
+        this.packagesHistoryCurrentPage = 0;
+        this.packagesHistoryTotalCount = 0;
+        this.packagesHistoryFilter = '';
         this.expandedPackage = null;
         this.compatibilityData = [];
     }
 
     _resetWizard() {
-        resetAsync(this.packagesFetchAsync);
-        resetAsync(this.packagesTufFetchAsync);
+        resetAsync(this.packagesSafeFetchAsync);
         this.packages = [];
-        this.overallPackagesCount = null;
         this.preparedPackages = [];
     }
 
@@ -1266,37 +818,14 @@ export default class PackagesStore {
         this.compatibilityData = data;
     }
 
-    _addPackage(data) {
-        if (_.filter(this.packages, function(o) { return ((o.id.version == data.packageId.version) && (o.id.name == data.packageId.name)); }).length <= 0) {
-            data.isBlackListed = false;
-            data.id = data.packageId;
-            delete data.packageId;
-            this.packages.push(data);
-            switch (this.page) {
-                case 'device':
-                    this._prepareDevicePackages();
-                    break;
-                default:
-                    this._preparePackages();
-                    break;
-            }
-            let found = _.find(this.packages, (pack) => {
-                return pack.id.name === data.id.name && pack.id.version === data.id.version;
-            });
-            if(!found) {
-                this.overallPackagesCount++;
-            }
-        }
-    }
-
-    _addTufPackage(pack) {
+    _addPackage(pack) {
         let name = pack.custom ? pack.custom.name : pack.filename;
         let version = pack.custom ? pack.custom.version : pack.checksum.hash;
         let hardwareIds = pack.custom ? pack.custom.hardwareIds : [];
         let formattedPack = {
             customExists: pack.custom ? true : false,
             packageHash: pack.checksum.hash,
-            imageName: pack.filename,
+            filepath: pack.filename,
             createdAt: pack.custom ? pack.custom.createdAt : null,
             updatedAt: pack.custom ? pack.custom.updatedAt : null,
             targetFormat: pack.custom ? pack.custom.targetFormat : 'OSTREE',
@@ -1309,7 +838,6 @@ export default class PackagesStore {
             },
             installedOnEcus: 0,
             isBlackListed: false,
-            inDirector: true,
             namespace: pack.namespace,
             signature: null,
             timestamp: null,
@@ -1322,7 +850,6 @@ export default class PackagesStore {
             found.hardwareIds = hardwareIds;
         } else {
             this.packages.push(formattedPack);
-            this.overallPackagesCount++;
         }
         switch (this.page) {
             case 'device':
@@ -1336,7 +863,7 @@ export default class PackagesStore {
 
     @computed
     get packagesCount() {
-        return this.packages.length;
+        return Object.keys(_.groupBy(this.packages, pack => pack.id.name)).length;
     }
 
     @computed

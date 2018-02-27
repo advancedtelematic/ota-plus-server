@@ -16,8 +16,7 @@ class SecondaryEcu extends Component {
         hideHardwareOverlay();
     }
     render() {
-        const { active, ecu, hardwareStore, ...otherProps} = this.props;
-        const hardware = hardwareStore.hardware;
+        const { active, ecu, ...otherProps} = this.props;
         return (
             <span>
                 <a
@@ -45,7 +44,6 @@ class SecondaryEcu extends Component {
                 <PublicKeyPopover
                     {...otherProps}
                     ecu={ecu}
-                    hardwareStore={hardwareStore}
                 />
             </span>
         );

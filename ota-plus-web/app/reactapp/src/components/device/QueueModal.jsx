@@ -3,8 +3,8 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { Popover } from 'material-ui';
-import { QueueList, QueueMtuList } from './queue';
-import { HistoryList, HistoryMtuList } from './history';
+import { QueueMtuList } from './queue';
+import { HistoryMtuList } from './history';
 import _ from 'underscore';
 
 @observer
@@ -30,9 +30,8 @@ class QueueModal extends Component {
         super(props);
     }
     render() {
-        const { packagesStore, devicesStore, shown, hide, cancelInstallation, cancelMtuUpdate, activeTabId, setQueueModalActiveTabId, anchorEl } = this.props;
+        const { packagesStore, devicesStore, shown, hide, cancelMtuUpdate, activeTabId, setQueueModalActiveTabId, anchorEl, alphaPlusEnabled, showSequencer } = this.props;
         const device = devicesStore.device;
-        const isDeviceDirector = device.isDirector;
         const installationStatus = QueueModal.checkStatus(device.deviceStatus);
         const content = (
             <span>
@@ -49,17 +48,12 @@ class QueueModal extends Component {
                         onActive={setQueueModalActiveTabId.bind(this, 0)}
                     >
                         <div className={"wrapper-list" + (activeTabId === 1 ? " hide" : "")}>
-                            {isDeviceDirector ?
-                                <QueueMtuList 
-                                    devicesStore={devicesStore}
-                                    cancelMtuUpdate={cancelMtuUpdate}
-                                />
-                            :
-                                <QueueList 
-                                    packagesStore={packagesStore}
-                                    cancelInstallation={cancelInstallation}
-                                />
-                            }
+                            <QueueMtuList 
+                                devicesStore={devicesStore}
+                                cancelMtuUpdate={cancelMtuUpdate}
+                                alphaPlusEnabled={alphaPlusEnabled}
+                                showSequencer={showSequencer}
+                            />
                         </div>
                     </Tab>
                     <Tab
@@ -70,18 +64,10 @@ class QueueModal extends Component {
                         onActive={setQueueModalActiveTabId.bind(this, 1, !_.isEmpty(device) ? device : null)}
                     >
                         <div className={"wrapper-list" + (activeTabId === 0 ? " hide" : "")}>
-                            {isDeviceDirector ?
-                                <HistoryMtuList
-                                    packagesStore={packagesStore}
-                                    device={device}
-                                />
-                            :
-                                <HistoryList 
-                                    packagesStore={packagesStore}
-                                    device={device}
-                                />
-                            }
-                            
+                            <HistoryMtuList
+                                packagesStore={packagesStore}
+                                device={device}
+                            />
                         </div>
                     </Tab>
                 </Tabs>
@@ -121,7 +107,6 @@ QueueModal.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
-    cancelInstallation: PropTypes.func.isRequired,
     activeTabId: PropTypes.number.isRequired,
     setQueueModalActiveTabId: PropTypes.func.isRequired,
     anchorEl: PropTypes.object,

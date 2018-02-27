@@ -7,7 +7,6 @@ import {
     API_DEVICES_DIRECTOR_DEVICE,
     API_DEVICES_CREATE,
     API_DEVICES_RENAME,
-    API_DEVICES_UPDATES_LOGS,
     API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
     API_CREATE_MULTI_TARGET_UPDATE,
     API_FETCH_MULTI_TARGET_UPDATES,
@@ -23,18 +22,16 @@ import _ from 'underscore';
 export default class DevicesStore {
 
     @observable devicesFetchAsync = {};
-    @observable devicesInitialFetchAsync = {};
-    @observable devicesRememberedFetchAsync = {};
-    @observable devicesFetchAfterDragAndDropAsync = {};
-    @observable devicesFetchAfterGroupCreationAsync = {};
     @observable devicesOneFetchAsync = {};
     @observable devicesCountFetchAsync = {};
     @observable devicesDirectorAttributesFetchAsync = {};
-    @observable devicesDirectorPrimaryAndSecondaryHashesFetchAsync = {};
+    @observable devicesDirectorHashesFetchAsync = {};
     @observable devicesCreateAsync = {};
     @observable devicesRenameAsync = {};
-    @observable multiTargetUpdateCreateAsync = {};
-    @observable multiTargetUpdatesFetchAsync = {};
+    @observable mtuCreateAsync = {};
+    @observable mtuFetchAsync = {};
+    @observable mtuCancelAsync = {};
+
     @observable devices = [];
     @observable devicesInitialTotalCount = null;
     @observable devicesTotalCount = null;
@@ -44,124 +41,23 @@ export default class DevicesStore {
     @observable devicesGroupFilter = null;
     @observable devicesSort = 'asc';
     @observable device = {};
-    @observable deviceUpdatesLogs = [];
     @observable multiTargetUpdates = [];
     @observable multiTargetUpdatesSaved = [];
-    @observable legacyDevicesCount = 0;
     @observable directorDevicesCount = 0;
     @observable directorDevicesIds = [];
-    @observable multiTargetUpdatesCancelAsync = {};
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
-        resetAsync(this.devicesInitialFetchAsync);
-        resetAsync(this.devicesRememberedFetchAsync);
-        resetAsync(this.devicesFetchAfterDragAndDropAsync);
-        resetAsync(this.devicesFetchAfterGroupCreationAsync);
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesCountFetchAsync);
         resetAsync(this.devicesDirectorAttributesFetchAsync);
-        resetAsync(this.devicesDirectorPrimaryAndSecondaryHashesFetchAsync);
+        resetAsync(this.devicesDirectorHashesFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
-        resetAsync(this.multiTargetUpdateCreateAsync);
-        resetAsync(this.multiTargetUpdatesFetchAsync);
-        resetAsync(this.multiTargetUpdatesCancelAsync);
+        resetAsync(this.mtuCreateAsync);
+        resetAsync(this.mtuFetchAsync);
+        resetAsync(this.mtuCancelAsync);
         this.devicesLimit = 30;
-    }
-
-    createMultiTargetUpdate(data, id) {
-        let updateObject = this._prepareUpdateObject(data);
-        resetAsync(this.multiTargetUpdateCreateAsync, true);
-        return axios.post(API_GET_MULTI_TARGET_UPDATE_INDENTIFIER, updateObject)
-            .then((response) => {
-                let updateIdentifier = response.data;
-                let status = null;
-                if(updateIdentifier.length) {
-                    let after = _.after(status === 'success', () => {
-                        this.fetchMultiTargetUpdates(id);
-                        this.multiTargetUpdateCreateAsync = handleAsyncSuccess(response);
-                    }, this);
-                    axios.put(API_CREATE_MULTI_TARGET_UPDATE + '/' + id + '/multi_target_update/' + updateIdentifier)
-                        .then(function(multiTargetResponse) {
-                            status = 'success';
-                            after();
-                        })
-                        .catch(function() {
-                            status = 'error';
-                            after();
-                        });
-                }
-            })
-            .catch((error) => {
-                this.multiTargetUpdateCreateAsync = handleAsyncError(error);
-            });
-    }
-
-    fetchMultiTargetUpdates(id) {
-        resetAsync(this.multiTargetUpdatesFetchAsync, true);
-        return axios.get(API_FETCH_MULTI_TARGET_UPDATES + '/' + id + '/queue')
-            .then((response) => {
-                let data = response.data;
-                _.each(data, (item, index) => {
-                    item.device = id;
-                });
-                this.multiTargetUpdates = response.data;
-                this.multiTargetUpdatesSaved = _.uniq(this.multiTargetUpdates.concat(response.data), item => item.device);
-                this.multiTargetUpdatesFetchAsync = handleAsyncSuccess(response);
-            })
-            .catch((error) => {
-                this.multiTargetUpdatesFetchAsync = handleAsyncError(error);
-            });
-    }
-
-    cancelMtuUpdate(data) {
-        resetAsync(this.multiTargetUpdatesCancelAsync, true);
-        return axios.post(API_CANCEL_MULTI_TARGET_UPDATE, data)
-            .then(function(response) {
-                this.multiTargetUpdatesCancelAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.multiTargetUpdatesCancelAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    _prepareUpdateObject(data) {
-        return {
-            targets: {
-                [data.hardwareId]: {
-                    to: {
-                        target: data.target,
-                        checksum: {
-                            method: "sha256",
-                            hash: data.hash
-                        },
-                        targetLength: data.targetLength
-                    },
-                    targetFormat: data.targetFormat,
-                    generateDiff: data.generateDiff
-                }
-            }
-        }
-    }
-
-    fetchDevicesCount() {
-        resetAsync(this.devicesCountFetchAsync, true);
-        let that = this;
-        return axios.all([
-            axios.get(API_DEVICES_SEARCH),
-            axios.get(API_DIRECTOR_DEVICES_SEARCH),
-        ])
-            .then(axios.spread(function (all, director) {
-                let allDevicesCount = all.data.total;
-                that.directorDevicesCount = director.data.total;
-                that.directorDevicesIds = director.data.values;
-                that.legacyDevicesCount = allDevicesCount - that.directorDevicesCount;
-                that.devicesCountFetchAsync = handleAsyncSuccess(all);
-            }))
-            .catch((error) => {
-                that.devicesCountFetchAsync = handleAsyncError(error);
-            });
     }
 
     fetchDevices(filter = '', groupId) {
@@ -183,85 +79,23 @@ export default class DevicesStore {
             .then((response) => {
                 this.devices = _.uniq(this.devices.concat(response.data.values), device => device.uuid);
                 this._prepareDevices();
-
                 if (this.devicesInitialTotalCount === null && groupId !== 'ungrouped') {
                     this.devicesInitialTotalCount = response.data.total;
                 }
-
                 this.devicesCurrentPage++;
                 this.devicesTotalCount = response.data.total;
                 this.devicesFetchAsync = handleAsyncSuccess(response);
-
             })
             .catch((error) => {
                 this.devicesFetchAsync = handleAsyncError(error);
             });
     }
 
-    fetchRememberedDevices(filter = '', groupId) {
-        resetAsync(this.devicesRememberedFetchAsync, true);
-        if (this.devicesFilter !== filter || this.devicesGroupFilter !== groupId) {
-            this.devicesTotalCount = null;
-            this.devicesCurrentPage = 0;
-            this.devices = [];
-            this.preparedDevices = [];
-        }
-        this.devicesFilter = filter;
-        this.devicesGroupFilter = groupId;
-        let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesCurrentPage * this.devicesLimit}`;
-        if (groupId && groupId === 'ungrouped')
-            apiAddress += `&ungrouped=true`;
-        else if (groupId)
-            apiAddress += `&groupId=${groupId}`;
-        return axios.get(apiAddress)
-            .then((response) => {
-                this.devices = _.uniq(this.devices.concat(response.data.values), device => device.uuid);
-                this._prepareDevices();
-                if (this.devicesInitialTotalCount === null) {
-                    this.devicesInitialTotalCount = response.data.total;
-                }
-                this.devicesCurrentPage++;
-                this.devicesTotalCount = response.data.total;
-                this.devicesRememberedFetchAsync = handleAsyncSuccess(response);
-            })
-            .catch((error) => {
-                this.devicesRememberedFetchAsync = handleAsyncError(error);
-            });
+    _increaseDeviceInitialTotalCount() {
+        this.devicesInitialTotalCount++;
     }
 
-    fetchDevicesAfterDragAndDrop(groupId) {
-        resetAsync(this.devicesFetchAfterDragAndDropAsync, true);
-        this.devicesTotalCount = null;
-        this.devicesCurrentPage = 0;
-        this.devices = [];
-        this.preparedDevices = [];
-        let apiAddress = `${API_DEVICES_SEARCH}?regex=&limit=${this.devicesLimit}&offset=${this.devicesCurrentPage * this.devicesLimit}`;
-        if (groupId && groupId === 'ungrouped')
-            apiAddress += `&ungrouped=true`;
-        else if (groupId)
-            apiAddress += `&groupId=${groupId}`;
-        return axios.get(apiAddress)
-            .then((response) => {
-                this.devices = response.data.values;
-                this._prepareDevices();
-                if (this.devicesInitialTotalCount === null) {
-                    this.devicesInitialTotalCount = response.data.total;
-                }
-                this.devicesCurrentPage++;
-                this.devicesTotalCount = response.data.total;
-                this.devicesFetchAfterDragAndDropAsync = handleAsyncSuccess(response);
-            })
-            .catch((error) => {
-                this.devicesFetchAfterDragAndDropAsync = handleAsyncError(error);
-            });
-    }
-
-    fetchDevicesAfterGroupCreation() {
-        this.devices = [];
-        this.preparedDevices = [];
-    }
-
-    fetchDevice(id, fetchTimes = null) {
+    fetchDevice(id) {
         resetAsync(this.devicesOneFetchAsync, true);
         let that = this;
         return axios.all([
@@ -294,41 +128,158 @@ export default class DevicesStore {
             });
     }
 
-    fetchDirectorAttributes(id) {
-        resetAsync(this.devicesDirectorAttributesFetchAsync, true);
-        return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
+    createMultiTargetUpdate(data, id) {
+        let updateObject = this._prepareUpdateObject(data);
+        resetAsync(this.mtuCreateAsync, true);
+        return axios.post(API_GET_MULTI_TARGET_UPDATE_INDENTIFIER, updateObject)
             .then((response) => {
-                let primary = _.filter(response.data, (data, index) => {
-                    return data.primary;
-                });
-                let secondary = _.filter(response.data, (data, index) => {
-                    return !data.primary;
-                });
-                extendObservable(this.device, {
-                    directorAttributes: {
-                        primary: _.first(primary),
-                        secondary: secondary
-                    }
-                });
-                this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
+                let updateIdentifier = response.data;
+                let status = null;
+                if(updateIdentifier.length) {
+                    let after = _.after(status === 'success', () => {
+                        this.fetchMultiTargetUpdates(id);
+                        this.mtuCreateAsync = handleAsyncSuccess(response);
+                    }, this);
+                    axios.put(API_CREATE_MULTI_TARGET_UPDATE + '/' + id + '/multi_target_update/' + updateIdentifier)
+                        .then(function(multiTargetResponse) {
+                            status = 'success';
+                            after();
+                        })
+                        .catch(function() {
+                            status = 'error';
+                            after();
+                        });
+                }
             })
             .catch((error) => {
-                this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
+                this.mtuCreateAsync = handleAsyncError(error);
             });
     }
 
+    _prepareUpdateObject(data) {
+        return {
+            targets: {
+                [data.hardwareId]: {
+                    to: {
+                        target: data.target,
+                        checksum: {
+                            method: "sha256",
+                            hash: data.hash
+                        },
+                        targetLength: data.targetLength
+                    },
+                    targetFormat: data.targetFormat,
+                    generateDiff: data.generateDiff
+                }
+            }
+        }
+    }
+
+    fetchMultiTargetUpdates(id) {
+        resetAsync(this.mtuFetchAsync, true);
+        return axios.get(API_FETCH_MULTI_TARGET_UPDATES + '/' + id + '/queue')
+            .then((response) => {
+                let data = response.data;
+                _.each(data, (item, index) => {
+                    item.device = id;
+                });
+                this.multiTargetUpdates = response.data;
+                this.multiTargetUpdatesSaved = _.uniq(this.multiTargetUpdates.concat(response.data), item => item.device);
+                this.mtuFetchAsync = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this.mtuFetchAsync = handleAsyncError(error);
+            });
+    }
+
+    cancelMtuUpdate(data) {
+        resetAsync(this.mtuCancelAsync, true);
+        return axios.post(API_CANCEL_MULTI_TARGET_UPDATE, data)
+            .then(function(response) {
+                this.mtuCancelAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function(error) {
+                this.mtuCancelAsync = handleAsyncError(error);
+            }.bind(this));
+    }    
+
+    fetchDevicesCount() {
+        resetAsync(this.devicesCountFetchAsync, true);
+        let that = this;
+        return axios.all([
+            axios.get(API_DEVICES_SEARCH),
+            axios.get(API_DIRECTOR_DEVICES_SEARCH),
+        ])
+            .then(axios.spread(function (all, director) {
+                let allDevicesCount = all.data.total;
+                that.directorDevicesCount = director.data.total;
+                that.directorDevicesIds = director.data.values;
+                that.devicesCountFetchAsync = handleAsyncSuccess(all);
+            }))
+            .catch((error) => {
+                that.devicesCountFetchAsync = handleAsyncError(error);
+            });
+    }    
+
+    fetchDirectorAttributes(id) {
+        let device = this._getDevice(id);
+        if(!_.isEmpty(this.device) && this.device.uuid === id) {
+            resetAsync(this.devicesDirectorAttributesFetchAsync, true);
+            return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
+                .then((response) => {
+                    let primary = _.filter(response.data, (data, index) => {
+                        return data.primary;
+                    });
+                    let secondary = _.filter(response.data, (data, index) => {
+                        return !data.primary;
+                    });
+                    extendObservable(this.device, {
+                        directorAttributes: {
+                            primary: _.first(primary),
+                            secondary: secondary
+                        }
+                    });
+                    this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
+                })
+                .catch((error) => {
+                    this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
+                });
+        } else if(device) {
+            resetAsync(this.devicesDirectorAttributesFetchAsync, true);
+            return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
+                .then((response) => {
+                    let primary = _.filter(response.data, (data, index) => {
+                        return data.primary;
+                    });
+                    let secondary = _.filter(response.data, (data, index) => {
+                        return !data.primary;
+                    });
+                    extendObservable(device, {
+                        directorAttributes: {
+                            primary: _.first(primary),
+                            secondary: secondary
+                        }
+                    });
+                    this.devicesDirectorAttributesFetchAsync = handleAsyncSuccess(response);
+                })
+                .catch((error) => {
+                    this.devicesDirectorAttributesFetchAsync = handleAsyncError(error);
+                });
+        }
+    }
+
     fetchPrimaryAndSecondaryFilepaths(id) {
-        resetAsync(this.devicesDirectorPrimaryAndSecondaryHashesFetchAsync, true);
+        resetAsync(this.devicesDirectorHashesFetchAsync, true);
         return axios.get(API_DEVICES_DIRECTOR_DEVICE + '/' + id)
             .then((response) => {
                 let filepaths = _.map(response.data, (item, i) => {
                     return item.image.filepath;
                 });
-                this.devicesDirectorPrimaryAndSecondaryHashesFetchAsync = handleAsyncSuccess(response);
+                this.devicesDirectorHashesFetchAsync = handleAsyncSuccess(response);
                 return filepaths;
             })
             .catch((error) => {
-                this.devicesDirectorPrimaryAndSecondaryHashesFetchAsync = handleAsyncError(error);
+                this.devicesDirectorHashesFetchAsync = handleAsyncError(error);
             });
     }
 
@@ -396,18 +347,15 @@ export default class DevicesStore {
 
     _reset() {
         resetAsync(this.devicesFetchAsync);
-        resetAsync(this.devicesInitialFetchAsync);
-        resetAsync(this.devicesRememberedFetchAsync);
-        resetAsync(this.devicesFetchAfterDragAndDropAsync);
-        resetAsync(this.devicesFetchAfterGroupCreationAsync);
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesCountFetchAsync);
         resetAsync(this.devicesDirectorAttributesFetchAsync);
-        resetAsync(this.devicesDirectorPrimaryAndSecondaryHashesFetchAsync);
+        resetAsync(this.devicesDirectorHashesFetchAsync);
         resetAsync(this.devicesCreateAsync);
         resetAsync(this.devicesRenameAsync);
-        resetAsync(this.multiTargetUpdateCreateAsync);
-        resetAsync(this.multiTargetUpdatesFetchAsync);
+        resetAsync(this.mtuCreateAsync);
+        resetAsync(this.mtuFetchAsync);
+        resetAsync(this.mtuCancelAsync);
         this.devices = [];
         this.devicesInitialTotalCount = null;
         this.devicesTotalCount = null;
@@ -416,10 +364,8 @@ export default class DevicesStore {
         this.devicesFilter = '';
         this.devicesSort = 'asc';
         this.device = {};
-        this.deviceUpdatesLogs = [];
         this.multiTargetUpdates = [];
         this.multiTargetUpdatesSaved = [];
-        this.legacyDevicesCount = 0;
         this.directorDevicesCount = 0;
         this.directorDevicesIds = [];
     }
@@ -454,10 +400,6 @@ export default class DevicesStore {
             else
                 return aName.localeCompare(bName);
         });
-    }
-
-    @computed get devicesCount() {
-        return this.devices.length;
     }
 
     @computed get lastDevices() {
