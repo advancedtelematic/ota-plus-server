@@ -29,7 +29,7 @@ class DependenciesModal extends Component {
       super(props);
       this.devicesFetchHandler = new AsyncStatusCallbackHandler(props.devicesStore, 'devicesFetchAsync', this.devicesFetched.bind(this));
       this.campaignsFetchHandler = new AsyncStatusCallbackHandler(props.campaignsStore, 'campaignsSafeFetchAsync', this.campaignsFetched.bind(this));
-      this.packagesFetchHandler = new AsyncStatusCallbackHandler(props.packagesStore, 'packagesTufFetchAsync', this.packagesFetched.bind(this));
+      this.packagesFetchHandler = new AsyncStatusCallbackHandler(props.packagesStore, 'packagesFetchAsync', this.packagesFetched.bind(this));
       this.onLinkMouseAction = this.onLinkMouseAction.bind(this);
       this.onLinkClick = this.onLinkClick.bind(this);
       this.getCampaignStatus = this.getCampaignStatus.bind(this);
@@ -49,7 +49,7 @@ class DependenciesModal extends Component {
         if(window.location.href.indexOf('/packages') > -1) {
           this.props.campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
         } else {
-          this.props.packagesStore.fetchTufPackages();
+          this.props.packagesStore.fetchPackages();
         }
       });
   }
@@ -145,7 +145,7 @@ class DependenciesModal extends Component {
     const { campaignsStore, devicesStore, packagesStore } = this.props;
     _.each(devicesStore.multiTargetUpdatesSaved, (mtuUpdate, i) => {
       let packageHash = mtuUpdate.targets[Object.keys(mtuUpdate.targets)[0]].image.fileinfo.hashes.sha256;
-      let pack = _.find(packagesStore.directorPackages, (pack) => {
+      let pack = _.find(packagesStore.packages, (pack) => {
         return pack.packageHash === packageHash;
       });
       this.packages.push(pack);
@@ -153,15 +153,15 @@ class DependenciesModal extends Component {
     _.each(devicesStore.devices, (device, i) => {
       let filepaths = device.installedFilepaths;
       _.each(filepaths, (filepath, index) => {
-        let pack = _.find(packagesStore.directorPackages, (pack) => {
-          return pack.imageName === filepath;
+        let pack = _.find(packagesStore.packages, (pack) => {
+          return pack.filepath === filepath;
         });
         if(!_.isUndefined(pack)) {
           this.packages.push(pack);
         }
       });
     });
-    this.packages = _.uniq(this.packages, pack => pack.imageName);
+    this.packages = _.uniq(this.packages, pack => pack.filepath);
     this.packages = _.sortBy(this.packages, pack => pack.id.name);
     this.formatData();
   }
@@ -183,7 +183,7 @@ class DependenciesModal extends Component {
       _.each(devicesStore.devices, (device, ind) => {
         let filepaths = device.installedFilepaths;
         _.each(filepaths, (filepath, index) => {
-          if(pack.imageName === filepath) {
+          if(pack.filepath === filepath) {
             let mtu = {
               type: 'history',
               device: device.uuid
@@ -389,7 +389,7 @@ class DependenciesModal extends Component {
 
       _.map(source, (item, index) => {
 
-        if(activeItemName === item.imageName) {
+        if(activeItemName === item.filepath) {
           itemsToHighlight.push(item);
         }
 
@@ -471,16 +471,16 @@ class DependenciesModal extends Component {
       let activeItemName = this.props.activeItemName;
 
       _.map(this.packages, (item, index) => {
-        if(activeItemName === item.imageName) {
+        if(activeItemName === item.filepath) {
           activePackages.push(item);
         }
 
         let pushedPackages = [];
         _.map(item.mtus, (mtu, i) => {
           _.map(mtu.campaigns, (campaign, i) => {
-            if(activeItemName === campaign.name && pushedPackages.indexOf(item.imageName) === -1) {
+            if(activeItemName === campaign.name && pushedPackages.indexOf(item.filepath) === -1) {
               activePackages.push(item);
-              pushedPackages.push(item.imageName);
+              pushedPackages.push(item.filepath);
             }
           });
         });

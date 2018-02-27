@@ -18,9 +18,9 @@ const deviceSource = {
         const dropResult = monitor.getDropResult();
         let selectedGroup = props.groupsStore.selectedGroup;
         if(selectedGroup.id) {
-            props.devicesStore.fetchDevicesAfterDragAndDrop(selectedGroup.id);
+            props.devicesStore.fetchDevices('', selectedGroup.id);
         } else {
-            props.devicesStore.fetchDevicesAfterDragAndDrop(null);
+            props.devicesStore.fetchDevices();
         }
     },
 };
@@ -38,7 +38,7 @@ class Item extends Component {
         super(props);
     }
     render() {
-        const { groupsStore, device, width, showRenameModal, goToDetails } = this.props;
+        const { groupsStore, device, width, goToDetails } = this.props;
         const { isDragging, connectDragSource } = this.props;
         const opacity = isDragging ? 0.4 : 1;
         const lastSeenDate = new Date(device.lastSeen);
@@ -89,7 +89,6 @@ Item.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     device: PropTypes.object.isRequired,
     width: PropTypes.number.isRequired,
-    showRenameModal: PropTypes.func.isRequired,
     goToDetails: PropTypes.func.isRequired,
     connectDragSource: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired,

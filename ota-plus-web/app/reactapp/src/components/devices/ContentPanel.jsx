@@ -24,7 +24,7 @@ export default class ContentPanel extends Component {
     }
 
     render() {
-        const {devicesStore, groupsStore, showRenameModal, changeSort, changeFilter } = this.props;
+        const {devicesStore, groupsStore, changeSort, changeFilter } = this.props;
         return (
             <div className="content-panel">
                 <ContentPanelHeader 
@@ -47,7 +47,7 @@ export default class ContentPanel extends Component {
                             devicesStore.fetchDevices(devicesStore.devicesFilter, devicesStore.devicesGroupFilter)
                         }}
                     >
-                        {devicesStore.devicesCount ?
+                        {devicesStore.devicesTotalCount ?
                             <div ref="innerContainer">
                                 {_.map(devicesStore.preparedDevices, (device) => {
                                     return (
@@ -56,19 +56,11 @@ export default class ContentPanel extends Component {
                                             devicesStore={devicesStore}
                                             device={device}
                                             width={this.boxWidth}
-                                            showRenameModal={showRenameModal}
                                             goToDetails={this.goToDetails}
                                             key={device.uuid}
                                         />
                                     );
                                 })}
-                                {devicesStore.devicesFetchAsync.isFetching ?
-                                    <div className="wrapper-center">
-                                        <Loader />
-                                    </div>
-                                :
-                                    null
-                                }
                             </div>
                         :
                             devicesStore.devicesFetchAsync.isFetching ?
@@ -76,21 +68,11 @@ export default class ContentPanel extends Component {
                                     <Loader />
                                 </div>
                             :
-                                devicesStore.devicesRememberedFetchAsync.isFetching ?
-                                    <div className="wrapper-center">
-                                        <Loader />
+                                <span className="content-empty">
+                                    <div className="wrapper-center font-big">
+                                        Oops, there are no devices to show.
                                     </div>
-                                :
-                                    devicesStore.devicesFetchAfterDragAndDropAsync.isFetching ?
-                                        <div className="wrapper-center">
-                                            <Loader />
-                                        </div>
-                                    :
-                                    <span className="content-empty">
-                                        <div className="wrapper-center font-big">
-                                            Oops, there are no devices to show.
-                                        </div>
-                                    </span>
+                                </span>
                         }
                     </InfiniteScroll>
                 </div>
@@ -106,7 +88,6 @@ ContentPanel.contextTypes = {
 ContentPanel.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     groupsStore: PropTypes.object.isRequired,
-    showRenameModal: PropTypes.func.isRequired,
     changeSort: PropTypes.func.isRequired,
     changeFilter: PropTypes.func.isRequired
 }

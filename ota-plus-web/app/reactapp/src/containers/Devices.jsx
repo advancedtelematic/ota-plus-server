@@ -4,53 +4,23 @@ import { observer } from 'mobx-react';
 import { FlatButton } from 'material-ui';
 import { Loader } from '../partials';
 import { resetAsync } from '../utils/Common';
-import { DevicesTooltip, DevicesCreateModal, DevicesRenameModal } from '../components/devices';
-import { GroupsCreateModal, GroupsRenameModal } from '../components/groups';
+import { DevicesCreateModal } from '../components/devices';
+import { GroupsCreateModal } from '../components/groups';
 import { DevicesGroupsPanel, DevicesContentPanel } from '../components/devices';
 
 @observer
 class Devices extends Component {
-    @observable tooltipShown = false;
     @observable createModalShown = false;
-    @observable renameModalShown = false;
     @observable createGroupModalShown = false;
-    @observable renameGroupModalShown = false;
-    @observable actionDeviceId = null;
-    @observable actionGroupId = null;
 
     constructor(props) {
         super(props);
-        this.showTooltip = this.showTooltip.bind(this);
-        this.hideTooltip = this.hideTooltip.bind(this);
-        this.showRenameModal = this.showRenameModal.bind(this);
-        this.hideRenameModal = this.hideRenameModal.bind(this);
         this.showCreateGroupModal = this.showCreateGroupModal.bind(this);
         this.hideCreateGroupModal = this.hideCreateGroupModal.bind(this);
-        this.showRenameGroupModal = this.showRenameGroupModal.bind(this);
-        this.hideRenameGroupModal = this.hideRenameGroupModal.bind(this);
         this.selectGroup = this.selectGroup.bind(this);
         this.onDeviceDrop = this.onDeviceDrop.bind(this);
         this.changeSort = this.changeSort.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
-    }
-    showTooltip(e) {
-        if(e) e.preventDefault();
-        this.tooltipShown = true;
-    }
-    hideTooltip(e) {
-        if(e) e.preventDefault();
-        this.tooltipShown = false;
-    }
-    showRenameModal(deviceId, e) {
-        if(e) e.preventDefault();
-        this.renameModalShown = true;
-        this.actionDeviceId = deviceId;
-    }
-    hideRenameModal(e) {
-        if(e) e.preventDefault();
-        this.renameModalShown = false;
-        this.actionDeviceId = null;
-        resetAsync(this.props.devicesStore.devicesRenameAsync);
     }
     showCreateGroupModal(e) {
         if(e) e.preventDefault();
@@ -60,17 +30,6 @@ class Devices extends Component {
         if(e) e.preventDefault();
         this.createGroupModalShown = false;
         resetAsync(this.props.groupsStore.groupsCreateAsync);
-    }
-    showRenameGroupModal(groupId, e) {
-        if(e) e.preventDefault();
-        this.renameGroupModalShown = true;
-        this.actionGroupId = groupId;
-    }
-    hideRenameGroupModal(e) {
-        if(e) e.preventDefault();
-        this.renameGroupModalShown = false;
-        this.actionGroupId = null;
-        resetAsync(this.props.groupsStore.groupsRenameAsync);
     }
     selectGroup(group) {
         const { devicesStore, groupsStore } = this.props;
@@ -109,15 +68,12 @@ class Devices extends Component {
                                     devicesStore={devicesStore}
                                     groupsStore={groupsStore}
                                     showCreateGroupModal={this.showCreateGroupModal}
-                                    showRenameGroupModal={this.showRenameGroupModal}
                                     selectGroup={this.selectGroup}
                                     onDeviceDrop={this.onDeviceDrop}
                                 />
                                 <DevicesContentPanel 
                                     devicesStore={devicesStore}
                                     groupsStore={groupsStore}
-                                    showRenameGroupModal={this.showRenameGroupModal}
-                                    showRenameModal={this.showRenameModal}
                                     changeSort={this.changeSort}
                                     changeFilter={this.changeFilter}
                                 />
@@ -130,28 +86,12 @@ class Devices extends Component {
                             </div>
                         </div>
                 }
-                <DevicesTooltip 
-                    shown={this.tooltipShown}
-                    hide={this.hideTooltip}
-                />
-                <DevicesRenameModal 
-                    shown={this.renameModalShown}
-                    hide={this.hideRenameModal}
-                    deviceId={this.actionDeviceId}
-                    devicesStore={devicesStore}
-                />
                 <GroupsCreateModal 
                     shown={this.createGroupModalShown}
                     hide={this.hideCreateGroupModal}
                     selectGroup={this.selectGroup}
                     groupsStore={groupsStore}
                     devicesStore={devicesStore}
-                />
-                <GroupsRenameModal 
-                    shown={this.renameGroupModalShown}
-                    hide={this.hideRenameGroupModal}
-                    groupId={this.actionGroupId}
-                    groupsStore={groupsStore}
                 />
             </span>
         );

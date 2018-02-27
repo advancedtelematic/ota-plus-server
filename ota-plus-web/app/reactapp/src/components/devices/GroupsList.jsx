@@ -33,10 +33,10 @@ class GroupsList extends Component {
         const { devicesStore, groupsStore } = this.props;
         const selectedGroup = groupsStore.selectedGroup;
         const groupId = selectedGroup.id || null;
-        devicesStore.fetchRememberedDevices(devicesStore.devicesFilter, groupId);        
+        devicesStore.fetchDevices(devicesStore.devicesFilter, groupId);        
     }
     render() {
-        const { devicesStore, groupsStore, showRenameGroupModal, selectGroup, onDeviceDrop } = this.props;
+        const { devicesStore, groupsStore, selectGroup, onDeviceDrop } = this.props;
         return (
             <div className="wrapper-groups">
             
@@ -81,7 +81,6 @@ class GroupsList extends Component {
                                 <GroupsListItem 
                                     group={group}
                                     groupsStore={groupsStore}
-                                    showRenameGroupModal={showRenameGroupModal}
                                     selectGroup={selectGroup}
                                     isSelected={isSelected}
                                     onDeviceDrop={onDeviceDrop}
@@ -100,7 +99,6 @@ class GroupsList extends Component {
 GroupsList.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     groupsStore: PropTypes.object.isRequired,
-    showRenameGroupModal: PropTypes.func.isRequired,
     selectGroup: PropTypes.func.isRequired,
     onDeviceDrop: PropTypes.func.isRequired,
 }

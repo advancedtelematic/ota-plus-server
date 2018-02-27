@@ -4,7 +4,6 @@ import { observer } from 'mobx-react';
 import NavigationDropdown from './NavigationDropdown';
 import SettingsDropdown from './SettingsDropdown';
 import OtaPlusTabs from './OtaPlusTabs';
-import AsyncResponse from './AsyncResponse';
 
 @observer
 class Navigation extends Component {
@@ -59,11 +58,6 @@ class Navigation extends Component {
                             garageNavigation
                         }
                     </div>
-                    <AsyncResponse 
-                        handledStatus="error"
-                        action={packagesStore.packagesFetchAsync}
-                        errorMsg={'Timeout: core packages not loaded, too many items to load'}
-                    />
                     <ul className="right-nav">
                         {window.atsGarageTheme ?
                             <span>

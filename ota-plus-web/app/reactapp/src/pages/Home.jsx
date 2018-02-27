@@ -19,12 +19,7 @@ class Home extends Component {
     }
     componentWillMount() {
         this.props.devicesStore.fetchDevices();
-        this.props.devicesStore.fetchDevicesCount();
-        if(this.props.isLegacyShown) {
-            this.props.packagesStore.fetchPackages();
-            this.props.campaignsStore.fetchLegacyCampaigns();
-        }
-        this.props.packagesStore.fetchTufPackages();
+        this.props.packagesStore.fetchPackages();
         this.props.campaignsStore.fetchCampaigns();
     }
     componentWillUnmount() {
@@ -86,7 +81,7 @@ class Home extends Component {
                                 />
                             </MetaData>
                         </div>
-                    :
+                :
                     <PreparationContainer
                         packagesStore={packagesStore}
                         userStore={userStore}

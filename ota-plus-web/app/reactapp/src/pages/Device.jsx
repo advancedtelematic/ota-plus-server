@@ -6,7 +6,7 @@ import _ from 'underscore';
 import { MetaData, FadeAnimation } from '../utils';
 import { Header } from '../partials';
 import { DeviceContainer } from '../containers';
-import { DeviceHeader, DeviceQueueModal } from '../components/device';
+import { DeviceHeader, DeviceQueueModal, DeviceSequencerModal } from '../components/device';
 
 const title = "Device";
 
@@ -14,34 +14,17 @@ const title = "Device";
 class Device extends Component {
     queueAnchorEl = null;
     @observable packagesReady = false;
+    @observable sequencerShown = false;
 
     constructor(props) {
         super(props);
-        this.cancelInstallation = this.cancelInstallation.bind(this);
         this.cancelMtuUpdate = this.cancelMtuUpdate.bind(this);
         this.selectEcu = this.selectEcu.bind(this);
+        this.showSequencer = this.showSequencer.bind(this);
+        this.hideSequencer = this.hideSequencer.bind(this);
 
-        this.deviceFetchHandler = observe(props.devicesStore, (change) => {
-            if(change.name === 'devicesOneFetchAsync' && !change.object[change.name].isFetching) {
-                if(props.devicesStore.device.isDirector) {
-                    props.packagesStore.fetchTufPackages();
-                    props.devicesStore.fetchMultiTargetUpdates(props.params.id);
-                } else {
-                    if(this.props.isLegacyShown) {
-                        props.packagesStore.fetchPackages();
-                    }
-                    props.packagesStore.fetchInitialDevicePackages(props.params.id);
-                    props.packagesStore.fetchBlacklist();
-                    props.packagesStore.fetchDeviceAutoInstalledPackages(props.params.id);
-                    props.packagesStore.fetchDevicePackagesQueue(props.params.id);
-                    props.packagesStore.fetchDevicePackagesHistory(props.params.id);
-                    props.packagesStore.fetchDevicePackagesUpdatesLogs(props.params.id);
-                }
-            }
-        });
-
-        this.tufPackagesFetchHandler = observe(props.packagesStore, (change) => {
-            if(change.name === 'packagesTufFetchAsync' && !change.object[change.name].isFetching) {
+        this.packagesFetchHandler = observe(props.packagesStore, (change) => {
+            if(change.name === 'packagesFetchAsync' && !change.object[change.name].isFetching) {
                 this.selectEcu(
                     props.devicesStore._getPrimaryHardwareId(), 
                     props.devicesStore._getPrimarySerial(), 
@@ -51,28 +34,27 @@ class Device extends Component {
                 this.packagesReady = true;
             }
         });
-
-        this.packagesFetchHandler = observe(props.packagesStore, (change) => {
-            if(change.name === 'packagesFetchAsync' && !change.object[change.name].isFetching) {
-                this.packagesReady = true;              
-            }
-        });
     }
     componentWillMount() {
         this.props.packagesStore.page = 'device';
         this.props.devicesStore.fetchDevice(this.props.params.id);
+        this.props.packagesStore.fetchPackages();
+        this.props.devicesStore.fetchMultiTargetUpdates(this.props.params.id);
     }
     componentWillUnmount() {
         this.props.devicesStore._reset();
         this.props.packagesStore._reset();
         this.props.hardwareStore._reset();
-        this.deviceFetchHandler();
-        this.tufPackagesFetchHandler();
         this.packagesFetchHandler();
     }
-    cancelInstallation(requestId) {
-        const { packagesStore } = this.props;
-        packagesStore.cancelInstallation(this.props.params.id, requestId);
+    showSequencer(e) {
+        if(e) e.preventDefault();
+        this.props.hideQueueModal();
+        this.sequencerShown = true;
+    }
+    hideSequencer(e) {
+        if(e) e.preventDefault();
+        this.sequencerShown = false;
     }
     cancelMtuUpdate(updateId) {
         const { devicesStore } = this.props;
@@ -99,7 +81,7 @@ class Device extends Component {
         } else {
              packagesStore.expandedPackage = expandedPackage;
         }
-        packagesStore.fetchDirectorDeviceAutoInstalledPackages(devicesStore.device.uuid, serial);
+        packagesStore.fetchAutoInstalledPackages(devicesStore.device.uuid, serial);
     }
     render() {
         const { 
@@ -136,7 +118,6 @@ class Device extends Component {
                             showQueueModal={showQueueModal}
                             selectEcu={this.selectEcu}
                             packagesReady={this.packagesReady}
-                            alphaPlusEnabled={alphaPlusEnabled}
                         />
                     </MetaData>
                     <DeviceQueueModal
@@ -144,12 +125,23 @@ class Device extends Component {
                         devicesStore={devicesStore}
                         shown={queueModalShown}
                         hide={hideQueueModal}
-                        cancelInstallation={this.cancelInstallation}
                         cancelMtuUpdate={this.cancelMtuUpdate}
                         activeTabId={activeTabId}
                         setQueueModalActiveTabId={setQueueModalActiveTabId}
                         anchorEl={this.queueAnchorEl}
+                        alphaPlusEnabled={alphaPlusEnabled}
+                        showSequencer={this.showSequencer}
                     />
+                    {this.sequencerShown ?
+                        <DeviceSequencerModal 
+                            shown={this.sequencerShown}
+                            hide={this.hideSequencer}
+                            campaignsStore={campaignsStore}
+                            devicesStore={devicesStore}
+                        />
+                    :
+                        null
+                    }
                 </div>
             </FadeAnimation>
         );

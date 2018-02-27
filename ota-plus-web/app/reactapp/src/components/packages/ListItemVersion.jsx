@@ -7,60 +7,8 @@ import { FlatButton } from 'material-ui';
 
 @observer
 class ListItemVersion extends Component {
-    @observable activeEditField = false;
-    @observable showEditButton = false;
-    @observable commentFieldLength = 0;
-    @observable comment = null;
-    @observable commentTmp = null;
-
     constructor(props) {
         super(props);
-        this.enableEditField = this.enableEditField.bind(this);
-        this.disableEditField = this.disableEditField.bind(this);
-        this.changeCommentFieldLength = this.changeCommentFieldLength.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-    componentWillMount() {
-        this.comment = this.props.version.description;
-        this.commentTmp = this.props.version.description;
-    }
-    componentWillReceiveProps(nextProps) {
-        this.comment = nextProps.version.description;
-        this.commentTmp = nextProps.version.description;
-    }
-    enableEditField(e) {
-        e.preventDefault();
-        this.activeEditField = true;
-        this.changeCommentFieldLength();
-    }
-    disableEditField(e) {
-        e.preventDefault();
-        let that = this;
-        setTimeout(function(){
-            if(document.activeElement.className.indexOf('accept-button') == -1) {
-                that.activeEditField = false;
-                that.commentTmp = that.comment;
-            }
-        }, 1);
-    }
-    changeCommentFieldLength() {
-        var val = this.refs.comment.value;
-        this.commentFieldLength = val.length;
-        this.commentTmp = val;
-    }
-    handleSubmit(e) {
-        e.preventDefault();
-        this.comment = this.refs.comment.value;
-        this.commentTmp = this.refs.comment.value;
-        this.activeEditField = false;
-        const data = {
-            name: this.props.version.id.name,
-            version: this.props.version.id.version,
-            details: {
-                description: this.refs.comment.value
-            }
-        };
-        this.props.packagesStore.updatePackageDetails(data);
     }
     openBlacklistModal(mode, e) {
         this.props.showBlacklistModal(this.props.version.id.name, this.props.version.id.version, mode);
@@ -81,15 +29,19 @@ class ListItemVersion extends Component {
                 borderLeft: '10px solid ' + version.color,
             };
         }
-        let compatibilityData = packagesStore.compatibilityData;
-        let versionCompatibilityData = _.find(compatibilityData, item => item.name === version.imageName);
+        let versionCompatibilityData = null;
         let requiredBy = [];
-        _.each(compatibilityData, (data, index) => {
-            let found = _.find(data.required, item => item === version.imageName);
-            if(found) {
-                requiredBy.push(data.name);
-            }
-        });
+        if(alphaPlusEnabled) {
+            let compatibilityData = packagesStore.compatibilityData;
+            versionCompatibilityData = _.find(compatibilityData, item => item.name === version.filepath);
+            _.each(compatibilityData, (data, index) => {
+                let found = _.find(data.required, item => item === version.filepath);
+                if(found) {
+                    requiredBy.push(data.name);
+                }
+            });
+        }
+        
         const directorBlock = (
             <span>
                 <div className="c-package__software-box" style={borderStyle}>
@@ -165,69 +117,14 @@ class ListItemVersion extends Component {
                     }                                   
                 </div>
                 <div className="c-package__show-dependencies">
-                    <div className="c-package__dependencies-icon" title="Show dependencies" onClick={showDependenciesModal.bind(this, version.imageName)}></div>
+                    <div className="c-package__dependencies-icon" title="Show dependencies" onClick={showDependenciesModal.bind(this, version.filepath)}></div>
                 </div>                
             </span>
         );
-        const legacyBlock = (
-            <span>
-                <div className="left-box">
-                    <span>
-                        <input 
-                            className="input-comment" 
-                            name="comment" 
-                            value={this.commentTmp} 
-                            type="text" 
-                            placeholder="Comment here." 
-                            ref="comment" 
-                            onKeyUp={this.changeCommentFieldLength} 
-                            onChange={this.changeCommentFieldLength} 
-                            onFocus={this.enableEditField} />
-                            {this.commentFieldLength > 0 && this.activeEditField ?
-                                <div className="action-buttons">
-                                    <a href="#" className="cancel-button" onClick={this.disableEditField}>
-                                        <img src="/assets/img/icons/close_icon.png" alt="" />
-                                    </a>
-                                    &nbsp;
-                                    <a href="#" className="accept-button" onClick={this.handleSubmit}>
-                                        <img src="/assets/img/icons/accept_icon.png" alt="" />
-                                    </a>
-                                </div>
-                            : 
-                                ''
-                            }
-                    </span>
-                </div>
-                <div className="right-box">
-                    <span title={version.id.version} className="version-name">
-                        {version.id.version}
-                    </span>
-                    {isBlacklisted ?
-                        <button 
-                            className="btn-blacklist edit" 
-                            onClick={this.openBlacklistModal.bind(this, 'edit')} 
-                            title="Edit blacklisted package version" 
-                            id={"button-edit-blacklisted-package-" + packageName + "-" + version.id.version}>
-                        </button>
-                    : 
-                        <button 
-                            className="btn-blacklist" 
-                            onClick={this.openBlacklistModal.bind(this, 'add')} 
-                            title="Blacklist package version" 
-                            id={"button-blacklist-package-" + packageName + "-" + version.id.version}>
-                        </button>
-                    }
-                </div>
-            </span>
-        );        
         return (
             <span>
                 <li className={"c-package__version-item" + (!alphaPlusEnabled ? " c-package__version-item--ident" : "") + (isBlacklisted ? " blacklist" : "")} id={"package-" + packageName + "-version"}>
-                    {version.inDirector ?
-                        directorBlock
-                    :
-                        legacyBlock
-                    }
+                    {directorBlock}
                 </li>
                 {alphaPlusEnabled ?
                     <div className={"c-package__manager" + 
@@ -239,7 +136,7 @@ class ListItemVersion extends Component {
                                     Requires:
                                 </div>
                                 {_.map(versionCompatibilityData.required, (filepath, i) => {
-                                    let pack = _.find(packagesStore.directorPackages, item => item.imageName === filepath);
+                                    let pack = _.find(packagesStore.packages, item => item.filepath === filepath);
                                     return (
                                         <div className="c-package__relation-item" key={i}>
                                             <span className="c-package__relation-name" id={"required-" + pack.id.name}>
@@ -260,7 +157,7 @@ class ListItemVersion extends Component {
                                     Not compatible:
                                 </div>
                                 {_.map(versionCompatibilityData.incompatibles, (filepath, i) => {
-                                    let pack = _.find(packagesStore.directorPackages, item => item.imageName === filepath);
+                                    let pack = _.find(packagesStore.packages, item => item.filepath === filepath);
                                     return (
                                         <div className="c-package__relation-item" key={i}>
                                             <span className="c-package__relation-name" id={"not-compatible-" + pack.id.name}>
@@ -281,7 +178,7 @@ class ListItemVersion extends Component {
                                     Required by:
                                 </div>
                                 {_.map(requiredBy, (filepath, i) => {
-                                    let pack = _.find(packagesStore.directorPackages, item => item.imageName === filepath);
+                                    let pack = _.find(packagesStore.packages, item => item.filepath === filepath);
                                     return (
                                         <div className="c-package__relation-item" key={i}>
                                             <span className="c-package__relation-name" id={"required-by-" + pack.id.version}>
@@ -295,7 +192,8 @@ class ListItemVersion extends Component {
                                 })}
                             </div>
                         :
-                            null}
+                            null
+                        }
                         {versionCompatibilityData ?
                             <div className="c-package__manage-dependencies c-package__manage-dependencies--small">
                                 <FlatButton

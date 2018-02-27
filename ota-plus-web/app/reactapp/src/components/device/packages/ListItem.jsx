@@ -7,7 +7,7 @@ class ListItem extends Component {
         super(props);
     }
     render() {
-        const { pack, device, queuedPackage, installedPackage, isSelected, togglePackage, toggleAutoInstall, toggleTufAutoInstall, showPackageDetails } = this.props;
+        const { pack, device, queuedPackage, installedPackage, isSelected, togglePackage, toggleTufAutoInstall, showPackageDetails } = this.props;
         return (
             <span className="wrapper-item">
                 {!pack.unmanaged ?
@@ -16,17 +16,13 @@ class ListItem extends Component {
                             <div className="name">
                                 {pack.packageName}
                             </div>
-                            {device.isDirector ?
-                                <div className="package-versions-nr" id="package-versions-nr">
-                                    {pack.versions.length === 1 ?
-                                        pack.versions.length + " version"
-                                    :
-                                        pack.versions.length + " versions"
-                                    }
-                                </div>
-                            :
-                                null
-                            }
+                            <div className="package-versions-nr" id="package-versions-nr">
+                                {pack.versions.length === 1 ?
+                                    pack.versions.length + " version"
+                                :
+                                    pack.versions.length + " versions"
+                                }
+                            </div>
                             {!isSelected ?
                                 queuedPackage ?
                                     <span>
@@ -67,10 +63,7 @@ class ListItem extends Component {
                             <div className="wrapper-auto-update">
                                 Automatic update
                                 <div className={"switch" + (pack.isAutoInstallEnabled ? " switchOn" : "")} id="auto-install-switch" onClick={
-                                    pack.inDirector ?
-                                        toggleTufAutoInstall.bind(this, pack.packageName, device.uuid, pack.isAutoInstallEnabled)
-                                    :                                    
-                                        toggleAutoInstall.bind(this, pack.packageName, device.uuid, pack.isAutoInstallEnabled)
+                                    toggleTufAutoInstall.bind(this, pack.packageName, device.uuid, pack.isAutoInstallEnabled)
                                 }>
                                     <div className="switch-status">
                                         {pack.isAutoInstallEnabled ?
@@ -97,7 +90,6 @@ class ListItem extends Component {
                             <div className="hash">
                                 Hash: {pack.hash}
                             </div>
-                            
                         </button>
                     </span>
             }
@@ -113,7 +105,6 @@ ListItem.propTypes = {
     installedPackage: PropTypes.string,
     isSelected: PropTypes.bool.isRequired,
     togglePackage: PropTypes.func.isRequired,
-    toggleAutoInstall: PropTypes.func.isRequired,
     toggleTufAutoInstall: PropTypes.func.isRequired,
     showPackageDetails: PropTypes.func.isRequired,
 }

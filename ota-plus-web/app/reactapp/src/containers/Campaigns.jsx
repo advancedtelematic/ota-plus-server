@@ -4,8 +4,6 @@ import { observer } from 'mobx-react';
 import { Loader, DependenciesModal } from '../partials';
 import { resetAsync } from '../utils/Common';
 import { 
-    CampaignsTooltip, 
-    CampaignsRenameModal,
     CampaignsList,
 } from '../components/campaigns';
 import { 
@@ -17,37 +15,38 @@ import _ from 'underscore';
 
 @observer
 class Campaigns extends Component {
-    @observable tooltipShown = false;
-    @observable renameModalShown = false;
-    @observable campaignIdToAction = null;
     @observable cancelGroupModalShown = false;
     @observable cancelCampaignModalShown = false;
     @observable updateRequestToCancel = {};
     @observable dependenciesModalShown = false;
     @observable activeCampaign = null;
 
+    @observable prevExpandedCampaignName = null;
+    @observable expandedCampaignName = null;
+
     constructor(props) {
         super(props);
-        this.showTooltip = this.showTooltip.bind(this);
-        this.hideTooltip = this.hideTooltip.bind(this);
-        this.hideRenameModal = this.hideRenameModal.bind(this);
         this.changeSort = this.changeSort.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
         this.showWizard = this.showWizard.bind(this);
-        this.showRenameModal = this.showRenameModal.bind(this);
         this.showCancelGroupModal = this.showCancelGroupModal.bind(this);
         this.hideCancelGroupModal = this.hideCancelGroupModal.bind(this);
         this.showCancelCampaignModal = this.showCancelCampaignModal.bind(this);
         this.hideCancelCampaignModal = this.hideCancelCampaignModal.bind(this);
         this.showDependenciesModal = this.showDependenciesModal.bind(this);
         this.hideDependenciesModal = this.hideDependenciesModal.bind(this);
+        this.toggleCampaign = this.toggleCampaign.bind(this);
+    }
+    toggleCampaign(campaignName, e) {
+        if(e) e.preventDefault();
+        this.prevExpandedCampaignName = this.expandedCampaignName;
+        this.expandedCampaignName = null;
+        let that = this;
+        setTimeout(() => {
+            that.expandedCampaignName = (campaignName !== that.prevExpandedCampaignName) ? campaignName : null;
+        }, 400);
     }
     showWizard(campaignId) {
-        this.campaignIdToAction = campaignId;
-    }
-    showRenameModal(campaignId, e) {
-        if(e) e.preventDefault();
-        this.renameModalShown = true;
         this.campaignIdToAction = campaignId;
     }
     showCancelGroupModal(updateRequest, e) {
@@ -80,20 +79,6 @@ class Campaigns extends Component {
         this.dependenciesModalShown = false;
         this.activeCampaign = null;
     }
-    showTooltip(e) {
-        if(e) e.preventDefault();
-        this.tooltipShown = true;
-    }
-    hideTooltip(e) {
-        if(e) e.preventDefault();
-        this.tooltipShown = false;
-    }
-    hideRenameModal(e) {
-        if(e) e.preventDefault();
-        this.renameModalShown = false;
-        this.campaignIdToAction = null;
-        resetAsync(this.props.campaignsStore.campaignsRenameAsync);
-    }    
     changeSort(sort, e) {
         if(e) e.preventDefault();
         this.props.campaignsStore._prepareCampaigns(this.props.campaignsStore.campaignsFilter, sort);
@@ -105,22 +90,23 @@ class Campaigns extends Component {
         const { campaignsStore, packagesStore, groupsStore, hardwareStore, devicesStore, addNewWizard, otaPlusMode, highlightedCampaign } = this.props;
         return (
             <span>
-                {campaignsStore.campaignsFetchAsync.isFetching || campaignsStore.campaignsLegacyFetchAsync.isFetching ?
+                {campaignsStore.campaignsFetchAsync.isFetching ?
                     <div className="wrapper-center">
                         <Loader />
                     </div>
-                : campaignsStore.overallCampaignsCount + campaignsStore.overallLegacyCampaignsCount ?
+                : campaignsStore.overallCampaignsCount ?
                     <CampaignsList
                         campaignsStore={campaignsStore}
                         groupsStore={groupsStore}
                         addNewWizard={addNewWizard}
                         showWizard={this.showWizard}
-                        showRenameModal={this.showRenameModal}
                         otaPlusMode={otaPlusMode}
                         highlightedCampaign={highlightedCampaign}
                         showCancelCampaignModal={this.showCancelCampaignModal}
                         showCancelGroupModal={this.showCancelGroupModal}
                         showDependenciesModal={this.showDependenciesModal}
+                        expandedCampaignName={this.expandedCampaignName}
+                        toggleCampaign={this.toggleCampaign}
                     />
                 :
                     <div className="wrapper-center">
@@ -138,16 +124,6 @@ class Campaigns extends Component {
                         </div>
                     </div>
                 }
-                <CampaignsTooltip 
-                    shown={this.tooltipShown}
-                    hide={this.hideTooltip}
-                />
-                <CampaignsRenameModal 
-                    shown={this.renameModalShown}
-                    hide={this.hideRenameModal}
-                    campaignsStore={campaignsStore}
-                    campaignId={this.campaignIdToAction}
-                />
                 <CampaignCancelCampaignModal
                     shown={this.cancelCampaignModalShown}
                     hide={this.hideCancelCampaignModal}

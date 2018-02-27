@@ -3,7 +3,6 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Loader, DependenciesModal } from '../partials';
 import { 
-    PackagesTooltip, 
     PackagesCreateModal,
     PackagesFileUploaderModal, 
     PackagesHeader, 
@@ -16,13 +15,11 @@ import _ from 'underscore';
 
 @observer
 class Packages extends Component {
-    @observable tooltipShown = false;
     @observable createModalShown = false;
     @observable fileUploaderModalShown = false;
     @observable fileDropped = null;
     @observable blacklistModalShown = false;
     @observable blacklistAction = {};
-    @observable uploadToTuf = true;
     @observable copied = false;
     @observable dependenciesModalShown = false;
     @observable dependenciesManagerShown = false;
@@ -31,8 +28,6 @@ class Packages extends Component {
 
     constructor(props) {
         super(props);
-        this.showTooltip = this.showTooltip.bind(this);
-        this.hideTooltip = this.hideTooltip.bind(this);
         this.showCreateModal = this.showCreateModal.bind(this);
         this.showFileUploaderModal = this.showFileUploaderModal.bind(this);
         this.hideCreateModal = this.hideCreateModal.bind(this);
@@ -40,23 +35,11 @@ class Packages extends Component {
         this.showBlacklistModal = this.showBlacklistModal.bind(this);
         this.hideBlacklistModal = this.hideBlacklistModal.bind(this);
         this.onFileDrop = this.onFileDrop.bind(this);
-        this.toggleTufUpload = this.toggleTufUpload.bind(this);
         this.handleCopy = this.handleCopy.bind(this);
         this.showDependenciesModal = this.showDependenciesModal.bind(this);
         this.hideDependenciesModal = this.hideDependenciesModal.bind(this);
         this.showDependenciesManager = this.showDependenciesManager.bind(this);
         this.hideDependenciesManager = this.hideDependenciesManager.bind(this);
-    }
-    componentWillMount() {
-        const { packagesStore } = this.props;
-    }
-    showTooltip(e) {
-        if(e) e.preventDefault();
-        this.tooltipShown = true;
-    }
-    hideTooltip(e) {
-        if(e) e.preventDefault();
-        this.tooltipShown = false;
     }
     showDependenciesModal(activeVersionFilepath, e) {
         if(e) e.preventDefault();
@@ -91,10 +74,6 @@ class Packages extends Component {
         if(e) e.preventDefault();
         this.fileUploaderModalShown = false;
     }
-    toggleTufUpload(e) {
-        if(e) e.preventDefault();
-        this.uploadToTuf = !this.uploadToTuf;
-    } 
     handleCopy(e) {
         if(e) e.preventDefault();
         this.copied = true;
@@ -126,12 +105,12 @@ class Packages extends Component {
         const { packagesStore, hardwareStore, highlightedPackage, featuresStore, devicesStore, campaignsStore, alphaPlusEnabled } = this.props;
         return (
             <span ref="component">
-                {packagesStore.overallPackagesCount === null || packagesStore.packagesFetchAsync.isFetching || packagesStore.packagesTufFetchAsync.isFetching ?
+                {packagesStore.packagesFetchAsync.isFetching ?
                     <div className="wrapper-center">
                         <Loader />
                     </div>
                 :
-                    packagesStore.overallPackagesCount ?
+                    packagesStore.packagesCount ?
                         <span>
                             <PackagesHeader
                                 showCreateModal={this.showCreateModal}
@@ -146,13 +125,6 @@ class Packages extends Component {
                                 showDependenciesModal={this.showDependenciesModal}
                                 showDependenciesManager={this.showDependenciesManager}
                             />
-                            {packagesStore.overallPackagesCount && packagesStore.packagesFetchAsync.isFetching ? 
-                                <div className="wrapper-loader">
-                                    <Loader />
-                                </div>
-                            :  
-                                null
-                            }
                         </span>
                     :
                         <div className="wrapper-center">
@@ -169,20 +141,18 @@ class Packages extends Component {
                             </div>
                         </div>
                 }
-                <PackagesTooltip 
-                    shown={this.tooltipShown}
-                    hide={this.hideTooltip}
-                />
-                <PackagesCreateModal 
-                    shown={this.createModalShown}
-                    hide={this.hideCreateModal}
-                    packagesStore={packagesStore}
-                    fileDropped={this.fileDropped}
-                    toggleTufUpload={this.toggleTufUpload}
-                    uploadToTuf={this.uploadToTuf}
-                    hardwareStore={hardwareStore}
-                    devicesStore={devicesStore}
-                />
+                {this.createModalShown ?
+                    <PackagesCreateModal 
+                        shown={this.createModalShown}
+                        hide={this.hideCreateModal}
+                        packagesStore={packagesStore}
+                        fileDropped={this.fileDropped}
+                        hardwareStore={hardwareStore}
+                        devicesStore={devicesStore}
+                    />
+                :
+                    null
+                }
                 {this.fileUploaderModalShown ?
                     <PackagesFileUploaderModal 
                         shown={this.fileUploaderModalShown}

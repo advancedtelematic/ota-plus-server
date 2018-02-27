@@ -156,16 +156,12 @@ class Wizard extends Component {
         this.changeFilter = this.changeFilter.bind(this);
         this.handleMultiTargetUpdateCreated = this.handleMultiTargetUpdateCreated.bind(this);
         this.handleCampaignCreated = this.handleCampaignCreated.bind(this);
-        this.handleLegacyCampaignCreated = this.handleLegacyCampaignCreated.bind(this);
-        this.handleLegacyCampaignPackageSaved = this.handleLegacyCampaignPackageSaved.bind(this);
-        this.handleLegacyCampaignGroupsSaved = this.handleLegacyCampaignGroupsSaved.bind(this);
         this.selectVersion = this.selectVersion.bind(this);
         this.setRawSelectedPacks = this.setRawSelectedPacks.bind(this);
         this.removeSelectedPacksByKeys = this.removeSelectedPacksByKeys.bind(this);
-        this.handleLegacyCampaignLaunched = this.handleLegacyCampaignLaunched.bind(this);
 
         this.multiTargetUpdateCreatedHandler = observe(props.campaignsStore, (change) => {
-            if(change.name === 'campaignsMultiTargetUpdateCreateAsync' && change.object[change.name].isFetching === false) {
+            if(change.name === 'campaignsMtuCreateAsync' && change.object[change.name].isFetching === false) {
                 let wizardMinimized = _.find(props.minimizedWizards, (wizard, index) => {
                     return wizard.id === props.wizardIdentifier;
                 });
@@ -186,48 +182,6 @@ class Wizard extends Component {
                 }
             }
         });
-        this.legacyCampaignCreatedHandler = observe(props.campaignsStore, (change) => {
-            if(change.name === 'campaignsLegacyCreateAsync' && change.object[change.name].isFetching === false) {
-                 let wizardMinimized = _.find(props.minimizedWizards, (wizard, index) => {
-                    return wizard.id === props.wizardIdentifier;
-                });
-                if(!wizardMinimized) {
-                    if(change.object[change.name].status !== 'error') {
-                        this.handleLegacyCampaignCreated();
-                    }
-                }
-            }
-        });
-        this.legacyCampaignSavePackageHandler = observe(props.campaignsStore, (change) => {
-            if(change.name === 'campaignsPackageSaveAsync' && change.object[change.name].isFetching === false) {
-                 let wizardMinimized = _.find(props.minimizedWizards, (wizard, index) => {
-                    return wizard.id === props.wizardIdentifier;
-                });
-                if(!wizardMinimized) {
-                    this.handleLegacyCampaignPackageSaved();
-                }
-            }
-        });
-        this.legacyCampaignSaveGroupsHandler = observe(props.campaignsStore, (change) => {
-            if(change.name === 'campaignsGroupsSaveAsync' && change.object[change.name].isFetching === false) {
-                 let wizardMinimized = _.find(props.minimizedWizards, (wizard, index) => {
-                    return wizard.id === props.wizardIdentifier;
-                });
-                if(!wizardMinimized) {
-                    this.handleLegacyCampaignGroupsSaved();
-                }
-            }
-        });
-        this.legacyCampaignLaunchHandler = observe(props.campaignsStore, (change) => {
-            if(change.name === 'campaignsLegacyLaunchAsync' && change.object[change.name].isFetching === false) {
-                 let wizardMinimized = _.find(props.minimizedWizards, (wizard, index) => {
-                    return wizard.id === props.wizardIdentifier;
-                });
-                if(!wizardMinimized) {
-                    this.handleLegacyCampaignLaunched();
-                }
-            }
-        });
     }
 
     componentWillMount() {
@@ -240,10 +194,6 @@ class Wizard extends Component {
     componentWillUnmount() {
         this.multiTargetUpdateCreatedHandler();
         this.campaignCreatedHandler();
-        this.legacyCampaignCreatedHandler();
-        this.legacyCampaignSavePackageHandler();
-        this.legacyCampaignSaveGroupsHandler();
-        this.legacyCampaignLaunchHandler();
     }
     
     addToCampaign(packName, e) {
@@ -273,9 +223,9 @@ class Wizard extends Component {
         if(_.isUndefined(this.versions[data.packageName])) {
             this.versions[data.packageName] = {};
         }
-        let hash = data.imageName;
+        let hash = data.filepath;
         _.each(this.props.packagesStore.packages, (pack, index) => {
-            if(pack.imageName === data.imageName) {
+            if(pack.filepath === data.filepath) {
                 hash = pack.packageHash;
             }
         });
@@ -284,7 +234,7 @@ class Wizard extends Component {
         _.each(this.props.packagesStore.preparedPackages, (packs, letter) => {
             _.each(packs, (pack, index) => {
                 _.each(pack.versions, (version, i) => {
-                    if(version.id.name === data.imageName) {
+                    if(version.id.name === data.filepath) {
                         changedPackage = pack;
                         this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].from = null : null;
                         this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].fromFilepath = null : null;
@@ -297,7 +247,7 @@ class Wizard extends Component {
             case 'from':                
                 this.versions[data.packageName] = {
                     from: hash, 
-                    fromFilepath: data.imageName,
+                    fromFilepath: data.filepath,
                     to: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].to : null,
                     toFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toFilepath : null,
                     toPackageName: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].toPackageName : null,
@@ -309,7 +259,7 @@ class Wizard extends Component {
             case 'to':
                 this.versions[data.packageName] = {
                     to: hash, 
-                    toFilepath: data.imageName,
+                    toFilepath: data.filepath,
                     from: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].from : null,
                     toPackageName: data.packageName,
                     fromFilepath: this.wizardData[2].versions[data.packageName] ? this.wizardData[2].versions[data.packageName].fromFilepath : null,
@@ -391,54 +341,43 @@ class Wizard extends Component {
         let packages = this.wizardData[1].packages;
         let updates = this.wizardData[2].versions;
         let updateData = [];
-
-        if(_.first(packages).inDirector) {
-            _.each(updates, (update, packageName) => {
-                let fromHash = null;
-                let toHash = null;
-                let targetFormat = null;
-                let fromTargetLength = null;
-                let toTargetLength = null;
-                let packages = this.props.packagesStore.packages;
-                _.each(packages, (pack, index) => {
-                    if(pack.inDirector) {
-                        if(pack.imageName === update.fromFilepath) {
-                            fromTargetLength = pack.targetLength;
-                            fromHash = pack.packageHash;
-                        }
-                        if(pack.imageName === update.toFilepath) {                    
-                            toTargetLength = pack.targetLength;
-                            toHash = pack.packageHash;
-                        }
-                        if(pack.id.name === packageName) {
-                            targetFormat = pack.targetFormat;
-                        }
-                    }
-                });
-                updateData.push({
-                    hardwareId: update.hardwareId,
-                    from: {
-                        target: update.fromFilepath,
-                        targetLength: fromTargetLength,
-                        hash: fromHash
-                    },
-                    to: {
-                        target: update.toFilepath,
-                        targetLength: toTargetLength,
-                        hash: toHash
-                    },
-                    targetFormat: targetFormat,
-                    generateDiff: false
-                });
+        _.each(updates, (update, packageName) => {
+            let fromHash = null;
+            let toHash = null;
+            let targetFormat = null;
+            let fromTargetLength = null;
+            let toTargetLength = null;
+            let packages = this.props.packagesStore.packages;
+            _.each(packages, (pack, index) => {
+                if(pack.filepath === update.fromFilepath) {
+                    fromTargetLength = pack.targetLength;
+                    fromHash = pack.packageHash;
+                }
+                if(pack.filepath === update.toFilepath) {                    
+                    toTargetLength = pack.targetLength;
+                    toHash = pack.packageHash;
+                }
+                if(pack.id.name === packageName) {
+                    targetFormat = pack.targetFormat;
+                }
             });
-            this.props.campaignsStore.createMultiTargetUpdate(updateData);
-        } else {
-            let pack = _.first(packages);
-            let data = {
-                name: this.wizardData[0].name
-            };
-            this.props.campaignsStore.createLegacyCampaign(data);
-        }
+            updateData.push({
+                hardwareId: update.hardwareId,
+                from: {
+                    target: update.fromFilepath,
+                    targetLength: fromTargetLength,
+                    hash: fromHash
+                },
+                to: {
+                    target: update.toFilepath,
+                    targetLength: toTargetLength,
+                    hash: toHash
+                },
+                targetFormat: targetFormat,
+                generateDiff: false
+            });
+        });
+        this.props.campaignsStore.createMultiTargetUpdate(updateData);        
     }
     handleMultiTargetUpdateCreated() {
         let updateId = this.props.campaignsStore.campaignData.mtuId;
@@ -459,34 +398,11 @@ class Wizard extends Component {
         this.props.hideWizard(this.props.wizardIdentifier);
         this.props.campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
     }
-    handleLegacyCampaignCreated() {
-        let pack = _.first(this.wizardData[1].packages);
-        let version = this.wizardData[2].versions[pack.packageName].to;
-        let packageData = {
-            name: pack.packageName,
-            version: version
-        };
-        this.props.campaignsStore.savePackageForCampaign(this.props.campaignsStore.campaignData.campaignId, packageData);
-    }
-    handleLegacyCampaignPackageSaved() {
-        let groupsData = this.wizardData[3];
-        let groupIds = _.map(groupsData.groups, (group, index) => {
-            return group.id;
-        });
-        this.props.campaignsStore.saveGroupsForCampaign(this.props.campaignsStore.campaignData.campaignId, {groups: groupIds });
-    }
-    handleLegacyCampaignGroupsSaved() {
-        this.props.campaignsStore.launchLegacyCampaign(this.props.campaignsStore.campaignData.campaignId);
-    }
-    handleLegacyCampaignLaunched() {
-        this.props.hideWizard(this.props.wizardIdentifier);
-        this.props.campaignsStore.fetchLegacyCampaigns('campaignsLegacySafeFetchAsync');
-    }
     changeFilter(filterValue) {
         this.filterValue = filterValue;
     }
     render() {
-        const { campaignsStore, packagesStore, groupsStore, hardwareStore, wizardIdentifier, hideWizard, toggleWizard, minimizedWizards, isLegacyShown } = this.props;
+        const { campaignsStore, packagesStore, groupsStore, hardwareStore, wizardIdentifier, hideWizard, toggleWizard, minimizedWizards } = this.props;
         const currentStep = this.wizardSteps[this.currentStepId];
 
         let wizardMinimized = _.find(minimizedWizards, (wizard, index) => {
@@ -534,7 +450,6 @@ class Wizard extends Component {
                                                 setRawSelectedPacks: this.setRawSelectedPacks,
                                                 rawSelectedPacks: this.rawSelectedPacks,
                                                 removeSelectedPacksByKeys: this.removeSelectedPacksByKeys,
-                                                isLegacyShown: isLegacyShown,
                                                 addToCampaign: this.addToCampaign,                                                
                                             })
                                         }
