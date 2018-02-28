@@ -9,7 +9,7 @@ import play.api.Configuration
 trait NamespaceProvider extends (Tokens => Namespace)
 
 class NamespaceFromIdentity extends NamespaceProvider {
-  override def apply(tokens: Tokens): Namespace = Namespace(tokens.idToken.claims.userId.id)
+  override def apply(tokens: Tokens): Namespace = Namespace(tokens.idToken.userId.id)
 }
 
 class ConfiguredNamespace @Inject()(configuration: Configuration) extends NamespaceProvider {

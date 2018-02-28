@@ -1,10 +1,14 @@
 package com.advancedtelematic.controllers
 
+import java.time.Instant
+import java.time.temporal.ChronoUnit
+
 import cats.syntax.show._
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport, RemoteApiError}
 import javax.inject.{Inject, Singleton}
 
-import com.advancedtelematic.auth.{AccessToken, ApiAuthAction, AuthenticatedAction}
+import com.advancedtelematic.auth.{AccessToken, AccessTokenBuilder, ApiAuthAction, AuthenticatedAction}
+import com.advancedtelematic.auth.oidc.OidcGateway
 import org.genivi.sota.data.Uuid
 import play.api.Configuration
 import play.api.libs.functional.syntax._
@@ -22,13 +26,15 @@ class UserProfileController @Inject()(val conf: Configuration,
                                       val ws: WSClient,
                                       val clientExec: ApiClientExec,
                                       authAction: ApiAuthAction,
+                                      accessTokenBuilder: AccessTokenBuilder,
+                                      oidcGateway: OidcGateway,
                                       components: ControllerComponents)(implicit exec: ExecutionContext)
     extends AbstractController(components)
     with ApiClientSupport {
 
   def getUserProfile: Action[AnyContent] = authAction.async { request =>
-    val claims = request.idToken.claims
     val fut = for {
+      claims  <- oidcGateway.getUserInfo(request.accessToken)
       profile <- userProfileApi.getUser(claims.userId)
     } yield {
       val displayName = ((profile \ "displayName").validateOpt[String] match {
@@ -59,7 +65,8 @@ class UserProfileController @Inject()(val conf: Configuration,
 
   val changePassword: Action[AnyContent] = authAction.async { request =>
     for {
-      _ <- auth0Api.changePassword(request.idToken.claims.email)
+      claims <- oidcGateway.getUserInfo(request.accessToken)
+      _      <- auth0Api.changePassword(claims.email)
     } yield Ok(EmptyContent())
   }
 
@@ -67,15 +74,16 @@ class UserProfileController @Inject()(val conf: Configuration,
     import com.advancedtelematic.JsResultSyntax._
     (request.body \ "name").validate[String].toEither match {
       case Right(newName) =>
-        userProfileApi.updateDisplayName(request.idToken.claims.userId, newName).map { _ =>
-          val claims = request.idToken.claims
-          Ok(
-            Json.obj(
-              "fullName" -> newName,
-              "email"    -> claims.email,
-              "picture"  -> claims.picture
+        userProfileApi.updateDisplayName(request.idToken.userId, newName).flatMap { _ =>
+          oidcGateway.getUserInfo(request.accessToken).map { claims =>
+            Ok(
+              Json.obj(
+                "fullName" -> newName,
+                "email"    -> claims.email,
+                "picture"  -> claims.picture
+              )
             )
-          )
+          }
         }
 
       case Left(err) =>
@@ -84,13 +92,13 @@ class UserProfileController @Inject()(val conf: Configuration,
   }
 
   def updateBillingInfo(): Action[JsValue] = authAction.async(components.parsers.json) { request =>
-    userProfileApi.updateBillingInfo(request.idToken.claims.userId, request.queryString, request.body)
+    userProfileApi.updateBillingInfo(request.idToken.userId, request.queryString, request.body)
   }
 
   implicit val featureW: Writes[FeatureName] = Writes.StringWrites.contramap(_.get)
 
   def getFeatures(): Action[AnyContent] = authAction.async { request =>
-    val userId = request.idToken.claims.userId
+    val userId = request.idToken.userId
     userProfileApi
       .getFeatures(userId)
       .map { features =>
@@ -106,8 +114,9 @@ class UserProfileController @Inject()(val conf: Configuration,
   val apiDomain = conf.get[String]("api.domain")
 
   def activateFeature(feature: FeatureName): Action[AnyContent] = authAction.async { request =>
-    val userId = request.idToken.claims.userId
-    val token  = request.accessToken
+    val userId = request.idToken.userId
+    val token  = accessTokenBuilder.mkToken(userId.id, Instant.now().plus(1, ChronoUnit.MINUTES),
+      Set("client.register", s"namespace.${userId.id}"))
 
     def activateFeatureWithClientId =
       for {
@@ -133,7 +142,7 @@ class UserProfileController @Inject()(val conf: Configuration,
   }
 
   def getFeatureClient(feature: FeatureName): Action[AnyContent] = authAction.async { request =>
-    val userId = request.idToken.claims.userId
+    val userId = request.idToken.userId
     val token  = request.accessToken
 
     userProfileApi.getFeature(userId, feature).flatMap { f =>

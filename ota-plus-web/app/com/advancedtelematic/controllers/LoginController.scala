@@ -7,13 +7,12 @@ import akka.Done
 import akka.actor.ActorSystem
 import com.advancedtelematic.PlayMessageBusPublisher
 import com.advancedtelematic.api.UnexpectedResponse
-import com.advancedtelematic.auth.{AccessToken, AuthPlusConfig, IdToken, LoginAction, LogoutAction,
-  OAuthConfig, SessionCodecs, TokenExchange, Tokens, UiAuthAction}
-import com.advancedtelematic.auth.oidc.NamespaceProvider
+import com.advancedtelematic.auth.{AccessToken, AuthPlusConfig, IdToken, LoginAction, LogoutAction, OAuthConfig, SessionCodecs, TokenExchange, Tokens, UiAuthAction}
+import com.advancedtelematic.auth.oidc.{NamespaceProvider, OidcGateway}
 import com.advancedtelematic.libats.messaging_datatype.MessageLike
 import play.api.{Configuration, Logger}
 import play.api.http.{HeaderNames, MimeTypes}
-import play.api.libs.json.{JsResult, JsValue, Json}
+import play.api.libs.json.{Json, JsResult, JsValue}
 import play.api.libs.ws.{WSAuthScheme, WSClient, WSResponse}
 import play.api.mvc._
 import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
@@ -61,6 +60,7 @@ class LoginController @Inject()(components: ControllerComponents,
   */
 @Singleton
 class OAuthOidcController @Inject()(
+    oidcGateway: OidcGateway,
     messageBus: PlayMessageBusPublisher,
     conf: Configuration,
     ws: WSClient,
@@ -105,10 +105,10 @@ class OAuthOidcController @Inject()(
 
     def onAuthzCode(code: String): Future[Result] = {
       val loginResult = for {
-        tokens                       <- exchangeCodeForTokens(code)
+        tokens                       <- oidcGateway.exchangeCodeForTokens(code)
         newTokens @ Tokens(accessToken, idToken) <- tokenExchange.run(tokens)
         ns = namespaceProvider.apply(newTokens)
-        _ <- publishLoginEvent(idToken.claims.userId)
+        _ <- publishLoginEvent(idToken.userId)
       } yield
         Redirect(com.advancedtelematic.controllers.routes.Application.index()).withSession(
           "namespace"    -> ns.get,
@@ -130,35 +130,4 @@ class OAuthOidcController @Inject()(
     }
   }
 
-  def exchangeCodeForTokens(code: String): Future[Tokens] = {
-    def extractTokens(response: WSResponse): Future[Tokens] = {
-      val tokenOrError = for {
-        json        <- extractPayload(response)
-        idToken     <- JsResult.toTry((json \ "id_token").validate[String]).flatMap(IdToken.fromTokenValue)
-        accessToken <- JsResult.toTry(json.validate[AccessToken](AccessToken.FromTokenResponseReads))
-      } yield Tokens(accessToken, idToken)
-      Future.fromTry(tokenOrError)
-    }
-
-    val tokenEndpoint = s"https://${oauthConfig.domain}/oauth/token"
-    ws.url(tokenEndpoint)
-      .withHttpHeaders(HeaderNames.ACCEPT -> MimeTypes.JSON)
-      .post(
-        Json.obj(
-          "client_id"     -> oauthConfig.clientId,
-          "client_secret" -> oauthConfig.secret,
-          "redirect_uri"  -> oauthConfig.callbackURL,
-          "code"          -> code,
-          "grant_type"    -> "authorization_code"
-        )
-      )
-      .flatMap(extractTokens)
-  }
-
-  private[this] def extractPayload(response: WSResponse): Try[JsValue] =
-    if (response.status != ResponseStatusCodes.OK_200) {
-      Failure(UnexpectedResponse(response))
-    } else {
-      Try(response.json)
-    }
 }
