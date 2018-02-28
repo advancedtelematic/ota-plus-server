@@ -12,7 +12,7 @@ object AuthUtils {
   implicit class RequestSyntax[A](request: FakeRequest[A]) {
     def withAuthSession(ns: String): FakeRequest[A] = {
       request.withSession(
-        "id_token"               -> TokenUtils.identityTokenFor(ns).value,
+        "id_token"               -> TokenUtils.identityTokenFor(ns),
         "access_token"           -> Json.toJson(AccessToken("XXXX", Instant.now().plusSeconds(3600))).toString(),
         "auth_plus_access_token" -> "",
         "namespace"              -> ns)

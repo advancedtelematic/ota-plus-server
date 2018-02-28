@@ -1,35 +1,42 @@
 package com.advancedtelematic
 
-import java.nio.charset.StandardCharsets
-import javax.crypto.SecretKey
-import javax.crypto.spec.SecretKeySpec
+import java.security.{KeyPair, KeyPairGenerator, PrivateKey}
 
 import com.advancedtelematic.auth.{AccessToken, TokenVerification}
-import com.advancedtelematic.jwa.HS256
-import com.advancedtelematic.jws.{CompactSerialization, JwsPayload}
-import play.api.libs.json.Json
+import org.jose4j.jws.{AlgorithmIdentifiers, JsonWebSignature}
+import play.api.libs.json.{JsObject, Json}
 
 import scala.concurrent.Future
-import scala.util.Random
 
 object TokenUtils {
+  def genKeyPair(): KeyPair = {
+    KeyPairGen.generateKeyPair()
+  }
 
-  def identityTokenFor(subj: String): CompactSerialization = {
-    val payload = Json
-      .stringify(Json.obj(
-        "email" -> "provisioning.spec@advancedtelematic.com",
-        "sub" -> subj,
-        "name" -> "Morty Smith",
-        "picture" -> "http://mypicture.domain/xxx"
-      ))
-      .getBytes(StandardCharsets.UTF_8)
-    import com.advancedtelematic.json.signature.JcaSupport._
+  private val KeyPairGen = {
+    val kpg = KeyPairGenerator.getInstance("RSA")
+    kpg.initialize(2048)
+    kpg
+  }
 
-    val HmacKeySize    = 32
-    val bytes          = Array.fill[Byte](HmacKeySize)(Random.nextInt().toByte)
-    val key: SecretKey = new SecretKeySpec(bytes, "HmacSHA256")
-    val keyInfo        = HS256.signingKey(key).right.get
-    CompactSerialization(HS256.withKey(JwsPayload(payload), keyInfo))
+  def identityTokenFor(subj: String, secretKey: PrivateKey, keyId: String): String = {
+    val payload = Json.obj(
+      "sub"     -> subj
+    )
+    signToken(payload, secretKey, keyId)
+  }
+
+  def identityTokenFor(subj: String): String = {
+    identityTokenFor(subj, genKeyPair().getPrivate, "secret")
+  }
+
+  def signToken(claims: JsObject, secret: PrivateKey, keyId: String): String = {
+    val signer = new JsonWebSignature()
+    signer.setAlgorithmHeaderValue(AlgorithmIdentifiers.RSA_USING_SHA512)
+    signer.setKey(secret)
+    signer.setKeyIdHeaderValue(keyId)
+    signer.setPayload(Json.stringify(claims))
+    signer.getCompactSerialization
   }
 
   class NoVerification extends TokenVerification {

@@ -9,9 +9,9 @@ import play.api.libs.json.{Format, JsPath, JsResult, Json, Reads}
 
 import scala.util.{Failure, Success, Try}
 
-final case class IdentityClaims(userId: UserId, name: String, picture: String, email: String)
+final case class IdentityClaims(userId: UserId, name: String, picture: Option[String], email: String)
 
-sealed abstract case class IdToken(value: String, claims: IdentityClaims)
+sealed abstract case class IdToken(value: String, userId: UserId)
 
 final case class AccessToken(value: String, expiresAt: Instant)
 
@@ -22,8 +22,8 @@ object AccessToken {
     import play.api.libs.functional.syntax._
     (
       (JsPath \ "access_token").read[String] and
-        (JsPath \ "expires_in").read[Long].map(x => Instant.now().plusSeconds(x))
-      )(AccessToken.apply _)
+      (JsPath \ "expires_in").read[Long].map(x => Instant.now().plusSeconds(x))
+    )(AccessToken.apply _)
     // format: on
   }
 }
@@ -36,19 +36,11 @@ object IdToken {
 
   import play.api.libs.functional.syntax._
 
-  private[this] implicit val UserIdFormat: Format[UserId] = implicitly[Format[String]].inmap[UserId](UserId, _.id)
+  private[auth] implicit val subjClaimFormat = (JsPath \ "sub").format[String].inmap[UserId](UserId, _.id)
 
-  // format: off
-  private[this] implicit val identityClaimsFormat: Format[IdentityClaims] = (
-    (JsPath \ "sub").format[UserId] and
-    (JsPath \ "name").format[String] and
-    (JsPath \ "picture").format[String] and
-    (JsPath \ "email").format[String]
-  )(IdentityClaims.apply, unlift(IdentityClaims.unapply))
-  // format: on
 
   def from(id: String, name: String, pic: String, email: String): IdToken = {
-    val claims = IdentityClaims(UserId(id), name, pic, email)
+    val claims = UserId(id)
 
     val payload = Json.toBytes(Json.toJson(claims))
 
@@ -57,7 +49,7 @@ object IdToken {
          |${Base64Url(payload).underlying}.
          |${Base64Url("https://sig".getBytes()).underlying}""".stripMargin
 
-    new IdToken(value, claims) {}
+    new IdToken(value, UserId(id)) {}
   }
 
   def fromTokenValue(tokenValue: String): Try[IdToken] = {
@@ -66,7 +58,7 @@ object IdToken {
         .parse(tokenValue)
         .fold[Try[CompactSerialization]](x => Failure(JwsParseError(x)), Success(_))
       json   <- Try(Json.parse(cs.encodedPayload.stringData()))
-      claims <- JsResult.toTry(json.validate[IdentityClaims])
-    } yield new IdToken(tokenValue, claims) {}
+      userId <- JsResult.toTry(json.validate[UserId](subjClaimFormat))
+    } yield new IdToken(tokenValue, userId) {}
   }
 }

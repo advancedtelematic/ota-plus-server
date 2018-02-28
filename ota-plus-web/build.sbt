@@ -34,15 +34,17 @@ bashScriptExtraDefines ++= Seq("""addJava "-Xmx800m"""")
 
 dependencyOverrides ++= Dependencies.Netty
 
-libraryDependencies ++= Seq (
-    ws,
-    guice,
-    Dependencies.PlayJson,
-    Dependencies.LibTuf
-    ) ++
-  Dependencies.TestFrameworks ++
-  Dependencies.SotaCommon ++
-  Dependencies.LibAts
+libraryDependencies ++= Seq(
+  ws,
+  guice,
+  cacheApi,
+  Dependencies.LibTuf,
+  Dependencies.jose4j,
+  Dependencies.HereOauthClient
+) ++
+Dependencies.TestFrameworks ++
+Dependencies.SotaCommon ++
+Dependencies.LibAts
 
 enablePlugins(PlayScala, PlayNettyServer, Versioning.Plugin)
 
@@ -65,7 +67,7 @@ inConfig(BrowserTests)(Defaults.testTasks)
 val mkVersionProperties = taskKey[Seq[File]]("Makes version.properties file")
 
 mkVersionProperties := {
-  val propFile = new File( baseDirectory.value + "/../deploy", "version.properties")
+  val propFile = new File(baseDirectory.value + "/../deploy", "version.properties")
   IO.write(propFile, version.value)
   Seq(propFile)
 }
@@ -73,13 +75,15 @@ mkVersionProperties := {
 val runWebpack = taskKey[Seq[Int]]("Run webpack")
 
 runWebpack := {
-  Seq(Process(
-    "docker" :: "run" ::
-    "--rm" ::
-    "--volume" :: s"${baseDirectory.value.toString}/app:/app" ::
-    "advancedtelematic/webpack" ::
-    "bash" :: "-c" :: "cd reactapp && npm install && webpack" ::
-    Nil)!
+  Seq(
+    Process(
+      "docker" :: "run" ::
+        "--rm" ::
+        "--volume" :: s"${baseDirectory.value.toString}/app:/app" ::
+        "advancedtelematic/webpack" ::
+        "bash" :: "-c" :: "cd reactapp && npm install && webpack" ::
+        Nil
+    ) !
   )
 }
 

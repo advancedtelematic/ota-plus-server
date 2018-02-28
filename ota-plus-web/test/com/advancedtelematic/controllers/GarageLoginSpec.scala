@@ -1,11 +1,14 @@
 package com.advancedtelematic.controllers
 
 import com.advancedtelematic.TokenUtils
-import com.advancedtelematic.auth.OAuthConfig
+import com.advancedtelematic.auth.{AccessTokenBuilder, OAuthConfig}
+import com.advancedtelematic.auth.oidc.ProviderMetadata
 import mockws.{MockWS, MockWSHelpers}
+import org.jose4j.jwk.{JsonWebKey, JsonWebKeySet}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.play._
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.Configuration
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{Json, JsSuccess}
 import play.api.libs.ws.WSClient
@@ -29,11 +32,10 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
 
   lazy val auth0Config: OAuthConfig = OAuthConfig(app.configuration)
 
-  lazy val tokenEndpointUrl: String = s"https://${auth0Config.domain}/oauth/token"
+  lazy val providerMeta = ProviderMetadata.fromConfig(app.configuration.get[Configuration]("oidc.fallback"))
 
-  lazy val userInfoUrl: String = s"https://${auth0Config.domain}/userinfo"
-
-  val authPlusTokenEndpoint = s"$AuthPlusUri/token"
+  val secret = TokenUtils.genKeyPair()
+  val keyId = "secret"
 
   import play.api.data._
   import play.api.data.Forms._
@@ -46,14 +48,20 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
 
   lazy val namespace: String = "LoginSpec"
 
-  lazy val idToken: String = TokenUtils.identityTokenFor(namespace).value
+  lazy val idToken: String = TokenUtils.identityTokenFor(namespace, secret.getPrivate, keyId)
 
   val mockClient = MockWS {
-    case ("POST", `tokenEndpointUrl`) =>
-      Action(BodyParser.tolerantJson) { implicit request =>
-        (request.body \ "code").as[String] match {
+    case ("POST", url) if url == providerMeta.tokenEndpoint =>
+      Action(BodyParser.formUrlEncoded) { implicit request =>
+        request.body("code").head match {
           case "AUTHORIZATIONCODE" =>
-            Ok(Json.obj("id_token" -> idToken, "access_token" -> "AUTH0_ACCESS_TOKEN", "expires_in" -> 3600))
+            Ok(
+              Json.obj(
+                "id_token" -> idToken,
+                "access_token" -> TokenUtils.signToken(Json.obj("sub" -> "test"), secret.getPrivate, keyId),
+                "expires_in" -> 3600
+              )
+            )
 
           case "ERROR" =>
             Forbidden(Json.obj("error" -> "invalid_grant", "error_description" -> "Invalid authorization code"))
@@ -63,24 +71,17 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
         }
       }
 
-    case ("POST", `authPlusTokenEndpoint`) =>
-      Action(BodyParser.form(tokenRequestForm)) { implicit request =>
-        request.body match {
-          case ("urn:ietf:params:oauth:grant-type:jwt-bearer", "AUTH0_ACCESS_TOKEN") =>
-            Ok(Json.obj("access_token" -> "AUTHPLUS_ACCESS_TOKEN", "expires_in" -> 3600))
-
-          case (_, "AUTHPLUS_FAIL") =>
-            BadRequest(Json.obj("error" -> "invalid_grant"))
-
-          case form =>
-            BadRequest(s"Auth+ token request not mocked for $form")
-        }
-      }
-
-    case ("GET", `userInfoUrl`) =>
+    case ("GET", url) if url == providerMeta.userInfoEndpoint =>
       Action { implicit request =>
         Ok(Json.obj("email" -> "email@email.email"))
       }
+
+    case ("GET", url) if url == providerMeta.jwksUri =>
+      val key = JsonWebKey.Factory.newJwk(secret.getPublic)
+      key.setKeyId(keyId)
+      val jwks = new JsonWebKeySet(key).toJson
+      Action(Ok(jwks))
+
     case (method, url) =>
       Action {
         NotFound(s"No handler for ' $method $url'")
@@ -112,14 +113,6 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
       redirectLocation(result) mustBe Some("/login")
     }
 
-    "redirect to login if Auth+ returns an error" in {
-      val req = FakeRequest("GET", "/callback?code=AUTHPLUS_FAIL")
-
-      val result = controller.callback()()(req)
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some("/login")
-    }
-
     "set session token" in {
       val req    = FakeRequest("POST", "/?code=AUTHORIZATIONCODE")
       val result = controller.callback()()(req)
@@ -128,7 +121,7 @@ class GarageLoginSpec extends PlaySpec with GuiceOneAppPerSuite with MockWSHelpe
       redirectLocation(result) mustBe Some("/")
       val sess = session(result)
       (Json.parse(sess("access_token")) \ "access_token").validate[String] must matchPattern {
-        case JsSuccess("AUTHPLUS_ACCESS_TOKEN", _) =>
+        case JsSuccess(_, _) =>
       }
       sess.get("id_token") mustBe Some(idToken)
       sess.get("namespace") mustBe Some(namespace)
