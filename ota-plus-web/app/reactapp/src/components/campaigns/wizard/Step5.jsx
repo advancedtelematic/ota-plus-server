@@ -85,7 +85,15 @@ class WizardStep5 extends Component {
         }
     }
     addBlock(data) {
-        this.blocks.push(data);
+        let shouldAdd = true;
+        _.each(this.blocks, block => {
+            if(block.parentPack === data.childPack) {
+                shouldAdd = false;
+            }
+        });
+        if(shouldAdd) {
+            this.blocks.push(data);
+        }
     }
     getPackVersions(packName) {
         const { packagesStore } = this.props;
