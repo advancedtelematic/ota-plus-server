@@ -30,16 +30,8 @@ class ListItemVersion extends Component {
             };
         }
         let versionCompatibilityData = null;
-        let requiredBy = [];
         if(alphaPlusEnabled) {
-            let compatibilityData = packagesStore.compatibilityData;
-            versionCompatibilityData = _.find(compatibilityData, item => item.name === version.filepath);
-            _.each(compatibilityData, (data, index) => {
-                let found = _.find(data.required, item => item === version.filepath);
-                if(found) {
-                    requiredBy.push(data.name);
-                }
-            });
+            versionCompatibilityData = _.find(packagesStore.compatibilityData, item => item.name === version.filepath);
         }
         
         const directorBlock = (
@@ -129,7 +121,7 @@ class ListItemVersion extends Component {
                 {alphaPlusEnabled ?
                     <div className={"c-package__manager" + 
                                    (_.isEmpty(borderStyle) ? " c-package__manager--full" : "") + 
-                                   (versionCompatibilityData || requiredBy.length ? " c-package__manager--aligned" : "")}>
+                                   (versionCompatibilityData ? " c-package__manager--aligned" : "")}>
                         {versionCompatibilityData && versionCompatibilityData.required.length ?
                             <div className="c-package__relations" id="required">
                                 <div className="c-package__heading">
@@ -172,12 +164,12 @@ class ListItemVersion extends Component {
                             </div>
                         :
                             null}
-                        {requiredBy.length ?
+                        {versionCompatibilityData && versionCompatibilityData.requiredBy.length ?
                             <div className="c-package__relations" id="required-by">
                                 <div className="c-package__heading">
                                     Required by:
                                 </div>
-                                {_.map(requiredBy, (filepath, i) => {
+                                {_.map(versionCompatibilityData.requiredBy, (filepath, i) => {
                                     let pack = _.find(packagesStore.packages, item => item.filepath === filepath);
                                     return (
                                         <div className="c-package__relation-item" key={i}>
