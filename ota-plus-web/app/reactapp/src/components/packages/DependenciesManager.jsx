@@ -170,9 +170,10 @@ class DependenciesManager extends Component {
                                                                           Required by
                                                                     </span>
                                                                 :
-                                                                    <span className="label"
+                                                                    <span className="label color-black"
                                                                           id={"other-pack-not-selected-" + version.id.version}
                                                                           onClick={this.addVersion.bind(this, versionString)}>
+                                                                          Edit
                                                                     </span>
                                                                 }                                                                
                                                             </span>
