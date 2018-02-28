@@ -14,6 +14,7 @@ class DependenciesManager extends Component {
             name: props.activePackage.filepath,
             required: [],
             incompatibles: [],
+            requiredBy: []
         };
     }
     componentWillMount() {
@@ -24,17 +25,79 @@ class DependenciesManager extends Component {
             this.obj = pack;
         }
     }
+    getItemFromStorage(version) {
+        return JSON.parse(localStorage.getItem(version));
+    }
     addVersion(version) {
         const { activePackage, packagesStore } = this.props;
+
+        let relatedItem = {
+            name: version,
+            required: [],
+            incompatibles: [],
+            requiredBy: []
+        };
+
         if(_.indexOf(this.obj.required, version) > -1) {
             this.obj.incompatibles.push(version);
-            this.obj.required.splice(_.indexOf(this.obj.required, version), 1);            
+            this.obj.required.splice(_.indexOf(this.obj.required, version), 1);
+
+            let itemFromStorage = this.getItemFromStorage(version);
+
+            if(itemFromStorage) {
+                itemFromStorage.incompatibles.push(activePackage.filepath);
+                itemFromStorage.requiredBy.splice(_.indexOf(itemFromStorage.requiredBy, version), 1);
+                localStorage.setItem(version, JSON.stringify(itemFromStorage));
+            } else {
+                relatedItem.incompatibles.push(activePackage.filepath);
+                relatedItem.requiredBy.splice(_.indexOf(relatedItem.requiredBy, version), 1);
+                localStorage.setItem(version, JSON.stringify(relatedItem));
+            }
+
+            localStorage.setItem(activePackage.filepath, JSON.stringify(this.obj));
         } else if(_.indexOf(this.obj.incompatibles, version) > -1) {
-            this.obj.incompatibles.splice(_.indexOf(this.obj.required, version), 1);
+            this.obj.incompatibles.splice(_.indexOf(this.obj.incompatibles, version), 1);
+
+            let itemFromStorage = this.getItemFromStorage(version);
+            if(itemFromStorage) {
+                itemFromStorage.incompatibles.splice(_.indexOf(itemFromStorage.incompatibles, activePackage.filepath), 1);
+                localStorage.setItem(version, JSON.stringify(itemFromStorage));
+
+                if(!itemFromStorage.incompatibles.length && !itemFromStorage.required.length && !itemFromStorage.requiredBy.length) {
+                    localStorage.removeItem(version);
+                }
+
+            } else {
+                relatedItem.incompatibles.splice(_.indexOf(relatedItem.incompatibles, version), 1);
+
+                localStorage.setItem(activePackage.filepath, JSON.stringify(this.obj));
+                localStorage.setItem(version, JSON.stringify(relatedItem));
+
+                if(!relatedItem.incompatibles.length && !relatedItem.required.length && !relatedItem.requiredBy.length) {
+                    localStorage.removeItem(version);
+                }
+            }
+
+            if(!this.obj.incompatibles.length && !this.obj.required.length && !this.obj.requiredBy.length) {
+                localStorage.removeItem(activePackage.filepath);
+            } else {
+                localStorage.setItem(activePackage.filepath, JSON.stringify(this.obj));
+            }
         } else {
             this.obj.required.push(version);
+
+            let itemFromStorage = this.getItemFromStorage(version);
+            if(itemFromStorage) {
+                itemFromStorage.requiredBy.push(activePackage.filepath);
+                localStorage.setItem(version, JSON.stringify(itemFromStorage));
+            } else {
+                relatedItem.requiredBy.push(activePackage.filepath);
+                localStorage.setItem(version, JSON.stringify(relatedItem));
+            }
+
+            localStorage.setItem(activePackage.filepath, JSON.stringify(this.obj));
         }
-        localStorage.setItem(activePackage.filepath, JSON.stringify(this.obj));
+        
         packagesStore._handleCompatibles();
     }
     render() {
