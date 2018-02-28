@@ -3476,6 +3476,10 @@ input {
                             background: #84cf61;
                             border: none;
                         }
+
+                        &.color-black {
+                            color: #000;
+                        }
                     }
 
                     .value {
