@@ -2234,6 +2234,7 @@ input {
         margin-bottom: 50px;
         position: relative;
         min-height: 125px;
+        overflow: hidden;
     }
 
     &__end-point {
@@ -2248,6 +2249,7 @@ input {
         margin-bottom: 50px;
         position: relative;
         min-height: 125px;
+        overflow: hidden;
     }
 
     &__text {
@@ -2337,6 +2339,7 @@ input {
         width: 250px;
         cursor: pointer;
         margin-bottom: 50px;
+        overflow: hidden;
     }
 
     &__info {
@@ -2415,10 +2418,9 @@ input {
     }
 
     &__progress {
+        background-color: #fff;
         border: 1px solid #ccc;
         flex-basis: 100%;
-        border-bottom-left-radius: 13px;
-        border-bottom-right-radius: 13px;
 
         &--default-phase {
             margin-bottom: 0;
@@ -2429,8 +2431,6 @@ input {
     &__fill {
         height: 24px;
         background-color: #9ce2d8;
-        border-bottom-left-radius: 13px;
-        border-bottom-right-radius: 13px;
         align-items: center;
         justify-content: flex-end;
         display: flex;
@@ -2463,7 +2463,7 @@ input {
         }
 
         &--skip {
-            background: url('/assets/img/icons/white/skip_sequencer.svg')  no-repeat 100% 50%;
+            background: url('/assets/img/icons/white/skip_sequencer.svg')  no-repeat 50% 50%;
         } 
 
         &--cancel-all {
@@ -2474,7 +2474,7 @@ input {
             width: 100%;
             height: 100%;
             display: flex;
-            background-size: 90%;
+            background-size: 70%;
         }
     }
 }
@@ -2923,6 +2923,9 @@ input {
                     }
                     .c-sequencer__end-point, .c-sequencer__starter-point {
                         min-height: inherit;
+                    }
+                    .c-sequencer__item {
+                        overflow: visible;
                     }
                 }
 
