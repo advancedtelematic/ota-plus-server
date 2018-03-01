@@ -11,10 +11,7 @@
     <link href="/assets/css/style.css" rel="stylesheet" type="text/css"/>
   </head>
   <body>
-    <form id="logout" action="https://@{config.domain}/v2/logout">
-      <input type="hidden" name="client_id" value="@{config.clientId}" />
-      <input type="hidden" id="logout-return-to" name="returnTo" value="http://localhost:9000/logout" />
-    </form>
+    <form id="logout" action="/logout"/>
     <input type="hidden" id="csrf-token-val" value="@csrf.get.value"/>
     <input type="hidden" id="ws-url" value="@wsUrl"/>
     <input type="hidden" id="toggle-atsGarageTheme" value="@{uiToggles.atsGarageTheme}"/>
