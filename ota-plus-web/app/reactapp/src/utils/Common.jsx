@@ -1,6 +1,4 @@
 const doLogout = () => {
-  document.getElementById('logout-return-to').value =
-    location.protocol + '//' + location.host + '/logout';
   document.getElementById('logout').submit();
 }
 

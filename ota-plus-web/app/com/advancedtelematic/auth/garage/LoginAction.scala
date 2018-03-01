@@ -1,15 +1,14 @@
 package com.advancedtelematic.auth.garage
 
 import com.advancedtelematic.auth._
-
 import javax.inject.Inject
 import play.api.{Configuration, Logger}
-import play.api.libs.ws.{WSAuthScheme, WSClient, WSResponse}
+import play.api.libs.ws.{WSAuthScheme, WSClient}
 import play.api.mvc._
 import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Success}
 
 
 class LoginAction @Inject()(conf: Configuration,
@@ -33,11 +32,19 @@ class LogoutAction @Inject()(conf: Configuration,
   extends com.advancedtelematic.auth.LogoutAction {
 
   private[this] val log = Logger(this.getClass)
+  private[this] val oauthConfig = OAuthConfig(conf)
   private[this] val authPlusConfig = AuthPlusConfig(conf).get
 
   override def apply(request: Request[AnyContent]): Future[Result] = {
     Future.fromTry(AuthenticatedRequest.fromRequest(request).map(revoke)).map { _ =>
-      Results.Redirect(com.advancedtelematic.controllers.routes.LoginController.login()).withNewSession
+      implicit val reqHeader: RequestHeader = request
+      val query =
+          Map(
+            "client_id" -> Seq(oauthConfig.clientId),
+            "returnTo" ->
+              Seq(com.advancedtelematic.controllers.routes.LoginController.login().absoluteURL())
+          )
+      Results.Redirect(s"https://${oauthConfig.domain}/v2/logout", query).withNewSession
     }
   }
 
@@ -61,6 +68,7 @@ class LogoutAction @Inject()(conf: Configuration,
 import java.time.{Instant, ZoneId}
 import java.time.format.{DateTimeFormatter, DateTimeParseException, FormatStyle}
 import java.util.Locale
+
 import scala.concurrent.duration.Duration
 
 final case class DowntimeConfig(start: Option[Instant], duration: Duration) {
