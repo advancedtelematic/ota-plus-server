@@ -9,7 +9,6 @@ object Version {
   val ScalaCheck = "1.12.4"
   val ScalaTestPlay = "3.1.2"
   val Jose4j = "0.6.3"
-  val HereOauthClient = "0.4.11"
 }
 
 object Dependencies {
@@ -38,8 +37,6 @@ object Dependencies {
   val SotaCommon = Set(
     "org.genivi" %% "sota-common-data" % Version.GeniviSota
   )
-
-  val HereOauthClient = "com.here.account" % "here-oauth-client" % Version.HereOauthClient
 
   val Netty = Set("io.netty" % "netty-handler", "io.netty" % "netty-codec").map(_ % Version.Netty)
 }

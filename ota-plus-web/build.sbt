@@ -39,8 +39,7 @@ libraryDependencies ++= Seq(
   guice,
   cacheApi,
   Dependencies.LibTuf,
-  Dependencies.jose4j,
-  Dependencies.HereOauthClient
+  Dependencies.jose4j
 ) ++
 Dependencies.TestFrameworks ++
 Dependencies.SotaCommon ++
