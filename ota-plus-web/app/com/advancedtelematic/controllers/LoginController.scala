@@ -1,24 +1,30 @@
 package com.advancedtelematic.controllers
 
 import java.time.Instant
-import javax.inject.{Inject, Singleton}
 
 import akka.Done
 import akka.actor.ActorSystem
 import com.advancedtelematic.PlayMessageBusPublisher
 import com.advancedtelematic.api.UnexpectedResponse
-import com.advancedtelematic.auth.{AccessToken, AuthPlusConfig, IdToken, LoginAction, LogoutAction, OAuthConfig, SessionCodecs, TokenExchange, Tokens, UiAuthAction}
+import com.advancedtelematic.auth.{
+  IdToken,
+  LoginAction,
+  LogoutAction,
+  OAuthConfig,
+  SessionCodecs,
+  TokenExchange,
+  Tokens,
+  UiAuthAction
+}
 import com.advancedtelematic.auth.oidc.{NamespaceProvider, OidcGateway}
 import com.advancedtelematic.libats.messaging_datatype.MessageLike
+import javax.inject.{Inject, Singleton}
 import play.api.{Configuration, Logger}
-import play.api.http.{HeaderNames, MimeTypes}
-import play.api.libs.json.{Json, JsResult, JsValue}
-import play.api.libs.ws.{WSAuthScheme, WSClient, WSResponse}
+import play.api.libs.json.Json
+import play.api.libs.ws.WSClient
 import play.api.mvc._
-import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 
 import scala.concurrent.Future
-import scala.util.{Failure, Success, Try}
 
 final case class LoginData(username: String, password: String)
 
@@ -105,7 +111,7 @@ class OAuthOidcController @Inject()(
 
     def onAuthzCode(code: String): Future[Result] = {
       val loginResult = for {
-        tokens                       <- oidcGateway.exchangeCodeForTokens(code)
+        tokens                                   <- oidcGateway.exchangeCodeForTokens(code)
         newTokens @ Tokens(accessToken, idToken) <- tokenExchange.run(tokens)
         ns = namespaceProvider.apply(newTokens)
         _ <- publishLoginEvent(idToken.userId)

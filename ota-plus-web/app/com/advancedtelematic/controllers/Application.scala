@@ -5,16 +5,14 @@
 
 package com.advancedtelematic.controllers
 
-import javax.inject.{Inject, Named, Singleton}
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
-import com.advancedtelematic.api.ApiVersion
-import com.advancedtelematic.api.OtaPlusConfig
-import com.advancedtelematic.auth.{AccessTokenBuilder, ApiAuthAction, AuthenticatedAction, AuthenticatedRequest, OAuthConfig, UiAuthAction}
+import com.advancedtelematic.api.{ApiVersion, OtaPlusConfig}
+import com.advancedtelematic.auth.{AccessTokenBuilder, ApiAuthAction, AuthenticatedRequest, OAuthConfig, UiAuthAction}
+import javax.inject.{Inject, Singleton}
 import org.slf4j.LoggerFactory
 import play.api._
-import play.api.http.HttpEntity
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.libs.streams.Accumulator
 import play.api.libs.ws._
 import play.api.mvc._
