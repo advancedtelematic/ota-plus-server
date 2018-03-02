@@ -6,12 +6,11 @@
 package com.advancedtelematic.controllers
 
 import javax.inject.{Inject, Named, Singleton}
-
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import com.advancedtelematic.api.ApiVersion
 import com.advancedtelematic.api.OtaPlusConfig
-import com.advancedtelematic.auth.{ApiAuthAction, AuthenticatedAction, AuthenticatedRequest, OAuthConfig, UiAuthAction}
+import com.advancedtelematic.auth.{AccessTokenBuilder, ApiAuthAction, AuthenticatedAction, AuthenticatedRequest, OAuthConfig, UiAuthAction}
 import org.slf4j.LoggerFactory
 import play.api._
 import play.api.http.HttpEntity
@@ -52,7 +51,8 @@ class Application @Inject() (ws: WSClient,
                              components: ControllerComponents,
                              val conf: Configuration,
                              uiAuth: UiAuthAction,
-                             val apiAuth: ApiAuthAction)
+                             val apiAuth: ApiAuthAction,
+                             tokenBuilder: AccessTokenBuilder)
   extends AbstractController(components) with I18nSupport with OtaPlusConfig {
 
   import ApiVersion.ApiVersion
@@ -204,7 +204,9 @@ class Application @Inject() (ws: WSClient,
    * @return OK response and index html
    */
   def index : Action[AnyContent] = uiAuth { implicit req =>
-    val wsUrl = s"$wsScheme://bearer:${req.accessToken.value}@$wsHost:$wsPort$wsPath"
+    val subject = req.idToken.userId.id
+    val token = tokenBuilder.mkToken(subject, req.accessToken.expiresAt, Set(s"namespace.${subject}"))
+    val wsUrl = s"$wsScheme://bearer:${token}@$wsHost:$wsPort$wsPath"
     Ok(views.html.main(oauthConfig, CSRF.getToken, wsUrl, uiToggles))
   }
 }
