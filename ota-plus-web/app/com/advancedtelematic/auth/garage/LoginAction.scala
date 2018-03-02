@@ -42,7 +42,7 @@ class LogoutAction @Inject()(conf: Configuration,
           Map(
             "client_id" -> Seq(oauthConfig.clientId),
             "returnTo" ->
-              Seq(com.advancedtelematic.controllers.routes.LoginController.login().absoluteURL())
+              Seq(com.advancedtelematic.controllers.routes.LoginController.login().absoluteURL(secure=true))
           )
       Results.Redirect(s"https://${oauthConfig.domain}/v2/logout", query).withNewSession
     }
