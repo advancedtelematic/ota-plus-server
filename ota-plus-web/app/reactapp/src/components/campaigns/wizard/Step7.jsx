@@ -37,7 +37,7 @@ class WizardStep7 extends Component {
                                                 <div className="text">
                                                     From:
                                                 </div>
-                                                <div className="value">
+                                                <div className="value" id={"from-package-name-" + (!_.isEmpty(update.changedPackage) ? update.changedPackage.packageName : update.toPackageName)}>
                                                     {!_.isEmpty(update.changedPackage) ?
                                                         update.changedPackage.packageName
                                                     :
@@ -52,7 +52,7 @@ class WizardStep7 extends Component {
                                                 <div className="text">
                                                     To:
                                                 </div>
-                                                <div className="value">
+                                                <div className="value" id={"to-package-name-" + update.toPackageName}>
                                                     {update.toPackageName}
                                                     <span className="in-director">
                                                         <img src="/assets/img/icons/black/lock.svg" alt="Director" />
@@ -65,7 +65,7 @@ class WizardStep7 extends Component {
                                                 <div className="text">
                                                     Version:
                                                 </div>
-                                                <div className="value">
+                                                <div className="value" id={"from-package-version-" + update.from}>
                                                     {update.from}
                                                 </div>
                                             </div>
@@ -73,7 +73,7 @@ class WizardStep7 extends Component {
                                                 <div className="text">
                                                     Version:
                                                 </div>
-                                                <div className="value">
+                                                <div className="value" id={"to-package-version-" + update.to}>
                                                     {update.to}
                                                 </div>
                                             </div>
@@ -83,7 +83,7 @@ class WizardStep7 extends Component {
                                         <div className="text">
                                             On:
                                         </div>
-                                        <div className="value hardware-label">
+                                        <div className="value hardware-label" id={"package-version-" + update.to + '-hardware-id'}>
                                             {update.hardwareId}
                                         </div>
                                     </div>
