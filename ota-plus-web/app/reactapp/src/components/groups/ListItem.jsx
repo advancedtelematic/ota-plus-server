@@ -42,7 +42,7 @@ class ListItem extends Component {
                         <div className="title font-medium">
                             {group.groupName}
                         </div>
-                        <div className="subtitle font-small">
+                        <div className="subtitle font-small" id={"group-" + group.groupName + '-devices'}>
                             {t('common.deviceWithCount', {count: group.devices.total})}
                         </div>
                     </div>
