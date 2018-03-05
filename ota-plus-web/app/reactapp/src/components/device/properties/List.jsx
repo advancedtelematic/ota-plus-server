@@ -104,7 +104,7 @@ class List extends Component {
 			        						<span className="fa-stack queued">
 				                                <i className="fa fa-dot-circle-o fa-stack-1x" aria-hidden="true" id={this.generateIdTag('queued-icon', expandedPackage)}></i>
 				                            </span>
-			        						<span className="status-name" id={this.generateIdTag('queued', expandedPackage)}>
+			        						<span id={this.generateIdTag('queued', expandedPackage)}>
 			        							{queued}
 			        						</span>
 			        					</div>

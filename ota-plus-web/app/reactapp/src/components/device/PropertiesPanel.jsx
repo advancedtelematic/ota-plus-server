@@ -27,7 +27,7 @@ class PropertiesPanel extends Component {
                     {title}
                 </div>
                 <div className="wrapper-full">                    
-                    <div className="wrapper-properties recalculated-properties-height">
+                    <div className="wrapper-properties">
                         {!packagesReady ?
                             <div className="wrapper-loader">
                                 <Loader />
