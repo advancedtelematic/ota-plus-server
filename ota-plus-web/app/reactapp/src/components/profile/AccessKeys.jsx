@@ -19,7 +19,7 @@ class AccessKeys extends Component {
         this.props.provisioningStore._reset();
     }
     render() {
-        const { provisioningStore, devicesStore, groupsStore, uiCredentialsDownload, prebuiltDebrpm } = this.props;
+        const { provisioningStore, devicesStore } = this.props;
         return (
             <main id="access-keys">
                 <div className="title top font-big">
@@ -32,9 +32,6 @@ class AccessKeys extends Component {
                         <ProvisioningContainer
                             provisioningStore={provisioningStore}
                             devicesStore={devicesStore}
-                            groupsStore={groupsStore}
-                            uiCredentialsDownload={uiCredentialsDownload}
-                            prebuiltDebrpm={prebuiltDebrpm}
                         />
                     </MetaData>
                 </div>

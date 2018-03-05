@@ -10,7 +10,7 @@ class Header extends Component {
         super(props);
     }
     render() {
-        const { showCreateModal, showDevicesCreateModal, devicesFilter, changeFilter, provisioningSort, changeSort} = this.props;
+        const { showCreateModal, devicesFilter, changeFilter, provisioningSort, changeSort} = this.props;
         return (
             <SubHeader>
                 <Form>
