@@ -7,19 +7,7 @@ class Footer extends Component {
         super(props);
     }
     render() {
-        const { provisioningStore, showDevicesCreateModal, uiCredentialsDownload, prebuiltDebrpm } = this.props;
-        const prebuiltDebrpmBlock = (
-            <li>
-                <div className="prebuilds">
-                    <div className="text" id="access-keys-prebuilds-description">
-                        get pre-builds <a href="#" id="access-keys-prebuilds-link" onClick={showDevicesCreateModal}>DEB/RPM</a>
-                        <a href="https://docs.atsgarage.com/quickstarts/install-from-a-prebuilt-deb-or-rpm-package.html" target="_blank" className="icon">
-                            <img src="/assets/img/icons/questionmark.png" alt=""/>
-                        </a>
-                    </div>
-                </div>
-            </li>
-        );
+        const { provisioningStore } = this.props;
         return (
             <div className="footer">
                 <ul>
@@ -30,17 +18,9 @@ class Footer extends Component {
                             </div>
                             <pre id="personal-server-name">
                                  {provisioningStore.provisioningDetails.hostName}
-                                                        </pre>
+                            </pre>
                         </div>
                     </li>
-                    {uiCredentialsDownload ?
-                        prebuiltDebrpm ?
-                            prebuiltDebrpmBlock
-                        :
-                            null
-                    :
-                        prebuiltDebrpmBlock
-                    }
                 </ul>
             </div>
         );
