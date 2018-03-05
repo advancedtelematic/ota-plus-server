@@ -159,8 +159,8 @@ class Device extends Component {
                             />
                         </span>
                     :
-                        <div className="wrapper-center wrapper-responsive">
-                            <div className="guide-install-device">
+                        <div className="wrapper-center">
+                            <div className="device-offline">
                                 <div className="title">
                                     Device never seen online.
                                 </div>

@@ -32,7 +32,7 @@ class TufGroupsListItem extends Component {
             }
         ];
         return (
-            <div className="display-flex">
+            <div className="group-wrapper">
                 <div className="name">
                     <div className="element-box group">
                         <div className="icon"/>
