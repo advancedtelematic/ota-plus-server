@@ -45,7 +45,7 @@ class TufList extends Component {
     render() {
         const { campaignsStore, groupsStore, highlightedCampaign, showCancelCampaignModal, showDependenciesModal, expandedCampaignName, toggleCampaign } = this.props;
         return (
-            <div className="tuf-list" ref="list">
+            <span ref="list">
                 <div className="section-header">
                     In preparation
                 </div>
@@ -54,7 +54,7 @@ class TufList extends Component {
                         <span>
                             <div className="heading font-small">
                                 <div></div>
-                                <div className="column">Name</div>
+                                <div className="column name">Name</div>
                                 <div className="column">Created at</div>
                                 <div className="column">Processed</div>
                                 <div className="column">Affected</div>
@@ -110,7 +110,7 @@ class TufList extends Component {
                         <span>
                             <div className="heading font-small">
                                 <div></div>
-                                <div className="column">Name</div>
+                                <div className="column name">Name</div>
                                 <div className="column">Created at</div>
                                 <div className="column">Processed</div>
                                 <div className="column">Affected</div>
@@ -164,7 +164,7 @@ class TufList extends Component {
                         <span>
                             <div className="heading font-small">
                                 <div></div>
-                                <div className="column">Name</div>
+                                <div className="column name">Name</div>
                                 <div className="column">Created at</div>
                                 <div className="column">Processed</div>
                                 <div className="column">Affected</div>
@@ -218,7 +218,7 @@ class TufList extends Component {
                         <span>
                             <div className="heading font-small">
                                 <div></div>
-                                <div className="column">Name</div>
+                                <div className="column name">Name</div>
                                 <div className="column">Created at</div>
                                 <div className="column">Processed</div>
                                 <div className="column">Affected</div>
@@ -264,7 +264,7 @@ class TufList extends Component {
                         </div>
                     }
                 </div>
-            </div>
+            </span>
         );
     }
 }

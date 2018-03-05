@@ -37,14 +37,6 @@ class TufListItem extends Component {
                 </div>
             :
                 <div className="item" id={"item-" + campaign.id} onClick={toggleCampaign.bind(this, campaign.name)}>
-                    <div className="actions">
-                        <ul>
-                            <li id={"rename-campaign-" + campaign.name}>
-                                <img src="/assets/img/icons/edit_white.png" alt="" />
-                                <span>Rename</span>
-                            </li>
-                        </ul>
-                    </div>
                     <div className="column" id={"campaign-" + campaign.name}>
                         {campaign.name}
                     </div>
