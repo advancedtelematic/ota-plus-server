@@ -14,7 +14,6 @@ import com.advancedtelematic.controllers.{FeatureName, UserId}
 import com.advancedtelematic.libats.http.Errors.EntityAlreadyExists
 import com.advancedtelematic.libtuf.data.TufCodecs
 import com.advancedtelematic.libtuf.data.TufDataType.TufKeyPair
-import com.advancedtelematic.persistence.ClientInfo
 import org.genivi.sota.data.{Device, DeviceT, Namespace, Uuid}
 import play.api.http.Status
 import play.api.{Configuration, Logger}
@@ -117,40 +116,12 @@ trait ApiRequest { self =>
   * Controllers extending [[ApiClientSupport]] access [[DevicesApi]] endpoints using a singleton.
   */
 class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
-  import com.advancedtelematic.persistence.DeviceMetadata
   private val devicesRequest = ApiRequest.base(devicesApiUri + "/api/v1/")
 
   def getDevice(options: UserOptions, id: Uuid): Future[Device] = {
     devicesRequest("devices/" + id.show).withUserOptions(options).execJson(apiExec)(DeviceR)
   }
 
-  def fetchDeviceMetadata(options: UserOptions, id: Uuid)
-                         (implicit ec: ExecutionContext): Future[Option[DeviceMetadata]] = {
-    devicesRequest("devices/" + id.show + "/public_credentials")
-      .withUserOptions(options)
-      .execResponse(apiExec)
-      .map{ wresp =>
-      for {
-        resp <- Try(wresp.json).toOption
-        credentials <- (resp \ "credentials").validate[String].asOpt
-        clientInfo <- Json.parse(credentials).validate[ClientInfo].asOpt
-      } yield DeviceMetadata(id, clientInfo)
-    }
-  }
-
-  def setDeviceMetadata(options: UserOptions, devT: DeviceT)
-                       (implicit ec: ExecutionContext): Future[Done] =
-    devicesRequest("devices")
-      .withUserOptions(options)
-      .transform(_.withBody(Json.toJson(devT)).withMethod("PUT"))
-      .execResponse(apiExec)
-      .flatMap { response =>
-        if (response.status == ResponseStatusCodes.OK_200) {
-          Future.successful(Done)
-        } else {
-          Future.failed(UnexpectedResponse(response))
-        }
-      }
 }
 
 /**
@@ -168,15 +139,6 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
       .withToken(token.value)
       .transform(_.withBody(body).withMethod("POST"))
       .execJson(apiExec)(ev)
-  }
-
-  def createClient(device: Uuid, token: AccessToken)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
-    val body = Json.obj(
-      "grant_types" -> List("client_credentials"),
-      "client_name" -> device.show,
-      "scope"       -> s"ota-core.${device.show}.write ota-core.${device.show}.read"
-    )
-    createClient(body, token)
   }
 
   def createClientForUser(clientName: String, scope: String, token: AccessToken)(
