@@ -12,7 +12,7 @@ class Profile extends Component {
         super(props);
     }
     render() {
-        const { userStore, provisioningStore, devicesStore, groupsStore, children, otaPlusStore, uiUserProfileMenu, uiCredentialsDownload, prebuiltDebrpm } = this.props;
+        const { userStore, provisioningStore, devicesStore, groupsStore, children, otaPlusStore, uiUserProfileMenu, uiCredentialsDownload } = this.props;
         return (
             <FadeAnimation 
                 display="flex">
@@ -32,7 +32,6 @@ class Profile extends Component {
                                 devicesStore={devicesStore}
                                 groupsStore={groupsStore}
                                 uiCredentialsDownload={uiCredentialsDownload}
-                                prebuiltDebrpm={prebuiltDebrpm}
                             />
                         :
                             null
