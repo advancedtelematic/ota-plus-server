@@ -8,9 +8,6 @@ scalacOptions += "-Ypartial-unification"
 play.sbt.routes.RoutesKeys.routesImport ++= Seq(
   "com.advancedtelematic.api.ApiVersion._",
   "com.advancedtelematic.controllers.PathBinders._",
-  "com.advancedtelematic.controllers.ArtifactType",
-  "com.advancedtelematic.controllers.PackageManager",
-  "com.advancedtelematic.controllers.Architecture",
   "com.advancedtelematic.controllers.FeatureName",
   "org.genivi.sota.data.Namespace",
   "org.genivi.sota.data.Uuid",

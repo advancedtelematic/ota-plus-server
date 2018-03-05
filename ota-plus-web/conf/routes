@@ -8,7 +8,6 @@ GET     /                                        com.advancedtelematic.controlle
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                            controllers.Assets.versioned(path="/public", file: Asset)
 
-GET     /api/v1/device_client/:uuid/:artifact    com.advancedtelematic.controllers.ClientSdkController.deviceClientDownload(uuid: Uuid, artifact: ArtifactType, package_manager: PackageManager.Value, polling_sec: Option[Integer])
 POST    /api/v1/clients                          com.advancedtelematic.controllers.ClientsController.createClient
 GET     /api/v1/clients                          com.advancedtelematic.controllers.ClientsController.getClients
 GET     /api/v1/clients/:uuid                    com.advancedtelematic.controllers.ClientsController.getClient(uuid: Uuid)
