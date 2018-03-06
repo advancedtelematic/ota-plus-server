@@ -25,8 +25,7 @@ object Dependencies {
 
   lazy val jose4j = "org.bitbucket.b_c" % "jose4j" % Version.Jose4j
   val LibAts = Set(
-    "com.advancedtelematic" %% "libats-messaging",
-    "com.advancedtelematic" %% "libats-auth"
+    "com.advancedtelematic" %% "libats-messaging"
   ).map(_ % Version.LibAts)
 
   lazy val LibTuf = "com.advancedtelematic" %% "libtuf" % Version.LibTuf
