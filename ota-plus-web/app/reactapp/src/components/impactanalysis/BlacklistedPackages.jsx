@@ -1,28 +1,95 @@
 import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
+import { observable, observe } from 'mobx';
 import { observer } from 'mobx-react';
 import _ from 'underscore';
 import Versions from './Versions';
 import { SlideAnimation } from '../../utils';
 
+const headerHeight = 30;
+
 @observer
 class BlacklistedPackages extends Component {
-    @observable headerTopPosition = 0;
+    @observable firstShownIndex = 0;
+    @observable lastShownIndex = 50;
     @observable expandedPackage = null;
+    @observable fakeHeaderTopPosition = null;
+    @observable fakeHeaderLetter = '';
+    @observable tmpIntervalId = null;
 
     constructor(props) {
         super(props);
-        this.listScroll = this.listScroll.bind(this);
         this.togglePackage = this.togglePackage.bind(this);
+        this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
+        this.generateItemsPositions = this.generateItemsPositions.bind(this);
+        this.listScroll = this.listScroll.bind(this);
+        this.packagesChangeHandler = observe(props.packagesStore, (change) => {
+            if(change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
+                const that = this;
+                  setTimeout(() => {
+                      that.listScroll();
+                  }, 50);
+            }
+        });
     }
     componentDidMount() {
         this.refs.list.addEventListener('scroll', this.listScroll);
+        this.listScroll();
     }
     componentWillUnmount() {
+        this.packagesChangeHandler();
         this.refs.list.removeEventListener('scroll', this.listScroll);
     }
+    generateHeadersPositions() {
+        const headers = this.refs.list.getElementsByClassName('header');
+        const wrapperPosition = this.refs.list.getBoundingClientRect();
+        let positions = [];
+        _.each(headers, (header) => {
+            let position = header.getBoundingClientRect().top - wrapperPosition.top + this.refs.list.scrollTop;
+            positions.push(position);
+        }, this);
+        return positions;
+    }
+    generateItemsPositions() {
+        const items = this.refs.list.getElementsByClassName('item');
+        const wrapperPosition = this.refs.list.getBoundingClientRect();
+        let positions = [];
+        _.each(items, (item) => {
+            let position = item.getBoundingClientRect().top - wrapperPosition.top + this.refs.list.scrollTop;
+            positions.push(position);
+        }, this);
+        return positions;
+    }
     listScroll() {
-        this.headerTopPosition = this.refs.list.scrollTop;
+        const { packagesStore } = this.props;
+        if(this.refs.list) {
+            const headersPositions = this.generateHeadersPositions();
+            const itemsPositions = this.generateItemsPositions();
+            let scrollTop = this.refs.list.scrollTop;
+            let listHeight = this.refs.list.getBoundingClientRect().height;
+            let newFakeHeaderLetter = this.fakeHeaderLetter;
+            let firstShownIndex = null;
+            let lastShownIndex = null;
+            _.each(headersPositions, (position, index) => {
+                if(scrollTop >= position) {
+                    newFakeHeaderLetter = Object.keys(packagesStore.preparedBlacklist)[index];
+                    return true;
+                } else if(scrollTop >= position - headerHeight) {
+                    scrollTop -= scrollTop - (position - headerHeight);
+                    return true;
+                }
+            }, this);
+            _.each(itemsPositions, (position, index) => {
+                if(firstShownIndex === null && scrollTop <= position) {
+                    firstShownIndex = index;
+                } else if(lastShownIndex === null && scrollTop + listHeight <= position) {
+                    lastShownIndex = index;
+                }
+            }, this);
+            this.firstShownIndex = firstShownIndex;
+            this.lastShownIndex = lastShownIndex !== null ? lastShownIndex : itemsPositions.length - 1;
+            this.fakeHeaderLetter = newFakeHeaderLetter;
+            this.fakeHeaderTopPosition = scrollTop;
+        }
     }
     togglePackage(name) {
         this.expandedPackage = this.expandedPackage !== name ? name : null;
@@ -35,40 +102,57 @@ class BlacklistedPackages extends Component {
                 <div className="section-header">
                     Blacklisted packages
                 </div>
-                <div className="wrapper-list" ref="list">
-                    <div className="header" style={{top: this.headerTopPosition}}>
-                        <div className="column column-first">Package</div>
-                        <div className="column column-second">Impacted devices</div>
+                <div className="ios-list" ref="list">
+                    <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
+                        <div className="left-box">
+                            {this.fakeHeaderLetter}
+                        </div>
+                        <div className="right-box">
+                            Impacted devices
+                        </div>
                     </div>
-                    <div className="list">
-                        {_.map(blacklist, (pack, index) => {
-                            return (
-                                <span key={index}>
-                                    <button 
-                                        className={"item" + (this.expandedPackage == pack.packageName ? " selected" : "")}
-                                        id={"impact-analysis-blacklisted-" + pack.packageName}
-                                        onClick={this.togglePackage.bind(this, pack.packageName )}
-                                        key={pack.packageName }>
-                                        <div className="column column-first" title={pack.packageName}>
-                                            {pack.packageName}
-                                        </div>
-                                        <div className="column column-second">
-                                            {pack.deviceCount}
-                                        </div>
-                                    </button>
-                                    <SlideAnimation changeDisplay={false}>
-                                        {this.expandedPackage == pack.packageName  ?
-                                            <Versions 
-                                                versions={pack.versions}
-                                            />
-                                        : 
-                                            null
-                                        }
-                                    </SlideAnimation>
-                                </span>
-                            );
-                        })}
-                    </div>
+                    {_.map(blacklist, (packs, letter) => {
+                        return (
+                            <span key={letter}>
+                                <div className="header">
+                                    <div className="left-box">
+                                        {letter}
+                                    </div>
+                                    <div className="right-box">
+                                        Impacted devices
+                                    </div>
+                                    
+                                </div>
+                                {_.map(packs, (pack, index) => {
+                                    return (
+                                        <span key={index}>
+                                            <button 
+                                                className={"item" + (this.expandedPackage == pack.packageName ? " selected" : "")}
+                                                id={"impact-analysis-blacklisted-" + pack.packageName}
+                                                onClick={this.togglePackage.bind(this, pack.packageName )}
+                                                key={pack.packageName }>
+                                                <div title={pack.packageName}>
+                                                    {pack.packageName}
+                                                </div>
+                                                <div>
+                                                    {pack.deviceCount}
+                                                </div>
+                                            </button>
+                                            <SlideAnimation changeDisplay={false}>
+                                                {this.expandedPackage == pack.packageName  ?
+                                                    <Versions 
+                                                        versions={pack.versions}
+                                                    />
+                                                : 
+                                                    null
+                                                }
+                                            </SlideAnimation>
+                                        </span>
+                                    );
+                                })}                                    
+                            </span>
+                        );
+                    })}
                 </div>
             </div>
         );
