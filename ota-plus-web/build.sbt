@@ -9,8 +9,6 @@ play.sbt.routes.RoutesKeys.routesImport ++= Seq(
   "com.advancedtelematic.api.ApiVersion._",
   "com.advancedtelematic.controllers.PathBinders._",
   "com.advancedtelematic.controllers.FeatureName",
-  "org.genivi.sota.data.Namespace",
-  "org.genivi.sota.data.Uuid",
   "java.util.UUID"
 )
 
@@ -42,7 +40,6 @@ libraryDependencies ++= Seq(
   Dependencies.jose4j
 ) ++
 Dependencies.TestFrameworks ++
-Dependencies.SotaCommon ++
 Dependencies.LibAts
 
 enablePlugins(PlayScala, PlayNettyServer, Versioning.Plugin)

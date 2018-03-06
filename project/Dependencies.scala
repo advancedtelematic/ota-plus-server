@@ -2,7 +2,6 @@ object Version {
   val Akka = "2.5.8"
   val JsonWebSecurity = "0.4.5"
   val MockWs = "2.6.2"
-  val GeniviSota = "0.3.20"
   val LibAts = "0.1.0-5-g6b585f0"
   val LibTuf = "0.2.0-44-gda9b1e2"
   val Netty = "4.1.19.Final"
@@ -22,9 +21,9 @@ object Dependencies {
 
   lazy val MockWs = "de.leanovate.play-mockws" %% "play-mockws" % Version.MockWs
 
-  val SotaCommonTest = "org.genivi" %% "sota-common-test" % Version.GeniviSota
+//  val SotaCommonTest = "org.genivi" %% "sota-common-test" % Version.GeniviSota
 
-  lazy val TestFrameworks = Seq( ScalaCheck, ScalaTestPlay, MockWs, SotaCommonTest, AkkaTestKit ).map(_ % "test")
+  lazy val TestFrameworks = Seq( ScalaCheck, ScalaTestPlay, MockWs, AkkaTestKit ).map(_ % "test")
 
   lazy val jose4j = "org.bitbucket.b_c" % "jose4j" % Version.Jose4j
   val LibAts = Set(
@@ -33,10 +32,6 @@ object Dependencies {
   ).map(_ % Version.LibAts)
 
   lazy val LibTuf = "com.advancedtelematic" %% "libtuf" % Version.LibTuf
-
-  val SotaCommon = Set(
-    "org.genivi" %% "sota-common-data" % Version.GeniviSota
-  )
 
   val Netty = Set("io.netty" % "netty-handler", "io.netty" % "netty-codec").map(_ % Version.Netty)
 }
