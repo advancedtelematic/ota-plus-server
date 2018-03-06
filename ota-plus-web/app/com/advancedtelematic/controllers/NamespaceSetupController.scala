@@ -1,21 +1,21 @@
 package com.advancedtelematic.controllers
 
 import java.util.concurrent.TimeUnit
-import javax.inject.{Inject, Singleton}
 
+import javax.inject.{Inject, Singleton}
 import akka.actor.ActorSystem
 import akka.http.scaladsl.util.FastFuture
 import com.advancedtelematic.api._
 import com.advancedtelematic.auth.ApiAuthAction
 import play.api.{Configuration, Logger}
-import play.api.libs.json.{JsValue, Json, Writes}
+import play.api.libs.json.{Json, JsValue, Writes}
 import play.api.libs.ws.WSClient
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ExecutionContext, Future}
 import akka.pattern.after
-import org.genivi.sota.data.Namespace
+import com.advancedtelematic.libats.data.DataType.Namespace
 
 object NamespaceSetupController {
   sealed trait CreateResult {

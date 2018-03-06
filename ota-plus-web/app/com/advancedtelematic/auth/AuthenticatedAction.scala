@@ -1,17 +1,15 @@
 package com.advancedtelematic.auth
 
-import javax.inject.Inject
-
-import cats.syntax.either._
 import com.advancedtelematic.jwt.JsonWebToken
 import com.advancedtelematic.libats.auth.{AuthedNamespaceScope, NsFromToken}
-import org.genivi.sota.data.Namespace
+import com.advancedtelematic.libats.data.DataType.Namespace
+import javax.inject.Inject
 import play.api.{Configuration, Logger}
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.NoStackTrace
 import scala.util.{Failure, Success, Try}
+import scala.util.control.NoStackTrace
 
 final case class AuthenticatedRequest[A](idToken: IdToken,
                                          accessToken: AccessToken,

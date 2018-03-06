@@ -9,7 +9,6 @@ import javax.inject.{Inject, Singleton}
 
 import com.advancedtelematic.auth.{AccessToken, AccessTokenBuilder, ApiAuthAction, AuthenticatedAction}
 import com.advancedtelematic.auth.oidc.OidcGateway
-import org.genivi.sota.data.Uuid
 import play.api.Configuration
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
@@ -123,7 +122,7 @@ class UserProfileController @Inject()(val conf: Configuration,
         clientInfo <- authPlusApi.createClientForUser(feature.get,
                                                       s"namespace.${request.namespace.get} $apiDomain/${feature.get}",
                                                       token)
-        clientId = Uuid.fromJava(clientInfo.clientId)
+        clientId = clientInfo.clientId
         result <- userProfileApi.activateFeature(userId, feature, clientId)
       } yield result
 
