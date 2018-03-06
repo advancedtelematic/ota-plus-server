@@ -5,7 +5,7 @@ object Version {
   val LibAts = "0.1.0-5-g6b585f0"
   val LibTuf = "0.2.0-44-gda9b1e2"
   val Netty = "4.1.19.Final"
-  val ScalaCheck = "1.12.4"
+  val ScalaCheck = "1.13.4"
   val ScalaTestPlay = "3.1.2"
   val Jose4j = "0.6.3"
 }
@@ -20,8 +20,6 @@ object Dependencies {
   lazy val ScalaTestPlay = "org.scalatestplus.play" %% "scalatestplus-play" % Version.ScalaTestPlay
 
   lazy val MockWs = "de.leanovate.play-mockws" %% "play-mockws" % Version.MockWs
-
-//  val SotaCommonTest = "org.genivi" %% "sota-common-test" % Version.GeniviSota
 
   lazy val TestFrameworks = Seq( ScalaCheck, ScalaTestPlay, MockWs, AkkaTestKit ).map(_ % "test")
 
