@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
-import { Header } from '../partials';
 import { CampaignsContainer } from '../containers';
 import { translate } from 'react-i18next';
 
@@ -27,27 +26,6 @@ class Campaigns extends Component {
             <FadeAnimation 
                 display="flex">
                 <div className="wrapper-flex">
-                    <Header 
-                        title={title}
-                        subtitle={(
-                            <span>
-                                {campaignsStore.overallCampaignsCount === null && campaignsStore.campaignsFetchAsync.isFetching ?
-                                    <span>
-                                        <i className="fa fa-square-o fa-spin"></i> campaigns counting
-                                    </span>
-                                :
-                                    null
-                                }
-                                {!campaignsStore.campaignsFetchAsync.isFetching ?
-                                    <span id="campaigns-count﻿">
-                                        {t('common.campaignWithCount', {count: campaignsStore.overallCampaignsCount})}
-                                    </span>
-                                :
-                                    null
-                                }
-                            </span>
-                        )}
-                    />
                     <MetaData 
                         title={title}>
                         <CampaignsContainer 
