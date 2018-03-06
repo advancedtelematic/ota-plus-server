@@ -24,8 +24,6 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.2.2")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.0")
 
-addSbtPlugin("com.geirsson" % "sbt-scalafmt" % "0.2.10")
-
 addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.11")
 
 addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "0.1.10")
