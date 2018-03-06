@@ -41,7 +41,7 @@ class AutoProvisioningSpec extends PlaySpec with GuiceOneServerPerSuite with Sca
     import com.advancedtelematic.auth.SessionCodecs.AccessTokenFormat
     val session = Session(
       Map(
-        "id_token"               -> TokenUtils.identityTokenFor(subj).value,
+        "id_token"               -> TokenUtils.identityTokenFor(subj),
         "access_token"           -> Json.toJson(AccessToken("XXXX", Instant.now().plusSeconds(3600))).toString(),
         "auth_plus_access_token" -> "",
         "namespace"              -> subj,
