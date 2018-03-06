@@ -1,7 +1,5 @@
 package com.advancedtelematic.auth
 
-import com.advancedtelematic.jwt.JsonWebToken
-import com.advancedtelematic.libats.auth.{AuthedNamespaceScope, NsFromToken}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import javax.inject.Inject
 import play.api.{Configuration, Logger}
