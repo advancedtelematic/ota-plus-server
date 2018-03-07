@@ -1,10 +1,171 @@
 @font-face {
-    font-family: akkurat;
-    src: url(/assets/fonts/Akkurat-Regular/AkkuratStd.eot?#iefix) format("embedded-opentype"),
-         url(/assets/fonts/Akkurat-Regular/AkkuratStd.otf) format("opentype"),
-         url(/assets/fonts/Akkurat-Regular/AkkuratStd.woff) format("woff"),
-         url(/assets/fonts/Akkurat-Regular/AkkuratStd.ttf) format("truetype"),
-         url(/assets/fonts/Akkurat-Regular/AkkuratStd.svg#AkkuratStd) format("svg");
-    font-weight: 400;
-    font-style: normal;
+  font-family: akkurat;
+  src: url(/assets/fonts/Akkurat-Regular/AkkuratStd.eot?#iefix) format("embedded-opentype"),
+  url(/assets/fonts/Akkurat-Regular/AkkuratStd.otf) format("opentype"),
+  url(/assets/fonts/Akkurat-Regular/AkkuratStd.woff) format("woff"),
+  url(/assets/fonts/Akkurat-Regular/AkkuratStd.ttf) format("truetype"),
+  url(/assets/fonts/Akkurat-Regular/AkkuratStd.svg#AkkuratStd) format("svg");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Sans';
+  src: url(/assets/fonts/FiraSans/FiraSans-Light.ttf) format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Sans';
+  src: url(/assets/fonts/FiraSans/FiraSans-Medium.ttf) format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+.btn-primary {
+  transition: all 0.4s ease;
+  border-radius: 0;
+  color: #fff;
+  font-size: 12px;
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 500;
+  display: inline-block;
+  outline: none;
+  height: 36px;
+  border: none;
+  width: 126px;
+  background-color: #48DAD0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  &:hover {
+    background-color: #48DAD0;
+    border: none;
+  }
+  &:active {
+    background-color: #0DC9DA;
+    border: none;
+    &:focus {
+      background-color: #0DC9DA;
+      border: none;
+    }
+  }
+  &:focus {
+    background-color: #0DC9DA;
+    border: none;
+  }
+  &:disabled {
+    background-color: #9ce2d8;
+    &:hover {
+      background-color: #9ce2d8;
+      border: none;
+    }
+  }
+}
+
+.btn-red {
+  background: #ff0000 !important;
+}
+
+.c-form {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  &__relative-wrapper {
+    position: relative;
+
+    .c-form__input {
+      padding: 10px 40px 10px 10px;
+    }
+  }
+
+  &__label {
+    color: #0F1621;
+    font-family: "Fira Sans", sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &__icon {
+    margin-left: 10px;
+    height: 13px;
+    width: 13px;
+    background-color: #00AFAA;
+    border-radius: 50%;
+    padding: 6px;
+    font-size: 10px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 300;
+  }
+
+  &__input-wrapper {
+    width: 100%;
+    background-color: #ebebec;
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  &__input {
+    background-color: #ebebec;
+    padding: 10px;
+    height: auto;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+    color: #0F1621;
+    font-size: 12px;
+    font-weight: 300;
+    font-family: "Fira Sans", sans-serif;
+    border: 1px solid rgba(0, 0, 0, 0);
+    transition: all .4s ease;
+    &--in-director {
+      display: inline-block;
+      img {
+        width: 22px;
+      }
+    }
+    &--hide-caret {
+      color: transparent;
+      text-shadow: 0 0 0 black;
+    }
+  }
+
+  &__select {
+    position: absolute;
+    left: 0;
+    top: 67px;
+    width: 100%;
+    z-index: 99999;
+    border: none;
+    -webkit-box-shadow: 0 1px 10px 0 rgba(0,0,0,0.3);
+    -moz-box-shadow: 0 1px 10px 0 rgba(0,0,0,0.3);
+    box-shadow: 0 1px 10px 0 rgba(0,0,0,0.3);
+  }
+
+  &__select-icon {
+    position: absolute;
+    color: #00AFAA;
+    top: 39px;
+    right: 15px;
+    &.fa-check {
+      font-size: 14px;
+    }
+  }
+
+  &__option {
+    padding: 10px;
+    &:not(:last-child) {
+      border-bottom: 1px solid #ddd;
+    }
+  }
 }
