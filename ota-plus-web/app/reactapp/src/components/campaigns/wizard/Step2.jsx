@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observable, observe } from "mobx"
 import { observer } from 'mobx-react';
 import { WizardPackagesList } from './step2';
-import { Loader } from '../../../partials';
+import { Loader, Form, FormInput } from '../../../partials';
 import _ from 'underscore';
 
 @observer
@@ -48,12 +48,21 @@ class WizardStep2 extends Component {
                     <Loader />
                 </div>
             :
-                <WizardPackagesList
-                    chosenPackagesList={chosenPackagesList}
-                    setWizardData={this.setWizardData}
-                    wizardIdentifier={wizardIdentifier}
-                    packagesStore={packagesStore}
-                />
+                <div>
+                    <Form>
+                        <FormInput
+                            label="Select package"
+                            showIcon={true}
+                            showInput={false}
+                        />
+                    </Form>
+                    <WizardPackagesList
+                        chosenPackagesList={chosenPackagesList}
+                        setWizardData={this.setWizardData}
+                        wizardIdentifier={wizardIdentifier}
+                        packagesStore={packagesStore}
+                    />
+                </div>
         );
     }
 }
