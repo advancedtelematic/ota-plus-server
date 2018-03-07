@@ -89,7 +89,7 @@ class WizardStep3 extends Component {
                             })}
                         </span>
                     }
-                </span>                
+                </span>
             </div>
         );
     }

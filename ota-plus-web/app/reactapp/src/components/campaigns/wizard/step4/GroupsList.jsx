@@ -34,7 +34,9 @@ class GroupsList extends Component {
     }
     componentWillUnmount() {
         this.groupsChangeHandler();
-        this.refs.list.removeEventListener('scroll', this.listScroll);
+        if (this.refs.list) {
+            this.refs.list.removeEventListener('scroll', this.listScroll);
+        }
     }
     generatePositions() {
         const headers = this.refs.list.getElementsByClassName('header');
