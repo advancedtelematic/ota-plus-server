@@ -30,7 +30,7 @@ class Item extends Component {
                     </div>
                     <div className="panel-body">
                         <div className="wrapper-center inner">
-                            <div className="count">
+                            <div className="count" id={`target_total_activated_devices_${usage.active}`}>
                                 {fetch.active.isFetching ?
                                     <Loader 
                                         size={20}
@@ -43,7 +43,7 @@ class Item extends Component {
                             <div className="desc">
                                 Total activated devices
                             </div>
-                            <div className="count">
+                            <div className="count" id={`target_new_activated_devices_${usage.activated}`}>
                                 {fetch.activated.isFetching ?
                                     <Loader 
                                         size={20}
@@ -56,7 +56,7 @@ class Item extends Component {
                             <div className="desc">
                                 New devices activated this month
                             </div>
-                            <div className="count">
+                            <div className="count" id={`target_devices_connected_${usage.connected.numberOfDevices}`}>
                                 {fetch.connected.isFetching ?
                                     <Loader 
                                         size={20}
