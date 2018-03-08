@@ -10,14 +10,13 @@ import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCode
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-
 class LoginAction @Inject()(conf: Configuration,
                             val parser: BodyParsers.Default,
                             val executionContext: ExecutionContext)
     extends com.advancedtelematic.auth.LoginAction {
 
-  private[this] val oauthConfig = OAuthConfig(conf)
-  private[this] val auth0Config = Auth0Config(conf)
+  private[this] val oauthConfig    = OAuthConfig(conf)
+  private[this] val auth0Config    = Auth0Config(conf)
   private[this] val downtimeConfig = DowntimeConfig(conf)
   override def apply(request: Request[AnyContent]): Future[Result] = {
     Future.successful(Results.Ok(views.html.login(oauthConfig, auth0Config, downtimeConfig)))
@@ -27,16 +26,15 @@ class LoginAction @Inject()(conf: Configuration,
 class LogoutAction @Inject()(conf: Configuration,
                              ws: WSClient,
                              authAction: UiAuthAction,
-                             val parser: BodyParsers.Default)
-                            (implicit val executionContext: ExecutionContext)
-  extends com.advancedtelematic.auth.LogoutAction {
+                             val parser: BodyParsers.Default)(implicit val executionContext: ExecutionContext)
+    extends com.advancedtelematic.auth.LogoutAction {
 
-  private[this] val log = Logger(this.getClass)
-  private[this] val oauthConfig = OAuthConfig(conf)
+  private[this] val log            = Logger(this.getClass)
+  private[this] val oauthConfig    = OAuthConfig(conf)
   private[this] val authPlusConfig = AuthPlusConfig(conf).get
 
   override def apply(request: Request[AnyContent]): Future[Result] = {
-    Future.fromTry(AuthenticatedRequest.fromRequest(request).map(revoke)).map { _ =>
+    Future.fromTry(SecuredAction.fromSession(request).map(revoke)).map { _ =>
       implicit val reqHeader: RequestHeader = request
       val query =
           Map(
@@ -48,7 +46,7 @@ class LogoutAction @Inject()(conf: Configuration,
     }
   }
 
-  private[this] def revoke[A](req: AuthenticatedRequest[A]): Unit = {
+  private[this] def revoke[A](req: AuthorizedSessionRequest[A]): Unit = {
     ws.url(s"${authPlusConfig.uri}/revoke")
       .withAuth(authPlusConfig.clientId, authPlusConfig.clientSecret, WSAuthScheme.BASIC)
       .post(Map("token" -> Seq(req.accessToken.value)))
@@ -73,17 +71,23 @@ import scala.concurrent.duration.Duration
 
 final case class DowntimeConfig(start: Option[Instant], duration: Duration) {
   val isPlanned = start.map(_.isAfter(Instant.now())).getOrElse(false)
-  val isDown = start.map(st => {
+  val isDown = start
+    .map(st => {
       val now = Instant.now()
       st.isBefore(now) && st.isAfter(now.minusSeconds(duration.toSeconds))
-  }).getOrElse(false)
+    })
+    .getOrElse(false)
 
-  def startDateTime = start.map(st => {
-    val fmt = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL)
-      .withLocale(Locale.US)
-      .withZone(ZoneId.systemDefault())
-    fmt.format(st)
-  }).getOrElse("")
+  def startDateTime =
+    start
+      .map(st => {
+        val fmt = DateTimeFormatter
+          .ofLocalizedDateTime(FormatStyle.FULL)
+          .withLocale(Locale.US)
+          .withZone(ZoneId.systemDefault())
+        fmt.format(st)
+      })
+      .getOrElse("")
 }
 
 object DowntimeConfig {
@@ -100,4 +104,3 @@ object DowntimeConfig {
     }
   }
 }
-

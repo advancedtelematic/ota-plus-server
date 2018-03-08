@@ -8,7 +8,8 @@ package com.advancedtelematic.controllers
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import com.advancedtelematic.api.{ApiVersion, OtaPlusConfig}
-import com.advancedtelematic.auth.{AccessTokenBuilder, ApiAuthAction, AuthenticatedRequest, OAuthConfig, UiAuthAction}
+import com.advancedtelematic.auth.{AccessTokenBuilder,
+  AuthorizedSessionRequest, IdentityAction, OAuthConfig, UiAuthAction}
 import javax.inject.{Inject, Singleton}
 import org.slf4j.LoggerFactory
 import play.api._
@@ -49,7 +50,7 @@ class Application @Inject() (ws: WSClient,
                              components: ControllerComponents,
                              val conf: Configuration,
                              uiAuth: UiAuthAction,
-                             val apiAuth: ApiAuthAction,
+                             val apiAuth: IdentityAction,
                              tokenBuilder: AccessTokenBuilder)
   extends AbstractController(components) with I18nSupport with OtaPlusConfig {
 
@@ -155,7 +156,7 @@ class Application @Inject() (ws: WSClient,
    * @param req request to proxy
    * @return The proxied request
    */
-  private def proxyTo(apiUri: String, req: AuthenticatedRequest[Source[ByteString, _]]) : Future[Result] = {
+  private def proxyTo(apiUri: String, req: AuthorizedSessionRequest[Source[ByteString, _]]) : Future[Result] = {
 
     val allowedHeaders = Seq("content-type")
     def passHeaders(hdrs: Headers) = hdrs.toSimpleMap.filter(h => allowedHeaders.contains(h._1.toLowerCase)) +
@@ -204,7 +205,7 @@ class Application @Inject() (ws: WSClient,
   def index : Action[AnyContent] = uiAuth { implicit req =>
     val subject = req.idToken.userId.id
     val token = tokenBuilder.mkToken(subject, req.accessToken.expiresAt, Set(s"namespace.${subject}"))
-    val wsUrl = s"$wsScheme://bearer:${token}@$wsHost:$wsPort$wsPath"
+    val wsUrl = s"$wsScheme://bearer:${token.value}@$wsHost:$wsPort$wsPath"
     Ok(views.html.main(oauthConfig, CSRF.getToken, wsUrl, uiToggles))
   }
 }

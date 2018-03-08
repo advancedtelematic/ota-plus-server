@@ -7,7 +7,7 @@ import java.util.UUID
 import javax.inject.{Inject, Singleton}
 import akka.actor.ActorSystem
 import com.advancedtelematic.api._
-import com.advancedtelematic.auth.{ApiAuthAction, AuthenticatedRequest}
+import com.advancedtelematic.auth.{ApiAuthAction, SecuredAction, AuthorizedRequest}
 import play.api.Configuration
 import play.api.http.{HeaderNames, HttpEntity}
 import play.api.libs.json.{Json, JsValue}
@@ -25,7 +25,7 @@ class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient
 
   val cryptApi = new CryptApi(conf, clientExec)
 
-  def accountName(request: AuthenticatedRequest[_]): String = request.namespace.get
+  def accountName(request: AuthorizedRequest[_]): String = request.namespace.get
 
   val provisioningStatus: Action[AnyContent] = authAction.async { implicit request =>
     cryptApi.getAccountInfo(accountName(request)).map(x => Ok(Json.obj("active" -> x.isDefined)))
