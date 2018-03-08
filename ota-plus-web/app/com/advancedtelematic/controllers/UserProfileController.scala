@@ -3,18 +3,16 @@ package com.advancedtelematic.controllers
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-import cats.syntax.show._
 import com.advancedtelematic.api.{ApiClientExec, ApiClientSupport, RemoteApiError}
-import javax.inject.{Inject, Singleton}
-
-import com.advancedtelematic.auth.{AccessToken, AccessTokenBuilder, ApiAuthAction, AuthenticatedAction}
+import com.advancedtelematic.auth.{AccessTokenBuilder, IdentityAction}
 import com.advancedtelematic.auth.oidc.OidcGateway
+import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.libs.ws.WSClient
-import play.api.mvc.Results.EmptyContent
 import play.api.mvc._
+import play.api.mvc.Results.EmptyContent
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -24,7 +22,7 @@ final case class UserId(id: String) extends AnyVal
 class UserProfileController @Inject()(val conf: Configuration,
                                       val ws: WSClient,
                                       val clientExec: ApiClientExec,
-                                      authAction: ApiAuthAction,
+                                      authAction: IdentityAction,
                                       accessTokenBuilder: AccessTokenBuilder,
                                       oidcGateway: OidcGateway,
                                       components: ControllerComponents)(implicit exec: ExecutionContext)
