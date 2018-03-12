@@ -47,7 +47,7 @@ class VersionsStats extends Component {
         const content = (
             <div className="chart-panel" id={"package-" + pack.packageName + "-stats"}>
                 <div className={installedOnEcusTotal ? "wrapper-center" : "wrapper-center left"}>
-                    <div className={installedOnEcusTotal ? "total-count" : "hide"}>
+                    <div id={`target_chart_device_count_${installedOnEcusTotal}`} className={installedOnEcusTotal ? "total-count" : "hide"}>
                         {installedOnEcusTotal}
                     </div>
                     {stats.length ?
