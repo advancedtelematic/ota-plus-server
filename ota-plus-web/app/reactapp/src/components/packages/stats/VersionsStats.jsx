@@ -13,11 +13,11 @@ class VersionsStats extends Component {
     }
     render() {
         const { pack } = this.props;
-        const mainColor = !window.atsGarageTheme || window.otaPlusMode ? '#fa9872' : '#1D5E6F';
+        const mainColor = !window.atsGarageTheme || window.otaPlusMode ? '#fa9872' : '#FA9D00';
         const availableColors = [
             mainColor,
-            '#9DDDD4',
-            '#D3D3D3',
+            '#069F71',
+            '#660195',
             '#fff',
         ];
         let colorIndex = -1;
@@ -54,10 +54,10 @@ class VersionsStats extends Component {
                         <div>
                             <Doughnut 
                                 data={stats} 
-                                width="250" 
-                                height="250" 
+                                width="175" 
+                                height="175" 
                                 options={{
-                                    percentageInnerCutout: 60, 
+                                    percentageInnerCutout: 75, 
                                     segmentStrokeWidth: 5, 
                                     showTooltips: true
                                 }}
