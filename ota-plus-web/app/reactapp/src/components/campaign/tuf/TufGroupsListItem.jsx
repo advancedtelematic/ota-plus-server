@@ -37,7 +37,7 @@ class TufGroupsListItem extends Component {
                     <div className="element-box group">
                         <div className="icon"/>
                         <div className="desc">
-                            <div className="title" title={foundGroup.groupName}>
+                            <div className="small-title" title={foundGroup.groupName}>
                                 {foundGroup.groupName}
                             </div>
                             <div className="subtitle">
@@ -53,18 +53,17 @@ class TufGroupsListItem extends Component {
                                                                 && campaign.statistics.status !== 'cancelled'
                                                                 && progress !== 100 ? ' progress-bar-striped active': '')}
                                  role="progressbar"
-                                 style={{width: foundGroup.devices.total !== 0 ? progress + '%' : '100%'}}>
-                                <div className="wrapper-rate">
-                                    <span className="wrapper-rate-value">
-                                        {foundGroup.devices.total !== 0
-                                            ? progress + '%'
-                                            : '100%'
-                                        }
-                                    </span>
-                                    <i className="fa fa-check" aria-hidden="true" />
-                                </div>
+                                 style={{width: foundGroup.devices.total !== 0 ? progress + '%' : '100%'}}>                                
                             </div>
                         </div>
+                    </div>
+                    <div className="wrapper-rate">
+                        <span className="wrapper-rate-value">
+                            {foundGroup.devices.total !== 0
+                                ? progress + '%'
+                                : '100%'
+                            }
+                        </span>
                     </div>
                 </div>
                 <div className="status-group">

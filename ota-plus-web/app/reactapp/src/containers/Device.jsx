@@ -74,7 +74,11 @@ class Device extends Component {
     onFileDrop(files) {
         this.showPackageCreateModal(files);
     }
-    toggleTufPackageAutoUpdate(packageName, deviceId, isAutoInstallEnabled) {
+    toggleTufPackageAutoUpdate(packageName, deviceId, isAutoInstallEnabled, e) {
+        if(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         const { packagesStore, hardwareStore } = this.props;
         let activeEcuSerial = hardwareStore.activeEcu.serial;
         if(isAutoInstallEnabled)

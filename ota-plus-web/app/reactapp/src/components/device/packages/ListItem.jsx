@@ -12,71 +12,69 @@ class ListItem extends Component {
             <span className="wrapper-item">
                 {!pack.unmanaged ?
                     <span>
-                        <button className="item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
-                            <div className="name">
-                                {pack.packageName}
-                            </div>
-                            <div className="package-versions-nr" id="package-versions-nr">
-                                {pack.versions.length === 1 ?
-                                    pack.versions.length + " version"
-                                :
-                                    pack.versions.length + " versions"
-                                }
-                            </div>
-                            {!isSelected ?
-                                queuedPackage ?
-                                    <span>
-                                        {pack.isAutoInstallEnabled ?
-                                            <div className="labels">
-                                                <label className="label label-auto-update">Auto</label>
-                                                <label className="label label-package-queued">Queued</label>
-                                            </div>
-                                        : 
-                                            <div className="labels">
-                                                <label className="label label-package-queued">Queued</label>
-                                            </div>
-                                        }
-                                    </span>
-                                :
-                                installedPackage ?
-                                    pack.isAutoInstallEnabled ?
-                                        <div className="labels">
-                                            <label className="label label-auto-update">Auto</label>
-                                            <label className="label label-package-installed">Installed</label>
-                                        </div>
+                        <button className={"item" + (isSelected ? " selected": "")} id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
+                            <div className="left-box">
+                                <div className="name">
+                                    {pack.packageName}
+                                </div>
+                                <div className="package-versions-nr" id="package-versions-nr">
+                                    {pack.versions.length === 1 ?
+                                        pack.versions.length + " version"
                                     :
-                                        <div className="labels">
-                                            <label className="label label-package-installed">Installed</label>
-                                        </div>
-                                :
-                                pack.isAutoInstallEnabled ?
-                                        <div className="labels">
-                                            <label className="label label-auto-update">Auto</label>
-                                        </div>
-                                    : 
-                                        null
-                                : 
-                                    null
-                            }
-                        </button>
-                        {isSelected ?
-                            <div className="wrapper-auto-update">
-                                Automatic update
-                                <div className={"switch" + (pack.isAutoInstallEnabled ? " switchOn" : "")} id="auto-install-switch" onClick={
-                                    toggleTufAutoInstall.bind(this, pack.packageName, device.uuid, pack.isAutoInstallEnabled)
-                                }>
-                                    <div className="switch-status">
-                                        {pack.isAutoInstallEnabled ?
-                                            <span>ON</span>
-                                        :
-                                            <span>OFF</span>
-                                        }
-                                    </div>
+                                        pack.versions.length + " versions"
+                                    }
                                 </div>
                             </div>
-                        : 
-                            null
-                        }
+                            <div className="right-box">
+                                {!isSelected ?
+                                    queuedPackage ?
+                                        <span>
+                                            {pack.isAutoInstallEnabled ?
+                                                <div className="labels">
+                                                    <label className="label label-auto-update">Auto</label>
+                                                    <label className="label label-package-queued">Queued</label>
+                                                </div>
+                                            : 
+                                                <div className="labels">
+                                                    <label className="label label-package-queued">Queued</label>
+                                                </div>
+                                            }
+                                        </span>
+                                    :
+                                    installedPackage ?
+                                        pack.isAutoInstallEnabled ?
+                                            <div className="labels">
+                                                <label className="label label-auto-update">Auto</label>
+                                                <label className="label label-package-installed">Installed</label>
+                                            </div>
+                                        :
+                                            <div className="labels">
+                                                <label className="label label-package-installed">Installed</label>
+                                            </div>
+                                    :
+                                    pack.isAutoInstallEnabled ?
+                                            <div className="labels">
+                                                <label className="label label-auto-update">Auto</label>
+                                            </div>
+                                        : 
+                                            null
+                                    : 
+                                        null
+                                }
+                                {isSelected ?
+                                    <div className="wrapper-auto-update">
+                                        Automatic update
+                                        <div className={"switch" + (pack.isAutoInstallEnabled ? " switchOn" : "")} id="auto-install-switch" onClick={
+                                            toggleTufAutoInstall.bind(this, pack.packageName, device.uuid, pack.isAutoInstallEnabled)
+                                        }>
+                                        </div>
+                                    </div>
+                                : 
+                                    null
+                                }
+                            </div>
+                        </button>
+                        
                     </span>
                 :
                     <span>
