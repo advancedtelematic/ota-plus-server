@@ -128,14 +128,21 @@ class Packages extends Component {
                     :
                         <div className="wrapper-center">
                             <div className="page-intro">
-                                <div>You haven't created any packages yet.</div>
                                 <div>
-                                    <FlatButton
-                                        label="Add new package"
-                                        type="button"
-                                        className="btn-main"
-                                        onClick={this.showCreateModal.bind(this, null)}
-                                    />
+                                    <img src="/assets/img/icons/white/packages.png" alt="Icon" />
+                                </div>
+                                <div>
+                                    You haven't created any packages yet.
+                                </div>
+                                <div>
+                                    <a href="#" className="add-button" id="add-new-package" onClick={this.showCreateModal.bind(this, null)}>
+                                        <span>
+                                            +
+                                        </span>
+                                        <span>
+                                            Add new package
+                                        </span>
+                                    </a>
                                 </div>
                             </div>
                         </div>

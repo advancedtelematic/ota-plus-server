@@ -54,13 +54,13 @@ class CancelCampaignModal extends Component {
                             id="cancel-all-close">
                             Close
                         </a>
-                        <FlatButton
-                            label="Confirm"
-                            type="submit"
-                            className="btn-main"
+                        <button
+                            className="btn-primary"
                             id="cancel-all-confirm"
                             onClick={this.cancelCampaign.bind(this)}
-                        />
+                        >
+                            Confirm
+                        </button>
                     </div>
                 </span>
             :
@@ -68,7 +68,13 @@ class CancelCampaignModal extends Component {
         );
         return (
             <Modal 
-                title="You're about to cancel a campaign"
+                title={
+                    <div className="heading red">
+                        <div className="internal">
+                            You're about to cancel a campaign
+                        </div>
+                    </div>
+                }
                 content={content}
                 shown={shown}
                 className="cancel-campaign-modal"

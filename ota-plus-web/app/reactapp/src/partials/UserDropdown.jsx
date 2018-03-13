@@ -36,13 +36,13 @@ class UserDropdown extends Component {
         const { userStore, otaPlusMode, alphaPlusEnabled, uiCredentialsDownload, settings } = this.props;
         const otaPlusBlock = (
             <li>
-                <span className="switch-mode-heading">OTA Plus mode:</span>
+                <span className="switch-mode-heading">OTA Demo:</span>
                 <div className={"switch" + (otaPlusMode ? " switchOn" : "")} id="switch" onClick={this.toggleMode}>
                     <div className="switch-status">
                         {otaPlusMode ?
-                            <span id="switch-on">ON</span>
+                            <span id="switch-on"></span>
                         :
-                            <span id="switch-off">OFF</span>
+                            <span id="switch-off"></span>
                         }
                     </div>
                 </div>
@@ -65,6 +65,7 @@ class UserDropdown extends Component {
         );
         return (
             <div className="dropdown-menu">
+                <div className="triangle"></div>
                 {settings ? 
                     <ul className="links">
                         {uiCredentialsDownload ?
@@ -112,9 +113,6 @@ class UserDropdown extends Component {
                             <li>
                                   <Link to="/profile/usage" id="link-usage" onClick={this.closeDropdown}>Usage</Link>
                             </li>
-                            <li>
-                                  <Link to="/profile/billing" id="link-billing" onClick={this.closeDropdown}>Billing</Link>
-                            </li>
                             {uiCredentialsDownload ?
                                 <li>
                                       <Link to="/profile/access-keys" id="link-access-keys" onClick={this.closeDropdown}>Provisioning keys</Link>
@@ -141,13 +139,17 @@ class UserDropdown extends Component {
                                 <span>
                                     {alphaPlusEnabled ?
                                         <li className="clear-localstorage">
-                                            <button className="btn-main btn-small" onClick={this.clearLocalStorage} id="reset-demo"><span>Reset demo</span></button>
+                                            <a href="#" className="add-button" onClick={this.clearLocalStorage} id="reset-demo">
+                                                Reset demo
+                                            </a>
                                         </li>
                                     :
                                         null
                                     }
                                     <li className="signout">
-                                        <button className="btn-main btn-small" onClick={this.logout}><span>Sign out</span></button>
+                                        <a href="#" className="add-button" onClick={this.logout}>
+                                            Log out
+                                        </a>
                                     </li>
                                 </span>
                             }

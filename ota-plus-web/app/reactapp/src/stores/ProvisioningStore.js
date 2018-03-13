@@ -29,6 +29,7 @@ export default class ProvisioningStore {
     @observable provisioningKeys = [];
     @observable provisioningKeysSort = 'asc';
     @observable preparedProvisioningKeys = [];
+    @observable provisioningFilter = '';
 
     constructor() {
         resetAsync(this.provisioningStatusFetchAsync);
@@ -39,6 +40,7 @@ export default class ProvisioningStore {
     }
 
     _filterProvisioningKeys(filter) {
+        this.provisioningFilter = filter;
         let searchResults = [];
         let found = _.each(this.initialProvisioningKeys, function(key, index) {
             return key.description.indexOf(filter) >= 0 ? searchResults.push(key) : null
@@ -139,5 +141,6 @@ export default class ProvisioningStore {
         this.provisioningKeys = [];
         this.provisioningKeysSort = 'asc';
         this.preparedProvisioningKeys = [];
+        this.provisioningFilter = '';
     }
 }

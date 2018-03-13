@@ -77,14 +77,18 @@ class BlacklistModal extends Component {
     render() {
         const { shown, hide, blacklistAction, packagesStore } = this.props;
         const title = (
-            <span>
-                <img src="/assets/img/icons/ban_white.png" alt="" /> &nbsp;
-                {blacklistAction.mode === "edit" ? 
-                    "Edit blacklisted package" 
-                : 
-                    "Blacklist"
-                }
-            </span>
+            <div className="heading red">
+                <div className="internal">
+                    <span>
+                        <img src="/assets/img/icons/ban_white.png" alt="" /> &nbsp;
+                        {blacklistAction.mode === "edit" ? 
+                            "Edit blacklisted package" 
+                        : 
+                            "Blacklist"
+                        }
+                    </span>
+                </div>
+            </div>
         );
         const content = (
             <Form
@@ -168,15 +172,18 @@ class BlacklistModal extends Component {
                                 className="link-cancel">
                                 Cancel
                             </a>
-                            <FlatButton
-                                label={blacklistAction.mode === "edit" ? "Save Comment" : "Confirm"}
-                                type="submit"
-                                className="btn-main"
+                            <button 
+                                className="btn-primary"
                                 disabled={
                                     this.submitButtonDisabled || packagesStore.packagesBlacklistAsync.isFetching ||
                                     packagesStore.packagesUpdateBlacklistedAsync.isFetching || packagesStore.packagesRemoveFromBlacklistAsync.isFetching
+                                }>
+                                {blacklistAction.mode === "edit" ? 
+                                    "Save Comment"
+                                : 
+                                    "Confirm"
                                 }
-                            />
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -195,7 +202,6 @@ class BlacklistModal extends Component {
                 content={content}
                 shown={shown}
                 className="blacklist-modal"
-                titleClassName={blacklistAction.mode === "add" ? "red" : ""}
             />
         );
     }

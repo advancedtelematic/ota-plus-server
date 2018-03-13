@@ -24,19 +24,22 @@ class SecondaryEcuDetails extends Component {
                     </div>
 
                 <div className="body-actions">
-                    <FlatButton
-                        label="Got it"
-                        type="button"
-                        className="btn-main"
-                        onClick={hideDetails}
-                    />
+                    <button className="btn-primary" onClick={hideDetails}>
+                        Got it
+                    </button>
                 </div>
             </span>
         );
 
         return (
             <Modal 
-                title="Secondary ECUs"
+                title={
+                    <div className="heading">
+                        <div className="internal">
+                            Secondary ECUs
+                        </div>
+                    </div>
+                }
                 content={content}
                 shown={shown}
                 className="secondary-ecu-details-modal"

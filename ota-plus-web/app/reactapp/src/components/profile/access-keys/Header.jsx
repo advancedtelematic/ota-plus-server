@@ -10,33 +10,25 @@ class Header extends Component {
         super(props);
     }
     render() {
-        const { showCreateModal, devicesFilter, changeFilter, provisioningSort, changeSort} = this.props;
+        const { showCreateModal, provisioningFilter, changeFilter} = this.props;
         return (
             <SubHeader>
                 <Form>
                     <SearchBar 
-                        value={devicesFilter}
+                        value={provisioningFilter}
                         changeAction={changeFilter}
                         id="search-devices-input"
+                        additionalClassName={'white'}
                     />
                 </Form>
-                <div className="sort-box">
-                    {provisioningSort == 'asc' ? 
-                        <a href="#" onClick={changeSort.bind(this, 'desc')} id="link-sort-access-keys-desc">
-                            <i className="fa fa-long-arrow-up" aria-hidden="true"></i> A &gt; Z
-                        </a>
-                    :
-                        <a href="#" onClick={changeSort.bind(this, 'asc')} id="link-sort-access-keys-asc">
-                            <i className="fa fa-long-arrow-down" aria-hidden="true"></i> Z &gt; A
-                        </a>
-                    }
-                </div>
-                <FlatButton
-                    label="Add new key"
-                    onClick={showCreateModal.bind(this)}
-                    className="btn-main btn-small btn-add"
-                    id="add-new-key"
-                />
+                <a href="#" className="add-button grey-button" id="add-new-key" onClick={showCreateModal.bind(this)} >
+                    <span>
+                        +
+                    </span>
+                    <span>
+                        Add new key
+                    </span>
+                </a>
             </SubHeader>
         );
     }

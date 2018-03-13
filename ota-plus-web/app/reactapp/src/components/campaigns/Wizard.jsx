@@ -431,24 +431,10 @@ class Wizard extends Component {
         const modalContent = (
             <div
                 className={"campaigns-wizard campaigns-wizard-" + wizardIdentifier + (campaignsStore.fullScreenMode ? ' full-screen' : '')}>
-                <div className="draggable-content">
-                    <div className="body">
-                        <span>
-                            <div className="heading">
-                                Add new campaign
-                                <div>
-                                    {/*<a href="#" id="close-wizard" className="box-toggle pack-box-close"*/}
-                                    {/*title="Close wizard" onClick={hideWizard.bind(this, wizardIdentifier)}>*/}
-                                    {/*<img src="/assets/img/icons/white/cross.svg" alt="Icon"/>*/}
-                                    {/*</a>*/}
-                                    {/*<a href="#" id="minimize-wizard" className="box-toggle pack-box-minimize"*/}
-                                    {/*title="Minimize wizard"*/}
-                                    {/*onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)}>*/}
-                                    {/*<img src="/assets/img/icons/white/minimize.svg" alt="Icon"/>*/}
-                                    {/*</a>*/}
-                                </div>
-                            </div>
-                            <div className="actions">
+                <div className="draggable-content">                    
+                    <div className="internal-body">
+                        <span>                            
+                            <div className="stepper">
                                 <div className="wrapper-steps-no">
                                     {_.map(this.wizardSteps, (step, index) => {
                                         return (
@@ -508,12 +494,10 @@ class Wizard extends Component {
                                     }
                                 </div>
                                 <div className="wizard-actions">
-                                    <div className="wrapper-close">
-                                      <a href="#" className="link-close" id="save-and-close"
-                                         onClick={hideWizard.bind(this, wizardIdentifier)}>
-                                          Close
-                                      </a>
-                                    </div>
+                                  <a href="#" className="link-cancel" id="save-and-close"
+                                     onClick={hideWizard.bind(this, wizardIdentifier)}>
+                                      Close
+                                  </a>
                                     <div className="wrapper-confirm">
                                     {this.isLastStep() ?
                                         <button
@@ -541,7 +525,13 @@ class Wizard extends Component {
         );
         return (
             <Modal
-                title="Add new campaign"
+                title={
+                    <div className="heading">
+                        <div className="internal">
+                            Add new campaign
+                        </div>
+                    </div>
+                }
                 content={modalContent}
                 shown={!wizardMinimized}
                 onRequestClose={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)}

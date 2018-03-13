@@ -24,7 +24,6 @@ class Provisioning extends Component {
         this.showCreateModal = this.showCreateModal.bind(this);
         this.hideCreateModal = this.hideCreateModal.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
-        this.changeSort = this.changeSort.bind(this);
     }
     showTooltip(e) {
         if(e) e.preventDefault();
@@ -46,12 +45,8 @@ class Provisioning extends Component {
     changeFilter(filter) {
         this.props.provisioningStore._filterProvisioningKeys(filter);
     }
-    changeSort(sort, e) {
-        if(e) e.preventDefault();
-        this.props.provisioningStore._prepareProvisioningKeys(sort);
-    }
     render() {
-        const { provisioningStore, devicesStore } = this.props;
+        const { provisioningStore } = this.props;
         return (
             <span>
                 {provisioningStore.provisioningStatusFetchAsync.isFetching ?
@@ -63,10 +58,8 @@ class Provisioning extends Component {
                         <span>
                             <ProvisioningHeader 
                                 showCreateModal={this.showCreateModal}
-                                devicesFilter={devicesStore.devicesFilter}
+                                provisioningFilter={provisioningStore.provisioningFilter}
                                 changeFilter={this.changeFilter}
-                                provisioningSort={provisioningStore.provisioningKeysSort}
-                                changeSort={this.changeSort}
                             />
                             <ProvisioningList 
                                 provisioningStore={provisioningStore}

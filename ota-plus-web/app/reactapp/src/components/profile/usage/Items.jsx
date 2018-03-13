@@ -8,24 +8,23 @@ import Item from './Item';
 import NoHistoryItem from './NoHistoryItem';
 
 @observer
-class Carousel extends Component {
+class Items extends Component {
     @observable active = 0;
     @observable direction = '';
 
     constructor(props) {
         super(props);
-        this.moveLeft = this.moveLeft.bind(this);
-        this.moveRight = this.moveRight.bind(this);
     }
     generateElements() {
         const { userStore, months } = this.props;
         const inversedMonthUsageKeys = _.sortBy(months, (month) => {
             return month;
         }).reverse();
+
         let elements = [];
         const firstDate = moment(inversedMonthUsageKeys[inversedMonthUsageKeys.length - 1], 'YYYYMM');
-        for (var i = this.active; i <= this.active + 2; i++) {
-            const level = i - this.active;
+
+        for (var i = 0; i <= months.length; i++) {
             if (i < months.length) {
                 const objKey = inversedMonthUsageKeys[i];
                 const usage = {
@@ -46,7 +45,6 @@ class Carousel extends Component {
                         fetch={fetch}
                         userStore={userStore}
                         date={date}
-                        level={level}
                     />
                 );
             } else {
@@ -55,49 +53,27 @@ class Carousel extends Component {
                     <NoHistoryItem
                         key={i}
                         date={date}
-                        level={level}
                     />
                 );
             }
         }
         return elements;
     }
-    moveLeft() {
-        const { userStore, months } = this.props;
-        if(this.active < months.length - 1)
-            this.active = this.active + 1;
-        this.direction = 'left';
-    }
-    moveRight() {
-        const { userStore, months } = this.props;
-        if(this.active > 0)
-            this.active = this.active - 1;
-        this.direction = 'right';
-    }
     render() {
-        const { userStore, months } = this.props;
         return (
-            <div className="months-slider">
-                <div className={"arrow arrow-left" + (this.active === months.length - 1 ? " disabled" : "")} onClick={this.moveLeft}>
-                    <i className="fa fa-chevron-left"></i>
-                </div>
-                    <ReactCSSTransitionGroup
-                        transitionName={this.direction}
-                        transitionEnterTimeout={1000}
-                        transitionLeaveTimeout={1000}>
-                        {this.generateElements()}
-                    </ReactCSSTransitionGroup>
-                <div className={"arrow arrow-right" + (this.active === 0 ? " disabled" : "")} onClick={this.moveRight}>
-                    <i className="fa fa-chevron-right"></i>
-                </div>
-            </div>
+            <ReactCSSTransitionGroup
+                transitionName={this.direction}
+                transitionEnterTimeout={1000}
+                transitionLeaveTimeout={1000}>
+                {this.generateElements()}
+            </ReactCSSTransitionGroup>
         );
     }
 }
 
-Carousel.propTypes = {
+Items.propTypes = {
     userStore: PropTypes.object.isRequired,
     months: PropTypes.array.isRequired,
 };
 
-export default Carousel;
+export default Items;
