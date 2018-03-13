@@ -12,18 +12,14 @@ class GroupsPanel extends Component {
         const { devicesStore, groupsStore, showCreateGroupModal, selectGroup, onDeviceDrop } = this.props;
         return (
             <div className="groups-panel">
-                <div className="heading">
-                    <div className="title">
-                        Groups
-                    </div>
-                    <a href="#" className="add-button" id="add-new-group" onClick={showCreateGroupModal}>
-                        <span>
-                            +
-                        </span>
-                        <span>
-                            Add group
-                        </span>
-                    </a>
+                <div className="wrapper-btn">
+                    <FlatButton
+                        label="Add new group"
+                        type="button"
+                        className="btn-dashed"
+                        id="add-new-group"
+                        onClick={showCreateGroupModal}
+                    />
                 </div>
                 <GroupsList
                     devicesStore={devicesStore}

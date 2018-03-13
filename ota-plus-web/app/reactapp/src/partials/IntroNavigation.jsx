@@ -30,16 +30,16 @@ class IntroNavigation extends Component {
         const garageNavigation = (
             <ul className="nav navbar-nav">
                 <li>
-                    <Link to="/devices" activeClassName="active" id="link-devices">Devices</Link>
+                    <Link to="/devices" activeClassName="active" className="font-medium" id="link-devices">Devices</Link>
                 </li>
                 <li>
-                    <Link to="/packages" activeClassName="active" id="link-packages">Packages</Link>
+                    <Link to="/packages" activeClassName="active" className="font-medium" id="link-packages">Packages</Link>
                 </li>
                 <li>
-                    <Link to="/campaigns" activeClassName="active" id="link-campaigns">Campaigns</Link>
+                    <Link to="/campaigns" activeClassName="active" className="font-medium" id="link-campaigns">Campaigns</Link>
                 </li>
                 <li>
-                    <Link to="/impact-analysis" activeClassName="active" id="link-impactanalysis">Impact analysis</Link>
+                    <Link to="/impact-analysis" activeClassName="active" className="font-medium" id="link-impactanalysis">Impact analysis</Link>
                 </li>
             </ul>
         );
@@ -63,11 +63,11 @@ class IntroNavigation extends Component {
                        {allDevicesCount > 0 ?
                         <span>
                             <li className="text-link">
-                                <a href="http://docs.atsgarage.com" target="_blank" id="docs-link">DOCS</a>
+                                <a href="http://docs.atsgarage.com" className="font-medium" target="_blank" id="docs-link">DOCS</a>
                             </li>
                             <li className="separator">|</li>
                             <li className="text-link">
-                                <a href="mailto:support@atsgarage.com" id="support-link">SUPPORT</a>
+                                <a href="mailto:support@atsgarage.com" className="font-medium" id="support-link">SUPPORT</a>
                             </li>
                         </span>
                        : ''}

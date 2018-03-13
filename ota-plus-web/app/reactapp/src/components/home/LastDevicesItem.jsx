@@ -34,17 +34,17 @@ class LastDevicesItem extends Component {
                 id={"link-devicedetails-" + device.uuid}>
                 <div className="icon"></div>
                 <div className="desc">
-                    <div className="title">
+                    <div className="title font-medium-bold">
                         {device.deviceName}
                     </div>
-                    <div className="subtitle">
+                    <div className="subtitle font-small">
                         {deviceStatus !== 'Status unknown' ?
                             <span>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
                         :
                             <span>Never seen online</span>
                         }
                     </div>
-                    <div className="subtitle">
+                    <div className="subtitle font-small">
                         Device status: {deviceStatus}
                     </div>
                 </div>

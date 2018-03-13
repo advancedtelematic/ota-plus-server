@@ -40,15 +40,14 @@ class Home extends Component {
                     <div className="column">
                         <div className="panel panel-lightgrey">
                             <div className="panel-heading">
-                                {lastDevicesTitle}
+                                <div className="title font-medium-bold">
+                                    {lastDevicesTitle}
+                                </div>
                                 <div className="add">
                                     {allDevicesCount > 0 ?
-                                        <a href="https://docs.atsgarage.com/index.html" className="add-button" id="add-new-device" target="_blank" >
+                                        <a href="https://docs.atsgarage.com/index.html" className="btn-main btn-small btn-add" id="add-new-device" target="_blank" >
                                             <span>
-                                                +
-                                            </span>
-                                            <span>
-                                                Add device
+                                                Add new device
                                             </span>
                                         </a>
                                     :
@@ -66,16 +65,17 @@ class Home extends Component {
                     <div className="column">
                         <div className="panel panel-lightgrey">
                             <div className="panel-heading">
-                                {lastPackagesTitle}
+                                <div className="title font-medium-bold">
+                                    {lastPackagesTitle}
+                                </div>
                                 <div className="add">
-                                    <a href="#" className="add-button" id="add-new-package" onClick={this.showPackagesCreateModal}>
-                                        <span>
-                                            +
-                                        </span>
-                                        <span>
-                                            Add package
-                                        </span>
-                                    </a>
+                                    <FlatButton
+                                        label="Add new package"
+                                        type="button"
+                                        id="add-new-package"
+                                        className="btn-main btn-small btn-add"
+                                        onClick={this.showPackagesCreateModal}
+                                    />
                                 </div>
                             </div>
                             <div className="panel-body">
@@ -90,16 +90,17 @@ class Home extends Component {
                     <div className="column">
                         <div className="panel panel-lightgrey">
                             <div className="panel-heading">
-                                {activeCampaignsTitle}
+                                <div className="title font-medium-bold">
+                                    {activeCampaignsTitle}
+                                </div>
                                 <div className="add">
-                                    <a href="#" className="add-button" id="add-new-campaign" onClick={addNewWizard.bind(this, null)}>
-                                        <span>
-                                            +
-                                        </span>
-                                        <span>
-                                            Add campaign
-                                        </span>
-                                    </a>
+                                    <FlatButton
+                                        label="Add new campaign"
+                                        id="add-new-campaign"
+                                        type="button"
+                                        className="btn-main btn-small btn-add"
+                                        onClick={addNewWizard.bind(this, null)}
+                                    />
                                 </div>
                             </div>
                             <div className="panel-body">
