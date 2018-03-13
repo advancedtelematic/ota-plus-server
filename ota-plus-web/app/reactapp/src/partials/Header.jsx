@@ -4,25 +4,23 @@ const Header = (props) => {
     const { title, subtitle, backButtonShown, backButtonAction, children, device } = props;
     return (
         <div className="page-heading">
-            <div className="left-box">
+            <div className="container">
                 {backButtonShown ? 
                     <a href="#" id="back-button" className="back-button" onClick={backButtonAction}>
-                        <i className="fa fa-angle-left"></i>
+                        <img src="/assets/img/icons/back.png" className="icon-back" alt="" />
                     </a>
                 : null}
                 <div className="icon">
                     {device ? <div className={"status status-" + device.deviceStatus} id={"status=" + device.deviceStatus}></div> : ''}
                 </div>
                 <div className="text">
-                    <div className="title">{title}</div>
+                    <div className="title font-big">{title}</div>
                     {subtitle ?
-                        <div className="subtitle">{subtitle}</div>
+                        <div className="subtitle font-small">{subtitle}</div>
                     :
                         null
                     }
                 </div>
-            </div>
-            <div className="right-box">
                 {children}
             </div>
         </div>

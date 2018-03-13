@@ -11,13 +11,13 @@ class Chart extends Component {
     }
     render() {
         const { t, packagesStore } = this.props;
-        const blacklist = packagesStore.preparedBlacklistRaw;
+        const blacklist = packagesStore.preparedBlacklist;
         const availableColors = [
-            '#DFF9F8',
-            '#B2E7E5',
-            '#7ED7D3',
-            '#4CC7C4',
-            '#00AFAA'
+            '#1D5E6F',
+            '#9DDDD4',
+            '#D3D3D3',
+            '#9B9B9B',
+            '#4A4A4A'
         ];
         const groupedStatsName = 'Other';
         let colorIndex = -1;
@@ -52,18 +52,18 @@ class Chart extends Component {
                 </li>
             );
         }, this);
+
         return (
             <div className="chart-panel">
-                <div className="section-header"></div>
                 <div className="wrapper-center">
                     <div>
                         <Doughnut 
                             data={stats} 
-                            width="400" 
-                            height="400" 
+                            width="300" 
+                            height="300" 
                             options={{
-                                percentageInnerCutout: 50, 
-                                segmentStrokeWidth: 15, 
+                                percentageInnerCutout: 65, 
+                                segmentStrokeWidth: 5, 
                                 showTooltips: true
                             }}
                         />

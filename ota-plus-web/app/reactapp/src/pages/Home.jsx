@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observe, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
+import { Header } from '../partials';
 import { HomeContainer, PreparationContainer } from '../containers';
 import Cookies from 'js-cookie';
 
@@ -66,6 +67,9 @@ class Home extends Component {
                 display="flex">
                 {this.sanityCheckCompleted() ?
                         <div className="wrapper-flex">
+                            <Header
+                                title={title}
+                            />
                             <MetaData
                                 title={title}>
                                 <HomeContainer

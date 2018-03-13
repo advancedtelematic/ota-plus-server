@@ -38,7 +38,7 @@ class Item extends Component {
         super(props);
     }
     render() {
-        const { groupsStore, device, goToDetails } = this.props;
+        const { groupsStore, device, width, goToDetails } = this.props;
         const { isDragging, connectDragSource } = this.props;
         const opacity = isDragging ? 0.4 : 1;
         const lastSeenDate = new Date(device.lastSeen);
@@ -61,12 +61,14 @@ class Item extends Component {
         });
         return (
             connectDragSource(
-                <div className="common-box" style={{opacity}} onClick={goToDetails.bind(this, device.uuid)} id={"link-devicedetails-" + device.uuid}>
+                <div className="common-box" style={{width, opacity}} onClick={goToDetails.bind(this, device.uuid)} id={"link-devicedetails-" + device.uuid}>
+                    <div className="actions">
+                    </div>
                     <div className="icon">
                         <div className={"device-status device-status-" + device.deviceStatus} title={deviceStatus}></div>
                     </div>
                     <div className="desc">
-                        <div className="title" title={device.deviceName}>{device.deviceName}</div>
+                        <div className="title font-medium" title={device.deviceName}>{device.deviceName}</div>
                         <div className="subtitle">
                             {deviceStatus !== 'Status unknown' ?
                                 <span>Last seen: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
@@ -86,6 +88,7 @@ Item.propTypes = {
     groupsStore: PropTypes.object.isRequired,
     devicesStore: PropTypes.object.isRequired,
     device: PropTypes.object.isRequired,
+    width: PropTypes.number.isRequired,
     goToDetails: PropTypes.func.isRequired,
     connectDragSource: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired,

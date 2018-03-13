@@ -147,14 +147,15 @@ class List extends Component {
                         {_.map(packagesStore.preparedPackages, (packages, letter) => {
                             return (
                                 <span key={letter}>
-                                    <div className="header">{letter}</div>
+                                    <div className="header font-medium">{letter}</div>
                                     {_.map(packages, (pack, index) => {
                                         const that = this;
                                         return (
-                                            <span key={index} className="c-package">
+                                            <span key={index} className="c-package font-small">
                                                 <ListItem 
                                                     pack={pack}
                                                     togglePackage={this.togglePackage}
+                                                    expandedPackageName={this.expandedPackageName}
                                                 />
                                                 <VelocityTransitionGroup 
                                                     enter={{
@@ -170,9 +171,8 @@ class List extends Component {
                                                 >
                                                     {this.expandedPackageName === pack.packageName ?
                                                         <div className="c-package__details">
-                                                            <div className="c-package__main-name">
+                                                            <div className="c-package__main-name font-big">
                                                                 {pack.packageName}
-                                                                <i className="fa fa-angle-up"></i>
                                                             </div>
                                                             <div className="c-package__chart">
                                                                 <div className="c-package__heading">

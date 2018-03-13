@@ -40,8 +40,8 @@ class StatisticDetails extends Component {
             },
             {
                 value: overallStatistics.failed === 0 ? 1 : overallStatistics.finished,
-                color: "#44CA9D",
-                highlight: "#44CA9D",
+                color: "#83D060",
+                highlight: "#83D060",
                 label: "Success rate"
             },
             {
@@ -81,7 +81,7 @@ class StatisticDetails extends Component {
                         <div className="failure-rate" id="campaign-detail-total-failure-rate">
                             <Doughnut
                                 data={failureRateData}
-                                options={{percentageInnerCutout: 75, showTooltips: false}}
+                                options={{percentageInnerCutout: 40, showTooltips: false}}
                                 width="140"
                                 height="140"
                             />
@@ -91,9 +91,14 @@ class StatisticDetails extends Component {
                         </div>
                         {campaignsStore.campaign.statistics.status === 'launched' ?
                             <div className="cancel-campaign">
-                                <a href="#" id="campaign-detail-cancel-all" className="cancel-button" onClick={showCancelCampaignModal}>
-                                    Cancel all
-                                </a>
+                                <FlatButton
+                                    label="Cancel all"
+                                    title="Cancel the Campaign for all groups"
+                                    type="button"
+                                    onClick={showCancelCampaignModal}
+                                    className="btn-main btn-red"
+                                    id="campaign-detail-cancel-all"
+                                />
                             </div>
                         : 
                             null
@@ -141,12 +146,8 @@ class StatisticDetails extends Component {
                                 </div>
                             </div>
                             <div className="show-dependencies">
-                                <a href="#" className="add-button" id="show-dependencies" onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}>
-                                    <span>
-                                        Show dependencies
-                                    </span>
-                                </a>
-                            </div>  
+                                <div className="icon" title="Show dependencies" onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}></div>
+                            </div>
                         </div>
                         <div className="bottom-container">
                             <div className="status-block">

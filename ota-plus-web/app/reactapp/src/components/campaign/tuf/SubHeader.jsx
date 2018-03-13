@@ -76,32 +76,29 @@ class SubHeader extends Component {
         const { title } = this.props;
         return (
             <div className="campaign-name">
-                <div className="rename-container">
-                    <div onClick={this.enableCampaignRename}
-                         ref={(clickableArea) => {this.clickableArea = clickableArea}}
-                         className="clickable-area"
-                         style={{width: '100%', height: '100%', position: 'absolute'}} />
+                <div onClick={this.enableCampaignRename}
+                     ref={(clickableArea) => {this.clickableArea = clickableArea}}
+                     className="clickable-area"
+                     style={{width: '100%', height: '100%', position: 'absolute'}}/>
 
-                     <input type="text"
-                       ref={(input) => {this.campaignNameInput = input}}
-                       disabled
-                       onKeyPress={this.keyPressed}
-                       value={this.newCampaignName} onChange={this.userTypesName} />
+                 <input type="text"
+                   ref={(input) => {this.campaignNameInput = input}}
+                   disabled
+                   onKeyPress={this.keyPressed}
+                   value={this.newCampaignName} onChange={this.userTypesName} />
 
-                    {this.renameDisabled ?
-                        <img src="/assets/img/icons/black/edit.svg" className="edit" alt="Icon" style={{cursor: 'auto'}} />
-                    :
-                        <div className="icons">
-                            {this.newCampaignNameLength ?
-                                <img src="/assets/img/icons/accept_icon.png" className="rename" alt="Icon" onClick={this.renameCampaign} />
-                            :
-                                null
-                            }
-                            <img src="/assets/img/icons/close_icon.png" alt="Icon" className="cancel" onClick={this.cancelCampaignRename} />
-                        </div>
-                    }
-                </div>
-                <i className="fa fa-angle-up"></i>
+                {this.renameDisabled ?
+                    <img src="/assets/img/icons/black/edit.svg" className="edit" alt="Icon" style={{cursor: 'auto'}} />
+                :
+                    <div className="icons">
+                        {this.newCampaignNameLength ?
+                            <img src="/assets/img/icons/accept_icon.png" className="rename" alt="Icon" onClick={this.renameCampaign} />
+                        :
+                            null
+                        }
+                        <img src="/assets/img/icons/close_icon.png" alt="Icon" className="cancel" onClick={this.cancelCampaignRename} />
+                    </div>
+                }
             </div>
         );
     }
