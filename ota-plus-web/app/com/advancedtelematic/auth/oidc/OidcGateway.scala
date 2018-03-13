@@ -17,7 +17,7 @@ import org.jose4j.jws.{AlgorithmIdentifiers, JsonWebSignature}
 import play.api.{Configuration, Logger}
 import play.api.cache.AsyncCacheApi
 import play.api.http.{HeaderNames, MimeTypes, Status}
-import play.api.libs.json.{Format, JsPath, JsResult, JsValue}
+import play.api.libs.json.{Format, JsError, JsLookupResult, JsPath, JsResult, JsSuccess, JsValue}
 import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.mvc.{Result, Results}
 import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
@@ -51,7 +51,7 @@ object OidcGateway {
   final case class Authorize() extends GatewayCommand
 
   private[OidcGateway] val ProviderMetaKey = "oidc.proivider.configuration"
-  private[OidcGateway] val JwksKey = "oidc.keys"
+  private[OidcGateway] val JwksKey         = "oidc.keys"
 }
 
 @Singleton
@@ -62,7 +62,7 @@ class OidcGateway @Inject()(wsClient: WSClient, config: Configuration, cache: As
   private[this] val issuerIdentifier      = config.get[String]("oidc.issuer")
   private[this] val staticProviderMeta    = ProviderMetadata.fromConfig(config.get[Configuration]("oidc.fallback"))
   private[this] val metadataTtl           = config.get[FiniteDuration]("oidc.configurationTtl")
-  private[this] val jwksTtl = config.get[FiniteDuration]("oidc.keysTtl")
+  private[this] val jwksTtl               = config.get[FiniteDuration]("oidc.keysTtl")
 
   def redirectToAuthorize()(implicit executionContext: ExecutionContext): Future[Result] = providerMeta().map { meta =>
     Results.Redirect(
@@ -126,9 +126,9 @@ class OidcGateway @Inject()(wsClient: WSClient, config: Configuration, cache: As
     }
   }
 
-  private[this] def verify(
+  private[this] def verifySignature(
       token: String
-  )(implicit executionContext: ExecutionContext): Future[NotUsed] = {
+  )(implicit executionContext: ExecutionContext): Future[String] = {
     getKeys().flatMap { keys =>
       val verifier = new JsonWebSignature()
       verifier.setAlgorithmConstraints(
@@ -140,23 +140,31 @@ class OidcGateway @Inject()(wsClient: WSClient, config: Configuration, cache: As
       val keySelector = new VerificationJwkSelector()
       val webKey      = keySelector.select(verifier, keys.getJsonWebKeys)
       verifier.setKey(webKey.getKey)
-      if (verifier.verifySignature()) Future.successful(NotUsed)
+      if (verifier.verifySignature()) Future.successful(token)
       else Future.failed(new IllegalArgumentException("Signature verification failed"))
     }
   }
 
   def exchangeCodeForTokens(code: String)(implicit executionContext: ExecutionContext): Future[Tokens] = {
+    def verifyToken(lookup: JsLookupResult): Future[String] = {
+      lookup.validate[String] match {
+        case JsSuccess(x, _) =>
+          verifySignature(x)
+
+        case t: JsError =>
+          Future.failed(JsResult.Exception(t))
+      }
+    }
     def extractTokens(response: WSResponse): Future[Tokens] = {
-      val tokenOrError = for {
-        json        <- extractPayload(response)
-        idToken     <- JsResult.toTry((json \ "id_token").validate[String]).flatMap(IdToken.fromTokenValue)
-        accessToken <- JsResult.toTry(json.validate[AccessToken](AccessToken.FromTokenResponseReads))
-      } yield Tokens(accessToken, idToken)
       for {
-        tokens <- Future.fromTry(tokenOrError)
-        _ <- verify(tokens.accessToken.value)
-        _ <- verify(tokens.idToken.value)
-      } yield tokens
+        json              <- Future.fromTry(extractPayload(response))
+        idTokenSerialized <- verifyToken(json \ "id_token")
+        idToken           <- Future.fromTry(IdToken.fromCompactSerialization(idTokenSerialized))
+        _                 <- verifyToken(json \ "access_token")
+        accessToken <- Future.fromTry(
+          JsResult.toTry(json.validate[AccessToken](AccessToken.FromTokenResponseReads))
+        )
+      } yield Tokens(accessToken, idToken)
     }
 
     for {
@@ -181,7 +189,7 @@ class OidcGateway @Inject()(wsClient: WSClient, config: Configuration, cache: As
   private[this] implicit val identityClaimsFormat: Format[IdentityClaims] = {
     import play.api.libs.functional.syntax._
     (
-      IdToken.subjClaimFormat and
+      Tokens.subjClaimFormat and
       (JsPath \ "name").format[String] and
       (JsPath \ "picture").formatNullable[String] and
       (JsPath \ "email").format[String]

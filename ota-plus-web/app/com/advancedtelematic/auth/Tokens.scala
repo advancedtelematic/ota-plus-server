@@ -3,9 +3,10 @@ package com.advancedtelematic.auth
 import java.time.Instant
 
 import com.advancedtelematic.controllers.UserId
-import com.advancedtelematic.jwk.KeyInfoCodec.toJson
-import com.advancedtelematic.jws.{Base64Url, CompactSerialization}
-import play.api.libs.json.{Format, JsPath, JsResult, Json, Reads}
+import org.jose4j.base64url.{Base64, Base64Url}
+import org.jose4j.jws.JsonWebSignature
+import org.jose4j.jwx.CompactSerializer
+import play.api.libs.json.{Format, Json, JsPath, JsResult, Reads}
 
 import scala.util.{Failure, Success, Try}
 
@@ -14,6 +15,20 @@ final case class IdentityClaims(userId: UserId, name: String, picture: Option[St
 sealed abstract case class IdToken(value: String, userId: UserId)
 
 final case class AccessToken(value: String, expiresAt: Instant)
+
+final case class AccessTokenClaims(userId: UserId, expirationTime: Instant)
+
+object AccessTokenClaims {
+  import play.api.libs.functional.syntax._
+
+  val InstantAsSecondsSinceEpoch: Format[Instant] =
+    implicitly[Format[Long]].inmap(Instant.ofEpochSecond, _.getEpochSecond)
+
+  implicit val ReadsInstance: Reads[AccessTokenClaims] =
+    (Tokens.subjClaimFormat and (JsPath \ "exp").format(InstantAsSecondsSinceEpoch))(AccessTokenClaims.apply,
+                                                                                     unlift(AccessTokenClaims.unapply))
+
+}
 
 object AccessToken {
 
@@ -30,35 +45,51 @@ object AccessToken {
 
 final case class Tokens(accessToken: AccessToken, idToken: IdToken)
 
+object Tokens {
+  import play.api.libs.functional.syntax._
+
+  private[auth] val subjClaimFormat = (JsPath \ "sub").format[String].inmap[UserId](UserId, _.id)
+
+}
+
 final case class JwsParseError(msg: String) extends Throwable(msg)
 
 object IdToken {
 
-  import play.api.libs.functional.syntax._
-
-  private[auth] implicit val subjClaimFormat = (JsPath \ "sub").format[String].inmap[UserId](UserId, _.id)
-
-
   def from(id: String, name: String, pic: String, email: String): IdToken = {
     val claims = UserId(id)
 
-    val payload = Json.toBytes(Json.toJson(claims))
+    val payload = Json.toBytes(Json.toJson(claims)(Tokens.subjClaimFormat))
 
     val value =
-      s"""${Base64Url("header".getBytes()).underlying}.
-         |${Base64Url(payload).underlying}.
-         |${Base64Url("https://sig".getBytes()).underlying}""".stripMargin
+      s"""${Base64.encode("header".getBytes())}.
+         |${Base64.encode(payload)}.
+         |${Base64.encode("https://sig".getBytes())}""".stripMargin
 
     new IdToken(value, UserId(id)) {}
   }
 
-  def fromTokenValue(tokenValue: String): Try[IdToken] = {
-    for {
-      cs <- CompactSerialization
-        .parse(tokenValue)
-        .fold[Try[CompactSerialization]](x => Failure(JwsParseError(x)), Success(_))
-      json   <- Try(Json.parse(cs.encodedPayload.stringData()))
-      userId <- JsResult.toTry(json.validate[UserId](subjClaimFormat))
-    } yield new IdToken(tokenValue, userId) {}
+  private[this] def readUserId(claims: String): Try[UserId] = {
+    Try(Json.parse(claims)).flatMap { json =>
+      JsResult.toTry(json.validate[UserId](Tokens.subjClaimFormat))
+    }
   }
+
+  def fromCompactSerialization(idToken: String): Try[IdToken] = {
+    for {
+      parts <- Try { CompactSerializer.deserialize(idToken) }
+      payload <- if (parts.length != JsonWebSignature.COMPACT_SERIALIZATION_PARTS) {
+        Failure(
+          JwsParseError(
+            s"""A JWS Compact Serialization must have exactly ${JsonWebSignature.COMPACT_SERIALIZATION_PARTS}
+            |parts separated by period ('.') characters""".stripMargin
+          )
+        )
+      } else {
+        Success(Base64Url.decodeToUtf8String(parts(1)))
+      }
+      userId <- readUserId(payload)
+    } yield new IdToken(idToken, userId) {}
+  }
+
 }

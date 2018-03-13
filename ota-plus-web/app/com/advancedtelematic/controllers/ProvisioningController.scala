@@ -1,16 +1,16 @@
 package com.advancedtelematic.controllers
 
-import java.time.{LocalDate, ZoneOffset, ZonedDateTime}
+import java.time.{LocalDate, ZonedDateTime, ZoneOffset}
 import java.time.temporal.ChronoUnit
-import javax.inject.{Inject, Singleton}
+import java.util.UUID
 
+import javax.inject.{Inject, Singleton}
 import akka.actor.ActorSystem
 import com.advancedtelematic.api._
-import com.advancedtelematic.auth.{ApiAuthAction, AuthenticatedRequest}
-import org.genivi.sota.data.Uuid
+import com.advancedtelematic.auth.{ApiAuthAction, SecuredAction, AuthorizedRequest}
 import play.api.Configuration
 import play.api.http.{HeaderNames, HttpEntity}
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{Json, JsValue}
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 
@@ -25,7 +25,7 @@ class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient
 
   val cryptApi = new CryptApi(conf, clientExec)
 
-  def accountName(request: AuthenticatedRequest[_]): String = request.namespace.get
+  def accountName(request: AuthorizedRequest[_]): String = request.namespace.get
 
   val provisioningStatus: Action[AnyContent] = authAction.async { implicit request =>
     cryptApi.getAccountInfo(accountName(request)).map(x => Ok(Json.obj("active" -> x.isDefined)))
@@ -69,8 +69,8 @@ class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient
       )
     }
 
-  def downloadCredentials(uuid: Uuid): Action[AnyContent] = authAction.async { implicit request =>
-    cryptApi.downloadCredentials(accountName(request), uuid.toJava).map { entity =>
+  def downloadCredentials(uuid: UUID): Action[AnyContent] = authAction.async { implicit request =>
+    cryptApi.downloadCredentials(accountName(request), uuid).map { entity =>
         Ok.sendEntity(HttpEntity.Streamed(entity.dataStream, None, Some("application/x-pkcs12")))
           .withHeaders(HeaderNames.CONTENT_DISPOSITION -> "attachment; filename=credentials.p12")
     }

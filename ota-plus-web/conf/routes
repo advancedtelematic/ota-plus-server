@@ -13,7 +13,7 @@ GET     /api/v1/provisioning                     com.advancedtelematic.controlle
 PUT     /api/v1/provisioning/activate            com.advancedtelematic.controllers.ProvisioningController.activateAutoProvisioning
 POST    /api/v1/provisioning/credentials/registration       com.advancedtelematic.controllers.ProvisioningController.credentialsRegistration
 GET     /api/v1/provisioning/credentials/registration       com.advancedtelematic.controllers.ProvisioningController.getCredentials
-GET     /api/v1/provisioning/credentials/registration/:uuid com.advancedtelematic.controllers.ProvisioningController.downloadCredentials(uuid: Uuid)
+GET     /api/v1/provisioning/credentials/registration/:uuid com.advancedtelematic.controllers.ProvisioningController.downloadCredentials(uuid: UUID)
 
 GET     /api/v1/clienttools/provisioning/:keyuuid com.advancedtelematic.controllers.ClientToolController.downloadClientToolBundle(keyuuid: UUID)
 

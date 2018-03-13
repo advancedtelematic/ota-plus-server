@@ -1,9 +1,8 @@
 package com.advancedtelematic.auth.oidc
 
 import javax.inject.Inject
-
 import com.advancedtelematic.auth.Tokens
-import org.genivi.sota.data.Namespace
+import com.advancedtelematic.libats.data.DataType.Namespace
 import play.api.Configuration
 
 trait NamespaceProvider extends (Tokens => Namespace)
