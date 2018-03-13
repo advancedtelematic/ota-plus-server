@@ -140,7 +140,7 @@ class Header extends Component {
                 backButtonAction={backButtonAction}>
                 <FadeAnimation>
                     {!devicesStore.devicesOneFetchAsync.isFetching ?
-                        <span>
+                        <span className="pull-right">
                             <button className="queue-button" id="queue-button" onClick={showQueueModal} ref={queueButtonRef}>
                             </button>
                             <div className="dates">

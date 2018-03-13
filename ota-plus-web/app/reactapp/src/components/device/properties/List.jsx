@@ -79,50 +79,50 @@ class List extends Component {
             </div>
 		);
         return (
-        	<span>
+        	<div className="details-wrapper">
 	        	{!unmanaged ? 
     				<div className="details">
-    					<div className="heading">
-			        		<div className="title" id={"image-title-" + expandedPackage.id.name}>{expandedPackage.id.name}</div>
+    					<div className="top">
+			        		<div className="title font-medium" id={"image-title-" + expandedPackage.id.name}>{expandedPackage.id.name}</div>
 				        		<div className="status">
 				        			{isPackageBlacklisted && isPackageInstalled ?
-				        				<div className="blacklisted-installed">
-				        					<span id={this.generateIdTag('blacklisted-and-installed', expandedPackage)}>
+				        				<div className="status-container blacklisted-installed">
+				        					<img src="/assets/img/icons/red_cross.png" alt="" id={this.generateIdTag('blacklisted-and-installed-icon', expandedPackage)} />
+			        			 			<span id={this.generateIdTag('blacklisted-and-installed', expandedPackage)}>
 			        			 				{installed}
-		        			 				</span>
-		        			 				<img src="/assets/img/icons/red_cross.png" alt="" id={this.generateIdTag('blacklisted-and-installed-icon', expandedPackage)} /> 			 	        		
+		        			 				</span>	        			 	        		
 				        				</div>
 				        			: isPackageBlacklisted ?
-				        				<div className="blacklisted">
+				        				<div className="status-container blacklisted">
+				        					<img src="/assets/img/icons/ban_red.png" alt="" id={this.generateIdTag('blacklisted-icon', expandedPackage)} />
 			        			 			<span id={this.generateIdTag('blacklisted', expandedPackage)}>
 			        			 				{blacklisted}
-			        			 			</span>
-				        					<img src="/assets/img/icons/ban_red.png" alt="" id={this.generateIdTag('blacklisted-icon', expandedPackage)} />
+			        			 			</span>	        			 	        		
 				        				</div>
 				        			: isPackageQueued ? 
-				        				<div className="queued">
-			        						<span id={this.generateIdTag('queued', expandedPackage)}>
-			        							{queued}
-			        						</span>
+				        				<div className="status-container queued">
 			        						<span className="fa-stack queued">
 				                                <i className="fa fa-dot-circle-o fa-stack-1x" aria-hidden="true" id={this.generateIdTag('queued-icon', expandedPackage)}></i>
 				                            </span>
+			        						<span id={this.generateIdTag('queued', expandedPackage)}>
+			        							{queued}
+			        						</span>
 			        					</div>
 			        				: isPackageInstalled ? 
-				        				<div className="installed">
+				        				<div className="status-container installed">
+				        					<img src="/assets/img/icons/green_tick.png" alt="" id={this.generateIdTag('installed-icon', expandedPackage)} />
 				        					<span id={this.generateIdTag('image-installed', expandedPackage)}>
 				        						{installed}
 				        					</span>
-				        					<img src="/assets/img/icons/green_tick.png" alt="" id={this.generateIdTag('installed-icon', expandedPackage)} />
 				        				</div>
 			        				: 
-				        				<div className="not-installed" id={this.generateIdTag('not-installed', expandedPackage)}>
+				        				<div className="status-container not-installed" id={this.generateIdTag('not-installed', expandedPackage)}>
 				        					{notInstalled}
 				        				</div>
 			    					}
 				        		</div>
 			        	</div>
-			        	<div className="data">
+			        	<div className="bottom">
 			        		<span>
 	        					<div className="name">
 					        		<span className = "sub-title">Name:</span>
@@ -165,7 +165,7 @@ class List extends Component {
 					        		<span id={this.generateIdTag('version-hardware-ids-value', expandedPackage)}>
 					        			{_.map(expandedPackage.hardwareIds, (hardwareId, index) => {
 	                                         return (
-	                                            <span className="app-label" key={index}>
+	                                            <span className="hardware-label" key={index}>
 	                                                {hardwareId}
 	                                            </span>
 	                                        );
@@ -176,7 +176,7 @@ class List extends Component {
 			        				<div className="target-format">
 						        		<span className="sub-title">Format:</span>
 						        		<span id={this.generateIdTag('version-target-format-value', expandedPackage)}>
-                                            <span className="app-label">
+                                            <span className="format-label">
                                             	{expandedPackage.targetFormat}
                                             </span>
 						        		</span>
@@ -238,7 +238,8 @@ class List extends Component {
 						{notInstalled}
 					</div>
     			}
-			</span>
+			</div>
+
         );
     }
 }

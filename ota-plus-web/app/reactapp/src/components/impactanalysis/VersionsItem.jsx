@@ -9,13 +9,20 @@ class VersionsItem extends Component {
     render() {
         const { version } = this.props;
         return (
-            <li className="version-item">
-                <div className="column" title={version.packageId.version}>
+            <li>
+                <div className="column column-first" title={version.packageId.version}>
                     {version.packageId.version}
                 </div>
-                <div className="column">
+                <div className="column column-second">
                     {version.statistics.deviceCount !== null ? 
                         version.statistics.deviceCount
+                    :
+                        null
+                    }
+                </div>
+                <div className="column column-third">
+                    {version.statistics.groupsIds ?
+                        version.statistics.groupIds.length
                     :
                         null
                     }

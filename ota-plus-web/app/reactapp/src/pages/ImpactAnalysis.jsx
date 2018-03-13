@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
+import { Header } from '../partials';
 import { ImpactAnalysisContainer } from '../containers';
 import { translate } from 'react-i18next';
 
@@ -21,6 +22,29 @@ class ImpactAnalysis extends Component {
             <FadeAnimation 
                 display="flex">
                 <div className="wrapper-flex">
+                    <Header 
+                        title={title}
+                        subtitle={(
+                            <span>
+                                {packagesStore.packagesBlacklistFetchAsync.isFetching || impactAnalysisStore.impactAnalysisFetchAsync.isFetching ?
+                                    <span>
+                                        <i className="fa fa-square-o fa-spin"></i> impact analysis
+                                    </span>
+                                :
+                                    null
+                                }
+                                <FadeAnimation>
+                                    {!packagesStore.packagesBlacklistFetchAsync.isFetching && !impactAnalysisStore.impactAnalysisFetchAsync.isFetching ?
+                                        <span id="impact-analysis-affected-count">
+                                            Impact: {t('common.deviceWithCount', {count: Object.keys(impactAnalysisStore.impactAnalysis).length})}
+                                        </span>
+                                    :
+                                        null
+                                    }
+                                </FadeAnimation>
+                            </span>
+                        )}
+                    />
                     <MetaData 
                         title={title}>
                         <ImpactAnalysisContainer 

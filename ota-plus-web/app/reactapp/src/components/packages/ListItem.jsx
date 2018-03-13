@@ -20,7 +20,7 @@ class ListItem extends Component {
         return this.props.pack.versions.length;
     }
     render() {
-        const { pack, togglePackage } = this.props;
+        const { pack, togglePackage, expandedPackageName } = this.props;
         let installedOnEcus = this.countInstalledOnEcus();
         let packVersionsNumber = this.countPackVersionsNumber();
         const directorBlock = (
@@ -42,16 +42,20 @@ class ListItem extends Component {
                     <span id={"package-" + pack.packageName + "-installed-on-ecus"}>
                         Installed on <span id={"package-" + pack.packageName + "-installed-on-ecus-count"}>{installedOnEcus}</span> Ecu(s)
                     </span>
-                </div>
-                <div className="c-package__more-info">
-                    More info
-                </div>
+                </div>                
             </div>
         );
         return (
-            <div className="c-package__item item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
-                {directorBlock}
-            </div>
+            expandedPackageName === pack.packageName ?
+                <div className="c-package__item c-package__item--expanded item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
+                    <div className="wrapper-center">
+                        <img src="assets/img/icons/black/arrow-up.svg" alt="Icon" />
+                    </div>
+                </div>
+            :
+                <div className="c-package__item item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
+                    {directorBlock}
+                </div>
         );
     }
 }

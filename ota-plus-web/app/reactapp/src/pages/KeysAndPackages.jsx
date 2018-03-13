@@ -790,7 +790,7 @@ class List extends PureComponent {
                                                                 </div>
                                                                 <div className="right-box">
                                                                     <span className="bold">Installed on {versionItem.installedOnEcus} ECU(s)</span>
-                                                                    <span className="bold">Hardware ids: <span className="app-label">{versionItem.id}</span></span>
+                                                                    <span className="bold">Hardware ids: <span className="hardware-label">{versionItem.id}</span></span>
                                                                 </div>
                                                             </li>
                                                         )

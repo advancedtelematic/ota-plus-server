@@ -8,24 +8,6 @@
 
 $font: 'akkurat';
 
-.add-button {
-    text-transform: none;
-    color: $home-header-button;
-    font-size: 12px;
-    font-weight: bold;
-
-    &:hover {
-        color: $home-header-button;
-    }
-
-    span {
-
-        &:not(:last-child) {
-            margin-right: 5px;
-        }
-    }
-}
-
 .font-big {
     font-size: 21px !important;
 }
@@ -461,11 +443,12 @@ input {
 }
 
 .navbar-inverse {
-    background: $devices-groups-bg;
+    background: #fff;
     min-width: 1280px;
+    margin: 0;
     position: absolute;
-    border-bottom: 1px solid $panel-delimiter-color;
-    padding: 0 0 0 15px;
+    border: 0;
+    box-shadow: 1px 1px 4px #888;
 
     .alert {
         width: 400px;
@@ -488,7 +471,7 @@ input {
         margin-right: 0;
 
         .navbar-brand {
-            background: url('/assets/img/atsgarage_white.png') no-repeat;
+            background: url('/assets/img/ATS-Garage_Logo.svg') no-repeat;
             background-size: cover;
             width: 60px;
             height: 41px;
@@ -506,15 +489,14 @@ input {
             > li {
                 float: left;
                 > a {
-                    color: $devices-group-text;
+                    color: #888;
                     height: 50px;
                     padding: 15px 7px;
                     margin: 0 10px;
                     @include transition;
-                    font-size: 14px;
 
                     &:hover, &:focus, &:active {
-                        color: #fff;
+                        color: #555;
                     }
 
                     &:hover, &.active {
@@ -545,12 +527,12 @@ input {
 
             a {
                 color: #888;
-                font-size: 14px;
+                font-size: 1.0em;
                 padding: 15px;
                 display: block;
 
                 &:hover {
-                    color: #fff;
+                    color: $color-mint;
                     @include transition;
                 }
             }
@@ -558,7 +540,6 @@ input {
             &.separator {
                 line-height: 1.5em;
                 padding: 15px 0;
-                color: $devices-group-text;;
             }
 
             &#menu-login {
@@ -669,49 +650,47 @@ input {
 }
 
 .page-heading {
-    background-color: $devices-groups-bg;
+    background-image: url('/assets/img/bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
     width: 100%;
     height: 100px;
-    padding: 20px 25px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid $panel-delimiter-color;
+    padding: 20px 0;
+    float: left;
 
-    .left-box {
-        display: flex;
-        align-items: center;
-
-        .back-button {
-            margin-right: 15px;
+    .back-button {
     
-            i {
-                color: $home-header-button;
-                font-size: 2.5em;
-            }
+        img {
+            width: 34px;
+            height: 34px;
+        }
+    }
+
+    .icon {
+        text-align: center;
+        background-color: #fff;
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 60px;
+        height: 60px;
+        display: inline-block;
+        vertical-align: middle;
+        border-radius: 10px;
+    }
+
+    .text {
+        width: auto;
+        margin: 0 0 0 25px;
+        display: inline-block;
+        vertical-align: middle;
+
+        .title {
+            color: #fff;
         }
 
-        .icon {
-            text-align: center;
-            background-color: #fff;
-            background-repeat: no-repeat;
-            background-size: cover;
-            width: 60px;
-            height: 60px;
+        .subtitle {
+            color: #fff;
             display: inline-block;
-            vertical-align: middle;
-            border-radius: 10px;
-        }
-
-        .text {
-            width: auto;
-            margin: 0 0 0 25px;
-            display: inline-block;
-
-            .title {
-                color: #fff;
-                font-size: 18px;
-            }
         }
     }
 }
@@ -743,13 +722,8 @@ input {
 }
 
 .subheader {
-    background: $home-grey;
+    background: #666;
     height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 0 25px;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
 
     form {
         display: inline-block;
@@ -843,40 +817,36 @@ input {
     }
 }
 
-.search-box {
-    position: relative;
+.input-wrapper {
+    &.search {
+        width: 280px !important;
+        height: 28px !important;
+        margin: 6px 15px !important;
+        display: inline-block !important;
 
-    .input-wrapper {
-        &.search {
-            width: 280px !important;
-            height: 28px !important;
+        input {
+            font-size: 12px !important;
+            background: #fff !important;
+            padding: 0 15px !important;
+            border-radius: 15px !important;
+        }
 
-            input {
-                font-size: 12px !important;
-                background: #fff !important;
-                padding: 0 15px !important;
-                background: $devices-groups-bg!important;
-                color: #fff!important;
-                padding: 0 30px!important;
+        &:after {
+            font-family: FontAwesome;
+            font-size: 12px;
+            content: "\f002";
+            position: absolute;
+            top: 2px;
+            right: 10px;
+        }
+
+        div {
+            hr {
+                width: 260px !important;
+                left: 10px !important;
+                bottom: 0px !important;
             }
         }
-    }
-
-    .icon-search {
-        position: absolute;
-        top: 7px;
-        left: 10px;
-        color: #fff;
-        font-size: 12px;
-    }
-
-    .icon-close {
-        position: absolute;
-        top: 7px;
-        right: 10px;
-        color: #fff;
-        font-size: 12px;
-        cursor: pointer;
     }
 }
 
@@ -924,41 +894,101 @@ input {
     font-weight: bold;
 }
 
-.element-box {
-    display: flex;
-    align-items: center;
-    padding: 20px;
+.panel {
+    &.panel-grey {
+        background: transparent;
+        width: 100%;
+        margin-bottom: 0;
+        border: 0;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        position: relative;
 
-    .icon {
-        background-repeat: no-repeat;
-        background-size: cover;
-        width: 60px;
-        height: 60px;
-        border-radius: 10px;
-        margin-right: 20px;
-    }
-
-    .desc {
-        width: 70%;
-
-        .title {
-            color: #000;
-            @include textoverflowEllipsis;
-            font-size: 16px;
-            margin-bottom: 4px;
+        .panel-heading {
+            color: #fff;
+            line-height: 50px;
+            text-align: center;
+            background: #4B5151;
+            height: 50px;
+            padding: 0 15px;
+            border: 0;
+            border-radius: 0;
         }
 
-        .subtitle {
-            color: #898B91;
-            @include textoverflowEllipsis;
-            font-size: 12px;
+        .panel-body {
+            color: #444;
+            background: #fff;
+        }
+    }
+
+    &.panel-lightgrey {
+        background: transparent;
+        width: 100%;
+        margin-bottom: 0;
+        border: 0;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        position: relative;
+
+        .panel-heading {
+            color: $color-darkgrey;
+            line-height: 30px;
+            background: #eee;
+            height: 50px;
+        }
+
+        .panel-body {
+            color: $color-darkgrey;
+            background: #fff;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
     }
 }
 
+.element-box {
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 80px;
+    margin: 0 0 -6px 0;
+    display: inline-block;
+    position: relative;
+    border: 1px solid #eee;
+    transition: background-color 0.2s ease-in;
+
+    .icon {
+        text-align: center;
+        background-color: #fff;
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 60px;
+        height: 60px;
+        margin-top: 10px;
+        margin-left: 35px;
+        border-radius: 10px;
+        float: left;
+    }
+
+    .desc {
+        width: 70%;
+        margin-top: 15px;
+        margin-left: 15px;
+        float: left;
+
+        .title {
+            color: #444;
+            @include textoverflowEllipsis;
+        }
+
+        .subtitle {
+            color: #aaa;
+            @include textoverflowEllipsis;
+        }
+    }
+}
 
 .progress-blue {
-    height: 10px;
+    height: 25px;
     background: #fff;
     padding: 0;
     margin: 0;
@@ -967,7 +997,7 @@ input {
     position: relative;
 
     .progress-bar {
-        background-color: $progress-default-color;
+        background-color: #96DCD1;
         border-radius: 5px;
         -webkit-box-shadow: none;
         -moz-box-shadow: none;
@@ -1010,64 +1040,82 @@ input {
         position: absolute;
         z-index: 2;
         color: #202020;
-        font-size: 12px;
-        color: $home-header-text;
+        font-size: 13px;
         font-weight: 700;
         background: #d3d3d3;
         width: 100%;
         height: 40px;
-        text-transform: uppercase;
-        display: flex;
-        align-items: center;
-        background: $home-grey;
-        padding: 0 25px;
+        padding: 12px 15px;
+        margin: 0;
+        border-bottom: 1px solid #bbb;
     }
 
-    .column {
-        display: inline-block;
-        vertical-align: top;
-        @include transition;
-        width: 14%;
-        text-align: center;
-
-        &:first-child {
-            width: 15%;
-            text-align: left;
-        }
-
-        &.additional-info {
-            text-align: right;
-
-            .more-info {
-                color: $home-header-button;
-            }
-        }
-    }   
-
     .wrapper-list {
-        height: 100%;
+        height: 100%;                
 
         .campaigns-list {
 
-            .no-items {
-                height: 60px;
-                display: flex;
-                align-items: center;
-                padding: 0 25px;
-                color: $devices-group-text;
-                font-size: 12px;
+            .empty {
+                padding: 15px;
+            }
+
+            .heading {
+                border-bottom: 1px solid #ddd;
+                color: #464646;
+
+                .column {
+                    font-weight: bold;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+
+                    &.name {
+                        width: 15%;
+                        text-align: left;
+                    }
+                }
+            }
+
+            .column {
+                padding: 15px;
+                display: inline-block;
+                vertical-align: top;
+                @include transition;
+                width: 14%;
+                text-align: center;
+
+                &:first-child {
+                    width: 15%;
+                    text-align: left;
+                }
+
+                &.additional-info {
+                    text-align: right;
+
+                    .more-info {
+                        color: #444;
+                        font-size: 11px;
+                        background: $color-mint;
+                        padding: 1px 10px;
+                        border-radius: 10px;
+                        display: inline-block;
+                        @include transition;
+
+                        &:hover {
+                            background: $color-mint2;
+                        }
+                    }
+                }
             }
 
             .item {
                 cursor: pointer;
-                height: 60px;
+                width: 100%;
+                height: 48px;
                 border-bottom: 1px solid #ddd;
+                position: relative;
                 @include transition;
                 display: flex;
                 align-items: center;
-                font-size: 12px;
-                color: $devices-group-text;
-                padding: 0 25px;
 
                 &:hover {
                     background: #f5f5f5;
@@ -1081,74 +1129,62 @@ input {
             .statistic-details {
                 padding: 25px 0;
                 border-bottom: 1px solid #ddd;
+                background: #f5f5f5;
                 overflow: hidden;
 
                 .campaign-name {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding-right: 70px;
+                    position: relative;
+                    padding: 0 15px;
                     margin-bottom: 25px;
+                    width: 400px;
+                    cursor: pointer;
+                    font-size: 30px;
 
-                    .fa-angle-up {
-                        font-size: 2.8em;
-                        color: $home-header-button;
+                    input {
+                        width: 100%;
+                        background-color: rgba(0,0,0,0);
+                        border: none;
+                        outline: none;
+                        -webkit-appearance: none;
+                        -moz-appearance: none;
+                        appearance: none;
+                        transition: all 0.3s ease;
+                        padding: 10px 65px 10px 10px;
+                        text-overflow: ellipsis;
+                        
+                        &:focus {
+                            outline: auto;
+                            background-color: rgba(0,0,0,0.2);
+                        }
                     }
-
-                    .rename-container {
-                        position: relative;
-                        padding: 0 15px;
-                        width: 400px;
+                    img {
+                        width: 20px;
+                        transition: opacity 0.3s ease;
                         cursor: pointer;
-                        font-size: 22px;
-                        font-weight: bold;
 
-                        input {
-                            width: 100%;
-                            background-color: rgba(0,0,0,0);
-                            border: none;
-                            outline: none;
-                            -webkit-appearance: none;
-                            -moz-appearance: none;
-                            appearance: none;
-                            transition: all 0.3s ease;
-                            padding: 10px 65px 10px 10px;
-                            text-overflow: ellipsis;
-                            
-                            &:focus {
-                                outline: auto;
-                                background-color: rgba(0,0,0,0.2);
-                            }
-                        }
-                        img {
-                            width: 20px;
-                            transition: opacity 0.3s ease;
-                            cursor: pointer;
-
-                            &.edit {
-                                opacity: 0;
-                                position: absolute;
-                                right: 25px;
-                                top: 15px;
-                            }
-                        }
-                        .icons {
+                        &.edit {
+                            opacity: 0;
                             position: absolute;
-                            right: 20px;
-                            top: 10px;
-                            z-index: 10;
-                            img {
-                                margin-right: 5px;
-                                width: 15px;
-                            }
+                            right: 25px;
+                            top: 20px;
                         }
-                        &:hover {
-                            img {
-                                opacity: 1;
-                            }
-                            input {
-                                background-color: #ddd;
-                            }
+                    }
+                    .icons {
+                        position: absolute;
+                        right: 20px;
+                        top: 10px;
+                        z-index: 10;
+                        img {
+                            margin-right: 5px;
+                            width: 15px;
+                        }
+                    }
+                    &:hover {
+                        img {
+                            opacity: 1;
+                        }
+                        input {
+                            background-color: #ddd;
                         }
                     }
                 }
@@ -1156,13 +1192,10 @@ input {
                 .title {
                     font-weight: bold;
                     margin-bottom: 20px;
-                    font-size: 10px;
-                    text-transform: uppercase;
-                    color: $devices-group-text;
                 }
 
                 .left-box {
-                    width: 15%;
+                    width: 20%;
                     float: left;
                     padding: 0 30px;
 
@@ -1182,11 +1215,28 @@ input {
                         .cancel-campaign {
                             margin-top: 20px;
 
-                            .cancel-button {
-                                color: $campaigns-cancel-color;
-                                text-transform: uppercase;
-                                font-size: 12px;
-                                font-weight: bold;
+                            button {
+                                margin: auto!important;
+                                padding: 0!important;
+                                height: 25px!important;
+                                display: flex!important;
+                                justify-content: center;
+                                align-items: center;
+
+                                div {
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+
+                                    span {
+                                        text-transform: uppercase!important;
+                                        font-size: 12px!important;
+                                        vertical-align: none!important;
+                                        padding: 0 30px!important;
+                                    }
+                                }
+
+                                
                             }
                         }
                     }
@@ -1206,7 +1256,6 @@ input {
                             align-items: center;
                             position: relative;
                             top: 3px;
-                            font-size: 12px;
 
                             .block {
                                 display: inline-block;
@@ -1218,10 +1267,6 @@ input {
                                 div {
                                     display: inline-block;
 
-                                    &:last-child {
-                                        color: $campaign-details-text;
-                                    }
-
                                     &:first-child {
                                         font-size: 18px;
                                         margin-right: 5px;
@@ -1231,50 +1276,49 @@ input {
                         }
 
                         .middle-container {
-                            position: relative;
                             overflow: hidden;
+                            display: flex;
 
                             .devices-progress {
+                                flex-grow: 16;
                                 border: 1px solid #ccc;
                                 border-radius: 5px;
                                 float: left;
-                                height: 10px;
-                                width: 100%;
 
                                 &.with-bar {
                                     margin: 20px 0;
                                 }
 
                                 .bar {
-                                    height: 10px;
+                                    height: 25px;
                                     overflow: hidden;
                                     border-radius: 4px;
 
                                     .failure {
-                                        height: 10px;
+                                        height: 25px;
                                         background-color: #fe0001;
                                         float: left;
                                     }
 
                                     .success {
-                                        height: 10px;
+                                        height: 25px;
                                         background-color: #83d060;
                                         float: left;
                                     }
 
                                     .queued {
-                                        height: 10px;
+                                        height: 25px;
                                         background-color: #f5a623;
                                         float: left;
                                     }
 
                                     .not-impacted {
-                                        height: 10px;
+                                        height: 25px;
                                         background-color: #ddd;
                                         float: left;
                                     }
                                     .not-proceed {
-                                        height: 10px;
+                                        height: 25px;
                                         background-color: #fff;
                                         float: left;
                                     }
@@ -1282,14 +1326,40 @@ input {
                             }
 
                             .show-dependencies {
-                                position: absolute;
-                                right: 0;
+                                position: relative;
+                                flex-grow: 1;
+                                float: left;
+                                margin: 20px 0;
+                                display: flex;
+                                justify-content: flex-end;
+                                align-items: center;
+                                height: 25px;
+
+                                .icon {
+                                    background: url(/assets/img/icons/dependencies-icon.svg);
+                                    width: 50px;
+                                    height: 50px;
+                                    background-size: cover;
+                                    cursor: pointer;
+                                    transition: all 0.5s;
+                                }
+                                
+                                &:hover {
+                                    .icon {
+                                        background: url(/assets/img/icons/dependencies-icon-active.svg);
+                                        width: 50px;
+                                        height: 50px;
+                                        background-size: cover;
+                                        cursor: pointer;
+                                    }
+                                }
+
+
                             }
                         }
 
                         .bottom-container {
                             height: 35px;
-                            color: $device-hardware-header;
 
                             .status-block {
                                 div {
@@ -1308,7 +1378,7 @@ input {
                                     &.success {
                                         span {
                                             &:first-child {
-                                                background-color: $progress-default-color;
+                                                background-color: #83D060;
                                             }
                                         }
                                     }
@@ -1386,11 +1456,10 @@ input {
                             display: flex;
                             align-items: center;
                             background: #fff;
-                            margin: 0 50px 0 50px;
-                            border-top: 1px solid $device-active-item-bg;
+                            padding: 15px 50px;
 
-                            &:last-child {
-                                border-bottom: 1px solid $device-active-item-bg;
+                            &:not(:last-child) {
+                                margin-bottom: 10px;
                             }
 
                             p {
@@ -1402,7 +1471,10 @@ input {
                                 flex-grow: 1;
 
                                 .element-box {
-                                    padding: 20px 0;
+                                    display: flex;
+                                    height: auto;
+                                    margin: 0;
+                                    border: 0;
 
                                     &.group {
                                     
@@ -1410,8 +1482,12 @@ input {
                                             background-image: url(/assets/img/icons/groups.png);
                                             border: 2px solid #ddd;
                                             background-position: center;
-                                            height: 55px;
+                                            height: auto;
                                             margin: 0;
+                                            float: none;
+                                            display: inline-block;
+                                            vertical-align: middle;
+                                            flex-grow: 1;
                                         }
 
                                         .desc {
@@ -1421,20 +1497,16 @@ input {
                                             display: inline-block;
                                             vertical-align: middle;
 
-                                            .small-title {
-                                                font-size: 12px;
+                                            .title {
+                                                font-size: 14px;
                                                 font-weight: 400;
-                                                color: $device-properties-text;
-                                                margin-bottom: 2px;
-                                                @include textoverflowEllipsis;
-                                            }
-
-                                            .subtitle {
-                                                font-size: 10px;
-                                                color: $device-hardware-header;
                                             }
                                         }
                                     }
+                                }
+
+                                .title {
+                                    margin-bottom: 0;
                                 }
                             }
 
@@ -1443,21 +1515,37 @@ input {
                                 flex-grow: 5;
 
                                 .devices-progress {
-                                    height: 10px;
-                                }
 
-                                .wrapper-rate {
-                                    text-align: right;
-                                    margin-top: 5px;
+                                    .wrapper-rate {
+                                        position: absolute;
+                                        right: 10px;
+                                        color: #000;
+                                        height: 100%;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+
+                                        .wrapper-rate-value {
+                                            position: relative;
+                                            top: 2px;
+                                        }
+
+                                        .fa.fa-check {
+                                            margin-left: 5px;
+                                            background-color: #fff;
+                                            display: inline-block;
+                                            border: 2px solid #fff;
+                                            font-size: 8px;
+                                            border-radius: 50%;
+                                            color:#000;
+                                        }
+                                    }
                                 }
                             }
 
                             .status-group {
                                 flex-grow: 1;
                                 text-align: right;
-                                font-size: 12px;
-                                color: $device-properties-text;
-
                                 span {
                                     display: block;
                                     padding: 1px 0;
@@ -1471,34 +1559,17 @@ input {
     }
 }
 
-.app-label {
-    color: $color-darkgrey;
-    font-size: 12px;
-    background: transparent;
-    padding: 0px 10px;
-    border-radius: 5px;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    display: inline-block;
-    border: 1px solid #444;
-    @include transition;
-    line-height: 20px;
-}
-
 .section-header {
-    color: $home-header-text;
-    font-size: 12px;
+    color: #202020;
+    font-size: 13px;
     font-weight: bold;
-    background: $home-grey;
+    background: #D3D3D3;
     width: 100%;
     height: 40px;
+    padding: 12px 15px;
     margin: 0;
-    border-bottom: 1px solid $section-header-border-color;
+    border-bottom: 1px solid #bbb;
     position: relative;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    padding: 0 25px;
 }
 
 .icon-back {
@@ -1508,18 +1579,22 @@ input {
 .common-box {
     color: #fff;
     text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
-    background: $devices-groups-bg;
+    background: transparent;
     width: 25%;
     height: 100px;
+    display: inline-block;
+    position: relative;
+    border-radius: 10px;
+    border: 0;
     transition: background-color 0.2s ease-in;
-    margin: 5px 5px 0 0;
-    width: 350px;
-    display: flex;
-    align-items: center;
-    padding: 0 15px;
+    overflow: hidden;
 
     &:hover {
         background-color: rgba(255, 255, 255, .15);
+    }
+
+    &:hover, &:active, &:focus {
+        color: #fff;
     }
 
     .icon {
@@ -1529,6 +1604,7 @@ input {
         background-size: cover;
         width: 60px;
         height: 60px;
+        margin: 0 0 0 15px;
         border-radius: 10px;
         display: inline-block;
         vertical-align: middle;
@@ -1538,18 +1614,67 @@ input {
         text-align: left;
         width: 62%;
         margin-left: 15px;
+        display: inline-block;
+        vertical-align: middle;
         transition: all 0.2s ease-in;
 
         .title {
-            font-size: 14px;
-            text-transform: uppercase;
+            font-size: 18px;
+            line-height: 1.5em;
             @include textoverflowEllipsis;
         }
 
         .subtitle {
             font-size: 10px;
+            line-height: 1.6em;
             @include textoverflowEllipsis;
-            color: rgba(255,255,255,0.5);
+        }
+    }
+
+    .actions {
+        color: #fff;
+        text-align: center;
+        cursor: hand;
+        cursor: pointer;
+        background: #4B5151;
+        width: 60px;
+        height: 100%;
+        margin-left: -60px;
+        display: inline-block;
+        vertical-align: middle;
+        transition: all 0.2s ease-in;
+
+        ul {
+            height: 100%;
+            margin: 0;
+
+            li {
+                line-height: 92px;
+                height: 100%;
+                display: block;
+
+                img {
+                    width: 20px;
+                }
+
+                div {
+                    font-size: 11px;
+                    margin: 0 0 0 3px;
+                    transition: all 0.2s ease-in;
+                    display: none;
+                    vertical-align: sub;
+                }
+            }
+        }
+    }
+
+    &:hover {
+        .actions {
+            margin-left: 0;
+        }
+
+        .desc {
+            width: 55%;
         }
     }
 }
@@ -1587,18 +1712,16 @@ input {
     }
 
     .header, .fake-header {
-        color: $fake-header-text;
-        font-size: 12px;
+        color: #202020;
+        font-size: 13px;
         font-weight: bold;
-        background: $home-grey;
+        background: #D3D3D3;
         width: 100%;
         height: 30px;
-        padding: 0 25px;
+        padding: 7px 15px;
+        margin: 0;
         float: left;
         border-bottom: 1px solid #bbb;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
     }
 
     .fake-header {
@@ -1608,18 +1731,17 @@ input {
     }
 
     .item {
+        color: #555;
+        text-align: left;
         background: #fff;
         width: 100%;
-        height: 60px;
-        padding: 0 25px;
+        height: 40px;
+        padding: 11px 15px;
         border: 0;
         border-bottom: 1px solid #ddd;
         @include transition;
-        background: $device-item-bg;
-        color: $devices-group-text;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        overflow: hidden;
+        cursor: pointer;
 
         &.unmanaged {
            background: #d3d3d3; 
@@ -1634,19 +1756,24 @@ input {
         }
 
         &.selected {
-            background: $device-active-item-bg;
+            background: #f5f5f5;
         }
     }
 
     ul.versions {
         background: #f5f5f5;
         width: 100%;
+        padding: 5px 10px;
         margin: 0;
 
         li {
             background: #fff;
             overflow: hidden;
-            border-bottom: 1px solid #e1e1e1;
+            border: 1px solid #e1e1e1;
+
+            &:not(:last-child) {
+                margin-bottom: 5px;
+            }
 
             &.blacklist {
                 color: red;
@@ -1682,6 +1809,11 @@ input {
             }
 
             .right-box {
+                text-align: right;
+                width: 50%;
+                float: right;
+                padding: 0 10px;
+                height: 31px;
 
                 .version-name {
                     line-height: 32px;
@@ -2897,6 +3029,16 @@ input {
                                 .value {
                                     @include textoverflowEllipsis;
                                 }
+
+                                .hardware-label {
+                                    color: $color-darkgrey;
+                                    font-size: 12px;
+                                    background: transparent;
+                                    padding: 0px 10px;
+                                    border-radius: 10px;
+                                    display: inline-block;
+                                    border: 1px solid #444;
+                                }
                             }
                         }
                     }
@@ -3317,27 +3459,26 @@ input {
     }
 }
 
-.darkgrey-header, .hardware-header {
+.black-header, .darkgrey-header {
+    color: #fff;
     font-size: 16px;
     font-weight: bold;
+    line-height: 36px;
     text-transform: uppercase;
     width: 100%;
-    height: 45px;
-    padding: 0 25px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
+    height: 36px;
+    padding: 0 15px;
+    border-radius: 0;
+}
+
+.black-header {
+    background: #202020;
+    border-top: 1px solid #555;
+    border-bottom: 1px solid #000;
 }
 
 .darkgrey-header {
-    background: $home-grey;
-    color: $home-header-text;
-    border-bottom: 1px solid grey;
-}
-
-.hardware-header {
-    background: $devices-groups-bg;
-    color: $device-hardware-header;
+    background: #4B5151;
 }
 
 .wrapper-switch {
@@ -3638,7 +3779,7 @@ div[role=presentation] {
     vertical-align: middle;
 
     &:before {
-        background: #fff;
+        background: rgba(0,0,0,0);
         width: 45px;
         height: 18px;
         border: 1px solid #ccc;
@@ -3670,7 +3811,7 @@ div[role=presentation] {
 
     &.switchOn {
         &:before {
-            background: $switch-blue-color!important;
+            background: #369E47 !important;
         }
 
         &:after {
@@ -4420,11 +4561,9 @@ div[role=presentation] {
         }
 
         .wrapper-center {
-            font-size: 12px;
 
             &.left {
                 justify-content: left;
-                text-align: left;
             }
         }
     }
@@ -4436,11 +4575,6 @@ div[role=presentation] {
     height: 100%;
     position: relative;
     overflow-y: hidden;
-
-    .section-header {
-        position: absolute;
-        top: 0;
-    }
 
     ul {
         margin: 30px 0 0 0;
@@ -5497,6 +5631,18 @@ div[role=presentation] {
                     line-height: 13px;
                     margin-bottom: 10px;
                     display: block;
+                }
+
+                .hardware-label {
+                    color: #444;
+                    font-size: 12px;
+                    background: transparent;
+                    padding: 0 10px;
+                    border-radius: 10px;
+                    margin-right: 5px;
+                    margin-bottom: 5px;
+                    display: inline-block;
+                    border: 1px solid #444;
                 }
 
                 .versions {

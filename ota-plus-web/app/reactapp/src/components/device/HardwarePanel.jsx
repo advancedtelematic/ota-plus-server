@@ -12,7 +12,7 @@ import { PopoverWrapper } from '../../partials';
 import _ from 'underscore';
 
 const title = "Hardware";
-const primaryEcusTitle = "Primary Ecu";
+const primaryEcusTitle = "Primary Ecus";
 const secondaryEcusTitle = "Secondary Ecus";
 const noEcus = "None reported";
 
@@ -51,7 +51,7 @@ class HardwarePanel extends Component {
         const isPrimaryEcuActive = hardwareStore.activeEcu.hardwareId === devicesStore._getPrimaryHardwareId();
         const primaryEcus = (
             <span>
-                <div className="hardware-title">
+                <div className="section-header font-medium">
                     {primaryEcusTitle}
                 </div>
                 <PopoverWrapper
@@ -74,7 +74,7 @@ class HardwarePanel extends Component {
         );
         const secondaryEcus = (
             <span>
-                <div className="hardware-title">
+                <div className="section-header font-medium">
                     {secondaryEcusTitle}
                     <img src="/assets/img/icons/questionmark.png" alt="" className="hardware-secondary-details" 
                          onClick={this.showSecondaryDescription} id="hardware-secondary-ecu-details" 
@@ -112,12 +112,12 @@ class HardwarePanel extends Component {
         );
         return (
             <div className="hardware-panel">
-                <div className="hardware-header">
+                <div className="darkgrey-header">
                     {title}
                 </div>
                 <div className="inner-container">
                     <div className="hardware-list">
-                        <div className="primary-ecu font-small">
+                        <div className="primary-ecus font-small">
                             {primaryEcus}
                         </div>
                         <div className="secondary-ecus font-small">
