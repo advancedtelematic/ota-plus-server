@@ -40,8 +40,8 @@ class StatisticDetails extends Component {
             },
             {
                 value: overallStatistics.failed === 0 ? 1 : overallStatistics.finished,
-                color: "#83D060",
-                highlight: "#83D060",
+                color: "#44CA9D",
+                highlight: "#44CA9D",
                 label: "Success rate"
             },
             {
@@ -78,10 +78,10 @@ class StatisticDetails extends Component {
                     </div>
 
                     <div className="failure-rate-container">
-                        <div className="failure-rate" id="campaign-detail-total-failure-rate">
+                        <div className="failure-rate" id={`campaign-detail-total-failure-rate-${Math.round(overallStatistics.failed/Math.max(overallStatistics.finished, 1) * 100)}`}>
                             <Doughnut
                                 data={failureRateData}
-                                options={{percentageInnerCutout: 40, showTooltips: false}}
+                                options={{percentageInnerCutout: 75, showTooltips: false}}
                                 width="140"
                                 height="140"
                             />
@@ -91,14 +91,9 @@ class StatisticDetails extends Component {
                         </div>
                         {campaignsStore.campaign.statistics.status === 'launched' ?
                             <div className="cancel-campaign">
-                                <FlatButton
-                                    label="Cancel all"
-                                    title="Cancel the Campaign for all groups"
-                                    type="button"
-                                    onClick={showCancelCampaignModal}
-                                    className="btn-main btn-red"
-                                    id="campaign-detail-cancel-all"
-                                />
+                                <a href="#" id="campaign-detail-cancel-all" className="cancel-button" onClick={showCancelCampaignModal}>
+                                    Cancel all
+                                </a>
                             </div>
                         : 
                             null
@@ -146,7 +141,11 @@ class StatisticDetails extends Component {
                                 </div>
                             </div>
                             <div className="show-dependencies">
-                                <div className="icon" title="Show dependencies" onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}></div>
+                                <a href="#" className="add-button" id="target_show_dependencies" onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}>
+                                    <span>
+                                        Show dependencies
+                                    </span>
+                                </a>
                             </div>
                         </div>
                         <div className="bottom-container">
@@ -154,32 +153,32 @@ class StatisticDetails extends Component {
                                 <div className="success">
                                     <span></span>
                                     <span>Success</span>
-                                    <span>{overallStatistics.successful}</span>
+                                    <span id={`target_success_${overallStatistics.successful}`}>{overallStatistics.successful}</span>
                                 </div>
                                 <div className="queued">
                                     <span></span>
                                     <span>Queued</span>
-                                    <span>{overallStatistics.queued}</span>
+                                    <span id={`target_queued_${overallStatistics.queued}`}>{overallStatistics.queued}</span>
                                 </div>
                                 <div className="cancelled">
                                     <span></span>
                                     <span>Cancelled</span>
-                                    <span>{overallStatistics.cancelled}</span>
+                                    <span id={`target_cancelled_${overallStatistics.cancelled}`}>{overallStatistics.cancelled}</span>
                                 </div>
                                 <div className="failure">
                                     <span></span>
                                     <span>Failure</span>
-                                    <span>{overallStatistics.failed}</span>
+                                    <span id={`target_failure_${overallStatistics.failed}`}>{overallStatistics.failed}</span>
                                 </div>
                                 <div className="not-proceed">
                                     <span></span>
                                     <span>Not processed</span>
-                                    <span>{notProcessed }</span>
+                                    <span id={`target_not_proceed_${notProcessed}`}>{notProcessed}</span>
                                 </div>
                                 <div className="not-impacted">
                                     <span></span>
                                     <span>Not impacted</span>
-                                    <span>{overallStatistics.notImpacted}</span>
+                                    <span id={`target_not_impacted_${overallStatistics.notImpacted}`}>{overallStatistics.notImpacted}</span>
                                 </div>
                             </div> 
                         </div>

@@ -19,13 +19,13 @@ class LastPackagesItem extends Component {
                 id={"link-packages-" + pack.uuid}>
                 <div className="icon"></div>
                 <div className="desc">
-                    <div className="title font-medium-bold">
+                    <div className="title">
                         {pack.id.name}
                     </div>
-                    <div className="subtitle font-small">
+                    <div className="subtitle">
                         Version: {pack.id.version.length > 10 ? pack.id.version.substring(0, 10) + '...' : pack.id.version}
                     </div>
-                    <div className="subtitle font-small">
+                    <div className="subtitle">
                         Created at: {createdDate.toDateString() + ' ' + createdDate.toLocaleTimeString()}
                     </div>
                 </div>

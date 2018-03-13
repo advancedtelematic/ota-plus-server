@@ -26,22 +26,20 @@ class PropertiesPanel extends Component {
                 <div className="darkgrey-header">
                     {title}
                 </div>
-                <div className="wrapper-full">                    
-                    <div className="wrapper-properties">
-                        {!packagesReady ?
-                            <div className="wrapper-loader">
-                                <Loader />
-                            </div>
-                        :
-                            <PropertiesList
-                                packagesStore={packagesStore}
-                                devicesStore={devicesStore}
-                                hardwareStore={hardwareStore}
-                                showPackageBlacklistModal={showPackageBlacklistModal}
-                                installTufPackage={installTufPackage}
-                            />
-                        }
-                    </div>
+                <div className="wrapper-properties">
+                    {!packagesReady ?
+                        <div className="wrapper-loader">
+                            <Loader />
+                        </div>
+                    :
+                        <PropertiesList
+                            packagesStore={packagesStore}
+                            devicesStore={devicesStore}
+                            hardwareStore={hardwareStore}
+                            showPackageBlacklistModal={showPackageBlacklistModal}
+                            installTufPackage={installTufPackage}
+                        />
+                    }
                 </div>
             </div>
         );
