@@ -5,8 +5,28 @@
 @import 'mixins.scss';
 @import 'pages.scss';
 @import 'material-ui.scss';
+/*-----*/
+@import 'campaign-wizard';
 
 $font: 'akkurat';
+
+.add-button {
+    text-transform: none;
+    color: $home-header-button;
+    font-size: 12px;
+    font-weight: bold;
+
+    &:hover {
+        color: $home-header-button;
+    }
+
+    span {
+
+        &:not(:last-child) {
+            margin-right: 5px;
+        }
+    }
+}
 
 .font-big {
     font-size: 21px !important;
@@ -443,12 +463,11 @@ input {
 }
 
 .navbar-inverse {
-    background: #fff;
+    background: $devices-groups-bg;
     min-width: 1280px;
-    margin: 0;
     position: absolute;
-    border: 0;
-    box-shadow: 1px 1px 4px #888;
+    border-bottom: 1px solid $panel-delimiter-color;
+    padding: 0 0 0 15px;
 
     .alert {
         width: 400px;
@@ -471,7 +490,7 @@ input {
         margin-right: 0;
 
         .navbar-brand {
-            background: url('/assets/img/ATS-Garage_Logo.svg') no-repeat;
+            background: url('/assets/img/atsgarage_white.png') no-repeat;
             background-size: cover;
             width: 60px;
             height: 41px;
@@ -489,14 +508,15 @@ input {
             > li {
                 float: left;
                 > a {
-                    color: #888;
+                    color: $devices-group-text;
                     height: 50px;
                     padding: 15px 7px;
                     margin: 0 10px;
                     @include transition;
+                    font-size: 14px;
 
                     &:hover, &:focus, &:active {
-                        color: #555;
+                        color: #fff;
                     }
 
                     &:hover, &.active {
@@ -527,12 +547,12 @@ input {
 
             a {
                 color: #888;
-                font-size: 1.0em;
+                font-size: 14px;
                 padding: 15px;
                 display: block;
 
                 &:hover {
-                    color: $color-mint;
+                    color: #fff;
                     @include transition;
                 }
             }
@@ -540,6 +560,7 @@ input {
             &.separator {
                 line-height: 1.5em;
                 padding: 15px 0;
+                color: $devices-group-text;;
             }
 
             &#menu-login {
@@ -650,47 +671,49 @@ input {
 }
 
 .page-heading {
-    background-image: url('/assets/img/bg.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-color: $devices-groups-bg;
     width: 100%;
     height: 100px;
-    padding: 20px 0;
-    float: left;
+    padding: 20px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid $panel-delimiter-color;
 
-    .back-button {
+    .left-box {
+        display: flex;
+        align-items: center;
+
+        .back-button {
+            margin-right: 15px;
     
-        img {
-            width: 34px;
-            height: 34px;
-        }
-    }
-
-    .icon {
-        text-align: center;
-        background-color: #fff;
-        background-repeat: no-repeat;
-        background-size: cover;
-        width: 60px;
-        height: 60px;
-        display: inline-block;
-        vertical-align: middle;
-        border-radius: 10px;
-    }
-
-    .text {
-        width: auto;
-        margin: 0 0 0 25px;
-        display: inline-block;
-        vertical-align: middle;
-
-        .title {
-            color: #fff;
+            i {
+                color: $home-header-button;
+                font-size: 2.5em;
+            }
         }
 
-        .subtitle {
-            color: #fff;
+        .icon {
+            text-align: center;
+            background-color: #fff;
+            background-repeat: no-repeat;
+            background-size: cover;
+            width: 60px;
+            height: 60px;
             display: inline-block;
+            vertical-align: middle;
+            border-radius: 10px;
+        }
+
+        .text {
+            width: auto;
+            margin: 0 0 0 25px;
+            display: inline-block;
+
+            .title {
+                color: #fff;
+                font-size: 18px;
+            }
         }
     }
 }
@@ -722,8 +745,13 @@ input {
 }
 
 .subheader {
-    background: #666;
+    background: $home-grey;
     height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 25px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
 
     form {
         display: inline-block;
@@ -817,36 +845,40 @@ input {
     }
 }
 
-.input-wrapper {
-    &.search {
-        width: 280px !important;
-        height: 28px !important;
-        margin: 6px 15px !important;
-        display: inline-block !important;
+.search-box {
+    position: relative;
 
-        input {
-            font-size: 12px !important;
-            background: #fff !important;
-            padding: 0 15px !important;
-            border-radius: 15px !important;
-        }
+    .input-wrapper {
+        &.search {
+            width: 280px !important;
+            height: 28px !important;
 
-        &:after {
-            font-family: FontAwesome;
-            font-size: 12px;
-            content: "\f002";
-            position: absolute;
-            top: 2px;
-            right: 10px;
-        }
-
-        div {
-            hr {
-                width: 260px !important;
-                left: 10px !important;
-                bottom: 0px !important;
+            input {
+                font-size: 12px !important;
+                background: #fff !important;
+                padding: 0 15px !important;
+                background: $devices-groups-bg!important;
+                color: #fff!important;
+                padding: 0 30px!important;
             }
         }
+    }
+
+    .icon-search {
+        position: absolute;
+        top: 7px;
+        left: 10px;
+        color: #fff;
+        font-size: 12px;
+    }
+
+    .icon-close {
+        position: absolute;
+        top: 7px;
+        right: 10px;
+        color: #fff;
+        font-size: 12px;
+        cursor: pointer;
     }
 }
 
@@ -894,101 +926,41 @@ input {
     font-weight: bold;
 }
 
-.panel {
-    &.panel-grey {
-        background: transparent;
-        width: 100%;
-        margin-bottom: 0;
-        border: 0;
-        box-shadow: none;
-        -webkit-box-shadow: none;
-        position: relative;
-
-        .panel-heading {
-            color: #fff;
-            line-height: 50px;
-            text-align: center;
-            background: #4B5151;
-            height: 50px;
-            padding: 0 15px;
-            border: 0;
-            border-radius: 0;
-        }
-
-        .panel-body {
-            color: #444;
-            background: #fff;
-        }
-    }
-
-    &.panel-lightgrey {
-        background: transparent;
-        width: 100%;
-        margin-bottom: 0;
-        border: 0;
-        box-shadow: none;
-        -webkit-box-shadow: none;
-        position: relative;
-
-        .panel-heading {
-            color: $color-darkgrey;
-            line-height: 30px;
-            background: #eee;
-            height: 50px;
-        }
-
-        .panel-body {
-            color: $color-darkgrey;
-            background: #fff;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-    }
-}
-
 .element-box {
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 80px;
-    margin: 0 0 -6px 0;
-    display: inline-block;
-    position: relative;
-    border: 1px solid #eee;
-    transition: background-color 0.2s ease-in;
+    display: flex;
+    align-items: center;
+    padding: 20px;
 
     .icon {
-        text-align: center;
-        background-color: #fff;
         background-repeat: no-repeat;
         background-size: cover;
         width: 60px;
         height: 60px;
-        margin-top: 10px;
-        margin-left: 35px;
         border-radius: 10px;
-        float: left;
+        margin-right: 20px;
     }
 
     .desc {
         width: 70%;
-        margin-top: 15px;
-        margin-left: 15px;
-        float: left;
 
         .title {
-            color: #444;
+            color: #000;
             @include textoverflowEllipsis;
+            font-size: 16px;
+            margin-bottom: 4px;
         }
 
         .subtitle {
-            color: #aaa;
+            color: #898B91;
             @include textoverflowEllipsis;
+            font-size: 12px;
         }
     }
 }
 
+
 .progress-blue {
-    height: 25px;
+    height: 10px;
     background: #fff;
     padding: 0;
     margin: 0;
@@ -997,7 +969,7 @@ input {
     position: relative;
 
     .progress-bar {
-        background-color: #96DCD1;
+        background-color: $progress-default-color;
         border-radius: 5px;
         -webkit-box-shadow: none;
         -moz-box-shadow: none;
@@ -1040,82 +1012,64 @@ input {
         position: absolute;
         z-index: 2;
         color: #202020;
-        font-size: 13px;
+        font-size: 12px;
+        color: $home-header-text;
         font-weight: 700;
         background: #d3d3d3;
         width: 100%;
         height: 40px;
-        padding: 12px 15px;
-        margin: 0;
-        border-bottom: 1px solid #bbb;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        background: $home-grey;
+        padding: 0 25px;
     }
 
+    .column {
+        display: inline-block;
+        vertical-align: top;
+        @include transition;
+        width: 14%;
+        text-align: center;
+
+        &:first-child {
+            width: 15%;
+            text-align: left;
+        }
+
+        &.additional-info {
+            text-align: right;
+
+            .more-info {
+                color: $home-header-button;
+            }
+        }
+    }   
+
     .wrapper-list {
-        height: 100%;                
+        height: 100%;
 
         .campaigns-list {
 
-            .empty {
-                padding: 15px;
-            }
-
-            .heading {
-                border-bottom: 1px solid #ddd;
-                color: #464646;
-
-                .column {
-                    font-weight: bold;
-                    padding-top: 10px;
-                    padding-bottom: 10px;
-
-                    &.name {
-                        width: 15%;
-                        text-align: left;
-                    }
-                }
-            }
-
-            .column {
-                padding: 15px;
-                display: inline-block;
-                vertical-align: top;
-                @include transition;
-                width: 14%;
-                text-align: center;
-
-                &:first-child {
-                    width: 15%;
-                    text-align: left;
-                }
-
-                &.additional-info {
-                    text-align: right;
-
-                    .more-info {
-                        color: #444;
-                        font-size: 11px;
-                        background: $color-mint;
-                        padding: 1px 10px;
-                        border-radius: 10px;
-                        display: inline-block;
-                        @include transition;
-
-                        &:hover {
-                            background: $color-mint2;
-                        }
-                    }
-                }
+            .no-items {
+                height: 60px;
+                display: flex;
+                align-items: center;
+                padding: 0 25px;
+                color: $devices-group-text;
+                font-size: 12px;
             }
 
             .item {
                 cursor: pointer;
-                width: 100%;
-                height: 48px;
+                height: 60px;
                 border-bottom: 1px solid #ddd;
-                position: relative;
                 @include transition;
                 display: flex;
                 align-items: center;
+                font-size: 12px;
+                color: $devices-group-text;
+                padding: 0 25px;
 
                 &:hover {
                     background: #f5f5f5;
@@ -1129,62 +1083,74 @@ input {
             .statistic-details {
                 padding: 25px 0;
                 border-bottom: 1px solid #ddd;
-                background: #f5f5f5;
                 overflow: hidden;
 
                 .campaign-name {
-                    position: relative;
-                    padding: 0 15px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding-right: 70px;
                     margin-bottom: 25px;
-                    width: 400px;
-                    cursor: pointer;
-                    font-size: 30px;
 
-                    input {
-                        width: 100%;
-                        background-color: rgba(0,0,0,0);
-                        border: none;
-                        outline: none;
-                        -webkit-appearance: none;
-                        -moz-appearance: none;
-                        appearance: none;
-                        transition: all 0.3s ease;
-                        padding: 10px 65px 10px 10px;
-                        text-overflow: ellipsis;
-                        
-                        &:focus {
-                            outline: auto;
-                            background-color: rgba(0,0,0,0.2);
-                        }
+                    .fa-angle-up {
+                        font-size: 2.8em;
+                        color: $home-header-button;
                     }
-                    img {
-                        width: 20px;
-                        transition: opacity 0.3s ease;
+
+                    .rename-container {
+                        position: relative;
+                        padding: 0 15px;
+                        width: 400px;
                         cursor: pointer;
+                        font-size: 22px;
+                        font-weight: bold;
 
-                        &.edit {
-                            opacity: 0;
-                            position: absolute;
-                            right: 25px;
-                            top: 20px;
-                        }
-                    }
-                    .icons {
-                        position: absolute;
-                        right: 20px;
-                        top: 10px;
-                        z-index: 10;
-                        img {
-                            margin-right: 5px;
-                            width: 15px;
-                        }
-                    }
-                    &:hover {
-                        img {
-                            opacity: 1;
-                        }
                         input {
-                            background-color: #ddd;
+                            width: 100%;
+                            background-color: rgba(0,0,0,0);
+                            border: none;
+                            outline: none;
+                            -webkit-appearance: none;
+                            -moz-appearance: none;
+                            appearance: none;
+                            transition: all 0.3s ease;
+                            padding: 10px 65px 10px 10px;
+                            text-overflow: ellipsis;
+                            
+                            &:focus {
+                                outline: auto;
+                                background-color: rgba(0,0,0,0.2);
+                            }
+                        }
+                        img {
+                            width: 20px;
+                            transition: opacity 0.3s ease;
+                            cursor: pointer;
+
+                            &.edit {
+                                opacity: 0;
+                                position: absolute;
+                                right: 25px;
+                                top: 15px;
+                            }
+                        }
+                        .icons {
+                            position: absolute;
+                            right: 20px;
+                            top: 10px;
+                            z-index: 10;
+                            img {
+                                margin-right: 5px;
+                                width: 15px;
+                            }
+                        }
+                        &:hover {
+                            img {
+                                opacity: 1;
+                            }
+                            input {
+                                background-color: #ddd;
+                            }
                         }
                     }
                 }
@@ -1192,10 +1158,13 @@ input {
                 .title {
                     font-weight: bold;
                     margin-bottom: 20px;
+                    font-size: 10px;
+                    text-transform: uppercase;
+                    color: $devices-group-text;
                 }
 
                 .left-box {
-                    width: 20%;
+                    width: 15%;
                     float: left;
                     padding: 0 30px;
 
@@ -1215,28 +1184,11 @@ input {
                         .cancel-campaign {
                             margin-top: 20px;
 
-                            button {
-                                margin: auto!important;
-                                padding: 0!important;
-                                height: 25px!important;
-                                display: flex!important;
-                                justify-content: center;
-                                align-items: center;
-
-                                div {
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: center;
-
-                                    span {
-                                        text-transform: uppercase!important;
-                                        font-size: 12px!important;
-                                        vertical-align: none!important;
-                                        padding: 0 30px!important;
-                                    }
-                                }
-
-                                
+                            .cancel-button {
+                                color: $campaigns-cancel-color;
+                                text-transform: uppercase;
+                                font-size: 12px;
+                                font-weight: bold;
                             }
                         }
                     }
@@ -1256,6 +1208,7 @@ input {
                             align-items: center;
                             position: relative;
                             top: 3px;
+                            font-size: 12px;
 
                             .block {
                                 display: inline-block;
@@ -1267,6 +1220,10 @@ input {
                                 div {
                                     display: inline-block;
 
+                                    &:last-child {
+                                        color: $campaign-details-text;
+                                    }
+
                                     &:first-child {
                                         font-size: 18px;
                                         margin-right: 5px;
@@ -1276,49 +1233,50 @@ input {
                         }
 
                         .middle-container {
+                            position: relative;
                             overflow: hidden;
-                            display: flex;
 
                             .devices-progress {
-                                flex-grow: 16;
                                 border: 1px solid #ccc;
                                 border-radius: 5px;
                                 float: left;
+                                height: 10px;
+                                width: 100%;
 
                                 &.with-bar {
                                     margin: 20px 0;
                                 }
 
                                 .bar {
-                                    height: 25px;
+                                    height: 10px;
                                     overflow: hidden;
                                     border-radius: 4px;
 
                                     .failure {
-                                        height: 25px;
+                                        height: 10px;
                                         background-color: #fe0001;
                                         float: left;
                                     }
 
                                     .success {
-                                        height: 25px;
+                                        height: 10px;
                                         background-color: #83d060;
                                         float: left;
                                     }
 
                                     .queued {
-                                        height: 25px;
+                                        height: 10px;
                                         background-color: #f5a623;
                                         float: left;
                                     }
 
                                     .not-impacted {
-                                        height: 25px;
+                                        height: 10px;
                                         background-color: #ddd;
                                         float: left;
                                     }
                                     .not-proceed {
-                                        height: 25px;
+                                        height: 10px;
                                         background-color: #fff;
                                         float: left;
                                     }
@@ -1326,40 +1284,14 @@ input {
                             }
 
                             .show-dependencies {
-                                position: relative;
-                                flex-grow: 1;
-                                float: left;
-                                margin: 20px 0;
-                                display: flex;
-                                justify-content: flex-end;
-                                align-items: center;
-                                height: 25px;
-
-                                .icon {
-                                    background: url(/assets/img/icons/dependencies-icon.svg);
-                                    width: 50px;
-                                    height: 50px;
-                                    background-size: cover;
-                                    cursor: pointer;
-                                    transition: all 0.5s;
-                                }
-                                
-                                &:hover {
-                                    .icon {
-                                        background: url(/assets/img/icons/dependencies-icon-active.svg);
-                                        width: 50px;
-                                        height: 50px;
-                                        background-size: cover;
-                                        cursor: pointer;
-                                    }
-                                }
-
-
+                                position: absolute;
+                                right: 0;
                             }
                         }
 
                         .bottom-container {
                             height: 35px;
+                            color: $device-hardware-header;
 
                             .status-block {
                                 div {
@@ -1378,7 +1310,7 @@ input {
                                     &.success {
                                         span {
                                             &:first-child {
-                                                background-color: #83D060;
+                                                background-color: $progress-default-color;
                                             }
                                         }
                                     }
@@ -1456,10 +1388,11 @@ input {
                             display: flex;
                             align-items: center;
                             background: #fff;
-                            padding: 15px 50px;
+                            margin: 0 50px 0 50px;
+                            border-top: 1px solid $device-active-item-bg;
 
-                            &:not(:last-child) {
-                                margin-bottom: 10px;
+                            &:last-child {
+                                border-bottom: 1px solid $device-active-item-bg;
                             }
 
                             p {
@@ -1471,10 +1404,7 @@ input {
                                 flex-grow: 1;
 
                                 .element-box {
-                                    display: flex;
-                                    height: auto;
-                                    margin: 0;
-                                    border: 0;
+                                    padding: 20px 0;
 
                                     &.group {
                                     
@@ -1482,12 +1412,8 @@ input {
                                             background-image: url(/assets/img/icons/groups.png);
                                             border: 2px solid #ddd;
                                             background-position: center;
-                                            height: auto;
+                                            height: 55px;
                                             margin: 0;
-                                            float: none;
-                                            display: inline-block;
-                                            vertical-align: middle;
-                                            flex-grow: 1;
                                         }
 
                                         .desc {
@@ -1497,16 +1423,20 @@ input {
                                             display: inline-block;
                                             vertical-align: middle;
 
-                                            .title {
-                                                font-size: 14px;
+                                            .small-title {
+                                                font-size: 12px;
                                                 font-weight: 400;
+                                                color: $device-properties-text;
+                                                margin-bottom: 2px;
+                                                @include textoverflowEllipsis;
+                                            }
+
+                                            .subtitle {
+                                                font-size: 10px;
+                                                color: $device-hardware-header;
                                             }
                                         }
                                     }
-                                }
-
-                                .title {
-                                    margin-bottom: 0;
                                 }
                             }
 
@@ -1515,37 +1445,21 @@ input {
                                 flex-grow: 5;
 
                                 .devices-progress {
+                                    height: 10px;
+                                }
 
-                                    .wrapper-rate {
-                                        position: absolute;
-                                        right: 10px;
-                                        color: #000;
-                                        height: 100%;
-                                        display: flex;
-                                        align-items: center;
-                                        justify-content: center;
-
-                                        .wrapper-rate-value {
-                                            position: relative;
-                                            top: 2px;
-                                        }
-
-                                        .fa.fa-check {
-                                            margin-left: 5px;
-                                            background-color: #fff;
-                                            display: inline-block;
-                                            border: 2px solid #fff;
-                                            font-size: 8px;
-                                            border-radius: 50%;
-                                            color:#000;
-                                        }
-                                    }
+                                .wrapper-rate {
+                                    text-align: right;
+                                    margin-top: 5px;
                                 }
                             }
 
                             .status-group {
                                 flex-grow: 1;
                                 text-align: right;
+                                font-size: 12px;
+                                color: $device-properties-text;
+
                                 span {
                                     display: block;
                                     padding: 1px 0;
@@ -1559,17 +1473,34 @@ input {
     }
 }
 
+.app-label {
+    color: $color-darkgrey;
+    font-size: 12px;
+    background: transparent;
+    padding: 0px 10px;
+    border-radius: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    display: inline-block;
+    border: 1px solid #444;
+    @include transition;
+    line-height: 20px;
+}
+
 .section-header {
-    color: #202020;
-    font-size: 13px;
+    color: $home-header-text;
+    font-size: 12px;
     font-weight: bold;
-    background: #D3D3D3;
+    background: $home-grey;
     width: 100%;
     height: 40px;
-    padding: 12px 15px;
     margin: 0;
-    border-bottom: 1px solid #bbb;
+    border-bottom: 1px solid $section-header-border-color;
     position: relative;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    padding: 0 25px;
 }
 
 .icon-back {
@@ -1579,22 +1510,18 @@ input {
 .common-box {
     color: #fff;
     text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
-    background: transparent;
+    background: $devices-groups-bg;
     width: 25%;
     height: 100px;
-    display: inline-block;
-    position: relative;
-    border-radius: 10px;
-    border: 0;
     transition: background-color 0.2s ease-in;
-    overflow: hidden;
+    margin: 5px 5px 0 0;
+    width: 350px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
 
     &:hover {
         background-color: rgba(255, 255, 255, .15);
-    }
-
-    &:hover, &:active, &:focus {
-        color: #fff;
     }
 
     .icon {
@@ -1604,7 +1531,6 @@ input {
         background-size: cover;
         width: 60px;
         height: 60px;
-        margin: 0 0 0 15px;
         border-radius: 10px;
         display: inline-block;
         vertical-align: middle;
@@ -1614,67 +1540,18 @@ input {
         text-align: left;
         width: 62%;
         margin-left: 15px;
-        display: inline-block;
-        vertical-align: middle;
         transition: all 0.2s ease-in;
 
         .title {
-            font-size: 18px;
-            line-height: 1.5em;
+            font-size: 14px;
+            text-transform: uppercase;
             @include textoverflowEllipsis;
         }
 
         .subtitle {
             font-size: 10px;
-            line-height: 1.6em;
             @include textoverflowEllipsis;
-        }
-    }
-
-    .actions {
-        color: #fff;
-        text-align: center;
-        cursor: hand;
-        cursor: pointer;
-        background: #4B5151;
-        width: 60px;
-        height: 100%;
-        margin-left: -60px;
-        display: inline-block;
-        vertical-align: middle;
-        transition: all 0.2s ease-in;
-
-        ul {
-            height: 100%;
-            margin: 0;
-
-            li {
-                line-height: 92px;
-                height: 100%;
-                display: block;
-
-                img {
-                    width: 20px;
-                }
-
-                div {
-                    font-size: 11px;
-                    margin: 0 0 0 3px;
-                    transition: all 0.2s ease-in;
-                    display: none;
-                    vertical-align: sub;
-                }
-            }
-        }
-    }
-
-    &:hover {
-        .actions {
-            margin-left: 0;
-        }
-
-        .desc {
-            width: 55%;
+            color: rgba(255,255,255,0.5);
         }
     }
 }
@@ -1701,7 +1578,7 @@ input {
     }
 }
 
-.ios-list {
+.ios-list { //TODO: Remove redundant styles
     background: #fff;
     height: calc(100%);
     overflow-y: auto;
@@ -1712,16 +1589,18 @@ input {
     }
 
     .header, .fake-header {
-        color: #202020;
-        font-size: 13px;
+        color: $fake-header-text;
+        font-size: 12px;
         font-weight: bold;
-        background: #D3D3D3;
+        background: $home-grey;
         width: 100%;
         height: 30px;
-        padding: 7px 15px;
-        margin: 0;
+        padding: 0 25px;
         float: left;
         border-bottom: 1px solid #bbb;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
     .fake-header {
@@ -1731,17 +1610,18 @@ input {
     }
 
     .item {
-        color: #555;
-        text-align: left;
         background: #fff;
         width: 100%;
-        height: 40px;
-        padding: 11px 15px;
+        height: 60px;
+        padding: 0 25px;
         border: 0;
         border-bottom: 1px solid #ddd;
         @include transition;
-        overflow: hidden;
-        cursor: pointer;
+        background: $device-item-bg;
+        color: $devices-group-text;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
 
         &.unmanaged {
            background: #d3d3d3; 
@@ -1756,24 +1636,19 @@ input {
         }
 
         &.selected {
-            background: #f5f5f5;
+            background: $device-active-item-bg;
         }
     }
 
     ul.versions {
         background: #f5f5f5;
         width: 100%;
-        padding: 5px 10px;
         margin: 0;
 
         li {
             background: #fff;
             overflow: hidden;
-            border: 1px solid #e1e1e1;
-
-            &:not(:last-child) {
-                margin-bottom: 5px;
-            }
+            border-bottom: 1px solid #e1e1e1;
 
             &.blacklist {
                 color: red;
@@ -1809,11 +1684,6 @@ input {
             }
 
             .right-box {
-                text-align: right;
-                width: 50%;
-                float: right;
-                padding: 0 10px;
-                height: 31px;
 
                 .version-name {
                     line-height: 32px;
@@ -1945,6 +1815,7 @@ input {
 
 .dialog-campaign-wizard {
 
+
     &.disable-transitions {
 
         .content {
@@ -1997,7 +1868,6 @@ input {
             left: 50%;
             margin-left: -50vw;
             margin-top: 0!important;
-            width: 100vw;
 
             .draggable-content {
                 height: 100%;
@@ -2372,835 +2242,6 @@ input {
     }
 }
 
-.campaigns-wizard {
-    z-index: 2000;
-    width: 1000px;
-    top: 50%;
-    position: absolute;
-    left: 50%;
-    margin-left: -500px;
-    margin-top: -340px;
-    box-shadow: 0 14px 45px rgba(0,0,0,.25),0 10px 18px rgba(0,0,0,.22);
-
-    &.minimized {
-        top: auto!important;
-        left: auto!important;        
-        width: 400px!important;
-    }
-
-    .draggable-content {
-
-        .body {
-            background: #F7F7F7;
-            padding: 0 !important;
-
-            .heading {
-                color: #fff;
-                font-size: 18px;
-                text-align: center;
-                background: #4B5151;
-                height: 50px;
-                padding: 14px 15px;
-                border: 0;
-                position: relative;
-                display: flex!important;
-                align-items: center;
-                justify-content: center;
-
-                .wizard-actions {
-                    position: absolute;
-                    right: 15px;
-                    top: 10px;
-
-                    .box-toggle {
-                        float: right;
-
-                        &:last-child {
-                            margin-right: 10px;
-                        }
-
-                        img {
-                            width: 19px;
-                        }
-                    }
-                }
-            }
-
-            .input-wrapper {
-                &.search {
-                    position: absolute !important;
-                    right: 0 !important;
-                    top: 4px !important;
-                }
-            }
-
-            .content-step {
-                overflow-y: auto;
-                height: 490px;
-
-                .alert {
-                    margin-bottom: 0;
-                }
-
-                &.step-packages {
-                    .ios-list {
-                        height: 100%;
-
-                        .header, .fake-header {
-                            padding-left: 30px;
-                            padding-right: 30px;
-                            color: #464646;
-                        }
-
-                        .item {
-                            padding-left: 30px;
-                            padding-right: 30px;
-                            @include textoverflowEllipsis;
-
-                            &.disabled {
-                                background: #ddd;
-
-                                .btn-checkbox {
-                                    pointer-events: none;
-                                }
-                            }
-
-                            .btn-checkbox {
-                                float: left;
-                                margin: 0 10px 0 0;
-                            }
-
-                            .info {
-                                float: left;
-
-                                .in-director {
-                                    display: inline-block;
-                                    margin-left: 10px;
-
-                                    img {
-                                        width: 25px;
-                                        margin-top: -5px;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                &.step-versions {
-                
-                    .ios-list {
-
-                        .item {
-                            height: auto;
-
-                            .info {
-                                margin-top: 10px;
-                                display: flex;
-                                align-items: center;
-
-                                .in-director {
-                                    display: inline-block;
-                                    margin-left: 10px;
-
-                                    img {
-                                        width: 25px;
-                                        margin-top: -5px;
-                                    }
-                                }
-                            }
-
-                            .select-container {
-                                margin: 15px 0;
-
-                                .packages {
-                                    overflow: hidden;
-                                }
-
-                                .versions {
-                                    overflow: hidden;
-                                    margin: 15px 0;
-                                }
-
-                                .from {
-                                    width: 42%;
-                                    margin-right: 8%;
-                                    float: left;
-                                }
-
-                                .to {
-                                    width: 50%;
-                                    float: left;
-
-                                    .info {
-                                        .icon {
-                                            img {
-                                                width: 20px;
-                                            }
-                                            display: inline-block;
-                                            margin-right: 10px;
-                                        }
-                                        .name {
-                                            font-weight: bold;
-                                        }
-                                    }
-                                }
-
-                                .hardware-id {
-                                    width: 50%;
-                                    float: right;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                &.step-groups {
-                    .ios-list {
-                        height: 100%;
-
-                        .item {
-                            height: auto;
-
-                            .btn-checkbox {
-                                width: 20px;
-                                height: 20px;
-                                display: inline-block;
-                                position: relative;
-
-                                i {
-                                    position: relative;
-                                    right: -2px;
-                                    top: -2px;
-                                }
-                            }
-
-                            .element-box {
-                                &.group {
-                                    width: calc(100% - 70px);
-                                    height: auto;
-                                    margin: 0 0 0 20px;
-
-                                    .desc {
-                                        width: calc(100% - 80px);
-
-                                        .title {
-                                            @include textoverflowEllipsis;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                &.step-dependencies-management {
-
-                    .content {
-                        height: 100%;
-
-                        .wrapper-center {
-                            height: calc(100% - 60px);
-                        }
-
-                        .step-pass {
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
-                            font-weight: bold;
-                            color: #83d062;
-                            font-size: 16px;
-
-                            img {
-                                width: 100px;
-                                margin-bottom: 15px;
-                            }
-                        }
-
-                        .top-alert {
-                            padding: 15px;                            
-                            color: #fff;
-                            font-size: 16px;
-                            font-weight: bold;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-
-                            img {
-                                margin-right: 10px;
-                                width: 30px;
-                            }
-
-                            &.danger {
-                                background-color: #ff0100;
-                            }
-
-                            &.warning {
-                                background-color: #f5a623;
-                            }
-
-                            &.success {
-                                background-color: #83d062;
-                            }
-                        }
-                    
-                        section.pair {
-                            background: #fff;
-                            border-bottom: 1px solid #e5e5e5;
-                            padding: 20px 30px;
-                            overflow: hidden;
-
-                            &:not(:last-child) {
-                                margin-bottom: 20px;
-                            }
-
-                            .item {
-                                padding-left: 50px;
-                                overflow: hidden;
-                                display: flex;
-                                align-items: center;
-
-                                &:not(:last-child) {
-                                    margin-bottom: 20px;
-                                }
-
-                                .title {
-                                    margin-bottom: 10px;
-                                }
-
-                                .name {                                    
-                                    width: 35%;
-                                    margin-right: 15%;
-                                    float: left;
-                                    padding-bottom: 5px;
-                                    border-bottom: 1px solid #e0e0e0;
-                                    font-weight: bold;
-
-                                    .value {
-                                        @include textoverflowEllipsis;
-                                    }
-                                }
-
-                                .version {
-                                    width: 35%;
-                                    margin-right: 15%;
-                                    float: left;
-                                    font-weight: bold;
-
-                                    &:not(.select) {
-                                        padding-bottom: 5px;
-                                        border-bottom: 1px solid #e0e0e0;
-                                    }
-
-                                    &.select {
-
-                                        .title {
-                                            margin-bottom: 15px;
-                                        }
-                                    }
-
-                                    .value {
-                                        @include textoverflowEllipsis;
-                                    }
-                                }
-                            }
-
-                            .add {
-                                float: right;
-                            }
-
-                            .status {                                
-                                font-weight: bold;
-                                margin-bottom: 20px;
-
-                                &.required {
-                                    color: #f5a623;
-                                }
-
-                                &.incompatible {
-                                    color: #ff0100;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                &.step-delta {
-                    padding: 10px;
-
-                    .content {
-                        background: #fff;
-                        width: 100%;
-                        height: 100%;
-                        padding: 10px;
-                        border: 1px solid #eee;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-
-                        .delta-switch {
-                            text-align: center;
-                            width: 35%;
-                            display: inline-block;
-                            -webkit-touch-callout: none;
-                            -webkit-user-select: none;
-                            -khtml-user-select: none;
-                            -moz-user-select: none;
-                            -ms-user-select: none;
-                            user-select: none;
-
-                            .switch {
-                                background: transparent;
-                                width: 65px;
-                                height: 30px;
-                                border: 1px solid #dedede;
-
-                                .switch-status {
-                                    top: 8px;
-                                    right: 10px;
-                                }
-
-                                &:before {
-                                    background: transparent;
-                                    width: 65px;
-                                    height: 28px;
-                                    border: 0;
-                                }
-
-                                &:after {
-                                    width: 30px;
-                                    height: 30px;
-                                    border-color: #ddd;
-                                    top: -1px;
-                                }
-
-                                &.switchOn {
-                                    .switch-status {
-                                        top: 8px;
-                                        left: 10px;
-                                    }
-
-                                    &:after {
-                                        left: 35px !important;
-                                    }
-                                }
-                            }
-                        }
-
-                        .desc {
-                            width: 65%;
-                            padding: 40px;
-                            display: inline-block;
-
-                            .title {
-                                font-size: 16px;
-                                font-weight: bold;
-                            }
-
-                            .text {
-                                color: #ccc;
-                                margin: 10px 0 0 0;
-                            }
-                        }
-                    }
-                }
-
-                &.step-programming-sequencer {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-
-                    .c-sequencer__failure {
-                        border-bottom-right-radius: 15px;
-                    }
-                    .c-sequencer__end-point, .c-sequencer__starter-point {
-                        min-height: inherit;
-                    }
-                    .c-sequencer__item {
-                        overflow: visible;
-                    }
-                }
-
-                &.step-summary {
-                    .step-inner {
-                        height: 100%;
-                        padding: 8px;
-
-                        .box-bordered {
-                            .wrapper-package-name {
-                                width: 40%;
-                                padding: 0 15px;
-                                display: inline-block;
-                                @include textoverflowEllipsis;
-                            }
-
-                            .wrapper-package-version {
-                                font-weight: bold;
-                                width: 40%;
-                                padding: 0 15px;
-                                display: inline-block;
-                                @include textoverflowEllipsis;
-                            }
-
-                            .fade-wrapper-groups {
-                                width: 92%;
-                                height: 40px;
-                                position: absolute;
-
-                                &.top {
-                                    background: linear-gradient(to bottom, #fff 20%, rgba(255,255,255,0) 100%);
-                                    top: 45px;
-                                    z-index: 2;
-                                }
-
-                                &.bottom {
-                                    background: linear-gradient(to top, #fff 20%, rgba(255,255,255,0) 100%);
-                                    bottom: 20px;
-                                    z-index: 2;
-                                }
-                            }
-
-                            .wrapper-groups {
-                                height: 150px;
-                                padding: 20px 0 20px 0;
-                                position: relative;
-                                overflow-y: auto;
-
-                                .element-box {
-                                    width: 33.3333333%;
-                                    height: 60px;
-
-                                    &.group {
-                                        .icon {
-                                            width: 40px;
-                                            height: 40px;
-                                        }
-                                    }
-                                }
-                            }
-
-                            &.groups {
-                                position: relative;
-                            }
-
-                            &.delta {
-                                margin: 3px 0 0 0;
-
-                                .title {
-                                    padding: 0 5px 0 0;
-                                    display: inline-block;
-                                    vertical-align: middle;
-                                }
-
-                                .desc {
-                                    margin: 0;
-                                    display: inline-block;
-                                    vertical-align: middle;
-                                }
-                            }
-                        }
-
-                        .wrapper-box-dates {
-                            margin: 3px 0 0 0;
-
-                            .box-bordered {
-                                width: 49.8%;
-                                display: inline-block;
-
-                                &:nth-child(2) {
-                                    margin-left: 0.4%;
-                                }
-
-                                .title {
-                                    width: 40%;
-                                    display: inline-block;
-                                    vertical-align: middle;
-                                }
-
-                                .desc {
-                                    width: 30%;
-                                    margin: 0;
-                                    display: inline-block;
-                                    vertical-align: middle;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                .element-box {
-                    border: 0;
-                    display: inline-block;
-
-                    &:hover {
-                        background: transparent;
-                    }
-
-                    &.group {
-                        .icon {
-                            background-image: url('/assets/img/icons/groups.png');
-                            border: 2px solid #ddd;
-                            margin: 0;
-                            float: none;
-                            display: inline-block;
-                            vertical-align: middle;
-                        }
-
-                        .desc {
-                            margin: 0 0 0 15px;
-                            float: none;
-                            display: inline-block;
-                            vertical-align: middle;
-
-                            .title {
-                                font-size: 13px;
-                            }
-                        }
-                    }
-                }
-
-                .box-bordered {
-                    background: #fff;
-                    width: 100%;
-                    padding: 20px;
-                    border: 1px solid #eee;
-
-                    .title {
-                        font-weight: bold;
-                        font-size: 18px;
-                    }
-
-                    .desc {
-
-                        .package-container {
-                            overflow: hidden;
-                            padding-bottom: 15px;
-                            border-bottom: 2px solid #ddd;
-                            margin: 15px 0;
-
-                            .update-container {
-                                overflow: hidden;
-
-                                .update-from {
-                                    width: 46%;
-                                    float: left;
-                                    margin-right: 4%; 
-                                }
-
-                                .update-to {
-                                    width: 50%;
-                                    float: left;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
-                                    overflow: hidden;
-                                }
-
-                                .text {
-                                    font-weight: bold;
-                                    margin-bottom: 10px;
-                                }
-
-                                .value {
-                                    margin-bottom: 15px;
-                                    @include textoverflowEllipsis;
-
-                                    .in-director {
-                                        display: inline-block;
-                                        margin-left: 5px;
-
-                                        img {
-                                            width: 25px;
-                                        }
-                                    }
-                                }
-                            }
-
-                            .hardware-id-container {
-                                overflow: hidden;
-                                width: 50%;
-                                float: right;
-
-                                .text {
-                                    font-weight: bold;
-                                    margin-bottom: 10px;
-                                }
-
-                                .value {
-                                    @include textoverflowEllipsis;
-                                }
-
-                                .hardware-label {
-                                    color: $color-darkgrey;
-                                    font-size: 12px;
-                                    background: transparent;
-                                    padding: 0px 10px;
-                                    border-radius: 10px;
-                                    display: inline-block;
-                                    border: 1px solid #444;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        .actions {
-            padding: 20px !important;
-            border-top: 1px solid #e5e5e5;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            .wrapper-close {
-                flex-basis: 15%;
-
-                .link-close {
-                    color: $color-darkgrey;
-                }
-            }
-
-            .wrapper-steps-no {
-                flex-basis: 60%;
-                display: flex;
-                justify-content: center;
-            }
-
-            .wrapper-confirm {
-                flex-basis: 15%;
-                text-align: right;
-            }
-        }
-    }
-
-    .step {
-        width: 90px;
-        padding: 0;
-        margin: 20px 0 0 0;
-        float: left;
-        position: relative;
-
-        .complete {
-            & > .progress {
-                & > .progress-bar {
-                    width: 100%;
-                }
-            }
-        }
-
-        & > .stepnum {
-            color: #ccc;
-            font-size: 12px;
-            text-align: center;
-            padding: 0 5px;
-            margin: 20px 0 0 0;
-            line-height: 1.1;
-        }
-
-        & > .dot {
-            color: #ccc;
-            font-size: 16px;
-            text-align: center;
-            width: 26px;
-            height: 26px;
-            background: #F7F7F7;
-            padding: 2px 0 0 0;
-            margin-top: -35px;
-            margin-left: -13px;
-            border: 1px solid #ccc;
-            border-radius: 50%;
-            position: absolute;
-            left: 50%;
-            display: block;
-
-            &:hover, &:active, &:focus {
-                text-decoration: none;
-            }
-        }
-
-        & > .progress {
-            background: #ddd;
-            height: 1px;
-            padding: 0;
-            border: 0;
-            position: relative;
-            border-radius: 0px;
-            box-shadow: none;
-
-            & > .progress-bar {
-                width: 0px;
-                box-shadow: none;
-                background: #ddd;
-            }
-        }
-
-        &.active {
-            & > .progress {
-                & > .progress-bar {
-                    width: 50%;
-                }
-            }
-
-
-            & > .stepnum {
-                color: #888;
-            }
-
-            & > .dot {
-                color: #fff;
-                background: #9ddcd3;
-                border-color: transparent;
-            }
-        }
-
-        &:first-child {
-            & > .progress {
-                left: 50%;
-                width: 50%;
-            }
-
-            &.active {
-                & > .progress {
-                    & > .progress-bar {
-                        width: 0%;
-                    }
-                }
-            }
-        }
-
-        &:last-child {
-            & > .progress {
-                width: 50%;
-            }
-
-            &.active {
-                & > .progress {
-                    & > .progress-bar {
-                        width: 100%;
-                    }
-                }
-            }
-        }
-
-        &.disabled {
-            a {
-                &.dot {
-                    pointer-events: none;
-                }
-            }
-
-            & > .dot {
-                background-color: #9DDCD3;
-
-                &:after {
-                    opacity: 0;
-                }
-            }
-        }
-    }
-}
-
 .file-uploader-modal {
 
     .description {
@@ -3459,26 +2500,27 @@ input {
     }
 }
 
-.black-header, .darkgrey-header {
-    color: #fff;
+.darkgrey-header, .hardware-header {
     font-size: 16px;
     font-weight: bold;
-    line-height: 36px;
     text-transform: uppercase;
     width: 100%;
-    height: 36px;
-    padding: 0 15px;
-    border-radius: 0;
-}
-
-.black-header {
-    background: #202020;
-    border-top: 1px solid #555;
-    border-bottom: 1px solid #000;
+    height: 45px;
+    padding: 0 25px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
 }
 
 .darkgrey-header {
-    background: #4B5151;
+    background: $home-grey;
+    color: $home-header-text;
+    border-bottom: 1px solid grey;
+}
+
+.hardware-header {
+    background: $devices-groups-bg;
+    color: $device-hardware-header;
 }
 
 .wrapper-switch {
@@ -3747,13 +2789,12 @@ div[role=presentation] {
     height: 20px;
     padding: 0;
     margin: -6px 0 0 20px;
-    border-radius: 20px;
     border: 1px solid #ccc;
     position: relative;
 
     &.checked {
         color: #fff;
-        background: #99DDD2;
+        background: #00afaa;
         border-color: transparent;
     }
 
@@ -3779,7 +2820,7 @@ div[role=presentation] {
     vertical-align: middle;
 
     &:before {
-        background: rgba(0,0,0,0);
+        background: #fff;
         width: 45px;
         height: 18px;
         border: 1px solid #ccc;
@@ -3811,7 +2852,7 @@ div[role=presentation] {
 
     &.switchOn {
         &:before {
-            background: #369E47 !important;
+            background: $switch-blue-color!important;
         }
 
         &:after {
@@ -4561,9 +3602,11 @@ div[role=presentation] {
         }
 
         .wrapper-center {
+            font-size: 12px;
 
             &.left {
                 justify-content: left;
+                text-align: left;
             }
         }
     }
@@ -4575,6 +3618,11 @@ div[role=presentation] {
     height: 100%;
     position: relative;
     overflow-y: hidden;
+
+    .section-header {
+        position: absolute;
+        top: 0;
+    }
 
     ul {
         margin: 30px 0 0 0;
@@ -5631,18 +4679,6 @@ div[role=presentation] {
                     line-height: 13px;
                     margin-bottom: 10px;
                     display: block;
-                }
-
-                .hardware-label {
-                    color: #444;
-                    font-size: 12px;
-                    background: transparent;
-                    padding: 0 10px;
-                    border-radius: 10px;
-                    margin-right: 5px;
-                    margin-bottom: 5px;
-                    display: inline-block;
-                    border: 1px solid #444;
                 }
 
                 .versions {

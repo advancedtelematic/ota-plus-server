@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
-import { SubHeader, SearchBar } from '../../partials';
-import { Form } from 'formsy-react';
-import { FlatButton } from 'material-ui';
+import { SubHeader } from '../../partials';
 
 @observer
 class Header extends Component {
@@ -13,12 +11,14 @@ class Header extends Component {
         const { showCreateModal, showFileUploaderModal } = this.props;
         return (
             <SubHeader>
-                <FlatButton
-                    label="Add new package"
-                    onClick={showCreateModal.bind(this, null)}
-                    className="btn-main btn-small btn-add"
-                    id="add-new-package"
-                />
+                <a href="#" className="add-button" id="add-new-package" onClick={showCreateModal.bind(this, null)}>
+                    <span>
+                        +
+                    </span>
+                    <span>
+                        Add package
+                    </span>
+                </a>
             </SubHeader>
         );
     }

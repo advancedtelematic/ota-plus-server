@@ -21,28 +21,26 @@ class SoftwarePanel extends Component {
                 <div className="darkgrey-header">
                     {title}
                 </div>
-                <div className="wrapper-full">
-                    <div className="wrapper-software">
-                        {!packagesReady ?
-                            <div className="wrapper-loader">
-                                <Loader />
-                            </div>
+                <div className="wrapper-software">
+                    {!packagesReady ?
+                        <div className="wrapper-loader">
+                            <Loader />
+                        </div>
+                    :
+                        Object.keys(packagesStore.preparedPackages).length ?                                
+                            <PackagesList
+                                packagesStore={packagesStore}
+                                devicesStore={devicesStore}
+                                hardwareStore={hardwareStore}
+                                onFileDrop={onFileDrop}
+                                toggleTufPackageAutoUpdate={toggleTufPackageAutoUpdate}
+                                showPackageDetails={showPackageDetails}
+                            />
                         :
-                            Object.keys(packagesStore.preparedPackages).length ?                                
-                                <PackagesList
-                                    packagesStore={packagesStore}
-                                    devicesStore={devicesStore}
-                                    hardwareStore={hardwareStore}
-                                    onFileDrop={onFileDrop}
-                                    toggleTufPackageAutoUpdate={toggleTufPackageAutoUpdate}
-                                    showPackageDetails={showPackageDetails}
-                                />
-                            :
-                                <div className="wrapper-center">
-                                    {noSearchResults}
-                                </div>
-                        }
-                    </div>
+                            <div className="wrapper-center">
+                                {noSearchResults}
+                            </div>
+                    }
                 </div>
             </div>
         );

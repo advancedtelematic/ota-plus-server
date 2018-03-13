@@ -40,15 +40,12 @@ class ListItemArtificial extends Component {
                     }}
                     key={group.name}>
                     <div className="desc">
-                        <div className="title font-medium">
+                        <div className="title">
                             {group.friendlyName}
                         </div>
-                        <div className="subtitle font-small">
+                        <div className="subtitle">
                             {t('common.deviceWithCount', {count: deviceCount})}
                         </div>
-                    </div>
-                    <div className="pointer">
-                        <i className="fa fa-angle-right fa-2x"/>
                     </div>
                 </button>
             )

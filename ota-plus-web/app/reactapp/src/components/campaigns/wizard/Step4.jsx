@@ -1,7 +1,7 @@
-import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
-import { WizardGroupsList } from './step4';
-import { Loader } from '../../../partials';
+import React, {Component, PropTypes} from 'react';
+import {observer} from 'mobx-react';
+import {WizardGroupsList} from './step4';
+import {Loader, Form, FormInput} from '../../../partials';
 import _ from 'underscore';
 
 @observer
@@ -10,39 +10,48 @@ class WizardStep4 extends Component {
         super(props);
         this.setWizardData = this.setWizardData.bind(this);
     }
+
     componentWillMount() {
         this.props.groupsStore.fetchGroups();
     }
+
     setWizardData(groupId) {
         let group = _.findWhere(this.props.groupsStore.groups, {id: groupId});
 
         let stepWizardData = this.props.wizardData[3];
-        if(stepWizardData.groups.indexOf(group) > -1) {
+        if (stepWizardData.groups.indexOf(group) > -1) {
             stepWizardData.groups.splice(stepWizardData.groups.indexOf(group), 1);
         } else {
             stepWizardData.groups.push(group);
         }
-        if(stepWizardData.groups.length)
+        if (stepWizardData.groups.length)
             this.props.markStepAsFinished();
         else
             this.props.markStepAsNotFinished();
     }
+
     render() {
-        const { wizardData, groupsStore } = this.props;
+        const {wizardData, groupsStore} = this.props;
         const chosenGroups = wizardData[3].groups;
         return (
             groupsStore.groupsFetchAsync.isFetching ?
                 <div className="wrapper-center">
                     <Loader />
                 </div>
-            :
+                :
                 <span>
+                    <Form>
+                        <FormInput
+                            label="Select group(s)"
+                            showIcon={true}
+                            showInput={false}
+                        />
+                    </Form>
                     <WizardGroupsList
                         chosenGroups={chosenGroups}
-                        setWizardData={this.setWizardData}
+                        setWizardData={this.setWizardData.bind(this)}
                         groupsStore={groupsStore}
                     />
-
                 </span>
         );
     }
