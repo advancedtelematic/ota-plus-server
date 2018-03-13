@@ -12,10 +12,10 @@ class GroupsListItem extends Component {
         return (
             <button className={"item" + (isChosen ? " selected" : "")} id={"button-group-" + group.groupName} onClick={setWizardData.bind(this, group.id)}>
                 <div className={"btn-checkbox" + (isChosen ? " checked" : "")}>
-                    <i className="fa fa-check" aria-hidden="true"/>
+                    <i className="fa fa-check" aria-hidden="true"></i>
                 </div>
                 <div className="element-box group">
-                    <div className="icon"/>
+                    <div className="icon"></div>
                     <div className="desc">
                         <div className="title">
                             {group.groupName}

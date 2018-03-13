@@ -14,9 +14,6 @@ import Switch from './Switch';
 import IntroNavigation from './IntroNavigation';
 import DependenciesModal from './DependenciesModal';
 import Sequencer from './Sequencer';
-import {Form} from './Form';
-import FormInput from './FormInput';
-import FormSelect from './FormSelect';
 
 export {
     Navigation,
@@ -35,7 +32,4 @@ export {
     IntroNavigation,
     DependenciesModal,
     Sequencer,
-    Form,
-    FormInput,
-    FormSelect
 }
