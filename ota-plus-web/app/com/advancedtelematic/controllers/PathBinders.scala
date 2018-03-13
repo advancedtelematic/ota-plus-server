@@ -5,13 +5,9 @@
 
 package com.advancedtelematic.controllers
 
-import cats.syntax.show._
 import com.advancedtelematic.api.ApiVersion
-import eu.timepit.refined.refineV
-import eu.timepit.refined.string._
-import org.genivi.sota.data.Device._
-import org.genivi.sota.data.{Device, Namespace, Uuid}
-import play.api.mvc.{QueryStringBindable, PathBindable}
+import com.advancedtelematic.libats.data.DataType.Namespace
+import play.api.mvc.{PathBindable, QueryStringBindable}
 
 /**
   * Implicits that allow giving custom param-types in the method signatures in the routes file.
@@ -19,17 +15,6 @@ import play.api.mvc.{QueryStringBindable, PathBindable}
   * Details in http://cjwebb.github.io/blog/2015/06/23/play-framework-path-binders/
   */
 object PathBinders {
-
-  /**
-    * Path binder to convert a String (eg, from a route path)
-    * to a Uuid wrapped in a Right (if valid, Left otherwise).
-    */
-  implicit object bindableDeviceUuid extends PathBindable[Uuid] {
-    def bind(key: String, value: String): Either[String, Uuid] = {
-      refineV[Uuid.Valid](value).right.map(Uuid(_))
-    }
-    def unbind(key: String, value: Uuid): String = value.show
-  }
 
   implicit object bindableNamespace extends PathBindable[Namespace] {
     def bind(key: String, value: String): Either[String, Namespace] = {

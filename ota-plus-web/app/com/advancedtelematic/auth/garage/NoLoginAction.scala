@@ -2,19 +2,16 @@ package com.advancedtelematic.auth.garage
 
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.{Base64, UUID}
-import javax.inject.Inject
+import java.util.Base64
 
 import akka.actor.ActorSystem
-import cats.instances.map
-import com.advancedtelematic.{auth, PlayMessageBusPublisher}
+import com.advancedtelematic.PlayMessageBusPublisher
 import com.advancedtelematic.auth.{AccessTokenBuilder, IdToken, SessionCodecs}
 import com.advancedtelematic.controllers.UserLogin
-import com.advancedtelematic.jws.{CompactSerialization, JwsPayload}
+import javax.inject.Inject
+import play.api.{Configuration, Logger}
 import play.api.libs.json.Json
 import play.api.mvc.{AnyContent, BodyParsers, Request, Result, Results}
-import play.api.{Configuration, Logger}
-import io.circe.syntax._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try

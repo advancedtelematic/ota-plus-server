@@ -2,6 +2,7 @@ package com.advancedtelematic.controllers
 
 import java.io.FileOutputStream
 import java.nio.file.Files
+
 import javax.inject.{Inject, Singleton}
 import java.util.UUID
 import java.util.zip._
@@ -12,11 +13,11 @@ import akka.stream.ActorMaterializer
 import akka.util.ByteString
 import com.advancedtelematic.api._
 import com.advancedtelematic.auth.{AccessToken, ApiAuthAction}
+import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libtuf.data.TufDataType.TufKeyPair
-import org.genivi.sota.data.Namespace
 import play.api.Configuration
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Writes}
+import play.api.libs.json.{Json, JsPath, Writes}
 import play.api.libs.ws.WSClient
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 
@@ -87,8 +88,8 @@ class ClientToolController @Inject()(
       .flatMap { feat =>
         feat.client_id match {
           case Some(id) => for {
-            secret <- authPlusApi.fetchSecret(id.toJava, token)
-          } yield AuthParams(oauth2 = Some(OAuth2Params(authPlusApiUri, id.underlying.value, secret)))
+            secret <- authPlusApi.fetchSecret(id, token)
+          } yield AuthParams(oauth2 = Some(OAuth2Params(authPlusApiUri, id.toString, secret)))
           case None => Future.successful(AuthParams(noAuth = Some(true)))
         }
       }

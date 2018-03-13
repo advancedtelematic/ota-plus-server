@@ -5,22 +5,17 @@ import java.util.UUID
 import akka.Done
 import akka.http.scaladsl.util.FastFuture
 import akka.stream.Materializer
-import cats.syntax.show.toShowOps
 import com.advancedtelematic.api.ApiRequest.UserOptions
-import com.advancedtelematic.api.Devices._
 import com.advancedtelematic.auth.AccessToken
-import com.advancedtelematic.controllers.NamespaceSetupController.AlreadyExists
 import com.advancedtelematic.controllers.{FeatureName, UserId}
-import com.advancedtelematic.libats.http.Errors.EntityAlreadyExists
+import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libtuf.data.TufCodecs
 import com.advancedtelematic.libtuf.data.TufDataType.TufKeyPair
-import org.genivi.sota.data.{Device, DeviceT, Namespace, Uuid}
-import play.api.http.Status
 import play.api.{Configuration, Logger}
+import play.api.http.Status
 import play.api.libs.json._
 import play.api.libs.ws.{WSAuthScheme, WSClient, WSRequest, WSResponse}
 import play.api.mvc.Result
-import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -39,7 +34,7 @@ case class RemoteApiParseError(msg: String) extends Exception(msg) with NoStackT
 
 case class UserPass(user: String, pass: String)
 
-case class Feature(feature: FeatureName, client_id: Option[Uuid], enabled: Boolean)
+case class Feature(feature: FeatureName, client_id: Option[UUID], enabled: Boolean)
 
 object ApiRequest {
   case class UserOptions(token: Option[String] = None,
@@ -113,18 +108,6 @@ trait ApiRequest { self =>
 }
 
 /**
-  * Controllers extending [[ApiClientSupport]] access [[DevicesApi]] endpoints using a singleton.
-  */
-class DevicesApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
-  private val devicesRequest = ApiRequest.base(devicesApiUri + "/api/v1/")
-
-  def getDevice(options: UserOptions, id: Uuid): Future[Device] = {
-    devicesRequest("devices/" + id.show).withUserOptions(options).execJson(apiExec)(DeviceR)
-  }
-
-}
-
-/**
   * Controllers extending [[ApiClientSupport]] access [[AuthPlusApi]] endpoints using a singleton.
   */
 class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
@@ -151,15 +134,15 @@ class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
     createClient(body, token)
   }
 
-  def getClient(clientId: Uuid, token: AccessToken)(implicit ec: ExecutionContext): Future[Result] = {
-    authPlusRequest(s"clients/${clientId.underlying.value}")
+  def getClient(clientId: UUID, token: AccessToken)(implicit ec: ExecutionContext): Future[Result] = {
+    authPlusRequest(s"clients/${clientId.toString}")
       .withToken(token.value)
       .transform(_.withMethod("GET"))
       .execResult(apiExec)
   }
 
-  def getClientJsValue(clientId: Uuid, token: AccessToken)(implicit ec: ExecutionContext): Future[JsValue] = {
-    authPlusRequest(s"clients/${clientId.underlying.value}")
+  def getClientJsValue(clientId: UUID, token: AccessToken)(implicit ec: ExecutionContext): Future[JsValue] = {
+    authPlusRequest(s"clients/${clientId.toString}")
       .withToken(token.value)
       .transform(_.withMethod("GET"))
       .execJsonValue(apiExec)
@@ -199,7 +182,7 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
   implicit val featureNameW: Writes[FeatureName] = Writes.StringWrites.contramap(_.get)
   implicit val featureR: Reads[Feature] = {(
     (__ \ "feature").read[FeatureName] and
-    (__ \ "client_id").readNullable[Uuid] and
+    (__ \ "client_id").readNullable[UUID] and
     (__ \ "enabled").read[Boolean]
   )(Feature.apply _)}
 
@@ -212,7 +195,7 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
   def getFeatures(userId: UserId): Future[Seq[FeatureName]] =
     userProfileRequest("users/" + userId.id + "/features").execJson[Seq[FeatureName]](apiExec)
 
-  def activateFeature(userId: UserId, feature: FeatureName, clientId: Uuid)
+  def activateFeature(userId: UserId, feature: FeatureName, clientId: UUID)
                      (implicit executionContext: ExecutionContext): Future[Result] = {
     val requestBody = Json.obj("feature" -> feature.get, "client_id" -> clientId)
 
@@ -237,17 +220,17 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
           .withBody(body))
       .execResult(apiExec)
 
-  def getApplicationIds(userId: UserId): Future[Seq[Uuid]] =
-    userProfileRequest(s"users/${userId.id}/applications").execJson[Seq[Uuid]](apiExec)
+  def getApplicationIds(userId: UserId): Future[Seq[UUID]] =
+    userProfileRequest(s"users/${userId.id}/applications").execJson[Seq[UUID]](apiExec)
 
-  private def applicationIdRequest(method: String, userId: UserId, clientId: Uuid): Future[Result] =
-    userProfileRequest(s"users/${userId.id}/applications/${clientId.underlying.value}").transform(_.withMethod(method))
+  private def applicationIdRequest(method: String, userId: UserId, clientId: UUID): Future[Result] =
+    userProfileRequest(s"users/${userId.id}/applications/${clientId.toString}").transform(_.withMethod(method))
       .execResult(apiExec)
 
-  def addApplicationId(userId: UserId, clientId: Uuid): Future[Result] =
+  def addApplicationId(userId: UserId, clientId: UUID): Future[Result] =
     applicationIdRequest("PUT", userId, clientId)
 
-  def removeApplicationId(userId: UserId, clientId: Uuid): Future[Result] =
+  def removeApplicationId(userId: UserId, clientId: UUID): Future[Result] =
     applicationIdRequest("DELETE", userId, clientId)
 }
 
@@ -265,13 +248,13 @@ class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
       .execStreamedResult(apiExec)
   }
 
-  def download(artifact_type: String, clientId: Uuid, clientSecret: String)
+  def download(artifact_type: String, clientId: UUID, clientSecret: String)
               (implicit ec: ExecutionContext) : Future[Result] = {
 
     buildSrvRequest(s"api/v1/artifacts/$artifact_type/download")
       .transform(
         _.withMethod("POST")
-          .withBody(Map("client_id" -> Seq(clientId.underlying.value), "client_secret" -> Seq(clientSecret))))
+          .withBody(Map("client_id" -> Seq(clientId.toString), "client_secret" -> Seq(clientSecret))))
       .execStreamedResult(apiExec)
   }
 }
@@ -357,7 +340,7 @@ class KeyServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends 
 
   def targetKeys(repoId: String)(implicit ec: ExecutionContext, mat: Materializer): Future[Seq[TufKeyPair]] = {
     // using circe since there is a decoder for it in the lib
-    import io.circe.{ parser => CirceParser }
+    import io.circe.{parser => CirceParser}
 
     for {
       result <- request(s"root/$repoId/keys/targets/pairs").execResult(apiExec)
