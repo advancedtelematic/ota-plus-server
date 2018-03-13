@@ -78,7 +78,7 @@ class StatisticDetails extends Component {
                     </div>
 
                     <div className="failure-rate-container">
-                        <div className="failure-rate" id={`campaign-detail-total-failure-rate-${Math.round(overallStatistics.failed/Math.max(overallStatistics.finished, 1) * 100)}`}>
+                        <div className="failure-rate" id="campaign-detail-total-failure-rate">
                             <Doughnut
                                 data={failureRateData}
                                 options={{percentageInnerCutout: 75, showTooltips: false}}
@@ -141,44 +141,44 @@ class StatisticDetails extends Component {
                                 </div>
                             </div>
                             <div className="show-dependencies">
-                                <a href="#" className="add-button" id="target_show_dependencies" onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}>
+                                <a href="#" className="add-button" id="show-dependencies" onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}>
                                     <span>
                                         Show dependencies
                                     </span>
                                 </a>
-                            </div>
+                            </div>  
                         </div>
                         <div className="bottom-container">
                             <div className="status-block">
                                 <div className="success">
                                     <span></span>
                                     <span>Success</span>
-                                    <span id={`target_success_${overallStatistics.successful}`}>{overallStatistics.successful}</span>
+                                    <span>{overallStatistics.successful}</span>
                                 </div>
                                 <div className="queued">
                                     <span></span>
                                     <span>Queued</span>
-                                    <span id={`target_queued_${overallStatistics.queued}`}>{overallStatistics.queued}</span>
+                                    <span>{overallStatistics.queued}</span>
                                 </div>
                                 <div className="cancelled">
                                     <span></span>
                                     <span>Cancelled</span>
-                                    <span id={`target_cancelled_${overallStatistics.cancelled}`}>{overallStatistics.cancelled}</span>
+                                    <span>{overallStatistics.cancelled}</span>
                                 </div>
                                 <div className="failure">
                                     <span></span>
                                     <span>Failure</span>
-                                    <span id={`target_failure_${overallStatistics.failed}`}>{overallStatistics.failed}</span>
+                                    <span>{overallStatistics.failed}</span>
                                 </div>
                                 <div className="not-proceed">
                                     <span></span>
                                     <span>Not processed</span>
-                                    <span id={`target_not_proceed_${notProcessed}`}>{notProcessed}</span>
+                                    <span>{notProcessed }</span>
                                 </div>
                                 <div className="not-impacted">
                                     <span></span>
                                     <span>Not impacted</span>
-                                    <span id={`target_not_impacted_${overallStatistics.notImpacted}`}>{overallStatistics.notImpacted}</span>
+                                    <span>{overallStatistics.notImpacted}</span>
                                 </div>
                             </div> 
                         </div>
