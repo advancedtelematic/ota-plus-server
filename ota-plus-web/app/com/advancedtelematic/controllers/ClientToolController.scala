@@ -2,6 +2,8 @@ package com.advancedtelematic.controllers
 
 import java.io.FileOutputStream
 import java.nio.file.Files
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 import javax.inject.{Inject, Singleton}
 import java.util.UUID
@@ -12,7 +14,7 @@ import akka.http.scaladsl.model.Uri
 import akka.stream.ActorMaterializer
 import akka.util.ByteString
 import com.advancedtelematic.api._
-import com.advancedtelematic.auth.{AccessToken, ApiAuthAction}
+import com.advancedtelematic.auth.{AccessToken, AccessTokenBuilder, ApiAuthAction}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libtuf.data.TufDataType.TufKeyPair
 import play.api.Configuration
@@ -73,6 +75,7 @@ class ClientToolController @Inject()(
     val ws: WSClient,
     val authAction: ApiAuthAction,
     val clientExec: ApiClientExec,
+    tokenBuilder: AccessTokenBuilder,
     components: ControllerComponents)
     (implicit executionContext: ExecutionContext, actorSystem: ActorSystem)
   extends AbstractController(components) with OtaPlusConfig with ApiClientSupport {
@@ -83,16 +86,18 @@ class ClientToolController @Inject()(
 
   val cryptApi = new CryptApi(conf, clientExec)
 
-  def getOAuth2Params(userId: UserId, token: AccessToken) : Future[AuthParams] =
+  def getOAuth2Params(userId: UserId) : Future[AuthParams] = {
+    val accessToken = tokenBuilder.mkToken(userId.id, Instant.now().plus(1, ChronoUnit.MINUTES), Set())
     userProfileApi.getFeature(userId, FeatureName("treehub"))
       .flatMap { feat =>
         feat.client_id match {
           case Some(id) => for {
-            secret <- authPlusApi.fetchSecret(id, token)
+            secret <- authPlusApi.fetchSecret(id, accessToken)
           } yield AuthParams(oauth2 = Some(OAuth2Params(authPlusApiUri, id.toString, secret)))
           case None => Future.successful(AuthParams(noAuth = Some(true)))
         }
       }
+  }
 
   type CredentialsData = ByteString
 
@@ -146,7 +151,7 @@ class ClientToolController @Inject()(
         }
       }
       val authParams = if(conf.getOptional[String]("authplus.host").isDefined) {
-        await(getOAuth2Params(UserId(namespace.get), accessToken))
+        await(getOAuth2Params(UserId(namespace.get)))
       } else {
         AuthParams(noAuth = Some(true))
       }
