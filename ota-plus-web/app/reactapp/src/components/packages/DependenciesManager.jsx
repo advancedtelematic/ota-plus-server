@@ -112,19 +112,8 @@ class DependenciesManager extends Component {
         });
 
         const content = (
-            <span>
-                <a href="#" id="close-manager" className="close-manager" title="Close sankey" onClick={hide.bind(this)}>
-                    <img src="/assets/img/icons/white/cross.svg" alt="Icon" />
-                </a>
+            <span>                
                 <div className="content">
-                    <section className="head">
-                        <div className="name">
-                            Name
-                        </div>
-                        <div className="version">
-                            Version
-                        </div>
-                    </section>
                     <section className="current-pack" id="current-pack">
                         <div className="name" id={"current-pack-" + activePackage.id.name}>
                             {activePackage.id.name}
@@ -148,32 +137,36 @@ class DependenciesManager extends Component {
                                                     return (
                                                         version.id.version !== activePackage.id.version ?
                                                             <span className="item" key={index}>
-                                                                <span className="value" id={"other-pack-" + version.id.version}>
+                                                                <span className="value"
+                                                                      id={"other-pack-" + version.id.version}>
                                                                     {version.id.version}
                                                                 </span>
                                                                 {this.obj.required.indexOf(versionString) > -1 ?
-                                                                    <span className="label orange"
-                                                                          id={"other-pack-mandatory-" + version.id.version}
+                                                                    <span id={"other-pack-mandatory-" + version.id.version}
+                                                                          className="font-extra-small"
                                                                           onClick={this.addVersion.bind(this, versionString)}>
-                                                                          Mandatory
+                                                                        Mandatory
+                                                                        <span className="status orange"/>
                                                                     </span>
-                                                                : this.obj.incompatibles.indexOf(versionString) > -1 ?
-                                                                    <span className="label red"
-                                                                          id={"other-pack-incompatible-" + version.id.version}
+                                                                        : this.obj.incompatibles.indexOf(versionString) > -1 ?
+                                                                    <span id={"other-pack-incompatible-" + version.id.version}
+                                                                          className="font-extra-small"
                                                                           onClick={this.addVersion.bind(this, versionString)}>
-                                                                          Not compatible
+                                                                        Not compatible
+                                                                        <span className="status red"/>
                                                                     </span>
-                                                                : requiredBy.indexOf(versionString) > -1 ?
-                                                                    <span className="label green"
-                                                                          id={"other-pack-required-by-" + version.id.version}
-                                                                          >
-                                                                          Required by
+                                                                        : requiredBy.indexOf(versionString) > -1 ?
+                                                                    <span id={"other-pack-required-by-" + version.id.version}
+                                                                          className="font-extra-small">
+                                                                        Required by
+                                                                        <span className="status green"/>
                                                                     </span>
-                                                                :
-                                                                    <span className="label color-black"
-                                                                          id={"other-pack-not-selected-" + version.id.version}
+                                                                        :
+                                                                    <span id={"other-pack-not-selected-" + version.id.version}
+                                                                          className="font-extra-small"
                                                                           onClick={this.addVersion.bind(this, versionString)}>
-                                                                          Edit
+                                                                        Edit
+                                                                        <span className="status color-white"/>
                                                                     </span>
                                                                 }                                                                
                                                             </span>
@@ -191,13 +184,19 @@ class DependenciesManager extends Component {
                     </div>
                 </div>
                 <div className="footer">
-                    <a href="#" onClick={hide.bind(this)} className="link-cancel" id="link-close">Close</a>
+                    <a href="#" onClick={hide.bind(this)} className="link-cancel btn-primary" id="link-close">Close</a>
                 </div>
             </span>
         );
         return (
             <Modal 
-                title="Dependencies management"
+                title={
+                    <div className="heading">
+                        <div className="internal">
+                            Dependencies management
+                        </div>
+                    </div>
+                }
                 content={content}
                 shown={shown}
                 className="dependencies-manager-modal"

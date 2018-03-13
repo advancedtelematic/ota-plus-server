@@ -11,9 +11,9 @@ class SearchBar extends Component {
     }
     render() {
         let timeout = undefined;
-        const { value, changeAction, disabled, id } = this.props;
+        const { value, changeAction, disabled, id, additionalClassName } = this.props;
         return (
-            <div className="search-box">
+            <div className={"search-box " + (additionalClassName ? additionalClassName : "")}>
                 <FormsyText
                     name="filterValue"
                     value={value}

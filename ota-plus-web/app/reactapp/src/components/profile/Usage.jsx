@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import moment from 'moment';
-import { UsageCarousel } from './usage';
+import { Items } from './usage';
 
 const startTime = moment([2017,0,1]);
 const currentTime = moment();
@@ -36,18 +36,27 @@ class Usage extends Component {
         const { userStore } = this.props;
         return (
             <main id="usage">
-                <div className="title font-big">
-                    <img src="/assets/img/icons/black/usage.png" alt=""/>
-                    Usage
-                </div>
-
-                <hr />
-
-                <div className="carousel-container">
-                    <UsageCarousel
-                        userStore={userStore}
-                        months={months}
-                    />
+                <div className="content">
+                    <div className="subheader">
+                        <div className="flex-column-main">
+                            Date
+                        </div>
+                        <div className="flex-column">
+                            Total activated devices
+                        </div>
+                        <div className="flex-column">
+                            New devices activated this month
+                        </div>
+                        <div className="flex-column">
+                            Devices connected this month
+                        </div>
+                    </div>
+                    <ul>
+                        <Items
+                            userStore={userStore}
+                            months={months}
+                        />
+                    </ul>
                 </div>
             </main>
         );

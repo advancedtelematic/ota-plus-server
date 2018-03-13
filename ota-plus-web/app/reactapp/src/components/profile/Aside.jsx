@@ -11,6 +11,40 @@ class Aside extends Component {
     }
     render() {
         const { userStore, otaPlusStore, uiUserProfileMenu, uiCredentialsDownload } = this.props;
+        const userDetailsBlock = (
+            <div className="user-details">
+                {userStore.userFetchAsync.isFetching ?
+                    <div className="wrapper-center">
+                        <Loader />
+                    </div>
+                :
+                    window.atsGarageTheme ?
+                        <div className="user-details-wrapper">
+                            <Avatar
+                                src={userStore.user.picture ?
+                                    userStore.user.picture
+                                    :
+                                    "/assets/img/icons/profile.png"
+                                }
+                                className="icon-profile"
+                                id="icon-profile-min"
+                            />
+                            <div className="full-name">
+                                {userStore.user.fullName}
+                            </div>
+                            <div className="email">
+                                {userStore.user.email}
+                            </div>
+                        </div>
+                    :
+                        <Avatar
+                            src="/assets/img/icons/Settings_Icon_big.svg"
+                            className="icon-profile"
+                            id="icon-profile-min"
+                        />                    
+                }
+            </div>
+        );
         const otaPlusNewEntries = (
             <span className="ota-plus-new-entries">
                 <li>
@@ -27,35 +61,9 @@ class Aside extends Component {
         );
         const fullAside = (
             <aside>
-                <div className="user-details">
-                    {userStore.userFetchAsync.isFetching ?
-                        <div className="wrapper-center">
-                            <Loader />
-                        </div>
-                    :
-                        <span>
-                            {window.atsGarageTheme ?
-                                <Avatar
-                                    src={userStore.user.picture ?
-                                        userStore.user.picture
-                                        :
-                                        "/assets/img/icons/profile.png"
-                                    }
-                                    className="icon-profile"
-                                    id="icon-profile-min"
-                                />
-                                :
-                                <Avatar
-                                    src="/assets/img/icons/Settings_Icon_big.svg"
-                                    className="icon-profile"
-                                    id="icon-profile-min"
-                                />
-                            }
-                        </span>
-                    }
-                </div>
+                {userDetailsBlock}
                 <nav>
-                    <ul className="font-medium">
+                    <ul>
                         <li>
                             <Link to="/profile/edit" activeClassName="active" id="link-edit-profile">
                                 Edit profile
@@ -64,11 +72,6 @@ class Aside extends Component {
                         <li>
                             <Link to="/profile/usage" activeClassName="active" id="link-usage">
                                 Usage
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/profile/billing" activeClassName="active" id="link-billing">
-                                Billing
                             </Link>
                         </li>
                         <li>
@@ -88,35 +91,9 @@ class Aside extends Component {
         );
         const fullAsideWithoutProvisioningKeys = (
             <aside>
-                <div className="user-details">
-                    {userStore.userFetchAsync.isFetching ?
-                        <div className="wrapper-center">
-                            <Loader />
-                        </div>
-                    :
-                        <span>
-                            {window.atsGarageTheme ?
-                                <Avatar
-                                    src={userStore.user.picture ?
-                                        userStore.user.picture
-                                        :
-                                        "/assets/img/icons/profile.png"
-                                    }
-                                    className="icon-profile"
-                                    id="icon-profile-min"
-                                />
-                                :
-                                <Avatar
-                                    src="/assets/img/icons/Settings_Icon_big.svg"
-                                    className="icon-profile"
-                                    id="icon-profile-min"
-                                />
-                            }
-                        </span>
-                    }
-                </div>
+                {userDetailsBlock}
                 <nav>
-                    <ul className="font-medium">
+                    <ul>
                         <li>
                             <Link to="/profile/edit" activeClassName="active" id="link-edit-profile">
                                 Edit profile
@@ -125,11 +102,6 @@ class Aside extends Component {
                         <li>
                             <Link to="/profile/usage" activeClassName="active" id="link-usage">
                                 Usage
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/profile/billing" activeClassName="active" id="link-billing">
-                                Billing
                             </Link>
                         </li>
                         {otaPlusStore.otaPlusMode ?
@@ -144,29 +116,9 @@ class Aside extends Component {
         );
         const onlyProvisioningKeys = (
             <aside>
-                <div className="user-details">
-                    <span>
-                        {window.atsGarageTheme ?
-                            <Avatar
-                                src={userStore.user.picture ?
-                                    userStore.user.picture
-                                    :
-                                    "/assets/img/icons/profile.png"
-                                }
-                                className="icon-profile"
-                                id="icon-profile-min"
-                            />
-                            :
-                            <Avatar
-                                src="/assets/img/icons/Settings_Icon_big.svg"
-                                className="icon-profile"
-                                id="icon-profile-min"
-                            />
-                        }
-                    </span>
-                </div>
+                {userDetailsBlock}
                 <nav>
-                    <ul className="font-medium">
+                    <ul>
                         <li>
                             <Link to="/profile/access-keys" activeClassName="active" id="link-access-keys">
                                 Provisioning keys

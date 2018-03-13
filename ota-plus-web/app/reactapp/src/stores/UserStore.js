@@ -5,7 +5,6 @@ import _ from 'underscore';
 import { 
     API_USER_DETAILS,
     API_USER_UPDATE,
-    API_USER_UPDATE_BILLING,
     API_USER_CHANGE_PASSWORD,
     API_USER_ACTIVE_DEVICE_COUNT,
     API_USER_DEVICES_SEEN,
@@ -20,7 +19,6 @@ export default class UserStore {
 
     @observable userFetchAsync = {};
     @observable userUpdateAsync = {};
-    @observable userBillingUpdateAsync = {};
     @observable userChangePasswordAsync = {};
     @observable userActiveDeviceCountFetch = {};
     @observable user = {};
@@ -35,7 +33,6 @@ export default class UserStore {
         this.connectedDevicesFetchAsync = observable.map();
         resetAsync(this.userFetchAsync);
         resetAsync(this.userUpdateAsync);
-        resetAsync(this.userBillingUpdateAsync);
         resetAsync(this.userChangePasswordAsync);
     }
 
@@ -61,18 +58,6 @@ export default class UserStore {
             }.bind(this))
             .catch(function (error) {
                 this.userUpdateAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    updateBilling(data, newPlan) {
-        resetAsync(this.userBillingUpdateAsync);
-        return axios.put(API_USER_UPDATE_BILLING + (newPlan ? "?plan=" + newPlan : ""), data)
-            .then(function (response) {
-                this.fetchUser();
-                this.userBillingUpdateAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function (error) {
-                this.userBillingUpdateAsync = handleAsyncError(error);
             }.bind(this));
     }
 

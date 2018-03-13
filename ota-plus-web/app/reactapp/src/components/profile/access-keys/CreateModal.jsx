@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Modal, AsyncResponse } from '../../../partials';
+import { Modal, AsyncResponse, FormInput } from '../../../partials';
 import { AsyncStatusCallbackHandler } from '../../../utils';
 import { Form } from 'formsy-react';
 import { FormsyText, FormsyDate } from 'formsy-material-ui/lib';
@@ -34,8 +34,6 @@ class CreateModal extends Component {
         const { shown, hide, provisioningStore } = this.props;
         const form = (
             <Form
-                onValid={this.enableButton.bind(this)}
-                onInvalid={this.disableButton.bind(this)}
                 onValidSubmit={this.submitForm.bind(this)}
                 id="provisioning-key-create-form">
                 <AsyncResponse 
@@ -45,16 +43,16 @@ class CreateModal extends Component {
                 />
                 <div className="row">
                     <div className="col-xs-12">
-                        <FormsyText
+                        <FormInput
+                            onValid={this.enableButton.bind(this)}
+                            onInvalid={this.disableButton.bind(this)}
                             name="description"
-                            floatingLabelText="Description"
                             className="input-wrapper"
+                            isEditable={!provisioningStore.provisioningKeyCreateAsync.isFetching}
+                            title={"Description"}
+                            label={"Description"}
+                            placeholder={"Description"}
                             id="add-new-key-description"
-                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
-                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
-                            disabled={provisioningStore.provisioningKeyCreateAsync.isFetching}
-                            updateImmediately
-                            required
                         />
                     </div>
                     <div className="col-xs-12">
@@ -80,13 +78,13 @@ class CreateModal extends Component {
                                 id="add-new-key-cancel">
                                 Cancel
                             </a>
-                            <FlatButton
-                                label="Add key"
-                                type="submit"
-                                className="btn-main"
-                                id="add-new-key-confirm﻿"
+                            <button
                                 disabled={this.submitButtonDisabled || provisioningStore.provisioningKeyCreateAsync.isFetching}
-                            />
+                                className="btn-primary"
+                                id="add-new-key-confirm﻿"
+                            >
+                                Add key
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -94,7 +92,13 @@ class CreateModal extends Component {
         );
         return (
             <Modal 
-                title="Add new key"
+                title={
+                    <div className="heading">
+                        <div className="internal">
+                            Add new key
+                        </div>
+                    </div>
+                }
                 className="create-provisioning-key-modal"
                 content={form}
                 shown={shown}

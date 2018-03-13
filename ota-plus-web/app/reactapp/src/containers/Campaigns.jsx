@@ -111,15 +111,21 @@ class Campaigns extends Component {
                 :
                     <div className="wrapper-center">
                         <div className="page-intro">
-                            <div>You haven't created any update campaigns yet.</div>
                             <div>
-                                <FlatButton
-                                    label="Add new campaign"
-                                    id="add-new-campaign"
-                                    type="button"
-                                    className="btn-main"
-                                    onClick={addNewWizard.bind(this, null)}
-                                />
+                                <img src="/assets/img/icons/white/campaigns.png" alt="Icon" />
+                            </div>
+                            <div>
+                                You haven't created any update campaigns yet.
+                            </div>
+                            <div>
+                                <a href="#" className="add-button" id="add-new-campaign" onClick={addNewWizard.bind(this, null)}>
+                                    <span>
+                                        +
+                                    </span>
+                                    <span>
+                                        Add new campaign
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </div>

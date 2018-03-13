@@ -27,7 +27,9 @@ class PublicKeyPopover extends Component {
                     <span>
                         <div className="triangle"></div>
                         <div className="heading">
-                            <span>Public key</span>
+                            <div className="internal">
+                                Public key
+                            </div>
                         </div>
                         <div className="body">
                             <pre>
@@ -38,11 +40,9 @@ class PublicKeyPopover extends Component {
                             <CopyToClipboard
                                 text={hardwareStore.publicKey.keyval.public}
                                 onCopy={handleCopy.bind(this)}>
-                                <FlatButton
-                                    label="Copy to clipboard"
-                                    type="button"
-                                    className="btn-main font-medium"
-                                />
+                                <button className="btn-primary">
+                                    Copy to clipboard
+                                </button>
                             </CopyToClipboard>
                             <VelocityTransitionGroup
                                 enter={{

@@ -118,14 +118,16 @@ class ReportedList extends Component {
                                                 indexOne++;
                                                 if(property !== 'children' && property !== 'name' && property !== 'capabilities' && property !== 'configuration') {
                                                     return (
-                                                        <tr key={indexOne} className="item">
-                                                            <th>
-                                                                <div>{property}</div>
-                                                            </th>
-                                                            <td>
-                                                                <div>{value.toString()}</div>
-                                                            </td>
-                                                        </tr>
+                                                        <span key={indexOne}>
+                                                            <tr className="item">
+                                                                <th>
+                                                                    <div>{property}</div>
+                                                                </th>
+                                                                <td>
+                                                                    <div>{value.toString()}</div>
+                                                                </td>
+                                                            </tr>
+                                                        </span>
                                                     );
                                                 }
                                             })}
