@@ -13,11 +13,11 @@ class VersionsStats extends Component {
     }
     render() {
         const { pack } = this.props;
-        const mainColor = !window.atsGarageTheme || window.otaPlusMode ? '#fa9872' : '#FA9D00';
+        const mainColor = !window.atsGarageTheme || window.otaPlusMode ? '#fa9872' : '#1D5E6F';
         const availableColors = [
             mainColor,
-            '#069F71',
-            '#660195',
+            '#9DDDD4',
+            '#D3D3D3',
             '#fff',
         ];
         let colorIndex = -1;
@@ -47,17 +47,17 @@ class VersionsStats extends Component {
         const content = (
             <div className="chart-panel" id={"package-" + pack.packageName + "-stats"}>
                 <div className={installedOnEcusTotal ? "wrapper-center" : "wrapper-center left"}>
-                    <div id={`target_chart_device_count_${installedOnEcusTotal}`} className={installedOnEcusTotal ? "total-count" : "hide"}>
+                    <div className={installedOnEcusTotal ? "total-count" : "hide"}>
                         {installedOnEcusTotal}
                     </div>
                     {stats.length ?
                         <div>
                             <Doughnut 
                                 data={stats} 
-                                width="175" 
-                                height="175" 
+                                width="250" 
+                                height="250" 
                                 options={{
-                                    percentageInnerCutout: 75, 
+                                    percentageInnerCutout: 60, 
                                     segmentStrokeWidth: 5, 
                                     showTooltips: true
                                 }}

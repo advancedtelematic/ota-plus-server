@@ -23,12 +23,10 @@ class ListItemVersion extends Component {
         const { version, showDependenciesModal, showDependenciesManager, packagesStore, alphaPlusEnabled } = this.props;
         let isBlacklisted = this.isPackageBlacklisted(version);
         let packageName = version.id.name;
-        let borderStyle = {
-            borderLeft: '10px solid #e1e1e1'
-        };
+        let borderStyle = {};
         if(version.installedOnEcus > 0) {
             borderStyle = {
-                borderLeft: '10px solid ' + version.color
+                borderLeft: '10px solid ' + version.color,
             };
         }
         let versionCompatibilityData = null;
@@ -77,8 +75,8 @@ class ListItemVersion extends Component {
                 </div>
                 <div className="c-package__hardware-box">
                     <div className="c-package__hw-row c-package__hw-row--installed" id={"package-" + packageName + "-ecus-installed"}>
-                        <span id={"version-" + version.id.version.substring(0,8) + "-installed-on-ecus"}>
-                            Installed on <span id={"version-" + version.id.version.substring(0,8) + "-installed-on-ecus-count"}>{version.installedOnEcus}</span> ECU(s)
+                        <span id={"version-" + version.id.version + "-installed-on-ecus"}>
+                            Installed on <span id={"version-" + version.id.version + "-installed-on-ecus-count"}>{version.installedOnEcus}</span> ECU(s)
                         </span>
                     </div>
                     <div className="c-package__hw-row c-package__hw-row--hardware-ids" id={"package-" + packageName + "-hardware_ids"}>
@@ -88,7 +86,7 @@ class ListItemVersion extends Component {
                         <div className="c-package__hw-value">
                             {_.map(version.hardwareIds, (hardwareId, index) => {
                                 return (
-                                    <span className="app-label" key={index} id={"package-" + packageName + "-app-label"}>
+                                    <span className="c-package__label" key={index} id={"package-" + packageName + "-hardware-label"}>
                                         {hardwareId}
                                     </span>
                                 );
@@ -101,7 +99,7 @@ class ListItemVersion extends Component {
                                 Format:
                             </div>
                             <div className="c-package__hw-value">
-                                <span className="app-label" id={"package-" + packageName + "-app-label"}>
+                                <span className="c-package__label" id={"package-" + packageName + "-format-label"}>
                                     {version.targetFormat}
                                 </span>
                             </div>
@@ -111,11 +109,7 @@ class ListItemVersion extends Component {
                     }                                   
                 </div>
                 <div className="c-package__show-dependencies">
-                    <a href="#" className="add-button" id="show-dependencies" onClick={showDependenciesModal.bind(this, version.filepath)}>
-                        <span>
-                            Show dependencies
-                        </span>
-                    </a>
+                    <div className="c-package__dependencies-icon" title="Show dependencies" onClick={showDependenciesModal.bind(this, version.filepath)}></div>
                 </div>                
             </span>
         );
@@ -194,19 +188,21 @@ class ListItemVersion extends Component {
                         }
                         {versionCompatibilityData ?
                             <div className="c-package__manage-dependencies c-package__manage-dependencies--small">
-                                <a href="#" id="edit-dependencies" className="add-button" onClick={showDependenciesManager.bind(this, version)}>
-                                    <span>
-                                        Edit
-                                    </span>
-                                </a>
+                                <FlatButton
+                                    label="Edit"
+                                    onClick={showDependenciesManager.bind(this, version)}
+                                    className="btn-main btn-small"
+                                    id="edit-dependencies"
+                                />
                             </div>
                         :
                             <div className="c-package__manage-dependencies">
-                                <a href="#" id="add-dependencies" className="add-button" onClick={showDependenciesManager.bind(this, version)}>
-                                    <span>
-                                        Manage dependencies
-                                    </span>
-                                </a>
+                                <FlatButton
+                                    label="Manage dependencies"
+                                    onClick={showDependenciesManager.bind(this, version)}
+                                    className="btn-main btn-small"
+                                    id="add-dependencies"
+                                />
                             </div>
                         }
                         

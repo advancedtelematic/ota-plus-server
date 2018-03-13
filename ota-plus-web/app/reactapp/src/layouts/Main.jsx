@@ -193,8 +193,7 @@ class Main extends Component {
         else
             this.minimizedWizards.push(minimizedWizard);
     }
-    addNewWizard(campaignId = null, e) {
-        if(e) e.preventDefault();
+    addNewWizard(campaignId = null) {
         this.wizards.push(
             <CampaignsWizard
                 campaignsStore={this.campaignsStore}

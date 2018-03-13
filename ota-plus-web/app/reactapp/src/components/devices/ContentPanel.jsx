@@ -7,9 +7,12 @@ import DeviceItem from './Item';
 import ContentPanelHeader from './ContentPanelHeader';
 import { Loader } from '../../partials';
 import { InfiniteScroll } from '../../utils';
+import GroupNameHeader from '../groups/GroupNameHeader';
 
 @observer
 export default class ContentPanel extends Component {
+    @observable boxWidth = 350;
+
     constructor(props) {
         super(props);
         this.goToDetails = this.goToDetails.bind(this);
@@ -21,12 +24,18 @@ export default class ContentPanel extends Component {
     }
 
     render() {
-        const {devicesStore, groupsStore, changeFilter } = this.props;
+        const {devicesStore, groupsStore, changeSort, changeFilter } = this.props;
         return (
             <div className="content-panel">
                 <ContentPanelHeader 
+                    devicesSort={devicesStore.devicesSort}
+                    changeSort={changeSort}
                     devicesFilter={devicesStore.devicesFilter}
                     changeFilter={changeFilter}
+                />
+                <GroupNameHeader
+                    groupsStore={groupsStore}
+                    devicesStore={devicesStore}
                 />
                 <div className="wrapper">
                     <InfiniteScroll
@@ -39,13 +48,14 @@ export default class ContentPanel extends Component {
                         }}
                     >
                         {devicesStore.devicesTotalCount ?
-                            <div className="inner-container">
+                            <div ref="innerContainer">
                                 {_.map(devicesStore.preparedDevices, (device) => {
                                     return (
                                         <DeviceItem
                                             groupsStore={groupsStore}
                                             devicesStore={devicesStore}
                                             device={device}
+                                            width={this.boxWidth}
                                             goToDetails={this.goToDetails}
                                             key={device.uuid}
                                         />
@@ -78,6 +88,7 @@ ContentPanel.contextTypes = {
 ContentPanel.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     groupsStore: PropTypes.object.isRequired,
+    changeSort: PropTypes.func.isRequired,
     changeFilter: PropTypes.func.isRequired
 }
 

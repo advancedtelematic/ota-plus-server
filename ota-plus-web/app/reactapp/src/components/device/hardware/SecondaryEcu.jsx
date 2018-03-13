@@ -26,7 +26,7 @@ class SecondaryEcu extends Component {
                     onClick={this.onEcuClick.bind(this, ecu)}
                 >
                     <div className="desc">
-                        <span id={"hardware-id-" + ecu.hardwareId} className="app-label">
+                        <span id={"hardware-id-" + ecu.hardwareId} className="hardware-label">
                             {ecu.hardwareId}
                         </span> <br />
                         Serial: <span id={"hardware-serial-" + ecu.id}>

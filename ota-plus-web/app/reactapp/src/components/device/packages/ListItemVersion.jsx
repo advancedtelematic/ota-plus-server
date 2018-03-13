@@ -33,11 +33,11 @@ class ListItemVersion extends Component {
         return (
             <li className={isSelected ? " selected" : ""} id={isSelected ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={this.handlePackageVersionClick}>
                 <div className="left-box">
-                    <div>
+                    <div className="hash">
                         <span className="sub-title">Hash / version:</span> 
                         <span className="value" id={"version-value-" + version.id.version.substring(0,8)}>{version.id.version}</span>
                     </div>
-                    <div>
+                    <div className="created_at">
                         <span className="sub-title">Created at:</span>
                         <span className="value">{moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
                     </div>

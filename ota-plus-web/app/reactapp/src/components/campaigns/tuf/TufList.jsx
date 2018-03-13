@@ -47,191 +47,219 @@ class TufList extends Component {
         return (
             <span ref="list">
                 <div className="section-header">
-                    <div className="column">In preparation</div>
-                    <div className="column">Created at</div>
-                    <div className="column">Processed</div>
-                    <div className="column">Affected</div>
-                    <div className="column">Finished</div>
-                    <div className="column">Failure rate</div>
+                    In preparation
                 </div>
                 <div className="campaigns-list" id="in-preparation-campaigns">
                     {campaignsStore.inPreparationCampaigns.length ?
-                        _.map(campaignsStore.inPreparationCampaigns, (campaign) => {
-                            return (
-                                <span key={campaign.id}>
-                                    <CampaignsTufListItem 
-                                        toggleCampaign={toggleCampaign}
-                                        campaign={campaign}
-                                        type="inPreparation"
-                                    />
-                                    <VelocityTransitionGroup 
-                                        enter={{
-                                            animation: "slideDown",
-                                        }}
-                                        leave={{
-                                            animation: "slideUp",
-                                            duration: 1000
-                                        }}
-                                    >
-                                        {expandedCampaignName === campaign.name ?
-                                            <CampaignsTufStatistics 
+                        <span>
+                            <div className="heading font-small">
+                                <div></div>
+                                <div className="column name">Name</div>
+                                <div className="column">Created at</div>
+                                <div className="column">Processed</div>
+                                <div className="column">Affected</div>
+                                <div className="column">Finished</div>
+                                <div className="column">Failure rate</div>
+                            </div>
+                            {_.map(campaignsStore.inPreparationCampaigns, (campaign) => {
+                                return (
+                                    <span key={campaign.id} className="font-small">
+                                        <CampaignsTufListItem 
+                                            toggleCampaign={toggleCampaign}
+                                            campaign={campaign}
+                                            expandedCampaignName={expandedCampaignName}
+                                            type="inPreparation"
+                                        />
+                                        <VelocityTransitionGroup 
+                                            enter={{
+                                                animation: "slideDown",
+                                            }}
+                                            leave={{
+                                                animation: "slideUp",
+                                                duration: 1000
+                                            }}
+                                        >
+                                            {expandedCampaignName === campaign.name ?
+                                                <CampaignsTufStatistics 
+                                                    campaignsStore={campaignsStore}
+                                                    groupsStore={groupsStore}
+                                                    campaignId={campaign.id}
+                                                    showCancelCampaignModal={showCancelCampaignModal}
+                                                    showDependenciesModal={showDependenciesModal}
+                                                    key={campaign.id}
+                                                />
+                                            :
+                                                null
+                                            }
+                                        </VelocityTransitionGroup>
+                                    </span>
+                                );
+                            })}
+                        </span>
+                    :
+                        <div className="empty font-small">
+                            No running campaigns.
+                        </div>
+                    }
+                </div>
+                <div className="section-header">
+                    Running campaigns
+                </div>
+                <div className="campaigns-list" id="running-campaigns">
+                    {campaignsStore.runningCampaigns.length ?
+                        <span>
+                            <div className="heading font-small">
+                                <div></div>
+                                <div className="column name">Name</div>
+                                <div className="column">Created at</div>
+                                <div className="column">Processed</div>
+                                <div className="column">Affected</div>
+                                <div className="column">Finished</div>
+                                <div className="column">Failure rate</div>
+                            </div>
+                            {_.map(campaignsStore.runningCampaigns, (campaign) => {
+                                return (
+                                    <span key={campaign.id} className="font-small">
+                                        <CampaignsTufListItem 
+                                            toggleCampaign={toggleCampaign}
+                                            campaign={campaign}
+                                            expandedCampaignName={expandedCampaignName}
+                                            type="running"
+                                        />
+                                        <VelocityTransitionGroup 
+                                            enter={{
+                                                animation: "slideDown",
+                                            }}
+                                            leave={{
+                                                animation: "slideUp",
+                                            }}
+                                        >
+                                        {expandedCampaignName === campaign.name?
+                                            <CampaignsTufStatistics
                                                 campaignsStore={campaignsStore}
                                                 groupsStore={groupsStore}
-                                                campaignId={campaign.id}
                                                 showCancelCampaignModal={showCancelCampaignModal}
                                                 showDependenciesModal={showDependenciesModal}
-                                                key={campaign.id}
+                                                campaignId={campaign.id}
                                             />
                                         :
                                             null
                                         }
-                                    </VelocityTransitionGroup>
-                                </span>
-                            );
-                        })
+                                        </VelocityTransitionGroup>
+                                    </span>
+                                );
+                            })}
+                        </span>
                     :
-                        <div className="no-items">
+                        <div className="empty font-small">
                             No running campaigns.
                         </div>
                     }
                 </div>
                 <div className="section-header">
-                    <div className="column">Running campaigns</div>
-                    <div className="column">Created at</div>
-                    <div className="column">Processed</div>
-                    <div className="column">Affected</div>
-                    <div className="column">Finished</div>
-                    <div className="column">Failure rate</div>
-                </div>
-                <div className="campaigns-list" id="running-campaigns">
-                    {campaignsStore.runningCampaigns.length ?
-                        _.map(campaignsStore.runningCampaigns, (campaign) => {
-                            return (
-                                <span key={campaign.id}>
-                                    <CampaignsTufListItem 
-                                        toggleCampaign={toggleCampaign}
-                                        campaign={campaign}
-                                        type="running"
-                                    />
-                                    <VelocityTransitionGroup 
-                                        enter={{
-                                            animation: "slideDown",
-                                        }}
-                                        leave={{
-                                            animation: "slideUp",
-                                        }}
-                                    >
-                                    {expandedCampaignName === campaign.name?
-                                        <CampaignsTufStatistics
-                                            campaignsStore={campaignsStore}
-                                            groupsStore={groupsStore}
-                                            showCancelCampaignModal={showCancelCampaignModal}
-                                            showDependenciesModal={showDependenciesModal}
-                                            campaignId={campaign.id}
-                                        />
-                                    :
-                                        null
-                                    }
-                                    </VelocityTransitionGroup>
-                                </span>
-                            );
-                        })
-                    :
-                        <div className="no-items">
-                            No running campaigns.
-                        </div>
-                    }
-                </div>
-                <div className="section-header">
-                    <div className="column">Finished campaigns</div>
-                    <div className="column">Created at</div>
-                    <div className="column">Processed</div>
-                    <div className="column">Affected</div>
-                    <div className="column">Finished</div>
-                    <div className="column">Failure rate</div>
+                    Finished campaigns
                 </div>
                 <div className="campaigns-list" id="finished-campaigns">
                     {campaignsStore.finishedCampaigns.length ?
-                        _.map(campaignsStore.finishedCampaigns, (campaign) => {
-                            return (
-                                <span key={campaign.id}>
-                                    <CampaignsTufListItem 
-                                        toggleCampaign={toggleCampaign}
-                                        campaign={campaign}
-                                        type="finished"
-                                    />
-                                    <VelocityTransitionGroup 
-                                        enter={{
-                                            animation: "slideDown",
-                                        }}
-                                        leave={{
-                                            animation: "slideUp",
-                                        }}
-                                    >
-                                    {expandedCampaignName === campaign.name ?
-                                        <CampaignsTufStatistics
-                                            campaignsStore={campaignsStore}
-                                            groupsStore={groupsStore}
-                                            showCancelCampaignModal={showCancelCampaignModal}
-                                            showDependenciesModal={showDependenciesModal}
-                                            campaignId={campaign.id}
+                        <span>
+                            <div className="heading font-small">
+                                <div></div>
+                                <div className="column name">Name</div>
+                                <div className="column">Created at</div>
+                                <div className="column">Processed</div>
+                                <div className="column">Affected</div>
+                                <div className="column">Finished</div>
+                                <div className="column">Failure rate</div>
+                            </div>
+                            {_.map(campaignsStore.finishedCampaigns, (campaign) => {
+                                return (
+                                    <span key={campaign.id} className="font-small">
+                                        <CampaignsTufListItem 
+                                            toggleCampaign={toggleCampaign}
+                                            campaign={campaign}
+                                            expandedCampaignName={expandedCampaignName}
+                                            type="finished"
                                         />
-                                    :
-                                        null
-                                    }
-                                    </VelocityTransitionGroup>
-                                </span>
-                            );
-                        })
+                                        <VelocityTransitionGroup 
+                                            enter={{
+                                                animation: "slideDown",
+                                            }}
+                                            leave={{
+                                                animation: "slideUp",
+                                            }}
+                                        >
+                                        {expandedCampaignName === campaign.name ?
+                                            <CampaignsTufStatistics
+                                                campaignsStore={campaignsStore}
+                                                groupsStore={groupsStore}
+                                                showCancelCampaignModal={showCancelCampaignModal}
+                                                showDependenciesModal={showDependenciesModal}
+                                                campaignId={campaign.id}
+                                            />
+                                        :
+                                            null
+                                        }
+                                        </VelocityTransitionGroup>
+                                    </span>
+                                );
+                            })}
+                        </span>
                     :
-                        <div className="no-items">
+                        <div className="empty font-small">
                             No finished campaigns.
                         </div>
                     }
                 </div>
                 <div className="section-header">
-                    <div className="column">Cancelled campaigns</div>
-                    <div className="column">Created at</div>
-                    <div className="column">Processed</div>
-                    <div className="column">Affected</div>
-                    <div className="column">Finished</div>
-                    <div className="column">Failure rate</div>
+                    Cancelled campaigns
                 </div>
                 <div className="campaigns-list" id="cancelled-campaigns">
                     {campaignsStore.cancelledCampaigns.length ?
-                        _.map(campaignsStore.cancelledCampaigns, (campaign) => {
-                            return (
-                                <span key={campaign.id}>
-                                    <CampaignsTufListItem 
-                                        toggleCampaign={toggleCampaign}
-                                        campaign={campaign}
-                                        type="cancelled"
-                                    />
-                                    <VelocityTransitionGroup 
-                                        enter={{
-                                            animation: "slideDown",
-                                        }}
-                                        leave={{
-                                            animation: "slideUp",
-                                        }}
-                                    >
-                                    {expandedCampaignName === campaign.name ?
-                                        <CampaignsTufStatistics
-                                            campaignsStore={campaignsStore}
-                                            groupsStore={groupsStore}
-                                            showCancelCampaignModal={showCancelCampaignModal}
-                                            showDependenciesModal={showDependenciesModal}
-                                            campaignId={campaign.id}
+                        <span>
+                            <div className="heading font-small">
+                                <div></div>
+                                <div className="column name">Name</div>
+                                <div className="column">Created at</div>
+                                <div className="column">Processed</div>
+                                <div className="column">Affected</div>
+                                <div className="column">Finished</div>
+                                <div className="column">Failure rate</div>
+                            </div>
+                            {_.map(campaignsStore.cancelledCampaigns, (campaign) => {
+                                return (
+                                    <span key={campaign.id} className="font-small">
+                                        <CampaignsTufListItem 
+                                            toggleCampaign={toggleCampaign}
+                                            campaign={campaign}
+                                            expandedCampaignName={expandedCampaignName}
+                                            type="cancelled"
                                         />
-                                    :
-                                        null
-                                    }
-                                    </VelocityTransitionGroup>
-                                </span>
-                            );
-                        })
+                                        <VelocityTransitionGroup 
+                                            enter={{
+                                                animation: "slideDown",
+                                            }}
+                                            leave={{
+                                                animation: "slideUp",
+                                            }}
+                                        >
+                                        {expandedCampaignName === campaign.name ?
+                                            <CampaignsTufStatistics
+                                                campaignsStore={campaignsStore}
+                                                groupsStore={groupsStore}
+                                                showCancelCampaignModal={showCancelCampaignModal}
+                                                showDependenciesModal={showDependenciesModal}
+                                                campaignId={campaign.id}
+                                            />
+                                        :
+                                            null
+                                        }
+                                        </VelocityTransitionGroup>
+                                    </span>
+                                );
+                            })}
+                        </span>
                     :
-                        <div className="no-items">
+                        <div className="empty font-small">
                             No cancelled campaigns.
                         </div>
                     }

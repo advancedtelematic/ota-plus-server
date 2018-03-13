@@ -26,7 +26,7 @@ class PrimaryEcu extends Component {
                 >
                     <div className="desc">
                         <span>
-                            <span id="hardware-id-value" className="app-label">{devicesStore._getPrimaryHardwareId()}</span> <br />
+                            <span id="hardware-id-value" className="hardware-label">{devicesStore._getPrimaryHardwareId()}</span> <br />
                             Serial: <span id="hardware-serial-value">{devicesStore._getPrimarySerial()}</span>
                         </span>
                     </div>
