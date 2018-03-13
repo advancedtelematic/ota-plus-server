@@ -25,13 +25,13 @@ class ListItem extends Component {
         let packVersionsNumber = this.countPackVersionsNumber();
         const directorBlock = (
             <div className="c-package__teaser director">
-                <div className="c-package__name" id={`target_package_${pack.packageName}`}>
+                <div className="c-package__name">
                     {pack.packageName}
                 </div> 
                 <div className="c-package__icon">
                     <img src="/assets/img/icons/black/lock.svg" alt="Director" />
                 </div>
-                <div className="c-package__versions-nr" id={`package_versions_count_${packVersionsNumber}`}>
+                <div className="c-package__versions-nr" id="package-versions-nr">
                     {packVersionsNumber === 1 ?
                         packVersionsNumber + " version"
                     :

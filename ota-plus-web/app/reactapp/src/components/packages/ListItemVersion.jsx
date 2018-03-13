@@ -77,8 +77,8 @@ class ListItemVersion extends Component {
                 </div>
                 <div className="c-package__hardware-box">
                     <div className="c-package__hw-row c-package__hw-row--installed" id={"package-" + packageName + "-ecus-installed"}>
-                        <span id={"version-" + version.id.version.substring(0,8) + "-installed-on-ecus"}>
-                            Installed on <span id={"version-" + version.id.version.substring(0,8) + "-installed-on-ecus-count"}>{version.installedOnEcus}</span> ECU(s)
+                        <span id={"version-" + version.id.version + "-installed-on-ecus"}>
+                            Installed on <span id={"version-" + version.id.version + "-installed-on-ecus-count"}>{version.installedOnEcus}</span> ECU(s)
                         </span>
                     </div>
                     <div className="c-package__hw-row c-package__hw-row--hardware-ids" id={"package-" + packageName + "-hardware_ids"}>
