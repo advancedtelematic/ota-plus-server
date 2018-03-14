@@ -53,6 +53,8 @@
     "KAFKA_HOST": "${KAFKA_HOST}",
     "KAFKA_TOPIC_SUFFIX": "${KAFKA_TOPIC_SUFFIX}",
     "MESSAGING_MODE": "kafka",
+    "OIDC_CONFIG_URL": "${OIDC_CONFIG_URL}",
+    "OIDC_ISSUER": "${OIDC_ISSUER}",
     "PACKAGES_VERSION_FORMAT": "${PACKAGES_VERSION_FORMAT}",
     "PLAY_CRYPTO_SECRET": "${PLAY_CRYPTO_SECRET}",
     "SERVICE_HEALTH_CHECK": "curl --show-error --silent %<host>s:%<port>s/health",
