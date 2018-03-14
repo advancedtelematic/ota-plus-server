@@ -11,6 +11,9 @@ class OtaPlusTabs extends Component {
         const otaPlusNavigation = (
             <ul className="nav navbar-nav">
                 <li>
+                    <Link to="/dashboard" activeClassName="active" id="link-dashboard">Dashboard</Link>
+                </li>
+                <li>
                     <Link to="/device-registry" activeClassName="active" id="link-device-registry">Device registry</Link>
                 </li>
                 <li>

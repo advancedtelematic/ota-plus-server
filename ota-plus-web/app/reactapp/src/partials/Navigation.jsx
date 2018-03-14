@@ -22,12 +22,11 @@ class Navigation extends Component {
             uiUserProfileMenu,
             uiCredentialsDownload,
         } = this.props;
-        let logoLink = '/';
-        if(otaPlusMode) {
-            logoLink = '/dashboard';
-        }
         const garageNavigation = (
             <ul className="nav navbar-nav">
+                <li>
+                    <Link to="/" activeClassName="active" id="link-dashboard">Dashboard</Link>
+                </li>
                 <li>
                     <Link to="/devices" activeClassName="active" id="link-devices">Devices</Link>
                 </li>
@@ -49,7 +48,7 @@ class Navigation extends Component {
             <nav className="navbar navbar-inverse navbar-fixed-top">
                   <div className="container">
                     <div className="navbar-header">
-                        <Link to={logoLink} className="navbar-brand" id="logo"></Link>
+                        <div className="navbar-brand" id="logo"/>
                     </div>
                     <div id="navbar">
                         {otaPlusMode ?

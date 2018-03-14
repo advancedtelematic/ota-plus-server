@@ -152,11 +152,12 @@ class List extends Component {
                                         const that = this;
                                         return (
                                             <span key={index} className="c-package">
-                                                <ListItem 
+                                                <ListItem
                                                     pack={pack}
+                                                    expanded={this.expandedPackageName === pack.packageName}
                                                     togglePackage={this.togglePackage}
                                                 />
-                                                <VelocityTransitionGroup 
+                                                <VelocityTransitionGroup
                                                     enter={{
                                                         animation: "slideDown",
                                                         begin: () => {that.startIntervalListScroll();},
@@ -172,7 +173,7 @@ class List extends Component {
                                                         <div className="c-package__details">
                                                             <div className="c-package__main-name">
                                                                 {pack.packageName}
-                                                                <i className="fa fa-angle-up"></i>
+                                                                <i className="fa fa-angle-up" onClick={this.togglePackage}/>
                                                             </div>
                                                             <div className="c-package__chart">
                                                                 <div className="c-package__heading">
@@ -181,14 +182,14 @@ class List extends Component {
                                                                 <PackagesVersionsStats
                                                                     pack={pack}
                                                                 />
-                                                            </div>                                                                
+                                                            </div>
                                                             <ul className="c-package__versions" id="versions">
                                                                 <div className="c-package__heading">
                                                                     All versions
                                                                 </div>
                                                                 {_.map(pack.versions, (version, i) => {
                                                                     return (
-                                                                        <ListItemVersion 
+                                                                        <ListItemVersion
                                                                             pack={pack}
                                                                             version={version}
                                                                             showBlacklistModal={showBlacklistModal}
@@ -202,7 +203,7 @@ class List extends Component {
                                                                 })}
                                                             </ul>
                                                         </div>
-                                                    : 
+                                                    :
                                                         null
                                                     }
                                                 </VelocityTransitionGroup>

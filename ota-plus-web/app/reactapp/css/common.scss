@@ -23,6 +23,18 @@
   font-style: normal;
 }
 
+::-webkit-scrollbar {
+  background-color: #F5F5F5;
+  width: 9px;
+  position: absolute;
+}
+
+::-webkit-scrollbar-thumb {
+  border: none;
+  width: 9px;
+  background-color: #9B9DA2;
+}
+
 .btn-primary {
   transition: all 0.4s ease;
   border-radius: 0;
