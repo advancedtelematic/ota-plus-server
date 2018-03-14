@@ -245,14 +245,14 @@ object OidcConfiguration {
   def load(wSClient: WSClient, configUrl: Url, issuerUrl: Url, log: Logger)(
       implicit ec: ExecutionContext
   ): Future[ProviderMetadata] = {
-    val uri = Uri(issuerUrl).withPath(OidcConfigurationPath)
+    val uri = Uri(configUrl).withPath(OidcConfigurationPath)
     log.info(s"Loading OIDC provider configuration from ${uri}")
     wSClient.url(uri.toString()).withFollowRedirects(true).get().flatMap { response =>
       response.status match {
         case ResponseStatusCodes.OK_200 =>
           response.json.validate[ProviderMetadata] match {
             case JsSuccess(x, _) if x.issuer == issuerUrl =>
-              log.info(s"Configuration of '${issuerUrl}: ${x}")
+              log.info(s"Configuration of '${issuerUrl}' from ${uri}: ${x}")
               Future.successful(x)
 
             case JsSuccess(x, _) =>
