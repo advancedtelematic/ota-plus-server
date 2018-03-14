@@ -20,7 +20,7 @@ class ListItem extends Component {
         return this.props.pack.versions.length;
     }
     render() {
-        const { pack, togglePackage } = this.props;
+        const { pack, togglePackage, expanded } = this.props;
         let installedOnEcus = this.countInstalledOnEcus();
         let packVersionsNumber = this.countPackVersionsNumber();
         const directorBlock = (
@@ -49,8 +49,8 @@ class ListItem extends Component {
             </div>
         );
         return (
-            <div className="c-package__item item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
-                {directorBlock}
+            <div className="c-package__item item" style={{height: expanded ? '0px' : ''}} id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
+                {!expanded ? directorBlock : null}
             </div>
         );
     }

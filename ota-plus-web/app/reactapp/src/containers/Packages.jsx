@@ -11,7 +11,6 @@ import {
     PackagesDependenciesManager
 } from '../components/packages';
 import { FlatButton } from 'material-ui';
-import _ from 'underscore';
 
 @observer
 class Packages extends Component {
