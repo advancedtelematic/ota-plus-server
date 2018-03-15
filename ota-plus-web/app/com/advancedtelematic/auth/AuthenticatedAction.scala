@@ -163,6 +163,18 @@ class ApiAuthAction @Inject()(val tokenVerification: TokenVerification,
     } yield claims
   }
 
+  private[this] val `namespace.` = "namespace."
+
+  private[this] def nsFromScope(claims: AccessTokenClaims): Try[Namespace] = {
+    claims.scope.find(_.startsWith(`namespace.`)).map(_.substring(`namespace.`.length)) match {
+      case Some(x) =>
+        Success(Namespace(x))
+
+      case None =>
+        Failure(new IllegalStateException("No namespace found in token's scope"))
+    }
+  }
+
   override def authRequest[A](request: Request[A]): Try[AuthorizedRequest[A]] = {
     (extractBearerToken(request), SecuredAction.fromSession(request)) match {
       case (Failure(t), Failure(e)) =>
@@ -172,9 +184,10 @@ class ApiAuthAction @Inject()(val tokenVerification: TokenVerification,
         Failure(new IllegalStateException("The request has both valid session and a bearer token."))
 
       case (Success(x), Failure(_)) =>
-        processBearerToken(x).map { claims =>
-          AuthorizedBearerJwtRequest(AccessToken(x, claims.expirationTime), Namespace(claims.userId.id), request)
-        }
+        for {
+          claims <- processBearerToken(x)
+          ns <- nsFromScope(claims)
+        } yield AuthorizedBearerJwtRequest(AccessToken(x, claims.expirationTime), ns, request)
 
       case (Failure(_), x @ Success(_)) =>
         x
