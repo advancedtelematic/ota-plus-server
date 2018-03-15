@@ -14,13 +14,6 @@ const WebsocketHandler = (function (wsUrl, stores) {
             const data = eventObj.event;
             switch (type) {
                 case "DeviceSeen":
-                    if(document.cookie.indexOf("fireworksPageAcknowledged") == -1) {
-                        stores.devicesStore.fetchDevicesCount().then(() => {
-                            if(stores.devicesStore.directorDevicesCount === 1) {
-                                window.location = '#/fireworks';
-                            }
-                        });
-                    }
                     stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
                     if(window.location.href.indexOf('/device/') > -1) {                        
                         stores.devicesStore.fetchDirectorAttributes(data.uuid);
@@ -33,6 +26,9 @@ const WebsocketHandler = (function (wsUrl, stores) {
                     stores.groupsStore.selectDefaultGroup();
                     stores.devicesStore.fetchDevices();
                     stores.devicesStore._increaseDeviceInitialTotalCount();
+                    if(document.cookie.indexOf("fireworksPageAcknowledged") == -1 && stores.devicesStore.devicesInitialTotalCount === 1) {
+                        window.location = '#/fireworks';
+                    }
                     break;
                 case "TufTargetAdded":
                     stores.packagesStore._addPackage(data);
