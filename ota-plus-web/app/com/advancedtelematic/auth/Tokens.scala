@@ -16,7 +16,7 @@ sealed abstract case class IdToken(value: String, userId: UserId)
 
 final case class AccessToken(value: String, expiresAt: Instant)
 
-final case class AccessTokenClaims(userId: UserId, expirationTime: Instant)
+final case class AccessTokenClaims(userId: UserId, scope: Array[String], expirationTime: Instant)
 
 object AccessTokenClaims {
   import play.api.libs.functional.syntax._
@@ -24,9 +24,20 @@ object AccessTokenClaims {
   val InstantAsSecondsSinceEpoch: Format[Instant] =
     implicitly[Format[Long]].inmap(Instant.ofEpochSecond, _.getEpochSecond)
 
+  val scopeClaimFormat: Reads[Array[String]] = (JsPath \ "scope").readNullable[String].map {
+    case Some(scopeStr) =>
+      scopeStr.split("[\\s+]")
+
+    case None =>
+      Array.empty[String]
+  }
+
   implicit val ReadsInstance: Reads[AccessTokenClaims] =
-    (Tokens.subjClaimFormat and (JsPath \ "exp").format(InstantAsSecondsSinceEpoch))(AccessTokenClaims.apply,
-                                                                                     unlift(AccessTokenClaims.unapply))
+    (
+      (Tokens.subjClaimFormat: Reads[UserId]) and
+      scopeClaimFormat and
+      (JsPath \ "exp").read(InstantAsSecondsSinceEpoch)
+    )(AccessTokenClaims.apply _)
 
 }
 

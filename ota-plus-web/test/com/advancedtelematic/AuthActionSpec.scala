@@ -21,28 +21,29 @@ class AuthActionSpec extends PlaySpec with GuiceOneServerPerSuite with Results {
   val application = new GuiceApplicationBuilder()
     .configure(
       "oidc.tokenVerification" -> "com.advancedtelematic.auth.oidc.NoTokenIntrospection",
-      "authplus.client_id" -> UUID.randomUUID().toString
+      "authplus.client_id"     -> UUID.randomUUID().toString
     )
     .build
 
   implicit val mat = application.injector.instanceOf[Materializer]
 
-  val namespace = "authActionSpec"
-  val jwtSecret = "AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow"
+  val namespace                  = "authActionSpec"
+  val jwtSecret                  = "AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow"
   private[this] val tokenBuilder = application.injector.instanceOf[AccessTokenBuilder]
-  val accessToken = tokenBuilder.mkToken(namespace, Instant.now().plus(5, ChronoUnit.MINUTES), Set.empty)
+  val accessToken =
+    tokenBuilder.mkToken(namespace, Instant.now().plus(5, ChronoUnit.MINUTES), Set(s"namespace.$namespace"))
   val authAction = application.injector.instanceOf[ApiAuthAction]
 
-  def fakeRoute() : Action[AnyContent] = authAction.async { implicit request =>
+  def fakeRoute(): Action[AnyContent] = authAction.async { implicit request =>
     Future.successful(Ok(""))
   }
 
   implicit class RequestSyntax[A](request: FakeRequest[A]) {
     def withAuthSession(): FakeRequest[A] =
       request.withSession(
-        "id_token" -> TokenUtils.identityTokenFor("test"),
+        "id_token"     -> TokenUtils.identityTokenFor("test"),
         "access_token" -> Json.stringify(Json.toJson(accessToken)(SessionCodecs.AccessTokenFormat)),
-        "namespace" -> namespace
+        "namespace"    -> namespace
       )
   }
 
@@ -84,7 +85,7 @@ class AuthActionSpec extends PlaySpec with GuiceOneServerPerSuite with Results {
 
     "reject request without Authorization header or session cookie" in {
       val request = FakeRequest(GET, "/")
-      val result = call(fakeRoute(), request)
+      val result  = call(fakeRoute(), request)
       status(result) must be(403)
     }
   }
