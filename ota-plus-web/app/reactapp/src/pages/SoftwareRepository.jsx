@@ -3207,7 +3207,7 @@ class ItemVersions extends Component {
                                                 <span className="bold">Length: {versionItem.length}</span>
                                                 <span className="bold">Installed on {versionItem.installedOnEcus} ECU(s)</span>
                                                 <span className="bold">Hardware ids: {_.map(versionItem.id, (id, key) => {
-                                                    return <span key={key} className="hardware-label">{id}</span>
+                                                    return <span key={key} className="app-label">{id}</span>
                                                 })}</span>
                                             </div>
                                         </div>

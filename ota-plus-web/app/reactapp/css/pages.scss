@@ -755,7 +755,6 @@
         }
     }
 
-
     .content {
 
         & > span {
@@ -767,63 +766,52 @@
             .boxes-row {
                 width: 100%;
                 height: 100%;
-                padding: 15px;
+                padding: 30px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                padding-top: 30px;
-                background: $color-grey;
+                background: $home-bg;
 
                 .column {
                     width: 33.3333333%;
+                    height: 100%;
                     display: inline-block;
-                    padding-right: 15px;
+                    padding-right: 5px;
 
                     &:last-child {
                         padding-right: 0;
                     }
                 }
 
-                &:last-child {
-                    padding-bottom: 30px;
-
-                    .column {
-                        height: 100%;
-                    }
-                }
-
                 .panel {
                     &.panel-lightgrey {
                         height: 100%;
+                        border: 5px solid $home-grey;
+                        margin-bottom: 0;
 
                         .panel-heading {
                             overflow: hidden;
-                            height: 60px;
+                            height: 50px;
                             display: flex;
                             align-items: center;
                             justify-content: space-between;
-                            background: $color-darkgrey;
-                            color: $color-white;
-                            padding-left: 35px;
-
-                            .add {
-                                button, a {
-                                    margin: 0!important;
-                                    &#add-new-device {
-                                        span {
-                                            line-height: 8px;
-                                        }
-                                    }
-                                }
-                            }
+                            background: $home-grey;
+                            color: $home-header-text;
+                            padding: 20px;
+                            text-transform: uppercase;
+                            font-weight: bold;
+                            font-size: 12px;                            
                         }
 
                         .panel-body {
-                            height: calc(100% - 60px);
+                            height: calc(100% - 50px);
                             padding: 0;
+                            background: #fff;
+                            overflow-x: hidden;
+                            overflow-y: auto;
 
                             .element-box {
-                                padding-right: 15px;
+                                border-bottom: 5px solid $home-grey;
 
                                 &.device {
                                     .icon {
@@ -858,14 +846,7 @@
 
 #page-devices {
     @include fullHeight;
-
-    .page-heading {
-        .icon {
-            background-image: url('/assets/img/icons/black/devices.png');
-            background-size: 45px 45px;
-            background-position: center;
-        }
-    }
+    background: $home-bg;
 
     .page-intro {
         .btn-main {
@@ -875,42 +856,58 @@
 
     .content {
         .groups-panel {
-            background: #fff;
+            background: $devices-groups-bg;
             width: 350px;
             height: 100%;
             float: left;
-            -webkit-box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.7);
-            -moz-box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.7);
-            box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.7);
 
-            .wrapper-btn {
-                text-align: center;
-                height: 130px;
-                padding: 30px 0 0 0;
-            }
-
-            .btn-dashed {
-                span {
-                    font-size: 14px !important;
-                }
+            .heading {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                height: 90px;
+                padding: 0 30px;
+                color: $devices-group-inactive;
+                font-size: 10px;
+                text-transform: uppercase;
             }
 
             .wrapper-groups {
-                height: calc(100% - 130px);
+                height: calc(100% - 90px);
                 overflow-y: auto;
 
                 .group-btn, button {
                     color: #555;
                     text-align: left;
-                    background: #fff;
                     width: 100%;
                     height: 90px;
                     padding: 0;
-                    border: 0;
-                    border-top: 1px solid #ddd;
                     position: relative;
                     overflow: hidden;
                     @include transition;
+                    display: flex;
+                    align-items: center;
+                    padding: 0 30px;
+                    cursor: pointer;
+                    background: transparent;
+                    border: 0;
+
+                    &:hover {
+
+                        .desc {
+
+                            .title, .subtitle {
+                                color: #fff;
+                            }
+                        }
+                    }
+
+                    &.artificial {
+                        
+                        .desc {
+                            margin: 0;
+                        }
+                    }
 
                     &.droppable {
                         &.active {
@@ -920,76 +917,13 @@
                         }
                     }
 
-                    &:hover {
-                        background: #eee;
-                    }
-
-                    &:last-child {
-                        border-bottom: 1px solid #ddd;
-                    }
-
                     &.selected {
-                        background: #eee;
                         border-left: 10px solid #96DED2;
 
-                        .pointer {
-                            display: block;
-                        }
-                    }
+                        .desc {
 
-                    .actions {
-                        color: #fff;
-                        text-align: center;
-                        background: #4B5151;
-                        width: 60px;
-                        height: 100%;
-                        margin-left: -60px;
-                        margin-right: 15px;
-                        display: inline-block;
-                        vertical-align: middle;
-                        @include transition;
-
-                        ul {
-                            height: 100%;
-                            margin: 0;
-
-                            li {
-                                line-height: 92px;
-                                height: 100%;
-                                display: block;
-                                @include transition;
-
-                                img {
-                                    width: 20px;
-                                    position: relative;
-                                    top: -2px;
-                                }
-
-                                & > div {
-                                    opacity: 0;
-                                    @include transition;
-                                }
-                            }
-                        }
-
-                        &:hover {
-                            width: 90px;
-                            cursor: pointer;
-                            ul {
-                                li {
-                                    & > div {
-                                        font-size: 11px;
-                                        display: inline-block;
-                                        vertical-align: sub;
-                                        opacity: 1;
-                                        position: relative;
-                                        top: -2px;
-                                    }
-                                }
-                            }
-
-                            & ~ .desc {
-                                width: 45%;
+                            .title, .subtitle {
+                                color: #fff;
                             }
                         }
                     }
@@ -1006,26 +940,20 @@
                     }
 
                     .desc {
-                        width: 62%;
+                        width: 70%;
                         margin: 0 0 0 15px;
-                        display: inline-block;
-                        vertical-align: middle;
                         transition: width 0.2s ease-in;
 
                         .title {
+                            font-size: 16px;
                             @include textoverflowEllipsis;
+                            color: $devices-group-text;
                         }
 
                         .subtitle {
-                            color: #ccc;
+                            font-size: 12px;
+                            color: $devices-group-text;
                         }
-                    }
-
-                    .pointer {
-                        position: absolute;
-                        top: 31px;
-                        right: 15px;
-                        display: none;
                     }
                 }
             }
@@ -1037,121 +965,24 @@
             position: relative;
             overflow-y: hidden;
 
-            .selected-group-title {
-                height: 150px;
+            .subheader {
+                background: transparent;
+                height: 60px;
                 display: flex;
                 align-items: center;
-                padding: 0 25px;
-                overflow: hidden;
-                background-color: rgba(150, 222, 210,0.15);
-
-                .left {
-                    .icon {
-                        background: url(/assets/img/icons/groups.png) #fff no-repeat;
-                        background-size: cover;
-                        width: 60px;
-                        height: 60px;
-                        border-radius: 10px;
-                        display: inline-block;
-                        vertical-align: middle;
-                        margin-right: 5px;
-                    }
-                }
-
-                .right {
-                    padding: 10px 0;
-                    width: 100%;
-
-                    h3 {
-                        display: inline-block;
-                        margin: 0;
-                        cursor: pointer;
-                        width: 100%;
-                        position: relative;
-
-                        input {
-                            width: 100%;
-                            background-color: rgba(0,0,0,0);
-                            border: none;
-                            outline: none;
-                            -webkit-appearance: none;
-                            -moz-appearance: none;
-                            color: #fff;
-                            appearance: none;
-                            transition: all 0.3s ease;
-                            padding: 5px 60px 5px 10px;
-                            text-overflow: ellipsis;
-                            
-                            &:focus {
-                                outline: auto;
-                                background-color: rgba(0,0,0,0.2);
-                            }                    
-                        }
-                        img {
-                            width: 20px;
-                            transition: opacity 0.3s ease;
-                            cursor: pointer;
-
-                            &.edit {
-                                opacity: 0;
-                                position: absolute;
-                                right: 15px;
-                                top: 7px;
-                            }
-                        }
-                        .icons {
-                            position: absolute;
-                            right: 5px;
-                            top: 5px;
-                            z-index: 10;
-
-                            img {
-                                margin-right: 5px;
-                                width: 15px;
-                                transition: opacity 0.3s ease;
-                                cursor: pointer;
-                            }
-                        }
-                        &.artificial {
-                            input {
-                                text-transform: capitalize;
-                            }
-                            .clickable-area {
-                                display: none;
-                            }
-                        }
-
-                        &:not(.artificial):hover {
-
-                            img {
-                                opacity: 1;
-                            }
-
-                            input {
-                                background-color: rgba(255,255,255,.2);
-                            }
-
-                            .clickable-area {
-                                width: 90%;
-                                height: 36px;
-                                position: absolute;
-                            }
-                        }
-                    }
-
-                    span {
-                        padding-left: 5px;
-                        display: block;
-                        color: #fff;
-                        font-size: 11px;
-                    }
-                }
+                justify-content: flex-end;
+                padding: 0 30px;
             }
 
             .wrapper {
-                height: calc(100% - 190px);
-                padding: 10px;
+                height: calc(100% - 60px);
+                padding: 0 30px;
                 overflow-y: auto;
+
+                .inner-container {
+                    display: flex;
+                    flex-wrap: wrap;
+                }
 
                 & > div {
                     width: 100%;
@@ -1169,15 +1000,6 @@
             }
 
             .common-box {
-
-                &:hover {
-                    .actions {
-                        margin-left: -60px;
-                    }
-                    .desc {
-                        width: 62%;
-                    }
-                }
 
                 .device-status {
                     position: relative;
@@ -1219,6 +1041,7 @@
             width: 425px;
 
             .title {
+
                 .device-name {
                     position: relative;
                     display: block!important;
@@ -1278,7 +1101,7 @@
         .dates {
             color: #ddd;
             font-size: 12px;
-            margin: 15px 20px 0 0;
+            margin: 0 20px 0 0;
             float: right;
 
             .date {
@@ -1286,11 +1109,7 @@
                 display: inline-block;
 
                 .date-label {
-                    color: #888;
-                }
-
-                .date-desc {
-                    margin-top: 1px;
+                    color: $devices-group-text;
                 }
 
                 img {
@@ -1338,7 +1157,6 @@
             background-size: cover;
             width: 32px;
             height: 32px;
-            margin: 15px 30px 0 20px;
             float: right;
             border: 0;
         }
@@ -1346,64 +1164,78 @@
 
     .content {
         height: calc(100vh - 150px);
+        overflow-y: hidden;
 
         .hardware-panel {
-            background: #fff;
+            background: $devices-groups-bg;
             width: 20%;
             height: 100%;
             float: left;
             position: relative;
             z-index: 121;
-            -webkit-box-shadow: 4px 0px 4px -1px rgba(50,50,50,0.5);
-            -moz-box-shadow: 4px 0px 4px -1px rgba(50,50,50,0.5);
-            box-shadow: 4px 0px 4px -1px rgba(50,50,50,0.5);
+            border-right: 2px solid $panel-delimiter-color;
+
 
             .inner-container {
-                height: calc(100% - 36px);
+                height: calc(100% - 45px);
                 overflow-y: auto;
 
                 .hardware-list {
 
-                    .secondary-ecus {
-                        a {
-                            border-bottom: 1px solid #ddd;
-                        }
+                    .hardware-title {
+                        color: $devices-group-inactive;
+                        font-size: 10px;
+                        text-transform: uppercase;
+                        height: 45px;
+                        display: flex;
+                        align-items: center;
+                        padding: 0 25px;
+                        font-weight: bold;
+                        position: relative;
+                    }
+
+                    .primary-ecu {
+                        border-bottom: 1px solid $home-header-text;
+                        padding-bottom: 20px;
                     }
 
                     a {
-                        color: #555;
+                        @include transition;
+                        color: $devices-group-text;
                         font-size: 12px;
                         text-decoration: none;
-                        padding-left: 10px;
-                        padding-top: 5px;
+                        padding-left: 25px;
                         border-left: 10px solid transparent;
                         position: relative;
                         margin-left: -10px;
-                        @include transition;
-                        height: 70px;
+                        height: 90px;
                         display: flex;
                         align-items: center;
 
+                        .app-label {
+                            color: $home-header-text;
+                            border: 1px solid $home-header-text;
+                            margin-bottom: 10px;
+                        }
+
                         &:hover {
-                            background: #eee;
+                            color: #fff;
+
+                            .app-label {
+                                color: #fff;
+                                border: 1px solid #fff;
+                            }
                         }
 
                         &.selected {
+                            color: #fff;
                             margin-left: 0;
                             border-left-color: $color-mint;
-                        }
 
-                        .hardware-label {
-                            color: #444;
-                            font-size: 12px;
-                            background: transparent;
-                            padding: 0 10px;
-                            padding-top: 3px;
-                            border-radius: 10px;
-                            margin-right: 5px;
-                            margin-bottom: 5px;
-                            display: inline-block;
-                            border: 1px solid #444;
+                            .app-label {
+                                color: #fff;
+                                border: 1px solid #fff;
+                            }
                         }
 
                         .desc {
@@ -1411,6 +1243,7 @@
                             text-overflow: ellipsis;
                             white-space: nowrap;
                             overflow: hidden;
+
                         }
 
                         .icons {
@@ -1430,12 +1263,12 @@
                                     margin-left: 5px;
                                 }
                             }
-
                         }
                     }
 
                     .not-available {
-                        padding: 10px 15px;
+                        padding: 10px 25px;
+                        color: $devices-group-text;
                     }
 
                     .hardware-secondary-details {
@@ -1506,134 +1339,20 @@
         }
 
         .software-panel {
-            background: #fff;
             width: 45%;
             height: 100%;
-            padding: 0;
             float: left;
             position: relative;
             z-index: 120;
-            -webkit-box-shadow: 4px 0px 4px -1px rgba(50,50,50,0.5);
-            -moz-box-shadow: 4px 0px 4px -1px rgba(50,50,50,0.5);
-            box-shadow: 4px 0px 4px -1px rgba(50,50,50,0.5);
-
-            .wrapper-full {
-                height: calc(100% - 36px);
-                position: relative;
-            }            
-
+            border-right: 2px solid $panel-delimiter-color;
+           
             .wrapper-software {
-                height: 100%;
-
-                .details {
-                    padding: 30px 30px 30px 50px;
-
-                    .top {
-                        overflow: hidden;
-                        margin-bottom: 10px;
-
-                        .title {
-                            float: left;
-                            font-weight: bold;
-                            font-size: 16px;
-                        }
-                        
-                        .status {
-                            float: right;
-                        }
-
-                        .status.not-installed {
-                            color: #D3D3D3;
-                            font-weight: bold;
-                            font-size: 16px;
-                        }
-
-                        .status.blacklisted {
-                            color: red;
-                            font-weight: bold;
-                            font-size: 16px;
-                        }
-                    }
-
-                    .bottom {
-                        margin-bottom: 25px;
-
-                        .sub-title {
-                            width: 130px;
-                            display: inline-block;
-                        }
-                    }
-
-                    .comments {
-                        margin-bottom: 10px;
-                    }
-
-                    .blacklist {
-                        padding: 15px 10px;
-                        border-top: 1px solid #ddd;
-                        border-bottom: 1px solid #ddd;
-                        overflow: hidden;
-                        margin-bottom: 25px;
-
-                        .text {
-                            display: inline-block;
-                            float: left;
-                            font-size: 15px;
-                            padding-top: 5px;
-                            color: #ddd;
-                        }
-
-                        .btn-blacklist {
-                            float: right;
-                            background: url(/assets/img/icons/ban_grey.png) no-repeat center;
-                            background-size: 30px 30px !important;
-                            height: 26px;
-                            width: 26px;
-                            padding: 0;
-                            margin: 0;
-                            border: 0;
-                            display: inline-block;
-                        }
-
-                        .btn-blacklist.edit {
-                            background: url(/assets/img/icons/ban_red.png) no-repeat center;
-                        }
-                    }
-
-                    .blacklist.package-blacklisted {
-                        border-top: 1px solid red;
-                        border-bottom: 1px solid red;
-
-                        .text {
-                            color: red;
-                        }
-                    }
-
-                    .install {
-                        overflow: hidden;
-
-                        .btn-main {
-                            float: right;
-                            width: 300px;
-                            
-                            span {
-                                font-size: 20px!important;
-                                font-weight: 500!important;
-                            }
-                        }
-                    }
-                }
+                height: calc(100% - 45px);
 
                 .ios-list {
                     height: 100%;
 
                     .wrapper-item {
-                        text-align: right;
-                        width: 100%;
-                        height: 50px;
-                        position: relative;
-                        display: block;
-                        clear: both;
 
                         .labels {
                             overflow: hidden;
@@ -1670,34 +1389,39 @@
                             }
                         }
 
-                        .wrapper-auto-update {
-                            font-size: 12px;
-                            position: absolute;
-                            top: 15px;
-                            right: 15px;
-                        }                        
-
                         .item {
-                            height: 50px;
-                            padding: 15px;
+
+                            &.selected {
+
+                                .name {
+                                    font-size: 14px;
+                                    color: $home-bg;
+                                }
+
+                                .package-versions-nr {
+                                    color: $home-header-text;
+                                    line-height: 20px;
+                                }
+                            }
+
+                            .left-box, .right-box {
+                                display: flex;
+                            }
 
                             &.unmanaged {
                                 height: 90px;
-                            }
-
-                            .name {
-                                display: inline-block;
+                                flex-direction: column;
+                                justify-content: center;
+                                align-items: flex-start;
                             }
 
                             .package-versions-nr {
                                 color: #b5b7b9;
-                                display: inline-block;
                                 margin-left: 10px;
+                                font-size: 12px;
                             }
 
                             .fa-stack {
-                                margin: -4px 0 0 0;
-                                float: right;
 
                                 &.queued {
                                     color: #fff;
@@ -1707,48 +1431,51 @@
                                     }
                                 }
                             }
+
+                            .wrapper-auto-update {
+                                color: $home-header-text;
+                                font-size: 10px;
+                                display: flex;
+                                align-items: center;
+                            }
                         }
                     }
 
                     .versions-container {
+                        margin-bottom: 0;
                     
                         .versions {
-                            padding: 8px 30px;
 
                             li {
                                 cursor: pointer;
-                                padding-left: 15px;
+                                padding: 15px 35px;
                                 display: flex;
+                                align-items: center;
+                                justify-content: space-between;
                                 @include transition;
+                                border-left: 10px solid transparent;
 
                                 &:hover {
                                     background: #eee;
                                 }
 
-                                &:not(:last-child) {
-                                    margin-bottom: 8px;
-                                }
-
                                 .left-box {
-                                    width: 80%;
-                                    padding: 8px 0 8px 10px;
-
-                                    span {
-                                        line-height: 24px;
-                                    }
+                                    display: flex;
+                                    flex-direction: column;
+                                    width: 70%;
 
                                     div {
-                                        overflow: hidden;
+                                        display: flex;
+
+                                        &:not(:last-child) {
+                                            margin-bottom: 5px;
+                                        }
 
                                         .sub-title {
-                                            float: left;
-                                            display: block;
                                             width: 25%;
                                         }
 
                                         .value {
-                                            float: left;
-                                            display: block;
                                             width: 75%;
                                             @include textoverflowEllipsis;
                                         }
@@ -1756,15 +1483,12 @@
                                 }
 
                                 .right-box {
-                                    width: 20%;
-                                    height: auto;
-                                    align-items: center;
                                     display: flex;
-                                    justify-content: flex-end;
+                                    flex-direction: column;
+                                    width: 30%;
+                                    align-items: flex-end;
 
                                     .fa-stack {
-                                        float: right;
-                                        margin: 12px;
 
                                         &.queued {
                                             color: #fff;
@@ -1775,21 +1499,14 @@
                                         }
                                     }
 
-                                    .blacklisted, .installed, .blacklisted-installed {
-                                        display: inline-block;
-                                        padding: 10px 0;
-                                        margin: 0 12px;
-
-                                        img {
-                                            width: 25px;
-                                            height: 25px;
-                                        }
+                                    img {
+                                        width: 25px;
+                                        height: 25px;
                                     }
                                 }
 
                                 &.selected {
                                     border-left: 10px solid $color-mint;
-                                    padding-left: 0;
                                 }
                             }
                         }
@@ -1797,8 +1514,8 @@
                         .info-auto-update {
                             color: #fff;
                             text-align: center;
-                            background: #369E47;
-                            padding: 7px;
+                            background: $switch-blue-color;
+                            padding: 10px 25px;
                         }
                     }
                 }
@@ -1817,53 +1534,45 @@
             -moz-box-shadow: 4px 0px 4px -1px rgba(50,50,50,0.5);
             box-shadow: 4px 0px 4px -1px rgba(50,50,50,0.5);
 
-            .wrapper-full {
-                height: calc(100% - 36px);
-                background-color: #F5F5F5;
-                padding: 20px 15px 0 20px;
-            }            
-
             .wrapper-properties {
-                height: calc(100% - 24px);
-                background-color: #fff;
+                height: calc(100% - 44px);
                 position: relative;
-                border: 1px solid #e1e1e1;
 
-                .details-wrapper {
-                    height: 100%;
+                .additional-status {
+                    position: absolute;
+                    bottom: 0;
+                    width: 100%;
+                    height: 30px;
+                    color: #fff;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
 
-                    .additional-status {
-                        position: absolute;
-                        bottom: 0;
-                        padding: 10px 0;
-                        text-align: center;
-                        width: 100%;
-                        color: #fff;
+                    &.bg-green {
+                        background-color: $device-pack-installed-bg;
+                    }
 
-                        &.bg-green {
-                            background-color: #369e47;
-                        }
+                    &.bg-orange {
+                        background-color: #F2A721;
+                    }
 
-                        &.bg-orange {
-                            background-color: #F2A721;
-                        }
+                    &.bg-grey {
+                        background-color: #666666;
+                    }
 
-                        &.bg-grey {
-                            background-color: #666666;
-                        }
-
-                        &.bg-red {
-                            background-color: red;
-                        }
+                    &.bg-red {
+                        background-color: red;
                     }
                 }
 
                 .details {
-                    padding: 30px;
+                    padding: 35px;
 
-                    .top {
-                        margin-bottom: 10px;
-                        position: relative;
+                    .heading {
+                        margin-bottom: 15px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
 
                         .title {
                             font-weight: bold;
@@ -1875,53 +1584,33 @@
                         }
                         
                         .status {
-                            position: absolute;
-                            right: 0;
-                            top: 0;
+                            width: 35%;
+                            text-align: right;
+                            font-weight: bold;
+                            font-size: 10px;
+                            color: $device-hardware-header;
 
-                            .status-container {
-                                font-size: 13px;
+                            img {
+                                width: 17px;
+                                margin: 0 0 5px 8px;
+                            }
 
-                                img {
-                                    width: 18px;
-                                    margin-right: 8px;
-                                    margin-bottom: 5px;
-                                }
+                            i {
+                                font-size: 2em;
+                                margin: 0 0 5px 8px;
+                            }
 
-                                &.installed {
-                                    font-weight: bold;
-                                }
-
-                                &.not-installed {
-                                    font-weight: bold;
-                                }
-
-                                &.queued {
-                                    font-weight: bold;
-                                    margin-top: -4px;
-
-                                    .fa-stack i {
-                                        font-size: 1.2em;
-                                    }
-                                }
-
-                                &.blacklisted {
-                                    color: red;
-                                    font-weight: bold;
-                                }
-
-                                &.blacklisted-installed {
-                                    color: red;
-                                    font-weight: bold;
-                                }
+                            .blacklisted, .blacklisted-installed {
+                                color: red;
                             }
                         }
                     }
 
-                    .bottom {
+                    .data {
                         margin-bottom: 60px;
+                        color: $device-properties-text;
 
-                        span:not(.hardware-label) {
+                        span:not(.app-label) {
                             line-height: 26px;
                         }
 
@@ -1940,37 +1629,6 @@
                             overflow: hidden;
                             text-overflow: ellipsis;
                             white-space: nowrap;
-                        }
-
-                        .hardware-ids {
-                        
-                            .hardware-label {
-                                color: $color-darkgrey;
-                                font-size: 12px;
-                                line-height: 18px;
-                                background: transparent;
-                                padding: 0px 10px;
-                                border-radius: 10px;
-                                margin-right: 5px;
-                                display: inline-block;
-                                border: 1px solid #444;
-                            }
-                        }
-
-                        .target-format {
-                        
-                            .format-label {
-                                color: $color-darkgrey;
-                                font-size: 12px;
-                                line-height: 18px;
-                                background: transparent;
-                                padding: 0px 10px;
-                                border-radius: 10px;
-                                margin-right: 5px;
-                                margin-bottom: 5px;
-                                display: inline-block;
-                                border: 1px solid #444;
-                            }
                         }
                     }
 
@@ -2036,67 +1694,81 @@
         .c-package {
 
             &__item {
+                cursor: pointer;
+                font-size: 12px;
+            }
 
-                &--expanded {
-                    background: #f5f5f5;
-                }
+            &__teaser {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
             }
 
             &__name {
-                float: left;
-                width: 30%;
+                flex: 3;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
+                padding-right: 15px;
             }
 
             &__icon {
-                width: 10%;
+                flex: 1;
                 text-align: center;
-                float: left;
-                margin-top: -4px;
-                margin-left: 10px;
-                margin-right: 5px;
-
+            
                 img {
                     width: 25px;
                 }
             }
 
             &__versions-nr {
-                width: 10%;
+                flex: 1;
                 text-align: center;
-                float: left;
-                margin-left: 5px;
-                margin-right: 10px;
             }
 
             &__installed {
-                width: 15%;
+                flex: 1;
                 text-align: center;
-                float: left;
-                margin-left: 10px;
-                margin-right: 5px;
+            }
+
+            &__more-info {
+                flex: 3;
+                text-align: right;
+                color: $home-header-button;
             }
 
             &__details {
-                background: #f5f5f5;
+                background: #fff;
                 overflow: hidden;
                 padding: 25px;
             }
 
             &__main-name {
+                font-size: 22px;
                 margin-bottom: 25px;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding-right: 30px;
+
+                i {
+                    color: $home-header-button;
+                    font-size: 1.5em;
+                }
             }
 
             &__chart {
-                width: 20%;
+                width: 15%;
                 float: left;
             }
 
             &__heading {
                 margin-bottom: 10px;
                 font-weight: bold;
+                color: $device-hardware-header;
+                font-size: 12px;
 
                 &--strict {
                     width: 25%;
@@ -2105,7 +1777,6 @@
             }
 
             &__versions {
-                background: #f5f5f5;
                 padding: 0 25px;
                 width: 70%;
                 float: left;
@@ -2113,14 +1784,11 @@
             }
 
             &__version-item {
+                font-size: 12px;
                 position: relative;
                 @include transition;
                 background: #fff;
                 overflow: hidden;
-                border: 1px solid #e1e1e1;
-                -webkit-box-shadow: 0px 1px 10px 0px rgba(150,150,150,0.2);
-                -moz-box-shadow: 0px 1px 10px 0px rgba(150,150,150,0.2);
-                box-shadow: 0px 1px 10px 0px rgba(150,150,150,0.2);
 
                 &:hover {
                     background: #eee;
@@ -2186,19 +1854,7 @@
             &__hw-value {
                 width: 75%;
                 float: left;
-            }
-
-            &__label {
-                color: $color-darkgrey;
-                font-size: 12px;
-                background: transparent;
-                padding: 0px 10px;
-                border-radius: 10px;
-                margin-right: 5px;
-                margin-bottom: 5px;
-                display: inline-block;
-                border: 1px solid #444;
-            }
+            }            
 
             &__show-dependencies {
                 position: absolute;
@@ -2207,27 +1863,10 @@
                 transform: translateY(-50%);
             }
 
-            &__dependencies-icon {
-                background: url(/assets/img/icons/dependencies-icon.svg);
-                width: 50px;
-                height: 50px;
-                background-size: cover;
-                cursor: pointer;
-                transition: all 0.5s;
-
-                &:hover {
-                    background: url(/assets/img/icons/dependencies-icon-active.svg);
-                    width: 50px;
-                    height: 50px;
-                    background-size: cover;
-                    cursor: pointer;
-                }
-            }
-
             &__manager {
                 display: flex;
                 justify-content: flex-end;
-                background-color: #fafafa;
+                background-color: rgba(243,243,244,0.5);
                 margin-bottom: 10px;
                 padding: 15px 35px;
                 margin-left: 10px;
@@ -2332,95 +1971,25 @@
             width: 400px;
             height: 100%;
             float: left;
-            -webkit-box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.2);
-            -moz-box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.2);
-            box-shadow: 4px 0px 4px -1px rgba(150,150,150,0.2);
+            border-right: 1px solid $panel-delimiter-color;
             position: absolute;
             z-index: 10;
+            font-size: 12px;
 
-            .wrapper-list {
+            .ios-list {
                 height: calc(100% - 40px);
-                position: relative;
-                overflow-y: auto;
 
-                .header {
-                    font-weight: bold;
-                    line-height: 34px;
-                    background: #fff;
-                    width: 100%;
-                    height: 34px;
-                    padding: 0 15px;
-                    border-bottom: 1px solid #ddd;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    z-index: 1;
-                }
+                ul {
+                    margin-bottom: 0;
 
-                .column {
-                    display: inline-block;
-                    vertical-align: top;
-
-                    &.column-first {
-                        width: 50%;
-                        @include textoverflowEllipsis;
-                    }
-
-                    &.column-second {
-                        font-size: 11px;
-                        text-align: right;
-                        width: 50%;
-                    }
-
-                    &.column-third {
-                        font-size: 11px;
-                        text-align: center;
-                        width: 25%;
-                    }
-                }
-
-                .list {
-                    margin: 34px 0 0 0;
-
-                    .item {
-                        background: #fff;
-                        width: 100%;
+                    .version-item {
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 0 25px;
+                        align-items: center;
                         height: 50px;
-                        padding: 0 15px;
-                        border: 0;
-                        border-bottom: 1px solid #ddd;
-                        @include transition;
-
-                        &:hover, &.selected {
-                            background: #f5f5f5;
-                        }
-
-                        .column {
-                            &.column-first {
-                                text-align: left;
-                            }
-                        }
-                    }
-
-                    .versions {
-                        width: 100%;
-                        background: #f5f5f5;
-                        float: left;
-
-                        ul {
-                            width: 100%;
-                            padding: 5px 10px;
-                            margin: 0;
-                            float: left;
-
-                            li {
-                                background: #fff;
-                                height: 32px;
-                                padding: 7px 5px;
-                                margin: 5px 0;
-                                border-bottom: 1px solid #e1e1e1;
-                            }
-                        }
+                        border-left: 10px solid #96DED2;
+                        color: $device-properties-text;
                     }
                 }
             }

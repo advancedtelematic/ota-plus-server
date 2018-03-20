@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
-import { SubHeader, SearchBar } from '../../partials';
-import { Form } from 'formsy-react';
-import { FlatButton } from 'material-ui';
+import { SubHeader } from '../../partials';
 
 @observer
 class Header extends Component {
@@ -13,12 +11,14 @@ class Header extends Component {
         const { addNewWizard } = this.props;
         return (
             <SubHeader>
-                <FlatButton
-                    label="Add new campaign"
-                    onClick={addNewWizard.bind(this, null)}
-                    className="btn-main btn-small btn-add"
-                    id="add-new-campaign"
-                />
+                <a href="#" className="add-button" id="add-new-campaign" onClick={addNewWizard.bind(this, null)}>
+                    <span>
+                        +
+                    </span>
+                    <span>
+                        Add campaign
+                    </span>
+                </a>
             </SubHeader>
         );
     }

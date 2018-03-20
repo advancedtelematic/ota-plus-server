@@ -714,6 +714,7 @@ export default class PackagesStore {
 
     _prepareBlacklist() {
         let groupedPackages = {};
+        let sortedPackages = {};
         _.each(this.blacklist, (obj, index) => {
             if (_.isUndefined(groupedPackages[obj.packageId.name]) || !groupedPackages[obj.packageId.name] instanceof Array) {
                 groupedPackages[obj.packageId.name] = new Object();
@@ -738,7 +739,28 @@ export default class PackagesStore {
         groupedPackages = _.sortBy(groupedPackages, (version) => {
             return version.deviceCount;
         }).reverse();
-        this.preparedBlacklist = groupedPackages;
+
+        groupedPackages.sort();
+
+        let specialGroup = {'#' : []};
+        _.each(groupedPackages, (pack, key) => {
+            let firstLetter = pack.packageName.charAt(0).toUpperCase();
+
+            firstLetter = firstLetter.match(/[A-Z]/) ? firstLetter : '#';
+            if(firstLetter != '#' && _.isUndefined(sortedPackages[firstLetter]) || !sortedPackages[firstLetter] instanceof Array ) {
+                sortedPackages[firstLetter] = [];
+            }
+            if(firstLetter != '#')
+                sortedPackages[firstLetter].push(pack);
+            else
+                specialGroup['#'].push(pack);
+        });
+        if(!_.isEmpty(specialGroup['#'])) {
+            sortedPackages = Object.assign(specialGroup, sortedPackages);
+        }
+
+        this.preparedBlacklist = sortedPackages;
+        this.preparedBlacklistRaw = groupedPackages;
     }
 
     _resetBlacklistActions() {
@@ -779,6 +801,7 @@ export default class PackagesStore {
         this.packagesUploading = [];
         this.blacklist = [];
         this.preparedBlacklist = [];
+        this.preparedBlacklistRaw = [];
         this.blacklistedPackage = {};
         this.affectedDevicesCount = {};
         this.autoInstalledPackages = [];

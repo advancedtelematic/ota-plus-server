@@ -83,7 +83,7 @@ class WizardStep7 extends Component {
                                         <div className="text">
                                             On:
                                         </div>
-                                        <div className="value hardware-label" id={"package-version-" + update.to + '-hardware-id'}>
+                                        <div className="value app-label" id={"package-version-" + update.to + '-hardware-id'}>
                                             {update.hardwareId}
                                         </div>
                                     </div>
