@@ -309,7 +309,7 @@ class List extends Component {
                                                         that.stopIntervalListScroll()
                                                     }
                                                 }}>
-                                                {this.expandedPackageName === pack.packageName ?
+                                                {this.expandedPackageName === pack.packageName ?                                                    
                                                     <ul className="versions-container">
                                                         <li className="auto-update">
                                                             <VelocityTransitionGroup

@@ -49,7 +49,8 @@ class Devices extends Component {
         if(e) e.preventDefault();
         this.props.devicesStore._prepareDevices(sort);
     }
-    changeFilter(filter) {
+    changeFilter(filter, e) {
+        if(e) e.preventDefault();
         let groupId = this.props.groupsStore.selectedGroup.id;
         this.props.devicesStore.fetchDevices(filter, groupId);
     }

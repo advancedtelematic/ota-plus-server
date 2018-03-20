@@ -5,6 +5,7 @@ import { CampaignsTufList } from './tuf';
 import CampaignsHeader from './Header';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import _ from 'underscore';
+import ReactDOM from 'react-dom';
 
 const headerHeight = 28;
 
@@ -26,7 +27,7 @@ class List extends Component {
         this.refs.list.removeEventListener('scroll', this.listScroll);
     }
     generateHeadersPositions() {
-        const headers = this.refs.list.querySelectorAll('.tuf-list .section-header');
+        const headers = this.refs.list.querySelectorAll('.wrapper-list .section-header');
         const wrapperPosition = this.refs.list.getBoundingClientRect();
         let positions = [];
         _.each(headers, (header) => {
@@ -37,7 +38,7 @@ class List extends Component {
     }
 
     listScroll() {
-        const headers = this.refs.list.querySelectorAll('.tuf-list .section-header');
+        const headers = this.refs.list.querySelectorAll('.wrapper-list .section-header');
         if(this.refs.list) {
             const headersPositions = this.generateHeadersPositions();
             let scrollTop = this.refs.list.scrollTop;
@@ -66,8 +67,7 @@ class List extends Component {
                     {campaignsStore.preparedCampaigns.length ?
                         <span>
                             {this.fakeHeaderLetter.length ?
-                                <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
-                                    {this.fakeHeaderLetter}
+                                <div className="fake-header"style={{top: this.fakeHeaderTopPosition}} dangerouslySetInnerHTML={{__html: this.fakeHeaderLetter}}>
                                 </div>
                             :
                                 null
