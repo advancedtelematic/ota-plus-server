@@ -17,19 +17,20 @@ class Tooltip extends Component {
                 </div>
 
                 <div className="body-actions">
-                    <FlatButton
-                        label="Got it!"
-                        type="button"
-                        className="btn-main"
-                        onClick={hide}
-                    />
+                    <button className="btn-primary" onClick={hide} id="provisioning-keys-got-it">Got it</button>
                 </div>
             </span>
         );
             
         return (
             <Modal 
-                title={<span className="heading provisioning-tooltip-header"><img src="/assets/img/icons/white/key.png" alt="Image" />Provisioning Key</span>}
+                title={
+                    <div className="heading">
+                        <div className="internal">
+                            Provisioning Keys
+                        </div>
+                    </div>
+                }
                 content={content}
                 shown={shown}
                 className="provisioning-key-tooltip"

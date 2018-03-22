@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { Modal } from '../../partials';
-import { FlatButton } from 'material-ui';
 
 class Tooltip extends Component {
     constructor(props) {
@@ -20,20 +19,20 @@ class Tooltip extends Component {
                     <img src="/assets/img/impact_tooltip.jpg" alt="" />
                 </div>
                 <div className="body-actions">
-                    <FlatButton
-                        label="Got it"
-                        type="button"
-                        className="btn-main"
-                        id="impact-analysis-got-it﻿"
-                        onClick={hide}
-                    />
+                    <button className="btn-primary" onClick={hide} id="impact-analysis-got-it﻿">Got it</button>
                 </div>
             </span>
         );
             
         return (
             <Modal 
-                title="Blacklist"
+                title={
+                    <div className="heading">
+                        <div className="internal">
+                            Blacklist
+                        </div>
+                    </div>
+                }
                 content={content}
                 shown={shown}
             />

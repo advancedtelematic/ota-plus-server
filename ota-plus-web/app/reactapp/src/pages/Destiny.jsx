@@ -19,51 +19,42 @@ class Destiny extends Component {
             <FadeAnimation>
                 <div className="wrapper-center wrapper-responsive">
                     <div className="destiny-container">
-                        <div className="heading">
-                            <div className="title">
-                                Choose your destiny.
-                            </div>
-                        </div>
                         <div className="item new">
-                            <div className="icon">
-                                <img src="/assets/img/icons/destiny_10_min.png" alt="Image" />
-                            </div>
                             <div className="title">
                                 START FRESH
                             </div>
                             <div className="body">
-                                <img src="/assets/img/icons/destiny_new.png" alt="Image" />
+                                <img src="/assets/img/onboarding_start_fresh.svg" alt="Image" />
                                 <div className="subtitle">
                                     Try out a quickstart project
                                 </div>
                                 <div className="text">
                                     New to Yocto? We'll take you through a starter project step by step.
                                 </div>
+                                <p>10 min</p>
                                 <div className="action">
-                                    <a href="http://docs.atsgarage.com/quickstarts/raspberry-pi.html" target="_blank" className="btn btn-main" id="user-new-yocto-docs">
-                                        Quickstart guide
+                                    <a href="http://docs.atsgarage.com/quickstarts/raspberry-pi.html" target="_blank" className="btn-primary" id="user-new-yocto-docs">
+                                        Guide
                                     </a>
                                 </div>
                             </div>
                         </div>
                         <div className="item existing">
-                            <div className="icon">
-                                <img src="/assets/img/icons/destiny_10_min.png" alt="Image" />
-                            </div>
                             <div className="title">
                                 INTEGRATE
                             </div>
                             <div className="body">
-                                <img src="/assets/img/icons/destiny_existing.png" alt="Image" />
+                                <img src="/assets/img/onboarding_integrate.svg" alt="Image" />
                                 <div className="subtitle">
                                     Integrate with existing project
                                 </div>
                                 <div className="text">
                                     Add the meta-updater layer into your existing Yocto project and OTA-enable your devices.
                                 </div>
+                                <p>10 min</p>
                                 <div className="action">
-                                    <a href="http://docs.atsgarage.com/quickstarts/adding-ats-garage-updating-to-an-existing-yocto-project.html" target="_blank" className="btn btn-main" id="user-existing-yocto-docs">
-                                        Integration guide
+                                    <a href="http://docs.atsgarage.com/quickstarts/adding-ats-garage-updating-to-an-existing-yocto-project.html" target="_blank" className="btn-primary" id="user-existing-yocto-docs">
+                                        Guide
                                     </a>
                                 </div>
                             </div>

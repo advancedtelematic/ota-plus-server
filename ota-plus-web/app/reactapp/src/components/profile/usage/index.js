@@ -1,5 +1,5 @@
-import UsageCarousel from './Carousel';
+import Items from './Items';
 
 export {
-    UsageCarousel
+    Items
 }

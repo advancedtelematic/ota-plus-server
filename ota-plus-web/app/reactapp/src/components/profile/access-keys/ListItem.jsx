@@ -11,34 +11,29 @@ class ListItem extends Component {
         location.href="/api/v1/clienttools/provisioning/" + provisioningKey.id;
     }
     render() {
-        const { provisioningKey, width } = this.props; 
+        const { provisioningKey } = this.props; 
         const validFrom = new Date(provisioningKey.validFrom);
         const validUntil = new Date(provisioningKey.validUntil);
         return (
             <a href="#/profile/access-keys"
                 onClick={this._onDownload.bind(this)}
                 className="common-box"
-                id={"key-" + provisioningKey.description}
-                style={{width: width}}>
+                id={"key-" + provisioningKey.description}>
 
-                <div className="actions">
-                    <ul>
-                        <li title="Download key">
-                            <img src="/assets/img/icons/download_key.png" alt="" />
-                        </li>
-                    </ul>
-                </div>
                 <div className="icon"></div>
                 <div className="desc">
                     <div className="title" title={provisioningKey.description}>
                         {provisioningKey.description}
                     </div>
                     <div className="subtitle" id="key-valid-from">
-                        Valid from: {validFrom.toDateString() + ' ' + validFrom.toLocaleTimeString()}
+                        Start date: {validFrom.toDateString() + ' ' + validFrom.toLocaleTimeString()}
                     </div>
                     <div className="subtitle" id="key-valid-until">
-                        Valid until: {validUntil.toDateString() + ' ' + validUntil.toLocaleTimeString()}
+                        End date: {validUntil.toDateString() + ' ' + validUntil.toLocaleTimeString()}
                     </div>                        
+                </div>
+                <div className="download-icon">
+                    <img src="/assets/img/icons/download_key.png" alt="Icon" />
                 </div>
             </a>
         );
@@ -48,7 +43,6 @@ class ListItem extends Component {
 ListItem.propTypes = {
     provisioningStore: PropTypes.object.isRequired,
     provisioningKey: PropTypes.object.isRequired,
-    width: PropTypes.number.isRequired
 }
 
 export default ListItem;

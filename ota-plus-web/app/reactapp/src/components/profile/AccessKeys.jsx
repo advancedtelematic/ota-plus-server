@@ -22,10 +22,6 @@ class AccessKeys extends Component {
         const { provisioningStore, devicesStore } = this.props;
         return (
             <main id="access-keys">
-                <div className="title top font-big">
-                    <img src="/assets/img/icons/black/key.png" alt=""/>
-                    Provisioning keys
-                </div>
                 <div className={"wrapper-flex"}>
                     <MetaData 
                         title={title}>

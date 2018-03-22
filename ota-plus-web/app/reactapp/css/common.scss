@@ -38,11 +38,13 @@
 .btn-primary {
   transition: all 0.4s ease;
   border-radius: 0;
-  color: #fff;
+  color: #fff!important;
   font-size: 12px;
   font-family: 'Fira Sans', sans-serif;
   font-weight: 500;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   outline: none;
   height: 36px;
   border: none;
@@ -150,6 +152,11 @@
       color: transparent;
       text-shadow: 0 0 0 black;
     }
+    &:disabled {
+      cursor: not-allowed;
+      background-color: #CFD0D3;
+      color: #9B9DA2;
+    }
   }
 
   &__select {
@@ -178,6 +185,18 @@
     padding: 10px;
     &:not(:last-child) {
       border-bottom: 1px solid #ddd;
+    }
+
+    &--selected {
+      position: relative;
+      &:before {
+        content: "\f00c";
+        font-family: FontAwesome;
+        right:10px;
+        position:absolute;
+        top:50%;
+        transform: translateY(-50%);
+      }
     }
   }
 }

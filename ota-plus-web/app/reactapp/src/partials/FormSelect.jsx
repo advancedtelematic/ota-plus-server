@@ -7,7 +7,7 @@ class FormSelect extends Component {
         super();
         this.state = {
             showDropDown: false,
-            selectedOption: ''
+            selectedOptions: []
         };
         this.toggleMenu = this.toggleMenu.bind(this);
         this.selectOption = this.selectOption.bind(this);
@@ -32,7 +32,7 @@ class FormSelect extends Component {
 
     appendSelectFieldsToBody(e) {
         const {multiple = true, options, id, visibleFieldsCount = 0} = this.props;
-        const {showDropDown} = this.state;
+        const {showDropDown, selectedOptions} = this.state;
         const renderContainer = document.createElement('div');
         const inputPosition = e.target.getBoundingClientRect();
 
@@ -50,13 +50,14 @@ class FormSelect extends Component {
                     className="c-form__select"
                     multiple={multiple} id={id}>
                 {options.map((value, index) => {
+                    const selected = _.contains(selectedOptions, value);
                     if (_.isObject(value)) {
                         const option = value;
                         return (
                             <option key={index}
                                     onClick={this.selectOption.bind(this, option)}
                                     id={`${id}-${option.id}`}
-                                    className="c-form__option"
+                                    className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`}
                                     value={option.value}>
                                 {option.text}
                             </option>
@@ -66,7 +67,7 @@ class FormSelect extends Component {
                             <option key={index}
                                     onClick={this.selectOption.bind(this, value)}
                                     id={`${id}-${value}`}
-                                    className="c-form__option"
+                                    className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`}
                                     value={value}>
                                 {value}
                             </option>
@@ -83,11 +84,33 @@ class FormSelect extends Component {
     }
 
     selectOption(value, e) {
-        this.setState({
-            selectedOption: value
-        });
-        this.props.onChange(e);
-        this.toggleMenu(e);
+
+        const {appendMenuToBodyTag} = this.props;
+
+        if (appendMenuToBodyTag) {
+            e.target.classList.toggle('c-form__option--selected')
+        }
+
+        let options = this.state.selectedOptions;
+        if (_.isArray(options)) {
+            if (_.contains(options, value)) {
+                options = _.without(options, value);
+            } else {
+                options.push(value);
+            }
+        }
+
+        if (!this.props.multiple) {
+            this.toggleMenu(e);
+            this.setState({
+                selectedOptions: value
+            });
+        } else {
+            this.setState({
+                selectedOptions: options
+            });
+        }
+        this.props.onChange(options);
     }
 
     render() {
@@ -103,12 +126,12 @@ class FormSelect extends Component {
             visibleFieldsCount = 0,
         } = this.props;
 
-        const {showDropDown, selectedOption} = this.state;
+        const {showDropDown, selectedOptions} = this.state;
         const inputValue =
-            selectedOption.id ?
-                selectedOption.id
-                : selectedOption.length
-                ? selectedOption
+            selectedOptions.id ?
+                selectedOptions.id
+                : selectedOptions.length
+                ? selectedOptions
                 : defaultValue && defaultValue.length > 0 ? defaultValue : '';
 
         return (
@@ -130,13 +153,14 @@ class FormSelect extends Component {
                             className="c-form__select"
                             multiple={multiple} id={id}>
                         {options.map((value, index) => {
+                            const selected = _.contains(selectedOptions, value);
                             if (_.isObject(value)) {
                                 const option = value;
                                 return (
                                     <option key={index}
                                             onClick={this.selectOption.bind(this, option)}
                                             id={`${id}-${option.id}`}
-                                            className="c-form__option"
+                                            className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`}
                                             value={option.value}>
                                         {option.text}
                                     </option>
@@ -146,7 +170,7 @@ class FormSelect extends Component {
                                     <option key={index}
                                             onClick={this.selectOption.bind(this, value)}
                                             id={`${id}-${value}`}
-                                            className="c-form__option"
+                                            className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`}
                                             value={value}>
                                         {value}
                                     </option>
@@ -161,7 +185,7 @@ class FormSelect extends Component {
 }
 
 FormSelect.propTypes = {
-    multiple: PropTypes.bool, // TODO: doesn't work now
+    multiple: PropTypes.bool,
     label: PropTypes.string,
     appendMenuToBodyTag: PropTypes.bool,
     placeholder: PropTypes.string,
