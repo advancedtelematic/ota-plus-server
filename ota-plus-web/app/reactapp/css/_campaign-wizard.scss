@@ -67,8 +67,10 @@
 
             .item {
               height: auto;
+              background-color: #fff;
 
               .select-container {
+                width: 100%;
                 margin: 15px 0;
 
                 .packages {
@@ -129,6 +131,8 @@
               font-weight: 300;
               display: flex;
               align-items: center;
+              justify-content: flex-start;
+              background-color: #fff;
               @include textoverflowEllipsis;
 
               .btn-checkbox {
@@ -164,6 +168,8 @@
               height: auto;
 
               .element-box {
+                display: flex;
+                padding: 20px 10px;
                 &.group {
                   width: calc(100% - 70px);
                   height: auto;
@@ -175,6 +181,9 @@
                   }
 
                   .desc {
+                    display: flex;
+                    align-items: flex-start;
+                    flex-direction: column;
                     width: calc(100% - 80px);
 
                     .title {

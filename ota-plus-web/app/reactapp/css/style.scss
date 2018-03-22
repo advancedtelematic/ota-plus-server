@@ -45,6 +45,10 @@ $font: 'akkurat';
     font-size: 12px !important;
 }
 
+.font-extra-small {
+    font-size: 10px !important;
+}
+
 .link-cancel {
     font-size: 12px !important;
 }
@@ -1003,7 +1007,6 @@ input {
     height: calc(100% - 40px);
     min-height: calc(100% - 40px);
     overflow-y: auto;
-    background: #fff;
     width: 100%;
     display: block;
     position: relative;
@@ -1050,6 +1053,8 @@ input {
         height: 100%;
 
         .campaigns-list {
+            margin-bottom: 10px;
+            background-color: #fff;
 
             .no-items {
                 height: 60px;
