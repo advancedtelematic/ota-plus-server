@@ -175,7 +175,7 @@ export default class CampaignsStore {
                     }.bind(this));
             }.bind(this))
             .catch(function (error) {
-                this[statsAsync] = handleAsyncError(err);
+                this[statsAsync] = handleAsyncError(error);
             }.bind(this));
     }
 

@@ -101,7 +101,6 @@ class SubHeader extends Component {
                         </div>
                     }
                 </div>
-                <i className="fa fa-angle-up"></i>
             </div>
         );
     }

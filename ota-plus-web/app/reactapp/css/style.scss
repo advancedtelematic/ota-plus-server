@@ -27,7 +27,6 @@ $font: 'akkurat';
     text-transform: none;
     color: $home-header-button;
     font-size: 12px;
-    font-weight: bold;
 
     &:hover {
         color: $home-header-button;
@@ -76,11 +75,9 @@ $font: 'akkurat';
 
 .dialog {
     .content {
-        font-family: "Fira Sans", sans-serif;
         .heading {
             background: #fff !important;
             color: #0F1621 !important;
-            font-family: "Fira Sans", sans-serif;
             font-size: 16px !important;
             font-weight: 300!important;
             height: 60px!important;
@@ -128,7 +125,6 @@ $font: 'akkurat';
         .link-cancel {
             line-height: 15px;
             color: #95979c;
-            font-family: Fira Sans, sans-serif;
             font-size: 14px;
             font-weight: 300;
             margin-right: 22px;
@@ -255,7 +251,8 @@ html, body {
 }
 
 body {
-    font-family: $font;
+    font-family: 'Fira Sans', sans-serif;
+    font-weight: 300;
     font-size: 13px;
     height: 100vh;
     max-height: 100vh;
@@ -1065,7 +1062,6 @@ input {
     .column {
         display: inline-block;
         vertical-align: top;
-        @include transition;
         width: 14%;
         text-align: center;
 
@@ -2342,7 +2338,7 @@ input {
                 border-top: 1px solid #e5e5e5;
                 background: #f7f7f7;
                 display: flex;
-                justify-content: space-between;
+                justify-content: flex-end;
                 align-items: center;
             }
         }
@@ -2360,6 +2356,10 @@ input {
                 display: flex;
                 justify-content: flex-end;
                 align-items: center;
+
+                .link-cancel {
+                    margin: 0;
+                }
             }
         }
     }
@@ -3497,7 +3497,6 @@ div[role=presentation] {
 
                                     .result {
                                         color: #68F22D;
-                                        font-family: Courier New;
                                         font-size: 11px;
                                         background: #000;
                                         padding: 15px;
@@ -3569,7 +3568,6 @@ div[role=presentation] {
     .heading {
         background: #fff !important;
         color: #0F1621 !important;
-        font-family: "Fira Sans", sans-serif;
         font-size: 16px !important;
         font-weight: 300!important;
         height: 60px!important;
@@ -3767,7 +3765,6 @@ div[role=presentation] {
             text-align: left;
             color: white;
             @extend .font-medium;
-            font-family: akkurat;
             text-transform: uppercase;
             font-weight: bold;
             padding: 14px 0px;
@@ -4156,7 +4153,6 @@ div[role=presentation] {
             }
 
             .info > ul, .user-info+ul {
-                font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
                 li {
                     line-height: 18px !important;
                     font-weight: 300 !important;
@@ -4776,7 +4772,6 @@ div[role=presentation] {
                         ul {
                             margin-left: 0;
                             padding: 15px 0;
-                            font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
                             li {
                                 font-weight: 300;
                                 line-height: 18px;

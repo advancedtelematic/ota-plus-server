@@ -154,7 +154,7 @@ class List extends Component {
                                             <span key={index} className="c-package">
                                                 <ListItem
                                                     pack={pack}
-                                                    expanded={this.expandedPackageName === pack.packageName}
+                                                    expandedPackageName={this.expandedPackageName}
                                                     togglePackage={this.togglePackage}
                                                 />
                                                 <VelocityTransitionGroup
@@ -173,7 +173,6 @@ class List extends Component {
                                                         <div className="c-package__details">
                                                             <div className="c-package__main-name">
                                                                 {pack.packageName}
-                                                                <i className="fa fa-angle-up" onClick={this.togglePackage}/>
                                                             </div>
                                                             <div className="c-package__chart">
                                                                 <div className="c-package__heading">
