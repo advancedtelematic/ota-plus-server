@@ -43,7 +43,7 @@ class Home extends Component {
                                 {lastDevicesTitle}
                                 <div className="add">
                                     {allDevicesCount > 0 ?
-                                        <a href="https://docs.atsgarage.com/index.html" className="add-button" id="add-new-device" target="_blank" >
+                                        <a href="https://docs.atsgarage.com/index.html" className="add-button grey-button" id="add-new-device" target="_blank" >
                                             <span>
                                                 +
                                             </span>
@@ -68,7 +68,7 @@ class Home extends Component {
                             <div className="panel-heading">
                                 {lastPackagesTitle}
                                 <div className="add">
-                                    <a href="#" className="add-button" id="add-new-package" onClick={this.showPackagesCreateModal}>
+                                    <a href="#" className="add-button grey-button" id="add-new-package" onClick={this.showPackagesCreateModal}>
                                         <span>
                                             +
                                         </span>
@@ -92,7 +92,7 @@ class Home extends Component {
                             <div className="panel-heading">
                                 {activeCampaignsTitle}
                                 <div className="add">
-                                    <a href="#" className="add-button" id="add-new-campaign" onClick={addNewWizard.bind(this, null)}>
+                                    <a href="#" className="add-button grey-button" id="add-new-campaign" onClick={addNewWizard.bind(this, null)}>
                                         <span>
                                             +
                                         </span>

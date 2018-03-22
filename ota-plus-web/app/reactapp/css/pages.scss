@@ -2128,7 +2128,6 @@
         }
 
         &#usage {
-            font-family:'Fira Sans', sans-serif;
             .content {
                 display: flex;
                 flex-direction: column;
@@ -2285,7 +2284,6 @@
 #page-welcome, #page-destiny, #page-fireworks {
     @include fullHeight;
     background-color: #3E454D;
-    font-family:'Fira Sans', sans-serif;
 
     .welcome-container {
         width: 1000px;

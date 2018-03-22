@@ -20,7 +20,7 @@ class ListItem extends Component {
         return this.props.pack.versions.length;
     }
     render() {
-        const { pack, togglePackage, expanded } = this.props;
+        const { pack, togglePackage, expandedPackageName } = this.props;
         let installedOnEcus = this.countInstalledOnEcus();
         let packVersionsNumber = this.countPackVersionsNumber();
         const directorBlock = (
@@ -49,9 +49,16 @@ class ListItem extends Component {
             </div>
         );
         return (
-            <div className="c-package__item item" style={{height: expanded ? '0px' : ''}} id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
-                {!expanded ? directorBlock : null}
-            </div>
+            expandedPackageName === pack.packageName ?
+                <div className="c-package__item c-package__item--expanded item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
+                    <div className="wrapper-center">
+                        <img src="assets/img/icons/black/arrow-up.svg" alt="Icon" />
+                    </div>
+                </div>
+            :
+                <div className="c-package__item item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
+                    {directorBlock}
+                </div>
         );
     }
 }

@@ -563,7 +563,7 @@ class DependenciesModal extends Component {
                 </div>
               }
               <div className="footer">
-                <a href="#" onClick={hide.bind(this)} className="link-cancel btn-primary">Close</a>
+                <a href="#" onClick={hide.bind(this)} className="link-cancel">Close</a>
                 {this.showOnlyActive ?
                   <button className="btn-primary" onClick={this.showFullGraph.bind(this)}>
                     Show all

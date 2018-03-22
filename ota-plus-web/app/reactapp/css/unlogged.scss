@@ -37,7 +37,6 @@ body {
 }
 
 a, a:hover, a:focus {
-    font-family: $font;
     color: #fff;
     text-decoration: none;
 }
@@ -286,7 +285,6 @@ body {
         .auth0-lock-center {
             .terms-conditions {
                 margin: 15px 0;
-                font-family:$font;
 
                 a {
                     text-decoration: underline;
@@ -319,7 +317,6 @@ body {
 
                 .auth0-lock-header-welcome {
                     .auth0-lock-name {
-                        font-family:$font;
                         margin: 25px 0;
                         color: #fff;
                     }
@@ -332,7 +329,6 @@ body {
 
             .auth0-lock-form {
                 p {
-                    font-family:$font;
                     color: #fff;
                 }
 
@@ -408,14 +404,12 @@ body {
                 text-transform: capitalize;
                 height: auto;
                 line-height: auto;
-                font-family:$font;
 
                 &:not(.auth0-label-submit) {
                     display: none;
                 }
                 &.auth0-label-submit {
                     transform: scale(1) !important;
-                    font-family:$font;
                 }
             }
         }
