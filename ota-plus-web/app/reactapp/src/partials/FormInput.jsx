@@ -4,9 +4,9 @@ export default class FormInput extends Component {
 
     validateInput(e) {
         if (e.target.value.length > 0) {
-            this.props.onValid();
+            this.props.onValid ? this.props.onValid() : null;
         } else {
-            this.props.onInvalid();
+            this.props.onInvalid ? this.props.onInvalid() : null;
         }
     }
 

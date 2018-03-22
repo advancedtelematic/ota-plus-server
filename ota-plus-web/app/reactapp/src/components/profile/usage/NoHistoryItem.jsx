@@ -6,28 +6,22 @@ class NoHistoryItem extends Component {
         super(props);
     }
     render() {
-        const { level, date } = this.props;
-        const className = 'item level' + level;
+        const { date } = this.props;
         return (
-            <div className={className}>
-                <div className="panel panel-grey">
-                    <div className="panel-heading">
-                        {date.format('MMM YYYY')}
-                    </div>
-                    <div className="panel-body">
-                        <div className="wrapper-center inner">
-                            No history
-                        </div>
-                    </div>
+            <li className="flex-row">
+                <div className="flex-column-main">
+                    {date.format('MMM YYYY')}
                 </div>
-            </div>
+                <div className="flex-column">
+                    No history
+                </div>
+            </li>
         );
     }
 }
 
 NoHistoryItem.propTypes = {
     date: PropTypes.object.isRequired,
-    level: PropTypes.number.isRequired,
 };
 
 export default NoHistoryItem;

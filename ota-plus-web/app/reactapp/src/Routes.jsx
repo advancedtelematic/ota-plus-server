@@ -31,10 +31,7 @@ import {
 import {
     ProfileEditProfile,
     ProfileUsage,
-    ProfileBilling,
     ProfileAccessKeys,
-    ProfileUsersAndRoles,
-    ProfileBlSettings,
 } from './components/profile';
 
 const Routes = () => {
@@ -64,10 +61,7 @@ const Routes = () => {
                     <IndexRoute component={ProfileEditProfile}/>
                     <Route path="edit" component={ProfileEditProfile} />
                     <Route path="usage" component={ProfileUsage} />
-                    <Route path="billing" component={ProfileBilling} />
                     <Route path="access-keys" component={ProfileAccessKeys} />
-                    <Route path="users-and-roles" component={ProfileUsersAndRoles} />
-                    <Route path="bl-settings" component={ProfileBlSettings} />
                 </Route>
                 <Route path="*" component={NoMatchPage}/>
             </Route>

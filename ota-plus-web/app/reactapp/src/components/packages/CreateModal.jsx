@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Modal, AsyncResponse, Loader } from '../../partials';
-import { AsyncStatusCallbackHandler } from '../../utils';
+import { Modal, AsyncResponse, Loader, FormSelect, FormInput } from '../../partials';
 import { Form } from 'formsy-react';
 import { FormsyText } from 'formsy-material-ui/lib';
 import { FlatButton, SelectField, MenuItem } from 'material-ui';
@@ -40,7 +39,8 @@ class CreateModal extends Component {
         this.props.packagesStore.createPackage(data, formData, this.selectedHardwareIds.join());
         this.hideModal();
     }
-    _onFileUploadClick() {
+    _onFileUploadClick(e) {
+        e.preventDefault();
         var fileUploadDom = this.refs.fileUpload;
         fileUploadDom.click();
     }
@@ -54,21 +54,8 @@ class CreateModal extends Component {
         this.selectedHardwareIds = [];
         this.props.hide();
     }
-    formatHardwareIds(selectedHardwareIds) {
-        let hardwareIds = this.props.hardwareStore.hardwareIds;
-        return hardwareIds.map((id) => (
-            <MenuItem
-                key={id}
-                insetChildren={true}
-                checked={selectedHardwareIds && selectedHardwareIds.indexOf(id) > -1}
-                value={id}
-                primaryText={id}
-                id={"hardware-ids-select-menu-item-" + id}
-            />
-        ));
-    }
-    selectHardwareIds(event, index, values) {
-        this.selectedHardwareIds = values;
+    selectHardwareIds(selectedOptions) {
+        this.selectedHardwareIds = selectedOptions;
     }
     render() {
         const { shown, hide, packagesStore, hardwareStore, fileDropped, devicesStore } = this.props;
@@ -78,48 +65,44 @@ class CreateModal extends Component {
                 onInvalid={this.disableButton.bind(this)}
                 onValidSubmit={this.submitForm.bind(this, 'director')}
                 id="package-create-form">
+
                 <div className="row">
                     <div className="col-xs-6">
-                        <FormsyText
+                        <FormInput
+                            label="Package Name"
+                            placeholder="Name"
                             name="packageName"
-                            floatingLabelText="Package name"
-                            className="input-wrapper"
-                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
-                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
+                            onInvalid={this.disableButton.bind(this)}
                             id="add-new-package-name"
-                            updateImmediately
-                            required
                         />
                     </div>
                     <div className="col-xs-6">
-                        <FormsyText
+                        <FormInput
+                            label="Version"
                             name="version"
-                            floatingLabelText="Version"
-                            className="input-wrapper"
-                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
-                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                             id="add-new-package-version"
-                            updateImmediately
-                            required
+                            onInvalid={this.disableButton.bind(this)}
+                            placeholder="Select version"
                         />
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-xs-6">
-                        <div className="hardware-ids-select" id="hardware-ids-select">
+                        <div className="hardware-ids-select">
                             {hardwareStore.hardwareIdsFetchAsync.isFetching ?
                                 <Loader />
                             :
-                                <SelectField
-                                    id="hardware-ids-select-field"
+                                <FormSelect
                                     multiple={true}
+                                    appendMenuToBodyTag={true}
+                                    label="Version"
+                                    id="hardware-ids-select"
+                                    placeholder="Select Hardware ids"
                                     onChange={this.selectHardwareIds}
-                                    hintText="Select hardware ids"
-                                    hintStyle={{opacity: this.selectedHardwareIds.length ? 0 : 1, color: '#b2b2b2', fontWeight: 'bold'}}
-                                    value={this.selectedHardwareIds}
-                                >
-                                    {this.formatHardwareIds(this.selectedHardwareIds)}
-                                </SelectField>
+                                    visibleFieldsCount={8}
+                                    defaultValue={_.isArray(this.selectedHardwareIds) ? this.selectedHardwareIds : null}
+                                    options={hardwareStore.hardwareIds}
+                                />
                             }
                         </div>
                     </div>
@@ -129,12 +112,13 @@ class CreateModal extends Component {
                         <div className="row">
                             <div className="upload-wrapper col-xs-12">
                                 {!fileDropped ?
-                                    <FlatButton
-                                        label="Choose file"
-                                        onClick={this._onFileUploadClick.bind(this)}
-                                        className="btn-main btn-small"
-                                        id="choose-package"
-                                    />
+                                    <a href="#"
+                                       className="add-button"
+                                       onClick={this._onFileUploadClick.bind(this)}
+                                       id="choose-package"
+                                    >
+                                        <span>Choose file</span>
+                                    </a>
                                     :
                                     null
                                 }
@@ -180,25 +164,25 @@ class CreateModal extends Component {
                             >
                                 Cancel
                             </a>
-                            <FlatButton
-                                label="Add package"
-                                type="submit"
-                                className="btn-main"
-                                id="add-new-package-confirm"
-                                disabled={this.submitButtonDisabled || !this.selectedHardwareIds.length}
-                            />
+                            <button className="btn-primary"
+                                    disabled={this.submitButtonDisabled || !this.selectedHardwareIds.length}
+                                    id="add-new-package-confirm"
+                            >
+                                Add
+                            </button>
                         </div>
                     </div>
                 </div>
             </Form>
         );
         return (
-            <Modal 
+            <Modal
                 title={(
-                    <span>
-                        <img src="/assets/img/icons/white/packages.png" alt="Icon" className="header-icon" />                    
-                        <span className="header-text">Add new package</span>
-                    </span>
+                    <div className="heading">
+                        <div className="internal">
+                            Add new package
+                        </div>
+                    </div>
                 )}
                 content={directorForm}
                 shown={shown}

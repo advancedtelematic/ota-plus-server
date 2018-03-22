@@ -83,7 +83,12 @@ class Devices extends Component {
                     :
                         <div className="wrapper-center">
                             <div className="page-intro">
-                                <div>You haven't created any devices yet.</div>
+                                <div>
+                                    <img src="/assets/img/icons/white/devices.png" alt="Icon" />
+                                </div>
+                                <div>
+                                    You haven't created any devices yet.
+                                </div>
                             </div>
                         </div>
                 }

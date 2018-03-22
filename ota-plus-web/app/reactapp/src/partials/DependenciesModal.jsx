@@ -533,13 +533,7 @@ class DependenciesModal extends Component {
       const { shown, hide, packagesStore, campaignsStore, devicesStore } = this.props;
       const content = (
           this.loaded ?
-            <span>
-              <div className="heading">
-                <span>Dependencies</span>
-                <a href="#" id="close-sankey" className="close-sankey" title="Close sankey" onClick={hide.bind(this)}>
-                    <img src="/assets/img/icons/white/cross.svg" alt="Icon" />
-                </a>
-              </div>
+            <span>              
               {this.nodes.length && this.links.length ?
                 <div className={(this.nodes.length <= 3 ? "sankey-minimized" : "")}>
                   <Sankey
@@ -569,9 +563,9 @@ class DependenciesModal extends Component {
                 </div>
               }
               <div className="footer">
-                <a href="#" onClick={hide.bind(this)} className="link-cancel">Close</a>
+                <a href="#" onClick={hide.bind(this)} className="link-cancel btn-primary">Close</a>
                 {this.showOnlyActive ?
-                  <button className="btn-main" onClick={this.showFullGraph.bind(this)}>
+                  <button className="btn-primary" onClick={this.showFullGraph.bind(this)}>
                     Show all
                   </button>
                 :
@@ -586,6 +580,13 @@ class DependenciesModal extends Component {
       );
       return (
         <Modal
+          title={
+            <div className="heading">
+              <div className="internal">
+                Dependencies
+              </div>
+            </div>
+          }
           content={content}
           shown={shown}
           className="dependencies-modal"

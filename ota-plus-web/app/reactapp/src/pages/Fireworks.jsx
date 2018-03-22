@@ -29,19 +29,19 @@ class Fireworks extends Component {
                                 CONGRATULATIONS
                             </div>
                             <div className="body">
-                                <img src="/assets/img/icons/Fireworks_screen.gif" alt="Image" />
+                                <img src="/assets/img/icons/fireworks_check.svg" alt="Image" />
                                 <div className="subtitle">
                                     Your first device is online!
                                 </div>
                                 <div className="text">
                                     Every time you build a new image, you can send it to this device over the air.
                                 </div>
+                                <div className="action">
+                                    <button className="btn-primary" onClick={this.acknowledgeFireworks}>
+                                        Go to my device
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <div className="manage">
-                            <button className="btn btn-main btn-manage" onClick={this.acknowledgeFireworks}>
-                                Go to my device
-                            </button>
                         </div>
                 	</div>
                 </div>

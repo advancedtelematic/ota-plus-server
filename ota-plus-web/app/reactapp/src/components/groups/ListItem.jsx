@@ -35,8 +35,6 @@ class ListItem extends Component {
                     onClick={() => {
                         selectGroup({type: 'real', name: group.groupName, id: group.id});
                     }}>
-                    <div className="actions">
-                    </div>
                     <div className="icon"></div>
                     <div className="desc">
                         <div className="title">
