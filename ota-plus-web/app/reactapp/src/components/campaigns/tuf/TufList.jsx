@@ -55,6 +55,7 @@ class TufList extends Component {
                             return (
                                 <span key={campaign.id}>
                                     <CampaignsTufListItem 
+                                        expandedCampaignName={expandedCampaignName}
                                         toggleCampaign={toggleCampaign}
                                         campaign={campaign}
                                         type="inPreparation"
@@ -104,6 +105,7 @@ class TufList extends Component {
                             return (
                                 <span key={campaign.id}>
                                     <CampaignsTufListItem 
+                                        expandedCampaignName={expandedCampaignName}
                                         toggleCampaign={toggleCampaign}
                                         campaign={campaign}
                                         type="running"
@@ -146,6 +148,7 @@ class TufList extends Component {
                             return (
                                 <span key={campaign.id}>
                                     <CampaignsTufListItem 
+                                        expandedCampaignName={expandedCampaignName}
                                         toggleCampaign={toggleCampaign}
                                         campaign={campaign}
                                         type="finished"
@@ -188,6 +191,7 @@ class TufList extends Component {
                             return (
                                 <span key={campaign.id}>
                                     <CampaignsTufListItem 
+                                        expandedCampaignName={expandedCampaignName}
                                         toggleCampaign={toggleCampaign}
                                         campaign={campaign}
                                         type="cancelled"
