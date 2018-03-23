@@ -94,12 +94,12 @@ class CreateModal extends Component {
                             :
                                 <FormSelect
                                     multiple={true}
-                                    appendMenuToBodyTag={true}
+                                    appendMenuToBodyTag={false}
                                     label="Version"
                                     id="hardware-ids-select"
                                     placeholder="Select Hardware ids"
                                     onChange={this.selectHardwareIds}
-                                    visibleFieldsCount={8}
+                                    visibleFieldsCount={4}
                                     defaultValue={_.isArray(this.selectedHardwareIds) ? this.selectedHardwareIds : null}
                                     options={hardwareStore.hardwareIds}
                                 />

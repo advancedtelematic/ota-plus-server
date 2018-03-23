@@ -7,10 +7,11 @@ class NoHistoryItem extends Component {
     }
     render() {
         const { date } = this.props;
+        const dateFormatted = date.format('MMM YYYY');
         return (
-            <li className="flex-row">
+            <li className="flex-row" id={"no-history-" + dateFormatted}>
                 <div className="flex-column-main">
-                    {date.format('MMM YYYY')}
+                    {dateFormatted}
                 </div>
                 <div className="flex-column">
                     No history

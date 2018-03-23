@@ -43,7 +43,7 @@ class ListItemArtificial extends Component {
                         <div className="title">
                             {group.friendlyName}
                         </div>
-                        <div className="subtitle">
+                        <div className="subtitle" id={"group-" + group.name + "-devices"}>
                             {t('common.deviceWithCount', {count: deviceCount})}
                         </div>
                     </div>
