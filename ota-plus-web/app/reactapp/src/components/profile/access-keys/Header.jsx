@@ -17,7 +17,7 @@ class Header extends Component {
                     <SearchBar 
                         value={provisioningFilter}
                         changeAction={changeFilter}
-                        id="search-devices-input"
+                        id="search-keys-input"
                         additionalClassName={'white'}
                     />
                 </Form>

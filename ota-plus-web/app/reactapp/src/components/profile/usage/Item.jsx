@@ -21,12 +21,13 @@ class Item extends Component {
     }
     render() {
         const {usage, fetch, date } = this.props;
+        const dateFormatted = date.format('MMM YYYY');
         return (
             <li className="flex-row">
-                <div className="flex-column-main">
-                    {date.format('MMM YYYY')}
+                <div className="flex-column-main" id={"month-" + dateFormatted}>
+                    {dateFormatted}
                 </div>
-                <div className="flex-column" id={`target_total_activated_devices_${usage.active}`}>
+                <div className="flex-column" id={`target_total_activated_devices_${dateFormatted}`}>
                     {fetch.active.isFetching ?
                         <Loader
                             size={20}
@@ -36,7 +37,7 @@ class Item extends Component {
                         usage.active
                     }
                 </div>
-                <div className="flex-column" id={`target_total_activated_devices_${usage.active}`}>
+                <div className="flex-column" id={`target_total_activated_devices_this_month_${dateFormatted}`}>
                     {fetch.activated.isFetching ?
                         <Loader
                             size={20}
@@ -46,7 +47,7 @@ class Item extends Component {
                         usage.activated
                     }
                 </div>
-                <div className="flex-column" id={`target_total_activated_devices_${usage.numberOfDevices}`}>
+                <div className="flex-column" id={`target_total_connected_devices_this_month_${dateFormatted}`}>
                     {fetch.connected.isFetching ?
                         <Loader
                             size={20}

@@ -118,7 +118,7 @@ class FormSelect extends Component {
             multiple = true,
             label,
             placeholder,
-            options, id,
+            options, id = '',
             inputWidth = '100%',
             wrapperWidth = '100%',
             defaultValue,
@@ -142,7 +142,8 @@ class FormSelect extends Component {
                        style={{width: inputWidth}}
                        value={inputValue}
                        placeholder={placeholder}
-                       onClick={this.toggleMenu}/>
+                       onClick={this.toggleMenu}
+                       id={id}/>
                 {inputValue.length ?
                     <i className={`fa fa-check c-form__select-icon`}/>
                     :
@@ -151,7 +152,7 @@ class FormSelect extends Component {
                 {showDropDown && !appendMenuToBodyTag ?
                     <select size={visibleFieldsCount}
                             className="c-form__select"
-                            multiple={multiple} id={id}>
+                            multiple={multiple} id={'select-' + id}>
                         {options.map((value, index) => {
                             const selected = _.contains(selectedOptions, value);
                             if (_.isObject(value)) {
