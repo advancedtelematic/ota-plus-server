@@ -58,7 +58,6 @@ export default class PackagesStore {
     @observable preparedPackages = [];
     @observable packagesSort = 'asc';
     @observable preparedOndevicePackages = {};
-    @observable packagesOndeviceFilter = null;
     @observable packagesOndeviceSort = 'asc';
     @observable packagesUploading = [];
     @observable blacklist = [];
@@ -796,7 +795,6 @@ export default class PackagesStore {
         this.preparedPackages = [];
         this.packagesSort = 'asc';
         this.preparedOndevicePackages = {};
-        this.packagesOndeviceFilter = null;
         this.packagesOndeviceSort = 'asc';
         this.packagesUploading = [];
         this.blacklist = [];
