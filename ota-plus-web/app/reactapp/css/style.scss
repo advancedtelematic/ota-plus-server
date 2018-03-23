@@ -82,6 +82,9 @@ $font: 'akkurat';
 
 .dialog {
     .content {
+        &>div {
+            font-family:'Fira Sans', sans-serif !important;
+        }
         .heading {
             background: #fff !important;
             color: #0F1621 !important;
@@ -513,15 +516,16 @@ input {
         margin-right: 0;
 
         .navbar-brand {
-            background: url('/assets/img/atsgarage_white.png') no-repeat;
-            background-size: cover;
-            width: 60px;
-            height: 41px;
+            background: url('/assets/img/HERE_Logo_2016.png') no-repeat;
+            background-size: contain;
+            width: 33.12px;
+            height: 40px;
+            background-position-y: center;
         }
     }
 
     #navbar {
-        margin: 0 0 0 30px;
+        margin: 0 0 0 50px;
         float: left;
 
         .navbar-nav {
@@ -533,10 +537,11 @@ input {
                 > a {
                     color: $devices-group-text;
                     height: 50px;
-                    padding: 15px 7px;
+                    padding: 15px 20px;
                     margin: 0 10px;
                     @include transition;
-                    font-size: 14px;
+                    font-weight: 300;
+                    font-size: 18px;
 
                     &:hover, &:focus, &:active {
                         color: #fff;
@@ -786,6 +791,7 @@ input {
     }
 
     .input-wrapper {
+        font-family:'Fira Sans', sans-serif !important;
         width: 280px !important;
         height: 28px !important;
 
@@ -2737,6 +2743,7 @@ input {
 .queue-modal {
     margin-top: 130px;
     margin-left: 55px;
+    font-family:'Fira Sans', sans-serif !important;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 45px, rgba(0, 0, 0, 0.22) 0px 10px 18px!important;
     border-radius: 10px!important;
     overflow-y: visible !important;
@@ -2809,6 +2816,7 @@ input {
 
                 .tab-item {
                     color: $color-lightgrey !important;
+                    font-family:'Fira Sans', sans-serif !important;
                     height: 31px;
                     border: 1px solid #ccc !important;
 
