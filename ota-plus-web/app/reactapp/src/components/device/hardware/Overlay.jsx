@@ -66,6 +66,7 @@ class Overlay extends Component {
                                             value={hardwareStore.hardwareFilter}
                                             changeAction={this.changeFilter}
                                             id="search-installed-hardware-input"
+                                            additionalClassName="white"
                                         />
                                     </Form>
                                 </SubHeader>

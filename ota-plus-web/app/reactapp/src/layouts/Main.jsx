@@ -39,7 +39,6 @@ class Main extends Component {
     @observable router = null;
     @observable systemReady = false;
     @observable pagesWithRedirectToWelcome = ['page-welcome', 'page-destiny'];
-    @observable pagesWithWhiteBackground = ['welcome', 'destiny', 'fireworks', 'device'];
     @observable pagesWithGradientBackground = ['login'];
     @observable pagesWithHiddenNavbar = ['page-login'];
     @observable numOfWizards = 0;
@@ -64,7 +63,6 @@ class Main extends Component {
         });
         this.locationHasChanged = this.locationHasChanged.bind(this);
         this.setSystemReady = this.setSystemReady.bind(this);
-        this.makeBodyWhite = this.makeBodyWhite.bind(this);
         this.makeBodyGradient = this.makeBodyGradient.bind(this);
         this.backButtonAction = this.backButtonAction.bind(this);
         this.addNewWizard = this.addNewWizard.bind(this);
@@ -115,7 +113,6 @@ class Main extends Component {
             }
         });
 
-        this.makeBodyWhite();
         this.makeBodyGradient();
     }
     callFakeWsHandler() {
@@ -225,7 +222,6 @@ class Main extends Component {
         this.uploadBoxMinimized = !this.uploadBoxMinimized;
     }
     locationHasChanged() {
-        this.makeBodyWhite();
         this.makeBodyGradient();
     }
     setSystemReady(value) {
@@ -244,14 +240,6 @@ class Main extends Component {
             document.body.className += " gradient";
         } else {
             document.body.classList.remove("gradient");
-        }
-    }
-    makeBodyWhite() {
-        let pageName = this.props.location.pathname.toLowerCase().split('/')[1];
-        if(_.includes(this.pagesWithWhiteBackground, pageName)) {
-            document.body.className += " whitened";
-        } else {
-            document.body.classList.remove("whitened");
         }
     }
     componentWillUnmount() {

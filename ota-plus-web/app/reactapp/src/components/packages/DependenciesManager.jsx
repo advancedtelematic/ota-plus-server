@@ -183,8 +183,8 @@ class DependenciesManager extends Component {
                         })}
                     </div>
                 </div>
-                <div className="footer">
-                    <a href="#" onClick={hide.bind(this)} className="link-cancel" id="link-close">Close</a>
+                <div className="body-actions">
+                    <a href="#" onClick={hide.bind(this)} className="link-cancel" id="link-close" style={{margin: 0}}>Close</a>
                 </div>
             </span>
         );
