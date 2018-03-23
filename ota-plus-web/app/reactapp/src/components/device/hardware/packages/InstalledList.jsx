@@ -118,9 +118,10 @@ class InstalledList extends Component {
                 <SubHeader>
                     <Form>
                         <SearchBar
-                            value={packagesStore.packagesOndeviceFilter}
+                            value={packagesStore.ondeviceFilter}
                             changeAction={this.changeFilter}
                             id="search-installed-packages-input"
+                            additionalClassName="white"
                         />
                     </Form>
                 </SubHeader>

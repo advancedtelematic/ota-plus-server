@@ -562,16 +562,17 @@ class DependenciesModal extends Component {
                   This item is not on the chart.
                 </div>
               }
-              <div className="footer">
-                <a href="#" onClick={hide.bind(this)} className="link-cancel">Close</a>
-                {this.showOnlyActive ?
-                  <button className="btn-primary" onClick={this.showFullGraph.bind(this)}>
-                    Show all
-                  </button>
-                :
-                  null
-                }
-              </div>
+             
+              <div className="body-actions">
+                  <a href="#" onClick={hide.bind(this)} className="link-cancel" id="link-close" style={{margin: 0}}>Close</a>
+                  {this.showOnlyActive ?
+                    <button className="btn-primary" onClick={this.showFullGraph.bind(this)} style={{marginLeft: '22px'}}>
+                      Show all
+                    </button>
+                  :
+                    null
+                  }
+              </div>                
             </span>
           :
             <div className="wrapper-center">
