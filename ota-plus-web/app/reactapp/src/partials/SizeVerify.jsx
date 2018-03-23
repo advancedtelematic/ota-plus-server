@@ -47,19 +47,25 @@ class SizeVerify extends Component {
                         />&nbsp;
                         <span>Don't show this again</span>
                     </div>
-                    <FlatButton
-                        label="OK"
-                        type="submit"
-                        className="btn-main"
+                    <button
                         id="size-verify-confirm"
+                        className="btn-primary"
                         onClick={this.handleClick}
-                    />
+                    >
+                        OK
+                    </button>
                 </div>
             </span>
         );
         return (
             <Modal 
-                title="Tip!"
+                title={
+                    <div className="heading">
+                        <div className="internal">
+                            Tip
+                        </div>
+                    </div>
+                }
                 content={content}
                 shown={!this.sizeVerifyHidden}
                 className="size-verify-modal"
