@@ -80,6 +80,7 @@ class EditProfile extends Component {
                                             placeholder={"Name"}
                                             defaultValue={userStore.user.fullName}
                                             wrapperWidth={"50%"}
+                                            id={"display-name"}
                                         />
                                     </div>
                                     <div className="form-input-container">
@@ -92,10 +93,11 @@ class EditProfile extends Component {
                                             defaultValue={userStore.user.email}
                                             isEditable={false}
                                             wrapperWidth={"50%"}
+                                            id={"login"}
                                         />
                                     </div>
                                     <div className="form-input-container">
-                                        <a href="#" className="add-button" onClick={this.changePassword}>
+                                        <a href="#" className="add-button" onClick={this.changePassword} id="change-password">
                                             Change password
                                         </a>
                                     </div>
@@ -104,6 +106,7 @@ class EditProfile extends Component {
                                             className="btn-primary"
                                             id="save-changes"
                                             disabled={this.submitButtonDisabled || userStore.userUpdateAsync.isFetching}
+                                            id="save-changes"
                                         >
                                             Save changes
                                         </button>
