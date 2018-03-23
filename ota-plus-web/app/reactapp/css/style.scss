@@ -48,6 +48,7 @@ $font: 'akkurat';
 
     &.grey-button {
         color: $add-button-grey;
+        font-weight: 300;
 
         &:hover {
             color: $add-button-grey;
