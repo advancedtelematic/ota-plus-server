@@ -2699,17 +2699,16 @@ input {
         text-align: center !important;
         width: 550px !important;
 
-        .heading {
-            color: $color-darkgrey !important;
-            background: $color-mint !important;
-        }
+        .body-actions {
+            justify-content: space-between;
 
-        .body {
-            .body-actions {
-                .wrapper-checkbox {
-                    margin: 15px 0 0 0;
-                    float: left;
-                }
+            .wrapper-checkbox {
+                display: flex;
+                align-items: center;
+            }
+
+            input[type=checkbox] {
+                margin: 0;
             }
         }
     }
