@@ -23,6 +23,13 @@ $font: 'akkurat';
     font-size: 12px;
 }
 
+.add-package-modal {
+
+    .hardware-ids-select {
+        margin-top: 10px;
+    }
+}
+
 .add-button {
     text-transform: none;
     color: $home-header-button;
@@ -732,12 +739,6 @@ input {
     display: flex;
     flex-direction: column;
 
-    &.whitened {
-        background: url(/assets/img/bg_white.png) no-repeat 100px 170px;
-        background-attachment: fixed;
-        background-size: cover;
-    }
-
     .content {
         height: 100%;
         overflow-y: auto;
@@ -749,10 +750,6 @@ input {
     }
 }
 
-.content-flex {
-    flex: 1;
-}
-
 .subheader {
     background: $home-grey;
     height: 40px;
@@ -762,95 +759,8 @@ input {
     padding: 0 25px;
     border-bottom: 1px solid rgba(0,0,0,0.1);    
 
-    form {
-        display: inline-block;
-        .input-wrapper.search {
-            hr {
-                display: none;
-            }
-        }
-    }
-
-    .sort-box {
-        vertical-align: top;
-        margin: 12px 0 0 0;
-    }
-
-    .status-box {
-        height: auto !important;
-        margin: 6px 8px 0 8px !important;
-        float: right !important;
-        vertical-align: top !important;
-
-        & > div {
-            & > div {
-                &:nth-child(2) {
-                    color: #888 !important;
-                    font-size: 12px !important;
-                    line-height: 28px !important;
-                    background: #fff !important;
-                    background: -moz-linear-gradient(bottom, #fefefe 0%, #f3f3f3 100%) !important;
-                    background: -webkit-linear-gradient(bottom, #fefefe 0%, #f3f3f3 100%) !important;
-                    background: linear-gradient(to top, #fefefe 0%, #f3f3f3 100%) !important;
-                    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3f3f3', endColorstr='#fefefe',GradientType=0 ) !important;
-                    min-width: 90px !important;
-                    height: 27px !important;
-                    padding-left: 15px !important;
-                    padding-right: 25px !important;
-                    border-radius: 20px !important;
-                }
-            }
-        }
-
-        button {
-            height: 27px !important;
-            right: 0px !important;
-            top: 0 !important;
-
-            div {
-
-                svg {
-                    display: none !important;
-                }
-
-                &:after {
-                    color: $color-lightgrey;
-                    content: '\f107';
-                    font-family: FontAwesome;
-                    font-size: 12px;
-                    position: absolute;
-                    top: 6px;
-                    right: 10px;
-                }
-            }
-        }
-    }   
-
-    .setup-file-uploader {
-        float: right;
-        color: white;
-        margin-top: 11px;
-        margin-right: 15px;
-        text-decoration: underline;
-    }
-}
-
-.btn-add {
-    float: right !important;
-    margin: 6px 15px 0 0 !important;
-    color: black!important;
-    display: flex !important;
-    align-items: center;
-
-    div {
-        display: flex !important;
-        span {
-
-        }
-    }
-
-    &:before {
-        font-size: 10px;
+    hr {
+        display: none;
     }
 }
 
@@ -921,7 +831,6 @@ input {
     .file-name {
         margin: 0 0 0 20px;
         display: inline-block;
-        vertical-align: sub;
     }
 }
 
@@ -954,11 +863,6 @@ input {
         margin-top: 15px;
         display: block;
     }
-}
-
-.main-title {
-    font-size: 22px;
-    font-weight: bold;
 }
 
 .element-box {
@@ -1126,11 +1030,6 @@ input {
                     align-items: center;
                     padding-right: 70px;
                     margin-bottom: 25px;
-
-                    .fa-angle-up {
-                        font-size: 2.8em;
-                        color: $home-header-button;
-                    }
 
                     .rename-container {
                         position: relative;
@@ -1538,10 +1437,6 @@ input {
     padding: 0 25px;
 }
 
-.icon-back {
-    margin: 0 20px 0 0;
-}
-
 .common-box {
     color: #fff;
     text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
@@ -1751,25 +1646,6 @@ input {
         &.edit {
             background-image: url('/assets/img/icons/ban_red.png');
         }
-    }
-}
-
-.version-menu-item {
-    line-height: 15px!important;
-    min-height: 0!important;
-    font-size: 13px!important;
-    padding: 5px 20px!important;
-
-    .version-hash, .version-created-at {
-        float: none!important;
-        display: block;
-    }
-    div {
-        padding: 0!important;
-    }
-
-    &.blacklisted {
-        background: #f3bdbd!important;
     }
 }
 
@@ -2286,6 +2162,7 @@ input {
     .description {
         margin-bottom: 15px;
     }
+
     .github {
         margin-bottom: 15px;
         
@@ -2308,72 +2185,13 @@ input {
         .sankey-minimized {
             margin: 75px auto;
         }
-
-        .rv-sankey {
-            margin: auto;
-        }
-
-        .body {
-            padding: 0!important;
-            overflow-y: hidden!important;
-
-            .heading {
-                display: flex!important;
-                align-items: center;
-                justify-content: center;
-
-                .close-sankey {
-                    position: absolute;
-                    right: 15px;
-                    top: 15px;
-
-                    img {
-                        width: 19px;
-                    }
-                }
-            }
-
-            .footer {
-                padding: 20px!important;
-                border-top: 1px solid #e5e5e5;
-                background: #f7f7f7;
-                display: flex;
-                justify-content: flex-end;
-                align-items: center;
-            }
-        }
     }
 }
 
 .dependencies-manager-modal {
 
     .content {
-        .body {
-            overflow-y: hidden!important;
-
-            .footer {
-                padding-top: 30px;
-                display: flex;
-                justify-content: flex-end;
-                align-items: center;
-
-                .link-cancel {
-                    margin: 0;
-                }
-            }
-        }
-    }
-
-    .close-manager {
-
-        img {
-            width: 19px;
-        }
-    }
-
-    .content {
         section {
-            background: #fff;
             border-bottom: 1px solid #e5e5e5;
             padding: 15px 5px;
             display: flex;
@@ -2390,6 +2208,7 @@ input {
 
                 &:first-child {
                     width: 40%;
+                    font-weight: 500;
                 }
 
                 &:last-child {
@@ -2401,20 +2220,13 @@ input {
         .other-packs-list {
             overflow-y: auto;
             max-height: 400px;
-            font-weight: 300;
-
-            .name {
-                font-weight: 500;
-            }
 
             .name, .value {
                 color: #202020;
             }
 
             .versions {
-                display: flex;
-                flex-direction: column;
-
+              
                 .item {
                     display: flex;
                     align-items: center;
@@ -2427,10 +2239,8 @@ input {
                     }
 
                     .status {
-                        text-align: right;
                         width: 15px;
                         height: 15px;
-                        display: inline-block;
                         margin-left: 5px;
                         cursor: pointer;
 
@@ -2479,7 +2289,6 @@ input {
 
     .body {
         text-align: center;
-        padding-top: 20px !important;
 
         .subactions {
             text-align: right;
@@ -2519,17 +2328,7 @@ input {
     }
 }
 
-.sort-box {
-    display: inline-block;
-
-    a {
-        color: #fff;
-    }
-}
-
-.create-group-modal, .rename-group-modal,
-.create-device-modal, .rename-device-modal,
-.create-campaign-modal, .rename-campaign-modal {
+.create-group-modal {
 
     .content {
         width: 500px !important;
@@ -2609,25 +2408,21 @@ input {
     }
 }
 
-.cancel-campaign-modal, .cancel-campaign-group-modal {
+.cancel-campaign-modal {
     .content {
         width: 550px !important;
 
         .body {
-            font-size: 13px !important;
             text-align: center;
 
             .element-box {
+                display: block;
                 width: 100%;
                 height: auto;
                 margin: 0 0 30px 0;
                 border: 0;
 
-                &:hover {
-                    background: transparent;
-                }
-
-                &.campaign, &.group {
+                &.campaign {
                     .icon {
                         border: 2px solid #ddd;
                         margin: 0;
@@ -2656,19 +2451,9 @@ input {
                         background-image: url('/assets/img/icons/black/campaigns.png');
                     }
                 }
-
-                &.group {
-                    .icon {
-                        background-image: url('/assets/img/icons/groups.png');
-                    }
-                }
             }
         }
     }
-}
-
-.alert {
-    text-align: left;
 }
 
 .dnd-zone {
@@ -2711,99 +2496,6 @@ input {
                 margin: 0;
             }
         }
-    }
-}
-
-div[role=presentation] {
-    width: auto!important;
-}    
-
-.add-package-modal {
-
-    .content {
-
-        .heading {
-
-            .header-icon {
-                width: 50px;
-                margin-top: -3px;
-            }
-            .header-text {
-                display: inline-block;
-                margin: 9px 0;
-            }
-        }
-    }
-
-    .package-manager {
-        background: #F7F7F7;
-        padding: 20px;
-    }
-
-    #package-create-form {
-
-        .hardware-ids-select {
-            margin-top: 11px;
-        }
-
-        .upload-wrapper {
-            margin: 15px 0;
-        }
-    }
-
-    .switch {
-        margin-top: 3px;
-        background: white!important;
-
-        &.switchOn {
-
-            &:before {
-                background: #9ce2d8!important;
-            }
-
-            .switch-status {
-                color: black;
-            }
-        }
-    }
-
-    .tuf-title {
-        float: left;
-        font-size: 18px;
-    }
-
-    .docs {
-        float: left;
-        margin-top: 3px;
-        margin-left: 15px;
-
-        .link {
-            color: $color-darkgrey;
-            font-size: 12px;
-            background: $color-mint;
-            padding: 1px 5px;
-            border-radius: 10px;
-            margin: 0 5px;
-        }
-    }
-
-    .tuf-icon {
-        img {
-            width: 40px;
-        }
-    }
-
-    .tuf-description {
-        font-size: 13px;
-        color: rgba(0, 0, 0, 0.4);
-        display: flex;
-        align-items: center;
-        height: 40px;
-    }
-
-    .switch-row {
-        padding-bottom: 10px;
-        overflow: hidden;
     }
 }
 
@@ -2911,28 +2603,9 @@ div[role=presentation] {
 }
 
 .provisioning-key-tooltip {
+    
     .text-center {
         padding: 50px;
-    }
-
-    .body-actions {
-        .btn-main {
-            padding: 15px 80px!important;
-            margin: 15px!important;
-        }
-    }
-
-    .provisioning-tooltip-header img {
-        width: 20px;
-        margin-right: 10px;
-    }
-}
-
-.package-stats-modal {
-    .content {
-        .heading {
-            background: #222 !important;
-        }
     }
 }
 
@@ -2946,46 +2619,23 @@ div[role=presentation] {
         width: 400px;
     }
 
-    .heading {
-        color: #fff;
-        font-size: 18px;
-        text-align: center;
-        background: #4B5151;
-        height: 50px;
-        padding: 14px 15px;
-        border: 0;
-        position: relative;
+    .content {
 
-        .box-toggle {
-            color: #fff;
-            font-size: 40px;
-            float: right;
-            margin-top: -5px;
+        .heading {
+            color: #fff!important;
+            background: #4B5151!important;
 
-            &:last-child {
-                margin-right: 15px;
-            }
+            .box-toggle {
+                color: #fff;
+                font-size: 40px;
+                float: right;
 
-            .fa-times-thin:before {
-                content: '\00d7';
-            }
-        }
+                &:last-child {
+                    margin-right: 10px;
+                }
 
-        .box-close {
-            color: #fff;
-            position: absolute;
-            top: 6px;
-            right: 15px;
-            -webkit-text-stroke: 1px #fff;
-
-            .fa-stack {
-                font-size: 26px;
-                line-height: 1.7em;
-                width: 30px;
-                height: 40px;
-
-                .fa-angle-down {
-                    top: -5px;
+                .fa-times-thin:before {
+                    content: '\00d7';
                 }
             }
         }
@@ -3540,18 +3190,6 @@ div[role=presentation] {
 }
 
 .hardware-pk-popover {
-    overflow-y: visible!important;
-
-    pre {
-        font-size: 12px;
-    }
-
-    div {
-
-        &:first-child {
-            overflow-y: visible!important;
-        }
-    }
 
     .triangle {
         width: 0;
@@ -3606,14 +3244,11 @@ div[role=presentation] {
 .clipboard-copied {
     color: red;
     font-size: 11px;
-    padding: 0 10px;
 }
 
 .packages-stats {
 
     .chart-panel {
-        background: transparent;
-        overflow: hidden;
 
         .total-count {
             position: absolute;
@@ -3622,15 +3257,9 @@ div[role=presentation] {
             color: #666;
         }
 
-        .hide {
-            display: none;
-        }
-
         .wrapper-center {
-            font-size: 12px;
 
             &.left {
-                justify-content: left;
                 text-align: left;
             }
         }
@@ -3674,31 +3303,8 @@ div[role=presentation] {
         overflow: hidden;
     }
 }
-.package-stats-modal {
-    .close  {
-        background-image: url(/assets/img/icons/close_white.png);
-        margin: 0;
-        width: 24px;
-        height: 24px;
-        border: 0;
-        border-radius: 0;
-        opacity: 0.8;
-    }
-
-    .icon {
-        width: 26px;
-        margin: -5px 0 0 0;
-    }
-}
-
-.fixed {
-    position: fixed;
-    overflow: hidden;
-    padding-bottom: 5px;
-}
 
 .hardware-overlay-modal {
-    padding-top: 0!important;
     left: 19% !important;
     top: 225px !important;
     overflow-y: visible !important;
@@ -3819,8 +3425,12 @@ div[role=presentation] {
                 }
             }
 
+            .subheader {
+                justify-content: flex-start;
+            }
+
             .hardware-details {
-                padding: 0 0 0 50px;
+                padding: 0 0 0 50px;                
 
                 .table {
                     margin-bottom: 0;

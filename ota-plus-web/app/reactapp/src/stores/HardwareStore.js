@@ -50,6 +50,7 @@ export default class HardwareStore {
     }
 
     _filterHardware(filter) {
+        this.hardwareFilter = filter;
         let searchResults = [];
         _.each(this.hardware, (objects, index) => {
             _.each(objects, (value, property) => {

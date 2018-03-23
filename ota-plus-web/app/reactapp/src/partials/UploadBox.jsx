@@ -94,13 +94,17 @@ class UploadBox extends Component {
         });
         const heading = (
             <div className="heading">
-                Uploading {t('common.packageWithCount', {count: packagesStore.packagesUploading.length})}
-                <a href="#" className="box-toggle pack-box-close" title="Toggle upload box size" onClick={this.close}>
-                    <i className="fa fa-times fa-times-thin" aria-hidden="true" id="close-upload-box"></i>
-                </a>
-                <a href="#" className="box-toggle pack-box-minimize" title="Toggle upload box size" onClick={this.toggleMode}>
-                    <i className="fa fa-angle-down" aria-hidden="true" id="minimize-upload-box"></i>
-                </a>
+                <div className="internal">
+                    Uploading {t('common.packageWithCount', {count: packagesStore.packagesUploading.length})}
+                    <div className="heading-actions">
+                        <a href="#" className="box-toggle pack-box-close" title="Toggle upload box size" onClick={this.close}>
+                            <i className="fa fa-times fa-times-thin" aria-hidden="true" id="close-upload-box"></i>
+                        </a>
+                        <a href="#" className="box-toggle pack-box-minimize" title="Toggle upload box size" onClick={this.toggleMode}>
+                            <i className="fa fa-angle-down" aria-hidden="true" id="minimize-upload-box"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         );
         const uploadBoxData = (                 
