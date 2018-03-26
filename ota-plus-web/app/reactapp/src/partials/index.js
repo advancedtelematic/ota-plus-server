@@ -17,6 +17,7 @@ import Sequencer from './Sequencer';
 import {Form} from './Form';
 import FormInput from './FormInput';
 import FormSelect from './FormSelect';
+import FormTextarea from './FormTextarea';
 
 export {
     Navigation,
@@ -37,5 +38,6 @@ export {
     Sequencer,
     Form,
     FormInput,
-    FormSelect
+    FormSelect,
+    FormTextarea
 }
