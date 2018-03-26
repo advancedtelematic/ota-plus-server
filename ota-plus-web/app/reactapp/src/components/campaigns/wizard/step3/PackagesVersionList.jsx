@@ -26,12 +26,12 @@ class PackagesVersionList extends Component {
             }
         });
     }
-    selectVersion(data, event, index, value) {
-        data.filepath = event ? event.target.value : value;
+    selectVersion(data, obj, index, value) {
+        data.filepath = obj ? obj.value : value;
         this.props.selectVersion(data);
     }
-    selectHardwareId(data, event) {
-        data.hardwareId = event.target.value;
+    selectHardwareId(data, obj) {
+        data.hardwareId = obj.value;
         this.props.selectVersion(data);
     }
     componentWillMount() {
@@ -126,6 +126,7 @@ class PackagesVersionList extends Component {
                                         id="available-tuf-packages"
                                         options={tufPackages}
                                         label="From"
+                                        multiple={false}
                                         wrapperWidth="100%"
                                         visibleFieldsCount={5}
                                         appendMenuToBodyTag={true}
@@ -139,7 +140,7 @@ class PackagesVersionList extends Component {
                                         label="To"
                                         name="package-to"
                                         isEditable={false}
-                                        inputWidth="30%"
+                                        inputWidth="100%"
                                         defaultValue={pack.packageName}
                                         inDirector={true}
                                     />
@@ -158,6 +159,7 @@ class PackagesVersionList extends Component {
                                         visibleFieldsCount={this.fromVersions.length < 4 ? this.fromVersions.length : 4}
                                         appendMenuToBodyTag={true}
                                         label="Version"
+                                        multiple={false}
                                         defaultValue={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].fromFilepath : null}
                                         onChange={this.selectVersion.bind(this, {type: 'from', packageName: pack.packageName})}
                                         placeholder="Select from version"
@@ -170,6 +172,7 @@ class PackagesVersionList extends Component {
                                         visibleFieldsCount={versions.length < 4 ? versions.length : 4}
                                         appendMenuToBodyTag={true}
                                         label="Version"
+                                        multiple={false}
                                         defaultValue={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].toFilepath : null}
                                         onChange={this.selectVersion.bind(this, {type: 'to', packageName: pack.packageName})}
                                         placeholder="Select to version"
@@ -183,6 +186,7 @@ class PackagesVersionList extends Component {
                                     id="hardware-ids-select-field"
                                     options={hardwareIds}
                                     label="On"
+                                    multiple={false}
                                     visibleFieldsCount={hardwareIds.length < 4 ? hardwareIds.length  : 4}
                                     appendMenuToBodyTag={true}
                                     defaultValue={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].hardwareId : null}
