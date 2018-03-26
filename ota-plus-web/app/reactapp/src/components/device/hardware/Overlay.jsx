@@ -20,7 +20,8 @@ class Overlay extends Component {
         super(props);
         this.showPackagesList = this.showPackagesList.bind(this);
         this.showHardwareInfo = this.showHardwareInfo.bind(this);
-        this.changeFilter = this.changeFilter.bind(this);
+        this.changeHardwareFilter = this.changeHardwareFilter.bind(this);
+        this.changePackagesFilter = this.changePackagesFilter.bind(this);
     }
     componentWillMount() {
         this.props.hardwareStore.fetchHardware(this.props.device.uuid);
@@ -30,14 +31,18 @@ class Overlay extends Component {
     showPackagesList(e) { 
         if(e) e.preventDefault();
         this.hardwareInfoShown = false;
+        this.changePackagesFilter('');
     }
     showHardwareInfo(e) {
         if(e) e.preventDefault();
         this.hardwareInfoShown = true;
-        this.changeFilter('');
+        this.changeHardwareFilter('');
     }
-    changeFilter(filter) {
+    changeHardwareFilter(filter) {
         this.props.hardwareStore._filterHardware(filter);
+    }
+    changePackagesFilter(filter) {
+        this.props.packagesStore.fetchOndevicePackages(this.props.device.uuid, filter);
     }
     render() {
         const { hardwareStore, hideHardwareOverlay, shown, packagesStore, device, showPackageBlacklistModal, onFileDrop, hardwareOverlayAnchor } = this.props;
@@ -52,39 +57,54 @@ class Overlay extends Component {
                 </div>
             :
                 <div id="hardware-overlay">
-                    <div className="details">
-                        <Switch
-                            hardwareInfoShown={this.hardwareInfoShown}
-                            showHardwareInfo={this.showHardwareInfo}
-                            showPackagesList={this.showPackagesList}
-                        />
-                        {this.hardwareInfoShown ?
-                            <div className="hardware-details">
-                                <SubHeader>
-                                    <Form>
-                                        <SearchBar
-                                            value={hardwareStore.hardwareFilter}
-                                            changeAction={this.changeFilter}
-                                            id="search-installed-hardware-input"
-                                            additionalClassName="white"
-                                        />
-                                    </Form>
-                                </SubHeader>
-                                <DeviceHardwareReportedList
-                                    hardware={hardwareStore.filteredHardware}
-                                />
+                    <SubHeader>
+                        <div className="nav">
+                            <div className={"item" + (this.hardwareInfoShown ? " active" : "")} onClick={this.showHardwareInfo}>
+                                <span>
+                                    Hardware
+                                </span>
                             </div>
-                        :
-                            <div className="packages-details">
-                                <DeviceHardwarePackagesInstalledList
-                                    packagesStore={packagesStore}
-                                    device={device}
-                                    showPackageBlacklistModal={showPackageBlacklistModal}
-                                    onFileDrop={onFileDrop}
-                                />
+                            <div className={"item" + (!this.hardwareInfoShown ? " active" : "")} onClick={this.showPackagesList}>
+                                <span>
+                                    Packages
+                                </span>
                             </div>
-                        }
-                    </div>
+                        </div>
+                        <Form>
+                            {this.hardwareInfoShown ?
+                                <SearchBar
+                                    value={hardwareStore.hardwareFilter}
+                                    changeAction={this.changeHardwareFilter}
+                                    id="search-installed-hardware-input"
+                                    additionalClassName="white"
+                                />
+                            :
+                                <SearchBar
+                                    value={packagesStore.ondeviceFilter}
+                                    changeAction={this.changePackagesFilter}
+                                    id="search-installed-packages-input"
+                                    additionalClassName="white"
+                                />
+                            }
+                            
+                        </Form>
+                    </SubHeader>
+                    {this.hardwareInfoShown ?                        
+                        <div className="hardware-details">
+                            <DeviceHardwareReportedList
+                                hardware={hardwareStore.filteredHardware}
+                            />
+                        </div>
+                    :
+                        <div className="packages-details">
+                            <DeviceHardwarePackagesInstalledList
+                                packagesStore={packagesStore}
+                                device={device}
+                                showPackageBlacklistModal={showPackageBlacklistModal}
+                                onFileDrop={onFileDrop}
+                            />
+                        </div>
+                    }                    
                 </div>
         );
         return (
@@ -94,7 +114,6 @@ class Overlay extends Component {
                 anchorEl={hardwareOverlayAnchor}
                 anchorOrigin={{horizontal: 'right', vertical: 'center'}}
                 targetOrigin={{horizontal: 'left', vertical: 'center'}}
-                onRequestClose={hideHardwareOverlay}
                 useLayerForClickAway={false}
                 animated={false}
             >
@@ -102,18 +121,17 @@ class Overlay extends Component {
                 <div className="content">
                     <div>
                         <div className="heading">
-                            {this.hardwareInfoShown ?
-                                <span>
-                                    Hardware reported by this ECU
-                                </span>
-                            :
-                                <span>
-                                    Packages reported by this ECU
-                                </span>
-                            }
+                            <div className="internal">
+                                Reports by this ECU
+                            </div>
                         </div>
                         <div className="body">
                             {content}
+                            <div className="body-actions">
+                                <a href="#" className="btn-primary" onClick={hideHardwareOverlay}>
+                                    Close
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

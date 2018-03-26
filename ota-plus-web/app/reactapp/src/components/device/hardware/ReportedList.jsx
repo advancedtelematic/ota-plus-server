@@ -79,7 +79,7 @@ class ReportedList extends Component {
             }, this);
             this.firstShownIndex = firstShownIndex;
             this.lastShownIndex = lastShownIndex !== null ? lastShownIndex : itemsPositions.length - 1;
-            this.fakeHeaderText = newFakeHeaderText;
+            this.fakeHeaderText = newFakeHeaderText.toLowerCase();
             this.fakeHeaderTopPosition = scrollTop;
         }
     }
@@ -109,7 +109,7 @@ class ReportedList extends Component {
                                     {that.fakeHeaderText}
                                 </div>
                                 <div className="header">
-                                    {hwItem.name}
+                                    {hwItem.name.toLowerCase()}
                                 </div>
                                 <div>
                                     <table className="table">
@@ -118,16 +118,14 @@ class ReportedList extends Component {
                                                 indexOne++;
                                                 if(property !== 'children' && property !== 'name' && property !== 'capabilities' && property !== 'configuration') {
                                                     return (
-                                                        <span key={indexOne}>
-                                                            <tr className="item">
-                                                                <th>
-                                                                    <div>{property}</div>
-                                                                </th>
-                                                                <td>
-                                                                    <div>{value.toString()}</div>
-                                                                </td>
-                                                            </tr>
-                                                        </span>
+                                                        <tr className="item" key={indexOne}>
+                                                            <th>
+                                                                <div>{property}</div>
+                                                            </th>
+                                                            <td>
+                                                                <div>{value.toString()}</div>
+                                                            </td>
+                                                        </tr>
                                                     );
                                                 }
                                             })}
@@ -139,7 +137,7 @@ class ReportedList extends Component {
                     })}
                 </ul>   
             :
-                <div className="wrapper-center">
+                <div className="wrapper-center" style={{height: '100%'}}>
                     {noSearchResults}
                 </div>
         );
