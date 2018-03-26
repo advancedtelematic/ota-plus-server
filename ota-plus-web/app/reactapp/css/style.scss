@@ -1481,7 +1481,7 @@ input {
 
         .title {
             font-size: 14px;
-            text-transform: uppercase;
+            text-transform: capitalize;
             @include textoverflowEllipsis;
         }
 
