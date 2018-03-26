@@ -11,7 +11,7 @@ class Header extends Component {
         const { addNewWizard } = this.props;
         return (
             <SubHeader>
-                <a href="#" className="add-button" id="add-new-campaign" onClick={addNewWizard.bind(this, null)}>
+                <a href="#" className="add-button grey-button" id="add-new-campaign" onClick={addNewWizard.bind(this, null)}>
                     <span>
                         +
                     </span>

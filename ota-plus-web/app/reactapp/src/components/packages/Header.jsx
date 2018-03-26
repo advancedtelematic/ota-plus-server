@@ -11,7 +11,7 @@ class Header extends Component {
         const { showCreateModal, showFileUploaderModal } = this.props;
         return (
             <SubHeader>
-                <a href="#" className="add-button" id="add-new-package" onClick={showCreateModal.bind(this, null)}>
+                <a href="#" className="add-button grey-button" id="add-new-package" onClick={showCreateModal.bind(this, null)}>
                     <span>
                         +
                     </span>
