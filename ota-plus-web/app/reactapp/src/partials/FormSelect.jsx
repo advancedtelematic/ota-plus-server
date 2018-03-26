@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'underscore';
+import $ from 'jquery';
 
 class FormSelect extends Component {
     constructor() {
@@ -12,22 +13,47 @@ class FormSelect extends Component {
         this.toggleMenu = this.toggleMenu.bind(this);
         this.selectOption = this.selectOption.bind(this);
         this.appendSelectFieldsToBody = this.appendSelectFieldsToBody.bind(this);
+        this._attachEventListener = this._attachEventListener.bind(this);
+        this._detachEventListener = this._detachEventListener.bind(this);
+    }
+
+    _attachEventListener() {
+        const self = this;
+        const body = $('body');
+
+        if ($._data( body[0], 'events' ) && $._data( body[0], 'events' ).click) {
+            self._detachEventListener();
+        } else {
+            body.on('click', (e) => {
+                if (e.target.className !== 'c-form__option ' && e.target.className !== 'c-form__input ') {
+                    self.toggleMenu();
+                }
+            });
+        }
+    }
+
+    _detachEventListener() {
+        $('body').unbind('click');
     }
 
     toggleMenu(e) {
         const {appendMenuToBodyTag} = this.props;
         const existContainer = document.getElementById('dropdown-render-container');
+
         if (existContainer) {
             existContainer.parentNode.removeChild(existContainer)
         }
 
         this.setState({
             showDropDown: !this.state.showDropDown
+        }, () => {
+            this._attachEventListener();
         });
 
-        if (appendMenuToBodyTag && e.target.className !== 'c-form__option') {
+        if (appendMenuToBodyTag && e && e.target && e.target.className !== 'c-form__option') {
             this.appendSelectFieldsToBody(e);
         }
+
     }
 
     appendSelectFieldsToBody(e) {
@@ -85,7 +111,7 @@ class FormSelect extends Component {
 
     selectOption(value, e) {
 
-        const {appendMenuToBodyTag} = this.props;
+        const {appendMenuToBodyTag, multiple} = this.props;
 
         if (appendMenuToBodyTag) {
             e.target.classList.toggle('c-form__option--selected')
@@ -100,17 +126,18 @@ class FormSelect extends Component {
             }
         }
 
-        if (!this.props.multiple) {
+        if (!multiple) {
             this.toggleMenu(e);
             this.setState({
                 selectedOptions: value
             });
+            this.props.onChange(value);
         } else {
             this.setState({
                 selectedOptions: options
             });
+            this.props.onChange(options);
         }
-        this.props.onChange(options);
     }
 
     render() {
