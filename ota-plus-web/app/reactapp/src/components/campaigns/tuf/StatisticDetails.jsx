@@ -78,7 +78,7 @@ class StatisticDetails extends Component {
                     </div>
 
                     <div className="failure-rate-container">
-                        <div className="failure-rate" id={`campaign-detail-total-failure-rate-${Math.round(overallStatistics.failed/Math.max(overallStatistics.finished, 1) * 100)}`}>
+                        <div className="failure-rate" id="campaign-detail-total-failure-rate">
                             <Doughnut
                                 data={failureRateData}
                                 options={{percentageInnerCutout: 75, showTooltips: false}}
@@ -153,32 +153,32 @@ class StatisticDetails extends Component {
                                 <div className="success">
                                     <span></span>
                                     <span>Success</span>
-                                    <span id={`target_success_${overallStatistics.successful}`}>{overallStatistics.successful}</span>
+                                    <span id="target_stats_success">{overallStatistics.successful}</span>
                                 </div>
                                 <div className="queued">
                                     <span></span>
                                     <span>Queued</span>
-                                    <span id={`target_queued_${overallStatistics.queued}`}>{overallStatistics.queued}</span>
+                                    <span id="target_stats_queued">{overallStatistics.queued}</span>
                                 </div>
                                 <div className="cancelled">
                                     <span></span>
                                     <span>Cancelled</span>
-                                    <span id={`target_cancelled_${overallStatistics.cancelled}`}>{overallStatistics.cancelled}</span>
+                                    <span id="target_stats_cancelled">{overallStatistics.cancelled}</span>
                                 </div>
                                 <div className="failure">
                                     <span></span>
                                     <span>Failure</span>
-                                    <span id={`target_failure_${overallStatistics.failed}`}>{overallStatistics.failed}</span>
+                                    <span id="target_stats_failure">{overallStatistics.failed}</span>
                                 </div>
                                 <div className="not-proceed">
                                     <span></span>
                                     <span>Not processed</span>
-                                    <span id={`target_not_proceed_${notProcessed}`}>{notProcessed}</span>
+                                    <span id="target_stats_not_proceed">{notProcessed}</span>
                                 </div>
                                 <div className="not-impacted">
                                     <span></span>
                                     <span>Not impacted</span>
-                                    <span id={`target_not_impacted_${overallStatistics.notImpacted}`}>{overallStatistics.notImpacted}</span>
+                                    <span id="target_stats_not_impacted">{overallStatistics.notImpacted}</span>
                                 </div>
                             </div> 
                         </div>
