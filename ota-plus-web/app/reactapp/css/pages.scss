@@ -1279,62 +1279,6 @@
                         top: 9px;
                     }
                 }
-
-                #hardware-overlay {
-                    width: 80vw;
-                    height: calc(100% - 36px);
-                    background: rgba(100,100,100,0.5);
-                    position: absolute;
-                    left: 100%;
-                    top: 36px;
-                    z-index: 120;
-                    overflow: hidden;
-
-                    .details {
-                        color: #000;
-                        background: rgba(150,150,150,0.95);
-                        width: 864px;
-                        height: 100%;
-                        padding: 10px 20px;
-                        position: relative;
-                        overflow-y: scroll;
-
-                        .btn-close-hardware {
-                            background: transparent;
-                            width: 25px;
-                            border: 0;
-                            position: absolute;
-                            top: 10px;
-                            right: 10px;
-                        }
-
-                        .title {
-                            color: #fff;
-                            font-weight: bold;
-                        }
-
-                        .header {
-                            text-align: center;
-                            margin: 20px 0;
-
-                            .name {
-                                color: #fff;
-                                font-size: 20px;
-                                font-weight: bold;
-                            }
-                        }
-
-                        .details-header {
-                            text-transform: capitalize;
-                            width: 200px;
-                            padding-left: 20px;
-                            padding-bottom: 10px;
-                            margin-left: -20px;
-                            margin-bottom: 10px;
-                            border-bottom: 1px solid #fff;
-                        }
-                    }
-                }
             }
         }
 
