@@ -48,12 +48,12 @@ class Aside extends Component {
         const otaPlusNewEntries = (
             <span className="ota-plus-new-entries">
                 <li>
-                    <Link to="/profile/users-and-roles" activeClassName="active" id="link-users-and-roles">
+                    <Link to="/profile/users-and-roles" activeClassName="active" id="sidebar-link-users-and-roles">
                         Users and roles
                     </Link>
                 </li>
                 <li>
-                    <Link to="/profile/bl-settings" activeClassName="active" id="link-bl-settings">
+                    <Link to="/profile/bl-settings" activeClassName="active" id="sidebar-link-bl-settings">
                         Bl settings
                     </Link>
                 </li>
@@ -65,17 +65,17 @@ class Aside extends Component {
                 <nav>
                     <ul>
                         <li>
-                            <Link to="/profile/edit" activeClassName="active" id="link-edit-profile">
+                            <Link to="/profile/edit" activeClassName="active" id="sidebar-link-edit-profile">
                                 Edit profile
                             </Link>
                         </li>
                         <li>
-                            <Link to="/profile/usage" activeClassName="active" id="link-usage">
+                            <Link to="/profile/usage" activeClassName="active" id="sidebar-link-usage">
                                 Usage
                             </Link>
                         </li>
                         <li>
-                            <Link to="/profile/access-keys" activeClassName="active" id="link-access-keys">
+                            <Link to="/profile/access-keys" activeClassName="active" id="sidebar-link-access-keys">
                                 Provisioning keys
                             </Link>
                         </li>
@@ -95,12 +95,12 @@ class Aside extends Component {
                 <nav>
                     <ul>
                         <li>
-                            <Link to="/profile/edit" activeClassName="active" id="link-edit-profile">
+                            <Link to="/profile/edit" activeClassName="active" id="sidebar-link-edit-profile">
                                 Edit profile
                             </Link>
                         </li>
                         <li>
-                            <Link to="/profile/usage" activeClassName="active" id="link-usage">
+                            <Link to="/profile/usage" activeClassName="active" id="sidebar-link-usage">
                                 Usage
                             </Link>
                         </li>
@@ -120,7 +120,7 @@ class Aside extends Component {
                 <nav>
                     <ul>
                         <li>
-                            <Link to="/profile/access-keys" activeClassName="active" id="link-access-keys">
+                            <Link to="/profile/access-keys" activeClassName="active" id="sidebar-link-access-keys">
                                 Provisioning keys
                             </Link>
                         </li>

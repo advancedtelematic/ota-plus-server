@@ -35,7 +35,7 @@ class ListItemVersion extends Component {
         if(alphaPlusEnabled) {
             versionCompatibilityData = _.find(packagesStore.compatibilityData, item => item.name === version.filepath);
         }
-        
+
         const directorBlock = (
             <span>
                 <div className="c-package__software-box" style={borderStyle}>
@@ -88,7 +88,7 @@ class ListItemVersion extends Component {
                         <div className="c-package__hw-value">
                             {_.map(version.hardwareIds, (hardwareId, index) => {
                                 return (
-                                    <span className="app-label" key={index} id={"package-" + packageName + "-app-label"}>
+                                    <span className="app-label" key={index} id={"package-" + packageName + `-app-label`}>
                                         {hardwareId}
                                     </span>
                                 );
@@ -101,7 +101,7 @@ class ListItemVersion extends Component {
                                 Format:
                             </div>
                             <div className="c-package__hw-value">
-                                <span className="app-label" id={"package-" + packageName + "-app-label"}>
+                                <span className="app-label" id={"package-" + packageName + "-app-format-ostree"}>
                                     {version.targetFormat}
                                 </span>
                             </div>

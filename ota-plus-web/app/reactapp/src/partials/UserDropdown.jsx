@@ -51,10 +51,10 @@ class UserDropdown extends Component {
         const otaPlusNewEntries = (
             <span className="ota-plus-new-entries">
                 <li>
-                      <Link to="/profile/users-and-roles" id="link-users-and-roles" onClick={this.closeDropdown}>Users and roles</Link>
+                      <Link to="/profile/users-and-roles" id="dropdown-link-users-and-roles" onClick={this.closeDropdown}>Users and roles</Link>
                 </li>
                 <li>
-                      <Link to="/profile/bl-settings" id="link-bl-settings" onClick={this.closeDropdown}>Bl settings</Link>
+                      <Link to="/profile/bl-settings" id="dropdown-link-bl-settings" onClick={this.closeDropdown}>Bl settings</Link>
                 </li>
             </span>
         );
@@ -70,7 +70,7 @@ class UserDropdown extends Component {
                     <ul className="links">
                         {uiCredentialsDownload ?
                             <li>
-                                  <Link to="/profile/access-keys" id="link-access-keys" onClick={this.closeDropdown}>Provisioning keys</Link>
+                                  <Link to="/profile/access-keys" id="dropdown-link-access-keys" onClick={this.closeDropdown}>Provisioning keys</Link>
                             </li>
                         :
                             null
@@ -108,14 +108,14 @@ class UserDropdown extends Component {
                         <hr />
                         <ul className="links">
                             <li>
-                                <Link to="/profile/edit" id="link-editprofile" onClick={this.closeDropdown}>Edit profile</Link>
+                                <Link to="/profile/edit" id="dropdown-link-editprofile" onClick={this.closeDropdown}>Edit profile</Link>
                             </li>
                             <li>
-                                  <Link to="/profile/usage" id="link-usage" onClick={this.closeDropdown}>Usage</Link>
+                                  <Link to="/profile/usage" id="dropdown-link-usage" onClick={this.closeDropdown}>Usage</Link>
                             </li>
                             {uiCredentialsDownload ?
                                 <li>
-                                      <Link to="/profile/access-keys" id="link-access-keys" onClick={this.closeDropdown}>Provisioning keys</Link>
+                                      <Link to="/profile/access-keys" id="dropdown-link-access-keys" onClick={this.closeDropdown}>Provisioning keys</Link>
                                 </li>
                             :
                                 null
