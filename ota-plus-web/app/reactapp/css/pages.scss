@@ -1684,6 +1684,8 @@
             &__more-info {
                 flex: 3;
                 text-align: right;
+                color: $home-header-button;
+                font-weight: 500;
             }
 
             &__details {

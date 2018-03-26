@@ -34,6 +34,7 @@ $font: 'akkurat';
     text-transform: none;
     color: $home-header-button;
     font-size: 12px;
+    font-weight: 500;
 
     &:hover {
         color: $home-header-button;
@@ -984,6 +985,11 @@ input {
 
         &.additional-info {
             text-align: right;
+            font-weight: 500;
+
+            .more-info {
+                color: $home-header-button;
+            }
         }
     }   
 
