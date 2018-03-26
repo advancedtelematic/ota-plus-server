@@ -2297,13 +2297,12 @@ input {
         text-align: center;
 
         .subactions {
-            text-align: right;
-            padding: 10px 0 0 0;
+            text-align: left;
+            margin-top: 20px;
+        }
 
-            a {
-                color: $color-mint;
-                font-weight: bold;
-            }
+        .body-actions {
+            margin: 20px 0 0;
         }
 
         .name {

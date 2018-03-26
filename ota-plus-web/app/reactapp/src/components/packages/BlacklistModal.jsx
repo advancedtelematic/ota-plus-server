@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Modal, AsyncResponse, Loader } from '../../partials';
+import { Modal, AsyncResponse, Loader, FormTextarea, Form } from '../../partials';
 import { AsyncStatusCallback, AsyncStatusCallbackHandler } from '../../utils';
-import { Form } from 'formsy-react';
 import { FormsyText } from 'formsy-material-ui/lib';
 import { FlatButton } from 'material-ui';
 import serialize from 'form-serialize';
@@ -51,7 +50,8 @@ class BlacklistModal extends Component {
     disableButton() {
         this.submitButtonDisabled = true;
     }
-    submitForm() {
+    submitForm(e) {
+        if(e) e.preventDefault();
         const formData = serialize(document.querySelector('#blacklist-form'), { hash: true });
         const data = {
             packageId: {
@@ -77,24 +77,19 @@ class BlacklistModal extends Component {
     render() {
         const { shown, hide, blacklistAction, packagesStore } = this.props;
         const title = (
-            <div className="heading red">
+            <div className="heading">
                 <div className="internal">
-                    <span>
-                        <img src="/assets/img/icons/ban_white.png" alt="" /> &nbsp;
-                        {blacklistAction.mode === "edit" ? 
-                            "Edit blacklisted package" 
-                        : 
-                            "Blacklist"
-                        }
-                    </span>
+                    {blacklistAction.mode === "edit" ? 
+                        "Edit blacklisted package" 
+                    : 
+                        "Blacklist"
+                    }
                 </div>
             </div>
         );
         const content = (
-            <Form
-                onValid={this.enableButton.bind(this)}
-                onInvalid={this.disableButton.bind(this)}
-                onValidSubmit={this.submitForm.bind(this)}
+            <Form                
+                onSubmit={this.submitForm.bind(this)}
                 id="blacklist-form">
                 {blacklistAction.mode === "edit" ? 
                     <span>
@@ -146,21 +141,32 @@ class BlacklistModal extends Component {
                 }
 
                 <div className="row">
-                    <div className="col-xs-8 col-xs-offset-2">
+                    <div className="col-xs-12">
                         {packagesStore.packagesOneBlacklistedFetchAsync.isFetching ?
                             <Loader 
                                 className="dark"
                             />
                         : 
-                            <FormsyText
-                                name="comment"
-                                value={!_.isEmpty(packagesStore.blacklistedPackage) ? packagesStore.blacklistedPackage.comment : ''}
-                                floatingLabelText="Comment"
-                                underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
-                                floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
-                                className="input-wrapper"
-                                updateImmediately
-                            />
+                            <span>
+                                <FormTextarea 
+                                    name="comment"
+                                    defaultValue={!_.isEmpty(packagesStore.blacklistedPackage) ? packagesStore.blacklistedPackage.comment : ''}
+                                    label="Comment"
+                                    id="blacklist-comment"
+                                    onValid={this.enableButton.bind(this)}
+                                    onInvalid={this.disableButton.bind(this)}
+                                    rows={5}
+                                />
+                                {blacklistAction.mode === 'edit' ?
+                                    <div className="subactions">
+                                        <a href="#" className="add-button" onClick={this.removeFromBlacklist}>
+                                            Remove from Blacklist
+                                        </a>
+                                    </div>
+                                : 
+                                    null
+                                }
+                            </span>
                         }
                     </div>
                 </div>
@@ -186,14 +192,7 @@ class BlacklistModal extends Component {
                             </button>
                         </div>
                     </div>
-                </div>
-                {blacklistAction.mode === 'edit' ?
-                    <div className="subactions">
-                        <a href="#" style={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}} onClick={this.removeFromBlacklist}>Remove from Blacklist</a>
-                    </div>
-                : 
-                    null
-                }
+                </div>                
             </Form>
         );
         return (
