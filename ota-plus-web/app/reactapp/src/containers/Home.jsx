@@ -30,7 +30,7 @@ class Home extends Component {
     }
     render() {
         const { devicesStore, hardwareStore, packagesStore, campaignsStore, addNewWizard } = this.props;
-        const allDevicesCount = devicesStore.directorDevicesCount;
+        const allDevicesCount = devicesStore.devicesInitialTotalCount;
         const lastDevicesTitle = 'Latest created devices';
         const lastPackagesTitle = 'Latest added packages';
         const activeCampaignsTitle = 'Active campaigns';

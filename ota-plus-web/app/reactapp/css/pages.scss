@@ -802,7 +802,11 @@
                             padding: 20px;
                             text-transform: uppercase;
                             font-weight: bold;
-                            font-size: 12px;                            
+                            font-size: 12px;
+
+                            .add {
+                                letter-spacing: 0.75px;
+                            }
                         }
 
                         .panel-body {
@@ -1736,7 +1740,6 @@
             &__more-info {
                 flex: 3;
                 text-align: right;
-                color: $home-header-button;
             }
 
             &__details {
