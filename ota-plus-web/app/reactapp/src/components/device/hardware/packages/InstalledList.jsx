@@ -26,7 +26,6 @@ class InstalledList extends Component {
         this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
         this.generateItemsPositions = this.generateItemsPositions.bind(this);
         this.listScroll = this.listScroll.bind(this);
-        this.changeFilter = this.changeFilter.bind(this);
         this.packagesChangeHandler = observe(props.packagesStore, (change) => {
             if(change.name === 'preparedOndevicePackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
@@ -43,7 +42,6 @@ class InstalledList extends Component {
     componentWillUnmount() {
         this.packagesChangeHandler();
         this.refs.list.removeEventListener('scroll', this.listScroll);
-        this.changeFilter('');
     }
     generateHeadersPositions() {
         const headers = this.refs.list.getElementsByClassName('header');
@@ -108,23 +106,10 @@ class InstalledList extends Component {
         clearInterval(this.tmpIntervalId);
         this.tmpIntervalId = null;
     }    
-    changeFilter(filter) {
-        this.props.packagesStore.fetchOndevicePackages(this.props.device.uuid, filter);
-    }
     render() {
         const { packagesStore, device, showPackageBlacklistModal, onFileDrop } = this.props;
         return (
             <span>
-                <SubHeader>
-                    <Form>
-                        <SearchBar
-                            value={packagesStore.ondeviceFilter}
-                            changeAction={this.changeFilter}
-                            id="search-installed-packages-input"
-                            additionalClassName="white"
-                        />
-                    </Form>
-                </SubHeader>
                 <div className="ios-list" ref="list">
                     <InfiniteScroll
                         className="wrapper-infinite-scroll"
@@ -165,11 +150,9 @@ class InstalledList extends Component {
                                 })}
                             </Dropzone>
                         :
-                            <span className="content-empty">
-                                <div className="wrapper-center">
-                                    {noSearchResults}
-                                </div>
-                            </span>
+                            <div className="wrapper-center" style={{height: '100%'}}>
+                                {noSearchResults}
+                            </div>
                         }
                     </InfiniteScroll>
                 </div>

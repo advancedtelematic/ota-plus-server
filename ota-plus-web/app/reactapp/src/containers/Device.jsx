@@ -68,7 +68,8 @@ class Device extends Component {
         this.hardwareOverlayShown = true;
         this.hardwareOverlayAnchor = e.currentTarget;
     }
-    hideHardwareOverlay() {
+    hideHardwareOverlay(e) {
+        if(e) e.preventDefault();
         this.hardwareOverlayShown = false;        
     }
     onFileDrop(files) {
