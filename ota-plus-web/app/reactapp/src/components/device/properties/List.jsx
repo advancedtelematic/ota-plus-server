@@ -121,8 +121,9 @@ class List extends Component {
 				        				</div>
 			    					}
 				        		</div>
-			        	</div>
-			        	<div className="data">
+			        	    </div>
+			        	<div className="wrapper-flex">
+							<div className="data">
 			        		<span>
 	        					<div className="name">
 					        		<span className = "sub-title">Name:</span>
@@ -164,53 +165,54 @@ class List extends Component {
 					        		<span className = "sub-title">Hardware ids:</span>
 					        		<span id={this.generateIdTag('version-hardware-ids-value', expandedPackage)}>
 					        			{_.map(expandedPackage.hardwareIds, (hardwareId, index) => {
-	                                         return (
-	                                            <span className="app-label" key={index}>
+                                            return (
+												<span className="app-label" key={index}>
 	                                                {hardwareId}
 	                                            </span>
-	                                        );
-	                                    })}
+                                            );
+                                        })}
 					        		</span>
 				        		</div>
-				        		{expandedPackage.targetFormat ?
-			        				<div className="target-format">
-						        		<span className="sub-title">Format:</span>
-						        		<span id={this.generateIdTag('version-target-format-value', expandedPackage)}>
+                                {expandedPackage.targetFormat ?
+									<div className="target-format">
+										<span className="sub-title">Format:</span>
+										<span id={this.generateIdTag('version-target-format-value', expandedPackage)}>
                                             <span className="app-label">
                                             	{expandedPackage.targetFormat}
                                             </span>
 						        		</span>
-					        		</div>
-			        			:
-			        				null
-			        			}
+									</div>
+                                    :
+                                    null
+                                }
 	        				</span>
-			        	</div>
-						{!isPackageInstalled ?
-							<div className="install multi-target">
-								<button
-									className="btn-main btn-install"
-									label="Install"
-									title="Install"
-									id={"button-install-package-" + expandedPackage.id.name + "-" + expandedPackage.id.version}
-									onClick={installTufPackage.bind(this, {
-                                        target: expandedPackage.filepath,
-                                        hash: expandedPackage.packageHash,
-                                        targetLength: expandedPackage.targetLength,
-                                        targetFormat: expandedPackage.targetFormat,
-                                        generateDiff: false
-                                    })}
-									disabled={
-										isPackageQueued || 
-										isPackageInstalled || 
-										devicesStore.multiTargetUpdates.length
-									}>
-										{install}
-								</button>
-	        				</div>
-						:
-							null
-						}
+							</div>
+                            {!isPackageInstalled ?
+								<div className="install multi-target">
+									<button
+										className="btn-primary btn-install"
+										label="Install"
+										title="Install"
+										id={"button-install-package-" + expandedPackage.id.name + "-" + expandedPackage.id.version}
+										onClick={installTufPackage.bind(this, {
+                                            target: expandedPackage.filepath,
+                                            hash: expandedPackage.packageHash,
+                                            targetLength: expandedPackage.targetLength,
+                                            targetFormat: expandedPackage.targetFormat,
+                                            generateDiff: false
+                                        })}
+										disabled={
+                                            isPackageQueued ||
+                                            isPackageInstalled ||
+                                            devicesStore.multiTargetUpdates.length
+                                        }>
+                                        {install}
+									</button>
+								</div>
+                                :
+                                null
+                            }
+						</div>
 		        	</div>
     			: unmanaged ?
     				unmanagedPackage
