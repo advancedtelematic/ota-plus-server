@@ -394,12 +394,8 @@
 
           &.group {
             .icon {
-              background-image: url('/assets/img/icons/groups.png');
-              border: 2px solid #ddd;
+              background-image: url('/assets/img/icons/group-default.svg');
               margin: 0;
-              float: none;
-              display: inline-block;
-              vertical-align: middle;
             }
 
             .desc {

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>Groups_default_Icon Copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Groups_default_Icon-Copy">
+            <path d="M4,0 L46,0 L46,0 C48.209139,-4.05812251e-16 50,1.790861 50,4 L50,46 L50,46 C50,48.209139 48.209139,50 46,50 L4,50 L4,50 C1.790861,50 2.705415e-16,48.209139 0,46 L0,4 L0,4 C-2.705415e-16,1.790861 1.790861,4.05812251e-16 4,0 Z" id="Combined-Shape" fill-opacity="0.3" fill="#0F1621"></path>
+            <g id="Group" transform="translate(14.000000, 14.000000)" fill="#6F737A">
+                <rect id="Rectangle-6" x="0.379073756" y="0.35916442" width="5" height="5" rx="1"></rect>
+                <rect id="Rectangle-6-Copy-3" x="0.379073756" y="8.56940851" width="5" height="5" rx="1"></rect>
+                <rect id="Rectangle-6-Copy" x="8.73859501" y="0.35916442" width="5" height="5" rx="1"></rect>
+                <rect id="Rectangle-6-Copy-4" x="8.73859501" y="8.56940851" width="5" height="5" rx="1"></rect>
+                <rect id="Rectangle-6-Copy-2" x="17.0981163" y="0.35916442" width="5" height="5" rx="1"></rect>
+                <rect id="Rectangle-6-Copy-5" x="17.0981163" y="8.56940851" width="5" height="5" rx="1"></rect>
+                <rect id="Rectangle-6-Copy-8" x="0.379073756" y="16.7796526" width="5" height="5" rx="1"></rect>
+                <rect id="Rectangle-6-Copy-7" x="8.73859501" y="16.7796526" width="5" height="5" rx="1"></rect>
+                <rect id="Rectangle-6-Copy-6" x="17.0981163" y="16.7796526" width="5" height="5" rx="1"></rect>
+            </g>
+        </g>
+    </g>
+</svg>
