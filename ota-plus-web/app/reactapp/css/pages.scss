@@ -818,27 +818,7 @@
 
                             .element-box {
                                 border-bottom: 5px solid $home-grey;
-
-                                &.device {
-                                    .icon {
-                                        background-image: url('/assets/img/icons/car.svg');
-                                        background-size: cover;
-                                    }
-                                }
-                 
-                                &.package {
-                                    .icon {
-                                        background-image: url('/assets/img/icons/black/packages.png');
-                                        border: 2px solid #ddd;
-                                    }
-                                }
-                 
-                                &.campaign {
-                                    .icon {
-                                        background-image: url('/assets/img/icons/black/campaigns.png');
-                                        border: 2px solid #ddd;
-                                    }
-                                }
+                                padding: 30px 40px;
                             }
                         }
                     }
