@@ -731,7 +731,7 @@ input {
 
         .text {
             width: auto;
-            margin: 0 0 0 25px;
+            margin: 0 0 0 10px;
             display: inline-block;
 
             .title {
@@ -1353,10 +1353,9 @@ input {
                                     &.group {
                                     
                                         .icon {
-                                            background-image: url(/assets/img/icons/groups.png);
-                                            border: 2px solid #ddd;
-                                            background-position: center;
-                                            height: 55px;
+                                            background-image: url(/assets/img/icons/group-default.svg);
+                                            height: 50px;
+                                            width: 50px;
                                             margin: 0;
                                         }
 
