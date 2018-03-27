@@ -2766,19 +2766,6 @@ input {
         z-index: 1;
     }
 
-    ::-webkit-scrollbar {
-        width: 12px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background: #c1c1c1;
-    }
     .hide {
         display: none;
     }
@@ -3686,11 +3673,6 @@ input {
         }
 
         .keys {
-            ::-webkit-scrollbar {
-                width: 0;
-                background:transparent;
-                display: none;
-            }
             min-height: 100vh;
             background-color: #fff;
             position: relative;
@@ -3740,7 +3722,6 @@ input {
         }
 
         .packages, .campaigns {
-            ::-webkit-scrollbar {display:none;}
 
             i.selected-user {
                 &:after {
