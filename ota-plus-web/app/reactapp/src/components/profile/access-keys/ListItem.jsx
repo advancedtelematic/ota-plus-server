@@ -20,7 +20,7 @@ class ListItem extends Component {
                 className="common-box"
                 id={"key-" + provisioningKey.description}>
 
-                <div className="icon"></div>
+                <div className="icon"/>
                 <div className="desc">
                     <div className="title" title={provisioningKey.description}>
                         {provisioningKey.description}
@@ -33,7 +33,7 @@ class ListItem extends Component {
                     </div>                        
                 </div>
                 <div className="download-icon">
-                    <img src="/assets/img/icons/download_key.png" alt="Icon" />
+                    <img src="/assets/img/icons/download_key.svg" alt="Icon" />
                 </div>
             </a>
         );
