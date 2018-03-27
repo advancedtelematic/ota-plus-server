@@ -45,7 +45,7 @@ class ListItemVersion extends Component {
                 <div className="right-box">
                     {blacklistedPackage && version.id.version === installedPackage ?
                         <span className="blacklisted-installed" id={"image-blacklisted-and-installed-" + version.id.version.substring(0,8)}>
-                            <img src="/assets/img/icons/red_cross.png" alt="" />
+                            <img src="/assets/img/icons/red_cross.svg" alt="" />
                         </span>
                     :
                         blacklistedPackage ?
@@ -58,7 +58,7 @@ class ListItemVersion extends Component {
                             </span>
                         : version.id.version === installedPackage ?
                             <span className="installed" id={"image-installed-" + version.id.version.substring(0,8)}>
-                                <img src="/assets/img/icons/green_tick.png" alt="" />
+                                <img src="/assets/img/icons/green_tick.svg" alt="" />
                             </span>                                            
                         :
                             null

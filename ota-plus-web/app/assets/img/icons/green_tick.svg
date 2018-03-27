@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
     <title>Green_Tick</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Green_Tick">
             <g id="Group-9">
-                <path d="M0.5023,14.867 C0.5023,22.805 6.9333,29.238 14.8703,29.238 C22.8073,29.238 29.2433,22.805 29.2433,14.867 C29.2433,6.931 22.8073,0.5 14.8703,0.5 C6.9333,0.5 0.5023,6.931 0.5023,14.867 Z" id="Stroke-5" fill="#359E47"></path>
-                <polyline id="Stroke-7" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" points="8.6368 15.3015 12.8258 20.5395 21.8468 9.2615"></polyline>
+                <path d="M0,15.9961031 C0,24.834209 7.16022407,31.9966598 15.9972165,31.9966598 C24.834209,31.9966598 32,24.834209 32,15.9961031 C32,7.16022407 24.834209,0 15.9972165,0 C7.16022407,0 0,7.16022407 0,15.9961031 Z" id="Stroke-5" fill="#06B87C"></path>
+                <polyline id="Stroke-7" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" points="8 16.4817357 13.1889057 22.9700355 24.3632 9"></polyline>
             </g>
         </g>
     </g>
