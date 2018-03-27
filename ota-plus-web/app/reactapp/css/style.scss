@@ -1496,7 +1496,7 @@ input {
 }
 
 .device-status {
-    background: url('/assets/img/icons/grey_questionmark.png') no-repeat;
+    background: url('/assets/img/icons/grey_questionmark.svg') no-repeat;
     width: 25px;
     height: 25px;
     background-size: cover;
@@ -1505,15 +1505,15 @@ input {
     vertical-align: middle;
 
     &.device-status-Error {
-        background-image: url('/assets/img/icons/red_cross.png');
+        background-image: url('/assets/img/icons/red_cross.svg');
     }
 
     &.device-status-Outdated {
-        background-image: url('/assets/img/icons/orange_exclamation.png');
+        background-image: url('/assets/img/icons/orange_exclamation.svg');
     }
 
     &.device-status-UpToDate {
-        background-image: url('/assets/img/icons/green_tick.png');
+        background-image: url('/assets/img/icons/green_tick.svg');
     }
 }
 

@@ -90,7 +90,7 @@ class List extends Component {
 				        					<span id={this.generateIdTag('blacklisted-and-installed', expandedPackage)}>
 			        			 				{installed}
 		        			 				</span>
-		        			 				<img src="/assets/img/icons/red_cross.png" alt="" id={this.generateIdTag('blacklisted-and-installed-icon', expandedPackage)} /> 			 	        		
+		        			 				<img src="/assets/img/icons/red_cross.svg" alt="" id={this.generateIdTag('blacklisted-and-installed-icon', expandedPackage)} /> 			 	        		
 				        				</div>
 				        			: isPackageBlacklisted ?
 				        				<div className="blacklisted">
@@ -113,7 +113,7 @@ class List extends Component {
 				        					<span id={this.generateIdTag('image-installed', expandedPackage)}>
 				        						{installed}
 				        					</span>
-				        					<img src="/assets/img/icons/green_tick.png" alt="" id={this.generateIdTag('installed-icon', expandedPackage)} />
+				        					<img src="/assets/img/icons/green_tick.svg" alt="" id={this.generateIdTag('installed-icon', expandedPackage)} />
 				        				</div>
 			        				: 
 				        				<div className="not-installed" id={this.generateIdTag('not-installed', expandedPackage)}>

@@ -1122,15 +1122,15 @@
             top: -7px;
 
             &.status-Error {
-                background-image: url('/assets/img/icons/red_cross.png');
+                background-image: url('/assets/img/icons/red_cross.svg');
             }
 
             &.status-Outdated {
-                background-image: url('/assets/img/icons/orange_exclamation.png');
+                background-image: url('/assets/img/icons/orange_exclamation.svg');
             }
 
             &.status-UpToDate {
-                background-image: url('/assets/img/icons/green_tick.png');
+                background-image: url('/assets/img/icons/green_tick.svg');
             }
         }
 
