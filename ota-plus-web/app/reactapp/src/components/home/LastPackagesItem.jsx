@@ -17,7 +17,6 @@ class LastPackagesItem extends Component {
                 className="element-box package" 
                 title={pack.id.name + ' ' + pack.id.version}
                 id={"link-packages-" + pack.uuid}>
-                <div className="icon"></div>
                 <div className="desc">
                     <div className="title">
                         {pack.id.name}
