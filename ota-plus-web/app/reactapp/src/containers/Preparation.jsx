@@ -223,11 +223,11 @@ class Preparation extends Component {
                                                         </span>
                                                     : this.userProfile ?
                                                         <span>
-                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
+                                                            <img src="/assets/img/icons/green_tick.svg" alt="pass"/>
                                                         </span>
                                                     : finished ?
                                                         <span>
-                                                            <img src="/assets/img/icons/red_cross.png" alt="fail"/>
+                                                            <img src="/assets/img/icons/red_cross.svg" alt="fail"/>
                                                         </span> 
                                                     : 
                                                         <span className="pending">
@@ -240,11 +240,11 @@ class Preparation extends Component {
                                                         </span>
                                                     : this.activatedProvisioning ?
                                                         <span>
-                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
+                                                            <img src="/assets/img/icons/green_tick.svg" alt="pass"/>
                                                         </span>
                                                     : finished ?
                                                         <span>
-                                                            <img src="/assets/img/icons/red_cross.png" alt="fail"/>
+                                                            <img src="/assets/img/icons/red_cross.svg" alt="fail"/>
                                                         </span>
                                                     :
                                                         <span className="pending">
@@ -257,11 +257,11 @@ class Preparation extends Component {
                                                         </span>
                                                     : this.createdTuf ?
                                                         <span>
-                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
+                                                            <img src="/assets/img/icons/green_tick.svg" alt="pass"/>
                                                         </span>
                                                     : finished ?
                                                         <span>
-                                                            <img src="/assets/img/icons/red_cross.png" alt="fail"/>
+                                                            <img src="/assets/img/icons/red_cross.svg" alt="fail"/>
                                                         </span>
                                                     : 
                                                         <span className="pending">
@@ -274,11 +274,11 @@ class Preparation extends Component {
                                                         </span>
                                                     : this.createdDirector ?
                                                         <span>
-                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
+                                                            <img src="/assets/img/icons/green_tick.svg" alt="pass"/>
                                                         </span>
                                                     : finished ?
                                                         <span>
-                                                            <img src="/assets/img/icons/red_cross.png" alt="fail"/>
+                                                            <img src="/assets/img/icons/red_cross.svg" alt="fail"/>
                                                         </span>
                                                     :
                                                         <span className="pending">
@@ -291,11 +291,11 @@ class Preparation extends Component {
                                                         </span>
                                                     : this.createdTreehub ?
                                                         <span>
-                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
+                                                            <img src="/assets/img/icons/green_tick.svg" alt="pass"/>
                                                         </span>
                                                     : finished ?
                                                         <span>
-                                                            <img src="/assets/img/icons/red_cross.png" alt="fail"/>
+                                                            <img src="/assets/img/icons/red_cross.svg" alt="fail"/>
                                                         </span>
                                                     :
                                                         <span className="pending">
@@ -308,11 +308,11 @@ class Preparation extends Component {
                                                         </span>
                                                     : this.createdFileUploader ?
                                                         <span>
-                                                            <img src="/assets/img/icons/green_tick.png" alt="pass"/>
+                                                            <img src="/assets/img/icons/green_tick.svg" alt="pass"/>
                                                         </span>
                                                     : finished ?
                                                         <span>
-                                                            <img src="/assets/img/icons/red_cross.png" alt="fail"/>
+                                                            <img src="/assets/img/icons/red_cross.svg" alt="fail"/>
                                                         </span>
                                                     :
                                                         <span className="pending">
