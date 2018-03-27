@@ -1515,6 +1515,9 @@
 
                 .details {
                     padding: 35px;
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
 
                     .heading {
                         margin-bottom: 15px;
@@ -1554,8 +1557,13 @@
                         }
                     }
 
+                    .wrapper-flex {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                    }
+
                     .data {
-                        margin-bottom: 60px;
                         color: $device-properties-text;
 
                         span:not(.app-label) {
@@ -1581,12 +1589,18 @@
                     }
 
                     .install {
-                        text-align: center;
+                        display: flex;
+                        justify-content: center;
+                        margin-bottom: 30px;
 
-                        .btn-main {
+                        .btn-primary {
                             display: inline-block;
-                            width: 300px;
-                            
+                            width: 380px;
+                            height: 60px;
+                            color: rgba(255,255,255,0.9);
+                            font-size: 22px;
+                            font-weight: 300;
+
                             span {
                                 font-size: 20px!important;
                                 font-weight: 500!important;
