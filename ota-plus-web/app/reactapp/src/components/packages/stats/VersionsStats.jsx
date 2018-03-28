@@ -18,7 +18,7 @@ class VersionsStats extends Component {
             mainColor,
             '#069F71',
             '#660195',
-            '#fff',
+            '#B8B9BE',
         ];
         let colorIndex = -1;
         let statsPackIndex = 0;
