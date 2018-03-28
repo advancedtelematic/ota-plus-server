@@ -121,7 +121,9 @@ class ListItemVersion extends Component {
         );
         return (
             <span>
-                <li className={"c-package__version-item" + (!alphaPlusEnabled ? " c-package__version-item--ident" : "") + (isBlacklisted ? " blacklist" : "")} id={"package-" + packageName + "-version"}>
+                <li className={"c-package__version-item" + (!alphaPlusEnabled ? " c-package__version-item--ident" : "") + (isBlacklisted ? " blacklist" : "")}
+                    data-installed={version.installedOnEcus}
+                    id={"package-" + packageName + "-version"}>
                     {directorBlock}
                 </li>
                 {alphaPlusEnabled ?

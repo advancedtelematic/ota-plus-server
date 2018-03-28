@@ -48,29 +48,23 @@ class Preparation extends Component {
     @observable timesCreateDirectorCalled = 0;
     @observable checkedCreatedDirector = false;
     @observable checkedCreatedTufCalled = false;
+    @observable namespaceSetupIntervalDirector = null;
+    @observable namespaceSetupIntervalTuf = null;
 
     constructor(props) {
         super(props);
         this.doorOpen = this.doorOpen.bind(this);
-        this.doubleCheckCreatedTuf = this.doubleCheckCreatedTuf.bind(this);
-        this.doubleCheckCreatedDirector = this.doubleCheckCreatedDirector.bind(this);
-        this.fetchDirectorRepoExists = this.fetchDirectorRepoExists.bind(this);
-        this.fetchTufRepoExists = this.fetchTufRepoExists.bind(this);
         this.userProfileHandler = new AsyncStatusCallbackHandler(props.userStore, 'userFetchAsync', this.checkUserProfile.bind(this));
         this.activatedProvisioningHandler = new AsyncStatusCallbackHandler(props.provisioningStore, 'provisioningStatusFetchAsync', this.checkActivatedProvisioning.bind(this));
-        this.createdTufHandler = new AsyncConflictCallbackHandler(props.packagesStore, 'tufRepoExistsFetchAsync', this.checkCreatedTuf.bind(this));
-        this.createTufHandler = new AsyncStatusCallbackHandler(props.packagesStore, 'tufRepoCreateFetchAsync', this.doubleCheckCreatedTuf.bind(this));
-        this.createdDirectorHandler = new AsyncConflictCallbackHandler(props.packagesStore, 'directorRepoExistsFetchAsync', this.checkCreatedDirector.bind(this));
-        this.createDirectorHandler = new AsyncStatusCallbackHandler(props.packagesStore, 'directorRepoCreateFetchAsync', this.doubleCheckCreatedDirector.bind(this));
+        this.createdTufHandler = new AsyncStatusCallbackHandler(props.provisioningStore, 'namespaceSetupFetchAsync', this.checkCreatedTuf.bind(this));
+        this.createdDirectorHandler = new AsyncStatusCallbackHandler(props.provisioningStore, 'namespaceSetupFetchAsync', this.checkCreatedDirector.bind(this));
         this.createdTreehubHandler = new AsyncStatusCallbackHandler(props.featuresStore, 'featuresFetchAsync', this.checkCreatedTreehub.bind(this));
         this.createdFileUploaderHandler = new AsyncStatusCallbackHandler(props.featuresStore, 'featuresFetchAsync', this.checkCreatedFileUploader.bind(this));
     }
 
     componentWillMount() {
         this.props.userStore.fetchUser();
-        this.props.provisioningStore.activateProvisioning();
-        this.props.packagesStore.fetchTufRepoExists();
-        this.props.packagesStore.fetchDirectorRepoExists();
+        this.props.provisioningStore.namespaceSetup();
         this.props.featuresStore.activateTreehub();
         this.props.featuresStore.activateFileUploader();
     }
@@ -82,8 +76,6 @@ class Preparation extends Component {
         this.createdDirectorHandler();
         this.createdTreehubHandler();
         this.createdFileUploaderHandler();
-        this.createDirectorHandler();
-        this.createTufHandler();
     }
 
     checkUserProfile() {
@@ -93,78 +85,44 @@ class Preparation extends Component {
     }
 
     checkActivatedProvisioning() {
-        if (this.props.provisioningStore.provisioningStatusFetchAsync.code === 200 && this.props.provisioningStore.provisioningStatus.active) {
+        if (this.props.provisioningStore.namespaceSetupFetchAsync.code === 200 && this.props.provisioningStore.namespaceSetupFetchAsync.data.crypt) {
             this.activatedProvisioning = true;
         }
     }
 
-    doubleCheckCreatedTuf() {
-        if(this.timesCreateTufCalled > 0) {
-            setTimeout(this.fetchTufRepoExists, 3000);
-        } else if(this.createdTuf !== true) {
-            this.props.packagesStore.fetchTufRepoExists();
-        }
-    }
-
-    fetchTufRepoExists() {
-        this.props.packagesStore.fetchTufRepoExists();
-    }
-
-    doubleCheckCreatedDirector() {
-        if (this.timesCreateDirectorCalled > 0) {
-            setTimeout(this.fetchDirectorRepoExists, 3000);
-        } else if(this.createdDirector !== true) {
-            this.props.packagesStore.fetchDirectorRepoExists()
-
-        }
-    }
-
-    fetchDirectorRepoExists() {
-        if (this.createdDirector !== true) {
-            this.props.packagesStore.fetchDirectorRepoExists();
-        }
-    }
-
     checkCreatedTuf() {
-        switch (this.props.packagesStore.tufRepoExistsFetchAsync.code) {
-            case 200:
-                this.createdTuf = true;
-                this.checkedCreatedTufCalled = true;
-                break;
-            case 404:
-                this.timesCreateTufCalled +=1;
-                if(this.timesCreateTufCalled === 1) {
-                    this.props.packagesStore.createTufRepo();
+        switch (this.props.provisioningStore.namespaceSetupFetchAsync.code) {
+            case 200: {
+                if (this.props.provisioningStore.namespaceSetupFetchAsync.data.tuf) {
+                    this.createdTuf = true;
+                    this.checkedCreatedTufCalled = true;
+                    clearInterval(this.namespaceSetupIntervalTuf);
+                } else {
+                    this.namespaceSetupIntervalTuf = setInterval(this.props.provisioningStore.namespaceSetup, 800);
                 }
                 break;
-            case 409:
-            case 502:
-                this.timesCheckCreatedTufCalled += 1;
-                if(this.timesCheckCreatedTufCalled === 1){
-                    setInterval(this.doubleCheckCreatedTuf, 800);
-                }
+            }
+            default: {
                 break;
+            }
         }
     }
 
     checkCreatedDirector() {
-        switch (this.props.packagesStore.directorRepoExistsFetchAsync.code) {
-            case 200:
-                this.createdDirector = true;
-                this.checkedCreatedDirectorCalled = true;
-                break;
-            case 404:
-                this.timesCreateDirectorCalled += 1;
-                if(this.timesCreateDirectorCalled === 1) {
-                    this.props.packagesStore.createDirectorRepo();
+        switch (this.props.provisioningStore.namespaceSetupFetchAsync.code) {
+            case 200: {
+                if (this.props.provisioningStore.namespaceSetupFetchAsync.data.director) {
+                    this.createdDirector = true;
+                    this.checkedCreatedDirectorCalled = true;
+                    clearInterval(this.namespaceSetupIntervalDirector);
+                } else {
+                    this.namespaceSetupIntervalDirector = setInterval(this.props.provisioningStore.namespaceSetup, 800);
                 }
                 break;
-            case 409:
-            case 502:
-                this.timesCheckCreatedDirectorCalled += 1;
-                if(this.timesCheckCreatedDirectorCalled === 1){
-                    setInterval(this.doubleCheckCreatedDirector, 800);
-                }
+            }
+            default: {
+                break;
+            }
         }
     }
 
@@ -190,11 +148,9 @@ class Preparation extends Component {
     }
 
     render() {
-        const {userStore, provisioningStore, featuresStore, packagesStore} = this.props;
+        const {userStore, provisioningStore, featuresStore} = this.props;
         let finished = !userStore.userFetchAsync.isFetching &&
-            !provisioningStore.provisioningStatusFetchAsync.isFetching &&
-            !packagesStore.tufRepoExistsFetchAsync.isFetching &&
-            !packagesStore.directorRepoExistsFetchAsync.isFetching &&
+            !provisioningStore.namespaceSetupFetchAsync.isFetching &&
             !featuresStore.featuresTreehubActivateAsync.isFetching &&
             !featuresStore.featuresFileUploaderActivateAsync.isFetching && this.checkedCreatedTufCalled && this.checkedCreatedDirectorCalled;
         let allIsPassed = finished && this.userProfile && this.activatedProvisioning && this.createdTuf && this.createdDirector && this.createdTreehub && this.createdFileUploader;
@@ -234,7 +190,7 @@ class Preparation extends Component {
                                                             <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
                                                         </span>
                                                 : step.nr === 2 ?
-                                                    provisioningStore.provisioningStatusFetchAsync.isFetching || provisioningStore.provisioningActivateAsync.isFetching ?
+                                                    provisioningStore.namespaceSetupFetchAsync.isFetching || provisioningStore.provisioningActivateAsync.isFetching ?
                                                         <span className="pending">
                                                             <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
                                                         </span>
@@ -251,7 +207,7 @@ class Preparation extends Component {
                                                             <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
                                                         </span>
                                                 : step.nr === 3 ?
-                                                    packagesStore.tufRepoExistsFetchAsync.isFetching || !this.checkedCreatedTufCalled ?
+                                                    provisioningStore.namespaceSetupFetchAsync.isFetching || !this.checkedCreatedTufCalled ?
                                                         <span className="pending">
                                                             <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
                                                         </span>
@@ -268,7 +224,7 @@ class Preparation extends Component {
                                                             <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
                                                         </span>
                                                 : step.nr === 4 ?
-                                                    packagesStore.directorRepoExistsFetchAsync.isFetching || !this.checkedCreatedDirectorCalled ?
+                                                    provisioningStore.namespaceSetupFetchAsync.isFetching || !this.checkedCreatedDirectorCalled ?
                                                         <span className="pending">
                                                             <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
                                                         </span>

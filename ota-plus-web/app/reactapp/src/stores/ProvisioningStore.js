@@ -7,7 +7,8 @@ import {
     API_PROVISIONING_ACTIVATE,
     API_PROVISIONING_DETAILS,
     API_PROVISIONING_KEYS_FETCH,
-    API_PROVISIONING_KEY_CREATE
+    API_PROVISIONING_KEY_CREATE,
+    API_NAMESPACE_SETUP_STEPS
 } from '../config';
 import { 
     resetAsync, 
@@ -20,6 +21,7 @@ export default class ProvisioningStore {
 
     @observable provisioningStatusFetchAsync = {};
     @observable provisioningActivateAsync = {};
+    @observable namespaceSetupFetchAsync = {};
     @observable provisioningDetailsFetchAsync = {};
     @observable provisioningKeysFetchAsync = {};
     @observable provisioningKeyCreateAsync = {};
@@ -33,6 +35,7 @@ export default class ProvisioningStore {
 
     constructor() {
         resetAsync(this.provisioningStatusFetchAsync);
+        resetAsync(this.namespaceSetupFetchAsync);
         resetAsync(this.provisioningActivateAsync);
         resetAsync(this.provisioningDetailsFetchAsync);
         resetAsync(this.provisioningKeysFetchAsync);
@@ -76,6 +79,18 @@ export default class ProvisioningStore {
             }.bind(this))
             .catch(function (error) {
                 this.provisioningStatusFetchAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
+    namespaceSetup() {
+        resetAsync(this.namespaceSetupFetchAsync, true);
+        return axios.post(API_NAMESPACE_SETUP_STEPS)
+            .then(function (response) {
+                this.fetchProvisioningStatus();
+                this.namespaceSetupFetchAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function (error) {
+                this.namespaceSetupFetchAsync = handleAsyncError(error);
             }.bind(this));
     }
 
@@ -131,6 +146,7 @@ export default class ProvisioningStore {
 
     _reset() {
         resetAsync(this.provisioningStatusFetchAsync);
+        resetAsync(this.namespaceSetupFetchAsync);
         resetAsync(this.provisioningActivateAsync);
         resetAsync(this.provisioningDetailsFetchAsync);
         resetAsync(this.provisioningKeysFetchAsync);
