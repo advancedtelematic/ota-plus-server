@@ -15,7 +15,7 @@ class List extends Component {
         const { provisioningStore, showTooltip } = this.props;
         return (
             <div className="wrapper">
-                <div className="inner-container" ref="innerContainer">
+                <div className={"inner-container" + (!provisioningStore.preparedProvisioningKeys.length ? " full-height" : "")} ref="innerContainer">
                     {provisioningStore.preparedProvisioningKeys.length ?
                         _.map(provisioningStore.preparedProvisioningKeys, (provisioningKey, index) => {
                             return (

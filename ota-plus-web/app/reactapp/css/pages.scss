@@ -2145,7 +2145,10 @@
                     .inner-container {
                         display: flex;
                         flex-wrap: wrap;
-                        height: 100%;
+
+                        &.full-height {
+                            height: 100%;
+                        }
 
                         .wrapper-center {
                             font-weight: bold;
