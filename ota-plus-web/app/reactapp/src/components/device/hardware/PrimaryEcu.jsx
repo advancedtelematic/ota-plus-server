@@ -32,14 +32,14 @@ class PrimaryEcu extends Component {
                     </div>
                     <div className="icons">
                         <div className="hardware-icon details" 
-                            id="hardware-details-icon"
+                            id="hardware-details-icon-primary"
                             onClick={showHardwareOverlay}
                         >
                             <img src="/assets/img/icons/black/icon.svg" alt="Icon" />
                         </div>
                         <div
                             className="hardware-icon key" 
-                            id="hardware-key-icon"
+                            id="hardware-key-icon-primary"
                             onClick={otherProps.handleTouchTap}
                         >
                             <img src="/assets/img/icons/key.svg" alt="Icon" />

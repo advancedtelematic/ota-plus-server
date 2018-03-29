@@ -60,12 +60,12 @@ class Overlay extends Component {
                     <SubHeader>
                         <div className="nav">
                             <div className={"item" + (this.hardwareInfoShown ? " active" : "")} onClick={this.showHardwareInfo}>
-                                <span>
+                                <span id="show-hardware">
                                     Hardware
                                 </span>
                             </div>
                             <div className={"item" + (!this.hardwareInfoShown ? " active" : "")} onClick={this.showPackagesList}>
-                                <span>
+                                <span id="show-packages">
                                     Packages
                                 </span>
                             </div>
