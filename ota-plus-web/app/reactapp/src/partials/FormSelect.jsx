@@ -25,7 +25,7 @@ class FormSelect extends Component {
             self._detachEventListener();
         } else {
             body.on('click', (e) => {
-                if (e.target.className !== 'c-form__option ' && e.target.className !== 'c-form__input ') {
+                if (e.target.className !== 'c-form__option ') {
                     self.toggleMenu();
                 }
             });
@@ -57,7 +57,7 @@ class FormSelect extends Component {
     }
 
     appendSelectFieldsToBody(e) {
-        const {multiple = true, options, id, visibleFieldsCount = 0} = this.props;
+        const {multiple = true, options, id, visibleFieldsCount = options.length > 1 ? options.length : 2,} = this.props;
         const {showDropDown, selectedOptions} = this.state;
         const renderContainer = document.createElement('div');
         const inputPosition = e.target.getBoundingClientRect();
@@ -71,7 +71,8 @@ class FormSelect extends Component {
                         top: inputPosition.top + inputPosition.height,
                         left: inputPosition.left,
                         position: 'absolute',
-                        width: inputPosition.width
+                        width: inputPosition.width,
+                        height: options.length > 1 ? 'auto' : '35px'
                     }}
                     className="c-form__select"
                     multiple={multiple} id={id}>
@@ -110,7 +111,6 @@ class FormSelect extends Component {
     }
 
     selectOption(value, e) {
-
         const {appendMenuToBodyTag, multiple} = this.props;
 
         if (appendMenuToBodyTag) {
@@ -150,7 +150,7 @@ class FormSelect extends Component {
             wrapperWidth = '100%',
             defaultValue,
             appendMenuToBodyTag = false,
-            visibleFieldsCount = 0,
+            visibleFieldsCount = options.length > 1 ? options.length : 2,
         } = this.props;
 
         const {showDropDown, selectedOptions} = this.state;
@@ -178,6 +178,9 @@ class FormSelect extends Component {
                 }
                 {showDropDown && !appendMenuToBodyTag ?
                     <select size={visibleFieldsCount}
+                            style={{
+                                height: options.length > 1 ? 'auto' : '35px'
+                            }}
                             className="c-form__select"
                             multiple={multiple} id={'select-' + id}>
                         {options.map((value, index) => {
