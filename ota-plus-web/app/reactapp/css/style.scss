@@ -3400,6 +3400,7 @@ input {
                 background-color: $device-item-bg;
                 padding: 0;
                 height: 45px;
+                border: 0;
             }
 
             .hardware-details {
@@ -3456,6 +3457,8 @@ input {
                 text-transform: capitalize;
                 padding: 0 15px;
                 color: $fake-header-text;
+                border: 0;
+                font-size: 10px;
             }
 
             .packages-details {
