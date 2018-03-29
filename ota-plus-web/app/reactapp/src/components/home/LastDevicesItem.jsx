@@ -7,7 +7,7 @@ import _ from 'underscore';
 class LastDevicesItem extends Component {
     constructor(props) {
         super(props);
-    }
+    }    
     render() {
         const { device } = this.props;
         const link = 'device/' + device.uuid;
@@ -29,23 +29,21 @@ class LastDevicesItem extends Component {
         return (
             <Link
                 to={`${link}`} 
-                className="element-box device" 
+                className="device" 
                 title={device.deviceName}
                 id={"link-devicedetails-" + device.uuid}>
-                <div className="desc">
-                    <div className="title">
-                        {device.deviceName}
-                    </div>
-                    <div className="subtitle">
-                        {deviceStatus !== 'Status unknown' ?
-                            <span>Last seen online: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
-                        :
-                            <span>Never seen online</span>
-                        }
-                    </div>
-                    <div className="subtitle">
-                        Device status: {deviceStatus}
-                    </div>
+                <div className="col">
+                    {device.deviceName}
+                </div>
+                <div className="col">
+                    {deviceStatus !== 'Status unknown' ?
+                        <span>{lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
+                    :
+                        <span>Never seen online</span>
+                    }
+                </div>
+                <div className="col">
+                    {deviceStatus}
                 </div>
             </Link>
         );

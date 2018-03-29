@@ -10,7 +10,6 @@ import SearchBar from './SearchBar';
 import SizeVerify from './SizeVerify';
 import UploadBox from './UploadBox';
 import PopoverWrapper from './PopoverWrapper';
-import IntroNavigation from './IntroNavigation';
 import DependenciesModal from './DependenciesModal';
 import Sequencer from './Sequencer';
 import {Form} from './Form';
@@ -31,7 +30,6 @@ export {
     SizeVerify,
     UploadBox,
     PopoverWrapper,
-    IntroNavigation,
     DependenciesModal,
     Sequencer,
     Form,

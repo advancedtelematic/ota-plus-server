@@ -6,8 +6,6 @@ import CampaignsPage from './Campaigns';
 import ImpactAnalysisPage from './ImpactAnalysis';
 import ProfilePage from './Profile';
 import NoMatchPage from './NoMatch';
-import WelcomePage from './Welcome';
-import DestinyPage from './Destiny';
 import FireworksPage from './Fireworks';
 import SoftwareRepository from './SoftwareRepository';
 
@@ -20,8 +18,6 @@ export {
     ImpactAnalysisPage,
     ProfilePage,
     NoMatchPage,
-    WelcomePage,
-    DestinyPage,
     FireworksPage,
     SoftwareRepository
 }

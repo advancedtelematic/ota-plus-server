@@ -14,19 +14,17 @@ class LastPackagesItem extends Component {
         return (
             <Link
                 to={`${link}`} 
-                className="element-box package" 
+                className="package" 
                 title={pack.id.name + ' ' + pack.id.version}
                 id={"link-packages-" + pack.uuid}>
-                <div className="desc">
-                    <div className="title">
-                        {pack.id.name}
-                    </div>
-                    <div className="subtitle">
-                        Version: {pack.id.version.length > 10 ? pack.id.version.substring(0, 10) + '...' : pack.id.version}
-                    </div>
-                    <div className="subtitle">
-                        Created at: {createdDate.toDateString() + ' ' + createdDate.toLocaleTimeString()}
-                    </div>
+                <div className="col">
+                    {pack.id.name}
+                </div>
+                <div className="col">
+                    {pack.id.version.length > 10 ? pack.id.version.substring(0, 10) + '...' : pack.id.version}
+                </div>
+                <div className="col">
+                    {createdDate.toDateString() + ' ' + createdDate.toLocaleTimeString()}
                 </div>
             </Link>
         );
