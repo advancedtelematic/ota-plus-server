@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>Edit_Black</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Edit_Black" stroke="#202020">
+            <g id="Page-1" transform="translate(3.000000, 3.000000)">
+                <path d="M24.1726,5.4062 C24.1726,5.1922 24.0846,4.9862 23.9356,4.8342 L19.8376,0.7372 C19.6796,0.5792 19.4716,0.5002 19.2646,0.5002 C19.0566,0.5002 18.8496,0.5792 18.6926,0.7372 C18.6926,0.7372 3.4366,15.9932 3.4266,16.0032 C3.2376,16.1922 0.5756,22.8972 0.4756,23.1442 C0.3526,23.4452 0.4236,23.7892 0.6536,24.0182 C0.8816,24.2472 1.2256,24.3192 1.5286,24.1972 C1.7646,24.1012 8.4896,21.4272 8.6676,21.2442 C8.7786,21.1332 23.8246,6.0882 23.9356,5.9782 C24.0856,5.8272 24.1726,5.6222 24.1726,5.4062 Z" id="Stroke-1"></path>
+                <path d="M20.4307,5.7095 L6.7717,19.3525" id="Stroke-3"></path>
+                <path d="M3.4264,16.0035 L8.6674,21.2445" id="Stroke-5"></path>
+                <path d="M0.9604,21.9434 L2.7344,23.7174" id="Stroke-7"></path>
+            </g>
+        </g>
+    </g>
+</svg>
