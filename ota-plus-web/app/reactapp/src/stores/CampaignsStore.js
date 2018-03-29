@@ -361,7 +361,7 @@ export default class CampaignsStore {
         campaigns = _.sortBy(campaigns, function(campaign) {
           return campaign.createdAt;
         }).reverse();
-        return campaigns.slice(0,10);
+        return campaigns.slice(0, 10);
     }
 
     @computed get overallCampaignStatistics() {

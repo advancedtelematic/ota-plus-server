@@ -9,11 +9,9 @@ const title = "Home";
 
 @observer
 class Home extends Component {
-    @observable router = null;
 
     constructor(props) {
         super(props);
-        this.redirectTo = this.redirectTo.bind(this);
         this.sanityCheckCompleted = this.sanityCheckCompleted.bind(this);
     }
     componentWillMount() {
@@ -31,32 +29,6 @@ class Home extends Component {
             return true;
         } else {
             return this.props.systemReady || Cookies.get('systemReady') == 1;
-        }
-    }
-    componentWillReceiveProps(nextProps) {
-        if(this.sanityCheckCompleted() && !this.props.otaPlusStore.otaPlusMode) {            
-            this.router = nextProps.router;
-            let allDevicesCount = nextProps.allDevicesCount;
-            let directorDevicesCount = nextProps.directorDevicesCount;
-
-            if(allDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') != 1 && window.atsGarageTheme) {
-                this.redirectTo('welcome');
-            }
-            if(allDevicesCount === 0 && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') && Cookies.get('welcomePageAcknowledged') == 1 && window.atsGarageTheme) {
-                this.redirectTo('destiny');
-            }
-            if(directorDevicesCount === 1 && Cookies.get('fireworksPageAcknowledged') != 1            
-                && !this.router.isActive('/welcome') && !this.router.isActive('/destiny') 
-                && !this.router.isActive('/fireworks')) {
-                    this.redirectTo('fireworks');
-            }
-        }
-    }
-    redirectTo(page, query = null) {
-        if(query) {
-            this.router.push('/' + page + query);
-        } else {
-            this.router.push('/' + page);
         }
     }
     render() {

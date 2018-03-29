@@ -25,19 +25,17 @@ class ActiveCampaignItem extends Component {
         return (
             <Link
                 to={`${link}`}
-                className="element-box campaign" 
+                className="campaign" 
                 title={campaign.name}
                 id={"link-campaignwizard-" + campaign.id}>
-                    <div className="desc">
-                        <div className="title">
-                            {campaign.name}
-                        </div>
-                        <div className="subtitle">
-                            Finished: {totalFinished}/{totalAffected}
-                        </div>
-                        <div className="subtitle">
-                            Failure rate: {failureRate}%
-                        </div>
+                    <div className="col">
+                        {campaign.name}
+                    </div>
+                    <div className="col">
+                        {totalFinished}/{totalAffected}
+                    </div>
+                    <div className="col">
+                        {failureRate}%
                     </div>
             </Link>
         );

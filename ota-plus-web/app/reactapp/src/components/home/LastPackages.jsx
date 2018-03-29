@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { Loader } from '../../partials';
 import _ from 'underscore';
 import LastPackagesItem from './LastPackagesItem';
+import NoItems from './NoItems';
 
 @observer
 class LastPackages extends Component {
@@ -11,11 +12,10 @@ class LastPackages extends Component {
         super(props);
     }
     render() {
-        const { packagesStore } = this.props;
+        const { packagesStore, showPackagesCreateModal } = this.props;
         const { lastPackages } = packagesStore;
-        const noPackages = 'No added packages.';
         return (
-            <span>
+            <span style={{height: '100%'}}>
                 {packagesStore.packagesFetchAsync.isFetching ?
                     <div className="wrapper-center">
                         <Loader 
@@ -33,11 +33,11 @@ class LastPackages extends Component {
                             );
                         })
                     :
-                        <div className="wrapper-center">
-                            {noPackages}
-                        </div>
+                        <NoItems 
+                            itemName={"package"}
+                            create={showPackagesCreateModal}
+                        />
                 }
-                
             </span>
         );
     }

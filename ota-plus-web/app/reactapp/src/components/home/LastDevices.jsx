@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { Loader } from '../../partials';
 import _ from 'underscore';
 import LastDevicesItem from './LastDevicesItem';
+import NoItems from './NoItems';
 
 @observer
 class LastDevices extends Component {
@@ -13,9 +14,8 @@ class LastDevices extends Component {
     render() {
         const { devicesStore } = this.props;
         const { lastDevices } = devicesStore;
-        const noDevices = 'No created devices.';
         return (
-            <span>
+            <span style={{height: '100%'}}>
                 {devicesStore.devicesFetchAsync.isFetching ?
                     <div className="wrapper-center">
                         <Loader 
@@ -33,9 +33,10 @@ class LastDevices extends Component {
                             );
                         })
                     :
-                        <div className="wrapper-center">
-                            {noDevices}
-                        </div>
+                        <NoItems 
+                            itemName={"device"}
+                            create={null}
+                        />
                 }
             </span>
         );
