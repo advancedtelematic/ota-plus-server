@@ -147,7 +147,7 @@ class UserDropdown extends Component {
                                         null
                                     }
                                     <li className="signout">
-                                        <a href="#" className="add-button" onClick={this.logout}>
+                                        <a href="#" className="add-button" onClick={this.logout} id="app-logout">
                                             Log out
                                         </a>
                                     </li>
