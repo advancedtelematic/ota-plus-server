@@ -18,7 +18,6 @@ import {
 import { APP_LAYOUT } from '../config';
 import { 
     Navigation,
-    IntroNavigation,
     SizeVerify,
     UploadBox 
 } from '../partials';
@@ -34,13 +33,7 @@ import { CampaignsWizard } from '../components/campaigns';
 @observer
 class Main extends Component {
     @observable ifLogout = false;
-    @observable directorDevicesCount = null;
-    @observable allDevicesCount = null;
-    @observable router = null;
     @observable systemReady = false;
-    @observable pagesWithRedirectToWelcome = ['page-welcome', 'page-destiny'];
-    @observable pagesWithGradientBackground = ['login'];
-    @observable pagesWithHiddenNavbar = ['page-login'];
     @observable numOfWizards = 0;
     @observable wizards = [];    
     @observable minimizedWizards = [];
@@ -61,9 +54,7 @@ class Main extends Component {
             }
             return Promise.reject(error);
         });
-        this.locationHasChanged = this.locationHasChanged.bind(this);
         this.setSystemReady = this.setSystemReady.bind(this);
-        this.makeBodyGradient = this.makeBodyGradient.bind(this);
         this.backButtonAction = this.backButtonAction.bind(this);
         this.addNewWizard = this.addNewWizard.bind(this);
         this.hideWizard = this.hideWizard.bind(this);
@@ -98,13 +89,6 @@ class Main extends Component {
                 this.callFakeWsHandler();
             }
         });
-        this.devicesHandler = observe(this.devicesStore, (change) => {
-            if(change.name === 'devicesCountFetchAsync' && change.object[change.name].isFetching === false) {
-                this.allDevicesCount = this.devicesStore.directorDevicesCount;
-                this.directorDevicesCount = this.devicesStore.directorDevicesCount;
-            }
-        });
-
         this.featuresHandler = observe(this.featuresStore, (change) => {
             if(change.name === 'featuresFetchAsync' && change.object[change.name].isFetching === false) {
                 if(_.contains(this.featuresStore.features, 'alphaplus')) {
@@ -112,8 +96,6 @@ class Main extends Component {
                 }
             }
         });
-
-        this.makeBodyGradient();
     }
     callFakeWsHandler() {
         let wsUrl = document.getElementById('ws-url').value.replace('bearer', 'logout');
@@ -127,8 +109,6 @@ class Main extends Component {
         this.fakeWebsocketHandler.init();
     }
     componentWillMount() {
-        this.router = this.context.router;
-        this.router.listen(this.locationHasChanged);
         if(this.uiUserProfileMenu) {
             this.userStore.fetchUser();
             this.featuresStore.fetchFeatures();
@@ -221,9 +201,6 @@ class Main extends Component {
         if(e) e.preventDefault();
         this.uploadBoxMinimized = !this.uploadBoxMinimized;
     }
-    locationHasChanged() {
-        this.makeBodyGradient();
-    }
     setSystemReady(value) {
         this.systemReady = value;
     }
@@ -234,18 +211,8 @@ class Main extends Component {
             return this.systemReady || Cookies.get('systemReady') == 1;
         }
     }
-    makeBodyGradient() {
-        let pageName = this.props.location.pathname.toLowerCase().split('/')[1];
-        if(_.includes(this.pagesWithGradientBackground, pageName)) {
-            document.body.className += " gradient";
-        } else {
-            document.body.classList.remove("gradient");
-        }
-    }
     componentWillUnmount() {
         this.logoutHandler();
-        this.devicesHandler();
-        this.provisioningStatusHandler();
         this.featuresHandler();
     }
     backButtonAction(e) {
@@ -264,44 +231,22 @@ class Main extends Component {
         if(this.otaPlusStore.otaPlusMode) {
             logoLink = '/dashboard';
         }
-        if(_.includes(this.pagesWithRedirectToWelcome, pageId)) {
-            logoLink = '/welcome';
-        }
         return (
             <div id={pageId}>
                 <FadeAnimation>
-                    {!_.includes(this.pagesWithHiddenNavbar, pageId) ?
-                        !this.allDevicesCount ?
-                            <IntroNavigation
-                                userStore={this.userStore}
-                                featuresStore={this.featuresStore}
-                                devicesStore={this.devicesStore}
-                                packagesStore={this.packagesStore}
-                                allDevicesCount={this.allDevicesCount}
-                                logoLink={logoLink}
-                                hideQueueModal={this.hideQueueModal}
-                                toggleOtaPlusMode={this.toggleOtaPlusMode}
-                                otaPlusMode={this.otaPlusStore.otaPlusMode}
-                                atsGarageTheme={this.otaPlusStore.atsGarageTheme}
-                                alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
-                                uiUserProfileMenu={this.uiUserProfileMenu}
-                                uiCredentialsDownload={this.uiCredentialsDownload}
-                            />
-                        : this.sanityCheckCompleted() ?
-                                <Navigation
-                                    userStore={this.userStore}
-                                    featuresStore={this.featuresStore}
-                                    devicesStore={this.devicesStore}
-                                    packagesStore={this.packagesStore}
-                                    hideQueueModal={this.hideQueueModal}
-                                    toggleOtaPlusMode={this.toggleOtaPlusMode}
-                                    otaPlusMode={this.otaPlusStore.otaPlusMode}
-                                    alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
-                                    uiUserProfileMenu={this.uiUserProfileMenu}
-                                    uiCredentialsDownload={this.uiCredentialsDownload}
-                                />
-                            :
-                                null                        
+                    {this.sanityCheckCompleted() ?
+                        <Navigation
+                            userStore={this.userStore}
+                            featuresStore={this.featuresStore}
+                            devicesStore={this.devicesStore}
+                            packagesStore={this.packagesStore}
+                            hideQueueModal={this.hideQueueModal}
+                            toggleOtaPlusMode={this.toggleOtaPlusMode}
+                            otaPlusMode={this.otaPlusStore.otaPlusMode}
+                            alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
+                            uiUserProfileMenu={this.uiUserProfileMenu}
+                            uiCredentialsDownload={this.uiCredentialsDownload}
+                        />
                     :
                         null
                     }
@@ -317,9 +262,6 @@ class Main extends Component {
                         featuresStore={this.featuresStore}
                         provisioningStore={this.provisioningStore}
                         userStore={this.userStore}
-                        directorDevicesCount={this.directorDevicesCount}
-                        allDevicesCount={this.allDevicesCount}
-                        router={this.router}
                         backButtonAction={this.backButtonAction}
                         systemReady={this.systemReady}
                         setSystemReady={this.setSystemReady}
@@ -403,10 +345,6 @@ class Main extends Component {
         );
     }
     
-}
-
-Main.contextTypes = {
-    router: React.PropTypes.object.isRequired
 }
 
 Main.propTypes = {

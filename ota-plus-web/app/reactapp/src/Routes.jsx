@@ -10,8 +10,6 @@ import {
     ImpactAnalysisPage,
     ProfilePage,
     NoMatchPage,
-    WelcomePage,
-    DestinyPage,
     FireworksPage,
     SoftwareRepository,
 } from './pages';
@@ -41,8 +39,6 @@ const Routes = () => {
                 <IndexRoute component={HomePage}/>
                 <Route path="/" component={HomePage}/>
                 <Route path="/dashboard" component={DashboardPage}/>
-                <Route path="/welcome" component={WelcomePage}/>
-                <Route path="/destiny" component={DestinyPage}/>
                 <Route path="/fireworks" component={FireworksPage}/>
                 <Route path="/devices" component={DevicesPage}/>
                 <Route path="/device/:id" component={DevicePage}/>

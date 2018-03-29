@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import { Loader } from '../../partials';
 import _ from 'underscore';
 import ActiveCampaignItem from './ActiveCampaignItem';
+import NoItems from './NoItems';
 
 @observer
 class ActiveCampaigns extends Component {
@@ -10,10 +11,9 @@ class ActiveCampaigns extends Component {
         super(props);        
     }    
     render() {
-        const { campaignsStore } = this.props;
-        const noCampaigns = 'No running campaigns.';
+        const { campaignsStore, addNewWizard } = this.props;
         return (
-            <span>
+            <span style={{height: '100%'}}>
                 {campaignsStore.campaignsFetchAsync.isFetching ?
                     <div className="wrapper-center">
                         <Loader />
@@ -29,9 +29,10 @@ class ActiveCampaigns extends Component {
                             );
                         })
                     :
-                        <div className="wrapper-center">
-                            {noCampaigns}
-                        </div>
+                        <NoItems 
+                            itemName={"campaign"}
+                            create={addNewWizard}
+                        />
                 }
             </span>
         );
