@@ -34,7 +34,7 @@ class WizardStep1 extends Component {
                             name="name"
                             placeholder="Name"
                             id="add-campaign-name-form-input"
-                            showIcon={true}
+                            showIcon={false}
                             title="Select campaign name"
                             previousValue={campaignName}
                             onValid={this.changeCampaignName.bind(this)}

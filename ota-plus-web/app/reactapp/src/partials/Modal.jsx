@@ -22,6 +22,7 @@ class Modal extends Component {
                   bodyClassName="body"
                   actionsContainerClassName="actions"
                   autoScrollBodyContent={true}
+                  repositionOnUpdate={true}
                   onRequestClose={onRequestClose}>
               {content}
             </Dialog>
