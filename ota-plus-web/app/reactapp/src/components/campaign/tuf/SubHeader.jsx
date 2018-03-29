@@ -89,7 +89,7 @@ class SubHeader extends Component {
                        value={this.newCampaignName} onChange={this.userTypesName} />
 
                     {this.renameDisabled ?
-                        <img src="/assets/img/icons/black/edit.svg" className="edit" alt="Icon" style={{cursor: 'auto'}} />
+                        <img src="/assets/img/icons/black/edit_pencil.svg" className="edit" alt="Icon" style={{cursor: 'auto'}} />
                     :
                         <div className="icons">
                             {this.newCampaignNameLength ?
