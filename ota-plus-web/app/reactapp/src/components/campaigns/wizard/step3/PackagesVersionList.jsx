@@ -156,7 +156,6 @@ class PackagesVersionList extends Component {
                                     <FormSelect
                                         id="version-from"
                                         options={this.fromVersions}
-                                        visibleFieldsCount={this.fromVersions.length < 4 ? this.fromVersions.length : 4}
                                         appendMenuToBodyTag={true}
                                         label="Version"
                                         multiple={false}
@@ -169,7 +168,6 @@ class PackagesVersionList extends Component {
                                     <FormSelect
                                         id="version-to"
                                         options={versions}
-                                        visibleFieldsCount={versions.length < 4 ? versions.length : 4}
                                         appendMenuToBodyTag={true}
                                         label="Version"
                                         multiple={false}

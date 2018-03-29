@@ -10,12 +10,12 @@
         justify-content: flex-end;
         align-items: center;
         border-top: 1px solid rgba(215, 216, 218, 0.5);
-        padding: 20px 0;
+        padding: 20px 0 0;
       }
 
       .content-step {
         overflow-y: auto;
-        height: 490px;
+        height: 45vh;
 
         .alert {
           margin-bottom: 0;
