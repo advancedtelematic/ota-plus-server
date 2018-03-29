@@ -80,7 +80,7 @@ class HardwarePanel extends Component {
                          onClick={this.showSecondaryDescription} id="hardware-secondary-ecu-details" 
                      />
                 </div>
-                {!_.isEmpty(device.directorAttributes.secondary) ?
+                {!_.isEmpty(device.directorAttributes.secondary) || device.directorAttributes.secondary.length ?
                     _.map(device.directorAttributes.secondary, (item, index) => {
                         return (
                             <PopoverWrapper
