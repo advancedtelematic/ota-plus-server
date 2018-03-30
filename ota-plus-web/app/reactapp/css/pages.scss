@@ -1263,6 +1263,7 @@
             position: relative;
             z-index: 120;
             border-right: 2px solid $panel-delimiter-color;
+            background: #fff;
            
             .wrapper-software {
                 height: calc(100% - 45px);
@@ -1701,7 +1702,7 @@
 
             &__heading {
                 margin-bottom: 10px;
-                font-weight: bold;
+                font-weight: 500;
                 color: $device-hardware-header;
                 font-size: 12px;
 
