@@ -3261,7 +3261,7 @@ input {
         .wrapper-center {
 
             &.left {
-                text-align: left;
+                justify-content: flex-start;
             }
         }
     }

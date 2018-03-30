@@ -65,6 +65,7 @@ class CreateModal extends Component {
                             minDate={moment().toDate()}
                             maxDate={moment().add(4, 'year').toDate()}
                             defaultDate={moment().add(1, 'year').toDate()}
+                            okLabel={"Save"}
                             required
                         />
                     </div>
