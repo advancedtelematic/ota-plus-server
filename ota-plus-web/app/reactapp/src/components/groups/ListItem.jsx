@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
+import { observable } from 'mobx';
 import { translate } from 'react-i18next';
 import { DropTarget } from 'react-dnd';
+import CreateModal from './CreateModal';
 
 const groupTarget = {
     drop(props, monitor) {
@@ -20,9 +22,24 @@ function collect(connect, monitor) {
 
 @observer
 class ListItem extends Component {
+    @observable createModalShown = false;
+
     constructor(props) {
         super(props);
+        this.showCreateModal = this.showCreateModal.bind(this);
+        this.hideCreateModal = this.hideCreateModal.bind(this);
     }
+
+    showCreateModal(e) {
+        if(e) e.stopPropagation();
+        this.createModalShown = true;
+    }
+
+    hideCreateModal(e) {
+        if(e) e.preventDefault();
+        this.createModalShown = false;
+    }
+
     render() {
         const { t, group, isSelected, selectGroup, groupsStore } = this.props;
         const { isOver, canDrop, connectDropTarget } = this.props;
@@ -39,11 +56,28 @@ class ListItem extends Component {
                     <div className="desc">
                         <div className="title">
                             {group.groupName}
+                            <img src="../assets/img/icons/white/Rename.svg" alt="Rename" onClick={() => {
+                                selectGroup({type: 'real', name: group.groupName, id: group.id});
+                                this.showCreateModal();
+                            }}/>
                         </div>
                         <div className="subtitle" id={"group-" + group.groupName + '-devices'}>
                             {t('common.deviceWithCount', {count: group.devices.total})}
                         </div>
-                    </div>                    
+                    </div>
+                    {this.createModalShown ?
+                        <CreateModal
+                            shown={this.createModalShown}
+                            hide={this.hideCreateModal}
+                            groupsStore={groupsStore}
+                            selectGroup={selectGroup}
+                            action="rename"
+                            modalTitle="Edit Group"
+                            buttonText="Save"
+                        />
+                        :
+                        null
+                    }
                 </div>
             )
         );

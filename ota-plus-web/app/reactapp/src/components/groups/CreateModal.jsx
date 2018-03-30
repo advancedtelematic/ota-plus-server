@@ -26,17 +26,27 @@ class CreateModal extends Component {
     }
     submitForm(e) {
         if(e) e.preventDefault();
+        const {action = 'create', groupsStore} = this.props;
         let data = serialize(document.querySelector('#group-create-form'), { hash: true });
-        this.props.groupsStore.createGroup(data.groupName);
+        if (action === 'rename') {
+            this.props.groupsStore.renameGroup(groupsStore.selectedGroup.id, data.groupName);
+            this.props.groupsStore._updateGroupData(groupsStore.selectedGroup.id, data);
+            this.props.hide();
+        } else {
+            this.props.groupsStore.createGroup(data.groupName);
+        }
     }
     handleResponse() {
         let data = serialize(document.querySelector('#group-create-form'), { hash: true });
         this.props.selectGroup({type: 'real', name: data.groupName, id: this.props.groupsStore.latestCreatedGroupId});
+        this.props.groupsStore._updateGroupData(this.props.groupsStore.selectedGroup.id, {name: data.groupName});
+        this.props.groupsStore.selectedGroup.name = data.groupName;
+        this.props.groupsStore._prepareGroups();
         this.props.devicesStore.fetchDevices('', this.props.groupsStore.latestCreatedGroupId);
         this.props.hide();
     }
     render() {
-        const { shown, hide, groupsStore } = this.props;
+        const { shown, hide, groupsStore, modalTitle = 'Add new group', buttonText = 'Add' } = this.props;
         const form = (
             <Form                
                 onSubmit={this.submitForm.bind(this)}
@@ -74,7 +84,7 @@ class CreateModal extends Component {
                                 className="btn-primary"
                                 id="add"
                             >
-                                Add
+                                {buttonText}
                             </button>
                         </div>
                     </div>
@@ -86,7 +96,7 @@ class CreateModal extends Component {
                 title={
                     <div className="heading">
                         <div className="internal">
-                            Add new group
+                            {modalTitle}
                         </div>
                     </div>
                 }
