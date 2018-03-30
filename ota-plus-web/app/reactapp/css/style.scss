@@ -1062,7 +1062,7 @@ input {
                             text-overflow: ellipsis;
                             
                             &:focus {
-                                outline: auto;
+                                outline: none;
                                 background-color: rgba(0,0,0,0.2);
                             }
                         }
@@ -1093,7 +1093,7 @@ input {
                                 opacity: 1;
                             }
                             input {
-                                background-color: #ddd;
+                                background-color: #F3F3F4;
                             }
                         }
                     }
