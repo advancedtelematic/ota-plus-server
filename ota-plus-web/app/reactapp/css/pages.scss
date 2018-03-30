@@ -2365,20 +2365,17 @@
                             text-shadow: none;
                             position: relative;
 
-                            .title, .subtitle {
-                                display: inline-block;
-                            }
-
                             .title {
                                 color: #000;
                                 line-height: 19px;
-                                font-size: 16px;
+                                font-size: 18px;
+                                margin-bottom: 5px;
                             }
 
                             .subtitle {
-                                font-size: 12px;
+                                font-size: 10px;
                                 line-height: 14px;
-                                color: $device-hardware-header;
+                                color: $home-grey;
                             }
 
                             &:hover {
@@ -2386,13 +2383,10 @@
                             }
 
                             .icon {
-                                background-image: url(/assets/img/icons/white/key.png);
-                                background-size: 35px 36px;
-                                background-position: 13px 11px;
-                                background-color: #666;
-                                -webkit-box-shadow: 0px 0px 15px -4px rgba(0,0,0,0.75);
-                                -moz-box-shadow: 0px 0px 15px -4px rgba(0,0,0,0.75);
-                                box-shadow: 0px 0px 15px -4px rgba(0,0,0,0.75);
+                                background-image: url(/assets/img/icons/key.svg);
+                                background-size: 100%;
+                                width: 50px;
+                                height: 50px;
                             }
 
                             .download-icon {
@@ -2402,7 +2396,7 @@
                                 right: 15px;
 
                                 img {
-                                    width: 15px;
+                                    width: 17px;
                                 }
                             }
                         }
