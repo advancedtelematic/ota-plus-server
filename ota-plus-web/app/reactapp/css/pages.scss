@@ -1910,6 +1910,18 @@
             .ios-list {
                 height: calc(100% - 40px);
 
+                span.key {
+                    &:last-child {
+                        .item {
+                            border-bottom: none;
+                        }
+                    }
+                }
+
+                .fake-header {
+                    border-bottom: none;
+                }
+
                 .selected {
                     background-color: #fff;
                     border-left: 10px solid $color-mint;
@@ -1929,6 +1941,7 @@
 
                 span:not(:first-child) {
                     .header {
+                        border-bottom: none;
                         .right-box {
                             display: none;
                         }
