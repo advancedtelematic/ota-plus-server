@@ -37,7 +37,11 @@ class SecondaryEcu extends Component {
                          id={"hardware-key-icon-secondary-" + ecu.id}
                          onClick={otherProps.handleTouchTap}>
                             <span className="hardware-icon">
-                                <img src="/assets/img/icons/key.svg" alt="Icon" />
+                                {active ?
+                                    <img src="/assets/img/icons/white/lock.svg" alt="Icon" />
+                                :
+                                    <img src="/assets/img/icons/black/lock.svg" alt="Icon" />
+                                }
                             </span>
                     </div>
                 </a>

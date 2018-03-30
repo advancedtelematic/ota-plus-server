@@ -35,14 +35,22 @@ class PrimaryEcu extends Component {
                             id="hardware-details-icon-primary"
                             onClick={showHardwareOverlay}
                         >
-                            <img src="/assets/img/icons/black/icon.svg" alt="Icon" />
+                            {active ?
+                                <img src="/assets/img/icons/white/info_icon.svg" alt="Icon" />
+                            :
+                                <img src="/assets/img/icons/black/info_icon.svg" alt="Icon" />
+                            }
                         </div>
                         <div
                             className="hardware-icon key" 
                             id="hardware-key-icon-primary"
                             onClick={otherProps.handleTouchTap}
                         >
-                            <img src="/assets/img/icons/key.svg" alt="Icon" />
+                            {active ?
+                                <img src="/assets/img/icons/white/lock.svg" alt="Icon" />
+                            :
+                                <img src="/assets/img/icons/black/lock.svg" alt="Icon" />
+                            }
                         </div>
                     </div>
                 </a>
