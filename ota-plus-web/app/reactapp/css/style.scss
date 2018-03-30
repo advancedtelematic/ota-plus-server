@@ -3173,17 +3173,17 @@ input {
 
                 &.success {
                     color: #fff;
-                    background-color: #369E47;
+                    background-color: $device-pack-installed-bg;
                 }
 
                 &.pending {
                     color: #fff;
-                    background-color: #F7A621;
+                    background-color: $device-pack-queued-bg;
                 }
 
                 &.error {
                     color: #fff;
-                    background-color: #FE0000;
+                    background-color: $campaigns-cancel-color;
                 }
             }
         }
