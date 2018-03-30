@@ -31,7 +31,7 @@ class PackagesVersionList extends Component {
         this.props.selectVersion(data);
     }
     selectHardwareId(data, obj) {
-        data.hardwareId = obj.value;
+        data.hardwareId = obj.value ? obj.value : obj;
         this.props.selectVersion(data);
     }
     componentWillMount() {
