@@ -125,7 +125,7 @@ class BlacklistedPackages extends Component {
                                 </div>
                                 {_.map(packs, (pack, index) => {
                                     return (
-                                        <span key={index}>
+                                        <span key={index} className="key">
                                             <button 
                                                 className={"item" + (this.expandedPackage == pack.packageName ? " selected" : "")}
                                                 id={"impact-analysis-blacklisted-" + pack.packageName}
