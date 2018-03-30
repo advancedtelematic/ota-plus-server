@@ -433,91 +433,87 @@ class Wizard extends Component {
                 className={"campaigns-wizard campaigns-wizard-" + wizardIdentifier + (campaignsStore.fullScreenMode ? ' full-screen' : '')}>
                 <div className="draggable-content">                    
                     <div className="internal-body">
-                        <span>                            
-                            <div className="stepper">
-                                <div className="wrapper-steps-no">
-                                    {_.map(this.wizardSteps, (step, index) => {
-                                        return (
-                                            <div
-                                                className={"step" + (this.currentStepId == index ? " active" : "")}
-                                                key={'wizard-step-' + index}>
-                                                <a href="#" className="dot"
-                                                   onClick={this.jumpToStep.bind(this, index)}>
-                                                    {index + 1}
-                                                </a>
-                                                <div className="stepnum">
-                                                    {step.title}
-                                                </div>
+                        <div className="stepper">
+                            <div className="wrapper-steps-no">
+                                {_.map(this.wizardSteps, (step, index) => {
+                                    return (
+                                        <div
+                                            className={"step" + (this.currentStepId == index ? " active" : "")}
+                                            key={'wizard-step-' + index}>
+                                            <a href="#" className="dot"
+                                               onClick={this.jumpToStep.bind(this, index)}>
+                                                {index + 1}
+                                            </a>
+                                            <div className="stepnum">
+                                                {step.title}
                                             </div>
-                                        );
-                                    }, this)}
+                                        </div>
+                                    );
+                                }, this)}
+                            </div>
+                        </div>
+                            <div className={"content-step step-" + currentStep.name}>
+                                {campaignsStore.campaignsOneFetchAsync.isFetching ?
+                                    <div className="wrapper-center">
+                                        <Loader />
+                                    </div>
+                                    :
+                                    React.createElement(currentStep.class, {
+                                        campaign: {},
+                                        campaignsStore: campaignsStore,
+                                        setWizardData: this.setWizardData,
+                                        wizardData: this.wizardData,
+                                        markStepAsFinished: this.markStepAsFinished,
+                                        markStepAsNotFinished: this.markStepAsNotFinished,
+                                        filterValue: this.filterValue,
+                                        packagesStore: packagesStore,
+                                        groupsStore: groupsStore,
+                                        hardwareStore: hardwareStore,
+                                        selectFromVersion: this.selectFromVersion,
+                                        selectedFromVersion: this.selectedFromVersion,
+                                        selectVersion: this.selectVersion,
+                                        wizardIdentifier: wizardIdentifier,
+                                        setRawSelectedPacks: this.setRawSelectedPacks,
+                                        rawSelectedPacks: this.rawSelectedPacks,
+                                        removeSelectedPacksByKeys: this.removeSelectedPacksByKeys,
+                                        addToCampaign: this.addToCampaign,
+                                    })
+                                }
+                                {currentStep.isSearchBarShown ?
+                                    <Form>
+                                        <SearchBar
+                                            value={this.filterValue}
+                                            changeAction={this.changeFilter}
+                                            id="wizard-search-package"
+                                        />
+                                    </Form>
+                                    :
+                                    null
+                                }
+                            </div>
+                            <div className="wizard-actions">
+                              <a href="#" className="link-cancel" id="save-and-close"
+                                 onClick={hideWizard.bind(this, wizardIdentifier)}>
+                                  Close
+                              </a>
+                                <div className="wrapper-confirm">
+                                {this.isLastStep() ?
+                                    <button
+                                        className="btn-primary btn-red"
+                                        id="wizard-launch-button"
+                                        onClick={this.launch}
+                                        disabled={!currentStep.isFinished}
+                                    >Launch</button>
+                                    :
+                                    <button
+                                        className="btn-primary"
+                                        id="next-step"
+                                        onClick={this.nextStep}
+                                        disabled={!currentStep.isFinished}
+                                    >Next</button>
+                                }
                                 </div>
                             </div>
-                            <span>
-                                <div className={"content-step step-" + currentStep.name}>
-                                    {campaignsStore.campaignsOneFetchAsync.isFetching ?
-                                        <div className="wrapper-center">
-                                            <Loader />
-                                        </div>
-                                        :
-                                        React.createElement(currentStep.class, {
-                                            campaign: {},
-                                            campaignsStore: campaignsStore,
-                                            setWizardData: this.setWizardData,
-                                            wizardData: this.wizardData,
-                                            markStepAsFinished: this.markStepAsFinished,
-                                            markStepAsNotFinished: this.markStepAsNotFinished,
-                                            filterValue: this.filterValue,
-                                            packagesStore: packagesStore,
-                                            groupsStore: groupsStore,
-                                            hardwareStore: hardwareStore,
-                                            selectFromVersion: this.selectFromVersion,
-                                            selectedFromVersion: this.selectedFromVersion,
-                                            selectVersion: this.selectVersion,
-                                            wizardIdentifier: wizardIdentifier,
-                                            setRawSelectedPacks: this.setRawSelectedPacks,
-                                            rawSelectedPacks: this.rawSelectedPacks,
-                                            removeSelectedPacksByKeys: this.removeSelectedPacksByKeys,
-                                            addToCampaign: this.addToCampaign,
-                                        })
-                                    }
-                                    {currentStep.isSearchBarShown ?
-                                        <Form>
-                                            <SearchBar
-                                                value={this.filterValue}
-                                                changeAction={this.changeFilter}
-                                                id="wizard-search-package"
-                                            />
-                                        </Form>
-                                        :
-                                        null
-                                    }
-                                </div>
-                                <div className="wizard-actions">
-                                  <a href="#" className="link-cancel" id="save-and-close"
-                                     onClick={hideWizard.bind(this, wizardIdentifier)}>
-                                      Close
-                                  </a>
-                                    <div className="wrapper-confirm">
-                                    {this.isLastStep() ?
-                                        <button
-                                            className="btn-primary btn-red"
-                                            id="wizard-launch-button"
-                                            onClick={this.launch}
-                                            disabled={!currentStep.isFinished}
-                                        >Launch</button>
-                                        :
-                                        <button
-                                            className="btn-primary"
-                                            id="next-step"
-                                            onClick={this.nextStep}
-                                            disabled={!currentStep.isFinished}
-                                        >Next</button>
-                                    }
-                                    </div>
-                                </div>
-                            </span>
-                        </span>
                     </div>
                 </div>
                 <div id="dropdown-render"></div>
