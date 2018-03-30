@@ -2382,7 +2382,8 @@
 
                             .download-icon {
                                 position: absolute;
-                                top: 20px;
+                                top: 50%;
+                                transform: translateY(-50%);
                                 right: 15px;
 
                                 img {
