@@ -66,7 +66,7 @@ class WizardStep3 extends Component {
                                         </div>
                                         {_.map(packages, (pack, index) => {
                                              return (
-                                                <span key={index}>
+                                                <span key={index} className="key">
                                                     <WizardPackagesVersionList
                                                         pack={pack}
                                                         packsCount={packsCount}
