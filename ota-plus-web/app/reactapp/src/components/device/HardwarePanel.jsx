@@ -76,9 +76,15 @@ class HardwarePanel extends Component {
             <span>
                 <div className="hardware-title">
                     {secondaryEcusTitle}
-                    <img src="/assets/img/icons/questionmark.png" alt="" className="hardware-secondary-details" 
-                         onClick={this.showSecondaryDescription} id="hardware-secondary-ecu-details" 
-                     />
+                    {isPrimaryEcuActive ?
+                        <img src="/assets/img/icons/black/question.svg" alt="" className="hardware-secondary-details" 
+                             onClick={this.showSecondaryDescription} id="hardware-secondary-ecu-details" 
+                         />
+                    :
+                        <img src="/assets/img/icons/white/question.svg" alt="" className="hardware-secondary-details" 
+                             onClick={this.showSecondaryDescription} id="hardware-secondary-ecu-details" 
+                         />
+                    }
                 </div>
                 {!_.isEmpty(device.directorAttributes.secondary) || device.directorAttributes.secondary.length ?
                     _.map(device.directorAttributes.secondary, (item, index) => {
