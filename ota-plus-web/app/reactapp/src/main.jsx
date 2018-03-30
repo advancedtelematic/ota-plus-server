@@ -12,11 +12,11 @@ const muiTheme = getMuiTheme({
         primary1Color: '#9ce2d8',
     },
     datePicker: {
-        selectColor: '#9ce2d8',
+        selectColor: '#48DAD0',
     },
     flatButton: {
         primaryTextColor: '#4B5151',
-    }
+    },
 });
 
 const Main = () => {

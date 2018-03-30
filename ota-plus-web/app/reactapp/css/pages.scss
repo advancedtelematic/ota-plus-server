@@ -1874,7 +1874,7 @@
             }
 
             &__chart {
-                width: 15%;
+                width: 16%;
                 float: left;
             }
 
@@ -1903,6 +1903,7 @@
                 @include transition;
                 background: #fff;
                 overflow: hidden;
+                border-top: 1px solid $add-button-grey;
 
                 &--ident {
                     margin-bottom: 5px;
@@ -1976,7 +1977,8 @@
             &__manager {
                 display: flex;
                 justify-content: flex-end;
-                background-color: rgba(243,243,244,0.5);
+                background-color: rgba(15,22,33,0.1);
+                box-shadow: 0 0 2px 0 rgba(0,0,0,0.08);
                 margin-bottom: 10px;
                 padding: 15px 35px;
                 margin-left: 10px;
