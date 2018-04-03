@@ -1791,6 +1791,8 @@ input {
             width: 100%!important;
             left: 50%;
             margin-left: -50vw;
+            padding: 30px;
+            background-color: #fff;
             margin-top: 0!important;
 
             .draggable-content {
@@ -1829,9 +1831,13 @@ input {
             padding: 0 !important;
         }
 
+        h3.heading {
+            padding: 24px 24px 20px !important;
+        }
+
         .sequencer-wrapper {
-            padding: 30px 15px;
-            background-color: #F7F7F7;
+            padding: 0 15px;
+            background-color: #fff;
 
             .c-sequencer {
                 background-color: #fff;
@@ -1887,122 +1893,113 @@ input {
     width: 100%;
     align-items: center;
     justify-content: center;
-    padding: 15px 0;
+    padding: 15px 0 35px;
 
     &__fullscreen-hide, &__fullscreen-show {
         position: absolute;
-        right: 15px;
-        top: 15px;
+        right: 2px;
+        bottom: 10px;
         z-index: 100;
+        color: #9B9DA2;
         background-color: #fff;
+        img {
+            padding-bottom: 2px;
+        }
     }
 
-    &__init {
-        font-size: 14px;
-        padding: 15px 0;
-        color: #9b9b9b;
+    &__phase, &__init, &__termination {
+        font-size: 10px;
+        color: #6F737A;
+        font-weight: 500;
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 8px 0;
+        background-color: #fff;
+
     }
 
-    &__termination {
-        font-size: 14px;
-        padding: 15px 0;
-        color: #9b9b9b;
-    }
-
-    &__starter-point {
-        border-radius: 15px;
+    &__starter-point, &__end-point {
         display: flex;
         min-width: 250px;
-        height: 99px;
-        background-color: #9B9B9B;
-        color: #000;
+        height: 81px;
+        background-color: #FFF;
+        color: #9B9DA2;
         flex-direction: column;
         justify-content: center;
-        margin-bottom: 50px;
-        position: relative;
         min-height: 125px;
         overflow: hidden;
-    }
-
-    &__end-point {
-        border-radius: 15px;
-        display: flex;
-        min-width: 250px;
-        height: 99px;
-        color: #000;
-        background-color: #9B9B9B;
-        flex-direction: column;
-        justify-content: center;
-        margin-bottom: 50px;
-        position: relative;
-        min-height: 125px;
-        overflow: hidden;
+        margin-bottom: 15px;
+        text-transform: uppercase;
     }
 
     &__text {
         display: flex;
         width: 100%;
+        height: 81px;
         justify-content: center;
         align-items: center;
         font-size: 19px;
         flex-basis: 95%;
     }
 
-    &__flexrow {
+    &__wrapper {
         display: flex;
-        padding: 15px 30px;
-        border-left: 1px solid #ccc;
         flex-direction: column;
-        height: 100%;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
-        transition: width 0.4s, opacity 0.8s;
+        background-color: #f3f3f4;
+        width: 100%;
+        height: 100%;
+        transition: width 0.4s,  opacity 0.4s;
         transition-timing-function: ease;
-
-        &:last-child {
-            border-right: 1px solid #ccc;
+        will-change: transform, width;
+        &:not(:last-child) {
+            margin-right: 4px;
         }
-
         &--hide {
             display: flex;
             width: 0;
             padding: 0;
             opacity: 0;
+            margin-right: 0 !important;
         }
 
         &--show {
-            width: 311px;
-        }
-
-        &--default-phase {
-            position: relative;
-            justify-content: space-between;
-
-            .c-sequencer__text {
-                color: #fff;
-            }
+            width: 100%;
+            opacity: 1;
         }
     }
 
-    &__phase {
-        font-size: 14px;
-        padding: 15px 0;
-        position: absolute;
-        color: #9b9b9b;
-        top: 30px;
+    &__flexrow {
+        display: flex;
+        padding: 15px 30px;
+        flex-direction: column;
+        height: 90%;
+        justify-content: center;
+        align-items: center;
+
+        &--default-phase {
+            position: relative;
+        }
+        
+        &--hide {
+            display: none;
+        }
     }
 
     &__empty-node {
         height: 1px;
         display: flex;
-        width: 250px;
+        width: 140px;
         transition: height 0.4s ease;
 
         &--highlighted {
-            border: 2px dashed #9b9b9b!important;
-            border-radius: 15px;
+            border: 2px dashed #48DAD0 !important;
+            border-radius: 2px;
+            width:250px;
             cursor: pointer;
-            height: 99px;
+            height: 95px;
 
             &:not(:last-child) {
                 margin-bottom: 50px;
@@ -2013,24 +2010,29 @@ input {
     &__details-row {
         display: flex;
         flex-direction:row;
-        max-width: 249px;
+        max-width: 100%;
     }
 
     &__item {
         position: relative;
         flex-wrap: wrap;
-        border: 1px solid #000;
-        border-radius: 15px;
+        border-radius: 2px;
         display: flex;
         flex-direction: row;
+        background-color: #FFFFFF;
+        height: auto;
+        box-shadow: 0 2px 4px 0 rgba(15,22,33,0.2);
         width: 250px;
         cursor: pointer;
         margin-bottom: 50px;
         overflow: hidden;
+        .c-sequencer__progress-status {
+            right: 10px;
+        }
     }
 
     &__info {
-        margin: 10px 30px 10px 10px;
+        margin: 7px 10px 7px 7px;
         flex-basis: 75%;
         @include textoverflowEllipsis;
     }
@@ -2048,20 +2050,17 @@ input {
     }
 
     &__pack-name {
-        font-size: 10px;
-        @include textoverflowEllipsis;
-        font-weight: bold;
-        font-size: 13px;
+        font-size: 16px;
+        font-weight: 300;
         margin-bottom: 5px;
-    }
-
-    &__update-from {
-        font-size: 10px;
+        color:#0F1621;
         @include textoverflowEllipsis;
     }
 
-    &__update-to {
-        font-size: 10px;
+    &__update-from, &__update-to {
+        font-size: 85%;
+        font-weight: 500;
+        color: #9B9DA2;
         @include textoverflowEllipsis;
     }
 
@@ -2072,8 +2071,9 @@ input {
     &__failure {
         height: 100%;
         width: 100%;
-        background: #FC0003;
-        border-top-right-radius: 15px;
+        background: #D0021B;
+        border-top-right-radius: 2px;
+        border-bottom-right-radius: 2px;
         position: relative;
     }
 
@@ -2081,13 +2081,13 @@ input {
         position: absolute;
         z-index: 10;
         top: 70px;
-        left: 5px;
+        left: -25px;
     }
 
     &__list {
         min-width: 100px;
         margin: 0;
-        background-color: #FC0003;
+        background-color: #D0021B;
         padding: 0 2px;
         box-shadow: 0 14px 45px rgba(0,0,0,.25), 0 10px 18px rgba(0,0,0,.22);
     }
@@ -2096,8 +2096,13 @@ input {
         display: flex;
         padding: 5px 3px;
         color: #fff;
-        font-size: 11px;
+        font-size: 10px;
+        font-weight: 500;
         justify-content: space-between;
+
+        &:hover {
+            background-color: rgba(165,0,47,0.41);
+        }
 
         &:not(:last-child) {
             border-bottom: 1px solid #fff;
@@ -2117,23 +2122,16 @@ input {
 
     &__fill {
         height: 24px;
-        background-color: #9ce2d8;
+        background-color: $switch-blue-color;
         align-items: center;
         justify-content: flex-end;
         display: flex;
+        color: #fff;
     }
 
     &__progress-status {
         position: absolute;
-        right: 10px;
-    }
-
-    &__progress-icon {
-        background-color: #fff;
-        color: #000;
-        border-radius: 50%;
-        padding: 2px;
-        margin-left: 10px;
+        right: 35px;
     }
 
     &__icon {        
@@ -2161,7 +2159,7 @@ input {
             width: 100%;
             height: 100%;
             display: flex;
-            background-size: 70%;
+            background-size: 60%;
         }
     }
 }
