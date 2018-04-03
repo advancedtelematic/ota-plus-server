@@ -305,10 +305,8 @@
           display: flex;
           align-items: center;
           justify-content: center;
-
-          .c-sequencer__failure {
-            border-bottom-right-radius: 15px;
-          }
+          background-color: #fff;
+          
           .c-sequencer__end-point, .c-sequencer__starter-point {
             min-height: inherit;
           }
@@ -558,8 +556,8 @@
     & > .dot {
       color: #ccc;
       font-size: 16px;
-      width: 26px;
-      height: 26px;
+      width: 40px;
+      height: 40px;
       background: #E7E7E8;
       padding: 2px 0 0 0;
       border-radius: 50%;
