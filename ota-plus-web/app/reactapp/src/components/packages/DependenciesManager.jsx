@@ -136,7 +136,7 @@ class DependenciesManager extends Component {
                                                     let versionString = version.filepath;
                                                     return (
                                                         version.id.version !== activePackage.id.version ?
-                                                            <span className="item" key={index}>
+                                                            <span className={`item ${index % 2 === 0 ? '' : 'odd'}`} key={index}>
                                                                 <span className="value"
                                                                       id={"other-pack-" + version.id.version}>
                                                                     {version.id.version}
@@ -184,7 +184,7 @@ class DependenciesManager extends Component {
                     </div>
                 </div>
                 <div className="body-actions">
-                    <a href="#" onClick={hide.bind(this)} className="link-cancel" id="link-close" style={{margin: 0}}>Close</a>
+                    <a href="#" onClick={hide.bind(this)} className="btn-primary" id="link-close" style={{margin: 0}}>Close</a>
                 </div>
             </span>
         );
