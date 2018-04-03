@@ -32,7 +32,6 @@ class SequencerProgress extends  Component {
                 <div className="c-sequencer__fill" style={{width: this.progress + '%'}}>
                     <span className="c-sequencer__progress-status">
                         {this.progress + '%'}
-                        <i className="c-sequencer__progress-icon fa fa-check"/>
                     </span>
                 </div>
             </div>

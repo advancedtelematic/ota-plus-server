@@ -204,58 +204,62 @@ class Sequencer extends Component {
             campaignsStore.fullScreenMode ?
                 <div className="c-sequencer__fullscreen-hide">
                     <a href="#" onClick={this.hideFullScreen.bind(this)}>
-                        <img src="/assets/img/icons/black/minimize.svg" alt="Icon" />
+                        Minimise <img src="/assets/img/icons/expand_icon.svg" alt="Icon" />
                     </a>
                 </div>
             :
                 <div className="c-sequencer__fullscreen-show">
                     <a href="#" onClick={this.showFullScreen.bind(this)}>
-                        <img src="/assets/img/icons/black/maximize.svg" alt="Icon" />
+                        Expand <img src="/assets/img/icons/expand_icon.svg" alt="Icon" />
                     </a>
                 </div>
         );
         const initPhase = (
-            <div className="c-sequencer__flexrow c-sequencer__flexrow--default-phase">
+            <div className="c-sequencer__wrapper">
                 <div className="c-sequencer__init">Phase 1</div>
-                <div className="c-sequencer__starter-point"
-                     onClick={!_.isNull(this.selectedElement) && this.selectedElement.row > 0 ? this.moveElement.bind(this, {column : -1, row: -1, value: {}}) : null}
-                >
-                    <div className="c-sequencer__text">
-                        Init
+                <div className="c-sequencer__flexrow c-sequencer__flexrow--default-phase">
+                    <div className="c-sequencer__starter-point"
+                         onClick={!_.isNull(this.selectedElement) && this.selectedElement.row > 0 ? this.moveElement.bind(this, {column : -1, row: -1, value: {}}) : null}
+                    >
+                        <div className="c-sequencer__text">
+                            Init
+                        </div>
+                        {readOnly ?
+                            <SequencerProgress
+                                delay={0}
+                                duration={INIT_PROGRESS_TIME}
+                                className={"c-sequencer__progress c-sequencer__progress--default-phase"}
+                            />
+                            :
+                            null
+                        }
                     </div>
-                    {readOnly ? 
-                        <SequencerProgress
-                            delay={0}
-                            duration={INIT_PROGRESS_TIME}
-                            className={"c-sequencer__progress c-sequencer__progress--default-phase"}
-                        />
-                    :
-                        null
-                    }
+                    <div className="c-sequencer__init" style={{visibility: 'hidden'}}>Phase 1</div>
                 </div>
-                <div className="c-sequencer__init" style={{visibility: 'hidden'}}>Phase 1</div>
             </div>
         );
         const terminationPhase = (
-            <div className="c-sequencer__flexrow c-sequencer__flexrow--default-phase">
+            <div className="c-sequencer__wrapper">
                 <div className="c-sequencer__termination">Phase {numberOfPhases + 2}</div>
-                <div className="c-sequencer__end-point"
-                     onClick={!_.isNull(this.selectedElement) && this.selectedElement.row > 0 ? this.moveElement.bind(this, {column : -1, row: -1, value: {}}) : null}
-                >
-                    <div className="c-sequencer__text">
-                        Termination
+                <div className="c-sequencer__flexrow c-sequencer__flexrow--default-phase">
+                    <div className="c-sequencer__end-point"
+                         onClick={!_.isNull(this.selectedElement) && this.selectedElement.row > 0 ? this.moveElement.bind(this, {column : -1, row: -1, value: {}}) : null}
+                    >
+                        <div className="c-sequencer__text">
+                            Termination
+                        </div>
+                        {readOnly ?
+                            <SequencerProgress
+                                delay={INIT_PROGRESS_TIME + (PHASE_PROGRESS_TIME * numberOfPhases)}
+                                duration={TERMINATION_PROGRESS_TIME}
+                                className={"c-sequencer__progress c-sequencer__progress--default-phase"}
+                            />
+                            :
+                            null
+                        }
                     </div>
-                    {readOnly ? 
-                        <SequencerProgress
-                            delay={INIT_PROGRESS_TIME + (PHASE_PROGRESS_TIME * numberOfPhases)}
-                            duration={TERMINATION_PROGRESS_TIME}
-                            className={"c-sequencer__progress c-sequencer__progress--default-phase"}
-                        />
-                    :
-                        null
-                    }
+                    <div className="c-sequencer__termination" style={{visibility: 'hidden'}}>Phase {updatesArray.length + 2}</div>
                 </div>
-                <div className="c-sequencer__termination" style={{visibility: 'hidden'}}>Phase {updatesArray.length + 2}</div>
             </div>
         );
         return (
@@ -265,51 +269,53 @@ class Sequencer extends Component {
                 </div>
             :
                 <div className="c-sequencer">
-                    {!readOnly ?
-                        fullScreenBlock
-                    :
-                        null
-                    }
                     {initPhase}
                     {_.map(updatesArray, (val, rowIndex) => {
                         let rowIsEmpty = _.find(updatesMatrix[rowIndex], (obj) => { return !_.isEmpty(obj) });
                         return (
-                            <div className={`c-sequencer__flexrow c-sequencer__flexrow--${rowIndex} ${rowIsEmpty || this.selectedElement ? 'c-sequencer__flexrow--show' : 'c-sequencer__flexrow--hide'}`} key={rowIndex}>
+                            <div className={`c-sequencer__wrapper ${rowIsEmpty || this.selectedElement ? 'c-sequencer__wrapper--show' : 'c-sequencer__wrapper--hide'}`}>
                                 <span className="c-sequencer__phase">Phase {rowIndex + 2}</span>
-                                {updatesMatrix[rowIndex] && updatesMatrix[rowIndex].length > 0 ?
-                                    _.map(updatesMatrix[rowIndex], (value, columnIndex) => {
-                                        if (!_.isEmpty(value)) {
-                                            return (
-                                                <SequencerItem
-                                                    value={value}
-                                                    delay={INIT_PROGRESS_TIME * (rowIndex + 1)}
-                                                    duration={PHASE_PROGRESS_TIME}
-                                                    selectSlot={this.selectSlot}
-                                                    selectedElement={this.selectedElement}
-                                                    deselectSlot={this.deselectSlot}
-                                                    selectAction={this.selectAction}
-                                                    row={rowIndex}
-                                                    column={columnIndex}
-                                                    key={columnIndex}
-                                                    readOnly={readOnly}
-                                                />
-                                            )
-                                        } else {
+                                <div className={`c-sequencer__flexrow c-sequencer__flexrow--${rowIndex} ${rowIsEmpty || this.selectedElement ? '' : 'c-sequencer__flexrow--hide'}`} key={rowIndex}>
+                                    {updatesMatrix[rowIndex] && updatesMatrix[rowIndex].length > 0 ?
+                                        _.map(updatesMatrix[rowIndex], (value, columnIndex) => {
+                                            if (!_.isEmpty(value)) {
+                                                return (
+                                                    <SequencerItem
+                                                        value={value}
+                                                        delay={INIT_PROGRESS_TIME * (rowIndex + 1)}
+                                                        duration={PHASE_PROGRESS_TIME}
+                                                        selectSlot={this.selectSlot}
+                                                        selectedElement={this.selectedElement}
+                                                        deselectSlot={this.deselectSlot}
+                                                        selectAction={this.selectAction}
+                                                        row={rowIndex}
+                                                        column={columnIndex}
+                                                        key={columnIndex}
+                                                        readOnly={readOnly}
+                                                    />
+                                                )
+                                            } else {
+                                                return <div className="c-sequencer__empty-node"
+                                                            onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, {column: columnIndex, row: rowIndex, value}) : null}
+                                                            key={columnIndex} />
+                                            }
+                                        })
+                                        :   _.map(updatesArray, (value, columnIndex) => {
                                             return <div className="c-sequencer__empty-node"
                                                         onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, {column: columnIndex, row: rowIndex, value}) : null}
-                                                        key={columnIndex} />
-                                        }
-                                    })
-                                :   _.map(updatesArray, (value, columnIndex) => {
-                                        return <div className="c-sequencer__empty-node"
-                                                    onClick={!_.isNull(this.selectedElement) ? this.moveElement.bind(this, {column: columnIndex, row: rowIndex, value}) : null}
-                                                    key={rowIndex} />
-                                    })
-                                }
+                                                        key={rowIndex} />
+                                        })
+                                    }
+                                </div>
                             </div>
                         )
                     })}
                     {terminationPhase}
+                    {!readOnly ?
+                        fullScreenBlock
+                        :
+                        null
+                    }
                 </div>
         );
     }
