@@ -739,6 +739,7 @@
 
                 .block {
                     height: 33%;
+                    background-color: transparent;
 
                     &:not(:last-child) {
                         margin-bottom: 8px;
@@ -895,6 +896,7 @@
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
+                    background-color: #fff;
                     padding: 20px;
                     color: $devices-group-inactive;
                 }
@@ -1800,7 +1802,7 @@
 
         .ios-list {
             height: calc(100% - 40px);
-            background-color: #CFD0D3;
+            background-color: transparent;
         }
 
         .c-package {

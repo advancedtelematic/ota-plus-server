@@ -2204,7 +2204,7 @@ input {
     .content {
         section {
             border-bottom: 1px solid #e5e5e5;
-            padding: 15px 5px;
+            padding: 15px 0;
             display: flex;
 
             &.current-pack {
@@ -2244,6 +2244,10 @@ input {
                     padding: 8px;
                     color: #9B9DA2;
                     justify-content: space-between;
+
+                    &.odd {
+                        background-color: #F3F3F4;
+                    }
 
                     span {
                         display: flex;
