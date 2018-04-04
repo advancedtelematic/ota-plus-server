@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="171px" height="171px" viewBox="0 0 171 171" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="66px" height="74px" viewBox="0 0 66 74" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
     <title>ICON</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="Templates" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Onboarding" transform="translate(-883.000000, -272.000000)">
-            <g id="EXISTING" transform="translate(726.000000, 147.000000)">
-                <g id="ICON" transform="translate(133.000000, 101.000000)">
-                    <ellipse id="Oval" stroke="#76E3DC" stroke-width="5" transform="translate(109.500000, 109.476945) rotate(-114.000000) translate(-109.500000, -109.476945) " cx="109.5" cy="109.476945" rx="82.5" ry="82.4769448"></ellipse>
-                    <g id="Group-2" transform="translate(69.000000, 64.000000)" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline id="Stroke-1" points="52.7688703 45.2607853 62.7400893 0.702523543 79.6715331 78.8404666 45.8125711 78.8404666 47.7125987 70.0425901"></polyline>
-                        <path d="M17.7749178,69.2843537 C3.76810318,76.8575595 -7.01573084,53.9009091 6.46896879,45.407225 C2.89267727,32.1491768 11.8667743,18.9069307 24.2444331,18.9069307 C33.4776248,18.9069307 41.1130661,26.3892738 42.5459381,36.1787385 C49.8005887,38.2290743 55.1709145,45.5020383 55.1709145,54.1853488 C55.1709145,68.9801613 40.3514848,77.7543345 29.3046304,69.809777" id="Stroke-3"></path>
-                        <path d="M59.7924104,91.0249526 L59.7924104,67.4520164" id="Stroke-5"></path>
-                        <path d="M23.8740181,91.2299773 L23.8740181,40.1454057" id="Stroke-7"></path>
-                        <path d="M24.5681592,64.701329 C24.5681592,64.701329 27.2493965,45.4581964 40.1373932,49.9183681" id="Stroke-9"></path>
-                        <path d="M24.1701945,60.6437273 C24.1701945,60.6437273 18.3641185,47.8281407 12.4284953,53.9277911" id="Stroke-11"></path>
+    <g id="Templates" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Dashboard" transform="translate(-503.000000, -642.000000)" stroke="#4A4A4A" stroke-width="1.5">
+            <g id="Welcome" transform="translate(29.000000, 86.000000)">
+                <g id="Integrate" transform="translate(158.000000, 485.000000)">
+                    <g id="ICON" transform="translate(317.000000, 71.000000)">
+                        <g id="Group-2" transform="translate(0.042432, 0.231652)">
+                            <polyline id="Stroke-1" points="42.1858391 35.3462292 49.9600889 0.559421242 63.4426397 62.7808594 36.4806642 62.7808594 37.9936608 55.7750885"></polyline>
+                            <path d="M14.1542112,55.1713029 C3.00054992,61.2018655 -5.58664389,42.9214278 5.15125591,36.1578861 C2.30344609,25.6004693 9.44954186,15.0556359 19.3059023,15.0556359 C26.6583158,15.0556359 32.7384366,21.0138443 33.8794362,28.8092193 C39.6563325,30.4419068 43.9327362,36.2333861 43.9327362,43.1479278 C43.9327362,54.9290738 32.1319876,61.9159697 23.33535,55.5896988" id="Stroke-3"></path>
+                            <path d="M47.3571429,72.4833959 L47.3571429,53.7122082" id="Stroke-5"></path>
+                            <path d="M18.5714286,72.6466575 L18.5714286,31.9678862" id="Stroke-7"></path>
+                            <path d="M18.5636862,51.521829 C18.5636862,51.521829 20.6987621,36.1984747 30.9615059,39.7501205" id="Stroke-9"></path>
+                            <path d="M18.2467859,48.2907507 C18.2467859,48.2907507 13.6233932,38.0856673 8.89684168,42.942834" id="Stroke-11"></path>
+                        </g>
                     </g>
                 </g>
             </g>
