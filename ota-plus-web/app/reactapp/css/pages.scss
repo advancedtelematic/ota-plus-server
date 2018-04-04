@@ -711,6 +711,7 @@
                     line-height: 17px;
                     display: block;
                     color: $device-hardware-header;
+                    font-weight:400;
                 }
             }
         }
@@ -793,6 +794,7 @@
 
                 .subtitle {
                     color: $device-hardware-header;
+                    font-weight: normal;
                 }
 
                 .guide-title {
@@ -806,10 +808,12 @@
                     margin-bottom: 2%;
 
                     img {
-                        width: 110px;
+                        width: 150px;
+                        height: 55%;
 
                         @media(max-height: 850px) {
                             width: 75px;
+                            height:45%;
                         }
                     }
                 }
@@ -819,9 +823,11 @@
 
                     img {
                         width: 75px;
+                        height: 55%;
 
                         @media(max-height: 850px) {
                             width: 50px;
+                            height:45%;
                         }
                     }
                 }
@@ -839,7 +845,6 @@
                         display: flex;
                         align-items: center;
                         flex-direction: column;
-                        justify-content: space-evenly;
 
                         @media(max-height: 850px) {
                             padding: 0 30px;
@@ -852,8 +857,16 @@
                         .step-text {
                             color: $devices-group-inactive;
                             font-size: 14px;
+                            height: 10%;
+                            padding: 10px 0;
                             text-transform: uppercase;
-                        }                        
+                        }
+
+                        .step-title, .step-desc {
+                            line-height: 17px;
+                            padding: 5px 0;
+                            font-weight: normal;
+                        }
 
                         .step-title {
                             color: $home-bg;

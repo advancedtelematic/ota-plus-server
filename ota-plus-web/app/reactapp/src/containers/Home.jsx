@@ -56,11 +56,6 @@ class Home extends Component {
                             <div className="col">
                                 Welcome
                             </div>
-                            <div className="dots">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
                         </div>
                         <div className="body">
                             <div className="top">
@@ -68,7 +63,7 @@ class Home extends Component {
                                     Welcome to HERE OTA Connect!
                                 </div>
                                 <div className="subtitle">
-                                    lets you manage updates on your embedded devices from the cloud.
+                                    OTA Connect lets you manage updates on your embedded devices from the cloud.
                                 </div>
                             </div>
                             <div className="overview">
@@ -160,10 +155,10 @@ class Home extends Component {
                             <div className="col">
                                 Last created devices
                             </div>
-                            <div className="col">
+                            <div className="col font-extra-small">
                                 Seen online
                             </div>
-                            <div className="col">
+                            <div className="col font-extra-small">
                                 Status
                             </div>
                             <div className="dots" onClick={this.toggleDeviceSubmenu}>
@@ -198,10 +193,10 @@ class Home extends Component {
                             <div className="col">
                                 Last added packages
                             </div>
-                            <div className="col">
+                            <div className="col font-extra-small">
                                 Version
                             </div>
-                            <div className="col">
+                            <div className="col font-extra-small">
                                 Created at
                             </div>
                             <div className="dots" onClick={this.togglePackageSubmenu}>
@@ -242,10 +237,10 @@ class Home extends Component {
                             <div className="col">
                                 Active campaigns
                             </div>
-                            <div className="col">
+                            <div className="col font-extra-small">
                                 Finished
                             </div>
-                            <div className="col">
+                            <div className="col font-extra-small">
                                 Failure rate
                             </div>
                             <div className="dots" onClick={this.toggleCampaignSubmenu}>
