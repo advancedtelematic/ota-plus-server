@@ -204,7 +204,7 @@ class Sequencer extends Component {
             campaignsStore.fullScreenMode ?
                 <div className="c-sequencer__fullscreen-hide">
                     <a href="#" onClick={this.hideFullScreen.bind(this)}>
-                        Minimise <img src="/assets/img/icons/expand_icon.svg" alt="Icon" />
+                        Minimize <img src="/assets/img/icons/expand_icon.svg" alt="Icon" />
                     </a>
                 </div>
             :

@@ -43,7 +43,7 @@ class WizardStep4 extends Component {
                     <Form>
                         <FormInput
                             label="Select group(s)"
-                            showIcon={true}
+                            showIcon={false}
                             showInput={false}
                         />
                     </Form>
