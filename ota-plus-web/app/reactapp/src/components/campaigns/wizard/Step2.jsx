@@ -52,7 +52,7 @@ class WizardStep2 extends Component {
                     <Form>
                         <FormInput
                             label="Select package"
-                            showIcon={true}
+                            showIcon={false}
                             showInput={false}
                         />
                     </Form>
