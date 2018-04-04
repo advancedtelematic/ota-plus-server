@@ -55,7 +55,9 @@ class ListItem extends Component {
                     <div className="icon"></div>
                     <div className="desc">
                         <div className="title">
-                            {group.groupName}
+                            <span>
+                                {group.groupName}
+                            </span>
                             <img src="../assets/img/icons/white/Rename.svg" alt="Rename" onClick={() => {
                                 selectGroup({type: 'real', name: group.groupName, id: group.id});
                                 this.showCreateModal();
