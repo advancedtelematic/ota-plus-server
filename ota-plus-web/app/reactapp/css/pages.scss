@@ -156,8 +156,8 @@
             .up {
                 width: 0;
                 height: 0;
-                border-left: 10px solid transparent;
-                border-right: 10px solid transparent;
+                border-left: 4px solid transparent;
+                border-right: 4px solid transparent;
                 border-bottom: 10px solid #fe2911;
                 margin-left: 15px;
                 display: inline-block;
@@ -166,8 +166,8 @@
             .down {
                 width: 0; 
                 height: 0; 
-                border-left: 10px solid transparent;
-                border-right: 10px solid transparent;
+                border-left: 4px solid transparent;
+                border-right: 4px solid transparent;
                 border-top: 10px solid #77fa3a;
                 margin-left: 15px;
                 display: inline-block;
@@ -1063,9 +1063,9 @@
 
                     &.droppable {
                         &.active {
-                            color: #888;
-                            background: #eee;
-                            border: 2px dashed #9ce2d8;
+                            color: #fff;
+                            background: #272D37;
+                            border: 2px dashed #48DAD0;
                         }
                     }
 
@@ -1093,7 +1093,11 @@
                             justify-content: space-between;
                             align-items:center;
                             display: flex;
-                            @include textoverflowEllipsis;
+
+                            span {
+                                max-width: 150px;
+                                @include textoverflowEllipsis;
+                            }
 
                             img {
                                 width: 12px;
@@ -1359,7 +1363,7 @@
                         font-size: 12px;
                         text-decoration: none;
                         padding-left: 25px;
-                        border-left: 10px solid transparent;
+                        border-left: 4px solid transparent;
                         position: relative;
                         margin-left: -10px;
                         height: 90px;
@@ -1552,7 +1556,7 @@
                                 align-items: center;
                                 justify-content: space-between;
                                 @include transition;
-                                border-left: 10px solid transparent;
+                                border-left: 4px solid transparent;
 
                                 &:hover {
                                     background: #eee;
@@ -1605,7 +1609,7 @@
                                 }
 
                                 &.selected {
-                                    border-left: 10px solid $color-mint;
+                                    border-left: 4px solid $color-mint;
                                 }
                             }
                         }
@@ -2107,19 +2111,19 @@
 
                 .selected {
                     background-color: #fff;
-                    border-left: 10px solid $color-mint;
+                    border-left: 4px solid $color-mint;
                     border-bottom: none;
 
                     &+span {
                         transition: all .2s ease-in;
                         display: block;
-                        border-left: 10px solid #48dad0;
+                        border-left: 4px solid #48dad0;
                         overflow: hidden;
                     }
                 }
 
                 &+span {
-                    border-left: 10px solid transparent;
+                    border-left: 4px solid transparent;
                 }
 
                 span:not(:first-child) {
@@ -2220,7 +2224,7 @@
                     a {
                         color: $devices-group-text;
                         padding: 25px 20px;
-                        border-left: 10px solid transparent;
+                        border-left: 4px solid transparent;
                         display: block;
                         @include transition;
 
@@ -2230,7 +2234,7 @@
 
                         &.active {
                             color: #fff;
-                            border-left: 10px solid $home-header-button;
+                            border-left: 4px solid $home-header-button;
                         }
                     }
                 }
