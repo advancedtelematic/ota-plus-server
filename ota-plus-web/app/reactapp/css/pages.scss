@@ -1017,8 +1017,12 @@
                 height: 90px;
                 padding: 0 30px;
                 color: $devices-group-inactive;
-                font-size: 10px;
+                font-size: 12px;
                 text-transform: uppercase;
+
+                .add-button {
+                    font-weight: 300;
+                }
             }
 
             .wrapper-groups {
