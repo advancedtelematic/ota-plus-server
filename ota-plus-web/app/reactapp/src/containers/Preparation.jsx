@@ -141,7 +141,6 @@ class Preparation extends Component {
     doorOpen() {
         let container = document.getElementsByClassName('preparation-container')[0];
         if (container && !_.includes(container.classList, 'door-open')) {
-            container.className += " door-open";
             Cookies.set('systemReady', 1);
             this.props.setSystemReady(true);
         }
@@ -163,9 +162,12 @@ class Preparation extends Component {
             <FadeAnimation>
                 <div className="preparation-container">
                     <div className="wrapper-center wrapper-responsive">
+                        <div className="logo">
+                            <img src="/assets/img/HERE_pos.png" alt="HERE"/>
+                        </div>
                         <div>
                             <div className="title">
-                                Setting up ATS Garage:
+                                Setting up your account:
                             </div>
                             <ul className="sequence-list">
                                 {_.map(this.preparationSequence, (step, index) => {
