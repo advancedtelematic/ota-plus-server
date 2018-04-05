@@ -2126,6 +2126,11 @@
                     border-bottom: none;
                 }
 
+                .item {
+                    border-left: 4px solid transparent;
+                    border-bottom: 1px solid transparent;
+                }
+
                 .selected {
                     background-color: #fff;
                     border-left: 4px solid $color-mint;
