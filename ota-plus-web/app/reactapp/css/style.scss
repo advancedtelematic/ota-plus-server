@@ -1927,7 +1927,7 @@ input {
         height: 81px;
         justify-content: center;
         align-items: center;
-        font-size: 19px;
+        font-size: 12px;
         flex-basis: 95%;
     }
 
@@ -2046,7 +2046,7 @@ input {
 
     &__update-from, &__update-to {
         font-size: 85%;
-        font-weight: 500;
+        font-weight: 300;
         color: #9B9DA2;
         @include textoverflowEllipsis;
     }
