@@ -112,7 +112,7 @@ class Home extends Component {
                                             <div className="step-text">
                                                 Start fresh
                                             </div>
-                                            <img src="/assets/img/onboarding_start_fresh.svg" alt="Image" />
+                                            <img src="/assets/img/onboarding_start_fresh.png" alt="Image" />
                                             <div className="step-title">
                                                 Try out a quickstart project
                                             </div>
@@ -130,7 +130,7 @@ class Home extends Component {
                                             <div className="step-text">
                                                 Integrate
                                             </div>
-                                            <img src="/assets/img/onboarding_integrate.svg" alt="Image" />
+                                            <img src="/assets/img/onboarding_integrate.png" alt="Image" />
                                             <div className="step-title">
                                                 Integrate with existing project
                                             </div>
