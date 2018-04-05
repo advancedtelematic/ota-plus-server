@@ -822,11 +822,9 @@
                     height: 44%;
 
                     img {
-                        width: 75px;
                         height: 55%;
 
                         @media(max-height: 850px) {
-                            width: 50px;
                             height:45%;
                         }
                     }
@@ -918,92 +916,98 @@
     }
 
     .preparation-container {
-        background: url('/assets/img/door.jpg') top center no-repeat;
-        background-size: cover;
+        background-color: #F3F3F4;
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        bottom: o;
+        bottom: 0;
         z-index: 9999;
 
-        &.door-open {
-          transform: translateY(-10000px);
-          -webkit-transition-duration: 5s;
-          transition-duration: 5s;
-        }
-
         .wrapper-center {
-          display: flex!important;
-          color: white;
-          height: 100vh;
+            display: flex !important;
+            flex-direction: column;
+            color: white;
+            height: 100vh;
 
-          .title {
-            font-size: 40px;
-            margin: 25px 0;
-          }
-
-          .sequence-list {
-            width: 50%;
-            margin: 50px auto;
-
-            li {
-              margin: 10px;
-
-              .stepnum {
-                overflow: hidden;
-                display: flex;
-
-                .feature-name {
-                  font-size: 15px;
-                  display: flex;
-                  align-items: center;
-                }
-
+            .logo {
                 img {
-                  height: 30px;
-                  width: 30px;
-                  margin-right: 15px;
+                    width: 90px;
+                    height: auto;
                 }
+            }
 
-                .pending {
-                  width: 30px;
-                  height: 30px;
-                  background: #cdcdcd;
-                  border-radius: 50%;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  margin-right: 15px;
+            .title {
+                font-size: 22px;
+                margin: 25px 0;
+                color: #202020;
+            }
 
-                  img {
-                    margin-right: 0;
-                  }
+            .sequence-list {
+                margin: 35px auto 45px auto;
+                padding-left: 20px;
+
+                li {
+                    margin: 10px;
+
+                    .stepnum {
+                        overflow: hidden;
+                        display: flex;
+
+                        .feature-name {
+                            font-size: 12px;
+                            font-weight: 300;
+                            display: flex;
+                            align-items: center;
+                            color: #000000;
+                        }
+
+                        img {
+                            height: 40px;
+                            width: 40px;
+                            margin-right: 15px;
+                        }
+
+                        .pending {
+                            width: 40px;
+                            height: 40px;
+                            background: #cdcdcd;
+                            border-radius: 50%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            margin-right: 15px;
+
+                            img {
+                                margin-right: 0;
+                                height: 40px;
+                                width: 40px;
+                            }
+                        }
+                    }
                 }
-              }
             }
-          }
 
-          .setting-up {
-            text-align: center;
-            margin: 25px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            .setting-up {
+                text-align: center;
+                margin: 25px 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
 
-            .loader {
-              display: inline-block;
-              margin-right: 15px;
+                .loader {
+                    display: inline-block;
+                    margin-right: 15px;
+                }
+                .text {
+                    display: inline-block;
+                    font-size: 12px;
+                    color: #9B9B9B;
+                    font-weight: 500;
+                }
             }
-            .text {
-              display: inline-block;
-              font-size: 16px;
-            }
-          }
         }
     }
-
-
 }
 
 #page-devices {
@@ -2005,6 +2009,7 @@
                 margin-bottom: 10px;
                 padding: 15px 35px;
                 margin-left: 10px;
+                font-size: 12px;
 
                 &--aligned {
                     justify-content: space-between;
