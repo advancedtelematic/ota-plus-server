@@ -7,7 +7,6 @@ import {
     ProvisioningTooltip, 
     ProvisioningHeader,
     ProvisioningList,
-    ProvisioningFooter,
     ProvisioningCreateModal
 } from '../components/profile/access-keys';
 import { AsyncStatusCallbackHandler } from '../utils';
@@ -64,9 +63,6 @@ class Provisioning extends Component {
                             <ProvisioningList 
                                 provisioningStore={provisioningStore}
                                 showTooltip={this.showTooltip}
-                            />
-                            <ProvisioningFooter 
-                                provisioningStore={provisioningStore}
                             />
                         </span>
                     :

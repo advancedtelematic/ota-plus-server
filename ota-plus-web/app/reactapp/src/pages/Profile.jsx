@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
 import { Header } from '../partials';
-import { ProfileAside } from '../components/profile';
+import { ProfileHeader } from '../components/profile';
 
 const title = "Profile";
 
@@ -19,7 +19,7 @@ class Profile extends Component {
                 <div className="wrapper-flex">
                     <MetaData 
                         title={title}>
-                        <ProfileAside
+                        <ProfileHeader
                             userStore={userStore}
                             otaPlusStore={otaPlusStore}
                             uiUserProfileMenu={uiUserProfileMenu}
