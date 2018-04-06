@@ -1,10 +1,10 @@
-import ProfileAside from './Aside';
+import ProfileHeader from './Header';
 import ProfileEditProfile from './EditProfile';
 import ProfileUsage from './Usage';
 import ProfileAccessKeys from './AccessKeys';
 
 export {
-    ProfileAside,
+    ProfileHeader,
     ProfileEditProfile,
     ProfileUsage,
     ProfileAccessKeys,

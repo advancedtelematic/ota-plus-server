@@ -15,27 +15,20 @@ class ListItem extends Component {
         const validFrom = new Date(provisioningKey.validFrom);
         const validUntil = new Date(provisioningKey.validUntil);
         return (
-            <a href="#/profile/access-keys"
-                onClick={this._onDownload.bind(this)}
-                className="common-box"
-                id={"key-" + provisioningKey.description}>
-
-                <div className="icon"/>
-                <div className="desc">
-                    <div className="title" title={provisioningKey.description}>
-                        {provisioningKey.description}
-                    </div>
-                    <div className="subtitle" id="key-valid-from">
-                        Start date: {validFrom.toDateString() + ' ' + validFrom.toLocaleTimeString()}
-                    </div>
-                    <div className="subtitle" id="key-valid-until">
-                        End date: {validUntil.toDateString() + ' ' + validUntil.toLocaleTimeString()}
-                    </div>                        
+            <div className="box"  id={"key-" + provisioningKey.description}>
+                <div className="column">
+                    {provisioningKey.description}
                 </div>
-                <div className="download-icon">
-                    <img src="/assets/img/icons/download_key.svg" alt="Icon" />
+                <div className="column">
+                    Start date: {validFrom.toDateString() + ' ' + validFrom.toLocaleTimeString()}
                 </div>
-            </a>
+                <div className="column">
+                    End date: {validUntil.toDateString() + ' ' + validUntil.toLocaleTimeString()}
+                </div>
+                <div className="column">
+                    <img src="/assets/img/icons/download_key.svg" className="download-key-link" id={"download-key-link-" + (provisioningKey.description)} alt="Icon" onClick={this._onDownload.bind(this)} />
+                </div>
+            </div>
         );
     }
 }

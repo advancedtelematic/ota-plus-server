@@ -35,30 +35,28 @@ class Usage extends Component {
     render() {
         const { userStore } = this.props;
         return (
-            <main id="usage">
-                <div className="content">
-                    <div className="subheader">
-                        <div className="flex-column-main">
-                            Date
-                        </div>
-                        <div className="flex-column">
-                            Total activated devices
-                        </div>
-                        <div className="flex-column">
-                            New devices activated this month
-                        </div>
-                        <div className="flex-column">
-                            Devices connected this month
-                        </div>
+            <div className="profile-container" id="usage">
+                <div className="section-header">
+                    <div className="column">
+                        Date
                     </div>
-                    <ul>
-                        <Items
-                            userStore={userStore}
-                            months={months}
-                        />
-                    </ul>
+                    <div className="column">
+                        Total activated devices
+                    </div>
+                    <div className="column">
+                        New devices activated this month
+                    </div>
+                    <div className="column">
+                        Devices connected this month
+                    </div>
                 </div>
-            </main>
+                <div className="usage-info">
+                    <Items
+                        userStore={userStore}
+                        months={months}
+                    />
+                </div>
+            </div>
         );
     }
 }
