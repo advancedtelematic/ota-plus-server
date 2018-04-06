@@ -109,7 +109,7 @@ class Header extends Component {
                                 <div onClick={this.enableDeviceRename}
                                      ref={(clickableArea) => {this.clickableArea = clickableArea}}
                                      className="clickable-area"
-                                     style={{width: '85%', height: '51px', position: 'absolute'}}/>
+                                     style={{width: '85%', height: '50px', position: 'absolute'}}/>
 
                                 <input type="text"
                                    ref={(input) => {this.deviceNameInput = input}}

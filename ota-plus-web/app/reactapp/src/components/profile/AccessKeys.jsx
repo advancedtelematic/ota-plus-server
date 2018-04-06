@@ -21,17 +21,15 @@ class AccessKeys extends Component {
     render() {
         const { provisioningStore, devicesStore } = this.props;
         return (
-            <main id="access-keys">
-                <div className={"wrapper-flex"}>
-                    <MetaData 
-                        title={title}>
-                        <ProvisioningContainer
-                            provisioningStore={provisioningStore}
-                            devicesStore={devicesStore}
-                        />
-                    </MetaData>
-                </div>
-            </main>
+            <div className="profile-container" id="provisioning">
+                <MetaData 
+                    title={title}>
+                    <ProvisioningContainer
+                        provisioningStore={provisioningStore}
+                        devicesStore={devicesStore}
+                    />
+                </MetaData>
+            </div>
         );
     }
 }
