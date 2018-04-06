@@ -2924,11 +2924,11 @@ input {
                                 }
 
                                 .error {
-                                    background-color: #FE0000;
+                                    background-color: $campaigns-cancel-color;
                                 }
 
                                 .success {
-                                    background-color: #369e47;
+                                    background-color: $device-pack-installed-bg;
                                 }
                             }
 
