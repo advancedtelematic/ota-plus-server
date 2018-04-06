@@ -14,10 +14,24 @@ class List extends Component {
     render() {
         const { provisioningStore, showTooltip } = this.props;
         return (
-            <div className="wrapper">
-                <div className={"inner-container" + (!provisioningStore.preparedProvisioningKeys.length ? " full-height" : "")} ref="innerContainer">
-                    {provisioningStore.preparedProvisioningKeys.length ?
-                        _.map(provisioningStore.preparedProvisioningKeys, (provisioningKey, index) => {
+            provisioningStore.preparedProvisioningKeys.length ?
+                <span>
+                    <div className="section-header">
+                        <div className="column">
+                            Name
+                        </div>
+                        <div className="column">
+                            Start date
+                        </div>
+                        <div className="column">
+                            End date
+                        </div>
+                        <div className="column">
+                            Download
+                        </div>
+                    </div>
+                    <div className="keys-info">
+                        {_.map(provisioningStore.preparedProvisioningKeys, (provisioningKey, index) => {
                             return (
                                 <ListItem
                                     provisioningStore={provisioningStore}
@@ -25,19 +39,18 @@ class List extends Component {
                                     key={index}
                                 />
                             );
-                        })
-                    :
-                        provisioningStore.provisioningKeysFetchAsync.isFetching ? 
-                            <div className="wrapper-center">
-                                <Loader />
-                            </div>
-                        :
-                            <NoKeys 
-                                showTooltip={showTooltip}
-                            />
-                    }
-                </div>
-            </div>
+                        })}
+                    </div>
+                </span>
+            :
+                provisioningStore.provisioningKeysFetchAsync.isFetching ? 
+                    <div className="wrapper-center">
+                        <Loader />
+                    </div>
+                :
+                    <NoKeys 
+                        showTooltip={showTooltip}
+                    />
         );
     }
 }

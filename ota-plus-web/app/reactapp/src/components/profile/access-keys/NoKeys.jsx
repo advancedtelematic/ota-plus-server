@@ -12,7 +12,7 @@ class NoKeys extends Component {
                     You haven't created any keys yet.
                 </div>
                 <div>
-                    <a href="#" onClick={showTooltip.bind(this)}>What is this?</a>
+                    <a href="#" className="add-button access-keys-tooltip" onClick={showTooltip.bind(this)}>What is this?</a>
                 </div>
             </div>
         );

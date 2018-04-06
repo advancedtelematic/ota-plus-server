@@ -63,7 +63,7 @@ class Home extends Component {
                                     Welcome to HERE OTA Connect!
                                 </div>
                                 <div className="subtitle">
-                                    OTA Connect lets you manage updates on your embedded devices from the cloud.
+                                    HERE OTA Connect lets you manage updates on your embedded devices from the cloud.
                                 </div>
                             </div>
                             <div className="overview">
