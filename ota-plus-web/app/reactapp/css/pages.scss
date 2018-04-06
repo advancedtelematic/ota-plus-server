@@ -1931,7 +1931,16 @@
                 @include transition;
                 background: #fff;
                 overflow: hidden;
-                border-top: 1px solid $add-button-grey;
+
+                &:before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    width:100%;
+                    z-index: 1;
+                    height: 1px;
+                    background-color: $add-button-grey;
+                }
 
                 &--ident {
                     margin-bottom: 5px;
@@ -1940,6 +1949,8 @@
 
             &__software-box {
                 width: 50%;
+                position: relative;
+                z-index: 5;
                 float: left;
                 padding: 20px 10px 20px 35px;
             }
