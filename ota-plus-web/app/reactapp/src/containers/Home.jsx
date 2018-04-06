@@ -37,14 +37,20 @@ class Home extends Component {
     toggleDeviceSubmenu(e) {
         if(e) e.preventDefault();
         this.deviceSubmenuShown = !this.deviceSubmenuShown;
+        this.packageSubmenuShown = false;
+        this.campaignSubmenuShown= false;
     }
     togglePackageSubmenu(e) {
         if(e) e.preventDefault();
         this.packageSubmenuShown = !this.packageSubmenuShown;
+        this.deviceSubmenuShown = false;
+        this.campaignSubmenuShown = false;
     }
     toggleCampaignSubmenu(e) {
         if(e) e.preventDefault();
         this.campaignSubmenuShown = !this.campaignSubmenuShown;
+        this.packageSubmenuShown = false;
+        this.deviceSubmenuShown = false;
     }
     render() {
         const { devicesStore, hardwareStore, packagesStore, campaignsStore, addNewWizard } = this.props;
