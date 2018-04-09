@@ -135,7 +135,7 @@ class Packages extends Component {
                                     You haven't created any packages yet.
                                 </div>
                                 <div>
-                                    <a href="#" className="add-button" id="add-new-package" onClick={this.showCreateModal.bind(this, null)}>
+                                    <a href="#" className="add-button light" id="add-new-package" onClick={this.showCreateModal.bind(this, null)}>
                                         <span>
                                             +
                                         </span>

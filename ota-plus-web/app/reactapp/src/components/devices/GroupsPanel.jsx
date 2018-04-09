@@ -16,7 +16,7 @@ class GroupsPanel extends Component {
                     <div className="title">
                         Groups
                     </div>
-                    <a href="#" className="add-button" id="add-new-group" onClick={showCreateGroupModal}>
+                    <a href="#" className="add-button light" id="add-new-group" onClick={showCreateGroupModal}>
                         <span>
                             +
                         </span>
