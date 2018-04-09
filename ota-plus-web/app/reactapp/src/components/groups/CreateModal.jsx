@@ -14,9 +14,17 @@ class CreateModal extends Component {
     constructor(props) {
         super(props);
         this.createHandler = new AsyncStatusCallbackHandler(props.groupsStore, 'groupsCreateAsync', this.handleResponse.bind(this));
+        this.renameHandler = new AsyncStatusCallbackHandler(props.groupsStore, 'groupsRenameAsync', this.handleRenameResponse.bind(this));
+    }
+    componentWillMount() {
+        const { action = 'create' } = this.props;
+        if(action === 'rename') { 
+            this.enableButton();
+        }
     }
     componentWillUnmount() {
         this.createHandler();
+        this.renameHandler();
     }
     enableButton() {
         this.submitButtonDisabled = false;
@@ -30,8 +38,6 @@ class CreateModal extends Component {
         let data = serialize(document.querySelector('#group-create-form'), { hash: true });
         if (action === 'rename') {
             this.props.groupsStore.renameGroup(groupsStore.selectedGroup.id, data.groupName);
-            this.props.groupsStore._updateGroupData(groupsStore.selectedGroup.id, data);
-            this.props.hide();
         } else {
             this.props.groupsStore.createGroup(data.groupName);
         }
@@ -39,14 +45,14 @@ class CreateModal extends Component {
     handleResponse() {
         let data = serialize(document.querySelector('#group-create-form'), { hash: true });
         this.props.selectGroup({type: 'real', name: data.groupName, id: this.props.groupsStore.latestCreatedGroupId});
-        this.props.groupsStore._updateGroupData(this.props.groupsStore.selectedGroup.id, {name: data.groupName});
-        this.props.groupsStore.selectedGroup.name = data.groupName;
         this.props.groupsStore._prepareGroups();
-        this.props.devicesStore.fetchDevices('', this.props.groupsStore.latestCreatedGroupId);
+        this.props.hide();
+    }
+    handleRenameResponse() {
         this.props.hide();
     }
     render() {
-        const { shown, hide, groupsStore, modalTitle = 'Add new group', buttonText = 'Add' } = this.props;
+        const { action = 'create', shown, hide, groupsStore, modalTitle = 'Add new group', buttonText = 'Add' } = this.props;
         const form = (
             <Form                
                 onSubmit={this.submitForm.bind(this)}
@@ -55,6 +61,11 @@ class CreateModal extends Component {
                     handledStatus="error"
                     action={groupsStore.groupsCreateAsync}
                     errorMsg={(groupsStore.groupsCreateAsync.data ? groupsStore.groupsCreateAsync.data.description : null)}
+                />
+                <AsyncResponse 
+                    handledStatus="error"
+                    action={groupsStore.groupsRenameAsync}
+                    errorMsg={(groupsStore.groupsRenameAsync.data ? groupsStore.groupsRenameAsync.data.description : null)}
                 />
                 <div className="row">
                     <div className="col-xs-12">
@@ -67,6 +78,7 @@ class CreateModal extends Component {
                             title={"Group Name"}
                             label={"Group Name"}
                             placeholder={"Name"}
+                            defaultValue={action === 'rename' ? groupsStore.selectedGroup.name : ''}
                         />
                     </div>
                 </div>

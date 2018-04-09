@@ -101,6 +101,12 @@ export default class GroupsStore {
         return axios.put(API_GROUPS_RENAME + '/' + id + '/rename?groupName=' + name)
             .then(function (response) {
                 this.groupsRenameAsync = handleAsyncSuccess(response);
+                this._updateGroupData(id, {groupName: name});
+                this.selectedGroup = {
+                    type: 'real',
+                    name: name
+                };
+                this._prepareGroups();
             }.bind(this))
             .catch(function (error) {
                 this.groupsRenameAsync = handleAsyncError(error);
