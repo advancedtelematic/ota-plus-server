@@ -21,12 +21,12 @@ class Header extends Component {
                         additionalClassName={'white'}
                     />
                 </Form>
-                <a href="#" className="add-button" id="add-new-key" onClick={showCreateModal.bind(this)} >
+                <a href="#" className="add-button light" id="add-new-key" onClick={showCreateModal.bind(this)} >
                     <span>
                         +
                     </span>
                     <span>
-                        Add new key
+                        Add key
                     </span>
                 </a>
             </SubHeader>

@@ -107,6 +107,10 @@ $font: 'akkurat';
             color: $add-button-grey;
         }
     }
+
+    &.light {
+        font-weight: 300;
+    }
 }
 
 .font-big {
