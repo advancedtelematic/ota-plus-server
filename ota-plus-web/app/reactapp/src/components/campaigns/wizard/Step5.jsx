@@ -235,7 +235,7 @@ class WizardStep5 extends Component {
                                         </div>
                                         <div className="add">
                                             {block.isCompatible ?
-                                                <a href="#" id="add-to-campaign" className="add-button"
+                                                <a href="#" id="add-to-campaign" className="add-button light"
                                                    onClick={addToCampaign.bind(this, block.childPack)}>
                                                     <span>
                                                     +
@@ -245,7 +245,7 @@ class WizardStep5 extends Component {
                                                     </span>
                                                 </a>
                                                 :
-                                                <a href="#" id="change-version" className="add-button"
+                                                <a href="#" id="change-version" className="add-button light"
                                                    onClick={addToCampaign.bind(this, block.childPack)}>
                                                     <span>
                                                     +
