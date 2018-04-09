@@ -52,7 +52,7 @@ class Sequencer extends Component {
             this._createCampaignUpdates(matrixFromStorage[0]);
             this.updateMatrix = matrixFromStorage;
         }
-        if(this.campaignUpdates.length > 2) {
+        if(this.campaignUpdates.length >= 2) {
             this.showFullScreen();
         }
     }
