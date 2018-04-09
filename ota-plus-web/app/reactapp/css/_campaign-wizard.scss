@@ -349,6 +349,7 @@
                     .icon {
                       width: 40px;
                       height: 40px;
+                      display: inline-block;
                     }
                   }
                 }
@@ -409,7 +410,6 @@
               margin: 0 0 0 15px;
               float: none;
               display: inline-block;
-              vertical-align: middle;
 
               .title {
                 font-size: 13px;
