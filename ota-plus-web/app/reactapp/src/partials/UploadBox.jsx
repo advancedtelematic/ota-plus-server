@@ -96,13 +96,13 @@ class UploadBox extends Component {
             <div className="heading">
                 <div className="internal">
                     Uploading {t('common.packageWithCount', {count: packagesStore.packagesUploading.length})}
-                    <div className="heading-actions">
-                        <a href="#" className="box-toggle pack-box-close" title="Toggle upload box size" onClick={this.close}>
-                            <i className="fa fa-times fa-times-thin" aria-hidden="true" id="close-upload-box"></i>
-                        </a>
-                        <a href="#" className="box-toggle pack-box-minimize" title="Toggle upload box size" onClick={this.toggleMode}>
-                            <i className="fa fa-angle-down" aria-hidden="true" id="minimize-upload-box"></i>
-                        </a>
+                    <div className="top-actions flex-end">
+                        <div className="modal-minimize" onClick={this.toggleMode}>
+                            <img src="/assets/img/icons/minimize.svg" alt="Icon" />
+                        </div>
+                        <div className="modal-close"  onClick={this.close}>
+                            <img src="/assets/img/icons/close.svg" alt="Icon"/>
+                        </div>
                     </div>
                 </div>
             </div>

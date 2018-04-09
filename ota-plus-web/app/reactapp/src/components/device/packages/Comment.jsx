@@ -74,7 +74,7 @@ class Comment extends Component {
 	            {this.commentFieldLength > 0 && this.activeEditField ?
 	                <div className="action-buttons">
 	                    <a href="#" className="cancel-button" onClick={this.disableEditField}>
-	                        <img src="/assets/img/icons/close_icon.png" alt="" />
+	                        <img src="/assets/img/icons/close.svg" alt="" />
 	                    </a>
 	                    &nbsp;
 	                    <a href="#" className="accept-button" onClick={this.handleSubmit.bind(this, version.id.name, version.id.version)}>

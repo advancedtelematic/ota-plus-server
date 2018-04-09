@@ -154,6 +154,33 @@ $font: 'akkurat';
                 align-items: center;
                 justify-content: space-between;
                 height: 100%;
+
+                .top-actions {
+                    display: flex;
+                    width: 60px;
+                    align-items: center;
+                    justify-content: space-between;
+                    height: 15px;
+
+                    &.flex-end {
+                        justify-content: flex-end;
+
+                        div:not(:last-child) {
+                            margin-right: 10px;
+                        }
+                    }
+
+                    div {
+                        display: flex;
+                        cursor: pointer;
+                        height: 100%;
+                        align-items: flex-end;
+
+                        img {
+                            width: 12px;
+                        }
+                    }
+                }
             }
         }
         .body {
@@ -1706,67 +1733,16 @@ input {
         font-size: 18px;
         background: #4B5151;
         height: 50px;
-        padding: 14px 15px;
         border: 0;
         width: 350px;
         float: right;
         margin-left: 25px;
         margin-top: 25px;
         z-index: 9999;
-
-        .pack-box-maximize {
-            display: inline-block;
-            width: 30px;
-            height: 22px;
-            position: absolute;
-            top: 17px;
-            right: 45px;
-            color: #fff;
-            font-size: 48px;
-
-            .line {
-                display: block;
-                border-top: 3px solid white;
-            }
-        }
-
-
-        .name {
-            float: left;
-        }
-
-        .actions {
-            float: right;
-            position: relative;
-            margin-top: -10px;
-
-            .box-toggle {
-                color: #fff;
-                font-size: 40px;
-                line-height: 1.0em;
-
-                &.box-maximize {
-                    display: inline-block;
-                    width: 30px;
-                    height: 22px;
-                    position: absolute;
-                    right: 0;
-
-                    .line {
-                        display: block;
-                        border-top: 3px solid white;
-                    }
-                }
-
-                &.box-hide {
-                    display: inline-block;
-                }
-            }
-        }
-
-        .minimized {
-            transform: none!important;
-        }
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 15px;
     }
 }
 
@@ -1822,7 +1798,7 @@ input {
 
         .campaigns-wizard {
             position: absolute;
-            top: 0;
+            top: 60px;
             right: 0;
             bottom: 0;
             width: 100%!important;
@@ -2674,28 +2650,6 @@ input {
         width: 400px;
     }
 
-    .content {
-
-        .heading {
-            color: #fff!important;
-            background: #4B5151!important;
-
-            .box-toggle {
-                color: #fff;
-                font-size: 40px;
-                float: right;
-
-                &:last-child {
-                    margin-right: 10px;
-                }
-
-                .fa-times-thin:before {
-                    content: '\00d7';
-                }
-            }
-        }
-    }
-
     .subheading {
         background: #dedede;
         padding: 5px 20px;
@@ -3299,13 +3253,6 @@ input {
             font-size: 30px;
             font-weight: bold;
             color: #666;
-        }
-
-        .wrapper-center {
-
-            &.left {
-                justify-content: flex-start;
-            }
         }
     }
 }

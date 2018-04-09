@@ -159,6 +159,7 @@ class Wizard extends Component {
         this.selectVersion = this.selectVersion.bind(this);
         this.setRawSelectedPacks = this.setRawSelectedPacks.bind(this);
         this.removeSelectedPacksByKeys = this.removeSelectedPacksByKeys.bind(this);
+        this.toggleFullScreen = this.toggleFullScreen.bind(this);
 
         this.multiTargetUpdateCreatedHandler = observe(props.campaignsStore, (change) => {
             if (change.name === 'campaignsMtuCreateAsync' && change.object[change.name].isFetching === false) {
@@ -194,6 +195,15 @@ class Wizard extends Component {
     componentWillUnmount() {
         this.multiTargetUpdateCreatedHandler();
         this.campaignCreatedHandler();
+    }
+
+    toggleFullScreen(e) {
+        const { campaignsStore } = this.props;
+        if(e) e.preventDefault();
+        if(!campaignsStore.fullScreenMode) 
+            this.props.campaignsStore._showFullScreen();
+        else
+            this.props.campaignsStore._hideFullScreen();
     }
 
     addToCampaign(packName, e) {
@@ -525,6 +535,22 @@ class Wizard extends Component {
                     <div className="heading">
                         <div className="internal">
                             Add new campaign
+                            <div className="top-actions">
+                                <div className="wizard-minimize" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)}>
+                                    <img src="/assets/img/icons/minimize.svg" alt="Icon" />
+                                </div>                                
+                                <div className="toggle-fullscreen" onClick={this.toggleFullScreen}>
+                                    {campaignsStore.fullScreenMode ? 
+                                        <img src="/assets/img/icons/exit-fullscreen.svg" alt="Icon" />
+                                    :
+                                        <img src="/assets/img/icons/maximize.svg" alt="Icon" />
+                                    }
+                                    
+                                </div>
+                                <div className="wizard-close" onClick={hideWizard.bind(this, wizardIdentifier)}>
+                                    <img src="/assets/img/icons/close.svg" alt="Icon" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 }
