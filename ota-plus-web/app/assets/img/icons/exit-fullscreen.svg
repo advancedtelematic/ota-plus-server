@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="14px" viewBox="0 0 15 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>Exit Full screen</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M1.57131633,1.57064286 L9.42789801,1.57064286 L9.42789801,7.85714286 L1.57131633,7.85714286 L1.57131633,1.57064286 Z M0.5,9.42857143 L10.5,9.42857143 L10.5,9.42857143 C10.7761424,9.42857143 11,9.2047138 11,8.92857143 L11,0.5 L11,0.5 C11,0.223857625 10.7761424,8.7481711e-16 10.5,-5.55111512e-17 L0.5,0 L0.5,-5.55111512e-17 C0.223857625,-4.7846199e-18 -8.93288388e-17,0.223857625 -5.55111512e-17,0.5 L0,8.92857143 L-5.55111512e-17,8.92857143 C9.59361329e-16,9.2047138 0.223857625,9.42857143 0.5,9.42857143 Z" id="path-1"></path>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Titlebar-exit-fullscreen" transform="translate(-40.000000, -7.000000)">
+            <g id="Exit-Full-screen" transform="translate(40.000000, 8.000000)">
+                <g id="Rectangle-9">
+                    <g id="Mask" transform="translate(0.000000, 3.000000)">
+                        <g id="Path">
+                            <mask id="mask-2" fill="white">
+                                <use xlink:href="#path-1"></use>
+                            </mask>
+                            <use id="Mask" fill="#B7B9BC" xlink:href="#path-1"></use>
+                            <rect fill="#FFFFFF" mask="url(#mask-2)" x="6" y="-3" width="8" height="8"></rect>
+                        </g>
+                    </g>
+                </g>
+                <g id="Group" transform="translate(9.000000, 0.000000)" stroke="#B7B9BC" stroke-linecap="round">
+                    <path d="M4.5,0.5 L0.625,4.375" id="Line" stroke-width="1.2"></path>
+                    <polyline id="Path-2" stroke-width="1.2" transform="translate(1.500000, 3.500000) scale(-1, -1) rotate(90.000000) translate(-1.500000, -3.500000) " points="3 2 0 2 0 5"></polyline>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
