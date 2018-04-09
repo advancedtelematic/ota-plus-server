@@ -10,6 +10,58 @@
 
 $font: 'akkurat';
 
+.dots {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 17px;
+    width: 25px;
+    align-items: flex-end;
+
+    span {
+        height: 4px;
+        width: 3px;
+        border-radius: 50%;
+        background: $devices-groups-bg;
+
+        &:not(:last-child) {
+            margin-bottom: 2px;
+        }
+    }
+
+    &.nav-dots {
+        width: auto;
+        right: 0;
+        top: 16px;
+
+        span {
+            background: $home-header-button;
+            height: 5px;
+            width: 4px;
+        }
+    }
+
+    .submenu {
+        position: absolute;
+        top: 20px;
+        width: 135px;
+        background: #fff;
+        left: -100px;
+        font-size: 14px;
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+
+        a {
+            padding: 15px 15px 7.5px;
+            line-height: 17px;
+            display: block;
+            color: $device-hardware-header;
+            font-weight:400;
+        }
+    }
+}
+
 .alert-success {
     margin: 0;
     border-radius: 0;
@@ -481,7 +533,6 @@ input {
     min-width: 1280px;
     position: absolute;
     border-bottom: 1px solid $panel-delimiter-color;
-    padding: 0 0 0 15px;
 
     .alert {
         width: 400px;
@@ -502,6 +553,7 @@ input {
         float: left;
         margin-left: 0;
         margin-right: 0;
+        padding-left: 15px;
 
         .navbar-brand {
             background: url('/assets/img/HERE_Logo_2016.png') no-repeat;
@@ -585,7 +637,7 @@ input {
             &#menu-login {
                 .dropdown {
                     & > a {
-                        padding: 10px 15px;
+                        padding: 10px 0 10px 2px;
                     }
                 }
 
@@ -595,7 +647,7 @@ input {
                     border-radius: 0;
                     top: 94%;
                     left: auto;
-                    right: 0;
+                    right: -8px;
                     box-shadow: 0 3px 15px rgba(0,0,0,0.6);
 
                     .triangle {
@@ -2612,6 +2664,7 @@ input {
 
 #profile-dropdown {
     outline: none;
+    width: 50px;
 }
 
 .upload-box {

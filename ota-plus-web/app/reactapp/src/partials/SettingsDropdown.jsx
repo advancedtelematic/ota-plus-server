@@ -41,7 +41,12 @@ class SettingsDropdown extends Component {
                             id="icon-profile-min"
                         />
                     }
-                    &nbsp; <i className="fa fa-caret-down"></i>
+                    &nbsp; 
+                    <div className="dots nav-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 </LinkWrapper>
                 <UserDropdown 
                     userStore={userStore}
