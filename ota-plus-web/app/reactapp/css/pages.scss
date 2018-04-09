@@ -746,10 +746,6 @@
                     color: $home-bg;
                     font-size: 16px;
                     margin-bottom: 8px;
-
-                    @media(max-height: 850px) {
-                        margin-bottom: 5px;
-                    }
                 }
 
                 .subtitle {
@@ -771,9 +767,9 @@
                         width: 150px;
                         height: 55%;
 
-                        @media(max-height: 850px) {
+                        @media(max-height: 900px) {
+                            height: 35%;
                             width: 75px;
-                            height:45%;
                         }
                     }
                 }
@@ -784,8 +780,8 @@
                     img {
                         height: 55%;
 
-                        @media(max-height: 850px) {
-                            height:45%;
+                        @media(max-height: 900px) {
+                            height: 35%;
                         }
                     }
                 }
@@ -803,9 +799,10 @@
                         display: flex;
                         align-items: center;
                         flex-direction: column;
+                        justify-content: space-between;
 
-                        @media(max-height: 850px) {
-                            padding: 0 30px;
+                        @media(max-height: 900px) {
+                            padding: 15px;
                         }
 
                         &:first-child {
@@ -815,9 +812,12 @@
                         .step-text {
                             color: $devices-group-inactive;
                             font-size: 14px;
-                            height: 10%;
-                            padding: 10px 0;
                             text-transform: uppercase;
+                            padding: 5px 0;
+
+                            @media(max-height: 1000px) {
+                                padding: 0;
+                            }
                         }
 
                         .step-title, .step-desc {
