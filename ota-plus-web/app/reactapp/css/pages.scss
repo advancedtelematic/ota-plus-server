@@ -674,47 +674,7 @@
     .home-content {
         display: flex;
         font-size: 12px;
-        height: 100%;
-
-        .dots {
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-            position: absolute;
-            right: 20px;
-            top: 17px;
-            width: 25px;
-            align-items: flex-end;
-
-            span {
-                height: 4px;
-                width: 3px;
-                border-radius: 50%;
-                background: $devices-groups-bg;
-
-                &:not(:last-child) {
-                    margin-bottom: 2px;
-                }
-            }
-
-            .submenu {
-                position: absolute;
-                top: 20px;
-                width: 135px;
-                background: #fff;
-                left: -100px;
-                font-size: 14px;
-                box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
-
-                a {
-                    padding: 15px 15px 7.5px;
-                    line-height: 17px;
-                    display: block;
-                    color: $device-hardware-header;
-                    font-weight:400;
-                }
-            }
-        }
+        height: 100%;        
 
         .box {
             flex-basis: 50%;
