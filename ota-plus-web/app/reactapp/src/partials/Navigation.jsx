@@ -41,9 +41,6 @@ class Navigation extends Component {
                 </li>
           </ul>
         );
-        const otaPlusNavigation = (
-            <OtaPlusTabs />
-        );
         return (
             <nav className="navbar navbar-inverse navbar-fixed-top">
                   <div className="container">
@@ -52,7 +49,7 @@ class Navigation extends Component {
                     </div>
                     <div id="navbar">
                         {otaPlusMode ?
-                            otaPlusNavigation
+                            <OtaPlusTabs />
                         :
                             garageNavigation
                         }
