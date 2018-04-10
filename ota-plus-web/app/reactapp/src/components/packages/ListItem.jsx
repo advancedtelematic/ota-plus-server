@@ -29,7 +29,7 @@ class ListItem extends Component {
                     {pack.packageName}
                 </div> 
                 <div className="c-package__icon">
-                    <img src="/assets/img/icons/black/lock.svg" alt="Director" />
+                    <img src="/assets/img/icons/black/lock_new.svg" alt="Director" />
                 </div>
                 <div className="c-package__versions-nr" id={`package_versions_count_${packVersionsNumber}`}>
                     {packVersionsNumber === 1 ?

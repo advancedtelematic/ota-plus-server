@@ -44,7 +44,7 @@ class WizardStep7 extends Component {
                                                         update.toPackageName
                                                     }
                                                     <span className="in-director">
-                                                        <img src="/assets/img/icons/black/lock.svg" alt="Director" />
+                                                        <img src="/assets/img/icons/black/lock_new.svg" alt="Director" />
                                                     </span>
                                                 </div>
                                             </div>
@@ -55,7 +55,7 @@ class WizardStep7 extends Component {
                                                 <div className="value" id={"to-package-name-" + update.toPackageName}>
                                                     {update.toPackageName}
                                                     <span className="in-director">
-                                                        <img src="/assets/img/icons/black/lock.svg" alt="Director" />
+                                                        <img src="/assets/img/icons/black/lock_new.svg" alt="Director" />
                                                     </span>
                                                 </div>
                                             </div>
