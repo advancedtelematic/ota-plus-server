@@ -48,12 +48,6 @@ export default class FormInput extends Component {
                                type="text"
                                onKeyUp={this.validateInput.bind(this)}
                                placeholder={placeholder || ''}/>
-                        {inDirector ?
-                            <div className="c-form__input--in-director">
-                                <img src="/assets/img/icons/black/lock_new.svg" alt="Director" />
-                            </div>
-                            : ''
-                        }
                     </div>
                     : ''
                 }

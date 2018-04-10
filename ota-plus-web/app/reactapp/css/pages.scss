@@ -1248,12 +1248,6 @@
                 .date-label {
                     color: $devices-group-text;
                 }
-
-                img {
-                    width: 40px;
-                    height: 40px;
-                    margin-top: -20px;
-                }
             }
         }
 
@@ -1386,8 +1380,8 @@
 
                         .icons {
                             position: absolute;
-                            right: 10px;
-                            top: 15px;
+                            right: 12px;
+                            top: 20px;
 
                             .hardware-icon {
                                 display: inline-block;
@@ -1399,6 +1393,11 @@
 
                                 &.key {
                                     margin-left: 5px;
+
+                                    img {
+                                        width: 18px;
+                                        height: 18px;
+                                    }
                                 }
                             }
                         }
@@ -1810,15 +1809,6 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 padding-right: 15px;
-            }
-
-            &__icon {
-                flex: 1;
-                text-align: center;
-            
-                img {
-                    width: 20px;
-                }
             }
 
             &__versions-nr {
