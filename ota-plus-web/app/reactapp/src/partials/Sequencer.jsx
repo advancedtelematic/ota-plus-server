@@ -199,21 +199,7 @@ class Sequencer extends Component {
         const { campaignsStore, readOnly } = this.props;
         const updatesMatrix = this.updateMatrix;
         const updatesArray = this.campaignUpdates;
-        const numberOfPhases = updatesArray.length;
-        const fullScreenBlock = (
-            campaignsStore.fullScreenMode ?
-                <div className="c-sequencer__fullscreen-hide">
-                    <a href="#" onClick={this.hideFullScreen.bind(this)}>
-                        Minimize <img src="/assets/img/icons/expand_icon.svg" alt="Icon" />
-                    </a>
-                </div>
-            :
-                <div className="c-sequencer__fullscreen-show">
-                    <a href="#" onClick={this.showFullScreen.bind(this)}>
-                        Expand <img src="/assets/img/icons/expand_icon.svg" alt="Icon" />
-                    </a>
-                </div>
-        );
+        const numberOfPhases = updatesArray.length;        
         const initPhase = (
             <div className="c-sequencer__wrapper">
                 <div className="c-sequencer__init">Phase 1</div>
@@ -311,11 +297,6 @@ class Sequencer extends Component {
                         )
                     })}
                     {terminationPhase}
-                    {!readOnly ?
-                        fullScreenBlock
-                        :
-                        null
-                    }
                 </div>
         );
     }
