@@ -17,10 +17,7 @@ class PackagesListItem extends Component {
                     <div className="info">
                         <span className="name">
                             {pack.packageName}
-                        </span>
-                        <div className="in-director">
-                            <img src="/assets/img/icons/black/lock_new.svg" alt="Director" />
-                        </div>
+                        </span>                       
                     </div>
                 </div>
             </span>

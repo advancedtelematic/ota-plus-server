@@ -77,11 +77,11 @@ class HardwarePanel extends Component {
                 <div className="hardware-title">
                     {secondaryEcusTitle}
                     {isPrimaryEcuActive ?
-                        <img src="/assets/img/icons/black/question.svg" alt="" className="hardware-secondary-details" 
+                        <img src="/assets/img/icons/black/questionmark.svg" alt="" className="hardware-secondary-details" 
                              onClick={this.showSecondaryDescription} id="hardware-secondary-ecu-details" 
                          />
                     :
-                        <img src="/assets/img/icons/white/question.svg" alt="" className="hardware-secondary-details" 
+                        <img src="/assets/img/icons/white/questionmark.svg" alt="" className="hardware-secondary-details" 
                              onClick={this.showSecondaryDescription} id="hardware-secondary-ecu-details" 
                          />
                     }
