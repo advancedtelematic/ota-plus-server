@@ -587,6 +587,11 @@ class DependenciesModal extends Component {
             <div className="heading">
               <div className="internal">
                 Dependencies
+                <div className="top-actions flex-end">
+                  <div className="modal-close" onClick={hide}>
+                      <img src="/assets/img/icons/close.svg" alt="Icon" />
+                  </div>
+                </div>
               </div>
             </div>
           }
