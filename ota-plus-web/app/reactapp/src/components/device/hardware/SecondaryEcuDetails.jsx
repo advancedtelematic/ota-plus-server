@@ -37,6 +37,11 @@ class SecondaryEcuDetails extends Component {
                     <div className="heading">
                         <div className="internal">
                             Secondary ECUs
+                            <div className="top-actions flex-end">
+                                <div className="modal-close" onClick={hideDetails}>
+                                    <img src="/assets/img/icons/close.svg" alt="Icon" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 }
