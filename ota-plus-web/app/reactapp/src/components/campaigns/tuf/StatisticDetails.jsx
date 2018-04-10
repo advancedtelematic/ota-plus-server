@@ -108,21 +108,30 @@ class StatisticDetails extends Component {
 
                     <div className="total-progress-container">
                         <div className="top-container">
-                            <div className="block">
-                                <div id="campaign-detail-devices-stats-processed">
-                                   {overallStatistics.processed}
+                            <div className="blocks">
+                                <div className="block">
+                                    <div id="campaign-detail-devices-stats-processed">
+                                       {overallStatistics.processed}
+                                    </div>
+                                    <div>
+                                        Processed
+                                    </div>
                                 </div>
-                                <div>
-                                    Processed
+                                <div className="block">
+                                    <div id="campaign-detail-devices-stats-affected">
+                                        {overallStatistics.affected}
+                                    </div>
+                                    <div>
+                                        Affected
+                                    </div>
                                 </div>
                             </div>
-                            <div className="block">
-                                <div id="campaign-detail-devices-stats-affected">
-                                    {overallStatistics.affected}
-                                </div>
-                                <div>
-                                    Affected
-                                </div>
+                            <div className="show-dependencies">
+                                <a href="#" className="add-button" id="target_show_dependencies" onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}>
+                                    <span>
+                                        Show dependencies
+                                    </span>
+                                </a>
                             </div>
                         </div>
                         <div className="middle-container">
@@ -139,14 +148,7 @@ class StatisticDetails extends Component {
                                     <div className="not-proceed" style={{width: notProcessedRate + '%'}}>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="show-dependencies">
-                                <a href="#" className="add-button" id="target_show_dependencies" onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}>
-                                    <span>
-                                        Show dependencies
-                                    </span>
-                                </a>
-                            </div>
+                            </div>                            
                         </div>
                         <div className="bottom-container">
                             <div className="status-block">
