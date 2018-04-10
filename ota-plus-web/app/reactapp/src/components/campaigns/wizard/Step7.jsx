@@ -23,7 +23,7 @@ class WizardStep7 extends Component {
                         "Campaign with given name already exists."
                     }
                 />
-                <div className="box-bordered">
+                <div className="box-summary">
                     <div className="title">
                         Software & Version
                     </div>
@@ -92,7 +92,7 @@ class WizardStep7 extends Component {
                         })}
                     </div>
                 </div>
-                <div className="box-bordered groups">
+                <div className="box-summary groups">
                     <div className="title">
                         Groups & Devices
                     </div>
@@ -113,9 +113,7 @@ class WizardStep7 extends Component {
                                     </div>
                                 );
                             })}
-                            
                         </div>
-                        <div className="fade-wrapper-groups bottom"></div>
                     </div>
                 </div>
             </div>
