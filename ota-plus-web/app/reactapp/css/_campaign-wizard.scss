@@ -115,21 +115,6 @@
                   font-size: 14px;
                 }
               }
-
-              .info {
-                float: left;
-
-                .in-director {
-                  display: inline-block;
-                  margin-left: 10px;
-
-                  img {
-                    width: 18px;
-                    height: 18px;
-                    margin-top: -5px;
-                  }
-                }
-              }
             }
           }
         }
@@ -413,15 +398,6 @@
                 .value {
                   margin-bottom: 15px;
                   @include textoverflowEllipsis;
-
-                  .in-director {
-                    display: inline-block;
-                    margin-left: 10px;
-
-                    img {
-                      width: 20px;
-                    }
-                  }
                 }
               }
 

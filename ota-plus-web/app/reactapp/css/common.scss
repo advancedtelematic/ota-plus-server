@@ -136,16 +136,6 @@
     border: 1px solid rgba(0, 0, 0, 0);
     transition: all .4s ease;
 
-    &--in-director {
-      display: inline-block;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      right: 15px;
-      img {
-        width: 18px;
-      }
-    }
     &--hide-caret {
       color: transparent;
       text-shadow: 0 0 0 black;

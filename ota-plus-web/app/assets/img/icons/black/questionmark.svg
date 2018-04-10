@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>Questionmark Icon default</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Questionmark-Icon-default">
+            <g id="Page-1" transform="translate(2.000000, 2.000000)" stroke="#9FA2A6">
+                <path d="M2.05190476,16.0685714 C0.764761905,14.3857143 0,12.282381 0,10 C0,4.47714286 4.47714286,0 10,0 C15.5233333,0 20,4.47714286 20,10 C20,15.5228571 15.5233333,20 10,20 C7.71857143,20 5.61571429,19.2357143 3.93333333,17.95" id="Stroke-1"></path>
+            </g>
+            <g id="Group-13" transform="translate(9.000000, 6.000000)" stroke="#48DAD0">
+                <g id="Group-11">
+                    <path d="M2.70833333,12 L2.70833333,10.7368421" id="Stroke-3" stroke-linejoin="round"></path>
+                    <path d="M2.85266458,9.27851325 L2.85266458,7.36617931 C2.85266458,7.06999056 3.03132288,6.80725372 3.29670219,6.70620109 C4.91245141,6.09361307 6.25760502,5.15974737 6.25760502,3.57217568 C6.25760502,1.84103956 4.7631348,0.437453358 2.91982445,0.437453358 C1.67834483,0.437453358 0.595962382,1.07373648 0.0208652038,2.0180559" id="Stroke-5"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
