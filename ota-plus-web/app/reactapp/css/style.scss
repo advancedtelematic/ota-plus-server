@@ -1217,6 +1217,8 @@ input {
                             position: relative;
                             top: 3px;
                             font-size: 12px;
+                            display: flex;
+                            justify-content: space-between;
 
                             .block {
                                 display: inline-block;
@@ -1289,11 +1291,6 @@ input {
                                         float: left;
                                     }
                                 }
-                            }
-
-                            .show-dependencies {
-                                position: absolute;
-                                right: 0;
                             }
                         }
 
