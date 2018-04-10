@@ -1457,15 +1457,15 @@
                             }
 
                             .label-auto-update {
-                                background: #369E47;
+                                background: $device-pack-auto-update;
                             }
 
                             .label-package-installed {
-                                background: #369E47;
+                                background: $device-pack-installed-bg;
                             }
 
                             .label-package-queued {
-                                background: #fb9773;
+                                background: $device-pack-queued-bg;
                             }
 
                             .label-package-blacklisted {
@@ -1512,7 +1512,7 @@
                                     color: #fff;
 
                                     .fa-dot-circle-o {
-                                        color: #FB9773;
+                                        color: $device-pack-queued-bg;
                                     }
                                 }
                             }
@@ -1579,7 +1579,7 @@
                                             color: #fff;
 
                                             .fa-dot-circle-o {
-                                                color: #FB9773;
+                                                color: $device-pack-queued-bg;
                                             }
                                         }
                                     }
@@ -1638,7 +1638,7 @@
                     }
 
                     &.bg-orange {
-                        background-color: #F2A721;
+                        background-color: $device-pack-queued-bg;
                     }
 
                     &.bg-grey {
