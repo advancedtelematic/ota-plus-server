@@ -36,9 +36,9 @@ class PrimaryEcu extends Component {
                             onClick={showHardwareOverlay}
                         >
                             {active ?
-                                <img src="/assets/img/icons/white/info_icon.svg" alt="Icon" />
+                                <img src="/assets/img/icons/white/info.svg" alt="Icon" />
                             :
-                                <img src="/assets/img/icons/black/info_icon.svg" alt="Icon" />
+                                <img src="/assets/img/icons/black/info.svg" alt="Icon" />
                             }
                         </div>
                         <div
@@ -47,9 +47,9 @@ class PrimaryEcu extends Component {
                             onClick={otherProps.handleTouchTap}
                         >
                             {active ?
-                                <img src="/assets/img/icons/white/lock.svg" alt="Icon" />
+                                <img src="/assets/img/icons/white/key.svg" alt="Icon" />
                             :
-                                <img src="/assets/img/icons/black/lock.svg" alt="Icon" />
+                                <img src="/assets/img/icons/black/key.svg" alt="Icon" />
                             }
                         </div>
                     </div>

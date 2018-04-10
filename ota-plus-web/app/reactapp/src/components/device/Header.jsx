@@ -144,9 +144,6 @@ class Header extends Component {
                             <button className="queue-button" id="queue-button" onClick={showQueueModal} ref={queueButtonRef}>
                             </button>
                             <div className="dates">
-                                <div className="date director">
-                                    <img src="/assets/img/icons/white/director-device-icon.png" alt="Director" id="director-device-icon" />
-                                </div>                               
                                 <div className="date" id="created-info">
                                     <span className="date-label">Created</span>
                                     <div className="date-desc">
