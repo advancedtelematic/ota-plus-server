@@ -46,7 +46,7 @@ class VersionsStats extends Component {
         });
         const content = (
             <div className="chart-panel" id={"package-" + pack.packageName + "-stats"}>
-                <div className={installedOnEcusTotal ? "wrapper-center" : "wrapper-center left"}>
+                <div className={installedOnEcusTotal ? "wrapper-center" : "wrapper-center"}>
                     <div id="target_chart_device_count" className={installedOnEcusTotal ? "total-count" : "hide"}>
                         {installedOnEcusTotal}
                     </div>
@@ -64,7 +64,7 @@ class VersionsStats extends Component {
                             />
                         </div>
                     :
-                        <div id={"package-" + pack.packageName + "-not-installed"}>
+                        <div id={"package-" + pack.packageName + "-not-installed"} style={{textAlign: 'left'}}>
                             This package has not been installed yet.
                         </div>
                     }

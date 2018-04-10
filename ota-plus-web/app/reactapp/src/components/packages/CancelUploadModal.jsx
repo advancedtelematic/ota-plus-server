@@ -22,22 +22,28 @@ class CancelUploadModal extends Component {
                         className="link-cancel">
                         Continue upload
                     </a>
-                    <FlatButton
-                        label="Cancel upload"
-                        type="submit"
-                        className="btn-main"
+                    <button
+                        className="btn-primary"
+                        id="cancel-upload"
                         onClick={this.cancelUpload}
-                    />
+                    >
+                        Cancel upload
+                    </button>
                 </div>
             </span>
         );
         return (
             <Modal 
-                title="Cancel upload?"
+                title={
+                    <div className="heading">
+                        <div className="internal">
+                            Cancel upload?
+                        </div>
+                    </div>
+                }
                 content={content}
                 shown={shown}
                 className="cancel-upload-modal"
-                titleClassName="red"
             />
         );
     }
