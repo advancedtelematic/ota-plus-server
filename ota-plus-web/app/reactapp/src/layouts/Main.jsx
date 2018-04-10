@@ -311,8 +311,8 @@ class Main extends Component {
                             </div>
                             <div className="actions">
                                 <a href="#" id="maximize-upload-box" className="box-toggle box-maximize" onClick={this.toggleUploadBoxMode.bind(this)}>
-                                    <i className="fa fa-angle-up" aria-hidden="true"></i>
-                                </a>                           
+                                    <img src="/assets/img/icons/reopen.svg" alt="Icon" />
+                                </a>
                             </div>
                         </div>
                     :
@@ -334,7 +334,7 @@ class Main extends Component {
                                 </div>
                                 <div className="actions">
                                     <a href="#" id="maximize-wizard" className="box-toggle box-maximize" title="Maximize wizard" onClick={this.toggleWizard.bind(this, wizard.id, wizard.name)}>
-                                        <i className="fa fa-angle-up" aria-hidden="true"></i>
+                                        <img src="/assets/img/icons/reopen.svg" alt="Icon" />
                                     </a>
                                 </div>
                             </div>
