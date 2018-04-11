@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { observe, observable } from 'mobx';
 import { FlatButton } from 'material-ui';
-import { PackagesComment } from '../packages';
 import { Sequencer } from '../../../partials';
 import _ from 'underscore';
 import moment from 'moment';

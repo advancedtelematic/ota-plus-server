@@ -161,7 +161,7 @@ class EditProfile extends Component {
                                     :
                                         <div className="icons">
                                             {this.newNameLength ?
-                                                <img src="/assets/img/icons/accept_icon.png" className="rename" alt="Icon" onClick={this.rename} />
+                                                <img src="/assets/img/icons/black/tick.svg" className="rename" alt="Icon" onClick={this.rename} />
                                             :
                                                 null
                                             }
