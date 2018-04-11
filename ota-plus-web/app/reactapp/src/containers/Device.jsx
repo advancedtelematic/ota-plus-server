@@ -121,6 +121,7 @@ class Device extends Component {
             campaignsStore,
             selectEcu,
             packagesReady,
+            disableExpand,
         } = this.props;
         const device = devicesStore.device;
         return (
@@ -152,6 +153,7 @@ class Device extends Component {
                                 onFileDrop={this.onFileDrop}
                                 showPackageDetails={this.showPackageDetails}
                                 packagesReady={packagesReady}
+                                disableExpand={disableExpand}
                             />
                             <DevicePropertiesPanel
                                 packagesStore={packagesStore}
