@@ -1860,11 +1860,6 @@
                 font-weight: 500;
                 color: $device-hardware-header;
                 font-size: 12px;
-
-                &--strict {
-                    width: 25%;
-                    float: left;
-                }
             }
 
             &__versions {
