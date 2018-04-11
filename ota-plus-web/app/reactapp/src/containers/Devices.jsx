@@ -89,6 +89,14 @@ class Devices extends Component {
                                 <div>
                                     You haven't created any devices yet.
                                 </div>
+                                <a href="https://docs.atsgarage.com/quickstarts/start-intro.html" className="add-button light" id="add-new-device" target="_blank">
+                                    <span>
+                                        +
+                                    </span>
+                                    <span>
+                                        Add new device
+                                    </span>
+                                </a>
                             </div>
                         </div>
                 }
