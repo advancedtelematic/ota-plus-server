@@ -50,11 +50,11 @@ class Device extends Component {
         this.props.devicesStore.fetchMultiTargetUpdates(this.props.params.id);
     }
     componentWillUnmount() {
+        this.packagesFetchHandler();
+        this.autoInstallHandler();
         this.props.devicesStore._reset();
         this.props.packagesStore._reset();
         this.props.hardwareStore._reset();
-        this.packagesFetchHandler();
-        this.autoInstallHandler();
     }
     showSequencer(e) {
         if(e) e.preventDefault();
