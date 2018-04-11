@@ -15,6 +15,7 @@ class Device extends Component {
     queueAnchorEl = null;
     @observable packagesReady = false;
     @observable sequencerShown = false;
+    @observable disableExpand = false;
 
     constructor(props) {
         super(props);
@@ -34,6 +35,13 @@ class Device extends Component {
                 this.packagesReady = true;
             }
         });
+
+        this.autoInstallHandler = observe(props.packagesStore, (change) => {
+            if((change.name === 'packagesEnableAutoInstallAsync' || change.name === 'packagesDisableAutoInstallAsync') 
+                && !_.isMatch(change.oldValue, change.object[change.name])) {
+                    this.disableExpand = true;
+            }
+        });
     }
     componentWillMount() {
         this.props.packagesStore.page = 'device';
@@ -46,6 +54,7 @@ class Device extends Component {
         this.props.packagesStore._reset();
         this.props.hardwareStore._reset();
         this.packagesFetchHandler();
+        this.autoInstallHandler();
     }
     showSequencer(e) {
         if(e) e.preventDefault();
@@ -82,6 +91,7 @@ class Device extends Component {
              packagesStore.expandedPackage = expandedPackage;
         }
         packagesStore.fetchAutoInstalledPackages(devicesStore.device.uuid, serial);
+        this.disableExpand = false;
     }
     render() {
         const { 
@@ -118,6 +128,7 @@ class Device extends Component {
                             showQueueModal={showQueueModal}
                             selectEcu={this.selectEcu}
                             packagesReady={this.packagesReady}
+                            disableExpand={this.disableExpand}
                         />
                     </MetaData>
                     <DeviceQueueModal
