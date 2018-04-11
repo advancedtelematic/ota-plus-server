@@ -3407,14 +3407,10 @@ input {
                     color: $hardware-overlay-item-color;
                     padding: 0 20px;
                     justify-content: flex-start;
-                    border: 0;
+                    background-color: #fff;
 
-                    &:nth-child(odd) {
-                        background: #fff;
-                    }
-
-                    &:nth-child(even) {
-                        background: $device-item-bg;
+                    &:not(:last-child) {
+                        border-bottom: 1px solid $hardware-overlay-border;
                     }
 
                     th {
@@ -3460,14 +3456,10 @@ input {
                     height: 30px;
                     color: $hardware-overlay-item-color;
                     padding: 0 20px;
-                    border: 0;
+                    background-color: #fff;
 
-                    &:nth-child(odd) {
-                        background: #fff;
-                    }
-
-                    &:nth-child(even) {
-                        background: $device-item-bg;
+                    &:not(:last-child) {
+                        border-bottom: 1px solid $hardware-overlay-border;
                     }
 
                     .version {
