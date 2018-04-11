@@ -1154,6 +1154,11 @@ input {
                             img {
                                 margin-right: 5px;
                                 width: 15px;
+
+                                &.rename {
+                                    width: 25px;
+                                    margin-right: 0;
+                                }
                             }
                         }
                         &:hover {
