@@ -73,12 +73,6 @@ class CreateModal extends Component {
                 <div className="row">
                     <div className="col-xs-12">
                         <div className="body-actions">
-                            <a href="#"
-                                onClick={hide}
-                                className="link-cancel"
-                                id="add-new-key-cancel">
-                                Cancel
-                            </a>
                             <button
                                 disabled={this.submitButtonDisabled || provisioningStore.provisioningKeyCreateAsync.isFetching}
                                 className="btn-primary"
