@@ -157,13 +157,6 @@ class CreateModal extends Component {
                 <div className="row">
                     <div className="col-xs-12">
                         <div className="body-actions">
-                            <a href="#"
-                                onClick={this.hideModal.bind(this)}
-                                className="link-cancel"
-                                id="add-new-package-cancel"
-                            >
-                                Cancel
-                            </a>
                             <button className="btn-primary"
                                     disabled={this.submitButtonDisabled || !this.selectedHardwareIds.length}
                                     id="add-new-package-confirm"
