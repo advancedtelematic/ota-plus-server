@@ -15,7 +15,7 @@ class SoftwarePanel extends Component {
         super(props);
     }
     render() {
-        const { devicesStore, packagesStore, hardwareStore, toggleTufPackageAutoUpdate, onFileDrop, showPackageDetails, packagesReady } = this.props;
+        const { devicesStore, packagesStore, hardwareStore, toggleTufPackageAutoUpdate, onFileDrop, showPackageDetails, packagesReady, disableExpand } = this.props;
         return (
             <div className="software-panel">
                 <div className="darkgrey-header">
@@ -35,6 +35,7 @@ class SoftwarePanel extends Component {
                                 onFileDrop={onFileDrop}
                                 toggleTufPackageAutoUpdate={toggleTufPackageAutoUpdate}
                                 showPackageDetails={showPackageDetails}
+                                disableExpand={disableExpand}
                             />
                         :
                             <div className="wrapper-center">
