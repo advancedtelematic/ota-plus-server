@@ -7,6 +7,7 @@ import Dropzone from 'react-dropzone';
 import ListItem from './ListItem';
 import ListItemVersion from './ListItemVersion';
 import { Loader } from '../../../partials';
+import withAnimatedScroll from '../../../partials/withAnimatedScroll';
 
 const headerHeight = 28;
 const autoUpdateInfo = "Automatic update activated. The latest version of this package will automatically be installed on this device.";
@@ -32,6 +33,7 @@ class List extends Component {
                 const that = this;
                   setTimeout(() => {
                       that.listScroll();
+                      that.highlightInstalledPackage(props.packagesStore.expandedPackage);
                   }, 50);
             }
         });
@@ -56,6 +58,17 @@ class List extends Component {
     componentWillUnmount() {
         this.packagesChangeHandler();
         this.refs.list.removeEventListener('scroll', this.listScroll);
+    }
+    highlightInstalledPackage(pack) {
+        const { animatedScroll } = this.props;
+        if(this.refs.list && pack && !pack.unmanaged) {
+            const currentScrollTop = this.refs.list.scrollTop;
+            const elementCoords = document.getElementById("button-package-" + pack.id.name).getBoundingClientRect();
+            let scrollTo = currentScrollTop + elementCoords.top - 150;
+            setTimeout(() => {
+                animatedScroll(document.querySelector('.ios-list'), scrollTo, 500);
+            }, 400);
+        }
     }
     generateHeadersPositions() {
         const headers = this.refs.list.getElementsByClassName('header');
@@ -386,4 +399,4 @@ List.propTypes = {
     showPackageDetails: PropTypes.func.isRequired,
 }
 
-export default List;
+export default withAnimatedScroll(List);
