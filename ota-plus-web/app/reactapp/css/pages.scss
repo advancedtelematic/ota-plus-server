@@ -667,14 +667,25 @@
 }
 
 #page-home {
-    @include fullHeight;
+    height: calc(100vh - 50px);
     background: $home-bg;
     padding: 30px;
+
+    .wrapper-flex {
+        height: 100%;
+    }
+
+    .content {
+
+        @media(max-height: 768px) {
+            min-height: 665px;
+        }
+    }
 
     .home-content {
         display: flex;
         font-size: 12px;
-        height: 100%;        
+        height: 100%;
 
         .box {
             flex-basis: 50%;
@@ -693,6 +704,10 @@
                 .body {
                     height: calc(100vh - 160px);
                     padding: 20px;
+
+                    @media(max-height: 768px) {
+                        min-height: 600px;
+                    }
                 }                
             }
 
@@ -801,7 +816,7 @@
                         justify-content: space-between;
 
                         @media(max-height: 900px) {
-                            padding: 15px;
+                            padding: 12px;
                         }
 
                         &:first-child {
