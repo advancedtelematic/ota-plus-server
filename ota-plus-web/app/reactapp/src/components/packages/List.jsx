@@ -8,6 +8,7 @@ import ListItem from './ListItem';
 import ListItemVersion from './ListItemVersion';
 import { PackagesVersionsStats } from './stats';
 import { Loader } from '../../partials';
+import withAnimatedScroll from '../../partials/withAnimatedScroll';
 
 const headerHeight = 28;
 
@@ -97,15 +98,15 @@ class List extends Component {
         }
     }
     highlightPackage(pack) {
+        const { animatedScroll } = this.props;
         if(this.refs.list && pack) {
             this.expandedPackageName = pack;
-            const wrapperPosition = this.refs.list.getBoundingClientRect();
+            const currentScrollTop = this.refs.list.scrollTop;
             const elementCoords = document.getElementById("button-package-" + pack).getBoundingClientRect();
-            let scrollTo = elementCoords.top - wrapperPosition.top - headerHeight + elementCoords.height;
-            let page = document.querySelector('span.content');
+            let scrollTo = currentScrollTop + elementCoords.top - 150;
             setTimeout(() => {
-                page.scrollTop = scrollTo;
-            }, 400)
+                animatedScroll(document.querySelector('.ios-list'), scrollTo, 500);
+            }, 400);
         }
     }
     componentWillReceiveProps(nextProps) {
@@ -232,4 +233,4 @@ List.propTypes = {
     highlightedPackage: PropTypes.string
 }
 
-export default List;
+export default withAnimatedScroll(List);

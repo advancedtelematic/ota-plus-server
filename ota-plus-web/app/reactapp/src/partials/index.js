@@ -35,5 +35,5 @@ export {
     Form,
     FormInput,
     FormSelect,
-    FormTextarea
+    FormTextarea,
 }
