@@ -39,7 +39,7 @@ const initialWizardStepForAlphaPlus = [
     {
         class: WizardStep1,
         name: "name",
-        title: "Select software",
+        title: "Select name",
         isFinished: false,
         isSearchBarShown: false,
     },
@@ -92,7 +92,7 @@ const initialWizardStep = [
     {
         class: WizardStep1,
         name: "name",
-        title: "Select software",
+        title: "Select name",
         isFinished: false,
         isSearchBarShown: false,
     },
