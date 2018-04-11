@@ -565,15 +565,12 @@ class DependenciesModal extends Component {
              
               {this.showOnlyActive ?
                 <div className="body-actions">
-                  <a href="#" onClick={hide.bind(this)} className="link-cancel" id="link-close">Close</a>
                   <button className="btn-primary" onClick={this.showFullGraph.bind(this)}>
                     Show all
                   </button>
                 </div>
               :
-                <div className="body-actions">
-                  <a href="#" onClick={hide.bind(this)} className="btn-primary" id="link-close">Close</a>
-                </div>
+                null
               }
             </span>
           :

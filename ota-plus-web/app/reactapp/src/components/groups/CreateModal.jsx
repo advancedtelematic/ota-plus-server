@@ -85,12 +85,6 @@ class CreateModal extends Component {
                 <div className="row">
                     <div className="col-xs-12">
                         <div className="body-actions">
-                            <a href="#"
-                                onClick={hide}
-                                className="link-cancel"
-                                id="cancel">
-                                Cancel
-                            </a>
                             <button
                                 disabled={this.submitButtonDisabled || groupsStore.groupsCreateAsync.isFetching}
                                 className="btn-primary"

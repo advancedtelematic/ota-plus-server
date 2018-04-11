@@ -48,12 +48,6 @@ class CancelCampaignModal extends Component {
                         and will be moved to <strong>Finished</strong>.
                     </span>
                     <div className="body-actions">
-                        <a href="#"
-                            onClick={hide}
-                            className="link-cancel"
-                            id="cancel-all-close">
-                            Close
-                        </a>
                         <button
                             className="btn-primary"
                             id="cancel-all-confirm"

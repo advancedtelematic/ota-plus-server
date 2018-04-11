@@ -502,10 +502,6 @@ class Wizard extends Component {
                                 }
                             </div>
                             <div className="wizard-actions">
-                              <a href="#" className="link-cancel" id="save-and-close"
-                                 onClick={hideWizard.bind(this, wizardIdentifier)}>
-                                  Close
-                              </a>
                                 <div className="wrapper-confirm">
                                 {this.isLastStep() ?
                                     <button
