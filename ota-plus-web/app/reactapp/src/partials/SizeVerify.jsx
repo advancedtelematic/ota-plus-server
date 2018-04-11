@@ -34,8 +34,10 @@ class SizeVerify extends Component {
         const { minWidth, minHeight } = this.props;
         const content = (
             <span>
-                ATS Garage works best in a browser window that is at least <strong>{minWidth} x {minHeight}</strong>. <br />
-                You can still use it at a smaller size, but we recommend using a desktop browser for the best experience.
+                <div className="desc" style={{textAlign: 'left'}}>
+                    HERE OTA Connect works best in a browser window that is at least <strong>{minWidth} x {minHeight}</strong>. <br />
+                    You can still use it at a smaller size, but we recommend using a desktop browser for the best experience.
+                </div>
                 <div className="body-actions">
                     <div className="wrapper-checkbox">
                         <input 

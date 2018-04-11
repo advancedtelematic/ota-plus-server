@@ -7,7 +7,7 @@ const NoItems = ({itemName, create = null}) => {
                 No {itemName}s to show
             </span>
             <a href="#" className="add-button" onClick={create}>
-                Create your first {itemName}
+                Create a new {itemName}
             </a>
         </div>
     );
