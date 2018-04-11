@@ -93,7 +93,7 @@ class SubHeader extends Component {
                     :
                         <div className="icons">
                             {this.newCampaignNameLength ?
-                                <img src="/assets/img/icons/accept_icon.png" className="rename" alt="Icon" onClick={this.renameCampaign} />
+                                <img src="/assets/img/icons/black/tick.svg" className="rename" alt="Icon" onClick={this.renameCampaign} />
                             :
                                 null
                             }
