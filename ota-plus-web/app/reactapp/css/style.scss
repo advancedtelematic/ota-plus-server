@@ -183,6 +183,13 @@ $font: 'akkurat';
                         img {
                             width: 12px;
                         }
+
+                        &.toggle-fullscreen.on {
+
+                            img {
+                                width: 15px;
+                            }
+                        }
                     }
                 }
             }
@@ -931,7 +938,7 @@ input {
 
     img {
         width: 75px;
-        margin-bottom: 30px;
+        margin-bottom: 15px;
     }
 
     a {
