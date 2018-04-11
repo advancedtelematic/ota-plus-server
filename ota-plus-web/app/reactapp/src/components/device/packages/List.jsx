@@ -37,14 +37,16 @@ class List extends Component {
         });
     }
     componentWillReceiveProps(nextProps) {
-        const { devicesStore } = nextProps;
+        const { devicesStore, disableExpand, packagesStore } = nextProps;
         this.selectPackagesToDisplay();
         this.addUnmanagedPackage();
-        if(nextProps.packagesStore.expandedPackage && !nextProps.packagesStore.expandedPackage.unmanaged) {
-            this.expandedPackageName = nextProps.packagesStore.expandedPackage.id.name;
-        }
-        else {
-            this.expandedPackageName = null;
+        if(!disableExpand) {
+            if(packagesStore.expandedPackage && !packagesStore.expandedPackage.unmanaged) {
+                this.expandedPackageName = packagesStore.expandedPackage.id.name;
+            }
+            else {
+                this.expandedPackageName = null;
+            }
         }
     }
     componentDidMount() {
