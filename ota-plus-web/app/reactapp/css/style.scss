@@ -88,7 +88,7 @@ $font: 'akkurat';
     font-size: 12px;
     font-weight: 500;
 
-    &:hover {
+    &:hover, &:focus, &:active {
         color: $home-header-button;
     }
 
@@ -103,7 +103,7 @@ $font: 'akkurat';
         color: $add-button-grey;
         font-weight: 300;
 
-        &:hover {
+        &:hover, &:focus, &:active {
             color: $add-button-grey;
         }
     }
