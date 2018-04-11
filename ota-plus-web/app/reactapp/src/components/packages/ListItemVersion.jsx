@@ -82,7 +82,7 @@ class ListItemVersion extends Component {
                         </span>
                     </div>
                     <div className="c-package__hw-row c-package__hw-row--hardware-ids" id={"package-" + packageName + "-hardware_ids"}>
-                        <div className="c-package__heading c-package__heading--strict">
+                        <div className="c-package__sw-subtitle">
                             Hardware ids:
                         </div>
                         <div className="c-package__hw-value">
@@ -97,7 +97,7 @@ class ListItemVersion extends Component {
                     </div>
                     {version.targetFormat ?
                         <div className="c-package__hw-row c-package__hw-row--format" id={"package-" + packageName + "-target_format"}>
-                            <div className="c-package__heading c-package__heading--strict">
+                            <div className="c-package__sw-subtitle">
                                 Format:
                             </div>
                             <div className="c-package__hw-value">
