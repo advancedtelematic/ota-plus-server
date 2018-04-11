@@ -84,7 +84,7 @@ class Devices extends Component {
                         <div className="wrapper-center">
                             <div className="page-intro">
                                 <div>
-                                    <img src="/assets/img/icons/white/devices.png" alt="Icon" />
+                                    <img src="/assets/img/icons/white/devices.svg" alt="Icon" />
                                 </div>
                                 <div>
                                     You haven't created any devices yet.

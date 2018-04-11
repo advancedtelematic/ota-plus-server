@@ -535,13 +535,12 @@ class Wizard extends Component {
                                 <div className="wizard-minimize" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)}>
                                     <img src="/assets/img/icons/minimize.svg" alt="Icon" />
                                 </div>                                
-                                <div className="toggle-fullscreen" onClick={this.toggleFullScreen}>
+                                <div className={"toggle-fullscreen" + (campaignsStore.fullScreenMode ? " on" : " off")} onClick={this.toggleFullScreen}>
                                     {campaignsStore.fullScreenMode ? 
                                         <img src="/assets/img/icons/exit-fullscreen.svg" alt="Icon" />
                                     :
                                         <img src="/assets/img/icons/maximize.svg" alt="Icon" />
                                     }
-                                    
                                 </div>
                                 <div className="wizard-close" onClick={hideWizard.bind(this, wizardIdentifier)}>
                                     <img src="/assets/img/icons/close.svg" alt="Icon" />

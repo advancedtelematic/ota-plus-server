@@ -112,7 +112,7 @@ class Campaigns extends Component {
                     <div className="wrapper-center">
                         <div className="page-intro">
                             <div>
-                                <img src="/assets/img/icons/white/campaigns.png" alt="Icon" />
+                                <img src="/assets/img/icons/white/campaigns.svg" alt="Icon" />
                             </div>
                             <div>
                                 You haven't created any update campaigns yet.

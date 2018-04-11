@@ -129,7 +129,7 @@ class Packages extends Component {
                         <div className="wrapper-center">
                             <div className="page-intro">
                                 <div>
-                                    <img src="/assets/img/icons/white/packages.png" alt="Icon" />
+                                    <img src="/assets/img/icons/white/packages.svg" alt="Icon" />
                                 </div>
                                 <div>
                                     You haven't created any packages yet.
