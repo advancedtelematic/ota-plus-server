@@ -16,15 +16,15 @@ class StatsBlock extends Component {
         let availableColors = [];
         if (type === 'groups' || type === 'devices') {
             availableColors = [
-                '#F59B78',
-                '#847571',
-                '#D3D6D5',
-                '#959595',
+                '#FA9D00',
+                '#069F71',
+                '#670195',
+                '#B7B9BC',
             ]
         } else if (type === 'results') {
             availableColors = [
-                '#86BD69',
-                'red'
+                '#06B87C',
+                '#D0021B'
             ]
         } else {
             availableColors = [
