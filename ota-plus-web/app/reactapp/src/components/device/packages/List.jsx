@@ -68,7 +68,7 @@ class List extends Component {
         if(this.refs.list && pack && !pack.unmanaged) {
             const currentScrollTop = this.refs.list.scrollTop;
             const elementCoords = document.getElementById("button-package-" + pack.id.name).getBoundingClientRect();
-            let scrollTo = currentScrollTop + elementCoords.top - 150;
+            let scrollTo = currentScrollTop + elementCoords.top - 225;
             setTimeout(() => {
                 animatedScroll(document.querySelector('.ios-list'), scrollTo, 500);
             }, 400);
