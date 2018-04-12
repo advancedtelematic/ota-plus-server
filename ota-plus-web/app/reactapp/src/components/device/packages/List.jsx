@@ -21,6 +21,7 @@ class List extends Component {
     @observable expandedPackageName = null;
     @observable tmpIntervalId = null;
     @observable preparedPackages = {};
+    @observable initialHighlight = false;
 
     constructor(props) {
         super(props);
@@ -33,7 +34,10 @@ class List extends Component {
                 const that = this;
                   setTimeout(() => {
                       that.listScroll();
-                      that.highlightInstalledPackage(props.packagesStore.expandedPackage);
+                      if(!this.initialHighlight) {
+                        that.highlightInstalledPackage(props.packagesStore.expandedPackage);
+                        this.initialHighlight = true;
+                      }
                   }, 50);
             }
         });
