@@ -362,7 +362,6 @@ body {
     background-color: $home-bg;
     background-attachment: fixed;
     background-size: cover;
-    padding-top: 50px;
     overflow-y: hidden;
 
     .btn-main {
@@ -569,8 +568,9 @@ input {
 .navbar-inverse {
     background: $devices-groups-bg;
     min-width: 1280px;
-    position: absolute;
     border-bottom: 1px solid $panel-delimiter-color;
+    margin-bottom: 0;
+    height: 50px;
 
     .alert {
         width: 400px;
@@ -614,7 +614,7 @@ input {
                 float: left;
                 > a {
                     color: $devices-group-text;
-                    height: 50px;
+                    height: 48px;
                     padding: 15px 20px;
                     margin: 0 10px;
                     @include transition;
@@ -647,7 +647,7 @@ input {
         float: right;
 
         li {
-            height: 50px;
+            height: 48px;
             display: inline-block;
             vertical-align: top;
 
@@ -814,22 +814,6 @@ input {
                 font-size: 18px;
             }
         }
-    }
-}
-
-.wrapper-flex {
-    height: calc(100% - 50px);
-    display: flex;
-    flex-direction: column;
-
-    .content {
-        height: 100%;
-        overflow-y: auto;
-    }
-
-    .center {
-        @include flexCenter;
-        align-items: center;
     }
 }
 

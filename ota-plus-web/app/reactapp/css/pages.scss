@@ -1,8 +1,7 @@
-#page-packages, #page-campaigns, #page-impact-analysis {
+#page-packages, #page-campaigns, #page-impact-analysis, #page-home {
   padding: 30px;
-  background-color: #0F1621;
+  background-color: $home-bg;
 }
-
 
 #page-device-registry {
     @include fullHeight;
@@ -341,12 +340,6 @@
 #page-dashboard {
     background: #fff;
     @include fullHeight;
-
-    .wrapper-flex {
-        .content {
-            overflow-y: hidden;
-        }
-    }
     
     .subheader {
         height: 42px;
@@ -668,14 +661,9 @@
 
 #page-home {
     height: calc(100vh - 50px);
-    background: $home-bg;
-    padding: 30px;
-
-    .wrapper-flex {
-        height: 100%;
-    }
 
     .content {
+        height: 100%;
 
         @media(max-height: 768px) {
             min-height: 665px;
@@ -985,7 +973,7 @@
 }
 
 #page-devices {
-    @include fullHeight;
+    height: calc(100vh - 50px);
     background: $home-bg;
 
     .page-intro {
@@ -1173,11 +1161,8 @@
 }
 
 #page-device {
+    height: calc(100vh - 50px);
     background: $home-bg;
-
-    .wrapper-flex {
-        font-size: 12px!important;
-    }
 
     .page-heading {
         .icon {
@@ -1299,13 +1284,12 @@
     }
 
     .content {
-        height: calc(100vh - 150px);
-        overflow-y: hidden;
+        font-size: 12px;
 
         .hardware-panel {
             background: $devices-groups-bg;
             width: 20%;
-            height: 100%;
+            height: calc(100% - 100px);
             float: left;
             position: relative;
             z-index: 121;
@@ -1436,194 +1420,190 @@
 
         .software-panel {
             width: 45%;
-            height: 100%;
+            height: calc(100% - 100px);
             float: left;
             position: relative;
             z-index: 120;
             border-right: 2px solid $panel-delimiter-color;
             background: #fff;
            
-            .wrapper-software {
+            .ios-list {
                 height: calc(100% - 45px);
 
-                .ios-list {
-                    height: 100%;
+                .wrapper-item {
 
-                    .wrapper-item {
+                    .labels {
+                        overflow: hidden;
+                        float: right;
 
-                        .labels {
-                            overflow: hidden;
+                        .label {
                             float: right;
-
-                            .label {
-                                float: right;
-                                color: #fff;
-                                font-size: 11px;
-                                font-weight: normal;
-                                cursor: pointer;
-                                cursor: hand;
-                                background: #369E47;
-                                padding: 2px 14px;
-                                margin: 0 0 0 10px;
-                                float: right;
-                                border-radius: 10px;
-                            }
-
-                            .label-auto-update {
-                                background: $device-pack-auto-update;
-                            }
-
-                            .label-package-installed {
-                                background: $device-pack-installed-bg;
-                            }
-
-                            .label-package-queued {
-                                background: $device-pack-queued-bg;
-                            }
-
-                            .label-package-blacklisted {
-                                background: red;
-                            }
+                            color: #fff;
+                            font-size: 11px;
+                            font-weight: normal;
+                            cursor: pointer;
+                            cursor: hand;
+                            background: #369E47;
+                            padding: 2px 14px;
+                            margin: 0 0 0 10px;
+                            float: right;
+                            border-radius: 10px;
                         }
 
-                        .item {
+                        .label-auto-update {
+                            background: $device-pack-auto-update;
+                        }
 
-                            &.selected {
-                                border-bottom: none;
+                        .label-package-installed {
+                            background: $device-pack-installed-bg;
+                        }
 
-                                .name {
-                                    font-size: 14px;
-                                    color: $home-bg;
-                                }
+                        .label-package-queued {
+                            background: $device-pack-queued-bg;
+                        }
 
-                                .package-versions-nr {
-                                    color: $home-header-text;
-                                    line-height: 20px;
-                                }
-                            }
+                        .label-package-blacklisted {
+                            background: red;
+                        }
+                    }
 
-                            .left-box, .right-box {
-                                display: flex;
-                            }
+                    .item {
 
-                            &.unmanaged {
-                                height: 90px;
-                                flex-direction: column;
-                                justify-content: center;
-                                align-items: flex-start;
+                        &.selected {
+                            border-bottom: none;
+
+                            .name {
+                                font-size: 14px;
+                                color: $home-bg;
                             }
 
                             .package-versions-nr {
-                                color: #b5b7b9;
-                                margin-left: 10px;
-                                font-size: 12px;
-                            }
-
-                            .fa-stack {
-
-                                &.queued {
-                                    color: #fff;
-
-                                    .fa-dot-circle-o {
-                                        color: $device-pack-queued-bg;
-                                    }
-                                }
-                            }
-
-                            .wrapper-auto-update {
                                 color: $home-header-text;
-                                font-size: 10px;
-                                display: flex;
-                                align-items: center;
+                                line-height: 20px;
                             }
                         }
-                    }
 
-                    .versions-container {
-                        margin-bottom: 0;
-                    
-                        .versions {
+                        .left-box, .right-box {
+                            display: flex;
+                        }
 
-                            li {
-                                cursor: pointer;
-                                padding: 15px 35px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: space-between;
-                                @include transition;
-                                border-left: 4px solid transparent;
+                        &.unmanaged {
+                            height: 90px;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: flex-start;
+                        }
 
-                                &:hover {
-                                    background: #eee;
-                                }
+                        .package-versions-nr {
+                            color: #b5b7b9;
+                            margin-left: 10px;
+                            font-size: 12px;
+                        }
 
-                                .left-box {
-                                    display: flex;
-                                    flex-direction: column;
-                                    width: 70%;
+                        .fa-stack {
 
-                                    div {
-                                        display: flex;
+                            &.queued {
+                                color: #fff;
 
-                                        &:not(:last-child) {
-                                            margin-bottom: 5px;
-                                        }
-
-                                        .sub-title {
-                                            width: 25%;
-                                        }
-
-                                        .value {
-                                            width: 75%;
-                                            @include textoverflowEllipsis;
-                                        }
-                                    }
-                                }
-
-                                .right-box {
-                                    display: flex;
-                                    flex-direction: column;
-                                    width: 30%;
-                                    align-items: flex-end;
-
-                                    .fa-stack {
-
-                                        &.queued {
-                                            color: #fff;
-
-                                            .fa-dot-circle-o {
-                                                color: $device-pack-queued-bg;
-                                            }
-                                        }
-                                    }
-
-                                    img {
-                                        width: 25px;
-                                        height: 25px;
-                                    }
-                                }
-
-                                &.selected {
-                                    border-left: 4px solid $color-mint;
+                                .fa-dot-circle-o {
+                                    color: $device-pack-queued-bg;
                                 }
                             }
                         }
 
-                        .info-auto-update {
-                            color: #fff;
-                            text-align: center;
-                            background: $switch-blue-color;
-                            padding: 10px 25px;
+                        .wrapper-auto-update {
+                            color: $home-header-text;
+                            font-size: 10px;
+                            display: flex;
+                            align-items: center;
                         }
                     }
                 }
-            }            
+
+                .versions-container {
+                    margin-bottom: 0;
+                
+                    .versions {
+
+                        li {
+                            cursor: pointer;
+                            padding: 15px 35px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            @include transition;
+                            border-left: 4px solid transparent;
+
+                            &:hover {
+                                background: #eee;
+                            }
+
+                            .left-box {
+                                display: flex;
+                                flex-direction: column;
+                                width: 70%;
+
+                                div {
+                                    display: flex;
+
+                                    &:not(:last-child) {
+                                        margin-bottom: 5px;
+                                    }
+
+                                    .sub-title {
+                                        width: 25%;
+                                    }
+
+                                    .value {
+                                        width: 75%;
+                                        @include textoverflowEllipsis;
+                                    }
+                                }
+                            }
+
+                            .right-box {
+                                display: flex;
+                                flex-direction: column;
+                                width: 30%;
+                                align-items: flex-end;
+
+                                .fa-stack {
+
+                                    &.queued {
+                                        color: #fff;
+
+                                        .fa-dot-circle-o {
+                                            color: $device-pack-queued-bg;
+                                        }
+                                    }
+                                }
+
+                                img {
+                                    width: 25px;
+                                    height: 25px;
+                                }
+                            }
+
+                            &.selected {
+                                border-left: 4px solid $color-mint;
+                            }
+                        }
+                    }
+
+                    .info-auto-update {
+                        color: #fff;
+                        text-align: center;
+                        background: $switch-blue-color;
+                        padding: 10px 25px;
+                    }
+                }
+            }
         }
 
         .properties-panel {
             background: #fff;
             width: 35%;
-            height: 100%;
+            height: calc(100% - 100px);
             padding: 0;
             float: left;
             position: relative;
@@ -1633,7 +1613,7 @@
             box-shadow: 4px 0px 4px -1px rgba(50,50,50,0.5);
 
             .wrapper-properties {
-                height: calc(100% - 44px);
+                height: calc(100% - 45px);
                 position: relative;
 
                 .additional-status {
@@ -1665,9 +1645,8 @@
 
                 .details {
                     padding: 35px;
-                    display: flex;
-                    flex-direction: column;
-                    height: 100%;
+                    height: calc(100% - 30px);
+                    position: relative;
 
                     .heading {
                         margin-bottom: 15px;
@@ -1707,12 +1686,6 @@
                         }
                     }
 
-                    .wrapper-flex {
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                    }
-
                     .data {
                         color: $device-properties-text;
 
@@ -1739,13 +1712,13 @@
                     }
 
                     .install {
-                        display: flex;
-                        justify-content: center;
-                        margin-bottom: 30px;
+                        position: absolute;
+                        bottom: 35px;
+                        right: 35;
+                        left: 35;
 
                         .btn-primary {
-                            display: inline-block;
-                            width: 380px;
+                            width: 100%;
                             height: 60px;
                             color: rgba(255,255,255,0.9);
                             font-size: 22px;
@@ -1773,7 +1746,7 @@
 }
 
 #page-packages {
-    @include fullHeight;
+    height: calc(100vh - 50px);
 
     .page-heading {
         .icon {
@@ -2039,7 +2012,7 @@
 }
 
 #page-campaigns {
-    @include fullHeight;
+    height: calc(100vh - 50px);
 
     .page-heading {
         .icon {
@@ -2065,7 +2038,7 @@
 }
 
 #page-impact-analysis {
-    @include fullHeight;
+    height: calc(100vh - 50px);
 
     .page-heading {
         .icon {
@@ -2082,7 +2055,7 @@
             height: 100%;
             float: left;
             border-right: 1px solid $panel-delimiter-color;
-            position: absolute;
+            position: relative;
             z-index: 10;
             font-size: 12px;
 
@@ -2160,7 +2133,7 @@
 }
 
 #page-fireworks {
-    @include fullHeight;
+    height: calc(100vh - 50px);
     background-color: #3E454D;
 
     .fireworks-container {
@@ -2301,7 +2274,7 @@
     }
 
     .profile-container {
-        height: calc(100vh - 220px);
+        height: calc(100vh - 230px);
         background-color: #fff;
         padding: 40px;
         overflow-y: auto;
@@ -2525,9 +2498,7 @@
             }
 
             .wrapper-center {
-                flex-direction: column;
-                height: calc(100% - 50px);
-
+            
                 .access-keys-tooltip {
                     font-size: 18px;
                 }

@@ -232,116 +232,118 @@ class Main extends Component {
             logoLink = '/dashboard';
         }
         return (
-            <div id={pageId}>
-                <FadeAnimation>
-                    {this.sanityCheckCompleted() ?
-                        <Navigation
-                            userStore={this.userStore}
-                            featuresStore={this.featuresStore}
+            <span>
+                {this.sanityCheckCompleted() ?
+                    <Navigation
+                        userStore={this.userStore}
+                        featuresStore={this.featuresStore}
+                        devicesStore={this.devicesStore}
+                        packagesStore={this.packagesStore}
+                        hideQueueModal={this.hideQueueModal}
+                        toggleOtaPlusMode={this.toggleOtaPlusMode}
+                        otaPlusMode={this.otaPlusStore.otaPlusMode}
+                        alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
+                        uiUserProfileMenu={this.uiUserProfileMenu}
+                        uiCredentialsDownload={this.uiCredentialsDownload}
+                    />
+                :
+                    null
+                }            
+                <div id={pageId}>
+                    <FadeAnimation>                    
+                        <children.type
+                            {...rest}
+                            children={children.props.children}
                             devicesStore={this.devicesStore}
+                            hardwareStore={this.hardwareStore}
+                            groupsStore={this.groupsStore}
                             packagesStore={this.packagesStore}
+                            campaignsStore={this.campaignsStore}
+                            impactAnalysisStore={this.impactAnalysisStore}
+                            featuresStore={this.featuresStore}
+                            provisioningStore={this.provisioningStore}
+                            userStore={this.userStore}
+                            backButtonAction={this.backButtonAction}
+                            systemReady={this.systemReady}
+                            setSystemReady={this.setSystemReady}
+                            addNewWizard={this.addNewWizard}
+                            showQueueModal={this.showQueueModal}
                             hideQueueModal={this.hideQueueModal}
-                            toggleOtaPlusMode={this.toggleOtaPlusMode}
+                            queueModalShown={this.queueModalShown}
+                            activeTabId={this.activeTabId}
+                            setQueueModalActiveTabId={this.setQueueModalActiveTabId}
                             otaPlusMode={this.otaPlusStore.otaPlusMode}
-                            alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
+                            otaPlusStore={this.otaPlusStore}
+                            uiAutoFeatureActivation={this.uiAutoFeatureActivation}
                             uiUserProfileMenu={this.uiUserProfileMenu}
                             uiCredentialsDownload={this.uiCredentialsDownload}
+                            alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
+                        />
+                    </FadeAnimation>
+                    <SizeVerify 
+                        minWidth={1280}
+                        minHeight={768}
+                    />
+                    <UploadBox 
+                        packagesStore={this.packagesStore}
+                        minimized={this.uploadBoxMinimized}
+                        toggleUploadBoxMode={this.toggleUploadBoxMode}
+                    />
+                    {this.sanityCheckCompleted() ?
+                        <DoorAnimation
+                            mode="show"
                         />
                     :
                         null
                     }
-                    <children.type
-                        {...rest}
-                        children={children.props.children}
-                        devicesStore={this.devicesStore}
-                        hardwareStore={this.hardwareStore}
-                        groupsStore={this.groupsStore}
-                        packagesStore={this.packagesStore}
-                        campaignsStore={this.campaignsStore}
-                        impactAnalysisStore={this.impactAnalysisStore}
-                        featuresStore={this.featuresStore}
-                        provisioningStore={this.provisioningStore}
-                        userStore={this.userStore}
-                        backButtonAction={this.backButtonAction}
-                        systemReady={this.systemReady}
-                        setSystemReady={this.setSystemReady}
-                        addNewWizard={this.addNewWizard}
-                        showQueueModal={this.showQueueModal}
-                        hideQueueModal={this.hideQueueModal}
-                        queueModalShown={this.queueModalShown}
-                        activeTabId={this.activeTabId}
-                        setQueueModalActiveTabId={this.setQueueModalActiveTabId}
-                        otaPlusMode={this.otaPlusStore.otaPlusMode}
-                        otaPlusStore={this.otaPlusStore}
-                        uiAutoFeatureActivation={this.uiAutoFeatureActivation}
-                        uiUserProfileMenu={this.uiUserProfileMenu}
-                        uiCredentialsDownload={this.uiCredentialsDownload}
-                        alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
-                    />
-                </FadeAnimation>
-                <SizeVerify 
-                    minWidth={1280}
-                    minHeight={768}
-                />
-                <UploadBox 
-                    packagesStore={this.packagesStore}
-                    minimized={this.uploadBoxMinimized}
-                    toggleUploadBoxMode={this.toggleUploadBoxMode}
-                />
-                {this.sanityCheckCompleted() ?
-                    <DoorAnimation
-                        mode="show"
-                    />
-                :
-                    null
-                }
-                {this.ifLogout ?
-                    <DoorAnimation 
-                        mode="hide"
-                    />
-                :
-                    null
-                }
-                {this.wizards}
-                <div className="minimized-wizards-container">
-                    {this.uploadBoxMinimized ?
-                        <div className="minimized-box" key={this.packagesStore.packagesUploading.length}>
-                            <div className="name">
-                                Uploading {this.props.t('common.packageWithCount', {count: this.packagesStore.packagesUploading.length})}
-                            </div>
-                            <div className="actions">
-                                <a href="#" id="maximize-upload-box" className="box-toggle box-maximize" onClick={this.toggleUploadBoxMode.bind(this)}>
-                                    <img src="/assets/img/icons/reopen.svg" alt="Icon" />
-                                </a>
-                            </div>
-                        </div>
+                    {this.ifLogout ?
+                        <DoorAnimation 
+                            mode="hide"
+                        />
                     :
                         null
                     }
-                    {_.map(this.minimizedWizards, (wizard, index) => {
-                        return (
-                            <div className="minimized-box" key={index}>
+                    {this.wizards}
+                    <div className="minimized-wizards-container">
+                        {this.uploadBoxMinimized ?
+                            <div className="minimized-box" key={this.packagesStore.packagesUploading.length}>
                                 <div className="name">
-                                    {wizard.name ?
-                                        <span>
-                                            {wizard.name}
-                                        </span>
-                                    :
-                                        <span>
-                                            Choose name
-                                        </span>
-                                    }
+                                    Uploading {this.props.t('common.packageWithCount', {count: this.packagesStore.packagesUploading.length})}
                                 </div>
                                 <div className="actions">
-                                    <a href="#" id="maximize-wizard" className="box-toggle box-maximize" title="Maximize wizard" onClick={this.toggleWizard.bind(this, wizard.id, wizard.name)}>
+                                    <a href="#" id="maximize-upload-box" className="box-toggle box-maximize" onClick={this.toggleUploadBoxMode.bind(this)}>
                                         <img src="/assets/img/icons/reopen.svg" alt="Icon" />
                                     </a>
                                 </div>
                             </div>
-                        );
-                    })}
+                        :
+                            null
+                        }
+                        {_.map(this.minimizedWizards, (wizard, index) => {
+                            return (
+                                <div className="minimized-box" key={index}>
+                                    <div className="name">
+                                        {wizard.name ?
+                                            <span>
+                                                {wizard.name}
+                                            </span>
+                                        :
+                                            <span>
+                                                Choose name
+                                            </span>
+                                        }
+                                    </div>
+                                    <div className="actions">
+                                        <a href="#" id="maximize-wizard" className="box-toggle box-maximize" title="Maximize wizard" onClick={this.toggleWizard.bind(this, wizard.id, wizard.name)}>
+                                            <img src="/assets/img/icons/reopen.svg" alt="Icon" />
+                                        </a>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
-            </div>
+            </span>
         );
     }
     

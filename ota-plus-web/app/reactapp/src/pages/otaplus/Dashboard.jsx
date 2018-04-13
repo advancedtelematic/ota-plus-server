@@ -13,17 +13,14 @@ class Dashboard extends Component {
     }
     render() {
         return (
-            <FadeAnimation
-                display="flex">
-                <div className="wrapper-flex">
-                    <Header
-                        title={title}
-                    />
-                    <MetaData 
-                        title={title}>
-                        <DashboardContainer />
-                    </MetaData>
-                </div>
+            <FadeAnimation>
+                <Header
+                    title={title}
+                />
+                <MetaData 
+                    title={title}>
+                    <DashboardContainer />
+                </MetaData>
             </FadeAnimation>
         );
     }

@@ -37,18 +37,16 @@ class Home extends Component {
             <FadeAnimation
                 display="flex">
                 {this.sanityCheckCompleted() ?
-                        <div className="wrapper-flex">
-                            <MetaData
-                                title={title}>
-                                <HomeContainer
-                                    devicesStore={devicesStore}
-                                    packagesStore={packagesStore}
-                                    campaignsStore={campaignsStore}
-                                    hardwareStore={hardwareStore}
-                                    addNewWizard={addNewWizard}
-                                />
-                            </MetaData>
-                        </div>
+                    <MetaData
+                        title={title}>
+                        <HomeContainer
+                            devicesStore={devicesStore}
+                            packagesStore={packagesStore}
+                            campaignsStore={campaignsStore}
+                            hardwareStore={hardwareStore}
+                            addNewWizard={addNewWizard}
+                        />
+                    </MetaData>
                 :
                     <PreparationContainer
                         packagesStore={packagesStore}
