@@ -14,30 +14,27 @@ class Profile extends Component {
     render() {
         const { userStore, provisioningStore, devicesStore, groupsStore, children, otaPlusStore, uiUserProfileMenu, uiCredentialsDownload } = this.props;
         return (
-            <FadeAnimation 
-                display="flex">
-                <div className="wrapper-flex">
-                    <MetaData 
-                        title={title}>
-                        <ProfileHeader
+            <FadeAnimation>
+                <MetaData 
+                    title={title}>
+                    <ProfileHeader
+                        userStore={userStore}
+                        otaPlusStore={otaPlusStore}
+                        uiUserProfileMenu={uiUserProfileMenu}
+                        uiCredentialsDownload={uiCredentialsDownload}
+                    />
+                    {children ?
+                        <children.type
                             userStore={userStore}
-                            otaPlusStore={otaPlusStore}
-                            uiUserProfileMenu={uiUserProfileMenu}
+                            provisioningStore={provisioningStore}
+                            devicesStore={devicesStore}
+                            groupsStore={groupsStore}
                             uiCredentialsDownload={uiCredentialsDownload}
                         />
-                        {children ?
-                            <children.type
-                                userStore={userStore}
-                                provisioningStore={provisioningStore}
-                                devicesStore={devicesStore}
-                                groupsStore={groupsStore}
-                                uiCredentialsDownload={uiCredentialsDownload}
-                            />
-                        :
-                            null
-                        }
-                    </MetaData>
-                </div>
+                    :
+                        null
+                    }
+                </MetaData>
             </FadeAnimation>
         );
     }

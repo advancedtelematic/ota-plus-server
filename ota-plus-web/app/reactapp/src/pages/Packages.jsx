@@ -22,22 +22,19 @@ class Packages extends Component {
     render() {
         const { t, packagesStore, hardwareStore, featuresStore, devicesStore, campaignsStore, otaPlusStore } = this.props;
         return (
-            <FadeAnimation 
-                display="flex">
-                <div className="wrapper-flex">
-                    <MetaData 
-                        title={title}>
-                        <PackagesContainer 
-                            packagesStore={packagesStore}
-                            hardwareStore={hardwareStore}
-                            featuresStore={featuresStore}
-                            devicesStore={devicesStore}
-                            campaignsStore={campaignsStore}
-                            highlightedPackage={this.props.params.packageName}
-                            alphaPlusEnabled={otaPlusStore.alphaPlusEnabled}
-                        />
-                    </MetaData>
-                </div>
+            <FadeAnimation>
+                <MetaData 
+                    title={title}>
+                    <PackagesContainer 
+                        packagesStore={packagesStore}
+                        hardwareStore={hardwareStore}
+                        featuresStore={featuresStore}
+                        devicesStore={devicesStore}
+                        campaignsStore={campaignsStore}
+                        highlightedPackage={this.props.params.packageName}
+                        alphaPlusEnabled={otaPlusStore.alphaPlusEnabled}
+                    />
+                </MetaData>
             </FadeAnimation>
         );
     }

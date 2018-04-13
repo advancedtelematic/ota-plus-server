@@ -108,9 +108,8 @@ class Device extends Component {
             alphaPlusEnabled
         } = this.props;
         return (
-            <FadeAnimation 
-                display="flex">
-                <div className="wrapper-flex">
+            <FadeAnimation>
+                <span>
                     <DeviceHeader
                         devicesStore={devicesStore}
                         device={devicesStore.device}
@@ -153,7 +152,7 @@ class Device extends Component {
                     :
                         null
                     }
-                </div>
+                </span>
             </FadeAnimation>
         );
     }

@@ -18,17 +18,14 @@ class ImpactAnalysis extends Component {
     render() {
         const { t, packagesStore, impactAnalysisStore } = this.props;
         return (
-            <FadeAnimation 
-                display="flex">
-                <div className="wrapper-flex">
-                    <MetaData 
-                        title={title}>
-                        <ImpactAnalysisContainer 
-                            packagesStore={packagesStore}
-                            impactAnalysisStore={impactAnalysisStore}
-                        />
-                    </MetaData>
-                </div>
+            <FadeAnimation>
+                <MetaData 
+                    title={title}>
+                    <ImpactAnalysisContainer 
+                        packagesStore={packagesStore}
+                        impactAnalysisStore={impactAnalysisStore}
+                    />
+                </MetaData>
             </FadeAnimation>
         );
     }

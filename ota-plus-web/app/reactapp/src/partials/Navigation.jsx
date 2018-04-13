@@ -42,7 +42,7 @@ class Navigation extends Component {
           </ul>
         );
         return (
-            <nav className="navbar navbar-inverse navbar-fixed-top">
+            <nav className="navbar navbar-inverse">
                   <div className="container">
                     <div className="navbar-header">
                         <div className="navbar-brand" id="logo"/>
