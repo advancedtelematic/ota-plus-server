@@ -21,7 +21,7 @@ class SoftwarePanel extends Component {
                 <div className="darkgrey-header">
                     {title}
                 </div>
-                <div className="wrapper-software">
+                <span>
                     {!packagesReady ?
                         <div className="wrapper-loader">
                             <Loader />
@@ -42,7 +42,7 @@ class SoftwarePanel extends Component {
                                 {noSearchResults}
                             </div>
                     }
-                </div>
+                </span>
             </div>
         );
     }

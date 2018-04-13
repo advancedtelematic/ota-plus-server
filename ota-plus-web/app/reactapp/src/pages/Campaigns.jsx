@@ -23,23 +23,20 @@ class Campaigns extends Component {
     render() {
         const { t, campaignsStore, packagesStore, groupsStore, hardwareStore, devicesStore, addNewWizard, otaPlusMode } = this.props;
         return (
-            <FadeAnimation 
-                display="flex">
-                <div className="wrapper-flex">
-                    <MetaData 
-                        title={title}>
-                        <CampaignsContainer 
-                            campaignsStore={campaignsStore}
-                            packagesStore={packagesStore}
-                            groupsStore={groupsStore}
-                            hardwareStore={hardwareStore}
-                            devicesStore={devicesStore}
-                            addNewWizard={addNewWizard}
-                            otaPlusMode={otaPlusMode}
-                            highlightedCampaign={this.props.params.campaignName}
-                        />
-                    </MetaData>
-                </div>
+            <FadeAnimation>
+                <MetaData 
+                    title={title}>
+                    <CampaignsContainer 
+                        campaignsStore={campaignsStore}
+                        packagesStore={packagesStore}
+                        groupsStore={groupsStore}
+                        hardwareStore={hardwareStore}
+                        devicesStore={devicesStore}
+                        addNewWizard={addNewWizard}
+                        otaPlusMode={otaPlusMode}
+                        highlightedCampaign={this.props.params.campaignName}
+                    />
+                </MetaData>
             </FadeAnimation>
         );
     }

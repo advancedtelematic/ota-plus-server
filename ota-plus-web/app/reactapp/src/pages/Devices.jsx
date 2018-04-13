@@ -25,17 +25,14 @@ class Devices extends Component {
     render() {
         const { devicesStore, groupsStore } = this.props;
         return (
-            <FadeAnimation 
-                display="flex">
-                <div className="wrapper-flex">
-                    <MetaData 
-                        title={title}>
-                        <DevicesContainer 
-                            devicesStore={devicesStore}
-                            groupsStore={groupsStore}
-                        />
-                    </MetaData>
-                </div>
+            <FadeAnimation>
+                <MetaData 
+                    title={title}>
+                    <DevicesContainer 
+                        devicesStore={devicesStore}
+                        groupsStore={groupsStore}
+                    />
+                </MetaData>
             </FadeAnimation>
         );
     }
