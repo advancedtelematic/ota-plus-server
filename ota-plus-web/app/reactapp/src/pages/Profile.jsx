@@ -12,14 +12,13 @@ class Profile extends Component {
         super(props);
     }
     render() {
-        const { userStore, provisioningStore, devicesStore, groupsStore, children, otaPlusStore, uiUserProfileMenu, uiCredentialsDownload } = this.props;
+        const { userStore, provisioningStore, devicesStore, groupsStore, children, uiUserProfileMenu, uiCredentialsDownload } = this.props;
         return (
             <FadeAnimation>
                 <MetaData 
                     title={title}>
                     <ProfileHeader
                         userStore={userStore}
-                        otaPlusStore={otaPlusStore}
                         uiUserProfileMenu={uiUserProfileMenu}
                         uiCredentialsDownload={uiCredentialsDownload}
                     />

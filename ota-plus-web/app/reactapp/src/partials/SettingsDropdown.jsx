@@ -22,7 +22,7 @@ class SettingsDropdown extends Component {
         this.props.hideQueueModal();
     }
     render() {
-        const { userStore, toggleOtaPlusMode, otaPlusMode, alphaPlusEnabled, uiCredentialsDownload } = this.props;
+        const { userStore, alphaPlusEnabled, uiCredentialsDownload } = this.props;
         return (
             <Dropdown id="profile-dropdown" rootCloseEvent="mousedown">
                 <LinkWrapper
@@ -51,8 +51,6 @@ class SettingsDropdown extends Component {
                 <UserDropdown 
                     userStore={userStore}
                     bsRole="menu"
-                    toggleOtaPlusMode={toggleOtaPlusMode}
-                    otaPlusMode={otaPlusMode}
                     alphaPlusEnabled={alphaPlusEnabled}
                     uiCredentialsDownload={uiCredentialsDownload}
                     settings={true}

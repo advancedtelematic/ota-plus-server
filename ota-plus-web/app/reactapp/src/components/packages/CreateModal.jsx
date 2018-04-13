@@ -140,8 +140,6 @@ class CreateModal extends Component {
                                 <FormsyText
                                     type="text"
                                     name="fake-file"
-                                    underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
-                                    floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                                     value={fileDropped ?
                                         fileDropped.name
                                         :

@@ -123,7 +123,7 @@ class EditProfile extends Component {
                             </div>
                         </div>                        
                         <div className="user-info">
-                            <div className="column">
+                            <div className="column">                                
                                 {window.atsGarageTheme ?
                                     <Avatar
                                         src={userStore.user.picture ?

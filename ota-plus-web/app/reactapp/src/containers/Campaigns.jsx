@@ -87,7 +87,7 @@ class Campaigns extends Component {
         this.props.campaignsStore._prepareCampaigns(filter, this.props.campaignsStore.campaignsSort);
     }
     render() {
-        const { campaignsStore, packagesStore, groupsStore, hardwareStore, devicesStore, addNewWizard, otaPlusMode, highlightedCampaign } = this.props;
+        const { campaignsStore, packagesStore, groupsStore, hardwareStore, devicesStore, addNewWizard, highlightedCampaign } = this.props;
         return (
             <span>
                 {campaignsStore.campaignsFetchAsync.isFetching ?
@@ -100,7 +100,6 @@ class Campaigns extends Component {
                         groupsStore={groupsStore}
                         addNewWizard={addNewWizard}
                         showWizard={this.showWizard}
-                        otaPlusMode={otaPlusMode}
                         highlightedCampaign={highlightedCampaign}
                         showCancelCampaignModal={this.showCancelCampaignModal}
                         showCancelGroupModal={this.showCancelGroupModal}
