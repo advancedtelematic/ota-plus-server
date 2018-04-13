@@ -164,7 +164,7 @@ class FormSelect extends Component {
         return (
             <div className="c-form__relative-wrapper" style={{width: wrapperWidth}}>
                 <label className="c-form__label">{label}</label>
-                <input className={`c-form__input ${inputValue.length ? 'c-form__input--hide-caret' : ''}`}
+                <input className={`c-form__input ${inputValue.length === 0 ? 'c-form__input--hide-caret' : ''}`}
                        type="text"
                        style={{width: inputWidth}}
                        value={inputValue}
