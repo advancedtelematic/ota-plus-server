@@ -44,8 +44,8 @@ class PackagesVersionList extends Component {
                 packageName: packageName
             };
             this.selectVersion(data, null, null, packageName);
-            this.formatFromVersions(this.props.pack);
         }
+        this.formatFromVersions(this.props.pack);
     }
     componentWillReceiveProps(nextProps) {
         let selectedVersions = nextProps.selectedVersions;
