@@ -126,7 +126,7 @@ class Home extends Component {
                                                 New to Yocto? We'll take you through a starter project step by step.
                                             </div>
                                             <div className="step-link">
-                                                <a href="https://docs.atsgarage.com/quickstarts/raspberry-pi.html" className="add-button" target="_blank">
+                                                <a href="https://docs.atsgarage.com/quickstarts/raspberry-pi.html" className="add-button" target="_blank" id="user-new-yocto-docs">
                                                     Quickstart guide
                                                 </a>
                                             </div>
@@ -144,7 +144,7 @@ class Home extends Component {
                                                 Add the meta-updater layer into your existing Yocto project and OTA-enable your devices.
                                             </div>
                                             <div className="step-link">
-                                                <a href="https://docs.atsgarage.com/quickstarts/adding-ats-garage-updating-to-an-existing-yocto-project.html" className="add-button" target="_blank">
+                                                <a href="https://docs.atsgarage.com/quickstarts/adding-ats-garage-updating-to-an-existing-yocto-project.html" id="user-existing-yocto-docs" className="add-button" target="_blank">
                                                     Integration guide
                                                 </a>
                                             </div>
