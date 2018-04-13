@@ -53,8 +53,6 @@ class CreateModal extends Component {
                             name="name"
                             floatingLabelText="Campaign name"
                             className="input-wrapper"
-                            underlineFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {borderColor: '#fa9872'} : {}}
-                            floatingLabelFocusStyle={!window.atsGarageTheme || window.otaPlusMode ? {color: '#fa9872'} : {}}
                             id="add-new-campaign-name"
                             updateImmediately
                             required

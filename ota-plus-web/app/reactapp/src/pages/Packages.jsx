@@ -20,7 +20,7 @@ class Packages extends Component {
         this.props.packagesStore._reset();
     }
     render() {
-        const { t, packagesStore, hardwareStore, featuresStore, devicesStore, campaignsStore, otaPlusStore } = this.props;
+        const { t, packagesStore, hardwareStore, featuresStore, devicesStore, campaignsStore, alphaPlusEnabled } = this.props;
         return (
             <FadeAnimation>
                 <MetaData 
@@ -32,7 +32,7 @@ class Packages extends Component {
                         devicesStore={devicesStore}
                         campaignsStore={campaignsStore}
                         highlightedPackage={this.props.params.packageName}
-                        alphaPlusEnabled={otaPlusStore.alphaPlusEnabled}
+                        alphaPlusEnabled={alphaPlusEnabled}
                     />
                 </MetaData>
             </FadeAnimation>

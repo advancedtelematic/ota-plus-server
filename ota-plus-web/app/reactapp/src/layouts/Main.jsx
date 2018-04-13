@@ -13,7 +13,6 @@ import {
     FeaturesStore,
     ProvisioningStore,
     UserStore,
-    OtaPlusStore
 } from '../stores';
 import { APP_LAYOUT } from '../config';
 import { 
@@ -43,6 +42,9 @@ class Main extends Component {
     @observable uiAutoFeatureActivation = document.getElementById('toggle-autoFeatureActivation').value === "true";
     @observable uiUserProfileMenu = document.getElementById('toggle-userProfileMenu').value === "true";
     @observable uiCredentialsDownload = document.getElementById('toggle-credentialsDownload').value === "true";
+    @observable atsGarageTheme = document.getElementById('toggle-atsGarageTheme').value === 'true';
+
+    @observable alphaPlusEnabled = false;
 
     constructor(props) {
         super(props);
@@ -64,7 +66,6 @@ class Main extends Component {
         this.showQueueModal = this.showQueueModal.bind(this);
         this.hideQueueModal = this.hideQueueModal.bind(this);
         this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
-        this.toggleOtaPlusMode = this.toggleOtaPlusMode.bind(this);
         this.callFakeWsHandler = this.callFakeWsHandler.bind(this);
         this.devicesStore = new DevicesStore();
         this.hardwareStore = new HardwareStore();
@@ -75,7 +76,6 @@ class Main extends Component {
         this.featuresStore = new FeaturesStore();
         this.provisioningStore = new ProvisioningStore();
         this.userStore = new UserStore();
-        this.otaPlusStore = new OtaPlusStore();
         this.websocketHandler = new WebsocketHandler(document.getElementById('ws-url').value, {
             devicesStore: this.devicesStore,
             packagesStore: this.packagesStore,
@@ -92,7 +92,7 @@ class Main extends Component {
         this.featuresHandler = observe(this.featuresStore, (change) => {
             if(change.name === 'featuresFetchAsync' && change.object[change.name].isFetching === false) {
                 if(_.contains(this.featuresStore.features, 'alphaplus')) {
-                    this.otaPlusStore._enableAlphaPlus();
+                    this.alphaPlusEnabled = true;
                 }
             }
         });
@@ -116,34 +116,7 @@ class Main extends Component {
         this.devicesStore.fetchDevices();
         this.devicesStore.fetchDevicesCount();
         this.websocketHandler.init();
-
-        if (!this.otaPlusStore.atsGarageTheme) {
-            document.body.className += " ota-plus";
-            window.atsGarageTheme = false;
-        } else {
-            window.atsGarageTheme = true;
-        }
-
-        if (Cookies.get('otaPlusMode') == 1 ) {
-            this.otaPlusStore._enableOtaPlusMode();
-            document.body.className += " ota-plus";
-            window.otaPlusMode = true;
-        }
-    }
-    toggleOtaPlusMode() {
-        this.otaPlusStore._toggleOtaPlusMode();
-        if(this.otaPlusStore.otaPlusMode) {
-            Cookies.set('otaPlusMode', 1);
-            document.body.className += " ota-plus";
-            window.otaPlusMode = true;
-        }
-        else {
-            Cookies.remove('otaPlusMode');
-            if (this.otaPlusStore.atsGarageTheme) {
-                document.body.classList.remove("ota-plus");
-            }
-            window.otaPlusMode = false;
-        }
+        window.atsGarageTheme = this.atsGarageTheme;
     }
     showQueueModal() {
         this.queueModalShown = true;
@@ -182,7 +155,7 @@ class Main extends Component {
                 hideWizard={this.hideWizard}
                 toggleWizard={this.toggleWizard}
                 minimizedWizards={this.minimizedWizards}
-                alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
+                alphaPlusEnabled={this.alphaPlusEnabled}
                 key={this.wizards.length}
             />
         );
@@ -227,10 +200,6 @@ class Main extends Component {
     render() {
         const { children, ...rest } = this.props;
         const pageId = "page-" + (this.props.location.pathname.toLowerCase().split('/')[1] || "home");
-        let logoLink = '/';
-        if(this.otaPlusStore.otaPlusMode) {
-            logoLink = '/dashboard';
-        }
         return (
             <span>
                 {this.sanityCheckCompleted() ?
@@ -240,9 +209,7 @@ class Main extends Component {
                         devicesStore={this.devicesStore}
                         packagesStore={this.packagesStore}
                         hideQueueModal={this.hideQueueModal}
-                        toggleOtaPlusMode={this.toggleOtaPlusMode}
-                        otaPlusMode={this.otaPlusStore.otaPlusMode}
-                        alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
+                        alphaPlusEnabled={this.alphaPlusEnabled}
                         uiUserProfileMenu={this.uiUserProfileMenu}
                         uiCredentialsDownload={this.uiCredentialsDownload}
                     />
@@ -272,12 +239,10 @@ class Main extends Component {
                             queueModalShown={this.queueModalShown}
                             activeTabId={this.activeTabId}
                             setQueueModalActiveTabId={this.setQueueModalActiveTabId}
-                            otaPlusMode={this.otaPlusStore.otaPlusMode}
-                            otaPlusStore={this.otaPlusStore}
                             uiAutoFeatureActivation={this.uiAutoFeatureActivation}
                             uiUserProfileMenu={this.uiUserProfileMenu}
                             uiCredentialsDownload={this.uiCredentialsDownload}
-                            alphaPlusEnabled={this.otaPlusStore.alphaPlusEnabled}
+                            alphaPlusEnabled={this.alphaPlusEnabled}
                         />
                     </FadeAnimation>
                     <SizeVerify 

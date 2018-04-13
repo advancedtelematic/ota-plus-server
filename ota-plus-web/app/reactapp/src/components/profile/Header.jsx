@@ -10,23 +10,7 @@ class Header extends Component {
         super(props);
     }
     render() {
-        const { userStore, otaPlusStore, uiUserProfileMenu, uiCredentialsDownload } = this.props;
-        const otaPlusNewEntries = (
-            <span className="ota-plus-new-entries" style={{display: 'flex'}}>
-                <Link to="/profile/users-and-roles" activeClassName="active" id="sidebar-link-users-and-roles">
-                    <div className="text">
-                        Edit profile
-                        <span></span>
-                    </div>
-                </Link>
-                <Link to="/profile/bl-settings" activeClassName="active" id="sidebar-link-bl-settings">
-                    <div className="text">
-                        Bl settings
-                        <span></span>
-                    </div>
-                </Link>
-            </span>
-        );
+        const { userStore, uiUserProfileMenu, uiCredentialsDownload } = this.props;
         const fullNavigation = (
             <div className="nav-container">
                 <div className="page-title">
@@ -72,11 +56,6 @@ class Header extends Component {
                             <span></span>
                         </div>
                     </Link>
-                    {otaPlusStore.otaPlusMode ?
-                        otaPlusNewEntries
-                    :
-                        null
-                    }
                 </div>
             </div>
         );
@@ -92,11 +71,6 @@ class Header extends Component {
                             <span></span>
                         </div>
                     </Link>
-                    {otaPlusStore.otaPlusMode ?
-                        otaPlusNewEntries
-                    :
-                        null
-                    }
                 </div>
             </div>
         );
