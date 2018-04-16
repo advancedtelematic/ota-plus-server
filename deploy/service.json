@@ -144,7 +144,7 @@
     "PLAY_CRYPTO_SECRET": "${PLAY_CRYPTO_SECRET}",
     "SERVICE_HEALTH_CHECK": "curl --show-error --silent %<host>s:%<port>s/health",
     "SERVICE_IMAGE": "${IMAGE_ARTIFACT}",
-    "SERVICE_NAME": "${SERVICE_NAME}-here",
+    "SERVICE_NAME": "${HERE_SERVICE_NAME}",
     "SERVICE_SCOPE": "public",
     "SERVICE_TYPE": "websockets",
     "SOTA_CORE_HOST": "${SOTA_CORE_HOST}",
