@@ -97,10 +97,10 @@ class UploadBox extends Component {
                 <div className="internal">
                     Uploading {t('common.packageWithCount', {count: packagesStore.packagesUploading.length})}
                     <div className="top-actions flex-end">
-                        <div className="modal-minimize" onClick={this.toggleMode}>
+                        <div className="modal-minimize" onClick={this.toggleMode} id="minimize-upload-box">
                             <img src="/assets/img/icons/minimize.svg" alt="Icon" />
                         </div>
-                        <div className="modal-close"  onClick={this.close}>
+                        <div className="modal-close"  onClick={this.close} id="close-upload-box">
                             <img src="/assets/img/icons/close.svg" alt="Icon"/>
                         </div>
                     </div>
