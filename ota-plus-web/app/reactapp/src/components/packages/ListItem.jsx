@@ -28,7 +28,7 @@ class ListItem extends Component {
                 <div className="c-package__name" id={`target_package_${pack.packageName}`}>
                     {pack.packageName}
                 </div>
-                <div className="c-package__versions-nr" id={`package_versions_count_${packVersionsNumber}`}>
+                <div className="c-package__versions-nr" id={"package-" + pack.packageName + "-versions-count"}>
                     {packVersionsNumber === 1 ?
                         packVersionsNumber + " version"
                     :
