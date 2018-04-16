@@ -177,7 +177,7 @@ class Preparation extends Component {
                                                 {step.nr === 1 ?
                                                     userStore.userFetchAsync.isFetching ?
                                                         <span className="pending">
-                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                            <Loader />
                                                         </span>
                                                     : this.userProfile ?
                                                         <span>
@@ -189,12 +189,12 @@ class Preparation extends Component {
                                                         </span> 
                                                     : 
                                                         <span className="pending">
-                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                            <Loader />
                                                         </span>
                                                 : step.nr === 2 ?
                                                     provisioningStore.namespaceSetupFetchAsync.isFetching || provisioningStore.provisioningActivateAsync.isFetching ?
                                                         <span className="pending">
-                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                            <Loader />
                                                         </span>
                                                     : this.activatedProvisioning ?
                                                         <span>
@@ -206,12 +206,12 @@ class Preparation extends Component {
                                                         </span>
                                                     :
                                                         <span className="pending">
-                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                            <Loader />
                                                         </span>
                                                 : step.nr === 3 ?
                                                     provisioningStore.namespaceSetupFetchAsync.isFetching || !this.checkedCreatedTufCalled ?
                                                         <span className="pending">
-                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                            <Loader />
                                                         </span>
                                                     : this.createdTuf ?
                                                         <span>
@@ -223,12 +223,12 @@ class Preparation extends Component {
                                                         </span>
                                                     : 
                                                         <span className="pending">
-                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                            <Loader />
                                                         </span>
                                                 : step.nr === 4 ?
                                                     provisioningStore.namespaceSetupFetchAsync.isFetching || !this.checkedCreatedDirectorCalled ?
                                                         <span className="pending">
-                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                            <Loader />
                                                         </span>
                                                     : this.createdDirector ?
                                                         <span>
@@ -240,12 +240,12 @@ class Preparation extends Component {
                                                         </span>
                                                     :
                                                         <span className="pending">
-                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                            <Loader />
                                                         </span>
                                                 : step.nr === 5 ?
                                                     featuresStore.featuresFetchAsync.isFetching ?
                                                         <span className="pending">
-                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                            <Loader />
                                                         </span>
                                                     : this.createdTreehub ?
                                                         <span>
@@ -257,12 +257,12 @@ class Preparation extends Component {
                                                         </span>
                                                     :
                                                         <span className="pending">
-                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                            <Loader />
                                                         </span> 
                                                 : step.nr === 6 ?
                                                     featuresStore.featuresFetchAsync.isFetching ?
                                                         <span className="pending">
-                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                            <Loader />
                                                         </span>
                                                     : this.createdFileUploader ?
                                                         <span>
@@ -274,11 +274,11 @@ class Preparation extends Component {
                                                         </span>
                                                     :
                                                         <span className="pending">
-                                                            <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                            <Loader />
                                                         </span>
                                                 :
                                                     <span className="pending">
-                                                        <img src="/assets/img/icons/loading_dots.gif" alt="Icon"/>
+                                                        <Loader />
                                                     </span>
                                                 }
                                                 <span className="feature-name">{step.name}</span>
@@ -289,9 +289,7 @@ class Preparation extends Component {
                             </ul>
                             {!finished ?
                                 <div className="setting-up">
-                                    <div className="loader">
-                                        <Loader />
-                                    </div>
+                                    <Loader />
                                     <div className="text">
                                         Setting up...
                                     </div>
