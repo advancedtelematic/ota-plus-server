@@ -41,7 +41,7 @@ class ListItemVersion extends Component {
                 <div className="c-package__software-box" style={borderStyle}>
                     {version.customExists ? 
                         <span>
-                            <div className="c-package__sw-row c-package__sw-row--version" id={"package-" + packageName + "-version"}>
+                            <div className="c-package__sw-row c-package__sw-row--version" id={"package-" + packageName + "-version-" + version.id.version}>
                                 <span className="c-package__sw-subtitle">Version:</span>
                                 <span className="c-package__sw-value">{version.id.version}</span>
                             </div>                                 
