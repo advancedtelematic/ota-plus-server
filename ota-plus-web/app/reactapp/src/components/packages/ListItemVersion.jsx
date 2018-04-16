@@ -41,54 +41,58 @@ class ListItemVersion extends Component {
                 <div className="c-package__software-box" style={borderStyle}>
                     {version.customExists ? 
                         <span>
-                            <div className="c-package__sw-row c-package__sw-row--version" id={"package-" + packageName + "-version-" + version.id.version}>
+                            <div className="c-package__sw-row c-package__sw-row--version">
                                 <span className="c-package__sw-subtitle">Version:</span>
-                                <span className="c-package__sw-value">{version.id.version}</span>
+                                <span className="c-package__sw-value" id={"package-" + packageName + "-version-" + version.id.version.substring(0,8)}>{version.id.version}</span>
                             </div>                                 
-                            <div className="c-package__sw-row" id={"package-" + packageName + "-created_at"}>
+                            <div className="c-package__sw-row">
                                 <span className="c-package__sw-subtitle">Created at:</span>
-                                <span className="c-package__sw-value">{moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
+                                <span className="c-package__sw-value" id={"package-" + packageName + "-created-at-" + version.id.version.substring(0,8)}>
+                                    {moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}
+                                </span>
                             </div>
-                            <div className="c-package__sw-row" id={"package-" + packageName + "-updated_at"}>
+                            <div className="c-package__sw-row">
                                 <span className="c-package__sw-subtitle">Updated at:</span>
-                                <span className="c-package__sw-value">{moment(version.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
+                                <span className="c-package__sw-value" id={"package-" + packageName + "-updated-at-" + version.id.version.substring(0,8)}>
+                                    {moment(version.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}
+                                </span>
                             </div>
-                            <div className="c-package__sw-row" id={"package-" + packageName + "-hash"}>
+                            <div className="c-package__sw-row">
                                 <span className="c-package__sw-subtitle">Hash:</span>
-                                <span className="c-package__sw-value">{version.packageHash}</span>
+                                <span className="c-package__sw-value" id={"package-" + packageName + "-hash-" + version.id.version.substring(0,8)}>
+                                    {version.packageHash}
+                                </span>
                             </div>
-                            <div className="c-package__sw-row" id={"package-" + packageName + "-target-length"}>
+                            <div className="c-package__sw-row">
                                 <span className="c-package__sw-subtitle">Length:</span>
-                                <span className="c-package__sw-value">{version.targetLength}</span>
+                                <span className="c-package__sw-value" id={"package-" + packageName + "-target-length-" + version.id.version.substring(0,8)}>{version.targetLength}</span>
                             </div>
                         </span>
                     :
                         <span>
-                            <div className="c-package__sw-row" id={"package-" + packageName + "-hash"}>
+                            <div className="c-package__sw-row">
                                 <span className="c-package__sw-subtitle">Hash:</span>
-                                <span className="c-package__sw-value">{version.packageHash}</span>
+                                <span className="c-package__sw-value" id={"package-" + packageName + "-hash-" + version.id.version.substring(0,8)}>{version.packageHash}</span>
                             </div>
-                            <div className="c-package__sw-row" id={"package-" + packageName + "-target-length"}>
+                            <div className="c-package__sw-row">
                                 <span className="c-package__sw-subtitle">Length:</span>
-                                <span className="c-package__sw-value">{version.targetLength}</span>
+                                <span className="c-package__sw-value" id={"package-" + packageName + "-target-length-" + version.id.version.substring(0,8)}>{version.targetLength}</span>
                             </div>
                         </span>
                     }
                 </div>
                 <div className="c-package__hardware-box">
-                    <div className="c-package__hw-row c-package__hw-row--installed" id={"package-" + packageName + "-ecus-installed"}>
-                        <span id={"version-" + version.id.version.substring(0,8) + "-installed-on-ecus"}>
-                            Installed on <span id={"version-" + version.id.version.substring(0,8) + "-installed-on-ecus-count"}>{version.installedOnEcus}</span> ECU(s)
-                        </span>
+                    <div className="c-package__hw-row c-package__hw-row--installed">
+                        Installed on <span id={"package-" + packageName + "-installed-on-ecus-count-" + version.id.version.substring(0,8)}>{version.installedOnEcus}</span> ECU(s)
                     </div>
-                    <div className="c-package__hw-row c-package__hw-row--hardware-ids" id={"package-" + packageName + "-hardware_ids"}>
+                    <div className="c-package__hw-row c-package__hw-row--hardware-ids">
                         <div className="c-package__sw-subtitle">
                             Hardware ids:
                         </div>
                         <div className="c-package__hw-value">
                             {_.map(version.hardwareIds, (hardwareId, index) => {
                                 return (
-                                    <span className="app-label" key={index} id={"package-" + packageName + `-app-label`}>
+                                    <span className="app-label" key={index} id={"package-" + packageName + '-app-label-' + version.id.version.substring(0,8)}>
                                         {hardwareId}
                                     </span>
                                 );
@@ -96,12 +100,12 @@ class ListItemVersion extends Component {
                         </div>
                     </div>
                     {version.targetFormat ?
-                        <div className="c-package__hw-row c-package__hw-row--format" id={"package-" + packageName + "-target_format"}>
+                        <div className="c-package__hw-row c-package__hw-row--format">
                             <div className="c-package__sw-subtitle">
                                 Format:
                             </div>
                             <div className="c-package__hw-value">
-                                <span className="app-label" id={"package-" + packageName + "-app-format-ostree"}>
+                                <span className="app-label" id={"package-" + packageName + "-app-format-" + version.id.version.substring(0,8)}>
                                     {version.targetFormat}
                                 </span>
                             </div>
