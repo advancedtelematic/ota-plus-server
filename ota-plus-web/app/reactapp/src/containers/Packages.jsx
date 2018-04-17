@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Loader, DependenciesModal } from '../partials';
-import { 
+import { SoftwareRepository } from '../pages';
+import {
     PackagesCreateModal,
     PackagesFileUploaderModal, 
     PackagesHeader, 
@@ -24,6 +25,7 @@ class Packages extends Component {
     @observable dependenciesManagerShown = false;
     @observable activeVersionFilepath = null;
     @observable activeManagerVersion = null;
+    @observable switchToSWRepo = false;
 
     constructor(props) {
         super(props);
@@ -39,6 +41,7 @@ class Packages extends Component {
         this.hideDependenciesModal = this.hideDependenciesModal.bind(this);
         this.showDependenciesManager = this.showDependenciesManager.bind(this);
         this.hideDependenciesManager = this.hideDependenciesManager.bind(this);
+        this.toggleSWRepo = this.toggleSWRepo.bind(this);
     }
     showDependenciesModal(activeVersionFilepath, e) {
         if(e) e.preventDefault();
@@ -100,6 +103,9 @@ class Packages extends Component {
     onFileDrop(files) {
         this.showCreateModal(files);
     }
+    toggleSWRepo () {
+        this.switchToSWRepo = !this.switchToSWRepo;
+    }
     render() {
         const { packagesStore, hardwareStore, highlightedPackage, featuresStore, devicesStore, campaignsStore, alphaPlusEnabled } = this.props;
         return (
@@ -114,16 +120,21 @@ class Packages extends Component {
                             <PackagesHeader
                                 showCreateModal={this.showCreateModal}
                                 showFileUploaderModal={this.showFileUploaderModal}
-                            />
-                            <PackagesList 
-                                showBlacklistModal={this.showBlacklistModal}
-                                packagesStore={packagesStore}
-                                onFileDrop={this.onFileDrop}
+                                toggleSWRepo={this.toggleSWRepo}
+                                switchValue={this.switchToSWRepo}
                                 alphaPlusEnabled={alphaPlusEnabled}
-                                highlightedPackage={highlightedPackage}
-                                showDependenciesModal={this.showDependenciesModal}
-                                showDependenciesManager={this.showDependenciesManager}
                             />
+                            {!this.switchToSWRepo ?
+                                <PackagesList
+                                    showBlacklistModal={this.showBlacklistModal}
+                                    packagesStore={packagesStore}
+                                    onFileDrop={this.onFileDrop}
+                                    alphaPlusEnabled={alphaPlusEnabled}
+                                    highlightedPackage={highlightedPackage}
+                                    showDependenciesModal={this.showDependenciesModal}
+                                    showDependenciesManager={this.showDependenciesManager}
+                                />
+                            : <SoftwareRepository/>}
                         </span>
                     :
                         <div className="wrapper-center">
