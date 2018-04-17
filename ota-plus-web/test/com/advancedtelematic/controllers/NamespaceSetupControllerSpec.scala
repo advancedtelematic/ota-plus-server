@@ -12,6 +12,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.inject.bind
 import AuthUtils._
+import com.advancedtelematic.libtuf.data.TufDataType.RsaKeyType
 import mockws.MockWS.Routes
 import play.api.libs.json.{JsValue, Json}
 
@@ -110,7 +111,7 @@ class NamespaceSetupControllerSpec extends PlaySpec with GuiceOneServerPerSuite 
 
     "return failure errors when check fails" in {
       val ns = "error-get-ns"
-      val result = controller.setup()(FakeRequest("GET", "/").withAuthSession(ns))
+      val result = controller.setup(RsaKeyType)(FakeRequest("GET", "/").withAuthSession(ns))
 
       status(result) mustBe BAD_GATEWAY
 
@@ -121,7 +122,7 @@ class NamespaceSetupControllerSpec extends PlaySpec with GuiceOneServerPerSuite 
 
     "return failure errors when create fails" in {
       val ns = "error-ns"
-      val result = controller.setup()(FakeRequest("GET", "/").withAuthSession(ns))
+      val result = controller.setup(RsaKeyType)(FakeRequest("GET", "/").withAuthSession(ns))
 
       status(result) mustBe BAD_GATEWAY
 
@@ -132,7 +133,7 @@ class NamespaceSetupControllerSpec extends PlaySpec with GuiceOneServerPerSuite 
 
     "create resources when they do not exist" in {
       val ns = "test-ns-create"
-      val result = controller.setup()(FakeRequest("GET", "/").withAuthSession(ns))
+      val result = controller.setup(RsaKeyType)(FakeRequest("GET", "/").withAuthSession(ns))
 
       status(result) mustBe OK
 
