@@ -3323,11 +3323,9 @@ input {
 }
 .software-repository {
     display: block !important;
-    border-top: 2px solid #0f1621;
-
-    ::-webkit-scrollbar {
-        display: none;
-    }
+    border-top: 1px solid #0f1621;
+    min-width: 1280px;
+    overflow: auto;
 
     @keyframes fadeIn {
         0%   { opacity: 0; }
@@ -3382,6 +3380,7 @@ input {
 
     .container {
         overflow: hidden;
+        height: 100%;
     }
 
     #tree-canvas {
@@ -3465,19 +3464,20 @@ input {
     }
 
     .wrapper-full {
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
         .row {
             background-color: #fff;
-            min-height:100vh;
+            height: 100%;
         }
 
         .keys {
             display: inline-block;
             float:left;
-            min-height: 100vh;
             background-color: #3F454D;
-            position: relative;
             overflow: hidden;
-            z-index: 51;
 
             .section-header {
                 background-color: #3F454D;
@@ -3491,18 +3491,6 @@ input {
                 }
             }
 
-            div.selected {
-                & > span {
-                    //position: relative;
-                    //&:before {
-                    //    content: '';
-                    //    position: absolute;
-                    //    width: 100%;
-                    //    height: 50px;
-                    //    background-color: #000;
-                    //}
-                }
-            }
         }
 
         .packages, .campaigns {
@@ -3570,12 +3558,6 @@ input {
                 }
             }
 
-            .first-level {
-                position: absolute;
-                left:0;
-                right:0;
-            }
-
             .owners {
                 padding: 10px 25px;
                 cursor: auto;
@@ -3588,11 +3570,9 @@ input {
         }
 
         .campaigns {
-            min-height: 100vh;
+            height: 95vh;
+            overflow-y: scroll;
             padding: 0;
-            background-color: #fff;
-            z-index: 50;
-            position: relative;
 
             .row {
                 min-height: inherit;
@@ -3616,9 +3596,8 @@ input {
             }
 
             .first-level {
-                height: 90vh;
-                padding-bottom: 15px;
-                overflow-y: scroll;
+                padding-bottom: 0;
+                margin: 0;
                 .second-level {
                     li {
                         span:not(.value) {
@@ -3632,7 +3611,6 @@ input {
             }
 
             .info {
-                max-height: 100vh;
                 overflow-y: hidden;
                 transition: all 1s cubic-bezier(0, 1, 0.5, 1);
                 &.hide{
@@ -3874,6 +3852,7 @@ input {
 
                     .desc {
                         float: none;
+                        width: 50%;
                     }
 
                     .name, .stats {
@@ -3913,12 +3892,8 @@ input {
 
         .packages {
             padding: 0;
-            -webkit-box-shadow: 4px 0px 8px -2px rgba(0, 0, 0, 0.25);
-            -moz-box-shadow: 4px 0px 8px -2px rgba(0, 0, 0, 0.25);
-            box-shadow: 4px 0px 8px -2px rgba(0, 0, 0, 0.25);
-            position: relative;
-            z-index: 49;
-            min-height: 100vh;
+            overflow-y: scroll;
+            height: 100%;
 
             i.fa-owner-orange {
                 background: url('/assets/img/icons/person-hover.png') no-repeat center;
@@ -3936,6 +3911,7 @@ input {
             .first-level {
                 height: 90vh;
                 overflow-y: auto;
+                overflow-x: hidden;
             }
 
             .second-level {
@@ -4078,14 +4054,6 @@ input {
                         top:23.5%;
                         font-size: 18px;
                         transform: translateY(-50%);
-                    }
-                    .canvas-wrapper {
-                        flex-direction: column;
-                        display: flex;
-                        justify-content: center;
-                        canvas {
-                            position: inherit;
-                        }
                     }
                     .colors-info {
                         padding-top: 15px;
