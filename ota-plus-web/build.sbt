@@ -5,11 +5,14 @@ PlaySettings.defaultScalaSettings
 
 scalacOptions += "-Ypartial-unification"
 
-play.sbt.routes.RoutesKeys.routesImport ++= Seq(
+RoutesKeys.routesImport ++= Seq(
   "com.advancedtelematic.api.ApiVersion._",
   "com.advancedtelematic.controllers.PathBinders._",
+
   "com.advancedtelematic.controllers.FeatureName",
-  "java.util.UUID"
+  "java.util.UUID",
+  "com.advancedtelematic.libtuf.data.TufDataType.KeyType",
+  "com.advancedtelematic.libtuf.data.TufDataType.RsaKeyType"
 )
 
 RoutesKeys.routesGenerator := InjectedRoutesGenerator

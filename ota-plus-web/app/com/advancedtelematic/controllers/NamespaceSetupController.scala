@@ -8,7 +8,7 @@ import akka.http.scaladsl.util.FastFuture
 import com.advancedtelematic.api._
 import com.advancedtelematic.auth.ApiAuthAction
 import play.api.{Configuration, Logger}
-import play.api.libs.json.{Json, JsValue, Writes}
+import play.api.libs.json.{JsValue, Json, Writes}
 import play.api.libs.ws.WSClient
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 
@@ -16,6 +16,7 @@ import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ExecutionContext, Future}
 import akka.pattern.after
 import com.advancedtelematic.libats.data.DataType.Namespace
+import com.advancedtelematic.libtuf.data.TufDataType.KeyType
 
 object NamespaceSetupController {
   sealed trait CreateResult {
@@ -40,7 +41,7 @@ object NamespaceSetupController {
   trait ResourceCreation {
     protected def exists(): Future[Boolean]
 
-    protected def create(): Future[Unit]
+    protected def create(keyType: KeyType): Future[Unit]
 
     private lazy val log = Logger(this.getClass)
 
@@ -55,13 +56,14 @@ object NamespaceSetupController {
       FastFuture.successful(name).zip(safeCheck)
     }
 
-    def setupResource(checkSeconds: Int)(implicit system: ActorSystem, ec: ExecutionContext): Future[CreateResult] = {
+    def setupResource(checkSeconds: Int, keyType: KeyType)
+                     (implicit system: ActorSystem, ec: ExecutionContext): Future[CreateResult] = {
       exists().flatMap {
         case true =>
           log.info(s"Not creating $name, already exists")
           FastFuture.successful(AlreadyExists(name))
         case false =>
-          create().flatMap { _ =>
+          create(keyType).flatMap { _ =>
             waitFor(checkSeconds, FiniteDuration(1, TimeUnit.SECONDS))
           }
       }.recover {
@@ -96,7 +98,7 @@ object NamespaceSetupController {
 
     override def exists(): Future[Boolean] = repoServerApi.repoExists(namespace)
 
-    override def create(): Future[Unit] = repoServerApi.createRepo(namespace)
+    override def create(keyType: KeyType): Future[Unit] = repoServerApi.createRepo(namespace, keyType)
   }
 
   class DirectorRepoCreation(namespace: Namespace, directorApi: DirectorApi)
@@ -105,7 +107,7 @@ object NamespaceSetupController {
 
     override def exists(): Future[Boolean] = directorApi.repoExists(namespace)
 
-    override def create(): Future[Unit] = directorApi.createRepo(namespace)
+    override def create(keyType: KeyType): Future[Unit] = directorApi.createRepo(namespace, keyType)
   }
 
   class CryptAccountCreation(namespace: Namespace, cryptApi: CryptApi)
@@ -115,7 +117,8 @@ object NamespaceSetupController {
     override protected def exists(): Future[Boolean] =
       cryptApi.getAccount(namespace.get, _.validate[JsValue]).map(_.isDefined)
 
-    override protected def create(): Future[Unit] = cryptApi.registerAccount(namespace.get).map(_ => ())
+    override protected def create(keyType: KeyType): Future[Unit] =
+      cryptApi.registerAccount(namespace.get).map(_ => ())
   }
 }
 
@@ -153,9 +156,9 @@ class NamespaceSetupController @Inject() (val ws: WSClient,
     }.map { results => Ok(Json.toJson(results.toMap)) }
   }
 
-  def setup(): Action[AnyContent] = apiAuth.async { request =>
+  def setup(keyType: KeyType): Action[AnyContent] = apiAuth.async { request =>
     Future.sequence {
-      enabledResources(request.namespace).map(_.setupResource(conf.get[Int]("namespace_setup.check_retries")))
+      enabledResources(request.namespace).map(_.setupResource(conf.get[Int]("namespace_setup.check_retries"), keyType))
     }.map { results =>
       val result = Json.toJson(results.map { r => r.name -> r }.toMap)
 
