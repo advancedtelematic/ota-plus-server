@@ -1080,6 +1080,32 @@
 #page-packages {
     height: calc(100vh - 50px);
 
+    .subheader {
+        justify-content: space-between;
+
+        .switch {
+            &:before {
+                border: none;
+            }
+        }
+    }
+
+    .software-repository {
+        min-width: 1220px;
+        .wrapper-full {
+            height: calc(100vh - 150px);
+            overflow: hidden;
+        }
+
+        .container {
+            min-width: 1220px;
+        }
+
+        .campaigns {
+            height: 100%;
+        }
+    }
+
     .page-heading {
         .icon {
             background-image: url('/assets/img/icons/black/packages.png');
