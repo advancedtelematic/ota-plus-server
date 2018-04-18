@@ -261,6 +261,10 @@
                         overflow: hidden;
                         display: flex;
 
+                        &__item {
+                            display: flex;
+                        }
+
                         .feature-name {
                             font-size: 12px;
                             font-weight: 300;
