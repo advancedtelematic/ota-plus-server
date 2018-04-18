@@ -19,7 +19,7 @@ class Tooltip extends Component {
                     <img src="/assets/img/impact_tooltip.jpg" alt="" />
                 </div>
                 <div className="body-actions">
-                    <button className="btn-primary" onClick={hide} id="impact-analysis-got-it﻿">Got it</button>
+                    <button className="btn-primary" onClick={hide} id="impact-analysis-got-it">Got it</button>
                 </div>
             </span>
         );

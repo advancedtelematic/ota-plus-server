@@ -60,7 +60,7 @@ class CreateModal extends Component {
                             name="until"
                             floatingLabelText="Valid until"
                             className="input-wrapper date-wrapper"
-                            id="add-new-key-valid-until﻿"
+                            id="add-new-key-valid-until"
                             disabled={provisioningStore.provisioningKeyCreateAsync.isFetching}
                             minDate={moment().toDate()}
                             maxDate={moment().add(4, 'year').toDate()}
@@ -76,7 +76,7 @@ class CreateModal extends Component {
                             <button
                                 disabled={this.submitButtonDisabled || provisioningStore.provisioningKeyCreateAsync.isFetching}
                                 className="btn-primary"
-                                id="add-new-key-confirm﻿"
+                                id="add-new-key-confirm"
                             >
                                 Add key
                             </button>
