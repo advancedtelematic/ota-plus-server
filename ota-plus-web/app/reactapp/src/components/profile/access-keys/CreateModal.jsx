@@ -76,7 +76,7 @@ class CreateModal extends Component {
                             <button
                                 disabled={this.submitButtonDisabled || provisioningStore.provisioningKeyCreateAsync.isFetching}
                                 className="btn-primary"
-                                id="add-new-key-confirm﻿"
+                                id="add-new-key-confirm-btn"
                             >
                                 Add key
                             </button>
