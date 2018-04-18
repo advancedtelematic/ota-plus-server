@@ -80,7 +80,7 @@ runWebpack := {
         "--rm" ::
         "--volume" :: s"${baseDirectory.value.toString}/app:/app" ::
         "advancedtelematic/webpack" ::
-        "bash" :: "-c" :: "cd reactapp && npm install && webpack" ::
+        "bash" :: "-c" :: "cd reactapp && npm install && webpack -p" ::
         Nil
     ) !
   )
