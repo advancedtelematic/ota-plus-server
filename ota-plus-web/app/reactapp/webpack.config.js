@@ -20,7 +20,7 @@ const optimize = new webpack.optimize.UglifyJsPlugin({
     comments: false,
   },
 });
-
+const prod = process.argv.indexOf('-p') !== -1;
 module.exports = {
   entry: [
     join(__dirname, 'src/main.jsx'),
@@ -103,5 +103,12 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
   plugins: [
+    new webpack.DefinePlugin({
+      process: {
+        env: {
+          NODE_ENV: prod ? `"production"`: '"development"'
+        }
+      }
+    }),
   ]
 };
