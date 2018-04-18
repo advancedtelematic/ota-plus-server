@@ -32,7 +32,7 @@ class Home extends Component {
         }
     }
     render() {
-        const { devicesStore, packagesStore, campaignsStore, hardwareStore, userStore, provisioningStore, featuresStore, setSystemReady, addNewWizard } = this.props;
+        const { devicesStore, packagesStore, campaignsStore, hardwareStore, userStore, provisioningStore, featuresStore, setSystemReady, addNewWizard, uiUserProfileMenu } = this.props;
         return (
             <FadeAnimation
                 display="flex">
@@ -54,6 +54,7 @@ class Home extends Component {
                         provisioningStore={provisioningStore}
                         featuresStore={featuresStore}
                         setSystemReady={setSystemReady}
+                        uiUserProfileMenu={uiUserProfileMenu}
                     />
                 }
             </FadeAnimation>
