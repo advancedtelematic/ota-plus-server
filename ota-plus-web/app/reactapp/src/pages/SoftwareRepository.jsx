@@ -1,6 +1,6 @@
 import React, { Component, PropTypes, PureComponent } from 'react';
 import { observer } from 'mobx-react';
-import { observable } from 'mobx';
+import { observable, toJS } from 'mobx';
 import _ from 'underscore';
 import { VelocityTransitionGroup } from 'velocity-react';
 import {TreeUl, ItemVersions, List} from '../components/softrepo';
@@ -8,23 +8,19 @@ import {keys, packages, roles, campaigns} from '../components/softrepo/data.js';
 
 @observer
 export default class SoftwareRepository extends Component {
-    @observable selectedItemObject = {
-        element: '',
-    };
+    @observable selectedPackage = null;
+    @observable selectedRole = '';
+    @observable associatedPackages = packages.groups;
+    @observable associatedCampaigns = campaigns.groups;
 
     constructor(props) {
         super(props);
         this.showPackageChildren = this.showPackageChildren.bind(this);
-        this.drawLines =  this.drawLines.bind(this);
-        this.selectPackageWithKeys = this.selectPackageWithKeys.bind(this);
+        this.filterPackagesAndCampaigns =  this.filterPackagesAndCampaigns.bind(this);
+        this.selectPackage = this.selectPackage.bind(this);
         this.removeSelectedClasses = this.removeSelectedClasses.bind(this);
-        this.drawLinesFromAllChilds = this.drawLinesFromAllChilds.bind(this);
-        this.handleClickType = this.handleClickType.bind(this);
         this.openTreeNode = this.openTreeNode.bind(this);
-        this.drawLineBetweenPackagesAndCampaigns = this.drawLineBetweenPackagesAndCampaigns.bind(this);
-        this.drawLineFromCampaign = this.drawLineFromCampaign.bind(this);
         this.showUserInfo = this.showUserInfo.bind(this);
-        this.deselectAll = this.deselectAll.bind(this);
     }
 
     componentDidMount() {
@@ -101,14 +97,6 @@ export default class SoftwareRepository extends Component {
         return parents;
     }
 
-    handleClickType(e) {
-        if (!e.target) {
-            e.target = e;
-        }
-        let element = document.querySelectorAll(`div[title=${e.target.parentNode.title}`)[0];
-
-        this.drawLinesFromAllChilds(element);
-    }
 
     showPackageChildren(e) {
         if (e[0] && e[0].parentNode) {
@@ -147,113 +135,12 @@ export default class SoftwareRepository extends Component {
         }
     }
 
-    drawLineFromCampaign(e) {
-
-        if (!e.target) {
-            e.target = e;
+    selectPackage(itemTitle, e) {
+        if (this.selectedPackage !== itemTitle) {
+            this.selectedPackage = itemTitle;
+        } else {
+            this.selectedPackage = '';
         }
-        e.target.classList.add('selected');
-
-        let packages = e.target.parentNode.dataset.packages.split(',');
-
-        packages.forEach(packageTitle => {
-            let packageItem = document.querySelector(`li[title*=${packageTitle}`);
-
-            this.selectPackageWithKeys(packageItem, false, false, false, false);
-
-        });
-    }
-
-    drawLineBetweenPackagesAndCampaigns(e) {
-        if (!e.target) {
-            e.target = e;
-        }
-
-        const allCampaigns = document.querySelectorAll(`li[data-packages*=${e.target.title}`);
-
-        allCampaigns.forEach(campaign => {
-            campaign.classList.add('selected');
-        })
-    }
-
-    selectPackageWithKeys(e, clear = true, drawLinesToCampaigns = true, removeSelectedClass = true, changeDataType = true) {
-        if (!e.target) {
-            e.target = e;
-        }
-
-        if (changeDataType) {
-            if (e.target.parentNode.title) {
-                e.target = e.target.parentNode;
-            }
-            if (e.target.title.length !== 0 && e.target !== this.selectedItemObject.element && e.target.title !== this.selectedItemObject.element.title) {
-                this.selectedItemObject = {
-                    element: e.target,
-                }
-            }
-        }
-
-        if (removeSelectedClass) {
-            this.removeSelectedClasses();
-        }
-
-        e.target.classList.add('selected');
-
-        let roles = e.target.dataset.role.split(',');
-
-        if (drawLinesToCampaigns) {
-            this.drawLineBetweenPackagesAndCampaigns(e,true);
-        }
-
-        roles.forEach(role => {
-            let key = [];
-
-            if (e.target.dataset.role) {
-                const element = document.querySelectorAll(`div[title*="${role}"`);
-                key.push(element[0]);
-            }
-
-            key[0].classList.add('selected');
-        });
-    }
-
-    deselectAll(event) {
-        const selectedElements = document.querySelectorAll('div.info');
-        const version = document.querySelectorAll('.versions-details');
-        const selectedSpans = document.querySelectorAll('span.selected');
-        const selectedLis = document.querySelectorAll('li.selected');
-        const selectedTreeNodes = document.querySelectorAll('div[title].selected');
-        const selectedOwners = document.querySelectorAll('i.selected-user');
-        const visibleUserInfo = document.querySelectorAll('.packages div.user-info:not(.hide), .packages div.user-info+div.info:not(.hide)');
-        const expandedElements = document.querySelectorAll('.expanded');
-        visibleUserInfo.forEach(el => {
-            el.classList.toggle('hide');
-        });
-        selectedOwners.forEach(el => {
-            el.classList.toggle('selected-user');
-        });
-        selectedTreeNodes.forEach(el => {
-            el.classList.remove('selected');
-        });
-        selectedLis.forEach(el => {
-            el.classList.toggle('selected');
-        });
-        selectedSpans.forEach(el => {
-            el.classList.toggle('selected');
-            el.classList.toggle('expanded');
-        });
-        version.forEach(el => {
-            el.classList.add('hide');
-        });
-        selectedElements.forEach(el => {
-            if (!el.classList[1] && event.target.nextSibling !== el) {
-                el.parentNode.classList.remove('selected');
-                el.classList.toggle('hide');
-                event.target.classList.remove('hide');
-            }
-        });
-        expandedElements.forEach(el => {
-            el.classList.remove('expanded');
-        })
     }
 
     removeSelectedClasses(section = 'all') {
@@ -268,43 +155,42 @@ export default class SoftwareRepository extends Component {
         });
     }
 
-    drawLinesFromAllChilds(e) {
-        let allChilds = e.parentNode.querySelectorAll('div[title]');
+    filterPackagesAndCampaigns(e) {
+        this.selectedRole = e.target.parentNode.title;
 
-        allChilds.forEach(el => {
-            el.classList.add('selected');
-            this.showPackageChildren([el]);
-            this.drawLines(el ,false, false, 'key', false);
-        })
-    }
+        let filteredPackages = {};
+        let filteredCampaigns = {};
 
-    drawLines(e, clear = true, removeClasses = true) {
-        if (!e.target) {
-            e.target = e;
-        }
+        _.map(packages.groups, function(obj, key) {
+            if (_.some(obj, {role: e.target.parentNode.title})) {
+                filteredPackages = {
+                    ...filteredPackages,
+                    [key]: obj
+                }
+            }
+        });
 
-        this.showPackageChildren(e);
+        _.map(campaigns.groups, function(obj, key) {
 
-        if (removeClasses) {
-            this.removeSelectedClasses();
-        }
-
-        if (e.target.title.length > 0) {
-
-            const associatedPackages = document.querySelectorAll(`li[data-role*="${e.target.title}"]`);
-
-            associatedPackages.forEach(element => {
-                this.drawLineBetweenPackagesAndCampaigns(element, false);
-                element.classList.add('selected');
+            _.map(filteredPackages, (pack) => {
+                if (_.some(obj, (item) => _.intersection(item.packages, _.keys(pack)).length > 0)) {
+                    filteredCampaigns = {
+                        ...filteredCampaigns,
+                        [key]: obj
+                    }
+                }
             });
-        }
 
+        });
+
+        this.associatedPackages = filteredPackages;
+        this.associatedCampaigns = filteredCampaigns;
     }
 
     render() {
-        const packagesList = Object.keys(packages.groups).map((group, groupKey) => {
+        const packagesList = Object.keys(this.associatedPackages).map((group, groupKey) => {
             return (
-                <li key={Math.floor((Math.random() * 300) + groupKey)}>
+                <li key={Math.floor((Math.random() * 3000) + groupKey)} >
                     <span className="title">{group}</span>
                     <ul className="second-level">
                         {Object.keys(packages.groups[group]).map((item, itemKey) => {
@@ -312,26 +198,19 @@ export default class SoftwareRepository extends Component {
                             const itemTitle = item.replace(/[&\/\\#,+()$~%_.'":*?<>{}]/g, '');
                             const role = groupItem.role.replace(/[&\/\\#,+()$~%_.' ":*?<>{}]/g, '');
                             let person = null;
+
                             return (
                                 <li
                                     key={Math.floor((Math.random() * 10000) + itemKey)}
-                                    className={this.selectedItemObject.element.title === itemTitle ? 'selected expanded' : ''}
-                                    onClick={(e) => {
-                                        this.deselectAll(e);
-                                        if (this.selectedItemObject.element && this.selectedItemObject.element.title === itemTitle) {
-                                            this.selectedItemObject.element = '';
-                                            this.resetContext(e);
-                                        } else {
-                                            this.selectPackageWithKeys(e);
-                                        }
-                                    }}
+                                    className={this.selectedPackage === itemTitle ? 'selected expanded' : ''}
+                                    onClick={this.selectPackage.bind(this, itemTitle)}
                                     title={itemTitle}
                                     data-keys={groupItem.keys}
                                     data-role={role}>
-                                    <span className="item">
-                                        {item}
-                                    </span>
-                                    <div className={`user-info ${this.selectedItemObject.element.title === itemTitle ? '' : 'hide'}`} onClick={e => {e.stopPropagation()}}>
+                                <span className="item">
+                                    {item}
+                                </span>
+                                    <div className={`user-info ${this.selectedPackage === itemTitle ? '' : 'hide'}`} onClick={e => {e.stopPropagation()}}>
                                         <div className="owners">
                                             {_.map(groupItem.keys, (key, i) => {
                                                 person = keys.keys[key].owner;
@@ -365,10 +244,10 @@ export default class SoftwareRepository extends Component {
                                     </div>
                                     <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
                                         {
-                                            this.selectedItemObject.element.title === itemTitle
-                                            ?
-                                            <ItemVersions groupItem={groupItem} />
-                                            : null
+                                            this.selectedPackage === itemTitle
+                                                ?
+                                                <ItemVersions groupItem={groupItem} />
+                                                : null
                                         }
                                     </VelocityTransitionGroup>
                                 </li>
@@ -390,26 +269,25 @@ export default class SoftwareRepository extends Component {
                                     <TreeUl
                                         data={roles}
                                         shown={true}
-                                        drawLinesFromKeys={this.handleClickType}
                                         openTreeNode={this.openTreeNode}
-                                        getCanvasContext={this._getCanvasContext}
-                                        removeClasses={this.removeSelectedClasses}
-                                        deselectAll={this.deselectAll}
                                         getParentsUntil={this.getParentsUntil}
+                                        filterPackagesAndCampaigns={this.filterPackagesAndCampaigns}
                                     />
                                 </div>
                             </div>
                             <div className="col-xs-4 packages" id="packages" onScroll={this.scroll}>
                                 <div className="section-header">Software</div>
                                 <ul className="first-level">
-                                    {packagesList}
+                                    {!_.isEmpty(toJS(this.associatedPackages)) ? packagesList :
+                                        <p className="absolute-align">No associated packages</p>
+                                    }
                                 </ul>
                             </div>
                             <div className="col-xs-4 campaigns" onScroll={this.scroll}>
                                 <div className="section-header">Campaigns</div>
                                 <ul className="first-level">
                                     <List
-                                        data={campaigns}
+                                        data={{groups: this.associatedCampaigns}}
                                         clickHandler={this.drawLineFromCampaign}
                                         dataType="campaigns"
                                         removeClasses={this.removeSelectedClasses}
