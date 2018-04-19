@@ -3338,6 +3338,7 @@ input {
     }
 
     .keys {
+        height: 100%;
         width: 20%;
         border-right: 2px solid #0f1621;
     }
@@ -3416,7 +3417,7 @@ input {
     }
 
     .wrapper-software {
-        height: 90vh;
+        height: 100%;
         overflow-y: auto;
         padding: 30px 0 50px 1px;
     }
@@ -3461,6 +3462,13 @@ input {
         & > i.fa-error {
             background-image: url('/assets/img/icons/error_square.png');
         }
+    }
+
+    .absolute-align {
+        position: absolute;
+        top:50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
     }
 
     .wrapper-full {
@@ -3637,11 +3645,15 @@ input {
             }
             li[data-packages] {
 
-                span:first-child {
-                    position: relative;
-                    &.expanded {
+                &.expanded {
+                    span:first-child {
                         background-color: #48DAD0;
                     }
+                }
+
+                span:first-child {
+                    position: relative;
+
                     i {
                         position: absolute;
                         right:-8px;
@@ -4337,7 +4349,6 @@ input {
 
     .tree li {
         margin: 0;
-        //padding: 0 1.5em;
         line-height: 2em;
         font-weight: bold;
         position: relative;
@@ -4359,13 +4370,13 @@ input {
         margin: 5px 0 15px;
         position: relative;
         color: #898B91;
+        width: 100%;
         .fa-angle-down {
             color: #fff;
             top: 9px;
             font-size:20px;
         }
         &.selected {
-            width: 100%;
             &:not(.expanded) {
                 background-color: rgba(15,22,33,0.2);
                 border-bottom: 4px solid #48DAD0;

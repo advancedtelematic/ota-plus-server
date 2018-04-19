@@ -5,34 +5,35 @@ import _ from 'underscore';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import {keys} from './data.js';
 
-
 @observer
 export default class TreeUl extends PureComponent {
     @observable showUserInfo = false;
     @observable userInfo = {};
     constructor(props) {
         super(props);
+        this.deselectRoles = this.deselectRoles.bind(this);
+        this.showInfo = this.showInfo.bind(this);
     }
 
-    resetContext(e) {
-        if (e.target.nextSibling.classList[1]) {
-            this.props.removeClasses();
-        }
-        let alreadyOpenedTreeNodes = document.querySelectorAll('div[title] .info:not(.hide)');
-        if (alreadyOpenedTreeNodes.length > 1) {
-            if (e.target.nextSibling === alreadyOpenedTreeNodes[0]) {
-                alreadyOpenedTreeNodes[1].classList.add('hide');
-            } else {
-                alreadyOpenedTreeNodes[0].classList.add('hide');
-            }
-        }
+    deselectRoles() {
+        const selectedRoles = document.querySelectorAll('div[title].expanded');
+
+        selectedRoles.forEach((role) => {
+            role.classList.remove('expanded');
+            role.querySelector('span.expanded').classList.remove('expanded');
+            role.querySelector('div.info').classList.add('hide');
+        })
     }
 
     showInfo(e) {
         e.stopPropagation();
+        this.deselectRoles(e);
+
         e.target.nextSibling.classList.toggle('hide');
         e.target.classList.toggle('expanded');
         e.target.parentNode.classList.toggle('expanded');
+
+        this.props.filterPackagesAndCampaigns(e);
     }
 
     getUserInfo(object,e) {
@@ -50,7 +51,7 @@ export default class TreeUl extends PureComponent {
     }
 
     render() {
-        const { data, drawLinesFromKeys, openTreeNode, getCanvasContext, removeClasses, deselectAll, level = 0 } = this.props;
+        const { data, openTreeNode, level = 0, filterPackagesAndCampaigns  } = this.props;
         let totalCount = 0;
         return (
             <CSSTransitionGroup
@@ -63,14 +64,10 @@ export default class TreeUl extends PureComponent {
                 className={this.props.shown ? `tree shown level-${level}`  : `hidden level-${level}`}
             >
                 {_.map(data, (items, key) => {
+                    const title = key;
                     return (
-                        <li key={key}>
-                            <div title={key.replace(/[&\/\\#,+()$~%_.' ":*?<>{}]/g, '')} onClick={e => {
-                                deselectAll(e);
-                                this.showInfo(e);
-                                drawLinesFromKeys(e, true);
-                                this.resetContext(e);
-                            }}>
+                        <li key={key} >
+                            <div title={title} onClick={this.showInfo}>
                                 {Object.keys(items).length
                                     ? <i className="fa fa-angle-right" aria-hidden="true" onClick={openTreeNode}/>
                                     : null}
@@ -81,7 +78,10 @@ export default class TreeUl extends PureComponent {
                                     <div className="owners">
                                         {_.map(items.keys, (key, i) => {
                                             const person = keys.keys[key].owner;
-                                            return <i title={key} className={`fa fa-owner ${this.userInfo.element && this.showUserInfo  && this.userInfo.element.title === key ? 'selected-user' : ''}`} aria-hidden="true" onClick={this.getUserInfo.bind(this,person)}/>
+                                            return <i title={key} key={i}
+                                                      className={`fa fa-owner ${this.userInfo.element && this.showUserInfo  && this.userInfo.element.title === key ? 'selected-user' : ''}`}
+                                                      aria-hidden="true"
+                                                      onClick={this.getUserInfo.bind(this,person)}/>
                                         })}
                                     </div>
                                     <div className="user-info hide">
@@ -118,7 +118,7 @@ export default class TreeUl extends PureComponent {
                                                 <div className="right-column">
                                                     {_.map(items.thresholds, (obj, i) => {
                                                         return (
-                                                            <div className="right-column">
+                                                            <div key={i} className="right-column">
                                                                 {' '+ obj + ' ' + i}
                                                             </div>
                                                         )
@@ -150,7 +150,7 @@ export default class TreeUl extends PureComponent {
                                             })}
                                             {_.map(items.errors, (error, key) => {
                                                 return (
-                                                    <p>
+                                                    <p key={key}>
                                                         <div className="left-column">
                                                             <i className="fa fa-error" aria-hidden="true"/>
                                                         </div>
@@ -169,10 +169,7 @@ export default class TreeUl extends PureComponent {
                                 shown={false}
                                 level={level + 1}
                                 openTreeNode={openTreeNode}
-                                drawLinesFromKeys={drawLinesFromKeys}
-                                getCanvasContext={getCanvasContext}
-                                removeClasses={removeClasses}
-                                deselectAll={deselectAll}
+                                filterPackagesAndCampaigns={filterPackagesAndCampaigns}
                             />
                         </li>
                     );
