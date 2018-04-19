@@ -386,6 +386,7 @@ input {
     border-bottom: 1px solid $panel-delimiter-color;
     margin-bottom: 0;
     height: 50px;
+    border-radius: 0;
 
     .alert {
         width: 400px;
@@ -4064,7 +4065,9 @@ input {
                     }
                     .total-count {
                         top:23.5%;
-                        font-size: 18px;
+                        font-size: 10px;
+                        font-weight: 300;
+                        color: #0F1621;
                         transform: translateY(-50%);
                     }
                     .colors-info {
