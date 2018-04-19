@@ -41,7 +41,6 @@ class Preparation extends Component {
     @observable createdTuf = null;
     @observable createdDirector = null;
     @observable createdTreehub = null;
-    @observable createdFileUploader = null;
     @observable timesCheckCreatedTufCalled = 0;
     @observable timesCreateTufCalled = 0;
     @observable timesCheckCreatedDirectorCalled = 0;
@@ -61,7 +60,6 @@ class Preparation extends Component {
         this.createdTufHandler = new AsyncStatusCallbackHandler(props.provisioningStore, 'namespaceSetupFetchAsync', this.checkCreatedTuf.bind(this));
         this.createdDirectorHandler = new AsyncStatusCallbackHandler(props.provisioningStore, 'namespaceSetupFetchAsync', this.checkCreatedDirector.bind(this));
         this.createdTreehubHandler = new AsyncStatusCallbackHandler(props.featuresStore, 'featuresFetchAsync', this.checkCreatedTreehub.bind(this));
-        this.createdFileUploaderHandler = new AsyncStatusCallbackHandler(props.featuresStore, 'featuresFetchAsync', this.checkCreatedFileUploader.bind(this));
     }
 
     componentWillMount() {
@@ -81,7 +79,6 @@ class Preparation extends Component {
         this.createdTufHandler();
         this.createdDirectorHandler();
         this.createdTreehubHandler();
-        this.createdFileUploaderHandler();
     }
 
     checkUserProfile() {
@@ -138,12 +135,6 @@ class Preparation extends Component {
         }
     }
 
-    checkCreatedFileUploader() {
-        if (this.props.featuresStore.featuresFetchAsync.code === 200 && _.includes(this.props.featuresStore.features, 'tufupload')) {
-            this.createdFileUploader = true;
-        }
-    }
-
     doorOpen() {
         let container = document.getElementsByClassName('preparation-container')[0];
         if (container && !_.includes(container.classList, 'door-open')) {
@@ -161,9 +152,9 @@ class Preparation extends Component {
         let allIsPassed = false;
 
         if(uiUserProfileMenu) {
-            allIsPassed = finished && this.userProfile && this.activatedProvisioning && this.createdTuf && this.createdDirector && this.createdTreehub && this.createdFileUploader;
+            allIsPassed = finished && this.userProfile && this.activatedProvisioning && this.createdTuf && this.createdDirector && this.createdTreehub
         } else {
-            allIsPassed = finished && this.activatedProvisioning && this.createdTuf && this.createdDirector && this.createdTreehub && this.createdFileUploader;
+            allIsPassed = finished && this.activatedProvisioning && this.createdTuf && this.createdDirector && this.createdTreehub
         }
 
         if (allIsPassed) {
@@ -302,29 +293,6 @@ class Preparation extends Component {
                                                             {step.name}
                                                         </span>
                                                     </span>
-                                                : step.nr === 6 ?
-                                                    <span className="stepnum__item">
-                                                        {featuresStore.featuresFetchAsync.isFetching ?
-                                                            <span className="pending">
-                                                                <Loader />
-                                                            </span>
-                                                        : this.createdFileUploader ?
-                                                            <span>
-                                                                <img src="/assets/img/icons/green_tick.svg" alt="pass"/>
-                                                            </span>
-                                                        : finished ?
-                                                            <span>
-                                                                <img src="/assets/img/icons/red_cross.svg" alt="fail"/>
-                                                            </span>
-                                                        :
-                                                            <span className="pending">
-                                                                <Loader />
-                                                            </span>
-                                                        }
-                                                        <span className="feature-name">
-                                                            {step.name}
-                                                        </span>
-                                                    </span>                                                    
                                                 :
                                                     null
                                                 }                                                
