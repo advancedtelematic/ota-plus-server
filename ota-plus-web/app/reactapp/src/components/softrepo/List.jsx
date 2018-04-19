@@ -1,22 +1,13 @@
 import React, { PureComponent } from 'react';
 import { observer } from 'mobx-react';
-import { observable } from 'mobx';
+import { observable, toJS } from 'mobx';
 import _ from 'underscore';
 import { VelocityTransitionGroup } from 'velocity-react';
 import {keys} from './data.js';
 
+@observer
 export default class List extends PureComponent {
-
-    resetContext(e) {
-        let alreadyOpenedTreeNodes = document.querySelectorAll('div[title] .info:not(.hide)');
-        if (alreadyOpenedTreeNodes.length > 1) {
-            if (e.target.nextSibling === alreadyOpenedTreeNodes[0]) {
-                alreadyOpenedTreeNodes[1].classList.add('hide');
-            } else {
-                alreadyOpenedTreeNodes[0].classList.add('hide');
-            }
-        }
-    }
+    @observable selectedElement = null;
 
     showUserInfo(e) {
         const alreadySelectedElements = document.querySelectorAll('i.selected-user');
@@ -32,16 +23,18 @@ export default class List extends PureComponent {
         }
     }
 
-    showInfo(e) {
-        e.target.classList.toggle('expanded');
-        e.target.nextSibling.classList.toggle('hide');
+    showInfo(e, item) {
+        this.selectedElement === item ?
+        this.selectedElement = null
+        :
+        this.selectedElement = item;
     }
 
     render() {
-        const {data, clickHandler, deselectAll} = this.props;
+        const {data} = this.props;
         const list = Object.keys(data.groups).map((group, groupKey) => {
             return (
-                <li key={Math.floor((Math.random() * 30) + groupKey)}>
+                <li key={Math.floor((Math.random() * 3000) + groupKey)}>
                     <span className="title">{group}</span>
                     <ul className="second-level">
                         {Object.keys(data.groups[group]).map((item, itemKey) => {
@@ -55,17 +48,17 @@ export default class List extends PureComponent {
                             });
                             return (
                                 <li
-                                    key={Math.floor((Math.random() * 1000) + itemKey)}
+                                    key={Math.floor((Math.random() * 10000) + itemKey)}
+                                    className={this.selectedElement === item ? 'expanded' : ''}
                                     onClick={(e) => {
-                                        deselectAll(e);
-                                        this.showInfo(e);
-                                        clickHandler(e,true);
+                                        this.showInfo(e, item);
+                                        // clickHandler(e,true);
                                     }}
                                     data-packages={packages}>
                                     <span>
                                         {item}
                                     </span>
-                                    <div className="info hide" onClick={e => {e.stopPropagation()}}>
+                                    <div className={`info ${this.selectedElement === item ? '' : 'hide'}`} onClick={e => {e.stopPropagation()}}>
                                         <div className="row">
                                             <div className="user-info">
                                                 <div className="owners">
@@ -103,10 +96,10 @@ export default class List extends PureComponent {
                                         {groupItem.warnings && groupItem.warnings.length > 0 || groupItem.errors && groupItem.errors.length > 0 ?
                                             <div className="warnings">
                                                 {_.map(groupItem.warnings, (warning, key) => {
-                                                    return <p><i key={key} className="fa warning" aria-hidden="true"/>{warning}</p>
+                                                    return <p key={key}><i className="fa warning" aria-hidden="true"/>{warning}</p>
                                                 })}
                                                 {_.map(groupItem.errors, (error, key) => {
-                                                    return <p><i key={key} className="fa fa-error" aria-hidden="true"/>{error}</p>
+                                                    return <p key={key}><i className="fa fa-error" aria-hidden="true"/>{error}</p>
                                                 })}
                                             </div>
                                             : ''}
@@ -162,14 +155,14 @@ export default class List extends PureComponent {
                                         </div>
                                         <div className="ecus">
                                             <h5>ECUs</h5>
-                                            {_.map(groupItem.ecus, (ecu) => {
-                                                return <p>{ecu}</p>
+                                            {_.map(groupItem.ecus, (ecu, key) => {
+                                                return <p key={key}>{ecu}</p>
                                             })}
                                         </div>
                                         <div className="groups">
                                             {_.map(groupItem.groups, (group,key) => {
                                                 return (
-                                                    <div className="row display-flex">
+                                                    <div key={key} className="row display-flex">
                                                         <div className="name">
                                                             <div className="element-box group">
                                                                 <div className="icon fa-groups"/>
@@ -209,7 +202,9 @@ export default class List extends PureComponent {
 
         return (
             <div>
-                {list}
+                {!_.isEmpty(toJS(data.groups)) ? list :
+                    <p className="absolute-align">No associated campaigns</p>
+                }
             </div>
         )
     }
