@@ -585,6 +585,7 @@
             .device-info-item {
                 margin: 0 10px;
                 display: inline-block;
+                max-width: 120px;
 
                 &.crop {
                     max-width: 120px;
