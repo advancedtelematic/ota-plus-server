@@ -52,6 +52,9 @@ const WebsocketHandler = (function (wsUrl, stores) {
                         stores.campaignsStore.fetchCampaigns();
                     }
                     break;
+                case "DeviceSystemInfoChanged":
+                    stores.devicesStore.fetchDeviceNetworkInfo(data.uuid);
+                    break;
                 default:
                     console.log('Unhandled event type: ' + eventObj.type);
                     break;

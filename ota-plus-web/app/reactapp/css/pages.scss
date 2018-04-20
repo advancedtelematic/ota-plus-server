@@ -511,13 +511,13 @@
         }
 
         .text {
-            width: 425px;
 
             .title {
 
                 .device-name {
                     position: relative;
                     display: block!important;
+                    width: 255px;
                 }
 
                 input {
@@ -530,8 +530,9 @@
                     color: #fff;
                     appearance: none;
                     transition: all 0.3s ease;
-                    padding: 10px 65px 10px 10px;
+                    padding: 10px 45px 10px 10px;
                     text-overflow: ellipsis;
+                    font-size: 16px;
                     
                     &:focus {
                         outline: auto;
@@ -539,7 +540,7 @@
                     }                    
                 }
                 img {
-                    width: 20px;
+                    width: 15px;
                     transition: opacity 0.3s ease;
                     cursor: pointer;
 
@@ -547,17 +548,17 @@
                         opacity: 0;
                         position: absolute;
                         right: 15px;
-                        top: 12px;
+                        top: 13px;
                     }
                 }
                 .icons {
                     position: absolute;
                     right: 5px;
-                    top: 10px;
+                    top: 8px;
                     z-index: 10;
                     img {
                         margin-right: 5px;
-                        width: 15px;
+                        width: 12px;
                     }
                 }
                 &:hover {
@@ -571,18 +572,39 @@
             }
         }
 
-        .dates {
+        .device-info-items {
             color: #ddd;
-            font-size: 12px;
-            margin: 0 20px 0 0;
-            float: right;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
 
-            .date {
+            .device-info-group {
+                display: flex;
+            }
+
+            .device-info-item {
                 margin: 0 10px;
                 display: inline-block;
 
-                .date-label {
+                &.crop {
+                    max-width: 120px;
+                }
+
+                &.last-seen {
+                    min-width: 115px;
+                    @include textoverflowEllipsis;
+                }
+
+                @media(max-width: 1420px) {
+                    margin: 0 8px;
+                }
+
+                .device-info-label {
                     color: $devices-group-text;
+                }
+
+                .device-info-desc {
+                    @include textoverflowEllipsis;
                 }
             }
         }
@@ -609,13 +631,42 @@
             }
         }
 
-        .queue-button {
-            background: url(/assets/img/icons/queue_button.png) no-repeat;
-            background-size: cover;
-            width: 32px;
-            height: 32px;
-            float: right;
-            border: 0;
+        .device-info-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            align-items: center;
+
+            .queue-button {
+                background: url(/assets/img/icons/queue_icon.svg) no-repeat;
+                background-size: cover;
+                width: 25px;
+                height: 25px;
+                border: 0;
+                margin-left: 10px;
+            }
+    
+            .delete-button {
+                height: 30px;
+                width: 180px;
+                border-radius: 1px;
+                background-color: #D0021B;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                border: none;
+                font-size: 13px;
+                margin: 0 10px;
+
+                @media(max-width: 1420px) {
+                    width: 130px;
+                    font-size: 12px;
+                }
+            }
         }
     }
 
@@ -1709,7 +1760,6 @@
                         }
 
                         img {
-                            width: 20px;
                             transition: opacity 0.3s ease;
                             cursor: pointer;
 
@@ -1717,7 +1767,8 @@
                                 opacity: 0;
                                 position: absolute;
                                 right: 10px;
-                                top: 10px;
+                                top: 12px;
+                                width: 20px;
                             }
                         }
                         .icons {
@@ -1727,10 +1778,10 @@
                             z-index: 10;
 
                             img {
-                                width: 15px;
+                                width: 25px;
 
                                 &.rename {
-                                    width: 25px;
+                                    margin-right: -5px;
                                 }
                             }
                         }

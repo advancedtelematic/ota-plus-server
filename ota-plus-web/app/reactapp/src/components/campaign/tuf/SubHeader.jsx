@@ -97,7 +97,7 @@ class SubHeader extends Component {
                             :
                                 null
                             }
-                            <img src="/assets/img/icons/close.svg" alt="Icon" className="cancel" onClick={this.cancelCampaignRename} />
+                            <img src="/assets/img/icons/black/cancel-thin.svg" alt="Icon" className="cancel" onClick={this.cancelCampaignRename} />
                         </div>
                     }
                 </div>

@@ -129,7 +129,9 @@ class DependenciesManager extends Component {
                                     pack.packageName !== activePackage.id.name ?
                                         <section className="other-pack" key={i}>
                                             <div className="name" id={"other-pack-" + pack.packageName}>
-                                                {pack.packageName}
+                                                <div className="name-text">
+                                                    {pack.packageName}
+                                                </div>
                                             </div>
                                             <div className="versions">
                                                 {_.map(pack.versions, (version, index) => {
