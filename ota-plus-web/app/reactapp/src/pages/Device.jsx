@@ -45,7 +45,9 @@ class Device extends Component {
     }
     componentWillMount() {
         this.props.packagesStore.page = 'device';
-        this.props.devicesStore.fetchDevice(this.props.params.id);
+        this.props.devicesStore.fetchDevice(this.props.params.id).then(() => {
+            this.props.devicesStore.fetchDeviceNetworkInfo(this.props.params.id);
+        });
         this.props.packagesStore.fetchPackages();
         this.props.devicesStore.fetchMultiTargetUpdates(this.props.params.id);
     }

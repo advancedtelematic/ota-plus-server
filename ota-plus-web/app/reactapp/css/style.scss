@@ -383,10 +383,11 @@ input {
 .navbar-inverse {
     background: $devices-groups-bg;
     min-width: 1280px;
+    border: 0;
+    border-radius: 0;
     border-bottom: 1px solid $panel-delimiter-color;
     margin-bottom: 0;
     height: 50px;
-    border-radius: 0;
 
     .alert {
         width: 400px;
