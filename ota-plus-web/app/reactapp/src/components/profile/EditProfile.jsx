@@ -165,7 +165,7 @@ class EditProfile extends Component {
                                             :
                                                 null
                                             }
-                                            <img src="/assets/img/icons/close.svg" alt="Icon" className="cancel" onClick={this.cancelRename} />
+                                            <img src="/assets/img/icons/black/cancel-thin.svg" alt="Icon" className="cancel" onClick={this.cancelRename} />
                                         </div>
                                     }     
                                 </div>
