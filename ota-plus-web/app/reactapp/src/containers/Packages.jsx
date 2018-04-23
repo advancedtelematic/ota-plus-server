@@ -25,7 +25,6 @@ class Packages extends Component {
     @observable dependenciesManagerShown = false;
     @observable activeVersionFilepath = null;
     @observable activeManagerVersion = null;
-    @observable switchToSWRepo = false;
 
     constructor(props) {
         super(props);
@@ -41,7 +40,6 @@ class Packages extends Component {
         this.hideDependenciesModal = this.hideDependenciesModal.bind(this);
         this.showDependenciesManager = this.showDependenciesManager.bind(this);
         this.hideDependenciesManager = this.hideDependenciesManager.bind(this);
-        this.toggleSWRepo = this.toggleSWRepo.bind(this);
     }
     showDependenciesModal(activeVersionFilepath, e) {
         if(e) e.preventDefault();
@@ -103,11 +101,8 @@ class Packages extends Component {
     onFileDrop(files) {
         this.showCreateModal(files);
     }
-    toggleSWRepo () {
-        this.switchToSWRepo = !this.switchToSWRepo;
-    }
     render() {
-        const { packagesStore, hardwareStore, highlightedPackage, featuresStore, devicesStore, campaignsStore, alphaPlusEnabled } = this.props;
+        const { packagesStore, hardwareStore, highlightedPackage, featuresStore, devicesStore, campaignsStore, alphaPlusEnabled, switchToSWRepo } = this.props;
         return (
             <span ref="component">
                 {packagesStore.packagesFetchAsync.isFetching ?
@@ -117,14 +112,13 @@ class Packages extends Component {
                 :
                     packagesStore.packagesCount ?
                         <span>
-                            <PackagesHeader
-                                showCreateModal={this.showCreateModal}
-                                showFileUploaderModal={this.showFileUploaderModal}
-                                toggleSWRepo={this.toggleSWRepo}
-                                switchValue={this.switchToSWRepo}
-                                alphaPlusEnabled={alphaPlusEnabled}
-                            />
-                            {!this.switchToSWRepo ?
+                            {!switchToSWRepo ?
+                                <PackagesHeader
+                                    showCreateModal={this.showCreateModal}
+                                    showFileUploaderModal={this.showFileUploaderModal}
+                                    alphaPlusEnabled={alphaPlusEnabled}
+                                /> : ''}
+                            {!switchToSWRepo ?
                                 <PackagesList
                                     showBlacklistModal={this.showBlacklistModal}
                                     packagesStore={packagesStore}
@@ -150,10 +144,10 @@ class Packages extends Component {
                                         <span>
                                             +
                                         </span>
-                                        <span>
+                                            <span>
                                             Add new package
                                         </span>
-                                    </a>
+                                    </a> : ''
                                 </div>
                             </div>
                         </div>
