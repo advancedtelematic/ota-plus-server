@@ -3359,14 +3359,27 @@ input {
 
     .switch {
         cursor: auto;
+        height: 15px;
         &:before {
             background-color: rgba(15,22,33,0.4);
+            border: none;
+            width: 30px;
+            height: 15px;
+        }
+        &:after {
+            border: none;
+            height: 15px;
+            width: 15px;
+            box-shadow: 0 0 5px 1px rgba(0,0,0,0.2);
         }
     }
 
     .switchOn {
         &:before {
             background-color: #48DAD0 !important;
+        }
+        &:after {
+            left: 18px !important;
         }
     }
 
@@ -3566,7 +3579,8 @@ input {
                 .second-level {
                     li {
                         border-bottom: 0.5px solid $sw-repo-border-color;
-                        color: #0F1621;
+                        color: #898B91;
+                        background-color: #F3F3F4;
                     }
                 }
             }
@@ -3600,8 +3614,7 @@ input {
             }
 
             .fa-groups {
-                background-image: url(/assets/img/icons/groups.png);
-                border: 2px solid #ddd;
+                background-image: url(/assets/img/icons/group-default.svg);
                 margin: 0;
                 float: left;
                 display: inline-block;
@@ -3653,6 +3666,7 @@ input {
                 &.expanded {
                     span:first-child {
                         background-color: #48DAD0;
+                        color: #0F1621;
                     }
                 }
 
@@ -3727,6 +3741,7 @@ input {
                 .total-progress {
                     overflow: hidden;
                     cursor: auto;
+                    background-color: #fff;
                     border-bottom: 1px solid $sw-repo-border-color;
                     .row {
                         min-height:inherit;
@@ -3770,7 +3785,6 @@ input {
                         margin: 15px 30px;
                         overflow: hidden;
                         height: 10px;
-                        border: 1px solid #ccc;
                         div {
                             height: 20px;
                             background-color: #ddd;
@@ -3783,6 +3797,7 @@ input {
                     cursor: auto;
                     padding: 20px 30px;
                     font-weight: 400;
+                    background-color: #fff;
                     border-bottom: 1px solid $sw-repo-border-color;
 
                     h5 {
@@ -3850,6 +3865,7 @@ input {
                     .progress-bar {
                         display: flex;
                         justify-content: flex-end;
+                        box-shadow: none;
                     }
 
                     .element-box {
@@ -4273,6 +4289,7 @@ input {
             &:first-child {
                 span {
                     cursor: pointer;
+                    color: #FFFFFF;
                 }
             }
         }
