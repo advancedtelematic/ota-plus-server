@@ -28,6 +28,7 @@ class WizardStep1 extends Component {
                     <Form
                         formWidth="60%"
                         id="add-campaign-name-form"
+                        onSubmit={(e) => e.preventDefault()}
                     >
                         <FormInput
                             label="Name"
