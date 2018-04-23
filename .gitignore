@@ -38,6 +38,7 @@ project/plugins/project/
 
 # IntelliJ IDEA
 /.idea
+.DS_Store
 
 # Ensime
 .ensime

@@ -5,6 +5,7 @@ import { observable } from 'mobx';
 import _ from 'underscore';
 import { Header as BaseHeader, Loader } from '../../partials';
 import { FadeAnimation, AsyncStatusCallbackHandler } from '../../utils';
+import NetworkInfo from './NetworkInfo';
 
 @observer
 class Header extends Component {
@@ -104,18 +105,18 @@ class Header extends Component {
                 title={
                     <FadeAnimation>
                         {!devicesStore.devicesOneFetchAsync.isFetching ?
-                            <span id="device-name" className="device-name">
+                            <div id="device-name" className="device-name">
 
                                 <div onClick={this.enableDeviceRename}
-                                     ref={(clickableArea) => {this.clickableArea = clickableArea}}
-                                     className="clickable-area"
-                                     style={{width: '85%', height: '50px', position: 'absolute'}}/>
+                                    ref={(clickableArea) => {this.clickableArea = clickableArea}}
+                                    className="clickable-area"
+                                    style={{width: '85%', height: '50px', position: 'absolute'}}/>
 
                                 <input type="text"
-                                   ref={(input) => {this.deviceNameInput = input}}
-                                   disabled
-                                   onKeyPress={this.keyPressed}
-                                   value={this.newDeviceName} onChange={this.userTypesName} />
+                                ref={(input) => {this.deviceNameInput = input}}
+                                disabled
+                                onKeyPress={this.keyPressed}
+                                value={this.newDeviceName} onChange={this.userTypesName} />
 
                                 {this.renameDisabled ?
                                     <img src="/assets/img/icons/white/Rename.svg" className="edit" alt="Icon" style={{cursor: 'auto'}} />
@@ -129,7 +130,7 @@ class Header extends Component {
                                         <img src="/assets/img/icons/white/X.svg" alt="Icon" className="cancel" onClick={this.cancelDeviceRename} />
                                     </div>
                                 }
-                            </span>
+                            </div>
                         :
                             null
                         }
@@ -141,38 +142,45 @@ class Header extends Component {
                 <FadeAnimation>
                     {!devicesStore.devicesOneFetchAsync.isFetching ?
                         <span>
-                            <button className="queue-button" id="queue-button" onClick={showQueueModal} ref={queueButtonRef}>
-                            </button>
-                            <div className="dates">
-                                <div className="date" id="created-info">
-                                    <span className="date-label">Created</span>
-                                    <div className="date-desc">
-                                        {createdDate.toDateString() + ' ' + createdDate.toLocaleTimeString()}
+                            <div className="device-info-container">
+                                <div className="device-info-items">
+                                    <NetworkInfo
+                                        devicesStore={devicesStore}
+                                    />
+                                    <div className="device-info-item" id="created-info">
+                                        <span className="device-info-label">Created</span>
+                                        <div className="device-info-desc">
+                                            {createdDate.toDateString() + ' ' + createdDate.toLocaleTimeString()}
+                                        </div>
+                                    </div>
+                                    <div className="device-info-item" id="activated-info">
+                                        <span className="device-info-label">Activated</span>
+                                        <div className="device-info-desc">
+                                            {device.activatedAt !== null ?
+                                                <span>
+                                                    {activatedDate.toDateString() + ' ' + activatedDate.toLocaleTimeString()}
+                                                </span>
+                                            :
+                                                <span>
+                                                    Device not activated
+                                                </span>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div className="device-info-item" id="last-seen-online-info">
+                                        <span className="device-info-label">Last seen online</span>
+                                        <div className="device-info-desc">
+                                            {deviceStatus !== 'Status unknown' ?
+                                                <span>{lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
+                                            :
+                                                <span>Never seen online</span>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="date" id="activated-info">
-                                    <span className="date-label">Activated</span>
-                                    <div className="date-desc">
-                                        {device.activatedAt !== null ?
-                                            <span>
-                                                {activatedDate.toDateString() + ' ' + activatedDate.toLocaleTimeString()}
-                                            </span>
-                                        :
-                                            <span>
-                                                Device not activated
-                                            </span>
-                                        }
-                                    </div>
-                                </div>
-                                <div className="date" id="last-seen-online-info">
-                                    <span className="date-label">Last seen online</span>
-                                    <div className="date-desc">
-                                        {deviceStatus !== 'Status unknown' ?
-                                            <span>{lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
-                                        :
-                                            <span>Never seen online</span>
-                                        }
-                                    </div>
+                                <div className="action-buttons">
+                                    <button className="queue-button" id="queue-button" onClick={showQueueModal} ref={queueButtonRef}>
+                                    </button>
                                 </div>
                             </div>
                         </span>
