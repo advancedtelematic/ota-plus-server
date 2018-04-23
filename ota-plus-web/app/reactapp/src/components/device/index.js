@@ -4,6 +4,7 @@ import DevicePropertiesPanel from './PropertiesPanel';
 import DeviceSoftwarePanel from './SoftwarePanel';
 import DeviceQueueModal from './QueueModal';
 import DeviceSequencerModal from './SequencerModal';
+import DeviceNetworkInfo from './NetworkInfo';
 
 export {
     DeviceHeader,
@@ -12,4 +13,5 @@ export {
     DeviceSoftwarePanel,
     DeviceQueueModal,
     DeviceSequencerModal,
+    DeviceNetworkInfo,
 }

@@ -2,6 +2,7 @@ import {observable, computed, extendObservable} from 'mobx';
 import axios from 'axios';
 import {
     API_DEVICES_SEARCH,
+    API_DEVICES_NETWORK_INFO,
     API_DIRECTOR_DEVICES_SEARCH,
     API_DEVICES_DEVICE_DETAILS,
     API_DEVICES_DIRECTOR_DEVICE,
@@ -23,6 +24,7 @@ export default class DevicesStore {
 
     @observable devicesFetchAsync = {};
     @observable devicesOneFetchAsync = {};
+    @observable devicesOneNetworkInfoFetchAsync = {};
     @observable devicesCountFetchAsync = {};
     @observable devicesDirectorAttributesFetchAsync = {};
     @observable devicesDirectorHashesFetchAsync = {};
@@ -41,6 +43,11 @@ export default class DevicesStore {
     @observable devicesGroupFilter = null;
     @observable devicesSort = 'asc';
     @observable device = {};
+    @observable deviceNetworkInfo = {
+        local_ipv4: null,
+        mac: null,
+        hostname: null
+    };
     @observable multiTargetUpdates = [];
     @observable multiTargetUpdatesSaved = [];
     @observable directorDevicesCount = 0;
@@ -126,6 +133,20 @@ export default class DevicesStore {
             .catch((error) => {
                 this.devicesOneFetchAsync = handleAsyncError(error);
             });
+    }
+
+    fetchDeviceNetworkInfo(id, isFromWs = false) {
+        if(this.device.uuid === id) {
+            resetAsync(this.devicesOneNetworkInfoFetchAsync, true);
+            return axios.get(API_DEVICES_NETWORK_INFO + '/' + id + '/system_info/network')
+                .then((response) => {
+                    this.deviceNetworkInfo = response.data;
+                    this.devicesOneNetworkInfoFetchAsync = handleAsyncSuccess(response);
+                })
+                .catch((error) => {
+                    this.devicesOneNetworkInfoFetchAsync = handleAsyncError(error);
+                });
+        }
     }
 
     createMultiTargetUpdate(data, id) {
@@ -348,6 +369,7 @@ export default class DevicesStore {
     _reset() {
         resetAsync(this.devicesFetchAsync);
         resetAsync(this.devicesOneFetchAsync);
+        resetAsync(this.devicesOneNetworkInfoFetchAsync);
         resetAsync(this.devicesCountFetchAsync);
         resetAsync(this.devicesDirectorAttributesFetchAsync);
         resetAsync(this.devicesDirectorHashesFetchAsync);
@@ -364,6 +386,11 @@ export default class DevicesStore {
         this.devicesFilter = '';
         this.devicesSort = 'asc';
         this.device = {};
+        this.deviceNetworkInfo = {
+            ip: null,
+            mac: null,
+            hostname: null
+        };
         this.multiTargetUpdates = [];
         this.multiTargetUpdatesSaved = [];
         this.directorDevicesCount = 0;
