@@ -11,7 +11,7 @@ class NetworkInfo extends PureComponent {
         const hostname = devicesStore.deviceNetworkInfo.hostname;
         return (
              <div className="device-info-group">
-                <div className="device-info-item" id="ip-info">
+                <div className="device-info-item crop" id="ip-info">
                     <span className="device-info-label">IP</span>
                     <div className="device-info-desc" title={ip}>
                         {ip ? 
@@ -21,7 +21,7 @@ class NetworkInfo extends PureComponent {
                         }
                     </div>
                 </div>
-                <div className="device-info-item" id="mac-info">
+                <div className="device-info-item crop" id="mac-info">
                     <span className="device-info-label">MAC</span>
                     <div className="device-info-desc" title={mac}>
                         {mac ? 
@@ -31,7 +31,7 @@ class NetworkInfo extends PureComponent {
                         }
                     </div>
                 </div>
-                <div className="device-info-item" id="hostname-info">
+                <div className="device-info-item crop" id="hostname-info">
                     <span className="device-info-label">Hostname</span>
                     <div className="device-info-desc" title={hostname}>
                         {hostname ? 

@@ -585,11 +585,13 @@
             .device-info-item {
                 margin: 0 10px;
                 display: inline-block;
-                max-width: 120px;
+
+                &.crop {
+                    max-width: 120px;
+                }
 
                 @media(max-width: 1420px) {
                     margin: 0 8px;
-                    max-width: 100px;
                 }
 
                 .device-info-label {
