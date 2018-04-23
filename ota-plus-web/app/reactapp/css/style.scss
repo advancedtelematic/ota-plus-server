@@ -943,7 +943,6 @@ input {
                             }
                         }
                         img {
-                            width: 20px;
                             transition: opacity 0.3s ease;
                             cursor: pointer;
 
@@ -952,6 +951,7 @@ input {
                                 position: absolute;
                                 right: 25px;
                                 top: 15px;
+                                width: 20px;
                             }
                         }
                         .icons {
@@ -959,13 +959,12 @@ input {
                             right: 20px;
                             top: 10px;
                             z-index: 10;
+
                             img {
-                                margin-right: 5px;
-                                width: 15px;
+                                width: 25px;
 
                                 &.rename {
-                                    width: 25px;
-                                    margin-right: 0;
+                                    margin-right: -5px;
                                 }
                             }
                         }
@@ -2063,6 +2062,10 @@ input {
 
             .name, .value {
                 color: #202020;
+            }
+
+            .name-text {
+                padding: 8px 0;
             }
 
             .versions {
