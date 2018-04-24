@@ -169,7 +169,7 @@ class UploadBox extends Component {
                                         :
                                             upload.status == 'success' ?
                                                 <span id="success">
-                                                    <i className="fa fa-check-circle" aria-hidden="true"></i> Success
+                                                    <img src="/assets/img/icons/green_tick.svg" alt="Icon" /> Success
                                                 </span>
                                             :
                                                 upload.status == 'error' ?
