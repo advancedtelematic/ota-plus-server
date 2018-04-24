@@ -11,8 +11,24 @@ class PublicKeyPopover extends Component {
     constructor(props) {
         super(props);
     }
+    componentWillMount() {
+        const { hardwareStore, device, serial } = this.props;
+        hardwareStore.fetchPublicKey(device.uuid, serial);
+    }
+    componentWillUnmount() {
+        const { hardwareStore } = this.props;
+        hardwareStore._resetPublicKey();
+    }
     render() {
-        const { hardwareStore, handleCopy, handleRequestClose, handleTouchTap, popoverShown, anchorEl, copied } = this.props;
+        const { 
+            hardwareStore, 
+            handleCopy,
+            handleRequestClose, 
+            popoverShown, 
+            anchorEl, 
+            copied, 
+            serial
+        } = this.props;
         return (
             <Popover
                 className="hardware-pk-popover"
@@ -39,7 +55,7 @@ class PublicKeyPopover extends Component {
                         <div className="actions">
                             <CopyToClipboard
                                 text={hardwareStore.publicKey.keyval.public}
-                                onCopy={handleCopy.bind(this)}>
+                                onCopy={handleCopy.bind(this, serial)}>
                                 <button className="btn-primary">
                                     Copy to clipboard
                                 </button>
@@ -77,7 +93,6 @@ class PublicKeyPopover extends Component {
 PublicKeyPopover.propTypes = {
     hardwareStore: PropTypes.object.isRequired,
     handleRequestClose: PropTypes.func.isRequired,
-    handleTouchTap: PropTypes.func.isRequired,
     popoverShown: PropTypes.bool.isRequired,
     anchorEl: PropTypes.oneOfType([
         PropTypes.element,

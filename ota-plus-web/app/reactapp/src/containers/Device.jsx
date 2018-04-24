@@ -9,7 +9,6 @@ import {
 } from '../components/device';
 import {
     PackagesCreateModal,
-    PackagesBlacklistModal
 } from '../components/packages';
 import _ from 'underscore';
 
@@ -17,23 +16,15 @@ import _ from 'underscore';
 class Device extends Component {
     @observable packageCreateModalShown = false;
     @observable fileDropped = null;
-    @observable packageBlacklistModalShown = false;
-    @observable packageBlacklistAction = {};
-    @observable hardwareOverlayShown = false;
-    @observable hardwareOverlayAnchor = null;
     
     constructor(props) {
         super(props);
         this.showPackageCreateModal = this.showPackageCreateModal.bind(this);
         this.hidePackageCreateModal = this.hidePackageCreateModal.bind(this);
-        this.showPackageBlacklistModal = this.showPackageBlacklistModal.bind(this);
-        this.hidePackageBlacklistModal = this.hidePackageBlacklistModal.bind(this);
         this.onFileDrop = this.onFileDrop.bind(this);
         this.toggleTufPackageAutoUpdate = this.toggleTufPackageAutoUpdate.bind(this);
         this.installTufPackage = this.installTufPackage.bind(this);
         this.showPackageDetails = this.showPackageDetails.bind(this);
-        this.showHardwareOverlay = this.showHardwareOverlay.bind(this);        
-        this.hideHardwareOverlay = this.hideHardwareOverlay.bind(this);        
     }
     showPackageCreateModal(files, e) {
         if(e) e.preventDefault();
@@ -44,33 +35,6 @@ class Device extends Component {
         if(e) e.preventDefault();
         this.packageCreateModalShown = false;
         this.fileDropped = null;
-    }
-    showPackageBlacklistModal(name, version, mode, e) {
-        if(e) e.preventDefault();
-        this.packageBlacklistModalShown = true;
-        this.packageBlacklistAction = {
-            name: name,
-            version: version,
-            mode: mode
-        };
-        this.hideHardwareOverlay();
-    }
-    hidePackageBlacklistModal(e) {
-        const { packagesStore } = this.props;
-        if(e) e.preventDefault();
-        this.packageBlacklistModalShown = false;
-        this.packageBlacklistAction = {};
-        packagesStore._resetBlacklistActions();
-    }
-    showHardwareOverlay(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        this.hardwareOverlayShown = true;
-        this.hardwareOverlayAnchor = e.currentTarget;
-    }
-    hideHardwareOverlay(e) {
-        if(e) e.preventDefault();
-        this.hardwareOverlayShown = false;        
     }
     onFileDrop(files) {
         this.showPackageCreateModal(files);
@@ -138,12 +102,7 @@ class Device extends Component {
                                 hardwareStore={hardwareStore}
                                 packagesStore={packagesStore}
                                 selectEcu={selectEcu}
-                                showPackageBlacklistModal={this.showPackageBlacklistModal}
                                 onFileDrop={this.onFileDrop}
-                                hardwareOverlayShown={this.hardwareOverlayShown}
-                                hardwareOverlayAnchor={this.hardwareOverlayAnchor}
-                                showHardwareOverlay={this.showHardwareOverlay}
-                                hideHardwareOverlay={this.hideHardwareOverlay}
                             />
                             <DeviceSoftwarePanel
                                 devicesStore={devicesStore}
@@ -160,7 +119,6 @@ class Device extends Component {
                                 devicesStore={devicesStore}
                                 campaignsStore={campaignsStore}
                                 hardwareStore={hardwareStore}
-                                showPackageBlacklistModal={this.showPackageBlacklistModal}
                                 installTufPackage={this.installTufPackage}
                                 packagesReady={packagesReady}
                             />
@@ -185,13 +143,7 @@ class Device extends Component {
                     />
                 :
                     null
-                }
-                <PackagesBlacklistModal 
-                    shown={this.packageBlacklistModalShown}
-                    hide={this.hidePackageBlacklistModal}
-                    blacklistAction={this.packageBlacklistAction}
-                    packagesStore={packagesStore}
-                />                
+                }                
             </span>
         );
     }
