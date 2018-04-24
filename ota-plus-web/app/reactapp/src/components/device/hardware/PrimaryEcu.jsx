@@ -7,22 +7,40 @@ import _ from 'underscore';
 class PrimaryEcu extends Component {
     constructor(props) {
         super(props);
-    }    
+        this.onEcuClick = this.onEcuClick.bind(this);
+    }
+    onEcuClick(e) {
+        if(e) e.preventDefault();
+        const { selectEcu, hidePopover, devicesStore } = this.props;
+        selectEcu(
+            devicesStore._getPrimaryHardwareId(), 
+            devicesStore._getPrimarySerial(), 
+            devicesStore._getPrimaryFilepath(), 
+            'primary'
+        );
+        hidePopover();
+    }
     render() {
-        const { active, devicesStore, showHardwareOverlay, selectEcu, ...otherProps} = this.props;
+        const { 
+            active, 
+            devicesStore, 
+            showHardwareOverlay, 
+            selectEcu, 
+            showPopover,
+            popoverShown,
+            copyPublicKey,
+            publicKeyCopied,
+            hidePopover,
+            popoverAnchor,
+            hardwareStore
+        } = this.props;
         return (
             <span>
                 <a
                     href="#" 
                     className={active ? " selected" : ""}
                     id="hardware-primary-details"
-                    onClick={selectEcu.bind(
-                        this, 
-                        devicesStore._getPrimaryHardwareId(), 
-                        devicesStore._getPrimarySerial(), 
-                        devicesStore._getPrimaryFilepath(), 
-                        'primary'
-                    )}
+                    onClick={this.onEcuClick.bind(this)}
                 >
                     <div className="desc">
                         <span>
@@ -44,7 +62,7 @@ class PrimaryEcu extends Component {
                         <div
                             className="hardware-icon key" 
                             id="hardware-key-icon-primary"
-                            onClick={otherProps.handleTouchTap}
+                            onClick={showPopover.bind(this, devicesStore._getPrimarySerial())}
                         >
                             {active ?
                                 <img src="/assets/img/icons/white/key.svg" alt="Icon" />
@@ -54,9 +72,20 @@ class PrimaryEcu extends Component {
                         </div>
                     </div>
                 </a>
-                <PublicKeyPopover
-                    {...otherProps}
-                />
+                {popoverShown ?
+                    <PublicKeyPopover
+                        serial={devicesStore._getPrimarySerial()}
+                        device={devicesStore.device}
+                        handleRequestClose={hidePopover}
+                        handleCopy={copyPublicKey}
+                        popoverShown={popoverShown}
+                        anchorEl={popoverAnchor}
+                        copied={publicKeyCopied}
+                        hardwareStore={hardwareStore}
+                    />
+                :
+                    null
+                }
             </span>
         );
     }

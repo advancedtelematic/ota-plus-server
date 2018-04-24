@@ -11,12 +11,24 @@ class SecondaryEcu extends Component {
     }
     onEcuClick(ecu, e) {
         if(e) e.preventDefault();
-        const { selectEcu, hideHardwareOverlay } = this.props;
+        const { selectEcu, hideHardwareOverlay, hidePopover } = this.props;
         selectEcu(ecu.hardwareId, ecu.id, ecu.image.filepath, 'secondary');
         hideHardwareOverlay();
+        hidePopover();
     }
     render() {
-        const { active, ecu, ...otherProps} = this.props;
+        const { 
+            active, 
+            ecu, 
+            device, 
+            showPopover,
+            popoverShown,
+            copyPublicKey,
+            publicKeyCopied,
+            hidePopover,
+            popoverAnchor,
+            hardwareStore
+        } = this.props;
         return (
             <span>
                 <a
@@ -35,7 +47,7 @@ class SecondaryEcu extends Component {
                     </div>
                     <div className="icons"
                          id={"hardware-key-icon-secondary-" + ecu.id}
-                         onClick={otherProps.handleTouchTap}>
+                         onClick={showPopover.bind(this, ecu.id)}>
                             <span className="hardware-icon key">
                                 {active ?
                                     <img src="/assets/img/icons/white/key.svg" alt="Icon" />
@@ -45,10 +57,20 @@ class SecondaryEcu extends Component {
                             </span>
                     </div>
                 </a>
-                <PublicKeyPopover
-                    {...otherProps}
-                    ecu={ecu}
-                />
+                {popoverShown ?
+                    <PublicKeyPopover
+                        serial={ecu.id}
+                        device={device}
+                        handleRequestClose={hidePopover}
+                        handleCopy={copyPublicKey}
+                        popoverShown={popoverShown}
+                        anchorEl={popoverAnchor}
+                        copied={publicKeyCopied}
+                        hardwareStore={hardwareStore}
+                    />
+                :
+                    null
+                }
             </span>
         );
     }
