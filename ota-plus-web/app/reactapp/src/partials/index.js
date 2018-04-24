@@ -9,7 +9,6 @@ import AsyncResponse from './AsyncResponse';
 import SearchBar from './SearchBar';
 import SizeVerify from './SizeVerify';
 import UploadBox from './UploadBox';
-import PopoverWrapper from './PopoverWrapper';
 import DependenciesModal from './DependenciesModal';
 import Sequencer from './Sequencer';
 import {Form} from './Form';
@@ -30,7 +29,6 @@ export {
     SearchBar,
     SizeVerify,
     UploadBox,
-    PopoverWrapper,
     DependenciesModal,
     Sequencer,
     Form,

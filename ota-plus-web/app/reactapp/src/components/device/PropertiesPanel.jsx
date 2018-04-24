@@ -17,7 +17,6 @@ class PropertiesPanel extends Component {
             packagesStore, 
             devicesStore, 
             hardwareStore, 
-            showPackageBlacklistModal, 
             installTufPackage, 
             packagesReady, 
         } = this.props;
@@ -36,7 +35,6 @@ class PropertiesPanel extends Component {
                             packagesStore={packagesStore}
                             devicesStore={devicesStore}
                             hardwareStore={hardwareStore}
-                            showPackageBlacklistModal={showPackageBlacklistModal}
                             installTufPackage={installTufPackage}
                         />
                     }
@@ -50,7 +48,6 @@ PropertiesPanel.propTypes = {
     packagesStore: PropTypes.object.isRequired,
     devicesStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
-    showPackageBlacklistModal: PropTypes.func.isRequired,
     installTufPackage: PropTypes.func.isRequired,
 }
 
