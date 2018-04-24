@@ -2524,10 +2524,12 @@ input {
                         text-align: center;
                         width: 15%;
 
+                        img {
+                            width: 15px;
+                            margin: -2px 5px 0 0;
+                        }
+
                         .fa {
-                            &.fa-check-circle {
-                                color: green;
-                            }
 
                             &.fa-exclamation-triangle {
                                 color: red;
