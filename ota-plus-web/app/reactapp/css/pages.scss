@@ -642,7 +642,7 @@
 
             .queue-button {
                 background: url(/assets/img/icons/queue_icon.svg) no-repeat;
-                background-size: cover;
+                background-size: 100% 100%;
                 width: 25px;
                 height: 25px;
                 border: 0;
@@ -1151,10 +1151,6 @@
 
     .software-repository {
         min-width: 1220px;
-        .wrapper-full {
-            height: calc(100vh - 150px);
-            overflow: hidden;
-        }
 
         .container {
             min-width: 1220px;

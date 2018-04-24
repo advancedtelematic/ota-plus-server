@@ -43,6 +43,7 @@ class Main extends Component {
     @observable uiUserProfileMenu = document.getElementById('toggle-userProfileMenu').value === "true";
     @observable uiCredentialsDownload = document.getElementById('toggle-credentialsDownload').value === "true";
     @observable atsGarageTheme = document.getElementById('toggle-atsGarageTheme').value === 'true';
+    @observable switchToSWRepo = false;
 
     @observable alphaPlusEnabled = false;
 
@@ -67,6 +68,7 @@ class Main extends Component {
         this.hideQueueModal = this.hideQueueModal.bind(this);
         this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
         this.callFakeWsHandler = this.callFakeWsHandler.bind(this);
+        this.toggleSWRepo = this.toggleSWRepo.bind(this);
         this.devicesStore = new DevicesStore();
         this.hardwareStore = new HardwareStore();
         this.groupsStore = new GroupsStore();
@@ -174,6 +176,9 @@ class Main extends Component {
         if(e) e.preventDefault();
         this.uploadBoxMinimized = !this.uploadBoxMinimized;
     }
+    toggleSWRepo() {
+        this.switchToSWRepo = !this.switchToSWRepo;
+    }
     setSystemReady(value) {
         this.systemReady = value;
     }
@@ -208,6 +213,9 @@ class Main extends Component {
                         featuresStore={this.featuresStore}
                         devicesStore={this.devicesStore}
                         packagesStore={this.packagesStore}
+                        location={pageId}
+                        toggleSWRepo={this.toggleSWRepo}
+                        switchToSWRepo={this.switchToSWRepo}
                         hideQueueModal={this.hideQueueModal}
                         alphaPlusEnabled={this.alphaPlusEnabled}
                         uiUserProfileMenu={this.uiUserProfileMenu}
@@ -216,7 +224,7 @@ class Main extends Component {
                 :
                     null
                 }            
-                <div id={pageId}>
+                <div id={pageId} style={{padding: `${this.switchToSWRepo && pageId === 'page-packages' ? '0' : ''}`}}>
                     <FadeAnimation>                    
                         <children.type
                             {...rest}
@@ -236,6 +244,7 @@ class Main extends Component {
                             addNewWizard={this.addNewWizard}
                             showQueueModal={this.showQueueModal}
                             hideQueueModal={this.hideQueueModal}
+                            switchToSWRepo={this.switchToSWRepo}
                             queueModalShown={this.queueModalShown}
                             activeTabId={this.activeTabId}
                             setQueueModalActiveTabId={this.setQueueModalActiveTabId}

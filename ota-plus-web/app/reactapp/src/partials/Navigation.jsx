@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { observer } from 'mobx-react';
 import NavigationDropdown from './NavigationDropdown';
+import SecondNavigation from './SecondNavigation';
 import SettingsDropdown from './SettingsDropdown';
-import OtaPlusTabs from './OtaPlusTabs';
 
 @observer
 class Navigation extends Component {
@@ -19,6 +19,9 @@ class Navigation extends Component {
             packagesStore,
             uiUserProfileMenu,
             uiCredentialsDownload,
+            location,
+            toggleSWRepo,
+            switchToSWRepo
         } = this.props;
         return (
             <nav className="navbar navbar-inverse">
@@ -80,6 +83,11 @@ class Navigation extends Component {
                         }
                     </ul>
                 </div>
+                {alphaPlusEnabled && location === 'page-packages' ?
+                    <SecondNavigation
+                        toggleSWRepo={toggleSWRepo}
+                        switchToSWRepo={switchToSWRepo}
+                    /> : ''}
             </nav>
         );
     }

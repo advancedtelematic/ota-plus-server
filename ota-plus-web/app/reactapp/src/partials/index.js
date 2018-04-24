@@ -9,13 +9,13 @@ import AsyncResponse from './AsyncResponse';
 import SearchBar from './SearchBar';
 import SizeVerify from './SizeVerify';
 import UploadBox from './UploadBox';
-import PopoverWrapper from './PopoverWrapper';
 import DependenciesModal from './DependenciesModal';
 import Sequencer from './Sequencer';
 import {Form} from './Form';
 import FormInput from './FormInput';
 import FormSelect from './FormSelect';
 import FormTextarea from './FormTextarea';
+import Dropdown from './Dropdown';
 
 export {
     Navigation,
@@ -29,11 +29,11 @@ export {
     SearchBar,
     SizeVerify,
     UploadBox,
-    PopoverWrapper,
     DependenciesModal,
     Sequencer,
     Form,
     FormInput,
     FormSelect,
     FormTextarea,
+    Dropdown
 }

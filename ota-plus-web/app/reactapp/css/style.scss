@@ -27,7 +27,7 @@ $font: 'akkurat';
         background: $devices-groups-bg;
 
         &:not(:last-child) {
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
     }
 
@@ -38,7 +38,7 @@ $font: 'akkurat';
 
         span {
             background: $home-header-button;
-            height: 5px;
+            height: 4px;
             width: 4px;
         }
     }
@@ -387,7 +387,42 @@ input {
     border-radius: 0;
     border-bottom: 1px solid $panel-delimiter-color;
     margin-bottom: 0;
-    height: 50px;
+    min-height: 50px;
+    border-radius: 0;
+
+    .second-navigation {
+        background-color: #272D37;
+        height: 50px;
+
+        .links {
+            height:100%;
+            padding-left: 110px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            li {
+                font-size: 16px;
+                font-weight: 300;
+                color: #9FA2A6;
+                padding: 5px 25px 0;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                border-bottom: 5px solid transparent;
+                margin-left:37px;
+                @include transition;
+
+                &:first-child {
+                    padding: 5px 20px 0;
+                    margin-left: 0;
+                }
+                &:hover, &.active {
+                    border-bottom: 5px solid $color-mint;
+                }
+            }
+        }
+    }
 
     .alert {
         width: 400px;
@@ -618,7 +653,7 @@ input {
             height: 60px;
             display: inline-block;
             vertical-align: middle;
-            border-radius: 10px;
+            border-radius: 4px;
         }
 
         .text {
@@ -788,7 +823,6 @@ input {
     background: #fff;
     padding: 0;
     margin: 0;
-    border: 1px solid #ddd;
     border-radius: 5px;
     position: relative;
 
@@ -1063,7 +1097,6 @@ input {
                             overflow: hidden;
 
                             .devices-progress {
-                                border: 1px solid #ccc;
                                 border-radius: 5px;
                                 float: left;
                                 height: 10px;
@@ -2524,10 +2557,12 @@ input {
                         text-align: center;
                         width: 15%;
 
+                        img {
+                            width: 15px;
+                            margin: -2px 5px 0 0;
+                        }
+
                         .fa {
-                            &.fa-check-circle {
-                                color: green;
-                            }
 
                             &.fa-exclamation-triangle {
                                 color: red;
@@ -3359,14 +3394,27 @@ input {
 
     .switch {
         cursor: auto;
+        height: 15px;
         &:before {
             background-color: rgba(15,22,33,0.4);
+            border: none;
+            width: 30px;
+            height: 15px;
+        }
+        &:after {
+            border: none;
+            height: 15px;
+            width: 15px;
+            box-shadow: 0 0 5px 1px rgba(0,0,0,0.2);
         }
     }
 
     .switchOn {
         &:before {
             background-color: #48DAD0 !important;
+        }
+        &:after {
+            left: 18px !important;
         }
     }
 
@@ -3477,6 +3525,8 @@ input {
     }
 
     .wrapper-full {
+        height: calc(100vh - 100px);
+        overflow: hidden;
         ::-webkit-scrollbar {
             display: none;
         }
@@ -3566,7 +3616,8 @@ input {
                 .second-level {
                     li {
                         border-bottom: 0.5px solid $sw-repo-border-color;
-                        color: #0F1621;
+                        color: #898B91;
+                        background-color: #F3F3F4;
                     }
                 }
             }
@@ -3600,8 +3651,7 @@ input {
             }
 
             .fa-groups {
-                background-image: url(/assets/img/icons/groups.png);
-                border: 2px solid #ddd;
+                background-image: url(/assets/img/icons/group-default.svg);
                 margin: 0;
                 float: left;
                 display: inline-block;
@@ -3653,6 +3703,7 @@ input {
                 &.expanded {
                     span:first-child {
                         background-color: #48DAD0;
+                        color: #0F1621;
                     }
                 }
 
@@ -3727,6 +3778,7 @@ input {
                 .total-progress {
                     overflow: hidden;
                     cursor: auto;
+                    background-color: #fff;
                     border-bottom: 1px solid $sw-repo-border-color;
                     .row {
                         min-height:inherit;
@@ -3770,7 +3822,6 @@ input {
                         margin: 15px 30px;
                         overflow: hidden;
                         height: 10px;
-                        border: 1px solid #ccc;
                         div {
                             height: 20px;
                             background-color: #ddd;
@@ -3783,6 +3834,7 @@ input {
                     cursor: auto;
                     padding: 20px 30px;
                     font-weight: 400;
+                    background-color: #fff;
                     border-bottom: 1px solid $sw-repo-border-color;
 
                     h5 {
@@ -3850,6 +3902,7 @@ input {
                     .progress-bar {
                         display: flex;
                         justify-content: flex-end;
+                        box-shadow: none;
                     }
 
                     .element-box {
@@ -4273,6 +4326,7 @@ input {
             &:first-child {
                 span {
                     cursor: pointer;
+                    color: #FFFFFF;
                 }
             }
         }

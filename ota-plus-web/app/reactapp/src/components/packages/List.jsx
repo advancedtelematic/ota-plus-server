@@ -8,7 +8,7 @@ import ListItem from './ListItem';
 import ListItemVersion from './ListItemVersion';
 import { PackagesVersionsStats } from './stats';
 import { Loader } from '../../partials';
-import withAnimatedScroll from '../../partials/withAnimatedScroll';
+import withAnimatedScroll from '../../partials/hoc/withAnimatedScroll';
 
 const headerHeight = 28;
 
