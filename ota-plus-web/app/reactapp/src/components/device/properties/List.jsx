@@ -50,7 +50,6 @@ class List extends Component {
     	const { 
     		packagesStore, 
     		devicesStore, 
-    		showPackageBlacklistModal,
     		installTufPackage, 
     	} = this.props;
 
@@ -245,7 +244,6 @@ class List extends Component {
 List.propTypes = {
     packagesStore: PropTypes.object.isRequired,
     devicesStore: PropTypes.object.isRequired,
-    showPackageBlacklistModal: PropTypes.func.isRequired,
     installTufPackage: PropTypes.func.isRequired,
 }
 
