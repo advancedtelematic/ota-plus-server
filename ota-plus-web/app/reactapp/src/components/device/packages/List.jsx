@@ -7,7 +7,7 @@ import Dropzone from 'react-dropzone';
 import ListItem from './ListItem';
 import ListItemVersion from './ListItemVersion';
 import { Loader } from '../../../partials';
-import withAnimatedScroll from '../../../partials/withAnimatedScroll';
+import withAnimatedScroll from '../../../partials/hoc/withAnimatedScroll';
 
 const headerHeight = 28;
 const autoUpdateInfo = "Automatic update activated. The latest version of this package will automatically be installed on this device.";
