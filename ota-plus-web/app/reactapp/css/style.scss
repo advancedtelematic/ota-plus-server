@@ -27,7 +27,7 @@ $font: 'akkurat';
         background: $devices-groups-bg;
 
         &:not(:last-child) {
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
     }
 
@@ -38,7 +38,7 @@ $font: 'akkurat';
 
         span {
             background: $home-header-button;
-            height: 5px;
+            height: 4px;
             width: 4px;
         }
     }
@@ -618,7 +618,7 @@ input {
             height: 60px;
             display: inline-block;
             vertical-align: middle;
-            border-radius: 10px;
+            border-radius: 4px;
         }
 
         .text {
