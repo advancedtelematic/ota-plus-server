@@ -7,6 +7,7 @@ import {
     LastPackages
 } from '../components/home';
 import { FlatButton } from 'material-ui';
+import { Dropdown } from '../partials';
 import { resetAsync } from '../utils/Common';
 import { PackagesCreateModal } from '../components/packages';
 import { Link } from 'react-router';
@@ -25,6 +26,7 @@ class Home extends Component {
         this.toggleDeviceSubmenu = this.toggleDeviceSubmenu.bind(this);
         this.togglePackageSubmenu = this.togglePackageSubmenu.bind(this);
         this.toggleCampaignSubmenu = this.toggleCampaignSubmenu.bind(this);
+        this.hideSubmenus = this.hideSubmenus.bind(this);
     }
     showPackagesCreateModal(e) {
         if(e) e.preventDefault();
@@ -34,7 +36,7 @@ class Home extends Component {
         if(e) e.preventDefault();
         this.packagesCreateModalShown = false;
     }
-    toggleDeviceSubmenu(e) {
+    toggleDeviceSubmenu(e,) {
         if(e) e.preventDefault();
         this.deviceSubmenuShown = !this.deviceSubmenuShown;
         this.packageSubmenuShown = false;
@@ -49,6 +51,11 @@ class Home extends Component {
     toggleCampaignSubmenu(e) {
         if(e) e.preventDefault();
         this.campaignSubmenuShown = !this.campaignSubmenuShown;
+        this.packageSubmenuShown = false;
+        this.deviceSubmenuShown = false;
+    }
+    hideSubmenus() {
+        this.campaignSubmenuShown = false;
         this.packageSubmenuShown = false;
         this.deviceSubmenuShown = false;
     }
@@ -172,25 +179,23 @@ class Home extends Component {
                                 <span></span>
                                 <span></span>
 
-                                {this.deviceSubmenuShown ?
-                                    <div className="submenu">
-                                        <ul>
-                                            <li>
-                                                <a href="https://docs.atsgarage.com/quickstarts/start-intro.html" target="_blank" onClick={(e) => e.stopPropagation()}>
-                                                    Add device
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <Link
-                                                    to="/devices">
-                                                        View all
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                :
-                                    null
-                                }
+
+                                <Dropdown
+                                    show={this.deviceSubmenuShown}
+                                    hideHandler={this.hideSubmenus}
+                                >
+                                    <li className="device-dropdown-item">
+                                        <a className="device-dropdown-item" href="https://docs.atsgarage.com/quickstarts/start-intro.html" target="_blank" onClick={(e) => e.stopPropagation()}>
+                                            Add device
+                                        </a>
+                                    </li>
+                                    <li className="device-dropdown-item">
+                                        <Link
+                                            to="/devices">
+                                            View all
+                                        </Link>
+                                    </li>
+                                </Dropdown>
                             </div>
                         </div>
                         <div className="body">
@@ -215,25 +220,22 @@ class Home extends Component {
                                 <span></span>
                                 <span></span>
 
-                                {this.packageSubmenuShown ?
-                                    <div className="submenu">
-                                        <ul>
-                                            <li>
-                                                <a href="#" onClick={this.showPackagesCreateModal}>
-                                                    Add package
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <Link
-                                                    to="/packages">
-                                                        View all
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                :
-                                    null
-                                }
+                                <Dropdown
+                                    show={this.packageSubmenuShown}
+                                    hideHandler={this.hideSubmenus}
+                                >
+                                    <li className="package-dropdown-item">
+                                        <a className="package-dropdown-item" href="#" onClick={this.showPackagesCreateModal}>
+                                            Add package
+                                        </a>
+                                    </li>
+                                    <li className="package-dropdown-item">
+                                        <Link
+                                            to="/packages">
+                                            View all
+                                        </Link>
+                                    </li>
+                                </Dropdown>
                             </div>
                         </div>
                         <div className="body">
@@ -259,25 +261,22 @@ class Home extends Component {
                                 <span></span>
                                 <span></span>
 
-                                {this.campaignSubmenuShown ?
-                                    <div className="submenu">
-                                        <ul>
-                                            <li>
-                                                <a href="#" onClick={addNewWizard.bind(this, null)}>
-                                                    Add campaign
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <Link
-                                                    to="/campaigns">
-                                                        View all
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                :
-                                    null
-                                }
+                                <Dropdown
+                                show={this.campaignSubmenuShown}
+                                hideHandler={this.hideSubmenus}
+                                >
+                                    <li className="campaign-dropdown-item">
+                                        <a className="campaign-dropdown-item" href="#" onClick={addNewWizard.bind(this, null)}>
+                                            Add campaign
+                                        </a>
+                                    </li>
+                                    <li className="campaign-dropdown-item">
+                                        <Link
+                                            to="/campaigns">
+                                            View all
+                                        </Link>
+                                    </li>
+                                </Dropdown>
                             </div>
                         </div>
                         <div className="body">
