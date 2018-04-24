@@ -16,6 +16,7 @@ import {Form} from './Form';
 import FormInput from './FormInput';
 import FormSelect from './FormSelect';
 import FormTextarea from './FormTextarea';
+import Dropdown from './Dropdown';
 
 export {
     Navigation,
@@ -36,4 +37,5 @@ export {
     FormInput,
     FormSelect,
     FormTextarea,
+    Dropdown
 }
