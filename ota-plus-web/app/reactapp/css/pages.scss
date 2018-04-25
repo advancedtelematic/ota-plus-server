@@ -1137,7 +1137,7 @@
 }
 
 #page-packages {
-    height: calc(100vh - 50px);
+    height: calc(100vh - 100px);
 
     .subheader {
         justify-content: space-between;
@@ -1281,7 +1281,8 @@
                     content: '';
                     position: absolute;
                     top: 0;
-                    width:100%;
+                    left: 0;
+                    right: 0;
                     z-index: 1;
                     height: 1px;
                     background-color: $add-button-grey;
@@ -1634,12 +1635,13 @@
         display: flex;
         align-items: center;
         padding: 0 40px;
+        position: relative;
 
         .page-title {
             color: $page-title-color;
             font-size: 44px;
-            line-height: 53px;
             position: absolute;
+            top: calc(50% - 30px);
         }
 
         .nav {
@@ -1691,6 +1693,10 @@
         background-color: #fff;
         padding: 40px;
         overflow-y: auto;
+
+        .profile-container-empty {
+            height: calc(100% - 50px);
+        }
 
         .section-header {
             background-color: $edit-profile-section-header;

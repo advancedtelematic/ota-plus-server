@@ -12,7 +12,7 @@ class ListItem extends Component {
             <span className="wrapper-item">
                 {!pack.unmanaged ?
                     <span>
-                        <button className={"item" + (isSelected ? " selected": "")} id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
+                        <div className={"item" + (isSelected ? " selected": "")} id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
                             <div className="left-box">
                                 <div className="name">
                                     {pack.packageName}
@@ -73,7 +73,7 @@ class ListItem extends Component {
                                     null
                                 }
                             </div>
-                        </button>
+                        </div>
                         
                     </span>
                 :
