@@ -222,7 +222,7 @@
         }
     }
 
-    .preparation-container {
+    .preparation-container, .terms {
         background-color: #F3F3F4;
         position: absolute;
         top: 0;
@@ -230,6 +230,42 @@
         right: 0;
         bottom: 0;
         z-index: 9999;
+
+        .checkbox-wrapper {
+            margin:90px 0;
+            display: flex;
+            width: 250px;
+            color: #000;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 20px;
+            letter-spacing: 0.01px;
+            a {
+                font-weight: 500;
+            }
+            .btn-checkbox {
+                margin: 0 10px 0 0;
+            }
+        }
+
+        .steps {
+            button {
+                display: inline-block;
+                height: 40px;
+                width: 190px;
+                &:not(:last-child) {
+                    margin-right: 20px;
+                }
+                &.back {
+                    background-color: transparent;
+                    border: 1px solid #A3ECE7;
+                }
+
+                &.next, &.back {
+                    color: #000 !important;
+                }
+            }
+        }
 
         .wrapper-center {
             display: flex !important;
