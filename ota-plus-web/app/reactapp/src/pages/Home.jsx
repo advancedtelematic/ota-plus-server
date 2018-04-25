@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { observe, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
-import { HomeContainer, PreparationContainer } from '../containers';
+import { HomeContainer, PreparationContainer, Terms } from '../containers';
 
 const title = "Home";
 
@@ -41,7 +41,8 @@ class Home extends Component {
         return (
             <FadeAnimation
                 display="flex">
-                    {sanityCheckCompleted() ?
+                {termsAccepted() ?
+                    sanityCheckCompleted() ?
                         <MetaData
                             title={title}>
                             <HomeContainer
@@ -52,7 +53,7 @@ class Home extends Component {
                                 addNewWizard={addNewWizard}
                             />
                         </MetaData>
-                    :
+                        :
                         <PreparationContainer
                             packagesStore={packagesStore}
                             userStore={userStore}
@@ -61,7 +62,12 @@ class Home extends Component {
                             setSystemReady={setSystemReady}
                             uiUserProfileMenu={uiUserProfileMenu}
                         />
-                    }
+
+                : <Terms
+                        setTermsAccepted={setTermsAccepted}
+                    />
+                }
+
             </FadeAnimation>
         );
     }
