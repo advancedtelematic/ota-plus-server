@@ -4,7 +4,6 @@ import {observer} from 'mobx-react';
 import _ from 'underscore';
 import {AsyncStatusCallbackHandler, AsyncConflictCallbackHandler, FadeAnimation} from '../utils';
 import {Loader} from '../partials';
-import Cookies from 'js-cookie';
 
 const initialPreparationSequence = [
     {
@@ -138,8 +137,7 @@ class Preparation extends Component {
     doorOpen() {
         let container = document.getElementsByClassName('preparation-container')[0];
         if (container && !_.includes(container.classList, 'door-open')) {
-            Cookies.set('systemReady', 1);
-            this.props.setSystemReady(true);
+            this.props.setSystemReady();
         }
     }
 

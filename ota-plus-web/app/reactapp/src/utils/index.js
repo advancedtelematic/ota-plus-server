@@ -1,6 +1,5 @@
 import FadeAnimation from './FadeAnimation';
 import SlideAnimation from './SlideAnimation';
-import DoorAnimation from './DoorAnimation';
 import MetaData from './MetaData';
 import AsyncStatusCallbackHandler from './AsyncStatusCallbackHandler';
 import AsyncConflictCallbackHandler from './AsyncConflictCallbackHandler';
@@ -13,7 +12,6 @@ import InfiniteScroll from './InfiniteScroll';
 export {
     FadeAnimation,
     SlideAnimation,
-    DoorAnimation,
     MetaData,
     AsyncStatusCallbackHandler,
     AsyncConflictCallbackHandler,
