@@ -23,16 +23,16 @@ import {
 import { 
     FadeAnimation, 
     WebsocketHandler,
-    DoorAnimation
 } from '../utils';
 import _ from 'underscore';
 import Cookies from 'js-cookie';
 import { CampaignsWizard } from '../components/campaigns';
+import { doLogout } from '../utils/Common';
 
 @observer
 class Main extends Component {
-    @observable ifLogout = false;
     @observable systemReady = false;
+    @observable termsAndConditionsAccepted = false;
     @observable numOfWizards = 0;
     @observable wizards = [];    
     @observable minimizedWizards = [];
@@ -52,12 +52,14 @@ class Main extends Component {
         axios.defaults.headers.common['Csrf-Token'] = document.getElementById('csrf-token-val').value;
         axios.interceptors.response.use(null, (error) => {
             if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-                this.ifLogout = true;
                 this.callFakeWsHandler();
+                doLogout();
             }
             return Promise.reject(error);
         });
         this.setSystemReady = this.setSystemReady.bind(this);
+        this.setTermsAccepted = this.setTermsAccepted.bind(this);
+        this.termsAccepted = this.termsAccepted.bind(this);
         this.backButtonAction = this.backButtonAction.bind(this);
         this.addNewWizard = this.addNewWizard.bind(this);
         this.hideWizard = this.hideWizard.bind(this);
@@ -87,8 +89,8 @@ class Main extends Component {
         });
         this.logoutHandler = observe(this.userStore, (change) => {
             if(change.name === 'ifLogout' && change.object[change.name]) {
-                this.ifLogout = true;
                 this.callFakeWsHandler();
+                doLogout();
             }
         });
         this.featuresHandler = observe(this.featuresStore, (change) => {
@@ -179,8 +181,9 @@ class Main extends Component {
     toggleSWRepo() {
         this.switchToSWRepo = !this.switchToSWRepo;
     }
-    setSystemReady(value) {
-        this.systemReady = value;
+    setSystemReady() {
+        this.systemReady = true;
+        Cookies.set('systemReady', 1);
     }
     sanityCheckCompleted() {
         if (!this.uiAutoFeatureActivation) {
@@ -188,6 +191,13 @@ class Main extends Component {
         } else {
             return this.systemReady || Cookies.get('systemReady') == 1;
         }
+    }
+    setTermsAccepted() {
+        this.termsAndConditionsAccepted = true;
+        Cookies.set('termsAccepted', 1);
+    }
+    termsAccepted() {
+        return this.termsAndConditionsAccepted || Cookies.get('termsAccepted') == 1;
     }
     componentWillUnmount() {
         this.logoutHandler();
@@ -239,7 +249,6 @@ class Main extends Component {
                             provisioningStore={this.provisioningStore}
                             userStore={this.userStore}
                             backButtonAction={this.backButtonAction}
-                            systemReady={this.systemReady}
                             setSystemReady={this.setSystemReady}
                             addNewWizard={this.addNewWizard}
                             showQueueModal={this.showQueueModal}
@@ -252,6 +261,9 @@ class Main extends Component {
                             uiUserProfileMenu={this.uiUserProfileMenu}
                             uiCredentialsDownload={this.uiCredentialsDownload}
                             alphaPlusEnabled={this.alphaPlusEnabled}
+                            sanityCheckCompleted={this.sanityCheckCompleted}
+                            setTermsAccepted={this.setTermsAccepted}
+                            termsAccepted={this.termsAccepted}
                         />
                     </FadeAnimation>
                     <SizeVerify 
@@ -263,20 +275,6 @@ class Main extends Component {
                         minimized={this.uploadBoxMinimized}
                         toggleUploadBoxMode={this.toggleUploadBoxMode}
                     />
-                    {this.sanityCheckCompleted() ?
-                        <DoorAnimation
-                            mode="show"
-                        />
-                    :
-                        null
-                    }
-                    {this.ifLogout ?
-                        <DoorAnimation 
-                            mode="hide"
-                        />
-                    :
-                        null
-                    }
                     {this.wizards}
                     <div className="minimized-wizards-container">
                         {this.uploadBoxMinimized ?
