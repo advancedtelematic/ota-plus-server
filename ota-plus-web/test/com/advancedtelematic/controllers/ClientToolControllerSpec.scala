@@ -2,18 +2,16 @@ package com.advancedtelematic.controllers
 
 import java.io.ByteArrayInputStream
 import java.security.Security
-import java.time.Instant
 import java.util.UUID
 import java.util.zip.ZipInputStream
 
-import com.advancedtelematic.TokenUtils
 import com.advancedtelematic.TokenUtils.NoVerification
-import com.advancedtelematic.api.UnexpectedResponse
-import com.advancedtelematic.auth.{AccessToken, TokenVerification}
+import com.advancedtelematic.api.{RemoteApiError, UnexpectedResponse}
+import com.advancedtelematic.auth.TokenVerification
 import com.advancedtelematic.libtuf.crypt.TufCrypto
 import com.advancedtelematic.libtuf.data.TufDataType.RsaKeyType
 import com.advancedtelematic.provisioning.MockCrypt.{CryptHost, TestAccountJson}
-import mockws.MockWSHelpers
+import mockws.{MockWSHelpers, Route}
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.PlaySpec
@@ -28,8 +26,6 @@ import play.api.test.Helpers._
 
 import scala.io.Source
 import AuthUtils._
-
-import scala.concurrent.Await
 
 class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with ScalaFutures with MockWSHelpers
   with Results {
@@ -70,14 +66,25 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
 
   import com.advancedtelematic.libtuf.data.TufCodecs.tufKeyPairEncoder
 
-  val mockClient = MockWS {
+  val defaultCryptRoutes = Route {
     case (GET, url) if url.startsWith(cryptAccountUrl) =>
       if (url.contains("/credentials/registration/")) {
         Action(_ => Ok("registration"))
       } else {
         Action(_ => Ok(TestAccountJson))
       }
+  }
 
+  val failingCryptRoutes = Route {
+    case (GET, url) if url.startsWith(cryptAccountUrl) =>
+      if (url.contains("/credentials/registration/")) {
+        Action(_ => InternalServerError("error message"))
+      } else {
+        Action(_ => Ok(TestAccountJson))
+      }
+  }
+
+  val defaultRoutes = Route {
     case (GET, `treehubJsonUrl`) =>
       Action(_ => Ok(TreehubFeatureJson))
 
@@ -100,9 +107,13 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
       Action(_ => NotFound)
   }
 
+  val mockClient = MockWS(defaultCryptRoutes orElse defaultRoutes)
+
   val failingClient = MockWS {
     case _ => Action(_ => InternalServerError)
   }
+
+  val mockClientFailingCrypt = MockWS(failingCryptRoutes orElse defaultRoutes)
 
   val builder = new GuiceApplicationBuilder()
     .configure("auth0.domain" -> auth0Domain)
@@ -160,5 +171,14 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
       status(result) mustBe OK
       contentType(result).get mustBe "application/zip"
     }
+
+    "error when when crypt client can't connect to crypt server" in {
+      val application = builder.overrides(bind[WSClient].to(mockClientFailingCrypt)).build
+      val controller = application.injector.instanceOf[ClientToolController]
+      an [RemoteApiError] should be thrownBy
+        status(call(controller.downloadClientToolBundle(UUID.randomUUID()), request))
+    }
+
   }
+
 }
