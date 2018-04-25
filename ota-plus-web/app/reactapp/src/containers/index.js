@@ -7,6 +7,7 @@ import ImpactAnalysisContainer from './ImpactAnalysis';
 import ProvisioningContainer from './Provisioning';
 import NoMatchContainer from './NoMatch';
 import PreparationContainer from './Preparation';
+import Terms from './Terms';
 
 export {
     HomeContainer,
@@ -17,5 +18,6 @@ export {
     ImpactAnalysisContainer,
     ProvisioningContainer,
     NoMatchContainer,
-    PreparationContainer
+    PreparationContainer,
+    Terms
 }
