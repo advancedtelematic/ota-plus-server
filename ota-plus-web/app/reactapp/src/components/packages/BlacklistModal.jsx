@@ -75,23 +75,7 @@ class BlacklistModal extends Component {
         this.props.packagesStore.removePackageFromBlacklist(data);
     }
     render() {
-        const { shown, hide, blacklistAction, packagesStore } = this.props;
-        const title = (
-            <div className="heading">
-                <div className="internal">
-                    {blacklistAction.mode === "edit" ? 
-                        "Edit blacklisted package" 
-                    : 
-                        "Blacklist"
-                    }
-                    <div className="top-actions flex-end">
-                        <div className="modal-close" onClick={hide}>
-                            <img src="/assets/img/icons/close.svg" alt="Icon" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+        const { shown, hide, blacklistAction, packagesStore } = this.props;        
         const content = (
             <Form                
                 onSubmit={this.submitForm.bind(this)}
@@ -197,7 +181,19 @@ class BlacklistModal extends Component {
         );
         return (
             <Modal 
-                title={title}
+                title={
+                    blacklistAction.mode === "edit" ? 
+                        "Edit blacklisted package" 
+                    : 
+                        "Blacklist"
+                }
+                topActions={
+                    <div className="top-actions flex-end">
+                        <div className="modal-close" onClick={hide}>
+                            <img src="/assets/img/icons/close.svg" alt="Icon" />
+                        </div>
+                    </div>
+                }
                 content={content}
                 shown={shown}
                 className="blacklist-modal"

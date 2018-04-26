@@ -61,13 +61,7 @@ class SizeVerify extends Component {
         );
         return (
             <Modal 
-                title={
-                    <div className="heading">
-                        <div className="internal">
-                            Tip
-                        </div>
-                    </div>
-                }
+                title={"Tip"}
                 content={content}
                 shown={!this.sizeVerifyHidden}
                 className="size-verify-modal"
