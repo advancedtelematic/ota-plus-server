@@ -114,8 +114,8 @@
                     img {
                         max-width: 250px;
 
-                        @media(max-height: 900px) {
-                            width: 75px;
+                        @media(max-height: 925px) {
+                            width: 125px;
                         }
                     }
                 }
@@ -127,7 +127,7 @@
                         height: 35%;
                         margin: 7% 0;
 
-                        @media(max-height: 900px) {
+                        @media(max-height: 925px) {
                             height: 25%;
                         }
                     }
@@ -148,7 +148,7 @@
                         flex-direction: column;
                         justify-content: space-between;
 
-                        @media(max-height: 900px) {
+                        @media(max-height: 925px) {
                             padding: 12px;
                         }
 
