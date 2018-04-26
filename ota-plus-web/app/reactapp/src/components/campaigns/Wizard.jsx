@@ -527,25 +527,21 @@ class Wizard extends Component {
         );
         return (
             <Modal
-                title={
-                    <div className="heading">
-                        <div className="internal">
-                            Add new campaign
-                            <div className="top-actions">
-                                <div className="wizard-minimize" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)} id="minimize-wizard">
-                                    <img src="/assets/img/icons/minimize.svg" alt="Icon" />
-                                </div>                                
-                                <div className={"toggle-fullscreen" + (campaignsStore.fullScreenMode ? " on" : " off")} onClick={this.toggleFullScreen}>
-                                    {campaignsStore.fullScreenMode ? 
-                                        <img src="/assets/img/icons/exit-fullscreen.svg" alt="Icon" id="exit-fullscreen-wizard" />
-                                    :
-                                        <img src="/assets/img/icons/maximize.svg" alt="Icon" id="enter-fullscreen-wizard" />
-                                    }
-                                </div>
-                                <div className="wizard-close" onClick={hideWizard.bind(this, wizardIdentifier)} id="close-wizard">
-                                    <img src="/assets/img/icons/close.svg" alt="Icon" />
-                                </div>
-                            </div>
+                title={"Add new campaign"}
+                topActions={
+                    <div className="top-actions">
+                        <div className="wizard-minimize" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)} id="minimize-wizard">
+                            <img src="/assets/img/icons/minimize.svg" alt="Icon" />
+                        </div>                                
+                        <div className={"toggle-fullscreen" + (campaignsStore.fullScreenMode ? " on" : " off")} onClick={this.toggleFullScreen}>
+                            {campaignsStore.fullScreenMode ? 
+                                <img src="/assets/img/icons/exit-fullscreen.svg" alt="Icon" id="exit-fullscreen-wizard" />
+                            :
+                                <img src="/assets/img/icons/maximize.svg" alt="Icon" id="enter-fullscreen-wizard" />
+                            }
+                        </div>
+                        <div className="wizard-close" onClick={hideWizard.bind(this, wizardIdentifier)} id="close-wizard">
+                            <img src="/assets/img/icons/close.svg" alt="Icon" />
                         </div>
                     </div>
                 }
