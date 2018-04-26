@@ -62,13 +62,7 @@ class CancelCampaignModal extends Component {
         );
         return (
             <Modal 
-                title={
-                    <div className="heading red">
-                        <div className="internal">
-                            You're about to cancel a campaign
-                        </div>
-                    </div>
-                }
+                title={"You're about to cancel a campaign"}
                 content={content}
                 shown={shown}
                 className="cancel-campaign-modal"

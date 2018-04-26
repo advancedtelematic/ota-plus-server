@@ -34,15 +34,11 @@ class CancelUploadModal extends Component {
         );
         return (
             <Modal 
-                title={
-                    <div className="heading">
-                        <div className="internal">
-                            Cancel upload?
-                            <div className="top-actions flex-end">
-                                <div className="modal-close" onClick={hide}>
-                                    <img src="/assets/img/icons/close.svg" alt="Icon" />
-                                </div>
-                            </div>
+                title={"Cancel upload?"}
+                topActions={
+                    <div className="top-actions flex-end">
+                        <div className="modal-close" onClick={hide}>
+                            <img src="/assets/img/icons/close.svg" alt="Icon" />
                         </div>
                     </div>
                 }

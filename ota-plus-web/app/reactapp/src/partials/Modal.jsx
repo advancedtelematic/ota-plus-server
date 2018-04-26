@@ -8,10 +8,16 @@ class Modal extends Component {
         super(props);
     }
     render() {
-        const { title, content, actions, shown, className, titleClassName, hideOnClickOutside, onRequestClose, backgroundNotGreyed } = this.props;
+        const { title, topActions, content, actions, shown, className, titleClassName, hideOnClickOutside, onRequestClose, backgroundNotGreyed } = this.props;
         return (
             <Dialog
-                  title={title}
+                  title={
+                    <div className="heading">
+                        <div className="internal">
+                            {title}
+                            {topActions}
+                        </div>
+                    </div>}
                   actions={actions}
                   modal={false}
                   open={shown}
@@ -32,6 +38,7 @@ class Modal extends Component {
 
 Modal.propTypes = {
     title: PropTypes.any,
+    topActions: PropTypes.any,
     content: PropTypes.any.isRequired,
     actions: PropTypes.array,
     shown: PropTypes.bool,
