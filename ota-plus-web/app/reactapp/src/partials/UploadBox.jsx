@@ -91,22 +91,7 @@ class UploadBox extends Component {
             secondsRemaining = timeLeft > secondsRemaining ? timeLeft : secondsRemaining;
             if(upload.status === null)
                 uploadFinished = false;
-        });
-        const heading = (
-            <div className="heading">
-                <div className="internal">
-                    Uploading {t('common.packageWithCount', {count: packagesStore.packagesUploading.length})}
-                    <div className="top-actions flex-end">
-                        <div className="modal-minimize" onClick={this.toggleMode} id="minimize-upload-box">
-                            <img src="/assets/img/icons/minimize.svg" alt="Icon" />
-                        </div>
-                        <div className="modal-close"  onClick={this.close} id="close-upload-box">
-                            <img src="/assets/img/icons/close.svg" alt="Icon"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+        });        
         const uploadBoxData = (                 
             <div id="upload-box">
                 <div className="subheading">
@@ -213,9 +198,20 @@ class UploadBox extends Component {
                 />
             </div>                
         );
+        const title = "Uploading " + t('common.packageWithCount', {count: packagesStore.packagesUploading.length});
         return (
             <Modal 
-                title={heading}
+                title={title}
+                topActions={
+                    <div className="top-actions flex-end">
+                        <div className="modal-minimize" onClick={this.toggleMode} id="minimize-upload-box">
+                            <img src="/assets/img/icons/minimize.svg" alt="Icon" />
+                        </div>
+                        <div className="modal-close"  onClick={this.close} id="close-upload-box">
+                            <img src="/assets/img/icons/close.svg" alt="Icon"/>
+                        </div>
+                    </div>
+                }
                 content={uploadBoxData}
                 shown={packagesStore.packagesUploading.length && !minimized ? true : false}
                 onRequestClose={toggleUploadBoxMode}
