@@ -392,6 +392,10 @@ input {
     min-height: 50px;
     border-radius: 0;
 
+    .container {
+        background: $devices-groups-bg;
+    }
+
     .second-navigation {
         background-color: #272D37;
         height: 50px;

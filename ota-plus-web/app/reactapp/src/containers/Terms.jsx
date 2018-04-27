@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {observable} from "mobx"
 import {observer} from 'mobx-react';
+import { Link } from 'react-router';
 
 @observer
 export default class Terms extends Component {
@@ -21,7 +22,7 @@ export default class Terms extends Component {
                         <button className={`btn-checkbox ${this.termsAccepted ? 'checked': ''}`} onClick={() => this.termsAccepted = !this.termsAccepted}>
                             <i className="fa fa-check" aria-hidden="true"></i>
                         </button>
-                        <p>I AGREE TO OUR <a href="#">SERVICE TERMS</a> AND <a href="#">PRIVACY POLICY.</a></p>
+                        <p>I AGREE TO OUR <a href="#">SERVICE TERMS</a> AND <Link to="/policy">PRIVACY POLICY.</Link></p>
                     </div>
                     <div className="steps">
                         <button className="back btn-primary">Back</button>

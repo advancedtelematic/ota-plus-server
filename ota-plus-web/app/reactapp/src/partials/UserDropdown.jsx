@@ -68,7 +68,7 @@ class UserDropdown extends Component {
                                 null
                             }
                             <li>
-                                  <a href="http://atsgarage.com/en/terms-conditions.html" target="_blank" id="terms-of-use" onClick={this.closeDropdown}>Terms of use</a>
+                                <Link to="/policy">Terms of use</Link>
                             </li>
                             <span>
                                 {alphaPlusEnabled ?
