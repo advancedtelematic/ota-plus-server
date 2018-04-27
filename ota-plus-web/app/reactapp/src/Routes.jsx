@@ -12,6 +12,7 @@ import {
     NoMatchPage,
     FireworksPage,
     SoftwareRepository,
+    TermsAndConditions
 } from './pages';
 import {
     ProfileEditProfile,
@@ -32,6 +33,7 @@ const Routes = () => {
                 <Route path="/campaigns(/:campaignName)" component={CampaignsPage}/>
                 <Route path="/impact-analysis" component={ImpactAnalysisPage}/>
                 <Route path="/software-repository" component={SoftwareRepository}/>
+                <Route path="/policy" component={TermsAndConditions}/>
                 <Route path="/profile" component={ProfilePage}>
                     <IndexRoute component={ProfileEditProfile}/>
                     <Route path="edit" component={ProfileEditProfile} />

@@ -1,0 +1,37 @@
+#page-policy {
+  height: calc(100vh - 50px);
+  background-color: #fff;
+  .header {
+    background-color: #F3F3F4;
+    font-size: 44px;
+    color: rgba(15,22,33,0.8);
+    font-weight: 300;
+    line-height: 53px;
+    padding: 60px 40px;
+  }
+
+  .wrapper {
+    display: flex;
+    padding: 60px 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .content, .content-header {
+      width: 800px;
+    }
+
+    .content-header {
+      border-bottom: 1px solid #eee;
+      justify-content: space-between;
+      display: flex;
+    }
+
+    .content {
+      p {
+        font-size: 16px;
+        padding: 10px 0;
+        line-height: 24px;
+      }
+    }
+  }
+}
