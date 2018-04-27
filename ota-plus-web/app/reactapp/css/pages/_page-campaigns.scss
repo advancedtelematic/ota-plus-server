@@ -1,0 +1,15 @@
+#page-campaigns {
+	padding: 30px;
+    background-color: $home-bg;
+    height: calc(100vh - 50px);
+
+    .content {
+
+        .content-empty {
+            background: #fff;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    }    
+}
