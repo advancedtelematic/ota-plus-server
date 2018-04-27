@@ -175,7 +175,7 @@ class HardwarePanel extends Component {
                 <div className="hardware-header">
                     {title}
                 </div>
-                <div className="inner-container">
+                <div className="wrapper-hardware">
                     <div className="hardware-list">
                         <div className="primary-ecu font-small">
                             {primaryEcus}

@@ -30,24 +30,23 @@ class ListItemArtificial extends Component {
         const { isOver, canDrop, connectDropTarget } = this.props;
         return (
             connectDropTarget(
-                <button 
-                    type="button"
+                <div 
                     title={group.friendlyName}
                     id={group.identifier}
-                    className={"artificial" + (isDND ? " droppable" : "") + (isSelected ? " selected" : "") + (isOver ? " active" : "")}
+                    className={"group-btn artificial" + (isDND ? " droppable" : "") + (isSelected ? " selected" : "") + (isOver ? " active" : "")}
                     onClick={() => {
                         selectGroup({type: 'artificial', name: group.name, id: group.id});
                     }}
                     key={group.name}>
-                    <div className="desc">
-                        <div className="title">
-                            {group.friendlyName}
+                        <div className="desc">
+                            <div className="title">
+                                {group.friendlyName}
+                            </div>
+                            <div className="subtitle" id={"group-" + group.name + "-devices"}>
+                                {t('common.deviceWithCount', {count: deviceCount})}
+                            </div>
                         </div>
-                        <div className="subtitle" id={"group-" + group.name + "-devices"}>
-                            {t('common.deviceWithCount', {count: deviceCount})}
-                        </div>
-                    </div>
-                </button>
+                </div>
             )
         );
     }
