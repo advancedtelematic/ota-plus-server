@@ -448,7 +448,7 @@ input {
         padding-left: 15px;
 
         .navbar-brand {
-            background: url('/assets/img/HERE_Logo_2016.png') no-repeat;
+            background: url($here-logo) no-repeat;
             background-size: contain;
             width: 33.12px;
             height: 40px;
@@ -633,40 +633,12 @@ input {
     justify-content: space-between;
     border-bottom: 1px solid $panel-delimiter-color;
 
-    .left-box {
-        display: flex;
-        align-items: center;
+    .back-button {
+        margin-right: 15px;
 
-        .back-button {
-            margin-right: 15px;
-    
-            i {
-                color: $home-header-button;
-                font-size: 2.5em;
-            }
-        }
-
-        .icon {
-            text-align: center;
-            background-color: #fff;
-            background-repeat: no-repeat;
-            background-size: cover;
-            width: 60px;
-            height: 60px;
-            display: inline-block;
-            vertical-align: middle;
-            border-radius: 4px;
-        }
-
-        .text {
-            width: auto;
-            margin: 0 0 0 10px;
-            display: inline-block;
-
-            .title {
-                color: #fff;
-                font-size: 18px;
-            }
+        i {
+            color: $home-header-button;
+            font-size: 2.5em;
         }
     }
 }
@@ -1265,7 +1237,7 @@ input {
                                     &.group {
                                     
                                         .icon {
-                                            background: url(/assets/img/icons/group-default.svg) 50% 50%;
+                                            background: url($group-default-image-url) 50% 50%;
                                             height: 50px;
                                             width: 50px;
                                             margin: 0;
@@ -1408,7 +1380,7 @@ input {
 }
 
 .device-status {
-    background: url('/assets/img/icons/grey_questionmark.svg') no-repeat;
+    background: url($device-status-unknown) no-repeat;
     width: 25px;
     height: 25px;
     background-size: cover;
@@ -1417,15 +1389,15 @@ input {
     vertical-align: middle;
 
     &.device-status-Error {
-        background-image: url('/assets/img/icons/red_cross.svg');
+        background-image: url($device-status-error);
     }
 
     &.device-status-Outdated {
-        background-image: url('/assets/img/icons/orange_exclamation.svg');
+        background-image: url($device-status-pending);
     }
 
     &.device-status-UpToDate {
-        background-image: url('/assets/img/icons/green_tick.svg');
+        background-image: url($device-status-success);
     }
 }
 
@@ -1550,7 +1522,7 @@ input {
     }
 
     .btn-blacklist {
-        background: url('/assets/img/icons/ban_grey.png') no-repeat center;
+        background: url($blacklist-default) no-repeat center;
         background-size: 20px 20px !important;
         height: 32px;
         padding: 0 25px;
@@ -1562,11 +1534,11 @@ input {
         @include transition;
 
         &:hover {
-            background-image: url('/assets/img/icons/ban_red.png');
+            background-image: url($blacklist-active);
         }
 
         &.edit {
-            background-image: url('/assets/img/icons/ban_red.png');
+            background-image: url($blacklist-active);
         }
     }
 }
@@ -1998,25 +1970,25 @@ input {
         right: 35px;
     }
 
-    &__icon {        
+    &__icon {
         width: 15px;
         height: 15px;
         display: flex;
 
         &--rollback {
-            background: url('/assets/img/icons/white/rollback_sequencer.svg') no-repeat 50%;
+            background: url($sequencer-rollback-item) no-repeat 50%;
         }
 
         &--rollback-all {
-            background: url('/assets/img/icons/white/rollback_all_sequencer.svg')  no-repeat 50%;
+            background: url($sequencer-rollback-all)  no-repeat 50%;
         }
 
         &--skip {
-            background: url('/assets/img/icons/white/skip_sequencer.svg')  no-repeat 50% 50%;
+            background: url($sequencer-skip-item)  no-repeat 50% 50%;
         } 
 
         &--cancel-all {
-            background: url('/assets/img/icons/white/cancel_sequencer.svg')  no-repeat center 50%;
+            background: url($sequencer-cancel-all)  no-repeat center 50%;
         }
 
         &--top {
@@ -2332,7 +2304,7 @@ input {
 
                 &.campaign {
                     .icon {
-                        background-image: url('/assets/img/icons/black/campaigns.png');
+                        background-image: url($campaign-icon);
                     }
                 }
             }
@@ -3423,17 +3395,17 @@ input {
     }
 
     i.fa-owner {
-        background: url('/assets/img/icons/sw_person.svg') no-repeat center;
+        background: url($sw-repo-preson-default) no-repeat center;
         width:24px;
         height:20px;
         background-size: contain;
         &:hover {
-            background-image: url('/assets/img/icons/sw_person_active.svg');
+            background-image: url($sw-repo-preson-active);
         }
     }
 
     i.fa-owner.selected-user {
-        background-image: url('/assets/img/icons/sw_person_active.svg');
+        background-image: url($sw-repo-preson-active);
     }
 
     .container {
@@ -3486,7 +3458,7 @@ input {
         font-size: 18px;
     }
     i.fa-error {
-        background-image: url('/assets/img/icons/error.svg');
+        background-image: url($sw-repo-error);
         cursor: auto;
     }
     i.empty {
@@ -3509,15 +3481,15 @@ input {
         background-repeat: no-repeat;
     }
     i.warning {
-        background-image: url('/assets/img/icons/warning.svg');
+        background-image: url($sw-repo-warning);
     }
 
     span {
         & > i.warning {
-            background-image: url('/assets/img/icons/exclamation_triangle.png');
+            background-image: url($sw-repo-exclamation-triangle);
         }
         & > i.fa-error {
-            background-image: url('/assets/img/icons/error_square.png');
+            background-image: url($sw-repo-error-square);
         }
     }
 
@@ -3654,7 +3626,7 @@ input {
             }
 
             .fa-groups {
-                background-image: url(/assets/img/icons/group-default.svg);
+                background-image: url($group-default-image-url);
                 margin: 0;
                 float: left;
                 display: inline-block;
@@ -3969,7 +3941,7 @@ input {
             height: 100%;
 
             i.fa-owner-orange {
-                background: url('/assets/img/icons/person-hover.png') no-repeat center;
+                background: url($sw-repo-preson-hover) no-repeat center;
                 background-size: cover;
             }
 
@@ -4092,7 +4064,7 @@ input {
                         font-size: 18px;
                     }
                     i.fa-error {
-                        background: url('/assets/img/icons/error.svg') no-repeat center;
+                        background: url($sw-repo-error) no-repeat center;
                         background-size: contain;
                         display: inline-block;
                         width: 19px;
@@ -4511,13 +4483,13 @@ input {
             left: inherit;
         }
         i.fa-error {
-            background: url('/assets/img/icons/error.png') no-repeat center;
+            background: url($sw-repo-error) no-repeat center;
             background-size: cover;
             display: inline-block;
         }
         span {
             & > i.fa-error {
-                background-image: url('/assets/img/icons/error_square.png');
+                background-image: url($sw-repo-error-square);
             }
         }
         i.selected-user {

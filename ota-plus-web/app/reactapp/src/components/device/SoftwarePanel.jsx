@@ -21,28 +21,30 @@ class SoftwarePanel extends Component {
                 <div className="darkgrey-header">
                     {title}
                 </div>
-                <span>
-                    {!packagesReady ?
-                        <div className="wrapper-loader">
-                            <Loader />
-                        </div>
-                    :
-                        Object.keys(packagesStore.preparedPackages).length ?                                
-                            <PackagesList
-                                packagesStore={packagesStore}
-                                devicesStore={devicesStore}
-                                hardwareStore={hardwareStore}
-                                onFileDrop={onFileDrop}
-                                toggleTufPackageAutoUpdate={toggleTufPackageAutoUpdate}
-                                showPackageDetails={showPackageDetails}
-                                disableExpand={disableExpand}
-                            />
-                        :
-                            <div className="wrapper-center">
-                                {noSearchResults}
+                <div className="wrapper-software">
+                    <span>
+                        {!packagesReady ?
+                            <div className="wrapper-loader">
+                                <Loader />
                             </div>
-                    }
-                </span>
+                        :
+                            Object.keys(packagesStore.preparedPackages).length ?                                
+                                <PackagesList
+                                    packagesStore={packagesStore}
+                                    devicesStore={devicesStore}
+                                    hardwareStore={hardwareStore}
+                                    onFileDrop={onFileDrop}
+                                    toggleTufPackageAutoUpdate={toggleTufPackageAutoUpdate}
+                                    showPackageDetails={showPackageDetails}
+                                    disableExpand={disableExpand}
+                                />
+                            :
+                                <div className="wrapper-center">
+                                    {noSearchResults}
+                                </div>
+                        }
+                    </span>
+                </div>
             </div>
         );
     }

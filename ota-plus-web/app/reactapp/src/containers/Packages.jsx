@@ -147,7 +147,7 @@ class Packages extends Component {
                                             <span>
                                             Add new package
                                         </span>
-                                    </a> : ''
+                                    </a>
                                 </div>
                             </div>
                         </div>

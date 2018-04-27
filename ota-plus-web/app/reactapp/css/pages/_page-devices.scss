@@ -1,0 +1,165 @@
+#page-devices {
+    height: calc(100vh - 50px);
+    background: $home-bg;
+
+    .groups-panel {
+        background: $devices-groups-bg;
+        width: 350px;
+        height: 100%;
+        float: left;
+
+        .heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 90px;
+            padding: 0 30px;
+            color: $devices-group-inactive;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .wrapper-groups {
+            height: calc(100% - 90px);
+            overflow-y: auto;
+
+            .group-btn {
+                color: $devices-group-text;
+                text-align: left;
+                width: 100%;
+                height: 90px;
+                position: relative;
+                overflow: hidden;
+                @include transition;
+                display: flex;
+                align-items: center;
+                padding: 0 30px;
+                cursor: pointer;
+
+                &:hover {
+                    color: #fff;
+                }
+
+                &.selected {
+                    border-left: 4px solid $home-header-button;
+                    color: #fff;
+
+                    .icon {
+                        background: url($group-active-image-url) rgba(15,22,33,0.3) no-repeat;
+                    }
+                }
+
+                &.artificial {
+                    
+                    .desc {
+                        margin: 0;
+                    }
+                }
+
+                &.active {
+                    color: #fff;
+                    background: #272D37;
+                    border: 2px dashed #48DAD0;
+                }
+
+                .icon {
+                    background: url($group-default-image-url) rgba(15,22,33,0.3) no-repeat;
+                    background-size: cover;
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 4px;
+                }
+
+                .desc {
+                    width: 70%;
+                    margin-left: 15px;
+
+                    &:hover {
+
+                        .title {
+
+                            img {
+                                opacity: 1;
+                            }
+                        }
+                    }
+
+                    .title {
+                        font-size: 16px;
+                        justify-content: space-between;
+                        align-items:center;
+                        display: flex;
+
+                        span {
+                            max-width: 150px;
+                            @include textoverflowEllipsis;
+                        }
+
+                        img {
+                            width: 12px;
+                            height: 12px;
+                            opacity: 0;
+                            transition: opacity 0.4s ease;
+                        }
+                    }
+
+                    .subtitle {
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+    }
+
+    .content-panel {
+        height: 100%;
+        margin-left: 350px;
+        position: relative;
+        overflow-y: hidden;
+
+        .subheader {
+            background: transparent;
+            height: 60px;
+            padding: 0 30px;
+        }
+
+        .wrapper {
+            height: calc(100% - 60px);
+            padding: 0 30px;
+            overflow-y: auto;
+
+            .inner-container {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            .common-box {
+                cursor: move;
+            }
+
+            .content-empty {
+                color: #fff;
+                font-size: 21px;
+            }
+        }
+
+        .common-box {
+
+            .device-status {
+                position: relative;
+                top: -5px;
+                left: 25px;
+                width: 18px;
+                height: 18px;
+            }
+
+            .icon {
+                background-image: url($car-image-url);
+                background-size: cover;
+                background-color: transparent;
+                width: 50px;
+                height: 50px;
+            }
+        }
+    }
+}
