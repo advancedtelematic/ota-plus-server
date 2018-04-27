@@ -8,6 +8,7 @@ import ProfilePage from './Profile';
 import NoMatchPage from './NoMatch';
 import FireworksPage from './Fireworks';
 import SoftwareRepository from './SoftwareRepository';
+import TermsAndConditions from './TermsAndConditions';
 
 export {
     HomePage,
@@ -19,5 +20,6 @@ export {
     ProfilePage,
     NoMatchPage,
     FireworksPage,
-    SoftwareRepository
+    SoftwareRepository,
+    TermsAndConditions
 }

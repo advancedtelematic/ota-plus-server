@@ -232,8 +232,18 @@ class Main extends Component {
                         uiCredentialsDownload={this.uiCredentialsDownload}
                     />
                 :
-                    null
-                }            
+                    pageId === 'page-policy' ?
+                        <FadeAnimation>
+                            <nav className="navbar navbar-inverse">
+                                <div className="container">
+                                    <div className="navbar-header">
+                                        <div className="navbar-brand" id="logo"/>
+                                    </div>
+                                </div>
+                            </nav>
+                        </FadeAnimation>
+                    : null
+                }
                 <div id={pageId} style={{padding: `${this.switchToSWRepo && pageId === 'page-packages' ? '0' : ''}`}}>
                     <FadeAnimation>                    
                         <children.type
