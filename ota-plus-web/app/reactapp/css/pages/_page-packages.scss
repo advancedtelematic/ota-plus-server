@@ -1,0 +1,267 @@
+#page-packages {
+    padding: 30px;
+    background-color: $home-bg;
+    height: calc(100vh - 100px);
+
+    .software-repository {
+        min-width: 1220px;
+
+        .container {
+            min-width: 1220px;
+        }
+
+        .campaigns {
+            height: 100%;
+        }
+    }
+
+    .content {
+        overflow-y: hidden;
+        position: relative;
+
+        .content-empty {
+            font-size: 18px;
+            background: #fff;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .ios-list {
+            height: calc(100% - 40px);
+        }
+
+        .c-package {
+
+            &__item {
+                cursor: pointer;
+                font-size: 12px;
+            }
+
+            &__teaser {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+            }
+
+            &__name {
+                flex: 3;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                padding-right: 15px;
+            }
+
+            &__versions-nr {
+                flex: 1;
+                text-align: center;
+            }
+
+            &__installed {
+                flex: 1;
+                text-align: center;
+            }
+
+            &__more-info {
+                flex: 3;
+                text-align: right;
+                color: $home-header-button;
+                font-weight: 500;
+            }
+
+            &__details {
+                background: #fff;
+                overflow: hidden;
+                padding: 25px;
+            }
+
+            &__main-name {
+                font-size: 22px;
+                margin-bottom: 25px;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding-right: 30px;
+
+                i {
+                    color: $home-header-button;
+                    font-size: 1.5em;
+                    cursor: pointer;
+                }
+            }
+
+            &__chart {
+                width: 16%;
+                float: left;
+            }
+
+            &__heading {
+                margin-bottom: 10px;
+                font-weight: 500;
+                color: $device-hardware-header;
+                font-size: 12px;
+            }
+
+            &__versions {
+                padding: 0 25px;
+                width: 70%;
+                float: left;
+                margin: 0;
+            }
+
+            &__version-item {
+                font-size: 12px;
+                position: relative;
+                @include transition;
+                background: #fff;
+                overflow: hidden;
+
+                &:before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    z-index: 1;
+                    height: 1px;
+                    background-color: $add-button-grey;
+                }
+
+                &--ident {
+                    margin-bottom: 5px;
+                }
+            }
+
+            &__software-box {
+                width: 50%;
+                position: relative;
+                float: left;
+                padding: 20px 10px 20px 35px;
+            }
+
+            &__sw-row {
+                overflow: hidden;
+                margin-bottom: 5px;
+
+                &--version {
+                    font-weight: bold;
+                }
+            }
+
+            &__sw-subtitle {
+                display: block;
+                float: left;
+                width: 25%;
+            }
+
+            &__sw-value {
+                @include textoverflowEllipsis;
+                display: block;
+                float: left;
+                width: 75%;
+            }
+
+            &__hardware-box {
+                text-align: left;
+                height: auto;
+                padding: 20px 10px;
+                width: 40%;
+                float: left;
+            }
+
+            &__hw-row {
+                
+                &--installed {
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }
+
+                &--hardware-ids {
+                    overflow: hidden;
+                }
+
+                &--format {
+                    overflow: hidden;
+                }
+            }
+
+            &__hw-value {
+                width: 75%;
+                float: left;
+            }            
+
+            &__show-dependencies {
+                position: absolute;
+                right: 35px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            &__manager {
+                display: flex;
+                justify-content: flex-end;
+                background-color: rgba(15,22,33,0.1);
+                box-shadow: 0 0 2px 0 rgba(0,0,0,0.08);
+                margin-bottom: 10px;
+                padding: 15px 35px;
+                margin-left: 10px;
+                font-size: 12px;
+
+                &--aligned {
+                    justify-content: space-between;
+                }
+
+                &--full {
+                    margin-left: 0;
+                }
+            }
+
+            &__manage-dependencies {
+                width: 25%;
+                text-align: right;
+                align-items: center;
+                display: flex;
+                justify-content: flex-end;
+
+                &--small {
+                    width: 12%;
+                }
+            }
+
+            &__relations {
+                width: 30%;
+
+                &:first-child {
+                    padding-right: 20px;
+                }
+
+                &:not(:first-child) {
+                    padding: 0 20px;
+                }
+            }
+
+            &__relation-item {
+                @include textoverflowEllipsis;
+
+                &:not(:last-child) {
+                    margin-bottom: 5px;
+                }
+            }
+
+            &__relation-name {
+                width: 30%;
+                float: left;
+                @include textoverflowEllipsis;
+                margin-right: 10%;
+            }
+
+            &__relation-version {
+                width: 60%;
+                float: left;
+                @include textoverflowEllipsis;
+            }
+        }
+    }
+}

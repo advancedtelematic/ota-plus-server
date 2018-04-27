@@ -336,7 +336,7 @@
 
           &.group {
             .icon {
-              background: url('/assets/img/icons/group-default.svg') 50% 50%;
+              background: url($group-default-image-url) 50% 50%;
               border: 1px solid #B9B9B9;
               margin: 0;
               border-radius: 6px;
