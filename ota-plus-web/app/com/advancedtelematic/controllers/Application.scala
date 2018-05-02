@@ -25,6 +25,7 @@ final case class UiToggles(
   atsGarageTheme: Boolean,
   autoFeatureActivation: Boolean,
   credentialsDownload: Boolean,
+  userProfileEdit: Boolean,
   userProfileMenu: Boolean)
 
 object UiToggles {
@@ -32,11 +33,13 @@ object UiToggles {
     val atsGarageTheme = configuration.get[Boolean]("ui.toggle.atsGarageTheme")
     val autoFeatureActivation = configuration.get[Boolean]("ui.toggle.autoFeatureActivation")
     val credentialsDownload = configuration.get[Boolean]("ui.toggle.credentialsDownload")
+    val userProfileEdit = configuration.get[Boolean]("ui.toggle.userProfileEdit")
     val userProfileMenu = configuration.get[Boolean]("ui.toggle.userProfileMenu")
     UiToggles(
       atsGarageTheme,
       autoFeatureActivation,
       credentialsDownload,
+      userProfileEdit,
       userProfileMenu)
   }
 }
