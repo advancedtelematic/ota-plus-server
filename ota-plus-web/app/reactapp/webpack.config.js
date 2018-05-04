@@ -31,6 +31,7 @@ module.exports = {
     path: join(__dirname, '../assets/js'),
     filename: "app.js"
   },
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -87,7 +88,16 @@ module.exports = {
             }
           }
         ]
-      }
+      },
+        {
+          test: /\.(html)$/,
+          use: {
+            loader: 'html-loader',
+            options: {
+                attrs: [':data-src']
+            }
+          }
+        }
     ]
   },
   resolve: {

@@ -10,6 +10,7 @@ export const API_FETCH_MULTI_TARGET_UPDATES='/api/v1/admin/devices';
 export const API_CANCEL_MULTI_TARGET_UPDATE = '/api/v2/cancel_device_update_campaign';
 
 export const API_USER_DETAILS = '/user/profile';
+export const API_USER_CONTRACTS = '/user/contracts';
 export const API_USER_UPDATE = '/user/profile';
 export const API_USER_CHANGE_PASSWORD = '/user/change_password';
 export const API_USER_ACTIVE_DEVICE_COUNT = '/api/v1/active_device_count';

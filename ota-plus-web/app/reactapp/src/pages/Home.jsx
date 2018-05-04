@@ -64,6 +64,7 @@ class Home extends Component {
                         />
 
                 : <Terms
+                        userStore={userStore}
                         setTermsAccepted={setTermsAccepted}
                     />
                 }
