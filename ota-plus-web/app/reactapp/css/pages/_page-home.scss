@@ -242,6 +242,13 @@
             }
             .btn-checkbox {
                 margin: 0 10px 0 0;
+                width: 15px;
+                height: 15px;
+                &.checked {
+                    .fa.fa-check {
+                        vertical-align: top;
+                    }
+                }
             }
         }
 
