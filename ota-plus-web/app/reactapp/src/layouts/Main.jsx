@@ -41,6 +41,7 @@ class Main extends Component {
     @observable activeTabId = 0;
     @observable uiAutoFeatureActivation = document.getElementById('toggle-autoFeatureActivation').value === "true";
     @observable uiUserProfileMenu = document.getElementById('toggle-userProfileMenu').value === "true";
+    @observable uiUserProfileEdit = document.getElementById('toggle-userProfileEdit').value === "true";
     @observable uiCredentialsDownload = document.getElementById('toggle-credentialsDownload').value === "true";
     @observable atsGarageTheme = document.getElementById('toggle-atsGarageTheme').value === 'true';
     @observable switchToSWRepo = false;
@@ -225,6 +226,7 @@ class Main extends Component {
                         packagesStore={this.packagesStore}
                         location={pageId}
                         toggleSWRepo={this.toggleSWRepo}
+                        uiUserProfileEdit={this.uiUserProfileEdit}
                         switchToSWRepo={this.switchToSWRepo}
                         hideQueueModal={this.hideQueueModal}
                         alphaPlusEnabled={this.alphaPlusEnabled}
@@ -263,6 +265,7 @@ class Main extends Component {
                             addNewWizard={this.addNewWizard}
                             showQueueModal={this.showQueueModal}
                             hideQueueModal={this.hideQueueModal}
+                            uiUserProfileEdit={this.uiUserProfileEdit}
                             switchToSWRepo={this.switchToSWRepo}
                             queueModalShown={this.queueModalShown}
                             activeTabId={this.activeTabId}

@@ -10,19 +10,22 @@ class Header extends Component {
         super(props);
     }
     render() {
-        const { userStore, uiUserProfileMenu, uiCredentialsDownload } = this.props;
+        const { userStore, uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit } = this.props;
         const fullNavigation = (
             <div className="nav-container">
                 <div className="page-title">
                     Profile
                 </div>
                 <div className="nav">
-                    <Link to="/profile/edit" activeClassName="active" id="edit-profile-link">
-                        <div className="text">
-                            Edit profile
-                            <span></span>
-                        </div>
-                    </Link>
+                    {uiUserProfileEdit ?
+                        <Link to="/profile/edit" activeClassName="active" id="edit-profile-link">
+                            <div className="text">
+                                Edit profile
+                                <span></span>
+                            </div>
+                        </Link>
+                        : ''
+                    }
                     <Link to="/profile/usage" activeClassName="active" id="usage-link">
                         <div className="text">
                             Usage

@@ -24,7 +24,7 @@ class UserDropdown extends Component {
         this.props.packagesStore._handleCompatibles();
     }
     render() {
-        const { userStore, alphaPlusEnabled, uiCredentialsDownload, settings } = this.props;
+        const { userStore, alphaPlusEnabled, uiCredentialsDownload, settings, uiUserProfileEdit } = this.props;
         return (
             <div className="dropdown-menu">
                 <div className="triangle"></div>
@@ -54,9 +54,12 @@ class UserDropdown extends Component {
                         </div>
                         <hr />
                         <ul className="links">
-                            <li>
-                                <Link to="/profile/edit" id="dropdown-link-editprofile" onClick={this.closeDropdown}>Edit profile</Link>
-                            </li>
+                            {uiUserProfileEdit ?
+                                <li>
+                                    <Link to="/profile/edit" id="dropdown-link-editprofile" onClick={this.closeDropdown}>Edit profile</Link>
+                                </li>
+                                : ''
+                            }
                             <li>
                                   <Link to="/profile/usage" id="dropdown-link-usage" onClick={this.closeDropdown}>Usage</Link>
                             </li>
