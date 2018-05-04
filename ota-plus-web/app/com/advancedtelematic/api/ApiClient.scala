@@ -232,6 +232,10 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
 
   def removeApplicationId(userId: UserId, clientId: UUID): Future[Result] =
     applicationIdRequest("DELETE", userId, clientId)
+
+  def userProfileRequest(userId: UserId, method: String, path: String): Future[Result] =
+    userProfileRequest(s"users/${userId.id}/${path}").transform(_.withMethod(method))
+      .execResult(apiExec)
 }
 
 class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
