@@ -22,7 +22,7 @@ class NavigationDropdown extends Component {
         this.props.hideQueueModal();
     }
     render() {
-        const { userStore, packagesStore, alphaPlusEnabled, uiCredentialsDownload } = this.props;
+        const { userStore, packagesStore, alphaPlusEnabled, uiCredentialsDownload, uiUserProfileEdit } = this.props;
         return (
             <Dropdown id="profile-dropdown" rootCloseEvent="mousedown">
                 <LinkWrapper
@@ -44,6 +44,7 @@ class NavigationDropdown extends Component {
                     userStore={userStore}
                     packagesStore={packagesStore}
                     bsRole="menu"
+                    uiUserProfileEdit={uiUserProfileEdit}
                     alphaPlusEnabled={alphaPlusEnabled}
                     uiCredentialsDownload={uiCredentialsDownload}
                     settings={false}

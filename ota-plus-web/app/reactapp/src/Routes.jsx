@@ -20,6 +20,8 @@ import {
     ProfileAccessKeys,
 } from './components/profile';
 
+const userProfileEdit = document.getElementById('toggle-userProfileEdit').value === "true";
+
 const Routes = () => {
     return (
         <Router history={hashHistory}>
@@ -36,7 +38,7 @@ const Routes = () => {
                 <Route path="/policy" component={TermsAndConditions}/>
                 <Route path="/profile" component={ProfilePage}>
                     <IndexRoute component={ProfileEditProfile}/>
-                    <Route path="edit" component={ProfileEditProfile} />
+                    <Route path="edit" component={userProfileEdit ? ProfileEditProfile : NoMatchPage} />
                     <Route path="usage" component={ProfileUsage} />
                     <Route path="access-keys" component={ProfileAccessKeys} />
                 </Route>

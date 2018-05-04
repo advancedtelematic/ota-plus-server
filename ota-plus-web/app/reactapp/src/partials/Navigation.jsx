@@ -21,7 +21,8 @@ class Navigation extends Component {
             uiCredentialsDownload,
             location,
             toggleSWRepo,
-            switchToSWRepo
+            switchToSWRepo,
+            uiUserProfileEdit
         } = this.props;
         return (
             <nav className="navbar navbar-inverse">
@@ -65,6 +66,7 @@ class Navigation extends Component {
                                     userStore={userStore}
                                     packagesStore={packagesStore}
                                     hideQueueModal={hideQueueModal}
+                                    uiUserProfileEdit={uiUserProfileEdit}
                                     alphaPlusEnabled={alphaPlusEnabled}
                                     uiCredentialsDownload={uiCredentialsDownload}
                                 />
