@@ -246,7 +246,7 @@ class Main extends Component {
                         </FadeAnimation>
                     : null
                 }
-                <div id={pageId} style={{padding: `${this.switchToSWRepo && pageId === 'page-packages' || this.alphaPlusEnabled ? '0' : ''}`}}>
+                <div id={pageId} style={{padding: `${this.switchToSWRepo && pageId === 'page-packages' ? '0' : ''}`}}>
                     <FadeAnimation>                    
                         <children.type
                             {...rest}
