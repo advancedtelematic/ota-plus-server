@@ -45,3 +45,6 @@ GET     /user/profile                            com.advancedtelematic.controlle
 PUT     /user/profile                            com.advancedtelematic.controllers.UserProfileController.updateUserProfile
 PUT     /user/profile/billing_info               com.advancedtelematic.controllers.UserProfileController.updateBillingInfo
 POST    /user/change_password                    com.advancedtelematic.controllers.UserProfileController.changePassword
+GET     /user/*path                       com.advancedtelematic.controllers.UserProfileController.proxyRequest(path: String)
+PUT     /user/*path                       com.advancedtelematic.controllers.UserProfileController.proxyRequest(path: String)
+
