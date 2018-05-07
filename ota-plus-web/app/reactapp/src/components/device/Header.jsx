@@ -181,7 +181,7 @@ class Header extends Component {
                                 <div className="action-buttons">
                                     <button className="queue-button" id="queue-button" onClick={showQueueModal} ref={queueButtonRef}>
                                     </button>
-                                    <button className="delete-button" id="delete-device-button">
+                                    <button className="delete-button fixed-width" id="delete-device-button">
                                         Delete device
                                     </button>
                                 </div>

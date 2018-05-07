@@ -63,6 +63,13 @@ class CancelCampaignModal extends Component {
         return (
             <Modal 
                 title={"You're about to cancel a campaign"}
+                topActions={
+                    <div className="top-actions flex-end">
+                        <div className="modal-close" onClick={hide}>
+                            <img src="/assets/img/icons/close.svg" alt="Icon" />
+                        </div>
+                    </div>
+                }
                 content={content}
                 shown={shown}
                 className="cancel-campaign-modal"
