@@ -19,16 +19,18 @@ export default class Terms extends Component {
                         Terms and conditions
                     </div>
                     <div className="checkbox-wrapper">
-                        <button className={`btn-checkbox ${this.termsAccepted ? 'checked': ''}`} onClick={() => this.termsAccepted = !this.termsAccepted}>
+                        <button className={`btn-checkbox ${this.termsAccepted ? 'checked': ''}`} onClick={() => this.termsAccepted = !this.termsAccepted} id={"terms-checkbox" + (this.termsAccepted ? '-checked' : '')}>
                             <i className="fa fa-check" aria-hidden="true"></i>
                         </button>
-                        <p>I AGREE TO OUR <a href="#">SERVICE TERMS</a> AND <Link to="/policy">PRIVACY POLICY.</Link></p>
+                        <p>
+                            I AGREE TO OUR <Link id="service-terms-link" to="/policy">SERVICE TERMS</Link> AND <Link id="privacy-policy-link" to="/policy">PRIVACY POLICY.</Link>
+                        </p>
                     </div>
                     <div className="steps">
-                        <button className="back btn-primary">Back</button>
+                        <button className="back btn-primary" id="terms-back">Back</button>
                         {this.termsAccepted ?
-                            <button className="next btn-primary" onClick={setTermsAccepted}>Continue</button> :
-                            <button className="next btn-primary" disabled>Continue</button>
+                            <button className="next btn-primary" onClick={setTermsAccepted} id="terms-continue">Continue</button> :
+                            <button className="next btn-primary" disabled id="terms-continue-disabled">Continue</button>
                         }
                     </div>
                 </div>

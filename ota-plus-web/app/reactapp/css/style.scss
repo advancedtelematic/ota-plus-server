@@ -85,6 +85,32 @@ $font: 'akkurat';
     }
 }
 
+.delete-button {
+    height: 30px;
+    width: 100%;
+    border-radius: 1px;
+    background-color: #D0021B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border: none;
+    font-size: 13px;
+
+    @media(max-width: 1420px) {
+        font-size: 12px;
+    }
+
+    &.fixed-width {
+        margin: 0 10px;
+        width: 180px;
+
+        @media(max-width: 1420px) {
+            width: 130px;
+        }
+    }
+}
+
 .add-button {
     text-transform: none;
     color: $home-header-button;
@@ -914,20 +940,13 @@ input {
                 color: $devices-group-text;
                 padding: 0 25px;
                 background: $device-item-bg;
-
-                &:hover {
-                    background: #f5f5f5;
-                }
-
-                &.expanded {
-                    background: #f5f5f5;
-                }
             }
 
             .statistic-details {
                 padding: 25px 0;
                 border-bottom: 1px solid #ddd;
                 overflow: hidden;
+                background: $device-item-bg;
 
                 .campaign-name {
                     display: flex;
@@ -1011,29 +1030,29 @@ input {
                     float: left;
                     padding: 0 30px;
 
-                    .failure-rate-container {
-                        text-align: center;
+                    .failure-rate {
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
 
-                        .failure-rate {
-                            position: relative;
+                    .rate {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 18px;
+                        color: $home-bg;
+                        font-weight: 400;
+                    }
 
-                            .rate {
-                                position: absolute;
-                                top: 46%;
-                                right: 46%;
-                            }
-                        }
-
-                        .cancel-campaign {
-                            margin-top: 20px;
-
-                            .cancel-button {
-                                color: $campaigns-cancel-color;
-                                text-transform: uppercase;
-                                font-size: 12px;
-                                font-weight: bold;
-                            }
-                        }
+                    .cancel-campaign {
+                        margin-top: 20px;
                     }
                 }
 
@@ -1043,14 +1062,11 @@ input {
 
                     .total-progress-container {
                         background: #fff;
-                        padding: 20px 50px;
+                        padding: 25px 40px;
 
                         .top-container {
-                            height: 35px;
                             display: flex;
                             align-items: center;
-                            position: relative;
-                            top: 3px;
                             font-size: 12px;
                             display: flex;
                             justify-content: space-between;
@@ -1072,6 +1088,7 @@ input {
                                     &:first-child {
                                         font-size: 18px;
                                         margin-right: 5px;
+                                        font-weight: 500;
                                     }
                                 }
                             }
@@ -1129,90 +1146,80 @@ input {
                         }
 
                         .bottom-container {
-                            height: 35px;
                             color: $device-hardware-header;
+                            display: flex;
+                            justify-content: space-between;
+                            font-size: 10px;
 
-                            .status-block {
-                                div {
-                                    display: inline-block;
-                                    width: 33%;
-                                    font-size: 10px;
-
-                                    &.failure {
-                                        span {
-                                            &:first-child {
-                                                background-color: #FE0001;
-                                            }
-                                        }
+                            .failure {
+                                span {
+                                    &:first-child {
+                                        background-color: #FE0001;
                                     }
+                                }
+                            }
 
-                                    &.success {
-                                        span {
-                                            &:first-child {
-                                                background-color: $progress-default-color;
-                                            }
-                                        }
+                            .success {
+                                span {
+                                    &:first-child {
+                                        background-color: $progress-default-color;
                                     }
+                                }
+                            }
 
-                                    &.queued {
-                                        span {
-                                            &:first-child {
-                                                background-color: #F5A623;
-                                            }
-                                        }
+                            .queued {
+                                span {
+                                    &:first-child {
+                                        background-color: #F5A623;
                                     }
+                                }
+                            }
 
-                                    &.not-impacted {
-                                        span {
-                                            &:first-child {
-                                                background-color: #ddd;
-                                            }
-                                        }
+                            .not-impacted {
+                                span {
+                                    &:first-child {
+                                        background-color: #ddd;
                                     }
+                                }
+                            }
 
-                                    &.cancelled {
-                                        span {
-                                            &:first-child {
-                                                background-color: #585858;
-                                            }
-                                        }
+                            .cancelled {
+                                span {
+                                    &:first-child {
+                                        background-color: #585858;
                                     }
+                                }
+                            }
 
-                                    &.not-proceed {
-                                        span {
-                                            &:first-child {
-                                                background-color: #FFF;
-                                                border: 1px #B9B9B9 solid;
-                                            }
-                                        }
+                            .not-proceed {
+
+                                span {
+                                    &:first-child {
+                                        background-color: #FFF;
+                                        border: 1px #B9B9B9 solid;
                                     }
+                                }
+                            }
 
-                                    span {
-                                        display: inline-block;
+                            span {
+                                display: inline-block;
 
-                                        &:first-child {
-                                            width: 12px;
-                                            height: 12px;
-                                            border-radius: 50%;
-                                            position: relative;
-                                            top: 2px;
-                                        }
+                                &:first-child {
+                                    width: 12px;
+                                    height: 12px;
+                                    border-radius: 50%;
+                                    position: relative;
+                                    top: 2px;
+                                }
 
-                                        &:nth-child(2) {
-                                            width: 100px;
-                                        }
-
-                                        &:not(:last-child) {
-                                            margin-right: 15px;
-                                        }
-                                    }                                        
-                                }                                    
+                                &:not(:last-child) {
+                                    margin-right: 10px;
+                                }
                             }
                         }
                     }
 
                     .group-list {
-                        margin-top: 10px;
 
                         @media screen and (max-width: 1800px) {
                             .name {
@@ -1227,7 +1234,7 @@ input {
                             display: flex;
                             align-items: center;
                             background: #fff;
-                            margin: 0 50px 0 50px;
+                            padding: 0 40px;
                             border-top: 1px solid $device-active-item-bg;
 
                             &:last-child {
@@ -1240,63 +1247,65 @@ input {
 
                             .name {
                                 width: 15%;
-                                flex-grow: 1;
+                            }
 
-                                .element-box {
-                                    padding: 20px 0;
+                            .stats {
+                                width: 75%;
+                            }
 
-                                    &.group {
-                                    
-                                        .icon {
-                                            background: url($group-default-image-url) 50% 50%;
-                                            height: 50px;
-                                            width: 50px;
-                                            margin: 0;
+                            .element-box {
+                                padding: 20px 0;
+
+                                &.group {
+                                
+                                    .icon {
+                                        background: url($group-default-image-url) 50% 50%;
+                                        height: 35px;
+                                        width: 35px;
+                                        margin: 0;
+                                        border-radius: 4px;
+                                        background-size: 35px 35px;
+                                        background-repeat: no-repeat;
+                                    }
+
+                                    .desc {
+                                        margin: 0 0 0 15px;
+                                        float: none;
+                                        padding: 11px 15px 11px 0;
+                                        display: inline-block;
+                                        vertical-align: middle;
+
+                                        .small-title {
+                                            font-size: 12px;
+                                            font-weight: 400;
+                                            color: $device-properties-text;
+                                            margin-bottom: 2px;
+                                            @include textoverflowEllipsis;
                                         }
 
-                                        .desc {
-                                            margin: 0 0 0 15px;
-                                            float: none;
-                                            padding: 11px 15px 11px 0;
-                                            display: inline-block;
-                                            vertical-align: middle;
-
-                                            .small-title {
-                                                font-size: 12px;
-                                                font-weight: 400;
-                                                color: $device-properties-text;
-                                                margin-bottom: 2px;
-                                                @include textoverflowEllipsis;
-                                            }
-
-                                            .subtitle {
-                                                font-size: 10px;
-                                                color: $device-hardware-header;
-                                            }
+                                        .subtitle {
+                                            font-size: 10px;
+                                            color: $device-hardware-header;
                                         }
                                     }
                                 }
                             }
 
-                            .stats {
-                                width: 50%;
-                                flex-grow: 5;
+                            .devices-progress {
+                                height: 10px;
+                            }
 
-                                .devices-progress {
-                                    height: 10px;
-                                }
-
-                                .wrapper-rate {
-                                    text-align: right;
-                                    margin-top: 5px;
-                                }
+                            .wrapper-rate {
+                                text-align: right;
+                                margin-top: 5px;
                             }
 
                             .status-group {
-                                flex-grow: 1;
                                 text-align: right;
                                 font-size: 12px;
                                 color: $device-properties-text;
+                                width: 10%;
+                                min-width: 100px;
 
                                 span {
                                     display: block;
@@ -1501,20 +1510,6 @@ input {
                     padding: 0;
                     border: 0;
                     margin: 8px 0 0 10px;
-                }
-
-                .action-buttons {
-                    float: right;
-
-                    .accept-button, .cancel-button {
-                        margin: 6px 5px;
-                        float: right;
-                        opacity: 0.5;
-
-                        &:hover {
-                            opacity: 1.0;
-                        }
-                    }
                 }
             }
 
