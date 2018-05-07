@@ -40,6 +40,8 @@
                     background-color: #fff;
                     border-left: 4px solid $color-mint;
                     border-bottom: none;
+                    color: $device-properties-text;
+                    font-weight: 400;
 
                     &+span {
                         transition: all .2s ease-in;
@@ -74,6 +76,7 @@
                         height: 50px;
                         padding: 0 11px;
                         color: $device-properties-text;
+                        font-weight: 400;
 
                         &:not(:first-child) {
                             margin-top: 14px;
