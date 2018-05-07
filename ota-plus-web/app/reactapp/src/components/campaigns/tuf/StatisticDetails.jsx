@@ -89,13 +89,13 @@ class StatisticDetails extends Component {
                                 {Math.round(overallStatistics.failed/Math.max(overallStatistics.finished, 1) * 100)}%
                             </div>
                         </div>
-                        {campaignsStore.campaign.statistics.status === 'launched' ?
+                         {campaignsStore.campaign.statistics.status === 'launched' ?
                             <div className="cancel-campaign">
-                                <a href="#" id="campaign-detail-cancel-all" className="cancel-button" onClick={showCancelCampaignModal}>
-                                    Cancel all
-                                </a>
+                                <button id="campaign-detail-cancel-all" className="delete-button" onClick={showCancelCampaignModal}>
+                                    Cancel campaign
+                                </button>
                             </div>
-                        : 
+                        :
                             null
                         }
                     </div>
@@ -145,44 +145,42 @@ class StatisticDetails extends Component {
                                     </div>
                                     <div className="not-impacted" style={{width: notImpactedRate + '%'}}>
                                     </div>
-                                    <div className="not-proceed" style={{width: notProcessedRate + '%'}}>
+                                    <div className="not-proceed" style={{width: notProcessedRate + '%' }}>
                                     </div>
                                 </div>
                             </div>                            
                         </div>
                         <div className="bottom-container">
-                            <div className="status-block">
-                                <div className="success">
-                                    <span></span>
-                                    <span>Success</span>
-                                    <span id="target_stats_success">{overallStatistics.successful}</span>
-                                </div>
-                                <div className="queued">
-                                    <span></span>
-                                    <span>Queued</span>
-                                    <span id="target_stats_queued">{overallStatistics.queued}</span>
-                                </div>
-                                <div className="cancelled">
-                                    <span></span>
-                                    <span>Cancelled</span>
-                                    <span id="target_stats_cancelled">{overallStatistics.cancelled}</span>
-                                </div>
-                                <div className="failure">
-                                    <span></span>
-                                    <span>Failure</span>
-                                    <span id="target_stats_failure">{overallStatistics.failed}</span>
-                                </div>
-                                <div className="not-proceed">
-                                    <span></span>
-                                    <span>Not processed</span>
-                                    <span id="target_stats_not_proceed">{notProcessed}</span>
-                                </div>
-                                <div className="not-impacted">
-                                    <span></span>
-                                    <span>Not impacted</span>
-                                    <span id="target_stats_not_impacted">{overallStatistics.notImpacted}</span>
-                                </div>
-                            </div> 
+                            <div className="success">
+                                <span></span>
+                                <span>Success</span>
+                                <span id="target_stats_success">{overallStatistics.successful}</span>
+                            </div>
+                            <div className="queued">
+                                <span></span>
+                                <span>Queued</span>
+                                <span id="target_stats_queued">{overallStatistics.queued}</span>
+                            </div>
+                            <div className="cancelled">
+                                <span></span>
+                                <span>Cancelled</span>
+                                <span id="target_stats_cancelled">{overallStatistics.cancelled}</span>
+                            </div>
+                            <div className="failure">
+                                <span></span>
+                                <span>Failure</span>
+                                <span id="target_stats_failure">{overallStatistics.failed}</span>
+                            </div>
+                            <div className="not-proceed">
+                                <span></span>
+                                <span>Not processed</span>
+                                <span id="target_stats_not_proceed">{notProcessed}</span>
+                            </div>
+                            <div className="not-impacted">
+                                <span></span>
+                                <span>Not impacted</span>
+                                <span id="target_stats_not_impacted">{overallStatistics.notImpacted}</span>
+                            </div>
                         </div>
                                                
                     </div>
