@@ -156,25 +156,6 @@
                 border: 0;
                 margin: 0 10px;
             }
-    
-            .delete-button {
-                height: 30px;
-                width: 180px;
-                border-radius: 1px;
-                background-color: #D0021B;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                border: none;
-                font-size: 13px;
-                margin: 0 10px;
-
-                @media(max-width: 1420px) {
-                    width: 130px;
-                    font-size: 12px;
-                }
-            }
         }
     }
 
