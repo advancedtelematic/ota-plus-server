@@ -40,7 +40,7 @@
       background-color: #48DAD0 !important;
     }
     &:after {
-      left: 18px !important;
+      left: 17px !important;
     }
   }
 
@@ -267,6 +267,9 @@
 
       .fa-groups {
         background-image: url($group-default-image-url);
+        width:40px;
+        height:40px;
+        border-radius: 4px;
         margin: 0;
         float: left;
         display: inline-block;
@@ -517,6 +520,7 @@
 
           .progress {
             width:85%;
+            box-shadow: none;
           }
 
           .progress-bar {
