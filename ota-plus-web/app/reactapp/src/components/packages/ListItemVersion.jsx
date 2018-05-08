@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import moment from 'moment';
 import _ from 'underscore';
 import { FlatButton } from 'material-ui';
-import { Dropdown } from '../../partials';
+import { Dropdown, EditableArea } from '../../partials';
 
 @observer
 class ListItemVersion extends Component {
@@ -12,6 +12,7 @@ class ListItemVersion extends Component {
     constructor(props) {
         super(props);
         this.toggleSubmenu = this.toggleSubmenu.bind(this);
+        this.saveComment = this.saveComment.bind(this);
     }
     openBlacklistModal(mode, e) {
         this.props.showBlacklistModal(this.props.version.id.name, this.props.version.id.version, mode);
@@ -24,6 +25,9 @@ class ListItemVersion extends Component {
             return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
         });
         return isPackageBlacklisted ? isPackageBlacklisted : false;
+    }
+    saveComment(value) {
+        localStorage.setItem(this.props.pack.packageName, value);
     }
     render() {
         const { version, showDependenciesModal, showDependenciesManager, packagesStore, alphaPlusEnabled } = this.props;
@@ -41,6 +45,8 @@ class ListItemVersion extends Component {
         if(alphaPlusEnabled) {
             versionCompatibilityData = _.find(packagesStore.compatibilityData, item => item.name === version.filepath);
         }
+
+        let comment = localStorage.getItem(packageName) ? localStorage.getItem(packageName) : 'This package is provided to…. and works best with… compatible for…';
 
         const directorBlock = (
             <span>
@@ -154,7 +160,10 @@ class ListItemVersion extends Component {
                     <div className="c-package__heading">
                         Comment
                     </div>
-                    This package is provided to…. and works best with… compatible for…
+                    <EditableArea
+                        initialText={comment}
+                        saveHandler={this.saveComment}
+                    />
                 </div>
                 {alphaPlusEnabled ?
                     <div style={borderStyle}
