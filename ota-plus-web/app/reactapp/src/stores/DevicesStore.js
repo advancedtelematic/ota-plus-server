@@ -52,6 +52,7 @@ export default class DevicesStore {
     @observable multiTargetUpdatesSaved = [];
     @observable directorDevicesCount = 0;
     @observable directorDevicesIds = [];
+    @observable deviceFleets = [];
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
@@ -65,6 +66,41 @@ export default class DevicesStore {
         resetAsync(this.mtuFetchAsync);
         resetAsync(this.mtuCancelAsync);
         this.devicesLimit = 30;
+    }
+
+    fetchDeviceFleets() {
+        this.deviceFleets = [
+            {
+                id: 1,
+                name: 'HR2',
+                icon_default: '/assets/img/icons/vehicle_01--default.svg',
+                icon_active: '/assets/img/icons/vehicle_01--active.svg',
+            },
+            {
+                id: 2,
+                name: 'HR3',
+                icon_default: '/assets/img/icons/vehicle_02--default.svg',
+                icon_active: '/assets/img/icons/vehicle_02--active.svg',
+            },
+            {
+                id: 3,
+                name: 'HR4',
+                icon_default: '/assets/img/icons/vehicle_03--default.svg',
+                icon_active: '/assets/img/icons/vehicle_03--active.svg',
+            },
+            {
+                id: 4,
+                name: 'HR5',
+                icon_default: '/assets/img/icons/vehicle_04--default.svg',
+                icon_active: '/assets/img/icons/vehicle_04--active.svg',
+            },
+            {
+                id: 5,
+                name: 'HR6',
+                icon_default: '/assets/img/icons/vehicle_05--default.svg',
+                icon_active: '/assets/img/icons/vehicle_05--active.svg',
+            }
+        ];
     }
 
     fetchDevices(filter = '', groupId) {

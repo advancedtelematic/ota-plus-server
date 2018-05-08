@@ -49,7 +49,7 @@ class Device extends Component {
             this.props.devicesStore.fetchDeviceNetworkInfo(this.props.params.id);
         });
         this.props.packagesStore.fetchPackages();
-        this.props.devicesStore.fetchMultiTargetUpdates(this.props.params.id);
+        this.props.devicesStore.fetchMultiTargetUpdates(this.props.params.id);       
     }
     componentWillUnmount() {
         this.packagesFetchHandler();

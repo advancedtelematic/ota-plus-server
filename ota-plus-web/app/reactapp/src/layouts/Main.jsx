@@ -46,8 +46,6 @@ class Main extends Component {
     @observable atsGarageTheme = document.getElementById('toggle-atsGarageTheme').value === 'true';
     @observable switchToSWRepo = false;
 
-    @observable alphaPlusEnabled = false;
-
     constructor(props) {
         super(props);
         axios.defaults.headers.common['Csrf-Token'] = document.getElementById('csrf-token-val').value;
@@ -72,6 +70,7 @@ class Main extends Component {
         this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
         this.callFakeWsHandler = this.callFakeWsHandler.bind(this);
         this.toggleSWRepo = this.toggleSWRepo.bind(this);
+        this.toggleFleet = this.toggleFleet.bind(this);
         this.devicesStore = new DevicesStore();
         this.hardwareStore = new HardwareStore();
         this.groupsStore = new GroupsStore();
@@ -92,13 +91,6 @@ class Main extends Component {
             if(change.name === 'ifLogout' && change.object[change.name]) {
                 this.callFakeWsHandler();
                 doLogout();
-            }
-        });
-        this.featuresHandler = observe(this.featuresStore, (change) => {
-            if(change.name === 'featuresFetchAsync' && change.object[change.name].isFetching === false) {
-                if(_.contains(this.featuresStore.features, 'alphaplus')) {
-                    this.alphaPlusEnabled = true;
-                }
             }
         });
     }
@@ -160,7 +152,7 @@ class Main extends Component {
                 hideWizard={this.hideWizard}
                 toggleWizard={this.toggleWizard}
                 minimizedWizards={this.minimizedWizards}
-                alphaPlusEnabled={this.alphaPlusEnabled}
+                alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
                 key={this.wizards.length}
             />
         );
@@ -203,7 +195,6 @@ class Main extends Component {
     }
     componentWillUnmount() {
         this.logoutHandler();
-        this.featuresHandler();
     }
     backButtonAction(e) {
         if(e) e.preventDefault();
@@ -214,6 +205,11 @@ class Main extends Component {
             this.hideQueueModal();
         }
     }
+    toggleFleet(fleet, e) {
+        if(e) e.preventDefault();
+        this.groupsStore.activeFleet = fleet;
+        this.groupsStore._filterGroups(fleet.id);
+    }
     render() {
         const { children, ...rest } = this.props;
         const pageId = "page-" + (this.props.location.pathname.toLowerCase().split('/')[1] || "home");
@@ -222,17 +218,18 @@ class Main extends Component {
                 {this.sanityCheckCompleted() ?
                     <Navigation
                         userStore={this.userStore}
-                        featuresStore={this.featuresStore}
                         devicesStore={this.devicesStore}
                         packagesStore={this.packagesStore}
+                        activeFleet={this.groupsStore.activeFleet}
                         location={pageId}
                         toggleSWRepo={this.toggleSWRepo}
                         uiUserProfileEdit={this.uiUserProfileEdit}
                         switchToSWRepo={this.switchToSWRepo}
                         hideQueueModal={this.hideQueueModal}
-                        alphaPlusEnabled={this.alphaPlusEnabled}
+                        alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
                         uiUserProfileMenu={this.uiUserProfileMenu}
                         uiCredentialsDownload={this.uiCredentialsDownload}
+                        toggleFleet={this.toggleFleet}
                     />
                 :
                     pageId === 'page-policy' ?
@@ -274,7 +271,7 @@ class Main extends Component {
                             uiAutoFeatureActivation={this.uiAutoFeatureActivation}
                             uiUserProfileMenu={this.uiUserProfileMenu}
                             uiCredentialsDownload={this.uiCredentialsDownload}
-                            alphaPlusEnabled={this.alphaPlusEnabled}
+                            alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
                             sanityCheckCompleted={this.sanityCheckCompleted}
                             setTermsAccepted={this.setTermsAccepted}
                             termsAccepted={this.termsAccepted}
