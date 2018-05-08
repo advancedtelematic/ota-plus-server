@@ -52,7 +52,13 @@ class ListItem extends Component {
                     onClick={() => {
                         selectGroup({type: 'real', name: group.groupName, id: group.id});
                     }}>
-                    <div className="icon"></div>
+                    {groupsStore.activeFleet ?
+                        <div className="icon icon-fleet">
+                            ABC
+                        </div>
+                    :
+                        <div className="icon icon-bg"></div>
+                    }
                     <div className="desc">
                         <div className="title">
                             <span>

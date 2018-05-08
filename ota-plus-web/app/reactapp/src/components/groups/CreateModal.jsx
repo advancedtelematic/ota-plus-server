@@ -45,7 +45,7 @@ class CreateModal extends Component {
     handleResponse() {
         let data = serialize(document.querySelector('#group-create-form'), { hash: true });
         this.props.selectGroup({type: 'real', name: data.groupName, id: this.props.groupsStore.latestCreatedGroupId});
-        this.props.groupsStore._prepareGroups();
+        this.props.groupsStore._prepareGroups(this.props.groupsStore.groups);
         this.props.hide();
     }
     handleRenameResponse() {

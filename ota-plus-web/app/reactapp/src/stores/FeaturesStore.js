@@ -11,6 +11,7 @@ import {
     handleAsyncSuccess, 
     handleAsyncError 
 } from '../utils/Common';
+import _ from 'underscore';
 
 export default class FeaturesStore {
 
@@ -20,6 +21,7 @@ export default class FeaturesStore {
     @observable featuresClientIdFetchAsync = {};
     @observable features = [];
     @observable clientId = null;
+    @observable alphaPlusEnabled = false;
     
     constructor() {
         resetAsync(this.featuresFetchAsync);
@@ -47,6 +49,9 @@ export default class FeaturesStore {
         return axios.get(API_FEATURES_FETCH)
             .then(function (response) {
                 this.features = response.data;
+                if(_.contains(response.data, 'alphaplus')) {
+                    this.alphaPlusEnabled = true;
+                }
                 this.featuresFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {

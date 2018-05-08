@@ -12,8 +12,8 @@ class Navigation extends Component {
     }
     render() {
         const { 
-            userStore, 
-            devicesStore, 
+            userStore,
+            devicesStore,
             hideQueueModal, 
             alphaPlusEnabled, 
             packagesStore,
@@ -22,7 +22,9 @@ class Navigation extends Component {
             location,
             toggleSWRepo,
             switchToSWRepo,
-            uiUserProfileEdit
+            uiUserProfileEdit,
+            toggleFleet,
+            activeFleet
         } = this.props;
         return (
             <nav className="navbar navbar-inverse">
@@ -85,11 +87,18 @@ class Navigation extends Component {
                         }
                     </ul>
                 </div>
-                {alphaPlusEnabled && location === 'page-packages' ?
+                {alphaPlusEnabled ?
                     <SecondNavigation
+                        location={location}
                         toggleSWRepo={toggleSWRepo}
                         switchToSWRepo={switchToSWRepo}
-                    /> : ''}
+                        toggleFleet={toggleFleet}
+                        devicesStore={devicesStore}
+                        activeFleet={activeFleet}
+                    />
+                :
+                    null
+                }
             </nav>
         );
     }
