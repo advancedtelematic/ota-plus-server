@@ -188,3 +188,22 @@
     }
   }
 }
+
+.c-editable-area {
+
+  &__input {
+    padding: 5px 10px;
+    resize: none;
+    width: 100%;
+    background-color: transparent;
+    transition:border-color 0.5s ease;
+    border: 1px solid transparent;
+
+    &:hover {
+      border-color: #e7e7e8;
+    }
+    &:focus {
+      border-color: #e7e7e8;
+    }
+  }
+}
