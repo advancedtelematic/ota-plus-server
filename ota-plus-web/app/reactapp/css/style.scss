@@ -3083,11 +3083,16 @@ input {
 
         .total-count {
             position: absolute;
-            font-size: 30px;
-            font-weight: bold;
-            color: #666;
-            top: calc(50% - 25px);
-            left: calc(50% - 8px);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: $home-bg;
+            font-weight: 400;
         }
     }
 }

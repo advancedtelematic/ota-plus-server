@@ -28,6 +28,9 @@ class ListItem extends Component {
                 <div className="c-package__name" id={`target_package_${pack.packageName}`}>
                     {pack.packageName}
                 </div>
+                <div className="c-package__comments">
+                    This package is provided to….
+                </div>
                 <div className="c-package__versions-nr" id={"package-" + pack.packageName + "-versions-count"}>
                     {packVersionsNumber === 1 ?
                         packVersionsNumber + " version"
@@ -49,7 +52,7 @@ class ListItem extends Component {
             expandedPackageName === pack.packageName ?
                 <div className="c-package__item c-package__item--expanded item" id={"button-package-" + pack.packageName} onClick={togglePackage.bind(this, pack.packageName)}>
                     <div className="wrapper-center">
-                        <img src="assets/img/icons/black/arrow-up.svg" alt="Icon" />
+                        <img src="assets/img/icons/black/arrow-up.svg" className="c-package__icon" alt="Icon" />
                     </div>
                 </div>
             :
