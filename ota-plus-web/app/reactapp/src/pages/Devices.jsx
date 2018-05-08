@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { observe } from 'mobx';
 import { observer } from 'mobx-react';
 import { translate } from 'react-i18next';
 import { MetaData, FadeAnimation } from '../utils';
@@ -13,12 +14,22 @@ const title = "Devices";
 class Devices extends Component {
     constructor(props) {
         super(props);
+        if(props.alphaPlusEnabled) {
+            this.groupsFetchHandler = observe(props.groupsStore, (change) => {
+                if(change.name === 'groupsFetchAsync' && !change.object[change.name].isFetching) {
+                    props.groupsStore._prepareGroupsWithFleets(props.devicesStore.deviceFleets);
+                }
+            });
+        }
     }
     componentWillMount() {
         this.props.devicesStore.fetchDevices();
         this.props.groupsStore.fetchGroups();
     }
     componentWillUnmount() {
+        if(this.props.alphaPlusEnabled) {
+            this.groupsFetchHandler();
+        }
         this.props.devicesStore._reset();
         this.props.groupsStore._reset();
     }
