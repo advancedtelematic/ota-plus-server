@@ -175,6 +175,9 @@ class List extends Component {
                                                             <div className="c-package__main-name">
                                                                 {pack.packageName}
                                                             </div>
+                                                            <div className="c-package__delete-button">
+                                                                <button className="delete-button">Delete package</button>
+                                                            </div>
                                                             <div className="c-package__chart">
                                                                 <div className="c-package__heading">
                                                                     Distribution by devices

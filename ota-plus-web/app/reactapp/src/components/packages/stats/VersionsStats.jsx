@@ -34,7 +34,7 @@ class VersionsStats extends Component {
                             value: version.installedOnEcus,
                             color: availableColors[colorIndex],
                             highlight: availableColors[colorIndex],
-                            label: (statsPackIndex === availableColors.length - 1 ? "Other" : version.id.version)
+                            label: (statsPackIndex === availableColors.length - 1 ? "Other" : version.id.version),
                         }
                   );
                 } else if(statsPackIndex >= availableColors.length) {
@@ -58,8 +58,8 @@ class VersionsStats extends Component {
                                 height="175" 
                                 options={{
                                     percentageInnerCutout: 75, 
-                                    segmentStrokeWidth: 5, 
-                                    showTooltips: true
+                                    segmentStrokeWidth: 0,
+                                    showTooltips: true,
                                 }}
                             />
                         </div>
