@@ -8,7 +8,6 @@ const title = "Home";
 
 @observer
 class Home extends Component {
-
     constructor(props) {
         super(props);
     }
@@ -67,7 +66,6 @@ class Home extends Component {
                         setTermsAccepted={setTermsAccepted}
                     />
                 }
-
             </FadeAnimation>
         );
     }

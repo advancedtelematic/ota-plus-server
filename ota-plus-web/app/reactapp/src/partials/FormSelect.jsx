@@ -25,7 +25,6 @@ class FormSelect extends Component {
             self._detachEventListener();
         } else {
             body.on('click', (e) => {
-                console.log(e.target.className)
                 if (e.target.className !== 'c-form__option ' && e.target.className !== 'c-form__option c-form__option--selected') {
                     self.toggleMenu();
                 }

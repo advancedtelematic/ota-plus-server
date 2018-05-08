@@ -450,9 +450,18 @@ input {
                     padding: 5px 20px 0;
                     margin-left: 0;
                 }
+
                 &:hover, &.active {
                     border-bottom: 5px solid $color-mint;
+                    color: #fff;
                 }
+            }
+
+            .fleet-icon {
+                background-size: 100% 100%;
+                background-repeat: no-repeat;
+                width: 50px; 
+                height: 50px;
             }
         }
     }
@@ -506,12 +515,9 @@ input {
                     font-weight: 300;
                     font-size: 18px;
 
-                    &:hover, &:focus, &:active {
-                        color: #fff;
-                    }
-
-                    &:hover, &.active {
+                    &:focus, &:active, &:hover, &.active {
                         border-bottom: 5px solid $color-mint;
+                        color: #fff;
                     }
                 }
             }
