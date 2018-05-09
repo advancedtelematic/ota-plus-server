@@ -135,14 +135,14 @@ class ListItemVersion extends Component {
                     <span></span>
 
                     <Dropdown show={this.showSubmenu} hideHandler={() => {this.showSubmenu = false}}>
-                        <li>
-                            <a href="#" id="show-dependencies"
+                        <li className="package-dropdown-item">
+                            <a className="package-dropdown-item" href="#" id="show-dependencies"
                                onClick={showDependenciesModal.bind(this, version.filepath)}>
                                 Show dependencies
                             </a>
                         </li>
-                        <li>
-                            <a href="#">Delete version</a>
+                        <li className="package-dropdown-item">
+                            <a className="package-dropdown-item" href="#">Delete version</a>
                         </li>
                     </Dropdown>
                 </div>
