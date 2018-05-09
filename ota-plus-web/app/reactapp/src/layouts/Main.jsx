@@ -243,7 +243,10 @@ class Main extends Component {
                         </FadeAnimation>
                     : null
                 }
-                <div id={pageId} style={{padding: `${this.switchToSWRepo && pageId === 'page-packages' ? '0' : ''}`}}>
+                <div id={pageId} style={{
+                    height: this.featuresStore.alphaPlusEnabled && (pageId === 'page-packages' || pageId === 'page-devices') ? 'calc(100vh - 100px)' : 'calc(100vh - 50px)',
+                    padding: !this.featuresStore.alphaPlusEnabled && pageId === 'page-packages' ? '30px' : ''
+                }}>
                     <FadeAnimation>                    
                         <children.type
                             {...rest}
