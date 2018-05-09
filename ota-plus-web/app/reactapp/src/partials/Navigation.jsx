@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { observer } from 'mobx-react';
 import NavigationDropdown from './NavigationDropdown';
@@ -6,7 +6,7 @@ import SecondNavigation from './SecondNavigation';
 import SettingsDropdown from './SettingsDropdown';
 
 @observer
-class Navigation extends Component {
+class Navigation extends PureComponent {
     constructor(props) {
         super(props);
     }
@@ -14,7 +14,6 @@ class Navigation extends Component {
         const { 
             userStore,
             devicesStore,
-            hideQueueModal, 
             alphaPlusEnabled, 
             packagesStore,
             uiUserProfileMenu,
@@ -67,7 +66,6 @@ class Navigation extends Component {
                                 <NavigationDropdown
                                     userStore={userStore}
                                     packagesStore={packagesStore}
-                                    hideQueueModal={hideQueueModal}
                                     uiUserProfileEdit={uiUserProfileEdit}
                                     alphaPlusEnabled={alphaPlusEnabled}
                                     uiCredentialsDownload={uiCredentialsDownload}
@@ -77,7 +75,6 @@ class Navigation extends Component {
                             <li id="menu-login">
                                 <SettingsDropdown
                                     userStore={userStore}
-                                    hideQueueModal={hideQueueModal}
                                     alphaPlusEnabled={alphaPlusEnabled}
                                     uiCredentialsDownload={uiCredentialsDownload}
                                 />
@@ -87,7 +84,7 @@ class Navigation extends Component {
                         }
                     </ul>
                 </div>
-                {alphaPlusEnabled ?
+                {alphaPlusEnabled && location === 'page-packages' || location === 'page-devices'?
                     <SecondNavigation
                         location={location}
                         toggleSWRepo={toggleSWRepo}

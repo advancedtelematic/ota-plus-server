@@ -1,9 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import _ from 'underscore';
 
 @observer
-class SecondNavigation extends Component {
+class SecondNavigation extends PureComponent {
     constructor(props) {
         super(props);
     }
