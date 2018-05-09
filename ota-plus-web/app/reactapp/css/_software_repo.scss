@@ -69,6 +69,7 @@
     font-weight:500;
     color: #6A6D74;
     position: relative;
+    padding-left: 27px;
     z-index: 50;
     text-transform: uppercase;
   }
@@ -184,7 +185,7 @@
         background-color: #9B9DA2;
         width:100%;
         display: block;
-        padding: 5px 25px;
+        padding: 5px 27px;
         color: #3F454D;
         font-weight: 500;
         font-size: 10px;
@@ -283,7 +284,7 @@
               position: relative;
               display: block;
               width:100%;
-              padding: 20px 30px;
+              padding: 20px 27px;
             }
           }
         }
@@ -531,6 +532,7 @@
             border: none;
             margin: 0;
             height: auto;
+            padding: 20px 20px 20px 0;
             &:hover {
               background-color: transparent;
             }
@@ -545,6 +547,7 @@
           .desc {
             float: none;
             width: 50%;
+            padding-left: 10px;
           }
 
           .name, .stats {
@@ -600,6 +603,10 @@
         }
       }
 
+      .owners {
+        padding: 10px 21px;
+      }
+
       .first-level {
         height: calc(100% - 40px);
         overflow-y: auto;
@@ -612,7 +619,7 @@
           padding: 0 !important;
 
           & > span.item {
-            padding: 20px 35px;
+            padding: 20px 27px;
             display: block;
             i.fa-error, i.warning {
               position: absolute;
