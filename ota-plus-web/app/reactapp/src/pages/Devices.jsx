@@ -14,22 +14,21 @@ const title = "Devices";
 class Devices extends Component {
     constructor(props) {
         super(props);
-        if(props.alphaPlusEnabled) {
-            this.groupsFetchHandler = observe(props.groupsStore, (change) => {
-                if(change.name === 'groupsFetchAsync' && !change.object[change.name].isFetching) {
+
+        this.groupsFetchHandler = observe(props.groupsStore, (change) => {
+            if(change.name === 'groupsFetchAsync' && !change.object[change.name].isFetching) {
+                if(props.devicesStore.deviceFleets.length) {
                     props.groupsStore._prepareGroupsWithFleets(props.devicesStore.deviceFleets);
                 }
-            });
-        }
+            }
+        });
     }
     componentWillMount() {
         this.props.devicesStore.fetchDevices();
         this.props.groupsStore.fetchGroups();
     }
     componentWillUnmount() {
-        if(this.props.alphaPlusEnabled) {
-            this.groupsFetchHandler();
-        }
+        this.groupsFetchHandler();
         this.props.devicesStore._reset();
         this.props.groupsStore._reset();
     }
