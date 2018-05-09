@@ -249,6 +249,7 @@ class Main extends Component {
                             sanityCheckCompleted={this.sanityCheckCompleted}
                             setTermsAccepted={this.setTermsAccepted}
                             termsAccepted={this.termsAccepted}
+                            toggleFleet={this.toggleFleet}
                         />
                     </FadeAnimation>
                     <SizeVerify 

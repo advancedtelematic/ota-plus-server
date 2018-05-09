@@ -6,6 +6,7 @@ import { MetaData, FadeAnimation } from '../utils';
 import { DevicesContainer } from '../containers';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import _ from 'underscore';
 
 const title = "Devices";
 
@@ -19,6 +20,7 @@ class Devices extends Component {
             if(change.name === 'groupsFetchAsync' && !change.object[change.name].isFetching) {
                 if(props.devicesStore.deviceFleets.length) {
                     props.groupsStore._prepareGroupsWithFleets(props.devicesStore.deviceFleets);
+                    props.toggleFleet(_.first(props.devicesStore.deviceFleets));
                 }
             }
         });
