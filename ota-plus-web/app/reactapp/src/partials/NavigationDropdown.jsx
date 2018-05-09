@@ -11,22 +11,16 @@ import $ from 'jquery';
 class NavigationDropdown extends Component {
     constructor(props) {
         super(props);
-        this.onDropdownClick = this.onDropdownClick.bind(this);
     }
     handleClickOutside(e) {
         if($('#menu-login .dropdown').hasClass('open'))
             document.getElementById('profile-dropdown').click();
-    }
-    onDropdownClick(e) {
-        if(e) e.preventDefault();
-        this.props.hideQueueModal();
     }
     render() {
         const { userStore, packagesStore, alphaPlusEnabled, uiCredentialsDownload, uiUserProfileEdit } = this.props;
         return (
             <Dropdown id="profile-dropdown" rootCloseEvent="mousedown">
                 <LinkWrapper
-                    onClick={this.onDropdownClick.bind(this)}
                     bsRole="toggle">
                     <Avatar 
                         src={userStore.user.picture ? userStore.user.picture : "/assets/img/icons/profile.png"}
