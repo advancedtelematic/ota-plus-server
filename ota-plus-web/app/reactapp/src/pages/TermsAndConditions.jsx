@@ -19,7 +19,7 @@ class TermsAndConditions extends Component {
                     </div>
                     <div className="wrapper">
                         <div className="content-header">
-                            <span>Privacy Policy</span>
+                            <span className="border">Privacy Policy</span>
                             <span>Effective date: <span className="date">Friday, 4 December, 2015</span></span>
                         </div>
                         <div className="content">
