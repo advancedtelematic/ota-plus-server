@@ -23,6 +23,7 @@ import _ from 'underscore';
 export default class DevicesStore {
 
     @observable devicesFetchAsync = {};
+    @observable deviceFleetsFetchAsync = {};
     @observable devicesOneFetchAsync = {};
     @observable devicesOneNetworkInfoFetchAsync = {};
     @observable devicesCountFetchAsync = {};
@@ -56,6 +57,7 @@ export default class DevicesStore {
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
+        resetAsync(this.deviceFleetsFetchAsync);
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesCountFetchAsync);
         resetAsync(this.devicesDirectorAttributesFetchAsync);
@@ -69,6 +71,7 @@ export default class DevicesStore {
     }
 
     fetchDeviceFleets() {
+        resetAsync(this.deviceFleetsFetchAsync, true);
         this.deviceFleets = [
             {
                 id: 1,
@@ -101,6 +104,7 @@ export default class DevicesStore {
                 icon_active: '/assets/img/icons/vehicle_05--active.svg',
             }
         ];
+        this.deviceFleetsFetchAsync = handleAsyncSuccess(this.deviceFleets);
     }
 
     fetchDevices(filter = '', groupId) {
@@ -404,6 +408,7 @@ export default class DevicesStore {
 
     _reset() {
         resetAsync(this.devicesFetchAsync);
+        resetAsync(this.deviceFleetsFetchAsync);
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesOneNetworkInfoFetchAsync);
         resetAsync(this.devicesCountFetchAsync);
