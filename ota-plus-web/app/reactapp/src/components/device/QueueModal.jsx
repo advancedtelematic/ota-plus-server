@@ -61,7 +61,7 @@ class QueueModal extends Component {
                         className={"tab-item" + (activeTabId === 1 ? " active" : "")}
                         id="installation-history"
                         data-id={1}
-                        onActive={setQueueModalActiveTabId.bind(this, 1, !_.isEmpty(device) ? device : null)}
+                        onActive={setQueueModalActiveTabId.bind(this, 1)}
                     >
                         <div className={"wrapper-list" + (activeTabId === 0 ? " hide" : "")}>
                             <HistoryMtuList

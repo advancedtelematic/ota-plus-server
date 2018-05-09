@@ -23,7 +23,6 @@ class Device extends Component {
         this.hidePackageCreateModal = this.hidePackageCreateModal.bind(this);
         this.onFileDrop = this.onFileDrop.bind(this);
         this.toggleTufPackageAutoUpdate = this.toggleTufPackageAutoUpdate.bind(this);
-        this.installTufPackage = this.installTufPackage.bind(this);
         this.showPackageDetails = this.showPackageDetails.bind(this);
     }
     showPackageCreateModal(files, e) {
@@ -59,12 +58,7 @@ class Device extends Component {
                 activeEcuSerial
             );
     }
-    installTufPackage(data) {
-        const { packagesStore, devicesStore, hardwareStore } = this.props;
-        data.hardwareId = hardwareStore.activeEcu.hardwareId;
-        devicesStore.createMultiTargetUpdate(data, devicesStore.device.uuid);
-        this.props.showQueueModal();
-    }
+    
     showPackageDetails(pack, e) {
         if(e) e.preventDefault();
         const { packagesStore } = this.props;
@@ -86,6 +80,7 @@ class Device extends Component {
             selectEcu,
             packagesReady,
             disableExpand,
+            installTufPackage
         } = this.props;
         const device = devicesStore.device;
         return (
@@ -119,7 +114,7 @@ class Device extends Component {
                                 devicesStore={devicesStore}
                                 campaignsStore={campaignsStore}
                                 hardwareStore={hardwareStore}
-                                installTufPackage={this.installTufPackage}
+                                installTufPackage={installTufPackage}
                                 packagesReady={packagesReady}
                             />
                         </span>
@@ -153,7 +148,6 @@ Device.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     packagesStore: PropTypes.object.isRequired,
     hardwareStore: PropTypes.object.isRequired,
-    showQueueModal: PropTypes.func.isRequired,
     selectEcu: PropTypes.func.isRequired,
 }
 

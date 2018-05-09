@@ -37,8 +37,6 @@ class Main extends Component {
     @observable wizards = [];    
     @observable minimizedWizards = [];
     @observable uploadBoxMinimized = false;
-    @observable queueModalShown = false;
-    @observable activeTabId = 0;
     @observable uiAutoFeatureActivation = document.getElementById('toggle-autoFeatureActivation').value === "true";
     @observable uiUserProfileMenu = document.getElementById('toggle-userProfileMenu').value === "true";
     @observable uiUserProfileEdit = document.getElementById('toggle-userProfileEdit').value === "true";
@@ -65,9 +63,7 @@ class Main extends Component {
         this.toggleWizard = this.toggleWizard.bind(this);
         this.toggleUploadBoxMode = this.toggleUploadBoxMode.bind(this);
         this.sanityCheckCompleted = this.sanityCheckCompleted.bind(this);
-        this.showQueueModal = this.showQueueModal.bind(this);
-        this.hideQueueModal = this.hideQueueModal.bind(this);
-        this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
+        
         this.callFakeWsHandler = this.callFakeWsHandler.bind(this);
         this.toggleSWRepo = this.toggleSWRepo.bind(this);
         this.toggleFleet = this.toggleFleet.bind(this);
@@ -115,19 +111,6 @@ class Main extends Component {
         this.websocketHandler.init();
         window.atsGarageTheme = this.atsGarageTheme;
     }
-    showQueueModal() {
-        this.queueModalShown = true;
-    }
-    hideQueueModal() {
-        this.queueModalShown = false;
-        this.setQueueModalActiveTabId(0);
-    }
-    setQueueModalActiveTabId(tabId, device = null) {
-        this.activeTabId = tabId;
-        if(!_.isEmpty(device) && tabId === 1) {
-            this.packagesStore.fetchPackagesHistory(device.uuid, this.packagesStore.packagesHistoryFilter);
-        }
-    }    
     toggleWizard(wizardId, wizardName, e) {
         if(e) e.preventDefault();
         let minimizedWizard = {
@@ -200,11 +183,6 @@ class Main extends Component {
         if(e) e.preventDefault();
         window.history.go(-1);
     }
-    componentWillReceiveProps(nextProps) {
-        if(this.queueModalShown) {
-            this.hideQueueModal();
-        }
-    }
     toggleFleet(fleet, e) {
         if(e) e.preventDefault();
         this.groupsStore.activeFleet = fleet;
@@ -225,7 +203,6 @@ class Main extends Component {
                         toggleSWRepo={this.toggleSWRepo}
                         uiUserProfileEdit={this.uiUserProfileEdit}
                         switchToSWRepo={this.switchToSWRepo}
-                        hideQueueModal={this.hideQueueModal}
                         alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
                         uiUserProfileMenu={this.uiUserProfileMenu}
                         uiCredentialsDownload={this.uiCredentialsDownload}
@@ -264,13 +241,8 @@ class Main extends Component {
                             backButtonAction={this.backButtonAction}
                             setSystemReady={this.setSystemReady}
                             addNewWizard={this.addNewWizard}
-                            showQueueModal={this.showQueueModal}
-                            hideQueueModal={this.hideQueueModal}
                             uiUserProfileEdit={this.uiUserProfileEdit}
                             switchToSWRepo={this.switchToSWRepo}
-                            queueModalShown={this.queueModalShown}
-                            activeTabId={this.activeTabId}
-                            setQueueModalActiveTabId={this.setQueueModalActiveTabId}
                             uiAutoFeatureActivation={this.uiAutoFeatureActivation}
                             uiUserProfileMenu={this.uiUserProfileMenu}
                             uiCredentialsDownload={this.uiCredentialsDownload}
