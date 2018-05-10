@@ -28,6 +28,7 @@ class List extends Component {
         this.listScroll = this.listScroll.bind(this);
         this.highlightPackage = this.highlightPackage.bind(this);
         this.togglePackage = this.togglePackage.bind(this);
+        this.deletePackage = this.deletePackage.bind(this);
         this.packagesChangeHandler = observe(props.packagesStore, (change) => {
             if(change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
@@ -130,6 +131,10 @@ class List extends Component {
         clearInterval(this.tmpIntervalId);
         this.tmpIntervalId = null;
     }
+    deletePackage(name, e) {
+        if(e) e.preventDefault();
+        this.props.packagesStore.deletePackage(name);
+    }
     render() {
         const { showBlacklistModal, packagesStore, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, alphaPlusEnabled } = this.props;        
         return (
@@ -176,7 +181,7 @@ class List extends Component {
                                                                 {pack.packageName}
                                                             </div>
                                                             <div className="c-package__delete-button">
-                                                                <button className="delete-button">Delete package</button>
+                                                                <button className="delete-button" onClick={this.deletePackage.bind(this, pack.packageName)}>Delete package</button>
                                                             </div>
                                                             <div className="c-package__chart">
                                                                 <div className="c-package__heading">
