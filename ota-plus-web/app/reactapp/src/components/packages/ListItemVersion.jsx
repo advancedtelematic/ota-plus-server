@@ -13,6 +13,7 @@ class ListItemVersion extends Component {
         super(props);
         this.toggleSubmenu = this.toggleSubmenu.bind(this);
         this.saveComment = this.saveComment.bind(this);
+        this.deleteVersion = this.deleteVersion.bind(this);
     }
     openBlacklistModal(mode, e) {
         this.props.showBlacklistModal(this.props.version.id.name, this.props.version.id.version, mode);
@@ -28,6 +29,10 @@ class ListItemVersion extends Component {
     }
     saveComment(value) {
         localStorage.setItem(this.props.pack.packageName, value);
+    }
+    deleteVersion(version, e) {
+        if(e) e.preventDefault();
+        this.props.packagesStore.deleteVersion(version);
     }
     render() {
         const { version, showDependenciesModal, showDependenciesManager, packagesStore, alphaPlusEnabled } = this.props;
@@ -142,7 +147,9 @@ class ListItemVersion extends Component {
                             </a>
                         </li>
                         <li className="package-dropdown-item">
-                            <a className="package-dropdown-item" href="#">Delete version</a>
+                            <a className="package-dropdown-item" href="#" onClick={this.deleteVersion.bind(this, version.id.version)}>
+                                Delete version
+                            </a>
                         </li>
                     </Dropdown>
                 </div>
