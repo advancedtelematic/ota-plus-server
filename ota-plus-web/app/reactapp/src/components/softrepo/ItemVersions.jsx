@@ -50,18 +50,18 @@ export default class ItemVersions extends Component {
                                         <div className="col-xs-6">
                                             <div className="left-box">
                                                 <div className="version-info">
-                                                    <span className="bold">Version: {version}</span>
-                                                    <span className="bold">Created at: {versionItem.created}</span>
-                                                    <span className="bold">Updated at: {versionItem.updated}</span>
-                                                    <span className="bold">Hash: {versionItem.hash}</span>
+                                                    <span className="light">Version: {version}</span>
+                                                    <span className="light">Created at: {versionItem.created}</span>
+                                                    <span className="light">Updated at: {versionItem.updated}</span>
+                                                    <span className="light">Hash: {versionItem.hash}</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="col-xs-6">
                                             <div className="right-box">
-                                                <span className="bold">Length: {versionItem.length}</span>
-                                                <span className="bold">Installed on {versionItem.installedOnEcus} ECU(s)</span>
-                                                <span className="bold">Hardware ids: {_.map(versionItem.id, (id, key) => {
+                                                <span className="light">Length: {versionItem.length}</span>
+                                                <span className="light">Installed on {versionItem.installedOnEcus} ECU(s)</span>
+                                                <span className="light">Hardware ids: {_.map(versionItem.id, (id, key) => {
                                                     return <span key={key} className="app-label">{id}</span>
                                                 })}</span>
                                             </div>

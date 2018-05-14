@@ -33,6 +33,7 @@ export default class GroupsStore {
     @observable groupsCurrentPage = 0;
     @observable groupsTotalCount = null;
     @observable groupsLimit = 10;
+    @observable activeFleet = null;
 
     constructor() {
         resetAsync(this.groupsFetchAsync);
@@ -49,6 +50,14 @@ export default class GroupsStore {
         };   
     }
 
+    _filterGroups(fleetId) {
+        const fg = _.filter(this.groups, group => group.fleet_id === fleetId);
+        // In order to prevent infinite scroll
+        this.groupsCurrentPage = 0;
+        this.groupsTotalCount = 0;
+        this._prepareGroups(fg);
+    }
+
     fetchGroups() {
         resetAsync(this.groupsFetchAsync, true);
         return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsLimit + '&offset=' + this.groupsCurrentPage * this.groupsLimit)
@@ -57,7 +66,7 @@ export default class GroupsStore {
                 if(groups.length) {
                     let after = _.after(groups.length, () => {
                         this.groups = _.uniq(this.groups.concat(groups), group => group.id);
-                        this._prepareGroups();
+                        this._prepareGroups(this.groups);
                         this.groupsFetchAsync = handleAsyncSuccess(response);
                     }, this);
                     _.each(groups, (group, index) => {
@@ -106,7 +115,11 @@ export default class GroupsStore {
                     type: 'real',
                     name: name
                 };
-                this._prepareGroups();
+                if(this.activeFleet) {
+                    this._filterGroups(this.activeFleet.id);
+                } else {
+                    this._prepareGroups(this.groups);
+                }
             }.bind(this))
             .catch(function (error) {
                 this.groupsRenameAsync = handleAsyncError(error);
@@ -159,10 +172,10 @@ export default class GroupsStore {
         this.latestCreatedGroupId = null;
         this.groupsCurrentPage = 0;
         this.groupsTotalCount = 0;
+        this.activeFleet = null;
     }
 
-    _prepareGroups() {
-        let groups = this.groups;
+    _prepareGroups(groups) {
         let preparedGroups = {};
         groups.sort((a, b) => {
             let aName = a.groupName;
@@ -178,6 +191,12 @@ export default class GroupsStore {
             preparedGroups[firstLetter].push(group);
         });
         this.preparedGroups = preparedGroups;
+    }
+
+    _prepareGroupsWithFleets(fleets) {
+        _.each(this.groups, group => {
+            group.fleet_id = fleets[_.random(0, fleets.length - 1)].id;
+        });
     }
 
     _getGroup(id) {

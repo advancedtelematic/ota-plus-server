@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { observer } from 'mobx-react';
 import NavigationDropdown from './NavigationDropdown';
@@ -6,15 +6,14 @@ import SecondNavigation from './SecondNavigation';
 import SettingsDropdown from './SettingsDropdown';
 
 @observer
-class Navigation extends Component {
+class Navigation extends PureComponent {
     constructor(props) {
         super(props);
     }
     render() {
         const { 
-            userStore, 
-            devicesStore, 
-            hideQueueModal, 
+            userStore,
+            devicesStore,
             alphaPlusEnabled, 
             packagesStore,
             uiUserProfileMenu,
@@ -22,7 +21,9 @@ class Navigation extends Component {
             location,
             toggleSWRepo,
             switchToSWRepo,
-            uiUserProfileEdit
+            uiUserProfileEdit,
+            toggleFleet,
+            activeFleet
         } = this.props;
         return (
             <nav className="navbar navbar-inverse">
@@ -65,7 +66,6 @@ class Navigation extends Component {
                                 <NavigationDropdown
                                     userStore={userStore}
                                     packagesStore={packagesStore}
-                                    hideQueueModal={hideQueueModal}
                                     uiUserProfileEdit={uiUserProfileEdit}
                                     alphaPlusEnabled={alphaPlusEnabled}
                                     uiCredentialsDownload={uiCredentialsDownload}
@@ -75,7 +75,6 @@ class Navigation extends Component {
                             <li id="menu-login">
                                 <SettingsDropdown
                                     userStore={userStore}
-                                    hideQueueModal={hideQueueModal}
                                     alphaPlusEnabled={alphaPlusEnabled}
                                     uiCredentialsDownload={uiCredentialsDownload}
                                 />
@@ -85,11 +84,18 @@ class Navigation extends Component {
                         }
                     </ul>
                 </div>
-                {alphaPlusEnabled && location === 'page-packages' ?
+                {alphaPlusEnabled && location === 'page-packages' || location === 'page-devices'?
                     <SecondNavigation
+                        location={location}
                         toggleSWRepo={toggleSWRepo}
                         switchToSWRepo={switchToSWRepo}
-                    /> : ''}
+                        toggleFleet={toggleFleet}
+                        devicesStore={devicesStore}
+                        activeFleet={activeFleet}
+                    />
+                :
+                    null
+                }
             </nav>
         );
     }

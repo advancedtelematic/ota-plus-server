@@ -60,14 +60,21 @@ class List extends Component {
         const { campaignsStore, groupsStore, addNewWizard, highlightedCampaign, showCancelCampaignModal, showCancelGroupModal, showDependenciesModal, expandedCampaignName, toggleCampaign } = this.props;
         return (
             <span>
-                <CampaignsHeader
-                    addNewWizard={addNewWizard}
-                />
                 <span className="content-container" ref="list">
                     {campaignsStore.preparedCampaigns.length ?
                         <span>
+                            <div className="fake-header-helper" style={{top: this.fakeHeaderTopPosition + 10}}>
+                                <a href="#" className="add-button grey-button" id="add-new-campaign" onClick={addNewWizard.bind(this, null)}>
+                                    <span>
+                                        +
+                                    </span>
+                                    <span>
+                                        Add campaign
+                                    </span>
+                                </a>
+                            </div>
                             {this.fakeHeaderLetter.length ?
-                                <div className="fake-header"style={{top: this.fakeHeaderTopPosition}} dangerouslySetInnerHTML={{__html: this.fakeHeaderLetter}}>
+                                <div className="fake-header" style={{top: this.fakeHeaderTopPosition}} dangerouslySetInnerHTML={{__html: this.fakeHeaderLetter}}>
                                 </div>
                             :
                                 null
