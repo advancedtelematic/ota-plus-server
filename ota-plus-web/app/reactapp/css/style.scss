@@ -1140,14 +1140,21 @@ input {
                                         float: left;
                                     }
 
-                                    .not-impacted {
-                                        height: 10px;
-                                        background-color: #ddd;
-                                        float: left;
-                                    }
                                     .not-proceed {
                                         height: 10px;
-                                        background-color: #fff;
+                                        background-color: #F3F3F4;
+                                        float: left;
+                                    }
+
+                                    .not-impacted {
+                                        height: 10px;
+                                        background-color: #9FA2A6;
+                                        float: left;
+                                    }
+
+                                    .cancelled {
+                                        height: 10px;
+                                        background-color: #6F737A;
                                         float: left;
                                     }
                                 }
@@ -1184,10 +1191,19 @@ input {
                                 }
                             }
 
+                            .not-proceed {
+
+                                span {
+                                    &:first-child {
+                                        background-color: #F3F3F4;
+                                    }
+                                }
+                            }
+
                             .not-impacted {
                                 span {
                                     &:first-child {
-                                        background-color: #ddd;
+                                        background-color: #9FA2A6;
                                     }
                                 }
                             }
@@ -1195,17 +1211,7 @@ input {
                             .cancelled {
                                 span {
                                     &:first-child {
-                                        background-color: #585858;
-                                    }
-                                }
-                            }
-
-                            .not-proceed {
-
-                                span {
-                                    &:first-child {
-                                        background-color: #FFF;
-                                        border: 1px #B9B9B9 solid;
+                                        background-color: #6F737A;
                                     }
                                 }
                             }
