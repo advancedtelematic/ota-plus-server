@@ -19,7 +19,7 @@ class Statistics extends Component {
         return (
             <div>
             	{campaignsStore.campaignsOneFetchAsync.isFetching || campaignsStore.campaignsOneStatisticsFetchAsync.isFetching ?
-    	        	<div className="wrapper-center">
+    	        	<div className="wrapper-center wrapper-center--dark">
     	        		<Loader />
     	        	</div>
             	:
