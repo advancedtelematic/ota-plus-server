@@ -865,6 +865,10 @@ input {
     align-items: center;
     justify-content: center;
     display: flex;
+
+    &--dark {
+        background: $device-item-bg;
+    }
 }
 
 .content-container {
