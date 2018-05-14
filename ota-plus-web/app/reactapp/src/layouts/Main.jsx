@@ -193,12 +193,13 @@ class Main extends Component {
             return this.systemReady || Cookies.get('systemReady') == 1;
         }
     }
-    setTermsAccepted() {
-        this.termsAndConditionsAccepted = true;
-        Cookies.set('termsAccepted', 1);
+    setTermsAccepted(path) {
+        this.userStore.acceptContract(path);
     }
     termsAccepted() {
-        return this.termsAndConditionsAccepted || Cookies.get('termsAccepted') == 1;
+        const terms = _.find(this.userStore.contracts, (obj) => obj.contract === 'v1_en.html');
+        return terms && terms.accepted ? this.termsAndConditionsAccepted = true : null;
+        return null;
     }
     componentWillUnmount() {
         this.logoutHandler();
@@ -246,7 +247,7 @@ class Main extends Component {
                         </FadeAnimation>
                     : null
                 }
-                <div id={pageId} style={{padding: `${this.switchToSWRepo && pageId === 'page-packages' || this.alphaPlusEnabled ? '0' : ''}`}}>
+                <div id={pageId} style={{padding: `${this.switchToSWRepo && pageId === 'page-packages' ? '0' : ''}`}}>
                     <FadeAnimation>                    
                         <children.type
                             {...rest}

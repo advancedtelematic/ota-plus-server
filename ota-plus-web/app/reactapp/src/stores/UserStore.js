@@ -8,6 +8,7 @@ import {
     API_USER_CHANGE_PASSWORD,
     API_USER_ACTIVE_DEVICE_COUNT,
     API_USER_DEVICES_SEEN,
+    API_USER_CONTRACTS
 } from '../config';
 import { 
     resetAsync, 
@@ -18,10 +19,13 @@ import {
 export default class UserStore {
 
     @observable userFetchAsync = {};
+    @observable contractsFetchAsync = {};
+    @observable contractsAcceptAsync = {};
     @observable userUpdateAsync = {};
     @observable userChangePasswordAsync = {};
     @observable userActiveDeviceCountFetch = {};
     @observable user = {};
+    @observable contracts = {};
     @observable ifLogout = false;
     
     constructor() {
@@ -34,6 +38,8 @@ export default class UserStore {
         resetAsync(this.userFetchAsync);
         resetAsync(this.userUpdateAsync);
         resetAsync(this.userChangePasswordAsync);
+        resetAsync(this.contractsFetchAsync);
+        resetAsync(this.contractsAcceptAsync);
     }
 
     fetchUser() {
@@ -45,6 +51,30 @@ export default class UserStore {
             }.bind(this))
             .catch(function (error) {
                 this.userFetchAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
+    fetchContracts() {
+        resetAsync(this.contractsFetchAsync, true);
+        return axios.get(API_USER_CONTRACTS)
+            .then(function (response) {
+                this.contracts = response.data;
+                this.contractsFetchAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function (error) {
+                this.contractsFetchAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
+    acceptContract(path) {
+        resetAsync(this.contractsAcceptAsync, true);
+        return axios.put(`${API_USER_CONTRACTS}/${path}`)
+            .then(function (response) {
+                this.fetchContracts();
+                this.contractsAcceptAsync = handleAsyncSuccess(response);
+            }.bind(this))
+            .catch(function (error) {
+                this.contractsAcceptAsync = handleAsyncError(error);
             }.bind(this));
     }
 
