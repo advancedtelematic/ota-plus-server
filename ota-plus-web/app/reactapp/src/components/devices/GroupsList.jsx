@@ -42,7 +42,7 @@ class GroupsList extends Component {
             
                 <InfiniteScroll
                         className="wrapper-infinite-scroll"
-                        hasMore={groupsStore.groupsCurrentPage < groupsStore.groupsTotalCount / groupsStore.groupsLimit}
+                        hasMore={groupsStore.shouldLoadMore && groupsStore.groupsCurrentPage < groupsStore.groupsTotalCount / groupsStore.groupsLimit}
                         isLoading={groupsStore.groupsFetchAsync.isFetching}
                         useWindow={false}
                         loadMore={() => {

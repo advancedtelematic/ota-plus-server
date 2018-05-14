@@ -34,6 +34,7 @@ export default class GroupsStore {
     @observable groupsTotalCount = null;
     @observable groupsLimit = 10;
     @observable activeFleet = null;
+    @observable shouldLoadMore = true;
 
     constructor() {
         resetAsync(this.groupsFetchAsync);
@@ -53,8 +54,7 @@ export default class GroupsStore {
     _filterGroups(fleetId) {
         const fg = _.filter(this.groups, group => group.fleet_id === fleetId);
         // In order to prevent infinite scroll
-        this.groupsCurrentPage = 0;
-        this.groupsTotalCount = 0;
+        this.shouldLoadMore = false;
         this._prepareGroups(fg);
     }
 
@@ -173,6 +173,7 @@ export default class GroupsStore {
         this.groupsCurrentPage = 0;
         this.groupsTotalCount = 0;
         this.activeFleet = null;
+        this.shouldLoadMore = true;
     }
 
     _prepareGroups(groups) {
