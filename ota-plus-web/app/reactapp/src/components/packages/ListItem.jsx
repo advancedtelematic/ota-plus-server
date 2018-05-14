@@ -20,7 +20,7 @@ class ListItem extends Component {
         return this.props.pack.versions.length;
     }
     render() {
-        const { pack, togglePackage, expandedPackageName } = this.props;
+        const { pack, togglePackage, expandedPackageName, comment } = this.props;
         let installedOnEcus = this.countInstalledOnEcus();
         let packVersionsNumber = this.countPackVersionsNumber();
         const directorBlock = (
@@ -29,7 +29,7 @@ class ListItem extends Component {
                     {pack.packageName}
                 </div>
                 <div className="c-package__comments">
-                    This package is provided to….
+                    {comment}
                 </div>
                 <div className="c-package__versions-nr" id={"package-" + pack.packageName + "-versions-count"}>
                     {packVersionsNumber === 1 ?

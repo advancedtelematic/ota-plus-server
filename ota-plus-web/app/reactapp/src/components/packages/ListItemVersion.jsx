@@ -28,7 +28,7 @@ class ListItemVersion extends Component {
         return isPackageBlacklisted ? isPackageBlacklisted : false;
     }
     saveComment(value) {
-        localStorage.setItem(this.props.pack.packageName, value);
+        localStorage.setItem(`${this.props.version.filepath}_comment`, JSON.stringify(value));
     }
     deleteVersion(version, e) {
         if(e) e.preventDefault();
@@ -51,7 +51,7 @@ class ListItemVersion extends Component {
             versionCompatibilityData = _.find(packagesStore.compatibilityData, item => item.name === version.filepath);
         }
 
-        let comment = localStorage.getItem(packageName) ? localStorage.getItem(packageName) : 'This package is provided to…. and works best with… compatible for…';
+        let comment = localStorage.getItem(`${version.filepath}_comment`) ? JSON.parse(localStorage.getItem(`${version.filepath}_comment`)) : 'This package is provided to…. and works best with… compatible for…';
 
         const directorBlock = (
             <span>
