@@ -7,6 +7,7 @@ package com.advancedtelematic.controllers
 
 import com.advancedtelematic.api.ApiVersion
 import com.advancedtelematic.libats.data.DataType.Namespace
+import com.advancedtelematic.libtuf.data.TufDataType.{EdKeyType, RsaKeyType}
 import play.api.mvc.{PathBindable, QueryStringBindable}
 
 /**
@@ -47,6 +48,28 @@ object PathBinders {
     def unbind(key: String, value: ApiVersion): String = value.toString
   }
 
+  import com.advancedtelematic.libtuf.data.TufDataType.KeyType
+
+  implicit object bindableKeyType extends QueryStringBindable[KeyType] {
+
+    def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, KeyType]] =
+      params.get(key).flatMap(_.headOption).map { p =>
+        p.toLowerCase match {
+          case "rsa" => Right(RsaKeyType)
+          case "ed25519" => Right(EdKeyType)
+          case _ => Left("unknown key type")
+        }
+      }
+
+    def unbind(key: String, value: KeyType): String = {
+      val kt = value match {
+        case RsaKeyType => "rsa"
+        case EdKeyType => "ed25519"
+      }
+
+      key + "=" + kt
+    }
+  }
 }
 
 final case class FeatureName(get: String)

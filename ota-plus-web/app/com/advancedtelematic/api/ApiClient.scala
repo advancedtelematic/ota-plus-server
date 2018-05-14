@@ -10,7 +10,7 @@ import com.advancedtelematic.auth.AccessToken
 import com.advancedtelematic.controllers.{FeatureName, UserId}
 import com.advancedtelematic.libats.data.DataType.Namespace
 import com.advancedtelematic.libtuf.data.TufCodecs
-import com.advancedtelematic.libtuf.data.TufDataType.TufKeyPair
+import com.advancedtelematic.libtuf.data.TufDataType.{KeyType, TufKeyPair}
 import play.api.{Configuration, Logger}
 import play.api.http.Status
 import play.api.libs.json._
@@ -264,6 +264,7 @@ class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
 }
 
 class DirectorApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
+
   private val request = ApiRequest.base(directorApiUri + "/api/v1/")
 
   private val log = Logger(this.getClass)
@@ -284,9 +285,11 @@ class DirectorApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
       }
   }
 
-  def createRepo(namespace: Namespace)(implicit ec: ExecutionContext): Future[Unit] = {
+  def createRepo(namespace: Namespace, keyType: KeyType)(implicit ec: ExecutionContext): Future[Unit] = {
+    val body = Json.obj("keyType" -> TufCodecs.keyTypeEncoder(keyType).noSpaces)
+
     request("admin/repo")
-      .transform(_.withMethod("POST"))
+      .transform(_.withBody(body).withMethod("POST"))
       .withNamespace(Some(namespace))
       .execResult(apiExec)
       .flatMap { result =>
@@ -323,9 +326,11 @@ class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends
     }
   }
 
-  def createRepo(namespace: Namespace)(implicit ec: ExecutionContext): Future[Unit] = {
+  def createRepo(namespace: Namespace, keyType: KeyType)(implicit ec: ExecutionContext): Future[Unit] = {
+    val body = Json.obj("keyType" -> TufCodecs.keyTypeEncoder(keyType).noSpaces)
+
     request("user_repo")
-      .transform(_.withMethod("POST"))
+      .transform(_.withBody(body).withMethod("POST"))
       .withNamespace(Some(namespace))
       .execResult(apiExec)
       .flatMap { result =>
