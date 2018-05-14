@@ -64,6 +64,7 @@ class StatisticDetails extends Component {
 
         let notProcessed  = totalDevicesAmount - overallStatistics.processed;
         let notProcessedRate = Math.min(Math.round(notProcessed /Math.max(overallStatistics.processed, 1) * 100), 100);
+        let cancelledRate = Math.min(Math.round(overallStatistics.cancelled /Math.max(overallStatistics.processed, 1) * 100), 100);
         return (
             <div className="statistic-details">
 
@@ -147,6 +148,8 @@ class StatisticDetails extends Component {
                                     </div>
                                     <div className="not-proceed" style={{width: notProcessedRate + '%' }}>
                                     </div>
+                                    <div className="cancelled" style={{width: cancelledRate + '%' }}>
+                                    </div>
                                 </div>
                             </div>                            
                         </div>
@@ -161,11 +164,6 @@ class StatisticDetails extends Component {
                                 <span>Queued</span>
                                 <span id="target_stats_queued">{overallStatistics.queued}</span>
                             </div>
-                            <div className="cancelled">
-                                <span></span>
-                                <span>Cancelled</span>
-                                <span id="target_stats_cancelled">{overallStatistics.cancelled}</span>
-                            </div>
                             <div className="failure">
                                 <span></span>
                                 <span>Failure</span>
@@ -175,11 +173,16 @@ class StatisticDetails extends Component {
                                 <span></span>
                                 <span>Not processed</span>
                                 <span id="target_stats_not_proceed">{notProcessed}</span>
-                            </div>
+                            </div>                            
                             <div className="not-impacted">
                                 <span></span>
                                 <span>Not impacted</span>
                                 <span id="target_stats_not_impacted">{overallStatistics.notImpacted}</span>
+                            </div>
+                            <div className="cancelled">
+                                <span></span>
+                                <span>Cancelled</span>
+                                <span id="target_stats_cancelled">{overallStatistics.cancelled}</span>
                             </div>
                         </div>
                                                
