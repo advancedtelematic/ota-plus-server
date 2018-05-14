@@ -59,6 +59,7 @@
 
             &__comments {
                 flex: 2;
+                @include textoverflowEllipsis;
             }
 
             &__versions-nr {
@@ -104,6 +105,7 @@
             &__chart {
                 width: 16%;
                 float: left;
+                min-height:180px;
 
                 .chart-panel {
                     background: #f3f3f4;
@@ -115,6 +117,25 @@
                 font-weight: 500;
                 color: $device-hardware-header;
                 font-size: 12px;
+            }
+
+            &__comment {
+                width:70%;
+                padding: 0 25px;
+                display: inline-block;
+                margin-bottom: 25px;
+            }
+
+            &__wrapper {
+                background-color: #fff;
+                padding: 15px 35px;
+                display: flex;
+                align-items: center;
+                height: auto;
+
+                .c-editable-area {
+                    width: 100%;
+                }
             }
 
             &__versions {
