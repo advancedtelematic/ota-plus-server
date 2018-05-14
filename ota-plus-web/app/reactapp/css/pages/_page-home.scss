@@ -226,7 +226,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        z-index: 9999;
+        z-index: 10;
 
         .checkbox-wrapper {
             margin:90px 0;
@@ -263,6 +263,12 @@
                 &.back {
                     background-color: transparent;
                     border: 1px solid #A3ECE7;
+                    a {
+                        display: flex;
+                        height:40px;
+                        align-items: center;
+                        justify-content: center;
+                    }
                 }
 
                 &.next, &.back {
