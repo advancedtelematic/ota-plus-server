@@ -5,9 +5,8 @@ import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 import javax.inject.{Inject, Singleton}
-import akka.actor.ActorSystem
 import com.advancedtelematic.api._
-import com.advancedtelematic.auth.{ApiAuthAction, SecuredAction, AuthorizedRequest}
+import com.advancedtelematic.auth.{ApiAuthAction, AuthorizedRequest}
 import play.api.Configuration
 import play.api.http.{HeaderNames, HttpEntity}
 import play.api.libs.json.{Json, JsValue}
@@ -20,7 +19,7 @@ import scala.concurrent.ExecutionContext
 class ProvisioningController @Inject()(val conf: Configuration, val ws: WSClient, val authAction: ApiAuthAction,
                                        val clientExec: ApiClientExec,
                                        components: ControllerComponents)(
-    implicit executionContext: ExecutionContext, actorSystem: ActorSystem)
+    implicit executionContext: ExecutionContext)
     extends AbstractController(components) with OtaPlusConfig with ApiClientSupport {
 
   val cryptApi = new CryptApi(conf, clientExec)

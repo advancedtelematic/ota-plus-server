@@ -7,10 +7,9 @@ import com.advancedtelematic.api.CryptAccountInfo
 import java.time.{Clock, Instant}
 import java.time.temporal.ChronoUnit
 
-import mockws.{MockWS, MockWSHelpers, Route}
+import mockws.{MockWS, MockWSHelpers}
 import play.api.http.{HeaderNames, HttpEntity}
 import play.api.libs.json.Json
-import play.api.mvc.Action
 
 object MockCrypt extends MockWSHelpers {
   val CryptHost = "http://crypt.ats.com"

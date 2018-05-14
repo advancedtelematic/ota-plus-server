@@ -1,7 +1,7 @@
 package com.advancedtelematic.controllers
 
 import com.advancedtelematic.TokenUtils
-import com.advancedtelematic.auth.{AccessTokenBuilder, OAuthConfig}
+import com.advancedtelematic.auth.OAuthConfig
 import com.advancedtelematic.auth.oidc.ProviderMetadata
 import mockws.{MockWS, MockWSHelpers}
 import org.jose4j.jwk.{JsonWebKey, JsonWebKeySet}

@@ -1,17 +1,18 @@
 package com.advancedtelematic.api
 
-import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.model.Uri
-import akka.http.scaladsl.model.Uri.{NamedHost, Path}
 import java.time.Instant
 import java.util.UUID
 
+import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.model.Uri
+import akka.http.scaladsl.model.Uri.{NamedHost, Path}
 import play.api.Configuration
-import play.api.http.HttpEntity
+import play.api.http.{HttpEntity, Status}
 import play.api.libs.json._
 import play.shaded.ahc.org.asynchttpclient.util.HttpConstants.ResponseStatusCodes
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 final case class CryptAccountInfo(name: String, hostName: NamedHost)
 
@@ -110,10 +111,15 @@ class CryptApi(conf: Configuration, val apiExec: ApiClientExec)(implicit exec: E
       .execJson[DeviceRegistrationCredentials](apiExec)
   }
 
-  def downloadCredentials(accountName: String, id: UUID): Future[HttpEntity] =
+  def downloadCredentials(accountName: String, id: UUID): Future[HttpEntity] = {
     baseUri(s"/accounts/$accountName/credentials/registration/$id")
       .transform(_.withMethod(GET))
       .execResult(apiExec)
-      .map(_.body)
-
+      .transform {
+        case Success(res) if Status.isServerError(res.header.status) =>
+                            Failure(RemoteApiError(res, "vault error status"))
+        case Success(res) => Success(res.body)
+        case Failure(exception) => Failure(exception)
+      }
+  }
 }
