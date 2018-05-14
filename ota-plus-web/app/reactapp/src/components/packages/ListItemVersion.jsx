@@ -4,20 +4,35 @@ import { observer } from 'mobx-react';
 import moment from 'moment';
 import _ from 'underscore';
 import { FlatButton } from 'material-ui';
+import { Dropdown, EditableArea } from '../../partials';
 
 @observer
 class ListItemVersion extends Component {
+    @observable showSubmenu = false;
     constructor(props) {
         super(props);
+        this.toggleSubmenu = this.toggleSubmenu.bind(this);
+        this.saveComment = this.saveComment.bind(this);
+        this.deleteVersion = this.deleteVersion.bind(this);
     }
     openBlacklistModal(mode, e) {
         this.props.showBlacklistModal(this.props.version.id.name, this.props.version.id.version, mode);
+    }
+    toggleSubmenu() {
+        this.showSubmenu = !this.showSubmenu;
     }
     isPackageBlacklisted(version) {
         let isPackageBlacklisted = _.find(this.props.packagesStore.blacklist, (dev) => {
             return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
         });
         return isPackageBlacklisted ? isPackageBlacklisted : false;
+    }
+    saveComment(value) {
+        localStorage.setItem(this.props.pack.packageName, value);
+    }
+    deleteVersion(version, e) {
+        if(e) e.preventDefault();
+        this.props.packagesStore.deleteVersion(version);
     }
     render() {
         const { version, showDependenciesModal, showDependenciesManager, packagesStore, alphaPlusEnabled } = this.props;
@@ -36,9 +51,11 @@ class ListItemVersion extends Component {
             versionCompatibilityData = _.find(packagesStore.compatibilityData, item => item.name === version.filepath);
         }
 
+        let comment = localStorage.getItem(packageName) ? localStorage.getItem(packageName) : 'This package is provided to…. and works best with… compatible for…';
+
         const directorBlock = (
             <span>
-                <div className="c-package__software-box" style={borderStyle}>
+                <div className="c-package__software-box">
                     {version.customExists ? 
                         <span>
                             <div className="c-package__sw-row c-package__sw-row--version">
@@ -115,29 +132,55 @@ class ListItemVersion extends Component {
                     }                                   
                 </div>
                 <div className="c-package__show-dependencies">
-                    <a href="#" className="add-button" id="show-dependencies" onClick={showDependenciesModal.bind(this, version.filepath)}>
-                        <span>
-                            Show dependencies
-                        </span>
-                    </a>
-                </div>                
+
+                </div>
+                <div className="dots" onClick={this.toggleSubmenu}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                    <Dropdown show={this.showSubmenu} hideHandler={() => {this.showSubmenu = false}}>
+                        <li className="package-dropdown-item">
+                            <a className="package-dropdown-item" href="#" id="show-dependencies"
+                               onClick={showDependenciesModal.bind(this, version.filepath)}>
+                                Show dependencies
+                            </a>
+                        </li>
+                        <li className="package-dropdown-item">
+                            <a className="package-dropdown-item" href="#" onClick={this.deleteVersion.bind(this, version.id.version)}>
+                                Delete version
+                            </a>
+                        </li>
+                    </Dropdown>
+                </div>
             </span>
         );
         return (
             <span>
                 <li className={"c-package__version-item" + (!alphaPlusEnabled ? " c-package__version-item--ident" : "") + (isBlacklisted ? " blacklist" : "")}
                     data-installed={version.installedOnEcus}
+                    style={borderStyle}
                     id={"package-" + packageName + "-version"}>
                     {directorBlock}
                 </li>
+                <div className="c-package__comment-wrapper" style={borderStyle}>
+                    <div className="c-package__heading">
+                        Comment
+                    </div>
+                    <EditableArea
+                        initialText={comment}
+                        saveHandler={this.saveComment}
+                    />
+                </div>
                 {alphaPlusEnabled ?
-                    <div className={"c-package__manager" + 
+                    <div style={borderStyle}
+                         className={"c-package__manager" +
                                    (_.isEmpty(borderStyle) ? " c-package__manager--full" : "") + 
                                    (versionCompatibilityData ? " c-package__manager--aligned" : "")}>
                         {versionCompatibilityData && versionCompatibilityData.required.length ?
                             <div className="c-package__relations" id="required">
                                 <div className="c-package__heading">
-                                    Requires:
+                                    Dependencies
                                 </div>
                                 {_.map(versionCompatibilityData.required, (filepath, i) => {
                                     let pack = _.find(packagesStore.packages, item => item.filepath === filepath);

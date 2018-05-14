@@ -16,6 +16,7 @@ import FormInput from './FormInput';
 import FormSelect from './FormSelect';
 import FormTextarea from './FormTextarea';
 import Dropdown from './Dropdown';
+import EditableArea from './EditableArea';
 
 export {
     Navigation,
@@ -35,5 +36,6 @@ export {
     FormInput,
     FormSelect,
     FormTextarea,
-    Dropdown
+    Dropdown,
+    EditableArea
 }

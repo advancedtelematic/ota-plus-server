@@ -22,6 +22,7 @@ class Header extends Component {
         this.focusTextInput = this.focusTextInput.bind(this);
         this.userTypesName = this.userTypesName.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
+        this.deleteDevice = this.deleteDevice.bind(this);
         this.renameHandler = new AsyncStatusCallbackHandler(props.devicesStore, 'devicesRenameAsync', this.handleResponse.bind(this));
     }
     componentWillReceiveProps(nextProps) {
@@ -80,6 +81,12 @@ class Header extends Component {
             this.deviceNameInput.removeAttribute('disabled');
             this.deviceNameInput.focus();
         }
+    }
+    deleteDevice(e) {
+        if(e) e.preventDefault();
+        this.props.devicesStore.deleteDevice(this.props.devicesStore.device.uuid).then(() => {
+            this.context.router.push('/devices');
+        });
     }
     render() {
         const { devicesStore, device, showQueueModal, queueButtonRef, backButtonAction } = this.props;
@@ -181,6 +188,9 @@ class Header extends Component {
                                 <div className="action-buttons">
                                     <button className="queue-button" id="queue-button" onClick={showQueueModal} ref={queueButtonRef}>
                                     </button>
+                                    <button className="delete-button fixed-width" id="delete-device-button" onClick={this.deleteDevice}>
+                                        Delete device
+                                    </button>
                                 </div>
                             </div>
                         </span>
@@ -197,6 +207,10 @@ Header.propTypes = {
     devicesStore: PropTypes.object.isRequired,
     showQueueModal: PropTypes.func.isRequired,
     queueButtonRef: PropTypes.func.isRequired,
+}
+
+Header.contextTypes = {
+    router: React.PropTypes.object.isRequired
 }
 
 export default Header;

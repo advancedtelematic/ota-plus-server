@@ -37,16 +37,12 @@ class Main extends Component {
     @observable wizards = [];    
     @observable minimizedWizards = [];
     @observable uploadBoxMinimized = false;
-    @observable queueModalShown = false;
-    @observable activeTabId = 0;
     @observable uiAutoFeatureActivation = document.getElementById('toggle-autoFeatureActivation').value === "true";
     @observable uiUserProfileMenu = document.getElementById('toggle-userProfileMenu').value === "true";
     @observable uiUserProfileEdit = document.getElementById('toggle-userProfileEdit').value === "true";
     @observable uiCredentialsDownload = document.getElementById('toggle-credentialsDownload').value === "true";
     @observable atsGarageTheme = document.getElementById('toggle-atsGarageTheme').value === 'true';
     @observable switchToSWRepo = false;
-
-    @observable alphaPlusEnabled = false;
 
     constructor(props) {
         super(props);
@@ -67,11 +63,10 @@ class Main extends Component {
         this.toggleWizard = this.toggleWizard.bind(this);
         this.toggleUploadBoxMode = this.toggleUploadBoxMode.bind(this);
         this.sanityCheckCompleted = this.sanityCheckCompleted.bind(this);
-        this.showQueueModal = this.showQueueModal.bind(this);
-        this.hideQueueModal = this.hideQueueModal.bind(this);
-        this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
+        
         this.callFakeWsHandler = this.callFakeWsHandler.bind(this);
         this.toggleSWRepo = this.toggleSWRepo.bind(this);
+        this.toggleFleet = this.toggleFleet.bind(this);
         this.devicesStore = new DevicesStore();
         this.hardwareStore = new HardwareStore();
         this.groupsStore = new GroupsStore();
@@ -92,13 +87,6 @@ class Main extends Component {
             if(change.name === 'ifLogout' && change.object[change.name]) {
                 this.callFakeWsHandler();
                 doLogout();
-            }
-        });
-        this.featuresHandler = observe(this.featuresStore, (change) => {
-            if(change.name === 'featuresFetchAsync' && change.object[change.name].isFetching === false) {
-                if(_.contains(this.featuresStore.features, 'alphaplus')) {
-                    this.alphaPlusEnabled = true;
-                }
             }
         });
     }
@@ -123,19 +111,6 @@ class Main extends Component {
         this.websocketHandler.init();
         window.atsGarageTheme = this.atsGarageTheme;
     }
-    showQueueModal() {
-        this.queueModalShown = true;
-    }
-    hideQueueModal() {
-        this.queueModalShown = false;
-        this.setQueueModalActiveTabId(0);
-    }
-    setQueueModalActiveTabId(tabId, device = null) {
-        this.activeTabId = tabId;
-        if(!_.isEmpty(device) && tabId === 1) {
-            this.packagesStore.fetchPackagesHistory(device.uuid, this.packagesStore.packagesHistoryFilter);
-        }
-    }    
     toggleWizard(wizardId, wizardName, e) {
         if(e) e.preventDefault();
         let minimizedWizard = {
@@ -160,7 +135,7 @@ class Main extends Component {
                 hideWizard={this.hideWizard}
                 toggleWizard={this.toggleWizard}
                 minimizedWizards={this.minimizedWizards}
-                alphaPlusEnabled={this.alphaPlusEnabled}
+                alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
                 key={this.wizards.length}
             />
         );
@@ -203,16 +178,15 @@ class Main extends Component {
     }
     componentWillUnmount() {
         this.logoutHandler();
-        this.featuresHandler();
     }
     backButtonAction(e) {
         if(e) e.preventDefault();
         window.history.go(-1);
     }
-    componentWillReceiveProps(nextProps) {
-        if(this.queueModalShown) {
-            this.hideQueueModal();
-        }
+    toggleFleet(fleet, e) {
+        if(e) e.preventDefault();
+        this.groupsStore.activeFleet = fleet;
+        this.groupsStore._filterGroups(fleet.id);
     }
     render() {
         const { children, ...rest } = this.props;
@@ -222,17 +196,17 @@ class Main extends Component {
                 {this.sanityCheckCompleted() ?
                     <Navigation
                         userStore={this.userStore}
-                        featuresStore={this.featuresStore}
                         devicesStore={this.devicesStore}
                         packagesStore={this.packagesStore}
+                        activeFleet={this.groupsStore.activeFleet}
                         location={pageId}
                         toggleSWRepo={this.toggleSWRepo}
                         uiUserProfileEdit={this.uiUserProfileEdit}
                         switchToSWRepo={this.switchToSWRepo}
-                        hideQueueModal={this.hideQueueModal}
-                        alphaPlusEnabled={this.alphaPlusEnabled}
+                        alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
                         uiUserProfileMenu={this.uiUserProfileMenu}
                         uiCredentialsDownload={this.uiCredentialsDownload}
+                        toggleFleet={this.toggleFleet}
                     />
                 :
                     pageId === 'page-policy' ?
@@ -247,7 +221,10 @@ class Main extends Component {
                         </FadeAnimation>
                     : null
                 }
-                <div id={pageId} style={{padding: `${this.switchToSWRepo && pageId === 'page-packages' ? '0' : ''}`}}>
+                <div id={pageId} style={{
+                    height: this.featuresStore.alphaPlusEnabled && (pageId === 'page-packages' || pageId === 'page-devices') ? 'calc(100vh - 100px)' : 'calc(100vh - 50px)',
+                    padding: !this.featuresStore.alphaPlusEnabled && pageId === 'page-packages' ? '30px' : ''
+                }}>
                     <FadeAnimation>                    
                         <children.type
                             {...rest}
@@ -264,20 +241,16 @@ class Main extends Component {
                             backButtonAction={this.backButtonAction}
                             setSystemReady={this.setSystemReady}
                             addNewWizard={this.addNewWizard}
-                            showQueueModal={this.showQueueModal}
-                            hideQueueModal={this.hideQueueModal}
                             uiUserProfileEdit={this.uiUserProfileEdit}
                             switchToSWRepo={this.switchToSWRepo}
-                            queueModalShown={this.queueModalShown}
-                            activeTabId={this.activeTabId}
-                            setQueueModalActiveTabId={this.setQueueModalActiveTabId}
                             uiAutoFeatureActivation={this.uiAutoFeatureActivation}
                             uiUserProfileMenu={this.uiUserProfileMenu}
                             uiCredentialsDownload={this.uiCredentialsDownload}
-                            alphaPlusEnabled={this.alphaPlusEnabled}
+                            alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
                             sanityCheckCompleted={this.sanityCheckCompleted}
                             setTermsAccepted={this.setTermsAccepted}
                             termsAccepted={this.termsAccepted}
+                            toggleFleet={this.toggleFleet}
                         />
                     </FadeAnimation>
                     <SizeVerify 
