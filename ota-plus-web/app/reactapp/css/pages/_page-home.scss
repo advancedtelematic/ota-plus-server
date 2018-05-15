@@ -229,21 +229,27 @@
         z-index: 10;
 
         .checkbox-wrapper {
-            margin:90px 0;
+            margin: 70px 0;
             display: flex;
-            width: 250px;
+            width: 380px;
             color: #000;
-            font-size: 16px;
-            font-weight: 400;
+            font-size: 14px;
+            text-transform: uppercase;
             line-height: 20px;
+            font-weight:400;
             letter-spacing: 0.01px;
             a {
-                font-weight: 500;
+                font-weight: bold;
+                color: #000;
             }
             .btn-checkbox {
                 margin: 0 10px 0 0;
                 width: 15px;
                 height: 15px;
+                &:not(.checked) {
+                    background-color: #EBEBEC;
+                    color:#EBEBEC;
+                }
                 &.checked {
                     .fa.fa-check {
                         vertical-align: top;
@@ -268,11 +274,17 @@
                         height:40px;
                         align-items: center;
                         justify-content: center;
+                        color: #00AFAA !important;
+                    }
+                }
+                &.next {
+                    a {
+                        color: #000 !important;
                     }
                 }
 
                 &.next, &.back {
-                    color: #000 !important;
+                    font-size: 16px !important;
                 }
             }
         }
@@ -284,6 +296,7 @@
             height: 100vh;
 
             .logo {
+                margin-bottom:100px;
                 img {
                     width: 90px;
                     height: auto;
@@ -291,9 +304,12 @@
             }
 
             .title {
-                font-size: 22px;
+                font-size: 32px;
+                width: 25%;
+                text-align: center;
+                font-weight: 400;
                 margin: 25px 0;
-                color: #202020;
+                color: #272D37;
             }
 
             .sequence-list {

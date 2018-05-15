@@ -174,7 +174,6 @@ class Main extends Component {
     termsAccepted() {
         const terms = _.find(this.userStore.contracts, (obj) => obj.contract === 'v1_en.html');
         return terms && terms.accepted ? this.termsAndConditionsAccepted = true : null;
-        return null;
     }
     componentWillUnmount() {
         this.logoutHandler();
