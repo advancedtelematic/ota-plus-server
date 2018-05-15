@@ -1,7 +1,5 @@
-import v1_en from './v1_en.html';
-import v2_en from './v2_en.html';
+import terms_conditions from './tc/2018-01/en/terms_conditions.html';
 
 export default {
-    'v1_en.html' : v1_en,
-    'v2_en.html' : v2_en
+    'terms_conditions.html': terms_conditions
 }

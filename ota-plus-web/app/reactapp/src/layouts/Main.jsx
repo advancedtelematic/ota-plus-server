@@ -28,6 +28,7 @@ import _ from 'underscore';
 import Cookies from 'js-cookie';
 import { CampaignsWizard } from '../components/campaigns';
 import { doLogout } from '../utils/Common';
+import * as contracts from '../../../assets/contracts/';
 
 @observer
 class Main extends Component {
@@ -204,9 +205,8 @@ class Main extends Component {
         this.userStore.acceptContract(path);
     }
     termsAccepted() {
-        const terms = _.find(this.userStore.contracts, (obj) => obj.contract === 'v1_en.html');
+        const terms = _.find(this.userStore.contracts, (obj) => contracts.default[obj.contract]);
         return terms && terms.accepted ? this.termsAndConditionsAccepted = true : null;
-        return null;
     }
     componentWillUnmount() {
         this.logoutHandler();
