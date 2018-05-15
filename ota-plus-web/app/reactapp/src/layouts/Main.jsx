@@ -72,6 +72,7 @@ class Main extends Component {
         this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
         this.callFakeWsHandler = this.callFakeWsHandler.bind(this);
         this.toggleSWRepo = this.toggleSWRepo.bind(this);
+        this.locationChange = this.locationChange.bind(this);
         this.devicesStore = new DevicesStore();
         this.hardwareStore = new HardwareStore();
         this.groupsStore = new GroupsStore();
@@ -122,6 +123,12 @@ class Main extends Component {
         this.devicesStore.fetchDevicesCount();
         this.websocketHandler.init();
         window.atsGarageTheme = this.atsGarageTheme;
+        this.context.router.listen(this.locationChange);
+    }
+    locationChange() {
+        if(!this.termsAccepted() && !this.context.router.isActive('/')) {
+            this.context.router.push('/');
+        }
     }
     showQueueModal() {
         this.queueModalShown = true;
@@ -333,6 +340,10 @@ class Main extends Component {
         );
     }
     
+}
+
+Main.contextTypes = {
+    router: React.PropTypes.object.isRequired
 }
 
 Main.propTypes = {
