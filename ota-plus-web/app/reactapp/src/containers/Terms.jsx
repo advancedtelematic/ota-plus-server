@@ -37,21 +37,24 @@ export default class Terms extends Component {
                         <img src="/assets/img/HERE_pos.png" alt="HERE"/>
                     </div>
                     <div className="title">
-                        Terms and conditions
+                        This is a 90 days trial for
+                        internal evaluation purposes only
                     </div>
                     <div className="checkbox-wrapper">
                         <button className={`btn-checkbox ${this.termsAccepted ? 'checked': ''}`} onClick={() => this.termsAccepted = !this.termsAccepted} id={"terms-checkbox" + (this.termsAccepted ? '-checked' : '')}>
-                            <i className="fa fa-check" aria-hidden="true"></i>
+                            <i className="fa fa-check" aria-hidden="true"/>
                         </button>
                         <p>
-                            I AGREE TO OUR <Link id="service-terms-link" to="/policy">SERVICE TERMS</Link> AND <Link id="privacy-policy-link" to="/policy">PRIVACY POLICY.</Link>
+                            I agree to HERE Location Platform Services Online
+                            <a id="service-terms-link" target="_blank" href="https://developer.here.com/terms-and-conditions"> terms and conditions </a>
+                            and <a target="_blank" id="privacy-policy-link" href="https://legal.here.com/en-gb/privacy" >privacy policy.</a>
                         </p>
                     </div>
                     <div className="steps">
-                        <button className="back btn-primary"><a href="/login">Back</a></button>
+                        <button className="back btn-primary" id="terms-btn-back"><a href="/login">Back</a></button>
                         {this.termsAccepted ?
-                            <button className="next btn-primary" onClick={() => {setTermsAccepted('v1_en.html')}}>Continue</button> :
-                            <button className="next btn-primary" disabled>Continue</button>
+                            <button className="next btn-primary" id="terms-btn-continue" onClick={() => {setTermsAccepted('v1_en.html')}}>Continue</button> :
+                            <button className="next btn-primary" id="terms-btn-continue_disabled" disabled>Continue</button>
                         }
                     </div>
                 </div>
