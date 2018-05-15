@@ -23,7 +23,6 @@ import _ from 'underscore';
 export default class DevicesStore {
 
     @observable devicesFetchAsync = {};
-    @observable devicesDeleteAsync = {};
     @observable deviceFleetsFetchAsync = {};
     @observable devicesOneFetchAsync = {};
     @observable devicesOneNetworkInfoFetchAsync = {};
@@ -58,7 +57,6 @@ export default class DevicesStore {
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
-        resetAsync(this.devicesDeleteAsync);
         resetAsync(this.deviceFleetsFetchAsync);
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesCountFetchAsync);
@@ -70,26 +68,6 @@ export default class DevicesStore {
         resetAsync(this.mtuFetchAsync);
         resetAsync(this.mtuCancelAsync);
         this.devicesLimit = 30;
-    }
-
-    deleteDevice(id) {
-        resetAsync(this.devicesDeleteAsync, true);
-        const that = this;
-        return new Promise(function(resolve, reject) {
-            setTimeout(() => {
-                if(localStorage.getItem('deleted')) {
-                    let deletedDeviceIds = JSON.parse(localStorage.getItem('deleted'));
-                    if(!_.contains(deletedDeviceIds, id)) {
-                        deletedDeviceIds.push(id);
-                        localStorage.setItem('deleted', JSON.stringify(deletedDeviceIds));
-                    }
-                } else {
-                    localStorage.setItem('deleted', JSON.stringify([id]));
-                }
-                that.devicesDeleteAsync = handleAsyncSuccess({});
-                resolve();
-            }, 500);
-        });
     }
 
     fetchDeviceFleets() {
@@ -146,9 +124,7 @@ export default class DevicesStore {
             apiAddress += `&groupId=${groupId}`;
         return axios.get(apiAddress)
             .then((response) => {
-                let devices = _.uniq(this.devices.concat(response.data.values), device => device.uuid);
-                let deletedDeviceIds = JSON.parse(localStorage.getItem('deleted'));
-                this.devices = _.filter(devices, device => !_.contains(deletedDeviceIds, device.uuid));
+                this.devices = _.uniq(this.devices.concat(response.data.values), device => device.uuid);
                 this._prepareDevices();
                 if (this.devicesInitialTotalCount === null && groupId !== 'ungrouped') {
                     this.devicesInitialTotalCount = response.data.total;
@@ -432,7 +408,6 @@ export default class DevicesStore {
 
     _reset() {
         resetAsync(this.devicesFetchAsync);
-        resetAsync(this.devicesDeleteAsync);
         resetAsync(this.deviceFleetsFetchAsync);
         resetAsync(this.devicesOneFetchAsync);
         resetAsync(this.devicesOneNetworkInfoFetchAsync);
