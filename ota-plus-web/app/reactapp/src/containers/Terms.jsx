@@ -21,7 +21,7 @@ export default class Terms extends Component {
     render() {
         const {setTermsAccepted, userStore} = this.props;
         let terms = _.find(userStore.contracts, (obj) => contracts.default[obj.contract]);
-        !terms ? terms = {contract: 'terms_conditions.html'}: terms;
+        !terms ? terms = {contract: contracts.defaultName}: terms;
         const htmlDoc = terms && terms.contract  ? {__html: contracts.default[terms.contract]} : null;
         const contractModalContent = (
             <div className="modal-wrapper">
