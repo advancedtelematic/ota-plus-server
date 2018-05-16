@@ -50,7 +50,7 @@ $font: 'akkurat';
         width: 135px;
         background: #fff;
         left: -100px;
-        font-size: 14px;
+        font-size: 12px;
         box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
         margin: 0;
         padding-bottom: 10px;
@@ -60,7 +60,6 @@ $font: 'akkurat';
             line-height: 17px;
             display: block;
             color: $device-hardware-header;
-            font-weight:400;
         }
     }
 }
