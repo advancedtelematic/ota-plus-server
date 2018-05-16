@@ -11,6 +11,12 @@
 
 $font: 'akkurat';
 
+.doughnut-wrapper {
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+}
+
 .dots {
     display: flex;
     flex-direction: column;

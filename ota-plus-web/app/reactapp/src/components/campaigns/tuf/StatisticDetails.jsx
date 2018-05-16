@@ -80,12 +80,14 @@ class StatisticDetails extends Component {
 
                     <div className="failure-rate-container">
                         <div className="failure-rate" id="campaign-detail-total-failure-rate">
-                            <Doughnut
-                                data={failureRateData}
-                                options={{percentageInnerCutout: 75, showTooltips: false}}
-                                width="140"
-                                height="140"
-                            />
+                            <div className="doughnut-wrapper">
+                                <Doughnut
+                                    data={failureRateData}
+                                    options={{percentageInnerCutout: 75, showTooltips: false, segmentStrokeWidth: 0, segmentShowStroke: false}}
+                                    width="140"
+                                    height="140"
+                                />
+                            </div>
                             <div className="rate">
                                 {Math.round(overallStatistics.failed/Math.max(overallStatistics.finished, 1) * 100)}%
                             </div>
