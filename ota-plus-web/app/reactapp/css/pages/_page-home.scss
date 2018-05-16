@@ -296,7 +296,11 @@
             height: 100vh;
 
             .logo {
-                margin-bottom:100px;
+                
+                &--terms {
+                    margin-bottom:100px;
+                }
+
                 img {
                     width: 90px;
                     height: auto;
@@ -304,15 +308,17 @@
             }
 
             .title {
-                font-size: 32px;
-                text-align: center;
-                font-weight: 400;
+                font-size: 22px;
+                color: #202020;
                 margin: 25px 0;
-                color: #272D37;
-            }
 
-            .terms-title {
-                width: 25%;
+                &--terms {
+                    width: 25%;
+                    font-size: 32px;
+                    text-align: center;
+                    font-weight: 400;
+                    color: #272D37;
+                }
             }
 
             .sequence-list {
