@@ -78,15 +78,32 @@ class ListItem extends Component {
                     </span>
                 :
                     <span>
-                        <button className="item unmanaged" id={"button-package-" + pack.hash} onClick={showPackageDetails.bind(this, 'unmanaged')}>
-                            <div className="filepath">
-                                Filepath: {pack.filepath}
-                            </div>
-                            <div className="filepath">
-                                Size: {pack.size}
-                            </div>
-                            <div className="hash">
-                                Hash: {pack.hash}
+                        <button className="unmanaged" id={"button-package-" + pack.hash} onClick={showPackageDetails.bind(this, 'unmanaged')}>
+                            <div className="left-box">
+                                <div>
+                                    <span className="sub-title">
+                                        Filepath:
+                                    </span>
+                                    <span className="value">
+                                        {pack.filepath}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="sub-title">
+                                        Size:
+                                    </span>
+                                    <span className="value">
+                                        {pack.size}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="sub-title">
+                                        Hash:
+                                    </span>
+                                    <span className="value">
+                                        {pack.hash}
+                                    </span>
+                                </div>
                             </div>
                         </button>
                     </span>
