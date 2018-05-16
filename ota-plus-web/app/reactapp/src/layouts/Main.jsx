@@ -28,6 +28,7 @@ import _ from 'underscore';
 import Cookies from 'js-cookie';
 import { CampaignsWizard } from '../components/campaigns';
 import { doLogout } from '../utils/Common';
+import * as contracts from '../../../assets/contracts/';
 
 @observer
 class Main extends Component {
@@ -67,6 +68,7 @@ class Main extends Component {
         this.callFakeWsHandler = this.callFakeWsHandler.bind(this);
         this.toggleSWRepo = this.toggleSWRepo.bind(this);
         this.toggleFleet = this.toggleFleet.bind(this);
+        this.locationChange = this.locationChange.bind(this);
         this.devicesStore = new DevicesStore();
         this.hardwareStore = new HardwareStore();
         this.groupsStore = new GroupsStore();
@@ -110,6 +112,12 @@ class Main extends Component {
         this.devicesStore.fetchDevicesCount();
         this.websocketHandler.init();
         window.atsGarageTheme = this.atsGarageTheme;
+        this.context.router.listen(this.locationChange);
+    }
+    locationChange() {
+        if(!this.termsAccepted() && !this.context.router.isActive('/')) {
+            this.context.router.push('/');
+        }
     }
     toggleWizard(wizardId, wizardName, e) {
         if(e) e.preventDefault();
@@ -172,9 +180,8 @@ class Main extends Component {
         this.userStore.acceptContract(path);
     }
     termsAccepted() {
-        const terms = _.find(this.userStore.contracts, (obj) => obj.contract === 'v1_en.html');
+        const terms = _.find(this.userStore.contracts, (obj) => contracts.default[obj.contract]);
         return terms && terms.accepted ? this.termsAndConditionsAccepted = true : null;
-        return null;
     }
     componentWillUnmount() {
         this.logoutHandler();
@@ -306,6 +313,10 @@ class Main extends Component {
         );
     }
     
+}
+
+Main.contextTypes = {
+    router: React.PropTypes.object.isRequired
 }
 
 Main.propTypes = {

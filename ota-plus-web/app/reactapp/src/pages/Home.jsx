@@ -61,8 +61,8 @@ class Home extends Component {
                             setSystemReady={setSystemReady}
                             uiUserProfileMenu={uiUserProfileMenu}
                         />
-
-                : <Terms
+                : 
+                    <Terms
                         userStore={userStore}
                         setTermsAccepted={setTermsAccepted}
                     />
