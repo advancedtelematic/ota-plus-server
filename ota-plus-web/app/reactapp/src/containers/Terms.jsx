@@ -28,8 +28,8 @@ export default class Terms extends Component {
                 <div className="overflow" dangerouslySetInnerHTML={htmlDoc}>
                 </div>
                 <div className="body-actions" style={{display:'flex', justifyContent: 'space-between'}}>
-                    <button className="back btn-primary" id="modal-back-button"><a href="#" onClick={this.toggleModal.bind(this)}>Back</a></button>
-                    <button className="btn-primary" id="modal-accept-button"> onClick={() => setTermsAccepted(terms.contract)}>
+                    <button className="back btn-primary" id="modal-back-button" onClick={this.toggleModal.bind(this)}>Back</button>
+                    <button className="btn-primary" id="modal-accept-button" onClick={() => setTermsAccepted(terms.contract)}>
                         I agree
                     </button>
                 </div>
@@ -38,10 +38,10 @@ export default class Terms extends Component {
         return (
             <div className="terms">
                 <div className="wrapper-center wrapper-responsive">
-                    <div className="logo">
+                    <div className="logo logo--terms">
                         <img src="/assets/img/HERE_pos.png" alt="HERE"/>
                     </div>
-                    <div className="title terms-title">
+                    <div className="title title--terms">
                         This is a 90 days trial for
                         internal evaluation purposes only
                     </div>
