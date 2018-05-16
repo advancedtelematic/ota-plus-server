@@ -51,7 +51,7 @@ class VersionsStats extends Component {
                         {installedOnEcusTotal}
                     </div>
                     {stats.length ?
-                        <div>
+                        <div className="doughnut-wrapper">
                             <Doughnut 
                                 data={stats} 
                                 width="175" 
@@ -60,6 +60,7 @@ class VersionsStats extends Component {
                                     percentageInnerCutout: 75, 
                                     segmentStrokeWidth: 0,
                                     showTooltips: true,
+                                    segmentShowStroke: false
                                 }}
                             />
                         </div>
