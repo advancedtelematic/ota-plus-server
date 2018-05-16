@@ -3119,6 +3119,12 @@ input {
             color: $home-bg;
             font-weight: 400;
         }
+
+        .not-installed {
+            text-align: left;
+            padding-top: 20px;
+            width: 100%;
+        }
     }
 }
 
