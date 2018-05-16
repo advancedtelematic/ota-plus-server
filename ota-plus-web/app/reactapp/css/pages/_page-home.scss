@@ -71,10 +71,10 @@
                     background-color: $home-heading-bg;
                     color: #383C45;
                     padding: 0 20px;
-                    font-weight: 500;
                     position: relative;
 
                     .col {
+                        font-weight: 500;
 
                         &:not(:first-child) {
                             font-size: 12px;
