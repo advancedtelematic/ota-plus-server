@@ -441,7 +441,7 @@ input {
                 display: flex;
                 align-items: center;
                 cursor: pointer;
-                border-bottom: 5px solid transparent;
+                border-bottom: 4px solid transparent;
                 margin-left:37px;
                 @include transition;
 
@@ -451,7 +451,7 @@ input {
                 }
 
                 &:hover, &.active {
-                    border-bottom: 5px solid $color-mint;
+                    border-bottom: 4px solid $color-mint;
                     color: #fff;
                 }
             }
@@ -515,7 +515,7 @@ input {
                     font-size: 18px;
 
                     &:focus, &:active, &:hover, &.active {
-                        border-bottom: 5px solid $color-mint;
+                        border-bottom: 4px solid $color-mint;
                         color: #fff;
                     }
                 }
