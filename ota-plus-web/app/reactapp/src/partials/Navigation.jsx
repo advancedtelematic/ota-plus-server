@@ -84,7 +84,7 @@ class Navigation extends PureComponent {
                         }
                     </ul>
                 </div>
-                {alphaPlusEnabled && location === 'page-packages' || location === 'page-devices'?
+                {alphaPlusEnabled && (location === 'page-packages' || location === 'page-devices')?
                     <SecondNavigation
                         location={location}
                         toggleSWRepo={toggleSWRepo}
