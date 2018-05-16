@@ -9,27 +9,34 @@ export default class EditableArea extends Component {
     constructor() {
         super();
         this.changeWatcher = this.changeWatcher.bind(this);
+        this.cancelEdit = this.cancelEdit.bind(this);
     }
 
     changeWatcher(e) {
-        this.value = e.target.value;
-        e.target.value !== this.props.initialText ? this.editComment = true : this.editComment = false;
+        this.value = e.target.innerText;
+        e.target.innerText !== this.props.initialText ? this.editComment = true : this.editComment = false;
+    }
+
+    cancelEdit(e) {
+        e.preventDefault();
+        this.editComment = false;
     }
 
     render() {
-        const {initialText, cols, rows, saveHandler} = this.props;
+        const {initialText, saveHandler} = this.props;
         return (
             <div className="c-editable-area">
-                <textarea rows="2"
-                          className="c-editable-area__input"
-                          defaultValue={initialText}
-                          onChange={this.changeWatcher}/>
+                <div contentEditable="true"
+                      className={`c-editable-area__input ${this.editComment ? 'c-editable-area__input--bordered' : ''}`}
+                      onInput={this.changeWatcher}>{initialText}</div>
                 {this.editComment ?
-                    <button className="btn-primary" onClick={() => {
-                        saveHandler(this.value);
-                        this.editComment = false;
-                    }
-                    }>Save changes</button>
+                    <div className="c-editable-area__body-actions">
+                        <a href="#" className="c-editable-area__button link-cancel" onClick={this.cancelEdit}>Cancel</a>
+                        <button className='c-editable-area__button btn-primary' onClick={() => {
+                            saveHandler(this.value);
+                            this.editComment = false;
+                        }}>Save</button>
+                    </div>
                 : ''}
             </div>
         )

@@ -106,7 +106,7 @@
             &__chart {
                 width: 16%;
                 float: left;
-                min-height:180px;
+                min-height:220px;
 
                 .chart-panel {
                     background: #f3f3f4;
@@ -121,7 +121,8 @@
             }
 
             &__comment {
-                width:70%;
+                width:84%;
+                float: right;
                 padding: 0 25px;
                 display: inline-block;
                 margin-bottom: 25px;
@@ -129,7 +130,7 @@
 
             &__wrapper {
                 background-color: #fff;
-                padding: 15px 35px;
+                padding: 20px;
                 display: flex;
                 align-items: center;
                 height: auto;
@@ -142,8 +143,8 @@
             &__versions {
                 color: #202020;
                 padding: 0 25px;
-                width: 70%;
-                float: left;
+                width: 84%;
+                float: right;
                 margin: 0;
             }
 
