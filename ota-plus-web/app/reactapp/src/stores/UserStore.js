@@ -67,8 +67,9 @@ export default class UserStore {
     }
 
     acceptContract(path) {
+        let encodedPath = encodeURIComponent(path);
         resetAsync(this.contractsAcceptAsync, true);
-        return axios.put(`${API_USER_CONTRACTS}/${path}`)
+        return axios.put(`${API_USER_CONTRACTS}/${encodedPath}`)
             .then(function (response) {
                 this.fetchContracts();
                 this.contractsAcceptAsync = handleAsyncSuccess(response);
