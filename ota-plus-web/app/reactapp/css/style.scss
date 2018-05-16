@@ -1482,14 +1482,6 @@ input {
         justify-content: space-between;
         cursor: pointer;
 
-        &.unmanaged {
-           background: #d3d3d3; 
-
-           &:hover {
-            background: #d3d3d3;
-           }
-        }
-
         &:hover {
             background: #f5f5f5;
         }
