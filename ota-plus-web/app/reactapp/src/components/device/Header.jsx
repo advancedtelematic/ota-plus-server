@@ -3,7 +3,7 @@ import { browserHistory } from 'react-router';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'underscore';
-import { Header as BaseHeader, Loader } from '../../partials';
+import { Header as BaseHeader, Loader, ConfirmationModal } from '../../partials';
 import { FadeAnimation, AsyncStatusCallbackHandler } from '../../utils';
 import NetworkInfo from './NetworkInfo';
 
@@ -13,6 +13,7 @@ class Header extends Component {
     @observable oldDeviceName = '';
     @observable newDeviceName = '';
     @observable newDeviceNameLength = 0;
+    @observable deleteConfirmationShown = false;
 
     constructor(props) {
         super(props);
@@ -23,6 +24,8 @@ class Header extends Component {
         this.userTypesName = this.userTypesName.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
         this.deleteDevice = this.deleteDevice.bind(this);
+        this.showDeleteConfirmation = this.showDeleteConfirmation.bind(this);
+        this.hideDeleteConfirmation = this.hideDeleteConfirmation.bind(this);
         this.renameHandler = new AsyncStatusCallbackHandler(props.devicesStore, 'devicesRenameAsync', this.handleResponse.bind(this));
     }
     componentWillReceiveProps(nextProps) {
@@ -36,6 +39,12 @@ class Header extends Component {
     }
     componentWillUnmount() {
         this.renameHandler();
+    }
+    showDeleteConfirmation() {
+        this.deleteConfirmationShown = true;
+    }
+    hideDeleteConfirmation() {
+        this.deleteConfirmationShown = false;
     }
     enableDeviceRename(e) {
         if (this.renameDisabled) {
@@ -188,11 +197,35 @@ class Header extends Component {
                                 <div className="action-buttons">
                                     <button className="queue-button" id="queue-button" onClick={showQueueModal} ref={queueButtonRef}>
                                     </button>
-                                    <button className="delete-button fixed-width" id="delete-device-button" onClick={this.deleteDevice}>
+                                    <button className="delete-button fixed-width" id="delete-device-button" onClick={this.showDeleteConfirmation}>
                                         Delete device
                                     </button>
                                 </div>
                             </div>
+                            {this.deleteConfirmationShown ?
+                                <ConfirmationModal
+                                    modalTitle={
+                                        <div className="text-red">
+                                            Delete device
+                                        </div>
+                                    }
+                                    shown={this.deleteConfirmationShown}
+                                    hide={this.hideDeleteConfirmation}
+                                    deleteItem={this.deleteDevice}
+                                    topText={
+                                        <div className="delete-modal-top-text">
+                                            Remove <b>{device.deviceName}</b> permanently?
+                                        </div>
+                                    }
+                                    bottomText={
+                                        <div className="delete-modal-bottom-text">
+                                            If the device is part of any active campaigns, it won't get the updates.
+                                        </div>
+                                    }
+                                />
+                            :
+                                null
+                            }
                         </span>
                     :
                         null

@@ -13,7 +13,6 @@ class ListItemVersion extends Component {
         super(props);
         this.toggleSubmenu = this.toggleSubmenu.bind(this);
         this.saveComment = this.saveComment.bind(this);
-        this.deleteVersion = this.deleteVersion.bind(this);
     }
     openBlacklistModal(mode, e) {
         this.props.showBlacklistModal(this.props.version.id.name, this.props.version.id.version, mode);
@@ -30,12 +29,8 @@ class ListItemVersion extends Component {
     saveComment(value) {
         localStorage.setItem(`${this.props.version.filepath}_comment`, JSON.stringify(value));
     }
-    deleteVersion(version, e) {
-        if(e) e.preventDefault();
-        this.props.packagesStore.deleteVersion(version);
-    }
     render() {
-        const { version, showDependenciesModal, showDependenciesManager, packagesStore, alphaPlusEnabled } = this.props;
+        const { version, showDependenciesModal, showDependenciesManager, packagesStore, alphaPlusEnabled, showDeleteConfirmation } = this.props;
         let isBlacklisted = this.isPackageBlacklisted(version);
         let packageName = version.id.name;
         let borderStyle = {
@@ -147,7 +142,7 @@ class ListItemVersion extends Component {
                             </a>
                         </li>
                         <li className="package-dropdown-item">
-                            <a className="package-dropdown-item" href="#" onClick={this.deleteVersion.bind(this, version.id.version)}>
+                            <a className="package-dropdown-item" href="#" onClick={showDeleteConfirmation.bind(this, version.id.version, 'version')}>
                                 Delete version
                             </a>
                         </li>

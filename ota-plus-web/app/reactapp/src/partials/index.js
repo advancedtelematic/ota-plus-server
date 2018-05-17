@@ -17,6 +17,7 @@ import FormSelect from './FormSelect';
 import FormTextarea from './FormTextarea';
 import Dropdown from './Dropdown';
 import EditableArea from './EditableArea';
+import ConfirmationModal from './ConfirmationModal';
 
 export {
     Navigation,
@@ -37,5 +38,6 @@ export {
     FormSelect,
     FormTextarea,
     Dropdown,
-    EditableArea
+    EditableArea,
+    ConfirmationModal
 }
