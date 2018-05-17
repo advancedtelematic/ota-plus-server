@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Loader, DependenciesModal } from '../partials';
+import { Loader, DependenciesModal, ConfirmationModal } from '../partials';
 import { SoftwareRepository } from '../pages';
 import {
     PackagesCreateModal,
@@ -25,6 +25,10 @@ class Packages extends Component {
     @observable dependenciesManagerShown = false;
     @observable activeVersionFilepath = null;
     @observable activeManagerVersion = null;
+    @observable deleteConfirmationShown = false;
+    @observable expandedPackageName = null;
+    @observable itemToDelete = null;
+    @observable itemToDeleteType = null;
 
     constructor(props) {
         super(props);
@@ -40,6 +44,33 @@ class Packages extends Component {
         this.hideDependenciesModal = this.hideDependenciesModal.bind(this);
         this.showDependenciesManager = this.showDependenciesManager.bind(this);
         this.hideDependenciesManager = this.hideDependenciesManager.bind(this);
+        this.showDeleteConfirmation = this.showDeleteConfirmation.bind(this);
+        this.hideDeleteConfirmation = this.hideDeleteConfirmation.bind(this);
+        this.deleteItem = this.deleteItem.bind(this);
+        this.setExpandedPackageName = this.setExpandedPackageName.bind(this);
+    }
+    setExpandedPackageName(name) {
+        this.expandedPackageName = name;
+    }
+    deleteItem(e) {        
+        if(e) e.preventDefault();
+        if(this.itemToDeleteType === 'package') {
+            this.props.packagesStore.deletePackage(this.itemToDelete);
+        }
+        if(this.itemToDeleteType === 'version') {
+            this.props.packagesStore.deleteVersion(this.itemToDelete);
+        }
+        this.hideDeleteConfirmation();
+    }
+    showDeleteConfirmation(itemName, itemType, e) {
+        if(e) e.preventDefault();
+        this.itemToDelete = itemName;
+        this.itemToDeleteType = itemType;
+        this.deleteConfirmationShown = true;
+    }
+    hideDeleteConfirmation(e) {
+        if(e) e.preventDefault();
+        this.deleteConfirmationShown = false;
     }
     showDependenciesModal(activeVersionFilepath, e) {
         if(e) e.preventDefault();
@@ -127,6 +158,9 @@ class Packages extends Component {
                                     highlightedPackage={highlightedPackage}
                                     showDependenciesModal={this.showDependenciesModal}
                                     showDependenciesManager={this.showDependenciesManager}
+                                    showDeleteConfirmation={this.showDeleteConfirmation}
+                                    expandedPackageName={this.expandedPackageName}
+                                    setExpandedPackageName={this.setExpandedPackageName}
                                 />
                             : <SoftwareRepository/>}
                         </span>
@@ -171,6 +205,40 @@ class Packages extends Component {
                         handleCopy={this.handleCopy}
                         copied={this.copied}
                         featuresStore={featuresStore}
+                    />
+                :
+                    null
+                }
+                {this.deleteConfirmationShown ?
+                    <ConfirmationModal
+                        modalTitle={
+                            <div className="text-red">
+                                Delete package
+                            </div>
+                        }
+                        shown={this.deleteConfirmationShown}
+                        hide={this.hideDeleteConfirmation}
+                        deleteItem={this.deleteItem}
+                        topText={
+                            <div className="delete-modal-top-text">
+                                {this.itemToDeleteType === 'package' ?
+                                    <span>
+                                        Remove <b>{this.expandedPackageName}</b> permanently?
+                                    </span>
+                                : this.itemToDeleteType === 'version' ?
+                                    <span>
+                                        Remove <b>{this.expandedPackageName}</b> v.<b>{this.itemToDelete}</b> permanently?
+                                    </span>
+                                :
+                                    null
+                                }
+                            </div>
+                        }
+                        bottomText={
+                            <div className="delete-modal-bottom-text">
+                                If the package is part of any active campaigns, any devices that haven't installed it yet fail the campaign.
+                            </div>
+                        }
                     />
                 :
                     null
