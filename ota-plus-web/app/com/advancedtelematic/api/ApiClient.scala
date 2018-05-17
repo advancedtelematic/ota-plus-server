@@ -5,18 +5,21 @@ import java.util.UUID
 import akka.Done
 import akka.http.scaladsl.util.FastFuture
 import akka.stream.Materializer
+import akka.util.ByteString
 import com.advancedtelematic.api.ApiRequest.UserOptions
 import com.advancedtelematic.auth.AccessToken
 import com.advancedtelematic.controllers.{FeatureName, UserId}
 import com.advancedtelematic.libats.data.DataType.Namespace
-import com.advancedtelematic.libtuf.data.TufCodecs
+import com.advancedtelematic.libtuf.data.TufCodecs.{keyTypeEncoder, tufKeyPairDecoder}
 import com.advancedtelematic.libtuf.data.TufDataType.{KeyType, TufKeyPair}
+import com.advancedtelematic.libtuf_server.data.Requests.{CreateRepositoryRequest, createRepositoryRequestEncoder}
+import io.circe.{Encoder, Printer}
+import io.circe.syntax._
 import play.api.{Configuration, Logger}
 import play.api.http.Status
 import play.api.libs.json._
-import play.api.libs.ws.{WSAuthScheme, WSClient, WSRequest, WSResponse}
-import play.api.mvc.Result
-
+import play.api.libs.ws.{BodyWritable, InMemoryBody, WSAuthScheme, WSClient, WSRequest, WSResponse}
+import play.api.mvc._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.NoStackTrace
@@ -46,6 +49,13 @@ object ApiRequest {
   def apply(baseUrl: String)(path: String): ApiRequest = new ApiRequest {
     override def build = ws => ws.url(baseUrl + path).withFollowRedirects(false)
   }
+}
+
+trait CirceJsonBodyWritables {
+
+  implicit def circeJsonBodyWritable: BodyWritable[io.circe.Json] =
+    BodyWritable(json => InMemoryBody(ByteString.fromString(json.noSpaces)), "application/json")
+
 }
 
 /**
@@ -263,7 +273,8 @@ class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
   }
 }
 
-class DirectorApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
+class DirectorApi(val conf: Configuration, val apiExec: ApiClientExec)
+  extends OtaPlusConfig with CirceJsonBodyWritables {
 
   private val request = ApiRequest.base(directorApiUri + "/api/v1/")
 
@@ -285,25 +296,24 @@ class DirectorApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
       }
   }
 
-  def createRepo(namespace: Namespace, keyType: KeyType)(implicit ec: ExecutionContext): Future[Unit] = {
-    val body = Json.obj("keyType" -> TufCodecs.keyTypeEncoder(keyType).noSpaces)
 
+  def createRepo(namespace: Namespace, keyType: KeyType)(implicit ec: ExecutionContext): Future[Unit] =
     request("admin/repo")
-      .transform(_.withBody(body).withMethod("POST"))
+      .transform(_.withBody(CreateRepositoryRequest(keyType).asJson).withMethod("POST"))
       .withNamespace(Some(namespace))
       .execResult(apiExec)
       .flatMap { result =>
-        if(result.header.status == Status.CREATED) {
+        if (result.header.status == Status.CREATED) {
           log.info(s"director repo created for $namespace")
           FastFuture.successful(())
         } else {
           FastFuture.failed(DirectorApiError(s"Error creating director repo. Response from director: $result"))
         }
       }
-  }
 }
 
-class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
+class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig
+                                                                                 with CirceJsonBodyWritables {
   private val request = ApiRequest.base(repoApiUri + "/api/v1/")
 
   case class RepoServerError(msg: String) extends Exception(msg) with NoStackTrace
@@ -326,11 +336,9 @@ class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends
     }
   }
 
-  def createRepo(namespace: Namespace, keyType: KeyType)(implicit ec: ExecutionContext): Future[Unit] = {
-    val body = Json.obj("keyType" -> TufCodecs.keyTypeEncoder(keyType).noSpaces)
-
+  def createRepo(namespace: Namespace, keyType: KeyType)(implicit ec: ExecutionContext): Future[Unit] =
     request("user_repo")
-      .transform(_.withBody(body).withMethod("POST"))
+      .transform(_.withBody(CreateRepositoryRequest(keyType).asJson).withMethod("POST"))
       .withNamespace(Some(namespace))
       .execResult(apiExec)
       .flatMap { result =>
@@ -341,7 +349,6 @@ class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends
           FastFuture.failed(RepoServerError(s"Error creating repo. Response from tuf-reposerver: $result"))
         }
       }
-  }
 }
 
 class KeyServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
@@ -367,7 +374,7 @@ class KeyServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends 
 
         val vector = parsed.asArray.getOrElse(throw new Exception("Vector expected"))
         vector.map { json =>
-          TufCodecs.tufKeyPairDecoder.decodeJson(json) match {
+          tufKeyPairDecoder.decodeJson(json) match {
             case Left(t) => throw t
             case Right(keyPair) => keyPair
           }
