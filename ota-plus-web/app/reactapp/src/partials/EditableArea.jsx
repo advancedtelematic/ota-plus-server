@@ -6,29 +6,34 @@ import { observer } from 'mobx-react';
 export default class EditableArea extends Component {
     @observable editComment = false;
     @observable value = '';
-    constructor() {
-        super();
+    @observable tmpValue = '';
+    constructor(props) {
+        super(props);
         this.changeWatcher = this.changeWatcher.bind(this);
         this.cancelEdit = this.cancelEdit.bind(this);
+        this.tmpValue = props.initialText;
     }
 
     changeWatcher(e) {
-        this.value = e.target.innerText;
-        e.target.innerText !== this.props.initialText ? this.editComment = true : this.editComment = false;
+        this.value = e.target.value;
+        e.target.value !== this.props.initialText ? this.editComment = true : this.editComment = false;
     }
 
     cancelEdit(e) {
         e.preventDefault();
         this.editComment = false;
+        this.input.value = this.tmpValue;
     }
 
     render() {
         const {initialText, saveHandler} = this.props;
         return (
             <div className="c-editable-area">
-                <div contentEditable="true"
-                      className={`c-editable-area__input ${this.editComment ? 'c-editable-area__input--bordered' : ''}`}
-                      onInput={this.changeWatcher}>{initialText}</div>
+                <textarea
+                     className={`c-editable-area__input ${this.editComment ? 'c-editable-area__input--bordered' : ''}`}
+                     ref={el => this.input = el}
+                     defaultValue={initialText}
+                     onChange={this.changeWatcher}/>
                 {this.editComment ?
                     <div className="c-editable-area__body-actions">
                         <a href="#" className="c-editable-area__button link-cancel" onClick={this.cancelEdit}>Cancel</a>
