@@ -18,7 +18,6 @@ class List extends Component {
     @observable lastShownIndex = 50;
     @observable fakeHeaderLetter = null;
     @observable fakeHeaderTopPosition = 0;
-    @observable expandedPackageName = null;
     @observable tmpIntervalId = null;
 
     constructor(props) {
@@ -28,7 +27,6 @@ class List extends Component {
         this.listScroll = this.listScroll.bind(this);
         this.highlightPackage = this.highlightPackage.bind(this);
         this.togglePackage = this.togglePackage.bind(this);
-        this.deletePackage = this.deletePackage.bind(this);
         this.saveComment = this.saveComment.bind(this);
         this.packagesChangeHandler = observe(props.packagesStore, (change) => {
             if(change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
@@ -48,6 +46,7 @@ class List extends Component {
         this.packagesChangeHandler();
         this.refs.list.removeEventListener('scroll', this.listScroll);
     }
+    
     generateHeadersPositions() {
         const headers = this.refs.list.getElementsByClassName('header');
         const wrapperPosition = this.refs.list.getBoundingClientRect();
@@ -100,9 +99,9 @@ class List extends Component {
         }
     }
     highlightPackage(pack) {
-        const { animatedScroll } = this.props;
+        const { animatedScroll, setExpandedPackageName } = this.props;
         if(this.refs.list && pack) {
-            this.expandedPackageName = pack;
+            setExpandedPackageName(pack)
             const currentScrollTop = this.refs.list.scrollTop;
             const elementCoords = document.getElementById("button-package-" + pack).getBoundingClientRect();
             let scrollTo = currentScrollTop + elementCoords.top - 150;
@@ -117,9 +116,10 @@ class List extends Component {
         }
     }
     togglePackage(packageName, e) {
+        const { expandedPackageName, setExpandedPackageName} = this.props;
         if(e) e.preventDefault();
         this.props.packagesStore._handleCompatibles();
-        this.expandedPackageName = (this.expandedPackageName !== packageName ? packageName : null);
+        setExpandedPackageName(expandedPackageName !== packageName ? packageName : null);
     }
     startIntervalListScroll() {
         clearInterval(this.tmpIntervalId);
@@ -135,12 +135,8 @@ class List extends Component {
     saveComment(pack,value) {
         localStorage.setItem(`${pack.packageName}`, value);
     }
-    deletePackage(name, e) {
-        if(e) e.preventDefault();
-        this.props.packagesStore.deletePackage(name);
-    }
     render() {
-        const { showBlacklistModal, packagesStore, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, alphaPlusEnabled } = this.props;
+        const { showBlacklistModal, packagesStore, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, alphaPlusEnabled, showDeleteConfirmation, expandedPackageName } = this.props;        
         return (
             <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching ? " fetching" : "")} ref="list">
                 {packagesStore.packagesCount ? 
@@ -166,7 +162,7 @@ class List extends Component {
                                                 <ListItem
                                                     pack={pack}
                                                     comment={comment}
-                                                    expandedPackageName={this.expandedPackageName}
+                                                    expandedPackageName={expandedPackageName}
                                                     togglePackage={this.togglePackage}
                                                 />
                                                 <VelocityTransitionGroup
@@ -181,13 +177,13 @@ class List extends Component {
                                                         complete: () => {that.stopIntervalListScroll();}
                                                     }}
                                                 >
-                                                    {this.expandedPackageName === pack.packageName ?
+                                                    {expandedPackageName === pack.packageName ?
                                                         <div className="c-package__details">
                                                             <div className="c-package__main-name">
                                                                 {pack.packageName}
                                                             </div>
                                                             <div className="c-package__delete-button">
-                                                                <button className="delete-button" onClick={this.deletePackage.bind(this, pack.packageName)}>Delete package</button>
+                                                                <button className="delete-button" onClick={showDeleteConfirmation.bind(this, expandedPackageName, 'package')}>Delete package</button>
                                                             </div>
                                                             <div className="c-package__chart">
                                                                 <div className="c-package__heading">
@@ -222,11 +218,12 @@ class List extends Component {
                                                                             showDependenciesModal={showDependenciesModal}
                                                                             showDependenciesManager={showDependenciesManager}
                                                                             alphaPlusEnabled={alphaPlusEnabled}
+                                                                            showDeleteConfirmation={showDeleteConfirmation}
                                                                             key={i}
                                                                         />
                                                                     );
                                                                 })}
-                                                            </ul>
+                                                            </ul>                                                            
                                                         </div>
                                                     :
                                                         null
@@ -237,7 +234,7 @@ class List extends Component {
                                     })}
                                 </span>
                             );
-                        })}
+                        })}                        
                     </Dropzone>
                 :
                     <span className="content-empty">
