@@ -10,10 +10,7 @@ import * as contracts from '../../../assets/contracts/';
 export default class Terms extends Component {
     @observable termsAccepted = false;
     @observable showModal = false;
-
-    componentWillMount() {
-        this.props.userStore.fetchContracts();
-    }
+    
     toggleModal(e) {
         e.preventDefault();
         this.showModal = !this.showModal;

@@ -195,43 +195,32 @@ class List extends Component {
     addUnmanagedPackage() {
         const { devicesStore, packagesStore, hardwareStore } = this.props;
         let preparedPackages = this.preparedPackages;
+        let ecuObject = null;
         switch(hardwareStore.activeEcu.type) {
             case 'secondary':
-                let secondaryObject = devicesStore._getSecondaryBySerial(hardwareStore.activeEcu.serial);
-                let reportedHash = secondaryObject.image.filepath;
-                let pack = packagesStore._getInstalledPackage(reportedHash, hardwareStore.activeEcu.hardwareId);
-                if(!pack) {
-                    let unmanagedPack = {
-                        filepath: secondaryObject.image.filepath,
-                        size: secondaryObject.image.size,
-                        hash: reportedHash,
-                        unmanaged: true
-                    };
-                    if(_.isUndefined(preparedPackages['#'])) {
-                        preparedPackages['#'] = [];
-                    }
-                    preparedPackages['#'].push(unmanagedPack);
-                }
+                ecuObject = devicesStore._getSecondaryBySerial(hardwareStore.activeEcu.serial);
                 break;
             case 'primary':
-                let primaryObject = devicesStore._getPrimaryByHardwareId(hardwareStore.activeEcu.hardwareId);
-                let hash = primaryObject.image.filepath;
-                let packItem = packagesStore._getInstalledPackage(hash, hardwareStore.activeEcu.hardwareId);
-                if(!packItem) {
-                    let unmanagedPack = {
-                        filepath: primaryObject.image.filepath,
-                        size: primaryObject.image.size,
-                        hash: hash,
-                        unmanaged: true
-                    };
-                    if(_.isUndefined(preparedPackages['#'])) {
-                        preparedPackages['#'] = [];
-                    }
-                    preparedPackages['#'].push(unmanagedPack);
-                }
+                ecuObject = devicesStore._getPrimaryByHardwareId(hardwareStore.activeEcu.hardwareId);
                 break;
             default:
                 break;
+        }
+        const filepath = ecuObject.image.filepath;
+        const hash = ecuObject.image.hash.sha256;
+        const size = ecuObject.image.size;
+        const pack = packagesStore._getInstalledPackage(filepath, hardwareStore.activeEcu.hardwareId);
+        if(!pack) {
+            let unmanagedPack = {
+                filepath: filepath,
+                size: size,
+                hash: hash,
+                unmanaged: true
+            };
+            if(_.isUndefined(preparedPackages['#'])) {
+                preparedPackages['#'] = [];
+            }
+            preparedPackages['#'].push(unmanagedPack);
         }
     }
     checkQueued(version) {
