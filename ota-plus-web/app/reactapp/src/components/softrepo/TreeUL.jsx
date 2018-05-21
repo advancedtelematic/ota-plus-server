@@ -37,17 +37,18 @@ export default class TreeUl extends PureComponent {
     }
 
     getUserInfo(object,e) {
-        e.target.parentNode.nextSibling.classList.toggle('hide');
+        const info = e.target.parentNode.nextSibling;
         if (this.userInfo.email && object.email === this.userInfo.email) {
             this.showUserInfo = !this.showUserInfo;
+            info.classList.add('hide');
         } else {
             this.showUserInfo = true;
+            info.classList.remove('hide');
         }
         this.userInfo = {
             ...object,
             element: e.target
         };
-        this.props.drawLinesFromKeys(e.target.parentNode.parentNode.previousSibling)
     }
 
     render() {
