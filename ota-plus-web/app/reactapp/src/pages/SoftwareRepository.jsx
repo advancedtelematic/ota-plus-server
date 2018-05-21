@@ -10,6 +10,7 @@ import {keys, packages, roles, campaigns} from '../components/softrepo/data.js';
 export default class SoftwareRepository extends Component {
     @observable selectedPackage = null;
     @observable selectedRole = '';
+    @observable selectedOwner = '';
     @observable associatedPackages = packages.groups;
     @observable associatedCampaigns = campaigns.groups;
 
@@ -53,6 +54,11 @@ export default class SoftwareRepository extends Component {
     showUserInfo(e) {
         const alreadySelectedElements = document.querySelectorAll('i.selected-user');
         const parent = e.target.parentNode.parentNode.nextSibling;
+        if (this.selectedOwner === e.target) {
+            parent.classList.remove('hide');
+        } else {
+            parent.classList.add('hide');
+        }
         alreadySelectedElements.forEach(el => {
             el.classList.remove('selected-user');
         });
@@ -62,6 +68,7 @@ export default class SoftwareRepository extends Component {
         } else {
             e.target.classList.add('selected-user');
         }
+        this.selectedOwner = e.target;
     }
 
     getParentsUntil (elem, parent, selector) {

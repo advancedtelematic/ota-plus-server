@@ -8,10 +8,16 @@ import {keys} from './data.js';
 @observer
 export default class List extends PureComponent {
     @observable selectedElement = null;
+    @observable selectedOwner = null;
 
     showUserInfo(e) {
         const alreadySelectedElements = document.querySelectorAll('i.selected-user');
         const parent = e.target.parentNode.parentNode.nextSibling;
+        if (this.selectedOwner === e.target) {
+            parent.classList.remove('hide');
+        } else {
+            parent.classList.add('hide');
+        }
         alreadySelectedElements.forEach(el => {
             el.classList.remove('selected-user');
         });
@@ -21,6 +27,7 @@ export default class List extends PureComponent {
         } else {
             e.target.classList.add('selected-user');
         }
+        this.selectedOwner = e.target;
     }
 
     showInfo(e, item) {
@@ -52,7 +59,6 @@ export default class List extends PureComponent {
                                     className={this.selectedElement === item ? 'expanded' : ''}
                                     onClick={(e) => {
                                         this.showInfo(e, item);
-                                        // clickHandler(e,true);
                                     }}
                                     data-packages={packages}>
                                     <span>
