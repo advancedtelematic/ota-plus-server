@@ -40,6 +40,7 @@ libraryDependencies ++= Seq(
   guice,
   cacheApi,
   Dependencies.LibTuf,
+  Dependencies.LibTufServer,
   Dependencies.jose4j
 ) ++
 Dependencies.TestFrameworks ++

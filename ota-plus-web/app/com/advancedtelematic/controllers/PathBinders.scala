@@ -7,7 +7,7 @@ package com.advancedtelematic.controllers
 
 import com.advancedtelematic.api.ApiVersion
 import com.advancedtelematic.libats.data.DataType.Namespace
-import com.advancedtelematic.libtuf.data.TufDataType.{EdKeyType, RsaKeyType}
+import com.advancedtelematic.libtuf.data.TufDataType.{EcPrime256KeyType, Ed25519KeyType, RsaKeyType}
 import play.api.mvc.{PathBindable, QueryStringBindable}
 
 /**
@@ -56,7 +56,8 @@ object PathBinders {
       params.get(key).flatMap(_.headOption).map { p =>
         p.toLowerCase match {
           case "rsa" => Right(RsaKeyType)
-          case "ed25519" => Right(EdKeyType)
+          case "ed25519" => Right(Ed25519KeyType)
+          case "ecprime256v1" => Right(EcPrime256KeyType)
           case _ => Left("unknown key type")
         }
       }
@@ -64,7 +65,8 @@ object PathBinders {
     def unbind(key: String, value: KeyType): String = {
       val kt = value match {
         case RsaKeyType => "rsa"
-        case EdKeyType => "ed25519"
+        case Ed25519KeyType => "ed25519"
+        case EcPrime256KeyType => "ecprime256v1"
       }
 
       key + "=" + kt

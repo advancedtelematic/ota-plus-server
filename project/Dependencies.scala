@@ -1,9 +1,9 @@
 object Version {
-  val Akka = "2.5.8"
+  val Akka = "2.5.9"
   val JsonWebSecurity = "0.4.5"
   val MockWs = "2.6.2"
   val LibAts = "0.1.0-5-g6b585f0"
-  val LibTuf = "0.2.0-44-gda9b1e2"
+  val LibTuf = "0.4.0-10-ge535619"
   val Netty = "4.1.19.Final"
   val ScalaCheck = "1.13.4"
   val ScalaTestPlay = "3.1.2"
@@ -29,6 +29,7 @@ object Dependencies {
   ).map(_ % Version.LibAts)
 
   lazy val LibTuf = "com.advancedtelematic" %% "libtuf" % Version.LibTuf
+  lazy val LibTufServer = "com.advancedtelematic" %% "libtuf-server" % Version.LibTuf
 
   val Netty = Set("io.netty" % "netty-handler", "io.netty" % "netty-codec").map(_ % Version.Netty)
 }
