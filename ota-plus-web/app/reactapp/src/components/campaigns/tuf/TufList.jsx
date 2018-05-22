@@ -93,11 +93,11 @@ class TufList extends Component {
                 </div>
                 <div className="section-header">
                     <div className="column">Running campaigns</div>
-                    <div className="column font-extra-small">Created at</div>
-                    <div className="column font-extra-small">Processed</div>
-                    <div className="column font-extra-small">Affected</div>
-                    <div className="column font-extra-small">Finished</div>
-                    <div className="column font-extra-small">Failure rate</div>
+                    <div className="column">Created at</div>
+                    <div className="column">Processed</div>
+                    <div className="column">Affected</div>
+                    <div className="column">Finished</div>
+                    <div className="column">Failure rate</div>
                 </div>
                 <div className="campaigns-list" id="running-campaigns">
                     {campaignsStore.runningCampaigns.length ?
