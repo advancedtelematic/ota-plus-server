@@ -41,8 +41,8 @@ export default class Terms extends Component {
                         <img src="/assets/img/HERE_pos.png" alt="HERE"/>
                     </div>
                     <div className="title title--terms">
-                        This is a 90 days trial for
-                        internal evaluation purposes only
+                        This is a 90 day trial, for
+                        evaluation purposes only
                     </div>
                     <p className="subtitle--terms">
                         The proprietary software that you upload to HERE OTA Connect SaaS will be used by HERE only for
