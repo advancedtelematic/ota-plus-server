@@ -168,10 +168,10 @@ class Home extends Component {
                             <div className="col">
                                 Last created devices
                             </div>
-                            <div className="col font-extra-small">
+                            <div className="col">
                                 Seen online
                             </div>
-                            <div className="col font-extra-small">
+                            <div className="col">
                                 Status
                             </div>
                             <div className="dots" onClick={this.toggleDeviceSubmenu}>
@@ -209,10 +209,10 @@ class Home extends Component {
                             <div className="col">
                                 Last added packages
                             </div>
-                            <div className="col font-extra-small">
+                            <div className="col">
                                 Version
                             </div>
-                            <div className="col font-extra-small">
+                            <div className="col">
                                 Created at
                             </div>
                             <div className="dots" onClick={this.togglePackageSubmenu}>
@@ -250,10 +250,10 @@ class Home extends Component {
                             <div className="col">
                                 Active campaigns
                             </div>
-                            <div className="col font-extra-small">
+                            <div className="col">
                                 Finished
                             </div>
-                            <div className="col font-extra-small">
+                            <div className="col">
                                 Failure rate
                             </div>
                             <div className="dots" onClick={this.toggleCampaignSubmenu}>

@@ -64,21 +64,22 @@
                 background: #fff;
 
                 .heading {
+                    text-transform: uppercase;
                     height: 50px;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
                     background-color: $home-heading-bg;
-                    color: #383C45;
                     padding: 0 20px;
                     position: relative;
 
                     .col {
                         font-weight: 500;
+                        color: #383C45;
 
                         &:not(:first-child) {
                             font-size: 12px;
-                            color: $home-header-text;
+                            color: $devices-group-text;
                         }
                     }
                 }
@@ -196,6 +197,7 @@
                 .col {
                     width: 33%;
                     display: flex;
+                    color: #000;
                     align-items: center;
                     @include textoverflowEllipsis;
 
