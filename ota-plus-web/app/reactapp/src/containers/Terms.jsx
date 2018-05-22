@@ -48,7 +48,7 @@ export default class Terms extends Component {
                         </button>
                         <p>
                             I agree to HERE Location Platform Services Online
-                            <a id="service-terms-link" target="_blank" onClick={this.toggleModal.bind(this)} href="#"> terms and conditions </a>
+                            <a id="service-terms-link" target="_blank" href="https://developer.here.com/terms-and-conditions"> terms and conditions </a>
                             and <a target="_blank" id="privacy-policy-link" href="https://legal.here.com/en-gb/privacy" >privacy policy.</a>
                         </p>
                     </div>
