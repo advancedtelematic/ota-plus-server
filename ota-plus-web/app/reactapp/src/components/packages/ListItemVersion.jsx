@@ -93,6 +93,15 @@ class ListItemVersion extends Component {
                         </span>
                     }
                 </div>
+                <div className="c-package__comment-wrapper" >
+                    <div className="c-package__heading">
+                        Comment
+                    </div>
+                    <EditableArea
+                        initialText={comment}
+                        saveHandler={this.saveComment}
+                    />
+                </div>
                 <div className="c-package__hardware-box">
                     <div className="c-package__hw-row c-package__hw-row--installed">
                         Installed on <span id={"package-" + packageName + "-installed-on-ecus-count-" + version.id.version.substring(0,8)}>{version.installedOnEcus}</span> ECU(s)
@@ -127,7 +136,96 @@ class ListItemVersion extends Component {
                     }                                   
                 </div>
                 <div className="c-package__show-dependencies">
+                    {alphaPlusEnabled ?
+                        <div className={"c-package__manager" +
+                             (_.isEmpty(borderStyle) ? " c-package__manager--full" : "") +
+                             (versionCompatibilityData ? " c-package__manager--aligned" : "")}>
+                            {versionCompatibilityData && versionCompatibilityData.required.length ?
+                                <div className="c-package__relations" id="required">
+                                    <div className="c-package__heading">
+                                        Dependencies
+                                    </div>
+                                    {_.map(versionCompatibilityData.required, (filepath, i) => {
+                                        let pack = _.find(packagesStore.packages, item => item.filepath === filepath);
+                                        return (
+                                            <div className="c-package__relation-item" key={i}>
+                                            <span className="c-package__relation-name" id={"required-" + pack.id.name}>
+                                                {pack.id.name}
+                                            </span>
+                                                <span className="c-package__relation-version" id={"required-" + pack.id.version}>
+                                                {pack.id.version}
+                                            </span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                :
+                                null}
+                            {versionCompatibilityData && versionCompatibilityData.incompatibles.length ?
+                                <div className="c-package__relations" id="not-compatible">
+                                    <div className="c-package__heading">
+                                        Not compatible:
+                                    </div>
+                                    {_.map(versionCompatibilityData.incompatibles, (filepath, i) => {
+                                        let pack = _.find(packagesStore.packages, item => item.filepath === filepath);
+                                        return (
+                                            <div className="c-package__relation-item" key={i}>
+                                            <span className="c-package__relation-name" id={"not-compatible-" + pack.id.name}>
+                                                {pack.id.name}
+                                            </span>
+                                                <span className="c-package__relation-version" id={"not-compatible-" + pack.id.version}>
+                                                {pack.id.version}
+                                            </span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                :
+                                null}
+                            {versionCompatibilityData && versionCompatibilityData.requiredBy.length ?
+                                <div className="c-package__relations" id="required-by">
+                                    <div className="c-package__heading">
+                                        Required by:
+                                    </div>
+                                    {_.map(versionCompatibilityData.requiredBy, (filepath, i) => {
+                                        let pack = _.find(packagesStore.packages, item => item.filepath === filepath);
+                                        return (
+                                            <div className="c-package__relation-item" key={i}>
+                                            <span className="c-package__relation-name" id={"required-by-" + pack.id.version}>
+                                                {pack.id.name}
+                                            </span>
+                                                <span className="c-package__relation-version" id={"required-by-" + pack.id.version}>
+                                                {pack.id.version}
+                                            </span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                :
+                                null
+                            }
+                            {versionCompatibilityData ?
+                                <div className="c-package__manage-dependencies c-package__manage-dependencies--small">
+                                    <a href="#" id="edit-dependencies" className="add-button" onClick={showDependenciesManager.bind(this, version)}>
+                                    <span>
+                                        Edit
+                                    </span>
+                                    </a>
+                                </div>
+                                :
+                                <div className="c-package__manage-dependencies">
+                                    <a href="#" id="add-dependencies" className="add-button" onClick={showDependenciesManager.bind(this, version)}>
+                                    <span>
+                                        Manage dependencies
+                                    </span>
+                                    </a>
+                                </div>
+                            }
 
+                        </div>
+                        :
+                        null
+                    }
                 </div>
                 <div className="dots" onClick={this.toggleSubmenu}>
                     <span></span>
@@ -158,106 +256,6 @@ class ListItemVersion extends Component {
                     id={"package-" + packageName + "-version"}>
                     {directorBlock}
                 </li>
-                <div className="c-package__comment-wrapper" style={borderStyle}>
-                    <div className="c-package__heading">
-                        Comment
-                    </div>
-                    <EditableArea
-                        initialText={comment}
-                        saveHandler={this.saveComment}
-                    />
-                </div>
-                {alphaPlusEnabled ?
-                    <div style={borderStyle}
-                         className={"c-package__manager" +
-                                   (_.isEmpty(borderStyle) ? " c-package__manager--full" : "") + 
-                                   (versionCompatibilityData ? " c-package__manager--aligned" : "")}>
-                        {versionCompatibilityData && versionCompatibilityData.required.length ?
-                            <div className="c-package__relations" id="required">
-                                <div className="c-package__heading">
-                                    Dependencies
-                                </div>
-                                {_.map(versionCompatibilityData.required, (filepath, i) => {
-                                    let pack = _.find(packagesStore.packages, item => item.filepath === filepath);
-                                    return (
-                                        <div className="c-package__relation-item" key={i}>
-                                            <span className="c-package__relation-name" id={"required-" + pack.id.name}>
-                                                {pack.id.name}
-                                            </span>
-                                            <span className="c-package__relation-version" id={"required-" + pack.id.version}>
-                                                {pack.id.version}
-                                            </span>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        :
-                            null}
-                        {versionCompatibilityData && versionCompatibilityData.incompatibles.length ?
-                            <div className="c-package__relations" id="not-compatible">
-                                <div className="c-package__heading">
-                                    Not compatible:
-                                </div>
-                                {_.map(versionCompatibilityData.incompatibles, (filepath, i) => {
-                                    let pack = _.find(packagesStore.packages, item => item.filepath === filepath);
-                                    return (
-                                        <div className="c-package__relation-item" key={i}>
-                                            <span className="c-package__relation-name" id={"not-compatible-" + pack.id.name}>
-                                                {pack.id.name}
-                                            </span>
-                                            <span className="c-package__relation-version" id={"not-compatible-" + pack.id.version}>
-                                                {pack.id.version}
-                                            </span>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        :
-                            null}
-                        {versionCompatibilityData && versionCompatibilityData.requiredBy.length ?
-                            <div className="c-package__relations" id="required-by">
-                                <div className="c-package__heading">
-                                    Required by:
-                                </div>
-                                {_.map(versionCompatibilityData.requiredBy, (filepath, i) => {
-                                    let pack = _.find(packagesStore.packages, item => item.filepath === filepath);
-                                    return (
-                                        <div className="c-package__relation-item" key={i}>
-                                            <span className="c-package__relation-name" id={"required-by-" + pack.id.version}>
-                                                {pack.id.name}
-                                            </span>
-                                            <span className="c-package__relation-version" id={"required-by-" + pack.id.version}>
-                                                {pack.id.version}
-                                            </span>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        :
-                            null
-                        }
-                        {versionCompatibilityData ?
-                            <div className="c-package__manage-dependencies c-package__manage-dependencies--small">
-                                <a href="#" id="edit-dependencies" className="add-button" onClick={showDependenciesManager.bind(this, version)}>
-                                    <span>
-                                        Edit
-                                    </span>
-                                </a>
-                            </div>
-                        :
-                            <div className="c-package__manage-dependencies">
-                                <a href="#" id="add-dependencies" className="add-button" onClick={showDependenciesManager.bind(this, version)}>
-                                    <span>
-                                        Manage dependencies
-                                    </span>
-                                </a>
-                            </div>
-                        }
-                        
-                    </div>
-                : 
-                    null
-                }
             </span>
         );
     }
