@@ -55,7 +55,7 @@ class Devices extends Component {
         this.props.devicesStore.fetchDevices(filter, groupId);
     }
     render() {
-        const { devicesStore, groupsStore } = this.props;
+        const { devicesStore, groupsStore, alphaPlusEnabled } = this.props;
         return (
             <span>
                 {devicesStore.devicesInitialTotalCount === null && devicesStore.devicesFetchAsync.isFetching ?
@@ -77,6 +77,7 @@ class Devices extends Component {
                                     groupsStore={groupsStore}
                                     changeSort={this.changeSort}
                                     changeFilter={this.changeFilter}
+                                    alphaPlusEnabled={alphaPlusEnabled}
                                 />
                             </span>
                         

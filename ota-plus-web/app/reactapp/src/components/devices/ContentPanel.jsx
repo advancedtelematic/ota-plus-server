@@ -21,7 +21,7 @@ export default class ContentPanel extends Component {
     }
 
     render() {
-        const {devicesStore, groupsStore, changeFilter } = this.props;
+        const {devicesStore, groupsStore, changeFilter, alphaPlusEnabled } = this.props;
         return (
             <div className="content-panel">
                 <ContentPanelHeader 
@@ -47,6 +47,7 @@ export default class ContentPanel extends Component {
                                             devicesStore={devicesStore}
                                             device={device}
                                             goToDetails={this.goToDetails}
+                                            alphaPlusEnabled={alphaPlusEnabled}
                                             key={device.uuid}
                                         />
                                     );
