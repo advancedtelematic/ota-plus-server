@@ -168,10 +168,30 @@
 
             .icon {
                 background-image: url($car-image-url);
-                background-size: cover;
+                background-size: 100% 100%;
                 background-color: transparent;
                 width: 50px;
                 height: 50px;
+
+                &.sedan {
+                    background-image: url($sedan-image-url);
+                }
+
+                &.hatchback {
+                    background-image: url($hatchback-image-url);
+                }
+
+                &.eh0 {
+                    background-image: url($eh0-image-url);
+                }
+
+                &.sport {
+                    background-image: url($sport-image-url);
+                }
+
+                &.sw {
+                    background-image: url($sw-image-url);
+                }
             }
         }
     }
