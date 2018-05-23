@@ -67,6 +67,7 @@ export default class GroupsStore {
                     let after = _.after(groups.length, () => {
                         this.groups = _.uniq(this.groups.concat(groups), group => group.id);
                         this._prepareGroups(this.groups);
+                        this._prepareGroupsWithFleets();
                         this.groupsFetchAsync = handleAsyncSuccess(response);
                     }, this);
                     _.each(groups, (group, index) => {
@@ -116,6 +117,7 @@ export default class GroupsStore {
                     name: name
                 };
                 if(this.activeFleet) {
+                    this._prepareGroupsWithFleets();
                     this._filterGroups(this.activeFleet.id);
                 } else {
                     this._prepareGroups(this.groups);
@@ -194,9 +196,26 @@ export default class GroupsStore {
         this.preparedGroups = preparedGroups;
     }
 
-    _prepareGroupsWithFleets(fleets) {
+    _prepareGroupsWithFleets() {
         _.each(this.groups, group => {
-            group.fleet_id = fleets[_.random(0, fleets.length - 1)].id;
+            let groupLetters = group.groupName.substring(0, 3);
+            switch(groupLetters) {
+                case 'H34':
+                    group.fleet_id = 'sedan';
+                    break;
+                case 'H35':
+                    group.fleet_id = 'hatchback';
+                    break;
+                case 'H5S':
+                    group.fleet_id = 'sport';
+                    break;
+                case 'H6W':
+                    group.fleet_id = 'sw';
+                    break;
+                default:
+                    group.fleet_id = 'eh0';
+                    break;
+            }
         });
     }
 

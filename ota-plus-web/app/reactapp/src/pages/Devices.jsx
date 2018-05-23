@@ -19,7 +19,6 @@ class Devices extends Component {
         this.groupsFetchHandler = observe(props.groupsStore, (change) => {
             if(change.name === 'groupsFetchAsync' && !change.object[change.name].isFetching) {
                 if(props.devicesStore.deviceFleets.length) {
-                    props.groupsStore._prepareGroupsWithFleets(props.devicesStore.deviceFleets);
                     props.toggleFleet(_.first(props.devicesStore.deviceFleets));
                 }
             }
@@ -35,7 +34,7 @@ class Devices extends Component {
         this.props.groupsStore._reset();
     }
     render() {
-        const { devicesStore, groupsStore } = this.props;
+        const { devicesStore, groupsStore, alphaPlusEnabled } = this.props;
         return (
             <FadeAnimation>
                 <MetaData 
@@ -43,6 +42,7 @@ class Devices extends Component {
                     <DevicesContainer 
                         devicesStore={devicesStore}
                         groupsStore={groupsStore}
+                        alphaPlusEnabled={alphaPlusEnabled}
                     />
                 </MetaData>
             </FadeAnimation>
