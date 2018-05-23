@@ -150,10 +150,10 @@
 
             &__version-item {
                 font-size: 12px;
+                display: flex;
                 position: relative;
                 @include transition;
                 background: #fff;
-                overflow: hidden;
 
                 &:before {
                     content: '';
@@ -166,16 +166,21 @@
                     background-color: $add-button-grey;
                 }
 
+                &>span {
+                    display: flex;
+                    flex-wrap: wrap;
+                    flex-basis:100%;
+                }
+
                 &--ident {
                     margin-bottom: 5px;
                 }
             }
 
             &__software-box {
-                width: 50%;
-                position: relative;
-                float: left;
-                padding: 20px 10px 20px 35px;
+                flex-basis: 50%;
+                padding: 20px 25px;
+                border-right: 1px solid #e7e7e8;
             }
 
             &__sw-row {
@@ -203,11 +208,11 @@
             }
 
             &__hardware-box {
+                border-right: 1px solid #e7e7e8;
+                flex-basis: 50%;
                 text-align: left;
                 height: auto;
-                padding: 20px 10px;
-                width: 40%;
-                float: left;
+                padding: 20px 25px;
             }
 
             &__hw-row {
@@ -227,8 +232,9 @@
 
             &__comment-wrapper {
                 background-color: #fff;
-                padding: 20px 35px;
+                padding: 20px 25px;
                 position: relative;
+                flex-basis: 50%;
                 &:before {
                     content: '';
                     position: absolute;
@@ -238,6 +244,10 @@
                     top:0;
                     left:0;
                 }
+            }
+
+            &__show-dependencies {
+                flex-basis: 50%;
             }
 
             &__hw-value {
@@ -250,6 +260,7 @@
                 justify-content: flex-end;
                 background-color: #fff;
                 position: relative;
+                flex-basis: 50%;
                 margin-bottom: 10px;
                 padding: 20px 35px;
                 font-size: 12px;
