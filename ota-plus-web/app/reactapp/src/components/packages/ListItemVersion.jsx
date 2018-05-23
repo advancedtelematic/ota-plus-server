@@ -14,24 +14,14 @@ class ListItemVersion extends Component {
         this.toggleSubmenu = this.toggleSubmenu.bind(this);
         this.saveComment = this.saveComment.bind(this);
     }
-    openBlacklistModal(mode, e) {
-        this.props.showBlacklistModal(this.props.version.id.name, this.props.version.id.version, mode);
-    }
     toggleSubmenu() {
         this.showSubmenu = !this.showSubmenu;
-    }
-    isPackageBlacklisted(version) {
-        let isPackageBlacklisted = _.find(this.props.packagesStore.blacklist, (dev) => {
-            return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
-        });
-        return isPackageBlacklisted ? isPackageBlacklisted : false;
     }
     saveComment(value) {
         localStorage.setItem(`${this.props.version.filepath}_comment`, JSON.stringify(value));
     }
     render() {
-        const { version, showDependenciesModal, showDependenciesManager, packagesStore, alphaPlusEnabled, showDeleteConfirmation } = this.props;
-        let isBlacklisted = this.isPackageBlacklisted(version);
+        const { version, showDependenciesModal, showDependenciesManager, packagesStore, alphaPlusEnabled, showDeleteConfirmation, showEditComment } = this.props;
         let packageName = version.id.name;
         let borderStyle = {
             borderLeft: '10px solid #e1e1e1'
@@ -45,8 +35,6 @@ class ListItemVersion extends Component {
         if(alphaPlusEnabled) {
             versionCompatibilityData = _.find(packagesStore.compatibilityData, item => item.name === version.filepath);
         }
-
-        let comment = localStorage.getItem(`${version.filepath}_comment`) ? JSON.parse(localStorage.getItem(`${version.filepath}_comment`)) : 'This package is provided to…. and works best with… compatible for…';
 
         const directorBlock = (
             <span>
@@ -98,7 +86,7 @@ class ListItemVersion extends Component {
                         Comment
                     </div>
                     <EditableArea
-                        initialText={comment}
+                        initialText={version.comment}
                         saveHandler={this.saveComment}
                     />
                 </div>
@@ -240,6 +228,12 @@ class ListItemVersion extends Component {
                             </a>
                         </li>
                         <li className="package-dropdown-item">
+                            <a className="package-dropdown-item" href="#" id="edit-comment"
+                               onClick={showEditComment.bind(this, version.filepath, version.comment)}>
+                                Edit comment
+                            </a>
+                        </li>
+                        <li className="package-dropdown-item">
                             <a className="package-dropdown-item" href="#" onClick={showDeleteConfirmation.bind(this, version.id.version, 'version')}>
                                 Delete version
                             </a>
@@ -250,7 +244,7 @@ class ListItemVersion extends Component {
         );
         return (
             <span>
-                <li className={"c-package__version-item" + (!alphaPlusEnabled ? " c-package__version-item--ident" : "") + (isBlacklisted ? " blacklist" : "")}
+                <li className={"c-package__version-item" + (!alphaPlusEnabled ? " c-package__version-item--ident" : "")}
                     data-installed={version.installedOnEcus}
                     style={borderStyle}
                     id={"package-" + packageName + "-version"}>
@@ -263,7 +257,6 @@ class ListItemVersion extends Component {
 
 ListItemVersion.propTypes = {
     version: PropTypes.object.isRequired,
-    showBlacklistModal: PropTypes.func.isRequired,
     packagesStore: PropTypes.object.isRequired
 }
 

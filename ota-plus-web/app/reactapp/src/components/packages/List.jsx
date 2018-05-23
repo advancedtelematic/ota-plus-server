@@ -136,7 +136,7 @@ class List extends Component {
         localStorage.setItem(`${pack.packageName}`, value);
     }
     render() {
-        const { showBlacklistModal, packagesStore, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, alphaPlusEnabled, showDeleteConfirmation, expandedPackageName } = this.props;        
+        const { packagesStore, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, alphaPlusEnabled, showDeleteConfirmation, expandedPackageName, showEditComment } = this.props;        
         return (
             <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching ? " fetching" : "")} ref="list">
                 {packagesStore.packagesCount ? 
@@ -213,12 +213,12 @@ class List extends Component {
                                                                         <ListItemVersion
                                                                             pack={pack}
                                                                             version={version}
-                                                                            showBlacklistModal={showBlacklistModal}
                                                                             packagesStore={packagesStore}
                                                                             showDependenciesModal={showDependenciesModal}
                                                                             showDependenciesManager={showDependenciesManager}
                                                                             alphaPlusEnabled={alphaPlusEnabled}
                                                                             showDeleteConfirmation={showDeleteConfirmation}
+                                                                            showEditComment={showEditComment}
                                                                             key={i}
                                                                         />
                                                                     );
@@ -249,7 +249,6 @@ class List extends Component {
 }
 
 List.propTypes = {
-    showBlacklistModal: PropTypes.func.isRequired,
     packagesStore: PropTypes.object.isRequired,
     onFileDrop: PropTypes.func.isRequired,
     highlightedPackage: PropTypes.string
