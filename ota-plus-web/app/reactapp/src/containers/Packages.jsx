@@ -8,8 +8,8 @@ import {
     PackagesFileUploaderModal, 
     PackagesHeader, 
     PackagesList,
-    PackagesBlacklistModal,
-    PackagesDependenciesManager
+    PackagesDependenciesManager,
+    PackagesEditCommentModal
 } from '../components/packages';
 import { FlatButton } from 'material-ui';
 
@@ -18,8 +18,6 @@ class Packages extends Component {
     @observable createModalShown = false;
     @observable fileUploaderModalShown = false;
     @observable fileDropped = null;
-    @observable blacklistModalShown = false;
-    @observable blacklistAction = {};
     @observable copied = false;
     @observable dependenciesModalShown = false;
     @observable dependenciesManagerShown = false;
@@ -29,6 +27,9 @@ class Packages extends Component {
     @observable expandedPackageName = null;
     @observable itemToDelete = null;
     @observable itemToDeleteType = null;
+    @observable editCommentShown = false;
+    @observable activeComment = '';
+    @observable activePackageFilepath = '';
 
     constructor(props) {
         super(props);
@@ -36,8 +37,6 @@ class Packages extends Component {
         this.showFileUploaderModal = this.showFileUploaderModal.bind(this);
         this.hideCreateModal = this.hideCreateModal.bind(this);
         this.hideFileUploaderModal = this.hideFileUploaderModal.bind(this);
-        this.showBlacklistModal = this.showBlacklistModal.bind(this);
-        this.hideBlacklistModal = this.hideBlacklistModal.bind(this);
         this.onFileDrop = this.onFileDrop.bind(this);
         this.handleCopy = this.handleCopy.bind(this);
         this.showDependenciesModal = this.showDependenciesModal.bind(this);
@@ -48,6 +47,20 @@ class Packages extends Component {
         this.hideDeleteConfirmation = this.hideDeleteConfirmation.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
         this.setExpandedPackageName = this.setExpandedPackageName.bind(this);
+        this.showEditComment = this.showEditComment.bind(this);
+        this.hideEditComment = this.hideEditComment.bind(this);
+    }
+    showEditComment(filepath, comment, e) {
+        if(e) e.preventDefault();
+        this.editCommentShown = true;
+        this.activeComment = comment;
+        this.activePackageFilepath = filepath;
+    }
+    hideEditComment(e) {
+        if(e) e.preventDefault();
+        this.editCommentShown = false;
+        this.activeComment = '';
+        this.activePackageFilepath = null;
     }
     setExpandedPackageName(name) {
         this.expandedPackageName = name;
@@ -114,21 +127,6 @@ class Packages extends Component {
         this.createModalShown = false;
         this.fileDropped = null;
     }
-    showBlacklistModal(name, version, mode, e) {
-        if(e) e.preventDefault();
-        this.blacklistModalShown = true;
-        this.blacklistAction = {
-            name: name,
-            version: version,
-            mode: mode
-        };
-    }
-    hideBlacklistModal(e) {
-        if(e) e.preventDefault();
-        this.blacklistModalShown = false;
-        this.blacklistAction = {};
-        this.props.packagesStore._resetBlacklistActions();
-    }
     onFileDrop(files) {
         this.showCreateModal(files);
     }
@@ -151,7 +149,6 @@ class Packages extends Component {
                                 /> : ''}
                             {!switchToSWRepo ?
                                 <PackagesList
-                                    showBlacklistModal={this.showBlacklistModal}
                                     packagesStore={packagesStore}
                                     onFileDrop={this.onFileDrop}
                                     alphaPlusEnabled={alphaPlusEnabled}
@@ -161,6 +158,7 @@ class Packages extends Component {
                                     showDeleteConfirmation={this.showDeleteConfirmation}
                                     expandedPackageName={this.expandedPackageName}
                                     setExpandedPackageName={this.setExpandedPackageName}
+                                    showEditComment={this.showEditComment}
                                 />
                             : <SoftwareRepository/>}
                         </span>
@@ -243,12 +241,6 @@ class Packages extends Component {
                 :
                     null
                 }
-                <PackagesBlacklistModal 
-                    shown={this.blacklistModalShown}
-                    hide={this.hideBlacklistModal}
-                    blacklistAction={this.blacklistAction}
-                    packagesStore={packagesStore}
-                />
                 {this.dependenciesModalShown ?
                     <DependenciesModal 
                         shown={this.dependenciesModalShown}
@@ -267,6 +259,17 @@ class Packages extends Component {
                         hide={this.hideDependenciesManager}
                         packages={packagesStore.preparedPackages}
                         activePackage={this.activeManagerVersion}
+                        packagesStore={packagesStore}
+                    />
+                :
+                    null
+                }
+                {this.editCommentShown ?
+                    <PackagesEditCommentModal 
+                        shown={this.editCommentShown}
+                        hide={this.hideEditComment}
+                        comment={this.activeComment}
+                        filepath={this.activePackageFilepath}
                         packagesStore={packagesStore}
                     />
                 :

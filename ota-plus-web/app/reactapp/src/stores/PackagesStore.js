@@ -282,6 +282,7 @@ export default class PackagesStore {
                 },
                 uuid: pack.hashes.sha256,
                 hardwareIds: pack.custom ? pack.custom.hardwareIds : [],
+                comment: localStorage.getItem(filepath + '_comment') ? JSON.parse(localStorage.getItem(filepath + '_comment')) : 'Default empty comment'
             };
             packs.push(formattedPack);
         });
@@ -289,6 +290,12 @@ export default class PackagesStore {
         let deletedPackageNames = JSON.parse(localStorage.getItem('deletedPackages'));
         let deletedVersions = JSON.parse(localStorage.getItem('deletedVersions'));
         this.packages =  _.filter(packs, pack => !_.contains(deletedPackageNames, pack.id.name) && !_.contains(deletedVersions, pack.id.version));
+    }
+
+    _updatePackageComment(filepath, comment) {
+        let result = _.find(this.packages, pack => pack.filepath === filepath);
+        localStorage.setItem(filepath + '_comment', JSON.stringify(comment));
+        result.comment = comment;
     }
 
     _packageURI(entryName, name, version, hardwareIds) {
@@ -923,7 +930,8 @@ export default class PackagesStore {
             namespace: pack.namespace,
             signature: null,
             timestamp: null,
-            vendor: null
+            vendor: null,
+            comment: 'Default comment'
         };
         let found = _.find(this.packages, (pack) => {
             return pack.id.name === name && pack.id.version === version;

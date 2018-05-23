@@ -6,6 +6,7 @@ import PackagesList from './List';
 import PackagesCancelUploadModal from './CancelUploadModal';
 import PackagesCancelAllUploadsModal from './CancelAllUploadsModal';
 import PackagesDependenciesManager from './DependenciesManager';
+import PackagesEditCommentModal from './EditCommentModal';
 
 export {
     PackagesCreateModal,
@@ -16,4 +17,5 @@ export {
     PackagesCancelUploadModal,
     PackagesCancelAllUploadsModal,
     PackagesDependenciesManager,
+    PackagesEditCommentModal,
 }
