@@ -3355,7 +3355,8 @@ input {
     .checkbox-wrapper {
         margin: 50px 0;
         display: flex;
-        width: 480px;
+        width: 380px;
+        text-align: justify;
         color: #000;
         font-size: 14px;
         text-transform: uppercase;
@@ -3434,9 +3435,9 @@ input {
             margin: 25px 0;
 
             &--terms {
-                width: 25%;
+                width: 380px;
                 font-size: 32px;
-                text-align: left;
+                text-align: justify;
                 font-weight: 400;
                 color: #272D37;
             }
@@ -3449,7 +3450,8 @@ input {
         .subtitle--terms {
             font-size: 14px;
             color: #0F1621;
-            width: 480px;
+            text-align: justify;
+            width: 380px;
         }
     }
 }

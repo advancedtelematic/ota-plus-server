@@ -41,7 +41,7 @@ export default class Terms extends Component {
                         <img src="/assets/img/HERE_pos.png" alt="HERE"/>
                     </div>
                     <div className="title title--terms">
-                        This is a 90 day trial, for
+                        This is a 90-day trial, for
                         evaluation purposes only
                     </div>
                     <p className="subtitle--terms">
@@ -56,7 +56,7 @@ export default class Terms extends Component {
                             I agree to HERE Location Platform Services Online
                             <a id="service-terms-link" target="_blank" href="https://developer.here.com/terms-and-conditions"> terms and conditions </a>
                             and <a target="_blank" id="privacy-policy-link" href="https://legal.here.com/en-gb/privacy" >privacy policy</a>
-                            <span className="agreed--terms">{checked ? ` (AGREED ON ${moment(agreedDate).format('MMM Do YYYY')})` : '.'}</span>
+                            <div className="agreed--terms">{checked ? ` (AGREED ON ${moment(agreedDate).format('MMM Do YYYY')})` : '.'}</div>
                         </p>
                     </div>
                     <div className="steps">
