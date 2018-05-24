@@ -7,7 +7,7 @@ import Dropzone from 'react-dropzone';
 import ListItem from './ListItem';
 import ListItemVersion from './ListItemVersion';
 import { PackagesVersionsStats } from './stats';
-import { Loader, EditableArea } from '../../partials';
+import { Loader } from '../../partials';
 import withAnimatedScroll from '../../partials/hoc/withAnimatedScroll';
 
 const headerHeight = 28;
@@ -27,7 +27,6 @@ class List extends Component {
         this.listScroll = this.listScroll.bind(this);
         this.highlightPackage = this.highlightPackage.bind(this);
         this.togglePackage = this.togglePackage.bind(this);
-        this.saveComment = this.saveComment.bind(this);
         this.packagesChangeHandler = observe(props.packagesStore, (change) => {
             if(change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
@@ -132,9 +131,6 @@ class List extends Component {
         clearInterval(this.tmpIntervalId);
         this.tmpIntervalId = null;
     }
-    saveComment(pack,value) {
-        localStorage.setItem(`${pack.packageName}`, value);
-    }
     render() {
         const { packagesStore, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, alphaPlusEnabled, showDeleteConfirmation, expandedPackageName, showEditComment } = this.props;        
         return (
@@ -156,12 +152,10 @@ class List extends Component {
                                     <div className="header">{letter}</div>
                                     {_.map(packages, (pack, index) => {
                                         const that = this;
-                                        let comment = localStorage.getItem(pack.packageName) ? localStorage.getItem(pack.packageName) : 'This package is provided to…';
                                         return (
                                             <span key={index} className="c-package">
                                                 <ListItem
                                                     pack={pack}
-                                                    comment={comment}
                                                     expandedPackageName={expandedPackageName}
                                                     togglePackage={this.togglePackage}
                                                 />
@@ -180,50 +174,38 @@ class List extends Component {
                                                     {expandedPackageName === pack.packageName ?
                                                         <div className="c-package__details">
                                                             <div className="c-package__main-name">
-                                                                {pack.packageName}
+                                                                <span>
+                                                                    {pack.packageName}
+                                                                </span>
+                                                                <button className="delete-button fixed-width" onClick={showDeleteConfirmation.bind(this, expandedPackageName, 'package')}>Delete package</button>
                                                             </div>
-                                                            <div className="c-package__delete-button">
-                                                                <button className="delete-button" onClick={showDeleteConfirmation.bind(this, expandedPackageName, 'package')}>Delete package</button>
-                                                            </div>
-                                                            <div className="c-package__chart">
-                                                                <div className="c-package__heading">
-                                                                    Distribution by devices
-                                                                </div>
-                                                                <PackagesVersionsStats
-                                                                    pack={pack}
-                                                                />
-                                                            </div>
-                                                            <div className="c-package__comment">
-                                                                <div className="c-package__heading">
-                                                                    Comment
-                                                                </div>
-                                                                <div className="c-package__wrapper">
-                                                                    <EditableArea
-                                                                        initialText={comment}
-                                                                        saveHandler={(value)=>{this.saveComment(pack, value)}}
+                                                            <div className="c-package__versions-wrapper">
+                                                                <div className="c-package__chart">
+                                                                    <div className="c-package__heading">
+                                                                        Distribution by devices
+                                                                    </div>
+                                                                    <PackagesVersionsStats
+                                                                        pack={pack}
                                                                     />
                                                                 </div>
+                                                                <ul className="c-package__versions" id="versions">
+                                                                    {_.map(pack.versions, (version, i) => {
+                                                                        return (
+                                                                            <ListItemVersion
+                                                                                pack={pack}
+                                                                                version={version}
+                                                                                packagesStore={packagesStore}
+                                                                                showDependenciesModal={showDependenciesModal}
+                                                                                showDependenciesManager={showDependenciesManager}
+                                                                                alphaPlusEnabled={alphaPlusEnabled}
+                                                                                showDeleteConfirmation={showDeleteConfirmation}
+                                                                                showEditComment={showEditComment}
+                                                                                key={i}
+                                                                            />
+                                                                        );
+                                                                    })}
+                                                                </ul> 
                                                             </div>
-                                                            <ul className="c-package__versions" id="versions">
-                                                                <div className="c-package__heading">
-                                                                    All versions
-                                                                </div>
-                                                                {_.map(pack.versions, (version, i) => {
-                                                                    return (
-                                                                        <ListItemVersion
-                                                                            pack={pack}
-                                                                            version={version}
-                                                                            packagesStore={packagesStore}
-                                                                            showDependenciesModal={showDependenciesModal}
-                                                                            showDependenciesManager={showDependenciesManager}
-                                                                            alphaPlusEnabled={alphaPlusEnabled}
-                                                                            showDeleteConfirmation={showDeleteConfirmation}
-                                                                            showEditComment={showEditComment}
-                                                                            key={i}
-                                                                        />
-                                                                    );
-                                                                })}
-                                                            </ul>                                                            
                                                         </div>
                                                     :
                                                         null

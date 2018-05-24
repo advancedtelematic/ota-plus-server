@@ -20,16 +20,13 @@ class ListItem extends Component {
         return this.props.pack.versions.length;
     }
     render() {
-        const { pack, togglePackage, expandedPackageName, comment } = this.props;
+        const { pack, togglePackage, expandedPackageName } = this.props;
         let installedOnEcus = this.countInstalledOnEcus();
         let packVersionsNumber = this.countPackVersionsNumber();
         const directorBlock = (
-            <div className="c-package__teaser director">
+            <div className="c-package__teaser">
                 <div className="c-package__name" id={`target_package_${pack.packageName}`}>
                     {pack.packageName}
-                </div>
-                <div className="c-package__comments">
-                    {comment}
                 </div>
                 <div className="c-package__versions-nr" id={"package-" + pack.packageName + "-versions-count"}>
                     {packVersionsNumber === 1 ?
