@@ -78,6 +78,10 @@ $font: 'akkurat';
             line-height: 17px;
             display: block;
             color: $device-hardware-header;
+
+            &.warning {
+                color: $confirm-modal-title;
+            } 
         }
     }
 }
@@ -114,16 +118,8 @@ $font: 'akkurat';
     border: none;
     font-size: 13px;
 
-    @media(max-width: 1420px) {
-        font-size: 12px;
-    }
-
     &.fixed-width {
         width: 180px;
-
-        @media(max-width: 1420px) {
-            width: 130px;
-        }
     }
 }
 
@@ -3122,12 +3118,6 @@ input {
             font-size: 18px;
             color: $home-bg;
             font-weight: 400;
-        }
-
-        .not-installed {
-            text-align: left;
-            padding-top: 20px;
-            width: 100%;
         }
     }
 }
