@@ -42,17 +42,17 @@ export default class Terms extends Component {
                         <img src="/assets/img/HERE_pos.png" alt="HERE"/>
                     </div>
                     <div className="title title--terms">
-                        This is a 90 days trial for
-                        internal evaluation purposes only
+                        This is a 90 day trial, for
+                        evaluation purposes only
                     </div>
                     <div className="checkbox-wrapper">
                         <button className={`btn-checkbox ${this.termsAccepted ? 'checked': ''}`} onClick={() => this.termsAccepted = !this.termsAccepted} id={"terms-checkbox" + (this.termsAccepted ? '-checked' : '')}>
                             <i className="fa fa-check" aria-hidden="true"/>
                         </button>
                         <p>
-                            I agree to HERE Location Platform Services Online
-                            <a id="service-terms-link" target="_blank" onClick={this.toggleModal.bind(this)} href="#"> terms and conditions </a>
-                            and <a target="_blank" id="privacy-policy-link" href="https://legal.here.com/en-gb/privacy" >privacy policy.</a>
+                            I agree to the HERE OTA Connect
+                            <a id="service-terms-link" target="_blank" onClick={this.toggleModal.bind(this)} href="#"> terms and conditions </a> and the
+                            HERE Location Platform Services Online <a target="_blank" id="privacy-policy-link" href="https://legal.here.com/en-gb/privacy" >privacy policy.</a>
                         </p>
                     </div>
                     <div className="steps">
