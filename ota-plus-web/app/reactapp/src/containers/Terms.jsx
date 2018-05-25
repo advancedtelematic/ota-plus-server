@@ -4,6 +4,7 @@ import {observer} from 'mobx-react';
 import { Link } from 'react-router';
 import {Modal} from '../partials';
 import _ from 'underscore';
+import moment from 'moment';
 import * as contracts from '../../../assets/contracts/';
 
 @observer
@@ -11,16 +12,14 @@ export default class Terms extends Component {
     @observable termsAccepted = false;
     @observable showModal = false;
 
-    componentWillMount() {
-        this.props.userStore.fetchContracts();
-    }
     toggleModal(e) {
         e.preventDefault();
         this.showModal = !this.showModal;
     }
     render() {
-        const {setTermsAccepted, userStore} = this.props;
+        const {setTermsAccepted, userStore, backButtonAction, checked} = this.props;
         let terms = _.find(userStore.contracts, (obj) => contracts.default[obj.contract]);
+        let agreedDate = terms && terms.accepted;
         !terms ? terms = {contract: contracts.defaultName}: terms;
         const htmlDoc = terms && terms.contract  ? {__html: contracts.default[terms.contract]} : null;
         const contractModalContent = (
@@ -42,21 +41,26 @@ export default class Terms extends Component {
                         <img src="/assets/img/HERE_pos.png" alt="HERE"/>
                     </div>
                     <div className="title title--terms">
-                        This is a 90 days trial for
-                        internal evaluation purposes only
+                        This is a 90-day trial, for
+                        evaluation purposes only
                     </div>
+                    <p className="subtitle--terms">
+                        The proprietary software that you upload to HERE OTA Connect SaaS will be used by HERE only for
+                        the purposes of allowing you to test the service internally during the Trial Period.
+                    </p>
                     <div className="checkbox-wrapper">
-                        <button className={`btn-checkbox ${this.termsAccepted ? 'checked': ''}`} onClick={() => this.termsAccepted = !this.termsAccepted} id={"terms-checkbox" + (this.termsAccepted ? '-checked' : '')}>
+                        <button className={`btn-checkbox ${this.termsAccepted || checked ? 'checked': ''}`} onClick={() => {!checked ? this.termsAccepted = !this.termsAccepted : null}} id={"terms-checkbox" + (this.termsAccepted ? '-checked' : '')}>
                             <i className="fa fa-check" aria-hidden="true"/>
                         </button>
                         <p>
                             I agree to HERE Location Platform Services Online
-                            <a id="service-terms-link" target="_blank" onClick={this.toggleModal.bind(this)} href="#"> terms and conditions </a>
-                            and <a target="_blank" id="privacy-policy-link" href="https://legal.here.com/en-gb/privacy" >privacy policy.</a>
+                            <a id="service-terms-link" target="_blank" href="https://developer.here.com/terms-and-conditions"> terms and conditions </a>
+                            and <a target="_blank" id="privacy-policy-link" href="https://legal.here.com/en-gb/privacy" >privacy policy</a>
+                            <div className="agreed--terms">{checked ? ` (AGREED ON ${moment(agreedDate).format('MMM Do YYYY')})` : '.'}</div>
                         </p>
                     </div>
                     <div className="steps">
-                        <button className="back btn-primary" id="terms-btn-back"><a href="/login">Back</a></button>
+                        <a href="/login" className="back btn-primary" id="terms-btn-back" onClick={backButtonAction ? backButtonAction : ''}>Back</a>
                         {this.termsAccepted ?
                             <button className="next btn-primary" id="terms-btn-continue" onClick={() => {setTermsAccepted(terms && terms.contract)}}>Continue</button> :
                             <button className="next btn-primary" id="terms-btn-continue_disabled" disabled>Continue</button>
