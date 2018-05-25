@@ -130,16 +130,121 @@
         position: relative;
         overflow-y: hidden;
 
+        .devices-heading {
+            color: $devices-group-inactive;
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: bold;
+
+            &--absolute {
+                position: absolute;
+                top: -15px;
+            }
+
+            &--margin {
+                margin-bottom: 5px;
+            }
+        }
+
         .subheader {
             background: transparent;
             height: 60px;
             padding: 0 30px;
         }
 
-        .wrapper {
+        .devices-wrapper {
             height: calc(100% - 60px);
             padding: 0 30px;
             overflow-y: auto;
+
+            .devices-list {
+                height: 50%;
+                position: relative;
+                min-height: 305px;
+            }
+
+            .wrapper-infinite-scroll {
+                overflow-y: auto;
+                float: none;
+            }
+
+            .wrapper-dashboard {
+                height: 45%;
+                margin-top: 2%;
+                overflow-y: hidden;
+                min-height: 275px;
+
+                .top {
+                    display: flex;
+                }
+
+                .bottom {
+                    display: flex;
+                }
+
+                .dashboard-top {
+                    flex: 1;
+                    padding: 15px;
+                    background-color: $devices-groups-bg;
+                    color: #fff;
+                    font-size: 18px;
+                    margin-right: 5px;
+
+                    @media(max-height: 850px) {
+                        font-size: 11px;
+                    }
+
+                    .icon-up {
+                        width: 0;
+                        height: 0;
+                        border-left: 8px solid transparent;
+                        border-right: 8px solid transparent;
+                        border-bottom: 12px solid #48dad0;
+                        margin-left: 15px;
+                        display: inline-block;
+                        margin-left: 5px;
+                    }
+                }
+
+                .dashboard-content {
+                    flex: 1;
+                    padding: 15px;
+                    background-color: $devices-groups-bg;
+                    color: #fff;
+                    margin: 5px 5px 0 0;
+                    flex-direction: column;
+                    display: flex;
+                }
+
+                .dashboard-data {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex: auto;
+                    padding-top: 15px;
+                    font-size: 11px;
+
+                    @media(max-height: 850px) {
+                        padding-top: 0;
+                    }
+                }
+
+                .devices-chart-wrapper {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-evenly;
+                    width: 100%;
+
+                    .value-legend {
+                        margin-bottom: 30px;
+                    }
+
+                    li {
+                        display: flex;
+                        align-items: center;
+                    }
+                }
+            }
 
             .inner-container {
                 display: flex;
