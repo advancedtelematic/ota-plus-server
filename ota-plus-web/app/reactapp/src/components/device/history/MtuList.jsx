@@ -24,7 +24,6 @@ class MtuList extends Component {
                     hasMore={packagesStore.packagesHistoryCurrentPage < packagesStore.packagesHistoryTotalCount / packagesStore.packagesHistoryLimit}
                     isLoading={packagesStore.packagesHistoryFetchAsync.isFetching}
                     useWindow={false}
-                    className={'wrapper-infinite-scroll'}
                     loadMore={() => {
                         packagesStore.fetchPackagesHistory(device.uuid, packagesStore.packagesHistoryFilter)
                     }}

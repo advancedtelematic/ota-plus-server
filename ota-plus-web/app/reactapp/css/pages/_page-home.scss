@@ -221,7 +221,7 @@
         }
     }
 
-    .preparation-container, .terms {
+    .preparation-container {
         background-color: #F3F3F4;
         position: absolute;
         top: 0;
@@ -230,67 +230,6 @@
         bottom: 0;
         z-index: 10;
 
-        .checkbox-wrapper {
-            margin: 70px 0;
-            display: flex;
-            width: 380px;
-            color: #000;
-            font-size: 14px;
-            text-transform: uppercase;
-            line-height: 20px;
-            font-weight:400;
-            letter-spacing: 0.01px;
-            a {
-                font-weight: bold;
-                color: #000;
-            }
-            .btn-checkbox {
-                margin: 0 10px 0 0;
-                width: 15px;
-                height: 15px;
-                &:not(.checked) {
-                    background-color: #EBEBEC;
-                    color:#EBEBEC;
-                }
-                &.checked {
-                    .fa.fa-check {
-                        vertical-align: top;
-                    }
-                }
-            }
-        }
-
-        .steps {
-            button {
-                display: inline-block;
-                height: 40px;
-                width: 190px;
-                &:not(:last-child) {
-                    margin-right: 20px;
-                }
-                &.back {
-                    background-color: transparent;
-                    border: 1px solid #A3ECE7;
-                    a {
-                        display: flex;
-                        height:40px;
-                        align-items: center;
-                        justify-content: center;
-                        color: #00AFAA !important;
-                    }
-                }
-                &.next {
-                    a {
-                        color: #000 !important;
-                    }
-                }
-
-                &.next, &.back {
-                    font-size: 16px !important;
-                }
-            }
-        }
-
         .wrapper-center {
             display: flex !important;
             flex-direction: column;
@@ -298,11 +237,6 @@
             height: 100vh;
 
             .logo {
-                
-                &--terms {
-                    margin-bottom:100px;
-                }
-
                 img {
                     width: 90px;
                     height: auto;
@@ -313,14 +247,6 @@
                 font-size: 22px;
                 color: #202020;
                 margin: 25px 0;
-
-                &--terms {
-                    width: 25%;
-                    font-size: 32px;
-                    text-align: center;
-                    font-weight: 400;
-                    color: #272D37;
-                }
             }
 
             .sequence-list {

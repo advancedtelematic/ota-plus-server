@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import moment from 'moment';
-import { Items } from './usage';
+import Items from './usage/Items';
 
 const startTime = moment([2017,0,1]);
 const currentTime = moment();

@@ -107,6 +107,7 @@ class Main extends Component {
         if(this.uiUserProfileMenu) {
             this.userStore.fetchUser();
             this.featuresStore.fetchFeatures();
+            this.userStore.fetchContracts();
         }
         this.devicesStore.fetchDevices();
         this.devicesStore.fetchDevicesCount();
