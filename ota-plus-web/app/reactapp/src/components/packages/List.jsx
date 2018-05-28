@@ -177,7 +177,7 @@ class List extends Component {
                                                                 <span>
                                                                     {pack.packageName}
                                                                 </span>
-                                                                <button className="delete-button fixed-width" onClick={showDeleteConfirmation.bind(this, expandedPackageName, 'package')}>Delete package</button>
+                                                                <button className="delete-button fixed-width hide" onClick={showDeleteConfirmation.bind(this, expandedPackageName, 'package')}>Delete package</button>
                                                             </div>
                                                             <div className="c-package__versions-wrapper">
                                                                 <div className="c-package__chart">

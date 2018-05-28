@@ -210,7 +210,7 @@ class Packages extends Component {
                 {this.deleteConfirmationShown ?
                     <ConfirmationModal
                         modalTitle={
-                            <div className="text-red">
+                            <div className="text-red hide">
                                 Delete package
                             </div>
                         }
