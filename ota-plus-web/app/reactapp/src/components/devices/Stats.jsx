@@ -53,9 +53,9 @@ class Stats extends Component {
                     width="100" 
                     height="100" 
                     options={{
-                        percentageInnerCutout: 85, 
+                        percentageInnerCutout: 75, 
                         segmentStrokeWidth: 0, 
-                        showTooltips: true
+                        segmentShowStroke: false
                     }}
                 />
                 <div>
