@@ -15,7 +15,7 @@ class EditCommentModal extends Component {
         const { filepath, hide, packagesStore } =  this.props;
         if(e) e.preventDefault();
         const data = serialize(document.querySelector('#comment-edit-form'), {hash: true});
-        packagesStore._updatePackageComment(filepath, data.comment);
+        packagesStore.updateComment(filepath, data.comment);
         hide();
     }
     enableButton() {

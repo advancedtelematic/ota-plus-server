@@ -65,6 +65,7 @@ export const API_PACKAGES_DEVICE_CANCEL_INSTALLATION = '/api/v1/device_updates';
 export const API_PACKAGES_COUNT_INSTALLED_ECUS = '/api/v1/admin/images/installed_count';
 
 export const API_CREATE_TUF_REPO = '/api/v1/user_repo';
+export const API_PACKAGES_COMMENTS = '/api/v1/user_repo/comments';
 export const API_CHECK_TUF_REPO = '/api/v1/user_repo/root.json';
 export const API_CREATE_DIRECTOR_REPO = '/api/v1/admin/repo';
 export const API_CHECK_DIRECTOR_REPO = '/api/v1/admin/repo/root.json';
