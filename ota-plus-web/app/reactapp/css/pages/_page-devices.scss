@@ -130,6 +130,10 @@
         position: relative;
         overflow-y: hidden;
 
+        .search-box {
+            margin-right: 5px;
+        }
+
         .devices-heading {
             color: $devices-group-inactive;
             text-transform: uppercase;
@@ -157,9 +161,13 @@
             padding: 0 30px;
 
             .devices-list {
-                height: 50%;
+                height: 100%;
                 position: relative;
                 min-height: 305px;
+
+                &--alpha {
+                    height: 50%;
+                }
             }
 
             .wrapper-infinite-scroll {
@@ -168,10 +176,16 @@
             }
 
             .wrapper-dashboard {
-                height: 45%;
-                margin-top: 2%;
                 overflow-y: hidden;
-                min-height: 275px;
+                position: absolute;
+                bottom: 30px;
+                left: 30px;
+                right: 30px;
+
+                @media(max-height: 950px) {
+                    margin-top: 2%;
+                    position: static;
+                }
 
                 .top {
                     display: flex;
@@ -272,6 +286,7 @@
 
             .icon {
                 background-image: url($car-image-url);
+                background-color: $fake-header-text!important;
                 background-size: 100% 100%;
                 background-color: transparent;
                 width: 50px;
