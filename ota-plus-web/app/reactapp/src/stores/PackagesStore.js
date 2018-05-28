@@ -27,7 +27,8 @@ import {
     API_CHECK_DIRECTOR_REPO,
     API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL,
     API_PACKAGES_COUNT_INSTALLED_ECUS,
-    API_PACKAGES_DEVICE_CANCEL_MTU_UPDATE
+    API_PACKAGES_DEVICE_CANCEL_MTU_UPDATE,
+    API_PACKAGES_COMMENTS
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import _ from 'underscore';
@@ -54,6 +55,8 @@ export default class PackagesStore {
     @observable packagesHistoryFetchAsync = {};
     @observable packagesEnableAutoInstallAsync = {};
     @observable packagesDisableAutoInstallAsync = {};
+    @observable commentsFetchAsync = {};
+    @observable commentUpdateAsync = {};
 
     @observable page = null;
     @observable packages = [];
@@ -104,6 +107,8 @@ export default class PackagesStore {
         resetAsync(this.packagesHistoryFetchAsync);
         resetAsync(this.packagesEnableAutoInstallAsync);
         resetAsync(this.packagesDisableAutoInstallAsync);
+        resetAsync(this.commentsFetchAsync);
+        resetAsync(this.commentUpdateAsync);
     }
 
     deletePackage(name) {
@@ -202,6 +207,27 @@ export default class PackagesStore {
             }.bind(this));
     }
 
+    fetchComments() {
+        resetAsync(this.commentsFetchAsync, true);
+        return axios.get(API_PACKAGES_COMMENTS)
+            .then(function(response) {
+                this._prepareComments(response.data);
+            }.bind(this))
+            .catch(function(error) {
+                this.commentsFetchAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
+    updateComment(filepath, data) {
+        return axios.put(`${API_PACKAGES_COMMENTS}/${filepath}`, {"comment": data})
+            .then(function(response) {
+                this._updatePackageComment(filepath, data);
+            }.bind(this))
+            .catch(function(error) {
+                this.commentUpdateAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
     fetchPackages(async = 'packagesFetchAsync') {
         let that = this;
         resetAsync(that[async], true);
@@ -256,6 +282,16 @@ export default class PackagesStore {
         });
     }
 
+    _prepareComments(comments) {
+       _.each(this.packages, pack => {
+           _.each(comments, obj => {
+               if (obj.filename === pack.filepath) {
+                   pack.comment = obj.comment;
+               }
+           })
+       });
+    }
+
     _formatPackages(packages) {
         let packs = [];
         _.each(packages, (pack, filepath) => {
@@ -282,7 +318,7 @@ export default class PackagesStore {
                 },
                 uuid: pack.hashes.sha256,
                 hardwareIds: pack.custom ? pack.custom.hardwareIds : [],
-                comment: localStorage.getItem(filepath + '_comment') ? JSON.parse(localStorage.getItem(filepath + '_comment')) : 'Default empty comment'
+                comment: 'No comment'
             };
             packs.push(formattedPack);
         });
@@ -294,7 +330,6 @@ export default class PackagesStore {
 
     _updatePackageComment(filepath, comment) {
         let result = _.find(this.packages, pack => pack.filepath === filepath);
-        localStorage.setItem(filepath + '_comment', JSON.stringify(comment));
         result.comment = comment;
     }
 
@@ -858,6 +893,7 @@ export default class PackagesStore {
         resetAsync(this.packagesHistoryFetchAsync);
         resetAsync(this.packagesEnableAutoInstallAsync);
         resetAsync(this.packagesDisableAutoInstallAsync);
+        resetAsync(this.commentUpdateAsync);
         this.page = null;
         this.packages = [];
         this.preparedPackages = [];
