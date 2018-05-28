@@ -70,10 +70,14 @@ export default class ContentPanel extends Component {
                     changeFilter={changeFilter}
                 />
                 <div className="devices-wrapper">
-                    <div className="devices-list">
-                        <div className="devices-heading devices-heading--absolute">
-                            Test devices
-                        </div>
+                    <div className={"devices-list" + (alphaPlusEnabled ? " devices-list--alpha" : "")}>
+                        {alphaPlusEnabled ?
+                            <div className="devices-heading devices-heading--absolute">
+                                Test devices
+                            </div>
+                        :
+                            null
+                        }
                         <InfiniteScroll
                             className="wrapper-infinite-scroll"
                             hasMore={devicesStore.devicesCurrentPage < devicesStore.devicesTotalCount / devicesStore.devicesLimit}
@@ -112,67 +116,71 @@ export default class ContentPanel extends Component {
                             }
                         </InfiniteScroll>
                     </div>
-                    <div className="wrapper-dashboard">
-                        <div className="devices-heading devices-heading--margin">
-                            Dashboard
-                        </div>
-                        <div className="dashboard-container">
-                            <div className="top">
-                                <div className="dashboard-top">
-                                    <div className="devices-heading">
-                                        Simultaneous connections
+                    {alphaPlusEnabled ?
+                        <div className="wrapper-dashboard">
+                            <div className="devices-heading devices-heading--margin">
+                                Dashboard
+                            </div>
+                            <div className="dashboard-container">
+                                <div className="top">
+                                    <div className="dashboard-top">
+                                        <div className="devices-heading">
+                                            Simultaneous connections
+                                        </div>
+                                        560/600
+                                        <div className="icon-up"></div>
                                     </div>
-                                    560/600
-                                    <div className="icon-up"></div>
+                                    <div className="dashboard-top">
+                                        <div className="devices-heading">
+                                            Total devices
+                                        </div>
+                                        134.000
+                                    </div>
+                                    <div className="dashboard-top">
+                                        <div className="devices-heading">
+                                            Total connections
+                                        </div>
+                                        69.000
+                                        <div className="icon-up"></div>
+                                    </div>
                                 </div>
-                                <div className="dashboard-top">
-                                    <div className="devices-heading">
-                                        Total devices
+                                <div className="bottom">
+                                    <div className="dashboard-content">
+                                        <div className="devices-heading">
+                                            Live connections
+                                        </div>
+                                        <div className="dashboard-data">
+                                            <BarChart 
+                                                connections={connections}
+                                            />
+                                        </div>
                                     </div>
-                                    134.000
-                                </div>
-                                <div className="dashboard-top">
-                                    <div className="devices-heading">
-                                        Total connections
+                                    <div className="dashboard-content">
+                                        <div className="devices-heading">
+                                            Certificate rollover
+                                        </div>
+                                        <div className="dashboard-data">
+                                            <Stats 
+                                                data={statsData}
+                                            />
+                                        </div>
                                     </div>
-                                    69.000
-                                    <div className="icon-up"></div>
+                                    <div className="dashboard-content">
+                                        <div className="devices-heading">
+                                            Connections
+                                        </div>
+                                        <div className="dashboard-data">
+                                            <Stats 
+                                                data={statsData}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="bottom">
-                                <div className="dashboard-content">
-                                    <div className="devices-heading">
-                                        Live connections
-                                    </div>
-                                    <div className="dashboard-data">
-                                        <BarChart 
-                                            connections={connections}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="dashboard-content">
-                                    <div className="devices-heading">
-                                        Certificate rollover
-                                    </div>
-                                    <div className="dashboard-data">
-                                        <Stats 
-                                            data={statsData}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="dashboard-content">
-                                    <div className="devices-heading">
-                                        Connections
-                                    </div>
-                                    <div className="dashboard-data">
-                                        <Stats 
-                                            data={statsData}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                    </div>
+                    :
+                        null
+                    }
                 </div>
             </div>
         );
