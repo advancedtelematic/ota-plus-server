@@ -197,7 +197,7 @@ class Header extends Component {
                                 <div className="action-buttons">
                                     <button className="queue-button" id="queue-button" onClick={showQueueModal} ref={queueButtonRef}>
                                     </button>
-                                    <button className="delete-button fixed-width" id="delete-device-button" onClick={this.showDeleteConfirmation}>
+                                    <button className="delete-button fixed-width hide" id="delete-device-button" onClick={this.showDeleteConfirmation}>
                                         Delete device
                                     </button>
                                 </div>
@@ -205,7 +205,7 @@ class Header extends Component {
                             {this.deleteConfirmationShown ?
                                 <ConfirmationModal
                                     modalTitle={
-                                        <div className="text-red">
+                                        <div className="text-red hide">
                                             Delete device
                                         </div>
                                     }
