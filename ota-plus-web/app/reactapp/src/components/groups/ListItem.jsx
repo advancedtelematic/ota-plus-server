@@ -54,7 +54,7 @@ class ListItem extends Component {
                     }}>
                     {groupsStore.activeFleet ?
                         <div className="icon icon-fleet">
-                            ABC
+                            {group.groupName.substring(0, 3)}
                         </div>
                     :
                         <div className="icon icon-bg"></div>

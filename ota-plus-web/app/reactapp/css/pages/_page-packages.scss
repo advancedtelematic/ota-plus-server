@@ -45,8 +45,7 @@
             }
 
             &__icon {
-                height: 10px;
-                width: 17px;
+                width: 18px;
             }
 
             &__name {
@@ -57,14 +56,21 @@
                 padding-right: 15px;
             }
 
-            &__comments {
-                flex: 2;
-                @include textoverflowEllipsis;
-            }
-
             &__versions-nr {
                 flex: 1;
                 text-align: center;
+            }
+
+            &__versions-wrapper {
+                display: flex;
+            }
+
+            &__chart {
+                padding-top: 20px;
+
+                .chart-panel {
+                    background: #f3f3f4;
+                }
             }
 
             &__installed {
@@ -81,101 +87,64 @@
 
             &__details {
                 background: #f3f3f4;
-                overflow: hidden;
                 padding: 25px;
                 border-bottom: 1px solid #ddd;
             }
 
             &__main-name {
-                font-size: 22px;
                 margin-bottom: 25px;
-                font-weight: bold;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                padding-right: 30px;
-                color: #0F1621;
 
-                i {
-                    color: $home-header-button;
-                    font-size: 1.5em;
-                    cursor: pointer;
-                }
-            }
-
-            &__chart {
-                width: 16%;
-                float: left;
-                min-height:220px;
-
-                .chart-panel {
-                    background: #f3f3f4;
+                span {
+                    font-weight: bold;
+                    font-size: 22px;
+                    color: #0F1621;
                 }
             }
 
             &__heading {
                 margin-bottom: 10px;
                 font-weight: 500;
-                color: $device-hardware-header;
+                color: $home-grey;
                 font-size: 12px;
+                text-transform: uppercase;
             }
 
-            &__comment {
-                width:84%;
-                float: right;
-                padding: 0 25px;
-                display: inline-block;
-                margin-bottom: 25px;
-            }
-
-            &__wrapper {
-                background-color: #fff;
-                padding: 20px;
-                display: flex;
-                align-items: center;
-                height: auto;
-
-                .c-editable-area {
-                    width: 100%;
-                }
+            &__subheading {
+                margin-bottom: 10px;
             }
 
             &__versions {
-                color: #202020;
-                padding: 0 25px;
-                width: 84%;
-                float: right;
+                color: $device-properties-text;
+                padding-left: 50px;
                 margin: 0;
+                flex: auto;
             }
 
             &__version-item {
                 font-size: 12px;
                 position: relative;
-                @include transition;
                 background: #fff;
-                overflow: hidden;
+                margin-bottom: 20px;
 
-                &:before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    z-index: 1;
-                    height: 1px;
-                    background-color: $add-button-grey;
-                }
-
-                &--ident {
-                    margin-bottom: 5px;
+                &>span {
+                    display: flex;
                 }
             }
 
-            &__software-box {
-                width: 50%;
-                position: relative;
-                float: left;
-                padding: 20px 10px 20px 35px;
+            &__sw-wrapper {
+
+                &:not(:last-child) {
+                    margin-bottom: 20px;
+                }
+            }
+
+            &__sw-box {
+                flex-basis: 50%;
+                padding: 20px 25px;
+                border-right: 1px solid #e7e7e8;
             }
 
             &__sw-row {
@@ -184,116 +153,53 @@
             }
 
             &__sw-subtitle {
-                display: block;
                 float: left;
-                width: 25%;
+                width: 125px;
             }
 
             &__sw-value {
                 @include textoverflowEllipsis;
-                display: block;
                 float: left;
-                width: 75%;
-            }
-
-            &__delete-button {
-              width: 180px;
-              height: 30px;
-              margin-bottom: 25px;
+                width: calc(100% - 125px);
             }
 
             &__hardware-box {
+                border-right: 1px solid #e7e7e8;
+                flex-basis: 50%;
                 text-align: left;
                 height: auto;
-                padding: 20px 10px;
-                width: 40%;
-                float: left;
+                padding: 20px 25px;
             }
 
-            &__hw-row {
-                
-                &--installed {
-                    margin-bottom: 10px;
-                }
-
-                &--hardware-ids {
-                    overflow: hidden;
-                }
-
-                &--format {
-                    overflow: hidden;
-                }
+            &__inner-box {
+                flex-basis: 50%;
             }
 
-            &__comment-wrapper {
-                background-color: #fff;
-                padding: 20px 35px;
-                position: relative;
-                &:before {
-                    content: '';
-                    position: absolute;
-                    width:100%;
-                    height: 1px;
-                    background-color: #e7e7e8;
-                    top:0;
-                    left:0;
-                }
+            &__comment {
+                padding: 20px 25px;
             }
 
-            &__hw-value {
-                width: 75%;
-                float: left;
-            }            
+            &__show-dependencies {
+                flex-basis: 50%;
+            }
 
             &__manager {
-                display: flex;
-                justify-content: flex-end;
-                background-color: #fff;
-                position: relative;
-                margin-bottom: 10px;
-                padding: 20px 35px;
+                padding: 20px 25px;
                 font-size: 12px;
-
-                &:before {
-                    content: '';
-                    position: absolute;
-                    width:100%;
-                    height: 1px;
-                    background-color: #e7e7e8;
-                    top:0;
-                    left:0;
-                }
-
-                &--aligned {
-                    justify-content: space-between;
-                }
-
-                &--full {
-                    margin-left: 0;
-                }
+                position: relative;
+                border-top: 1px solid $add-button-grey;
             }
 
-            &__manage-dependencies {
-                width: 25%;
-                text-align: right;
-                align-items: center;
+            &__manager-content {
                 display: flex;
-                justify-content: flex-end;
-
-                &--small {
-                    width: 12%;
-                }
+                flex-wrap: wrap;
             }
 
             &__relations {
-                width: 30%;
+                width: 33%;
 
-                &:first-child {
+                &:not(:last-child) {
                     padding-right: 20px;
-                }
-
-                &:not(:first-child) {
-                    padding: 0 20px;
                 }
             }
 
