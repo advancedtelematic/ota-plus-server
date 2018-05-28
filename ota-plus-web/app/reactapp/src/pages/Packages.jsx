@@ -15,6 +15,7 @@ class Packages extends Component {
     componentWillMount() {
         this.props.packagesStore.page = 'packages';
         this.props.packagesStore.fetchPackages();
+        this.props.packagesStore.fetchComments();
     }
     componentWillUnmount() {
         this.props.packagesStore._reset();

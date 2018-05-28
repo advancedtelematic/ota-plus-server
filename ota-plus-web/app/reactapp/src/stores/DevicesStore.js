@@ -96,32 +96,32 @@ export default class DevicesStore {
         resetAsync(this.deviceFleetsFetchAsync, true);
         this.deviceFleets = [
             {
-                id: 1,
-                name: 'HR2',
+                id: 'sedan',
+                name: 'H3 Sedan',
                 icon_default: '/assets/img/icons/vehicle_01--default.svg',
                 icon_active: '/assets/img/icons/vehicle_01--active.svg',
             },
             {
-                id: 2,
-                name: 'HR3',
+                id: 'hatchback',
+                name: 'H3 Hatchback',
                 icon_default: '/assets/img/icons/vehicle_02--default.svg',
                 icon_active: '/assets/img/icons/vehicle_02--active.svg',
             },
             {
-                id: 3,
-                name: 'HR4',
+                id: 'eh0',
+                name: 'eH0',
                 icon_default: '/assets/img/icons/vehicle_03--default.svg',
                 icon_active: '/assets/img/icons/vehicle_03--active.svg',
             },
             {
-                id: 4,
-                name: 'HR5',
+                id: 'sport',
+                name: 'H5 Sport',
                 icon_default: '/assets/img/icons/vehicle_04--default.svg',
                 icon_active: '/assets/img/icons/vehicle_04--active.svg',
             },
             {
-                id: 5,
-                name: 'HR6',
+                id: 'sw',
+                name: 'H6 SW',
                 icon_default: '/assets/img/icons/vehicle_05--default.svg',
                 icon_active: '/assets/img/icons/vehicle_05--active.svg',
             }
