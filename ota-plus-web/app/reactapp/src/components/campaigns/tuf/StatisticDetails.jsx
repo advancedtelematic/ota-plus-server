@@ -71,131 +71,123 @@ class StatisticDetails extends Component {
                 <CampaignTufSubHeader
                     campaignsStore={campaignsStore}
                     title={campaignsStore.campaign.name}
+                    showCancelCampaignModal={showCancelCampaignModal}
                 />
 
-                <div className="left-box">
-                    <div className="title">
-                        Failure rate
-                    </div>
-
-                    <div className="failure-rate-container">
-                        <div className="failure-rate" id="campaign-detail-total-failure-rate">
-                            <div className="doughnut-wrapper">
-                                <Doughnut
-                                    data={failureRateData}
-                                    options={{percentageInnerCutout: 75, showTooltips: false, segmentStrokeWidth: 0, segmentShowStroke: false}}
-                                    width="140"
-                                    height="140"
-                                />
-                            </div>
-                            <div className="rate">
-                                {Math.round(overallStatistics.failed/Math.max(overallStatistics.finished, 1) * 100)}%
-                            </div>
+                <div className="statistics-wrapper">
+                    <div className="left-box">
+                        <div className="title">
+                            Failure rate
                         </div>
-                         {campaignsStore.campaign.statistics.status === 'launched' ?
-                            <div className="cancel-campaign">
-                                <button id="campaign-detail-cancel-all" className="delete-button" onClick={showCancelCampaignModal}>
-                                    Cancel campaign
-                                </button>
+
+                        <div className="failure-rate-container">
+                            <div className="failure-rate" id="campaign-detail-total-failure-rate">
+                                <div className="doughnut-wrapper">
+                                    <Doughnut
+                                        data={failureRateData}
+                                        options={{percentageInnerCutout: 75, showTooltips: false, segmentStrokeWidth: 0, segmentShowStroke: false}}
+                                        width="140"
+                                        height="140"
+                                    />
+                                </div>
+                                <div className="rate">
+                                    {Math.round(overallStatistics.failed/Math.max(overallStatistics.finished, 1) * 100)}%
+                                </div>
+                            </div>                         
+                        </div>
+                    </div>
+
+                    <div className="right-box">
+                        <div className="total-progress-container">
+                            <div className="title">
+                                Total progress
                             </div>
-                        :
-                            null
-                        }
-                    </div>
-                </div>
-
-                <div className="right-box">
-                    <div className="title">
-                        Total progress
-                    </div>
-
-                    <div className="total-progress-container">
-                        <div className="top-container">
-                            <div className="blocks">
-                                <div className="block">
-                                    <div id="campaign-detail-devices-stats-processed">
-                                       {overallStatistics.processed}
+                            <div className="top-container">
+                                <div className="blocks">
+                                    <div className="block">
+                                        <div id="campaign-detail-devices-stats-processed">
+                                           {overallStatistics.processed}
+                                        </div>
+                                        <div>
+                                            Processed
+                                        </div>
                                     </div>
-                                    <div>
-                                        Processed
+                                    <div className="block">
+                                        <div id="campaign-detail-devices-stats-affected">
+                                            {overallStatistics.affected}
+                                        </div>
+                                        <div>
+                                            Affected
+                                        </div>
+                                    </div>
+                                </div>                                
+                            </div>
+                            <div className="middle-container">
+                                <div className="devices-progress with-bar">
+                                    <div className="bar">
+                                        <div className="failure" style={{width: failureRate + '%'}}>
+                                        </div>
+                                        <div className="success" style={{width: successRate + '%'}}>
+                                        </div>
+                                        <div className="queued" style={{width: queuedRate + '%'}}>
+                                        </div>
+                                        <div className="not-impacted" style={{width: notImpactedRate + '%'}}>
+                                        </div>
+                                        <div className="not-proceed" style={{width: notProcessedRate + '%' }}>
+                                        </div>
+                                        <div className="cancelled" style={{width: cancelledRate + '%' }}>
+                                        </div>
+                                    </div>
+                                    <div className="bottom-container">
+                                        <div className="success">
+                                            <span></span>
+                                            <span>Success</span>
+                                            <span id="target_stats_success">{overallStatistics.successful}</span>
+                                        </div>
+                                        <div className="queued">
+                                            <span></span>
+                                            <span>Queued</span>
+                                            <span id="target_stats_queued">{overallStatistics.queued}</span>
+                                        </div>
+                                        <div className="failure">
+                                            <span></span>
+                                            <span>Failure</span>
+                                            <span id="target_stats_failure">{overallStatistics.failed}</span>
+                                        </div>
+                                        <div className="not-proceed">
+                                            <span></span>
+                                            <span>Not processed</span>
+                                            <span id="target_stats_not_proceed">{notProcessed}</span>
+                                        </div>                            
+                                        <div className="not-impacted">
+                                            <span></span>
+                                            <span>Not impacted</span>
+                                            <span id="target_stats_not_impacted">{overallStatistics.notImpacted}</span>
+                                        </div>
+                                        <div className="cancelled">
+                                            <span></span>
+                                            <span>Cancelled</span>
+                                            <span id="target_stats_cancelled">{overallStatistics.cancelled}</span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="block">
-                                    <div id="campaign-detail-devices-stats-affected">
-                                        {overallStatistics.affected}
-                                    </div>
-                                    <div>
-                                        Affected
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="show-dependencies">
-                                <a href="#" className="add-button" id="target_show_dependencies" onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}>
-                                    <span>
-                                        Show dependencies
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                        <div className="middle-container">
-                            <div className="devices-progress with-bar">
-                                <div className="bar">
-                                    <div className="failure" style={{width: failureRate + '%'}}>
-                                    </div>
-                                    <div className="success" style={{width: successRate + '%'}}>
-                                    </div>
-                                    <div className="queued" style={{width: queuedRate + '%'}}>
-                                    </div>
-                                    <div className="not-impacted" style={{width: notImpactedRate + '%'}}>
-                                    </div>
-                                    <div className="not-proceed" style={{width: notProcessedRate + '%' }}>
-                                    </div>
-                                    <div className="cancelled" style={{width: cancelledRate + '%' }}>
-                                    </div>
+                                <div className="show-dependencies">
+                                    <a href="#" className="add-button" id="target_show_dependencies" onClick={showDependenciesModal.bind(this, campaignsStore.campaign.name)}>
+                                        <span>
+                                            Show dependencies
+                                        </span>
+                                    </a>
                                 </div>
                             </div>                            
+                                                   
                         </div>
-                        <div className="bottom-container">
-                            <div className="success">
-                                <span></span>
-                                <span>Success</span>
-                                <span id="target_stats_success">{overallStatistics.successful}</span>
-                            </div>
-                            <div className="queued">
-                                <span></span>
-                                <span>Queued</span>
-                                <span id="target_stats_queued">{overallStatistics.queued}</span>
-                            </div>
-                            <div className="failure">
-                                <span></span>
-                                <span>Failure</span>
-                                <span id="target_stats_failure">{overallStatistics.failed}</span>
-                            </div>
-                            <div className="not-proceed">
-                                <span></span>
-                                <span>Not processed</span>
-                                <span id="target_stats_not_proceed">{notProcessed}</span>
-                            </div>                            
-                            <div className="not-impacted">
-                                <span></span>
-                                <span>Not impacted</span>
-                                <span id="target_stats_not_impacted">{overallStatistics.notImpacted}</span>
-                            </div>
-                            <div className="cancelled">
-                                <span></span>
-                                <span>Cancelled</span>
-                                <span id="target_stats_cancelled">{overallStatistics.cancelled}</span>
-                            </div>
-                        </div>
-                                               
-                    </div>
 
-                    <CampaignTufGroupsList
-                        campaignsStore={campaignsStore}
-                        groupsStore={groupsStore}
-                    />                
-                </div>
-                             
+                        <CampaignTufGroupsList
+                            campaignsStore={campaignsStore}
+                            groupsStore={groupsStore}
+                        />                
+                    </div>
+                </div>       
             </div>
         );
     }
