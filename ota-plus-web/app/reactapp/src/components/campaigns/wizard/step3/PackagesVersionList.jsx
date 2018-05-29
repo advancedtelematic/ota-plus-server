@@ -185,7 +185,7 @@ class PackagesVersionList extends Component {
                                     options={hardwareIds}
                                     label="On"
                                     multiple={false}
-                                    visibleFieldsCount={hardwareIds.length < 4 ? hardwareIds.length  : 4}
+                                    visibleFieldsCount={hardwareIds.length < 4 && hardwareIds.length > 1 ? hardwareIds.length  : 4}
                                     appendMenuToBodyTag={true}
                                     defaultValue={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].hardwareId : null}
                                     onChange={this.selectHardwareId.bind(this, {type: 'hardwareId', packageName: pack.packageName})}
