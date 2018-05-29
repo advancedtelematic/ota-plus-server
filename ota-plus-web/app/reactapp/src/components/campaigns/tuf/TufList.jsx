@@ -28,7 +28,7 @@ class TufList extends Component {
         const wrapperPosition = this.refs.list.getBoundingClientRect();
         const elementCoords = document.getElementById("item-" + id).getBoundingClientRect();
         let scrollTo = elementCoords.top - wrapperPosition.top + 35;
-        let page = document.querySelector('span.content-container');
+        let page = document.querySelector('.campaigns');
         setTimeout(() => {
             page.scrollTop = scrollTo;
         }, 1000);
@@ -45,11 +45,11 @@ class TufList extends Component {
     render() {
         const { campaignsStore, groupsStore, highlightedCampaign, showCancelCampaignModal, showDependenciesModal, expandedCampaignName, toggleCampaign } = this.props;
         return (
-            <span ref="list">
-                <div className="section-header">
-                    <div className="column">In preparation</div>
+            <div className="campaigns__wrapper" ref="list">
+                <div className="campaigns__section-header section-header">
+                    <div className="campaigns__column">In preparation</div>
                 </div>
-                <div className="campaigns-list" id="in-preparation-campaigns">
+                <div className="campaigns__section-list" id="in-preparation-campaigns">
                     {campaignsStore.inPreparationCampaigns.length ?
                         _.map(campaignsStore.inPreparationCampaigns, (campaign) => {
                             return (
@@ -86,20 +86,20 @@ class TufList extends Component {
                             );
                         })
                     :
-                        <div className="no-items">
+                        <div className="campaigns__section-list--empty">
                             No running campaigns.
                         </div>
                     }
                 </div>
-                <div className="section-header">
-                    <div className="column">Running campaigns</div>
-                    <div className="column">Created at</div>
-                    <div className="column">Processed</div>
-                    <div className="column">Affected</div>
-                    <div className="column">Finished</div>
-                    <div className="column">Failure rate</div>
+                <div className="campaigns__section-header section-header">
+                    <div className="campaigns__column">Running campaigns</div>
+                    <div className="campaigns__column">Created at</div>
+                    <div className="campaigns__column">Processed</div>
+                    <div className="campaigns__column">Affected</div>
+                    <div className="campaigns__column">Finished</div>
+                    <div className="campaigns__column">Failure rate</div>
                 </div>
-                <div className="campaigns-list" id="running-campaigns">
+                <div className="campaigns__section-list" id="running-campaigns">
                     {campaignsStore.runningCampaigns.length ?
                         _.map(campaignsStore.runningCampaigns, (campaign) => {
                             return (
@@ -134,15 +134,15 @@ class TufList extends Component {
                             );
                         })
                     :
-                        <div className="no-items">
+                        <div className="campaigns__section-list--empty">
                             No running campaigns.
                         </div>
                     }
                 </div>
-                <div className="section-header">
-                    <div className="column">Finished campaigns</div>
+                <div className="campaigns__section-header section-header">
+                    <div className="campaigns__column">Finished campaigns</div>
                 </div>
-                <div className="campaigns-list" id="finished-campaigns">
+                <div className="campaigns__section-list" id="finished-campaigns">
                     {campaignsStore.finishedCampaigns.length ?
                         _.map(campaignsStore.finishedCampaigns, (campaign) => {
                             return (
@@ -177,15 +177,15 @@ class TufList extends Component {
                             );
                         })
                     :
-                        <div className="no-items">
+                        <div className="campaigns__section-list--empty">
                             No finished campaigns.
                         </div>
                     }
                 </div>
-                <div className="section-header">
-                    <div className="column">Cancelled campaigns</div>
+                <div className="campaigns__section-header section-header">
+                    <div className="campaigns__column">Cancelled campaigns</div>
                 </div>
-                <div className="campaigns-list" id="cancelled-campaigns">
+                <div className="campaigns__section-list" id="cancelled-campaigns">
                     {campaignsStore.cancelledCampaigns.length ?
                         _.map(campaignsStore.cancelledCampaigns, (campaign) => {
                             return (
@@ -220,12 +220,12 @@ class TufList extends Component {
                             );
                         })
                     :
-                        <div className="no-items">
+                        <div className="campaigns__section-list--empty">
                             No cancelled campaigns.
                         </div>
                     }
                 </div>
-            </span>
+            </div>
         );
     }
 }
