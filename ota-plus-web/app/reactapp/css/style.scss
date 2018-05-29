@@ -841,12 +841,11 @@ input {
     background: #fff;
     padding: 0;
     margin: 0;
-    border-radius: 5px;
     position: relative;
+    border-radius: 0;
 
     .progress-bar {
         background-color: $progress-default-color;
-        border-radius: 5px;
         -webkit-box-shadow: none;
         -moz-box-shadow: none;
         box-shadow: none;
@@ -973,7 +972,7 @@ input {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    padding-right: 70px;
+                    padding-right: 25px;
                     margin-bottom: 25px;
 
                     .rename-container {
@@ -1041,15 +1040,18 @@ input {
                 .title {
                     font-weight: 500;
                     margin-bottom: 20px;
-                    font-size: 10px;
+                    font-size: 12px;
                     text-transform: uppercase;
                     color: $devices-group-text;
                 }
 
+                .statistics-wrapper {
+                    display: flex;
+                    padding: 0 25px;
+                }
+
                 .left-box {
-                    width: 15%;
-                    float: left;
-                    padding: 0 30px;
+                    padding-top: 25px;
 
                     .failure-rate {
                         position: relative;
@@ -1071,26 +1073,18 @@ input {
                         color: $home-bg;
                         font-weight: 400;
                     }
-
-                    .cancel-campaign {
-                        margin-top: 20px;
-                    }
                 }
 
                 .right-box {
-                    width: 70%;
-                    float: left;
+                    padding-left: 50px;
+                    flex: auto;
 
                     .total-progress-container {
                         background: #fff;
-                        padding: 25px 40px;
+                        padding: 25px;
 
                         .top-container {
-                            display: flex;
-                            align-items: center;
                             font-size: 12px;
-                            display: flex;
-                            justify-content: space-between;
 
                             .block {
                                 display: inline-block;
@@ -1116,23 +1110,21 @@ input {
                         }
 
                         .middle-container {
-                            position: relative;
-                            overflow: hidden;
+                            display: flex;
 
-                            .devices-progress {
-                                border-radius: 5px;
-                                float: left;
-                                height: 10px;
-                                width: 100%;
+                            .show-dependencies {
+                                flex-basis: 15%;
+                                text-align: right;
+                                margin-top: 16px;
+                            }
 
-                                &.with-bar {
-                                    margin: 20px 0;
-                                }
+                            .devices-progress {    
+                                margin-top: 20px;
+                                flex: auto;                            
 
                                 .bar {
                                     height: 10px;
                                     overflow: hidden;
-                                    border-radius: 4px;
 
                                     .failure {
                                         height: 10px;
@@ -1178,6 +1170,7 @@ input {
                             display: flex;
                             justify-content: space-between;
                             font-size: 10px;
+                            margin-top: 20px;
 
                             .failure {
                                 span {
@@ -1248,36 +1241,34 @@ input {
 
                     .group-list {
 
-                        @media screen and (max-width: 1800px) {
-                            .name {
-                                width: 25% !important;
-                            }
-                            .stats {
-                                flex-grow: 3 !important;
-                            }
-                        }
-
                         .group-wrapper {
                             display: flex;
                             align-items: center;
                             background: #fff;
-                            padding: 0 40px;
+                            padding: 0 25px;
                             border-top: 1px solid $device-active-item-bg;
 
                             &:last-child {
                                 border-bottom: 1px solid $device-active-item-bg;
                             }
 
+                            .left-group-info {
+                                flex: auto;
+                                display: flex;
+                                align-items: center;
+
+                                .name {
+                                    flex: 1;
+                                    max-width: 220px;
+                                }
+
+                                .stats {
+                                    flex: 5;
+                                }
+                            }
+
                             p {
                                 margin: 0;
-                            }
-
-                            .name {
-                                width: 15%;
-                            }
-
-                            .stats {
-                                width: 75%;
                             }
 
                             .element-box {
@@ -1318,10 +1309,6 @@ input {
                                 }
                             }
 
-                            .devices-progress {
-                                height: 10px;
-                            }
-
                             .wrapper-rate {
                                 text-align: right;
                                 margin-top: 5px;
@@ -1331,8 +1318,7 @@ input {
                                 text-align: right;
                                 font-size: 12px;
                                 color: $device-properties-text;
-                                width: 10%;
-                                min-width: 100px;
+                                flex-basis: 15%;
 
                                 span {
                                     display: block;
