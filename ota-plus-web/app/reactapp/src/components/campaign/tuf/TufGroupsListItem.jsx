@@ -33,9 +33,9 @@ class TufGroupsListItem extends Component {
             }
         ];
         return (
-            <div className="group-wrapper">
-                <div className="left-group-info">
-                    <div className="name">
+            <div className="groups__item">
+                <div className="groups__box groups__box--left">
+                    <div className="groups__item-name">
                         <div className="element-box group">
                             <div className="icon"/>
                             <div className="desc">
@@ -48,36 +48,27 @@ class TufGroupsListItem extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="stats">
-                        <div className="devices-progress">
-                            <div className="progress progress-blue">
-                                <div className={"progress-bar" + (campaign.statistics.status !== 'finished'
-                                                                    && campaign.statistics.status !== 'cancelled'
-                                                                    && progress !== 100 ? ' progress-bar-striped active': '')}
-                                     role="progressbar"
-                                     style={{width: foundGroup.devices.total !== 0 ? progress + '%' : '100%'}}>
-                                </div>
+                    <div className="groups__item-progress">
+                        <div className="groups__item-progress-wrapper">
+                            <div className={"groups__item-progress-bar progress progress-bar" + (campaign.statistics.status !== 'finished'
+                                                            && campaign.statistics.status !== 'cancelled'
+                                                            && progress !== 100 ? ' progress-bar-striped active': '')}
+                                 role="progressbar"
+                                 style={{width: foundGroup.devices.total !== 0 ? progress + '%' : '100%'}}>
                             </div>
                         </div>
-                        <div className="wrapper-rate">
-                            <span className="wrapper-rate-value" id={`target_wrapper_rate_value_${progressForIdTag}`}>
-                                {foundGroup.devices.total !== 0
-                                    ? progress + '%'
-                                    : '100%'
-                                }
-                            </span>
+                        <div className="groups__item-progress-value" id={`target_wrapper_rate_value_${progressForIdTag}`}>
+                            {foundGroup.devices.total !== 0 ? progress + '%' : '100%'}
                         </div>
                     </div>
                 </div>
-                <div className="status-group">
-                    <p>
-                        <span>
-                            {statistics.processed} processed
-                        </span>
-                        <span>
-                            {statistics.affected} affected
-                        </span>
-                    </p>
+                <div className="groups__box groups__box--right">
+                    <div>
+                        {statistics.processed} processed
+                    </div>
+                    <div>
+                        {statistics.affected} affected
+                    </div>
                 </div>
             </div>
         );

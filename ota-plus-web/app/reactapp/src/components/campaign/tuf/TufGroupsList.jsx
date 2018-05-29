@@ -11,7 +11,7 @@ class TufGroupsList extends Component {
     render() {
         const { campaignsStore, groupsStore } = this.props;
         return (
-            <div className={"group-list" + (campaignsStore.campaign.statistics.status === 'launched' ? " launched" : "")}>
+            <div className="groups">
                 {_.map(campaignsStore.campaign.groups, (groupId, index) => {
                     const foundGroup = _.findWhere(groupsStore.groups, {id: groupId});
                     let groupStat = _.find(campaignsStore.campaign.statistics.stats, (stat, gId) => {
