@@ -75,7 +75,7 @@ class SubHeader extends Component {
     render() {
         const { title, campaignsStore, showCancelCampaignModal } = this.props;
         return (
-            <div className="campaign-name">
+            <div className="statistics__campaign-name">
                 <div className="rename-container">
                     <div onClick={this.enableCampaignRename}
                          ref={(clickableArea) => {this.clickableArea = clickableArea}}

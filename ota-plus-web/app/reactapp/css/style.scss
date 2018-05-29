@@ -835,37 +835,6 @@ input {
     }
 }
 
-
-.progress-blue {
-    height: 10px;
-    background: #fff;
-    padding: 0;
-    margin: 0;
-    position: relative;
-    border-radius: 0;
-
-    .progress-bar {
-        background-color: $progress-default-color;
-        -webkit-box-shadow: none;
-        -moz-box-shadow: none;
-        box-shadow: none;
-    }
-
-    .progress-count {
-        font-size: 12px;
-        position: absolute;
-        top: 5px;
-        right: 25px;
-    }
-
-    .progress-status {
-        font-size: 12px;
-        position: absolute;
-        top: 0;
-        right: 0;
-    }
-}
-
 .wrapper-center {
     width: 100%;
     height: 100%;
@@ -882,14 +851,14 @@ input {
     }
 }
 
-.content-container {
+.campaigns {
     height: 100%;
     overflow-y: auto;
     width: 100%;
     display: block;
     position: relative;
 
-    .fake-header {
+    &__fake-header {
         position: absolute;
         z-index: 2;
         color: #202020;
@@ -906,13 +875,13 @@ input {
         padding: 0 25px;
     }
 
-    .fake-header-helper {
+    &__fake-header-link {
         position: absolute;
         z-index: 3;
         right: 25px;
     }
 
-    .column {
+    &__column {
         display: inline-block;
         vertical-align: top;
         width: 14%;
@@ -923,411 +892,411 @@ input {
             text-align: left;
         }
 
-        &.additional-info {
+        &--additional-info {
             text-align: right;
             font-weight: 500;
-
-            .more-info {
-                color: $home-header-button;
-            }
+            color: $home-header-button;
         }
     }   
 
-    .wrapper-list {
+    &__wrapper {
         height: 100%;
+    }
 
-        .campaigns-list {
-            margin-bottom: 10px;
-            background-color: #fff;
+    &__section-list {
+        margin-bottom: 10px;
+        background-color: #fff;
 
-            .no-items {
-                height: 60px;
-                display: flex;
-                align-items: center;
-                padding: 0 25px;
-                color: $devices-group-text;
-                font-size: 12px;
+        &--empty {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 25px;
+            color: $devices-group-text;
+            font-size: 12px;
+        }
+    }
+
+    &__item {
+        cursor: pointer;
+        height: 60px;
+        border-bottom: 1px solid #ddd;
+        @include transition;
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        color: $devices-group-text;
+        padding: 0 25px;
+        background: $device-item-bg;
+    }
+}
+
+.statistics {
+    padding: 25px 0;
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+    background: $device-item-bg;
+
+    &__campaign-name {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-right: 25px;
+        margin-bottom: 25px;
+
+        .rename-container {
+            position: relative;
+            padding: 0 15px;
+            width: 400px;
+            cursor: pointer;
+            font-size: 22px;
+            font-weight: bold;
+
+            input {
+                width: 100%;
+                background-color: rgba(0,0,0,0);
+                border: none;
+                outline: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                transition: all 0.3s ease;
+                padding: 10px 65px 10px 10px;
+                text-overflow: ellipsis;
+                
+                &:focus {
+                    outline: none;
+                    background-color: rgba(0,0,0,0.2);
+                }
             }
-
-            .item {
+            img {
+                transition: opacity 0.3s ease;
                 cursor: pointer;
-                height: 60px;
-                border-bottom: 1px solid #ddd;
-                @include transition;
-                display: flex;
-                align-items: center;
+
+                &.edit {
+                    opacity: 0;
+                    position: absolute;
+                    right: 25px;
+                    top: 15px;
+                    width: 20px;
+                }
+            }
+            .icons {
+                position: absolute;
+                right: 20px;
+                top: 10px;
+                z-index: 10;
+
+                img {
+                    width: 25px;
+
+                    &.rename {
+                        margin-right: -5px;
+                    }
+                }
+            }
+            &:hover {
+                img {
+                    opacity: 1;
+                }
+                input {
+                    background-color: #F3F3F4;
+                }
+            }
+        }
+    }
+
+    &__wrapper {
+        display: flex;
+        padding: 0 25px;
+    }
+
+    &__box {
+
+        &--left {
+            padding-top: 25px;
+        }
+
+        &--right {
+            padding-left: 50px;
+            flex: auto;
+        }
+    }
+
+    &__box-title {
+        font-weight: 500;
+        margin-bottom: 20px;
+        font-size: 12px;
+        text-transform: uppercase;
+        color: $devices-group-text;
+    }
+
+    &__failure-chart {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__failure-chart-wrapper {
+        background: #fff;
+        border-radius: 50%;
+        display: flex;
+    }
+
+    &__failure-rate {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        color: $home-bg;
+        font-weight: 400;
+    }
+
+    &__blocks {
+        margin-bottom: 20px;
+    }
+
+    &__processed {
+        font-size: 12px;
+        display: inline-block;
+        margin-right: 25px;
+        color: $campaign-details-text;
+    }
+
+    &__affected {
+        font-size: 12px;
+        display: inline-block;
+        color: $campaign-details-text;
+    }
+
+    &__count {
+        font-size: 18px;
+        margin-right: 5px;
+        font-weight: 500;
+        color: #000;
+    }
+
+    &__installation {
+        display: flex;
+    }
+
+    &__dependencies {
+        flex-basis: 15%;
+        text-align: right;
+    }
+
+    &__bar-wrapper {
+        flex: auto;
+    }
+
+    &__bar {
+        height: 10px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+    &__bar-item {
+
+        &--failure {
+            height: 10px;
+            background-color: #fe0001;
+            float: left;
+        }
+
+        &--success {
+            height: 10px;
+            background-color: #83d060;
+            float: left;
+        }
+
+        &--queued {
+            height: 10px;
+            background-color: #f5a623;
+            float: left;
+        }
+
+        &--not-proceed {
+            height: 10px;
+            background-color: #F3F3F4;
+            float: left;
+        }
+
+        &--not-impacted {
+            height: 10px;
+            background-color: #9FA2A6;
+            float: left;
+        }
+
+        &--cancelled {
+            height: 10px;
+            background-color: #6F737A;
+            float: left;
+        }
+    }
+    
+    &__progress {
+        background: #fff;
+        padding: 25px;                    
+    }
+
+    &__legend {
+        color: $device-hardware-header;
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px;                    
+    }
+
+    &__legend-item-color {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        position: relative;
+        top: 2px;
+        display: inline-block;
+        margin-right: 10px;
+
+        &--success {
+            background-color: #FE0001;
+        }
+
+        &--failure {
+            background-color: #FE0001;
+        }
+
+        &--success {
+            background-color: $progress-default-color;
+        }
+
+        &--queued {
+            background-color: #F5A623;
+        }
+
+        &--not-proceed {
+            background-color: #F3F3F4;
+        }
+
+        &--not-impacted {
+            background-color: #9FA2A6;
+        }
+
+        &--cancelled {
+            background-color: #6F737A;
+        }
+    }
+
+    &__legend-item-title {
+        margin-right: 10px;
+        display: inline-block;
+    }
+
+    &__legend-item-count {
+        display: inline-block;
+    }
+}
+
+.groups {
+
+    &__item {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        padding: 0 25px;
+        border-top: 1px solid $device-active-item-bg;
+
+        &:last-child {
+            border-bottom: 1px solid $device-active-item-bg;
+        }
+    }
+
+    &__box {
+
+        &--left {
+            flex: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        &--right {
+            text-align: right;
+            font-size: 12px;
+            color: $device-properties-text;
+            flex-basis: 15%;
+        }
+    }
+
+    &__item-name {
+        flex: 1;
+        max-width: 220px;
+    }
+
+    &__item-progress {
+        flex: 5;
+    }
+
+    &__item-progress-wrapper {
+        height: 10px;
+        -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+        box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    }
+
+    &__item-progress-value {
+        text-align: right;
+        margin-top: 5px;
+    }
+
+    &__item-progress-bar {
+        height: 10px;
+        background: #fff;
+        padding: 0;
+        margin: 0;
+        position: relative;
+        border-radius: 0;
+        background-color: $progress-default-color;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+    }
+}
+
+.element-box {
+    padding: 20px 0;
+
+    &.group {
+    
+        .icon {
+            background: url($group-default-image-url) 50% 50%;
+            height: 35px;
+            width: 35px;
+            margin: 0;
+            border-radius: 4px;
+            background-size: 35px 35px;
+            background-repeat: no-repeat;
+        }
+
+        .desc {
+            margin: 0 0 0 15px;
+            float: none;
+            padding: 11px 15px 11px 0;
+            display: inline-block;
+            vertical-align: middle;
+
+            .small-title {
                 font-size: 12px;
-                color: $devices-group-text;
-                padding: 0 25px;
-                background: $device-item-bg;
+                font-weight: 400;
+                color: $device-properties-text;
+                margin-bottom: 2px;
+                @include textoverflowEllipsis;
             }
 
-            .statistic-details {
-                padding: 25px 0;
-                border-bottom: 1px solid #ddd;
-                overflow: hidden;
-                background: $device-item-bg;
-
-                .campaign-name {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding-right: 25px;
-                    margin-bottom: 25px;
-
-                    .rename-container {
-                        position: relative;
-                        padding: 0 15px;
-                        width: 400px;
-                        cursor: pointer;
-                        font-size: 22px;
-                        font-weight: bold;
-
-                        input {
-                            width: 100%;
-                            background-color: rgba(0,0,0,0);
-                            border: none;
-                            outline: none;
-                            -webkit-appearance: none;
-                            -moz-appearance: none;
-                            appearance: none;
-                            transition: all 0.3s ease;
-                            padding: 10px 65px 10px 10px;
-                            text-overflow: ellipsis;
-                            
-                            &:focus {
-                                outline: none;
-                                background-color: rgba(0,0,0,0.2);
-                            }
-                        }
-                        img {
-                            transition: opacity 0.3s ease;
-                            cursor: pointer;
-
-                            &.edit {
-                                opacity: 0;
-                                position: absolute;
-                                right: 25px;
-                                top: 15px;
-                                width: 20px;
-                            }
-                        }
-                        .icons {
-                            position: absolute;
-                            right: 20px;
-                            top: 10px;
-                            z-index: 10;
-
-                            img {
-                                width: 25px;
-
-                                &.rename {
-                                    margin-right: -5px;
-                                }
-                            }
-                        }
-                        &:hover {
-                            img {
-                                opacity: 1;
-                            }
-                            input {
-                                background-color: #F3F3F4;
-                            }
-                        }
-                    }
-                }
-
-                .title {
-                    font-weight: 500;
-                    margin-bottom: 20px;
-                    font-size: 12px;
-                    text-transform: uppercase;
-                    color: $devices-group-text;
-                }
-
-                .statistics-wrapper {
-                    display: flex;
-                    padding: 0 25px;
-                }
-
-                .left-box {
-                    padding-top: 25px;
-
-                    .failure-rate {
-                        position: relative;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    }
-
-                    .rate {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        bottom: 0;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 18px;
-                        color: $home-bg;
-                        font-weight: 400;
-                    }
-                }
-
-                .right-box {
-                    padding-left: 50px;
-                    flex: auto;
-
-                    .total-progress-container {
-                        background: #fff;
-                        padding: 25px;
-
-                        .top-container {
-                            font-size: 12px;
-
-                            .block {
-                                display: inline-block;
-
-                                &:first-child {
-                                    margin-right: 25px;
-                                }
-
-                                div {
-                                    display: inline-block;
-
-                                    &:last-child {
-                                        color: $campaign-details-text;
-                                    }
-
-                                    &:first-child {
-                                        font-size: 18px;
-                                        margin-right: 5px;
-                                        font-weight: 500;
-                                    }
-                                }
-                            }
-                        }
-
-                        .middle-container {
-                            display: flex;
-
-                            .show-dependencies {
-                                flex-basis: 15%;
-                                text-align: right;
-                                margin-top: 16px;
-                            }
-
-                            .devices-progress {    
-                                margin-top: 20px;
-                                flex: auto;                            
-
-                                .bar {
-                                    height: 10px;
-                                    overflow: hidden;
-
-                                    .failure {
-                                        height: 10px;
-                                        background-color: #fe0001;
-                                        float: left;
-                                    }
-
-                                    .success {
-                                        height: 10px;
-                                        background-color: #83d060;
-                                        float: left;
-                                    }
-
-                                    .queued {
-                                        height: 10px;
-                                        background-color: #f5a623;
-                                        float: left;
-                                    }
-
-                                    .not-proceed {
-                                        height: 10px;
-                                        background-color: #F3F3F4;
-                                        float: left;
-                                    }
-
-                                    .not-impacted {
-                                        height: 10px;
-                                        background-color: #9FA2A6;
-                                        float: left;
-                                    }
-
-                                    .cancelled {
-                                        height: 10px;
-                                        background-color: #6F737A;
-                                        float: left;
-                                    }
-                                }
-                            }
-                        }
-
-                        .bottom-container {
-                            color: $device-hardware-header;
-                            display: flex;
-                            justify-content: space-between;
-                            font-size: 10px;
-                            margin-top: 20px;
-
-                            .failure {
-                                span {
-                                    &:first-child {
-                                        background-color: #FE0001;
-                                    }
-                                }
-                            }
-
-                            .success {
-                                span {
-                                    &:first-child {
-                                        background-color: $progress-default-color;
-                                    }
-                                }
-                            }
-
-                            .queued {
-                                span {
-                                    &:first-child {
-                                        background-color: #F5A623;
-                                    }
-                                }
-                            }
-
-                            .not-proceed {
-
-                                span {
-                                    &:first-child {
-                                        background-color: #F3F3F4;
-                                    }
-                                }
-                            }
-
-                            .not-impacted {
-                                span {
-                                    &:first-child {
-                                        background-color: #9FA2A6;
-                                    }
-                                }
-                            }
-
-                            .cancelled {
-                                span {
-                                    &:first-child {
-                                        background-color: #6F737A;
-                                    }
-                                }
-                            }
-
-                            span {
-                                display: inline-block;
-
-                                &:first-child {
-                                    width: 12px;
-                                    height: 12px;
-                                    border-radius: 50%;
-                                    position: relative;
-                                    top: 2px;
-                                }
-
-                                &:not(:last-child) {
-                                    margin-right: 10px;
-                                }
-                            }
-                        }
-                    }
-
-                    .group-list {
-
-                        .group-wrapper {
-                            display: flex;
-                            align-items: center;
-                            background: #fff;
-                            padding: 0 25px;
-                            border-top: 1px solid $device-active-item-bg;
-
-                            &:last-child {
-                                border-bottom: 1px solid $device-active-item-bg;
-                            }
-
-                            .left-group-info {
-                                flex: auto;
-                                display: flex;
-                                align-items: center;
-
-                                .name {
-                                    flex: 1;
-                                    max-width: 220px;
-                                }
-
-                                .stats {
-                                    flex: 5;
-                                }
-                            }
-
-                            p {
-                                margin: 0;
-                            }
-
-                            .element-box {
-                                padding: 20px 0;
-
-                                &.group {
-                                
-                                    .icon {
-                                        background: url($group-default-image-url) 50% 50%;
-                                        height: 35px;
-                                        width: 35px;
-                                        margin: 0;
-                                        border-radius: 4px;
-                                        background-size: 35px 35px;
-                                        background-repeat: no-repeat;
-                                    }
-
-                                    .desc {
-                                        margin: 0 0 0 15px;
-                                        float: none;
-                                        padding: 11px 15px 11px 0;
-                                        display: inline-block;
-                                        vertical-align: middle;
-
-                                        .small-title {
-                                            font-size: 12px;
-                                            font-weight: 400;
-                                            color: $device-properties-text;
-                                            margin-bottom: 2px;
-                                            @include textoverflowEllipsis;
-                                        }
-
-                                        .subtitle {
-                                            font-size: 10px;
-                                            color: $device-hardware-header;
-                                        }
-                                    }
-                                }
-                            }
-
-                            .wrapper-rate {
-                                text-align: right;
-                                margin-top: 5px;
-                            }
-
-                            .status-group {
-                                text-align: right;
-                                font-size: 12px;
-                                color: $device-properties-text;
-                                flex-basis: 15%;
-
-                                span {
-                                    display: block;
-                                    padding: 1px 0;
-                                }
-                            }
-                        }
-                    }
-                }
+            .subtitle {
+                font-size: 10px;
+                color: $device-hardware-header;
             }
         }
     }
