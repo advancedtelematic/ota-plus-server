@@ -14,16 +14,16 @@ class LastPackagesItem extends Component {
         return (
             <Link
                 to={`${link}`} 
-                className="package" 
+                className="home__list-item" 
                 title={pack.id.name + ' ' + pack.id.version}
                 id={"link-packages-" + pack.uuid}>
-                <div className="col">
+                <div className="home__body-col">
                     {pack.id.name}
                 </div>
-                <div className="col">
+                <div className="home__body-col">
                     {pack.id.version.length > 10 ? pack.id.version.substring(0, 10) + '...' : pack.id.version}
                 </div>
-                <div className="col">
+                <div className="home__body-col">
                     {createdDate.toDateString() + ' ' + createdDate.toLocaleTimeString()}
                 </div>
             </Link>
