@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 
 const NoItems = ({itemName, create = null}) => {
     return (
-        <div className="no-items">
+        <div className="home__items-empty">
             <span>
                 No {itemName}s to show
             </span>

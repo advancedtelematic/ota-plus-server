@@ -62,95 +62,94 @@ class Home extends Component {
     render() {
         const { devicesStore, hardwareStore, packagesStore, campaignsStore, addNewWizard } = this.props;
         return (
-            <div className="home-content">
-                <div className="box box-left">
-                    <div className="block">
-                        <div className="heading">
-                            <div className="col">
+            <div className="home">
+                <div className="home__box home__box--left">
+                    <div className="home__tutorial">
+                        <div className="home__heading">
+                            <div className="home__heading-col">
                                 Welcome
                             </div>
                         </div>
-                        <div className="body">
-                            <div className="top">
-                                <div className="title">
+                        <div className="home__body home__body--left">
+                            <div className="home__tutorial-top">
+                                <div className="home__tutorial-title">
                                     Welcome to HERE OTA Connect!
                                 </div>
-                                <div className="subtitle">
+                                <div className="home__tutorial-subtitle">
                                     HERE OTA Connect lets you manage updates on your embedded devices from the cloud.
                                 </div>
                             </div>
-                            <div className="overview">
-                                <div style={{height: '100%'}}>
-                                    <div className="guide-title">
+                            <div className="home__tutorial-overview">
+                                <div className="home__tutorial-wrapper">
+                                    <div className="home__tutorial-title home__tutorial-title--small">
                                         How it works
                                     </div>
-
-                                    <div className="steps-container">
-                                        <div className="step">
-                                            <div className="step-text">
+                                    <div className="home__tutorial-steps">
+                                        <div className="home__tutorial-step">
+                                            <div className="home__tutorial-step-name">
                                                 Step 1
                                             </div>
-                                            <img src="/assets/img/onboarding_step_one.svg" alt="Image" />
-                                            <div className="step-title">
+                                            <img className="home__tutorial-step-image" src="/assets/img/onboarding_step_one.svg" alt="Image" />
+                                            <div className="home__tutorial-step-title">
                                                 Integrate our open source client
                                             </div>
-                                            <div className="step-desc">
+                                            <div className="home__tutorial-step-desc">
                                                 Add a Yocto layer to an existing project, or follow a quickstart guide if you're new to Yocto/OpenEmbedded.
                                             </div>
                                         </div>
 
-                                        <div className="step">
-                                            <div className="step-text">
+                                        <div className="home__tutorial-step">
+                                            <div className="home__tutorial-step-name">
                                                 Step 2
                                             </div>
-                                            <img src="/assets/img/onboarding_step_two.svg" alt="Image" />
-                                            <div className="step-title">
+                                            <img className="home__tutorial-step-image" src="/assets/img/onboarding_step_two.svg" alt="Image" />
+                                            <div className="home__tutorial-step-title">
                                                 Manage your devices
                                             </div>
-                                            <div className="step-desc">
+                                            <div className="home__tutorial-step-desc">
                                                 Auto-update test bench devices with every new build, define target groups, and manage full filesystem revisions with ease.
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="get-started">
-                                <div style={{height: '100%'}}>
-                                    <div className="guide-title">
+                            <div className="home__tutorial-start">
+                                <div className="home__tutorial-wrapper">
+                                    <div className="home__tutorial-title home__tutorial-title--small">
                                         Getting started
                                     </div>
                                     
-                                    <div className="steps-container">
-                                        <div className="step">
-                                            <div className="step-text">
+                                    <div className="home__tutorial-steps">
+                                        <div className="home__tutorial-step">
+                                            <div className="home__tutorial-step-name">
                                                 Start fresh
                                             </div>
-                                            <img src="/assets/img/icons/black/start_fresh.svg" alt="Image" />
-                                            <div className="step-title">
+                                            <img className="home__tutorial-start-image" src="/assets/img/icons/black/start_fresh.svg" alt="Image" />
+                                            <div className="home__tutorial-step-title">
                                                 Try out a quickstart project
                                             </div>
-                                            <div className="step-desc">
+                                            <div className="home__tutorial-step-desc">
                                                 New to Yocto? We'll take you through a starter project step by step.
                                             </div>
-                                            <div className="step-link">
+                                            <div className="home__tutorial-step-link">
                                                 <a href="https://docs.atsgarage.com/quickstarts/raspberry-pi.html" className="add-button" target="_blank" id="user-new-yocto-docs">
                                                     Quickstart guide
                                                 </a>
                                             </div>
                                         </div>
 
-                                        <div className="step">
-                                            <div className="step-text">
+                                        <div className="home__tutorial-step">
+                                            <div className="home__tutorial-step-name">
                                                 Integrate
                                             </div>
-                                            <img src="/assets/img/icons/black/integrate.svg" alt="Image" />
-                                            <div className="step-title">
+                                            <img className="home__tutorial-start-image" src="/assets/img/icons/black/integrate.svg" alt="Image" />
+                                            <div className="home__tutorial-step-title">
                                                 Integrate with existing project
                                             </div>
-                                            <div className="step-desc">
+                                            <div className="home__tutorial-step-desc">
                                                 Add the meta-updater layer into your existing Yocto project and OTA-enable your devices.
                                             </div>
-                                            <div className="step-link">
+                                            <div className="home__tutorial-step-link">
                                                 <a href="https://docs.atsgarage.com/quickstarts/adding-ats-garage-updating-to-an-existing-yocto-project.html" id="user-existing-yocto-docs" className="add-button" target="_blank">
                                                     Integration guide
                                                 </a>
@@ -162,16 +161,16 @@ class Home extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="box box-right">
-                    <div className="block block-device">
-                        <div className="heading">
-                            <div className="col">
+                <div className="home__box home__box--right">
+                    <div className="home__list home__list--devices">
+                        <div className="home__heading">
+                            <div className="home__heading-col">
                                 Last created devices
                             </div>
-                            <div className="col">
+                            <div className="home__heading-col">
                                 Seen online
                             </div>
-                            <div className="col">
+                            <div className="home__heading-col">
                                 Status
                             </div>
                             <div className="dots" onClick={this.toggleDeviceSubmenu}>
@@ -198,21 +197,21 @@ class Home extends Component {
                                 </Dropdown>
                             </div>
                         </div>
-                        <div className="body">
+                        <div className="home__body home__body--right">
                             <LastDevices 
                                 devicesStore={devicesStore}
                             />
                         </div>
                     </div>
-                    <div className="block block-package">
-                        <div className="heading">
-                            <div className="col">
+                    <div className="home__list home__list--packages">
+                        <div className="home__heading">
+                            <div className="home__heading-col">
                                 Last added packages
                             </div>
-                            <div className="col">
+                            <div className="home__heading-col">
                                 Version
                             </div>
-                            <div className="col">
+                            <div className="home__heading-col">
                                 Created at
                             </div>
                             <div className="dots" onClick={this.togglePackageSubmenu}>
@@ -238,22 +237,22 @@ class Home extends Component {
                                 </Dropdown>
                             </div>
                         </div>
-                        <div className="body">
+                        <div className="home__body home__body--right">
                             <LastPackages 
                                 packagesStore={packagesStore}
                                 showPackagesCreateModal={this.showPackagesCreateModal}
                             />
                         </div>
                     </div>
-                    <div className="block block-campaign">
-                        <div className="heading">
-                            <div className="col">
+                    <div className="home__list home__list--campaigns">
+                        <div className="home__heading">
+                            <div className="home__heading-col">
                                 Active campaigns
                             </div>
-                            <div className="col">
+                            <div className="home__heading-col">
                                 Finished
                             </div>
-                            <div className="col">
+                            <div className="home__heading-col">
                                 Failure rate
                             </div>
                             <div className="dots" onClick={this.toggleCampaignSubmenu}>
@@ -279,7 +278,7 @@ class Home extends Component {
                                 </Dropdown>
                             </div>
                         </div>
-                        <div className="body">
+                        <div className="home__body home__body--right">
                             <ActiveCampaigns 
                                 campaignsStore={campaignsStore}
                                 addNewWizard={addNewWizard}
