@@ -25,16 +25,16 @@ class ActiveCampaignItem extends Component {
         return (
             <Link
                 to={`${link}`}
-                className="campaign" 
+                className="home__list-item" 
                 title={campaign.name}
                 id={"link-campaignwizard-" + campaign.id}>
-                    <div className="col">
+                    <div className="home__body-col">
                         {campaign.name}
                     </div>
-                    <div className="col">
+                    <div className="home__body-col">
                         {totalFinished}/{totalAffected}
                     </div>
-                    <div className="col">
+                    <div className="home__body-col">
                         {failureRate}%
                     </div>
             </Link>
