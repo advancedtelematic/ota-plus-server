@@ -235,6 +235,7 @@ export default class PackagesStore {
             .then(function(response) {
                 let packages = response.data.signed.targets;
                 that._formatPackages(packages);
+                that.fetchComments();
                 let filepaths = that._getFilepaths();
                 axios.post(API_PACKAGES_COUNT_INSTALLED_ECUS, filepaths)
                     .then(function(resp) {
