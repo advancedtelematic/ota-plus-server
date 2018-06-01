@@ -8,7 +8,7 @@ class FadeAnimation extends Component {
     render() {
         const { runOnMount } = this.props;
         return (
-            <VelocityTransitionGroup enter={{animation: "fadeIn", display: this.props.display}} leave={{animation: "fadeOut", display: this.props.display}} runOnMount={runOnMount}>
+            <VelocityTransitionGroup component="span" enter={{animation: "fadeIn", display: this.props.display}} leave={{animation: "fadeOut", display: this.props.display}} runOnMount={runOnMount}>
                 {this.props.children}
             </VelocityTransitionGroup>
         );
