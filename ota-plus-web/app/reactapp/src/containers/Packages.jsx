@@ -67,9 +67,6 @@ class Packages extends Component {
     }
     deleteItem(e) {        
         if(e) e.preventDefault();
-        if(this.itemToDeleteType === 'package') {
-            this.props.packagesStore.deletePackage(this.itemToDelete);
-        }
         if(this.itemToDeleteType === 'version') {
             this.props.packagesStore.deleteVersion(this.itemToDelete);
         }
