@@ -135,7 +135,7 @@ class Preparation extends Component {
     }
 
     doorOpen() {
-        let container = document.getElementsByClassName('preparation-container')[0];
+        let container = document.getElementsByClassName('preparation')[0];
         if (container && !_.includes(container.classList, 'door-open')) {
             this.props.setSystemReady();
         }
