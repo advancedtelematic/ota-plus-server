@@ -23,6 +23,7 @@ export default class GroupsStore {
     @observable groupsAddDeviceAsync = {};
     @observable groupsRemoveDeviceAsync = {};
     @observable groups = [];
+    @observable filteredGroups = [];
     @observable preparedGroups = {};
     @observable latestCreatedGroupId = null;
     @observable selectedGroup = {
@@ -52,10 +53,10 @@ export default class GroupsStore {
     }
 
     _filterGroups(fleetId) {
-        const fg = _.filter(this.groups, group => group.fleet_id === fleetId);
+        this.filteredGroups = _.filter(this.groups, group => group.fleet_id === fleetId);
         // In order to prevent infinite scroll
         this.shouldLoadMore = false;
-        this._prepareGroups(fg);
+        this._prepareGroups(this.filteredGroups);
     }
 
     fetchGroups() {
@@ -170,11 +171,11 @@ export default class GroupsStore {
         resetAsync(this.groupsAddDeviceAsync);
         resetAsync(this.groupsRemoveDeviceAsync);
         this.groups = [];
+        this.filteredGroups = [];
         this.preparedGroups = {};
         this.latestCreatedGroupId = null;
         this.groupsCurrentPage = 0;
         this.groupsTotalCount = 0;
-        this.activeFleet = null;
         this.shouldLoadMore = true;
     }
 
