@@ -60,16 +60,16 @@ class Barchart extends Component {
                 <div className="legends">
                     <ul className="value-legend">
                         <li>
-                            <div className="title-box">value</div>
-                            <div>value</div>
+                            <div className="title-box">limit:</div>
+                            <div>{connections.limit}</div>
                         </li>
                         <li>
-                            <div className="title-box">value</div>
-                            <div>value</div>
+                            <div className="title-box">peak:</div>
+                            <div>{connections.max}</div>
                         </li>
                         <li>
-                            <div className="title-box">value</div>
-                            <div>value</div>
+                            <div className="title-box">avg:</div>
+                            <div>{connections.avg}</div>
                         </li>
                     </ul>
                     <ul className="color-legend">

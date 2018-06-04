@@ -191,10 +191,21 @@ class Main extends Component {
         if(e) e.preventDefault();
         window.history.go(-1);
     }
-    toggleFleet(fleet, e) {
+    toggleFleet(fleet, selectFirst = false, e) {
         if(e) e.preventDefault();
         this.groupsStore.activeFleet = fleet;
         this.groupsStore._filterGroups(fleet.id);
+        if(selectFirst) {
+            const firstGroup = _.first(this.groupsStore.filteredGroups);
+            if(firstGroup) {
+                this.groupsStore.selectedGroup = {
+                    type: 'real',
+                    name: firstGroup.groupName, 
+                    id: firstGroup.id
+                }
+                this.devicesStore.fetchDevices(this.devicesStore.devicesFilter, firstGroup.id);
+            }
+        }
     }
     render() {
         const { children, ...rest } = this.props;
