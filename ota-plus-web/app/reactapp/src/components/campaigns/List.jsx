@@ -57,13 +57,13 @@ class List extends Component {
         }
     }
     render() {
-        const { campaignsStore, groupsStore, addNewWizard, highlightedCampaign, showCancelCampaignModal, showCancelGroupModal, showDependenciesModal, expandedCampaignName, toggleCampaign } = this.props;
+        const { campaignsStore, groupsStore, highlightedCampaign, showCancelCampaignModal, showCancelGroupModal, showDependenciesModal, expandedCampaignName, toggleCampaign } = this.props;
         return (
             <div className="campaigns" ref="list">
                 {campaignsStore.preparedCampaigns.length ?
                     <span>
                         <div className="campaigns__fake-header-link" style={{top: this.fakeHeaderTopPosition + 10}}>
-                            <a href="#" className="add-button grey-button" id="add-new-campaign" onClick={addNewWizard.bind(this, null)}>
+                            <a href="#" className="add-button grey-button" id="add-new-campaign" onClick={(e) => { e.preventDefault(); campaignsStore._addNewWizard() }}>
                                 <span>
                                     +
                                 </span>
