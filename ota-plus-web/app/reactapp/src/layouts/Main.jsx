@@ -26,7 +26,7 @@ import {
 } from '../utils';
 import _ from 'underscore';
 import Cookies from 'js-cookie';
-import { CampaignsWizard } from '../components/campaigns';
+import Wizard from '../components/campaigns/Wizard';
 import { doLogout } from '../utils/Common';
 import * as contracts from '../../../assets/contracts/';
 
@@ -132,10 +132,10 @@ class Main extends Component {
         else
             this.minimizedWizards.push(minimizedWizard);
     }
-    addNewWizard(campaignId = null, e) {
+    addNewWizard(e) {
         if(e) e.preventDefault();
         this.wizards.push(
-            <CampaignsWizard
+            <Wizard
                 campaignsStore={this.campaignsStore}
                 packagesStore={this.packagesStore}
                 groupsStore={this.groupsStore}
