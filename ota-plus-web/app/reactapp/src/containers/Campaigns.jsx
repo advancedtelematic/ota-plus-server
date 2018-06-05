@@ -117,7 +117,7 @@ class Campaigns extends Component {
                                 You haven't created any update campaigns yet.
                             </div>
                             <div>
-                                <a href="#" className="add-button light" id="add-new-campaign" onClick={addNewWizard.bind(this, null)}>
+                                <a href="#" className="add-button light" id="add-new-campaign" onClick={addNewWizard}>
                                     <span>
                                         +
                                     </span>
