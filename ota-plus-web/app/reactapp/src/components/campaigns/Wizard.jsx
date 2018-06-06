@@ -15,7 +15,7 @@ import {
     WizardStep5,
     WizardStep6,
     WizardStep7,
-} from './steps';
+} from './wizard';
 
 const initialCurrentStepId = 0;
 const initialWizardData = [
