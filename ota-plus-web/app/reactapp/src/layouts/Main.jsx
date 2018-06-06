@@ -26,7 +26,7 @@ import {
 } from '../utils';
 import _ from 'underscore';
 import Cookies from 'js-cookie';
-import { CampaignsWizard } from '../components/campaigns';
+import Wizard from '../components/campaigns/Wizard';
 import { doLogout } from '../utils/Common';
 import * as contracts from '../../../assets/contracts/';
 
@@ -34,9 +34,6 @@ import * as contracts from '../../../assets/contracts/';
 class Main extends Component {
     @observable systemReady = false;
     @observable termsAndConditionsAccepted = false;
-    @observable numOfWizards = 0;
-    @observable wizards = [];    
-    @observable minimizedWizards = [];
     @observable uploadBoxMinimized = false;
     @observable uiAutoFeatureActivation = document.getElementById('toggle-autoFeatureActivation').value === "true";
     @observable uiUserProfileMenu = document.getElementById('toggle-userProfileMenu').value === "true";
@@ -59,9 +56,6 @@ class Main extends Component {
         this.setTermsAccepted = this.setTermsAccepted.bind(this);
         this.termsAccepted = this.termsAccepted.bind(this);
         this.backButtonAction = this.backButtonAction.bind(this);
-        this.addNewWizard = this.addNewWizard.bind(this);
-        this.hideWizard = this.hideWizard.bind(this);
-        this.toggleWizard = this.toggleWizard.bind(this);
         this.toggleUploadBoxMode = this.toggleUploadBoxMode.bind(this);
         this.sanityCheckCompleted = this.sanityCheckCompleted.bind(this);
         
@@ -120,45 +114,6 @@ class Main extends Component {
             this.context.router.push('/');
         }
     }
-    toggleWizard(wizardId, wizardName, e) {
-        if(e) e.preventDefault();
-        let minimizedWizard = {
-            id: wizardId,
-            name: wizardName
-        };
-        let wizardAlreadyMinimized = _.find(this.minimizedWizards, {id: wizardId});
-        if(wizardAlreadyMinimized)
-            this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, { id: wizardId }), 1);
-        else
-            this.minimizedWizards.push(minimizedWizard);
-    }
-    addNewWizard(campaignId = null, e) {
-        if(e) e.preventDefault();
-        this.wizards.push(
-            <CampaignsWizard
-                campaignsStore={this.campaignsStore}
-                packagesStore={this.packagesStore}
-                groupsStore={this.groupsStore}
-                hardwareStore={this.hardwareStore}
-                wizardIdentifier={this.wizards.length}
-                hideWizard={this.hideWizard}
-                toggleWizard={this.toggleWizard}
-                minimizedWizards={this.minimizedWizards}
-                alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
-                key={this.wizards.length}
-            />
-        );
-    }
-    hideWizard(wizardIdentifier, e) {
-        if(e) e.preventDefault();
-        _.each(this.wizards, (wizard, index) => {
-            if(wizard && wizard.key == wizardIdentifier) {
-                this.wizards.splice(index, 1);
-            }
-        })
-        this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, { id: wizardIdentifier }), 1);
-        this.campaignsStore._resetFullScreen();
-    }
     toggleUploadBoxMode(e) {
         if(e) e.preventDefault();
         this.uploadBoxMinimized = !this.uploadBoxMinimized;
@@ -191,10 +146,21 @@ class Main extends Component {
         if(e) e.preventDefault();
         window.history.go(-1);
     }
-    toggleFleet(fleet, e) {
+    toggleFleet(fleet, selectFirst = false, e) {
         if(e) e.preventDefault();
         this.groupsStore.activeFleet = fleet;
         this.groupsStore._filterGroups(fleet.id);
+        if(selectFirst) {
+            const firstGroup = _.first(this.groupsStore.filteredGroups);
+            if(firstGroup) {
+                this.groupsStore.selectedGroup = {
+                    type: 'real',
+                    name: firstGroup.groupName, 
+                    id: firstGroup.id
+                }
+                this.devicesStore.fetchDevices(this.devicesStore.devicesFilter, firstGroup.id);
+            }
+        }
     }
     render() {
         const { children, ...rest } = this.props;
@@ -248,7 +214,6 @@ class Main extends Component {
                             userStore={this.userStore}
                             backButtonAction={this.backButtonAction}
                             setSystemReady={this.setSystemReady}
-                            addNewWizard={this.addNewWizard}
                             uiUserProfileEdit={this.uiUserProfileEdit}
                             switchToSWRepo={this.switchToSWRepo}
                             uiAutoFeatureActivation={this.uiAutoFeatureActivation}
@@ -270,7 +235,19 @@ class Main extends Component {
                         minimized={this.uploadBoxMinimized}
                         toggleUploadBoxMode={this.toggleUploadBoxMode}
                     />
-                    {this.wizards}
+                    {_.map(this.campaignsStore.wizards, wizard => {
+                        return (
+                            <Wizard
+                                campaignsStore={this.campaignsStore}
+                                packagesStore={this.packagesStore}
+                                groupsStore={this.groupsStore}
+                                hardwareStore={this.hardwareStore}
+                                wizardIdentifier={wizard.id}
+                                alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
+                                key={wizard.id}
+                            />
+                        );
+                    })}
                     <div className="minimized-wizards-container">
                         {this.uploadBoxMinimized ?
                             <div className="minimized-box" key={this.packagesStore.packagesUploading.length}>
@@ -286,7 +263,7 @@ class Main extends Component {
                         :
                             null
                         }
-                        {_.map(this.minimizedWizards, (wizard, index) => {
+                        {_.map(this.campaignsStore.minimizedWizards, (wizard, index) => {
                             return (
                                 <div className="minimized-box" key={index}>
                                     <div className="name">
@@ -301,7 +278,7 @@ class Main extends Component {
                                         }
                                     </div>
                                     <div className="actions">
-                                        <a href="#" id="maximize-wizard" className="box-toggle box-maximize" title="Maximize wizard" onClick={this.toggleWizard.bind(this, wizard.id, wizard.name)}>
+                                        <a href="#" id="maximize-wizard" className="box-toggle box-maximize" title="Maximize wizard" onClick={(e) => { e.preventDefault(); this.campaignsStore._toggleWizard(wizard.id, wizard.name) }}>
                                             <img src="/assets/img/icons/reopen.svg" alt="Icon" />
                                         </a>
                                     </div>

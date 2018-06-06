@@ -30,20 +30,20 @@ class TufListItem extends Component {
         }
         return (
             expandedCampaignName === campaign.name?
-                <div className="item expanded" id={"item-" + campaign.name} onClick={toggleCampaign.bind(this, campaign.name)}>
+                <div className="campaigns__item" id={"item-" + campaign.name} onClick={toggleCampaign.bind(this, campaign.name)}>
                     <div className="wrapper-center">
                         <img src="assets/img/icons/black/arrow-up.svg" alt="Icon" />
                     </div>
                 </div>
             :
-                <div className="item" id={"item-" + campaign.id} onClick={toggleCampaign.bind(this, campaign.name)}>
-                    <div className="column" id={"campaign-" + campaign.name}>
+                <div className="campaigns__item" id={"item-" + campaign.name} onClick={toggleCampaign.bind(this, campaign.name)}>
+                    <div className="campaigns__column" id={"campaign-" + campaign.name}>
                         {campaign.name}
                     </div>
-                    <div className="column" id={"campaign-start-date-" + campaign.name}>
+                    <div className="campaigns__column" id={"campaign-start-date-" + campaign.name}>
                         {moment(campaign.createdAt).format("DD.MM.YYYY")}
                     </div>
-                    <div className="column" id={"campaign-processed-" + campaign.name}>
+                    <div className="campaigns__column" id={"campaign-processed-" + campaign.name}>
                         {type === 'running' || type === 'finished' || type === 'cancelled' ?
                             <span>
                                 <span>{totalProcessed}</span>                            
@@ -52,7 +52,7 @@ class TufListItem extends Component {
                             null
                         }
                     </div>
-                    <div className="column" id={"campaign-affected-" + campaign.name}>
+                    <div className="campaigns__column" id={"campaign-affected-" + campaign.name}>
                         {type === 'running' || type === 'finished' || type === 'cancelled' ?
                             <span>
                                 <span>{totalAffected}</span>                            
@@ -61,7 +61,7 @@ class TufListItem extends Component {
                             null
                         }
                     </div>
-                    <div className="column" id={"campaign-finished-" + campaign.name}>
+                    <div className="campaigns__column" id={"campaign-finished-" + campaign.name}>
                         {type === 'running' || type === 'finished' || type === 'cancelled' ?
                             <span>
                                 <span>{totalFinished}</span>
@@ -72,7 +72,7 @@ class TufListItem extends Component {
                             null
                         }
                     </div>
-                    <div className="column" id={"campaign-failure-rate-" + campaign.name}>
+                    <div className="campaigns__column" id={"campaign-failure-rate-" + campaign.name}>
                         {type === 'running' || type === 'finished' || type === 'cancelled' ?
                             <span>
                                 <span>{failureRate} %</span>
@@ -81,7 +81,7 @@ class TufListItem extends Component {
                             null
                         }
                     </div>
-                    <div className="column additional-info" id={"campaign-additional-info-" + campaign.name}>
+                    <div className="campaigns__column campaigns__column--additional-info" id={"campaign-additional-info-" + campaign.name}>
                         {type === 'inPreparation' ?
                             <div className="wrapper-center">
                                 <Loader 
@@ -90,7 +90,7 @@ class TufListItem extends Component {
                                 />
                             </div>
                         : type === 'running' || type === 'finished' || type === 'cancelled' ?
-                            <div className="more-info" id="campaign-more-info">
+                            <div id="campaign-more-info">
                                 More info
                             </div>
                         :

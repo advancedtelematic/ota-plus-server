@@ -1,4 +1,4 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { observer } from 'mobx-react';
 import NavigationDropdown from './NavigationDropdown';
@@ -6,7 +6,7 @@ import SecondNavigation from './SecondNavigation';
 import SettingsDropdown from './SettingsDropdown';
 
 @observer
-class Navigation extends PureComponent {
+class Navigation extends Component {
     constructor(props) {
         super(props);
     }

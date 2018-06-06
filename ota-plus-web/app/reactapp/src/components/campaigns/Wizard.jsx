@@ -15,7 +15,7 @@ import {
     WizardStep5,
     WizardStep6,
     WizardStep7,
-} from './wizard';
+} from './wizardSteps';
 
 const initialCurrentStepId = 0;
 const initialWizardData = [
@@ -422,7 +422,7 @@ class Wizard extends Component {
 
     handleCampaignCreated() {
         this.props.campaignsStore.launchCampaign(this.props.campaignsStore.campaignData.campaignId);
-        this.props.hideWizard(this.props.wizardIdentifier);
+        this.props.campaignsStore._hideWizard(this.props.wizardIdentifier);
         this.props.campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
     }
 
@@ -431,7 +431,7 @@ class Wizard extends Component {
     }
 
     render() {
-        const {campaignsStore, packagesStore, groupsStore, hardwareStore, wizardIdentifier, hideWizard, toggleWizard, minimizedWizards} = this.props;
+        const {campaignsStore, packagesStore, groupsStore, hardwareStore, wizardIdentifier, minimizedWizards} = this.props;
         const currentStep = this.wizardSteps[this.currentStepId];
 
         let wizardMinimized = _.find(minimizedWizards, (wizard, index) => {
@@ -530,7 +530,7 @@ class Wizard extends Component {
                 title={"Add new campaign"}
                 topActions={
                     <div className="top-actions">
-                        <div className="wizard-minimize" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)} id="minimize-wizard">
+                        <div className="wizard-minimize" onClick={(e) => { e.preventDefault(); campaignsStore._toggleWizard(wizardIdentifier, this.wizardData[0].name) }} id="minimize-wizard">
                             <img src="/assets/img/icons/minimize.svg" alt="Icon" />
                         </div>                                
                         <div className={"toggle-fullscreen" + (campaignsStore.fullScreenMode ? " on" : " off")} onClick={this.toggleFullScreen}>
@@ -540,14 +540,14 @@ class Wizard extends Component {
                                 <img src="/assets/img/icons/maximize.svg" alt="Icon" id="enter-fullscreen-wizard" />
                             }
                         </div>
-                        <div className="wizard-close" onClick={hideWizard.bind(this, wizardIdentifier)} id="close-wizard">
+                        <div className="wizard-close" onClick={(e) => { e.preventDefault(); campaignsStore._hideWizard(wizardIdentifier)} } id="close-wizard">
                             <img src="/assets/img/icons/close.svg" alt="Icon" />
                         </div>
                     </div>
                 }
                 content={modalContent}
                 shown={!wizardMinimized}
-                onRequestClose={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)}
+                onRequestClose={() => { campaignsStore._toggleWizard(wizardIdentifier, this.wizardData[0].name) }}
                 className={"dialog-campaign-wizard " + (campaignsStore.fullScreenMode ? "full-screen" : "") + (campaignsStore.transitionsEnabled ? "" : " disable-transitions")}
             />
         );
