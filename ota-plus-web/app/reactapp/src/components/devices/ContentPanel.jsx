@@ -49,8 +49,8 @@ const certificateRolloverData = {
   "expired": "0",
   "stats": {
     "valid": 100,
-    "soon expired": 0,
-    "expired": 0
+    "soon expired": 54,
+    "expired": 54
   }
 };
 
@@ -180,6 +180,7 @@ export default class ContentPanel extends Component {
                                         <div className="dashboard-data">
                                             <Stats 
                                                 data={certificateRolloverData.stats}
+                                                indicatorColors={true}
                                             />
                                         </div>
                                     </div>
@@ -190,6 +191,7 @@ export default class ContentPanel extends Component {
                                         <div className="dashboard-data">
                                             <Stats 
                                                 data={connectionsData.stats}
+                                                indicatorColors={false}
                                             />
                                         </div>
                                     </div>
