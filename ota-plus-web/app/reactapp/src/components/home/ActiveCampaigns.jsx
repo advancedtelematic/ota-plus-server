@@ -11,7 +11,7 @@ class ActiveCampaigns extends Component {
         super(props);        
     }    
     render() {
-        const { campaignsStore, addNewWizard } = this.props;
+        const { campaignsStore } = this.props;
         return (
             <span style={{height: '100%'}}>
                 {campaignsStore.campaignsFetchAsync.isFetching ?
@@ -31,7 +31,7 @@ class ActiveCampaigns extends Component {
                     :
                         <NoItems 
                             itemName={"campaign"}
-                            create={addNewWizard}
+                            create={(e) => { e.preventDefault(); campaignsStore._addNewWizard() }}
                         />
                 }
             </span>

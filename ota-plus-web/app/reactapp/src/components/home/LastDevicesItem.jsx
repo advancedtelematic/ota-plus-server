@@ -29,20 +29,20 @@ class LastDevicesItem extends Component {
         return (
             <Link
                 to={`${link}`} 
-                className="device" 
+                className="home__list-item" 
                 title={device.deviceName}
                 id={"link-devicedetails-" + device.uuid}>
-                <div className="col">
+                <div className="home__body-col">
                     {device.deviceName}
                 </div>
-                <div className="col">
+                <div className="home__body-col">
                     {deviceStatus !== 'Status unknown' ?
                         <span>{lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
                     :
                         <span>Never seen online</span>
                     }
                 </div>
-                <div className="col">
+                <div className="home__body-col">
                     {deviceStatus}
                 </div>
             </Link>

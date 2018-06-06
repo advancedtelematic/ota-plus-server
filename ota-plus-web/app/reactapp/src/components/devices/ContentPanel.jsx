@@ -43,10 +43,28 @@ const connections = {
   "trend": "up"
 };
 
-const statsData = {
-  "provisioning": 1,
-  "check": 88,
-  "update": 11
+const certificateRolloverData = {
+  "rotation": "2 years",
+  "expireSoon": "0",
+  "expired": "0",
+  "stats": {
+    "valid": 100,
+    "soon expired": 0,
+    "expired": 0
+  }
+};
+
+const connectionsData = {
+    "total": "1.601.906",
+    "provisioning": "12.558",
+    "check": "1.388.885",
+    "update": "200.463",
+    "trend": "equal",
+    "stats": {
+      "provisioning": 1,
+      "check": 87,
+      "update": 12
+    }
 };
 
 @observer
@@ -119,7 +137,7 @@ export default class ContentPanel extends Component {
                     {alphaPlusEnabled ?
                         <div className="wrapper-dashboard">
                             <div className="devices-heading devices-heading--margin">
-                                Dashboard
+                                Dashboard (BETA)
                             </div>
                             <div className="dashboard-container">
                                 <div className="top">
@@ -161,7 +179,7 @@ export default class ContentPanel extends Component {
                                         </div>
                                         <div className="dashboard-data">
                                             <Stats 
-                                                data={statsData}
+                                                data={certificateRolloverData.stats}
                                             />
                                         </div>
                                     </div>
@@ -171,7 +189,7 @@ export default class ContentPanel extends Component {
                                         </div>
                                         <div className="dashboard-data">
                                             <Stats 
-                                                data={statsData}
+                                                data={connectionsData.stats}
                                             />
                                         </div>
                                     </div>

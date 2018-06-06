@@ -73,9 +73,9 @@ class SubHeader extends Component {
         }
     }
     render() {
-        const { title } = this.props;
+        const { title, campaignsStore, showCancelCampaignModal } = this.props;
         return (
-            <div className="campaign-name">
+            <div className="statistics__campaign-name">
                 <div className="rename-container">
                     <div onClick={this.enableCampaignRename}
                          ref={(clickableArea) => {this.clickableArea = clickableArea}}
@@ -101,6 +101,15 @@ class SubHeader extends Component {
                         </div>
                     }
                 </div>
+                {campaignsStore.campaign.statistics.status === 'launched' ?
+                    <div className="cancel-campaign">
+                        <button id="campaign-detail-cancel-all" className="delete-button fixed-width" onClick={showCancelCampaignModal}>
+                            Cancel campaign
+                        </button>
+                    </div>
+                :
+                    null
+                }
             </div>
         );
     }

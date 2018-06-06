@@ -19,7 +19,11 @@ class Devices extends Component {
         this.groupsFetchHandler = observe(props.groupsStore, (change) => {
             if(change.name === 'groupsFetchAsync' && !change.object[change.name].isFetching) {
                 if(props.devicesStore.deviceFleets.length) {
-                    props.toggleFleet(_.first(props.devicesStore.deviceFleets));
+                    if(props.groupsStore.activeFleet) {
+                        props.toggleFleet(props.groupsStore.activeFleet);
+                    } else {
+                        props.toggleFleet(_.first(props.devicesStore.deviceFleets), true);
+                    }
                 }
             }
         });
