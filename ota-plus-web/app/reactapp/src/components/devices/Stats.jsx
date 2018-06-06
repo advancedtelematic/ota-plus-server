@@ -10,13 +10,20 @@ class Stats extends Component {
         super(props);
     }
     render() {
-        const { data } = this.props;
+        const { data, indicatorColors } = this.props;
 
-        let availableColors = [
+        const defaultColors = [
             '#00908A',
             '#99E9E3',
             '#F3F3F4'
         ];
+        const customColors = [
+            "#48DAD0",
+            "#FA9D00",
+            "#C41C33"
+        ];
+        const colors = indicatorColors ? customColors : defaultColors;
+
         let colorIndex = -1;
         let stats = [];
         _.each(data, (item, name) => {
@@ -24,8 +31,8 @@ class Stats extends Component {
             stats.push(
                 {
                     value: item,
-                    color: availableColors[colorIndex],
-                    highlight: availableColors[colorIndex],
+                    color: colors[colorIndex],
+                    highlight: colors[colorIndex],
                     label: name
                 }
             );
