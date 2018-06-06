@@ -130,7 +130,8 @@ class ListItemVersion extends Component {
                             name="comment-stick" 
                             rows="5"
                             value={version.comment}
-                            disabled>
+                            disabled
+                            id={"package-" + packageName + "-comment-" + version.id.version.substring(0,8)}>
                         </textarea>
                     </div>
                     {alphaPlusEnabled ?
@@ -210,7 +211,7 @@ class ListItemVersion extends Component {
                         null
                     }
                 </div>
-                <div className="dots" onClick={this.toggleSubmenu}>
+                <div className="dots" onClick={this.toggleSubmenu} id={"package-" + packageName + "-comment-overlay-" + version.id.version.substring(0,8)}>
                     <span></span>
                     <span></span>
                     <span></span>
