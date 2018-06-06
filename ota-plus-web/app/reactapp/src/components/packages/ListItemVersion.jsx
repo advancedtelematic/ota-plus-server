@@ -125,7 +125,13 @@ class ListItemVersion extends Component {
                         <div className="c-package__heading">
                             Comment
                         </div>
-                        {version.comment}
+                        <textarea 
+                            className="c-package__comment-value"
+                            name="comment-stick" 
+                            rows="5"
+                            value={version.comment}
+                            disabled>
+                        </textarea>
                     </div>
                     {alphaPlusEnabled ?
                         <div className="c-package__manager">
