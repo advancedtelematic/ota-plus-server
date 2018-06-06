@@ -135,7 +135,7 @@ class Preparation extends Component {
     }
 
     doorOpen() {
-        let container = document.getElementsByClassName('preparation-container')[0];
+        let container = document.getElementsByClassName('preparation')[0];
         if (container && !_.includes(container.classList, 'door-open')) {
             this.props.setSystemReady();
         }
@@ -162,165 +162,140 @@ class Preparation extends Component {
         }
         return (
             <FadeAnimation>
-                <div className="preparation-container">
-                    <div className="wrapper-center wrapper-responsive">
-                        <div className="logo">
-                            <img src="/assets/img/HERE_pos.png" alt="HERE"/>
+                <div className="preparation">
+                    <div className="wrapper-center">
+                        <img className="preparation__logo-image" src="/assets/img/HERE_pos.png" alt="HERE"/>
+                        <div className="preparation__title">
+                            Setting up your account:
                         </div>
-                        <div>
-                            <div className="title">
-                                Setting up your account:
-                            </div>
-                            <ul className="sequence-list">
-                                {_.map(this.preparationSequence, (step, index) => {
-                                    return (
-                                        <li key={'sequence-step-' + index}>
-                                            <div className="stepnum">
-                                                {step.nr === 1 && uiUserProfileMenu ?
-                                                    <span className="stepnum__item">
-                                                        {userStore.userFetchAsync.isFetching ?
-                                                            <span className="pending">
-                                                                <Loader />
-                                                            </span>
-                                                        : this.userProfile ?
-                                                            <span>
-                                                                <img src="/assets/img/icons/green_tick.svg" alt="pass"/>
-                                                            </span>
-                                                        : finished ?
-                                                            <span>
-                                                                <img src="/assets/img/icons/red_cross.svg" alt="fail"/>
-                                                            </span> 
-                                                        : 
-                                                            <span className="pending">
-                                                                <Loader />
-                                                            </span>
-                                                        }
-                                                        <span className="feature-name">
-                                                            {step.name}
-                                                        </span>
+                        <ul className="preparation__list">
+                            {_.map(this.preparationSequence, (step, index) => {
+                                return (
+                                    <li className="preparation__item" key={index}>
+                                        {step.nr === 1 && uiUserProfileMenu ?
+                                            <span className="preparation__item-inner">
+                                                {userStore.userFetchAsync.isFetching ?
+                                                    <span className="preparation__item-pending">
+                                                        <Loader />
                                                     </span>
-                                                : step.nr === 2 ?
-                                                    <span className="stepnum__item">
-                                                        {provisioningStore.namespaceSetupFetchAsync.isFetching || provisioningStore.provisioningActivateAsync.isFetching ?
-                                                            <span className="pending">
-                                                                <Loader />
-                                                            </span>
-                                                        : this.activatedProvisioning ?
-                                                            <span>
-                                                                <img src="/assets/img/icons/green_tick.svg" alt="pass"/>
-                                                            </span>
-                                                        : finished ?
-                                                            <span>
-                                                                <img src="/assets/img/icons/red_cross.svg" alt="fail"/>
-                                                            </span>
-                                                        :
-                                                            <span className="pending">
-                                                                <Loader />
-                                                            </span>
-                                                        }
-                                                        <span className="feature-name">
-                                                            {step.name}
-                                                        </span>
+                                                : this.userProfile ?
+                                                    <img className="preparation__item-image" src="/assets/img/icons/green_tick.svg" alt="pass"/>
+                                                : finished ?
+                                                    <img className="preparation__item-image" src="/assets/img/icons/red_cross.svg" alt="fail"/>
+                                                : 
+                                                    <span className="preparation__item-pending">
+                                                        <Loader />
                                                     </span>
-                                                : step.nr === 3 ?
-                                                    <span className="stepnum__item">
-                                                        {provisioningStore.namespaceSetupFetchAsync.isFetching || !this.checkedCreatedTufCalled ?
-                                                            <span className="pending">
-                                                                <Loader />
-                                                            </span>
-                                                        : this.createdTuf ?
-                                                            <span>
-                                                                <img src="/assets/img/icons/green_tick.svg" alt="pass"/>
-                                                            </span>
-                                                        : finished ?
-                                                            <span>
-                                                                <img src="/assets/img/icons/red_cross.svg" alt="fail"/>
-                                                            </span>
-                                                        : 
-                                                            <span className="pending">
-                                                                <Loader />
-                                                            </span>
-                                                        }
-                                                        <span className="feature-name">
-                                                            {step.name}
-                                                        </span>
+                                                }
+                                                <span className="preparation__item-name">
+                                                    {step.name}
+                                                </span>
+                                            </span>
+                                        : step.nr === 2 ?
+                                            <span className="preparation__item-inner">
+                                                {provisioningStore.namespaceSetupFetchAsync.isFetching || provisioningStore.provisioningActivateAsync.isFetching ?
+                                                    <span className="preparation__item-pending">
+                                                        <Loader />
                                                     </span>
-                                                : step.nr === 4 ?
-                                                    <span className="stepnum__item">
-                                                        {provisioningStore.namespaceSetupFetchAsync.isFetching || !this.checkedCreatedDirectorCalled ?
-                                                            <span className="pending">
-                                                                <Loader />
-                                                            </span>
-                                                        : this.createdDirector ?
-                                                            <span>
-                                                                <img src="/assets/img/icons/green_tick.svg" alt="pass"/>
-                                                            </span>
-                                                        : finished ?
-                                                            <span>
-                                                                <img src="/assets/img/icons/red_cross.svg" alt="fail"/>
-                                                            </span>
-                                                        :
-                                                            <span className="pending">
-                                                                <Loader />
-                                                            </span>
-                                                        }
-                                                        <span className="feature-name">
-                                                            {step.name}
-                                                        </span>
-                                                    </span>
-                                                : step.nr === 5 ?
-                                                    <span className="stepnum__item">
-                                                        {featuresStore.featuresFetchAsync.isFetching ?
-                                                            <span className="pending">
-                                                                <Loader />
-                                                            </span>
-                                                        : this.createdTreehub ?
-                                                            <span>
-                                                                <img src="/assets/img/icons/green_tick.svg" alt="pass"/>
-                                                            </span>
-                                                        : finished ?
-                                                            <span>
-                                                                <img src="/assets/img/icons/red_cross.svg" alt="fail"/>
-                                                            </span>
-                                                        :
-                                                            <span className="pending">
-                                                                <Loader />
-                                                            </span> 
-                                                        }
-                                                        <span className="feature-name">
-                                                            {step.name}
-                                                        </span>
-                                                    </span>
+                                                : this.activatedProvisioning ?
+                                                    <img className="preparation__item-image" src="/assets/img/icons/green_tick.svg" alt="pass"/>
+                                                : finished ?
+                                                    <img className="preparation__item-image" src="/assets/img/icons/red_cross.svg" alt="fail"/>
                                                 :
-                                                    null
-                                                }                                                
-                                            </div>
-                                        </li>
-                                    );
-                                }, this)}
-                            </ul>
-                            {!finished ?
-                                <div className="setting-up">
+                                                    <span className="preparation__item-pending">
+                                                        <Loader />
+                                                    </span>
+                                                }
+                                                <span className="preparation__item-name">
+                                                    {step.name}
+                                                </span>
+                                            </span>
+                                        : step.nr === 3 ?
+                                            <span className="preparation__item-inner">
+                                                {provisioningStore.namespaceSetupFetchAsync.isFetching || !this.checkedCreatedTufCalled ?
+                                                    <span className="preparation__item-pending">
+                                                        <Loader />
+                                                    </span>
+                                                : this.createdTuf ?
+                                                    <img className="preparation__item-image" src="/assets/img/icons/green_tick.svg" alt="pass"/>
+                                                : finished ?
+                                                    <img className="preparation__item-image" src="/assets/img/icons/red_cross.svg" alt="fail"/>
+                                                : 
+                                                    <span className="preparation__item-pending">
+                                                        <Loader />
+                                                    </span>
+                                                }
+                                                <span className="preparation__item-name">
+                                                    {step.name}
+                                                </span>
+                                            </span>
+                                        : step.nr === 4 ?
+                                            <span className="preparation__item-inner">
+                                                {provisioningStore.namespaceSetupFetchAsync.isFetching || !this.checkedCreatedDirectorCalled ?
+                                                    <span className="preparation__item-pending">
+                                                        <Loader />
+                                                    </span>
+                                                : this.createdDirector ?
+                                                    <img className="preparation__item-image" src="/assets/img/icons/green_tick.svg" alt="pass"/>
+                                                : finished ?
+                                                    <img className="preparation__item-image" src="/assets/img/icons/red_cross.svg" alt="fail"/>
+                                                :
+                                                    <span className="preparation__item-pending">
+                                                        <Loader />
+                                                    </span>
+                                                }
+                                                <span className="preparation__item-name">
+                                                    {step.name}
+                                                </span>
+                                            </span>
+                                        : step.nr === 5 ?
+                                            <span className="preparation__item-inner">
+                                                {featuresStore.featuresFetchAsync.isFetching ?
+                                                    <span className="preparation__item-pending">
+                                                        <Loader />
+                                                    </span>
+                                                : this.createdTreehub ?
+                                                    <img className="preparation__item-image" src="/assets/img/icons/green_tick.svg" alt="pass"/>
+                                                : finished ?
+                                                    <img className="preparation__item-image" src="/assets/img/icons/red_cross.svg" alt="fail"/>
+                                                :
+                                                    <span className="preparation__item-pending">
+                                                        <Loader />
+                                                    </span> 
+                                                }
+                                                <span className="preparation__item-name">
+                                                    {step.name}
+                                                </span>
+                                            </span>
+                                        :
+                                            null
+                                        }
+                                    </li>
+                                );
+                            }, this)}
+                        </ul>
+                        {!finished ?
+                            <div className="preparation__setting">
+                                <div className="preparation__setting-loader">
                                     <Loader />
-                                    <div className="text">
-                                        Setting up...
+                                </div>
+                                <div className="preparation__setting-title">
+                                    Setting up...
+                                </div>
+                            </div>
+                            : allIsPassed ?
+                                <div className="preparation__setting">
+                                    <div className="preparation__setting-title">
+                                        Everything has been set up.
                                     </div>
                                 </div>
-                                : allIsPassed ?
-                                    <div className="setting-up">
-                                        <div className="text">
-                                            Everything has been set up.
-                                        </div>
+                                :
+                                <div className="preparation__setting">
+                                    <div className="preparation__setting-title">
+                                        Something went wrong!
                                     </div>
-                                    :
-                                    <div className="setting-up">
-                                        <div className="text">
-                                            Something went wrong!
-                                        </div>
-                                    </div>
-                            }
-
-                        </div>
+                                </div>
+                        }
                     </div>
                 </div>
             </FadeAnimation>

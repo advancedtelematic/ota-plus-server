@@ -87,7 +87,7 @@ class Campaigns extends Component {
         this.props.campaignsStore._prepareCampaigns(filter, this.props.campaignsStore.campaignsSort);
     }
     render() {
-        const { campaignsStore, packagesStore, groupsStore, hardwareStore, devicesStore, addNewWizard, highlightedCampaign } = this.props;
+        const { campaignsStore, packagesStore, groupsStore, hardwareStore, devicesStore, highlightedCampaign } = this.props;
         return (
             <span>
                 {campaignsStore.campaignsFetchAsync.isFetching ?
@@ -98,7 +98,6 @@ class Campaigns extends Component {
                     <CampaignsList
                         campaignsStore={campaignsStore}
                         groupsStore={groupsStore}
-                        addNewWizard={addNewWizard}
                         showWizard={this.showWizard}
                         highlightedCampaign={highlightedCampaign}
                         showCancelCampaignModal={this.showCancelCampaignModal}
@@ -117,7 +116,7 @@ class Campaigns extends Component {
                                 You haven't created any update campaigns yet.
                             </div>
                             <div>
-                                <a href="#" className="add-button light" id="add-new-campaign" onClick={addNewWizard.bind(this, null)}>
+                                <a href="#" className="add-button light" id="add-new-campaign" onClick={(e) => { e.preventDefault(); campaignsStore._addNewWizard() }}>
                                     <span>
                                         +
                                     </span>

@@ -21,7 +21,7 @@ class Campaigns extends Component {
         this.props.groupsStore._reset();
     }
     render() {
-        const { t, campaignsStore, packagesStore, groupsStore, hardwareStore, devicesStore, addNewWizard } = this.props;
+        const { t, campaignsStore, packagesStore, groupsStore, hardwareStore, devicesStore } = this.props;
         return (
             <FadeAnimation>
                 <MetaData 
@@ -32,7 +32,6 @@ class Campaigns extends Component {
                         groupsStore={groupsStore}
                         hardwareStore={hardwareStore}
                         devicesStore={devicesStore}
-                        addNewWizard={addNewWizard}
                         highlightedCampaign={this.props.params.campaignName}
                     />
                 </MetaData>

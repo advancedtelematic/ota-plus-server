@@ -27,7 +27,7 @@ class List extends Component {
         this.refs.list.removeEventListener('scroll', this.listScroll);
     }
     generateHeadersPositions() {
-        const headers = this.refs.list.querySelectorAll('.wrapper-list .section-header');
+        const headers = this.refs.list.querySelectorAll('.section-header');
         const wrapperPosition = this.refs.list.getBoundingClientRect();
         let positions = [];
         _.each(headers, (header) => {
@@ -38,7 +38,7 @@ class List extends Component {
     }
 
     listScroll() {
-        const headers = this.refs.list.querySelectorAll('.wrapper-list .section-header');
+        const headers = this.refs.list.querySelectorAll('.section-header');
         if(this.refs.list) {
             const headersPositions = this.generateHeadersPositions();
             let scrollTop = this.refs.list.scrollTop;
@@ -57,45 +57,41 @@ class List extends Component {
         }
     }
     render() {
-        const { campaignsStore, groupsStore, addNewWizard, highlightedCampaign, showCancelCampaignModal, showCancelGroupModal, showDependenciesModal, expandedCampaignName, toggleCampaign } = this.props;
+        const { campaignsStore, groupsStore, highlightedCampaign, showCancelCampaignModal, showCancelGroupModal, showDependenciesModal, expandedCampaignName, toggleCampaign } = this.props;
         return (
-            <span>
-                <span className="content-container" ref="list">
-                    {campaignsStore.preparedCampaigns.length ?
-                        <span>
-                            <div className="fake-header-helper" style={{top: this.fakeHeaderTopPosition + 10}}>
-                                <a href="#" className="add-button grey-button" id="add-new-campaign" onClick={addNewWizard.bind(this, null)}>
-                                    <span>
-                                        +
-                                    </span>
-                                    <span>
-                                        Add campaign
-                                    </span>
-                                </a>
+            <div className="campaigns" ref="list">
+                {campaignsStore.preparedCampaigns.length ?
+                    <span>
+                        <div className="campaigns__fake-header-link" style={{top: this.fakeHeaderTopPosition + 10}}>
+                            <a href="#" className="add-button grey-button" id="add-new-campaign" onClick={(e) => { e.preventDefault(); campaignsStore._addNewWizard() }}>
+                                <span>
+                                    +
+                                </span>
+                                <span>
+                                    Add campaign
+                                </span>
+                            </a>
+                        </div>
+                        {this.fakeHeaderLetter.length ?
+                            <div className="campaigns__fake-header" style={{top: this.fakeHeaderTopPosition}} dangerouslySetInnerHTML={{__html: this.fakeHeaderLetter}}>
                             </div>
-                            {this.fakeHeaderLetter.length ?
-                                <div className="fake-header" style={{top: this.fakeHeaderTopPosition}} dangerouslySetInnerHTML={{__html: this.fakeHeaderLetter}}>
-                                </div>
-                            :
-                                null
-                            }
-                            <div className="wrapper-list">
-                                <CampaignsTufList
-                                    campaignsStore={campaignsStore}
-                                    groupsStore={groupsStore}
-                                    highlightedCampaign={highlightedCampaign}
-                                    showCancelCampaignModal={showCancelCampaignModal}
-                                    showDependenciesModal={showDependenciesModal}
-                                    expandedCampaignName={expandedCampaignName}
-                                    toggleCampaign={toggleCampaign}
-                                />
-                            </div>
-                        </span>
-                    :
-                        null
-                    }
-                </span>
-            </span>
+                        :
+                            null
+                        }
+                        <CampaignsTufList
+                            campaignsStore={campaignsStore}
+                            groupsStore={groupsStore}
+                            highlightedCampaign={highlightedCampaign}
+                            showCancelCampaignModal={showCancelCampaignModal}
+                            showDependenciesModal={showDependenciesModal}
+                            expandedCampaignName={expandedCampaignName}
+                            toggleCampaign={toggleCampaign}
+                        />
+                    </span>
+                :
+                    null
+                }
+            </div>
         );
     }
 }

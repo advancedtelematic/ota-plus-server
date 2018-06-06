@@ -27,6 +27,7 @@ import {
     handleAsyncSuccess, 
     handleAsyncError 
 } from '../utils/Common';
+import Wizard from '../components/campaigns/Wizard';
 import _ from 'underscore';
 
 export default class CampaignsStore {
@@ -45,6 +46,8 @@ export default class CampaignsStore {
     @observable campaignsMtuCreateAsync = {};
     
     @observable campaigns = [];
+    @observable wizards = [];
+    @observable minimizedWizards = [];
     @observable preparedCampaigns = [];
     @observable overallCampaignsCount = null;
     @observable campaignsFilter = '';
@@ -67,6 +70,43 @@ export default class CampaignsStore {
         resetAsync(this.campaignsCancelAsync);
         resetAsync(this.campaignsCancelRequestAsync);
         resetAsync(this.campaignsMtuCreateAsync);
+    }
+
+    _addNewWizard() {
+        this.wizards.push({
+            id: this.minimizedWizards.length
+        });
+    }
+
+    _hideWizard(id) {
+        _.each(this.wizards, (wizard, index) => {
+            if(wizard && wizard.id == id) {
+                this.wizards.splice(index, 1);
+            }
+        })
+        this._resetFullScreen();
+    }
+
+    _toggleWizard(id, name) {
+        let minimizedWizard = {
+            id: id,
+            name: name
+        };
+        let alreadyMinimized = _.find(this.minimizedWizards, {id: id});
+        if(alreadyMinimized) {
+            this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, { id: id }), 1);
+            this.wizards.push({
+                id: id
+            });
+        }
+        else {
+            this.minimizedWizards.push(minimizedWizard);
+            _.each(this.wizards, (wizard, index) => {
+                if(wizard && wizard.id == id) {
+                    this.wizards.splice(index, 1);
+                }
+            })
+        }
     }
 
     createMultiTargetUpdate(data) {

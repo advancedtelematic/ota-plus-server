@@ -31,7 +31,6 @@ class Home extends Component {
             provisioningStore,
             featuresStore,
             setSystemReady,
-            addNewWizard,
             uiUserProfileMenu,
             sanityCheckCompleted,
             setTermsAccepted,
@@ -49,7 +48,6 @@ class Home extends Component {
                                 packagesStore={packagesStore}
                                 campaignsStore={campaignsStore}
                                 hardwareStore={hardwareStore}
-                                addNewWizard={addNewWizard}
                             />
                         </MetaData>
                         :
