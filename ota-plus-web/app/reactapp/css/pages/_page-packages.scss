@@ -179,6 +179,14 @@
                 padding: 20px 25px;
             }
 
+            &__comment-value {
+                border: 0;
+                resize: none;
+                cursor: default;
+                background-color: transparent;
+                width: 100%;
+            }
+
             &__show-dependencies {
                 flex-basis: 50%;
             }
