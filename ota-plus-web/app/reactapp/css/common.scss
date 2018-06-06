@@ -135,6 +135,7 @@
     font-weight: 300;
     border: 1px solid rgba(0, 0, 0, 0);
     transition: all .4s ease;
+    resize: none;
 
     &--hide-caret {
       color: transparent;
