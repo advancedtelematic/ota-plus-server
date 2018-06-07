@@ -33,16 +33,16 @@ class ListItemArtificial extends Component {
                 <div 
                     title={group.friendlyName}
                     id={group.identifier}
-                    className={"group-btn artificial" + (isDND ? " droppable" : "") + (isSelected ? " selected" : "") + (isOver ? " active" : "")}
+                    className={"groups-panel__item groups-panel__item--artificial" + (isSelected ? " groups-panel__item--selected" : "") + (isOver ? " groups-panel__item--active" : "")}
                     onClick={() => {
                         selectGroup({type: 'artificial', name: group.name, id: group.id});
                     }}
                     key={group.name}>
-                        <div className="desc">
-                            <div className="title">
+                        <div className="groups-panel__item-desc">
+                            <div className="groups-panel__item-title">
                                 {group.friendlyName}
                             </div>
-                            <div className="subtitle" id={"group-" + group.name + "-devices"}>
+                            <div className="groups-panel__item-subtitle" id={"group-" + group.name + "-devices"}>
                                 {t('common.deviceWithCount', {count: deviceCount})}
                             </div>
                         </div>

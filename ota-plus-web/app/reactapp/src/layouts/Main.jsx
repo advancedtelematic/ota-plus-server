@@ -183,17 +183,7 @@ class Main extends Component {
                         toggleFleet={this.toggleFleet}
                     />
                 :
-                    pageId === 'page-policy' ?
-                        <FadeAnimation>
-                            <nav className="navbar navbar-inverse">
-                                <div className="container">
-                                    <div className="navbar-header">
-                                        <div className="navbar-brand" id="logo"/>
-                                    </div>
-                                </div>
-                            </nav>
-                        </FadeAnimation>
-                    : null
+                    null
                 }
                 <div id={pageId} style={{
                     height: this.featuresStore.alphaPlusEnabled && (pageId === 'page-packages' || pageId === 'page-devices') ? 'calc(100vh - 100px)' : 'calc(100vh - 50px)',
@@ -248,14 +238,14 @@ class Main extends Component {
                             />
                         );
                     })}
-                    <div className="minimized-wizards-container">
+                    <div className="minimized">
                         {this.uploadBoxMinimized ?
-                            <div className="minimized-box" key={this.packagesStore.packagesUploading.length}>
-                                <div className="name">
+                            <div className="minimized__box">
+                                <div className="minimized__name">
                                     Uploading {this.props.t('common.packageWithCount', {count: this.packagesStore.packagesUploading.length})}
                                 </div>
-                                <div className="actions">
-                                    <a href="#" id="maximize-upload-box" className="box-toggle box-maximize" onClick={this.toggleUploadBoxMode.bind(this)}>
+                                <div className="minimized__actions">
+                                    <a href="#" id="maximize-upload-box" title="Maximize upload box" onClick={this.toggleUploadBoxMode.bind(this)}>
                                         <img src="/assets/img/icons/reopen.svg" alt="Icon" />
                                     </a>
                                 </div>
@@ -265,8 +255,8 @@ class Main extends Component {
                         }
                         {_.map(this.campaignsStore.minimizedWizards, (wizard, index) => {
                             return (
-                                <div className="minimized-box" key={index}>
-                                    <div className="name">
+                                <div className="minimized__box" key={index}>
+                                    <div className="minimized__name">
                                         {wizard.name ?
                                             <span>
                                                 {wizard.name}
@@ -277,8 +267,8 @@ class Main extends Component {
                                             </span>
                                         }
                                     </div>
-                                    <div className="actions">
-                                        <a href="#" id="maximize-wizard" className="box-toggle box-maximize" title="Maximize wizard" onClick={(e) => { e.preventDefault(); this.campaignsStore._toggleWizard(wizard.id, wizard.name) }}>
+                                    <div className="minimized__actions">
+                                        <a href="#" id="maximize-wizard" title="Maximize wizard" onClick={(e) => { e.preventDefault(); this.campaignsStore._toggleWizard(wizard.id, wizard.name) }}>
                                             <img src="/assets/img/icons/reopen.svg" alt="Icon" />
                                         </a>
                                     </div>

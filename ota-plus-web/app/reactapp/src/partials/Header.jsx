@@ -11,7 +11,7 @@ const Header = (props) => {
                     </a>
                 : null}
                 <div className="icon">
-                    {device ? <div className={"status status-" + device.deviceStatus} id={"status=" + device.deviceStatus}></div> : ''}
+                    {device ? <div className={"device-status device-status--" + device.deviceStatus} id={"status-" + device.deviceStatus}></div> : ''}
                 </div>
                 <div className="text">
                     <div className="title">{title}</div>
