@@ -28,7 +28,8 @@ $(function () {
       forgotPasswordSubmitLabel: "Send",
       signUpLabel: 'Not registered yet? Sign up here.',
       signUpSubmitLabel: 'Start now!'
-    }
+    },
+    signUpLink: $('#auth0-sign-up-url').val()
   }
 
   var lock = new Auth0Lock($('#auth0-client-id').val(), $('#auth0-domain').val(), options);
