@@ -430,6 +430,7 @@
         .properties-panel {
             width: 35%;
             height: calc(100% - 100px);
+            min-height: 615px;
             float: left;
             z-index: 119;
             position: relative;
@@ -470,6 +471,8 @@
                     padding: 35px;
                     height: calc(100% - 30px);
                     position: relative;
+                    display: flex;
+                    flex-direction: column;
 
                     .heading {
                         margin-bottom: 15px;
@@ -511,6 +514,7 @@
 
                     .data {
                         color: $device-properties-text;
+                        margin-bottom: 15px;
 
                         span:not(.app-label) {
                             line-height: 26px;
@@ -534,11 +538,34 @@
                         }
                     }
 
+                    .comment {
+                        flex: auto;
+                        display: flex;
+                        flex-direction: column;
+                    }
+
+                    .comment-title {
+                        color: $device-hardware-header;
+                        font-size: 12px;
+                        font-weight: 500;
+                        margin-bottom: 5px;
+                    }
+
+                    .comment-value {
+                        border: 0;
+                        border-top: 1px solid $add-button-grey;
+                        border-bottom: 1px solid $add-button-grey;
+                        resize: none;
+                        cursor: default;
+                        background-color: transparent;
+                        width: 100%;
+                        font-size: 12px;
+                        padding: 5px 0;
+                        flex: auto;
+                    }
+
                     .install {
-                        position: absolute;
-                        bottom: 35px;
-                        right: 35px;
-                        left: 35px;
+                        margin-top: 35px;
 
                         .btn-primary {
                             width: 100%;
