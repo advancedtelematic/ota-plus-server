@@ -143,33 +143,36 @@ class EditProfile extends Component {
                                 }
                             </div>
                             <div className="column name" id="user-name">
-
-                                <div className="rename-container">
+                                <div className="rename-box">
                                     <div onClick={this.enableRename}
                                          ref={(clickableArea) => {this.clickableArea = clickableArea}}
-                                         className="clickable-area"
-                                         style={{width: '85%', height: '51px', position: 'absolute'}}/>
+                                         className="rename-box__clickable-area">
+                                     </div>
 
-                                    <input type="text"
-                                       ref={(input) => {this.renameInput = input}}
-                                       disabled
-                                       onKeyPress={this.keyPressed}
-                                       value={this.newName} onChange={this.userTypesName} />
+                                    <input 
+                                        className="rename-box__input rename-box__input--black"
+                                        type="text"
+                                        ref={(input) => {this.renameInput = input}}
+                                        disabled
+                                        onKeyPress={this.keyPressed}
+                                        value={this.newName} onChange={this.userTypesName}
+                                    />
 
-                                    {this.renameDisabled ?
-                                        <img src="/assets/img/icons/black/edit_pencil.svg" className="edit" alt="Icon" style={{cursor: 'auto'}} />
-                                    :
-                                        <div className="icons">
-                                            {this.newNameLength ?
-                                                <img src="/assets/img/icons/black/tick.svg" className="rename" alt="Icon" onClick={this.rename} />
-                                            :
-                                                null
-                                            }
-                                            <img src="/assets/img/icons/black/cancel-thin.svg" alt="Icon" className="cancel" onClick={this.cancelRename} />
-                                        </div>
-                                    }     
+                                    <div className="rename-box__actions rename-box__actions--big">
+                                        {this.renameDisabled ?
+                                            <img src="/assets/img/icons/black/edit_pencil.svg" className="rename-box__icon rename-box__icon--edit edit" alt="Icon" />
+                                        :
+                                            <span className="rename-box__user-actions">
+                                                {this.newNameLength ?
+                                                    <img src="/assets/img/icons/black/tick.svg"className="rename-box__icon rename-box__icon--save save" alt="Icon" onClick={this.rename} />
+                                                :
+                                                    null
+                                                }
+                                                <img src="/assets/img/icons/black/cancel-thin.svg" alt="Icon" className="rename-box__icon rename-box__icon--cancel cancel" onClick={this.cancelRename} />
+                                            </span>
+                                        }     
+                                    </div>
                                 </div>
-      
                             </div>
                             <div className="column email" id="user-email">
                                 {userStore.user.email}
