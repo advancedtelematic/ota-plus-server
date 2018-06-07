@@ -11,6 +11,28 @@
 
 $font: 'akkurat';
 
+.device-status {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 18px;
+    height: 18px;
+    background: url($device-status-unknown) no-repeat;
+    background-size: cover;
+
+    &--Error {
+        background-image: url($device-status-error);
+    }
+
+    &--Outdated {
+        background-image: url($device-status-pending);
+    }
+
+    &--UpToDate {
+        background-image: url($device-status-success);
+    }
+}
+
 .doughnut-wrapper {
     background: #fff;
     border-radius: 50%;
@@ -428,50 +450,7 @@ input {
 
     .container {
         background: $devices-groups-bg;
-    }
-
-    .second-navigation {
-        background-color: #272D37;
-        height: 50px;
-
-        .links {
-            height:100%;
-            padding-left: 110px;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            li {
-                font-size: 16px;
-                font-weight: 300;
-                color: #9FA2A6;
-                padding: 5px 25px 0;
-                height: 100%;
-                display: flex;
-                align-items: center;
-                cursor: pointer;
-                border-bottom: 4px solid transparent;
-                margin-left:37px;
-                @include transition;
-
-                &:first-child {
-                    padding: 5px 20px 0;
-                    margin-left: 0;
-                }
-
-                &:hover, &.active {
-                    border-bottom: 4px solid $color-mint;
-                    color: #fff;
-                }
-            }
-
-            .fleet-icon {
-                background-size: 100% 100%;
-                background-repeat: no-repeat;
-                width: 50px; 
-                height: 50px;
-            }
-        }
-    }
+    }    
 
     .alert {
         width: 400px;
@@ -658,6 +637,50 @@ input {
                 }
             }
         }
+    }
+}
+
+.second-navigation {
+    background-color: #272D37;
+    height: 50px;
+
+    &__links {
+        height:100%;
+        padding-left: 125px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    &__link {
+        font-size: 16px;
+        font-weight: 300;
+        color: #9FA2A6;
+        padding: 5px 25px 0;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        border-bottom: 4px solid transparent;
+        margin-left:37px;
+        @include transition;
+
+        &:first-child {
+            padding: 5px 20px 0;
+            margin-left: 0;
+        }
+
+        &:hover, &--active {
+            border-bottom: 4px solid $color-mint;
+            color: #fff;
+        }
+    }
+
+    &__icon {
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        width: 50px; 
+        height: 50px;
     }
 }
 
@@ -1332,88 +1355,6 @@ input {
     padding: 0 25px;
 }
 
-.common-box {
-    color: #fff;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
-    background: $devices-groups-bg;
-    height: 100px;
-    transition: background-color 0.2s ease-in;
-    margin: 0 5px 5px 0;
-    display: flex;
-    align-items: center;
-    padding: 0 15px;
-    width: calc((100% / 4) - 5px);
-
-    @media(max-width: 1600px) {
-        width: calc((100% / 3) - 5px);
-    }
-
-    @media(min-width: 1601px) and (max-width: 1920px) {
-        width: calc((100% / 4) - 5px);
-    }
-
-    @media(min-width: 1921px) {
-        width: calc((100% / 5) - 5px);
-    }
-
-    &:hover {
-        background-color: rgba(255, 255, 255, .15);
-    }
-
-    .icon {
-        text-align: center;
-        background-color: #fff;
-        background-repeat: no-repeat;
-        background-size: cover;
-        width: 60px;
-        height: 60px;
-        border-radius: 4px;
-        display: inline-block;
-        vertical-align: middle;
-    }
-
-    .desc {
-        text-align: left;
-        width: 62%;
-        margin-left: 15px;
-        transition: all 0.2s ease-in;
-
-        .title {
-            font-size: 14px;
-            text-transform: capitalize;
-            @include textoverflowEllipsis;
-        }
-
-        .subtitle {
-            font-size: 10px;
-            @include textoverflowEllipsis;
-            color: rgba(255,255,255,0.5);
-        }
-    }
-}
-
-.device-status {
-    background: url($device-status-unknown) no-repeat;
-    width: 25px;
-    height: 25px;
-    background-size: cover;
-    margin: -2px 5px 0 0;
-    display: inline-block;
-    vertical-align: middle;
-
-    &.device-status-Error {
-        background-image: url($device-status-error);
-    }
-
-    &.device-status-Outdated {
-        background-image: url($device-status-pending);
-    }
-
-    &.device-status-UpToDate {
-        background-image: url($device-status-success);
-    }
-}
-
 .ios-list { //TODO: Remove redundant styles
     background: #fff;
     height: calc(100%);
@@ -1534,13 +1475,13 @@ input {
     }
 }
 
-.minimized-wizards-container {
+.minimized {
     position: absolute;
     bottom: 0;
     right: 0;
     z-index: 9999;
 
-    .minimized-box {
+    &__box {
         color: #fff;
         font-size: 18px;
         background: #4B5151;

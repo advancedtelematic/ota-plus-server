@@ -39,7 +39,7 @@ class Stats extends Component {
         });
         const legend = _.map(stats, (stat) => {
             return (
-                <li key={"color-" + stat.label + "-" + stat.color}>
+                <li className="devices-panel__stats-item" key={"color-" + stat.label + "-" + stat.color}>
                     <div className="title-box">{stat.label}</div>
                     <div className="color-box" style={{backgroundColor: stat.color}}></div> 
                 </li>
@@ -47,14 +47,14 @@ class Stats extends Component {
         });
         const values = _.map(stats, (stat) => {
             return (
-                <li key={"color-" + stat.label + "-" + stat.color}>
+                <li className="devices-panel__stats-item" key={"color-" + stat.label + "-" + stat.color}>
                     <div className="title-box">{stat.label}</div>
                     <div>{stat.value}</div>
                 </li>
             );
         });
         const content = (
-            <div className="devices-chart-wrapper">
+            <div className="devices-panel__chart-wrapper">
                 <Doughnut 
                     data={stats} 
                     width="100" 
@@ -66,10 +66,10 @@ class Stats extends Component {
                     }}
                 />
                 <div>
-                    <ul className="value-legend">
+                    <ul className="devices-panel__legend-values">
                         {values}
                     </ul>
-                    <ul className="color-legend">
+                    <ul className="devices-panel__legend-colors">
                         {legend}
                     </ul>
                 </div>
