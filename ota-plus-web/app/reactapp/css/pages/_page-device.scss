@@ -20,63 +20,10 @@
         .text {
             margin-left: 15px;
 
-            .title {
-
-                .device-name {
-                    position: relative;
-                    display: block!important;
-                    width: 255px;
-                }
-
-                input {
-                    width: 100%;
-                    background-color: rgba(0,0,0,0);
-                    border: none;
-                    outline: none;
-                    -webkit-appearance: none;
-                    -moz-appearance: none;
-                    color: #fff;
-                    appearance: none;
-                    transition: all 0.3s ease;
-                    padding: 10px 45px 10px 10px;
-                    text-overflow: ellipsis;
-                    font-size: 16px;
-                    
-                    &:focus {
-                        outline: auto;
-                        background-color: rgba(0,0,0,0.2);
-                    }                    
-                }
-                img {
-                    width: 15px;
-                    transition: opacity 0.3s ease;
-                    cursor: pointer;
-
-                    &.edit {
-                        opacity: 0;
-                        position: absolute;
-                        right: 15px;
-                        top: 13px;
-                    }
-                }
-                .icons {
-                    position: absolute;
-                    right: 5px;
-                    top: 12px;
-                    z-index: 10;
-                    img {
-                        margin-right: 5px;
-                        width: 12px;
-                    }
-                }
-                &:hover {
-                    img {
-                        opacity: 1;
-                    }
-                    input {
-                        background-color: rgba(255,255,255,.2);
-                    }
-                }
+            .device-name {
+                display: block!important;
+                width: 255px;
+                font-size: 16px;
             }
         }
 
