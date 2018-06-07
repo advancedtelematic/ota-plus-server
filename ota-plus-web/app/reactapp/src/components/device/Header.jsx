@@ -123,29 +123,37 @@ class Header extends Component {
                         {!devicesStore.devicesOneFetchAsync.isFetching ?
                             <div id="device-name" className="device-name">
 
-                                <div onClick={this.enableDeviceRename}
-                                    ref={(clickableArea) => {this.clickableArea = clickableArea}}
-                                    className="clickable-area"
-                                    style={{width: '85%', height: '50px', position: 'absolute'}}/>
-
-                                <input type="text"
-                                ref={(input) => {this.deviceNameInput = input}}
-                                disabled
-                                onKeyPress={this.keyPressed}
-                                value={this.newDeviceName} onChange={this.userTypesName} />
-
-                                {this.renameDisabled ?
-                                    <img src="/assets/img/icons/white/Rename.svg" className="edit" alt="Icon" style={{cursor: 'auto'}} />
-                                :
-                                    <div className="icons">
-                                        {this.newDeviceNameLength ?
-                                            <img src="/assets/img/icons/white/Tick.svg" className="rename" alt="Icon" onClick={this.renameDevice} />
-                                        :
-                                            null
-                                        }
-                                        <img src="/assets/img/icons/white/X.svg" alt="Icon" className="cancel" onClick={this.cancelDeviceRename} />
+                                <div className="rename-box">
+                                    <div onClick={this.enableDeviceRename}
+                                        ref={(clickableArea) => {this.clickableArea = clickableArea}}
+                                        className="rename-box__clickable-area">
                                     </div>
-                                }
+
+                                    <input 
+                                        className="rename-box__input"
+                                        type="text"
+                                        ref={(input) => {this.deviceNameInput = input}}
+                                        disabled
+                                        onKeyPress={this.keyPressed}
+                                        value={this.newDeviceName} onChange={this.userTypesName} 
+                                    />
+
+                                    <div className="rename-box__actions">
+                                        {this.renameDisabled ?
+                                            <img src="/assets/img/icons/white/Rename.svg" className="rename-box__icon rename-box__icon--edit" alt="Icon" />
+                                        :
+                                            <span className="rename-box__user-actions">
+                                                {this.newDeviceNameLength ?
+                                                    <img src="/assets/img/icons/white/Tick.svg" className="rename-box__icon rename-box__icon--save" alt="Icon" onClick={this.renameDevice} />
+                                                :
+                                                    null
+                                                }
+                                                <img src="/assets/img/icons/white/X.svg" alt="Icon" className="rename-box__icon rename-box__icon--cancel" onClick={this.cancelDeviceRename} />
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                                
                             </div>
                         :
                             null
