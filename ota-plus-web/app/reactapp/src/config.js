@@ -1,6 +1,6 @@
 /* Main config */
 
-export const APP_TITLE = 'ATS Garage';
+export const APP_TITLE = 'HERE OTA Connect';
 export const APP_LAYOUT = 'atsgarage';
 
 /* API end-points config */
