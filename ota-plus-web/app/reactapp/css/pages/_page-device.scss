@@ -118,28 +118,6 @@
             }
         }
 
-        .status {
-            background: url($device-status-unknown) no-repeat;
-            width: 18px;
-            height: 18px;
-            background-size: cover;
-            position: absolute;
-            right: -7px;
-            top: -7px;
-
-            &.status-Error {
-                background-image: url($device-status-error);
-            }
-
-            &.status-Outdated {
-                background-image: url($device-status-pending);
-            }
-
-            &.status-UpToDate {
-                background-image: url($device-status-success);
-            }
-        }
-
         .device-info-container {
             display: flex;
             align-items: center;
