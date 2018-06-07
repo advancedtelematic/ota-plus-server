@@ -184,6 +184,19 @@ class List extends Component {
 	                                }
 		        				</span>
 							</div>
+							<div className="comment">
+								<div className="comment-title">
+									Comment
+								</div>
+								<textarea 
+		                            className="comment-value"
+		                            name="comment-stick" 
+		                            rows="10"
+		                            value={expandedPackage.comment}
+		                            disabled
+		                            id={"package-" + expandedPackage.id.name + "-comment-" + expandedPackage.id.version.substring(0,8)}>
+		                        </textarea>
+							</div>
                             {!isPackageInstalled ?
 								<div className="install multi-target">
 									<button
