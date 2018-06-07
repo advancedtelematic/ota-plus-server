@@ -11,6 +11,116 @@
 
 $font: 'akkurat';
 
+.rename-box {
+    position: relative;
+    width: 100%;
+
+    &:hover & {
+
+        &__icon--edit {
+            opacity: 1;
+        }
+        
+        &__input {
+            background-color: rgba(255,255,255,.2);
+        }
+
+        &__input--black {
+            background-color: #F3F3F4;
+        }
+
+        &__input--grey {
+            background-color: rgba(0, 0, 0, .1);
+        }
+    }
+
+    &__clickable-area {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+
+    &__input {
+        width: 100%;
+        background-color: rgba(0,0,0,0);
+        border: none;
+        outline: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        color: #fff;
+        appearance: none;
+        transition: all 0.3s ease;
+        padding: 10px 50px 10px 10px;
+        text-overflow: ellipsis;
+
+        &--black {
+            color: #000;
+
+            &:focus {
+                outline: auto;
+                background-color: rgba(0,0,0,.2);
+            }
+        }
+
+        &--grey {
+            color: #000;
+
+            &:focus {
+                outline: auto;
+                background-color: rgba(0,0,0,.1);
+            }
+        }
+    }
+
+    &__actions {
+        position: absolute;
+        display: flex;
+        height: 100%;
+        top: 0;
+        right: 10px;
+
+        &--big {
+
+            img.edit {
+                width: 20px;
+            }
+
+            img.save {
+                width: 25px;
+                margin-right: -5px;
+            }
+
+            img.cancel {
+                width: 25px;
+            }
+        }
+    }
+
+    &__user-actions {
+        display: flex;
+    }
+
+    &__icon {
+        width: 15px;
+        transition: opacity 0.3s ease;
+        cursor: pointer;
+
+        &--edit {
+            opacity: 0;
+            cursor: auto;
+        }
+
+        &--cancel {            
+            width: 12px;
+        }
+
+        &--save {
+            width: 12px;
+            margin-right: 5px;
+        }
+    }
+}
+
 .device-status {
     position: absolute;
     top: -5px;
@@ -965,68 +1075,12 @@ input {
         justify-content: space-between;
         align-items: center;
         padding-right: 25px;
+        padding-left: 15px;
         margin-bottom: 25px;
-
-        .rename-container {
-            position: relative;
-            padding: 0 15px;
-            width: 400px;
-            cursor: pointer;
-            font-size: 22px;
-            font-weight: bold;
-
-            input {
-                width: 100%;
-                background-color: rgba(0,0,0,0);
-                border: none;
-                outline: none;
-                -webkit-appearance: none;
-                -moz-appearance: none;
-                appearance: none;
-                transition: all 0.3s ease;
-                padding: 10px 65px 10px 10px;
-                text-overflow: ellipsis;
-                
-                &:focus {
-                    outline: none;
-                    background-color: rgba(0,0,0,0.2);
-                }
-            }
-            img {
-                transition: opacity 0.3s ease;
-                cursor: pointer;
-
-                &.edit {
-                    opacity: 0;
-                    position: absolute;
-                    right: 25px;
-                    top: 15px;
-                    width: 20px;
-                }
-            }
-            .icons {
-                position: absolute;
-                right: 20px;
-                top: 10px;
-                z-index: 10;
-
-                img {
-                    width: 25px;
-
-                    &.rename {
-                        margin-right: -5px;
-                    }
-                }
-            }
-            &:hover {
-                img {
-                    opacity: 1;
-                }
-                input {
-                    background-color: #F3F3F4;
-                }
-            }
-        }
+        max-width: 400px;
+        cursor: pointer;
+        font-size: 22px;
+        font-weight: 700;
     }
 
     &__wrapper {

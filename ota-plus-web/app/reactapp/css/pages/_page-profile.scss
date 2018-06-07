@@ -108,68 +108,6 @@
                     font-size: 16px;
                     color: $home-bg;
                     padding-right: 65px;
-
-                    .rename-container {
-                        position: relative;
-                        width: 100%;
-                        cursor: pointer;                        
-
-                        input {
-                            width: 100%;
-                            background-color: rgba(0,0,0,0);
-                            border: none;
-                            outline: none;
-                            -webkit-appearance: none;
-                            -moz-appearance: none;
-                            appearance: none;
-                            transition: all 0.3s ease;
-                            padding: 10px 65px 10px 10px;
-                            text-overflow: ellipsis;
-                            color: #000;
-                            
-                            &:focus {
-                                outline: none;
-                                background-color: rgba(0,0,0,0.2);
-                            }
-                        }
-
-                        img {
-                            transition: opacity 0.3s ease;
-                            cursor: pointer;
-
-                            &.edit {
-                                opacity: 0;
-                                position: absolute;
-                                right: 10px;
-                                top: 12px;
-                                width: 20px;
-                            }
-                        }
-                        .icons {
-                            position: absolute;
-                            right: 10px;
-                            top: 10px;
-                            z-index: 10;
-
-                            img {
-                                width: 25px;
-
-                                &.rename {
-                                    margin-right: -5px;
-                                }
-                            }
-                        }
-
-                        &:hover {
-                            img {
-                                opacity: 1;
-                            }
-
-                            input {
-                                background-color: #F3F3F4;
-                            }
-                        }                  
-                    }
                 }
 
                 &.email {
