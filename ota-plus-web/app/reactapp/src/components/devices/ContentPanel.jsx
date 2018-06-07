@@ -82,15 +82,15 @@ export default class ContentPanel extends Component {
     render() {
         const {devicesStore, groupsStore, changeFilter, alphaPlusEnabled } = this.props;
         return (
-            <div className="content-panel">
+            <div className="devices-panel">
                 <ContentPanelHeader 
                     devicesFilter={devicesStore.devicesFilter}
                     changeFilter={changeFilter}
                 />
-                <div className="devices-wrapper">
-                    <div className={"devices-list" + (alphaPlusEnabled ? " devices-list--alpha" : "")}>
+                <div className="devices-panel__wrapper">
+                    <div className={"devices-panel__list" + (alphaPlusEnabled ? " devices-panel__list--alpha" : "")}>
                         {alphaPlusEnabled ?
-                            <div className="devices-heading devices-heading--absolute">
+                            <div className="devices-panel__title devices-panel__title--absolute">
                                 Test devices
                             </div>
                         :
@@ -106,7 +106,7 @@ export default class ContentPanel extends Component {
                             }}
                         >
                             {devicesStore.devicesTotalCount ?
-                                <div className="inner-container">
+                                <div className="devices-panel__list-wrapper">
                                     {_.map(devicesStore.preparedDevices, (device) => {
                                         return (
                                             <DeviceItem
@@ -126,7 +126,7 @@ export default class ContentPanel extends Component {
                                         <Loader />
                                     </div>
                                 :
-                                    <span className="content-empty">
+                                    <span className="devices-panel__list-empty">
                                         <div className="wrapper-center">
                                             Oops, there are no devices to show.
                                         </div>
@@ -135,65 +135,63 @@ export default class ContentPanel extends Component {
                         </InfiniteScroll>
                     </div>
                     {alphaPlusEnabled ?
-                        <div className="wrapper-dashboard">
-                            <div className="devices-heading devices-heading--margin">
+                        <div className="devices-panel__dashboard">
+                            <div className="devices-panel__title devices-panel__title--margin">
                                 Dashboard (BETA)
                             </div>
-                            <div className="dashboard-container">
-                                <div className="top">
-                                    <div className="dashboard-top">
-                                        <div className="devices-heading">
-                                            Simultaneous connections
-                                        </div>
-                                        560/600
-                                        <div className="icon-up"></div>
+                            <div className="devices-panel__top-wrapper">
+                                <div className="devices-panel__dashboard-top">
+                                    <div className="devices-panel__title">
+                                        Simultaneous connections
                                     </div>
-                                    <div className="dashboard-top">
-                                        <div className="devices-heading">
-                                            Total devices
-                                        </div>
-                                        134.000
+                                    560/600
+                                    <div className="devices-panel__dashboard-top-icon"></div>
+                                </div>
+                                <div className="devices-panel__dashboard-top">
+                                    <div className="devices-panel__title">
+                                        Total devices
                                     </div>
-                                    <div className="dashboard-top">
-                                        <div className="devices-heading">
-                                            Total connections
-                                        </div>
-                                        69.000
-                                        <div className="icon-up"></div>
+                                    134.000
+                                </div>
+                                <div className="devices-panel__dashboard-top">
+                                    <div className="devices-panel__title">
+                                        Total connections
+                                    </div>
+                                    69.000
+                                    <div className="devices-panel__dashboard-top-icon"></div>
+                                </div>
+                            </div>
+                            <div className="devices-panel__dashboard-bottom">
+                                <div className="devices-panel__dashboard-content">
+                                    <div className="devices-panel__title">
+                                        Live connections
+                                    </div>
+                                    <div className="devices-panel__dashboard-data">
+                                        <BarChart 
+                                            connections={connections}
+                                        />
                                     </div>
                                 </div>
-                                <div className="bottom">
-                                    <div className="dashboard-content">
-                                        <div className="devices-heading">
-                                            Live connections
-                                        </div>
-                                        <div className="dashboard-data">
-                                            <BarChart 
-                                                connections={connections}
-                                            />
-                                        </div>
+                                <div className="devices-panel__dashboard-content">
+                                    <div className="devices-panel__title">
+                                        Certificate rollover
                                     </div>
-                                    <div className="dashboard-content">
-                                        <div className="devices-heading">
-                                            Certificate rollover
-                                        </div>
-                                        <div className="dashboard-data">
-                                            <Stats 
-                                                data={certificateRolloverData.stats}
-                                                indicatorColors={true}
-                                            />
-                                        </div>
+                                    <div className="devices-panel__dashboard-data">
+                                        <Stats 
+                                            data={certificateRolloverData.stats}
+                                            indicatorColors={true}
+                                        />
                                     </div>
-                                    <div className="dashboard-content">
-                                        <div className="devices-heading">
-                                            Connections
-                                        </div>
-                                        <div className="dashboard-data">
-                                            <Stats 
-                                                data={connectionsData.stats}
-                                                indicatorColors={false}
-                                            />
-                                        </div>
+                                </div>
+                                <div className="devices-panel__dashboard-content">
+                                    <div className="devices-panel__title">
+                                        Connections
+                                    </div>
+                                    <div className="devices-panel__dashboard-data">
+                                        <Stats 
+                                            data={connectionsData.stats}
+                                            indicatorColors={false}
+                                        />
                                     </div>
                                 </div>
                             </div>

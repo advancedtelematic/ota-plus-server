@@ -12,8 +12,8 @@ class GroupsPanel extends Component {
         const { devicesStore, groupsStore, showCreateGroupModal, selectGroup, onDeviceDrop } = this.props;
         return (
             <div className="groups-panel">
-                <div className="heading">
-                    <div className="title">
+                <div className="groups-panel__header">
+                    <div className="groups-panel__title">
                         Groups
                     </div>
                     <a href="#" className="add-button light" id="add-new-group" onClick={showCreateGroupModal}>
