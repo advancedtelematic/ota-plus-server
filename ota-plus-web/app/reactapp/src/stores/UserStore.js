@@ -164,7 +164,6 @@ export default class UserStore {
     };
 
     _logout() {
-        this._deleteCookie('systemReady');
         this.ifLogout = true;
     }
 }
