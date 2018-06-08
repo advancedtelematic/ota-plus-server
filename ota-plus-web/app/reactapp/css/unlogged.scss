@@ -47,6 +47,8 @@ a, a:hover, a:focus {
 }
 
 .login {
+    background: #F3F3F4;    
+
     #ats-page {
         min-height: 600px;
         height: 100%;
@@ -55,7 +57,7 @@ a, a:hover, a:focus {
         .container {
             padding: 0 0 60px 0;
             position: absolute;
-            top: 50%;
+            top: calc(50% + 55px);
             left: 50%;
             transform: translate(-50%, -50%);
 
@@ -271,186 +273,85 @@ label.error {
 }
 
 /* Auth0 */
+.auth0-lock-header-bg, .auth0-lock-header-bg-blur, .auth0-lock-cred-pane, .auth0-lock-header {
+    background: transparent!important;
+}
 
-body {
+.auth0-lock-header {
+    height: auto!important;
+    border-bottom: 1px solid #4A4A4A!important;
+    padding: 0!important;
+}
 
-    .auth0-lock.auth0-lock {
+.auth0-lock-header-logo {
+    margin-bottom: 20px!important;
+}
 
-        &.signin {
-             .auth0-lock-alternative  {
-                text-align: right;
-             }
-        }
+.auth0-lock-name, .auth-lock-social-buttons-pane span {
+    font-size: 21px!important;
+    color: #3F454D!important;
+}
 
-        .auth0-lock-center {
-            .terms-conditions {
-                margin: 15px 0;
+.auth0-lock-pane-separator + div p:first-child {
+    font-size: 18px!important;
+    color: #3F454D!important;
+}
 
-                a {
-                    text-decoration: underline;
-                }
-            }
-        }
+.auth0-lock-widget {
+    width: 100%!important;
+    font-family: "Fira Sans"!important;
+}
 
-        .auth0-lock-cred-pane {
-            background: transparent;
+.auth0-lock-social-button {
+    border-radius: 8px!important;
+}
 
-            .auth0-lock-header {
-                background: transparent;
-                height: auto;
-                padding: 0;
+.auth0-lock-input-wrap {
+    background: #fff!important;
+}
 
-                .auth0-lock-header-bg {
-                    background: transparent;
-                    height: auto;
+.auth0-lock-submit {
+    background: #48DAD0!important;
+    font-size: 22px!important;
+    text-transform: none!important;
 
-                    .auth0-lock-header-bg-blur {
-                        background: transparent;
-                        background-image: none!important;
-                        opacity: 1;
-                    }
-                }
+    &:hover {
 
-                .auth0-lock-header-logo {
-                    height: 90px;
-                }
-
-                .auth0-lock-header-welcome {
-                    .auth0-lock-name {
-                        margin: 25px 0;
-                        color: #fff;
-                    }
-                }
-            }
-        }
-
-        .auth0-lock-content {
-            padding: 0;
-
-            .auth0-lock-form {
-                p {
-                    color: #fff;
-                }
-
-                .auth0-lock-alternative {
-                    margin-bottom: 10px;
-                    text-align: right;
-
-                    .auth0-lock-alternative-link {
-                        color: #fff;
-                    }
-                }
-            }
-        }
-
-        .auth0-lock-social-button {
-            &.auth0-lock-social-big-button[data-provider="auth0"] {
-                background-color: #1b4d6d;
-            }
-        }
-
-        .auth0-lock-tabs {
-            background: transparent;
-
-            li {
-                width: 100%;
-
-                &.auth0-lock-tabs-current {
-                    display: none;
-                }
-
-                a {
-                    color: #fff;
-                    font-size: 16px;
-                    transition: all .3s ease-in;
-                    text-decoration: underline;
-
-                    &:hover {
-                        color: #9ce2d8;
-                    }
-                }
-            }
-        }
-
-        .auth0-lock-submit {
-            color: #444;
-            font-size: 17px;
-            font-weight: normal;
-            text-align: center;
-            text-decoration: none;
-            letter-spacing: 0px;
-            background: $color-mint !important;
-            width: 100%;
-            padding: 15px;
-            transition: all 0.5s ease;
-            border: 0;
-            border-radius: 25px;
-            display: block;
-            position: static;
-            height: 55px;
-            padding: 0;
-
-            &:hover {
-                text-decoration: none;
-                background: $color-mint-active !important;
-                -webkit-box-shadow: none;
-                transform: none;
-                box-shadow: none;
-                font-weight: 400;
-            }
-
-            span {
-                transition: none;
-                text-transform: capitalize;
-                height: auto;
-                line-height: auto;
-
-                &:not(.auth0-label-submit) {
-                    display: none;
-                }
-                &.auth0-label-submit {
-                    transform: scale(1) !important;
-                }
-            }
-        }
-
-        .auth0-lock-input-wrap {
-            margin: 15px 0;
-
-            &.auth0-lock-input-wrap-with-icon {
-                padding-left: 0;
-                border-radius: 12px;
-            }
-            .auth0-lock-input {
-                font: normal 16px akkurat;
-                text-align: center;
-                height: 50px;
-                border-radius: 12px;
-            }
-        }
-
-        .auth0-global-message {
-            &.auth0-global-message-error {
-                background: #d66f6f;
-                font: 400 14px Arial;
-                text-align: center;
-                padding: 15px 30px;
-                margin: 0 15px;
-                margin-bottom: 20px;
-                border-radius: 12px;
-            }
+        span {
+            transform: none!important;
         }
     }
+}
 
-    &.otaplus {
-        #a0-lock {
-            &.a0-theme-default {
-                .a0-panel {
-                    .a0-icon-container {
-                        background: #7b7b7b;
-                    }
-                }
-            }
-        }
-    }
+.auth0-label-submit span {
+    display: none!important;
+}
+
+.auth0-lock-alternative {
+    text-align: right!important;
+    margin-top: 0!important;
+}
+
+.auth0-lock-alternative-link {
+    font-size: 10px!important;
+    text-decoration: underline!important;
+}
+
+.auth0-lock-content {
+    padding: 20px 0 40px 0!important;
+}
+
+.auth0-lock-input-show-password {
+    margin-bottom: 0!important;
+}
+
+.auth0-register-link {
+    background: #48DAD0!important;
+    font-size: 16px;
+    height: 40px;
+    display: flex!important;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    margin: 20px 0;
 }
