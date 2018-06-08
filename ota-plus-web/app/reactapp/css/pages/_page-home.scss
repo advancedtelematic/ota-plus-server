@@ -228,7 +228,7 @@
         }
     }
 
-    .preparation {
+    .sanity-check {
         background-color: #F3F3F4;
         position: absolute;
         top: 0;
@@ -242,13 +242,14 @@
         }
 
         &__logo-image {
-            width: 90px;
+            width: 75px;
         }
 
         &__title {
             font-size: 22px;
             color: #202020;
-            margin: 25px 0;
+            margin-top: 25px;
+            margin-bottom: 75px;
         }
 
         &__list {
@@ -261,17 +262,12 @@
 
         &__item-inner {
             display: flex;
-
-            img {
-               
-            }
+            align-items: center;
+            height: 40px;
         }
 
         &__item-name {
-            font-size: 12px;
-            font-weight: 300;
-            display: flex;
-            align-items: center;
+            font-size: 22px;
             color: #000000;
         }
 
@@ -291,6 +287,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            height: 45px;
         }
 
         &__setting-loader {

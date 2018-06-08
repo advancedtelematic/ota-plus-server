@@ -22,6 +22,7 @@ export default class ProvisioningStore {
     @observable provisioningStatusFetchAsync = {};
     @observable provisioningActivateAsync = {};
     @observable namespaceSetupFetchAsync = {};
+    @observable namespaceSetupPostAsync = {};
     @observable provisioningDetailsFetchAsync = {};
     @observable provisioningKeysFetchAsync = {};
     @observable provisioningKeyCreateAsync = {};
@@ -32,10 +33,12 @@ export default class ProvisioningStore {
     @observable provisioningKeysSort = 'asc';
     @observable preparedProvisioningKeys = [];
     @observable provisioningFilter = '';
+    @observable sanityCheckCompleted = false;
 
     constructor() {
         resetAsync(this.provisioningStatusFetchAsync);
         resetAsync(this.namespaceSetupFetchAsync);
+        resetAsync(this.namespaceSetupPostAsync);
         resetAsync(this.provisioningActivateAsync);
         resetAsync(this.provisioningDetailsFetchAsync);
         resetAsync(this.provisioningKeysFetchAsync);
@@ -84,25 +87,33 @@ export default class ProvisioningStore {
 
     namespaceSetup() {
         resetAsync(this.namespaceSetupFetchAsync, true);
-        return axios.post(API_NAMESPACE_SETUP_STEPS)
+        return axios.get(API_NAMESPACE_SETUP_STEPS)
             .then(function (response) {
-                this.fetchProvisioningStatus();
+                this.sanityCheckCompleted = true;
                 this.namespaceSetupFetchAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
+                const that = this;
+                setTimeout(() => {
+                    that.namespaceSetupPost();
+                }, 800);
                 this.namespaceSetupFetchAsync = handleAsyncError(error);
             }.bind(this));
     }
 
-    activateProvisioning() {
-        resetAsync(this.provisioningActivateAsync, true);
-        return axios.put(API_PROVISIONING_ACTIVATE)
+    namespaceSetupPost() {
+        resetAsync(this.namespaceSetupPostAsync, true);
+        return axios.post(API_NAMESPACE_SETUP_STEPS)
             .then(function (response) {
-                this.fetchProvisioningStatus();
-                this.provisioningActivateAsync = handleAsyncSuccess(response);
+                this.sanityCheckCompleted = true;
+                this.namespaceSetupPostAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
-                this.provisioningActivateAsync = handleAsyncError(error);
+                const that = this;
+                setTimeout(() => {
+                    that.namespaceSetupPost();
+                }, 800);
+                this.namespaceSetupPostAsync = handleAsyncError(error);
             }.bind(this));
     }
 
@@ -147,6 +158,7 @@ export default class ProvisioningStore {
     _reset() {
         resetAsync(this.provisioningStatusFetchAsync);
         resetAsync(this.namespaceSetupFetchAsync);
+        resetAsync(this.namespaceSetupPostAsync);
         resetAsync(this.provisioningActivateAsync);
         resetAsync(this.provisioningDetailsFetchAsync);
         resetAsync(this.provisioningKeysFetchAsync);
@@ -158,5 +170,6 @@ export default class ProvisioningStore {
         this.provisioningKeysSort = 'asc';
         this.preparedProvisioningKeys = [];
         this.provisioningFilter = '';
+        this.sanityCheckCompleted = false;
     }
 }
