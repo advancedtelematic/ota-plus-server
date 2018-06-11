@@ -103,27 +103,12 @@ class BlacklistModal extends Component {
                 }
                 {blacklistAction.mode === 'add' ?
                     <span>
-                        You're about to <strong>blacklist</strong> the following package version:
-                        <div className="name" title={blacklistAction.name}>
-                            {blacklistAction.name}
+                        <div className="top-text">
+                           With HERE OTA Connect, you can <strong>blacklist</strong> problem packages, ensuring they won’t get installed on any of your devices.
                         </div>
-                        <div className="version" title={blacklistAction.version}>
-                            {blacklistAction.version}
+                        <div  className="bottom-text">
+                           On the <strong>Impact analysis tab</strong>, you can view which of your devices already have the blacklisted version of the package installed, letting you proactivly troubleshoot and update those devices to a fixed version, or roll them back to an older version.
                         </div>
-                        <div className="desc">
-                            When you blacklist a package version, you can no longer install it <br />
-                            on any devices. It will also appear in the <strong>Impact analysis tab</strong>, <br />
-                            showing which devices currently have it installed.
-                        </div>
-                        {packagesStore.affectedDevicesCount.affected_device_count ?
-                            <div className="warning">
-                                Warning: the package version you are about to <br />
-                                blacklist is queued for installation on {packagesStore.affectedDevicesCount.affected_device_count} devices. <br /> 
-                                These updates will be cancelled automatically.
-                            </div>
-                        : 
-                            null
-                        }
                     </span>
                 : 
                     null
