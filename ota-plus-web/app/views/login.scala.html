@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>ATS Garage - Log in</title>
+        <title>HERE OTA Connect - Log in</title>
         <link href="/assets/css/unlogged.css" rel="stylesheet" type="text/css"/>
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
         <script type="text/javascript" src='@routes.Assets.versioned("js/jquery-3.3.1.min.js")'></script>
@@ -18,7 +18,7 @@
                 <div class="top-alert">
                     <img src='@routes.Assets.versioned("img/icons/white/warning.png")' alt="Icon" />
                     <p>
-                      Planned outage: ATS Garage will be offline for approximately @downtimeConfig.duration.toHours hours
+                      Planned outage: HERE OTA Connect will be offline for approximately @downtimeConfig.duration.toHours hours
                       beginning on @downtimeConfig.startDateTime
                     </p>
                 </div>
@@ -33,7 +33,7 @@
                             <img src='@routes.Assets.versioned("img/icons/construction.png")' id="Construction">
                         </div>
                         <div class="header">
-                            <p>ATS Garage is currently offline for scheduled maintenance</p>
+                            <p>HERE OTA Connect is currently offline for scheduled maintenance</p>
                         </div>
                     </div>
                 </div>
@@ -67,7 +67,6 @@
         <input type="hidden" id="auth0-domain" value="@oauthConfig.domain"/>
         <input type="hidden" id="auth0-callback-url" value="@oauthConfig.callbackURL"/>
         <input type="hidden" id="auth0-token-audience" value="@auth0Config.audience"/>
-        <input type='hidden' id="auth0-sign-up-url" value="@auth0Config.signUpUrl" />
         <script type="text/javascript" src='@routes.Assets.versioned("js/login.js")'></script>
         <script type="text/javascript" src='@routes.Assets.versioned("js/privay-notification.js")'></script>
     </body>
