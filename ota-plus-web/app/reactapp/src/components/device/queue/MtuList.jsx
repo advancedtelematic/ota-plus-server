@@ -12,21 +12,23 @@ class MtuQueueList extends Component {
     render() {
         const { devicesStore, cancelMtuUpdate, alphaPlusEnabled, showSequencer } = this.props;
         const emptyQueue = (
-            <div className="queue-empty-center font-small">
-                You haven't got any multi target updates pending. <br />
+            <div className="queue-modal__list">
+                <div className="wrapper-center">
+                    You haven't got any multi target updates pending.
+                </div>
             </div>
         );
         return (
             <div>
                 {devicesStore.mtuFetchAsync.isFetching || devicesStore.mtuCreateAsync.isFetching ?
-                    <ul className="list queue">
-                        <div className="wrapper-loader">
+                    <ul className="queue-modal__list">
+                        <div className="wrapper-center">
                             <Loader />
                         </div>
                     </ul>
                 :
                     devicesStore.multiTargetUpdates.length ?
-                        <ul className={"list queue director-queue" + (!devicesStore.multiTargetUpdates.length ? " empty" : "")}>
+                        <ul className={"queue-modal__list" + (!devicesStore.multiTargetUpdates.length ? " empty" : "")}>
                             {_.map(devicesStore.multiTargetUpdates, (update, index) => {
                                 return _.map(update.targets, (target, hardwareId) => {
                                     return (
