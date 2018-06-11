@@ -318,8 +318,8 @@ class List extends Component {
                                                     }
                                                 }}>
                                                 {this.expandedPackageName === pack.packageName ?                                                    
-                                                    <ul className="versions-container">
-                                                        <li className="auto-update">
+                                                    <ul className="software-panel__details">
+                                                        <li>
                                                             <VelocityTransitionGroup
                                                                 enter={{
                                                                     animation: "slideDown",
@@ -340,7 +340,7 @@ class List extends Component {
                                                                     }
                                                                 }}>
                                                                 {pack.isAutoInstallEnabled ?
-                                                                    <div className="info-auto-update">
+                                                                    <div className="software-panel__auto-update-tip">
                                                                         {autoUpdateInfo}
                                                                     </div>
                                                                 :
@@ -349,7 +349,7 @@ class List extends Component {
                                                             </VelocityTransitionGroup>
                                                         </li>
                                                         <li>
-                                                            <ul className="versions">
+                                                            <ul className="software-panel__versions">
                                                                 {_.map(pack.versions, (version, i) => {
                                                                     return (
                                                                         <ListItemVersion

@@ -3,26 +3,26 @@ import React, { PropTypes, defaultProps } from 'react';
 const Header = (props) => {
     const { title, subtitle, backButtonShown, backButtonAction, children, device } = props;
     return (
-        <div className="page-heading">
-            <div className="left-box">
+        <div className="page-header">
+            <div className="page-header__left">
                 {backButtonShown ? 
-                    <a href="#" id="back-button" className="back-button" onClick={backButtonAction}>
+                    <a href="#" id="back-button" className="page-header__back" onClick={backButtonAction}>
                         <i className="fa fa-angle-left"></i>
                     </a>
                 : null}
-                <div className="icon">
+                <div className="page-header__icon">
                     {device ? <div className={"device-status device-status--" + device.deviceStatus} id={"status-" + device.deviceStatus}></div> : ''}
                 </div>
-                <div className="text">
-                    <div className="title">{title}</div>
+                <div className="page-header__text">
+                    <div className="page-header__title">{title}</div>
                     {subtitle ?
-                        <div className="subtitle">{subtitle}</div>
+                        <div className="page-header__subtitle">{subtitle}</div>
                     :
                         null
                     }
                 </div>
             </div>
-            <div className="right-box">
+            <div className="page-header__right">
                 {children}
             </div>
         </div>

@@ -38,36 +38,36 @@ class PrimaryEcu extends Component {
             <span>
                 <a
                     href="#" 
-                    className={active ? " selected" : ""}
+                    className={"hardware-panel__ecu" + (active ? " hardware-panel__ecu--selected" : "")}
                     id="hardware-primary-details"
                     onClick={this.onEcuClick.bind(this)}
                 >
-                    <div className="desc">
+                    <div className="hardware-panel__ecu-desc">
                         <span>
-                            <span id="hardware-id-value" className="app-label">{devicesStore._getPrimaryHardwareId()}</span> <br />
+                            <span id="hardware-id-value" className="hardware-panel__hardware-label app-label">{devicesStore._getPrimaryHardwareId()}</span> <br />
                             Serial: <span id="hardware-serial-value">{devicesStore._getPrimarySerial()}</span>
                         </span>
                     </div>
-                    <div className="icons">
-                        <div className="hardware-icon details" 
+                    <div className="hardware-panel__ecu-actions">
+                        <div className="hardware-panel__ecu-action hardware-panel__ecu-action--details" 
                             id="hardware-details-icon-primary"
                             onClick={showHardwareOverlay}
                         >
                             {active ?
-                                <img src="/assets/img/icons/white/info.svg" alt="Icon" />
+                                <img src="/assets/img/icons/white/info.svg" className="hardware-panel__ecu-action--details-size" alt="Icon" />
                             :
-                                <img src="/assets/img/icons/black/info.svg" alt="Icon" />
+                                <img src="/assets/img/icons/black/info.svg" className="hardware-panel__ecu-action--details-size" alt="Icon" />
                             }
                         </div>
                         <div
-                            className="hardware-icon key" 
+                            className="hardware-panel__ecu-action hardware-panel__ecu-action--key" 
                             id="hardware-key-icon-primary"
                             onClick={showPopover.bind(this, devicesStore._getPrimarySerial())}
                         >
                             {active ?
-                                <img src="/assets/img/icons/white/key.svg" alt="Icon" />
+                                <img src="/assets/img/icons/white/key.svg" className="hardware-panel__ecu-action--key-size" alt="Icon" />
                             :
-                                <img src="/assets/img/icons/black/key.svg" alt="Icon" />
+                                <img src="/assets/img/icons/black/key.svg" className="hardware-panel__ecu-action--key-size" alt="Icon" />
                             }
                         </div>
                     </div>
