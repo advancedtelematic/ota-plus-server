@@ -22,10 +22,10 @@ class PropertiesPanel extends Component {
         } = this.props;
         return (
             <div className="properties-panel">
-                <div className="darkgrey-header">
+                <div className="properties-panel__header darkgrey-header">
                     {title}
                 </div>
-                <div className="wrapper-properties">
+                <div className="properties-panel__wrapper">
                     {!packagesReady ?
                         <div className="wrapper-loader">
                             <Loader />
