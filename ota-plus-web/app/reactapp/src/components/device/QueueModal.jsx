@@ -36,43 +36,39 @@ class QueueModal extends Component {
         const content = (
             <span>
                 <Tabs
-                    tabItemContainerStyle={{backgroundColor: 'transparent'}}
+                    tabItemContainerStyle={{backgroundColor: 'transparent', 'justifyContent': 'center'}}
                     className="tabs"
                     inkBarStyle={{display: 'none'}}
                 >
                     <Tab
                         label="Queued"
-                        className={"tab-item" + (activeTabId === 0 ? " active" : "")}
+                        className={"queue-modal__tab-item" + (activeTabId === 0 ? " queue-modal__tab-item--active" : "")}
                         id="queued-packages"
                         data-id={0}
                         onActive={setQueueModalActiveTabId.bind(this, 0)}
                     >
-                        <div className={"wrapper-list" + (activeTabId === 1 ? " hide" : "")}>
-                            <QueueMtuList 
-                                devicesStore={devicesStore}
-                                cancelMtuUpdate={cancelMtuUpdate}
-                                alphaPlusEnabled={alphaPlusEnabled}
-                                showSequencer={showSequencer}
-                            />
-                        </div>
+                        <QueueMtuList 
+                            devicesStore={devicesStore}
+                            cancelMtuUpdate={cancelMtuUpdate}
+                            alphaPlusEnabled={alphaPlusEnabled}
+                            showSequencer={showSequencer}
+                        />
                     </Tab>
                     <Tab
                         label="History" 
-                        className={"tab-item" + (activeTabId === 1 ? " active" : "")}
+                        className={"queue-modal__tab-item" + (activeTabId === 1 ? " queue-modal__tab-item--active" : "")}
                         id="installation-history"
                         data-id={1}
                         onActive={setQueueModalActiveTabId.bind(this, 1)}
                     >
-                        <div className={"wrapper-list" + (activeTabId === 0 ? " hide" : "")}>
-                            <HistoryMtuList
-                                packagesStore={packagesStore}
-                                device={device}
-                            />
-                        </div>
+                        <HistoryMtuList
+                            packagesStore={packagesStore}
+                            device={device}
+                        />
                     </Tab>
                 </Tabs>
                 {installationStatus ?
-                    <div className={(activeTabId === 0) ? " queue installation-status " + installationStatus : " history installation-status " + installationStatus}>
+                    <div className={"queue-modal__status queue-modal__status--" + installationStatus}>
                         Last installation status: {installationStatus}
                     </div>
                 :
@@ -91,11 +87,9 @@ class QueueModal extends Component {
                 useLayerForClickAway={false}
                 animated={false}
             >
-                <div className="triangle"></div>
-                <div className="content">
-                    <div className="body">
-                        {content}
-                    </div>
+                <div className="queue-modal__triangle"></div>
+                <div className="queue-modal__content">
+                    {content}
                 </div>
             </Popover>
         );

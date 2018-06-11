@@ -11,18 +11,20 @@ class MtuListItem extends Component {
     render() {
     	const { item } = this.props;
         return (
-    		<li>
-            	<div className="main-info">
-					<div className="update-id">
-						<span id={"update-id-title-" + item.updateId} className="top-title">
-	                        Update ID
-	                    </span>
-						<span id={"update-id-" + item.updateId}>
-							{item.updateId}
-						</span>
+    		<li className="queue-modal__item">
+            	<div className="queue-modal__item-header">
+					<div className="queue-modal__item-update">
+						<div>
+							<span id={"update-id-title-" + item.updateId} className="queue-modal__item-title">
+		                        Update ID
+		                    </span>
+							<span id={"update-id-" + item.updateId}>
+								{item.updateId}
+							</span>
+						</div>
 					</div>
-					<div className="created-at font-small">
-						<span id={"received-at-title-" + item.updateId} className="top-title">
+					<div className="queue-modal__item-created">
+						<span id={"received-at-title-" + item.updateId} className="queue-modal__item-title">
 	                        Received at:
 	                    </span>
 						<span id={"received-at-" + item.updateId}>
@@ -30,29 +32,29 @@ class MtuListItem extends Component {
 					 	</span>
 					</div>
 				</div>
-        		<div className="operation-results">
+        		<div className="queue-modal__operations">
         			{_.map(item.operationResult, (result, ecuSerial) => {
         				return (
-        					<div className="result" key={ecuSerial}>
-		    					<div className="result-info">
-									<div className="ecu-serial">
-										<span id={"ecu-serial-title-" + item.updateId} className="title">
+        					<div className="queue-modal__operation" key={ecuSerial}>
+		    					<div className="queue-modal__operation-info">
+									<div className="queue-modal__operation-info-block">
+										<span id={"ecu-serial-title-" + item.updateId} className="queue-modal__operation-info-title">
 			                                ECU Serial:
 			                            </span>
 										<span id={"ecu-serial-" + item.updateId}>
 											{ecuSerial}
 										</span>
 									</div>
-									<div className="target">
-										<span id={"target-title-" + item.updateId} className="title">
+									<div className="queue-modal__operation-info-block">
+										<span id={"target-title-" + item.updateId} className="queue-modal__operation-info-title">
 			                                Target:
 			                            </span>
 										<span id={"target-" + item.updateId}>
 											{result.target}
 										</span>
 									</div>
-									<div className="length">
-										<span id={"length-title-" + item.updateId} className="title">
+									<div className="queue-modal__operation-info-block">
+										<span id={"length-title-" + item.updateId} className="queue-modal__operation-info-title">
 			                                Length:
 			                            </span>
 										<span id={"length-" + item.updateId}>
@@ -60,11 +62,11 @@ class MtuListItem extends Component {
 										</span>
 									</div>
 								</div>
-		    					<div className="result-status">
-									<div className={`code ${result.resultCode <=1 ? 'success' : 'error'}`}>
-										<span>Result code</span> <span className="value" id={"result-code-" + item.updateId}>{result.resultCode}</span>
+		    					<div className="queue-modal__operation-status">
+									<div className={`queue-modal__status-code ${result.resultCode <=1 ? 'queue-modal__status-code--success' : 'queue-modal__status-code--error'}`}>
+										<span>Result code</span> <span className="queue-modal__status-code-value" id={"result-code-" + item.updateId}>{result.resultCode}</span>
 									</div>
-									<div className="text">
+									<div className="queue-modal__status-text">
 										<span id={"result-text-" + item.updateId}>{result.resultText}</span>
 									</div>
 								</div>
