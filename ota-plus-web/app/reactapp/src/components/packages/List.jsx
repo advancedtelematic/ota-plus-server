@@ -134,97 +134,89 @@ class List extends Component {
     render() {
         const { packagesStore, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, alphaPlusEnabled, showDeleteConfirmation, expandedPackageName, showEditComment } = this.props;        
         return (
-            <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching ? " fetching" : "")} ref="list">
-                {packagesStore.packagesCount ? 
-                    <Dropzone 
-                        ref="dropzone" 
-                        onDrop={onFileDrop} 
-                        multiple={false} 
-                        disableClick={true} 
-                        className="dnd-zone" 
-                        activeClassName={"dnd-zone-active"}>
-                        <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
-                            {this.fakeHeaderLetter}
-                        </div>
-                        {_.map(packagesStore.preparedPackages, (packages, letter) => {
-                            return (
-                                <span key={letter}>
-                                    <div className="header">{letter}</div>
-                                    {_.map(packages, (pack, index) => {
-                                        const that = this;
-                                        return (
-                                            <span key={index} className="c-package">
-                                                <ListItem
-                                                    pack={pack}
-                                                    expandedPackageName={expandedPackageName}
-                                                    togglePackage={this.togglePackage}
-                                                />
-                                                <VelocityTransitionGroup
-                                                    enter={{
-                                                        animation: "slideDown",
-                                                        begin: () => {that.startIntervalListScroll();},
-                                                        complete: () => {that.stopIntervalListScroll();}
-                                                    }}
-                                                    leave={{
-                                                        animation: "slideUp",
-                                                        begin: () => {that.startIntervalListScroll();},
-                                                        complete: () => {that.stopIntervalListScroll();}
-                                                    }}
-                                                >
-                                                    {expandedPackageName === pack.packageName ?
-                                                        <div className="c-package__details">
-                                                            <div className="c-package__main-name">
-                                                                <span>
-                                                                    {pack.packageName}
-                                                                </span>
-                                                                <button className="delete-button fixed-width hide" onClick={showDeleteConfirmation.bind(this, expandedPackageName, 'package')}>Delete package</button>
-                                                            </div>
-                                                            <div className="c-package__versions-wrapper">
-                                                                <div className="c-package__chart">
-                                                                    <div className="c-package__heading">
-                                                                        Distribution by devices
-                                                                    </div>
-                                                                    <PackagesVersionsStats
-                                                                        pack={pack}
-                                                                    />
-                                                                </div>
-                                                                <ul className="c-package__versions" id="versions">
-                                                                    {_.map(pack.versions, (version, i) => {
-                                                                        return (
-                                                                            <ListItemVersion
-                                                                                pack={pack}
-                                                                                version={version}
-                                                                                packagesStore={packagesStore}
-                                                                                showDependenciesModal={showDependenciesModal}
-                                                                                showDependenciesManager={showDependenciesManager}
-                                                                                alphaPlusEnabled={alphaPlusEnabled}
-                                                                                showDeleteConfirmation={showDeleteConfirmation}
-                                                                                showEditComment={showEditComment}
-                                                                                key={i}
-                                                                            />
-                                                                        );
-                                                                    })}
-                                                                </ul> 
-                                                            </div>
+            <div className="ios-list" ref="list">
+                <Dropzone 
+                    ref="dropzone" 
+                    onDrop={onFileDrop} 
+                    multiple={false} 
+                    disableClick={true} 
+                    className="dnd-zone" 
+                    activeClassName={"dnd-zone-active"}>
+                    <div className="fake-header" style={{top: this.fakeHeaderTopPosition}}>
+                        {this.fakeHeaderLetter}
+                    </div>
+                    {_.map(packagesStore.preparedPackages, (packages, letter) => {
+                        return (
+                            <span key={letter}>
+                                <div className="header">{letter}</div>
+                                {_.map(packages, (pack, index) => {
+                                    const that = this;
+                                    return (
+                                        <span key={index} className="c-package">
+                                            <ListItem
+                                                pack={pack}
+                                                expandedPackageName={expandedPackageName}
+                                                togglePackage={this.togglePackage}
+                                            />
+                                            <VelocityTransitionGroup
+                                                enter={{
+                                                    animation: "slideDown",
+                                                    begin: () => {that.startIntervalListScroll();},
+                                                    complete: () => {that.stopIntervalListScroll();}
+                                                }}
+                                                leave={{
+                                                    animation: "slideUp",
+                                                    begin: () => {that.startIntervalListScroll();},
+                                                    complete: () => {that.stopIntervalListScroll();}
+                                                }}
+                                            >
+                                                {expandedPackageName === pack.packageName ?
+                                                    <div className="c-package__details">
+                                                        <div className="c-package__main-name">
+                                                            <span>
+                                                                {pack.packageName}
+                                                            </span>
+                                                            <button className="delete-button fixed-width hide" onClick={showDeleteConfirmation.bind(this, expandedPackageName, 'package')}>Delete package</button>
                                                         </div>
-                                                    :
-                                                        null
-                                                    }
-                                                </VelocityTransitionGroup>
-                                            </span>
-                                        );
-                                    })}
-                                </span>
-                            );
-                        })}                        
-                    </Dropzone>
-                :
-                    <span className="content-empty">
-                        <div className="wrapper-center">
-                            No matching packages found.
-                        </div>
-                    </span>
-                }
+                                                        <div className="c-package__versions-wrapper">
+                                                            <div className="c-package__chart">
+                                                                <div className="c-package__heading">
+                                                                    Distribution by devices
+                                                                </div>
+                                                                <PackagesVersionsStats
+                                                                    pack={pack}
+                                                                />
+                                                            </div>
+                                                            <ul className="c-package__versions" id="versions">
+                                                                {_.map(pack.versions, (version, i) => {
+                                                                    return (
+                                                                        <ListItemVersion
+                                                                            pack={pack}
+                                                                            version={version}
+                                                                            packagesStore={packagesStore}
+                                                                            showDependenciesModal={showDependenciesModal}
+                                                                            showDependenciesManager={showDependenciesManager}
+                                                                            alphaPlusEnabled={alphaPlusEnabled}
+                                                                            showDeleteConfirmation={showDeleteConfirmation}
+                                                                            showEditComment={showEditComment}
+                                                                            key={i}
+                                                                        />
+                                                                    );
+                                                                })}
+                                                            </ul> 
+                                                        </div>
+                                                    </div>
+                                                :
+                                                    null
+                                                }
+                                            </VelocityTransitionGroup>
+                                        </span>
+                                    );
+                                })}
+                            </span>
+                        );
+                    })}                        
+                </Dropzone>
             </div>
         );
     }

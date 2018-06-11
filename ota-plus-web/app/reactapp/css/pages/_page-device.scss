@@ -1,9 +1,30 @@
 #page-device {
     height: calc(100vh - 50px);
     background: $home-bg;
+    font-size: 12px; 
 
-    .page-heading {
-        .icon {
+    .device-offline-title {
+        font-size: 24px;
+        color: #fff;
+    }
+
+    .page-header {
+        background-color: $devices-groups-bg;
+        width: 100%;
+        height: 100px;
+        padding: 20px 25px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid $panel-delimiter-color;
+        margin: 0;
+
+        &__left {
+            display: flex;
+            align-items: center;
+        }
+
+        &__icon {
             background-image: url($car-image-url);
             background-size: cover;
             position: relative;
@@ -12,584 +33,548 @@
             height: 50px;
         }
 
-        .left-box {
+        &__text {
+            margin-left: 15px;
+        }
+
+        &__back {
+            margin-right: 15px;
+
+            i {
+                color: $home-header-button;
+                font-size: 2.5em;
+            }
+        }
+
+        &__device-name {
+            display: block!important;
+            width: 255px;
+            font-size: 16px;
+        }
+
+        &__device-report {
             display: flex;
             align-items: center;
         }
 
-        .text {
-            margin-left: 15px;
-
-            .device-name {
-                display: block!important;
-                width: 255px;
-                font-size: 16px;
-            }
-        }
-
-        .device-info-items {
+        &__device-report-items {
             color: #ddd;
             font-size: 11px;
             margin-right: 10px;
             display: flex;
             align-items: center;
+        }
 
-            .device-info-group {
-                display: flex;
+        &__device-report-item {
+            margin: 0 10px;
+            display: inline-block;
+
+            @media(max-width: 1420px) {
+                margin: 0 8px;
             }
 
-            .device-info-item {
-                margin: 0 10px;
-                display: inline-block;
+            &--last-seen {
+                min-width: 115px;
+                @include textoverflowEllipsis;
+            }
 
-                &.crop {
-                    max-width: 120px;
-                }
-
-                &.last-seen {
-                    min-width: 115px;
-                    @include textoverflowEllipsis;
-                }
-
-                @media(max-width: 1420px) {
-                    margin: 0 8px;
-                }
-
-                .device-info-label {
-                    color: $devices-group-text;
-                }
-
-                .device-info-desc {
-                    @include textoverflowEllipsis;
-                }
+            &--crop {
+                max-width: 120px;
             }
         }
 
-        .device-info-container {
+        &__device-report-label {
+            color: $devices-group-text;
+        }
+
+        &__device-report-desc {
+            @include textoverflowEllipsis;
+        }
+
+        &__network-info {
+            display: flex;
+        }
+
+        &__actions {
             display: flex;
             align-items: center;
         }
 
-        .action-buttons {
-            display: flex;
-            align-items: center;
-
-            .queue-button {
-                background: url($device-queue-icon) no-repeat;
-                background-size: 100% 100%;
-                width: 25px;
-                height: 25px;
-                border: 0;
-                margin-right: 20px;
-            }
+        &__queue-action {
+            background: url($device-queue-icon) no-repeat;
+            background-size: 100% 100%;
+            width: 25px;
+            height: 25px;
+            border: 0;
+            margin-right: 20px;
         }
     }
 
-    .content {
-        font-size: 12px;
+    .hardware-panel {
+        width: 20%;
+        height: calc(100% - 100px);
+        float: left;
+        position: relative;
+        z-index: 121;
+        border-right: 2px solid $panel-delimiter-color;
+        background: $devices-groups-bg;
 
-        .hardware-panel {
-            width: 20%;
-            height: calc(100% - 100px);
-            float: left;
+        &__header {
+            font-weight: bold;
+            text-transform: uppercase;
+            height: 45px;
+            padding: 0 25px;
+            display: flex;
+            align-items: center;
+            color: $device-hardware-header;
+        }
+
+        &__title {
+            color: $devices-group-inactive;
+            font-size: 10px;
+            text-transform: uppercase;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px 0 25px;
+            font-weight: bold;
             position: relative;
-            z-index: 121;
-            border-right: 2px solid $panel-delimiter-color;
+            justify-content: space-between;
+        }
 
-            .wrapper-hardware {
-                height: calc(100% - 45px);
-                overflow-y: auto;
-                background: $devices-groups-bg;
+        &__wrapper {
+            height: calc(100% - 45px);
+            overflow-y: auto;
+        }
 
-                .hardware-title {
-                    color: $devices-group-inactive;
-                    font-size: 10px;
-                    text-transform: uppercase;
-                    height: 45px;
-                    display: flex;
-                    align-items: center;
-                    padding: 0 25px;
-                    font-weight: bold;
-                    position: relative;
-                }
+        &__icon-secondary {
+            cursor: pointer;
+            width: 20px;
 
-                .primary-ecu {
-                    position: relative;
-                    padding-bottom: 20px;
-
-                    &:before {
-                        position: absolute;
-                        content: '';
-                        width: 90%;
-                        background-color: $home-header-text;
-                        height: 1px;
-                        bottom: 0;
-                        left: 50%;
-                        right: 50%;
-                        transform: translate(-50%);
-                    }
-                }
-
-                a {
-                    @include transition;
-                    color: $devices-group-text;
-                    padding-left: 25px;
-                    border-left: 4px solid transparent;
-                    position: relative;
-                    margin-left: -10px;
-                    height: 90px;
-                    display: flex;
-                    align-items: center;
-
-                    .app-label {
-                        color: $home-header-text;
-                        border: 1px solid $home-header-text;
-                        margin-bottom: 10px;
-                    }
-
-                    &:hover {
-                        color: #fff;
-
-                        .app-label {
-                            color: #fff;
-                            border: 1px solid #fff;
-                        }
-                    }
-
-                    &.selected {
-                        color: #fff;
-                        margin-left: 0;
-                        border-left-color: $color-mint;
-
-                        .app-label {
-                            color: #fff;
-                            border: 1px solid #fff;
-                        }
-                    }
-
-                    .desc {
-                        width: 70%;
-                        @include textoverflowEllipsis;
-                    }
-
-                    .icons {
-                        position: absolute;
-                        right: 12px;
-                        top: 20px;
-
-                        .hardware-icon {
-                            display: inline-block;
-
-                            img {
-                                width: 20px;
-                                height: 20px;
-                            }
-
-                            &.key {
-                                margin-left: 5px;
-
-                                img {
-                                    width: 18px;
-                                    height: 18px;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                .not-available {
-                    padding: 10px 25px;
-                    color: $devices-group-text;
-                }
-
-                .hardware-secondary-details {
-                    cursor: pointer;
-                    position: absolute;
-                    right: 10px;
-                    width: 20px;
-                    top: 9px;
-
-                    &:hover {
-                        background-image: url($device-secondary-questionmark-active);
-                        background-size: contain;
-                    }
-                }
+            &:hover {
+                background-image: url($device-secondary-questionmark-active);
+                background-size: contain;
             }
         }
 
-        .software-panel {
-            width: 45%;
-            height: calc(100% - 100px);
-            float: left;
-            z-index: 120;
-            border-right: 2px solid $panel-delimiter-color;
-
-            .wrapper-software {
-                position: relative;
-                height: calc(100% - 45px);
-                background: #fff;
-            }
-           
-            .ios-list {
-
-                .labels {
-
-                    .label {
-                        float: right;
-                        font-size: 11px;
-                        font-weight: normal;
-                        cursor: pointer;
-                        background: #369E47;
-                        padding: 2px 14px;
-                        margin: 0 0 0 10px;
-                        float: right;
-                        border-radius: 10px;
-                    }
-
-                    .label-auto-update {
-                        background: $device-pack-auto-update;
-                    }
-
-                    .label-package-installed {
-                        background: $device-pack-installed-bg;
-                    }
-
-                    .label-package-queued {
-                        background: $device-pack-queued-bg;
-                    }
-
-                    .label-package-blacklisted {
-                        background: red;
-                    }
-                }
-
-                .item {
-
-                    &.selected {
-                        border-bottom: none;
-
-                        .name {
-                            font-size: 14px;
-                            color: $home-bg;
-                        }
-
-                        .package-versions-nr {
-                            color: $home-header-text;
-                            line-height: 20px;
-                        }
-                    }
-
-                    .left-box, .right-box {
-                        display: flex;
-                    }
-
-                    .package-versions-nr {
-                        color: #b5b7b9;
-                        margin-left: 10px;
-                        font-size: 12px;
-                    }
-
-                    .fa-stack {
-
-                        &.queued {
-                            color: #fff;
-
-                            .fa-dot-circle-o {
-                                color: $device-pack-queued-bg;
-                            }
-                        }
-                    }
-
-                    .wrapper-auto-update {
-                        color: $home-header-text;
-                        font-size: 10px;
-                        display: flex;
-                        align-items: center;
-                    }
-                }
-
-                .unmanaged {
-                    width: 100%;
-                    height: 90px;
-                    padding: 0 39px;
-                    border: 0;
-                    border-bottom: 1px solid #ddd;
-                    transition: all .2s ease-in;
-                    background: #f3f3f4;
-                    color: #9fa2a6;
-                    cursor: pointer;
-                    background: #d3d3d3; 
-
-                    &:hover {
-                        background: #d3d3d3;
-                    }
-
-                    .left-box {
-                        text-align: left;
-                        width: 70%;
-
-                        div {
-                            display: flex;
-
-                            &:not(:last-child) {
-                                margin-bottom: 5px;
-                            }
-                        }
-
-                        .sub-title {
-                            width: 25%;
-                            display: inline-block;
-                        }
-
-                        .value {
-                            width: 75%;
-                            display: inline-block;
-                            @include textoverflowEllipsis;
-                        }
-                    }
-                }
-
-                .versions-container {
-                    margin-bottom: 0;
-                
-                    .versions {
-
-                        li {
-                            cursor: pointer;
-                            padding: 15px 35px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-between;
-                            border-left: 4px solid transparent;
-                            @include transition;
-
-                            &:hover {
-                                background: #eee;
-                            }
-
-                            .left-box {
-                                width: 70%;
-
-                                div {
-                                    display: flex;
-
-                                    &:not(:last-child) {
-                                        margin-bottom: 5px;
-                                    }
-
-                                    .sub-title {
-                                        width: 25%;
-                                    }
-
-                                    .value {
-                                        width: 75%;
-                                        @include textoverflowEllipsis;
-                                    }
-                                }
-                            }
-
-                            .right-box {
-                                display: flex;
-                                flex-direction: column;
-                                width: 30%;
-                                align-items: flex-end;
-
-                                .fa-stack {
-
-                                    &.queued {
-                                        color: #fff;
-
-                                        .fa-dot-circle-o {
-                                            color: $device-pack-queued-bg;
-                                        }
-                                    }
-                                }
-
-                                img {
-                                    width: 25px;
-                                    height: 25px;
-                                }
-                            }
-
-                            &.selected {
-                                border-left: 4px solid $color-mint;
-                            }
-                        }
-                    }
-
-                    .info-auto-update {
-                        color: #fff;
-                        text-align: center;
-                        background: $switch-blue-color;
-                        padding: 10px 25px;
-                    }
-                }
-            }
-        }
-
-        .properties-panel {
-            width: 35%;
-            height: calc(100% - 100px);
-            min-height: 615px;
-            float: left;
-            z-index: 119;
+        &__primary {
             position: relative;
-
-            .wrapper-properties {
-                height: calc(100% - 45px);
-                position: relative;
-                background: #fff;
-
-                .additional-status {
-                    position: absolute;
-                    bottom: 0;
-                    width: 100%;
-                    height: 30px;
-                    color: #fff;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-
-                    &.bg-green {
-                        background-color: $device-pack-installed-bg;
-                    }
-
-                    &.bg-orange {
-                        background-color: $device-pack-queued-bg;
-                    }
-
-                    &.bg-grey {
-                        background-color: #666666;
-                    }
-
-                    &.bg-red {
-                        background-color: red;
-                    }
-                }
-
-                .details {
-                    padding: 35px;
-                    height: calc(100% - 30px);
-                    position: relative;
-                    display: flex;
-                    flex-direction: column;
-
-                    .heading {
-                        margin-bottom: 15px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-
-                        .title {
-                            font-weight: bold;
-                            font-size: 16px;
-                            white-space: nowrap;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            width: 65%;
-                        }
-                        
-                        .status {
-                            width: 35%;
-                            text-align: right;
-                            font-weight: bold;
-                            font-size: 10px;
-                            color: $device-hardware-header;
-
-                            img {
-                                width: 17px;
-                                margin: 0 0 5px 8px;
-                            }
-
-                            i {
-                                font-size: 2em;
-                                margin: 0 0 5px 8px;
-                            }
-
-                            .blacklisted, .blacklisted-installed {
-                                color: red;
-                            }
-                        }
-                    }
-
-                    .data {
-                        color: $device-properties-text;
-                        margin-bottom: 15px;
-
-                        span:not(.app-label) {
-                            line-height: 26px;
-                        }
-
-                        div {
-                            overflow: hidden;
-                        }
-
-                        .sub-title {
-                            width: 25%;
-                            float: left;
-                        }
-
-                        .value {
-                            width: 70%;
-                            float: left;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                        }
-                    }
-
-                    .comment {
-                        flex: auto;
-                        display: flex;
-                        flex-direction: column;
-                    }
-
-                    .comment-title {
-                        color: $device-hardware-header;
-                        font-size: 12px;
-                        font-weight: 500;
-                        margin-bottom: 5px;
-                    }
-
-                    .comment-value {
-                        border: 0;
-                        border-top: 1px solid $add-button-grey;
-                        border-bottom: 1px solid $add-button-grey;
-                        resize: none;
-                        cursor: default;
-                        background-color: transparent;
-                        width: 100%;
-                        font-size: 12px;
-                        padding: 5px 0;
-                        flex: auto;
-                    }
-
-                    .install {
-                        margin-top: 35px;
-
-                        .btn-primary {
-                            width: 100%;
-                            height: 60px;
-                            color: rgba(255,255,255,0.9);
-                            font-size: 22px;
-                            font-weight: 300;
-
-                            span {
-                                font-size: 20px!important;
-                                font-weight: 500!important;
-                            }
-                        }
-                    }
-                }
-            }
+            padding-bottom: 20px;
+            border-bottom: 1px solid $home-header-text;
         }
 
-        .device-offline {
-            
-            .title {
-                font-size: 24px;
+        &__hardware-label {
+            color: $home-header-text;
+            border: 1px solid $home-header-text;
+            margin-bottom: 10px;
+        }
+
+        &__ecu {
+            @include transition;
+            color: $devices-group-text;
+            padding-left: 25px;
+            border-left: 4px solid transparent;
+            position: relative;
+            margin-left: -10px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+
+            &--selected {
                 color: #fff;
+                margin-left: 0;
+                border-left-color: $color-mint;
+
+                .hardware-panel__hardware-label {
+                    color: #fff;
+                    border: 1px solid #fff;
+                }
+            }
+
+            &:hover {
+                color: #fff;
+
+                .hardware-panel__hardware-label {
+                    color: #fff;
+                    border: 1px solid #fff;
+                }
             }
         }
+
+        &__ecu-desc {
+            width: 70%;
+            @include textoverflowEllipsis;
+        }
+
+        &__ecu-actions {
+            position: absolute;
+            right: 12px;
+            top: 20px;
+        }
+
+        &__ecu-action {
+            display: inline-block;
+
+            &--key {
+                margin-left: 5px;
+            }
+
+            &--key-size {
+                width: 18px;
+                height: 18px;
+            }
+
+            &--details-size {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        &__no-ecus {
+            padding: 10px 25px;
+            color: $devices-group-text;
+        }
     }
+
+    .software-panel {
+        width: 45%;
+        height: calc(100% - 100px);
+        float: left;
+        z-index: 120;
+        border-right: 2px solid $panel-delimiter-color;
+
+        &__wrapper {
+            position: relative;
+            height: calc(100% - 45px);
+            background: #fff;
+        }
+
+        &__item-versions-nr {
+            color: #b5b7b9;
+            margin-left: 10px;
+            font-size: 12px;
+        }
+
+        &__item {
+            background: #fff;
+            height: 60px;
+            padding: 0 25px;
+            border-bottom: 1px solid #ddd;
+            @include transition;
+            background: $device-item-bg;
+            color: $devices-group-text;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+
+            &:hover {
+                background: #f5f5f5;
+            }
+
+            &--selected {
+                background: $device-active-item-bg;
+                border-bottom: none;
+
+                .software-panel__item-name {
+                    font-size: 14px;
+                    color: $home-bg;
+                }
+
+                .software-panel__item-versions-nr {
+                    color: $home-header-text;
+                    line-height: 20px;
+                }
+            }
+        }
+
+        &__auto-update {
+            color: $home-header-text;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        &__item-left, &__item-right {
+            display: flex;
+        }
+
+        &__label {
+            float: right;
+            font-size: 11px;
+            font-weight: normal;
+            cursor: pointer;
+            background: #369E47;
+            padding: 2px 14px;
+            float: right;
+            border-radius: 10px;
+            color: #fff;
+            line-height: 1;
+
+            &:not(:last-child) {
+                margin-left: 10px;
+            }
+
+            &--auto-update {
+                background: $device-pack-auto-update;
+            }
+
+            &--installed {
+                background: $device-pack-installed-bg;
+            }
+
+            &--queued {
+                background: $device-pack-queued-bg;
+            }
+
+            &--blacklisted {
+                background: red;
+            }
+        }
+
+        &__item-unmanaged {
+            height: 90px;
+            padding: 0 40px;
+            border-bottom: 1px solid #ddd;
+            color: #9fa2a6;
+            cursor: pointer;
+            background: #d3d3d3; 
+            display: flex;
+            align-items: center;
+        }
+
+        &__item-unmanaged-left {
+            text-align: left;
+            width: 70%;
+        }
+
+        &__item-unmanaged-subtitle {
+            width: 25%;
+            display: inline-block;
+        }
+
+        &__item-unmanaged-value {
+            width: 75%;
+            display: inline-block;
+            @include textoverflowEllipsis;
+        }
+
+        &__item-unmanaged-block {
+            display: flex;
+
+            &:not(:last-child) {
+                margin-bottom: 5px;
+            }
+        }
+
+        &__details {
+            margin: 0;
+        }
+
+        &__version {
+            cursor: pointer;
+            padding: 15px 35px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 4px solid transparent;
+            @include transition;
+            border-bottom: 1px solid #e1e1e1;
+
+            &:hover {
+                background: #eee;
+            }
+
+            &--selected {
+                border-left: 4px solid $color-mint;
+            }
+        }
+
+        &__version-left {
+            width: 70%;
+        }
+
+        &__version-block {
+            display: flex;
+
+            &:not(:last-child) {
+                margin-bottom: 5px;
+            }
+        }
+
+        &__version-subtitle {
+            width: 25%;
+        }
+
+        &__version-value {
+            width: 75%;
+            @include textoverflowEllipsis;
+        }
+
+        &__version-right {
+            display: flex;
+            flex-direction: column;
+            width: 30%;
+            align-items: flex-end;
+        }
+
+        &__version-icon {
+            width: 25px;
+            height: 25px;
+
+            &--queued {
+                color: $device-pack-queued-bg;
+                position: static;
+            }
+        }
+
+        &__auto-update-tip {
+            color: #fff;
+            text-align: center;
+            background: $switch-blue-color;
+            padding: 10px 25px;
+        }
+    }
+
+    .properties-panel {
+        width: 35%;
+        height: calc(100% - 100px);
+        min-height: 615px;
+        float: left;
+        z-index: 119;
+        position: relative;
+
+        &__wrapper {
+            height: calc(100% - 45px);
+            position: relative;
+            background: #fff;
+        }
+
+        &__bottom-status {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &--green {
+                background-color: $device-pack-installed-bg;
+            }
+
+            &--orange {
+                background-color: $device-pack-queued-bg;
+            }
+
+            &--grey {
+                background-color: #666666;
+            }
+
+            &--red {
+                background-color: red;
+            }
+        }
+
+        &__info {
+             padding: 35px;
+            height: calc(100% - 30px);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        &__info-heading {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        &__info-title {
+            font-weight: bold;
+            font-size: 16px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 65%;
+        }
+
+        &__info-status {
+            width: 35%;
+            text-align: right;
+            font-weight: bold;
+            font-size: 10px;
+            color: $device-hardware-header;
+        }
+
+        &__info-status-icon {
+            width: 17px;
+            margin: 0 0 5px 8px;
+
+            &--queued {
+                font-size: 2em;
+                margin: 0 0 5px 8px;
+            }
+        }
+
+        &__info-data {
+            color: $device-properties-text;
+            margin-bottom: 15px;
+        }
+
+        &__info-data-block {
+            overflow: hidden;
+            line-height: 26px;
+        }
+
+        &__info-data-subtitle {
+            width: 25%;
+            float: left;
+        }
+
+        &__info-data-value {
+            width: 70%;
+            float: left;
+            @include textoverflowEllipsis;
+        }
+
+        &__info-comment {
+            flex: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        &__info-comment-title {
+            color: $device-hardware-header;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        &__info-comment-value {
+            border: 0;
+            border-top: 1px solid $add-button-grey;
+            border-bottom: 1px solid $add-button-grey;
+            resize: none;
+            cursor: default;
+            background-color: transparent;
+            width: 100%;
+            font-size: 12px;
+            padding: 5px 0;
+            flex: auto;
+        }
+
+        &__install {
+            margin-top: 35px;
+        }
+
+        &__install-button {
+            width: 100%;
+            height: 60px;
+            font-size: 22px;
+            font-weight: 300;
+        }
+    }    
 }

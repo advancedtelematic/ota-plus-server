@@ -111,7 +111,7 @@ class HardwarePanel extends Component {
         const isPrimaryEcuActive = hardwareStore.activeEcu.hardwareId === devicesStore._getPrimaryHardwareId();
         const primaryEcus = (
             <span>
-                <div className="hardware-title">
+                <div className="hardware-panel__title">
                     {primaryEcusTitle}
                 </div>
                 <DevicePrimaryEcu
@@ -131,14 +131,14 @@ class HardwarePanel extends Component {
         );
         const secondaryEcus = (
             <span>
-                <div className="hardware-title">
+                <div className="hardware-panel__title">
                     {secondaryEcusTitle}
                     {isPrimaryEcuActive ?
-                        <img src="/assets/img/icons/black/questionmark.svg" alt="" className="hardware-secondary-details" 
+                        <img src="/assets/img/icons/black/questionmark.svg" alt="" className="hardware-panel__icon-secondary" 
                              onClick={this.showSecondaryDescription} id="hardware-secondary-ecu-details" 
                          />
                     :
-                        <img src="/assets/img/icons/white/questionmark.svg" alt="" className="hardware-secondary-details" 
+                        <img src="/assets/img/icons/white/questionmark.svg" alt="" className="hardware-panel__icon-secondary" 
                              onClick={this.showSecondaryDescription} id="hardware-secondary-ecu-details" 
                          />
                     }
@@ -164,7 +164,7 @@ class HardwarePanel extends Component {
                         );
                     })
                 :
-                    <div className="not-available" id="hardware-secondary-not-available">
+                    <div className="hardware-panel__no-ecus" id="hardware-secondary-not-available">
                         {noEcus}
                     </div>
                 }
@@ -172,17 +172,15 @@ class HardwarePanel extends Component {
         );
         return (
             <div className="hardware-panel">
-                <div className="hardware-header">
+                <div className="hardware-panel__header">
                     {title}
                 </div>
-                <div className="wrapper-hardware">
-                    <div className="hardware-list">
-                        <div className="primary-ecu font-small">
-                            {primaryEcus}
-                        </div>
-                        <div className="secondary-ecus font-small">
-                            {secondaryEcus}
-                        </div>
+                <div className="hardware-panel__wrapper">
+                    <div className="hardware-panel__primary">
+                        {primaryEcus}
+                    </div>
+                    <div className="hardware-panel__secondaries">
+                        {secondaryEcus}
                     </div>
                     {this.hardwareOverlayShown ?
                         <DeviceHardwareOverlay

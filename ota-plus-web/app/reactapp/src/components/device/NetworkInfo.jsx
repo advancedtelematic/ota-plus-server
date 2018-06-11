@@ -10,10 +10,10 @@ class NetworkInfo extends PureComponent {
         const mac = data.mac;
         const hostname = data.hostname;
         return (
-             <div className="device-info-group">
-                <div className="device-info-item crop" id="ip-info">
-                    <span className="device-info-label">IP</span>
-                    <div className="device-info-desc" title={ip}>
+             <div className="page-header__network-info">
+                <div className="page-header__device-report-item page-header__device-report-item--crop" id="ip-info">
+                    <span className="page-header__device-report-label">IP</span>
+                    <div className="page-header__device-report-desc" title={ip}>
                         {ip ? 
                             ip 
                         : 
@@ -21,9 +21,9 @@ class NetworkInfo extends PureComponent {
                         }
                     </div>
                 </div>
-                <div className="device-info-item crop" id="mac-info">
-                    <span className="device-info-label">MAC</span>
-                    <div className="device-info-desc" title={mac}>
+                <div className="page-header__device-report-item page-header__device-report-item--crop" id="mac-info">
+                    <span className="page-header__device-report-label">MAC</span>
+                    <div className="page-header__device-report-desc" title={mac}>
                         {mac ? 
                             mac 
                         : 
@@ -31,9 +31,9 @@ class NetworkInfo extends PureComponent {
                         }
                     </div>
                 </div>
-                <div className="device-info-item crop" id="hostname-info">
-                    <span className="device-info-label">Hostname</span>
-                    <div className="device-info-desc" title={hostname}>
+                <div className="page-header__device-report-item page-header__device-report-item--crop" id="hostname-info">
+                    <span className="page-header__device-report-label">Hostname</span>
+                    <div className="page-header__device-report-desc" title={hostname}>
                         {hostname ? 
                             hostname
                         : 
