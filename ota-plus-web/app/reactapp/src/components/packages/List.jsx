@@ -132,7 +132,7 @@ class List extends Component {
         this.tmpIntervalId = null;
     }
     render() {
-        const { packagesStore, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, alphaPlusEnabled, showDeleteConfirmation, expandedPackageName, showEditComment } = this.props;        
+        const { packagesStore, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, alphaPlusEnabled, showDeleteConfirmation, expandedPackageName, showEditComment } = this.props;
         return (
             <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching ? " fetching" : "")} ref="list">
                 {packagesStore.packagesCount ? 
