@@ -13,12 +13,12 @@ class MtuList extends Component {
     render() {
         const { packagesStore, device } = this.props;
         const emptyHistory = (
-            <div className="wrapper-center font-small">
+            <div className="wrapper-center">
                 Multi target update history is empty.
             </div>
         );
         return (
-            <ul className="list history font-small">
+            <ul className="queue-modal__list">
                 <InfiniteScroll
                     className="wrapper-infinite-scroll"
                     hasMore={packagesStore.packagesHistoryCurrentPage < packagesStore.packagesHistoryTotalCount / packagesStore.packagesHistoryLimit}
