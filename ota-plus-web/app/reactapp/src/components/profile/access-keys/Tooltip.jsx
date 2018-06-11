@@ -11,7 +11,7 @@ class Tooltip extends Component {
         const content = (
             <span>
                 <div className="text-center">
-                    ATS Garage automatically provisions and activates your devices the first
+                    HERE OTA Connect automatically provisions and activates your devices the first
                     time they come online. Here, you can create and manage the provisioning keys
                     linked to your account.
                 </div>

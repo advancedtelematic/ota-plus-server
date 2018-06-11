@@ -10,7 +10,7 @@ class Tooltip extends Component {
         const content = (
             <span>
                 <div className="text-center">
-                    With ATS Garage, you can <strong>blacklist</strong> problem packages, ensuring they <br />
+                    With HERE OTA Connect, you can <strong>blacklist</strong> problem packages, ensuring they <br />
                     won't get installed on any of your devices. <br /><br />
                     On the <strong>Impact analysis tab</strong>, you can view which of your devices already <br /> 
                     have the blacklisted version of the package installed, letting you <br />
