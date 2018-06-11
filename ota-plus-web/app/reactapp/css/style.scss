@@ -2055,54 +2055,22 @@ input {
 }
 
 .blacklist-modal {
-    .content {
-        width: 550px !important;
+
+    .subactions {
+        text-align: left;
+        margin-top: 20px;
     }
 
-    .heading {
-        img {
-            width: 30px;
-            vertical-align: top;
-        }
+    .body-actions {
+        margin: 20px 0 0;
     }
 
-    .body {
-        text-align: center;
+    .top-text {
+        margin-bottom: 20px;
+    }
 
-        .subactions {
-            text-align: left;
-            margin-top: 20px;
-        }
-
-        .body-actions {
-            margin: 20px 0 0;
-        }
-
-        .name {
-            font-size: 20px;
-            line-height: 1.5em;
-            padding: 20px 0 0 0;
-            @include textoverflowEllipsis;
-        }
-
-        .version {
-            font-size: 20px;
-            font-weight: bold;
-            line-height: 1.5em;
-            @include textoverflowEllipsis;
-        }
-
-        .desc {
-            color: $color-lightgrey;
-            padding: 20px 0 0 0;
-        }
-
-        .warning {
-            color: red;
-            font-weight: bold;
-            line-height: 1.5em;
-            padding: 10px 0 0 0;
-        }
+    .bottom-text {
+        margin-bottom: 30px;
     }
 }
 
