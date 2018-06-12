@@ -27,7 +27,7 @@ class PropertiesPanel extends Component {
                 </div>
                 <div className="properties-panel__wrapper">
                     {!packagesReady ?
-                        <div className="wrapper-loader">
+                        <div className="wrapper-center">
                             <Loader />
                         </div>
                     :
