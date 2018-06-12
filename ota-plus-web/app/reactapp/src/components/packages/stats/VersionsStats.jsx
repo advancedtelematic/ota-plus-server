@@ -45,36 +45,33 @@ class VersionsStats extends Component {
             installedOnEcusTotal += version.installedOnEcus;
         });
         const content = (
-            <div className="chart-panel" id={"package-" + pack.packageName + "-stats"}>
-                <div className={installedOnEcusTotal ? "wrapper-center" : "wrapper-center"}>
-                    <div id="target_chart_device_count" className={installedOnEcusTotal ? "total-count" : "hide"}>
-                        {installedOnEcusTotal}
-                    </div>
-                    {stats.length ?
-                        <div className="doughnut-wrapper">
-                            <Doughnut 
-                                data={stats} 
-                                width="175" 
-                                height="175" 
-                                options={{
-                                    percentageInnerCutout: 75, 
-                                    segmentStrokeWidth: 0,
-                                    showTooltips: true,
-                                    segmentShowStroke: false
-                                }}
-                            />
-                        </div>
-                    :
-                        <div id={"package-" + pack.packageName + "-not-installed"} className="not-installed">
-                            This package has not been installed yet.
-                        </div>
-                    }
-                    
+            <div id={"package-" + pack.packageName + "-stats"}>
+                <div id="target_chart_device_count" className={installedOnEcusTotal ? "c-package__chart-total" : "hide"}>
+                    {installedOnEcusTotal}
                 </div>
+                {stats.length ?
+                    <div className="c-package__chart-wrapper">
+                        <Doughnut 
+                            data={stats} 
+                            width="175" 
+                            height="175" 
+                            options={{
+                                percentageInnerCutout: 75, 
+                                segmentStrokeWidth: 0,
+                                showTooltips: true,
+                                segmentShowStroke: false
+                            }}
+                        />
+                    </div>
+                :
+                    <div id={"package-" + pack.packageName + "-not-installed"} className="not-installed">
+                        This package has not been installed yet.
+                    </div>
+                }
             </div>
         );
         return (
-            <div className="packages-stats">
+            <div className="c-package__stats">
                 {content}
             </div>
         )

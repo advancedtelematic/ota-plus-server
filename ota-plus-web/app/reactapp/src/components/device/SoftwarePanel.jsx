@@ -24,7 +24,7 @@ class SoftwarePanel extends Component {
                 <div className="software-panel__wrapper">
                     <span>
                         {!packagesReady ?
-                            <div className="wrapper-loader">
+                            <div className="wrapper-center">
                                 <Loader />
                             </div>
                         :
