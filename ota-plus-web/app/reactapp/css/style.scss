@@ -2341,7 +2341,7 @@ input {
 
     &__item {
         padding: 15px;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid $device-active-item-bg;
         position: relative;
 
         &:first-child {
@@ -2360,6 +2360,21 @@ input {
         display: flex;
         align-items: center;
         justify-content: space-between;
+    }
+
+    &__item-process-status {
+        color: $home-header-button;
+        font-size: 12px;
+        margin-top: 8px;
+        font-weight: 400;
+        display: flex;
+        align-items: center;
+    }
+
+    &__process-dots {
+        width: 15px;
+        height: 10px;
+        margin-left: 2px;
     }
 
     &__item-created {
@@ -2440,7 +2455,11 @@ input {
         transition: all .2s ease-in; 
         color: $home-grey;
         font-size: 12px;
-        font-weight: 300;
+    }
+
+    &__cancel-update {
+        color: $campaigns-cancel-color;
+        font-weight: 400;
     }
 
     &__pending-dots {

@@ -34,6 +34,14 @@ class MultiTargetITem extends Component {
                             }
                         </div>
                     </div>
+                    <div className="queue-modal__item-process-status">
+                        {inFlight ?
+                            <span>Downloading</span>
+                        :
+                            <span>Queued, waiting for device to connect</span>
+                        }
+                        <img src="/assets/img/icons/points.gif" className="queue-modal__process-dots" alt="Icon" />
+                    </div>
                 </div>
 
                 <div className="queue-modal__operations">
