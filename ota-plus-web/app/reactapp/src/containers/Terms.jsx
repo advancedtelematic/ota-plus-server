@@ -17,7 +17,7 @@ export default class Terms extends Component {
         this.showModal = !this.showModal;
     }
     render() {
-        const {setTermsAccepted, userStore, backButtonAction, checked} = this.props;
+        const {userStore, backButtonAction, checked} = this.props;
         let terms = _.find(userStore.contracts, (obj) => contracts.default[obj.contract]);
         let agreedDate = terms && terms.accepted;
         !terms ? terms = {contract: contracts.defaultName}: terms;
@@ -28,7 +28,7 @@ export default class Terms extends Component {
                 </div>
                 <div className="body-actions" style={{display:'flex', justifyContent: 'space-between'}}>
                     <button className="back btn-primary" id="modal-back-button" onClick={this.toggleModal.bind(this)}>Back</button>
-                    <button className="btn-primary" id="modal-accept-button" onClick={() => setTermsAccepted(terms.contract)}>
+                    <button className="btn-primary" id="modal-accept-button" onClick={() => userStore.acceptContract(terms.contract)}>
                         I agree
                     </button>
                 </div>
@@ -62,7 +62,7 @@ export default class Terms extends Component {
                     <div className="steps">
                         <a href="/login" className="back btn-primary" id="terms-btn-back" onClick={backButtonAction ? backButtonAction : ''}>Back</a>
                         {this.termsAccepted ?
-                            <button className="next btn-primary" id="terms-btn-continue" onClick={() => {setTermsAccepted(terms && terms.contract)}}>Continue</button> :
+                            <button className="next btn-primary" id="terms-btn-continue" onClick={() => {userStore.acceptContract(terms && terms.contract)}}>Continue</button> :
                             <button className="next btn-primary" id="terms-btn-continue_disabled" disabled>Continue</button>
                         }
                     </div>
