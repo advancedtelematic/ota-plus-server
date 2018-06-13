@@ -8,7 +8,7 @@
         height: 100%;
         float: left;
 
-        .heading {
+        &__header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -19,122 +19,137 @@
             text-transform: uppercase;
         }
 
-        .wrapper-groups {
+        &__wrapper {
             height: calc(100% - 90px);
             overflow-y: auto;
+        }
 
-            .group-btn {
-                color: $devices-group-text;
-                text-align: left;
-                width: 100%;
-                height: 90px;
-                position: relative;
-                overflow: hidden;
-                @include transition;
+        &__item {
+            color: $devices-group-text;
+            text-align: left;
+            width: 100%;
+            height: 90px;
+            position: relative;
+            overflow: hidden;
+            @include transition;
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            cursor: pointer;
+
+            &:hover {
+                color: #fff;
+            }
+
+            &--selected {
+                border-left: 4px solid $home-header-button;
+                color: #fff;
+            }
+
+            &--active {
+                color: #fff;
+                background: #272D37;
+                border: 2px dashed #48DAD0;
+            }
+        }
+
+        &__item-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 4px;
+            margin-right: 15px;
+
+            &--default {
+                background: url($group-default-image-url) rgba(15,22,33,0.3) no-repeat;
+                background-size: cover;
+            }
+
+            &--fleet {
                 display: flex;
                 align-items: center;
-                padding: 0 30px;
-                cursor: pointer;
+                justify-content: center;
+                background: $fake-header-text;
+                font-size: 16px;
+                font-weight: 500;
+                text-transform: uppercase;
+            }
 
-                &:hover {
-                    color: #fff;
-                }
+            &--active {
+                background: url($group-active-image-url) rgba(15,22,33,0.3) no-repeat;
+            }
+        }
 
-                &.selected {
-                    border-left: 4px solid $home-header-button;
-                    color: #fff;
+        &__item-desc {
+            width: 70%;
 
-                    .icon-bg {
-                        background: url($group-active-image-url) rgba(15,22,33,0.3) no-repeat;
-                    }
-                }
+            &:hover {
 
-                &.artificial {
-                    
-                    .desc {
-                        margin: 0;
-                    }
-                }
-
-                &.active {
-                    color: #fff;
-                    background: #272D37;
-                    border: 2px dashed #48DAD0;
-                }
-
-                .icon {
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 4px;
-                }
-
-                .icon-bg {
-                    background: url($group-default-image-url) rgba(15,22,33,0.3) no-repeat;
-                    background-size: cover;
-                }
-
-                .icon-fleet {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: $fake-header-text;
-                    font-size: 16px;
-                    font-weight: 500;
-                    text-transform: uppercase;
-                }
-
-                .desc {
-                    width: 70%;
-                    margin-left: 15px;
-
-                    &:hover {
-
-                        .title {
-
-                            img {
-                                opacity: 1;
-                            }
-                        }
-                    }
-
-                    .title {
-                        font-size: 16px;
-                        justify-content: space-between;
-                        align-items:center;
-                        display: flex;
-
-                        span {
-                            max-width: 150px;
-                            @include textoverflowEllipsis;
-                        }
-
-                        img {
-                            width: 12px;
-                            height: 12px;
-                            opacity: 0;
-                            transition: opacity 0.4s ease;
-                        }
-                    }
-
-                    .subtitle {
-                        font-size: 12px;
-                    }
+                img {
+                    opacity: 1;
                 }
             }
         }
+
+        &__item-title {
+            font-size: 16px;
+            justify-content: space-between;
+            align-items:center;
+            display: flex;
+        }
+
+        &__item-title-value {
+            max-width: 150px;
+            @include textoverflowEllipsis;
+        }
+
+        &__rename-icon {
+            width: 12px;
+            height: 12px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        &__item-subtitle {
+            font-size: 12px;
+        }
     }
 
-    .content-panel {
+    .devices-panel {
         height: 100%;
         margin-left: 350px;
         position: relative;
         overflow-y: hidden;
 
+        .subheader {
+            background: transparent;
+            height: 60px;
+            padding: 0 30px;
+        } 
+
         .search-box {
             margin-right: 5px;
         }
 
-        .devices-heading {
+        .wrapper-infinite-scroll {
+            overflow-y: auto;
+        }
+
+        &__wrapper {
+            height: calc(100% - 60px);
+            padding: 0 30px;
+        }
+
+        &__list {
+            height: 100%;
+            position: relative;
+            min-height: 305px;
+
+            &--alpha {
+                height: 50%;
+            }
+        }
+
+        &__title {
             color: $devices-group-inactive;
             text-transform: uppercase;
             font-size: 12px;
@@ -150,168 +165,177 @@
             }
         }
 
-        .subheader {
-            background: transparent;
-            height: 60px;
-            padding: 0 30px;
-        }
+        &__dashboard {
+            overflow-y: hidden;
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            right: 30px;
 
-        .devices-wrapper {
-            height: calc(100% - 60px);
-            padding: 0 30px;
-
-            .devices-list {
-                height: 100%;
-                position: relative;
-                min-height: 305px;
-
-                &--alpha {
-                    height: 50%;
-                }
-            }
-
-            .wrapper-infinite-scroll {
-                overflow-y: auto;
-                float: none;
-            }
-
-            .wrapper-dashboard {
-                overflow-y: hidden;
-                position: absolute;
-                bottom: 30px;
-                left: 30px;
-                right: 30px;
-
-                @media(max-height: 950px) {
-                    margin-top: 2%;
-                    position: static;
-                }
-
-                .top {
-                    display: flex;
-                }
-
-                .bottom {
-                    display: flex;
-                }
-
-                .dashboard-top {
-                    flex: 1;
-                    padding: 15px;
-                    background-color: $devices-groups-bg;
-                    color: #fff;
-                    font-size: 18px;
-                    margin-right: 5px;
-
-                    @media(max-height: 850px) {
-                        font-size: 11px;
-                    }
-
-                    .icon-up {
-                        width: 0;
-                        height: 0;
-                        border-left: 8px solid transparent;
-                        border-right: 8px solid transparent;
-                        border-bottom: 12px solid #48dad0;
-                        margin-left: 15px;
-                        display: inline-block;
-                        margin-left: 5px;
-                    }
-                }
-
-                .dashboard-content {
-                    flex: 1;
-                    padding: 15px;
-                    background-color: $devices-groups-bg;
-                    color: #fff;
-                    margin: 5px 5px 0 0;
-                    flex-direction: column;
-                    display: flex;
-                }
-
-                .dashboard-data {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    flex: auto;
-                    padding-top: 15px;
-                    font-size: 11px;
-
-                    @media(max-height: 850px) {
-                        padding-top: 0;
-                    }
-                }
-
-                .devices-chart-wrapper {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-evenly;
-                    width: 100%;
-
-                    .value-legend {
-                        margin-bottom: 30px;
-                    }
-
-                    li {
-                        display: flex;
-                        align-items: center;
-                    }
-                }
-            }
-
-            .inner-container {
-                display: flex;
-                flex-wrap: wrap;
-            }
-
-            .common-box {
-                cursor: move;
-            }
-
-            .content-empty {
-                color: #fff;
-                font-size: 21px;
+            @media(max-height: 950px) {
+                margin-top: 2%;
+                position: static;
             }
         }
 
-        .common-box {
+        &__top-wrapper {
+            display: flex;
+        }
 
-            .device-status {
-                position: relative;
-                top: -5px;
-                left: 25px;
-                width: 18px;
-                height: 18px;
+        &__dashboard-top {
+            flex: 1;
+            padding: 15px;
+            background-color: #3f454d;
+            color: #fff;
+            font-size: 18px;
+            margin-right: 5px;
+
+            @media(max-height: 850px) {
+                font-size: 11px;
+            }
+        }
+
+        &__dashboard-top-icon {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 12px solid #48dad0;
+            margin-left: 15px;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        &__dashboard-bottom {
+            display: flex;
+        }
+
+        &__dashboard-content {
+            flex: 1;
+            padding: 15px;
+            background-color: $devices-groups-bg;
+            color: #fff;
+            margin: 5px 5px 0 0;
+            flex-direction: column;
+            display: flex;
+        }
+
+        &__dashboard-data {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: auto;
+            padding-top: 15px;
+            font-size: 11px;
+
+            @media(max-height: 850px) {
+                padding-top: 0;
+            }
+        }
+
+        &__chart-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            width: 100%;
+        }
+
+        &__legend-values {
+            margin-bottom: 30px;
+        }
+
+        &__stats-item {
+            display: flex;
+            align-items: center;
+        }
+
+        &__list-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        &__list-empty {
+            color: #fff;
+            font-size: 21px;
+        }
+
+        &__device {
+            cursor: move;
+            color: #fff;
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+            background: $devices-groups-bg;
+            height: 100px;
+            transition: background-color 0.2s ease-in;
+            margin: 0 5px 5px 0;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            width: calc((100% / 4) - 5px);
+
+            @media(max-width: 1600px) {
+                width: calc((100% / 3) - 5px);
             }
 
-            .icon {
-                background-image: url($car-image-url);
-                background-color: $fake-header-text!important;
-                background-size: 100% 100%;
-                background-color: transparent;
-                width: 50px;
-                height: 50px;
-
-                &.sedan {
-                    background-image: url($sedan-image-url);
-                }
-
-                &.hatchback {
-                    background-image: url($hatchback-image-url);
-                }
-
-                &.eh0 {
-                    background-image: url($eh0-image-url);
-                }
-
-                &.sport {
-                    background-image: url($sport-image-url);
-                }
-
-                &.sw {
-                    background-image: url($sw-image-url);
-                }
+            @media(min-width: 1601px) and (max-width: 1920px) {
+                width: calc((100% / 4) - 5px);
             }
+
+            @media(min-width: 1921px) {
+                width: calc((100% / 5) - 5px);
+            }
+
+            &:hover {
+                background-color: rgba(255, 255, 255, .15);
+            }
+        }
+
+        &__device-icon {
+            border-radius: 4px;
+            background-image: url($car-image-url);
+            background-color: $fake-header-text!important;
+            background-size: 100% 100%;
+            width: 50px;
+            height: 50px;
+            position: relative;
+
+            &--sedan {
+                background-image: url($sedan-image-url);
+            }
+
+            &--hatchback {
+                background-image: url($hatchback-image-url);
+            }
+
+            &--eh0 {
+                background-image: url($eh0-image-url);
+            }
+
+            &--sport {
+                background-image: url($sport-image-url);
+            }
+
+            &--sw {
+                background-image: url($sw-image-url);
+            }
+        }
+
+        &__device-desc {
+            text-align: left;
+            width: 62%;
+            margin-left: 15px;
+            transition: all 0.2s ease-in;
+        }
+
+        &__device-title {
+            font-size: 14px;
+            text-transform: capitalize;
+            @include textoverflowEllipsis;
+        }
+
+        &__device-subtitle {
+            font-size: 10px;
+            @include textoverflowEllipsis;
+            color: rgba(255,255,255,0.5);
         }
     }
 }

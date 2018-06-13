@@ -125,7 +125,14 @@ class ListItemVersion extends Component {
                         <div className="c-package__heading">
                             Comment
                         </div>
-                        {version.comment}
+                        <textarea 
+                            className="c-package__comment-value"
+                            name="comment-stick" 
+                            rows="5"
+                            value={version.comment}
+                            disabled
+                            id={"package-" + packageName + "-comment-" + version.id.version.substring(0,8)}>
+                        </textarea>
                     </div>
                     {alphaPlusEnabled ?
                         <div className="c-package__manager">
@@ -204,7 +211,7 @@ class ListItemVersion extends Component {
                         null
                     }
                 </div>
-                <div className="dots" onClick={this.toggleSubmenu}>
+                <div className="dots" onClick={this.toggleSubmenu} id={"package-" + packageName + "-comment-overlay-" + version.id.version.substring(0,8)}>
                     <span></span>
                     <span></span>
                     <span></span>

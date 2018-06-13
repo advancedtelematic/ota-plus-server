@@ -34,25 +34,25 @@ class SecondaryEcu extends Component {
                 <a
                     href="#"
                     id={"hardware-secondary-" + ecu.id}
-                    className={active ? " selected" : ""}
+                    className={"hardware-panel__ecu" + (active ? " hardware-panel__ecu--selected" : "")}
                     onClick={this.onEcuClick.bind(this, ecu)}
                 >
-                    <div className="desc">
-                        <span id={"hardware-id-" + ecu.hardwareId} className="app-label">
+                    <div className="hardware-panel__ecu-desc">
+                        <span id={"hardware-id-" + ecu.hardwareId} className="hardware-panel__hardware-label app-label">
                             {ecu.hardwareId}
                         </span> <br />
                         Serial: <span id={"hardware-serial-" + ecu.id}>
                             {ecu.id}
                         </span>
                     </div>
-                    <div className="icons"
+                    <div className="hardware-panel__ecu-actions"
                          id={"hardware-key-icon-secondary-" + ecu.id}
                          onClick={showPopover.bind(this, ecu.id)}>
-                            <span className="hardware-icon key">
+                            <span className="hardware-panel__ecu-action hardware-panel__ecu-action--key">
                                 {active ?
-                                    <img src="/assets/img/icons/white/key.svg" alt="Icon" />
+                                    <img src="/assets/img/icons/white/key.svg" className="hardware-panel__ecu-action--key-size" alt="Icon" />
                                 :
-                                    <img src="/assets/img/icons/black/key.svg" alt="Icon" />
+                                    <img src="/assets/img/icons/black/key.svg" className="hardware-panel__ecu-action--key-size" alt="Icon" />
                                 }
                             </span>
                     </div>

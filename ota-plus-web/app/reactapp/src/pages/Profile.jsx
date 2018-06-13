@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
-import { Header } from '../partials';
 import { ProfileHeader } from '../components/profile';
 
 const title = "Profile";

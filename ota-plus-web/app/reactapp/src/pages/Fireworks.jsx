@@ -19,29 +19,26 @@ class Fireworks extends Component {
         this.context.router.push(`/device/` + directorDeviceId);
     }
     render() {
-        const { devicesStore } = this.props;
         return (
             <FadeAnimation>
-                <div className="wrapper-center wrapper-responsive">
-                	<div className="fireworks-container">
-                        <div className="item">
-                            <div className="title">
-                                CONGRATULATIONS
+                <div className="wrapper-center">
+                	<div className="fireworks">
+                        <div className="fireworks__title">
+                            CONGRATULATIONS
+                        </div>
+                        <div className="fireworks__body">
+                            <img className="fireworks__icon" src="/assets/img/icons/fireworks_check.svg" alt="Image" />
+                            <div className="fireworks__subtitle">
+                                Your first device is online!
                             </div>
-                            <div className="body">
-                                <img src="/assets/img/icons/fireworks_check.svg" alt="Image" />
-                                <div className="subtitle">
-                                    Your first device is online!
-                                </div>
-                                <div className="text">
-                                    Every time you build a new image, you can send it to this device over the air.
-                                </div>
-                                <div className="action">
-                                    <button className="btn-primary" onClick={this.acknowledgeFireworks}>
-                                        Go to my device
-                                    </button>
-                                </div>
-                            </div>
+                            <div className="fireworks__text">
+                                Every time you build a new image, you can send it to this device over the air.
+                            </div>                            
+                        </div>
+                        <div className="fireworks__action">
+                            <button className="fireworks__button btn-primary" onClick={this.acknowledgeFireworks}>
+                                Go to my device
+                            </button>
                         </div>
                 	</div>
                 </div>

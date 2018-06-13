@@ -113,77 +113,69 @@ class DependenciesManager extends Component {
 
         const content = (
             <span>                
-                <div className="content">
-                    <section className="current-pack" id="current-pack">
-                        <div className="name" id={"current-pack-" + activePackage.id.name}>
-                            {activePackage.id.name}
-                        </div>
-                        <div className="version" id={"current-pack-" + activePackage.id.version}>
-                            {activePackage.id.version}
-                        </div>
-                    </section>
-                    <div className="other-packs-list" id="other-packs-list">
-                        {_.map(packages, (packs, letter) => {
-                            return _.map(packs, (pack, i) => {
-                                return (
-                                    pack.packageName !== activePackage.id.name ?
-                                        <section className="other-pack" key={i}>
-                                            <div className="name" id={"other-pack-" + pack.packageName}>
-                                                <div className="name-text">
-                                                    {pack.packageName}
-                                                </div>
-                                            </div>
-                                            <div className="versions">
-                                                {_.map(pack.versions, (version, index) => {
-                                                    let versionString = version.filepath;
-                                                    return (
-                                                        version.id.version !== activePackage.id.version ?
-                                                            <span className={`item ${index % 2 === 0 ? '' : 'odd'}`} key={index}>
-                                                                <span className="value"
-                                                                      id={"other-pack-" + version.id.version}>
-                                                                    {version.id.version}
-                                                                </span>
-                                                                {this.obj.required.indexOf(versionString) > -1 ?
-                                                                    <span id={"other-pack-mandatory-" + version.id.version}
-                                                                          className="font-extra-small"
-                                                                          onClick={this.addVersion.bind(this, versionString)}>
-                                                                        Mandatory
-                                                                        <span className="status orange"/>
-                                                                    </span>
-                                                                        : this.obj.incompatibles.indexOf(versionString) > -1 ?
-                                                                    <span id={"other-pack-incompatible-" + version.id.version}
-                                                                          className="font-extra-small"
-                                                                          onClick={this.addVersion.bind(this, versionString)}>
-                                                                        Not compatible
-                                                                        <span className="status red"/>
-                                                                    </span>
-                                                                        : requiredBy.indexOf(versionString) > -1 ?
-                                                                    <span id={"other-pack-required-by-" + version.id.version}
-                                                                          className="font-extra-small">
-                                                                        Required by
-                                                                        <span className="status green"/>
-                                                                    </span>
-                                                                        :
-                                                                    <span id={"other-pack-not-selected-" + version.id.version}
-                                                                          className="font-extra-small"
-                                                                          onClick={this.addVersion.bind(this, versionString)}>
-                                                                        Edit
-                                                                        <span className="status color-white"/>
-                                                                    </span>
-                                                                }                                                                
-                                                            </span>
-                                                        :
-                                                            null
-                                                    );
-                                                })}
-                                            </div>
-                                        </section>
-                                    :
-                                        null
-                                );
-                            }); 
-                        })}
+                <div className="manager-modal__pack manager-modal__pack--selected" id="current-pack">
+                    <div className="manager-modal__pack-name" id={"current-pack-" + activePackage.id.name}>
+                        {activePackage.id.name}
                     </div>
+                    <div className="manager-modal__pack-version" id={"current-pack-" + activePackage.id.version}>
+                        {activePackage.id.version}
+                    </div>
+                </div>
+                <div className="manager-modal__pack-list" id="other-packs-list">
+                    {_.map(packages, (packs, letter) => {
+                        return _.map(packs, (pack, i) => {
+                            return (
+                                pack.packageName !== activePackage.id.name ?
+                                    <div className="manager-modal__pack" key={i}>
+                                        <div className="manager-modal__pack-name manager-modal__pack-name--in-list" id={"other-pack-" + pack.packageName}>
+                                            {pack.packageName}
+                                        </div>
+                                        <div className="manager-modal__pack-versions">
+                                            {_.map(pack.versions, (version, index) => {
+                                                let versionString = version.filepath;
+                                                return (
+                                                    version.id.version !== activePackage.id.version ?
+                                                        <span className={`manager-modal__pack-item ${index % 2 === 0 ? '' : 'manager-modal__pack-item--odd'}`} key={index}>
+                                                            <span className="manager-modal__pack-value"
+                                                                  id={"other-pack-" + version.id.version}>
+                                                                {version.id.version}
+                                                            </span>
+                                                            {this.obj.required.indexOf(versionString) > -1 ?
+                                                                <span className="manager-modal__pack-status-title" id={"other-pack-mandatory-" + version.id.version}
+                                                                      onClick={this.addVersion.bind(this, versionString)}>
+                                                                    Mandatory
+                                                                    <span className="manager-modal__pack-status manager-modal__pack-status--orange"/>
+                                                                </span>
+                                                                    : this.obj.incompatibles.indexOf(versionString) > -1 ?
+                                                                <span className="manager-modal__pack-status-title" id={"other-pack-incompatible-" + version.id.version}
+                                                                      onClick={this.addVersion.bind(this, versionString)}>
+                                                                    Not compatible
+                                                                    <span className="manager-modal__pack-status manager-modal__pack-status--red"/>
+                                                                </span>
+                                                                    : requiredBy.indexOf(versionString) > -1 ?
+                                                                <span className="manager-modal__pack-status-title" id={"other-pack-required-by-" + version.id.version}>
+                                                                    Required by
+                                                                    <span className="manager-modal__pack-status manager-modal__pack-status--green"/>
+                                                                </span>
+                                                                    :
+                                                                <span className="manager-modal__pack-status-title" id={"other-pack-not-selected-" + version.id.version}
+                                                                      onClick={this.addVersion.bind(this, versionString)}>
+                                                                    Edit
+                                                                    <span className="manager-modal__pack-status manager-modal__pack-status--white"/>
+                                                                </span>
+                                                            }                                                                
+                                                        </span>
+                                                    :
+                                                        null
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                :
+                                    null
+                            );
+                        }); 
+                    })}
                 </div>
             </span>
         );
@@ -199,7 +191,7 @@ class DependenciesManager extends Component {
                 }
                 content={content}
                 shown={shown}
-                className="dependencies-manager-modal"
+                className="manager-modal"
                 hideOnClickOutside={true}
                 onRequestClose={hide}
             />

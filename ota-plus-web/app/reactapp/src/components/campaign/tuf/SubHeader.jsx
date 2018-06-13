@@ -76,30 +76,35 @@ class SubHeader extends Component {
         const { title, campaignsStore, showCancelCampaignModal } = this.props;
         return (
             <div className="statistics__campaign-name">
-                <div className="rename-container">
+
+                <div className="rename-box">
                     <div onClick={this.enableCampaignRename}
                          ref={(clickableArea) => {this.clickableArea = clickableArea}}
-                         className="clickable-area"
-                         style={{width: '100%', height: '100%', position: 'absolute'}} />
+                         className="rename-box__clickable-area">
+                    </div>
 
-                     <input type="text"
-                       ref={(input) => {this.campaignNameInput = input}}
-                       disabled
-                       onKeyPress={this.keyPressed}
-                       value={this.newCampaignName} onChange={this.userTypesName} />
+                     <input 
+                        className="rename-box__input rename-box__input--grey"
+                        type="text"
+                        ref={(input) => {this.campaignNameInput = input}}
+                        disabled
+                        onKeyPress={this.keyPressed}
+                        value={this.newCampaignName} onChange={this.userTypesName} />
 
-                    {this.renameDisabled ?
-                        <img src="/assets/img/icons/black/edit_pencil.svg" className="edit" alt="Icon" style={{cursor: 'auto'}} />
-                    :
-                        <div className="icons">
-                            {this.newCampaignNameLength ?
-                                <img src="/assets/img/icons/black/tick.svg" className="rename" alt="Icon" onClick={this.renameCampaign} />
-                            :
-                                null
-                            }
-                            <img src="/assets/img/icons/black/cancel-thin.svg" alt="Icon" className="cancel" onClick={this.cancelCampaignRename} />
-                        </div>
-                    }
+                    <div className="rename-box__actions rename-box__actions--big">
+                        {this.renameDisabled ?
+                            <img src="/assets/img/icons/black/edit_pencil.svg" className="rename-box__icon rename-box__icon--edit edit" alt="Icon" />
+                        :
+                            <span className="rename-box__user-actions">
+                                {this.newCampaignNameLength ?
+                                    <img src="/assets/img/icons/black/tick.svg" className="rename-box__icon rename-box__icon--save save" alt="Icon" onClick={this.renameCampaign} />
+                                :
+                                    null
+                                }
+                                <img src="/assets/img/icons/black/cancel-thin.svg" alt="Icon" className="rename-box__icon rename-box__icon--cancel cancel" onClick={this.cancelCampaignRename} />
+                            </span>
+                        }
+                    </div>
                 </div>
                 {campaignsStore.campaign.statistics.status === 'launched' ?
                     <div className="cancel-campaign">

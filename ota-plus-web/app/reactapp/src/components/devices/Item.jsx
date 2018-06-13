@@ -67,26 +67,26 @@ class Item extends Component {
         }
         return (
             connectDragSource(
-                <div className="common-box" style={{opacity}} onClick={goToDetails.bind(this, device.uuid)} id={"link-devicedetails-" + device.uuid}>
+                <div className="devices-panel__device" style={{opacity}} onClick={goToDetails.bind(this, device.uuid)} id={"link-devicedetails-" + device.uuid}>
                     {alphaPlusEnabled && foundFleet ?
-                        <div className={"icon " + foundFleet}>
-                            <div className={"device-status device-status-" + device.deviceStatus} title={deviceStatus}></div>
+                        <div className={"devices-panel__device-icon devices-panel__device-icon--" + foundFleet}>
+                            <div className={"device-status device-status--" + device.deviceStatus} title={deviceStatus}></div>
                         </div>
                     :
-                        <div className="icon">
-                            <div className={"device-status device-status-" + device.deviceStatus} title={deviceStatus}></div>
+                        <div className="devices-panel__device-icon">
+                            <div className={"device-status device-status--" + device.deviceStatus} title={deviceStatus}></div>
                         </div>
                     }
-                    <div className="desc">
-                        <div className="title" title={device.deviceName}>{device.deviceName}</div>
-                        <div className="subtitle">
+                    <div className="devices-panel__device-desc">
+                        <div className="devices-panel__device-title" title={device.deviceName}>{device.deviceName}</div>
+                        <div className="devices-panel__device-subtitle">
                             {deviceStatus !== 'Status unknown' ?
                                 <span>Last seen: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
                             :
                                 <span>Never seen online</span>
                             }
                         </div>
-                        <div className="subtitle">{foundGroup ? "Group: " + foundGroup.groupName : "Ungrouped"}</div>
+                        <div className="devices-panel__device-subtitle">{foundGroup ? "Group: " + foundGroup.groupName : "Ungrouped"}</div>
                     </div>
                 </div>
             )

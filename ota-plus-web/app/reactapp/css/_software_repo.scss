@@ -1,7 +1,7 @@
 .software-repository {
   display: block !important;
   border-top: 1px solid #0f1621;
-  min-width: 1280px;
+  min-width: 1220px;
   overflow: auto;
 
   .keys {
@@ -17,6 +17,7 @@
 
   .campaigns {
     width: 40% !important;
+    height: 100%;
   }
   .switch {
     cursor: auto;
@@ -61,6 +62,7 @@
   .container {
     overflow: hidden;
     height: 100%;
+    min-width: 1220px;
   }
 
   .section-header {
@@ -765,6 +767,13 @@
             font-weight: 300;
             color: #0F1621;
             transform: translateY(-50%);
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
           }
           .colors-info {
             padding-top: 15px;

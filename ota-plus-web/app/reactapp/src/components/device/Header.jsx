@@ -121,31 +121,39 @@ class Header extends Component {
                 title={
                     <FadeAnimation>
                         {!devicesStore.devicesOneFetchAsync.isFetching ?
-                            <div id="device-name" className="device-name">
+                            <div id="device-name" className="page-header__device-name">
 
-                                <div onClick={this.enableDeviceRename}
-                                    ref={(clickableArea) => {this.clickableArea = clickableArea}}
-                                    className="clickable-area"
-                                    style={{width: '85%', height: '50px', position: 'absolute'}}/>
-
-                                <input type="text"
-                                ref={(input) => {this.deviceNameInput = input}}
-                                disabled
-                                onKeyPress={this.keyPressed}
-                                value={this.newDeviceName} onChange={this.userTypesName} />
-
-                                {this.renameDisabled ?
-                                    <img src="/assets/img/icons/white/Rename.svg" className="edit" alt="Icon" style={{cursor: 'auto'}} />
-                                :
-                                    <div className="icons">
-                                        {this.newDeviceNameLength ?
-                                            <img src="/assets/img/icons/white/Tick.svg" className="rename" alt="Icon" onClick={this.renameDevice} />
-                                        :
-                                            null
-                                        }
-                                        <img src="/assets/img/icons/white/X.svg" alt="Icon" className="cancel" onClick={this.cancelDeviceRename} />
+                                <div className="rename-box">
+                                    <div onClick={this.enableDeviceRename}
+                                        ref={(clickableArea) => {this.clickableArea = clickableArea}}
+                                        className="rename-box__clickable-area">
                                     </div>
-                                }
+
+                                    <input 
+                                        className="rename-box__input"
+                                        type="text"
+                                        ref={(input) => {this.deviceNameInput = input}}
+                                        disabled
+                                        onKeyPress={this.keyPressed}
+                                        value={this.newDeviceName} onChange={this.userTypesName} 
+                                    />
+
+                                    <div className="rename-box__actions">
+                                        {this.renameDisabled ?
+                                            <img src="/assets/img/icons/white/Rename.svg" className="rename-box__icon rename-box__icon--edit" alt="Icon" />
+                                        :
+                                            <span className="rename-box__user-actions">
+                                                {this.newDeviceNameLength ?
+                                                    <img src="/assets/img/icons/white/Tick.svg" className="rename-box__icon rename-box__icon--save" alt="Icon" onClick={this.renameDevice} />
+                                                :
+                                                    null
+                                                }
+                                                <img src="/assets/img/icons/white/X.svg" alt="Icon" className="rename-box__icon rename-box__icon--cancel" onClick={this.cancelDeviceRename} />
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                                
                             </div>
                         :
                             null
@@ -158,20 +166,20 @@ class Header extends Component {
                 <FadeAnimation>
                     {!devicesStore.devicesOneFetchAsync.isFetching ?
                         <span>
-                            <div className="device-info-container">
-                                <div className="device-info-items">
+                            <div className="page-header__device-report">
+                                <div className="page-header__device-report-items">
                                     <NetworkInfo
                                         data={devicesStore.deviceNetworkInfo}
                                     />
-                                    <div className="device-info-item" id="created-info">
-                                        <span className="device-info-label">Created</span>
-                                        <div className="device-info-desc">
+                                    <div className="page-header__device-report-item" id="created-info">
+                                        <span className="page-header__device-report-label">Created</span>
+                                        <div className="page-header__device-report-desc">
                                             {createdDate.toDateString() + ' ' + createdDate.toLocaleTimeString()}
                                         </div>
                                     </div>
-                                    <div className="device-info-item" id="activated-info">
-                                        <span className="device-info-label">Activated</span>
-                                        <div className="device-info-desc">
+                                    <div className="page-header__device-report-item" id="activated-info">
+                                        <span className="page-header__device-report-label">Activated</span>
+                                        <div className="page-header__device-report-desc">
                                             {device.activatedAt !== null ?
                                                 <span>
                                                     {activatedDate.toDateString() + ' ' + activatedDate.toLocaleTimeString()}
@@ -183,9 +191,9 @@ class Header extends Component {
                                             }
                                         </div>
                                     </div>
-                                    <div className="device-info-item last-seen" id="last-seen-online-info">
-                                        <span className="device-info-label">Last seen online</span>
-                                        <div className="device-info-desc">
+                                    <div className="page-header__device-report-item page-header__device-report-item--last-seen" id="last-seen-online-info">
+                                        <span className="page-header__device-report-label">Last seen online</span>
+                                        <div className="page-header__device-report-desc">
                                             {deviceStatus !== 'Status unknown' ?
                                                 <span>{lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>
                                             :
@@ -194,12 +202,8 @@ class Header extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="action-buttons">
-                                    <button className="queue-button" id="queue-button" onClick={showQueueModal} ref={queueButtonRef}>
-                                    </button>
-                                    <button className="delete-button fixed-width hide" id="delete-device-button" onClick={this.showDeleteConfirmation}>
-                                        Delete device
-                                    </button>
+                                <div className="page-header__actions">
+                                    <button className="page-header__queue-action" id="queue-button" onClick={showQueueModal} ref={queueButtonRef}></button>
                                 </div>
                             </div>
                             {this.deleteConfirmationShown ?

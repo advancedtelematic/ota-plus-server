@@ -6,7 +6,7 @@ import CampaignsContainer from './Campaigns';
 import ImpactAnalysisContainer from './ImpactAnalysis';
 import ProvisioningContainer from './Provisioning';
 import NoMatchContainer from './NoMatch';
-import PreparationContainer from './Preparation';
+import SanityCheckContainer from './SanityCheck';
 import Terms from './Terms';
 
 export {
@@ -18,6 +18,6 @@ export {
     ImpactAnalysisContainer,
     ProvisioningContainer,
     NoMatchContainer,
-    PreparationContainer,
+    SanityCheckContainer,
     Terms
 }

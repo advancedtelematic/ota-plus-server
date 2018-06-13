@@ -22,35 +22,33 @@ class SecondNavigation extends Component {
         let block = null;
         if(location === 'page-packages') {
         	block = (
-        		<div className="container second-navigation">
-		            <ul className="links">
-		                <li onClick={toggleSWRepo} className={!switchToSWRepo ? 'active' : ''}><span>Compact</span></li>
-                		<li onClick={toggleSWRepo} className={switchToSWRepo ? 'active' : ''}><span>Advanced (BETA)</span></li>
-		            </ul>
-		        </div>
+	            <ul className="second-navigation__links">
+	                <li onClick={toggleSWRepo} className={"second-navigation__link " + (!switchToSWRepo ? 'second-navigation__link--active' : '')}><span>Compact</span></li>
+            		<li onClick={toggleSWRepo} className={"second-navigation__link " + (switchToSWRepo ? 'second-navigation__link--active' : '')}><span>Advanced (BETA)</span></li>
+	            </ul>
     		);
         }
         if(location === 'page-devices') {
         	block = (
-    			<div className="container second-navigation">
-		            <ul className="links">
-		    			{_.map(devicesStore.deviceFleets, (fleet) => {
-                            const isFleetActive = activeFleet ? activeFleet.id === fleet.id : false;
-		                    return (
-		                        <li key={fleet.id} onClick={toggleFleet.bind(this, fleet)} className={isFleetActive ? 'active' : ''}>
-                                    <div className="fleet-icon" style={{ backgroundImage: 'url(' + (isFleetActive ? fleet.icon_active : fleet.icon_default) + ')' }}></div>
-		                            <span>
-                                        {fleet.name}
-                                    </span>
-		                        </li>
-		                    );
-		                })}
-	                </ul>
-                </div>
-    		);
+	            <ul className="second-navigation__links">
+	    			{_.map(devicesStore.deviceFleets, (fleet) => {
+                        const isFleetActive = activeFleet ? activeFleet.id === fleet.id : false;
+	                    return (
+	                        <li key={fleet.id} onClick={toggleFleet.bind(this, fleet)} className={"second-navigation__link " + (isFleetActive ? 'second-navigation__link--active' : '')}>
+                                <div className="second-navigation__icon" style={{ backgroundImage: 'url(' + (isFleetActive ? fleet.icon_active : fleet.icon_default) + ')' }}></div>
+	                            <span>
+                                    {fleet.name}
+                                </span>
+	                        </li>
+	                    );
+	                })}
+                </ul>
+		    );
         }
         return (
-        	block
+            <div className="second-navigation">
+        	   {block}
+            </div>
         );
     }
 }

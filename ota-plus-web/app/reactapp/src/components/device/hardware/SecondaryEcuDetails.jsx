@@ -15,9 +15,9 @@ class SecondaryEcuDetails extends Component {
             <span>
                 <div className="text-left">
                    In many connected mobility domains, most notably in automotive, it is common to have a device, vehicle, or platform that has 
-                    multiple independent micro-controllers or other devices networked together. ATS Garage is built to handle updates to those other 
+                    multiple independent micro-controllers or other devices networked together. HERE OTA Connect is built to handle updates to those other 
                     micro-controllers even if they don't have an internet connection, or are too resource-constrained to run a full updater client 
-                    themselves. The device that has a direct internet connection – the one running the ATS Garage client – is called the "Primary ECU", 
+                    themselves. The device that has a direct internet connection – the one running the HERE OTA Connect client – is called the "Primary ECU", 
                     and is able to distribute firmware updates to secondary ECUs.<br /><br />
                     The term <strong>ECU</strong> comes from automotive, and stands for <strong>Electronic Control Unit.</strong><br /><br />
                     If you don't have multiple devices to update from one primary/master device, you don't need to worry about this functionality.

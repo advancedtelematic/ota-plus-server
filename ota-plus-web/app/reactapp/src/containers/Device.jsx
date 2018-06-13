@@ -120,10 +120,8 @@ class Device extends Component {
                         </span>
                     :
                         <div className="wrapper-center">
-                            <div className="device-offline">
-                                <div className="title">
-                                    Device never seen online.
-                                </div>
+                            <div className="device-offline-title">
+                                Device never seen online.
                             </div>
                         </div>
                 }

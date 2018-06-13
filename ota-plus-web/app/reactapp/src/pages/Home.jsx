@@ -1,17 +1,27 @@
 import React, { Component, PropTypes } from 'react';
 import { observe, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { MetaData, FadeAnimation } from '../utils';
-import { HomeContainer, PreparationContainer, Terms } from '../containers';
+import { MetaData, FadeAnimation, AsyncStatusCallbackHandler } from '../utils';
+import { HomeContainer, SanityCheckContainer, Terms } from '../containers';
+import { Loader } from '../partials';
 
 const title = "Home";
 
 @observer
 class Home extends Component {
+    @observable proceedToApp = false;
+
     constructor(props) {
         super(props);
+        this.proceed = this.proceed.bind(this);
+        this.namespaceSetupHandler = new AsyncStatusCallbackHandler(props.provisioningStore, 'namespaceSetupFetchAsync', this.namespaceSetupHandler.bind(this));
     }
     componentWillMount() {
+        const { uiAutoFeatureActivation } = this.props;
+        if (!uiAutoFeatureActivation) {
+           this.props.provisioningStore.sanityCheckCompleted = true;
+        }
+        this.props.provisioningStore.namespaceSetup();
         this.props.devicesStore.fetchDevices();
         this.props.packagesStore.fetchPackages();
         this.props.campaignsStore.fetchCampaigns();
@@ -20,6 +30,13 @@ class Home extends Component {
         this.props.devicesStore._reset();
         this.props.packagesStore._reset();
         this.props.campaignsStore._reset();
+        this.namespaceSetupHandler();
+    }
+    namespaceSetupHandler() {
+        this.proceed();
+    }
+    proceed() {
+        this.proceedToApp = true;
     }
     render() {
         const { 
@@ -30,17 +47,15 @@ class Home extends Component {
             userStore,
             provisioningStore,
             featuresStore,
-            setSystemReady,
             uiUserProfileMenu,
-            sanityCheckCompleted,
             setTermsAccepted,
-            termsAccepted
+            termsAccepted,
         } = this.props;
         return (
             <FadeAnimation
                 display="flex">
                 {termsAccepted() ?
-                    sanityCheckCompleted() ?
+                    this.proceedToApp ?
                         <MetaData
                             title={title}>
                             <HomeContainer
@@ -50,15 +65,15 @@ class Home extends Component {
                                 hardwareStore={hardwareStore}
                             />
                         </MetaData>
-                        :
-                        <PreparationContainer
-                            packagesStore={packagesStore}
-                            userStore={userStore}
+                    : provisioningStore.namespaceSetupFetchAsync.isFetching ?
+                        <div className="wrapper-center">
+                            <Loader />
+                        </div>
+                    :
+                        <SanityCheckContainer
                             provisioningStore={provisioningStore}
-                            featuresStore={featuresStore}
-                            setSystemReady={setSystemReady}
-                            uiUserProfileMenu={uiUserProfileMenu}
-                        />
+                            proceed={this.proceed}
+                        />            
                 : 
                     <Terms
                         userStore={userStore}

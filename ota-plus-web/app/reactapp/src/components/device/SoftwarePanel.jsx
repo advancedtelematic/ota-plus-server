@@ -18,13 +18,13 @@ class SoftwarePanel extends Component {
         const { devicesStore, packagesStore, hardwareStore, toggleTufPackageAutoUpdate, onFileDrop, showPackageDetails, packagesReady, disableExpand } = this.props;
         return (
             <div className="software-panel">
-                <div className="darkgrey-header">
+                <div className="software-panel__header darkgrey-header">
                     {title}
                 </div>
-                <div className="wrapper-software">
+                <div className="software-panel__wrapper">
                     <span>
                         {!packagesReady ?
-                            <div className="wrapper-loader">
+                            <div className="wrapper-center">
                                 <Loader />
                             </div>
                         :

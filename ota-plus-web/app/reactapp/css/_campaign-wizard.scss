@@ -305,12 +305,17 @@
                 padding: 20px 0 20px 0;
                 position: relative;
                 overflow-y: auto;
+                flex-wrap: wrap;
+                display: flex;
 
                 .element-box {
                   width: 33.3333333%;
                   height: 60px;
+                  padding: 0;
 
                   &.group {
+                    display: flex;
+
                     .icon {
                       width: 40px;
                       height: 40px;
