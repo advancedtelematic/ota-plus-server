@@ -39,7 +39,8 @@ $(function () {
  lock.show(options);
 
  lock.on('signin ready', function() {
-  var registerLink = "<a href='https://developer.here.com/authenticationpage' class='auth0-register-link'>Register for a HERE account</a>";
+  var href = $('#auth0-token-signup-url').val();
+  var registerLink = "<a href='" + href + "' class='auth0-register-link'>Register for a HERE account</a>";
   if(!$('.auth0-register-link').length) {
     $('.auth0-lock-header-welcome').append(registerLink);
   }
