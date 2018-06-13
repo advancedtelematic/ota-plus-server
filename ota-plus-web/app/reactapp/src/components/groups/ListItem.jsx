@@ -47,29 +47,29 @@ class ListItem extends Component {
             connectDropTarget(
                 <div
                     title={group.groupName}
-                    className={"group-btn droppable" + (isSelected ? " selected" : "") + (isOver ? " active" : "")}
+                    className={"groups-panel__item" + (isSelected ? " groups-panel__item--selected" : "") + (isOver ? " groups-panel__item--active" : "")}
                     id={"button-group-" + group.groupName}
                     onClick={() => {
                         selectGroup({type: 'real', name: group.groupName, id: group.id});
                     }}>
                     {groupsStore.activeFleet ?
-                        <div className="icon icon-fleet">
+                        <div className="groups-panel__item-icon groups-panel__item-icon--fleet">
                             {group.groupName.substring(0, 3)}
                         </div>
                     :
-                        <div className="icon icon-bg"></div>
+                        <div className={"groups-panel__item-icon groups-panel__item-icon--default" + (isSelected ? " groups-panel__item-icon--active" : "")}></div>
                     }
-                    <div className="desc">
-                        <div className="title">
-                            <span>
+                    <div className="groups-panel__item-desc">
+                        <div className="groups-panel__item-title">
+                            <div className="groups-panel__item-title-value">
                                 {group.groupName}
-                            </span>
-                            <img src="../assets/img/icons/white/Rename.svg" alt="Rename" onClick={() => {
+                            </div>
+                            <img src="../assets/img/icons/white/Rename.svg" className="groups-panel__rename-icon" alt="Rename" onClick={() => {
                                 selectGroup({type: 'real', name: group.groupName, id: group.id});
                                 this.showCreateModal();
                             }}/>
                         </div>
-                        <div className="subtitle" id={"group-" + group.groupName + '-devices'}>
+                        <div className="groups-panel__item-subtitle" id={"group-" + group.groupName + '-devices'}>
                             {t('common.deviceWithCount', {count: group.devices.total})}
                         </div>
                     </div>
@@ -83,7 +83,7 @@ class ListItem extends Component {
                             modalTitle="Edit Group"
                             buttonText="Save"
                         />
-                        :
+                    :
                         null
                     }
                 </div>

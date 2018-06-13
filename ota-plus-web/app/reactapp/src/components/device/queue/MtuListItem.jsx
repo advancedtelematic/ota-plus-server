@@ -10,52 +10,71 @@ class MultiTargetITem extends Component {
         const { item, hardwareId, updateId, length, cancelMtuUpdate, inFlight, alphaPlusEnabled, showSequencer } = this.props;
         const hash = item.image.fileinfo.hashes.sha256;
         return (
-            <li id={"queued-entry-" + hash} className={"multi-target-entry font-small" + (inFlight ? " pending" : "")}>
-                <div className="desc">
-                    Update ID <span id={"update-id-" + updateId}>{updateId}</span>
-                </div>
+            <li id={"queued-entry-" + hash} className={"queue-modal__item" + (inFlight ? " pending" : "")}>
 
-                <div className="result">
-                    <div className="left">
-                        <div className="ecu">
-                            <span id={"ecu-serial-title-" + updateId} className="title">
-                                ECU Serial:
+                <div className="queue-modal__item-header">
+                    <div className="queue-modal__item-update">
+                        <div>
+                            <span id={"update-id-title-" + updateId} className="queue-modal__item-title">
+                                Update ID
                             </span>
-                            <span id={"ecu-serial-" + updateId}>
-                                {hardwareId}
-                            </span>
-                        </div>
-                        <div className="name">
-                            <span id={"target-title-" + updateId} className="title">
-                                Target:
-                            </span>
-                            <span id={"target-" + updateId}>
-                                {hash}
+                            <span id={"update-id-" + updateId}>
+                                {updateId}
                             </span>
                         </div>
-                        <div className="length">
-                            <span id={"length-title-" + updateId} className="title">
-                                Length:
-                            </span>
-                            <span id={"length-" + updateId}>
-                                {length}
-                            </span>
-                        </div>
-                    </div>
-                    <div className="right">
-                        <div className="cancel">
+                        <div>
                             {inFlight ?
-                                <button id="pending" disabled>
-                                    Pending <img src="/assets/img/icons/loading_dots.gif" alt="Icon" />
+                                <button id="pending" className="queue-modal__pending" disabled>
+                                    Pending <img src="/assets/img/icons/loading_dots.gif" className="queue-modal__pending-dots" alt="Icon" />
                                 </button>
                             :
-                                <button id="cancel-mtu" onClick={cancelMtuUpdate.bind(this, updateId)}>
+                                <button id="cancel-mtu" className="queue-modal__cancel-update" onClick={cancelMtuUpdate.bind(this, updateId)}>
                                     Cancel
                                 </button>
                             }
                         </div>
                     </div>
+                    <div className="queue-modal__item-process-status">
+                        {inFlight ?
+                            <span>Downloading</span>
+                        :
+                            <span>Queued, waiting for device to connect</span>
+                        }
+                        <img src="/assets/img/icons/points.gif" className="queue-modal__process-dots" alt="Icon" />
+                    </div>
                 </div>
+
+                <div className="queue-modal__operations">
+                    <div className="queue-modal__operation">
+                        <div className="queue-modal__operation-info">
+                            <div className="queue-modal__operation-info-block">
+                                <span id={"ecu-serial-title-" + updateId} className="queue-modal__operation-info-title">
+                                    ECU Serial:
+                                </span>
+                                <span id={"ecu-serial-" + updateId}>
+                                    {hardwareId}
+                                </span>
+                            </div>
+                            <div className="queue-modal__operation-info-block">
+                                <span id={"target-title-" + updateId} className="queue-modal__operation-info-title">
+                                    Target:
+                                </span>
+                                <span id={"target-" + updateId}>
+                                    {hash}
+                                </span>
+                            </div>
+                            <div className="queue-modal__operation-info-block">
+                                <span id={"length-title-" + updateId} className="queue-modal__operation-info-title">
+                                    Length:
+                                </span>
+                                <span id={"length-" + updateId}>
+                                    {length}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 {alphaPlusEnabled && inFlight ?
                     <a href="#" style={{'display': 'block', 'textAlign': 'center', 'marginTop': '15px'}} onClick={showSequencer.bind(this)}>
                         Live installation progress

@@ -79,87 +79,89 @@ class List extends Component {
         return (
         	<span>
 	        	{!unmanaged ? 
-    				<div className="details">
-    					<div className="heading">
-			        		<div className="title" id={"image-title-" + expandedPackage.id.name}>{expandedPackage.id.name}</div>
-				        		<div className="status">
-				        			{isPackageBlacklisted && isPackageInstalled ?
-				        				<div className="blacklisted-installed">
-				        					<span id={this.generateIdTag('blacklisted-and-installed', expandedPackage)}>
-			        			 				{installed}
-		        			 				</span>
-		        			 				<img src="/assets/img/icons/red_cross.svg" alt="" id={this.generateIdTag('blacklisted-and-installed-icon', expandedPackage)} /> 			 	        		
-				        				</div>
-				        			: isPackageBlacklisted ?
-				        				<div className="blacklisted">
-			        			 			<span id={this.generateIdTag('blacklisted', expandedPackage)}>
-			        			 				{blacklisted}
-			        			 			</span>
-				        					<img src="/assets/img/icons/ban_red.png" alt="" id={this.generateIdTag('blacklisted-icon', expandedPackage)} />
-				        				</div>
-				        			: isPackageQueued ? 
-				        				<div className="queued">
-			        						<span id={this.generateIdTag('queued', expandedPackage)}>
-			        							{queued}
-			        						</span>
-			        						<span className="fa-stack queued">
-				                                <i className="fa fa-dot-circle-o fa-stack-1x" aria-hidden="true" id={this.generateIdTag('queued-icon', expandedPackage)}></i>
-				                            </span>
-			        					</div>
-			        				: isPackageInstalled ? 
-				        				<div className="installed">
-				        					<span id={this.generateIdTag('image-installed', expandedPackage)}>
-				        						{installed}
-				        					</span>
-				        					<img src="/assets/img/icons/green_tick.svg" alt="" id={this.generateIdTag('installed-icon', expandedPackage)} />
-				        				</div>
-			        				: 
-				        				<div className="not-installed" id={this.generateIdTag('not-installed', expandedPackage)}>
-				        					{notInstalled}
-				        				</div>
-			    					}
-				        		</div>
+    				<div className="properties-panel__info">
+    					<div className="properties-panel__info-heading">
+		        			<div className="properties-panel__info-title" id={"image-title-" + expandedPackage.id.name}>
+		        				{expandedPackage.id.name}
+		        			</div>
+			        		<div className="properties-panel__info-status">
+			        			{isPackageBlacklisted && isPackageInstalled ?
+			        				<div>
+			        					<span id={this.generateIdTag('blacklisted-and-installed', expandedPackage)}>
+		        			 				{installed}
+	        			 				</span>
+	        			 				<img className="properties-panel__info-status-icon" src="/assets/img/icons/red_cross.svg" alt="" id={this.generateIdTag('blacklisted-and-installed-icon', expandedPackage)} /> 			 	        		
+			        				</div>
+			        			: isPackageBlacklisted ?
+			        				<div>
+		        			 			<span id={this.generateIdTag('blacklisted', expandedPackage)}>
+		        			 				{blacklisted}
+		        			 			</span>
+			        					<img className="properties-panel__info-status-icon" src="/assets/img/icons/ban_red.png" alt="" id={this.generateIdTag('blacklisted-icon', expandedPackage)} />
+			        				</div>
+			        			: isPackageQueued ? 
+			        				<div>
+		        						<span id={this.generateIdTag('queued', expandedPackage)}>
+		        							{queued}
+		        						</span>
+		        						<span className="fa-stack queued">
+			                                <i className="properties-panel__info-status-icon properties-panel__info-status-icon--queued fa fa-dot-circle-o fa-stack-1x" aria-hidden="true" id={this.generateIdTag('queued-icon', expandedPackage)}></i>
+			                            </span>
+		        					</div>
+		        				: isPackageInstalled ? 
+			        				<div>
+			        					<span id={this.generateIdTag('image-installed', expandedPackage)}>
+			        						{installed}
+			        					</span>
+			        					<img className="properties-panel__info-status-icon" src="/assets/img/icons/green_tick.svg" alt="" id={this.generateIdTag('installed-icon', expandedPackage)} />
+			        				</div>
+		        				: 
+			        				<div id={this.generateIdTag('not-installed', expandedPackage)}>
+			        					{notInstalled}
+			        				</div>
+		    					}
+			        		</div>
 			        	    </div>
-							<div className="data">
+							<div className="properties-panel__info-data">
 				        		<span>
-		        					<div className="name">
-						        		<span className = "sub-title">Name:</span>
-						        		<span className="value" id={this.generateIdTag('version-name-value', expandedPackage)}>
+		        					<div className="properties-panel__info-data-block">
+						        		<span className="properties-panel__info-data-subtitle">Name:</span>
+						        		<span className="properties-panel__info-data-value" id={this.generateIdTag('version-name-value', expandedPackage)}>
 						        			{expandedPackage.customExists ? expandedPackage.id.name : "Not reported"}
 						        		</span>
 					        		</div>
-					        		<div className="created">
-										<span className = "sub-title">Created at:</span>
-						        		<span className="value" id={this.generateIdTag('version-created-at-value', expandedPackage)}>
+					        		<div className="properties-panel__info-data-block">
+										<span className="properties-panel__info-data-subtitle">Created at:</span>
+						        		<span className="properties-panel__info-data-value" id={this.generateIdTag('version-created-at-value', expandedPackage)}>
 						        			{moment(expandedPackage.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}
 						        		</span>
 					        		</div>
-					        		<div className="updated">
-										<span className = "sub-title">Updated at:</span>
-						        		<span className="value" id={this.generateIdTag('version-updated-at-value', expandedPackage)}>
+					        		<div className="properties-panel__info-data-block">
+										<span className="properties-panel__info-data-subtitle">Updated at:</span>
+						        		<span className="properties-panel__info-data-value" id={this.generateIdTag('version-updated-at-value', expandedPackage)}>
 						        			{moment(expandedPackage.updatedAt).format("ddd MMM DD YYYY, h:mm:ss A")}
 						        		</span>
 					        		</div>
-						            <div className="version">
-						        		<span className = "sub-title">Version:</span>
-						        		<span className="value" id={this.generateIdTag('version-value', expandedPackage)}>
+						            <div className="properties-panel__info-data-block">
+						        		<span className="properties-panel__info-data-subtitle">Version:</span>
+						        		<span className="properties-panel__info-data-value" id={this.generateIdTag('version-value', expandedPackage)}>
 						        			{expandedPackage.customExists ? expandedPackage.id.version : "Not reported"}
 						        		</span>
 					        		</div>
-					        		<div className="hash">
-						        		<span className = "sub-title">Hash:</span>
-						        		<span className="value" id={this.generateIdTag('version-hash-value', expandedPackage)}>
+					        		<div className="properties-panel__info-data-block">
+						        		<span className = "properties-panel__info-data-subtitle">Hash:</span>
+						        		<span className="properties-panel__info-data-value" id={this.generateIdTag('version-hash-value', expandedPackage)}>
 						        			{expandedPackage.packageHash}
 						        		</span>
 					        		</div>
-					        		<div className="hash-length">
-						        		<span className = "sub-title">Length:</span>
-						        		<span className="value" id={this.generateIdTag('version-hash-length-value', expandedPackage)}>
+					        		<div className="properties-panel__info-data-block">
+						        		<span className="properties-panel__info-data-subtitle">Length:</span>
+						        		<span className="properties-panel__info-data-value" id={this.generateIdTag('version-hash-length-value', expandedPackage)}>
 						        			{expandedPackage.targetLength}
 						        		</span>
 					        		</div>
-					        		<div className="hardware-ids">
-						        		<span className = "sub-title">Hardware ids:</span>
+					        		<div className="properties-panel__info-data-block">
+						        		<span className = "properties-panel__info-data-subtitle">Hardware ids:</span>
 						        		<span id={this.generateIdTag('version-hardware-ids-value', expandedPackage)}>
 						        			{_.map(expandedPackage.hardwareIds, (hardwareId, index) => {
 	                                            return (
@@ -171,8 +173,8 @@ class List extends Component {
 						        		</span>
 					        		</div>
 	                                {expandedPackage.targetFormat ?
-										<div className="target-format">
-											<span className="sub-title">Format:</span>
+										<div className="properties-panel__info-data-block">
+											<span className="properties-panel__info-data-subtitle">Format:</span>
 											<span id={this.generateIdTag('version-target-format-value', expandedPackage)}>
 	                                            <span className="app-label">
 	                                            	{expandedPackage.targetFormat}
@@ -184,10 +186,23 @@ class List extends Component {
 	                                }
 		        				</span>
 							</div>
+							<div className="properties-panel__info-comment">
+								<div className="properties-panel__info-comment-title">
+									Comment
+								</div>
+								<textarea 
+		                            className="properties-panel__info-comment-value"
+		                            name="comment-stick" 
+		                            rows="10"
+		                            value={expandedPackage.comment}
+		                            disabled
+		                            id={"package-" + expandedPackage.id.name + "-comment-" + expandedPackage.id.version.substring(0,8)}>
+		                        </textarea>
+							</div>
                             {!isPackageInstalled ?
-								<div className="install multi-target">
+								<div className="properties-panel__install">
 									<button
-										className="btn-primary btn-install"
+										className="properties-panel__install-button btn-primary"
 										label="Install"
 										title="Install"
 										id={"button-install-package-" + expandedPackage.id.name + "-" + expandedPackage.id.version}
@@ -216,23 +231,23 @@ class List extends Component {
 		        	noPackage
                 }
             	{isPackageBlacklisted && isPackageInstalled ?
-					<div className="additional-status bg-red">
+					<div className="properties-panel__bottom-status properties-panel__bottom-status--red">
 						{installed}
 					</div>
                 : isPackageBlacklisted ?
-					<div className="additional-status bg-red">
+					<div className="properties-panel__bottom-status properties-panel__bottom-status--red">
 						{blacklisted}
 					</div>
 				: isPackageQueued ?
-					<div className="additional-status bg-orange">
+					<div className="properties-panel__bottom-status properties-panel__bottom-status--orange">
 						{queued}
 					</div>
 				: isPackageInstalled ?
-					<div className="additional-status bg-green">
+					<div className="properties-panel__bottom-status properties-panel__bottom-status--green">
 						{installed}
 					</div>
 				:
-					<div className="additional-status bg-grey">
+					<div className="properties-panel__bottom-status properties-panel__bottom-status--grey">
 						{notInstalled}
 					</div>
     			}

@@ -10,13 +10,20 @@ class Stats extends Component {
         super(props);
     }
     render() {
-        const { data } = this.props;
+        const { data, indicatorColors } = this.props;
 
-        let availableColors = [
+        const defaultColors = [
             '#00908A',
             '#99E9E3',
             '#F3F3F4'
         ];
+        const customColors = [
+            "#48DAD0",
+            "#FA9D00",
+            "#C41C33"
+        ];
+        const colors = indicatorColors ? customColors : defaultColors;
+
         let colorIndex = -1;
         let stats = [];
         _.each(data, (item, name) => {
@@ -24,15 +31,15 @@ class Stats extends Component {
             stats.push(
                 {
                     value: item,
-                    color: availableColors[colorIndex],
-                    highlight: availableColors[colorIndex],
+                    color: colors[colorIndex],
+                    highlight: colors[colorIndex],
                     label: name
                 }
             );
         });
         const legend = _.map(stats, (stat) => {
             return (
-                <li key={"color-" + stat.label + "-" + stat.color}>
+                <li className="devices-panel__stats-item" key={"color-" + stat.label + "-" + stat.color}>
                     <div className="title-box">{stat.label}</div>
                     <div className="color-box" style={{backgroundColor: stat.color}}></div> 
                 </li>
@@ -40,14 +47,14 @@ class Stats extends Component {
         });
         const values = _.map(stats, (stat) => {
             return (
-                <li key={"color-" + stat.label + "-" + stat.color}>
+                <li className="devices-panel__stats-item" key={"color-" + stat.label + "-" + stat.color}>
                     <div className="title-box">{stat.label}</div>
                     <div>{stat.value}</div>
                 </li>
             );
         });
         const content = (
-            <div className="devices-chart-wrapper">
+            <div className="devices-panel__chart-wrapper">
                 <Doughnut 
                     data={stats} 
                     width="100" 
@@ -59,10 +66,10 @@ class Stats extends Component {
                     }}
                 />
                 <div>
-                    <ul className="value-legend">
+                    <ul className="devices-panel__legend-values">
                         {values}
                     </ul>
-                    <ul className="color-legend">
+                    <ul className="devices-panel__legend-colors">
                         {legend}
                     </ul>
                 </div>

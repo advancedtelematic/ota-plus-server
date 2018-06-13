@@ -38,8 +38,7 @@ class GroupsList extends Component {
     render() {
         const { devicesStore, groupsStore, selectGroup, onDeviceDrop } = this.props;
         return (
-            <div className="wrapper-groups">
-            
+            <div className="groups-panel__wrapper">
                 <InfiniteScroll
                         className="wrapper-infinite-scroll"
                         hasMore={groupsStore.shouldLoadMore && groupsStore.groupsCurrentPage < groupsStore.groupsTotalCount / groupsStore.groupsLimit}
@@ -52,7 +51,6 @@ class GroupsList extends Component {
                     {_.map(groupsArtificial, (group) => {
                         const isSelected = (groupsStore.selectedGroup.type === 'artificial' && groupsStore.selectedGroup.name === group.name);
                         let deviceCount = 0;
-                        let groupDevicesCount = 0;
                         if(group.name === 'all') {
                             deviceCount = devicesStore.devicesInitialTotalCount;
                         } else if(group.name === 'ungrouped') {
@@ -90,7 +88,6 @@ class GroupsList extends Component {
                         });
                     })}
                 </InfiniteScroll>
-
             </div>
         );
     }

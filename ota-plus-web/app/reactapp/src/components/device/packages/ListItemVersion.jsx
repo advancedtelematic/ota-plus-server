@@ -31,35 +31,27 @@ class ListItemVersion extends Component {
         let blacklistedPackage = this.isPackageBlacklisted(version);
         let isSelected = version.filepath === packagesStore.expandedPackage.filepath;
         return (
-            <li className={isSelected ? " selected" : ""} id={isSelected ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={this.handlePackageVersionClick}>
-                <div className="left-box">
-                    <div>
-                        <span className="sub-title">Hash / version:</span> 
-                        <span className="value" id={"version-value-" + version.id.version.substring(0,8)}>{version.id.version}</span>
+            <li className={"software-panel__version" + (isSelected ? " software-panel__version--selected" : "")} id={isSelected ? "image-" + version.id.version.substring(0,8) + "-selected" : "image-" + version.id.version.substring(0,8)} onClick={this.handlePackageVersionClick}>
+                <div className="software-panel__version-left">
+                    <div className="software-panel__version-block">
+                        <span className="software-panel__version-subtitle">Hash / version:</span> 
+                        <span className="software-panel__version-value" id={"version-value-" + version.id.version.substring(0,8)}>{version.id.version}</span>
                     </div>
-                    <div>
-                        <span className="sub-title">Created at:</span>
-                        <span className="value">{moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
+                    <div className="software-panel__version-block">
+                        <span className="software-panel__version-subtitle">Created at:</span>
+                        <span className="software-panel__version-value">{moment(version.createdAt).format("ddd MMM DD YYYY, h:mm:ss A")}</span>
                     </div>
                 </div>
-                <div className="right-box">
+                <div className="software-panel__version-right">
                     {blacklistedPackage && version.id.version === installedPackage ?
-                        <span className="blacklisted-installed" id={"image-blacklisted-and-installed-" + version.id.version.substring(0,8)}>
-                            <img src="/assets/img/icons/red_cross.svg" alt="" />
-                        </span>
+                        <img className="software-panel__version-icon" src="/assets/img/icons/red_cross.svg" id={"image-blacklisted-and-installed-" + version.id.version.substring(0,8)} alt="Icon" />
                     :
                         blacklistedPackage ?
-                            <span className="blacklisted" id={"image-blacklisted-" + version.id.version.substring(0,8)}>
-                                <img src="/assets/img/icons/ban_red.png" alt="" />
-                            </span>
+                            <img className="software-panel__version-icon" src="/assets/img/icons/ban_red.png" id={"image-blacklisted-" + version.id.version.substring(0,8)} alt="Icon" />
                         : version.filepath === queuedPackage ?
-                            <span className="fa-stack queued" id={"image-queued-" + version.id.version.substring(0,8)}>
-                                <i className="fa fa-dot-circle-o fa-stack-2x" aria-hidden="true"></i>
-                            </span>
+                            <i className="software-panel__version-icon software-panel__version-icon--queued fa fa-dot-circle-o fa-stack-2x" aria-hidden="true" id={"image-queued-" + version.id.version.substring(0,8)}></i>
                         : version.id.version === installedPackage ?
-                            <span className="installed" id={"image-installed-" + version.id.version.substring(0,8)}>
-                                <img src="/assets/img/icons/green_tick.svg" alt="" />
-                            </span>                                            
+                            <img className="software-panel__version-icon" src="/assets/img/icons/green_tick.svg" id={"image-installed-" + version.id.version.substring(0,8)} alt="Icon" />
                         :
                             null
                     }

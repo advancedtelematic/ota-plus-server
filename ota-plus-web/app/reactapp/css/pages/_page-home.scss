@@ -2,307 +2,296 @@
     padding: 30px;
     background-color: $home-bg;
     height: calc(100vh - 50px);
+}
 
-    .content {
+.home {
+    display: flex;
+    font-size: 12px;
+    height: 100%;
+    width: 100%;
+
+    &__box {
+        flex-basis: 50%;
         height: 100%;
+        overflow: hidden;
 
-        @media(max-height: 768px) {
-            min-height: 665px;
+        &--left {
+            margin-right: 8px;
         }
     }
 
-    .home {
+    &__tutorial {
+        background: #fff;
+    }
+
+    &__heading {
+        text-transform: uppercase;
+        height: 50px;
         display: flex;
-        font-size: 12px;
-        height: 100%;
-        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        background-color: $home-heading-bg;
+        padding: 0 20px;
+        position: relative;
+    }
 
-        &__box {
-            flex-basis: 50%;
-            height: 100%;
-            overflow: hidden;
+    &__heading-col {
+        font-weight: 500;
+        width: 33%;
+        display: flex;
+        color: #383c45;
+        align-items: center;
+        @include textoverflowEllipsis;
 
-            &--left {
-                margin-right: 8px;
-            }
-        }
-
-        &__tutorial {
-            background: #fff;
-        }
-
-        &__heading {
-            text-transform: uppercase;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: $home-heading-bg;
-            padding: 0 20px;
-            position: relative;
-        }
-
-        &__heading-col {
-            font-weight: 500;
-            width: 33%;
-            display: flex;
-            color: #383c45;
-            align-items: center;
-            @include textoverflowEllipsis;
-
-            &:not(:first-child) {
-                justify-content: center;
-                font-size: 12px;
-                color: $devices-group-text;
-            }
-        }
-
-        &__body-col {
-            width: 33%;
-            display: flex;
-            color: #000;
-            align-items: center;
-            @include textoverflowEllipsis;
-
-            &:not(:first-child) {
-                justify-content: center;
-                font-size: 10px;
-                color: $device-hardware-header;
-            }
-        }
-
-        &__body {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-
-            &--right {
-                min-height: calc(100% - 50px);
-                height: calc(100% - 50px);
-                max-height: 235px;
-                overflow-y: hidden;
-            }
-
-            &--left {
-                height: calc(100vh - 160px);
-                padding: 20px;
-
-                @media(max-height: 768px) {
-                    min-height: 600px;
-                }
-            }
-        }
-
-        &__tutorial-top {
-            height: 10%;
-        }
-
-        &__tutorial-wrapper {
-            height: 100%;
-        }
-
-        &__tutorial-title {
-            color: $home-bg;
-            font-size: 16px;
-            margin-bottom: 8px;
-
-            &--small {
-                font-size: 12px;
-                font-weight: 500;
-                height: 8%;
-                margin-bottom: 0;
-            }
-        }
-
-        &__tutorial-subtitle {
-            color: $device-hardware-header;
-            font-weight: normal;
-        }
-
-        &__tutorial-overview {
-            height: 44%;
-            margin-bottom: 2%;
-        }
-
-        &__tutorial-step-image {
-            max-width: 250px;
-
-            @media(max-height: 925px) {
-                width: 125px;
-            }
-        }
-
-        &__tutorial-start {
-            height: 44%;            
-        }
-
-        &__tutorial-start-image {
-            height: 35%;
-            margin: 7% 0;
-
-            @media(max-height: 925px) {
-                height: 25%;
-            }
-        }
-
-        &__tutorial-steps {
-            display: flex;
-            height: 92%;
-        }
-
-        &__tutorial-step {
-            text-align: center;
-            padding: 15px 30px;
-            background-color: $home-step-bg;
-            border: 1px solid $home-heading-bg;
-            flex-basis: 50%;
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            justify-content: space-between;
-
-            @media(max-height: 925px) {
-                padding: 12px;
-            }
-
-            &:first-child {
-                margin-right: 10px;
-            }
-        }
-
-        &__tutorial-step-name {
-            color: $devices-group-inactive;
-            font-size: 14px;
-            text-transform: uppercase;
-            padding: 5px 0;
-
-            @media(max-height: 1000px) {
-                padding: 0;
-            }
-        }
-
-        &__tutorial-step-title {
-            line-height: 17px;
-            padding: 5px 0;
-            font-weight: normal;
-            color: $home-bg;
-            font-size: 14px;
-        }
-
-        &__tutorial-step-desc {
-            line-height: 17px;
-            padding: 5px 0;
-            font-weight: normal;
-            color: $device-hardware-header;
-        }
-
-        &__list {
-            height: 33%;
-            min-height: 215px;
-
-            &:not(:last-child) {
-                margin-bottom: 8px;
-            }
-        }
-
-        &__list-item {
-            display: flex;
-            height: 25%;
-            padding: 0 20px;
-            background-color: #fff;
-            justify-content: space-between;
-
-            &:nth-of-type(even) {
-                background-color: $device-item-bg;
-            }
-        }            
-
-        &__items-empty {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #fff;
-            padding: 20px;
-            color: $devices-group-inactive;
+        &:not(:first-child) {
+            justify-content: center;
+            font-size: 12px;
+            color: $devices-group-text;
         }
     }
 
-    .preparation {
-        background-color: #F3F3F4;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 10;
+    &__body-col {
+        width: 33%;
+        display: flex;
+        color: #000;
+        align-items: center;
+        @include textoverflowEllipsis;
 
-        .wrapper-center {
-            flex-direction: column;
+        &:not(:first-child) {
+            justify-content: center;
+            font-size: 10px;
+            color: $device-hardware-header;
+        }
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        &--right {
+            min-height: calc(100% - 50px);
+            height: calc(100% - 50px);
+            max-height: 235px;
+            overflow-y: hidden;
         }
 
-        &__logo-image {
-            width: 90px;
-        }
+        &--left {
+            height: calc(100vh - 160px);
+            padding: 20px;
 
-        &__title {
-            font-size: 22px;
-            color: #202020;
-            margin: 25px 0;
-        }
-
-        &__list {
-            margin: 0;
-        }
-
-        &__item {
-            margin: 10px 0;
-        }
-
-        &__item-inner {
-            display: flex;
-
-            img {
-               
+            @media(max-height: 768px) {
+                min-height: 600px;
             }
         }
+    }
 
-        &__item-name {
+    &__tutorial-top {
+        height: 10%;
+    }
+
+    &__tutorial-wrapper {
+        height: 100%;
+    }
+
+    &__tutorial-title {
+        color: $home-bg;
+        font-size: 16px;
+        margin-bottom: 8px;
+
+        &--small {
             font-size: 12px;
-            font-weight: 300;
-            display: flex;
-            align-items: center;
-            color: #000000;
-        }
-
-        &__item-pending {
-            margin-right: 15px;
-        }
-
-        &__item-image {
-            height: 40px;
-            width: 40px;
-            margin-right: 15px;
-        }
-
-        &__setting {
-            text-align: center;
-            margin: 25px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        &__setting-loader {
-            display: inline-block;
-            margin-right: 15px;
-        }
-
-        &__setting-title {
-            display: inline-block;
-            font-size: 12px;
-            color: #9B9B9B;
             font-weight: 500;
+            height: 8%;
+            margin-bottom: 0;
         }
+    }
+
+    &__tutorial-subtitle {
+        color: $device-hardware-header;
+        font-weight: normal;
+    }
+
+    &__tutorial-overview {
+        height: 44%;
+        margin-bottom: 2%;
+    }
+
+    &__tutorial-step-image {
+        max-width: 250px;
+
+        @media(max-height: 925px) {
+            width: 125px;
+        }
+    }
+
+    &__tutorial-start {
+        height: 44%;            
+    }
+
+    &__tutorial-start-image {
+        height: 35%;
+        margin: 7% 0;
+
+        @media(max-height: 925px) {
+            height: 25%;
+        }
+    }
+
+    &__tutorial-steps {
+        display: flex;
+        height: 92%;
+    }
+
+    &__tutorial-step {
+        text-align: center;
+        padding: 15px 30px;
+        background-color: $home-step-bg;
+        border: 1px solid $home-heading-bg;
+        flex-basis: 50%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: space-between;
+
+        @media(max-height: 925px) {
+            padding: 12px;
+        }
+
+        &:first-child {
+            margin-right: 10px;
+        }
+    }
+
+    &__tutorial-step-name {
+        color: $devices-group-inactive;
+        font-size: 14px;
+        text-transform: uppercase;
+        padding: 5px 0;
+
+        @media(max-height: 1000px) {
+            padding: 0;
+        }
+    }
+
+    &__tutorial-step-title {
+        line-height: 17px;
+        padding: 5px 0;
+        font-weight: normal;
+        color: $home-bg;
+        font-size: 14px;
+    }
+
+    &__tutorial-step-desc {
+        line-height: 17px;
+        padding: 5px 0;
+        font-weight: normal;
+        color: $device-hardware-header;
+    }
+
+    &__list {
+        height: 33%;
+        min-height: 215px;
+
+        &:not(:last-child) {
+            margin-bottom: 8px;
+        }
+    }
+
+    &__list-item {
+        display: flex;
+        height: 25%;
+        padding: 0 20px;
+        background-color: #fff;
+        justify-content: space-between;
+
+        &:nth-of-type(even) {
+            background-color: $device-item-bg;
+        }
+    }            
+
+    &__items-empty {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+        padding: 20px;
+        color: $devices-group-inactive;
+    }
+}
+
+.sanity-check {
+    background-color: #F3F3F4;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+
+    .wrapper-center {
+        flex-direction: column;
+    }
+
+    &__logo-image {
+        width: 75px;
+    }
+
+    &__title {
+        font-size: 22px;
+        color: #202020;
+        margin-top: 25px;
+        margin-bottom: 75px;
+    }
+
+    &__list {
+        margin: 0;
+    }
+
+    &__item {
+        margin: 10px 0;
+    }
+
+    &__item-inner {
+        display: flex;
+        align-items: center;
+        height: 40px;
+    }
+
+    &__item-name {
+        font-size: 22px;
+        color: #000000;
+    }
+
+    &__item-pending {
+        margin-right: 15px;
+    }
+
+    &__item-image {
+        height: 40px;
+        width: 40px;
+        margin-right: 15px;
+    }
+
+    &__setting {
+        text-align: center;
+        margin: 25px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 45px;
+    }
+
+    &__setting-loader {
+        display: inline-block;
+        margin-right: 15px;
+    }
+
+    &__setting-title {
+        display: inline-block;
+        font-size: 12px;
+        color: #9B9B9B;
+        font-weight: 500;
     }
 }

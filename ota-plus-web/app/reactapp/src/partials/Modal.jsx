@@ -8,7 +8,7 @@ class Modal extends Component {
         super(props);
     }
     render() {
-        const { title, topActions, content, actions, shown, className, titleClassName, hideOnClickOutside, onRequestClose, backgroundNotGreyed } = this.props;
+        const { title, topActions, content, actions, shown, className, titleClassName, hideOnClickOutside, onRequestClose } = this.props;
         return (
             <Dialog
                   title={
@@ -22,7 +22,7 @@ class Modal extends Component {
                   modal={false}
                   open={shown}
                   className={"dialog" + (className ? " " + className : "")}
-                  overlayClassName={"overlay" + (backgroundNotGreyed ? " transparent-bg" : "")}
+                  overlayClassName="overlay"
                   titleClassName={"heading" + (titleClassName ? " " + titleClassName : "")}
                   contentClassName="content"
                   bodyClassName="body"
@@ -46,7 +46,6 @@ Modal.propTypes = {
     titleClassName: PropTypes.string,
     hideOnClickOutside: PropTypes.bool,
     onRequestClose: PropTypes.func,
-    backgroundNotGreyed: PropTypes.bool
 }
 
 Modal.defaultProps = {
