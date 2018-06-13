@@ -9,12 +9,8 @@ const title = "Home";
 
 @observer
 class Home extends Component {
-    @observable proceedToApp = false;
-
     constructor(props) {
         super(props);
-        this.proceed = this.proceed.bind(this);
-        this.namespaceSetupHandler = new AsyncStatusCallbackHandler(props.provisioningStore, 'namespaceSetupFetchAsync', this.namespaceSetupHandler.bind(this));
     }
     componentWillMount() {
         const { uiAutoFeatureActivation } = this.props;
@@ -30,13 +26,6 @@ class Home extends Component {
         this.props.devicesStore._reset();
         this.props.packagesStore._reset();
         this.props.campaignsStore._reset();
-        this.namespaceSetupHandler();
-    }
-    namespaceSetupHandler() {
-        this.proceed();
-    }
-    proceed() {
-        this.proceedToApp = true;
     }
     render() {
         const { 
@@ -55,7 +44,7 @@ class Home extends Component {
             <FadeAnimation
                 display="flex">
                 {termsAccepted() ?
-                    this.proceedToApp ?
+                    provisioningStore.sanityCheckCompleted ?
                         <MetaData
                             title={title}>
                             <HomeContainer
