@@ -15,6 +15,7 @@ import {
     handleAsyncSuccess, 
     handleAsyncError 
 } from '../utils/Common';
+import * as contracts from '../../../assets/contracts/';
 
 export default class UserStore {
 
@@ -64,6 +65,11 @@ export default class UserStore {
             .catch(function (error) {
                 this.contractsFetchAsync = handleAsyncError(error);
             }.bind(this));
+    }
+
+    _isTermsAccepted() {
+        const terms = _.find(this.contracts, obj => contracts.default[obj.contract]);
+        return terms && terms.accepted;
     }
 
     acceptContract(path) {
