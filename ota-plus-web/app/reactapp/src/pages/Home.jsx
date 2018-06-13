@@ -21,6 +21,7 @@ class Home extends Component {
         this.props.devicesStore.fetchDevices();
         this.props.packagesStore.fetchPackages();
         this.props.campaignsStore.fetchCampaigns();
+
     }
     componentWillUnmount() {
         this.props.devicesStore._reset();
@@ -37,13 +38,12 @@ class Home extends Component {
             provisioningStore,
             featuresStore,
             uiUserProfileMenu,
-            setTermsAccepted,
-            termsAccepted,
         } = this.props;
+        const isTermsAccepted = userStore._isTermsAccepted();
         return (
             <FadeAnimation
                 display="flex">
-                {termsAccepted() ?
+                {isTermsAccepted ?
                     provisioningStore.sanityCheckCompleted ?
                         <MetaData
                             title={title}>
@@ -63,10 +63,13 @@ class Home extends Component {
                             provisioningStore={provisioningStore}
                             proceed={this.proceed}
                         />            
-                : 
+                : userStore.contractsFetchAsync.isFetching ?
+                    <div className="wrapper-center">
+                        <Loader />
+                    </div>
+                :
                     <Terms
                         userStore={userStore}
-                        setTermsAccepted={setTermsAccepted}
                     />
                 }
             </FadeAnimation>

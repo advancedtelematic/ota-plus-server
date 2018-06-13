@@ -28,7 +28,6 @@ import _ from 'underscore';
 import Cookies from 'js-cookie';
 import Wizard from '../components/campaigns/Wizard';
 import { doLogout } from '../utils/Common';
-import * as contracts from '../../../assets/contracts/';
 
 @observer
 class Main extends Component {
@@ -51,8 +50,6 @@ class Main extends Component {
             }
             return Promise.reject(error);
         });
-        this.setTermsAccepted = this.setTermsAccepted.bind(this);
-        this.termsAccepted = this.termsAccepted.bind(this);
         this.backButtonAction = this.backButtonAction.bind(this);
         this.toggleUploadBoxMode = this.toggleUploadBoxMode.bind(this);
         
@@ -107,7 +104,7 @@ class Main extends Component {
         this.context.router.listen(this.locationChange);
     }
     locationChange() {
-        if(!this.termsAccepted() && !this.context.router.isActive('/')) {
+        if(!this.userStore._isTermsAccepted() && !this.context.router.isActive('/')) {
             this.context.router.push('/');
         }
     }
@@ -117,14 +114,7 @@ class Main extends Component {
     }
     toggleSWRepo() {
         this.switchToSWRepo = !this.switchToSWRepo;
-    }
-    setTermsAccepted(path) {
-        this.userStore.acceptContract(path);
-    }
-    termsAccepted() {
-        const terms = _.find(this.userStore.contracts, (obj) => contracts.default[obj.contract]);
-        return terms && terms.accepted ? this.termsAndConditionsAccepted = true : null;
-    }
+    }    
     componentWillUnmount() {
         this.logoutHandler();
     }
@@ -191,8 +181,6 @@ class Main extends Component {
                             uiUserProfileMenu={this.uiUserProfileMenu}
                             uiCredentialsDownload={this.uiCredentialsDownload}
                             alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
-                            setTermsAccepted={this.setTermsAccepted}
-                            termsAccepted={this.termsAccepted}
                             toggleFleet={this.toggleFleet}
                         />
                     </FadeAnimation>
