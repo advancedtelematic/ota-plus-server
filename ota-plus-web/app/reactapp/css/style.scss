@@ -872,7 +872,7 @@ input {
     height: 100%;
     align-items: center;
     justify-content: center;
-    display: flex;
+    display: flex!important;
 
     &--dark {
         background: $device-item-bg;
