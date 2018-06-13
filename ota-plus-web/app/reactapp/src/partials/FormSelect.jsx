@@ -170,7 +170,8 @@ class FormSelect extends Component {
                        value={inputValue}
                        placeholder={placeholder}
                        onClick={this.toggleMenu}
-                       id={id}/>
+                       id={id}
+                       autoComplete="off"/>
                 {inputValue.length ?
                     <i className={`fa fa-check c-form__select-icon`}/>
                     :
