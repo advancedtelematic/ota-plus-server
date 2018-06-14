@@ -133,8 +133,14 @@ class Main extends Component {
                     type: 'real',
                     name: firstGroup.groupName, 
                     id: firstGroup.id
-                }
+                };
                 this.devicesStore.fetchDevices(this.devicesStore.devicesFilter, firstGroup.id);
+            } else {
+                this.groupsStore.selectedGroup = {
+                    type: 'artificial',
+                    name: 'all'
+                };
+                this.devicesStore.fetchDevices(this.devicesStore.devicesFilter, null);
             }
         }
     }
