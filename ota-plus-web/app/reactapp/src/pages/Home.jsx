@@ -9,12 +9,8 @@ const title = "Home";
 
 @observer
 class Home extends Component {
-    @observable proceedToApp = false;
-
     constructor(props) {
         super(props);
-        this.proceed = this.proceed.bind(this);
-        this.namespaceSetupHandler = new AsyncStatusCallbackHandler(props.provisioningStore, 'namespaceSetupFetchAsync', this.namespaceSetupHandler.bind(this));
     }
     componentWillMount() {
         const { uiAutoFeatureActivation } = this.props;
@@ -25,18 +21,12 @@ class Home extends Component {
         this.props.devicesStore.fetchDevices();
         this.props.packagesStore.fetchPackages();
         this.props.campaignsStore.fetchCampaigns();
+
     }
     componentWillUnmount() {
         this.props.devicesStore._reset();
         this.props.packagesStore._reset();
         this.props.campaignsStore._reset();
-        this.namespaceSetupHandler();
-    }
-    namespaceSetupHandler() {
-        this.proceed();
-    }
-    proceed() {
-        this.proceedToApp = true;
     }
     render() {
         const { 
@@ -48,14 +38,13 @@ class Home extends Component {
             provisioningStore,
             featuresStore,
             uiUserProfileMenu,
-            setTermsAccepted,
-            termsAccepted,
         } = this.props;
+        const isTermsAccepted = userStore._isTermsAccepted();
         return (
             <FadeAnimation
                 display="flex">
-                {termsAccepted() ?
-                    this.proceedToApp ?
+                {isTermsAccepted ?
+                    provisioningStore.sanityCheckCompleted ?
                         <MetaData
                             title={title}>
                             <HomeContainer
@@ -74,10 +63,13 @@ class Home extends Component {
                             provisioningStore={provisioningStore}
                             proceed={this.proceed}
                         />            
-                : 
+                : userStore.contractsFetchAsync.isFetching ?
+                    <div className="wrapper-center">
+                        <Loader />
+                    </div>
+                :
                     <Terms
                         userStore={userStore}
-                        setTermsAccepted={setTermsAccepted}
                     />
                 }
             </FadeAnimation>

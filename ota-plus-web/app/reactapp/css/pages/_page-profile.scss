@@ -1,7 +1,7 @@
 #page-profile {
     background: #fff;
 
-    .nav-container {
+    .profile-nav {
         background-color: $device-item-bg;
         height: 180px;
         display: flex;
@@ -9,54 +9,54 @@
         padding: 0 40px;
         position: relative;
 
-        .page-title {
+        &__title {
             color: $page-title-color;
             font-size: 44px;
             position: absolute;
             top: calc(50% - 30px);
         }
 
-        .nav {
+        &__list {
             display: flex;
             font-size: 16px;
             align-items: flex-end;
             height: 100%;
+        }
 
-            a {
-                text-align: center;
-                width: 170px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                color: $hardware-overlay-menu-inactive;
-                padding: 15px 20px 10px;
-                position: relative;
-                flex-direction: column;
+        &__list-item {
+            text-align: center;
+            width: 170px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: $hardware-overlay-menu-inactive;
+            padding: 15px 20px 10px;
+            position: relative;
+            flex-direction: column;
 
-                span {
-                    height: 3px;
-                    display: block;
-                    background-color: transparent;
-                    width: 100%;
-                    position: relative;
-                    bottom: -3px;
-                }
+            &:not(:last-child) {
+                margin-right: 15px;
+            }
 
-                &:not(:last-child) {
-                    margin-right: 15px;
-                }
+            &--active {
+                background: #fff;
+                color: $hardware-overlay-menu-active;
+                border-radius: 3px 3px 0 0;
 
-                &.active {
-                    background: #fff;
-                    color: $hardware-overlay-menu-active;
-                    border-radius: 3px 3px 0 0;
-
-                    span {
-                        background-color: $switch-blue-color;
-                    }
+                .profile-nav__bottom-line {
+                    background-color: $switch-blue-color;
                 }
             }
+        }
+
+        &__bottom-line {
+            height: 3px;
+            display: block;
+            background-color: transparent;
+            width: 100%;
+            position: relative;
+            bottom: -3px;
         }
     }
 

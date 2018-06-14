@@ -28,7 +28,8 @@ import {
     API_PACKAGES_DIRECTOR_DEVICE_AUTO_INSTALL,
     API_PACKAGES_COUNT_INSTALLED_ECUS,
     API_PACKAGES_DEVICE_CANCEL_MTU_UPDATE,
-    API_PACKAGES_COMMENTS
+    API_PACKAGES_COMMENTS,
+    API_DELETE_PACKAGE
 } from '../config';
 import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Common';
 import _ from 'underscore';
@@ -36,7 +37,6 @@ import _ from 'underscore';
 export default class PackagesStore {
     @observable directorRepoExistsFetchAsync = {};
     @observable packagesDeleteAsync = {};
-    @observable packageVersionDeleteAsync = {};
     @observable directorRepoCreateFetchAsync = {};
     @observable tufRepoExistsFetchAsync = {};
     @observable tufRepoCreateFetchAsync = {};
@@ -89,7 +89,6 @@ export default class PackagesStore {
     constructor() {
         resetAsync(this.directorRepoExistsFetchAsync);
         resetAsync(this.packagesDeleteAsync);
-        resetAsync(this.packageVersionDeleteAsync);
         resetAsync(this.directorRepoCreateFetchAsync);
         resetAsync(this.tufRepoExistsFetchAsync);
         resetAsync(this.tufRepoCreateFetchAsync);
@@ -111,55 +110,20 @@ export default class PackagesStore {
         resetAsync(this.commentUpdateAsync);
     }
 
-    deletePackage(name) {
+    deletePackage(filepath) {
         resetAsync(this.packagesDeleteAsync, true);
-        const that = this;
-        return new Promise(function(resolve, reject) {
-            setTimeout(() => {
-                if(localStorage.getItem('deletedPackages')) {
-                    let deletedPackageNames = JSON.parse(localStorage.getItem('deletedPackages'));
-                    if(!_.contains(deletedPackageNames, name)) {
-                        deletedPackageNames.push(name);
-                        localStorage.setItem('deletedPackages', JSON.stringify(deletedPackageNames));                        
-                    }
-                } else {
-                    localStorage.setItem('deletedPackages', JSON.stringify([name]));
-                }
-                that._removePackage(name);
-                that.packagesDeleteAsync = handleAsyncSuccess({});
-                resolve();
-            }, 500);
-        });
+        return axios.delete(`${API_DELETE_PACKAGE}/${filepath}`)
+            .then(function(response) {
+                this.packagesDeleteAsync = handleAsyncSuccess(response);
+                this._removePackage(filepath);
+            }.bind(this))
+            .catch(function(error) {
+                this.packagesDeleteAsync = handleAsyncError(error);
+            }.bind(this));
     }
 
-    deleteVersion(version) {
-        resetAsync(this.packageVersionDeleteAsync, true);
-            const that = this;
-            return new Promise(function(resolve, reject) {
-                setTimeout(() => {
-                    if(localStorage.getItem('deletedVersions')) {
-                        let deletedVersions = JSON.parse(localStorage.getItem('deletedVersions'));
-                        if(!_.contains(deletedVersions, version)) {
-                            deletedVersions.push(version);
-                            localStorage.setItem('deletedVersions', JSON.stringify(deletedVersions));                        
-                        }
-                    } else {
-                        localStorage.setItem('deletedVersions', JSON.stringify([version]));
-                    }
-                    that._removeVersion(version);
-                    that.packageVersionDeleteAsync = handleAsyncSuccess({});
-                    resolve();
-                }, 500);
-        });
-    }
-
-    _removePackage(name) {
-        this.packages = _.filter(this.packages, pack => pack.id.name !== name);
-        this._preparePackages();
-    }
-
-    _removeVersion(version) {
-        this.packages = _.filter(this.packages, pack => pack.id.version !== version);
+    _removePackage(filepath) {
+        this.packages = _.filter(this.packages, pack => `${pack.id.name}_${pack.id.version}` !== filepath);
         this._preparePackages();
     }
 
@@ -877,7 +841,6 @@ export default class PackagesStore {
     _reset() {
         resetAsync(this.directorRepoExistsFetchAsync);
         resetAsync(this.packagesDeleteAsync);
-        resetAsync(this.packageVersionDeleteAsync);
         resetAsync(this.directorRepoCreateFetchAsync);
         resetAsync(this.tufRepoExistsFetchAsync);
         resetAsync(this.tufRepoCreateFetchAsync);
