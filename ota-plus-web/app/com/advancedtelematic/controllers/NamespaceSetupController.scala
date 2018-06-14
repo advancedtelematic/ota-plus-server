@@ -140,13 +140,12 @@ object NamespaceSetupController {
     override protected def create(keyType: KeyType): Future[Unit] = {
       val token  = accessTokenBuilder.mkToken(namespace.get, Instant.now().plus(1, ChronoUnit.MINUTES),
         Set("client.register", s"namespace.${namespace.get}"))
-      val fut = for {
+      for {
         clientInfo <- authPlusApi.createClientForUser(name,
                                                       s"namespace.${namespace.get} $apiDomain/$name",
                                                       token)
-        result <- userProfileApi.activateFeature(UserId(namespace.get), FeatureName(name), clientInfo.clientId)
-      } yield result
-      fut.map(_ => ())
+        _ <- userProfileApi.activateFeature(UserId(namespace.get), FeatureName(name), clientInfo.clientId)
+      } yield ()
     }
   }
 }
