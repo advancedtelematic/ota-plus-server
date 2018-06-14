@@ -26,7 +26,6 @@ class Packages extends Component {
     @observable deleteConfirmationShown = false;
     @observable expandedPackageName = null;
     @observable itemToDelete = null;
-    @observable itemToDeleteType = null;
     @observable editCommentShown = false;
     @observable activeComment = '';
     @observable activePackageFilepath = '';
@@ -67,18 +66,12 @@ class Packages extends Component {
     }
     deleteItem(e) {        
         if(e) e.preventDefault();
-        if(this.itemToDeleteType === 'package') {
-            this.props.packagesStore.deletePackage(this.itemToDelete);
-        }
-        if(this.itemToDeleteType === 'version') {
-            this.props.packagesStore.deleteVersion(this.itemToDelete);
-        }
+        this.props.packagesStore.deletePackage(this.itemToDelete);
         this.hideDeleteConfirmation();
     }
     showDeleteConfirmation(itemName, itemType, e) {
         if(e) e.preventDefault();
         this.itemToDelete = itemName;
-        this.itemToDeleteType = itemType;
         this.deleteConfirmationShown = true;
     }
     hideDeleteConfirmation(e) {
@@ -210,7 +203,7 @@ class Packages extends Component {
                 {this.deleteConfirmationShown ?
                     <ConfirmationModal
                         modalTitle={
-                            <div className="text-red hide">
+                            <div className="text-red">
                                 Delete package
                             </div>
                         }
@@ -219,17 +212,7 @@ class Packages extends Component {
                         deleteItem={this.deleteItem}
                         topText={
                             <div className="delete-modal-top-text">
-                                {this.itemToDeleteType === 'package' ?
-                                    <span>
-                                        Remove <b>{this.expandedPackageName}</b> permanently?
-                                    </span>
-                                : this.itemToDeleteType === 'version' ?
-                                    <span>
-                                        Remove <b>{this.expandedPackageName}</b> v.<b>{this.itemToDelete}</b> permanently?
-                                    </span>
-                                :
-                                    null
-                                }
+                                Remove <b>{this.expandedPackageName}</b> v.<b>{this.itemToDelete}</b> permanently?
                             </div>
                         }
                         bottomText={

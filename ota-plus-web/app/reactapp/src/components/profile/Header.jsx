@@ -12,82 +12,75 @@ class Header extends Component {
     render() {
         const { userStore, uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit } = this.props;
         const fullNavigation = (
-            <div className="nav-container">
-                <div className="page-title">
-                    Profile
-                </div>
-                <div className="nav">
-                    {uiUserProfileEdit ?
-                        <Link to="/profile/edit" activeClassName="active" id="edit-profile-link">
-                            <div className="text">
-                                Edit profile
-                                <span></span>
-                            </div>
-                        </Link>
-                        : ''
-                    }
-                    <Link to="/profile/usage" activeClassName="active" id="usage-link">
-                        <div className="text">
-                            Usage
-                            <span></span>
+            <div className="profile-nav__list">
+                {uiUserProfileEdit ?
+                    <Link to="/profile/edit" activeClassName="profile-nav__list-item--active" className="profile-nav__list-item" id="edit-profile-link">
+                        <div>
+                            Edit profile
+                            <span className="profile-nav__bottom-line"></span>
                         </div>
                     </Link>
-                    <Link to="/profile/access-keys" activeClassName="active" id="provisioning-keys-link">
-                        <div className="text">
-                            Provisioning keys
-                            <span></span>
-                        </div>
-                    </Link>
-                </div>
+                : 
+                    null
+                }
+                <Link to="/profile/usage" activeClassName="profile-nav__list-item--active" className="profile-nav__list-item" id="usage-link">
+                    <div>
+                        Usage
+                        <span className="profile-nav__bottom-line"></span>
+                    </div>
+                </Link>
+                <Link to="/profile/access-keys" activeClassName="profile-nav__list-item--active" className="profile-nav__list-item" id="provisioning-keys-link">
+                    <div>
+                        Provisioning keys
+                        <span className="profile-nav__bottom-line"></span>
+                    </div>
+                </Link>
             </div>
         );
         const fullNavigationWithoutProvisioningKeys = (
-            <div className="nav-container">
-                <div className="page-title">
-                    Profile
-                </div>
-                <div className="nav">
-                    <Link to="/profile/edit" activeClassName="active" id="edit-profile-link">
-                        <div className="text">
-                            Edit profile
-                            <span></span>
-                        </div>
-                    </Link>
-                    <Link to="/profile/usage" activeClassName="active" id="usage-link">
-                        <div className="text">
-                            Usage
-                            <span></span>
-                        </div>
-                    </Link>
-                </div>
+            <div className="profile-nav__list">
+                <Link to="/profile/edit" activeClassName="profile-nav__list-item--active" className="profile-nav__list-item" id="edit-profile-link">
+                    <div>
+                        Edit profile
+                        <span className="profile-nav__bottom-line"></span>
+                    </div>
+                </Link>
+                <Link to="/profile/usage" activeClassName="profile-nav__list-item--active" className="profile-nav__list-item" id="usage-link">
+                    <div>
+                        Usage
+                        <span className="profile-nav__bottom-line"></span>
+                    </div>
+                </Link>
             </div>
         );
         const onlyProvisioningKeys = (
-            <div className="nav-container">
-                <div className="page-title">
-                    Profile
-                </div>
-                <div className="nav">
-                    <Link to="/profile/access-keys" activeClassName="active" id="provisioning-keys-link">
-                        <div className="text">
-                            Provisioning keys
-                            <span></span>
-                        </div>
-                    </Link>
-                </div>
+            <div className="profile-nav__list">
+                <Link to="/profile/access-keys" activeClassName="profile-nav__list-item--active" className="profile-nav__list-item" id="provisioning-keys-link">
+                    <div>
+                        Provisioning keys
+                        <span className="profile-nav__bottom-line"></span>
+                    </div>
+                </Link>
             </div>
         );
         return (
-            uiUserProfileMenu ?
-                uiCredentialsDownload ?
-                    fullNavigation
+            <div className="profile-nav">
+                <div className="profile-nav__title">
+                    Profile
+                </div>
+                {uiUserProfileMenu ?
+                    uiCredentialsDownload ?
+                        fullNavigation
+                    :
+                        fullNavigationWithoutProvisioningKeys
                 :
-                    fullNavigationWithoutProvisioningKeys
-            :
-                uiCredentialsDownload ?
-                    onlyProvisioningKeys
-                :
-                    null            
+                    uiCredentialsDownload ?
+                        onlyProvisioningKeys
+                    :
+                        null 
+                } 
+            </div>
+                      
         );
     }
 }

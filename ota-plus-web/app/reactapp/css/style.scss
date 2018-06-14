@@ -466,7 +466,7 @@ $font: 'akkurat';
     outline: none;
 }
 
-a:hover {
+a:hover, a:focus, a:active {
     text-decoration: none;
 }
 

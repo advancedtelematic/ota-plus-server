@@ -233,6 +233,12 @@ class ListItemVersion extends Component {
                         :
                             null
                         }
+                        <li className="package-dropdown-item">
+                            <a className="package-dropdown-item" href="#" id="delete-version"
+                               onClick={showDeleteConfirmation.bind(this, version.filepath, 'version')}>
+                                Delete version
+                            </a>
+                        </li>
                     </Dropdown>
                 </div>
             </span>
