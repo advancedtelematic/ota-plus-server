@@ -1,12 +1,14 @@
 package com.advancedtelematic.controllers
 
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
 
 import javax.inject.{Inject, Singleton}
 import akka.actor.ActorSystem
 import akka.http.scaladsl.util.FastFuture
 import com.advancedtelematic.api._
-import com.advancedtelematic.auth.ApiAuthAction
+import com.advancedtelematic.auth.{AccessTokenBuilder, ApiAuthAction}
 import play.api.{Configuration, Logger}
 import play.api.libs.json.{JsValue, Json, Writes}
 import play.api.libs.ws.WSClient
@@ -120,6 +122,32 @@ object NamespaceSetupController {
     override protected def create(keyType: KeyType): Future[Unit] =
       cryptApi.registerAccount(namespace.get).map(_ => ())
   }
+
+  class TreehubClientCreation(
+    namespace: Namespace,
+    userProfileApi: UserProfileApi,
+    authPlusApi: AuthPlusApi,
+    accessTokenBuilder: AccessTokenBuilder,
+    apiDomain: String)(
+      implicit ec: ExecutionContext) extends ResourceCreation {
+    override val name: String = "treehub"
+
+    override protected def exists(): Future[Boolean] =
+      userProfileApi.getFeature(UserId(namespace.get), FeatureName(name))
+        .map { r => r.client_id.isDefined }
+        .recover { case RemoteApiError(r, _) if (r.header.status == 404) => false }
+
+    override protected def create(keyType: KeyType): Future[Unit] = {
+      val token  = accessTokenBuilder.mkToken(namespace.get, Instant.now().plus(1, ChronoUnit.MINUTES),
+        Set("client.register", s"namespace.${namespace.get}"))
+      for {
+        clientInfo <- authPlusApi.createClientForUser(name,
+                                                      s"namespace.${namespace.get} $apiDomain/$name",
+                                                      token)
+        _ <- userProfileApi.activateFeature(UserId(namespace.get), FeatureName(name), clientInfo.clientId)
+      } yield ()
+    }
+  }
 }
 
 @Singleton
@@ -127,6 +155,7 @@ class NamespaceSetupController @Inject() (val ws: WSClient,
                                           val conf: Configuration,
                                           val apiAuth: ApiAuthAction,
                                           val clientExec: ApiClientExec,
+                                          accessTokenBuilder: AccessTokenBuilder,
                                           components: ControllerComponents)
                                          (implicit system: ActorSystem, ec: ExecutionContext)
   extends AbstractController(components)
@@ -137,6 +166,8 @@ class NamespaceSetupController @Inject() (val ws: WSClient,
 
   private val cryptApi = new CryptApi(conf, clientExec)
 
+  private val apiDomain = conf.get[String]("api.domain")
+
   private lazy val enabledResources: Namespace => List[ResourceCreation] = { ns =>
     val crypt =
       if(conf.getOptional[String]("crypt.host").isDefined)
@@ -145,6 +176,7 @@ class NamespaceSetupController @Inject() (val ws: WSClient,
         List.empty
 
     List(
+      new TreehubClientCreation(ns, userProfileApi, authPlusApi, accessTokenBuilder, apiDomain),
       new TufRepoCreation(ns, repoServerApi),
       new DirectorRepoCreation(ns, directorApi)
     ) ++ crypt

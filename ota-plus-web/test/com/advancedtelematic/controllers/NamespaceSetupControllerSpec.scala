@@ -30,6 +30,8 @@ class NamespaceSetupControllerSpec extends PlaySpec with GuiceOneServerPerSuite 
       .configure("director.uri" -> "http://test-director")
       .configure("crypt.uri" -> "http://test-crypt")
       .configure("crypt.create" -> false)
+      .configure("authplus.uri" -> "http://test-auth-plus")
+      .configure("userprofile.uri" -> "http://test-userprofile")
       .configure("namespace_setup.check_retries" -> 1)
       .build
 
@@ -38,6 +40,8 @@ class NamespaceSetupControllerSpec extends PlaySpec with GuiceOneServerPerSuite 
   val tufRoots = new ConcurrentHashMap[String, JsValue]()
 
   val directorRoots = new ConcurrentHashMap[String, JsValue]()
+
+  val userProfileClients = new ConcurrentHashMap[String, JsValue]()
 
   val cryptRoutes: Routes = {
     case (_, r) if r.startsWith("http://test-crypt/accounts/") => Action { request =>
@@ -93,7 +97,46 @@ class NamespaceSetupControllerSpec extends PlaySpec with GuiceOneServerPerSuite 
     }
   }
 
-  val mockClient = MockWS(reposerverRoutes orElse directorRoutes orElse cryptRoutes)
+  val userProfilePathRegex = """^http://test-userprofile/api/v1/users/([^/]+)/features""".r
+  val userProfileFeaturePathRegex = """^http://test-userprofile/api/v1/users/([^/]+)/features/treehub""".r
+  val userProfileRoutes: Routes = {
+    case (GET, url) => Action { _ =>
+      url match {
+        case userProfileFeaturePathRegex(namespace) if (userProfileClients.containsKey(namespace)) =>
+          Ok(userProfileClients.get(namespace))
+        case _ => NotFound
+      }
+    }
+    case (POST, url) => Action { _ =>
+      url match {
+        case userProfilePathRegex(namespace) if namespace != "ns-without-user" => {
+          userProfileClients.put(
+            namespace,
+            Json.obj(
+              "feature" -> "treehub",
+              "client_id" -> "0f570b85-4d4d-4e61-9540-d8ac7389b4b6",
+              "enabled" -> true))
+          Ok(userProfileClients.get(namespace))
+        }
+        case _ => NotFound
+      }
+    }
+  }
+
+  val authPlusRoutes: Routes = {
+    case (POST, "http://test-auth-plus/clients") => Action { request =>
+      Ok(Json.obj(
+        "client_id" -> "0f570b85-4d4d-4e61-9540-d8ac7389b4b6",
+        "registration_client_uri" -> "http://test-auth-plus",
+        "registration_access_token" -> "aoeuaoeu"))
+    }
+  }
+
+  val mockClient = MockWS(reposerverRoutes orElse
+    directorRoutes orElse
+    cryptRoutes orElse
+    authPlusRoutes orElse
+    userProfileRoutes)
 
   "NamespaceSetupController" should {
     val controller = app.injector.instanceOf[NamespaceSetupController]
@@ -107,6 +150,7 @@ class NamespaceSetupControllerSpec extends PlaySpec with GuiceOneServerPerSuite 
 
       resourceStatus.get("tuf") must contain(false)
       resourceStatus.get("director") must contain(false)
+      resourceStatus.get("treehub") must contain(false)
     }
 
     "return failure errors when check fails" in {
@@ -131,6 +175,17 @@ class NamespaceSetupControllerSpec extends PlaySpec with GuiceOneServerPerSuite 
       resourceStatus("tuf") must include("Failed: Error creating repo")
     }
 
+    "return failure errors when create treehub client fails" in {
+      val ns = "ns-without-user"
+      val result = controller.setup(RsaKeyType)(FakeRequest("GET", "/").withAuthSession(ns))
+
+      status(result) mustBe BAD_GATEWAY
+
+      val resourceStatus = contentAsJson(result).as[Map[String, String]]
+
+      resourceStatus("treehub") must include("Failed to wait for resource creation")
+    }
+
     "create resources when they do not exist" in {
       val ns = "test-ns-create"
       val result = controller.setup(RsaKeyType)(FakeRequest("GET", "/").withAuthSession(ns))
@@ -141,6 +196,7 @@ class NamespaceSetupControllerSpec extends PlaySpec with GuiceOneServerPerSuite 
 
       resourceStatus.get("tuf") must contain("Created")
       resourceStatus.get("director") must contain("Created")
+      resourceStatus.get("treehub") must contain("Created")
     }
   }
 }
