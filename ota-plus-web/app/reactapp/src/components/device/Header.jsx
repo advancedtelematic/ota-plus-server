@@ -209,7 +209,7 @@ class Header extends Component {
                             {this.deleteConfirmationShown ?
                                 <ConfirmationModal
                                     modalTitle={
-                                        <div className="text-red hide">
+                                        <div className="text-red">
                                             Delete device
                                         </div>
                                     }

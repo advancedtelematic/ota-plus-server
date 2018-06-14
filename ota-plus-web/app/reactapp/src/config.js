@@ -44,6 +44,7 @@ export const API_GROUPS_REMOVE_DEVICE = '/api/v1/device_groups';
 export const API_PACKAGES = '/api/v1/packages';
 export const API_TUF_PACKAGES = '/api/v1/user_repo/targets.json';
 export const API_UPLOAD_TUF_PACKAGE = '/api/v1/user_repo/targets';
+export const API_DELETE_PACKAGE = '/api/v1/user_repo/targets';
 export const API_PACKAGES_COUNT_VERSION_BY_NAME = '/api/v1/device_packages';
 export const API_PACKAGES_COUNT_DEVICE_AND_GROUP = '/api/v1/device_count';
 export const API_PACKAGES_BLACKLIST_FETCH = '/api/v1/blacklist';
