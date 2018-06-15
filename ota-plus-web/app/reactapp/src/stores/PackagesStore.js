@@ -123,7 +123,9 @@ export default class PackagesStore {
     }
 
     _removePackage(filepath) {
-        this.packages = _.filter(this.packages, pack => `${pack.id.name}_${pack.id.version}` !== filepath);
+        this.packages = _.filter(this.packages, pack => {
+            return pack.filepath !== filepath
+        });
         this._preparePackages();
     }
 
