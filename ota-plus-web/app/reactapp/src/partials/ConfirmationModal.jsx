@@ -15,13 +15,13 @@ class ConfirmationModal extends Component {
             <span>
                 <div className="text-left">
                     {topText}
-                    <div className="important-info">
+                    <div className="important-info" id="confirmation-modal-important-info">
                         This action cannot be undone.
                     </div>
                     {bottomText}
                 </div>
                 <div className="body-actions">
-                    <button className="btn-primary" onClick={this.continue}>
+                    <button className="btn-primary" onClick={this.continue} id="confirmation-modal-continue">
                         Continue
                     </button>
                 </div>
@@ -32,8 +32,8 @@ class ConfirmationModal extends Component {
             <Modal 
                 title={modalTitle}
                 topActions={
-                    <div className="top-actions flex-end">
-                        <div className="modal-close" onClick={hide}>
+                    <div className="top-actions flex-end" id="confirmation-modal-top-actions">
+                        <div className="modal-close" onClick={hide} id="confirmation-modal-close">
                             <img src="/assets/img/icons/close.svg" alt="Icon" />
                         </div>
                     </div>
