@@ -203,7 +203,7 @@ class Packages extends Component {
                 {this.deleteConfirmationShown ?
                     <ConfirmationModal
                         modalTitle={
-                            <div className="text-red">
+                            <div className="text-red" id="delete-package-title">
                                 Delete package
                             </div>
                         }
@@ -211,12 +211,13 @@ class Packages extends Component {
                         hide={this.hideDeleteConfirmation}
                         deleteItem={this.deleteItem}
                         topText={
-                            <div className="delete-modal-top-text">
-                                Remove <b>{this.expandedPackageName}</b> v.<b>{this.itemToDelete}</b> permanently?
+                            <div className="delete-modal-top-text" id="delete-package-top-text">
+                                Remove <b id={"delete-package-" + this.expandedPackageName}>{this.expandedPackageName}</b> v.
+                                <b id={"delete-package-" + this.expandedPackageName + '-version-' + this.itemToDelete}>{this.itemToDelete}</b> permanently?
                             </div>
                         }
                         bottomText={
-                            <div className="delete-modal-bottom-text">
+                            <div className="delete-modal-bottom-text" id="delete-package-bottom-text">
                                 If the package is part of any active campaigns, any devices that haven't installed it yet fail the campaign.
                             </div>
                         }
