@@ -19,10 +19,10 @@ $(function () {
     },
     container: 'widget-container',
     languageDictionary: {
-      title: "Get more from HERE",
+      title: "ATS Garage is now HERE OTA Connect",
       loginSubmitLabel: "Sign in",
-      socialLoginInstructions: "ATS Garage is now HERE OTA Connect...",
-      databaseEnterpriseAlternativeLoginInstructions: "Sign in to your HERE account",
+      socialLoginInstructions: "or sign in with your existing ATS Garage account",
+      databaseEnterpriseAlternativeLoginInstructions: "",
       forgotPasswordAction: "Forgot your password?",
       forgotPasswordTitle: 'Password reset',
       forgotPasswordInstructions: "Please enter your email address. We will send you a link to reset your password.",

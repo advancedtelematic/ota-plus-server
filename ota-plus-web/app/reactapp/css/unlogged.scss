@@ -273,6 +273,10 @@ label.error {
 }
 
 /* Auth0 */
+.auth0-lock-name {
+    padding: 0!important;
+}
+
 .auth0-lock-header-bg, .auth0-lock-header-bg-blur, .auth0-lock-cred-pane, .auth0-lock-header {
     background: transparent!important;
 }
@@ -287,9 +291,10 @@ label.error {
     margin-bottom: 20px!important;
 }
 
-.auth0-lock-name, .auth-lock-social-buttons-pane span {
-    font-size: 21px!important;
+.auth-lock-social-buttons-pane span {
+    font-size: 16px!important;
     color: #3F454D!important;
+    font-weight: 600!important;
 }
 
 .auth0-lock-pane-separator + div p:first-child {
