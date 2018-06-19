@@ -17,6 +17,7 @@ const WebsocketHandler = (function (wsUrl, stores) {
                     stores.devicesStore._updateDeviceData(data.uuid, {lastSeen: data.lastSeen});
                     if(window.location.href.indexOf('/device/') > -1) {                        
                         stores.devicesStore.fetchDirectorAttributes(data.uuid);
+                        stores.devicesStore._updateStatus(data.uuid, "downloading");
                     }
                     break;
                 case "DeviceUpdateStatus":
@@ -55,6 +56,9 @@ const WebsocketHandler = (function (wsUrl, stores) {
                 case "DeviceSystemInfoChanged":
                     stores.devicesStore.fetchDeviceNetworkInfo(data.uuid);
                     break;
+                case "DeviceEventMessage":
+                    stores.devicesStore._updateStatus(data.deviceUuid, "installing");
+                    break;                    
                 default:
                     console.log('Unhandled event type: ' + eventObj.type);
                     break;
