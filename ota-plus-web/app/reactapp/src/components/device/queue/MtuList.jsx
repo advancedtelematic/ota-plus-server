@@ -36,7 +36,7 @@ class MtuQueueList extends Component {
                                             item={target}
                                             hardwareId={hardwareId}
                                             updateId={update.updateId}
-                                            inFlight={update.inFlight}
+                                            status={update.status}
                                             length={target.image.fileinfo.length}
                                             cancelMtuUpdate={cancelMtuUpdate}
                                             alphaPlusEnabled={alphaPlusEnabled}

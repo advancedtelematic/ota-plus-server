@@ -267,6 +267,7 @@ export default class DevicesStore {
                 let data = response.data;
                 _.each(data, (item, index) => {
                     item.device = id;
+                    item.status = "waiting";
                 });
                 this.multiTargetUpdates = response.data;
                 this.multiTargetUpdatesSaved = _.uniq(this.multiTargetUpdates.concat(response.data), item => item.device);
@@ -275,6 +276,17 @@ export default class DevicesStore {
             .catch((error) => {
                 this.mtuFetchAsync = handleAsyncError(error);
             });
+    }
+
+    _findMtu(id) {
+        return this.multiTargetUpdates.find(update => update.device === id);
+    }
+
+    _updateStatus(id, status) {
+        if(this.multiTargetUpdates.length) {
+            const update = this._findMtu(id);
+            update["status"] = status;
+        }
     }
 
     cancelMtuUpdate(data) {
