@@ -17,7 +17,7 @@ class Home extends Component {
         if (!uiAutoFeatureActivation) {
            this.props.provisioningStore.sanityCheckCompleted = true;
         }
-        this.props.provisioningStore.namespaceSetup();
+        this.props.provisioningStore.namespaceSetupPost();
         this.props.devicesStore.fetchDevices();
         this.props.packagesStore.fetchPackages();
         this.props.campaignsStore.fetchCampaigns();
@@ -54,7 +54,7 @@ class Home extends Component {
                                 hardwareStore={hardwareStore}
                             />
                         </MetaData>
-                    : provisioningStore.namespaceSetupFetchAsync.isFetching ?
+                    : provisioningStore.namespaceSetupPostAsync.isFetching ?
                         <div className="wrapper-center">
                             <Loader />
                         </div>

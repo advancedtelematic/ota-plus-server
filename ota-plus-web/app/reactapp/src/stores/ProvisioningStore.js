@@ -95,7 +95,7 @@ export default class ProvisioningStore {
             .catch(function (error) {
                 const that = this;
                 setTimeout(() => {
-                    that.namespaceSetupPost();
+                    that.namespaceSetup();
                 }, 800);
                 this.namespaceSetupFetchAsync = handleAsyncError(error);
             }.bind(this));
@@ -111,7 +111,7 @@ export default class ProvisioningStore {
             .catch(function (error) {
                 const that = this;
                 setTimeout(() => {
-                    that.namespaceSetupPost();
+                    that.namespaceSetup();
                 }, 800);
                 this.namespaceSetupPostAsync = handleAsyncError(error);
             }.bind(this));
