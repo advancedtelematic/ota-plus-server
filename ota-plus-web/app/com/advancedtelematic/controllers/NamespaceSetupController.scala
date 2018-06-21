@@ -168,7 +168,7 @@ class NamespaceSetupController @Inject() (val ws: WSClient,
 
   private val apiDomain = conf.get[String]("api.domain")
 
-  private lazy val enabledResources: Namespace => List[ResourceCreation] = { ns =>
+  private def enabledResources(ns: Namespace): List[ResourceCreation] = {
     val crypt =
       if(conf.getOptional[String]("crypt.host").isDefined)
         List(new CryptAccountCreation(ns, cryptApi))
@@ -185,7 +185,17 @@ class NamespaceSetupController @Inject() (val ws: WSClient,
   def status(): Action[AnyContent] = apiAuth.async { request =>
     Future.sequence {
       enabledResources(request.namespace).map(_.checkResource)
-    }.map { results => Ok(Json.toJson(results.toMap)) }
+    }.map { results =>
+      val success = results.forall { case (_, wasSuccess) => wasSuccess  }
+
+      val resultFn =
+        if (success)
+          Ok
+        else
+          BadGateway
+
+      resultFn(Json.toJson(results.toMap))
+    }
   }
 
   def setup(keyType: KeyType): Action[AnyContent] = apiAuth.async { request =>
