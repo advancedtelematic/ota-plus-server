@@ -12,7 +12,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.inject.bind
 import AuthUtils._
-import com.advancedtelematic.libtuf.data.TufDataType.RsaKeyType
+import com.advancedtelematic.libtuf.data.TufDataType.{Ed25519KeyType, RsaKeyType}
 import mockws.MockWS.Routes
 import play.api.libs.json.{JsValue, Json}
 
@@ -141,16 +141,32 @@ class NamespaceSetupControllerSpec extends PlaySpec with GuiceOneServerPerSuite 
   "NamespaceSetupController" should {
     val controller = app.injector.instanceOf[NamespaceSetupController]
 
-    "return status of resources" in {
+    "return status of resources with bad gateway when setup failed" in {
       val result = controller.status()(FakeRequest("GET", "/").withAuthSession(namespace))
 
-      status(result) mustBe OK
+      status(result) mustBe BAD_GATEWAY
 
       val resourceStatus = contentAsJson(result).as[Map[String, Boolean]]
 
       resourceStatus.get("tuf") must contain(false)
       resourceStatus.get("director") must contain(false)
       resourceStatus.get("treehub") must contain(false)
+    }
+
+    "return status of resources with ok when setup was sucessful " in {
+      val setupResult = controller.setup(Ed25519KeyType)(FakeRequest("GET", "/").withAuthSession(namespace))
+
+      status(setupResult) mustBe OK
+
+      val result = controller.status()(FakeRequest("GET", "/").withAuthSession(namespace))
+
+      status(result) mustBe OK
+
+      val resourceStatus = contentAsJson(result).as[Map[String, Boolean]]
+
+      resourceStatus.get("tuf") must contain(true)
+      resourceStatus.get("director") must contain(true)
+      resourceStatus.get("treehub") must contain(true)
     }
 
     "return failure errors when check fails" in {
