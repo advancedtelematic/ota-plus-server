@@ -7,10 +7,10 @@ class MultiTargetITem extends Component {
         super(props);
     }
     render() {
-        const { item, hardwareId, updateId, length, cancelMtuUpdate, inFlight, alphaPlusEnabled, showSequencer } = this.props;
+        const { item, hardwareId, updateId, status, length, cancelMtuUpdate, alphaPlusEnabled, showSequencer } = this.props;
         const hash = item.image.fileinfo.hashes.sha256;
         return (
-            <li id={"queued-entry-" + hash} className={"queue-modal__item" + (inFlight ? " pending" : "")}>
+            <li id={"queued-entry-" + hash} className="queue-modal__item">
 
                 <div className="queue-modal__item-header">
                     <div className="queue-modal__item-update">
@@ -23,22 +23,20 @@ class MultiTargetITem extends Component {
                             </span>
                         </div>
                         <div>
-                            {inFlight ?
-                                <button id="pending" className="queue-modal__pending" disabled>
-                                    Pending <img src="/assets/img/icons/loading_dots.gif" className="queue-modal__pending-dots" alt="Icon" />
-                                </button>
-                            :
-                                <button id="cancel-mtu" className="queue-modal__cancel-update" onClick={cancelMtuUpdate.bind(this, updateId)}>
-                                    Cancel
-                                </button>
-                            }
+                            <button id="cancel-mtu" className="queue-modal__cancel-update" onClick={cancelMtuUpdate.bind(this, updateId)}>
+                                Cancel
+                            </button>
                         </div>
                     </div>
                     <div className="queue-modal__item-process-status">
-                        {inFlight ?
-                            <span>Downloading</span>
-                        :
+                        {status === "waiting" ?
                             <span>Queued, waiting for device to connect</span>
+                        : status === "downloading" ?
+                            <span>Downloading</span>
+                        : status === "installing" ?
+                            <span>Installing</span>
+                        :
+                            null
                         }
                         <img src="/assets/img/icons/points.gif" className="queue-modal__process-dots" alt="Icon" />
                     </div>
@@ -74,14 +72,6 @@ class MultiTargetITem extends Component {
                         </div>
                     </div>
                 </div>
-
-                {alphaPlusEnabled && inFlight ?
-                    <a href="#" style={{'display': 'block', 'textAlign': 'center', 'marginTop': '15px'}} onClick={showSequencer.bind(this)}>
-                        Live installation progress
-                    </a>
-                :
-                    null
-                }
             </li>
         );
     }
