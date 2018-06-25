@@ -200,6 +200,7 @@
     &__list-item {
         display: flex;
         height: 25%;
+        min-height: 40px;
         padding: 0 20px;
         background-color: #fff;
         justify-content: space-between;
