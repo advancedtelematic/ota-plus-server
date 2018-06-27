@@ -32,9 +32,9 @@ class MultiTargetITem extends Component {
                         {status === "waiting" ?
                             <span>Queued, waiting for device to connect</span>
                         : status === "downloading" ?
-                            <span>Downloading</span>
+                            <span>Waiting for download to complete</span>
                         : status === "installing" ?
-                            <span>Installing</span>
+                            <span>Waiting for installation to complete</span>
                         :
                             null
                         }
