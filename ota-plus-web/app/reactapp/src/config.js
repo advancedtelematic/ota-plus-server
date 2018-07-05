@@ -9,6 +9,8 @@ export const API_CREATE_MULTI_TARGET_UPDATE='/api/v1/admin/devices';
 export const API_FETCH_MULTI_TARGET_UPDATES='/api/v1/admin/devices';
 export const API_CANCEL_MULTI_TARGET_UPDATE = '/api/v2/cancel_device_update_campaign';
 
+export const API_NAMESPACE_SETUP_STEPS = '/user/setup';
+
 export const API_USER_DETAILS = '/user/profile';
 export const API_USER_CONTRACTS = '/user/contracts';
 export const API_USER_UPDATE = '/user/profile';
@@ -99,5 +101,3 @@ export const API_PROVISIONING_ACTIVATE = '/api/v1/provisioning/activate';
 export const API_PROVISIONING_DETAILS = '/api/v1/provisioning';
 export const API_PROVISIONING_KEYS_FETCH = '/api/v1/provisioning/credentials/registration';
 export const API_PROVISIONING_KEY_CREATE = '/api/v1/provisioning/credentials/registration';
-
-export const API_NAMESPACE_SETUP_STEPS = '/api/v1/setup';

@@ -22,7 +22,6 @@ export default class ProvisioningStore {
     @observable provisioningStatusFetchAsync = {};
     @observable provisioningActivateAsync = {};
     @observable namespaceSetupFetchAsync = {};
-    @observable namespaceSetupPostAsync = {};
     @observable provisioningDetailsFetchAsync = {};
     @observable provisioningKeysFetchAsync = {};
     @observable provisioningKeyCreateAsync = {};
@@ -38,7 +37,6 @@ export default class ProvisioningStore {
     constructor() {
         resetAsync(this.provisioningStatusFetchAsync);
         resetAsync(this.namespaceSetupFetchAsync);
-        resetAsync(this.namespaceSetupPostAsync);
         resetAsync(this.provisioningActivateAsync);
         resetAsync(this.provisioningDetailsFetchAsync);
         resetAsync(this.provisioningKeysFetchAsync);
@@ -101,22 +99,6 @@ export default class ProvisioningStore {
             }.bind(this));
     }
 
-    namespaceSetupPost() {
-        resetAsync(this.namespaceSetupPostAsync, true);
-        return axios.post(API_NAMESPACE_SETUP_STEPS)
-            .then(function (response) {
-                this.sanityCheckCompleted = true;
-                this.namespaceSetupPostAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function (error) {
-                const that = this;
-                setTimeout(() => {
-                    that.namespaceSetup();
-                }, 800);
-                this.namespaceSetupPostAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
     fetchProvisioningDetails() {
         resetAsync(this.provisioningDetailsFetchAsync, true);
         return axios.get(API_PROVISIONING_DETAILS)
@@ -158,7 +140,6 @@ export default class ProvisioningStore {
     _reset() {
         resetAsync(this.provisioningStatusFetchAsync);
         resetAsync(this.namespaceSetupFetchAsync);
-        resetAsync(this.namespaceSetupPostAsync);
         resetAsync(this.provisioningActivateAsync);
         resetAsync(this.provisioningDetailsFetchAsync);
         resetAsync(this.provisioningKeysFetchAsync);
