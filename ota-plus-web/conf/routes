@@ -21,9 +21,6 @@ GET     /api/v1/features                         com.advancedtelematic.controlle
 PUT     /api/v1/features/:feature                com.advancedtelematic.controllers.UserProfileController.activateFeature(feature: FeatureName)
 GET     /api/v1/features/:feature/client         com.advancedtelematic.controllers.UserProfileController.getFeatureClient(feature: FeatureName)
 
-POST    /api/v1/setup                            com.advancedtelematic.controllers.NamespaceSetupController.setup(keyType: KeyType ?= RsaKeyType)
-GET     /api/v1/setup                            com.advancedtelematic.controllers.NamespaceSetupController.status()
-
 GET     /api/:version/*path                      com.advancedtelematic.controllers.Application.apiProxy(version: ApiVersion, path: String)
 PUT     /api/:version/*path                      com.advancedtelematic.controllers.Application.apiProxy(version: ApiVersion, path: String)
 POST    /api/:version/*path                      com.advancedtelematic.controllers.Application.apiProxy(version: ApiVersion, path: String)
