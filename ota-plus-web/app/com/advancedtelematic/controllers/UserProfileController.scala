@@ -108,48 +108,6 @@ class UserProfileController @Inject()(val conf: Configuration,
       }
   }
 
-  val apiDomain = conf.get[String]("api.domain")
-
-  def activateFeature(feature: FeatureName): Action[AnyContent] = authAction.async { request =>
-    val userId = request.idToken.userId
-    val token  = accessTokenBuilder.mkToken(userId.id, Instant.now().plus(1, ChronoUnit.MINUTES),
-      Set("client.register", s"namespace.${userId.id}"))
-
-    def activateFeatureWithClientId =
-      for {
-        clientInfo <- authPlusApi.createClientForUser(feature.get,
-                                                      s"namespace.${request.namespace.get} $apiDomain/${feature.get}",
-                                                      token)
-        clientId = clientInfo.clientId
-        result <- userProfileApi.activateFeature(userId, feature, clientId)
-      } yield result
-
-    userProfileApi
-      .getFeature(userId, feature)
-      .map { r =>
-        r.client_id
-      }
-      .recover { case RemoteApiError(r, _) if (r.header.status == 404) => None }
-      .flatMap { client_id =>
-        client_id match {
-          case Some(id) => Future.successful(Ok(EmptyContent()))
-          case None     => activateFeatureWithClientId
-        }
-      }
-  }
-
-  def getFeatureClient(feature: FeatureName): Action[AnyContent] = authAction.async { request =>
-    val userId = request.idToken.userId
-    val token  = request.accessToken
-
-    userProfileApi.getFeature(userId, feature).flatMap { f =>
-      f.client_id match {
-        case Some(id) => authPlusApi.getClient(id, token)
-        case None     => Future.successful(NotFound)
-      }
-    }
-  }
-
   def proxyRequest(path: String): Action[AnyContent] = authAction.async { request =>
     userProfileApi.userProfileRequest(request.idToken.userId, request.method, path)
   }
