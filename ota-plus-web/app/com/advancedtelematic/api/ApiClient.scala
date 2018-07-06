@@ -248,31 +248,6 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
       .execResult(apiExec)
 }
 
-class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
-
-  private val buildSrvRequest = ApiRequest.base(buildSrvApiUri + "/")
-
-  def download(artifact_type: String, params: Map[String, Seq[String]])
-    (implicit ec: ExecutionContext) : Future[Result] = {
-
-    buildSrvRequest(s"api/v1/artifacts/$artifact_type/download")
-      .transform(
-        _.withMethod("POST")
-          .withBody(params))
-      .execStreamedResult(apiExec)
-  }
-
-  def download(artifact_type: String, clientId: UUID, clientSecret: String)
-              (implicit ec: ExecutionContext) : Future[Result] = {
-
-    buildSrvRequest(s"api/v1/artifacts/$artifact_type/download")
-      .transform(
-        _.withMethod("POST")
-          .withBody(Map("client_id" -> Seq(clientId.toString), "client_secret" -> Seq(clientSecret))))
-      .execStreamedResult(apiExec)
-  }
-}
-
 class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig
                                                                                  with CirceJsonBodyWritables {
   private val request = ApiRequest.base(repoApiUri + "/api/v1/")

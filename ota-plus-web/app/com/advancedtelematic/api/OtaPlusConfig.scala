@@ -19,8 +19,6 @@ trait OtaPlusConfig {
 
   val authPlusApiUri = conf.underlying.getString("authplus.uri")
 
-  val buildSrvApiUri = conf.underlying.getString("buildservice.uri")
-
   val userProfileApiUri = conf.underlying.getString("userprofile.uri")
 
   val auditorApiUri = conf.underlying.getString("auditor.uri")
