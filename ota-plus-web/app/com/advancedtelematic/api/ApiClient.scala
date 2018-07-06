@@ -122,41 +122,7 @@ trait ApiRequest { self =>
   */
 class AuthPlusApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
 
-  private val clientId: String     = conf.get[String]("authplus.client_id")
-  private val clientSecret: String = conf.get[String]("authplus.secret")
-
   private val authPlusRequest = ApiRequest.base(authPlusApiUri + "/")
-
-  def createClient(body: JsValue, token: AccessToken)(implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
-    authPlusRequest("clients")
-      .withToken(token.value)
-      .transform(_.withBody(body).withMethod("POST"))
-      .execJson(apiExec)(ev)
-  }
-
-  def createClientForUser(clientName: String, scope: String, token: AccessToken)(
-      implicit ev: Reads[ClientInfo]): Future[ClientInfo] = {
-    val body = Json.obj(
-      "grant_types" -> List("client_credentials"),
-      "client_name" -> clientName,
-      "scope"       -> scope
-    )
-    createClient(body, token)
-  }
-
-  def getClient(clientId: UUID, token: AccessToken)(implicit ec: ExecutionContext): Future[Result] = {
-    authPlusRequest(s"clients/${clientId.toString}")
-      .withToken(token.value)
-      .transform(_.withMethod("GET"))
-      .execResult(apiExec)
-  }
-
-  def getClientJsValue(clientId: UUID, token: AccessToken)(implicit ec: ExecutionContext): Future[JsValue] = {
-    authPlusRequest(s"clients/${clientId.toString}")
-      .withToken(token.value)
-      .transform(_.withMethod("GET"))
-      .execJsonValue(apiExec)
-  }
 
   /**
     * The response is json for `com.advancedtelematic.authplus.client.ClientInformationResponse`
@@ -229,19 +195,6 @@ class UserProfileApi(val conf: Configuration, val apiExec: ApiClientExec) extend
           .withQueryStringParameters(query.mapValues(_.head).toSeq :_*)
           .withBody(body))
       .execResult(apiExec)
-
-  def getApplicationIds(userId: UserId): Future[Seq[UUID]] =
-    userProfileRequest(s"users/${userId.id}/applications").execJson[Seq[UUID]](apiExec)
-
-  private def applicationIdRequest(method: String, userId: UserId, clientId: UUID): Future[Result] =
-    userProfileRequest(s"users/${userId.id}/applications/${clientId.toString}").transform(_.withMethod(method))
-      .execResult(apiExec)
-
-  def addApplicationId(userId: UserId, clientId: UUID): Future[Result] =
-    applicationIdRequest("PUT", userId, clientId)
-
-  def removeApplicationId(userId: UserId, clientId: UUID): Future[Result] =
-    applicationIdRequest("DELETE", userId, clientId)
 
   def userProfileRequest(userId: UserId, method: String, path: String): Future[Result] =
     userProfileRequest(s"users/${userId.id}/${path}").transform(_.withMethod(method))
