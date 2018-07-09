@@ -2,16 +2,21 @@ import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { FlatButton } from 'material-ui';
-import { Loader } from '../partials';
+import { Loader, ConfirmationModal, EditModal } from '../partials';
 import { resetAsync } from '../utils/Common';
 import { DevicesCreateModal } from '../components/devices';
 import { GroupsCreateModal } from '../components/groups';
 import { DevicesGroupsPanel, DevicesContentPanel } from '../components/devices';
+import _ from 'underscore';
 
 @observer
 class Devices extends Component {
     @observable createModalShown = false;
     @observable createGroupModalShown = false;
+    @observable deleteConfirmationShown = false;
+    @observable itemToDelete = null;
+    @observable itemToEdit = null;
+    @observable editNameShown = false;
 
     constructor(props) {
         super(props);
@@ -21,6 +26,11 @@ class Devices extends Component {
         this.onDeviceDrop = this.onDeviceDrop.bind(this);
         this.changeSort = this.changeSort.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
+        this.showDeleteConfirmation = this.showDeleteConfirmation.bind(this);
+        this.hideDeleteConfirmation = this.hideDeleteConfirmation.bind(this);
+        this.deleteDevice = this.deleteDevice.bind(this);
+        this.showEditName = this.showEditName.bind(this);
+        this.hideEditName = this.hideEditName.bind(this);
     }
     showCreateGroupModal(e) {
         if(e) e.preventDefault();
@@ -30,6 +40,37 @@ class Devices extends Component {
         if(e) e.preventDefault();
         this.createGroupModalShown = false;
         resetAsync(this.props.groupsStore.groupsCreateAsync);
+    }
+    showDeleteConfirmation(device, e) {
+        if(e) e.preventDefault();
+        this.itemToDelete = device;
+        this.deleteConfirmationShown = true;
+    }
+    showEditName(device, e) {
+        if(e) e.preventDefault();
+        this.itemToEdit = device;
+        this.editNameShown = true;
+    }
+    hideEditName() {
+        this.editNameShown = false;
+    }
+    deleteDevice(e) {
+        if(e) e.preventDefault();
+        const deviceUuid = this.itemToDelete.uuid;
+        const { devicesStore, groupsStore } = this.props;
+        devicesStore.deleteDevice(deviceUuid).then(() => {
+            const foundGroup = _.find(groupsStore.groups, (group) => {
+                return group.devices.values.indexOf(deviceUuid) > -1;
+            });
+            if(foundGroup) {
+                foundGroup.devices.total--;
+            }
+            devicesStore._decreaseDeviceInitialTotalCount();
+            this.hideDeleteConfirmation();
+        });
+    }
+    hideDeleteConfirmation() {
+        this.deleteConfirmationShown = false;
     }
     selectGroup(group) {
         const { devicesStore, groupsStore } = this.props;
@@ -78,6 +119,8 @@ class Devices extends Component {
                                     changeSort={this.changeSort}
                                     changeFilter={this.changeFilter}
                                     alphaPlusEnabled={alphaPlusEnabled}
+                                    showDeleteConfirmation={this.showDeleteConfirmation}
+                                    showEditName={this.showEditName}
                                 />
                             </span>
                         
@@ -108,6 +151,40 @@ class Devices extends Component {
                     groupsStore={groupsStore}
                     devicesStore={devicesStore}
                 />
+                {this.deleteConfirmationShown ?
+                    <ConfirmationModal
+                        modalTitle={
+                            <div className="text-red">
+                                Delete device
+                            </div>
+                        }
+                        shown={this.deleteConfirmationShown}
+                        hide={this.hideDeleteConfirmation}
+                        deleteItem={this.deleteDevice}
+                        topText={
+                            <div className="delete-modal-top-text">
+                                Device will be removed now and can be re-provisioned.
+                            </div>
+                        }
+                    />
+                :
+                    null
+                }
+                {this.editNameShown ?
+                    <EditModal
+                        modalTitle={
+                            <div>
+                                Edit name
+                            </div>
+                    }
+                        shown={this.editNameShown}
+                        hide={this.hideEditName}
+                        devicesStore={devicesStore}
+                        device={this.itemToEdit}
+                    />
+                :
+                    null
+                }
             </span>
         );
     }

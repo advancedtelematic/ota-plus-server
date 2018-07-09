@@ -1,10 +1,27 @@
 import React from 'react';
-import eventHandler from './hoc/eventHandler';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
+import enhanceWithClickOutside from 'react-click-outside';
 
-const Dropdown = ({children, show, hideHandler, itemClass}) => {
-    return show ? <ul className="submenu">
+@observer
+class Dropdown extends React.Component {
+    @observable showSubmenu = false;
+    constructor() {
+        super();
+        this.handleClickOutside = this.handleClickOutside.bind(this);
+    }
+    componentWillReceiveProps(props) {
+        this.showSubmenu = props.show;
+    }
+    handleClickOutside() {
+        this.props.hideSubmenu();
+    }
+    render() {
+        const {children, show} = this.props;
+        return this.showSubmenu ? <ul className="submenu">
             {children}
         </ul> : null
-}
+    }
+};
 
-export default eventHandler(Dropdown)
+export default enhanceWithClickOutside(Dropdown);

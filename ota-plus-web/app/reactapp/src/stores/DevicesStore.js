@@ -8,6 +8,7 @@ import {
     API_DEVICES_DIRECTOR_DEVICE,
     API_DEVICES_CREATE,
     API_DEVICES_RENAME,
+    API_DEVICES_DELETE,
     API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
     API_CREATE_MULTI_TARGET_UPDATE,
     API_FETCH_MULTI_TARGET_UPDATES,
@@ -74,22 +75,17 @@ export default class DevicesStore {
 
     deleteDevice(id) {
         resetAsync(this.devicesDeleteAsync, true);
-        const that = this;
-        return new Promise(function(resolve, reject) {
-            setTimeout(() => {
-                if(localStorage.getItem('deleted')) {
-                    let deletedDeviceIds = JSON.parse(localStorage.getItem('deleted'));
-                    if(!_.contains(deletedDeviceIds, id)) {
-                        deletedDeviceIds.push(id);
-                        localStorage.setItem('deleted', JSON.stringify(deletedDeviceIds));
-                    }
-                } else {
-                    localStorage.setItem('deleted', JSON.stringify([id]));
-                }
-                that.devicesDeleteAsync = handleAsyncSuccess({});
-                resolve();
-            }, 500);
-        });
+        return axios.delete(API_DEVICES_DELETE + '/' + id)
+            .then((response) => {
+                this.devices = _.without(this.devices, _.findWhere(this.devices, {
+                    uuid: id
+                }));
+                this._prepareDevices();
+                this.devicesDeleteAsync = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this.devicesDeleteAsync = handleAsyncError(error);
+            });
     }
 
     fetchDeviceFleets() {
@@ -164,6 +160,10 @@ export default class DevicesStore {
 
     _increaseDeviceInitialTotalCount() {
         this.devicesInitialTotalCount++;
+    }
+
+    _decreaseDeviceInitialTotalCount() {
+        this.devicesInitialTotalCount--;
     }
 
     fetchDevice(id) {
@@ -435,6 +435,12 @@ export default class DevicesStore {
         return axios.put(API_DEVICES_RENAME + '/' + id, data)
             .then((response) => {
                 this.devicesRenameAsync = handleAsyncSuccess(response);
+                if(this.device.uuid === id) {
+                    this.device.deviceName = data.deviceName;
+                } else {
+                    let device = _.find(this.devices, device => device.uuid === id);
+                    device.deviceName = data.deviceName;
+                }
                 this.fetchDevicesCount();
             })
             .catch((error) => {

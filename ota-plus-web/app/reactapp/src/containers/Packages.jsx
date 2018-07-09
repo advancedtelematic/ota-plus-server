@@ -221,6 +221,7 @@ class Packages extends Component {
                                 If the package is part of any active campaigns, any devices that haven't installed it yet fail the campaign.
                             </div>
                         }
+                        showDetailedInfo={true}
                     />
                 :
                     null
