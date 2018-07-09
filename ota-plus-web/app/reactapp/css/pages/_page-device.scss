@@ -12,7 +12,7 @@
         background-color: $devices-groups-bg;
         width: 100%;
         height: 100px;
-        padding: 20px 25px;
+        padding: 20px 15px 20px 25px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -50,6 +50,8 @@
             display: block!important;
             width: 255px;
             font-size: 16px;
+            color: #fff;
+            @include textoverflowEllipsis;
         }
 
         &__device-report {
@@ -100,13 +102,11 @@
             align-items: center;
         }
 
-        &__queue-action {
-            background: url($device-queue-icon) no-repeat;
-            background-size: 100% 100%;
-            width: 25px;
-            height: 25px;
-            border: 0;
-            margin-right: 20px;
+        &__queue-button {
+            background: transparent;
+            border: 1px solid $home-header-button;
+            color: $home-header-button;
+            padding: 5px 12px;
         }
     }
 

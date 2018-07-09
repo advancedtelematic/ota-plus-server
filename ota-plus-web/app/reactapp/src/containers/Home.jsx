@@ -181,7 +181,7 @@ class Home extends Component {
 
                                 <Dropdown
                                     show={this.deviceSubmenuShown}
-                                    hideHandler={this.hideSubmenus}
+                                    hideSubmenu={this.hideSubmenus}
                                 >
                                     <li className="device-dropdown-item">
                                         <a className="device-dropdown-item" href="https://docs.atsgarage.com/quickstarts/start-intro.html" target="_blank" onClick={(e) => e.stopPropagation()}>
@@ -221,7 +221,7 @@ class Home extends Component {
 
                                 <Dropdown
                                     show={this.packageSubmenuShown}
-                                    hideHandler={this.hideSubmenus}
+                                    hideSubmenu={this.hideSubmenus}
                                 >
                                     <li className="package-dropdown-item">
                                         <a className="package-dropdown-item" href="#" onClick={this.showPackagesCreateModal}>
@@ -261,8 +261,8 @@ class Home extends Component {
                                 <span></span>
 
                                 <Dropdown
-                                show={this.campaignSubmenuShown}
-                                hideHandler={this.hideSubmenus}
+                                    show={this.campaignSubmenuShown}
+                                    hideSubmenu={this.hideSubmenus}
                                 >
                                     <li className="campaign-dropdown-item">
                                         <a className="campaign-dropdown-item" href="#" onClick={(e) => { e.preventDefault(); campaignsStore._addNewWizard() }}>

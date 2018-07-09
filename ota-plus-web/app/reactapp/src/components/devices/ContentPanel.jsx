@@ -80,7 +80,7 @@ export default class ContentPanel extends Component {
     }
 
     render() {
-        const {devicesStore, groupsStore, changeFilter, alphaPlusEnabled } = this.props;
+        const {devicesStore, groupsStore, changeFilter, alphaPlusEnabled, showDeleteConfirmation, showEditName } = this.props;
         return (
             <div className="devices-panel">
                 <ContentPanelHeader 
@@ -115,6 +115,8 @@ export default class ContentPanel extends Component {
                                                 device={device}
                                                 goToDetails={this.goToDetails}
                                                 alphaPlusEnabled={alphaPlusEnabled}
+                                                showDeleteConfirmation={showDeleteConfirmation}
+                                                showEditName={showEditName}
                                                 key={device.uuid}
                                             />
                                         );

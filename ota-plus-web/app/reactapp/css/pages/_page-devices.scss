@@ -259,6 +259,10 @@
             font-size: 21px;
         }
 
+        .dots {
+            opacity: 0;
+        }
+
         &__device {
             cursor: move;
             color: #fff;
@@ -267,10 +271,11 @@
             height: 100px;
             transition: background-color 0.2s ease-in;
             margin: 0 5px 5px 0;
-            display: flex;
-            align-items: center;
             padding: 0 15px;
             width: calc((100% / 4) - 5px);
+            display: flex;
+            align-items: center;
+            position: relative;
 
             @media(max-width: 1600px) {
                 width: calc((100% / 3) - 5px);
@@ -286,6 +291,10 @@
 
             &:hover {
                 background-color: rgba(255, 255, 255, .15);
+
+                .dots {
+                    opacity: 1;
+                }
             }
         }
 
@@ -321,15 +330,16 @@
 
         &__device-desc {
             text-align: left;
-            width: 62%;
             margin-left: 15px;
             transition: all 0.2s ease-in;
+            width: 62%;
         }
 
         &__device-title {
             font-size: 14px;
             text-transform: capitalize;
             @include textoverflowEllipsis;
+            position: relative;
         }
 
         &__device-subtitle {

@@ -8,13 +8,18 @@ import { Dropdown } from '../../partials';
 
 @observer
 class ListItemVersion extends Component {
-    @observable showSubmenu = false;
+    @observable isShown = false;
+
     constructor(props) {
         super(props);
-        this.toggleSubmenu = this.toggleSubmenu.bind(this);
+        this.hideSubmenu = this.hideSubmenu.bind(this);
+        this.showSubmenu = this.showSubmenu.bind(this);
     }
-    toggleSubmenu() {
-        this.showSubmenu = !this.showSubmenu;
+    hideSubmenu() {
+        this.isShown = false;
+    }
+    showSubmenu() {
+        this.isShown = true;
     }
     render() {
         const { version, showDependenciesModal, showDependenciesManager, packagesStore, alphaPlusEnabled, showDeleteConfirmation, showEditComment } = this.props;
@@ -211,12 +216,12 @@ class ListItemVersion extends Component {
                         null
                     }
                 </div>
-                <div className="dots" onClick={this.toggleSubmenu} id={"package-" + packageName + "-comment-overlay-" + version.id.version.substring(0,8)}>
+                <div className="dots" onClick={this.showSubmenu} id={"package-" + packageName + "-comment-overlay-" + version.id.version.substring(0,8)}>
                     <span></span>
                     <span></span>
                     <span></span>
 
-                    <Dropdown show={this.showSubmenu} hideHandler={() => {this.showSubmenu = false}}>
+                    <Dropdown show={this.isShown} hideSubmenu={this.hideSubmenu}>
                         <li className="package-dropdown-item">
                             <a className="package-dropdown-item" href="#" id="edit-comment"
                                onClick={showEditComment.bind(this, version.filepath, version.comment)}>
