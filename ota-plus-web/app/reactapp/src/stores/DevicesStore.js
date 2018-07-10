@@ -158,6 +158,21 @@ export default class DevicesStore {
             });
     }
 
+    _addDevice(data) {
+        this.devices.push({
+            activatedAt: data.timestamp,
+            createdAt: data.timestamp,
+            deviceId: data.deviceId,
+            deviceName: data.deviceName,
+            deviceStatus: "UpToDate",
+            deviceType: data.deviceType,
+            lastSeen: data.timestamp,
+            uuid: data.uuid
+        });
+        this._increaseDeviceInitialTotalCount();
+        this._prepareDevices();
+    }
+
     _increaseDeviceInitialTotalCount() {
         this.devicesInitialTotalCount++;
     }
