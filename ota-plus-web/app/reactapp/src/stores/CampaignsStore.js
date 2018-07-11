@@ -20,7 +20,8 @@ import {
     API_CAMPAIGNS_LEGACY_CAMPAIGN_STATISTICS,
     API_CAMPAIGNS_LEGACY_INDIVIDUAL_FETCH,
     API_CAMPAIGNS_LEGACY_RENAME,
-    API_CAMPAIGNS_LEGACY_CANCEL
+    API_CAMPAIGNS_LEGACY_CANCEL,
+    API_GROUPS_DEVICES_FETCH
 } from '../config';
 import { 
     resetAsync, 
@@ -44,7 +45,7 @@ export default class CampaignsStore {
     @observable campaignsCancelAsync = {};
     @observable campaignsCancelRequestAsync = {};
     @observable campaignsMtuCreateAsync = {};
-    
+
     @observable campaigns = [];
     @observable preparedCampaigns = [];
     @observable overallCampaignsCount = null;
@@ -163,13 +164,23 @@ export default class CampaignsStore {
         return axios.get(API_CAMPAIGNS_INDIVIDUAL_FETCH + '/' + id)
             .then(function (response) {
                 resetAsync(this[statsAsync], true);
-                this[mainAsync] = handleAsyncSuccess(response);
                 axios.get(API_CAMPAIGNS_CAMPAIGN_STATISTICS + '/' + id + '/stats')
                     .then(function (resp) {
                         let data = response.data;
-                        data.statistics = resp.data;
-                        this.campaign = data;
-                        this[statsAsync] = handleAsyncSuccess(resp);
+                        let promises = [];
+                        _.each(data.groups, group => {
+                            promises.push(axios.get(API_GROUPS_DEVICES_FETCH + '/' + group + '/devices'));
+                        });
+                        axios.all(promises).then((result) => {
+                            data.statistics = resp.data;
+                            data.groupObjects = _.pluck(result, 'data');
+                            _.each(data.groups, (group, index) => {
+                                data.groupObjects[index].id = group;
+                            });
+                            this.campaign = data;
+                            this[mainAsync] = handleAsyncSuccess(response);
+                            this[statsAsync] = handleAsyncSuccess(resp);
+                        });
                     }.bind(this))
                     .catch(function (err) {
                         this[statsAsync] = handleAsyncError(err);

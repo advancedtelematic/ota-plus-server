@@ -9,20 +9,19 @@ class TufGroupsList extends Component {
         super(props);
     }
     render() {
-        const { campaignsStore, groupsStore } = this.props;
+        const { campaignsStore } = this.props;
         return (
             <div className="groups">
-                {_.map(campaignsStore.campaign.groups, (groupId, index) => {
-                    const foundGroup = _.findWhere(groupsStore.groups, {id: groupId});
+                {_.map(campaignsStore.campaign.groupObjects, (group, index) => {
                     let groupStat = _.find(campaignsStore.campaign.statistics.stats, (stat, gId) => {
-                        return gId === groupId;
+                        return gId === group.id;
                     });
                     return (
                         <TufGroupsListItem
-                            group={groupId}
+                            group={group.id}
                             campaign={campaignsStore.campaign}
                             statistics={groupStat}
-                            foundGroup={foundGroup}
+                            foundGroup={group}
                             key={index}
                         />
                     );

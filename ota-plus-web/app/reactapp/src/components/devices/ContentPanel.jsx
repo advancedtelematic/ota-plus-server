@@ -130,7 +130,7 @@ export default class ContentPanel extends Component {
                                 :
                                     <span className="devices-panel__list-empty">
                                         <div className="wrapper-center">
-                                            Oops, there are no devices to show.
+                                            This group is empty. You can drag and drop devices to fill it up.
                                         </div>
                                     </span>
                             }
