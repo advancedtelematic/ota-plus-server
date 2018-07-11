@@ -82,9 +82,11 @@ class Item extends Component {
             connectDragSource(
                 <div className="devices-panel__device" style={{opacity}} onClick={goToDetails.bind(this, device.uuid)} id={"link-devicedetails-" + device.uuid} >
                     <div className="dots align" id={"device-actions-" + device.uuid} onClick={this.toggleMenu}>
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                        <div className="dots__wrapper">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
 
                         <Dropdown
                             show={this.menuShown}

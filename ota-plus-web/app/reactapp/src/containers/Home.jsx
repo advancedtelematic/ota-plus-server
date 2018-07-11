@@ -60,7 +60,7 @@ class Home extends Component {
         this.deviceSubmenuShown = false;
     }
     render() {
-        const { devicesStore, hardwareStore, packagesStore, campaignsStore } = this.props;
+        const { devicesStore, hardwareStore, packagesStore, campaignsStore, addNewWizard  } = this.props;
         return (
             <div className="home">
                 <div className="home__box home__box--left">
@@ -265,7 +265,7 @@ class Home extends Component {
                                     hideSubmenu={this.hideSubmenus}
                                 >
                                     <li className="campaign-dropdown-item">
-                                        <a className="campaign-dropdown-item" href="#" onClick={(e) => { e.preventDefault(); campaignsStore._addNewWizard() }}>
+                                        <a className="campaign-dropdown-item" href="#" onClick={addNewWizard.bind(this, null)} >
                                             Add campaign
                                         </a>
                                     </li>
@@ -281,6 +281,7 @@ class Home extends Component {
                         <div className="home__body home__body--right">
                             <ActiveCampaigns 
                                 campaignsStore={campaignsStore}
+                                addNewWizard={addNewWizard}
                             />
                         </div>
                     </div>
