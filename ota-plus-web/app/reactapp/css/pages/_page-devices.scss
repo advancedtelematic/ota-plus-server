@@ -264,7 +264,6 @@
         }
 
         &__device {
-            cursor: move;
             color: #fff;
             text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
             background: $devices-groups-bg;
@@ -294,7 +293,18 @@
 
                 .dots {
                     opacity: 1;
+                    z-index: 101;
                 }
+            }
+
+            .hover-area {
+                z-index:100;
+                cursor: move;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                position: absolute;
             }
         }
 

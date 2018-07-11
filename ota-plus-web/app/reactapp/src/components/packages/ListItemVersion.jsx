@@ -223,6 +223,7 @@ class ListItemVersion extends Component {
 
                     <Dropdown show={this.isShown} hideSubmenu={this.hideSubmenu}>
                         <li className="package-dropdown-item">
+                            <i className="icon icon-edit"/>
                             <a className="package-dropdown-item" href="#" id="edit-comment"
                                onClick={showEditComment.bind(this, version.filepath, version.comment)}>
                                 Edit comment
@@ -230,6 +231,7 @@ class ListItemVersion extends Component {
                         </li>
                         {alphaPlusEnabled ?
                             <li className="package-dropdown-item">
+                                <i className="icon icon-dependencies"/>
                                 <a className="package-dropdown-item" href="#" id="show-dependencies"
                                    onClick={showDependenciesManager.bind(this, version)}>
                                     Edit dependencies
@@ -239,6 +241,7 @@ class ListItemVersion extends Component {
                             null
                         }
                         <li className="package-dropdown-item">
+                            <i className="icon icon-trash"/>
                             <a className="package-dropdown-item" href="#" id="delete-version"
                                onClick={showDeleteConfirmation.bind(this, version.filepath, 'version')}>
                                 Delete version

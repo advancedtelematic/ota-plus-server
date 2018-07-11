@@ -17,8 +17,8 @@ class Dropdown extends React.Component {
         this.props.hideSubmenu();
     }
     render() {
-        const {children, show} = this.props;
-        return this.showSubmenu ? <ul className="submenu">
+        const {children, customStyles, customClassName} = this.props;
+        return this.showSubmenu ? <ul className={"submenu " + customClassName} style={customStyles}>
             {children}
         </ul> : null
     }
