@@ -38,6 +38,7 @@ class Home extends Component {
             provisioningStore,
             featuresStore,
             uiUserProfileMenu,
+            addNewWizard
         } = this.props;
         const isTermsAccepted = userStore._isTermsAccepted();
         return (
@@ -48,6 +49,7 @@ class Home extends Component {
                         <MetaData
                             title={title}>
                             <HomeContainer
+                                addNewWizard={addNewWizard}
                                 devicesStore={devicesStore}
                                 packagesStore={packagesStore}
                                 campaignsStore={campaignsStore}

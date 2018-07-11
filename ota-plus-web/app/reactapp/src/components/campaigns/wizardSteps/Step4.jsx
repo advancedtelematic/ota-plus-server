@@ -12,18 +12,19 @@ class WizardStep4 extends Component {
     }
 
     componentWillMount() {
-        this.props.groupsStore.fetchGroups();
+        this.props.groupsStore.fetchWizardGroups();
     }
 
     setWizardData(groupId) {
-        let group = _.findWhere(this.props.groupsStore.groups, {id: groupId});
-
         let stepWizardData = this.props.wizardData[3];
-        if (stepWizardData.groups.indexOf(group) > -1) {
-            stepWizardData.groups.splice(stepWizardData.groups.indexOf(group), 1);
-        } else {
-            stepWizardData.groups.push(group);
-        }
+        const foundGroup = _.find(stepWizardData.groups, item => item.id === groupId);
+        const groupToAdd = _.findWhere(this.props.groupsStore.wizardGroups, {id: groupId});
+
+        if (foundGroup)
+            stepWizardData.groups.splice(stepWizardData.groups.indexOf(foundGroup), 1);
+        else
+            stepWizardData.groups.push(groupToAdd);
+
         if (stepWizardData.groups.length)
             this.props.markStepAsFinished();
         else
@@ -34,7 +35,7 @@ class WizardStep4 extends Component {
         const {wizardData, groupsStore} = this.props;
         const chosenGroups = wizardData[3].groups;
         return (
-            groupsStore.groupsFetchAsync.isFetching ?
+            groupsStore.groupsWizardFetchAsync.isFetching ?
                 <div className="wrapper-center">
                     <Loader />
                 </div>
