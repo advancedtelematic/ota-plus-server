@@ -100,9 +100,8 @@ class Main extends Component {
         else
             this.minimizedWizards.push(minimizedWizard);
     }
-    addNewWizard(campaignId = null, e) {
-        if(e) e.preventDefault();
-        this.wizards.push(
+    addNewWizard() {
+        const wizard =
             <Wizard
                 campaignsStore={this.campaignsStore}
                 packagesStore={this.packagesStore}
@@ -114,16 +113,12 @@ class Main extends Component {
                 minimizedWizards={this.minimizedWizards}
                 alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
                 key={this.wizards.length}
-            />
-        );
+            />;
+        this.wizards = this.wizards.concat(wizard);
     }
     hideWizard(wizardIdentifier, e) {
         if(e) e.preventDefault();
-        _.each(this.wizards, (wizard, index) => {
-            if(wizard && wizard.key == wizardIdentifier) {
-                this.wizards.splice(index, 1);
-            }
-        })
+        this.wizards = _.filter(this.wizards, wizard => parseInt(wizard.key, 10) !== parseInt(wizardIdentifier, 10));
         this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, { id: wizardIdentifier }), 1);
         this.campaignsStore._resetFullScreen();
     }

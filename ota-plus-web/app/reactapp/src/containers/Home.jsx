@@ -265,7 +265,7 @@ class Home extends Component {
                                     hideSubmenu={this.hideSubmenus}
                                 >
                                     <li className="campaign-dropdown-item">
-                                        <a className="campaign-dropdown-item" href="#" onClick={addNewWizard.bind(this, null)} >
+                                        <a className="campaign-dropdown-item" href="#" onClick={(e) => { e.preventDefault(); addNewWizard() }} >
                                             Add campaign
                                         </a>
                                     </li>

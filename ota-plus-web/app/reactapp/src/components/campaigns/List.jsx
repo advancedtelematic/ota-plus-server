@@ -63,7 +63,7 @@ class List extends Component {
                 {campaignsStore.preparedCampaigns.length ?
                     <span>
                         <div className="campaigns__fake-header-link" style={{top: this.fakeHeaderTopPosition + 10}}>
-                            <a href="#" className="add-button grey-button" id="add-new-campaign" onClick={addNewWizard.bind(this, null)} >
+                            <a href="#" className="add-button grey-button" id="add-new-campaign" onClick={(e) => { e.preventDefault(); addNewWizard() }} >
                                 <span>
                                     +
                                 </span>
