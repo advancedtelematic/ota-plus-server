@@ -10,8 +10,8 @@ class TufGroupsListItem extends Component {
     }
     render() {
         const { t, group, statistics, foundGroup, campaign } = this.props;
-        const progress = Math.min(Math.round(statistics.processed/Math.max(foundGroup.devices.total, 1) * 100), 100);
-        const progressForIdTag = foundGroup.devices.total !== 0 ? progress : '100';
+        const progress = Math.min(Math.round(statistics.processed/Math.max(foundGroup.total, 1) * 100), 100);
+        const progressForIdTag = foundGroup.total !== 0 ? progress : '100';
         const data = [
             {
               value: statistics.affected,
@@ -42,8 +42,8 @@ class TufGroupsListItem extends Component {
                                 <div className="small-title" id={`target_group_${foundGroup.groupName}`} title={foundGroup.groupName}>
                                     {foundGroup.groupName}
                                 </div>
-                                <div className="subtitle" id={`target_group_devicecount_${foundGroup.devices.total}`}>
-                                    {t('common.deviceWithCount', {count: foundGroup.devices.total})}
+                                <div className="subtitle" id={`target_group_devicecount_${foundGroup.total}`}>
+                                    {t('common.deviceWithCount', {count: foundGroup.total})}
                                 </div>
                             </div>
                         </div>
@@ -54,11 +54,11 @@ class TufGroupsListItem extends Component {
                                                             && campaign.statistics.status !== 'cancelled'
                                                             && progress !== 100 ? ' progress-bar-striped active': '')}
                                  role="progressbar"
-                                 style={{width: foundGroup.devices.total !== 0 ? progress + '%' : '100%'}}>
+                                 style={{width: foundGroup.total !== 0 ? progress + '%' : '100%'}}>
                             </div>
                         </div>
                         <div className="groups__item-progress-value" id={`target_wrapper_rate_value_${progressForIdTag}`}>
-                            {foundGroup.devices.total !== 0 ? progress + '%' : '100%'}
+                            {foundGroup.total !== 0 ? progress + '%' : '100%'}
                         </div>
                     </div>
                 </div>

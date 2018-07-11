@@ -58,7 +58,7 @@ class GroupsList extends Component {
                             _.each(groupsStore.groups, (group, index) => {
                                 groupedDevicesCount += group.devices.total;
                             });
-                            deviceCount = devicesStore.devicesInitialTotalCount - groupedDevicesCount;
+                            deviceCount = Math.max(0, devicesStore.devicesInitialTotalCount - groupedDevicesCount);
                         }
                         return (
                             <GroupsListItemArtificial

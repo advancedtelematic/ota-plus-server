@@ -57,9 +57,8 @@ class StatisticDetails extends Component {
         let notImpactedRate = Math.min(Math.round(overallStatistics.notImpacted/Math.max(overallStatistics.processed, 1) * 100), 100);
 
         let totalDevicesAmount = 0;
-        _.each(campaignsStore.campaign.groups, (groupId, index) => {
-            const foundGroup = _.findWhere(groupsStore.groups, {id: groupId});
-            totalDevicesAmount += foundGroup.devices.total;
+        _.each(campaignsStore.campaign.groupObjects, group => {
+            totalDevicesAmount += group.total;
         });
 
         let notProcessed  = totalDevicesAmount - overallStatistics.processed;
