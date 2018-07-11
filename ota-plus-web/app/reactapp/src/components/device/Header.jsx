@@ -135,6 +135,7 @@ class Header extends Component {
                                         <Dropdown
                                             show={this.headerMenuShown}
                                             hideSubmenu={this.hideHeaderMenu}
+                                            customClassName={"relative"}
                                         >
                                             <li className="device-dropdown-item">
                                                 <a className="device-dropdown-item" id="edit-device" onClick={this.showEditName}>
