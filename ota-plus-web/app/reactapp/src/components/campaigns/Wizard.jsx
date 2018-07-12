@@ -362,7 +362,7 @@ class Wizard extends Component {
     }
 
     launch() {
-        let updates = this.wizardData[2].versions;
+        const updates = this.wizardData[2].versions;
         let updateData = [];
         _.each(updates, (update, packageName) => {
             let fromHash = null;
@@ -370,7 +370,7 @@ class Wizard extends Component {
             let targetFormat = null;
             let fromTargetLength = null;
             let toTargetLength = null;
-            let packages = this.props.packagesStore.packages;
+            const packages = this.props.packagesStore.packages;
             _.each(packages, (pack, index) => {
                 if (pack.filepath === update.fromFilepath) {
                     fromTargetLength = pack.targetLength;

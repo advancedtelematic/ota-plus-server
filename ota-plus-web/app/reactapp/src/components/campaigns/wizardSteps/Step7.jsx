@@ -19,9 +19,7 @@ class WizardStep7 extends Component {
                 <AsyncResponse 
                     handledStatus="error"
                     action={campaignsStore.campaignsCreateAsync}
-                    errorMsg={
-                        "Campaign with given name already exists."
-                    }
+                    errorMsg={(campaignsStore.campaignsCreateAsync.data ? campaignsStore.campaignsCreateAsync.data.description : null)}
                 />
                 <div className="box-summary">
                     <div className="title">
