@@ -13,9 +13,6 @@ class WizardStep2 extends Component {
         this.togglePackage = this.togglePackage.bind(this);
         this.toggleStep = this.toggleStep.bind(this);
     }
-    componentWillMount() {
-        this.props.packagesStore.fetchPackages('packagesSafeFetchAsync');
-    }
     componentWillUnmount() {
         this.props.setRawSelectedPacks(this.props.wizardData[1].packages);
     }
@@ -50,11 +47,7 @@ class WizardStep2 extends Component {
             :
                 <div>
                     <Form>
-                        <FormInput
-                            label="Select package"
-                            showIcon={false}
-                            showInput={false}
-                        />
+                        <label title="" className="c-form__label">Select package</label>
                     </Form>
                     <WizardPackagesList
                         chosenPackagesList={chosenPackagesList}

@@ -95,8 +95,10 @@ class Main extends Component {
             name: wizardName
         };
         let wizardAlreadyMinimized = _.find(this.minimizedWizards, {id: wizardId});
-        if(wizardAlreadyMinimized)
+        if(wizardAlreadyMinimized) {
             this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, { id: wizardId }), 1);
+            this.packagesStore.fetchPackages('packagesSafeFetchAsync');
+        }
         else
             this.minimizedWizards.push(minimizedWizard);
     }

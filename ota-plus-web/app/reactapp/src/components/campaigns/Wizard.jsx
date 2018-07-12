@@ -190,6 +190,7 @@ class Wizard extends Component {
         if (matrixFromStorage) {
             localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);
         }
+        this.props.packagesStore.fetchPackages('packagesSafeFetchAsync');
     }
 
     componentWillUnmount() {
@@ -361,7 +362,6 @@ class Wizard extends Component {
     }
 
     launch() {
-        let packages = this.wizardData[1].packages;
         let updates = this.wizardData[2].versions;
         let updateData = [];
         _.each(updates, (update, packageName) => {
