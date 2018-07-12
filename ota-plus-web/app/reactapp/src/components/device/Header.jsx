@@ -165,7 +165,7 @@ class Header extends Component {
                                     deleteItem={this.deleteDevice}
                                     topText={
                                         <div className="delete-modal-top-text">
-                                            Device will be removed now and can be re-provisioned.
+                                            Device will be removed.
                                         </div>
                                     }
                                 />
