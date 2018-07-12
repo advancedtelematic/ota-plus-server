@@ -80,8 +80,8 @@ class Item extends Component {
         }
         return (
             connectDragSource(
-                <div className="devices-panel__device" id={"link-devicedetails-" + device.uuid} >
-                    <div className="hover-area" style={{opacity}} onClick={goToDetails.bind(this, device.uuid)}/>
+                <div className="devices-panel__device">
+                    <div className="hover-area" style={{opacity}} onClick={goToDetails.bind(this, device.uuid)} id={"link-devicedetails-" + device.uuid} />
                     <div className="dots align" id={"device-actions-" + device.uuid} onClick={this.toggleMenu}>
                         <div className="dots__wrapper">
                             <span></span>
