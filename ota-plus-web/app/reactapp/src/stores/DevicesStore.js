@@ -170,6 +170,7 @@ export default class DevicesStore {
             uuid: data.uuid
         });
         this._increaseDeviceInitialTotalCount();
+        this.directorDevicesCount++;
         this._prepareDevices();
     }
 
