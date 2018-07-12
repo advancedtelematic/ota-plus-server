@@ -15,7 +15,7 @@ class Statistics extends Component {
     	this.props.campaignsStore.fetchCampaign(this.props.campaignId);
     }
     render() {
-        const { campaignsStore, groupsStore, showCancelCampaignModal, showDependenciesModal } = this.props;
+        const { campaignsStore, groupsStore, showCancelCampaignModal, showDependenciesModal, showDropdown } = this.props;
         return (
             <div>
             	{campaignsStore.campaignsOneFetchAsync.isFetching || campaignsStore.campaignsOneStatisticsFetchAsync.isFetching ?
@@ -28,7 +28,8 @@ class Statistics extends Component {
                         groupsStore={groupsStore}
                         showCancelCampaignModal={showCancelCampaignModal}
                         showDependenciesModal={showDependenciesModal}
-            		/>
+                        showDropdown={showDropdown}
+                    />
                 }
             </div>
     	);
