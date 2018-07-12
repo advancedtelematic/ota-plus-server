@@ -4,6 +4,7 @@ import { observable } from 'mobx';
 import { translate } from 'react-i18next';
 import { DropTarget } from 'react-dnd';
 import CreateModal from './CreateModal';
+import { Dropdown } from '../../partials';
 
 const groupTarget = {
     drop(props, monitor) {
@@ -23,11 +24,14 @@ function collect(connect, monitor) {
 @observer
 class ListItem extends Component {
     @observable createModalShown = false;
+    @observable showEdit = false;
 
     constructor(props) {
         super(props);
         this.showCreateModal = this.showCreateModal.bind(this);
         this.hideCreateModal = this.hideCreateModal.bind(this);
+        this.showDropdown = this.showDropdown.bind(this);
+        this.hideDropdown = this.hideDropdown.bind(this);
     }
 
     showCreateModal(e) {
@@ -38,6 +42,14 @@ class ListItem extends Component {
     hideCreateModal(e) {
         if(e) e.preventDefault();
         this.createModalShown = false;
+    }
+
+    showDropdown() {
+        this.showEdit = true;
+    }
+
+    hideDropdown() {
+        this.showEdit = false;
     }
 
     render() {
@@ -64,10 +76,25 @@ class ListItem extends Component {
                             <div className="groups-panel__item-title-value">
                                 {group.groupName}
                             </div>
-                            <img src="../assets/img/icons/white/Rename.svg" className="groups-panel__rename-icon" alt="Rename" onClick={() => {
-                                selectGroup({type: 'real', name: group.groupName, id: group.id});
-                                this.showCreateModal();
-                            }}/>
+                            <div className="dots" onClick={this.showDropdown} id={"group-" + group.groupName + "-dropdown"}>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+
+                                <Dropdown show={this.showEdit} hideSubmenu={this.hideDropdown}>
+                                    <li className="package-dropdown-item">
+                                        <i className="icon icon-edit"/>
+                                        <a className="package-dropdown-item" href="#" id="edit-comment"
+                                           onClick={(e) => {
+                                               e.preventDefault();
+                                               selectGroup({type: 'real', name: group.groupName, id: group.id});
+                                               this.showCreateModal();
+                                           }}>
+                                            Edit name
+                                        </a>
+                                    </li>
+                                </Dropdown>
+                            </div>
                         </div>
                         <div className="groups-panel__item-subtitle" id={"group-" + group.groupName + '-devices'}>
                             {t('common.deviceWithCount', {count: group.devices.total})}
