@@ -65,7 +65,7 @@ class Devices extends Component {
             if(foundGroup) {
                 foundGroup.devices.total--;
             }
-            devicesStore._decreaseDeviceInitialTotalCount();
+            devicesStore.devicesInitialTotalCount--;
             this.hideDeleteConfirmation();
         });
     }
