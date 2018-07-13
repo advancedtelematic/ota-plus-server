@@ -117,7 +117,7 @@ class GroupNameHeader extends Component {
                         }
                     </h3>
                     <FadeAnimation>
-                        {devicesStore.devicesTotalCount === null && devicesStore.devicesFetchAsync.isFetching ?
+                        {devicesStore.devicesFetchAsync.isFetching ?
                             <span>
                                 <i className="fa fa-square-o fa-spin"></i> devices counting
                             </span>
