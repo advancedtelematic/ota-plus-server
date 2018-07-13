@@ -24,6 +24,7 @@ import _ from 'underscore';
 export default class DevicesStore {
 
     @observable devicesFetchAsync = {};
+    @observable devicesLoadMoreAsync = {};
     @observable devicesDeleteAsync = {};
     @observable deviceFleetsFetchAsync = {};
     @observable devicesOneFetchAsync = {};
@@ -38,9 +39,10 @@ export default class DevicesStore {
     @observable mtuCancelAsync = {};
 
     @observable devices = [];
-    @observable devicesInitialTotalCount = null;
     @observable devicesTotalCount = null;
-    @observable devicesCurrentPage = 0;
+    @observable devicesInitialTotalCount = null;
+    @observable devicesCurrentPage = 1;
+    @observable devicesOffset = 0;
     @observable preparedDevices = [];
     @observable devicesFilter = '';
     @observable devicesGroupFilter = null;
@@ -59,6 +61,7 @@ export default class DevicesStore {
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
+        resetAsync(this.devicesLoadMoreAsync);
         resetAsync(this.devicesDeleteAsync);
         resetAsync(this.deviceFleetsFetchAsync);
         resetAsync(this.devicesOneFetchAsync);
@@ -70,7 +73,7 @@ export default class DevicesStore {
         resetAsync(this.mtuCreateAsync);
         resetAsync(this.mtuFetchAsync);
         resetAsync(this.mtuCancelAsync);
-        this.devicesLimit = 30;
+        this.devicesLimit = 10;
     }
 
     deleteDevice(id) {
@@ -126,35 +129,55 @@ export default class DevicesStore {
     }
 
     fetchDevices(filter = '', groupId) {
+        console.log('fetch')
         resetAsync(this.devicesFetchAsync, true);
-        if (this.devicesFilter !== filter || this.devicesGroupFilter !== groupId) {
-            this.devicesTotalCount = null;
-            this.devicesCurrentPage = 0;
-            this.devices = [];
-            this.preparedDevices = [];
-        }
+        this.devicesOffset = 0;
+        this.devicesCurrentPage = 1;
         this.devicesFilter = filter;
         this.devicesGroupFilter = groupId;
-        let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesCurrentPage * this.devicesLimit}`;
+        let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesOffset}`;
         if (groupId && groupId === 'ungrouped')
             apiAddress += `&ungrouped=true`;
         else if (groupId)
             apiAddress += `&groupId=${groupId}`;
         return axios.get(apiAddress)
             .then((response) => {
-                let devices = _.uniq(this.devices.concat(response.data.values), device => device.uuid);
-                let deletedDeviceIds = JSON.parse(localStorage.getItem('deleted'));
-                this.devices = _.filter(devices, device => !_.contains(deletedDeviceIds, device.uuid));
-                this._prepareDevices();
+                this.devices = response.data.values;
+                this.devicesTotalCount = response.data.total;
                 if (this.devicesInitialTotalCount === null && groupId !== 'ungrouped') {
                     this.devicesInitialTotalCount = response.data.total;
                 }
-                this.devicesCurrentPage++;
-                this.devicesTotalCount = response.data.total;
+                this.preparedDevices = [];
+                this._prepareDevices();
                 this.devicesFetchAsync = handleAsyncSuccess(response);
             })
             .catch((error) => {
                 this.devicesFetchAsync = handleAsyncError(error);
+            });
+    }
+
+    loadMoreDevices(filter = '', groupId) {
+        console.log('load more')
+        console.log('offset')
+        console.log(this.devicesOffset)
+        console.log(this.devicesOffset + this.devicesLimit)
+        resetAsync(this.devicesLoadMoreAsync, true);
+        let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesOffset + this.devicesLimit}`;
+        if (groupId && groupId === 'ungrouped')
+            apiAddress += `&ungrouped=true`;
+        else if (groupId)
+            apiAddress += `&groupId=${groupId}`;
+        return axios.get(apiAddress)
+            .then((response) => {
+                this.devices = this.devices.concat(response.data.values);
+                console.log('offset from repsonse')
+                this.devicesOffset = response.data.offset;
+                this._prepareDevices();
+                this.devicesCurrentPage++;
+                this.devicesLoadMoreAsync = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this.devicesLoadMoreAsync = handleAsyncError(error);
             });
     }
 
@@ -169,17 +192,11 @@ export default class DevicesStore {
             lastSeen: data.timestamp,
             uuid: data.uuid
         });
-        this._increaseDeviceInitialTotalCount();
-        this.directorDevicesCount++;
-        this._prepareDevices();
-    }
-
-    _increaseDeviceInitialTotalCount() {
+        if(this.devicesInitialTotalCount === null) {
+            this.devicesInitialTotalCount = 0;
+        }
         this.devicesInitialTotalCount++;
-    }
-
-    _decreaseDeviceInitialTotalCount() {
-        this.devicesInitialTotalCount--;
+        this._prepareDevices();
     }
 
     fetchDevice(id) {
@@ -466,6 +483,7 @@ export default class DevicesStore {
 
     _reset() {
         resetAsync(this.devicesFetchAsync);
+        resetAsync(this.devicesLoadMoreAsync);
         resetAsync(this.devicesDeleteAsync);
         resetAsync(this.deviceFleetsFetchAsync);
         resetAsync(this.devicesOneFetchAsync);
@@ -479,9 +497,9 @@ export default class DevicesStore {
         resetAsync(this.mtuFetchAsync);
         resetAsync(this.mtuCancelAsync);
         this.devices = [];
-        this.devicesInitialTotalCount = null;
         this.devicesTotalCount = null;
-        this.devicesCurrentPage = 0;
+        this.devicesCurrentPage = 1;
+        this.devicesOffset = 0;
         this.preparedDevices = [];
         this.devicesFilter = '';
         this.devicesSort = 'asc';

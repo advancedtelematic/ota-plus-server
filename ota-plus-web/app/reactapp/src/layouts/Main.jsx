@@ -141,8 +141,6 @@ class Main extends Component {
             this.featuresStore.fetchFeatures();
             this.userStore.fetchContracts();
         }        
-        this.devicesStore.fetchDevices();
-        this.devicesStore.fetchDevicesCount();
         this.websocketHandler.init();
         window.atsGarageTheme = this.atsGarageTheme;
         this.context.router.listen(this.locationChange);

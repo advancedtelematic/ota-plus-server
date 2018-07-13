@@ -131,17 +131,15 @@
             margin-right: 5px;
         }
 
-        .wrapper-infinite-scroll {
-            overflow-y: auto;
-        }
-
         &__wrapper {
             height: calc(100% - 60px);
             padding: 0 30px;
+            position: relative;
         }
 
         &__list {
             height: 100%;
+            overflow-y: auto;
             position: relative;
             min-height: 305px;
 
@@ -276,6 +274,7 @@
             display: flex;
             align-items: center;
             position: relative;
+            float: left;
 
             @media(max-width: 1600px) {
                 width: calc((100% / 3) - 5px);
