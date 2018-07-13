@@ -20,17 +20,9 @@ $font: 'akkurat';
         &__icon--edit {
             opacity: 1;
         }
-        
-        &__input {
-            background-color: rgba(255,255,255,.2);
-        }
 
         &__input--black {
             background-color: #F3F3F4;
-        }
-
-        &__input--grey {
-            background-color: rgba(0, 0, 0, .1);
         }
     }
 
@@ -155,6 +147,80 @@ $font: 'akkurat';
     font-size: 16px;
 }
 
+.icon-trash {
+    background: url($dropdown-trash) no-repeat center;
+}
+
+.icon-edit {
+    background: url($dropdown-edit) no-repeat center;
+}
+
+.icon-dependencies {
+    background: url($dropdown-dependencies) no-repeat center;
+}
+
+.submenu {
+    position: absolute;
+    top: 20px;
+    display: flex;
+    width: 170px;
+    flex-direction: column;
+    background: #fff;
+    left: -130px;
+    font-size: 12px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    margin: 0;
+    z-index: 120;
+    padding: 5px 0;
+
+    li {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 15px 0;
+
+        &:not(:only-child) {
+            padding: 10px 0 7.5px;
+        }
+    }
+
+    a {
+        padding: 0 15px;
+        line-height: 17px;
+        display: flex;
+        cursor: pointer;
+        color: $device-hardware-header;
+
+        &.warning {
+            color: $confirm-modal-title;
+        }
+    }
+
+    &.relative {
+        font-size: 14px;
+        width: 150px;
+        left: -115px;
+
+        img {
+            width: 15px;
+            margin-right: 15px;
+        }
+    }
+
+    &.align {
+        font-size: 14px;
+        width: 150px;
+        left: auto;
+        right: 0;
+        top: 40px;
+
+        img {
+            width: 15px;
+            margin-right: 15px;
+        }
+    }
+}
+
 .dots {
     display: flex;
     flex-direction: column;
@@ -165,14 +231,31 @@ $font: 'akkurat';
     width: 25px;
     align-items: flex-end;
 
+    &__wrapper {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        flex-direction: column;
+        margin-top: 25px;
+    }
+
+    i.icon {
+        display: flex;
+        width: 13px;
+        height: 13px;
+        margin-left: 15px;
+    }
+
     span {
         height: 3px;
         width: 3px;
         border-radius: 50%;
         background: $devices-groups-bg;
+        margin-bottom: 4px;
 
-        &:not(:last-child) {
-            margin-bottom: 4px;
+        &:nth-of-type(3) {
+            margin-bottom: 0;
         }
     }
 
@@ -188,26 +271,28 @@ $font: 'akkurat';
         }
     }
 
-    .submenu {
-        position: absolute;
-        top: 20px;
-        width: 135px;
-        background: #fff;
-        left: -100px;
-        font-size: 12px;
-        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
-        margin: 0;
-        padding-bottom: 10px;
+    &.relative {
+        position: relative;
+        top: 0;
+        right: 0;
 
-        a {
-            padding: 15px 15px 7.5px;
-            line-height: 17px;
-            display: block;
-            color: $device-hardware-header;
+        span {
+            background: $home-header-button;
+            height: 4px;
+            width: 4px;
+        }
+    }
 
-            &.warning {
-                color: $confirm-modal-title;
-            } 
+    &.align {
+        top: 0;
+        right: 0;
+        width: 40px;
+        height: 100%;
+
+        span {
+            background: $home-header-button;
+            height: 4px;
+            width: 4px;
         }
     }
 }
@@ -976,10 +1061,20 @@ input {
         padding-right: 25px;
         padding-left: 15px;
         margin-bottom: 25px;
-        max-width: 400px;
         cursor: pointer;
         font-size: 22px;
         font-weight: 700;
+
+        & > .dots {
+            position: relative;
+            top: 0;
+            span {
+                background-color: $color-mint;
+                width: 4px;
+                heigth: 4px;
+            }
+        }
+
     }
 
     &__wrapper {
@@ -1984,8 +2079,8 @@ input {
 
 .create-group-modal {
 
-    .content {
-        width: 500px !important;
+    .group-name-input {
+        margin-bottom: 75px;
     }
 }
 
@@ -2313,7 +2408,7 @@ input {
 
 .queue-modal {
     margin-top: 130px;
-    margin-left: 55px;
+    margin-left: 68px;
     font-family:'Fira Sans', sans-serif !important;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 45px, rgba(0, 0, 0, 0.22) 0px 10px 18px!important;
     border-radius: 10px!important;

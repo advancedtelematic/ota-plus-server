@@ -55,7 +55,7 @@ class GroupsList extends Component {
             const positions = this.generatePositions();
             _.each(positions, (position, index) => {
                 if(scrollTop >= position) {
-                    newFakeHeaderLetter = Object.keys(this.props.groupsStore.preparedGroups)[index];
+                    newFakeHeaderLetter = Object.keys(this.props.groupsStore.preparedWizardGroups)[index];
                     return true;
                 } else if(scrollTop >= position - headerHeight) {
                     scrollTop -= scrollTop - (position - headerHeight);
@@ -70,14 +70,14 @@ class GroupsList extends Component {
         const { chosenGroups, setWizardData, groupsStore } = this.props;
         return (
             <div className="ios-list" ref="list">
-                {Object.keys(groupsStore.preparedGroups).length ?
+                {Object.keys(groupsStore.preparedWizardGroups).length ?
                     <InfiniteScroll
                         className="wrapper-infinite-scroll"
-                        hasMore={groupsStore.groupsCurrentPage < groupsStore.groupsTotalCount / groupsStore.groupsLimit}
-                        isLoading={groupsStore.groupsFetchAsync.isFetching}
+                        hasMore={groupsStore.groupsWizardCurrentPage < groupsStore.groupsWizardTotalCount / groupsStore.groupsWizardLimit}
+                        isLoading={groupsStore.groupsWizardFetchAsync.isFetching}
                         useWindow={false}
                         loadMore={() => {
-                            groupsStore.fetchGroups()
+                            groupsStore.fetchWizardGroups()
                         }}
                     >
                         <span>
@@ -85,7 +85,7 @@ class GroupsList extends Component {
                                 {this.fakeHeaderLetter}
                             </div>
                             
-                            {_.map(groupsStore.preparedGroups, (groups, letter) => {
+                            {_.map(groupsStore.preparedWizardGroups, (groups, letter) => {
                                 return (
                                     <span key={letter}>
                                         <div className="header">

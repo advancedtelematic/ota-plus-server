@@ -32,6 +32,9 @@ import { doLogout } from '../utils/Common';
 @observer
 class Main extends Component {
     @observable termsAndConditionsAccepted = false;
+    @observable numOfWizards = 0;
+    @observable wizards = [];    
+    @observable minimizedWizards = [];
     @observable uploadBoxMinimized = false;
     @observable uiAutoFeatureActivation = document.getElementById('toggle-autoFeatureActivation').value === "true";
     @observable uiUserProfileMenu = document.getElementById('toggle-userProfileMenu').value === "true";
@@ -57,6 +60,11 @@ class Main extends Component {
         this.toggleSWRepo = this.toggleSWRepo.bind(this);
         this.toggleFleet = this.toggleFleet.bind(this);
         this.locationChange = this.locationChange.bind(this);
+
+        this.addNewWizard = this.addNewWizard.bind(this);
+        this.hideWizard = this.hideWizard.bind(this);
+        this.toggleWizard = this.toggleWizard.bind(this);
+
         this.devicesStore = new DevicesStore();
         this.hardwareStore = new HardwareStore();
         this.groupsStore = new GroupsStore();
@@ -80,6 +88,42 @@ class Main extends Component {
             }
         });
     }
+    toggleWizard(wizardId, wizardName, e) {
+        if(e) e.preventDefault();
+        let minimizedWizard = {
+            id: wizardId,
+            name: wizardName
+        };
+        let wizardAlreadyMinimized = _.find(this.minimizedWizards, {id: wizardId});
+        if(wizardAlreadyMinimized) {
+            this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, { id: wizardId }), 1);
+            this.packagesStore.fetchPackages('packagesSafeFetchAsync');
+        }
+        else
+            this.minimizedWizards.push(minimizedWizard);
+    }
+    addNewWizard() {
+        const wizard =
+            <Wizard
+                campaignsStore={this.campaignsStore}
+                packagesStore={this.packagesStore}
+                groupsStore={this.groupsStore}
+                hardwareStore={this.hardwareStore}
+                wizardIdentifier={this.wizards.length}
+                hideWizard={this.hideWizard}
+                toggleWizard={this.toggleWizard}
+                minimizedWizards={this.minimizedWizards}
+                alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
+                key={this.wizards.length}
+            />;
+        this.wizards = this.wizards.concat(wizard);
+    }
+    hideWizard(wizardIdentifier, e) {
+        if(e) e.preventDefault();
+        this.wizards = _.filter(this.wizards, wizard => parseInt(wizard.key, 10) !== parseInt(wizardIdentifier, 10));
+        this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, { id: wizardIdentifier }), 1);
+        this.campaignsStore._resetFullScreen();
+    }
     callFakeWsHandler() {
         let wsUrl = document.getElementById('ws-url').value.replace('bearer', 'logout');
         this.fakeWebsocketHandler = new WebsocketHandler(wsUrl, {
@@ -97,8 +141,6 @@ class Main extends Component {
             this.featuresStore.fetchFeatures();
             this.userStore.fetchContracts();
         }        
-        this.devicesStore.fetchDevices();
-        this.devicesStore.fetchDevicesCount();
         this.websocketHandler.init();
         window.atsGarageTheme = this.atsGarageTheme;
         this.context.router.listen(this.locationChange);
@@ -181,6 +223,7 @@ class Main extends Component {
                             provisioningStore={this.provisioningStore}
                             userStore={this.userStore}
                             backButtonAction={this.backButtonAction}
+                            addNewWizard={this.addNewWizard}
                             uiUserProfileEdit={this.uiUserProfileEdit}
                             switchToSWRepo={this.switchToSWRepo}
                             uiAutoFeatureActivation={this.uiAutoFeatureActivation}
@@ -199,19 +242,7 @@ class Main extends Component {
                         minimized={this.uploadBoxMinimized}
                         toggleUploadBoxMode={this.toggleUploadBoxMode}
                     />
-                    {_.map(this.campaignsStore.wizards, wizard => {
-                        return (
-                            <Wizard
-                                campaignsStore={this.campaignsStore}
-                                packagesStore={this.packagesStore}
-                                groupsStore={this.groupsStore}
-                                hardwareStore={this.hardwareStore}
-                                wizardIdentifier={wizard.id}
-                                alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
-                                key={wizard.id}
-                            />
-                        );
-                    })}
+                    {this.wizards}
                     <div className="minimized">
                         {this.uploadBoxMinimized ?
                             <div className="minimized__box">
@@ -227,7 +258,7 @@ class Main extends Component {
                         :
                             null
                         }
-                        {_.map(this.campaignsStore.minimizedWizards, (wizard, index) => {
+                        {_.map(this.minimizedWizards, (wizard, index) => {
                             return (
                                 <div className="minimized__box" key={index}>
                                     <div className="minimized__name">
@@ -242,7 +273,7 @@ class Main extends Component {
                                         }
                                     </div>
                                     <div className="minimized__actions">
-                                        <a href="#" id="maximize-wizard" title="Maximize wizard" onClick={(e) => { e.preventDefault(); this.campaignsStore._toggleWizard(wizard.id, wizard.name) }}>
+                                        <a href="#" id="maximize-wizard" title="Maximize wizard" onClick={this.toggleWizard.bind(this, wizard.id, wizard.name)} >
                                             <img src="/assets/img/icons/reopen.svg" alt="Icon" />
                                         </a>
                                     </div>

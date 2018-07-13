@@ -28,7 +28,7 @@ class StatisticDetails extends Component {
         clearInterval(this.tmpIntervalId);
     }
     render() {
-        const { campaignsStore, groupsStore, showCancelCampaignModal, showDependenciesModal } = this.props;
+        const { campaignsStore, groupsStore, showCancelCampaignModal, showDependenciesModal, showDropdown } = this.props;
         let overallStatistics = campaignsStore.overallCampaignStatistics;
         const progress = Math.min(Math.round(overallStatistics.finished/Math.max(overallStatistics.affected, 1) * 100), 100);
         const failureRateData = [
@@ -57,9 +57,8 @@ class StatisticDetails extends Component {
         let notImpactedRate = Math.min(Math.round(overallStatistics.notImpacted/Math.max(overallStatistics.processed, 1) * 100), 100);
 
         let totalDevicesAmount = 0;
-        _.each(campaignsStore.campaign.groups, (groupId, index) => {
-            const foundGroup = _.findWhere(groupsStore.groups, {id: groupId});
-            totalDevicesAmount += foundGroup.devices.total;
+        _.each(campaignsStore.campaign.groupObjects, group => {
+            totalDevicesAmount += group.total;
         });
 
         let notProcessed  = totalDevicesAmount - overallStatistics.processed;
@@ -72,6 +71,7 @@ class StatisticDetails extends Component {
                     campaignsStore={campaignsStore}
                     title={campaignsStore.campaign.name}
                     showCancelCampaignModal={showCancelCampaignModal}
+                    showDropdown={showDropdown}
                 />
 
                 <div className="statistics__wrapper">

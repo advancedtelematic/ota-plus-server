@@ -2,23 +2,22 @@ import React, { Component, PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'underscore';
+import {Dropdown, EditCampaignModal} from '../../../partials';
 import { AsyncStatusCallbackHandler } from '../../../utils';
 
 @observer
 class SubHeader extends Component {
     @observable renameDisabled = true;
-    @observable oldCampaignName = '';
-    @observable newCampaignName = '';
     @observable newCampaignNameLength = 0;
+    @observable submenuIsShown = false;
+    @observable editModal = false;
 
     constructor(props) {
         super(props);
-        this.enableCampaignRename = this.enableCampaignRename.bind(this);
-        this.cancelCampaignRename = this.cancelCampaignRename.bind(this);
-        this.renameCampaign = this.renameCampaign.bind(this);
-        this.focusTextInput = this.focusTextInput.bind(this);
-        this.userTypesName = this.userTypesName.bind(this);
-        this.keyPressed = this.keyPressed.bind(this);
+        this.showSubmenu = this.showSubmenu.bind(this);
+        this.hideSubmenu = this.hideSubmenu.bind(this);
+        this.showEditModal = this.showEditModal.bind(this);
+        this.hideEditModal = this.hideEditModal.bind(this);
     }
     componentWillMount() {
         this.oldCampaignName = this.props.title;
@@ -32,80 +31,47 @@ class SubHeader extends Component {
             this.newCampaignNameLength = nextProps.title.length;
         }
     }
-    enableCampaignRename(e) {
-        if(this.renameDisabled) {
-            this.renameDisabled = false;
-            this.focusTextInput();
-            e.target.classList.add('hide');
-        }
+    showEditModal(e) {
+        e.preventDefault();
+        this.editModal = true;
     }
-    cancelCampaignRename() {
-        this.renameDisabled = true; 
-        this.newCampaignName = this.oldCampaignName;
-        this.newCampaignNameLength = this.oldCampaignName.length;
-        this.focusTextInput();
-        this.clickableArea.classList.remove('hide');
+    hideEditModal() {
+        this.editModal = false;
     }
-    userTypesName(e) {
-        this.newCampaignName = e.target.value;
-        this.newCampaignNameLength = e.target.value.length;
+    hideSubmenu() {
+        this.submenuIsShown = false;
     }
-    keyPressed(e) {
-        if(e.key === 'Enter') {
-            this.renameCampaign();
-        }
-    }
-    renameCampaign() {
-        const { campaign } = this.props.campaignsStore;
-        this.clickableArea.classList.remove('hide');
-        this.props.campaignsStore.renameCampaign(campaign.id, { name: this.newCampaignName }).then(() => {
-            this.renameDisabled = true;
-            this.oldCampaignName = this.newCampaignName;
-            this.focusTextInput();
-        });
-    }
-    focusTextInput() {
-        if (this.renameDisabled) {
-            this.campaignNameInput.setAttribute('disabled','true');
-        } else {
-            this.campaignNameInput.removeAttribute('disabled');
-            this.campaignNameInput.focus();
-        }
+    showSubmenu() {
+        this.submenuIsShown = true;
     }
     render() {
-        const { title, campaignsStore, showCancelCampaignModal } = this.props;
+        const { campaignsStore, showCancelCampaignModal, showDropdown = true } = this.props;
         return (
             <div className="statistics__campaign-name">
+                {this.newCampaignName}
+                {showDropdown ?
+                <div className="dots" onClick={this.showSubmenu}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
 
-                <div className="rename-box">
-                    <div onClick={this.enableCampaignRename}
-                         ref={(clickableArea) => {this.clickableArea = clickableArea}}
-                         className="rename-box__clickable-area">
-                    </div>
-
-                     <input 
-                        className="rename-box__input rename-box__input--grey"
-                        type="text"
-                        ref={(input) => {this.campaignNameInput = input}}
-                        disabled
-                        onKeyPress={this.keyPressed}
-                        value={this.newCampaignName} onChange={this.userTypesName} />
-
-                    <div className="rename-box__actions rename-box__actions--big">
-                        {this.renameDisabled ?
-                            <img src="/assets/img/icons/black/edit_pencil.svg" className="rename-box__icon rename-box__icon--edit edit" alt="Icon" />
-                        :
-                            <span className="rename-box__user-actions">
-                                {this.newCampaignNameLength ?
-                                    <img src="/assets/img/icons/black/tick.svg" className="rename-box__icon rename-box__icon--save save" alt="Icon" onClick={this.renameCampaign} />
-                                :
-                                    null
-                                }
-                                <img src="/assets/img/icons/black/cancel-thin.svg" alt="Icon" className="rename-box__icon rename-box__icon--cancel cancel" onClick={this.cancelCampaignRename} />
-                            </span>
-                        }
-                    </div>
-                </div>
+                    <Dropdown show={this.submenuIsShown} hideSubmenu={this.hideSubmenu} customStyles={{
+                        width: '130px',
+                        left: '-100px',
+                        fontSize: '14px',
+                        color: '#9B9DA2',
+                        fontWeight: '400'
+                    }}>
+                        <li className="package-dropdown-item">
+                            <i className="icon icon-edit"/>
+                            <a className="package-dropdown-item" href="#" id="edit-comment"
+                               onClick={this.showEditModal}
+                            >
+                                Edit
+                            </a>
+                        </li>
+                    </Dropdown>
+                </div> : ''}
                 {campaignsStore.campaign.statistics.status === 'launched' ?
                     <div className="cancel-campaign">
                         <button id="campaign-detail-cancel-all" className="delete-button fixed-width" onClick={showCancelCampaignModal}>
@@ -115,6 +81,17 @@ class SubHeader extends Component {
                 :
                     null
                 }
+                <EditCampaignModal
+                    modalTitle={(
+                        <div className="title">
+                            Edit name
+                        </div>
+                    )}
+                    shown={this.editModal}
+                    hide={this.hideEditModal}
+                    campaignsStore={campaignsStore}
+                    defaultValue={this.newCampaignName}
+                />
             </div>
         );
     }

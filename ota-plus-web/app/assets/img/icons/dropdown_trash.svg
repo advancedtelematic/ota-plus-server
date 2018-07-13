@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="13px" height="12px" viewBox="0 0 13 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Edit Icon black Copy 4</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 15 15 15 15 0 0 0"></polygon>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Drop-down-package-detail" transform="translate(-16.000000, -91.000000)">
+            <g id="Trash-grey" transform="translate(15.000000, 89.000000)">
+                <g id="Group-7">
+                    <path d="M2.69525,6.25 L3.67025,12.5 C3.77275,13.18875 4.524,13.75 5.33775,13.75 L9.6615,13.75 C10.4815,13.75 11.22775,13.18875 11.3365,12.5 L12.30525,6.25 L2.69525,6.25 Z" id="Fill-3" fill="#9B9DA2"></path>
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Clip-6"></g>
+                    <polygon id="Fill-5" fill="#9B9DA2" mask="url(#mask-2)" points="10 5 13.75 5 13.75 3.75 10 3.75"></polygon>
+                    <polygon id="Fill-1" fill="#9B9DA2" mask="url(#mask-2)" points="1.25 5 5 5 5 3.75 1.25 3.75"></polygon>
+                    <polygon id="Fill-2" fill="#9B9DA2" mask="url(#mask-2)" points="5 3.75 10.00125 3.75 10.00125 2.5 5 2.5"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

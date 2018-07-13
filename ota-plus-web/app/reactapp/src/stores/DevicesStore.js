@@ -8,6 +8,7 @@ import {
     API_DEVICES_DIRECTOR_DEVICE,
     API_DEVICES_CREATE,
     API_DEVICES_RENAME,
+    API_DEVICES_DELETE,
     API_GET_MULTI_TARGET_UPDATE_INDENTIFIER,
     API_CREATE_MULTI_TARGET_UPDATE,
     API_FETCH_MULTI_TARGET_UPDATES,
@@ -23,6 +24,7 @@ import _ from 'underscore';
 export default class DevicesStore {
 
     @observable devicesFetchAsync = {};
+    @observable devicesLoadMoreAsync = {};
     @observable devicesDeleteAsync = {};
     @observable deviceFleetsFetchAsync = {};
     @observable devicesOneFetchAsync = {};
@@ -37,10 +39,10 @@ export default class DevicesStore {
     @observable mtuCancelAsync = {};
 
     @observable devices = [];
-    @observable devicesInitialTotalCount = null;
     @observable devicesTotalCount = null;
-    @observable devicesCurrentPage = 0;
-    @observable preparedDevices = [];
+    @observable devicesInitialTotalCount = null;
+    @observable devicesCurrentPage = 1;
+    @observable devicesOffset = 0;
     @observable devicesFilter = '';
     @observable devicesGroupFilter = null;
     @observable devicesSort = 'asc';
@@ -58,6 +60,7 @@ export default class DevicesStore {
 
     constructor() {
         resetAsync(this.devicesFetchAsync);
+        resetAsync(this.devicesLoadMoreAsync);
         resetAsync(this.devicesDeleteAsync);
         resetAsync(this.deviceFleetsFetchAsync);
         resetAsync(this.devicesOneFetchAsync);
@@ -74,22 +77,17 @@ export default class DevicesStore {
 
     deleteDevice(id) {
         resetAsync(this.devicesDeleteAsync, true);
-        const that = this;
-        return new Promise(function(resolve, reject) {
-            setTimeout(() => {
-                if(localStorage.getItem('deleted')) {
-                    let deletedDeviceIds = JSON.parse(localStorage.getItem('deleted'));
-                    if(!_.contains(deletedDeviceIds, id)) {
-                        deletedDeviceIds.push(id);
-                        localStorage.setItem('deleted', JSON.stringify(deletedDeviceIds));
-                    }
-                } else {
-                    localStorage.setItem('deleted', JSON.stringify([id]));
-                }
-                that.devicesDeleteAsync = handleAsyncSuccess({});
-                resolve();
-            }, 500);
-        });
+        return axios.delete(API_DEVICES_DELETE + '/' + id)
+            .then((response) => {
+                this.devices = _.without(this.devices, _.findWhere(this.devices, {
+                    uuid: id
+                }));
+                this._prepareDevices();
+                this.devicesDeleteAsync = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this.devicesDeleteAsync = handleAsyncError(error);
+            });
     }
 
     fetchDeviceFleets() {
@@ -131,30 +129,23 @@ export default class DevicesStore {
 
     fetchDevices(filter = '', groupId) {
         resetAsync(this.devicesFetchAsync, true);
-        if (this.devicesFilter !== filter || this.devicesGroupFilter !== groupId) {
-            this.devicesTotalCount = null;
-            this.devicesCurrentPage = 0;
-            this.devices = [];
-            this.preparedDevices = [];
-        }
+        this.devicesOffset = 0;
+        this.devicesCurrentPage = 1;
         this.devicesFilter = filter;
         this.devicesGroupFilter = groupId;
-        let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesCurrentPage * this.devicesLimit}`;
+        let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesOffset}`;
         if (groupId && groupId === 'ungrouped')
             apiAddress += `&ungrouped=true`;
         else if (groupId)
             apiAddress += `&groupId=${groupId}`;
         return axios.get(apiAddress)
             .then((response) => {
-                let devices = _.uniq(this.devices.concat(response.data.values), device => device.uuid);
-                let deletedDeviceIds = JSON.parse(localStorage.getItem('deleted'));
-                this.devices = _.filter(devices, device => !_.contains(deletedDeviceIds, device.uuid));
-                this._prepareDevices();
+                this.devices = response.data.values;
+                this.devicesTotalCount = response.data.total;
                 if (this.devicesInitialTotalCount === null && groupId !== 'ungrouped') {
                     this.devicesInitialTotalCount = response.data.total;
                 }
-                this.devicesCurrentPage++;
-                this.devicesTotalCount = response.data.total;
+                this._prepareDevices();
                 this.devicesFetchAsync = handleAsyncSuccess(response);
             })
             .catch((error) => {
@@ -162,8 +153,42 @@ export default class DevicesStore {
             });
     }
 
-    _increaseDeviceInitialTotalCount() {
+    loadMoreDevices(filter = '', groupId) {
+        resetAsync(this.devicesLoadMoreAsync, true);
+        let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesOffset + this.devicesLimit}`;
+        if (groupId && groupId === 'ungrouped')
+            apiAddress += `&ungrouped=true`;
+        else if (groupId)
+            apiAddress += `&groupId=${groupId}`;
+        return axios.get(apiAddress)
+            .then((response) => {
+                this.devices = _.uniq(this.devices.concat(response.data.values), item => item.uuid);
+                this.devicesOffset = response.data.offset;
+                this._prepareDevices();
+                this.devicesCurrentPage++;
+                this.devicesLoadMoreAsync = handleAsyncSuccess(response);
+            })
+            .catch((error) => {
+                this.devicesLoadMoreAsync = handleAsyncError(error);
+            });
+    }
+
+    _addDevice(data) {
+        this.devices.push({
+            activatedAt: data.timestamp,
+            createdAt: data.timestamp,
+            deviceId: data.deviceId,
+            deviceName: data.deviceName,
+            deviceStatus: "UpToDate",
+            deviceType: data.deviceType,
+            lastSeen: data.timestamp,
+            uuid: data.uuid
+        });
+        if(this.devicesInitialTotalCount === null) {
+            this.devicesInitialTotalCount = 0;
+        }
         this.devicesInitialTotalCount++;
+        this._prepareDevices();
     }
 
     fetchDevice(id) {
@@ -435,6 +460,12 @@ export default class DevicesStore {
         return axios.put(API_DEVICES_RENAME + '/' + id, data)
             .then((response) => {
                 this.devicesRenameAsync = handleAsyncSuccess(response);
+                if(this.device.uuid === id) {
+                    this.device.deviceName = data.deviceName;
+                } else {
+                    let device = _.find(this.devices, device => device.uuid === id);
+                    device.deviceName = data.deviceName;
+                }
                 this.fetchDevicesCount();
             })
             .catch((error) => {
@@ -444,6 +475,7 @@ export default class DevicesStore {
 
     _reset() {
         resetAsync(this.devicesFetchAsync);
+        resetAsync(this.devicesLoadMoreAsync);
         resetAsync(this.devicesDeleteAsync);
         resetAsync(this.deviceFleetsFetchAsync);
         resetAsync(this.devicesOneFetchAsync);
@@ -457,10 +489,9 @@ export default class DevicesStore {
         resetAsync(this.mtuFetchAsync);
         resetAsync(this.mtuCancelAsync);
         this.devices = [];
-        this.devicesInitialTotalCount = null;
         this.devicesTotalCount = null;
-        this.devicesCurrentPage = 0;
-        this.preparedDevices = [];
+        this.devicesCurrentPage = 1;
+        this.devicesOffset = 0;
         this.devicesFilter = '';
         this.devicesSort = 'asc';
         this.device = {};
@@ -496,8 +527,7 @@ export default class DevicesStore {
 
     _prepareDevices(devicesSort = this.devicesSort) {
         this.devicesSort = devicesSort;
-        let devices = this.devices;
-        this.preparedDevices = devices.sort((a, b) => {
+        this.devices = this.devices.sort((a, b) => {
             let aName = a.deviceName;
             let bName = b.deviceName;
             if (devicesSort !== 'undefined' && devicesSort == 'desc')

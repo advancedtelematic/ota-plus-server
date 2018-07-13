@@ -77,6 +77,7 @@ class TufList extends Component {
                                                 showCancelCampaignModal={showCancelCampaignModal}
                                                 showDependenciesModal={showDependenciesModal}
                                                 key={campaign.id}
+                                                showDropdown={false}
                                             />
                                         :
                                             null
@@ -125,6 +126,7 @@ class TufList extends Component {
                                             showCancelCampaignModal={showCancelCampaignModal}
                                             showDependenciesModal={showDependenciesModal}
                                             campaignId={campaign.id}
+                                            showDropdown={false}
                                         />
                                     :
                                         null

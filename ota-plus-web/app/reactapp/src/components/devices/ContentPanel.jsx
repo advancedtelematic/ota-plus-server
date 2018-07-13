@@ -80,7 +80,7 @@ export default class ContentPanel extends Component {
     }
 
     render() {
-        const {devicesStore, groupsStore, changeFilter, alphaPlusEnabled } = this.props;
+        const { devicesStore, groupsStore, changeFilter, alphaPlusEnabled, showDeleteConfirmation, showEditName } = this.props;
         return (
             <div className="devices-panel">
                 <ContentPanelHeader 
@@ -88,49 +88,49 @@ export default class ContentPanel extends Component {
                     changeFilter={changeFilter}
                 />
                 <div className="devices-panel__wrapper">
+                    {alphaPlusEnabled ?
+                        <div className="devices-panel__title devices-panel__title--absolute">
+                            Test devices
+                        </div>
+                    :
+                        null
+                    }
                     <div className={"devices-panel__list" + (alphaPlusEnabled ? " devices-panel__list--alpha" : "")}>
-                        {alphaPlusEnabled ?
-                            <div className="devices-panel__title devices-panel__title--absolute">
-                                Test devices
-                            </div>
-                        :
-                            null
-                        }
                         <InfiniteScroll
                             className="wrapper-infinite-scroll"
                             hasMore={devicesStore.devicesCurrentPage < devicesStore.devicesTotalCount / devicesStore.devicesLimit}
                             isLoading={devicesStore.devicesFetchAsync.isFetching}
                             useWindow={false}
                             loadMore={() => {
-                                devicesStore.fetchDevices(devicesStore.devicesFilter, devicesStore.devicesGroupFilter)
+                                devicesStore.loadMoreDevices(devicesStore.devicesFilter, devicesStore.devicesGroupFilter)
                             }}
+                            threshold={100}
                         >
-                            {devicesStore.devicesTotalCount ?
-                                <div className="devices-panel__list-wrapper">
-                                    {_.map(devicesStore.preparedDevices, (device) => {
-                                        return (
-                                            <DeviceItem
-                                                groupsStore={groupsStore}
-                                                devicesStore={devicesStore}
-                                                device={device}
-                                                goToDetails={this.goToDetails}
-                                                alphaPlusEnabled={alphaPlusEnabled}
-                                                key={device.uuid}
-                                            />
-                                        );
-                                    })}
+                            {devicesStore.devicesFetchAsync.isFetching ?
+                                <div className="wrapper-center">
+                                    <Loader />
                                 </div>
+                            : devicesStore.devices.length ?
+                                _.map(devicesStore.devices, (device) => {
+                                    return (
+                                        <DeviceItem
+                                            groupsStore={groupsStore}
+                                            devicesStore={devicesStore}
+                                            device={device}
+                                            goToDetails={this.goToDetails}
+                                            alphaPlusEnabled={alphaPlusEnabled}
+                                            showDeleteConfirmation={showDeleteConfirmation}
+                                            showEditName={showEditName}
+                                            key={device.uuid}
+                                        />
+                                    );
+                                })
                             :
-                                devicesStore.devicesFetchAsync.isFetching ?
+                                <span className="devices-panel__list-empty">
                                     <div className="wrapper-center">
-                                        <Loader />
+                                        This group is empty. Please, drag and drop devices here.
                                     </div>
-                                :
-                                    <span className="devices-panel__list-empty">
-                                        <div className="wrapper-center">
-                                            Oops, there are no devices to show.
-                                        </div>
-                                    </span>
+                                </span>
                             }
                         </InfiniteScroll>
                     </div>

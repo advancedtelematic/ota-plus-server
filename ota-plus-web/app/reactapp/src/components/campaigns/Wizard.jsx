@@ -190,6 +190,7 @@ class Wizard extends Component {
         if (matrixFromStorage) {
             localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);
         }
+        this.props.packagesStore.fetchPackages('packagesSafeFetchAsync');
     }
 
     componentWillUnmount() {
@@ -361,8 +362,7 @@ class Wizard extends Component {
     }
 
     launch() {
-        let packages = this.wizardData[1].packages;
-        let updates = this.wizardData[2].versions;
+        const updates = this.wizardData[2].versions;
         let updateData = [];
         _.each(updates, (update, packageName) => {
             let fromHash = null;
@@ -370,7 +370,7 @@ class Wizard extends Component {
             let targetFormat = null;
             let fromTargetLength = null;
             let toTargetLength = null;
-            let packages = this.props.packagesStore.packages;
+            const packages = this.props.packagesStore.packages;
             _.each(packages, (pack, index) => {
                 if (pack.filepath === update.fromFilepath) {
                     fromTargetLength = pack.targetLength;
@@ -422,7 +422,7 @@ class Wizard extends Component {
 
     handleCampaignCreated() {
         this.props.campaignsStore.launchCampaign(this.props.campaignsStore.campaignData.campaignId);
-        this.props.campaignsStore._hideWizard(this.props.wizardIdentifier);
+        this.props.hideWizard(this.props.wizardIdentifier);
         this.props.campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
     }
 
@@ -431,7 +431,7 @@ class Wizard extends Component {
     }
 
     render() {
-        const {campaignsStore, packagesStore, groupsStore, hardwareStore, wizardIdentifier, minimizedWizards} = this.props;
+        const {campaignsStore, packagesStore, groupsStore, hardwareStore, wizardIdentifier, hideWizard, toggleWizard, minimizedWizards} = this.props;
         const currentStep = this.wizardSteps[this.currentStepId];
 
         let wizardMinimized = _.find(minimizedWizards, (wizard, index) => {
@@ -530,7 +530,7 @@ class Wizard extends Component {
                 title={"Add new campaign"}
                 topActions={
                     <div className="top-actions">
-                        <div className="wizard-minimize" onClick={(e) => { e.preventDefault(); campaignsStore._toggleWizard(wizardIdentifier, this.wizardData[0].name) }} id="minimize-wizard">
+                        <div className="wizard-minimize" onClick={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)} id="minimize-wizard">
                             <img src="/assets/img/icons/minimize.svg" alt="Icon" />
                         </div>                                
                         <div className={"toggle-fullscreen" + (campaignsStore.fullScreenMode ? " on" : " off")} onClick={this.toggleFullScreen}>
@@ -540,14 +540,14 @@ class Wizard extends Component {
                                 <img src="/assets/img/icons/maximize.svg" alt="Icon" id="enter-fullscreen-wizard" />
                             }
                         </div>
-                        <div className="wizard-close" onClick={(e) => { e.preventDefault(); campaignsStore._hideWizard(wizardIdentifier)} } id="close-wizard">
+                        <div className="wizard-close" onClick={hideWizard.bind(this, wizardIdentifier)} id="close-wizard">
                             <img src="/assets/img/icons/close.svg" alt="Icon" />
                         </div>
                     </div>
                 }
                 content={modalContent}
                 shown={!wizardMinimized}
-                onRequestClose={() => { campaignsStore._toggleWizard(wizardIdentifier, this.wizardData[0].name) }}
+                onRequestClose={toggleWizard.bind(this, wizardIdentifier, this.wizardData[0].name)}
                 className={"dialog-campaign-wizard " + (campaignsStore.fullScreenMode ? "full-screen" : "") + (campaignsStore.transitionsEnabled ? "" : " disable-transitions")}
             />
         );
