@@ -162,6 +162,7 @@ class PackagesVersionList extends Component {
                                         defaultValue={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].fromFilepath : null}
                                         onChange={this.selectVersion.bind(this, {type: 'from', packageName: pack.packageName})}
                                         placeholder="Select from version"
+                                        visibleFieldsCount={5}
                                     />
                                 </div>
                                 <div className="to">
@@ -174,6 +175,7 @@ class PackagesVersionList extends Component {
                                         defaultValue={selectedVersions[pack.packageName] ? selectedVersions[pack.packageName].toFilepath : null}
                                         onChange={this.selectVersion.bind(this, {type: 'to', packageName: pack.packageName})}
                                         placeholder="Select to version"
+                                        visibleFieldsCount={5}
                                     />
                                 </div>
                             </Form>

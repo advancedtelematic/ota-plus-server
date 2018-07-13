@@ -7,7 +7,7 @@ import Dropzone from 'react-dropzone';
 import ListItem from './ListItem';
 import ListItemVersion from './ListItemVersion';
 import { PackagesVersionsStats } from './stats';
-import { Loader } from '../../partials';
+import { Loader, Dropdown, EditPackageModal } from '../../partials';
 import withAnimatedScroll from '../../partials/hoc/withAnimatedScroll';
 
 const headerHeight = 28;
@@ -19,6 +19,8 @@ class List extends Component {
     @observable fakeHeaderLetter = null;
     @observable fakeHeaderTopPosition = 0;
     @observable tmpIntervalId = null;
+    @observable submenuIsShown = false;
+    @observable editModal = false;
 
     constructor(props) {
         super(props);
@@ -27,6 +29,10 @@ class List extends Component {
         this.listScroll = this.listScroll.bind(this);
         this.highlightPackage = this.highlightPackage.bind(this);
         this.togglePackage = this.togglePackage.bind(this);
+        this.showSubmenu = this.showSubmenu.bind(this);
+        this.hideSubmenu = this.hideSubmenu.bind(this);
+        this.hideEditModal = this.hideEditModal.bind(this);
+        this.showEditModal = this.showEditModal.bind(this);
         this.packagesChangeHandler = observe(props.packagesStore, (change) => {
             if(change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
@@ -44,6 +50,14 @@ class List extends Component {
     componentWillUnmount() {
         this.packagesChangeHandler();
         this.refs.list.removeEventListener('scroll', this.listScroll);
+    }
+
+    hideEditModal() {
+        this.editModal = false;
+    }
+
+    showEditModal() {
+        this.editModal = true;
     }
     
     generateHeadersPositions() {
@@ -131,8 +145,42 @@ class List extends Component {
         clearInterval(this.tmpIntervalId);
         this.tmpIntervalId = null;
     }
+    hideSubmenu() {
+        this.submenuIsShown = false;
+    }
+    showSubmenu() {
+        this.submenuIsShown = true;
+    }
     render() {
         const { packagesStore, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, alphaPlusEnabled, showDeleteConfirmation, expandedPackageName, showEditComment } = this.props;        
+        const dropdownContent = (
+            <div className="dots" onClick={this.showSubmenu}>
+                <span></span>
+                <span></span>
+                <span></span>
+                <Dropdown show={this.submenuIsShown} hideSubmenu={this.hideSubmenu} customStyles={{
+                    width: '130px',
+                    left: '-100px',
+                    fontSize: '14px',
+                    color: '#9B9DA2'
+                }}>
+                    <li className="package-dropdown-item">
+                        <i className="icon icon-edit"/>
+                        <a className="package-dropdown-item" href="#" id="edit-comment"
+                        >
+                            Edit
+                        </a>
+                    </li>
+                    <li className="package-dropdown-item">
+                        <i className="icon icon-trash"/>
+                        <a className="package-dropdown-item" href="#" id="delete-version"
+                        >
+                            Delete
+                        </a>
+                    </li>
+                </Dropdown>
+            </div>
+        );
         return (
             <div className="ios-list" ref="list">
                 <Dropzone 
@@ -176,7 +224,6 @@ class List extends Component {
                                                             <span>
                                                                 {pack.packageName}
                                                             </span>
-                                                            <button className="delete-button fixed-width hide" onClick={showDeleteConfirmation.bind(this, expandedPackageName, 'package')}>Delete package</button>
                                                         </div>
                                                         <div className="c-package__versions-wrapper">
                                                             <div className="c-package__chart">

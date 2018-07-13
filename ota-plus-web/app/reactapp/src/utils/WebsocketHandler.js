@@ -24,9 +24,7 @@ const WebsocketHandler = (function (wsUrl, stores) {
                     stores.devicesStore._updateDeviceData(data.device, {deviceStatus: data.status});
                     break;
                 case "DeviceCreated":
-                    stores.groupsStore.selectDefaultGroup();
-                    stores.devicesStore.fetchDevices();
-                    stores.devicesStore._increaseDeviceInitialTotalCount();
+                    stores.devicesStore._addDevice(data);
                     if(document.cookie.indexOf("fireworksPageAcknowledged") == -1 && stores.devicesStore.devicesInitialTotalCount === 1) {
                         window.location = '#/fireworks';
                     }

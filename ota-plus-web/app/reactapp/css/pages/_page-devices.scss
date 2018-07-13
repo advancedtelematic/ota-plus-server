@@ -30,7 +30,6 @@
             width: 100%;
             height: 90px;
             position: relative;
-            overflow: hidden;
             @include transition;
             display: flex;
             align-items: center;
@@ -84,7 +83,7 @@
 
             &:hover {
 
-                img {
+                .dots {
                     opacity: 1;
                 }
             }
@@ -102,11 +101,13 @@
             @include textoverflowEllipsis;
         }
 
-        &__rename-icon {
-            width: 12px;
-            height: 12px;
+        .dots {
             opacity: 0;
             transition: opacity 0.4s ease;
+            top: auto;
+            span {
+                background-color: $color-mint;
+            }
         }
 
         &__item-subtitle {
@@ -130,17 +131,15 @@
             margin-right: 5px;
         }
 
-        .wrapper-infinite-scroll {
-            overflow-y: auto;
-        }
-
         &__wrapper {
             height: calc(100% - 60px);
             padding: 0 30px;
+            position: relative;
         }
 
         &__list {
             height: 100%;
+            overflow-y: auto;
             position: relative;
             min-height: 305px;
 
@@ -259,18 +258,23 @@
             font-size: 21px;
         }
 
+        .dots {
+            opacity: 0;
+        }
+
         &__device {
-            cursor: move;
             color: #fff;
             text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
             background: $devices-groups-bg;
             height: 100px;
             transition: background-color 0.2s ease-in;
             margin: 0 5px 5px 0;
-            display: flex;
-            align-items: center;
             padding: 0 15px;
             width: calc((100% / 4) - 5px);
+            display: flex;
+            align-items: center;
+            position: relative;
+            float: left;
 
             @media(max-width: 1600px) {
                 width: calc((100% / 3) - 5px);
@@ -286,6 +290,21 @@
 
             &:hover {
                 background-color: rgba(255, 255, 255, .15);
+
+                .dots {
+                    opacity: 1;
+                    z-index: 101;
+                }
+            }
+
+            .hover-area {
+                z-index:100;
+                cursor: move;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                position: absolute;
             }
         }
 
@@ -321,15 +340,16 @@
 
         &__device-desc {
             text-align: left;
-            width: 62%;
             margin-left: 15px;
             transition: all 0.2s ease-in;
+            width: 62%;
         }
 
         &__device-title {
             font-size: 14px;
             text-transform: capitalize;
             @include textoverflowEllipsis;
+            position: relative;
         }
 
         &__device-subtitle {

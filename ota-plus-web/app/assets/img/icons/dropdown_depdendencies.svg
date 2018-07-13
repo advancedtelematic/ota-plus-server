@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon -- depdendencies</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icon----depdendencies" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Group-10" transform="translate(1.000000, 0.000000)" stroke="#9B9DA2">
+            <path d="M7.00069986,6.22222222 L7,6.22222222 C7.77334533,6.22222222 8.39972006,5.50044444 8.39972006,4.61111111 C8.39972006,3.72177778 9.02679464,3 9.79944011,3 L10.5,3" id="Stroke-6" stroke-width="0.8"></path>
+            <path d="M2.00069986,9.52222241 L2,9.52222241 C2.77334533,9.52222241 3.39972006,8.80044464 3.39972006,7.9111113 C3.39972006,7.02177797 4.02679464,6.30000019 4.79944011,6.30000019 L5.5,6.30000019" id="Stroke-8" stroke-width="0.8"></path>
+            <g id="Group-4" fill="#9B9DA2" stroke-width="0.5">
+                <polygon id="Stroke-1" points="0 12.75 2 12.75 2 5.75 0 5.75"></polygon>
+                <polygon id="Stroke-3" points="10 7.25 12 7.25 12 0.25 10 0.25"></polygon>
+            </g>
+            <polygon id="Stroke-5" stroke-width="0.5" fill="#9B9DA2" points="5 10 7 10 7 3 5 3"></polygon>
+        </g>
+    </g>
+</svg>

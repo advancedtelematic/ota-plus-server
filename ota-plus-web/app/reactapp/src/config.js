@@ -26,6 +26,7 @@ export const API_DEVICES_NETWORK_INFO = '/api/v1/devices';
 export const API_DIRECTOR_DEVICES_SEARCH = '/api/v1/admin/devices';
 export const API_DEVICES_CREATE = '/api/v1/devices';
 export const API_DEVICES_UPDATE = '/api/v1/devices';
+export const API_DEVICES_DELETE = '/api/v1/devices';
 export const API_DEVICES_DEVICE_DETAILS = '/api/v1/devices';
 export const API_DEVICES_DIRECTOR_DEVICE = '/api/v1/admin/devices';
 export const API_DEVICES_RENAME = '/api/v1/devices';

@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
 import { observer } from 'mobx-react';
+import { observable } from 'mobx';
 import _ from 'underscore';
+import { Dropdown } from '../../partials';
 
 const deviceSource = {
     beginDrag(props) {
@@ -34,11 +36,22 @@ function collect(connect, monitor) {
 
 @observer
 class Item extends Component {
+    @observable menuShown = false;
+
     constructor(props) {
         super(props);
+        this.toggleMenu = this.toggleMenu.bind(this);
+        this.hideMenu = this.hideMenu.bind(this);
+    }
+    toggleMenu(e) {
+        e.stopPropagation();
+        this.menuShown = !this.menuShown;
+    }
+    hideMenu(e) {
+        this.menuShown = false;
     }
     render() {
-        const { groupsStore, device, goToDetails, alphaPlusEnabled } = this.props;
+        const { groupsStore, device, goToDetails, alphaPlusEnabled, showDeleteConfirmation, showEditName } = this.props;
         const { isDragging, connectDragSource } = this.props;
         const opacity = isDragging ? 0.4 : 1;
         const lastSeenDate = new Date(device.lastSeen);
@@ -67,7 +80,33 @@ class Item extends Component {
         }
         return (
             connectDragSource(
-                <div className="devices-panel__device" style={{opacity}} onClick={goToDetails.bind(this, device.uuid)} id={"link-devicedetails-" + device.uuid}>
+                <div className="devices-panel__device">
+                    <div className="hover-area" style={{opacity}} onClick={goToDetails.bind(this, device.uuid)} id={"link-devicedetails-" + device.uuid} />
+                    <div className="dots align" id={"device-actions-" + device.uuid} onClick={this.toggleMenu}>
+                        <div className="dots__wrapper">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <Dropdown
+                        show={this.menuShown}
+                        hideSubmenu={this.hideMenu}
+                        customClassName={"align"}
+                    >
+                        <li className="device-dropdown-item">
+                            <a className="device-dropdown-item" id="edit-device" onClick={showEditName.bind(this, device)} >
+                                <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
+                                Edit device
+                            </a>
+                        </li>
+                        <li className="device-dropdown-item">
+                            <a className="device-dropdown-item" id="delete-device" onClick={showDeleteConfirmation.bind(this, device)} >
+                                <img src="/assets/img/icons/trash_icon.svg" alt="Icon" />
+                                Delete device
+                            </a>
+                        </li>
+                    </Dropdown>
                     {alphaPlusEnabled && foundFleet ?
                         <div className={"devices-panel__device-icon devices-panel__device-icon--" + foundFleet}>
                             <div className={"device-status device-status--" + device.deviceStatus} title={deviceStatus}></div>
@@ -78,7 +117,9 @@ class Item extends Component {
                         </div>
                     }
                     <div className="devices-panel__device-desc">
-                        <div className="devices-panel__device-title" title={device.deviceName}>{device.deviceName}</div>
+                        <div className="devices-panel__device-title" title={device.deviceName}>
+                            {device.deviceName}
+                        </div>
                         <div className="devices-panel__device-subtitle">
                             {deviceStatus !== 'Status unknown' ?
                                 <span>Last seen: {lastSeenDate.toDateString() + ' ' + lastSeenDate.toLocaleTimeString()}</span>

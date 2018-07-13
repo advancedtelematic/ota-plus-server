@@ -68,18 +68,20 @@ class CreateModal extends Component {
                     errorMsg={(groupsStore.groupsRenameAsync.data ? groupsStore.groupsRenameAsync.data.description : null)}
                 />
                 <div className="row">
-                    <div className="col-xs-12">
-                        <FormInput
-                            onValid={this.enableButton.bind(this)}
-                            onInvalid={this.disableButton.bind(this)}
-                            name="groupName"
-                            className="input-wrapper"
-                            isEditable={!groupsStore.groupsCreateAsync.isFetching}
-                            title={"Group Name"}
-                            label={"Group Name"}
-                            placeholder={"Name"}
-                            defaultValue={action === 'rename' ? groupsStore.selectedGroup.name : ''}
-                        />
+                    <div className="col-xs-8">
+                        <div className="group-name-input">
+                            <FormInput
+                                onValid={this.enableButton.bind(this)}
+                                onInvalid={this.disableButton.bind(this)}
+                                name="groupName"
+                                className="input-wrapper"
+                                isEditable={!groupsStore.groupsCreateAsync.isFetching}
+                                title={"Group Name"}
+                                label={"Group Name"}
+                                placeholder={"Name"}
+                                defaultValue={action === 'rename' ? groupsStore.selectedGroup.name : ''}
+                            />
+                        </div>
                     </div>
                 </div>
                 <div className="row">

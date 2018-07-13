@@ -29,8 +29,11 @@ class Devices extends Component {
         });
     }
     componentWillMount() {
-        this.props.devicesStore.fetchDevices();
-        this.props.groupsStore.fetchGroups();
+        const { devicesStore, groupsStore } = this.props;
+        const selectedGroup = groupsStore.selectedGroup;
+        const groupId = selectedGroup.id || null;
+        devicesStore.fetchDevices('', groupId);        
+        groupsStore.fetchGroups();
     }
     componentWillUnmount() {
         this.groupsFetchHandler();

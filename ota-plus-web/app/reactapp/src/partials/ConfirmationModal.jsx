@@ -10,15 +10,21 @@ class ConfirmationModal extends Component {
         this.props.deleteItem();
     }
     render() {
-        const { shown, hide, topText, bottomText, modalTitle } = this.props;
+        const { shown, hide, topText, bottomText, modalTitle, showDetailedInfo } = this.props;
         const content = (
             <span>
                 <div className="text-left">
                     {topText}
-                    <div className="important-info" id="confirmation-modal-important-info">
-                        This action cannot be undone.
-                    </div>
-                    {bottomText}
+                    {showDetailedInfo ?
+                        <span>
+                            <div className="important-info" id="confirmation-modal-important-info">
+                                This action cannot be undone.
+                            </div>
+                            {bottomText}
+                        </span>
+                    :
+                        null
+                    }
                 </div>
                 <div className="body-actions">
                     <button className="btn-primary" onClick={this.continue} id="confirmation-modal-continue">

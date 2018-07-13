@@ -97,6 +97,17 @@
             align-items: center;
             justify-content: space-between;
 
+            & > .dots {
+                position: relative;
+                top: 0;
+                left: 0;
+                & > span {
+                    background-color: $color-mint;
+                    width: 4px;
+                    height: 4px;
+                }
+            }
+
             span {
                 font-weight: bold;
                 font-size: 22px;

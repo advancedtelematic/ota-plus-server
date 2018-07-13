@@ -26,15 +26,6 @@ const groupsArtificial = [
 
 @observer
 class GroupsList extends Component {
-    constructor(props) {
-        super(props);
-    }
-    componentWillMount() {
-        const { devicesStore, groupsStore } = this.props;
-        const selectedGroup = groupsStore.selectedGroup;
-        const groupId = selectedGroup.id || null;
-        devicesStore.fetchDevices(devicesStore.devicesFilter, groupId);        
-    }
     render() {
         const { devicesStore, groupsStore, selectGroup, onDeviceDrop } = this.props;
         return (
@@ -58,7 +49,7 @@ class GroupsList extends Component {
                             _.each(groupsStore.groups, (group, index) => {
                                 groupedDevicesCount += group.devices.total;
                             });
-                            deviceCount = devicesStore.devicesInitialTotalCount - groupedDevicesCount;
+                            deviceCount = Math.max(0, devicesStore.devicesInitialTotalCount - groupedDevicesCount);
                         }
                         return (
                             <GroupsListItemArtificial
