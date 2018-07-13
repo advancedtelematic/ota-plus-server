@@ -81,9 +81,6 @@ export default class ContentPanel extends Component {
 
     render() {
         const { devicesStore, groupsStore, changeFilter, alphaPlusEnabled, showDeleteConfirmation, showEditName } = this.props;
-        console.log('devicesStore.devicesCurrentPage')
-        console.log(devicesStore.devicesCurrentPage)
-        console.log(devicesStore.devicesTotalCount)
         return (
             <div className="devices-panel">
                 <ContentPanelHeader 
@@ -105,7 +102,6 @@ export default class ContentPanel extends Component {
                             isLoading={devicesStore.devicesFetchAsync.isFetching}
                             useWindow={false}
                             loadMore={() => {
-                                console.log('load more')
                                 devicesStore.loadMoreDevices(devicesStore.devicesFilter, devicesStore.devicesGroupFilter)
                             }}
                             threshold={100}
@@ -114,8 +110,8 @@ export default class ContentPanel extends Component {
                                 <div className="wrapper-center">
                                     <Loader />
                                 </div>
-                            : devicesStore.preparedDevices.length ?
-                                _.map(devicesStore.preparedDevices, (device) => {
+                            : devicesStore.devices.length ?
+                                _.map(devicesStore.devices, (device) => {
                                     return (
                                         <DeviceItem
                                             groupsStore={groupsStore}

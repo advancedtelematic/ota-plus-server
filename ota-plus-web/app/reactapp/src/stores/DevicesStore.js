@@ -43,7 +43,6 @@ export default class DevicesStore {
     @observable devicesInitialTotalCount = null;
     @observable devicesCurrentPage = 1;
     @observable devicesOffset = 0;
-    @observable preparedDevices = [];
     @observable devicesFilter = '';
     @observable devicesGroupFilter = null;
     @observable devicesSort = 'asc';
@@ -73,7 +72,7 @@ export default class DevicesStore {
         resetAsync(this.mtuCreateAsync);
         resetAsync(this.mtuFetchAsync);
         resetAsync(this.mtuCancelAsync);
-        this.devicesLimit = 10;
+        this.devicesLimit = 30;
     }
 
     deleteDevice(id) {
@@ -129,7 +128,6 @@ export default class DevicesStore {
     }
 
     fetchDevices(filter = '', groupId) {
-        console.log('fetch')
         resetAsync(this.devicesFetchAsync, true);
         this.devicesOffset = 0;
         this.devicesCurrentPage = 1;
@@ -147,7 +145,6 @@ export default class DevicesStore {
                 if (this.devicesInitialTotalCount === null && groupId !== 'ungrouped') {
                     this.devicesInitialTotalCount = response.data.total;
                 }
-                this.preparedDevices = [];
                 this._prepareDevices();
                 this.devicesFetchAsync = handleAsyncSuccess(response);
             })
@@ -157,10 +154,6 @@ export default class DevicesStore {
     }
 
     loadMoreDevices(filter = '', groupId) {
-        console.log('load more')
-        console.log('offset')
-        console.log(this.devicesOffset)
-        console.log(this.devicesOffset + this.devicesLimit)
         resetAsync(this.devicesLoadMoreAsync, true);
         let apiAddress = `${API_DEVICES_SEARCH}?regex=${filter}&limit=${this.devicesLimit}&offset=${this.devicesOffset + this.devicesLimit}`;
         if (groupId && groupId === 'ungrouped')
@@ -169,8 +162,7 @@ export default class DevicesStore {
             apiAddress += `&groupId=${groupId}`;
         return axios.get(apiAddress)
             .then((response) => {
-                this.devices = this.devices.concat(response.data.values);
-                console.log('offset from repsonse')
+                this.devices = _.uniq(this.devices.concat(response.data.values), item => item.uuid);
                 this.devicesOffset = response.data.offset;
                 this._prepareDevices();
                 this.devicesCurrentPage++;
@@ -500,7 +492,6 @@ export default class DevicesStore {
         this.devicesTotalCount = null;
         this.devicesCurrentPage = 1;
         this.devicesOffset = 0;
-        this.preparedDevices = [];
         this.devicesFilter = '';
         this.devicesSort = 'asc';
         this.device = {};
@@ -536,8 +527,7 @@ export default class DevicesStore {
 
     _prepareDevices(devicesSort = this.devicesSort) {
         this.devicesSort = devicesSort;
-        let devices = this.devices;
-        this.preparedDevices = devices.sort((a, b) => {
+        this.devices = this.devices.sort((a, b) => {
             let aName = a.deviceName;
             let bName = b.deviceName;
             if (devicesSort !== 'undefined' && devicesSort == 'desc')
