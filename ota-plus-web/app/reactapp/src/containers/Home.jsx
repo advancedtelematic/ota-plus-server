@@ -178,7 +178,6 @@ class Home extends Component {
                                 <span></span>
                                 <span></span>
 
-
                                 <Dropdown
                                     show={this.deviceSubmenuShown}
                                     hideSubmenu={this.hideSubmenus}
