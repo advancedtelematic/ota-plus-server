@@ -45,11 +45,10 @@ class SubHeader extends Component {
         this.submenuIsShown = true;
     }
     render() {
-        const { campaignsStore, showCancelCampaignModal, showDropdown = true } = this.props;
+        const { campaignsStore, showCancelCampaignModal, hideCancel = true } = this.props;
         return (
             <div className="statistics__campaign-name">
                 {this.newCampaignName}
-                {showDropdown ?
                 <div className="dots" onClick={this.showSubmenu}>
                     <span></span>
                     <span></span>
@@ -70,8 +69,20 @@ class SubHeader extends Component {
                                 Edit
                             </a>
                         </li>
+                        {campaignsStore.campaign.statistics.status === 'launched' || !hideCancel ?
+                            <li className="package-dropdown-item">
+                                <i className="icon icon-trash"/>
+                                <a className="package-dropdown-item" href="#" id="campaign-detail-cancel-all"
+                                   onClick={showCancelCampaignModal}
+                                >
+                                    Cancel campaign
+                                </a>
+                            </li>
+                            :
+                            null
+                        }
                     </Dropdown>
-                </div> : ''}
+                </div>
                 {campaignsStore.campaign.statistics.status === 'launched' ?
                     <div className="cancel-campaign">
                         <button id="campaign-detail-cancel-all" className="delete-button fixed-width" onClick={showCancelCampaignModal}>
