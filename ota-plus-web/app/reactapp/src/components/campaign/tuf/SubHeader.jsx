@@ -54,18 +54,12 @@ class SubHeader extends Component {
                     <span></span>
                     <span></span>
 
-                    <Dropdown show={this.submenuIsShown} hideSubmenu={this.hideSubmenu} customStyles={{
-                        width: '130px',
-                        left: '-100px',
-                        fontSize: '14px',
-                        color: '#9B9DA2',
-                        fontWeight: '400'
-                    }}>
+                    <Dropdown show={this.submenuIsShown} hideSubmenu={this.hideSubmenu}>
                         <li className="package-dropdown-item">
-                            <i className="icon icon-edit"/>
                             <a className="package-dropdown-item" href="#" id="edit-comment"
                                onClick={this.showEditModal}
                             >
+                                <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
                                 Edit
                             </a>
                         </li>
