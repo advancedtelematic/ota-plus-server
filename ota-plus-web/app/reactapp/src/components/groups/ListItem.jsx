@@ -60,10 +60,7 @@ class ListItem extends Component {
                 <div
                     title={group.groupName}
                     className={"groups-panel__item" + (isSelected ? " groups-panel__item--selected" : "") + (isOver ? " groups-panel__item--active" : "")}
-                    id={"button-group-" + group.groupName}
-                    onClick={() => {
-                        selectGroup({type: 'real', name: group.groupName, id: group.id});
-                    }}>
+                    id={"button-group-" + group.groupName}>
                     {groupsStore.activeFleet ?
                         <div className="groups-panel__item-icon groups-panel__item-icon--fleet">
                             {group.groupName.substring(0, 3)}
@@ -71,7 +68,9 @@ class ListItem extends Component {
                     :
                         <div className={"groups-panel__item-icon groups-panel__item-icon--default" + (isSelected ? " groups-panel__item-icon--active" : "")}></div>
                     }
-                    <div className="groups-panel__item-desc">
+                    <div className="groups-panel__item-desc" onClick={() => {
+                        selectGroup({type: 'real', name: group.groupName, id: group.id});
+                    }}>
                         <div className="groups-panel__item-title">
                             <div className="groups-panel__item-title-value">
                                 {group.groupName}
@@ -80,21 +79,20 @@ class ListItem extends Component {
                                 <span></span>
                                 <span></span>
                                 <span></span>
-
-                                <Dropdown show={this.showEdit} hideSubmenu={this.hideDropdown}>
-                                    <li className="package-dropdown-item">
-                                        <i className="icon icon-edit"/>
-                                        <a className="package-dropdown-item" href="#" id="edit-comment"
-                                           onClick={(e) => {
-                                               e.preventDefault();
-                                               selectGroup({type: 'real', name: group.groupName, id: group.id});
-                                               this.showCreateModal();
-                                           }}>
-                                            Edit name
-                                        </a>
-                                    </li>
-                                </Dropdown>
                             </div>
+                            <Dropdown show={this.showEdit} hideSubmenu={this.hideDropdown}>
+                                <li className="package-dropdown-item">
+                                    <a className="package-dropdown-item" href="#" id="edit-comment"
+                                       onClick={(e) => {
+                                           e.preventDefault();
+                                           selectGroup({type: 'real', name: group.groupName, id: group.id});
+                                           this.showCreateModal();
+                                       }}>
+                                        <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
+                                        Edit name
+                                    </a>
+                                </li>
+                            </Dropdown>
                         </div>
                         <div className="groups-panel__item-subtitle" id={"group-" + group.groupName + '-devices'}>
                             {t('common.deviceWithCount', {count: group.devices.total})}

@@ -223,9 +223,9 @@ class ListItemVersion extends Component {
 
                     <Dropdown show={this.isShown} hideSubmenu={this.hideSubmenu}>
                         <li className="package-dropdown-item">
-                            <i className="icon icon-edit"/>
                             <a className="package-dropdown-item" href="#" id="edit-comment"
                                onClick={showEditComment.bind(this, version.filepath, version.comment)}>
+                                <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
                                 Edit comment
                             </a>
                         </li>
@@ -241,9 +241,9 @@ class ListItemVersion extends Component {
                             null
                         }
                         <li className="package-dropdown-item">
-                            <i className="icon icon-trash"/>
                             <a className="package-dropdown-item" href="#" id="delete-version"
                                onClick={showDeleteConfirmation.bind(this, version.filepath, 'version')}>
+                                <img src="/assets/img/icons/trash_icon.svg" alt="Icon" />
                                 Delete version
                             </a>
                         </li>
