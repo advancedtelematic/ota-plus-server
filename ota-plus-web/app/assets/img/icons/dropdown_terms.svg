@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Terms of Use Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Terms-of-Use-Icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linejoin="round">
+        <g id="Service-term-Icons" transform="translate(2.000000, 1.000000)">
+            <path d="M9,11.5826087 C9,11.8106087 8.81258824,12 8.58070588,12 L0.416647059,12 C0.185823529,12 0,11.8106087 0,11.5826087 L0,0.42 C0,0.192521739 0.185823529,0 0.416647059,0 L6.88235294,0 C6.99247059,0 7.04329412,0.0464347826 7.12164706,0.122608696 L8.87505882,1.82765217 C8.95447059,1.9053913 9,1.97634783 9,2.08695652 L9,11.5826087 Z" id="Stroke-3" stroke="#9B9DA2" fill="#9B9DA2" stroke-linecap="round"></path>
+            <polyline id="Stroke-1" stroke="#FFFFFF" stroke-linecap="square" points="7 0 7 2 9 2"></polyline>
+            <path d="M7,9 L2,9" id="Stroke-5" stroke="#FFFFFF" stroke-linecap="round"></path>
+            <path d="M7,7 L2,7" id="Stroke-7" stroke="#FFFFFF" stroke-linecap="round"></path>
+            <path d="M7,5 L2,5" id="Stroke-9" stroke="#FFFFFF" stroke-linecap="round"></path>
+            <path d="M5,3 L2,3" id="Stroke-11" stroke="#FFFFFF" stroke-linecap="round"></path>
+        </g>
+    </g>
+</svg>
