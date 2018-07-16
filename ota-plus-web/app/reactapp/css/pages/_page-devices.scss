@@ -36,6 +36,14 @@
             padding: 0 30px;
             cursor: pointer;
 
+            .hover-area {
+                position: absolute;
+                top:0;
+                left:0;
+                width:100%;
+                height:100%;
+            }
+
             &:hover {
                 color: #fff;
             }
@@ -81,6 +89,12 @@
         &__item-desc {
             width: 70%;
 
+            .submenu {
+                top: 50px;
+                right: 10px;
+                left:auto;
+            }
+
             &:hover {
 
                 .dots {
@@ -104,7 +118,7 @@
         .dots {
             opacity: 0;
             transition: opacity 0.4s ease;
-            top: auto;
+            top: 28px;
             span {
                 background-color: $color-mint;
             }

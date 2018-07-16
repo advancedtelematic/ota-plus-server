@@ -153,34 +153,6 @@ class List extends Component {
     }
     render() {
         const { packagesStore, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, alphaPlusEnabled, showDeleteConfirmation, expandedPackageName, showEditComment } = this.props;        
-        const dropdownContent = (
-            <div className="dots" onClick={this.showSubmenu}>
-                <span></span>
-                <span></span>
-                <span></span>
-                <Dropdown show={this.submenuIsShown} hideSubmenu={this.hideSubmenu} customStyles={{
-                    width: '130px',
-                    left: '-100px',
-                    fontSize: '14px',
-                    color: '#9B9DA2'
-                }}>
-                    <li className="package-dropdown-item">
-                        <i className="icon icon-edit"/>
-                        <a className="package-dropdown-item" href="#" id="edit-comment"
-                        >
-                            Edit
-                        </a>
-                    </li>
-                    <li className="package-dropdown-item">
-                        <i className="icon icon-trash"/>
-                        <a className="package-dropdown-item" href="#" id="delete-version"
-                        >
-                            Delete
-                        </a>
-                    </li>
-                </Dropdown>
-            </div>
-        );
         return (
             <div className="ios-list" ref="list">
                 <Dropzone 
