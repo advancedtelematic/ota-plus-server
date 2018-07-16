@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream
 import java.security.Security
 import java.util.UUID
 import java.util.zip.ZipInputStream
+import java.net.URL
 
 import com.advancedtelematic.TokenUtils.NoVerification
 import com.advancedtelematic.api.{RemoteApiError, UnexpectedResponse}
@@ -123,8 +124,10 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
     .configure("crypt.host" -> "crypt")
     .configure("crypt.uri" -> CryptHost)
     .configure("keyserver.uri" -> keyServerUri)
-    .configure("repo.pub.host" -> "reposerver")
+    .configure("repo.pub.host" -> "http://reposerver")
     .configure("repo.uri" -> repoServerUri)
+    .configure("repo.pub.uri" -> repoServerUri)
+    .configure("director.uri" -> "http://director")
     .overrides(bind[TokenVerification].to[NoVerification])
   val application = builder.overrides(bind[WSClient].to(mockClient)).build
   val controller = application.injector.instanceOf[ClientToolController]
@@ -139,8 +142,19 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
 
       val zip = new ZipInputStream(new ByteArrayInputStream(contentAsBytes(result).toArray))
 
-      val nonJsonFiles = Seq("autoprov.url", "autoprov_credentials.p12", "tufrepo.url")
-      nonJsonFiles.foreach(zip.getNextEntry.getName mustBe _)
+      val nonJsonFiles = Seq("autoprov.url", "autoprov_credentials.p12", "director.url",
+                             "tufrepo.url")
+      nonJsonFiles.foreach { entry =>
+        zip.getNextEntry.getName mustBe entry
+
+        if (entry.contains(".url")) {
+          val content = Source.fromInputStream(zip).mkString
+          val url = new URL(content)
+          assert(url.getHost != "")
+        }
+
+        zip.closeEntry()
+      }
 
       val jsonFiles = Seq("root.json", "targets.pub", "targets.sec", "treehub.json")
       jsonFiles.foreach { entry =>

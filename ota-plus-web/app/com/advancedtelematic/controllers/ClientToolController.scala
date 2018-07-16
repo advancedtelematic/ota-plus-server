@@ -139,6 +139,8 @@ class ClientToolController @Inject()(
         writeZipEntry("autoprov.url", gatewayUri.toString.getBytes)
         writeZipEntry("autoprov_credentials.p12", credentialsData.toArray)
       }
+      writeZipEntry("director.url", directorApiUri.getBytes)
+
       if(conf.getOptional[String]("repo.pub.host").isDefined) {
         val (rootJson, targetKeys) = await(getTufRepoCredentials(namespace))
         writeZipEntry("tufrepo.url", repoPubApiUri.getBytes)
