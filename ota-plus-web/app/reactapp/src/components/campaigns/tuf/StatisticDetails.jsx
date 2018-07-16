@@ -28,7 +28,7 @@ class StatisticDetails extends Component {
         clearInterval(this.tmpIntervalId);
     }
     render() {
-        const { campaignsStore, groupsStore, showCancelCampaignModal, showDependenciesModal, showDropdown } = this.props;
+        const { campaignsStore, groupsStore, showCancelCampaignModal, showDependenciesModal, hideCancel } = this.props;
         let overallStatistics = campaignsStore.overallCampaignStatistics;
         const progress = Math.min(Math.round(overallStatistics.finished/Math.max(overallStatistics.affected, 1) * 100), 100);
         const failureRateData = [
@@ -71,7 +71,7 @@ class StatisticDetails extends Component {
                     campaignsStore={campaignsStore}
                     title={campaignsStore.campaign.name}
                     showCancelCampaignModal={showCancelCampaignModal}
-                    showDropdown={showDropdown}
+                    hideCancel={hideCancel}
                 />
 
                 <div className="statistics__wrapper">
