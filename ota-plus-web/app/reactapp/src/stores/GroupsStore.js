@@ -127,7 +127,7 @@ export default class GroupsStore {
                     this.wizardGroups = _.uniq(this.wizardGroups.concat(groups), group => group.id);
                     this.groupsWizardFetchAsync = handleAsyncSuccess(response);
                 }
-                this.groupsCurrentPage++;
+                this.groupsWizardCurrentPage++;
                 this.groupsWizardTotalCount = response.data.total;
             }.bind(this))
             .catch(function (error) {
