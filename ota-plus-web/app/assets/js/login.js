@@ -4,6 +4,7 @@ $(function () {
   var appUrl = location.protocol + '//' + location.host;
   var logoUrl = appUrl + '/assets/img/HERE_pos.png';
   var options = {
+    configurationBaseUrl: 'https://cdn.eu.auth0.com',
     oidcConformant: true,
     allowSignUp: false,
     theme: {
