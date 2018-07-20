@@ -139,7 +139,12 @@ class ClientToolController @Inject()(
         writeZipEntry("autoprov.url", gatewayUri.toString.getBytes)
         writeZipEntry("autoprov_credentials.p12", credentialsData.toArray)
       }
+
       writeZipEntry("director.url", directorApiUri.getBytes)
+
+      writeZipEntry("campaigner.url", campaignerApiUri.getBytes)
+
+      writeZipEntry("device_registry.url", devicesApiUri.getBytes)
 
       if(conf.getOptional[String]("repo.pub.host").isDefined) {
         val (rootJson, targetKeys) = await(getTufRepoCredentials(namespace))
@@ -157,6 +162,7 @@ class ClientToolController @Inject()(
       } else {
         AuthParams(noAuth = Some(true))
       }
+
       writeZipEntry("treehub.json", Json.prettyPrint(Json.toJson(
         AllParams(authParams, OSTreeParams(treehubPubApiUri)))).getBytes())
     }

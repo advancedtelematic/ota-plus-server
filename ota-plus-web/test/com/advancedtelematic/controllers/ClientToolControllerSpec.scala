@@ -128,6 +128,8 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
     .configure("repo.uri" -> repoServerUri)
     .configure("repo.pub.uri" -> repoServerUri)
     .configure("director.uri" -> "http://director")
+    .configure("campaigner.uri" -> "http://campaigner")
+    .configure("deviceregistry.uri" -> "http://device-registry")
     .overrides(bind[TokenVerification].to[NoVerification])
   val application = builder.overrides(bind[WSClient].to(mockClient)).build
   val controller = application.injector.instanceOf[ClientToolController]
@@ -143,6 +145,7 @@ class ClientToolControllerSpec extends PlaySpec with GuiceOneServerPerSuite with
       val zip = new ZipInputStream(new ByteArrayInputStream(contentAsBytes(result).toArray))
 
       val nonJsonFiles = Seq("autoprov.url", "autoprov_credentials.p12", "director.url",
+                             "campaigner.url", "device_registry.url",
                              "tufrepo.url")
       nonJsonFiles.foreach { entry =>
         zip.getNextEntry.getName mustBe entry
