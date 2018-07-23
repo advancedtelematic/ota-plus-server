@@ -12,7 +12,7 @@ class TufGroupsList extends Component {
         const { campaignsStore } = this.props;
         return (
             <div className="groups">
-                {_.map(campaignsStore.campaign.groupObjects, (group, index) => {
+                {_.map(campaignsStore.campaign.groups, (group, index) => {
                     let groupStat = _.find(campaignsStore.campaign.statistics.stats, (stat, gId) => {
                         return gId === group.id;
                     });
