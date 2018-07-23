@@ -49,43 +49,45 @@ class SubHeader extends Component {
         return (
             <div className="statistics__campaign-name">
                 {this.newCampaignName}
-                <div className="dots" onClick={this.showSubmenu}>
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <div className="statistics__campaign-actions">
+                    {campaignsStore.campaign.statistics.status === 'launched' ?
+                        <div className="cancel-campaign">
+                            <button id="campaign-detail-cancel-all" className="delete-button fixed-width" onClick={showCancelCampaignModal}>
+                                Cancel campaign
+                            </button>
+                        </div>
+                    :
+                        null
+                    }
+                    <div className="dots" onClick={this.showSubmenu}>
+                        <span></span>
+                        <span></span>
+                        <span></span>
 
-                    <Dropdown show={this.submenuIsShown} hideSubmenu={this.hideSubmenu}>
-                        <li className="package-dropdown-item">
-                            <a className="package-dropdown-item" href="#" id="edit-comment"
-                               onClick={this.showEditModal}
-                            >
-                                <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
-                                Edit
-                            </a>
-                        </li>
-                        {campaignsStore.campaign.statistics.status === 'launched' || !hideCancel ?
+                        <Dropdown show={this.submenuIsShown} hideSubmenu={this.hideSubmenu}>
                             <li className="package-dropdown-item">
-                                <i className="icon icon-trash"/>
-                                <a className="package-dropdown-item" href="#" id="campaign-detail-cancel-all"
-                                   onClick={showCancelCampaignModal}
+                                <a className="package-dropdown-item" href="#" id="edit-comment"
+                                   onClick={this.showEditModal}
                                 >
-                                    Cancel campaign
+                                    <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
+                                    Edit
                                 </a>
                             </li>
-                            :
-                            null
-                        }
-                    </Dropdown>
+                            {campaignsStore.campaign.statistics.status === 'launched' || !hideCancel ?
+                                <li className="package-dropdown-item">
+                                    <i className="icon icon-trash"/>
+                                    <a className="package-dropdown-item" href="#" id="campaign-detail-cancel-all"
+                                       onClick={showCancelCampaignModal}
+                                    >
+                                        Cancel campaign
+                                    </a>
+                                </li>
+                                :
+                                null
+                            }
+                        </Dropdown>
+                    </div>                    
                 </div>
-                {campaignsStore.campaign.statistics.status === 'launched' ?
-                    <div className="cancel-campaign">
-                        <button id="campaign-detail-cancel-all" className="delete-button fixed-width" onClick={showCancelCampaignModal}>
-                            Cancel campaign
-                        </button>
-                    </div>
-                :
-                    null
-                }
                 <EditCampaignModal
                     modalTitle={(
                         <div className="title">

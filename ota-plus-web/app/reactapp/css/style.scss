@@ -1051,17 +1051,23 @@ input {
         cursor: pointer;
         font-size: 22px;
         font-weight: 700;
+    }
 
-        & > .dots {
+    &__campaign-actions {
+        display: flex;
+        align-items: center;
+
+        .dots {
             position: relative;
             top: 0;
+            right: 0;
+
             span {
                 background-color: $color-mint;
                 width: 4px;
                 heigth: 4px;
             }
         }
-
     }
 
     &__wrapper {
