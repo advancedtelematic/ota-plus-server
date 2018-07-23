@@ -687,7 +687,7 @@ input {
                 }
 
                 .dropdown-menu {
-                    min-width: 330px;
+                    width: 350px;
                     padding: 20px 20px 11px 20px;
                     border-radius: 0;
                     top: 94%;
@@ -719,20 +719,20 @@ input {
                         .full-name {
                             color: $fake-header-text;
                             font-size: 16px;
-                            font-weight: bold;
+                            font-weight: 500;
                             margin: 10px 0 0 0;
                             word-wrap: break-word;
                         }
 
                         .email {
-                            color: $devices-group-inactive;
-                            font-size: 12px;
+                            color: $home-grey;
                             margin: 5px 0 0 0;
+                            word-wrap: break-word;
                         }
                     }
 
                     hr {
-                        border-color: $devices-group-inactive;
+                        border: 1px solid rgba(215,216,218,0.5);
                     }
 
                     .links {
@@ -741,23 +741,21 @@ input {
                             display: block;
 
                             a {
-                                font-size: 12px;
                                 padding: 0;
+                                font-size: 14px!important;
 
                                 &:not(.add-button) {
-                                    color: $home-bg;
+                                    color: $home-grey;
 
                                     &:hover {
                                         color: $home-bg;
                                     }
                                 }
-                                
-                            }
 
-                            .switch-mode-heading {
-                                font-size: 12px;
-                                color: $home-bg;
-                            }
+                                img {
+                                    margin-right: 15px;
+                                }
+                            }                          
 
                             &.clear-localstorage {
                                 padding-top: 2px;

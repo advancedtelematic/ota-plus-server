@@ -32,7 +32,10 @@ class UserDropdown extends Component {
                     <ul className="links">
                         {uiCredentialsDownload ?
                             <li>
-                                  <Link to="/profile/access-keys" id="dropdown-link-access-keys" onClick={this.closeDropdown}>Provisioning keys</Link>
+                                  <Link to="/profile/access-keys" id="dropdown-link-access-keys" onClick={this.closeDropdown}>
+                                      <img src="/assets/img/icons/dropdown_key.svg" alt="Icon" />
+                                      Provisioning keys
+                                  </Link>
                             </li>
                         :
                             null
@@ -56,27 +59,40 @@ class UserDropdown extends Component {
                         <ul className="links">
                             {uiUserProfileEdit ?
                                 <li>
-                                    <Link to="/profile/edit" id="dropdown-link-editprofile" onClick={this.closeDropdown}>Edit profile</Link>
+                                    <Link to="/profile/edit" id="dropdown-link-editprofile" onClick={this.closeDropdown}>
+                                        <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
+                                        Edit profile
+                                    </Link>
                                 </li>
                                 : ''
                             }
                             <li>
-                                  <Link to="/profile/usage" id="dropdown-link-usage" onClick={this.closeDropdown}>Usage</Link>
+                                  <Link to="/profile/usage" id="dropdown-link-usage" onClick={this.closeDropdown}>
+                                      <img src="/assets/img/icons/dropdown_usage.svg" alt="Icon" />
+                                      Usage
+                                  </Link>
                             </li>
                             {uiCredentialsDownload ?
                                 <li>
-                                      <Link to="/profile/access-keys" id="dropdown-link-access-keys" onClick={this.closeDropdown}>Provisioning keys</Link>
+                                      <Link to="/profile/access-keys" id="dropdown-link-access-keys" onClick={this.closeDropdown}>
+                                          <img src="/assets/img/icons/dropdown_key.svg" alt="Icon" />
+                                          Provisioning keys
+                                      </Link>
                                 </li>
                             :
                                 null
                             }
                             <li>
-                                <Link to="/policy">Terms of use</Link>
+                                <Link to="/policy">
+                                    <img src="/assets/img/icons/dropdown_terms.svg" alt="Icon" />
+                                    Terms of use
+                                </Link>
                             </li>
                             <span>
                                 {alphaPlusEnabled ?
                                     <li className="clear-localstorage">
                                         <a href="#" className="add-button" onClick={this.clearLocalStorage} id="reset-demo">
+                                            <img src="/assets/img/icons/dropdown_reset_demo.svg" alt="Icon" />
                                             Reset demo
                                         </a>
                                     </li>
@@ -85,6 +101,7 @@ class UserDropdown extends Component {
                                 }
                                 <li className="signout">
                                     <a href="#" className="add-button" onClick={this.logout} id="app-logout">
+                                        <img src="/assets/img/icons/dropdown_logout.svg" alt="Icon" />
                                         Log out
                                     </a>
                                 </li>
