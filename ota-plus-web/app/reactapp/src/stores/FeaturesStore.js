@@ -17,7 +17,6 @@ export default class FeaturesStore {
 
     @observable featuresFetchAsync = {};
     @observable featuresTreehubActivateAsync = {};
-    @observable featuresFileUploaderActivateAsync = {};
     @observable featuresClientIdFetchAsync = {};
     @observable features = [];
     @observable clientId = null;
@@ -26,22 +25,7 @@ export default class FeaturesStore {
     constructor() {
         resetAsync(this.featuresFetchAsync);
         resetAsync(this.featuresTreehubActivateAsync);
-        resetAsync(this.featuresFileUploaderActivateAsync);
         resetAsync(this.featuresClientIdFetchAsync);
-    }
-
-    resetFeaturesFetchAsync(isFetching = false) {
-        this.featuresFetchAsync = {
-            isFetching: isFetching,
-            status: null
-        }
-    }
-
-    resetFeaturesTreehubActivateAsync(isFetching = false) {
-        this.featuresTreehubActivateAsync = {
-            isFetching: isFetching,
-            status: null
-        }
     }
 
     fetchFeatures() {
@@ -71,18 +55,6 @@ export default class FeaturesStore {
             }.bind(this));
     }
 
-    activateFileUploader() {
-        resetAsync(this.featuresFileUploaderActivateAsync);
-        return axios.put(API_FEATURES_FILE_UPLOADER_ACTIVATE)
-            .then(function (response) {
-                this.featuresFileUploaderActivateAsync = handleAsyncSuccess(response);
-                this.fetchFeatures();
-            }.bind(this))
-            .catch(function (error) {
-                this.featuresFileUploaderActivateAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
     fetchClientId() {
         resetAsync(this.featuresClientIdFetchAsync, true);
         return axios.get(API_FEATURES_FILE_UPLOADER_CLIENT_ID_GET)
@@ -98,7 +70,6 @@ export default class FeaturesStore {
     _reset() {
         resetAsync(this.featuresFetchAsync);
         resetAsync(this.featuresTreehubActivateAsync);
-        resetAsync(this.featuresFileUploaderActivateAsync);
         resetAsync(this.featuresClientIdFetchAsync);
     }
 }

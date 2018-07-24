@@ -35,11 +35,7 @@ import { resetAsync, handleAsyncSuccess, handleAsyncError } from '../utils/Commo
 import _ from 'underscore';
 
 export default class PackagesStore {
-    @observable directorRepoExistsFetchAsync = {};
     @observable packagesDeleteAsync = {};
-    @observable directorRepoCreateFetchAsync = {};
-    @observable tufRepoExistsFetchAsync = {};
-    @observable tufRepoCreateFetchAsync = {};
     
     @observable packagesFetchAsync = {};
     @observable packagesSafeFetchAsync = {};
@@ -87,11 +83,7 @@ export default class PackagesStore {
     @observable compatibilityData = [];
 
     constructor() {
-        resetAsync(this.directorRepoExistsFetchAsync);
         resetAsync(this.packagesDeleteAsync);
-        resetAsync(this.directorRepoCreateFetchAsync);
-        resetAsync(this.tufRepoExistsFetchAsync);
-        resetAsync(this.tufRepoCreateFetchAsync);
         resetAsync(this.packagesFetchAsync);
         resetAsync(this.packagesSafeFetchAsync);
         resetAsync(this.packagesCreateAsync);
@@ -142,50 +134,6 @@ export default class PackagesStore {
             return pack.filepath !== filepath
         });
         this._preparePackages();
-    }
-
-    fetchDirectorRepoExists() {
-        resetAsync(this.directorRepoExistsFetchAsync, true);
-        return axios.get(API_CHECK_DIRECTOR_REPO)
-            .then(function(response) {
-                this.directorRepoExistsFetchAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.directorRepoExistsFetchAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    createDirectorRepo() {
-        resetAsync(this.directorRepoCreateFetchAsync, true);
-        return axios.post(API_CREATE_DIRECTOR_REPO)
-            .then(function(response) {
-                this.directorRepoCreateFetchAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.directorRepoCreateFetchAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    fetchTufRepoExists() {
-        resetAsync(this.tufRepoExistsFetchAsync, true);
-        return axios.get(API_CHECK_TUF_REPO)
-            .then(function(response) {
-                this.tufRepoExistsFetchAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.tufRepoExistsFetchAsync = handleAsyncError(error);
-            }.bind(this));
-    }
-
-    createTufRepo() {
-        resetAsync(this.tufRepoCreateFetchAsync, true);
-        return axios.post(API_CREATE_TUF_REPO)
-            .then(function(response) {
-                this.tufRepoCreateFetchAsync = handleAsyncSuccess(response);
-            }.bind(this))
-            .catch(function(error) {
-                this.tufRepoCreateFetchAsync = handleAsyncError(error);
-            }.bind(this));
     }
 
     fetchComments() {
@@ -856,11 +804,7 @@ export default class PackagesStore {
     }
 
     _reset() {
-        resetAsync(this.directorRepoExistsFetchAsync);
         resetAsync(this.packagesDeleteAsync);
-        resetAsync(this.directorRepoCreateFetchAsync);
-        resetAsync(this.tufRepoExistsFetchAsync);
-        resetAsync(this.tufRepoCreateFetchAsync);
         resetAsync(this.packagesFetchAsync);
         resetAsync(this.packagesSafeFetchAsync);
         resetAsync(this.packagesCreateAsync);
