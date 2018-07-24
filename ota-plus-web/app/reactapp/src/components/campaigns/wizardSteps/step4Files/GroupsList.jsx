@@ -73,11 +73,11 @@ class GroupsList extends Component {
                 {Object.keys(groupsStore.preparedWizardGroups).length ?
                     <InfiniteScroll
                         className="wrapper-infinite-scroll"
-                        hasMore={groupsStore.groupsWizardCurrentPage < groupsStore.groupsWizardTotalCount / groupsStore.groupsWizardLimit}
+                        hasMore={groupsStore.hasMoreGroups}
                         isLoading={groupsStore.groupsWizardFetchAsync.isFetching}
                         useWindow={false}
                         loadMore={() => {
-                            groupsStore.fetchWizardGroups()
+                            groupsStore.loadMoreWizardGroups()
                         }}
                     >
                         <span>
