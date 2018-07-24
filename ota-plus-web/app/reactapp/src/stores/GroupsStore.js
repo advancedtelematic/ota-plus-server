@@ -19,6 +19,7 @@ export default class GroupsStore {
 
     @observable groupsFetchAsync = {};
     @observable groupsWizardFetchAsync = {};
+    @observable groupsWizardLoadMoreFetchAsync = {};
     @observable groupsCreateAsync = {};
     @observable groupsRenameAsync = {};
     @observable groupsAddDeviceAsync = {};
@@ -41,13 +42,15 @@ export default class GroupsStore {
     @observable activeFleet = null;
     @observable shouldLoadMore = true;
 
-    @observable groupsWizardCurrentPage = 0;
-    @observable groupsWizardTotalCount = null;
+    @observable groupsWizardOffset = 0;
+    @observable hasMoreGroups = 0;
     @observable groupsWizardLimit = 10;
 
     constructor() {
         resetAsync(this.groupsFetchAsync);
         resetAsync(this.groupsWizardFetchAsync);
+        resetAsync(this.groupsWizardLoadMoreFetchAsync
+            );
         resetAsync(this.groupsCreateAsync);
         resetAsync(this.groupsRenameAsync);
         resetAsync(this.groupsAddDeviceAsync);
@@ -104,13 +107,16 @@ export default class GroupsStore {
 
     fetchWizardGroups() {
         resetAsync(this.groupsWizardFetchAsync, true);
-        return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsWizardLimit + '&offset=' + this.groupsWizardCurrentPage * this.groupsWizardLimit)
+
+        this.groupsWizardOffset = 0;
+
+        return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsWizardLimit + '&offset=' + this.groupsWizardOffset)
             .then(function (response) {
                 let groups = response.data.values;
                 if(groups.length) {
                     let after = _.after(groups.length, () => {
-                        this.wizardGroups = _.uniq(this.wizardGroups.concat(groups), group => group.id);
-                        this._prepareWizardGroups(this.wizardGroups);
+                        this.wizardGroups = groups;
+                        this._prepareWizardGroups();
                         this.groupsWizardFetchAsync = handleAsyncSuccess(response);
                     }, this);
                     _.each(groups, (group, index) => {
@@ -124,14 +130,46 @@ export default class GroupsStore {
                             });
                     });
                 } else {
-                    this.wizardGroups = _.uniq(this.wizardGroups.concat(groups), group => group.id);
+                    this.wizardGroups = groups;
                     this.groupsWizardFetchAsync = handleAsyncSuccess(response);
                 }
-                this.groupsWizardCurrentPage++;
-                this.groupsWizardTotalCount = response.data.total;
+                this.hasMoreGroups = this.groupsWizardOffset < response.data.total;
             }.bind(this))
             .catch(function (error) {
                 this.groupsWizardFetchAsync = handleAsyncError(error);
+            }.bind(this));
+    }
+
+    loadMoreWizardGroups() {        
+        resetAsync(this.groupsWizardLoadMoreFetchAsync, true);
+        return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsWizardLimit + '&offset=' + (this.groupsWizardOffset + this.groupsWizardLimit))
+            .then(function (response) {
+                let groups = response.data.values;
+                if(groups.length) {
+                    let after = _.after(groups.length, () => {
+                        this.wizardGroups = _.uniq(this.wizardGroups.concat(groups), group => group.id);
+                        this._prepareWizardGroups();
+                        this.groupsWizardLoadMoreFetchAsync = handleAsyncSuccess(response);
+                    }, this);
+                    _.each(groups, (group, index) => {
+                        axios.get(API_GROUPS_DEVICES_FETCH + '/' + group.id + '/devices')
+                            .then(function(resp) {
+                                group.devices = resp.data;
+                                after();
+                            })
+                            .catch(function() {
+                                after();
+                            });
+                    });
+                } else {
+                    this.wizardGroups = _.uniq(this.wizardGroups.concat(groups), group => group.id);
+                    this.groupsWizardLoadMoreFetchAsync = handleAsyncSuccess(response);
+                }
+                this.groupsWizardOffset = response.data.offset;
+                this.hasMoreGroups = this.groupsWizardOffset < response.data.total;
+            }.bind(this))
+            .catch(function (error) {
+                this.groupsWizardLoadMoreFetchAsync = handleAsyncError(error);
             }.bind(this));
     }
 
@@ -209,6 +247,7 @@ export default class GroupsStore {
     _reset() {
         resetAsync(this.groupsFetchAsync);
         resetAsync(this.groupsWizardFetchAsync);
+        resetAsync(this.groupsWizardLoadMoreFetchAsync);
         resetAsync(this.groupsCreateAsync);
         resetAsync(this.groupsRenameAsync);
         resetAsync(this.groupsAddDeviceAsync);
@@ -223,8 +262,8 @@ export default class GroupsStore {
         this.groupsCurrentPage = 0;
         this.groupsTotalCount = 0;
 
-        this.groupsWizardCurrentPage = 0;
-        this.groupsWizardTotalCount = 0;
+        this.groupsWizardOffset = 0;
+        this.hasMoreGroups = false;
 
         this.shouldLoadMore = true;
     }
@@ -247,7 +286,8 @@ export default class GroupsStore {
         this.preparedGroups = preparedGroups;
     }
 
-    _prepareWizardGroups(groups) {
+    _prepareWizardGroups() {
+        const groups = this.wizardGroups;
         let preparedGroups = {};
         groups.sort((a, b) => {
             let aName = a.groupName;
