@@ -39,6 +39,7 @@ export const API_GROUPS_FETCH = '/api/v1/device_groups';
 export const API_GROUPS_CREATE = '/api/v1/device_groups';
 export const API_GROUPS_RENAME = '/api/v1/device_groups';
 export const API_GROUPS_DEVICES_FETCH = '/api/v1/device_groups';
+export const API_GROUPS_DETAIL = '/api/v1/device_groups';
 export const API_GROUPS_ADD_DEVICE = '/api/v1/device_groups';
 export const API_GROUPS_REMOVE_DEVICE = '/api/v1/device_groups';
 

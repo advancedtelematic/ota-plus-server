@@ -21,7 +21,8 @@ import {
     API_CAMPAIGNS_LEGACY_INDIVIDUAL_FETCH,
     API_CAMPAIGNS_LEGACY_RENAME,
     API_CAMPAIGNS_LEGACY_CANCEL,
-    API_GROUPS_DEVICES_FETCH
+    API_GROUPS_DEVICES_FETCH,
+    API_GROUPS_DETAIL
 } from '../config';
 import { 
     resetAsync, 
@@ -174,7 +175,7 @@ export default class CampaignsStore {
                         _.each(data.groups, groupId => {
                             promises.push(
                                 axios.get(API_GROUPS_DEVICES_FETCH + '/' + groupId + '/devices'),
-                                axios.get(API_GROUPS_DEVICES_FETCH + '/' + groupId)
+                                axios.get(API_GROUPS_DETAIL + '/' + groupId)
                             );
                         });
 

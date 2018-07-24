@@ -120,8 +120,15 @@
         }
 
         &.step-groups {
+          overflow-y: hidden;
+
+          form {
+            height: 50px;
+          }
+
           .ios-list {
-            overflow-y: visible;
+            overflow-y: auto;
+            height: calc(100% - 50px);
 
             .item {
               height: auto;
