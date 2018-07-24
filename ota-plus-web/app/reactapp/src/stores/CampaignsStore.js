@@ -165,29 +165,37 @@ export default class CampaignsStore {
             .then(function (response) {
                 resetAsync(this[statsAsync], true);
                 axios.get(API_CAMPAIGNS_CAMPAIGN_STATISTICS + '/' + id + '/stats')
-                    .then(function (resp) {
+                    .then(function (statsResponse) {
                         let data = response.data;
+                        data.statistics = statsResponse.data;
+
                         let promises = [];
-                        _.each(data.groups, group => {
-                            promises.push(axios.get(API_GROUPS_DEVICES_FETCH + '/' + group + '/devices'));
+
+                        _.each(data.groups, groupId => {
+                            promises.push(
+                                axios.get(API_GROUPS_DEVICES_FETCH + '/' + groupId + '/devices'),
+                                axios.get(API_GROUPS_DEVICES_FETCH + '/' + groupId)
+                            );
                         });
-                        axios.all(promises).then((result) => {
-                            data.statistics = resp.data;
-                            data.groupObjects = _.pluck(result, 'data');
-                            _.each(data.groups, (group, index) => {
-                                data.groupObjects[index].id = group;
+
+                        axios.all(promises).then(results => {
+                            results = _.pluck(results, 'data');
+                            const chunks = _.chunk(results, 2);
+                            data.groups = _.map(chunks, chunk => {
+                                return {...chunk[0], ...chunk[1]};
                             });
                             this.campaign = data;
-                            this[mainAsync] = handleAsyncSuccess(response);
-                            this[statsAsync] = handleAsyncSuccess(resp);
+                            this[statsAsync] = handleAsyncSuccess(statsResponse);
                         });
+
                     }.bind(this))
-                    .catch(function (err) {
-                        this[statsAsync] = handleAsyncError(err);
+                    .catch(function (statsError) {
+                        this[statsAsync] = handleAsyncError(statsError);
                     }.bind(this));
+                this[mainAsync] = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
-                this[statsAsync] = handleAsyncError(error);
+                this[mainAsync] = handleAsyncError(error);
             }.bind(this));
     }
 
