@@ -73,18 +73,6 @@ class SubHeader extends Component {
                                     Edit
                                 </a>
                             </li>
-                            {campaignsStore.campaign.statistics.status === 'launched' || !hideCancel ?
-                                <li className="package-dropdown-item">
-                                    <i className="icon icon-trash"/>
-                                    <a className="package-dropdown-item" href="#" id="campaign-detail-cancel-all"
-                                       onClick={showCancelCampaignModal}
-                                    >
-                                        Cancel campaign
-                                    </a>
-                                </li>
-                                :
-                                null
-                            }
                         </Dropdown>
                     </div>                    
                 </div>
