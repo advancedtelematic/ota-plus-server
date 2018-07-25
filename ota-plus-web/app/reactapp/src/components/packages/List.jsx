@@ -7,7 +7,7 @@ import Dropzone from 'react-dropzone';
 import ListItem from './ListItem';
 import ListItemVersion from './ListItemVersion';
 import { PackagesVersionsStats } from './stats';
-import { Loader, Dropdown, EditPackageModal } from '../../partials';
+import { Loader, Dropdown, EditPackageModal, ConfirmationModal } from '../../partials';
 import withAnimatedScroll from '../../partials/hoc/withAnimatedScroll';
 
 const headerHeight = 28;
@@ -21,6 +21,8 @@ class List extends Component {
     @observable tmpIntervalId = null;
     @observable submenuIsShown = false;
     @observable editModal = false;
+    @observable deleteModal = false;
+    @observable packVersions = [];
 
     constructor(props) {
         super(props);
@@ -33,6 +35,8 @@ class List extends Component {
         this.hideSubmenu = this.hideSubmenu.bind(this);
         this.hideEditModal = this.hideEditModal.bind(this);
         this.showEditModal = this.showEditModal.bind(this);
+        this.showDeleteModal = this.showDeleteModal.bind(this);
+        this.hideDeleteModal = this.hideDeleteModal.bind(this);
         this.packagesChangeHandler = observe(props.packagesStore, (change) => {
             if(change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
@@ -148,8 +152,14 @@ class List extends Component {
     hideSubmenu() {
         this.submenuIsShown = false;
     }
-    showSubmenu() {
+    showSubmenu(versions) {
         this.submenuIsShown = true;
+    }
+    showDeleteModal() {
+        this.deleteModal = true;
+    }
+    hideDeleteModal() {
+        this.deleteModal = false;
     }
     render() {
         const { packagesStore, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, alphaPlusEnabled, showDeleteConfirmation, expandedPackageName, showEditComment } = this.props;        
@@ -196,6 +206,30 @@ class List extends Component {
                                                             <span>
                                                                 {pack.packageName}
                                                             </span>
+                                                            <div className="dots" onClick={() => this.showSubmenu()}>
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                                <Dropdown show={this.submenuIsShown} hideSubmenu={this.hideSubmenu}>
+                                                                    <li className="package-dropdown-item">
+                                                                        <a className="package-dropdown-item" href="#" id="edit-comment" onClick={(e) => e.preventDefault()}>
+                                                                            <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
+                                                                            Edit
+                                                                        </a>
+                                                                    </li>
+                                                                    <li className="package-dropdown-item">
+                                                                        <a className="package-dropdown-item" href="#" id="edit-comment"
+                                                                           onClick={(e) => {
+                                                                               e.preventDefault();
+                                                                               this.packVersions = pack.versions;
+                                                                               this.showDeleteModal()
+                                                                           }}>
+                                                                            <img src="/assets/img/icons/trash_icon.svg" alt="Icon" />
+                                                                            Delete
+                                                                        </a>
+                                                                    </li>
+                                                                </Dropdown>
+                                                            </div>
                                                         </div>
                                                         <div className="c-package__versions-wrapper">
                                                             <div className="c-package__chart">
@@ -236,6 +270,23 @@ class List extends Component {
                         );
                     })}                        
                 </Dropzone>
+                {this.deleteModal ?
+                    <ConfirmationModal
+                        modalTitle={
+                            <div className="text-red">
+                                Delete all versions
+                            </div>
+                        }
+                        hide={this.hideDeleteModal}
+                        shown={this.deleteModal}
+                        deleteItem={() => {packagesStore.deleteAllVersions(this.packVersions); this.hideDeleteModal()}}
+                        topText={
+                            <div className="delete-modal-top-text">
+                                All package versions will be removed.
+                            </div>
+                        }
+                    />
+                    : null}
             </div>
         );
     }

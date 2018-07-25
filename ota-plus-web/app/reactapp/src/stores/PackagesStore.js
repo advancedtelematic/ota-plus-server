@@ -122,6 +122,21 @@ export default class PackagesStore {
             }.bind(this));
     }
 
+    deleteAllVersions(versions) {
+        let index = 0;
+        const store = this;
+        function request() {
+            store.deletePackage(versions[index].filepath).then(() => {
+                index++;
+                if (index >= versions.length) {
+                    return 'done';
+                }
+                return request();
+            });
+        }
+        return request();
+    }
+
     _removePackage(filepath) {
         this.packages = _.filter(this.packages, pack => {
             return pack.filepath !== filepath
