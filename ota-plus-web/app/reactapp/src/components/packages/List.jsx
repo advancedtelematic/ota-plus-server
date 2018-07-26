@@ -212,12 +212,6 @@ class List extends Component {
                                                                 <span></span>
                                                                 <Dropdown show={this.submenuIsShown} hideSubmenu={this.hideSubmenu}>
                                                                     <li className="package-dropdown-item">
-                                                                        <a className="package-dropdown-item" href="#" id="edit-comment" onClick={(e) => e.preventDefault()}>
-                                                                            <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
-                                                                            Edit
-                                                                        </a>
-                                                                    </li>
-                                                                    <li className="package-dropdown-item">
                                                                         <a className="package-dropdown-item" href="#" id="edit-comment"
                                                                            onClick={(e) => {
                                                                                e.preventDefault();
