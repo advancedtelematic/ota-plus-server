@@ -40,7 +40,7 @@ class GroupsList extends Component {
                         }}
                     >
                     {_.map(groupsArtificial, (group) => {
-                        const isSelected = (groupsStore.selectedGroup.type === 'artificial' && groupsStore.selectedGroup.name === group.name);
+                        const isSelected = (groupsStore.selectedGroup.type === 'artificial' && groupsStore.selectedGroup.groupName === group.name);
                         let deviceCount = 0;
                         if(group.name === 'all') {
                             deviceCount = devicesStore.devicesInitialTotalCount;
@@ -65,7 +65,7 @@ class GroupsList extends Component {
                     })}
                     {_.map(groupsStore.preparedGroups, (groups) => {
                         return _.map(groups, (group, index) => {
-                            const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.name === group.groupName);
+                            const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.groupName === group.groupName);
                             return (
                                 <GroupsListItem 
                                     group={group}
