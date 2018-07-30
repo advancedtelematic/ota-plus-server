@@ -19,7 +19,6 @@ class WizardStep4 extends Component {
         let stepWizardData = this.props.wizardData[3];
         const foundGroup = _.find(stepWizardData.groups, item => item.id === groupId);
         const groupToAdd = _.findWhere(this.props.groupsStore.wizardGroups, {id: groupId});
-
         if (foundGroup)
             stepWizardData.groups.splice(stepWizardData.groups.indexOf(foundGroup), 1);
         else

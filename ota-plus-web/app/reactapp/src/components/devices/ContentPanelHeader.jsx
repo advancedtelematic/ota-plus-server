@@ -10,9 +10,18 @@ class ContentPanelHeader extends Component {
         super(props);
     }
     render() {
-        const { devicesFilter, changeFilter } = this.props;
+        const { devicesFilter, changeFilter, addNewWizard, activeGroup } = this.props;
         return (
             <SubHeader>
+                {activeGroup.id && activeGroup.id !== 'ungrouped' ?
+                    <div className="add-group-campaign">
+                        <a href="#" className="add-button bordered light" onClick={(e) => { e.preventDefault(); addNewWizard('groups') }}>
+                            Create campaign
+                        </a>
+                    </div>
+                :
+                    null
+                }
                 <Form>
                     <SearchBar 
                         value={devicesFilter}

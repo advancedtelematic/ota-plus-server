@@ -186,6 +186,16 @@ class Wizard extends Component {
     }
 
     componentWillMount() {
+        const { skipStep, groupsStore } = this.props;
+
+        if(skipStep) {
+            this.wizardSteps = _.filter(this.wizardSteps, step => step.name !== skipStep);
+            const selectedGroup = groupsStore.selectedGroup;
+            groupsStore.fetchDevicesForSelectedGroup(selectedGroup.id).then(() => {
+                this.wizardData[3].groups = this.wizardData[3].groups.concat(selectedGroup);
+            });
+        }
+        
         let matrixFromStorage = JSON.parse(localStorage.getItem(`matrix-${this.props.wizardIdentifier}`));
         if (matrixFromStorage) {
             localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);

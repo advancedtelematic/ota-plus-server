@@ -366,6 +366,11 @@ $font: 'akkurat';
     &.light {
         font-weight: 300;
     }
+
+    &.bordered {
+        padding: 5px 15px;
+        border: 1px solid;
+    }
 }
 
 

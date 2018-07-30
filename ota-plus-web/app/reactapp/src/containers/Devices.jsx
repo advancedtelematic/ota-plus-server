@@ -96,7 +96,7 @@ class Devices extends Component {
         this.props.devicesStore.fetchDevices(filter, groupId);
     }
     render() {
-        const { devicesStore, groupsStore, alphaPlusEnabled } = this.props;
+        const { devicesStore, groupsStore, alphaPlusEnabled, addNewWizard } = this.props;
         return (
             <span>
                 {devicesStore.devicesInitialTotalCount === null && devicesStore.devicesFetchAsync.isFetching ?
@@ -121,6 +121,7 @@ class Devices extends Component {
                                     alphaPlusEnabled={alphaPlusEnabled}
                                     showDeleteConfirmation={this.showDeleteConfirmation}
                                     showEditName={this.showEditName}
+                                    addNewWizard={addNewWizard}
                                 />
                             </span>
                         
