@@ -373,7 +373,7 @@ export default class CampaignsStore {
           return campaign.createdAt;
         }).reverse();
         return _.filter(campaigns, (campaign) => {
-            return !_.isUndefined(campaign.summary) && (campaign.summary.status === "finished" || campaign.summary.status === "cancelled");
+            return !_.isUndefined(campaign.summary) && (campaign.summary.status === "finished");
         });
     }
 
