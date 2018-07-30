@@ -129,6 +129,7 @@ export default class DevicesStore {
 
     fetchDevices(filter = '', groupId) {
         resetAsync(this.devicesFetchAsync, true);
+        filter = filter.toLowerCase();
         this.devicesOffset = 0;
         this.devicesCurrentPage = 1;
         this.devicesFilter = filter;
