@@ -102,7 +102,7 @@ class Main extends Component {
         else
             this.minimizedWizards.push(minimizedWizard);
     }
-    addNewWizard() {
+    addNewWizard(skipStep = null) {
         const wizard =
             <Wizard
                 campaignsStore={this.campaignsStore}
@@ -114,6 +114,7 @@ class Main extends Component {
                 toggleWizard={this.toggleWizard}
                 minimizedWizards={this.minimizedWizards}
                 alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
+                skipStep={skipStep}
                 key={this.wizards.length}
             />;
         this.wizards = this.wizards.concat(wizard);
@@ -173,14 +174,14 @@ class Main extends Component {
             if(firstGroup) {
                 this.groupsStore.selectedGroup = {
                     type: 'real',
-                    name: firstGroup.groupName, 
+                    groupName: firstGroup.groupName, 
                     id: firstGroup.id
                 };
                 this.devicesStore.fetchDevices(this.devicesStore.devicesFilter, firstGroup.id);
             } else {
                 this.groupsStore.selectedGroup = {
                     type: 'artificial',
-                    name: 'all'
+                    groupName: 'all'
                 };
                 this.devicesStore.fetchDevices(this.devicesStore.devicesFilter, null);
             }

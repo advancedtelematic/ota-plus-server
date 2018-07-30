@@ -69,7 +69,7 @@ class ListItem extends Component {
                         <div className={"groups-panel__item-icon groups-panel__item-icon--default" + (isSelected ? " groups-panel__item-icon--active" : "")}></div>
                     }
                     <div className="groups-panel__item-desc" onClick={() => {
-                        selectGroup({type: 'real', name: group.groupName, id: group.id});
+                        selectGroup({type: 'real', groupName: group.groupName, id: group.id});
                     }}>
                         <div className="groups-panel__item-title">
                             <div className="groups-panel__item-title-value">
@@ -85,7 +85,7 @@ class ListItem extends Component {
                                     <a className="package-dropdown-item" href="#" id="edit-comment"
                                        onClick={(e) => {
                                            e.preventDefault();
-                                           selectGroup({type: 'real', name: group.groupName, id: group.id});
+                                           selectGroup({type: 'real', groupName: group.groupName, id: group.id});
                                            this.showCreateModal();
                                        }}>
                                         <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />

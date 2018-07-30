@@ -80,12 +80,14 @@ export default class ContentPanel extends Component {
     }
 
     render() {
-        const { devicesStore, groupsStore, changeFilter, alphaPlusEnabled, showDeleteConfirmation, showEditName } = this.props;
+        const { devicesStore, groupsStore, changeFilter, alphaPlusEnabled, showDeleteConfirmation, showEditName, addNewWizard } = this.props;
         return (
             <div className="devices-panel">
                 <ContentPanelHeader 
                     devicesFilter={devicesStore.devicesFilter}
                     changeFilter={changeFilter}
+                    addNewWizard={addNewWizard}
+                    activeGroup={groupsStore.selectedGroup}
                 />
                 <div className="devices-panel__wrapper">
                     {alphaPlusEnabled ?

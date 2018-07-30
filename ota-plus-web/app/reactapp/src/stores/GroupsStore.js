@@ -32,7 +32,7 @@ export default class GroupsStore {
     @observable latestCreatedGroupId = null;
     @observable selectedGroup = {
         type: 'artificial',
-        name: 'all'
+        groupName: 'all'
     };
 
     @observable groupsCurrentPage = 0;
@@ -60,7 +60,7 @@ export default class GroupsStore {
     selectDefaultGroup() {
         this.selectedGroup = {
             type: 'artificial',
-            name: 'all'
+            groupName: 'all'
         };   
     }
 
@@ -195,7 +195,7 @@ export default class GroupsStore {
                 this._updateGroupData(id, {groupName: name});
                 this.selectedGroup = {
                     type: 'real',
-                    name: name
+                    groupName: name
                 };
                 if(this.activeFleet) {
                     this._prepareGroupsWithFleets();
@@ -237,8 +237,18 @@ export default class GroupsStore {
         return axios.get(API_GROUPS_DEVICES_FETCH + '/' + groupId + '/devices')
             .then(function(resp) {
                 const foundGroup = this._getGroup(groupId);
-                if(foundGroup)
+                if(foundGroup) {
                     foundGroup.devices = resp.data;
+                }
+            }.bind(this))
+            .catch(function() {
+            });
+    }
+
+    fetchDevicesForSelectedGroup(groupId) {
+        return axios.get(API_GROUPS_DEVICES_FETCH + '/' + groupId + '/devices')
+            .then(function(resp) {
+                this.selectedGroup.devices = resp.data;
             }.bind(this))
             .catch(function() {
             });

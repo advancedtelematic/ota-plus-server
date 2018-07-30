@@ -41,7 +41,7 @@ class Devices extends Component {
         this.props.groupsStore._reset();
     }
     render() {
-        const { devicesStore, groupsStore, alphaPlusEnabled } = this.props;
+        const { devicesStore, groupsStore, alphaPlusEnabled, addNewWizard } = this.props;
         return (
             <FadeAnimation>
                 <MetaData 
@@ -50,6 +50,7 @@ class Devices extends Component {
                         devicesStore={devicesStore}
                         groupsStore={groupsStore}
                         alphaPlusEnabled={alphaPlusEnabled}
+                        addNewWizard={addNewWizard}
                     />
                 </MetaData>
             </FadeAnimation>

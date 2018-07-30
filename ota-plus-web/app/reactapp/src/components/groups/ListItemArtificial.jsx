@@ -35,7 +35,7 @@ class ListItemArtificial extends Component {
                     id={group.identifier}
                     className={"groups-panel__item groups-panel__item--artificial" + (isSelected ? " groups-panel__item--selected" : "") + (isOver ? " groups-panel__item--active" : "")}
                     onClick={() => {
-                        selectGroup({type: 'artificial', name: group.name, id: group.id});
+                        selectGroup({type: 'artificial', groupName: group.name, id: group.id});
                     }}
                     key={group.name}>
                         <div className="groups-panel__item-desc">
