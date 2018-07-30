@@ -34,7 +34,7 @@ $(function () {
   var lock = new Auth0Lock($('#auth0-client-id').val(), $('#auth0-domain').val(), options);
 
   lock.on("authorization_error", function (err) {
-    alert(err);
+    console.log(err);
   });
 
  lock.show(options);
