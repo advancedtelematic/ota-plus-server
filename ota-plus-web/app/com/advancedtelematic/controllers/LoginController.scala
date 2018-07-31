@@ -6,16 +6,8 @@ import akka.Done
 import akka.actor.ActorSystem
 import com.advancedtelematic.PlayMessageBusPublisher
 import com.advancedtelematic.api.UnexpectedResponse
-import com.advancedtelematic.auth.{
-  IdToken,
-  LoginAction,
-  LogoutAction,
-  OAuthConfig,
-  SessionCodecs,
-  TokenExchange,
-  Tokens,
-  UiAuthAction
-}
+import com.advancedtelematic.auth.{AccessToken, IdentityClaims, IdToken, LoginAction, LogoutAction,
+  OAuthConfig, SessionCodecs, TokenExchange, Tokens, UiAuthAction}
 import com.advancedtelematic.auth.oidc.{NamespaceProvider, OidcGateway}
 import com.advancedtelematic.libats.messaging_datatype.MessageLike
 import javax.inject.{Inject, Singleton}
@@ -28,11 +20,13 @@ import scala.concurrent.Future
 
 final case class LoginData(username: String, password: String)
 
-final case class UserLogin(id: String, timestamp: Instant)
+final case class UserLogin(id: String, identity: Option[IdentityClaims], timestamp: Instant)
 
 object UserLogin {
 
   import com.advancedtelematic.libats.codecs.CirceCodecs._
+  private[this] implicit val UserLoginEncoder = io.circe.generic.semiauto.deriveEncoder[IdentityClaims]
+  private[this] implicit val UserLoginDecoder = io.circe.generic.semiauto.deriveDecoder[IdentityClaims]
 
   implicit val MessageLikeInstance = MessageLike[UserLogin](_.id)
 }
@@ -94,10 +88,12 @@ class OAuthOidcController @Inject()(
     Redirect(routes.OAuthOidcController.authorizationError()).flashing("authzError" -> error)
   }
 
-  def publishLoginEvent(user: UserId): Future[Done] = {
-    messageBus
-      .publish(UserLogin(user.id, Instant.now()))
-      .map(_ => Done)
+  def publishLoginEvent(accessToken: AccessToken): Future[Done] = {
+    oidcGateway.getUserInfo(accessToken).flatMap { x =>
+      messageBus
+        .publish(UserLogin(x.userId.id, Some(x), Instant.now()))
+        .map(_ => Done)
+    }
   }
 
   val callback: Action[AnyContent] = Action.async { request =>
@@ -114,7 +110,7 @@ class OAuthOidcController @Inject()(
         tokens                                   <- oidcGateway.exchangeCodeForTokens(code)
         newTokens @ Tokens(accessToken, idToken) <- tokenExchange.run(tokens)
         ns = namespaceProvider.apply(newTokens)
-        _ <- publishLoginEvent(idToken.userId)
+        _ <- publishLoginEvent(accessToken)
       } yield
         Redirect(com.advancedtelematic.controllers.routes.Application.index()).withSession(
           "namespace"    -> ns.get,
