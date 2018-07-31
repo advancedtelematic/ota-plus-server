@@ -88,12 +88,15 @@ class OAuthOidcController @Inject()(
     Redirect(routes.OAuthOidcController.authorizationError()).flashing("authzError" -> error)
   }
 
-  def publishLoginEvent(accessToken: AccessToken): Future[Done] = {
-    oidcGateway.getUserInfo(accessToken).flatMap { x =>
-      messageBus
-        .publish(UserLogin(x.userId.id, Some(x), Instant.now()))
-        .map(_ => Done)
-    }
+  def publishLoginEvent(userId: UserId, accessToken: AccessToken): Future[Done] = {
+    oidcGateway.getUserInfo(accessToken)
+      .map(x => UserLogin(x.userId.id, Some(x), Instant.now()))
+      .recover {
+        case t =>
+          log.warn("Unble get user info", t)
+          UserLogin(userId.id, None, Instant.now())
+      }
+      .flatMap(x => messageBus.publish(x).map(_ => Done))
   }
 
   val callback: Action[AnyContent] = Action.async { request =>
@@ -110,7 +113,7 @@ class OAuthOidcController @Inject()(
         tokens                                   <- oidcGateway.exchangeCodeForTokens(code)
         newTokens @ Tokens(accessToken, idToken) <- tokenExchange.run(tokens)
         ns = namespaceProvider.apply(newTokens)
-        _ <- publishLoginEvent(accessToken)
+        _ <- publishLoginEvent(idToken.userId, accessToken)
       } yield
         Redirect(com.advancedtelematic.controllers.routes.Application.index()).withSession(
           "namespace"    -> ns.get,
