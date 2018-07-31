@@ -56,7 +56,7 @@ class NoLoginAction @Inject()(messageBus: PlayMessageBusPublisher,
 
     log.debug(s"Signed fake auth token for namespace $fakeNamespace")
 
-    messageBus.publishSafe(UserLogin(fakeNamespace, Instant.now()))
+    messageBus.publishSafe(UserLogin(fakeNamespace, None, Instant.now()))
 
     Future.successful(result)
   }
