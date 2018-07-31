@@ -28,7 +28,7 @@ class NavigationDropdown extends Component {
                         id="icon-profile-min"
                     />
                     &nbsp;
-                    <div className="dots nav-dots">
+                    <div className="dots nav-dots" id="nav-menu">
                         <span></span>
                         <span></span>
                         <span></span>

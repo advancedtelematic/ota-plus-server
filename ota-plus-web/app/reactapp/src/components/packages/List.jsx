@@ -206,7 +206,7 @@ class List extends Component {
                                                             <span>
                                                                 {pack.packageName}
                                                             </span>
-                                                            <div className="dots" onClick={() => this.showSubmenu()}>
+                                                            <div className="dots" id="package-menu" onClick={() => this.showSubmenu()}>
                                                                 <span></span>
                                                                 <span></span>
                                                                 <span></span>
