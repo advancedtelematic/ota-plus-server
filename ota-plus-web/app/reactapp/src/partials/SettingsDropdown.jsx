@@ -36,7 +36,7 @@ class SettingsDropdown extends Component {
                         />
                     }
                     &nbsp; 
-                    <div className="dots nav-dots">
+                    <div className="dots nav-dots" id="settings-menu">
                         <span></span>
                         <span></span>
                         <span></span>
