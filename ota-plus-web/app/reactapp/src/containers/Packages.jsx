@@ -218,7 +218,7 @@ class Packages extends Component {
                         }
                         bottomText={
                             <div className="delete-modal-bottom-text" id="delete-package-bottom-text">
-                                If the package is part of any active campaigns, any devices that haven't installed it yet fail the campaign.
+                                If the package is part of any active campaigns, any devices that haven't installed it will fail the campaign.
                             </div>
                         }
                         showDetailedInfo={true}

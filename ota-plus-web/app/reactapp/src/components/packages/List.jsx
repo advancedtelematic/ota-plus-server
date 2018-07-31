@@ -267,7 +267,7 @@ class List extends Component {
                 {this.deleteModal ?
                     <ConfirmationModal
                         modalTitle={
-                            <div className="text-red">
+                            <div className="text-red" id="delete-all-versions-title">
                                 Delete all versions
                             </div>
                         }
@@ -275,10 +275,16 @@ class List extends Component {
                         shown={this.deleteModal}
                         deleteItem={() => {packagesStore.deleteAllVersions(this.packVersions); this.hideDeleteModal()}}
                         topText={
-                            <div className="delete-modal-top-text">
+                            <div className="delete-modal-top-text" id="delete-all-versions-top-text">
                                 All package versions will be removed.
                             </div>
                         }
+                        bottomText={
+                            <div className="delete-modal-bottom-text" id="delete-all-versions-bottom-text">
+                                If the package is part of any active campaigns, any devices that haven't installed it will fail the campaign.
+                            </div>
+                        }
+                        showDetailedInfo={true}
                     />
                     : null}
             </div>
