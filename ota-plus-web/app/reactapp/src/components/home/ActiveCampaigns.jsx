@@ -8,8 +8,14 @@ import NoItems from './NoItems';
 @observer
 class ActiveCampaigns extends Component {
     constructor(props) {
-        super(props);        
-    }    
+        super(props);  
+        this.createCampaign = this.createCampaign.bind(this);
+    }
+    createCampaign(e) {
+        e.preventDefault();
+        const { addNewWizard } = this.props;
+        addNewWizard();
+    }
     render() {
         const { campaignsStore, addNewWizard } = this.props;
         return (
@@ -31,7 +37,7 @@ class ActiveCampaigns extends Component {
                     :
                         <NoItems 
                             itemName={"campaign"}
-                            create={addNewWizard}
+                            create={this.createCampaign}
                         />
                 }
             </span>
