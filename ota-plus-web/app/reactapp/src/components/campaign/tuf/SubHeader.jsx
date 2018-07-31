@@ -59,7 +59,7 @@ class SubHeader extends Component {
                     :
                         null
                     }
-                    <div className="dots" onClick={this.showSubmenu}>
+                    <div className="dots" id="campaign-menu" onClick={this.showSubmenu}>
                         <span></span>
                         <span></span>
                         <span></span>

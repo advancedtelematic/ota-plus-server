@@ -173,7 +173,7 @@ class Home extends Component {
                             <div className="home__heading-col">
                                 Status
                             </div>
-                            <div className="dots" onClick={this.toggleDeviceSubmenu}>
+                            <div className="dots" id="devices-menu" onClick={this.toggleDeviceSubmenu}>
                                 <span></span>
                                 <span></span>
                                 <span></span>
@@ -213,7 +213,7 @@ class Home extends Component {
                             <div className="home__heading-col">
                                 Created at
                             </div>
-                            <div className="dots" onClick={this.togglePackageSubmenu}>
+                            <div className="dots" id="packages-menu" onClick={this.togglePackageSubmenu}>
                                 <span></span>
                                 <span></span>
                                 <span></span>
@@ -254,7 +254,7 @@ class Home extends Component {
                             <div className="home__heading-col">
                                 Failure rate
                             </div>
-                            <div className="dots" onClick={this.toggleCampaignSubmenu}>
+                            <div className="dots" id="campaigns-menu" onClick={this.toggleCampaignSubmenu}>
                                 <span></span>
                                 <span></span>
                                 <span></span>
