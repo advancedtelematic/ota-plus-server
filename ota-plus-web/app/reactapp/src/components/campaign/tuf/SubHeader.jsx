@@ -50,7 +50,7 @@ class SubHeader extends Component {
             <div className="statistics__campaign-name">
                 {this.newCampaignName}
                 <div className="statistics__campaign-actions">
-                    {campaignsStore.campaign.statistics.status === 'launched' ?
+                    {campaignsStore.campaign.statistics.status === 'launched' || campaignsStore.campaign.statistics.status === 'scheduled' ?
                         <div className="cancel-campaign">
                             <button id="campaign-detail-cancel-all" className="delete-button fixed-width" onClick={showCancelCampaignModal}>
                                 Cancel campaign
