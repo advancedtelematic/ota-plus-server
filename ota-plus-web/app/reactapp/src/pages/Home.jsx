@@ -44,7 +44,7 @@ class Home extends Component {
         return (
             <FadeAnimation
                 display="flex">
-                {isTermsAccepted || !uiUserProfileMenu ?
+                {isTermsAccepted ?
                     provisioningStore.sanityCheckCompleted ?
                         <MetaData
                             title={title}>
