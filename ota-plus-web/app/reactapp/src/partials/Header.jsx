@@ -1,7 +1,6 @@
 import React, { PropTypes, defaultProps } from 'react';
 
-const Header = (props) => {
-    const { title, subtitle, backButtonShown, backButtonAction, children, device } = props;
+const Header = ({ title, subtitle, backButtonShown, backButtonAction, children, device }) => {
     return (
         <div className="page-header">
             <div className="page-header__left">

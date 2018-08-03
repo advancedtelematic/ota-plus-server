@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { FadeAnimation } from '../utils';
 import Cookies from 'js-cookie';
 import _ from 'underscore';
 
+@inject("stores")
 @observer
 class Fireworks extends Component {
     constructor(props) {
@@ -11,11 +12,13 @@ class Fireworks extends Component {
         this.acknowledgeFireworks = this.acknowledgeFireworks.bind(this);
     }
     componentWillMount() {
+        const { devicesStore } = this.props.stores;
         Cookies.set('fireworksPageAcknowledged', 1);
-        this.props.devicesStore.fetchDevicesCount();
+        devicesStore.fetchDevicesCount();
     }    
     acknowledgeFireworks() {
-        let directorDeviceId = _.first(this.props.devicesStore.directorDevicesIds);
+        const { devicesStore } = this.props.stores;
+        let directorDeviceId = _.first(devicesStore.directorDevicesIds);
         this.context.router.push(`/device/` + directorDeviceId);
     }
     render() {
@@ -47,7 +50,7 @@ class Fireworks extends Component {
     }
 }
 
-Fireworks.contextTypes = {
+Fireworks.wrappedComponent.contextTypes = {
     router: React.PropTypes.object.isRequired
 }
 

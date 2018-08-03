@@ -1,29 +1,37 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Modal, AsyncResponse } from '../../partials';
 import { AsyncStatusCallbackHandler } from '../../utils';
 import { FlatButton } from 'material-ui';
 import { translate } from 'react-i18next';
 import _ from 'underscore';
 
+@inject("stores")
 @observer
 class CancelCampaignModal extends Component {
     constructor(props) {
         super(props);
-        this.cancelHandler = new AsyncStatusCallbackHandler(props.campaignsStore, 'campaignsCancelAsync', this.handleResponse.bind(this));
+        const { campaignsStore } = props.stores;
+        this.cancelHandler = new AsyncStatusCallbackHandler(campaignsStore, 'campaignsCancelAsync', this.handleResponse.bind(this));
     }
     componentWillUnmount() {
         this.cancelHandler();
     }
     cancelCampaign() {
-        this.props.campaignsStore.cancelCampaign(this.props.campaign.id);        
+        const { campaignsStore } = this.props.stores;
+        const { campaign } = campaignsStore;
+        campaignsStore.cancelCampaign(campaign.id);        
     }
     handleResponse() {
-        this.props.campaignsStore.fetchCampaign(this.props.campaign.id);
+        const { campaignsStore } = this.props.stores;
+        const { campaign } = campaignsStore;
+        campaignsStore.fetchCampaign(campaign.id);
         this.props.hide();
     }
     render() {
-        const { t, shown, hide, campaign, campaignsStore } = this.props;
+        const { t, shown, hide } = this.props;
+        const { campaignsStore } = this.props.stores;
+        const { campaign } = campaignsStore;
         const content = (
             !_.isEmpty(campaign) ?
                 <span>
@@ -81,8 +89,7 @@ class CancelCampaignModal extends Component {
 CancelCampaignModal.propTypes = {
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
-    campaign: PropTypes.object.isRequired,
-    campaignsStore: PropTypes.object.isRequired,
+    stores: PropTypes.object
 }
 
 export default translate()(CancelCampaignModal);

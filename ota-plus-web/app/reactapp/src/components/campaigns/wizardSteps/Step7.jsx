@@ -1,18 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Loader, AsyncResponse } from '../../../partials';
 import { translate } from 'react-i18next';
 import _ from 'underscore';
 import moment from 'moment';
 
+@inject("stores")
 @observer
 class WizardStep7 extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        const { t, wizardData, groupsStore, campaignsStore } = this.props;
+        const { t, wizardData } = this.props;
+        const { groupsStore, campaignsStore } = this.props.stores;
         const updates = wizardData[2].versions;
         return (
             <div className="step-inner">
@@ -115,7 +117,7 @@ class WizardStep7 extends Component {
 
 WizardStep7.propTypes = {
     wizardData: PropTypes.object.isRequired,
-    groupsStore: PropTypes.object.isRequired
+    stores: PropTypes.object
 }
 
 export default translate()(WizardStep7);

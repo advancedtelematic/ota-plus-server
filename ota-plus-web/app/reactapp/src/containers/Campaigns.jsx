@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Loader, DependenciesModal } from '../partials';
 import { resetAsync } from '../utils/Common';
 import { 
@@ -13,6 +13,7 @@ import {
 import { FlatButton } from 'material-ui';
 import _ from 'underscore';
 
+@inject("stores")
 @observer
 class Campaigns extends Component {
     @observable cancelGroupModalShown = false;
@@ -56,9 +57,10 @@ class Campaigns extends Component {
     }
     hideCancelGroupModal(e) {
         if(e) e.preventDefault();
+        const { campaignsStore } = this.props.stores;
         this.cancelGroupModalShown = false;
         this.updateRequestToCancel = {};
-        resetAsync(this.props.campaignsStore.campaignsCancelRequestAsync);
+        resetAsync(campaignsStore.campaignsCancelRequestAsync);
     }
     showCancelCampaignModal(e) {
         if(e) e.preventDefault();
@@ -66,8 +68,9 @@ class Campaigns extends Component {
     }
     hideCancelCampaignModal(e) {
         if(e) e.preventDefault();
+        const { campaignsStore } = this.props.stores;
         this.cancelCampaignModalShown = false;
-        resetAsync(this.props.campaignsStore.campaignsCancelAsync);
+        resetAsync(campaignsStore.campaignsCancelAsync);
     }
     showDependenciesModal(activeCampaign, e) {
         if(e) e.preventDefault();
@@ -81,13 +84,16 @@ class Campaigns extends Component {
     }
     changeSort(sort, e) {
         if(e) e.preventDefault();
-        this.props.campaignsStore._prepareCampaigns(this.props.campaignsStore.campaignsFilter, sort);
+        const { campaignsStore } = this.props.stores;
+        campaignsStore._prepareCampaigns(campaignsStore.campaignsFilter, sort);
     }
     changeFilter(filter) {
-        this.props.campaignsStore._prepareCampaigns(filter, this.props.campaignsStore.campaignsSort);
+        const { campaignsStore } = this.props.stores;
+        campaignsStore._prepareCampaigns(filter, campaignsStore.campaignsSort);
     }
     render() {
-        const { campaignsStore, packagesStore, groupsStore, hardwareStore, devicesStore, addNewWizard, highlightedCampaign } = this.props;
+        const { addNewWizard, highlightedCampaign } = this.props;
+        const { campaignsStore } = this.props.stores;
         return (
             <span>
                 {campaignsStore.campaignsFetchAsync.isFetching ?
@@ -96,13 +102,10 @@ class Campaigns extends Component {
                     </div>
                 : campaignsStore.overallCampaignsCount ?
                     <CampaignsList
-                        campaignsStore={campaignsStore}
-                        groupsStore={groupsStore}
                         addNewWizard={addNewWizard}
                         showWizard={this.showWizard}
                         highlightedCampaign={highlightedCampaign}
                         showCancelCampaignModal={this.showCancelCampaignModal}
-                        showCancelGroupModal={this.showCancelGroupModal}
                         showDependenciesModal={this.showDependenciesModal}
                         expandedCampaignName={this.expandedCampaignName}
                         toggleCampaign={this.toggleCampaign}
@@ -132,14 +135,10 @@ class Campaigns extends Component {
                 <CampaignCancelCampaignModal
                     shown={this.cancelCampaignModalShown}
                     hide={this.hideCancelCampaignModal}
-                    campaignsStore={campaignsStore}
-                    campaign={campaignsStore.campaign}
                 />
                 <CampaignCancelGroupModal
                     shown={this.cancelGroupModalShown}
                     hide={this.hideCancelGroupModal}
-                    campaign={campaignsStore.campaign}
-                    campaignsStore={campaignsStore}
                     updateRequest={this.updateRequestToCancel}
                 />
                 {this.dependenciesModalShown ?
@@ -147,9 +146,6 @@ class Campaigns extends Component {
                         shown={this.dependenciesModalShown}
                         hide={this.hideDependenciesModal}
                         activeItemName={this.activeCampaign}
-                        packagesStore={packagesStore}
-                        campaignsStore={campaignsStore}
-                        devicesStore={devicesStore}
                     />
                 :
                     null
@@ -160,10 +156,7 @@ class Campaigns extends Component {
 }
 
 Campaigns.propTypes = {
-    campaignsStore: PropTypes.object.isRequired,
-    packagesStore: PropTypes.object.isRequired,
-    groupsStore: PropTypes.object.isRequired,
-    hardwareStore: PropTypes.object
+    stores: PropTypes.object,
 }
 
 export default Campaigns;

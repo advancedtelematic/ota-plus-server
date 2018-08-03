@@ -1,19 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import axios from 'axios';
 import { observe, observable, extendObservable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { translate } from 'react-i18next';
-import { 
-    DevicesStore,
-    HardwareStore,
-    GroupsStore,
-    PackagesStore,
-    CampaignsStore,
-    ImpactAnalysisStore,
-    FeaturesStore,
-    ProvisioningStore,
-    UserStore,
-} from '../stores';
 import { APP_LAYOUT } from '../config';
 import { 
     Navigation,
@@ -29,6 +18,7 @@ import Cookies from 'js-cookie';
 import Wizard from '../components/campaigns/Wizard';
 import { doLogout } from '../utils/Common';
 
+@inject('stores')
 @observer
 class Main extends Component {
     @observable termsAndConditionsAccepted = false;
@@ -65,23 +55,22 @@ class Main extends Component {
         this.hideWizard = this.hideWizard.bind(this);
         this.toggleWizard = this.toggleWizard.bind(this);
 
-        this.devicesStore = new DevicesStore();
-        this.hardwareStore = new HardwareStore();
-        this.groupsStore = new GroupsStore();
-        this.packagesStore = new PackagesStore();
-        this.campaignsStore = new CampaignsStore();
-        this.impactAnalysisStore = new ImpactAnalysisStore();
-        this.featuresStore = new FeaturesStore();
-        this.provisioningStore = new ProvisioningStore();
-        this.userStore = new UserStore();
+        const { 
+            devicesStore, 
+            packagesStore, 
+            hardwareStore, 
+            campaignsStore, 
+            groupsStore, 
+            userStore
+        } = props.stores;
         this.websocketHandler = new WebsocketHandler(document.getElementById('ws-url').value, {
-            devicesStore: this.devicesStore,
-            packagesStore: this.packagesStore,
-            hardwareStore: this.hardwareStore,
-            campaignsStore: this.campaignsStore,
-            groupsStore: this.groupsStore,
+            devicesStore: devicesStore,
+            packagesStore: packagesStore,
+            hardwareStore: hardwareStore,
+            campaignsStore: campaignsStore,
+            groupsStore: groupsStore,
         });
-        this.logoutHandler = observe(this.userStore, (change) => {
+        this.logoutHandler = observe(userStore, (change) => {
             if(change.name === 'ifLogout' && change.object[change.name]) {
                 this.callFakeWsHandler();
                 doLogout();
@@ -90,6 +79,9 @@ class Main extends Component {
     }
     toggleWizard(wizardId, wizardName, e) {
         if(e) e.preventDefault();
+        const { 
+            packagesStore, 
+        } = this.props.stores;
         let minimizedWizard = {
             id: wizardId,
             name: wizardName
@@ -97,57 +89,80 @@ class Main extends Component {
         let wizardAlreadyMinimized = _.find(this.minimizedWizards, {id: wizardId});
         if(wizardAlreadyMinimized) {
             this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, { id: wizardId }), 1);
-            this.packagesStore.fetchPackages('packagesSafeFetchAsync');
+            packagesStore.fetchPackages('packagesSafeFetchAsync');
         }
         else
             this.minimizedWizards.push(minimizedWizard);
     }
     addNewWizard(skipStep = null) {
+        const { 
+            campaignsStore, 
+            packagesStore,
+            groupsStore,
+            hardwareStore,
+            featuresStore
+        } = this.props.stores;
         const wizard =
             <Wizard
-                campaignsStore={this.campaignsStore}
-                packagesStore={this.packagesStore}
-                groupsStore={this.groupsStore}
-                hardwareStore={this.hardwareStore}
+                campaignsStore={campaignsStore}
+                packagesStore={packagesStore}
+                groupsStore={groupsStore}
+                hardwareStore={hardwareStore}
                 wizardIdentifier={this.wizards.length}
                 hideWizard={this.hideWizard}
                 toggleWizard={this.toggleWizard}
                 minimizedWizards={this.minimizedWizards}
-                alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
                 skipStep={skipStep}
                 key={this.wizards.length}
             />;
         this.wizards = this.wizards.concat(wizard);
     }
     hideWizard(wizardIdentifier, e) {
+        const { 
+            campaignsStore           
+        } = this.props.stores;
         if(e) e.preventDefault();
         this.wizards = _.filter(this.wizards, wizard => parseInt(wizard.key, 10) !== parseInt(wizardIdentifier, 10));
         this.minimizedWizards.splice(_.findIndex(this.minimizedWizards, { id: wizardIdentifier }), 1);
-        this.campaignsStore._resetFullScreen();
+        campaignsStore._resetFullScreen();
     }
     callFakeWsHandler() {
+        const { 
+            devicesStore, 
+            packagesStore,
+            hardwareStore,
+            campaignsStore,
+            groupsStore
+        } = this.props.stores;
         let wsUrl = document.getElementById('ws-url').value.replace('bearer', 'logout');
         this.fakeWebsocketHandler = new WebsocketHandler(wsUrl, {
-            devicesStore: this.devicesStore,
-            packagesStore: this.packagesStore,
-            hardwareStore: this.hardwareStore,
-            campaignsStore: this.campaignsStore,
-            groupsStore: this.groupsStore,
+            devicesStore: devicesStore,
+            packagesStore: packagesStore,
+            hardwareStore: hardwareStore,
+            campaignsStore: campaignsStore,
+            groupsStore: groupsStore,
         });
         this.fakeWebsocketHandler.init();
     }
     componentWillMount() {
+        const { 
+            userStore, 
+            featuresStore,
+        } = this.props.stores;
         if(this.uiUserProfileMenu) {
-            this.userStore.fetchUser();
-            this.featuresStore.fetchFeatures();
-            this.userStore.fetchContracts();
+            userStore.fetchUser();
+            userStore.fetchContracts();
+            featuresStore.fetchFeatures();
         }        
         this.websocketHandler.init();
         window.atsGarageTheme = this.atsGarageTheme;
         this.context.router.listen(this.locationChange);
     }
     locationChange() {
-        if(!this.userStore._isTermsAccepted() && !this.context.router.isActive('/')) {
+        const { 
+            userStore, 
+        } = this.props.stores;
+        if(!userStore._isTermsAccepted() && !this.context.router.isActive('/')) {
             this.context.router.push('/');
         }
     }
@@ -166,63 +181,57 @@ class Main extends Component {
         window.history.go(-1);
     }
     toggleFleet(fleet, selectFirst = false, e) {
+        const { 
+            groupsStore,
+            devicesStore 
+        } = this.props.stores;
         if(e) e.preventDefault();
-        this.groupsStore.activeFleet = fleet;
-        this.groupsStore._filterGroups(fleet.id);
+        groupsStore.activeFleet = fleet;
+        groupsStore._filterGroups(fleet.id);
         if(selectFirst) {
-            const firstGroup = _.first(this.groupsStore.filteredGroups);
+            const firstGroup = _.first(groupsStore.filteredGroups);
             if(firstGroup) {
-                this.groupsStore.selectedGroup = {
+                groupsStore.selectedGroup = {
                     type: 'real',
                     groupName: firstGroup.groupName, 
                     id: firstGroup.id
                 };
-                this.devicesStore.fetchDevices(this.devicesStore.devicesFilter, firstGroup.id);
+                devicesStore.fetchDevices(devicesStore.devicesFilter, firstGroup.id);
             } else {
-                this.groupsStore.selectedGroup = {
+                groupsStore.selectedGroup = {
                     type: 'artificial',
                     groupName: 'all'
                 };
-                this.devicesStore.fetchDevices(this.devicesStore.devicesFilter, null);
+                devicesStore.fetchDevices(devicesStore.devicesFilter, null);
             }
         }
     }
     render() {
         const { children, ...rest } = this.props;
         const pageId = "page-" + (this.props.location.pathname.toLowerCase().split('/')[1] || "home");
+        const { 
+            featuresStore,
+            packagesStore
+        } = this.props.stores;
         return (
             <span>
                 <Navigation
-                    userStore={this.userStore}
-                    devicesStore={this.devicesStore}
-                    packagesStore={this.packagesStore}
-                    activeFleet={this.groupsStore.activeFleet}
                     location={pageId}
                     toggleSWRepo={this.toggleSWRepo}
                     uiUserProfileEdit={this.uiUserProfileEdit}
                     switchToSWRepo={this.switchToSWRepo}
-                    alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
                     uiUserProfileMenu={this.uiUserProfileMenu}
                     uiCredentialsDownload={this.uiCredentialsDownload}
                     toggleFleet={this.toggleFleet}
                 />
                 <div id={pageId} style={{
-                    height: this.featuresStore.alphaPlusEnabled && (pageId === 'page-packages' || pageId === 'page-devices') ? 'calc(100vh - 100px)' : 'calc(100vh - 50px)',
-                    padding: !this.featuresStore.alphaPlusEnabled && pageId === 'page-packages' ? '30px' : ''
+                    height: featuresStore.alphaPlusEnabled && (pageId === 'page-packages' || pageId === 'page-devices') ? 'calc(100vh - 100px)' : 'calc(100vh - 50px)',
+                    padding: !featuresStore.alphaPlusEnabled && pageId === 'page-packages' ? '30px' : ''
                 }}>
                     <FadeAnimation>                    
                         <children.type
                             {...rest}
                             children={children.props.children}
-                            devicesStore={this.devicesStore}
-                            hardwareStore={this.hardwareStore}
-                            groupsStore={this.groupsStore}
-                            packagesStore={this.packagesStore}
-                            campaignsStore={this.campaignsStore}
-                            impactAnalysisStore={this.impactAnalysisStore}
-                            featuresStore={this.featuresStore}
-                            provisioningStore={this.provisioningStore}
-                            userStore={this.userStore}
                             backButtonAction={this.backButtonAction}
                             addNewWizard={this.addNewWizard}
                             uiUserProfileEdit={this.uiUserProfileEdit}
@@ -230,7 +239,6 @@ class Main extends Component {
                             uiAutoFeatureActivation={this.uiAutoFeatureActivation}
                             uiUserProfileMenu={this.uiUserProfileMenu}
                             uiCredentialsDownload={this.uiCredentialsDownload}
-                            alphaPlusEnabled={this.featuresStore.alphaPlusEnabled}
                             toggleFleet={this.toggleFleet}
                         />
                     </FadeAnimation>
@@ -239,7 +247,7 @@ class Main extends Component {
                         minHeight={768}
                     />
                     <UploadBox 
-                        packagesStore={this.packagesStore}
+                        // packagesStore={this.packagesStore}
                         minimized={this.uploadBoxMinimized}
                         toggleUploadBoxMode={this.toggleUploadBoxMode}
                     />
@@ -248,7 +256,7 @@ class Main extends Component {
                         {this.uploadBoxMinimized ?
                             <div className="minimized__box">
                                 <div className="minimized__name">
-                                    Uploading {this.props.t('common.packageWithCount', {count: this.packagesStore.packagesUploading.length})}
+                                    Uploading {this.props.t('common.packageWithCount', {count: packagesStore.packagesUploading.length})}
                                 </div>
                                 <div className="minimized__actions">
                                     <a href="#" id="maximize-upload-box" title="Maximize upload box" onClick={this.toggleUploadBoxMode.bind(this)}>
@@ -289,7 +297,7 @@ class Main extends Component {
     
 }
 
-Main.contextTypes = {
+Main.wrappedComponent.contextTypes = {
     router: React.PropTypes.object.isRequired
 }
 

@@ -1,15 +1,17 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import { Loader } from '../../../partials';
 
+@inject("stores")
 @observer
 class Item extends Component {
     constructor(props) {
         super(props);
     }
     componentWillMount() {
-        const { userStore, fetch, date } = this.props;
+        const { fetch, date } = this.props;
+        const { userStore } = this.props.stores;
         if(fetch.active.status === null && !fetch.active.isFetching) {
             const startTime = date;
             const startTimeTmp = moment(startTime);
@@ -65,7 +67,7 @@ class Item extends Component {
 Item.propTypes = {
     usage: PropTypes.object.isRequired,
     fetch: PropTypes.object.isRequired,
-    userStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     date: PropTypes.object.isRequired,
 };
 

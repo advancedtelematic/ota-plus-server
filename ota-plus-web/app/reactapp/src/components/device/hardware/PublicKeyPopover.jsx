@@ -1,27 +1,28 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { FlatButton, Popover } from 'material-ui';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { VelocityTransitionGroup } from 'velocity-react';
 import _ from 'underscore';
 import { Loader } from '../../../partials';
 
+@inject("stores")
 @observer
 class PublicKeyPopover extends Component {
     constructor(props) {
         super(props);
     }
     componentWillMount() {
-        const { hardwareStore, device, serial } = this.props;
+        const { device, serial } = this.props;
+        const { hardwareStore } = this.props.stores;
         hardwareStore.fetchPublicKey(device.uuid, serial);
     }
     componentWillUnmount() {
-        const { hardwareStore } = this.props;
+        const { hardwareStore } = this.props.stores;
         hardwareStore._resetPublicKey();
     }
     render() {
         const { 
-            hardwareStore, 
             handleCopy,
             handleRequestClose, 
             popoverShown, 
@@ -29,6 +30,7 @@ class PublicKeyPopover extends Component {
             copied, 
             serial
         } = this.props;
+        const { hardwareStore } = this.props.stores;
         return (
             <Popover
                 className="hardware-pk-popover"
@@ -91,7 +93,7 @@ class PublicKeyPopover extends Component {
 }
 
 PublicKeyPopover.propTypes = {
-    hardwareStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     handleRequestClose: PropTypes.func.isRequired,
     popoverShown: PropTypes.bool.isRequired,
     anchorEl: PropTypes.oneOfType([

@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { browserHistory } from 'react-router';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'underscore';
 import { Header as BaseHeader, Loader, ConfirmationModal, EditModal, Dropdown } from '../../partials';
 import { FadeAnimation, AsyncStatusCallbackHandler } from '../../utils';
 import NetworkInfo from './NetworkInfo';
 
+@inject("stores")
 @observer
 class Header extends Component {
     @observable deleteConfirmationShown = false;
@@ -45,12 +46,16 @@ class Header extends Component {
     }
     deleteDevice(e) {
         if(e) e.preventDefault();
-        this.props.devicesStore.deleteDevice(this.props.devicesStore.device.uuid).then(() => {
+        const { devicesStore } = this.props.stores;
+        const { device } = devicesStore;
+        devicesStore.deleteDevice(device.uuid).then(() => {
             this.context.router.push('/devices');
         });
     }
     render() {
-        const { devicesStore, device, showQueueModal, queueButtonRef, backButtonAction } = this.props;
+        const { showQueueModal, queueButtonRef, backButtonAction } = this.props;
+        const { devicesStore } = this.props.stores;
+        const { device } = devicesStore;
         const lastSeenDate = new Date(device.lastSeen);
         const createdDate = new Date(device.createdAt);
         const activatedDate = new Date(device.activatedAt);
@@ -181,7 +186,6 @@ class Header extends Component {
                                     }
                                     shown={this.editNameShown}
                                     hide={this.hideEditName}
-                                    devicesStore={devicesStore}
                                     device={device}
                                 />
                             :
@@ -198,12 +202,12 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-    devicesStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     showQueueModal: PropTypes.func.isRequired,
     queueButtonRef: PropTypes.func.isRequired,
 }
 
-Header.contextTypes = {
+Header.wrappedComponent.contextTypes = {
     router: React.PropTypes.object.isRequired
 }
 

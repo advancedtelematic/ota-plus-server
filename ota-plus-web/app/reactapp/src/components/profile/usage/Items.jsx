@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { observable, toJS } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import _ from 'underscore';
 import moment from 'moment';
 import Item from './Item';
 import NoHistoryItem from './NoHistoryItem';
 
+@inject("stores")
 @observer
 class Items extends Component {
     @observable active = 0;
@@ -16,7 +17,8 @@ class Items extends Component {
         super(props);
     }
     generateElements() {
-        const { userStore, months } = this.props;
+        const { months } = this.props;
+        const { userStore } = this.props.stores;
         const inversedMonthUsageKeys = _.sortBy(months, (month) => {
             return month;
         }).reverse();
@@ -43,7 +45,6 @@ class Items extends Component {
                         key={i}
                         usage={usage}
                         fetch={fetch}
-                        userStore={userStore}
                         date={date}
                     />
                 );
@@ -72,7 +73,7 @@ class Items extends Component {
 }
 
 Items.propTypes = {
-    userStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     months: PropTypes.array.isRequired,
 };
 

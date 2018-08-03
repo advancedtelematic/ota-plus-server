@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import _ from 'underscore';
 import { FlatButton } from 'material-ui';
 import { Dropdown } from '../../partials';
 
+@inject("stores")
 @observer
 class ListItemVersion extends Component {
     @observable isShown = false;
@@ -22,7 +23,9 @@ class ListItemVersion extends Component {
         this.isShown = true;
     }
     render() {
-        const { version, showDependenciesModal, showDependenciesManager, packagesStore, alphaPlusEnabled, showDeleteConfirmation, showEditComment } = this.props;
+        const { version, showDependenciesModal, showDependenciesManager, showDeleteConfirmation, showEditComment } = this.props;
+        const { packagesStore, featuresStore } = this.props.stores;
+        const { alphaPlusEnabled } = featuresStore;
         let packageName = version.id.name;
         let borderStyle = {
             borderLeft: '10px solid #e1e1e1'
@@ -266,7 +269,7 @@ class ListItemVersion extends Component {
 
 ListItemVersion.propTypes = {
     version: PropTypes.object.isRequired,
-    packagesStore: PropTypes.object.isRequired
+    stores: PropTypes.object
 }
 
 export default ListItemVersion;

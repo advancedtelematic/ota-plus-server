@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
 import { Terms } from '../containers';
 import * as contracts from '../../../assets/contracts/';
@@ -7,13 +7,15 @@ import _ from 'underscore';
 
 const title = "Policy";
 
+@inject("stores")
 @observer
 class TermsAndConditions extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        const { userStore, backButtonAction } = this.props;
+        const { backButtonAction } = this.props;
+        const { userStore } = this.props.stores;
         let terms = _.find(userStore.contracts, (obj) => contracts.default[obj.contract]);
         const htmlDoc = terms && terms.contract  ? {__html: contracts.default[terms.contract]} : null;
         const oldTerms = (
@@ -34,7 +36,7 @@ class TermsAndConditions extends Component {
         return (
             <FadeAnimation>
                 <MetaData title={title}>
-                    <Terms userStore={userStore} backButtonAction={backButtonAction} checked={true}/>
+                    <Terms backButtonAction={backButtonAction} checked={true}/>
                 </MetaData>
             </FadeAnimation>
         );

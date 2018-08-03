@@ -11,23 +11,18 @@ class Profile extends Component {
         super(props);
     }
     render() {
-        const { userStore, provisioningStore, devicesStore, groupsStore, children, uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit } = this.props;
+        const { children, uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit } = this.props;
         return (
             <FadeAnimation>
                 <MetaData 
                     title={title}>
                     <ProfileHeader
-                        userStore={userStore}
                         uiUserProfileMenu={uiUserProfileMenu}
                         uiUserProfileEdit={uiUserProfileEdit}
                         uiCredentialsDownload={uiCredentialsDownload}
                     />
                     {children ?
                         <children.type
-                            userStore={userStore}
-                            provisioningStore={provisioningStore}
-                            devicesStore={devicesStore}
-                            groupsStore={groupsStore}
                             uiCredentialsDownload={uiCredentialsDownload}
                         />
                     :
@@ -37,10 +32,6 @@ class Profile extends Component {
             </FadeAnimation>
         );
     }
-}
-
-Profile.propTypes = {
-    userStore: PropTypes.object
 }
 
 export default Profile;

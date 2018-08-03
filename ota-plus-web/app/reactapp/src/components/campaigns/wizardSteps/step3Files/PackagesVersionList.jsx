@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { SelectField, MenuItem } from 'material-ui';
 import {Form, FormSelect, FormInput} from '../../../../partials/';
 import _ from 'underscore';
 import moment from 'moment';
 
+@inject("stores")
 @observer
 class PackagesVersionList extends Component {
     @observable fromVersions = [];
@@ -95,9 +96,10 @@ class PackagesVersionList extends Component {
         }
     }
     render() {
-        const { pack, selectedVersions, hardwareStore} = this.props;
-        let hardwareIds = hardwareStore.hardwareIds;
-        let tufPackages = _.uniq(this.props.packagesStore.packages, (item) => { return item.id.name });
+        const { pack, selectedVersions} = this.props;
+        const { hardwareStore, packagesStore } = this.props.stores;
+        let { hardwareIds } = hardwareStore;
+        let tufPackages = _.uniq(packagesStore.packages, (item) => { return item.id.name });
         tufPackages = _.map(tufPackages, (item) => {
             return {
                 text: item.id.name,
@@ -204,7 +206,7 @@ class PackagesVersionList extends Component {
 
 PackagesVersionList.propTypes = {
     pack: PropTypes.object.isRequired,
-    hardwareStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
 }
 
 export default PackagesVersionList;

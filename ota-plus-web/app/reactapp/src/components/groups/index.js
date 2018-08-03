@@ -1,9 +1,11 @@
 import GroupsCreateModal from './CreateModal';
-import GroupsListItem from './ListItem';
-import GroupsListItemArtificial from './ListItemArtificial';
+import GroupsHeader from './Header';
+import GroupsList from './List';
+import GroupsArtificialList from './ArtificialList';
 
 export {
     GroupsCreateModal,
-    GroupsListItem,
-    GroupsListItemArtificial,
+    GroupsHeader,
+    GroupsList,
+    GroupsArtificialList
 }

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observable, toJS, observe } from 'mobx';
 import _ from 'underscore';
 import Modal from './Modal';
@@ -13,6 +13,7 @@ const sankeyAlign = "left";
 const nodeColor = "grey";
 const linkColor = "grey";
 
+@inject("stores")
 @observer
 class DependenciesModal extends Component {
   @observable loaded = false;
@@ -27,9 +28,10 @@ class DependenciesModal extends Component {
 
   constructor(props) {
       super(props);
-      this.devicesFetchHandler = new AsyncStatusCallbackHandler(props.devicesStore, 'devicesFetchAsync', this.devicesFetched.bind(this));
-      this.campaignsFetchHandler = new AsyncStatusCallbackHandler(props.campaignsStore, 'campaignsSafeFetchAsync', this.campaignsFetched.bind(this));
-      this.packagesFetchHandler = new AsyncStatusCallbackHandler(props.packagesStore, 'packagesFetchAsync', this.packagesFetched.bind(this));
+      const { devicesStore, packagesStore, campaignsStore } = props.stores;
+      this.devicesFetchHandler = new AsyncStatusCallbackHandler(devicesStore, 'devicesFetchAsync', this.devicesFetched.bind(this));
+      this.campaignsFetchHandler = new AsyncStatusCallbackHandler(campaignsStore, 'campaignsSafeFetchAsync', this.campaignsFetched.bind(this));
+      this.packagesFetchHandler = new AsyncStatusCallbackHandler(packagesStore, 'packagesFetchAsync', this.packagesFetched.bind(this));
       this.onLinkMouseAction = this.onLinkMouseAction.bind(this);
       this.onLinkClick = this.onLinkClick.bind(this);
       this.getCampaignStatus = this.getCampaignStatus.bind(this);
@@ -45,11 +47,12 @@ class DependenciesModal extends Component {
     window.addEventListener("resize", this.resizeSankey);
   }
   componentWillMount() {
-      this.props.devicesStore.fetchDevices().then(() => {
+      const { devicesStore, campaignsStore, packagesStore } = this.props.stores;
+      devicesStore.fetchDevices().then(() => {
         if(window.location.href.indexOf('/packages') > -1) {
-          this.props.campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
+          campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
         } else {
-          this.props.packagesStore.fetchPackages();
+          packagesStore.fetchPackages();
         }
       });
   }
@@ -63,10 +66,11 @@ class DependenciesModal extends Component {
     }
   }
   componentWillUnmount() {
+    const { devicesStore } = this.props.stores;
     this.devicesFetchHandler();
     this.campaignsFetchHandler();
     this.packagesFetchHandler();
-    this.props.devicesStore._reset();
+    devicesStore._reset();
     window.removeEventListener("resize", this.resizeSankey);
   }
   showFullGraph() {
@@ -102,7 +106,8 @@ class DependenciesModal extends Component {
       });
   }
   onLinkClick(linkdata, event) {
-    const { packagesStore, campaignsStore, hide } = this.props;
+    const { hide } = this.props;
+    const { campaignsStore } = this.props.stores;
     let clickedItemType = linkdata.target.type;
     switch(clickedItemType) {
       case 'pack':
@@ -130,7 +135,7 @@ class DependenciesModal extends Component {
     return campaign.summary.status === 'finished' || campaign.summary.status === 'cancelled' ? 'finished' : campaign.summary.status === 'launched' ? 'running' : 'other';
   }
   devicesFetched() {
-    const { devicesStore, packagesStore } = this.props;
+    const { devicesStore } = this.props.stores;
     _.each(devicesStore.devices, (device, index) => {
       devicesStore.fetchMultiTargetUpdates(device.uuid);
       devicesStore.fetchPrimaryAndSecondaryFilepaths(device.uuid).then((filepaths) => {
@@ -139,10 +144,11 @@ class DependenciesModal extends Component {
     });
   }
   packagesFetched() {
-    this.props.campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
+    const { campaignsStore } = this.props.stores;
+    campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
   }
   campaignsFetched() {
-    const { campaignsStore, devicesStore, packagesStore } = this.props;
+    const { devicesStore, packagesStore } = this.props.stores;
     _.each(devicesStore.multiTargetUpdatesSaved, (mtuUpdate, i) => {
       let packageHash = mtuUpdate.targets[Object.keys(mtuUpdate.targets)[0]].image.fileinfo.hashes.sha256;
       let pack = _.find(packagesStore.packages, (pack) => {
@@ -166,7 +172,7 @@ class DependenciesModal extends Component {
     this.formatData();
   }
   prepareNodesAndLinks(source, highlight = false) {
-    const { campaignsStore, devicesStore, packagesStore } = this.props;
+    const { campaignsStore, devicesStore, packagesStore } = this.props.stores;
     let devicesWithQueue = [];
     let devicesWithInstalled = [];
 
@@ -442,7 +448,7 @@ class DependenciesModal extends Component {
     });
   }
   formatData(removeHandler = false) {
-    const { devicesStore, packagesStore, campaignsStore } = this.props;
+    const { devicesStore, packagesStore, campaignsStore } = this.props.stores;
     if(removeHandler) {
       this.sankeyModeHandler();
     }
@@ -530,7 +536,7 @@ class DependenciesModal extends Component {
     return html.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
   }
   render() {
-      const { shown, hide, packagesStore, campaignsStore, devicesStore } = this.props;
+      const { shown, hide } = this.props;
       const content = (
           this.loaded ?
             <span>              
@@ -599,9 +605,10 @@ class DependenciesModal extends Component {
 }
 
 DependenciesModal.propTypes = {
+  stores: PropTypes.object
 }
 
-DependenciesModal.contextTypes = {
+DependenciesModal.wrappedComponent.contextTypes = {
     router: React.PropTypes.object.isRequired
 }
 

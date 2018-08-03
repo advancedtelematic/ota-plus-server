@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { observable, observe } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
 import Versions from './Versions';
 import { SlideAnimation } from '../../utils';
 
 const headerHeight = 30;
 
+@inject("stores")
 @observer
 class BlacklistedPackages extends Component {
     @observable firstShownIndex = 0;
@@ -18,11 +19,12 @@ class BlacklistedPackages extends Component {
 
     constructor(props) {
         super(props);
+        const { packagesStore } = props.stores;
         this.togglePackage = this.togglePackage.bind(this);
         this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
         this.generateItemsPositions = this.generateItemsPositions.bind(this);
         this.listScroll = this.listScroll.bind(this);
-        this.packagesChangeHandler = observe(props.packagesStore, (change) => {
+        this.packagesChangeHandler = observe(packagesStore, (change) => {
             if(change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
                   setTimeout(() => {
@@ -60,7 +62,7 @@ class BlacklistedPackages extends Component {
         return positions;
     }
     listScroll() {
-        const { packagesStore } = this.props;
+        const { packagesStore } = this.props.stores;
         if(this.refs.list) {
             const headersPositions = this.generateHeadersPositions();
             const itemsPositions = this.generateItemsPositions();
@@ -95,7 +97,7 @@ class BlacklistedPackages extends Component {
         this.expandedPackage = this.expandedPackage !== name ? name : null;
     }
     render() {
-        const { packagesStore } = this.props; 
+        const { packagesStore } = this.props.stores; 
         const blacklist = packagesStore.preparedBlacklist;
         return (
             <div className="blacklisted-packages-panel">
@@ -160,7 +162,7 @@ class BlacklistedPackages extends Component {
 }
 
 BlacklistedPackages.propTypes = {
-    packagesStore: PropTypes.object.isRequired
+    stores: PropTypes.object
 }
 
 export default BlacklistedPackages;

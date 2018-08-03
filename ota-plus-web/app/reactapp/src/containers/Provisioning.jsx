@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Loader } from '../partials';
 import { resetAsync } from '../utils/Common';
 import { 
@@ -11,6 +11,7 @@ import {
 } from '../components/profile/access-keys';
 import { AsyncStatusCallbackHandler } from '../utils';
 
+@inject("stores")
 @observer
 class Provisioning extends Component {
     @observable tooltipShown = false;
@@ -38,14 +39,16 @@ class Provisioning extends Component {
     }
     hideCreateModal(e) {
         if(e) e.preventDefault();
+        const { provisioningStore } = this.props.stores;
         this.createModalShown = false;
-        resetAsync(this.props.provisioningStore.provisioningKeyCreateAsync);
+        resetAsync(provisioningStore.provisioningKeyCreateAsync);
     }
     changeFilter(filter) {
-        this.props.provisioningStore._filterProvisioningKeys(filter);
+        const { provisioningStore } = this.props.stores;
+        provisioningStore._filterProvisioningKeys(filter);
     }
     render() {
-        const { provisioningStore } = this.props;
+        const { provisioningStore } = this.props.stores;
         return (
             <span>
                 {provisioningStore.provisioningStatusFetchAsync.isFetching ?
@@ -61,7 +64,6 @@ class Provisioning extends Component {
                                 changeFilter={this.changeFilter}
                             />
                             <ProvisioningList 
-                                provisioningStore={provisioningStore}
                                 showTooltip={this.showTooltip}
                             />
                         </span>
@@ -79,7 +81,6 @@ class Provisioning extends Component {
                 <ProvisioningCreateModal 
                     shown={this.createModalShown}
                     hide={this.hideCreateModal}
-                    provisioningStore={provisioningStore}
                 />
             </span>
         );
@@ -87,7 +88,7 @@ class Provisioning extends Component {
 }
 
 Provisioning.propTypes = {
-    provisioningStore: PropTypes.object
+    stores: PropTypes.object
 }
 
 export default Provisioning;

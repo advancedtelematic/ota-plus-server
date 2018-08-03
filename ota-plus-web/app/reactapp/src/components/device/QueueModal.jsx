@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { Popover } from 'material-ui';
 import { QueueMtuList } from './queue';
 import { HistoryMtuList } from './history';
 import _ from 'underscore';
 
+@inject("stores")
 @observer
 class QueueModal extends Component {
     static checkStatus(status) {
@@ -30,8 +31,9 @@ class QueueModal extends Component {
         super(props);
     }
     render() {
-        const { packagesStore, devicesStore, shown, hide, cancelMtuUpdate, activeTabId, setQueueModalActiveTabId, anchorEl, alphaPlusEnabled, showSequencer } = this.props;
-        const device = devicesStore.device;
+        const { shown, hide, cancelMtuUpdate, activeTabId, setQueueModalActiveTabId, anchorEl, showSequencer } = this.props;
+        const { devicesStore } = this.props.stores;
+        const { device } = devicesStore;
         const installationStatus = QueueModal.checkStatus(device.deviceStatus);
         const content = (
             <span>
@@ -48,9 +50,7 @@ class QueueModal extends Component {
                         onActive={setQueueModalActiveTabId.bind(this, 0)}
                     >
                         <QueueMtuList 
-                            devicesStore={devicesStore}
                             cancelMtuUpdate={cancelMtuUpdate}
-                            alphaPlusEnabled={alphaPlusEnabled}
                             showSequencer={showSequencer}
                         />
                     </Tab>
@@ -62,7 +62,6 @@ class QueueModal extends Component {
                         onActive={setQueueModalActiveTabId.bind(this, 1)}
                     >
                         <HistoryMtuList
-                            packagesStore={packagesStore}
                             device={device}
                         />
                     </Tab>
@@ -97,8 +96,7 @@ class QueueModal extends Component {
 }
 
 QueueModal.propTypes = {
-    packagesStore: PropTypes.object.isRequired,
-    devicesStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
     activeTabId: PropTypes.number.isRequired,

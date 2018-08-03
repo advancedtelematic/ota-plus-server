@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import Items from './usage/Items';
 
@@ -12,6 +12,7 @@ for(var i = 0; i <= monthsCount; i++) {
     months.push(date.format('YYYYMM'));
 }
 
+@inject("stores")
 @observer
 class Usage extends Component {
     constructor(props) {
@@ -19,11 +20,12 @@ class Usage extends Component {
         this.fetchUsage = this.fetchUsage.bind(this);
     }
     componentWillMount() {
-        this.props.userStore._setUsageInitial(startTime, monthsCount);
+        const { userStore } = this.props.stores;
+        userStore._setUsageInitial(startTime, monthsCount);
         this.fetchUsage();
     }
     fetchUsage() {
-        const { userStore } = this.props;
+        const { userStore } = this.props.stores;
         for(var i = monthsCount; i >= monthsCount - 2; i--) {
             const startTimeTmp = moment(startTime).add(i, 'months');
             const endTimeTmp = moment(startTimeTmp).add(1, 'months');
@@ -33,7 +35,6 @@ class Usage extends Component {
         }
     }
     render() {
-        const { userStore } = this.props;
         return (
             <div className="profile-container" id="usage">
                 <div className="section-header">
@@ -52,7 +53,6 @@ class Usage extends Component {
                 </div>
                 <div className="usage-info">
                     <Items
-                        userStore={userStore}
                         months={months}
                     />
                 </div>
@@ -62,7 +62,7 @@ class Usage extends Component {
 }
 
 Usage.propTypes = {
-    userStore: PropTypes.object
+    stores: PropTypes.object
 };
 
 export default Usage;

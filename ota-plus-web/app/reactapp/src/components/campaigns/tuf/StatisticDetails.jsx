@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'underscore';
 import { Doughnut } from 'react-chartjs';
@@ -10,6 +10,7 @@ import { CampaignTufGroupsList, CampaignTufSubHeader } from '../../campaign/tuf'
 const AUTO_REFRESH_TIME = 10000;
 const tooltipText = "Show dependencies";
 
+@inject("stores")
 @observer
 class StatisticDetails extends Component {
     @observable tmpIntervalId = null;
@@ -20,15 +21,17 @@ class StatisticDetails extends Component {
         this.tmpIntervalId = setInterval(this.autoRefresh, AUTO_REFRESH_TIME);
     }
     autoRefresh() {
-        if(this.props.campaignsStore.campaign.statistics.status === "prepared" || this.props.campaignsStore.campaign.statistics.status === "scheduled") {
-            this.props.campaignsStore.fetchCampaign(this.props.campaignsStore.campaign.id, 'campaignsOneSafeFetchAsync' ,'campaignsOneSafeStatisticsFetchAsync');
+        const { campaignsStore } = this.props.stores;
+        if(campaignsStore.campaign.statistics.status === "prepared" || campaignsStore.campaign.statistics.status === "scheduled") {
+            campaignsStore.fetchCampaign(campaignsStore.campaign.id, 'campaignsOneSafeFetchAsync' ,'campaignsOneSafeStatisticsFetchAsync');
         }
     }
     componentWillUnmount() {
         clearInterval(this.tmpIntervalId);
     }
     render() {
-        const { campaignsStore, groupsStore, showCancelCampaignModal, showDependenciesModal, hideCancel } = this.props;
+        const { showCancelCampaignModal, showDependenciesModal, hideCancel } = this.props;
+        const { campaignsStore } = this.props.stores;
         let overallStatistics = campaignsStore.overallCampaignStatistics;
         const progress = Math.min(Math.round(overallStatistics.finished/Math.max(overallStatistics.affected, 1) * 100), 100);
         const failureRateData = [
@@ -68,8 +71,7 @@ class StatisticDetails extends Component {
             <div className="statistics">
 
                 <CampaignTufSubHeader
-                    campaignsStore={campaignsStore}
-                    title={campaignsStore.campaign.name}
+                    campaign={campaignsStore.campaign}
                     showCancelCampaignModal={showCancelCampaignModal}
                     hideCancel={hideCancel}
                 />
@@ -166,11 +168,7 @@ class StatisticDetails extends Component {
                             </div>                            
                                                    
                         </div>
-
-                        <CampaignTufGroupsList
-                            campaignsStore={campaignsStore}
-                            groupsStore={groupsStore}
-                        />                
+                        <CampaignTufGroupsList />                
                     </div>
                 </div>       
             </div>

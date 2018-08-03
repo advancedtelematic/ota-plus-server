@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { SubHeader } from '../../partials';
 import _ from 'underscore';
 import DeviceItem from './Item';
@@ -67,6 +67,7 @@ const connectionsData = {
     }
 };
 
+@inject('stores')
 @observer
 export default class ContentPanel extends Component {
     constructor(props) {
@@ -80,14 +81,15 @@ export default class ContentPanel extends Component {
     }
 
     render() {
-        const { devicesStore, groupsStore, changeFilter, alphaPlusEnabled, showDeleteConfirmation, showEditName, addNewWizard } = this.props;
+        const { changeFilter, showDeleteConfirmation, showEditName, addNewWizard } = this.props;
+        const { devicesStore, featuresStore, groupsStore } = this.props.stores;
+        const { alphaPlusEnabled } = featuresStore;
         return (
             <div className="devices-panel">
                 <ContentPanelHeader 
                     devicesFilter={devicesStore.devicesFilter}
                     changeFilter={changeFilter}
                     addNewWizard={addNewWizard}
-                    activeGroup={groupsStore.selectedGroup}
                 />
                 <div className="devices-panel__wrapper">
                     {alphaPlusEnabled ?
@@ -116,14 +118,16 @@ export default class ContentPanel extends Component {
                                 _.map(devicesStore.devices, (device) => {
                                     return (
                                         <DeviceItem
-                                            groupsStore={groupsStore}
-                                            devicesStore={devicesStore}
                                             device={device}
                                             goToDetails={this.goToDetails}
-                                            alphaPlusEnabled={alphaPlusEnabled}
                                             showDeleteConfirmation={showDeleteConfirmation}
                                             showEditName={showEditName}
                                             key={device.uuid}
+                                            stores={{
+                                                devicesStore: devicesStore, 
+                                                featuresStore: featuresStore,
+                                                groupsStore: groupsStore
+                                            }}
                                         />
                                     );
                                 })
@@ -207,13 +211,12 @@ export default class ContentPanel extends Component {
     }
 }
 
-ContentPanel.contextTypes = {
+ContentPanel.wrappedComponent.contextTypes = {
     router: React.PropTypes.object.isRequired
 }
 
 ContentPanel.propTypes = {
-    devicesStore: PropTypes.object.isRequired,
-    groupsStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     changeFilter: PropTypes.func.isRequired
 }
 
