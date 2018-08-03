@@ -273,82 +273,14 @@ class BuildSrvApi(val conf: Configuration, val apiExec: ApiClientExec) extends O
   }
 }
 
-class DirectorApi(val conf: Configuration, val apiExec: ApiClientExec)
-  extends OtaPlusConfig with CirceJsonBodyWritables {
-
-  private val request = ApiRequest.base(directorApiUri + "/api/v1/")
-
-  private val log = Logger(this.getClass)
-
-  case class DirectorApiError(msg: String) extends Exception(msg) with NoStackTrace
-
-  def repoExists(namespace: Namespace)(implicit ec: ExecutionContext): Future[Boolean] = {
-    request("admin/repo/root.json")
-      .withNamespace(Some(namespace))
-      .execResult(apiExec)
-      .map { result =>
-        if(result.header.status == Status.OK) {
-          true
-        } else {
-          log.info(s"Resource not ready: $result")
-          false
-        }
-      }
-  }
-
-
-  def createRepo(namespace: Namespace, keyType: KeyType)(implicit ec: ExecutionContext): Future[Unit] =
-    request("admin/repo")
-      .transform(_.withBody(CreateRepositoryRequest(keyType).asJson).withMethod("POST"))
-      .withNamespace(Some(namespace))
-      .execResult(apiExec)
-      .flatMap { result =>
-        if (result.header.status == Status.CREATED) {
-          log.info(s"director repo created for $namespace")
-          FastFuture.successful(())
-        } else {
-          FastFuture.failed(DirectorApiError(s"Error creating director repo. Response from director: $result"))
-        }
-      }
-}
-
 class RepoServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig
                                                                                  with CirceJsonBodyWritables {
   private val request = ApiRequest.base(repoApiUri + "/api/v1/")
-
-  case class RepoServerError(msg: String) extends Exception(msg) with NoStackTrace
-
-  private val log = Logger(this.getClass)
 
   def rootJsonResult(namespace: Namespace)(implicit ec: ExecutionContext): Future[Result] =
     request("user_repo/root.json")
       .withNamespace(Some(namespace))
       .execResult(apiExec)
-
-  def repoExists(namespace: Namespace)(implicit ec: ExecutionContext): Future[Boolean] = {
-    rootJsonResult(namespace).map { result =>
-      if(result.header.status == 200) {
-        true
-      } else {
-        log.info(s"Resource not ready: $result")
-        false
-      }
-    }
-  }
-
-  def createRepo(namespace: Namespace, keyType: KeyType)(implicit ec: ExecutionContext): Future[Unit] =
-    request("user_repo")
-      .transform(_.withBody(CreateRepositoryRequest(keyType).asJson).withMethod("POST"))
-      .withNamespace(Some(namespace))
-      .execResult(apiExec)
-      .flatMap { result =>
-        if(result.header.status == 200) {
-          log.info(s"tuf repo created for $namespace")
-          FastFuture.successful(())
-        } else {
-          FastFuture.failed(RepoServerError(s"Error creating repo. Response from tuf-reposerver: $result"))
-        }
-      }
 }
 
 class KeyServerApi(val conf: Configuration, val apiExec: ApiClientExec) extends OtaPlusConfig {
