@@ -20,15 +20,15 @@ class SubHeader extends Component {
         this.hideEditModal = this.hideEditModal.bind(this);
     }
     componentWillMount() {
-        this.oldCampaignName = this.props.title;
-        this.newCampaignName = this.props.title;
-        this.newCampaignNameLength = this.props.title.length;
+        this.oldCampaignName = this.props.campaign.name;
+        this.newCampaignName = this.props.campaign.name;
+        this.newCampaignNameLength = this.props.campaign.name.length;
     }
     componentWillReceiveProps(nextProps) {
-        if(!_.isEmpty(nextProps.title)) {
-            this.oldCampaignName = nextProps.title;
-            this.newCampaignName = nextProps.title;
-            this.newCampaignNameLength = nextProps.title.length;
+        if(!_.isEmpty(nextProps.campaign.name)) {
+            this.oldCampaignName = nextProps.campaign.name;
+            this.newCampaignName = nextProps.campaign.name;
+            this.newCampaignNameLength = nextProps.campaign.name.length;
         }
     }
     showEditModal(e) {
@@ -45,12 +45,12 @@ class SubHeader extends Component {
         this.submenuIsShown = true;
     }
     render() {
-        const { campaignsStore, showCancelCampaignModal, hideCancel = true } = this.props;
+        const { campaign, showCancelCampaignModal, hideCancel = true } = this.props;
         return (
             <div className="statistics__campaign-name">
                 {this.newCampaignName}
                 <div className="statistics__campaign-actions">
-                    {campaignsStore.campaign.statistics.status === 'launched' || campaignsStore.campaign.statistics.status === 'scheduled' ?
+                    {campaign.statistics.status === 'launched' || campaign.statistics.status === 'scheduled' ?
                         <div className="cancel-campaign">
                             <button id="campaign-detail-cancel-all" className="delete-button fixed-width" onClick={showCancelCampaignModal}>
                                 Cancel campaign
@@ -84,7 +84,6 @@ class SubHeader extends Component {
                     )}
                     shown={this.editModal}
                     hide={this.hideEditModal}
-                    campaignsStore={campaignsStore}
                     defaultValue={this.newCampaignName}
                 />
             </div>

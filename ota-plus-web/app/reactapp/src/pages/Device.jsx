@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable, observe } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { browserHistory } from 'react-router';
 import _ from 'underscore';
 import { MetaData, FadeAnimation } from '../utils';
@@ -10,6 +10,7 @@ import { DeviceHeader, DeviceQueueModal, DeviceSequencerModal } from '../compone
 
 const title = "Device";
 
+@inject("stores")
 @observer
 class Device extends Component {
     queueAnchorEl = null;
@@ -30,19 +31,21 @@ class Device extends Component {
         this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
         this.installTufPackage = this.installTufPackage.bind(this);
 
-        this.packagesFetchHandler = observe(props.packagesStore, (change) => {
+        const { packagesStore, devicesStore } = props.stores;
+
+        this.packagesFetchHandler = observe(packagesStore, (change) => {
             if(change.name === 'packagesFetchAsync' && !change.object[change.name].isFetching) {
                 this.selectEcu(
-                    props.devicesStore._getPrimaryHardwareId(), 
-                    props.devicesStore._getPrimarySerial(), 
-                    props.devicesStore._getPrimaryFilepath(), 
+                    devicesStore._getPrimaryHardwareId(), 
+                    devicesStore._getPrimarySerial(), 
+                    devicesStore._getPrimaryFilepath(), 
                     'primary'
                 );
                 this.packagesReady = true;
             }
         });
 
-        this.autoInstallHandler = observe(props.packagesStore, (change) => {
+        this.autoInstallHandler = observe(packagesStore, (change) => {
             if((change.name === 'packagesEnableAutoInstallAsync' || change.name === 'packagesDisableAutoInstallAsync') 
                 && !_.isMatch(change.oldValue, change.object[change.name])) {
                     this.disableExpand = true;
@@ -50,19 +53,21 @@ class Device extends Component {
         });
     }
     componentWillMount() {
-        this.props.packagesStore.page = 'device';
-        this.props.devicesStore.fetchDevice(this.props.params.id).then(() => {
-            this.props.devicesStore.fetchDeviceNetworkInfo(this.props.params.id);
-            this.props.packagesStore.fetchPackages();
-            this.props.devicesStore.fetchMultiTargetUpdates(this.props.params.id);       
+        const { packagesStore, devicesStore } = this.props.stores;
+        packagesStore.page = 'device';
+        devicesStore.fetchDevice(this.props.params.id).then(() => {
+            devicesStore.fetchDeviceNetworkInfo(this.props.params.id);
+            packagesStore.fetchPackages();
+            devicesStore.fetchMultiTargetUpdates(this.props.params.id);       
         });
     }
     componentWillUnmount() {
+        const { packagesStore, devicesStore, hardwareStore } = this.props.stores;
         this.packagesFetchHandler();
         this.autoInstallHandler();
-        this.props.devicesStore._reset();
-        this.props.packagesStore._reset();
-        this.props.hardwareStore._reset();
+        devicesStore._reset();
+        packagesStore._reset();
+        hardwareStore._reset();
     }
     showSequencer(e) {
         if(e) e.preventDefault();
@@ -81,13 +86,14 @@ class Device extends Component {
         this.setQueueModalActiveTabId(0);
     }
     setQueueModalActiveTabId(tabId) {
+        const { packagesStore, devicesStore } = this.props.stores;
         this.activeTabId = tabId;
         if(tabId === 1) {
-            this.props.packagesStore.fetchPackagesHistory(this.props.devicesStore.device.uuid, this.props.packagesStore.packagesHistoryFilter);
+            packagesStore.fetchPackagesHistory(devicesStore.device.uuid, packagesStore.packagesHistoryFilter);
         }
     }
     cancelMtuUpdate(updateId) {
-        const { devicesStore } = this.props;
+        const { devicesStore } = this.props.stores;
         let deviceId = this.props.params.id;
         let data = {
             update: updateId,
@@ -97,7 +103,7 @@ class Device extends Component {
     }
     selectEcu(hardwareId, serial, filepath, type, e) {
         if(e) e.preventDefault();
-        const { packagesStore, devicesStore, hardwareStore } = this.props;
+        const { packagesStore, devicesStore, hardwareStore } = this.props.stores;
         hardwareStore.activeEcu = {
             hardwareId: hardwareId,
             serial: serial,
@@ -115,26 +121,19 @@ class Device extends Component {
         this.disableExpand = false;
     }
     installTufPackage(data) {
-        const { packagesStore, devicesStore, hardwareStore } = this.props;
+        const { packagesStore, devicesStore, hardwareStore } = this.props.stores;
         data.hardwareId = hardwareStore.activeEcu.hardwareId;
         devicesStore.createMultiTargetUpdate(data, devicesStore.device.uuid);
         this.showQueueModal();
     }
     render() {
         const { 
-            devicesStore, 
-            packagesStore, 
-            campaignsStore, 
-            hardwareStore, 
-            backButtonAction,
-            alphaPlusEnabled
+            backButtonAction
         } = this.props;
         return (
             <FadeAnimation>
                 <span>
                     <DeviceHeader
-                        devicesStore={devicesStore}
-                        device={devicesStore.device}
                         showQueueModal={this.showQueueModal}
                         queueButtonRef={el => this.queueAnchorEl = el}
                         backButtonAction={backButtonAction}
@@ -142,10 +141,6 @@ class Device extends Component {
                     <MetaData 
                         title={title}>
                         <DeviceContainer 
-                            devicesStore={devicesStore}
-                            packagesStore={packagesStore}
-                            campaignsStore={campaignsStore}
-                            hardwareStore={hardwareStore}
                             selectEcu={this.selectEcu}
                             packagesReady={this.packagesReady}
                             disableExpand={this.disableExpand}
@@ -153,23 +148,18 @@ class Device extends Component {
                         />
                     </MetaData>
                     <DeviceQueueModal
-                        packagesStore={packagesStore}
-                        devicesStore={devicesStore}
                         shown={this.queueModalShown}
                         hide={this.hideQueueModal}
                         cancelMtuUpdate={this.cancelMtuUpdate}
                         activeTabId={this.activeTabId}
                         setQueueModalActiveTabId={this.setQueueModalActiveTabId}
                         anchorEl={this.queueAnchorEl}
-                        alphaPlusEnabled={alphaPlusEnabled}
                         showSequencer={this.showSequencer}
                     />
                     {this.sequencerShown ?
                         <DeviceSequencerModal 
                             shown={this.sequencerShown}
                             hide={this.hideSequencer}
-                            campaignsStore={campaignsStore}
-                            devicesStore={devicesStore}
                         />
                     :
                         null
@@ -181,10 +171,7 @@ class Device extends Component {
 }
 
 Device.propTypes = {
-    devicesStore: PropTypes.object,
-    packagesStore: PropTypes.object,
-    campaignsStore: PropTypes.object,
-    hardwareStore: PropTypes.object,
+    stores: PropTypes.object,
 }
 
 export default Device;

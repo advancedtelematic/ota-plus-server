@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { CampaignsTufList } from './tuf';
 import CampaignsHeader from './Header';
@@ -9,6 +9,7 @@ import ReactDOM from 'react-dom';
 
 const headerHeight = 28;
 
+@inject("stores")
 @observer
 class List extends Component {
     @observable fakeHeaderLetter = '';
@@ -57,7 +58,8 @@ class List extends Component {
         }
     }
     render() {
-        const { campaignsStore, groupsStore, highlightedCampaign, showCancelCampaignModal, showCancelGroupModal, showDependenciesModal, expandedCampaignName, toggleCampaign, addNewWizard } = this.props;
+        const { highlightedCampaign, showCancelCampaignModal, showDependenciesModal, expandedCampaignName, toggleCampaign, addNewWizard } = this.props;
+        const { campaignsStore } = this.props.stores;
         return (
             <div className="campaigns" ref="list">
                 {campaignsStore.preparedCampaigns.length ?
@@ -79,8 +81,6 @@ class List extends Component {
                             null
                         }
                         <CampaignsTufList
-                            campaignsStore={campaignsStore}
-                            groupsStore={groupsStore}
                             highlightedCampaign={highlightedCampaign}
                             showCancelCampaignModal={showCancelCampaignModal}
                             showDependenciesModal={showDependenciesModal}
@@ -96,7 +96,8 @@ class List extends Component {
     }
 }
 
-List.propTypes = {    
+List.propTypes = {
+    stores: PropTypes.object
 }
 
 export default List;

@@ -69,7 +69,7 @@ export default class UserStore {
 
     _isTermsAccepted() {
         const terms = _.find(this.contracts, obj => contracts.default[obj.contract]);
-        return terms && terms.accepted;
+        return terms && terms.accepted ? true : false;
     }
 
     acceptContract(path) {

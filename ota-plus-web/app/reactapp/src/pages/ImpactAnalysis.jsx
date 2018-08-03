@@ -1,30 +1,28 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
 import { ImpactAnalysisContainer } from '../containers';
 import { translate } from 'react-i18next';
 
 const title = "Impact analysis";
 
+@inject("stores")
 @observer
 class ImpactAnalysis extends Component {
     constructor(props) {
         super(props);
     }
     componentWillMount() {
-        this.props.packagesStore.fetchBlacklist(true, true);
-        this.props.impactAnalysisStore.fetchImpactAnalysis();
+        const { packagesStore, impactAnalysisStore } = this.props.stores;
+        packagesStore.fetchBlacklist(true, true);
+        impactAnalysisStore.fetchImpactAnalysis();
     }
     render() {
-        const { t, packagesStore, impactAnalysisStore } = this.props;
         return (
             <FadeAnimation>
                 <MetaData 
                     title={title}>
-                    <ImpactAnalysisContainer 
-                        packagesStore={packagesStore}
-                        impactAnalysisStore={impactAnalysisStore}
-                    />
+                    <ImpactAnalysisContainer />
                 </MetaData>
             </FadeAnimation>
         );
@@ -32,8 +30,7 @@ class ImpactAnalysis extends Component {
 }
 
 ImpactAnalysis.propTypes = {
-    packagesStore: PropTypes.object,
-    impactAnalysisStore: PropTypes.object
+    stores: PropTypes.object,
 }
 
-export default translate()(ImpactAnalysis);
+export default ImpactAnalysis;

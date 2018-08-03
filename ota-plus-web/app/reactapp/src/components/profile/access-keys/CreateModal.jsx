@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Modal, AsyncResponse, FormInput } from '../../../partials';
 import { AsyncStatusCallbackHandler } from '../../../utils';
 import { Form } from 'formsy-react';
@@ -9,13 +9,15 @@ import { FlatButton } from 'material-ui';
 import serialize from 'form-serialize';
 import moment from 'moment';
 
+@inject("stores")
 @observer
 class CreateModal extends Component {
     @observable submitButtonDisabled = true;
 
     constructor(props) {
         super(props);
-        this.createHandler = new AsyncStatusCallbackHandler(props.provisioningStore, 'provisioningKeyCreateAsync', props.hide);
+        const { provisioningStore } = this.props.stores;
+        this.createHandler = new AsyncStatusCallbackHandler(provisioningStore, 'provisioningKeyCreateAsync', props.hide);
     }
     componentWillUnmount() {
         this.createHandler();
@@ -27,11 +29,13 @@ class CreateModal extends Component {
         this.submitButtonDisabled = true;
     }
     submitForm() {
+        const { provisioningStore } = this.props.stores;
         let data = serialize(document.querySelector('#provisioning-key-create-form'), { hash: true });
-        this.props.provisioningStore.createProvisioningKey(data);
+        provisioningStore.createProvisioningKey(data);
     }
     render() {
-        const { shown, hide, provisioningStore } = this.props;
+        const { shown, hide } = this.props;
+        const { provisioningStore } = this.props.stores;
         const form = (
             <Form
                 onValidSubmit={this.submitForm.bind(this)}
@@ -106,7 +110,7 @@ class CreateModal extends Component {
 CreateModal.propTypes = {
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
-    provisioningStore: PropTypes.object.isRequired
+    stores: PropTypes.object
 }
 
 export default CreateModal;

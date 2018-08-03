@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import PublicKeyPopover from './PublicKeyPopover';
 import _ from 'underscore';
 
+@inject("stores")
 @observer
 class PrimaryEcu extends Component {
     constructor(props) {
@@ -11,7 +12,8 @@ class PrimaryEcu extends Component {
     }
     onEcuClick(e) {
         if(e) e.preventDefault();
-        const { selectEcu, hidePopover, devicesStore } = this.props;
+        const { selectEcu, hidePopover } = this.props;
+        const { devicesStore } = this.props.stores;
         selectEcu(
             devicesStore._getPrimaryHardwareId(), 
             devicesStore._getPrimarySerial(), 
@@ -23,7 +25,6 @@ class PrimaryEcu extends Component {
     render() {
         const { 
             active, 
-            devicesStore, 
             showHardwareOverlay, 
             selectEcu, 
             showPopover,
@@ -32,8 +33,8 @@ class PrimaryEcu extends Component {
             publicKeyCopied,
             hidePopover,
             popoverAnchor,
-            hardwareStore
         } = this.props;
+        const { devicesStore } = this.props.stores;
         return (
             <span>
                 <a
@@ -81,7 +82,6 @@ class PrimaryEcu extends Component {
                         popoverShown={popoverShown}
                         anchorEl={popoverAnchor}
                         copied={publicKeyCopied}
-                        hardwareStore={hardwareStore}
                     />
                 :
                     null
@@ -99,6 +99,7 @@ PrimaryEcu.propTypes = {
     popoverShown: PropTypes.bool,
     copied: PropTypes.bool,
     selectEcu: PropTypes.func,
+    stores: PropTypes.object
 };
 
 export default PrimaryEcu;

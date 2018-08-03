@@ -14,9 +14,6 @@ class PropertiesPanel extends Component {
     }
     render() {
         const { 
-            packagesStore, 
-            devicesStore, 
-            hardwareStore, 
             installTufPackage, 
             packagesReady, 
         } = this.props;
@@ -32,9 +29,6 @@ class PropertiesPanel extends Component {
                         </div>
                     :
                         <PropertiesList
-                            packagesStore={packagesStore}
-                            devicesStore={devicesStore}
-                            hardwareStore={hardwareStore}
                             installTufPackage={installTufPackage}
                         />
                     }
@@ -45,9 +39,6 @@ class PropertiesPanel extends Component {
 }
 
 PropertiesPanel.propTypes = {
-    packagesStore: PropTypes.object.isRequired,
-    devicesStore: PropTypes.object.isRequired,
-    hardwareStore: PropTypes.object.isRequired,
     installTufPackage: PropTypes.func.isRequired,
 }
 

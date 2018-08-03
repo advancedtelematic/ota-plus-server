@@ -29,7 +29,6 @@ class Header extends Component {
 
 Header.propTypes = {
     showCreateModal: PropTypes.func.isRequired,
-    showFileUploaderModal: PropTypes.func.isRequired,
 }
 
 export default Header;

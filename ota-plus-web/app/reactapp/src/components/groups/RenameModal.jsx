@@ -9,16 +9,19 @@ import { AsyncStatusCallbackHandler } from '../../utils';
 
 @inject('stores')
 @observer
-class CreateModal extends Component {
+class RenameModal extends Component {
     @observable submitButtonDisabled = true;
 
     constructor(props) {
         super(props);
         const { groupsStore } = props.stores;
-        this.createHandler = new AsyncStatusCallbackHandler(groupsStore, 'groupsCreateAsync', this.handleResponse.bind(this));
+        this.renameHandler = new AsyncStatusCallbackHandler(groupsStore, 'groupsRenameAsync', this.handleRenameResponse.bind(this));
+    }
+    componentWillMount() {
+        this.enableButton();
     }
     componentWillUnmount() {
-        this.createHandler();
+        this.renameHandler();
     }
     enableButton() {
         this.submitButtonDisabled = false;
@@ -29,27 +32,23 @@ class CreateModal extends Component {
     submitForm(e) {
         if(e) e.preventDefault();
         const { groupsStore } = this.props.stores;
-        let data = serialize(document.querySelector('#group-create-form'), { hash: true });        
-        groupsStore.createGroup(data.groupName);
+        let data = serialize(document.querySelector('#group-rename-form'), { hash: true });
+        groupsStore.renameGroup(groupsStore.selectedGroup.id, data.groupName);
     }
-    handleResponse() {
-        const { groupsStore } = this.props.stores;
-        let data = serialize(document.querySelector('#group-create-form'), { hash: true });
-        this.props.selectGroup({type: 'real', groupName: data.groupName, id: groupsStore.latestCreatedGroupId});
-        groupsStore._prepareGroups(groupsStore.groups);
+    handleRenameResponse() {
         this.props.hide();
     }
     render() {
-        const { shown, hide } = this.props;
+        const { action, shown, hide } = this.props;
         const { groupsStore } = this.props.stores;
         const form = (
             <Form                
                 onSubmit={this.submitForm.bind(this)}
-                id="group-create-form">
+                id="group-rename-form">
                 <AsyncResponse 
                     handledStatus="error"
-                    action={groupsStore.groupsCreateAsync}
-                    errorMsg={(groupsStore.groupsCreateAsync.data ? groupsStore.groupsCreateAsync.data.description : null)}
+                    action={groupsStore.groupsRenameAsync}
+                    errorMsg={(groupsStore.groupsRenameAsync.data ? groupsStore.groupsRenameAsync.data.description : null)}
                 />
                 <div className="row">
                     <div className="col-xs-8">
@@ -59,10 +58,11 @@ class CreateModal extends Component {
                                 onInvalid={this.disableButton.bind(this)}
                                 name="groupName"
                                 className="input-wrapper"
-                                isEditable={!groupsStore.groupsCreateAsync.isFetching}
+                                isEditable={!groupsStore.groupsRenameAsync.isFetching}
                                 title={"Group Name"}
                                 label={"Group Name"}
                                 placeholder={"Name"}
+                                defaultValue={groupsStore.selectedGroup.groupName}
                             />
                         </div>
                     </div>
@@ -71,11 +71,11 @@ class CreateModal extends Component {
                     <div className="col-xs-12">
                         <div className="body-actions">
                             <button
-                                disabled={this.submitButtonDisabled || groupsStore.groupsCreateAsync.isFetching}
+                                disabled={this.submitButtonDisabled || groupsStore.groupsRenameAsync.isFetching}
                                 className="btn-primary"
                                 id="add"
                             >
-                                Add
+                                Edit
                             </button>
                         </div>
                     </div>
@@ -86,7 +86,7 @@ class CreateModal extends Component {
             <Modal 
                 title={
                     <div>
-                        Create new group
+                        Edit name
                     </div>
                 }
                 topActions={
@@ -104,11 +104,11 @@ class CreateModal extends Component {
     }
 }
 
-CreateModal.propTypes = {
+RenameModal.propTypes = {
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
     selectGroup: PropTypes.func.isRequired,
     stores: PropTypes.object
 }
 
-export default CreateModal;
+export default RenameModal;

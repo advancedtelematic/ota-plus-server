@@ -1,25 +1,27 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
 import TufGroupsListItem from './TufGroupsListItem';
 
+@inject("stores")
 @observer
 class TufGroupsList extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        const { campaignsStore } = this.props;
+        const { campaignsStore } = this.props.stores;
+        const { campaign } = campaignsStore;
         return (
             <div className="groups">
-                {_.map(campaignsStore.campaign.groups, (group, index) => {
-                    let groupStat = _.find(campaignsStore.campaign.statistics.stats, (stat, gId) => {
+                {_.map(campaign.groups, (group, index) => {
+                    let groupStat = _.find(campaign.statistics.stats, (stat, gId) => {
                         return gId === group.id;
                     });
                     return (
                         <TufGroupsListItem
                             group={group.id}
-                            campaign={campaignsStore.campaign}
+                            campaign={campaign}
                             statistics={groupStat}
                             foundGroup={group}
                             key={index}
@@ -32,8 +34,7 @@ class TufGroupsList extends Component {
 }
 
 TufGroupsList.propTypes = {
-    campaignsStore: PropTypes.object.isRequired,
-    groupsStore: PropTypes.object.isRequired
+    stores: PropTypes.object,
 }
 
 export default TufGroupsList;

@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Avatar } from 'material-ui';
 
+@inject('stores')
 @observer
 class UserDropdown extends Component {
     constructor(props) {
@@ -16,15 +17,19 @@ class UserDropdown extends Component {
     }
     logout(e) {
         e.preventDefault();
-        this.props.userStore._logout();
+        const { userStore } = this.props.stores;
+        userStore._logout();
     }
     clearLocalStorage(e) {
         e.preventDefault();
+        const { packagesStore } = this.props.stores;
         localStorage.clear();
-        this.props.packagesStore._handleCompatibles();
+        packagesStore._handleCompatibles();
     }
     render() {
-        const { userStore, alphaPlusEnabled, uiCredentialsDownload, settings, uiUserProfileEdit } = this.props;
+        const { uiCredentialsDownload, settings, uiUserProfileEdit } = this.props;
+        const { userStore, featuresStore } = this.props.stores;
+        const { alphaPlusEnabled } = featuresStore;
         return (
             <div className="dropdown-menu">
                 <div className="triangle"></div>
@@ -115,12 +120,8 @@ class UserDropdown extends Component {
     }
 }
 
-UserDropdown.contextTypes = {
-    router: React.PropTypes.object.isRequired
-}
-
 UserDropdown.propTypes = {
-    userStore: PropTypes.object.isRequired
+    stores: PropTypes.object
 }
 
 export default UserDropdown;

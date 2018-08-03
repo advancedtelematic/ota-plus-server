@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Loader, DependenciesModal, ConfirmationModal } from '../partials';
 import { SoftwareRepository } from '../pages';
 import {
@@ -12,6 +12,7 @@ import {
 } from '../components/packages';
 import { FlatButton } from 'material-ui';
 
+@inject("stores")
 @observer
 class Packages extends Component {
     @observable createModalShown = false;
@@ -65,7 +66,8 @@ class Packages extends Component {
     }
     deleteItem(e) {        
         if(e) e.preventDefault();
-        this.props.packagesStore.deletePackage(this.itemToDelete);
+        const { packagesStore } = this.props.stores;
+        packagesStore.deletePackage(this.itemToDelete);
         this.hideDeleteConfirmation();
     }
     showDeleteConfirmation(itemName, itemType, e) {
@@ -123,7 +125,8 @@ class Packages extends Component {
         this.showCreateModal(files);
     }
     render() {
-        const { packagesStore, hardwareStore, highlightedPackage, featuresStore, devicesStore, campaignsStore, alphaPlusEnabled, switchToSWRepo } = this.props;
+        const { highlightedPackage, switchToSWRepo } = this.props;
+        const { packagesStore } = this.props.stores;
         return (
             <span ref="component">
                 {packagesStore.packagesFetchAsync.isFetching ?
@@ -136,14 +139,13 @@ class Packages extends Component {
                             {!switchToSWRepo ?
                                 <PackagesHeader
                                     showCreateModal={this.showCreateModal}
-                                    showFileUploaderModal={this.showFileUploaderModal}
-                                    alphaPlusEnabled={alphaPlusEnabled}
-                                /> : ''}
+                                /> 
+                            :
+                                null
+                            }
                             {!switchToSWRepo ?
                                 <PackagesList
-                                    packagesStore={packagesStore}
                                     onFileDrop={this.onFileDrop}
-                                    alphaPlusEnabled={alphaPlusEnabled}
                                     highlightedPackage={highlightedPackage}
                                     showDependenciesModal={this.showDependenciesModal}
                                     showDependenciesManager={this.showDependenciesManager}
@@ -152,7 +154,9 @@ class Packages extends Component {
                                     setExpandedPackageName={this.setExpandedPackageName}
                                     showEditComment={this.showEditComment}
                                 />
-                            : <SoftwareRepository/>}
+                            : 
+                                <SoftwareRepository />
+                            }
                         </span>
                     :
                         <div className="wrapper-center">
@@ -180,10 +184,7 @@ class Packages extends Component {
                     <PackagesCreateModal 
                         shown={this.createModalShown}
                         hide={this.hideCreateModal}
-                        packagesStore={packagesStore}
                         fileDropped={this.fileDropped}
-                        hardwareStore={hardwareStore}
-                        devicesStore={devicesStore}
                     />
                 :
                     null
@@ -219,9 +220,6 @@ class Packages extends Component {
                         shown={this.dependenciesModalShown}
                         hide={this.hideDependenciesModal}
                         activeItemName={this.activeVersionFilepath}
-                        packagesStore={packagesStore}
-                        campaignsStore={campaignsStore}
-                        devicesStore={devicesStore}
                     />
                 :
                     null
@@ -232,7 +230,6 @@ class Packages extends Component {
                         hide={this.hideDependenciesManager}
                         packages={packagesStore.preparedPackages}
                         activePackage={this.activeManagerVersion}
-                        packagesStore={packagesStore}
                     />
                 :
                     null
@@ -243,7 +240,6 @@ class Packages extends Component {
                         hide={this.hideEditComment}
                         comment={this.activeComment}
                         filepath={this.activePackageFilepath}
-                        packagesStore={packagesStore}
                     />
                 :
                     null
@@ -254,8 +250,7 @@ class Packages extends Component {
 }
 
 Packages.propTypes = {
-    packagesStore: PropTypes.object.isRequired,
-    hardwareStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     highlightedPackage: PropTypes.string
 }
 

@@ -7,7 +7,7 @@ class ListItem extends Component {
         super(props);
     }
     _onDownload() {
-	const { provisioningStore, provisioningKey } = this.props;
+	const { provisioningKey } = this.props;
         location.href="/api/v1/clienttools/provisioning/" + provisioningKey.id;
     }
     render() {
@@ -34,7 +34,6 @@ class ListItem extends Component {
 }
 
 ListItem.propTypes = {
-    provisioningStore: PropTypes.object.isRequired,
     provisioningKey: PropTypes.object.isRequired,
 }
 

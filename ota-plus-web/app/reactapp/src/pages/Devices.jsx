@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observe } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { translate } from 'react-i18next';
 import { MetaData, FadeAnimation } from '../utils';
 import { DevicesContainer } from '../containers';
@@ -11,45 +11,44 @@ import _ from 'underscore';
 const title = "Devices";
 
 @DragDropContext(HTML5Backend)
+@inject("stores")
 @observer
 class Devices extends Component {
     constructor(props) {
         super(props);
-
-        this.groupsFetchHandler = observe(props.groupsStore, (change) => {
+        const { groupsStore, devicesStore } = props.stores;
+        this.groupsFetchHandler = observe(groupsStore, (change) => {
             if(change.name === 'groupsFetchAsync' && !change.object[change.name].isFetching) {
-                if(props.devicesStore.deviceFleets.length) {
-                    if(props.groupsStore.activeFleet) {
-                        props.toggleFleet(props.groupsStore.activeFleet);
+                if(devicesStore.deviceFleets.length) {
+                    if(groupsStore.activeFleet) {
+                        props.toggleFleet(groupsStore.activeFleet);
                     } else {
-                        props.toggleFleet(_.first(props.devicesStore.deviceFleets), true);
+                        props.toggleFleet(_.first(devicesStore.deviceFleets), true);
                     }
                 }
             }
         });
     }
     componentWillMount() {
-        const { devicesStore, groupsStore } = this.props;
-        const selectedGroup = groupsStore.selectedGroup;
+        const { devicesStore, groupsStore } = this.props.stores;
+        const { selectedGroup } = groupsStore;
         const groupId = selectedGroup.id || null;
         devicesStore.fetchDevices('', groupId);        
         groupsStore.fetchGroups();
     }
     componentWillUnmount() {
+        const { devicesStore, groupsStore } = this.props.stores;
         this.groupsFetchHandler();
-        this.props.devicesStore._reset();
-        this.props.groupsStore._reset();
+        devicesStore._reset();
+        groupsStore._reset();
     }
     render() {
-        const { devicesStore, groupsStore, alphaPlusEnabled, addNewWizard } = this.props;
+        const { addNewWizard } = this.props;
         return (
             <FadeAnimation>
                 <MetaData 
                     title={title}>
                     <DevicesContainer 
-                        devicesStore={devicesStore}
-                        groupsStore={groupsStore}
-                        alphaPlusEnabled={alphaPlusEnabled}
                         addNewWizard={addNewWizard}
                     />
                 </MetaData>
@@ -59,8 +58,7 @@ class Devices extends Component {
 }
 
 Devices.propTypes = {
-    devicesStore: PropTypes.object,
-    groupsStore: PropTypes.object
+    stores: PropTypes.object,
 }
 
 export default Devices;

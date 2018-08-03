@@ -7,7 +7,7 @@ class MultiTargetITem extends Component {
         super(props);
     }
     render() {
-        const { item, hardwareId, updateId, status, length, cancelMtuUpdate, alphaPlusEnabled, showSequencer } = this.props;
+        const { item, hardwareId, updateId, status, length, cancelMtuUpdate, showSequencer } = this.props;
         const hash = item.image.fileinfo.hashes.sha256;
         return (
             <li id={"queued-entry-" + hash} className="queue-modal__item">

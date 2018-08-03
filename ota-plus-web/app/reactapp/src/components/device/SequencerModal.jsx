@@ -1,23 +1,25 @@
 import React, { Component, PropTypes } from 'react';
-import { observer, observable } from 'mobx-react';
+import { observer, observable, inject } from 'mobx-react';
 import _ from 'underscore';
 import { Modal, Sequencer } from '../../partials';
 
+@inject("stores")
 @observer
 class SequencerModal extends Component {
     constructor(props) {
         super(props);
     }
     componentWillMount() {
-        const { campaignsStore } = this.props;
+        const { campaignsStore } = this.props.stores;
         campaignsStore._showFullScreen();
     }
     componentWillUnmount() {
-        const { campaignsStore } = this.props;
+        const { campaignsStore } = this.props.stores;
         campaignsStore._resetFullScreen();
     }
     render() {
-        const { shown, hide, campaignsStore, devicesStore } = this.props;
+        const { shown, hide } = this.props;
+        const { campaignsStore, devicesStore } = this.props.stores;
         const content = (
             <div className="sequencer-wrapper">
                 <div className="actions">
@@ -27,7 +29,6 @@ class SequencerModal extends Component {
                 </div>
                 {devicesStore.multiTargetUpdates.length ?
                     <Sequencer
-                        campaignsStore={campaignsStore}
                         wizardIdentifier={devicesStore.multiTargetUpdates[0].updateId}
                         data={null}
                         entity={"device"}

@@ -1,14 +1,17 @@
 import React, { Component, PropTypes } from 'react';
 import { FlatButton } from 'material-ui';
 import { Modal } from '../../partials';
+import { inject } from 'mobx-react';
 
+@inject("stores")
 class CancelUploadModal extends Component {
     constructor(props) {
         super(props);
         this.cancelUpload = this.cancelUpload.bind(this);
     }
     cancelUpload() {
-        this.props.packagesStore.packagesUploading[this.props.uploadIndex].source.cancel();
+        const { packagesStore } = this.props.stores;
+        packagesStore.packagesUploading[this.props.uploadIndex].source.cancel();
         this.props.hide();
     }
     render() {
@@ -54,7 +57,7 @@ CancelUploadModal.propTypes = {
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
     uploadIndex: PropTypes.number,
-    packagesStore: PropTypes.object.isRequired
+    stores: PropTypes.object
 }
 
 export default CancelUploadModal;

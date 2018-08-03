@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observable, toJS, extendObservable } from 'mobx';
 import _ from 'underscore';
 import $ from 'jquery';
@@ -22,6 +22,7 @@ const INIT_PROGRESS_TIME = 4;
 const PHASE_PROGRESS_TIME = 4;
 const TERMINATION_PROGRESS_TIME = 4;
 
+@inject("stores")
 @observer
 class Sequencer extends Component {
     @observable destinationElement = null;
@@ -68,12 +69,14 @@ class Sequencer extends Component {
 
     showFullScreen(e) {
         if(e) e.preventDefault();
-        this.props.campaignsStore._showFullScreen();
+        const { campaignsStore } = this.props.stores;
+        campaignsStore._showFullScreen();
     }
 
     hideFullScreen(e) {
         if(e) e.preventDefault();
-        this.props.campaignsStore._hideFullScreen();
+        const { campaignsStore } = this.props.stores;
+        campaignsStore._hideFullScreen();
     }
 
     componentWillUnmount() {
@@ -196,7 +199,7 @@ class Sequencer extends Component {
     }
 
     render() {
-        const { campaignsStore, readOnly } = this.props;
+        const { readOnly } = this.props;
         const updatesMatrix = this.updateMatrix;
         const updatesArray = this.campaignUpdates;
         const numberOfPhases = updatesArray.length;        

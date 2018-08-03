@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import UserDropdown from './UserDropdown';
 import { Avatar } from 'material-ui';
 import { Dropdown, Button } from 'react-bootstrap';
@@ -7,17 +7,15 @@ import onClickOutside from 'react-onclickoutside';
 import { LinkWrapper } from '../utils';
 import $ from 'jquery';
 
+@inject('stores')
 @observer
 class NavigationDropdown extends Component {
     constructor(props) {
         super(props);
     }
-    handleClickOutside(e) {
-        if($('#menu-login .dropdown').hasClass('open'))
-            document.getElementById('profile-dropdown').click();
-    }
     render() {
-        const { userStore, packagesStore, alphaPlusEnabled, uiCredentialsDownload, uiUserProfileEdit } = this.props;
+        const { uiCredentialsDownload, uiUserProfileEdit } = this.props;
+        const { userStore } = this.props.stores;
         return (
             <Dropdown id="profile-dropdown" rootCloseEvent="mousedown">
                 <LinkWrapper
@@ -35,11 +33,8 @@ class NavigationDropdown extends Component {
                     </div>
                 </LinkWrapper>
                 <UserDropdown 
-                    userStore={userStore}
-                    packagesStore={packagesStore}
                     bsRole="menu"
                     uiUserProfileEdit={uiUserProfileEdit}
-                    alphaPlusEnabled={alphaPlusEnabled}
                     uiCredentialsDownload={uiCredentialsDownload}
                     settings={false}
                 />
@@ -49,7 +44,14 @@ class NavigationDropdown extends Component {
 }
 
 NavigationDropdown.propTypes = {
-    userStore: PropTypes.object.isRequired
+    stores: PropTypes.object
 }
 
-export default onClickOutside(NavigationDropdown);
+export default onClickOutside(NavigationDropdown, {
+    handleClickOutside: (e) => {
+        return () => {
+            if($('#menu-login .dropdown').hasClass('open'))
+                document.getElementById('profile-dropdown').click();
+        }
+    }
+});

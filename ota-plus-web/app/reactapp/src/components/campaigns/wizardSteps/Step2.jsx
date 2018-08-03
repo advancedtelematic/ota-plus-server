@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { observable, observe } from "mobx"
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { WizardPackagesList } from './step2Files';
 import { Loader, Form, FormInput } from '../../../partials';
 import _ from 'underscore';
 
+@inject("stores")
 @observer
 class WizardStep2 extends Component {
     constructor(props) {
@@ -37,7 +38,8 @@ class WizardStep2 extends Component {
         this.toggleStep(chosenPackagesList, pack);
     }
     render() {
-        const { wizardData, packagesStore, wizardIdentifier } = this.props;
+        const { wizardData, wizardIdentifier } = this.props;
+        const { packagesStore } = this.props.stores;
         let chosenPackagesList = wizardData[1].packages;
         return (
             packagesStore.packagesSafeFetchAsync.isFetching ? 
@@ -53,7 +55,6 @@ class WizardStep2 extends Component {
                         chosenPackagesList={chosenPackagesList}
                         setWizardData={this.setWizardData}
                         wizardIdentifier={wizardIdentifier}
-                        packagesStore={packagesStore}
                     />
                 </div>
         );
@@ -62,7 +63,7 @@ class WizardStep2 extends Component {
 
 WizardStep2.propTypes = {
     wizardData: PropTypes.object.isRequired,
-    packagesStore: PropTypes.object.isRequired
+    stores: PropTypes.object
 }
 
 export default WizardStep2;

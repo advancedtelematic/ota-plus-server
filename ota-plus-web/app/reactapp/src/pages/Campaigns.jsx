@@ -1,37 +1,35 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
 import { CampaignsContainer } from '../containers';
 import { translate } from 'react-i18next';
 
 const title = "Campaigns";
 
+@inject("stores")
 @observer
 class Campaigns extends Component {
     constructor(props) {
         super(props);
     }
     componentWillMount() {
-        this.props.campaignsStore.fetchCampaigns();
-        this.props.groupsStore.fetchGroups();
+        const { campaignsStore, groupsStore } = this.props.stores;
+        campaignsStore.fetchCampaigns();
+        groupsStore.fetchGroups();
     }
     componentWillUnmount() {
-        this.props.campaignsStore._reset();
-        this.props.packagesStore._reset();
-        this.props.groupsStore._reset();
+        const { campaignsStore, packagesStore, groupsStore } = this.props.stores;
+        campaignsStore._reset();
+        packagesStore._reset();
+        groupsStore._reset();
     }
     render() {
-        const { t, campaignsStore, packagesStore, groupsStore, hardwareStore, devicesStore, addNewWizard } = this.props;
+        const { t, addNewWizard } = this.props;
         return (
             <FadeAnimation>
                 <MetaData 
                     title={title}>
                     <CampaignsContainer 
-                        campaignsStore={campaignsStore}
-                        packagesStore={packagesStore}
-                        groupsStore={groupsStore}
-                        hardwareStore={hardwareStore}
-                        devicesStore={devicesStore}
                         highlightedCampaign={this.props.params.campaignName}
                         addNewWizard={addNewWizard}
                     />

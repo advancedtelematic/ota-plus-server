@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Modal, AsyncResponse, Loader, FormSelect, FormInput } from '../../partials';
 import { Form } from 'formsy-react';
 import { FormsyText } from 'formsy-material-ui/lib';
@@ -8,6 +8,7 @@ import { FlatButton, SelectField, MenuItem } from 'material-ui';
 import serialize from 'form-serialize';
 import _ from 'underscore';
 
+@inject("stores")
 @observer
 class CreateModal extends Component {
     @observable submitButtonDisabled = true;
@@ -18,7 +19,8 @@ class CreateModal extends Component {
         this.selectHardwareIds = this.selectHardwareIds.bind(this);
     }
     componentWillMount() {
-        this.props.hardwareStore.fetchHardwareIds();
+        const { hardwareStore } = this.props.stores;
+        hardwareStore.fetchHardwareIds();
     }
     enableButton() {
         this.submitButtonDisabled = false;
@@ -27,6 +29,7 @@ class CreateModal extends Component {
         this.submitButtonDisabled = true;
     }
     submitForm(type) {
+        const { packagesStore } = this.props.stores;
         let formData = new FormData();
         if(this.props.fileDropped)
             formData.append('file', this.props.fileDropped);
@@ -36,7 +39,7 @@ class CreateModal extends Component {
         delete data['fake-file'];
         data.description = data.description ? data.description : "";
         data.vendor = data.vendor ? data.vendor : "";
-        this.props.packagesStore.createPackage(data, formData, this.selectedHardwareIds.join());
+        packagesStore.createPackage(data, formData, this.selectedHardwareIds.join());
         this.hideModal();
     }
     _onFileUploadClick(e) {
@@ -58,7 +61,8 @@ class CreateModal extends Component {
         this.selectedHardwareIds = selectedOptions;
     }
     render() {
-        const { shown, hide, packagesStore, hardwareStore, fileDropped, devicesStore } = this.props;
+        const { shown, hide, fileDropped } = this.props;
+        const { hardwareStore } = this.props.stores;
         const directorForm = (
             <Form
                 onValid={this.enableButton.bind(this)}
@@ -187,8 +191,7 @@ class CreateModal extends Component {
 CreateModal.propTypes = {
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
-    packagesStore: PropTypes.object.isRequired,
-    hardwareStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     fileDropped: PropTypes.object
 }
 

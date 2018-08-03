@@ -8,10 +8,9 @@ class WizardStep6 extends Component {
         super(props);
     }
     render() {
-        const { wizardIdentifier, wizardData, campaignsStore } = this.props;
+        const { wizardIdentifier, wizardData } = this.props;
         return (
             <Sequencer
-                campaignsStore={campaignsStore}
                 wizardIdentifier={wizardIdentifier}
                 data={wizardData[2].versions}
                 entity={"campaign"}

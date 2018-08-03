@@ -1,19 +1,19 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { SubHeader, SearchBar } from '../../partials';
 import { Form } from 'formsy-react';
 import { FlatButton } from 'material-ui';
 
+@inject("stores")
 @observer
 class ContentPanelHeader extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
-        const { devicesFilter, changeFilter, addNewWizard, activeGroup } = this.props;
+        const { devicesFilter, changeFilter, addNewWizard } = this.props;
+        const { groupsStore } = this.props.stores;
+        const { selectedGroup } = groupsStore;
         return (
             <SubHeader>
-                {activeGroup.id && activeGroup.id !== 'ungrouped' ?
+                {selectedGroup.id && selectedGroup.id !== 'ungrouped' ?
                     <div className="add-group-campaign">
                         <a href="#" className="add-button bordered light" onClick={(e) => { e.preventDefault(); addNewWizard('groups') }}>
                             Create campaign
@@ -35,6 +35,7 @@ class ContentPanelHeader extends Component {
 }
 
 ContentPanelHeader.propTypes = {
+    stores: PropTypes.object,
     devicesFilter: PropTypes.string,
     changeFilter: PropTypes.func.isRequired
 }

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { FlatButton } from 'material-ui';
 import { Loader, ConfirmationModal, EditModal } from '../partials';
 import { resetAsync } from '../utils/Common';
@@ -9,6 +9,7 @@ import { GroupsCreateModal } from '../components/groups';
 import { DevicesGroupsPanel, DevicesContentPanel } from '../components/devices';
 import _ from 'underscore';
 
+@inject("stores")
 @observer
 class Devices extends Component {
     @observable createModalShown = false;
@@ -38,8 +39,9 @@ class Devices extends Component {
     }
     hideCreateGroupModal(e) {
         if(e) e.preventDefault();
+        const { groupsStore } = this.props.stores;
         this.createGroupModalShown = false;
-        resetAsync(this.props.groupsStore.groupsCreateAsync);
+        resetAsync(groupsStore.groupsCreateAsync);
     }
     showDeleteConfirmation(device, e) {
         if(e) e.preventDefault();
@@ -57,7 +59,7 @@ class Devices extends Component {
     deleteDevice(e) {
         if(e) e.preventDefault();
         const deviceUuid = this.itemToDelete.uuid;
-        const { devicesStore, groupsStore } = this.props;
+        const { devicesStore, groupsStore } = this.props.stores;
         devicesStore.deleteDevice(deviceUuid).then(() => {
             const foundGroup = _.find(groupsStore.groups, (group) => {
                 return group.devices.values.indexOf(deviceUuid) > -1;
@@ -73,30 +75,34 @@ class Devices extends Component {
         this.deleteConfirmationShown = false;
     }
     selectGroup(group) {
-        const { devicesStore, groupsStore } = this.props;
+        const { devicesStore, groupsStore } = this.props.stores;
         groupsStore.selectedGroup = group;
         const groupId = group.id || null;
         devicesStore.fetchDevices(devicesStore.devicesFilter, groupId);
     }
     onDeviceDrop(device, groupId) {
+        const { groupsStore } = this.props.stores;
         if(device.groupId !== groupId && device.groupId) {
-            this.props.groupsStore.removeDeviceFromGroup(device.groupId, device.uuid);
+            groupsStore.removeDeviceFromGroup(device.groupId, device.uuid);
         }
         if(device.groupId !== groupId && groupId) {
-            this.props.groupsStore.addDeviceToGroup(groupId, device.uuid);
+            groupsStore.addDeviceToGroup(groupId, device.uuid);
         }
     }
     changeSort(sort, e) {
         if(e) e.preventDefault();
-        this.props.devicesStore._prepareDevices(sort);
+        const { devicesStore } = this.props.stores;
+        devicesStore._prepareDevices(sort);
     }
     changeFilter(filter, e) {
         if(e) e.preventDefault();
-        let groupId = this.props.groupsStore.selectedGroup.id;
-        this.props.devicesStore.fetchDevices(filter, groupId);
+        const { devicesStore, groupsStore } = this.props.stores;
+        let groupId = groupsStore.selectedGroup.id;
+        devicesStore.fetchDevices(filter, groupId);
     }
     render() {
-        const { devicesStore, groupsStore, alphaPlusEnabled, addNewWizard } = this.props;
+        const { addNewWizard } = this.props;
+        const { devicesStore } = this.props.stores;
         return (
             <span>
                 {devicesStore.devicesInitialTotalCount === null && devicesStore.devicesFetchAsync.isFetching ?
@@ -107,24 +113,18 @@ class Devices extends Component {
                     devicesStore.devicesInitialTotalCount ?
                             <span>
                                 <DevicesGroupsPanel 
-                                    devicesStore={devicesStore}
-                                    groupsStore={groupsStore}
                                     showCreateGroupModal={this.showCreateGroupModal}
                                     selectGroup={this.selectGroup}
                                     onDeviceDrop={this.onDeviceDrop}
                                 />
                                 <DevicesContentPanel 
-                                    devicesStore={devicesStore}
-                                    groupsStore={groupsStore}
                                     changeSort={this.changeSort}
                                     changeFilter={this.changeFilter}
-                                    alphaPlusEnabled={alphaPlusEnabled}
                                     showDeleteConfirmation={this.showDeleteConfirmation}
                                     showEditName={this.showEditName}
                                     addNewWizard={addNewWizard}
                                 />
                             </span>
-                        
                     :
                         <div className="wrapper-center">
                             <div className="page-intro">
@@ -145,13 +145,15 @@ class Devices extends Component {
                             </div>
                         </div>
                 }
-                <GroupsCreateModal 
-                    shown={this.createGroupModalShown}
-                    hide={this.hideCreateGroupModal}
-                    selectGroup={this.selectGroup}
-                    groupsStore={groupsStore}
-                    devicesStore={devicesStore}
-                />
+                {this.createGroupModalShown ?
+                    <GroupsCreateModal 
+                        shown={this.createGroupModalShown}
+                        hide={this.hideCreateGroupModal}
+                        selectGroup={this.selectGroup}
+                    />
+                :
+                    null
+                }
                 {this.deleteConfirmationShown ?
                     <ConfirmationModal
                         modalTitle={
@@ -177,10 +179,9 @@ class Devices extends Component {
                             <div>
                                 Edit name
                             </div>
-                    }
+                        }
                         shown={this.editNameShown}
                         hide={this.hideEditName}
-                        devicesStore={devicesStore}
                         device={this.itemToEdit}
                     />
                 :
@@ -192,8 +193,7 @@ class Devices extends Component {
 }
 
 Devices.propTypes = {
-    devicesStore: PropTypes.object.isRequired,
-    groupsStore: PropTypes.object.isRequired
+    stores: PropTypes.object,
 }
 
 export default Devices;

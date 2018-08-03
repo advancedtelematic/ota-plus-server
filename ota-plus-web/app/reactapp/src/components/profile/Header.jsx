@@ -10,7 +10,7 @@ class Header extends Component {
         super(props);
     }
     render() {
-        const { userStore, uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit } = this.props;
+        const { uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit } = this.props;
         const fullNavigation = (
             <div className="profile-nav__list">
                 {uiUserProfileEdit ?
@@ -83,10 +83,6 @@ class Header extends Component {
                       
         );
     }
-}
-
-Header.propTypes = {
-    userStore: PropTypes.object.isRequired
 }
 
 export default Header;

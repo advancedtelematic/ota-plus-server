@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import _ from 'underscore';
 import { Modal } from '../../partials';
 
+@inject("stores")
 @observer
 class DependenciesManager extends Component {
     @observable obj = {};
@@ -29,7 +30,8 @@ class DependenciesManager extends Component {
         return JSON.parse(localStorage.getItem(version));
     }
     addVersion(version) {
-        const { activePackage, packagesStore } = this.props;
+        const { activePackage } = this.props;
+        const { packagesStore } = this.props.stores;
 
         let relatedItem = {
             name: version,
@@ -101,7 +103,8 @@ class DependenciesManager extends Component {
         packagesStore._handleCompatibles();
     }
     render() {
-        const { shown, hide, packages, activePackage, packagesStore } = this.props;
+        const { shown, hide, packages, activePackage } = this.props;
+        const { packagesStore } = this.props.stores;
 
         let requiredBy = [];
         _.each(packagesStore.compatibilityData, (data, index) => {
