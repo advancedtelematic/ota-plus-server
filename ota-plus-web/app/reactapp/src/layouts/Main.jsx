@@ -21,8 +21,6 @@ import { doLogout } from '../utils/Common';
 @inject('stores')
 @observer
 class Main extends Component {
-    @observable termsAndConditionsAccepted = false;
-    @observable numOfWizards = 0;
     @observable wizards = [];    
     @observable minimizedWizards = [];
     @observable uploadBoxMinimized = false;
@@ -43,18 +41,14 @@ class Main extends Component {
             }
             return Promise.reject(error);
         });
-        this.backButtonAction = this.backButtonAction.bind(this);
         this.toggleUploadBoxMode = this.toggleUploadBoxMode.bind(this);
-        
         this.callFakeWsHandler = this.callFakeWsHandler.bind(this);
         this.toggleSWRepo = this.toggleSWRepo.bind(this);
         this.toggleFleet = this.toggleFleet.bind(this);
         this.locationChange = this.locationChange.bind(this);
-
         this.addNewWizard = this.addNewWizard.bind(this);
         this.hideWizard = this.hideWizard.bind(this);
         this.toggleWizard = this.toggleWizard.bind(this);
-
         const { 
             devicesStore, 
             packagesStore, 
@@ -95,19 +89,8 @@ class Main extends Component {
             this.minimizedWizards.push(minimizedWizard);
     }
     addNewWizard(skipStep = null) {
-        const { 
-            campaignsStore, 
-            packagesStore,
-            groupsStore,
-            hardwareStore,
-            featuresStore
-        } = this.props.stores;
         const wizard =
             <Wizard
-                campaignsStore={campaignsStore}
-                packagesStore={packagesStore}
-                groupsStore={groupsStore}
-                hardwareStore={hardwareStore}
                 wizardIdentifier={this.wizards.length}
                 hideWizard={this.hideWizard}
                 toggleWizard={this.toggleWizard}
@@ -176,10 +159,6 @@ class Main extends Component {
     componentWillUnmount() {
         this.logoutHandler();
     }
-    backButtonAction(e) {
-        if(e) e.preventDefault();
-        window.history.go(-1);
-    }
     toggleFleet(fleet, selectFirst = false, e) {
         const { 
             groupsStore,
@@ -213,6 +192,7 @@ class Main extends Component {
             featuresStore,
             packagesStore
         } = this.props.stores;
+        const { alphaPlusEnabled } = featuresStore;
         return (
             <span>
                 <Navigation
@@ -225,14 +205,13 @@ class Main extends Component {
                     toggleFleet={this.toggleFleet}
                 />
                 <div id={pageId} style={{
-                    height: featuresStore.alphaPlusEnabled && (pageId === 'page-packages' || pageId === 'page-devices') ? 'calc(100vh - 100px)' : 'calc(100vh - 50px)',
-                    padding: !featuresStore.alphaPlusEnabled && pageId === 'page-packages' ? '30px' : ''
+                    height: alphaPlusEnabled && (pageId === 'page-packages' || pageId === 'page-devices') ? 'calc(100vh - 100px)' : 'calc(100vh - 50px)',
+                    padding: !alphaPlusEnabled && pageId === 'page-packages' ? '30px' : ''
                 }}>
                     <FadeAnimation>                    
                         <children.type
                             {...rest}
                             children={children.props.children}
-                            backButtonAction={this.backButtonAction}
                             addNewWizard={this.addNewWizard}
                             uiUserProfileEdit={this.uiUserProfileEdit}
                             switchToSWRepo={this.switchToSWRepo}
@@ -247,7 +226,6 @@ class Main extends Component {
                         minHeight={768}
                     />
                     <UploadBox 
-                        // packagesStore={this.packagesStore}
                         minimized={this.uploadBoxMinimized}
                         toggleUploadBoxMode={this.toggleUploadBoxMode}
                     />

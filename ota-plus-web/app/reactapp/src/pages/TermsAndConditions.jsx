@@ -14,7 +14,6 @@ class TermsAndConditions extends Component {
         super(props);
     }
     render() {
-        const { backButtonAction } = this.props;
         const { userStore } = this.props.stores;
         let terms = _.find(userStore.contracts, (obj) => contracts.default[obj.contract]);
         const htmlDoc = terms && terms.contract  ? {__html: contracts.default[terms.contract]} : null;
@@ -36,7 +35,7 @@ class TermsAndConditions extends Component {
         return (
             <FadeAnimation>
                 <MetaData title={title}>
-                    <Terms backButtonAction={backButtonAction} checked={true}/>
+                    <Terms goBack={true} checked={true}/>
                 </MetaData>
             </FadeAnimation>
         );

@@ -7,6 +7,7 @@ import DeviceItem from './Item';
 import BarChart from './BarChart';
 import Stats from './Stats';
 import ContentPanelHeader from './ContentPanelHeader';
+import ContentPanelSubheader from './ContentPanelSubheader';
 import { Loader } from '../../partials';
 import { InfiniteScroll } from '../../utils';
 
@@ -84,6 +85,8 @@ export default class ContentPanel extends Component {
         const { changeFilter, showDeleteConfirmation, showEditName, addNewWizard } = this.props;
         const { devicesStore, featuresStore, groupsStore } = this.props.stores;
         const { alphaPlusEnabled } = featuresStore;
+        const { selectedGroup } = groupsStore;
+        const { isAutomatic } = selectedGroup;
         return (
             <div className="devices-panel">
                 <ContentPanelHeader 
@@ -91,14 +94,12 @@ export default class ContentPanel extends Component {
                     changeFilter={changeFilter}
                     addNewWizard={addNewWizard}
                 />
-                <div className="devices-panel__wrapper">
-                    {alphaPlusEnabled ?
-                        <div className="devices-panel__title devices-panel__title--absolute">
-                            Test devices
-                        </div>
-                    :
-                        null
-                    }
+                {isAutomatic ?
+                    <ContentPanelSubheader />
+                :
+                    null
+                }
+                <div className={"devices-panel__wrapper " + (isAutomatic ? "devices-panel__wrapper--automatic" : "")}>
                     <div className={"devices-panel__list" + (alphaPlusEnabled ? " devices-panel__list--alpha" : "")}>
                         <InfiniteScroll
                             className="wrapper-infinite-scroll"

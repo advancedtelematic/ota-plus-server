@@ -76,7 +76,7 @@ class GroupsList extends Component {
                 {Object.keys(groupsStore.preparedWizardGroups).length ?
                     <InfiniteScroll
                         className="wrapper-infinite-scroll"
-                        hasMore={groupsStore.hasMoreGroups}
+                        hasMore={groupsStore.hasMoreWizardGroups}
                         isLoading={groupsStore.groupsWizardFetchAsync.isFetching}
                         useWindow={false}
                         loadMore={() => {

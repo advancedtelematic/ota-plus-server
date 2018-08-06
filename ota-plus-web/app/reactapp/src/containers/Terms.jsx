@@ -17,8 +17,12 @@ export default class Terms extends Component {
         e.preventDefault();
         this.showModal = !this.showModal;
     }
+    goBack(e) {
+        e.preventDefault();
+        window.history.go(-1);
+    }
     render() {
-        const {backButtonAction, checked} = this.props;
+        const { goBack, checked } = this.props;
         const { userStore } = this.props.stores;
         let terms = _.find(userStore.contracts, (obj) => contracts.default[obj.contract]);
         let agreedDate = terms && terms.accepted;
@@ -62,7 +66,7 @@ export default class Terms extends Component {
                         </p>
                     </div>
                     <div className="steps">
-                        <a href="/login" className="back btn-primary" id="terms-btn-back" onClick={backButtonAction ? backButtonAction : ''}>Back</a>
+                        <a href="/login" className="back btn-primary" id="terms-btn-back" onClick={(e) => { goBack ? this.goBack(e) : null }}>Back</a>
                         {this.termsAccepted ?
                             <button className="next btn-primary" id="terms-btn-continue" onClick={() => {userStore.acceptContract(terms && terms.contract)}}>Continue</button> :
                             <button className="next btn-primary" id="terms-btn-continue_disabled" disabled>Continue</button>

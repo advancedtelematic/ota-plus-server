@@ -160,11 +160,15 @@ class FormSelect extends Component {
                 : selectedOptions.length
                 ? selectedOptions
                 : defaultValue && defaultValue.length > 0 ? defaultValue : '';
-
         return (
-            <div className="c-form__relative-wrapper" style={{width: wrapperWidth}}>
-                <label className="c-form__label">{label}</label>
-                <input className={`c-form__input ${inputValue.length === 0 ? 'c-form__input--hide-caret' : ''}`}
+            <div className="c-form__wrapper" style={{width: wrapperWidth}}>
+                {label ?
+                    <label className="c-form__label">{label}</label>
+                :
+                    null
+                }
+                <div className="c-form__relative-input">
+                    <input className={`c-form__input ${inputValue.length === 0 ? 'c-form__input--hide-caret' : ''}`}
                        type="text"
                        style={{width: inputWidth}}
                        value={inputValue}
@@ -172,45 +176,46 @@ class FormSelect extends Component {
                        onClick={this.toggleMenu}
                        id={id}
                        autoComplete="off"/>
-                {inputValue.length ?
-                    <i className={`fa fa-check c-form__select-icon`}/>
-                    :
-                    <i className={`fa ${showDropDown ? 'fa-angle-up' : 'fa-angle-down'} c-form__select-icon`}/>
-                }
-                {showDropDown && !appendMenuToBodyTag ?
-                    <select size={visibleFieldsCount}
-                            style={{
-                                height: options.length > 1 ? 'auto' : '35px'
-                            }}
-                            className="c-form__select"
-                            multiple={multiple} id={'select-' + id}>
-                        {options.map((value, index) => {
-                            const selected = _.contains(selectedOptions, value);
-                            if (_.isObject(value)) {
-                                const option = value;
-                                return (
-                                    <option key={index}
-                                            onClick={this.selectOption.bind(this, option)}
-                                            id={`${id}-${option.id}`}
-                                            className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`}
-                                            value={option.value}>
-                                        {option.text}
-                                    </option>
-                                )
-                            } else {
-                                return (
-                                    <option key={index}
-                                            onClick={this.selectOption.bind(this, value)}
-                                            id={`${id}-${value}`}
-                                            className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`}
-                                            value={value}>
-                                        {value}
-                                    </option>
-                                )
-                            }
-                        })}
-                    </select>
-                    : ''}
+                    {inputValue.length ?
+                        <i className={`fa fa-check c-form__select-icon`}/>
+                        :
+                        <i className={`fa ${showDropDown ? 'fa-angle-up' : 'fa-angle-down'} c-form__select-icon`}/>
+                    }
+                    {showDropDown && !appendMenuToBodyTag ?
+                        <select size={visibleFieldsCount}
+                                style={{
+                                    height: options.length > 1 ? 'auto' : '35px'
+                                }}
+                                className="c-form__select"
+                                multiple={multiple} id={'select-' + id}>
+                            {options.map((value, index) => {
+                                const selected = _.contains(selectedOptions, value);
+                                if (_.isObject(value)) {
+                                    const option = value;
+                                    return (
+                                        <option key={index}
+                                                onClick={this.selectOption.bind(this, option)}
+                                                id={`${id}-${option.id}`}
+                                                className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`}
+                                                value={option.value}>
+                                            {option.text}
+                                        </option>
+                                    )
+                                } else {
+                                    return (
+                                        <option key={index}
+                                                onClick={this.selectOption.bind(this, value)}
+                                                id={`${id}-${value}`}
+                                                className={`c-form__option ${selected ? 'c-form__option--selected' : ''}`}
+                                                value={value}>
+                                            {value}
+                                        </option>
+                                    )
+                                }
+                            })}
+                        </select>
+                        : ''}
+                </div>
             </div>
         )
     }
@@ -224,7 +229,7 @@ FormSelect.propTypes = {
     visibleFieldsCount: PropTypes.oneOfType([PropTypes.string,PropTypes.number]),
     id: PropTypes.string,
     options: PropTypes.oneOfType([
-        PropTypes.string,
+        PropTypes.array,
         PropTypes.shape({
             text: PropTypes.string,
             id: PropTypes.oneOfType([
