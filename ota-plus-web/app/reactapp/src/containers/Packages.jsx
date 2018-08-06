@@ -5,7 +5,6 @@ import { Loader, DependenciesModal, ConfirmationModal } from '../partials';
 import { SoftwareRepository } from '../pages';
 import {
     PackagesCreateModal,
-    PackagesFileUploaderModal, 
     PackagesHeader, 
     PackagesList,
     PackagesDependenciesManager,
@@ -185,17 +184,6 @@ class Packages extends Component {
                         fileDropped={this.fileDropped}
                         hardwareStore={hardwareStore}
                         devicesStore={devicesStore}
-                    />
-                :
-                    null
-                }
-                {this.fileUploaderModalShown ?
-                    <PackagesFileUploaderModal 
-                        shown={this.fileUploaderModalShown}
-                        hide={this.hideFileUploaderModal}
-                        handleCopy={this.handleCopy}
-                        copied={this.copied}
-                        featuresStore={featuresStore}
                     />
                 :
                     null

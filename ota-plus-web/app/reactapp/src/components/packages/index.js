@@ -1,6 +1,5 @@
 import PackagesCreateModal from './CreateModal';
 import PackagesBlacklistModal from './BlacklistModal';
-import PackagesFileUploaderModal from './FileUploaderModal';
 import PackagesHeader from './Header';
 import PackagesList from './List';
 import PackagesCancelUploadModal from './CancelUploadModal';
@@ -11,7 +10,6 @@ import PackagesEditCommentModal from './EditCommentModal';
 export {
     PackagesCreateModal,
     PackagesBlacklistModal,
-    PackagesFileUploaderModal,
     PackagesHeader,
     PackagesList,
     PackagesCancelUploadModal,
