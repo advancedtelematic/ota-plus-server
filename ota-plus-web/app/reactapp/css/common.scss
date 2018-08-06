@@ -83,7 +83,7 @@
   flex-direction: column;
   position: relative;
 
-  &__relative-wrapper {
+  &__relative-input {
     position: relative;
 
     .c-form__input {
@@ -163,7 +163,8 @@
   &__select-icon {
     position: absolute;
     color: #00AFAA;
-    top: 39px;
+    top: 50%;
+    margin-top: -7px;
     right: 15px;
     &.fa-check {
       font-size: 14px;

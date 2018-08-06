@@ -127,16 +127,12 @@ class Device extends Component {
         this.showQueueModal();
     }
     render() {
-        const { 
-            backButtonAction
-        } = this.props;
         return (
             <FadeAnimation>
                 <span>
                     <DeviceHeader
                         showQueueModal={this.showQueueModal}
                         queueButtonRef={el => this.queueAnchorEl = el}
-                        backButtonAction={backButtonAction}
                     />
                     <MetaData 
                         title={title}>

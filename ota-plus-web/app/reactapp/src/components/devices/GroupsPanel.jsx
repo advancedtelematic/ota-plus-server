@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { FlatButton } from 'material-ui';
-import { GroupsHeader, GroupsList, GroupsArtificialList } from '../groups';
+import { GroupsHeader, GroupsStaticList, GroupsAutomaticList, GroupsArtificialList, GroupsDefaultList } from '../groups';
+import { observer, inject } from 'mobx-react';
 
-const GroupsPanel = ({ showCreateGroupModal, selectGroup, onDeviceDrop }) => {
+const GroupsPanel = inject("stores")(observer(({ showCreateGroupModal, selectGroup, onDeviceDrop, stores }) => {
+    const { alphaPlusEnabled } = stores.featuresStore;
     return (
         <div className="groups-panel">
             <GroupsHeader 
@@ -12,13 +14,27 @@ const GroupsPanel = ({ showCreateGroupModal, selectGroup, onDeviceDrop }) => {
                 selectGroup={selectGroup}
                 onDeviceDrop={onDeviceDrop}
             />
-            <GroupsList                  
-                selectGroup={selectGroup}
-                onDeviceDrop={onDeviceDrop}
-            />
+            {alphaPlusEnabled ?
+                <span>
+                    <GroupsStaticList                  
+                        selectGroup={selectGroup}
+                        onDeviceDrop={onDeviceDrop}
+                    />
+                    <GroupsAutomaticList
+                        selectGroup={selectGroup}
+                        onDeviceDrop={onDeviceDrop}
+                    />
+                </span>
+            :
+                <GroupsDefaultList                  
+                    selectGroup={selectGroup}
+                    onDeviceDrop={onDeviceDrop}
+                />
+            }
+            
         </div>
     );
-}
+}));
 
 GroupsPanel.propTypes = {
     showCreateGroupModal: PropTypes.func.isRequired,

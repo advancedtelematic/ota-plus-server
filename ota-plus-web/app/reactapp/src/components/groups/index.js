@@ -1,11 +1,15 @@
 import GroupsCreateModal from './CreateModal';
 import GroupsHeader from './Header';
-import GroupsList from './List';
+import GroupsStaticList from './StaticList';
+import GroupsAutomaticList from './AutomaticList';
 import GroupsArtificialList from './ArtificialList';
+import GroupsDefaultList from './DefaultList';
 
 export {
     GroupsCreateModal,
     GroupsHeader,
-    GroupsList,
-    GroupsArtificialList
+    GroupsStaticList,
+    GroupsAutomaticList,
+    GroupsArtificialList,
+    GroupsDefaultList
 }

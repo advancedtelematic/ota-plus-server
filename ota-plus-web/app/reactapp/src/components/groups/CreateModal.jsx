@@ -1,86 +1,141 @@
 import React, { Component, PropTypes } from 'react';
-import { observable } from 'mobx';
+import { observable, intercept, ObservableMap } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Modal, AsyncResponse, Form, FormInput } from '../../partials';
 import { FormsyText } from 'formsy-material-ui/lib';
 import { FlatButton } from 'material-ui';
 import serialize from 'form-serialize';
 import { AsyncStatusCallbackHandler } from '../../utils';
+import {
+    Step1,
+    Step2,
+} from './createWizard';
+import _ from 'underscore';
+
+const wizardSteps = [
+    {
+        class: Step1,
+        name: "Choose group type",
+        isFinished: false,
+    },
+    {
+        class: Step2,
+        name: "Pass group data",
+        isFinished: false,
+    },
+];
+
+const initialCurrentStepId = 0;
 
 @inject('stores')
 @observer
 class CreateModal extends Component {
-    @observable submitButtonDisabled = true;
+    @observable currentStepId = initialCurrentStepId;
+    @observable steps = wizardSteps;
+    @observable groupType = '';
 
     constructor(props) {
         super(props);
         const { groupsStore } = props.stores;
         this.createHandler = new AsyncStatusCallbackHandler(groupsStore, 'groupsCreateAsync', this.handleResponse.bind(this));
+        this.markStepAsFinished = this.markStepAsFinished.bind(this);
+        this.markStepAsNotFinished = this.markStepAsNotFinished.bind(this);
+        this.selectGroupType = this.selectGroupType.bind(this);
+        this.nextStep = this.nextStep.bind(this);
+        this.verifyIfPreviousStepsFinished = this.verifyIfPreviousStepsFinished.bind(this);
+        this.createGroup = this.createGroup.bind(this);
+        this.isLastStep = this.isLastStep.bind(this);
+    }
+    componentWillMount() {
+        const { featuresStore } = this.props.stores;
+        const { alphaPlusEnabled } = featuresStore;
+        if(!alphaPlusEnabled) {
+            this.currentStepId = 1;
+            this.groupType = 'static';
+        }
+    }
+    markStepAsFinished() {
+        this.steps[this.currentStepId].isFinished = true;
+    }
+    markStepAsNotFinished() {
+        this.steps[this.currentStepId].isFinished = false;
+    }
+    verifyIfPreviousStepsFinished(stepId) {
+        if (_.find(this.steps, function (step, index) {
+                return index <= stepId && step.isFinished === false;
+            }))
+            return false;
+        return true;
+    }
+    isLastStep() {
+        return this.currentStepId == this.steps.length - 1;
+    }
+    nextStep() {
+        if (this.verifyIfPreviousStepsFinished(this.currentStepId) && this.currentStepId != this.steps.length - 1) {
+            this.currentStepId = this.currentStepId + 1;
+        }
+    }
+    selectGroupType(type) {
+        this.groupType = type;
+        this.markStepAsFinished();
     }
     componentWillUnmount() {
         this.createHandler();
     }
-    enableButton() {
-        this.submitButtonDisabled = false;
-    }
-    disableButton() {
-        this.submitButtonDisabled = true;
-    }
-    submitForm(e) {
-        if(e) e.preventDefault();
-        const { groupsStore } = this.props.stores;
-        let data = serialize(document.querySelector('#group-create-form'), { hash: true });        
-        groupsStore.createGroup(data.groupName);
+    createGroup() {
+        if(this.groupType === 'static') {
+            const { groupsStore } = this.props.stores;
+            let data = serialize(document.querySelector('#static-group-create-form'), { hash: true });
+            groupsStore.createGroup(data.groupName);
+        } else {
+            console.log('CREATING AUTO GROUP');
+        }
     }
     handleResponse() {
         const { groupsStore } = this.props.stores;
-        let data = serialize(document.querySelector('#group-create-form'), { hash: true });
+        let data = null;
+        if(this.groupType === 'static') {
+            data = serialize(document.querySelector('#static-group-create-form'), { hash: true });
+        } else {
+            data = serialize(document.querySelector('#automatic-group-create-form'), { hash: true });
+        }
         this.props.selectGroup({type: 'real', groupName: data.groupName, id: groupsStore.latestCreatedGroupId});
         groupsStore._prepareGroups(groupsStore.groups);
         this.props.hide();
     }
     render() {
         const { shown, hide } = this.props;
-        const { groupsStore } = this.props.stores;
-        const form = (
-            <Form                
-                onSubmit={this.submitForm.bind(this)}
-                id="group-create-form">
-                <AsyncResponse 
-                    handledStatus="error"
-                    action={groupsStore.groupsCreateAsync}
-                    errorMsg={(groupsStore.groupsCreateAsync.data ? groupsStore.groupsCreateAsync.data.description : null)}
-                />
-                <div className="row">
-                    <div className="col-xs-8">
-                        <div className="group-name-input">
-                            <FormInput
-                                onValid={this.enableButton.bind(this)}
-                                onInvalid={this.disableButton.bind(this)}
-                                name="groupName"
-                                className="input-wrapper"
-                                isEditable={!groupsStore.groupsCreateAsync.isFetching}
-                                title={"Group Name"}
-                                label={"Group Name"}
-                                placeholder={"Name"}
-                            />
-                        </div>
-                    </div>
+        const currentStep = this.steps[this.currentStepId];
+        const step = (
+            <span>
+                {React.createElement(currentStep.class, {
+                    selectGroupType: this.selectGroupType,
+                    groupType: this.groupType,
+                    markStepAsFinished: this.markStepAsFinished,
+                    markStepAsNotFinished: this.markStepAsNotFinished,
+                })}
+                <div className="body-actions">
+                    {this.isLastStep() ?
+                        <button
+                            className="btn-primary"
+                            id="wizard-launch-button"
+                            onClick={this.createGroup}
+                            disabled={!currentStep.isFinished}
+                        >
+                            Create
+                        </button>
+                    :
+                        <button
+                            disabled={!currentStep.isFinished}
+                            className="btn-primary"
+                            id="next"
+                            onClick={this.nextStep}
+                        >
+                            Next
+                        </button>
+                    }
                 </div>
-                <div className="row">
-                    <div className="col-xs-12">
-                        <div className="body-actions">
-                            <button
-                                disabled={this.submitButtonDisabled || groupsStore.groupsCreateAsync.isFetching}
-                                className="btn-primary"
-                                id="add"
-                            >
-                                Add
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </Form>
+            </span>
         );
         return (
             <Modal 
@@ -97,7 +152,7 @@ class CreateModal extends Component {
                     </div>
                 }
                 className="create-group-modal"
-                content={form}
+                content={step}
                 shown={shown}
             />
         );
