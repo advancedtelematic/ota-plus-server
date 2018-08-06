@@ -1,3 +1,4 @@
+import com.typesafe.sbt.packager.docker.Cmd
 import play.sbt.PlaySettings
 import play.sbt.routes.RoutesKeys
 
@@ -30,6 +31,14 @@ packageName in Docker := "ota-plus-web"
 dockerRepository := Some("advancedtelematic")
 
 dockerUpdateLatest := true
+
+dockerBaseImage := "openjdk:8u151-jre-alpine"
+
+dockerCommands ++= Seq(
+  Cmd("USER", "root"),
+  Cmd("RUN", "apk upgrade --update && apk add --update bash coreutils"),
+  Cmd("USER", (daemonUser in Docker).value)
+)
 
 bashScriptExtraDefines ++= Seq("""addJava "-Xmx800m"""")
 
