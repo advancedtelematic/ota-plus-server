@@ -20,6 +20,7 @@ import ConfirmationModal from './ConfirmationModal';
 import EditModal from './EditModal';
 import EditCampaignModal from './EditCampaignModal';
 import EditPackageModal from './EditPackageModal';
+import TimePicker from './TimePicker';
 
 export {
     Navigation,
@@ -43,5 +44,6 @@ export {
     ConfirmationModal,
     EditModal,
     EditCampaignModal,
-    EditPackageModal
+    EditPackageModal,
+    TimePicker
 }
