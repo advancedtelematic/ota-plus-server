@@ -74,6 +74,13 @@
   }
 }
 
+.btn-bordered {
+  background: transparent;
+  border: 1px solid #48dad0;
+  color: #48dad0;
+  padding: 5px 12px;
+}
+
 .btn-red {
   background: #ff0000 !important;
 }
@@ -188,5 +195,24 @@
         transform: translateY(-50%);
       }
     }
+  }
+}
+
+.c-time-picker {
+  &__time-value {
+    padding:5px;
+    div {
+      display: inline-block;
+    }
+  }
+
+  &__hours, &__minutes, &__seconds {
+    position: relative;
+  }
+
+  select {
+    position: absolute;
+    top:20px;
+    left:-5px;
   }
 }

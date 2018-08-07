@@ -4,9 +4,9 @@ export default class FormTextarea extends Component {
 
     validateInput(e) {
         if (e.target.value.length > 0) {
-            this.props.onValid ? this.props.onValid() : null;
+            this.props.onValid ? this.props.onValid(e) : null;
         } else {
-            this.props.onInvalid ? this.props.onInvalid() : null;
+            this.props.onInvalid ? this.props.onInvalid(e) : null;
         }
     }
 
