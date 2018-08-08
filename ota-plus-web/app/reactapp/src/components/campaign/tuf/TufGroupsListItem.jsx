@@ -5,9 +5,6 @@ import { translate } from 'react-i18next';
 
 @observer
 class TufGroupsListItem extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { t, group, statistics, foundGroup, campaign } = this.props;
         const progress = Math.min(Math.round(statistics.processed/Math.max(foundGroup.total, 1) * 100), 100);

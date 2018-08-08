@@ -3,9 +3,6 @@ import { observer } from 'mobx-react';
 
 @observer
 class MultiTargetITem extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { item, hardwareId, updateId, status, length, cancelMtuUpdate, showSequencer } = this.props;
         const hash = item.image.fileinfo.hashes.sha256;

@@ -9,9 +9,6 @@ const title = "Properties";
 
 @observer
 class PropertiesPanel extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { 
             installTufPackage, 

@@ -3,9 +3,6 @@ import { observer } from 'mobx-react';
 
 @observer
 class PackagesListItem extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { pack, togglePackage, setWizardData, chosen } = this.props;
         return (

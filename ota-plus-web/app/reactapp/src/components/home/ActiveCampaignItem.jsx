@@ -5,9 +5,6 @@ import _ from 'underscore';
 
 @observer
 class ActiveCampaignItem extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { campaign } = this.props;
         const link = "campaigns/" + campaign.id;

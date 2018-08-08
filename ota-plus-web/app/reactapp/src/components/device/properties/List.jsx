@@ -15,9 +15,6 @@ const queued = "Queued";
 @inject("stores")
 @observer
 class List extends Component {
-	constructor(props) {
-		super(props);
-	}
 	isPackageQueued(version) {
 		const { devicesStore, hardwareStore } = this.props.stores;
 		let isPackageQueued = false;

@@ -10,9 +10,6 @@ const title = "Access keys";
 @inject("stores")
 @observer
 class AccessKeys extends Component {
-    constructor(props) {
-        super(props);
-    }
     componentWillMount() {
         const { provisioningStore } = this.props.stores; 
         provisioningStore.fetchProvisioningStatus();

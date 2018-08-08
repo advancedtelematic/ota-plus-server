@@ -9,9 +9,6 @@ import CampaignsTufStatisticDetails from './StatisticDetails';
 @inject("stores")
 @observer
 class Statistics extends Component {
-    constructor(props) {
-        super(props);
-    }
     componentWillMount() {
         const { campaignsStore } = this.props.stores;
     	campaignsStore.fetchCampaign(this.props.campaignId);

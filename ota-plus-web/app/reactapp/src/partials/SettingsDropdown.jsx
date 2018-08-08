@@ -9,9 +9,6 @@ import $ from 'jquery';
 
 @observer
 class SettingsDropdown extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         return (
             <Dropdown id="profile-dropdown" rootCloseEvent="mousedown">

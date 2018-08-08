@@ -7,9 +7,6 @@ import { translate } from 'react-i18next';
 @inject("stores")
 @observer
 class Chart extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { t } = this.props;
         const { packagesStore } = this.props.stores;

@@ -10,9 +10,6 @@ const title = "Policy";
 @inject("stores")
 @observer
 class TermsAndConditions extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { userStore } = this.props.stores;
         let terms = _.find(userStore.contracts, (obj) => contracts.default[obj.contract]);

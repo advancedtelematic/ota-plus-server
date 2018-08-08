@@ -5,9 +5,6 @@ import VersionsItem from './VersionsItem';
 
 @observer
 class Versions extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { versions } = this.props;
         return (

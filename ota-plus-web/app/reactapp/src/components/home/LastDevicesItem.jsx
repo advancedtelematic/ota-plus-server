@@ -5,9 +5,6 @@ import _ from 'underscore';
 
 @observer
 class LastDevicesItem extends Component {
-    constructor(props) {
-        super(props);
-    }    
     render() {
         const { device } = this.props;
         const link = 'device/' + device.uuid;

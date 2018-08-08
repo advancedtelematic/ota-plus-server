@@ -3,9 +3,6 @@ import { observer } from 'mobx-react';
 
 @observer
 class ListItem extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { pack, device, queuedPackage, installedPackage, isSelected, togglePackage, toggleTufAutoInstall, showPackageDetails } = this.props;
         return (

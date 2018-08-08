@@ -5,9 +5,6 @@ import moment from 'moment';
 
 @observer
 class MtuListItem extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
     	const { item } = this.props;
         return (

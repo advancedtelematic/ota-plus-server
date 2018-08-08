@@ -7,9 +7,6 @@ import MtuListItem from './MtuListItem';
 @inject("stores")
 @observer    
 class MtuQueueList extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { cancelMtuUpdate, showSequencer } = this.props;
         const { devicesStore } = this.props.stores;

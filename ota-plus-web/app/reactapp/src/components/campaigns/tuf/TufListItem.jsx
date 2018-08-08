@@ -6,9 +6,6 @@ import { Loader } from '../../../partials';
 
 @observer
 class TufListItem extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { campaign, toggleCampaign, type, expandedCampaignName } = this.props;
 
