@@ -1,18 +1,21 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Loader } from '../../partials';
 import _ from 'underscore';
 import LastPackagesItem from './LastPackagesItem';
 import NoItems from './NoItems';
 
+@inject("stores")
 @observer
 class LastPackages extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        const { packagesStore, showPackagesCreateModal } = this.props;
+        const { showPackagesCreateModal } = this.props;
+        const { packagesStore } = this.props.stores;
+
         const { lastPackages } = packagesStore;
         return (
             <span style={{height: '100%'}}>
@@ -44,7 +47,7 @@ class LastPackages extends Component {
 }
 
 LastPackages.propTypes = {
-    packagesStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
 }
 
 export default LastPackages;

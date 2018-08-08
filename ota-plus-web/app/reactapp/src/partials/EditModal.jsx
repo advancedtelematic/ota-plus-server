@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import Modal from './Modal';
 import AsyncResponse from './AsyncResponse';
 import { Form } from './Form';
@@ -9,13 +9,15 @@ import serialize from 'form-serialize';
 import { AsyncStatusCallbackHandler } from '../utils';
 import _ from 'underscore';
 
+@inject('stores')
 @observer
 class EditModal extends Component {
     @observable submitButtonDisabled = true;
 
     constructor(props) {
         super(props);
-        this.renameHandler = new AsyncStatusCallbackHandler(props.devicesStore, 'devicesRenameAsync', this.handleRenameResponse.bind(this));
+        const { devicesStore } = props.stores;
+        this.renameHandler = new AsyncStatusCallbackHandler(devicesStore, 'devicesRenameAsync', this.handleRenameResponse.bind(this));
     }
     enableButton() {
         this.submitButtonDisabled = false;
@@ -25,8 +27,9 @@ class EditModal extends Component {
     }
     submitForm(e) {
         if(e) e.preventDefault();
+        const { devicesStore } = this.props.stores;
         const formData = serialize(document.querySelector('#edit-name-form'), { hash: true });
-        this.props.devicesStore.renameDevice(this.props.device.uuid, {
+        devicesStore.renameDevice(this.props.device.uuid, {
             deviceName: formData.deviceName,
             deviceType: "Other"
         });
@@ -35,7 +38,8 @@ class EditModal extends Component {
         this.props.hide();
     }
     render() {
-        const { devicesStore, shown, hide, modalTitle, device } = this.props;
+        const { shown, hide, modalTitle, device } = this.props;
+        const { devicesStore } = this.props.stores;
         const form = (
             <Form                
                 onSubmit={this.submitForm.bind(this)}

@@ -1,44 +1,26 @@
-    import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import React, { Component, PropTypes } from 'react';
 import { FlatButton } from 'material-ui';
-import GroupsList from './GroupsList';
+import { GroupsHeader, GroupsList, GroupsArtificialList } from '../groups';
 
-@observer
-class GroupsPanel extends Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        const { devicesStore, groupsStore, showCreateGroupModal, selectGroup, onDeviceDrop } = this.props;
-        return (
-            <div className="groups-panel">
-                <div className="groups-panel__header">
-                    <div className="groups-panel__title">
-                        Groups
-                    </div>
-                    <a href="#" className="add-button light" id="add-new-group" onClick={showCreateGroupModal}>
-                        <span>
-                            +
-                        </span>
-                        <span>
-                            Add group
-                        </span>
-                    </a>
-                </div>
-                <GroupsList
-                    devicesStore={devicesStore}
-                    groupsStore={groupsStore}
-                    selectGroup={selectGroup}
-                    onDeviceDrop={onDeviceDrop}
-                />
-            </div>
-        );
-    }
+const GroupsPanel = ({ showCreateGroupModal, selectGroup, onDeviceDrop }) => {
+    return (
+        <div className="groups-panel">
+            <GroupsHeader 
+                showCreateGroupModal={showCreateGroupModal}
+            />
+            <GroupsArtificialList                  
+                selectGroup={selectGroup}
+                onDeviceDrop={onDeviceDrop}
+            />
+            <GroupsList                  
+                selectGroup={selectGroup}
+                onDeviceDrop={onDeviceDrop}
+            />
+        </div>
+    );
 }
 
 GroupsPanel.propTypes = {
-    devicesStore: PropTypes.object.isRequired,
-    groupsStore: PropTypes.object.isRequired,
     showCreateGroupModal: PropTypes.func.isRequired,
     selectGroup: PropTypes.func.isRequired,
     onDeviceDrop: PropTypes.func.isRequired,

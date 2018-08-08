@@ -1,21 +1,24 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
 import { Doughnut } from 'react-chartjs';
 import { FlatButton } from 'material-ui';
 import { Loader } from '../../../partials';
 import CampaignsTufStatisticDetails from './StatisticDetails';
 
+@inject("stores")
 @observer
 class Statistics extends Component {
     constructor(props) {
         super(props);
     }
     componentWillMount() {
-    	this.props.campaignsStore.fetchCampaign(this.props.campaignId);
+        const { campaignsStore } = this.props.stores;
+    	campaignsStore.fetchCampaign(this.props.campaignId);
     }
     render() {
-        const { campaignsStore, groupsStore, showCancelCampaignModal, showDependenciesModal, hideCancel } = this.props;
+        const { showCancelCampaignModal, showDependenciesModal, hideCancel } = this.props;
+        const { campaignsStore } = this.props.stores;
         return (
             <div>
             	{campaignsStore.campaignsOneFetchAsync.isFetching || campaignsStore.campaignsOneStatisticsFetchAsync.isFetching ?
@@ -24,8 +27,6 @@ class Statistics extends Component {
     	        	</div>
             	:
             		<CampaignsTufStatisticDetails
-            			campaignsStore={campaignsStore}
-                        groupsStore={groupsStore}
                         showCancelCampaignModal={showCancelCampaignModal}
                         showDependenciesModal={showDependenciesModal}
                         hideCancel={hideCancel}

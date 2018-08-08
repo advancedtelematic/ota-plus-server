@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Modal, AsyncResponse, Loader, FormTextarea, Form } from '../../partials';
 import { AsyncStatusCallback, AsyncStatusCallbackHandler } from '../../utils';
 import { FormsyText } from 'formsy-material-ui/lib';
@@ -8,6 +8,7 @@ import { FlatButton } from 'material-ui';
 import serialize from 'form-serialize';
 import _ from 'underscore';
 
+@inject("stores")
 @observer
 class BlacklistModal extends Component {
     @observable submitButtonDisabled = true;
@@ -17,11 +18,13 @@ class BlacklistModal extends Component {
         this.removeFromBlacklist = this.removeFromBlacklist.bind(this);
     }
     componentDidMount() {
-        this.blacklistHandler = AsyncStatusCallbackHandler(this.props.packagesStore, 'packagesBlacklistAsync', this.props.hide);
-        this.updateBlacklistedPackageHandler = AsyncStatusCallbackHandler(this.props.packagesStore, 'packagesUpdateBlacklistedAsync', this.props.hide);
-        this.removePackageFromBlacklistHandler = AsyncStatusCallbackHandler(this.props.packagesStore, 'packagesRemoveFromBlacklistAsync', this.props.hide);
+        const { packagesStore } = this.props.stores;
+        this.blacklistHandler = AsyncStatusCallbackHandler(packagesStore, 'packagesBlacklistAsync', this.props.hide);
+        this.updateBlacklistedPackageHandler = AsyncStatusCallbackHandler(packagesStore, 'packagesUpdateBlacklistedAsync', this.props.hide);
+        this.removePackageFromBlacklistHandler = AsyncStatusCallbackHandler(packagesStore, 'packagesRemoveFromBlacklistAsync', this.props.hide);
     }
     componentWillReceiveProps(nextProps) {
+        const { packagesStore } = this.props.stores;
         if(nextProps.blacklistAction.name && nextProps.blacklistAction.version &&
                 (nextProps.blacklistAction.name !== this.props.blacklistAction.name ||
                 nextProps.blacklistAction.version !== this.props.blacklistAction.version
@@ -32,10 +35,10 @@ class BlacklistModal extends Component {
                 version: nextProps.blacklistAction.version
             };
             if(nextProps.blacklistAction.mode === 'edit') {
-                this.props.packagesStore.fetchBlacklist();
-                this.props.packagesStore.fetchBlacklistedPackage(data);
+                packagesStore.fetchBlacklist();
+                packagesStore.fetchBlacklistedPackage(data);
             } else {
-                this.props.packagesStore.fetchAffectedDevicesCount(data);
+                packagesStore.fetchAffectedDevicesCount(data);
             }
         }
     }
@@ -51,6 +54,7 @@ class BlacklistModal extends Component {
         this.submitButtonDisabled = true;
     }
     submitForm(e) {
+        const { packagesStore } = this.props.stores;
         if(e) e.preventDefault();
         const formData = serialize(document.querySelector('#blacklist-form'), { hash: true });
         const data = {
@@ -61,21 +65,23 @@ class BlacklistModal extends Component {
             comment: formData.comment
         };
         if(this.props.blacklistAction.mode === "edit") {
-            this.props.packagesStore.updateBlacklistedPackage(data);
+            packagesStore.updateBlacklistedPackage(data);
         } else {
-            this.props.packagesStore.blacklistPackage(data);
+            packagesStore.blacklistPackage(data);
         }
     }
     removeFromBlacklist(e) {
         if(e) e.preventDefault();
+        const { packagesStore } = this.props.stores;
         const data = {
             name: this.props.blacklistAction.name,
             version: this.props.blacklistAction.version
         }
-        this.props.packagesStore.removePackageFromBlacklist(data);
+        packagesStore.removePackageFromBlacklist(data);
     }
     render() {
-        const { shown, hide, blacklistAction, packagesStore } = this.props;        
+        const { shown, hide, blacklistAction } = this.props;
+        const { packagesStore } = this.props.stores;   
         const content = (
             <Form                
                 onSubmit={this.submitForm.bind(this)}
@@ -191,7 +197,7 @@ BlacklistModal.propTypes = {
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
     blacklistAction: PropTypes.object.isRequired,
-    packagesStore: PropTypes.object.isRequired
+    stores: PropTypes.object
 }
 
 export default BlacklistModal;

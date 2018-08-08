@@ -50,7 +50,6 @@ class WizardStep1 extends Component {
 
 WizardStep1.propTypes = {
     wizardData: PropTypes.object.isRequired,
-    groupsStore: PropTypes.object.isRequired
 }
 
 export default WizardStep1;

@@ -2,21 +2,15 @@ import React, { PropTypes, PureComponent } from 'react';
 import { CircularProgress } from 'material-ui';
 import Cookies from 'js-cookie';
 
-class Loader extends PureComponent {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        const { className, size, thickness } = this.props;
-        return (
-            <div className={"loader" + (className ? " " + className : "")}>
-                <CircularProgress
-                    size={size}
-                    thickness={thickness}
-                />
-            </div>
-        );
-    }
+const Loader = ({ className, size, thickness }) => {
+    return (
+        <div className={"loader" + (className ? " " + className : "")}>
+            <CircularProgress
+                size={size}
+                thickness={thickness}
+            />
+        </div>
+    );
 }
 
 Loader.propTypes = {

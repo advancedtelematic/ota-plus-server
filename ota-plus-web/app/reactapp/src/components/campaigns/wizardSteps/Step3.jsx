@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable, observe } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
 import { WizardPackagesVersionList } from './step3Files';
 import { VelocityTransitionGroup } from 'velocity-react';
@@ -9,6 +9,7 @@ import { SelectField, MenuItem } from 'material-ui';
 
 const headerHeight = 28;
 
+@inject("stores")
 @observer
 class WizardStep3 extends Component {
     @observable hardwareIdDuplicates = false;
@@ -19,7 +20,8 @@ class WizardStep3 extends Component {
         this.setHardwareIdDuplicates = this.setHardwareIdDuplicates.bind(this);
     }
     componentWillMount() {
-        this.props.hardwareStore.fetchHardwareIds();
+        const { hardwareStore } = this.props.stores;
+        hardwareStore.fetchHardwareIds();
     }
     setHardwareIdDuplicates(value) {
         if(value)
@@ -40,7 +42,8 @@ class WizardStep3 extends Component {
         return sortedPackages;
     }
     render() {
-        const { wizardData, selectVersion, markStepAsFinished, markStepAsNotFinished, hardwareStore, rawSelectedPacks, removeSelectedPacksByKeys, packagesStore } = this.props;
+        const { wizardData, selectVersion, markStepAsFinished, markStepAsNotFinished, rawSelectedPacks, removeSelectedPacksByKeys } = this.props;
+        const { hardwareStore } = this.props.stores;
         let chosenPackagesList = this.sortByFirstLetter(wizardData[1].packages);
         let selectedVersions = wizardData[2].versions;
         return (
@@ -74,12 +77,10 @@ class WizardStep3 extends Component {
                                                         selectVersion={selectVersion}
                                                         markStepAsFinished={markStepAsFinished}
                                                         markStepAsNotFinished={markStepAsNotFinished}
-                                                        hardwareStore={hardwareStore}
                                                         setHardwareIdDuplicates={this.setHardwareIdDuplicates}
                                                         hardwareIdDuplicates={this.hardwareIdDuplicates}
                                                         rawSelectedPacks={rawSelectedPacks}
                                                         removeSelectedPacksByKeys={removeSelectedPacksByKeys}
-                                                        packagesStore={packagesStore}
                                                     />
                                                 </span>
                                             );
@@ -97,8 +98,7 @@ class WizardStep3 extends Component {
 
 WizardStep3.propTypes = {
     setWizardData: PropTypes.func.isRequired,
-    packagesStore: PropTypes.object.isRequired,
-    hardwareStore: PropTypes.object
+    stores: PropTypes.object
 }
 
 export default WizardStep3;

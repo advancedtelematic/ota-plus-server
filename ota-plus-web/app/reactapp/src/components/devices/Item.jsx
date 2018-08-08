@@ -7,7 +7,8 @@ import { Dropdown } from '../../partials';
 
 const deviceSource = {
     beginDrag(props) {
-        const foundGroup = _.find(props.groupsStore.groups, (group) => {
+        const { groupsStore } = props.stores;
+        const foundGroup = _.find(groupsStore.groups, (group) => {
             return group.devices.values.indexOf(props.device.uuid) > -1;
         });
         return {
@@ -16,13 +17,14 @@ const deviceSource = {
         };
     },
     endDrag(props, monitor) {
+        const { devicesStore, groupsStore } = props.stores;
         const item = monitor.getItem();
         const dropResult = monitor.getDropResult();
-        let selectedGroup = props.groupsStore.selectedGroup;
+        let selectedGroup = groupsStore.selectedGroup;
         if(selectedGroup.id) {
-            props.devicesStore.fetchDevices('', selectedGroup.id);
+            devicesStore.fetchDevices('', selectedGroup.id);
         } else {
-            props.devicesStore.fetchDevices();
+            devicesStore.fetchDevices();
         }
     },
 };
@@ -51,7 +53,9 @@ class Item extends Component {
         this.menuShown = false;
     }
     render() {
-        const { groupsStore, device, goToDetails, alphaPlusEnabled, showDeleteConfirmation, showEditName } = this.props;
+        const { device, goToDetails, showDeleteConfirmation, showEditName } = this.props;
+        const { groupsStore, featuresStore } = this.props.stores;
+        const { alphaPlusEnabled } = featuresStore;
         const { isDragging, connectDragSource } = this.props;
         const opacity = isDragging ? 0.4 : 1;
         const lastSeenDate = new Date(device.lastSeen);
@@ -136,8 +140,7 @@ class Item extends Component {
 }
 
 Item.propTypes = {
-    groupsStore: PropTypes.object.isRequired,
-    devicesStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     device: PropTypes.object.isRequired,
     goToDetails: PropTypes.func.isRequired,
     connectDragSource: PropTypes.func.isRequired,

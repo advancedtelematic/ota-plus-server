@@ -1,17 +1,19 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
 import { Loader } from '../../../partials';
 import MtuListItem from './MtuListItem';
 import { InfiniteScroll } from '../../../utils';
 
+@inject("stores")
 @observer
 class MtuList extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        const { packagesStore, device } = this.props;
+        const { device } = this.props;
+        const { packagesStore } = this.props.stores;
         const emptyHistory = (
             <div className="wrapper-center">
                 Multi target update history is empty.
@@ -47,7 +49,7 @@ class MtuList extends Component {
 }
 
 MtuList.propTypes = {
-    packagesStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     device: PropTypes.object.isRequired
 }
 

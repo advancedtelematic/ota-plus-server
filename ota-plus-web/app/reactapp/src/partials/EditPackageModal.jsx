@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import Modal from './Modal';
 import AsyncResponse from './AsyncResponse';
 import { Form } from './Form';
@@ -9,13 +9,15 @@ import serialize from 'form-serialize';
 import { AsyncStatusCallbackHandler } from '../utils';
 import _ from 'underscore';
 
+@inject("stores")
 @observer
 class EditPackageModal extends Component {
     @observable submitButtonDisabled = true;
 
     constructor(props) {
         super(props);
-        this.renameHandler = new AsyncStatusCallbackHandler(props.packagesStore, 'campaignsRenameAsync', this.handleRenameResponse.bind(this));
+        const { packagesStore } = props.stores;
+        this.renameHandler = new AsyncStatusCallbackHandler(packagesStore, 'campaignsRenameAsync', this.handleRenameResponse.bind(this));
     }
     enableButton() {
         this.submitButtonDisabled = false;
@@ -25,15 +27,17 @@ class EditPackageModal extends Component {
     }
     submitForm(e) {
         if(e) e.preventDefault();
-        const { campaign } = this.props.campaignsStore;
+        const { packagesStore, campaignsStore } = this.props.stores;
+        const { campaign } = campaignsStore;
         const formData = serialize(document.querySelector('#edit-name-form'), { hash: true });
-        this.props.packagesStore.renameCampaign(campaign.id, { name: formData.campaignName })
+        packagesStore.renameCampaign(campaign.id, { name: formData.campaignName })
     }
     handleRenameResponse() {
         this.props.hide();
     }
     render() {
-        const { packagesStore, shown, hide, modalTitle, defaultValue } = this.props;
+        const { shown, hide, modalTitle, defaultValue } = this.props;
+        const { packagesStore } = this.props.stores;
         const form = (
             <Form
                 onSubmit={this.submitForm.bind(this)}

@@ -1,29 +1,36 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Modal, AsyncResponse } from '../../partials';
 import { AsyncStatusCallbackHandler } from '../../utils';
 import { FlatButton } from 'material-ui';
 import { translate } from 'react-i18next';
 import _ from 'underscore';
 
+@inject("stores")
 @observer
 class CancelGroupModal extends Component {
     constructor(props) {
         super(props);
-        this.cancelHandler = new AsyncStatusCallbackHandler(props.campaignsStore, 'campaignsCancelRequestAsync', this.handleResponse.bind(this));
+        const { campaignsStore } = props.stores;
+        this.cancelHandler = new AsyncStatusCallbackHandler(campaignsStore, 'campaignsCancelRequestAsync', this.handleResponse.bind(this));
     }
     componentWillUnmount() {
         this.cancelHandler();
     }
     cancelCampaignRequest() {
-        this.props.campaignsStore.cancelCampaignRequest(this.props.updateRequest.updateRequest);
+        const { campaignsStore } = this.props.stores;
+        campaignsStore.cancelCampaignRequest(this.props.updateRequest.updateRequest);
     }
     handleResponse() {
-        this.props.campaignsStore.fetchCampaign(this.props.campaign.meta.id);
+        const { campaignsStore } = this.props.stores;
+        const { campaign } = campaignsStore;
+        campaignsStore.fetchCampaign(campaign.meta.id);
         this.props.hide();
     }
     render() {
-        const { t, shown, hide, campaignsStore, updateRequest, campaign } = this.props;
+        const { t, shown, hide, updateRequest } = this.props;
+        const { campaignsStore } = this.props.stores;
+        const { campaign } = campaignsStore;
         const content = (
             !_.isEmpty(updateRequest) ?
                 <span>
@@ -79,8 +86,7 @@ class CancelGroupModal extends Component {
 CancelGroupModal.propTypes = {
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
-    campaign: PropTypes.object.isRequired,
-    campaignsStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     updateRequest: PropTypes.object.isRequired
 }
 

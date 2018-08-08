@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable, observe } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
 import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
@@ -12,6 +12,7 @@ import { Form } from 'formsy-react';
 const headerHeight = 28;
 const noSearchResults = "No matching packages found.";
 
+@inject("stores")
 @observer
 class InstalledList extends Component {
     @observable firstShownIndex = 0;
@@ -23,10 +24,11 @@ class InstalledList extends Component {
 
     constructor(props) {
         super(props);
+        const { packagesStore } = this.props.stores;
         this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
         this.generateItemsPositions = this.generateItemsPositions.bind(this);
         this.listScroll = this.listScroll.bind(this);
-        this.packagesChangeHandler = observe(props.packagesStore, (change) => {
+        this.packagesChangeHandler = observe(packagesStore, (change) => {
             if(change.name === 'preparedOndevicePackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
                   setTimeout(() => {
@@ -64,6 +66,7 @@ class InstalledList extends Component {
         return positions;
     }
     listScroll() {
+        const { packagesStore } = this.props.stores;
         if(this.refs.list) {
             const headersPositions = this.generateHeadersPositions();
             const itemsPositions = this.generateItemsPositions();
@@ -74,7 +77,7 @@ class InstalledList extends Component {
             let lastShownIndex = null;
             _.each(headersPositions, (position, index) => {
                 if(scrollTop >= position) {
-                    newFakeHeaderLetter = Object.keys(this.props.packagesStore.preparedOndevicePackages)[index];
+                    newFakeHeaderLetter = Object.keys(packagesStore.preparedOndevicePackages)[index];
                     return true;
                 } else if(scrollTop >= position - headerHeight) {
                     scrollTop -= scrollTop - (position - headerHeight);
@@ -107,7 +110,8 @@ class InstalledList extends Component {
         this.tmpIntervalId = null;
     }    
     render() {
-        const { packagesStore, device, showPackageBlacklistModal, onFileDrop } = this.props;
+        const { device, showPackageBlacklistModal, onFileDrop } = this.props;
+        const { packagesStore } = this.props.stores;
         return (
             <span>
                 <div className="ios-list" ref="list">
@@ -162,7 +166,7 @@ class InstalledList extends Component {
 }
 
 InstalledList.propTypes = {
-    packagesStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     device: PropTypes.object.isRequired,
     showPackageBlacklistModal: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,

@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {observable} from "mobx"
-import {observer} from 'mobx-react';
+import {observer, inject} from 'mobx-react';
 import { Link } from 'react-router';
 import {Modal} from '../partials';
 import _ from 'underscore';
 import moment from 'moment';
 import * as contracts from '../../../assets/contracts/';
 
+@inject('stores')
 @observer
 export default class Terms extends Component {
     @observable termsAccepted = false;
@@ -17,7 +18,8 @@ export default class Terms extends Component {
         this.showModal = !this.showModal;
     }
     render() {
-        const {userStore, backButtonAction, checked} = this.props;
+        const {backButtonAction, checked} = this.props;
+        const { userStore } = this.props.stores;
         let terms = _.find(userStore.contracts, (obj) => contracts.default[obj.contract]);
         let agreedDate = terms && terms.accepted;
         !terms ? terms = {contract: contracts.defaultName}: terms;

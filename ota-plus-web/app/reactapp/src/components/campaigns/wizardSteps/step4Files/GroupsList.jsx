@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable, observe } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Loader } from '../../../../partials';
 import GroupsListItem from './GroupsListItem';
 import _ from 'underscore';
@@ -8,6 +8,7 @@ import { InfiniteScroll } from '../../../../utils';
 
 const headerHeight = 28;
 
+@inject("stores")
 @observer
 class GroupsList extends Component {
     @observable fakeHeaderLetter = null;
@@ -15,9 +16,10 @@ class GroupsList extends Component {
 
     constructor(props) {
         super(props);
+        const { groupsStore } = props.stores;
         this.generatePositions = this.generatePositions.bind(this);
         this.listScroll = this.listScroll.bind(this);
-        this.groupsChangeHandler = observe(props.groupsStore, (change) => {
+        this.groupsChangeHandler = observe(groupsStore, (change) => {
             if(change.name === 'preparedGroups' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
                   setTimeout(() => {
@@ -67,7 +69,8 @@ class GroupsList extends Component {
         }
     }
     render() {
-        const { chosenGroups, setWizardData, groupsStore } = this.props;
+        const { chosenGroups, setWizardData } = this.props;
+        const { groupsStore } = this.props.stores;
         return (
             <div className="ios-list" ref="list">
                 {Object.keys(groupsStore.preparedWizardGroups).length ?
@@ -97,7 +100,6 @@ class GroupsList extends Component {
                                                     <GroupsListItem 
                                                         group={group}
                                                         setWizardData={setWizardData}
-                                                        groupsStore={groupsStore}
                                                         isChosen={_.findWhere(chosenGroups, {id: group.id}) ? true : false}
                                                     /> 
                                                 </span>
@@ -121,7 +123,7 @@ class GroupsList extends Component {
 GroupsList.propTypes = {
     chosenGroups: PropTypes.object.isRequired,
     setWizardData: PropTypes.func.isRequired,
-    groupsStore: PropTypes.object.isRequired
+    stores: PropTypes.object
 }
 
 export default GroupsList;

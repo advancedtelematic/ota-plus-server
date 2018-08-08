@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
 
+@inject('stores')
 @observer
 class SecondNavigation extends Component {
     constructor(props) {
@@ -9,16 +10,19 @@ class SecondNavigation extends Component {
     }
     componentWillMount() {
     	if(this.props.location === 'page-devices') {
-    		this.props.devicesStore.fetchDeviceFleets();
+            const { devicesStore } = this.props.stores;
+    		devicesStore.fetchDeviceFleets();
     	}
     }
     componentWillReceiveProps(nextProps) {
     	if(nextProps.location === 'page-devices') {
-    		this.props.devicesStore.fetchDeviceFleets();
+            const { devicesStore } = this.props.stores;
+    		devicesStore.fetchDeviceFleets();
     	}
     }
     render() {
-        const { location, toggleSWRepo, switchToSWRepo, toggleFleet, activeFleet, devicesStore } = this.props;
+        const { location, toggleSWRepo, switchToSWRepo, toggleFleet, activeFleet } = this.props;
+        const { devicesStore } = this.props.stores;
         let block = null;
         if(location === 'page-packages') {
         	block = (

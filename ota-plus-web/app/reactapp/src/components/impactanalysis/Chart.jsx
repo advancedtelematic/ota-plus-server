@@ -1,16 +1,18 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Doughnut } from 'react-chartjs';
 import _ from 'underscore';
 import { translate } from 'react-i18next';
 
+@inject("stores")
 @observer
 class Chart extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        const { t, packagesStore } = this.props;
+        const { t } = this.props;
+        const { packagesStore } = this.props.stores;
         const blacklist = packagesStore.preparedBlacklistRaw;
         const availableColors = [
             '#DFF9F8',
@@ -78,7 +80,7 @@ class Chart extends Component {
 }
 
 Chart.propTypes = {
-    packagesStore: PropTypes.object.isRequired
+    stores: PropTypes.object
 }
 
 export default translate()(Chart);

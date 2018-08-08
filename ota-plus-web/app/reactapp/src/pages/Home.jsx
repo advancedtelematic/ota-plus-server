@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { observe, observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { MetaData, FadeAnimation, AsyncStatusCallbackHandler } from '../utils';
 import { HomeContainer, SanityCheckContainer, Terms } from '../containers';
 import { Loader } from '../partials';
 
 const title = "Home";
 
+@inject("stores")
 @observer
 class Home extends Component {
     constructor(props) {
@@ -14,32 +15,40 @@ class Home extends Component {
     }
     componentWillMount() {
         const { uiAutoFeatureActivation } = this.props;
+        const { 
+            provisioningStore, 
+            devicesStore,
+            packagesStore,
+            campaignsStore
+        } = this.props.stores;
         if (!uiAutoFeatureActivation) {
-           this.props.provisioningStore.sanityCheckCompleted = true;
+           provisioningStore.sanityCheckCompleted = true;
         }
-        this.props.provisioningStore.namespaceSetup();
-        this.props.devicesStore.fetchDevices();
-        this.props.packagesStore.fetchPackages();
-        this.props.campaignsStore.fetchCampaigns();
-
+        provisioningStore.namespaceSetup();
+        devicesStore.fetchDevices();
+        packagesStore.fetchPackages();
+        campaignsStore.fetchCampaigns();
     }
     componentWillUnmount() {
-        this.props.devicesStore._reset();
-        this.props.packagesStore._reset();
-        this.props.campaignsStore._reset();
-    }
-    render() {
         const { 
             devicesStore,
             packagesStore,
-            campaignsStore,
-            hardwareStore,
-            userStore,
-            provisioningStore,
-            featuresStore,
+            campaignsStore
+        } = this.props.stores;
+
+        devicesStore._reset();
+        packagesStore._reset();
+        campaignsStore._reset();
+    }
+    render() {
+        const { 
             uiUserProfileMenu,
             addNewWizard
         } = this.props;
+        const {
+            userStore,
+            provisioningStore
+        } = this.props.stores;
         const isTermsAccepted = userStore._isTermsAccepted();
         return (
             <FadeAnimation
@@ -50,10 +59,6 @@ class Home extends Component {
                             title={title}>
                             <HomeContainer
                                 addNewWizard={addNewWizard}
-                                devicesStore={devicesStore}
-                                packagesStore={packagesStore}
-                                campaignsStore={campaignsStore}
-                                hardwareStore={hardwareStore}
                             />
                         </MetaData>
                     : provisioningStore.namespaceSetupFetchAsync.isFetching ?
@@ -61,18 +66,13 @@ class Home extends Component {
                             <Loader />
                         </div>
                     :
-                        <SanityCheckContainer
-                            provisioningStore={provisioningStore}
-                            proceed={this.proceed}
-                        />            
+                        <SanityCheckContainer />            
                 : userStore.contractsFetchAsync.isFetching ?
                     <div className="wrapper-center">
                         <Loader />
                     </div>
                 :
-                    <Terms
-                        userStore={userStore}
-                    />
+                    <Terms />
                 }
             </FadeAnimation>
         );
@@ -80,13 +80,7 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-    devicesStore: PropTypes.object,
-    hardwareStore: PropTypes.object,
-    packagesStore: PropTypes.object,
-    campaignsStore: PropTypes.object,
-    userStore: PropTypes.object,
-    provisioningStore: PropTypes.object,
-    featuresStore: PropTypes.object,
+    stores: PropTypes.object,
 }
 
 export default Home;

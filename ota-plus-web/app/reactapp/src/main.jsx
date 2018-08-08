@@ -6,6 +6,18 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
+import { Provider } from "mobx-react";
+import { 
+    DevicesStore,
+    HardwareStore,
+    GroupsStore,
+    PackagesStore,
+    CampaignsStore,
+    ImpactAnalysisStore,
+    FeaturesStore,
+    ProvisioningStore,
+    UserStore,
+} from './stores';
 
 const muiTheme = getMuiTheme({
     palette: {
@@ -19,14 +31,28 @@ const muiTheme = getMuiTheme({
     },
 });
 
+const stores = {
+    devicesStore: new DevicesStore(),
+    hardwareStore: new HardwareStore(),
+    groupsStore: new GroupsStore(),
+    packagesStore: new PackagesStore(),
+    campaignsStore: new CampaignsStore(),
+    impactAnalysisStore: new ImpactAnalysisStore(),
+    featuresStore: new FeaturesStore(),
+    provisioningStore: new ProvisioningStore(),
+    userStore: new UserStore()
+};
+
 const Main = () => {
     injectTapEventPlugin();
     return (
-        <MuiThemeProvider muiTheme={muiTheme}>
-            <I18nextProvider i18n={i18n}>
-                <Routes />
-            </I18nextProvider>
-        </MuiThemeProvider>
+        <Provider stores={stores}>
+            <MuiThemeProvider muiTheme={muiTheme}>
+                <I18nextProvider i18n={i18n}>
+                    <Routes />
+                </I18nextProvider>
+            </MuiThemeProvider>
+        </Provider>
     )
 }
 
