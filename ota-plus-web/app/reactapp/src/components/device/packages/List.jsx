@@ -22,7 +22,6 @@ class List extends Component {
     @observable expandedPackageName = null;
     @observable tmpIntervalId = null;
     @observable preparedPackages = {};
-    @observable initialHighlight = false;
 
     constructor(props) {
         super(props);
@@ -36,10 +35,7 @@ class List extends Component {
                 const that = this;
                   setTimeout(() => {
                       that.listScroll();
-                      if(!this.initialHighlight) {
-                        that.highlightInstalledPackage(packagesStore.expandedPackage);
-                        this.initialHighlight = true;
-                      }
+                      that.highlightInstalledPackage(packagesStore.expandedPackage);
                   }, 50);
             }
         });
@@ -68,13 +64,17 @@ class List extends Component {
     }
     highlightInstalledPackage(pack) {
         const { animatedScroll } = this.props;
-        if(this.refs.list && pack && !pack.unmanaged) {
-            const currentScrollTop = this.refs.list.scrollTop;
-            const elementCoords = document.getElementById("button-package-" + pack.id.name).getBoundingClientRect();
-            let scrollTo = currentScrollTop + elementCoords.top - 225;
-            setTimeout(() => {
-                animatedScroll(document.querySelector('.ios-list'), scrollTo, 500);
-            }, 400);
+        const list = this.refs.list;
+        if(list) {
+            let top = null;
+            const scrollTop = list.scrollTop;
+            if(pack.unmanaged) {
+                top = document.querySelector(".software-panel__item-unmanaged").getBoundingClientRect().top;
+            } else {
+                top = document.getElementById("button-package-" + pack.id.name).getBoundingClientRect().top;
+            }
+            const scrollTo = scrollTop + top - 225;
+            animatedScroll(list, scrollTo, 800);
         }
     }
     generateHeadersPositions() {

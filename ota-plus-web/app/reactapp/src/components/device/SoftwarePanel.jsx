@@ -13,7 +13,7 @@ const noSearchResults = "No matching packages found.";
 @observer
 class SoftwarePanel extends Component {
     render() {
-        const { toggleTufPackageAutoUpdate, onFileDrop, showPackageDetails, packagesReady, disableExpand } = this.props;
+        const { toggleTufPackageAutoUpdate, onFileDrop, showPackageDetails, disableExpand } = this.props;
         const { packagesStore } = this.props.stores;
         return (
             <div className="software-panel">
@@ -22,7 +22,7 @@ class SoftwarePanel extends Component {
                 </div>
                 <div className="software-panel__wrapper">
                     <span>
-                        {!packagesReady ?
+                        {packagesStore.packagesFetchAsync.isFetching ?
                             <div className="wrapper-center">
                                 <Loader />
                             </div>
