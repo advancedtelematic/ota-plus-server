@@ -3,16 +3,12 @@ import { observer, inject } from 'mobx-react';
 import { MetaData, FadeAnimation } from '../utils';
 import { Loader } from '../partials';
 import { PackagesContainer } from '../containers';
-import { translate } from 'react-i18next';
 
 const title = "Packages";
 
 @inject("stores")
 @observer
 class Packages extends Component {
-    constructor(props) {
-        super(props);
-    }
     componentWillMount() {
         const { packagesStore } = this.props.stores;
         packagesStore.page = 'packages';
@@ -23,7 +19,7 @@ class Packages extends Component {
         packagesStore._reset();
     }
     render() {
-        const { t, switchToSWRepo } = this.props;
+        const { switchToSWRepo } = this.props;
         return (
             <FadeAnimation>
                 <MetaData 
@@ -42,4 +38,4 @@ Packages.propTypes = {
     stores: PropTypes.object,
 }
 
-export default translate()(Packages);
+export default Packages;

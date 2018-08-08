@@ -12,9 +12,6 @@ const noSearchResults = "No matching packages found.";
 @inject("stores")
 @observer
 class SoftwarePanel extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { toggleTufPackageAutoUpdate, onFileDrop, showPackageDetails, packagesReady, disableExpand } = this.props;
         const { packagesStore } = this.props.stores;

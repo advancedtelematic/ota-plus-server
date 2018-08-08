@@ -4,9 +4,6 @@ import { Sequencer } from '../../../partials';
 
 @observer
 class WizardStep6 extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { wizardIdentifier, wizardData } = this.props;
         return (

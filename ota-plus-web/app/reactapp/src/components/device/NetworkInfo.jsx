@@ -1,9 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 
 class NetworkInfo extends PureComponent {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { data } = this.props;
         const ip = data.local_ipv4;

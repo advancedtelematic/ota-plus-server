@@ -9,9 +9,6 @@ import NoItems from './NoItems';
 @inject("stores")
 @observer
 class LastPackages extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { showPackagesCreateModal } = this.props;
         const { packagesStore } = this.props.stores;

@@ -8,9 +8,6 @@ import { InfiniteScroll } from '../../../utils';
 @inject("stores")
 @observer
 class MtuList extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { device } = this.props;
         const { packagesStore } = this.props.stores;

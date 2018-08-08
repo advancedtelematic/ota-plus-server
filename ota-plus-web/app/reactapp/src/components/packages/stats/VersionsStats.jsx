@@ -8,9 +8,6 @@ import { FadeAnimation } from '../../../utils';
 
 @observer
 class VersionsStats extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { pack } = this.props;
         const mainColor = '#FA9D00';

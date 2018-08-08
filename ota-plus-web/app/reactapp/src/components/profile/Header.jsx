@@ -6,9 +6,6 @@ import { Avatar } from 'material-ui';
 
 @observer
 class Header extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit } = this.props;
         const fullNavigation = (

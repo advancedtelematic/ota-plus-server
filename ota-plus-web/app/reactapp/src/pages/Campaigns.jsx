@@ -9,9 +9,6 @@ const title = "Campaigns";
 @inject("stores")
 @observer
 class Campaigns extends Component {
-    constructor(props) {
-        super(props);
-    }
     componentWillMount() {
         const { campaignsStore, groupsStore } = this.props.stores;
         campaignsStore.fetchCampaigns();

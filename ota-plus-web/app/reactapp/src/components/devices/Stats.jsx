@@ -6,9 +6,6 @@ import { Doughnut } from 'react-chartjs';
 
 @observer
 class Stats extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { data, indicatorColors } = this.props;
 

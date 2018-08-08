@@ -6,9 +6,6 @@ import { FlatButton } from 'material-ui';
 
 @observer
 class SecondaryEcuDetails extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { hideDetails, shown } = this.props;
         const content = (
