@@ -2196,6 +2196,20 @@ input {
     }
 }
 
+.btn-radio {
+    background: #fff;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+
+    &.checked {
+        color: #fff;
+        background: #00afaa;
+        border-color: transparent;
+    }
+}
+
 .switch {
     cursor: pointer;
     background: rgba(0,0,0,0);

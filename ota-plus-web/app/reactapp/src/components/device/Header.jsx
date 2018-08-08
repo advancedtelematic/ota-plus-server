@@ -53,7 +53,7 @@ class Header extends Component {
         });
     }
     render() {
-        const { showQueueModal, queueButtonRef, backButtonAction } = this.props;
+        const { showQueueModal, queueButtonRef } = this.props;
         const { devicesStore } = this.props.stores;
         const { device } = devicesStore;
         const lastSeenDate = new Date(device.lastSeen);
@@ -87,8 +87,7 @@ class Header extends Component {
                     </FadeAnimation>
                 }
                 device={device}
-                backButtonShown={true}
-                backButtonAction={backButtonAction}>
+                backButtonShown={true}>
                 <FadeAnimation>
                     {!devicesStore.devicesOneFetchAsync.isFetching ?
                         <span>

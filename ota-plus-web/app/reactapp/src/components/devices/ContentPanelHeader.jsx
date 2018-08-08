@@ -28,7 +28,7 @@ class ContentPanelHeader extends Component {
                         changeAction={changeFilter}
                         id="search-devices-input"
                     />
-                </Form>                
+                </Form>
             </SubHeader>
         );
     }

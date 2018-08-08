@@ -107,7 +107,6 @@ class RenameModal extends Component {
 RenameModal.propTypes = {
     shown: PropTypes.bool.isRequired,
     hide: PropTypes.func.isRequired,
-    selectGroup: PropTypes.func.isRequired,
     stores: PropTypes.object
 }
 

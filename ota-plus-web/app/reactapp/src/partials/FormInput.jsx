@@ -31,13 +31,19 @@ export default class FormInput extends Component {
             inDirector = false,
             inputWidth = '100%',
             wrapperWidth = '100%',
+            onChange = null,
+            statusIconShown = false
         } = this.props;
         return (
             <div className="c-form__relative-wrapper" style={{width: wrapperWidth}}>
-                <label title={title} htmlFor={id} className="c-form__label">
-                    {label || ''}
-                    {showIcon ? <i className="c-form__icon fa fa-info"/> : ''}
-                </label>
+                {label.length ?
+                    <label title={title} htmlFor={id} className="c-form__label">
+                        {label || ''}
+                        {showIcon ? <i className="c-form__icon fa fa-info"/> : ''}
+                    </label>
+                :
+                    null
+                }
                 {showInput ?
                     <div className="c-form__input-wrapper">
                         <input ref={(input) => this.input = input}
@@ -47,7 +53,13 @@ export default class FormInput extends Component {
                                className="c-form__input"
                                type="text"
                                onKeyUp={this.validateInput.bind(this)}
-                               placeholder={placeholder || ''}/>
+                               placeholder={placeholder || ''}
+                               onChange={onChange} />
+                       {statusIconShown ?
+                            <i className='fa fa-check c-form__select-icon' />
+                       :
+                            null
+                       }
                     </div>
                     : ''
                 }

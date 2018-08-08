@@ -135,7 +135,7 @@ const minimizedWizardPadding = 25;
 @observer
 class Wizard extends Component {
     @observable currentStepId = initialCurrentStepId;
-    @observable wizardSteps = (this.props.alphaPlusEnabled ? initialWizardStepForAlphaPlus : initialWizardStep);
+    @observable wizardSteps = (this.props.stores.featuresStore.alphaPlusEnabled ? initialWizardStepForAlphaPlus : initialWizardStep);
     @observable wizardData = initialWizardData;
     @observable filterValue = initialFilterValue;
     @observable rawSelectedPacks = [];

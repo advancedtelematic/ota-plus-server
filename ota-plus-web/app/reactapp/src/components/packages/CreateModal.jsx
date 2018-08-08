@@ -98,7 +98,7 @@ class CreateModal extends Component {
                             :
                                 <FormSelect
                                     multiple={true}
-                                    appendMenuToBodyTag={false}
+                                    appendMenuToBodyTag={true}
                                     label="Hardware ids"
                                     id="hardware-ids-select"
                                     placeholder="Select Hardware ids"
