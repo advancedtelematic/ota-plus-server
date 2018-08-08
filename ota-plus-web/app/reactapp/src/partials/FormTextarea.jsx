@@ -28,7 +28,8 @@ export default class FormTextarea extends Component {
             id, label = '',
             inputWidth = '100%',
             wrapperWidth = '100%',
-            rows = 1
+            rows = 1,
+            onChange = null,
         } = this.props;
         return (
             <div className="c-form__relative-wrapper" style={{width: wrapperWidth}}>
@@ -44,7 +45,8 @@ export default class FormTextarea extends Component {
                         style={{width: inputWidth}}
                         className="c-form__input"
                         onKeyUp={this.validateInput.bind(this)}
-                        placeholder={placeholder || ''}>
+                        placeholder={placeholder || ''}
+                        onChange={onChange}>
                     </textarea>
                 </div>
             </div>

@@ -17,6 +17,7 @@ import {
     FeaturesStore,
     ProvisioningStore,
     UserStore,
+    UpdateStore,
 } from './stores';
 
 const muiTheme = getMuiTheme({
@@ -40,7 +41,8 @@ const stores = {
     impactAnalysisStore: new ImpactAnalysisStore(),
     featuresStore: new FeaturesStore(),
     provisioningStore: new ProvisioningStore(),
-    userStore: new UserStore()
+    userStore: new UserStore(),
+    updateStore: new UpdateStore(),
 };
 
 const Main = () => {

@@ -31,7 +31,7 @@ class CreateModal extends Component {
     submitForm(type) {
         const { packagesStore } = this.props.stores;
         let formData = new FormData();
-        if(this.props.fileDropped)
+        if (this.props.fileDropped)
             formData.append('file', this.props.fileDropped);
         else
             formData.append('file', this.refs.fileUpload.files[0]);
@@ -52,7 +52,7 @@ class CreateModal extends Component {
         this.fileName = name;
     }
     hideModal(e) {
-        if(e) e.preventDefault();
+        if (e) e.preventDefault();
         this.fileName = null;
         this.selectedHardwareIds = [];
         this.props.hide();
@@ -95,7 +95,7 @@ class CreateModal extends Component {
                         <div className="hardware-ids-select">
                             {hardwareStore.hardwareIdsFetchAsync.isFetching ?
                                 <Loader />
-                            :
+                                :
                                 <FormSelect
                                     multiple={true}
                                     appendMenuToBodyTag={true}
@@ -117,9 +117,9 @@ class CreateModal extends Component {
                             <div className="upload-wrapper col-xs-12">
                                 {!fileDropped ?
                                     <a href="#"
-                                       className="add-button"
-                                       onClick={this._onFileUploadClick.bind(this)}
-                                       id="choose-package"
+                                        className="add-button"
+                                        onClick={this._onFileUploadClick.bind(this)}
+                                        id="choose-package"
                                     >
                                         <span>Choose file</span>
                                     </a>
@@ -149,7 +149,7 @@ class CreateModal extends Component {
                                         :
                                         this.fileName
                                     }
-                                    style={{display: 'none'}}
+                                    style={{ display: 'none' }}
                                     required
                                 />
                             </div>
@@ -160,8 +160,8 @@ class CreateModal extends Component {
                     <div className="col-xs-12">
                         <div className="body-actions">
                             <button className="btn-primary"
-                                    disabled={this.submitButtonDisabled || !this.selectedHardwareIds.length}
-                                    id="add-new-package-confirm"
+                                disabled={this.submitButtonDisabled || !this.selectedHardwareIds.length}
+                                id="add-new-package-confirm"
                             >
                                 Add
                             </button>
