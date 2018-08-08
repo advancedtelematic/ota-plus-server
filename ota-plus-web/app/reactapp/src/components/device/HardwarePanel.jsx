@@ -43,6 +43,16 @@ class HardwarePanel extends Component {
         this.showPackageBlacklistModal = this.showPackageBlacklistModal.bind(this);
         this.hidePackageBlacklistModal = this.hidePackageBlacklistModal.bind(this);
     }
+    componentWillMount() {
+        const { selectEcu } = this.props;
+        const { devicesStore } = this.props.stores;
+        selectEcu(
+            devicesStore._getPrimaryHardwareId(), 
+            devicesStore._getPrimarySerial(), 
+            devicesStore._getPrimaryFilepath(), 
+            'primary'
+        );
+    }
     showSecondaryDescription(e) {
         e.preventDefault();
         e.stopPropagation();

@@ -75,7 +75,6 @@ class Device extends Component {
     render() {
         const { 
             selectEcu,
-            packagesReady,
             disableExpand,
             installTufPackage
         } = this.props;
@@ -98,12 +97,10 @@ class Device extends Component {
                                 toggleTufPackageAutoUpdate={this.toggleTufPackageAutoUpdate}
                                 onFileDrop={this.onFileDrop}
                                 showPackageDetails={this.showPackageDetails}
-                                packagesReady={packagesReady}
                                 disableExpand={disableExpand}
                             />
                             <DevicePropertiesPanel
                                 installTufPackage={installTufPackage}
-                                packagesReady={packagesReady}
                             />
                         </span>
                     :

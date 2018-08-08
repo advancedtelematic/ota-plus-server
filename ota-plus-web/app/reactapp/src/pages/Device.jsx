@@ -14,7 +14,6 @@ const title = "Device";
 @observer
 class Device extends Component {
     queueAnchorEl = null;
-    @observable packagesReady = false;
     @observable sequencerShown = false;
     @observable disableExpand = false;
     @observable queueModalShown = false;
@@ -31,19 +30,7 @@ class Device extends Component {
         this.setQueueModalActiveTabId = this.setQueueModalActiveTabId.bind(this);
         this.installTufPackage = this.installTufPackage.bind(this);
 
-        const { packagesStore, devicesStore } = props.stores;
-
-        this.packagesFetchHandler = observe(packagesStore, (change) => {
-            if(change.name === 'packagesFetchAsync' && !change.object[change.name].isFetching) {
-                this.selectEcu(
-                    devicesStore._getPrimaryHardwareId(), 
-                    devicesStore._getPrimarySerial(), 
-                    devicesStore._getPrimaryFilepath(), 
-                    'primary'
-                );
-                this.packagesReady = true;
-            }
-        });
+        const { packagesStore } = props.stores;
 
         this.autoInstallHandler = observe(packagesStore, (change) => {
             if((change.name === 'packagesEnableAutoInstallAsync' || change.name === 'packagesDisableAutoInstallAsync') 
@@ -55,15 +42,13 @@ class Device extends Component {
     componentWillMount() {
         const { packagesStore, devicesStore } = this.props.stores;
         packagesStore.page = 'device';
-        devicesStore.fetchDevice(this.props.params.id).then(() => {
-            devicesStore.fetchDeviceNetworkInfo(this.props.params.id);
-            packagesStore.fetchPackages();
-            devicesStore.fetchMultiTargetUpdates(this.props.params.id);       
-        });
+        devicesStore.fetchDevice(this.props.params.id);
+        packagesStore.fetchPackages();
+        devicesStore.fetchDeviceNetworkInfo(this.props.params.id);
+        devicesStore.fetchMultiTargetUpdates(this.props.params.id);    
     }
     componentWillUnmount() {
         const { packagesStore, devicesStore, hardwareStore } = this.props.stores;
-        this.packagesFetchHandler();
         this.autoInstallHandler();
         devicesStore._reset();
         packagesStore._reset();
@@ -138,7 +123,6 @@ class Device extends Component {
                         title={title}>
                         <DeviceContainer 
                             selectEcu={this.selectEcu}
-                            packagesReady={this.packagesReady}
                             disableExpand={this.disableExpand}
                             installTufPackage={this.installTufPackage}
                         />
