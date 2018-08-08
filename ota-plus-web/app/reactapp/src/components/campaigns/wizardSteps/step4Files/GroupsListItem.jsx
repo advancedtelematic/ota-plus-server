@@ -5,9 +5,6 @@ import { translate } from 'react-i18next';
 @inject("stores")
 @observer
 class GroupsListItem extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { t, group, setWizardData, isChosen } = this.props;
         const { groupsStore } = this.props.stores;

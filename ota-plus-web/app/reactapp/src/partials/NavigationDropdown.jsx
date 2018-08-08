@@ -10,9 +10,6 @@ import $ from 'jquery';
 @inject('stores')
 @observer
 class NavigationDropdown extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { uiCredentialsDownload, uiUserProfileEdit } = this.props;
         const { userStore } = this.props.stores;

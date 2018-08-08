@@ -9,9 +9,6 @@ import NoItems from './NoItems';
 @inject("stores")
 @observer
 class LastDevices extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { devicesStore } = this.props.stores;
         const { lastDevices } = devicesStore;

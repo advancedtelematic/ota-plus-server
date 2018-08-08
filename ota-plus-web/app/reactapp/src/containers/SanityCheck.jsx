@@ -7,9 +7,6 @@ import { Loader } from '../partials';
 
 @observer
 class SanityCheck extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         return (
             <FadeAnimation>

@@ -3,9 +3,6 @@ import { observer } from 'mobx-react';
 
 @observer
 class VersionsItem extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { version } = this.props;
         return (

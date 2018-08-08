@@ -6,9 +6,6 @@ import TufGroupsListItem from './TufGroupsListItem';
 @inject("stores")
 @observer
 class TufGroupsList extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { campaignsStore } = this.props.stores;
         const { campaign } = campaignsStore;

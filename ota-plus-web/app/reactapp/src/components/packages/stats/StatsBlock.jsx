@@ -8,9 +8,6 @@ import { FadeAnimation } from '../../../utils';
 
 @observer
 class StatsBlock extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { pack, size, type } = this.props;
         let availableColors = [];

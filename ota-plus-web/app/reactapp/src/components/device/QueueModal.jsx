@@ -27,9 +27,6 @@ class QueueModal extends Component {
         }
         return installationStatus;
     }
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { shown, hide, cancelMtuUpdate, activeTabId, setQueueModalActiveTabId, anchorEl, showSequencer } = this.props;
         const { devicesStore } = this.props.stores;

@@ -10,16 +10,13 @@ const title = "Home";
 @inject("stores")
 @observer
 class Home extends Component {
-    constructor(props) {
-        super(props);
-    }
     componentWillMount() {
         const { uiAutoFeatureActivation } = this.props;
         const { 
             provisioningStore, 
             devicesStore,
             packagesStore,
-            campaignsStore
+            campaignsStore,
         } = this.props.stores;
         if (!uiAutoFeatureActivation) {
            provisioningStore.sanityCheckCompleted = true;
@@ -33,9 +30,8 @@ class Home extends Component {
         const { 
             devicesStore,
             packagesStore,
-            campaignsStore
+            campaignsStore,
         } = this.props.stores;
-
         devicesStore._reset();
         packagesStore._reset();
         campaignsStore._reset();
@@ -50,11 +46,12 @@ class Home extends Component {
             provisioningStore
         } = this.props.stores;
         const isTermsAccepted = userStore._isTermsAccepted();
+        const { sanityCheckCompleted } = provisioningStore;
         return (
             <FadeAnimation
                 display="flex">
                 {isTermsAccepted ?
-                    provisioningStore.sanityCheckCompleted ?
+                    sanityCheckCompleted ?
                         <MetaData
                             title={title}>
                             <HomeContainer

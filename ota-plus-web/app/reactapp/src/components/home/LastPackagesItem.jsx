@@ -4,9 +4,6 @@ import { observer } from 'mobx-react';
 
 @observer
 class LastPackagesItem extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { pack } = this.props;
         const link = 'packages/' + pack.id.name;

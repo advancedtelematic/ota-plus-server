@@ -9,9 +9,6 @@ import serialize from 'form-serialize';
 class EditCommentModal extends Component {
     @observable submitButtonDisabled = false;
 
-    constructor(props) {
-        super(props);
-    }
     submitForm(e) {
         const { filepath, hide } =  this.props;
         const { packagesStore } = this.props.stores;

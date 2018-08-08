@@ -22,9 +22,6 @@ function collect(connect, monitor) {
 
 @observer
 class ListItemArtificial extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { t, group, isSelected, selectGroup, isDND, deviceCount } = this.props;
         const { isOver, canDrop, connectDropTarget } = this.props;

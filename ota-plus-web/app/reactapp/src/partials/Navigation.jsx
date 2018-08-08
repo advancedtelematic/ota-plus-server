@@ -8,9 +8,6 @@ import SettingsDropdown from './SettingsDropdown';
 @inject("stores")
 @observer
 class Navigation extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { 
             uiUserProfileMenu,

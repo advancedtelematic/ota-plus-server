@@ -6,9 +6,6 @@ import { Modal, Sequencer } from '../../partials';
 @inject("stores")
 @observer
 class SequencerModal extends Component {
-    constructor(props) {
-        super(props);
-    }
     componentWillMount() {
         const { campaignsStore } = this.props.stores;
         campaignsStore._showFullScreen();

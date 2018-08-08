@@ -9,9 +9,6 @@ import moment from 'moment';
 @inject("stores")
 @observer
 class WizardStep7 extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { t, wizardData } = this.props;
         const { groupsStore, campaignsStore } = this.props.stores;

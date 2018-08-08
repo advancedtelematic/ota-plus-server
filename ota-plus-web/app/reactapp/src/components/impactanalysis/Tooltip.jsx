@@ -2,9 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { Modal } from '../../partials';
 
 class Tooltip extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { shown, hide } = this.props;
         const content = (

@@ -5,9 +5,6 @@ import _ from 'underscore';
 @inject('stores')
 @observer
 class SecondNavigation extends Component {
-    constructor(props) {
-        super(props);
-    }
     componentWillMount() {
     	if(this.props.location === 'page-devices') {
             const { devicesStore } = this.props.stores;

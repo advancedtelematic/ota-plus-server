@@ -7,9 +7,6 @@ const title = "Profile";
 
 @observer
 class Profile extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const { children, uiUserProfileMenu, uiCredentialsDownload, uiUserProfileEdit } = this.props;
         return (

@@ -9,9 +9,6 @@ const title = "Impact analysis";
 @inject("stores")
 @observer
 class ImpactAnalysis extends Component {
-    constructor(props) {
-        super(props);
-    }
     componentWillMount() {
         const { packagesStore, impactAnalysisStore } = this.props.stores;
         packagesStore.fetchBlacklist(true, true);

@@ -9,9 +9,6 @@ import { Loader } from '../../../partials';
 @inject("stores")
 @observer
 class PublicKeyPopover extends Component {
-    constructor(props) {
-        super(props);
-    }
     componentWillMount() {
         const { device, serial } = this.props;
         const { hardwareStore } = this.props.stores;
