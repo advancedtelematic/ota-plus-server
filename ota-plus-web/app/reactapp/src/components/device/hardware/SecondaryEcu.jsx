@@ -27,7 +27,6 @@ class SecondaryEcu extends Component {
             publicKeyCopied,
             hidePopover,
             popoverAnchor,
-            hardwareStore
         } = this.props;
         return (
             <span>
@@ -66,7 +65,6 @@ class SecondaryEcu extends Component {
                         popoverShown={popoverShown}
                         anchorEl={popoverAnchor}
                         copied={publicKeyCopied}
-                        hardwareStore={hardwareStore}
                     />
                 :
                     null

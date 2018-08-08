@@ -1,14 +1,16 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { translate } from 'react-i18next';
 
+@inject("stores")
 @observer
 class GroupsListItem extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        const { t, group, setWizardData, isChosen, groupsStore } = this.props;
+        const { t, group, setWizardData, isChosen } = this.props;
+        const { groupsStore } = this.props.stores;
         return (
             <button className={"item" + (isChosen ? " selected" : "")} id={"button-group-" + group.groupName} onClick={setWizardData.bind(this, group.id)}>
                 <div className={"btn-checkbox" + (isChosen ? " checked" : "")}>
@@ -33,7 +35,8 @@ class GroupsListItem extends Component {
 GroupsListItem.propTypes = {
     group: PropTypes.object.isRequired,
     setWizardData: PropTypes.func.isRequired,
-    isChosen: PropTypes.bool.isRequired
+    isChosen: PropTypes.bool.isRequired,
+    stores: PropTypes.object
 }
 
 export default translate()(GroupsListItem);

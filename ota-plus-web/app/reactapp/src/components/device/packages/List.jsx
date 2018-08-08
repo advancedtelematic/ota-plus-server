@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable, observe } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
 import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
@@ -12,6 +12,7 @@ import withAnimatedScroll from '../../../partials/hoc/withAnimatedScroll';
 const headerHeight = 28;
 const autoUpdateInfo = "Automatic update activated. The latest version of this package will automatically be installed on this device.";
 
+@inject("stores")
 @observer
 class List extends Component {
     @observable firstShownIndex = 0;
@@ -25,17 +26,18 @@ class List extends Component {
 
     constructor(props) {
         super(props);
+        const { packagesStore } = props.stores;
         this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
         this.generateItemsPositions = this.generateItemsPositions.bind(this);
         this.listScroll = this.listScroll.bind(this);
         this.togglePackage = this.togglePackage.bind(this);
-        this.packagesChangeHandler = observe(props.packagesStore, (change) => {
+        this.packagesChangeHandler = observe(packagesStore, (change) => {
             if(change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
                   setTimeout(() => {
                       that.listScroll();
                       if(!this.initialHighlight) {
-                        that.highlightInstalledPackage(props.packagesStore.expandedPackage);
+                        that.highlightInstalledPackage(packagesStore.expandedPackage);
                         this.initialHighlight = true;
                       }
                   }, 50);
@@ -43,7 +45,8 @@ class List extends Component {
         });
     }
     componentWillReceiveProps(nextProps) {
-        const { devicesStore, disableExpand, packagesStore } = nextProps;
+        const { disableExpand } = nextProps;
+        const { packagesStore } = nextProps.stores;
         this.selectPackagesToDisplay();
         this.addUnmanagedPackage();
         if(!disableExpand) {
@@ -148,7 +151,7 @@ class List extends Component {
         });
     }
     selectPackagesToDisplay() {
-        const { devicesStore, packagesStore, hardwareStore } = this.props;
+        const { devicesStore, packagesStore, hardwareStore } = this.props.stores;
         let preparedPackages = packagesStore.preparedPackages;
         let dirPacks = {};
         _.map(packagesStore.preparedPackages, (packages, letter) => {
@@ -193,7 +196,7 @@ class List extends Component {
         this.preparedPackages = dirPacks;
     }
     addUnmanagedPackage() {
-        const { devicesStore, packagesStore, hardwareStore } = this.props;
+        const { devicesStore, packagesStore, hardwareStore } = this.props.stores;
         let preparedPackages = this.preparedPackages;
         let ecuObject = null;
         switch(hardwareStore.activeEcu.type) {
@@ -224,7 +227,7 @@ class List extends Component {
         }
     }
     checkQueued(version) {
-        const { devicesStore, hardwareStore } = this.props;
+        const { devicesStore, hardwareStore } = this.props.stores;
         let queuedPackage = null;
         let serial = hardwareStore.activeEcu.serial;                                        
         _.each(devicesStore.multiTargetUpdates, (update, i) => {
@@ -237,7 +240,7 @@ class List extends Component {
         return queuedPackage;
     }
     checkInstalled(version) {
-        const { devicesStore, hardwareStore } = this.props;
+        const { devicesStore, hardwareStore } = this.props.stores;
         const device = devicesStore.device;
         let installedPackage = null;
         if(hardwareStore.activeEcu.type === 'primary') {
@@ -255,8 +258,9 @@ class List extends Component {
         return installedPackage;
     }
     render() {        
-        const { devicesStore, packagesStore, hardwareStore, onFileDrop, toggleTufPackageAutoUpdate, showPackageDetails } = this.props;
-        const device = devicesStore.device;
+        const { onFileDrop, toggleTufPackageAutoUpdate, showPackageDetails } = this.props;
+        const { devicesStore } = this.props.stores;
+        const { device } = devicesStore;
         const preparedPackages = this.preparedPackages;
         return (
             <div className="ios-list" ref="list">
@@ -353,7 +357,6 @@ class List extends Component {
                                                                 {_.map(pack.versions, (version, i) => {
                                                                     return (
                                                                         <ListItemVersion
-                                                                            packagesStore={packagesStore}
                                                                             version={version}
                                                                             queuedPackage={queuedPackage}
                                                                             installedPackage={installedPackage}
@@ -384,9 +387,7 @@ class List extends Component {
 }
 
 List.propTypes = {
-    packagesStore: PropTypes.object.isRequired,
-    devicesStore: PropTypes.object.isRequired,
-    hardwareStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     onFileDrop: PropTypes.func.isRequired,
     toggleTufPackageAutoUpdate: PropTypes.func.isRequired,
     showPackageDetails: PropTypes.func.isRequired,

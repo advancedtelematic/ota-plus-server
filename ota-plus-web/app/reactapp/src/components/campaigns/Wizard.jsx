@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {observable, observe, extendObservable} from "mobx"
-import {observer} from 'mobx-react';
+import {observer, inject} from 'mobx-react';
 import {FlatButton} from 'material-ui';
 import _ from 'underscore';
 import {Form} from 'formsy-react';
@@ -131,6 +131,7 @@ const initialFilterValue = null;
 const minimizedWizardWidth = 400;
 const minimizedWizardPadding = 25;
 
+@inject("stores")
 @observer
 class Wizard extends Component {
     @observable currentStepId = initialCurrentStepId;
@@ -142,6 +143,7 @@ class Wizard extends Component {
 
     constructor(props) {
         super(props);
+        const { campaignsStore } = props.stores;
         this.addToCampaign = this.addToCampaign.bind(this);
         this.isFirstStep = this.isFirstStep.bind(this);
         this.isLastStep = this.isLastStep.bind(this);
@@ -161,7 +163,7 @@ class Wizard extends Component {
         this.removeSelectedPacksByKeys = this.removeSelectedPacksByKeys.bind(this);
         this.toggleFullScreen = this.toggleFullScreen.bind(this);
 
-        this.multiTargetUpdateCreatedHandler = observe(props.campaignsStore, (change) => {
+        this.multiTargetUpdateCreatedHandler = observe(campaignsStore, (change) => {
             if (change.name === 'campaignsMtuCreateAsync' && change.object[change.name].isFetching === false) {
                 let wizardMinimized = _.find(props.minimizedWizards, (wizard, index) => {
                     return wizard.id === props.wizardIdentifier;
@@ -171,7 +173,7 @@ class Wizard extends Component {
                 }
             }
         });
-        this.campaignCreatedHandler = observe(props.campaignsStore, (change) => {
+        this.campaignCreatedHandler = observe(campaignsStore, (change) => {
             if (change.name === 'campaignsCreateAsync' && change.object[change.name].isFetching === false) {
                 let wizardMinimized = _.find(props.minimizedWizards, (wizard, index) => {
                     return wizard.id === props.wizardIdentifier;
@@ -186,7 +188,8 @@ class Wizard extends Component {
     }
 
     componentWillMount() {
-        const { skipStep, groupsStore } = this.props;
+        const { skipStep } = this.props;
+        const { groupsStore, packagesStore } = this.props.stores;
 
         if(skipStep) {
             this.wizardSteps = _.filter(this.wizardSteps, step => step.name !== skipStep);
@@ -200,7 +203,7 @@ class Wizard extends Component {
         if (matrixFromStorage) {
             localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);
         }
-        this.props.packagesStore.fetchPackages('packagesSafeFetchAsync');
+        packagesStore.fetchPackages('packagesSafeFetchAsync');
     }
 
     componentWillUnmount() {
@@ -209,18 +212,19 @@ class Wizard extends Component {
     }
 
     toggleFullScreen(e) {
-        const { campaignsStore } = this.props;
+        const { campaignsStore } = this.props.stores;
         if(e) e.preventDefault();
         if(!campaignsStore.fullScreenMode) 
-            this.props.campaignsStore._showFullScreen();
+            campaignsStore._showFullScreen();
         else
-            this.props.campaignsStore._hideFullScreen();
+            campaignsStore._hideFullScreen();
     }
 
     addToCampaign(packName, e) {
         if (e) e.preventDefault();
+        const { packagesStore } = this.props.stores;
         this.currentStepId = 2;
-        let sortedPacks = this.props.packagesStore.preparedPackages;
+        let sortedPacks = packagesStore.preparedPackages;
         _.each(sortedPacks, (packs, letter) => {
             let pack = _.find(packs, pack => pack.packageName === packName);
             if (pack) {
@@ -244,18 +248,19 @@ class Wizard extends Component {
     }
 
     selectVersion(data) {
+        const { packagesStore } = this.props.stores;
         if (_.isUndefined(this.versions[data.packageName])) {
             this.versions[data.packageName] = {};
         }
         let hash = data.filepath;
-        _.each(this.props.packagesStore.packages, (pack, index) => {
+        _.each(packagesStore.packages, (pack, index) => {
             if (pack.filepath === data.filepath) {
                 hash = pack.packageHash;
             }
         });
 
         let changedPackage = null;
-        _.each(this.props.packagesStore.preparedPackages, (packs, letter) => {
+        _.each(packagesStore.preparedPackages, (packs, letter) => {
             _.each(packs, (pack, index) => {
                 _.each(pack.versions, (version, i) => {
                     if (version.id.name === data.filepath) {
@@ -372,6 +377,7 @@ class Wizard extends Component {
     }
 
     launch() {
+        const { packagesStore, campaignsStore } = this.props.stores;
         const updates = this.wizardData[2].versions;
         let updateData = [];
         _.each(updates, (update, packageName) => {
@@ -380,7 +386,7 @@ class Wizard extends Component {
             let targetFormat = null;
             let fromTargetLength = null;
             let toTargetLength = null;
-            const packages = this.props.packagesStore.packages;
+            const packages = packagesStore.packages;
             _.each(packages, (pack, index) => {
                 if (pack.filepath === update.fromFilepath) {
                     fromTargetLength = pack.targetLength;
@@ -410,11 +416,12 @@ class Wizard extends Component {
                 generateDiff: false
             });
         });
-        this.props.campaignsStore.createMultiTargetUpdate(updateData);
+        campaignsStore.createMultiTargetUpdate(updateData);
     }
 
     handleMultiTargetUpdateCreated() {
-        let updateId = this.props.campaignsStore.campaignData.mtuId;
+        const { campaignsStore } = this.props.stores;
+        let updateId = campaignsStore.campaignData.mtuId;
 
         let matrixFromStorage = JSON.parse(localStorage.getItem(`matrix-${this.props.wizardIdentifier}`));
         localStorage.removeItem(`matrix-${this.props.wizardIdentifier}`);
@@ -427,13 +434,14 @@ class Wizard extends Component {
                 return group.id
             })
         };
-        this.props.campaignsStore.createCampaign(createData);
+        campaignsStore.createCampaign(createData);
     }
 
     handleCampaignCreated() {
-        this.props.campaignsStore.launchCampaign(this.props.campaignsStore.campaignData.campaignId);
+        const { campaignsStore } = this.props.stores;
+        campaignsStore.launchCampaign(campaignsStore.campaignData.campaignId);
         this.props.hideWizard(this.props.wizardIdentifier);
-        this.props.campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
+        campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
     }
 
     changeFilter(filterValue) {
@@ -441,7 +449,8 @@ class Wizard extends Component {
     }
 
     render() {
-        const {campaignsStore, packagesStore, groupsStore, hardwareStore, wizardIdentifier, hideWizard, toggleWizard, minimizedWizards} = this.props;
+        const { wizardIdentifier, hideWizard, toggleWizard, minimizedWizards} = this.props;
+        const { campaignsStore } = this.props.stores;
         const currentStep = this.wizardSteps[this.currentStepId];
 
         let wizardMinimized = _.find(minimizedWizards, (wizard, index) => {
@@ -480,15 +489,11 @@ class Wizard extends Component {
                                     :
                                     React.createElement(currentStep.class, {
                                         campaign: {},
-                                        campaignsStore: campaignsStore,
                                         setWizardData: this.setWizardData,
                                         wizardData: this.wizardData,
                                         markStepAsFinished: this.markStepAsFinished,
                                         markStepAsNotFinished: this.markStepAsNotFinished,
                                         filterValue: this.filterValue,
-                                        packagesStore: packagesStore,
-                                        groupsStore: groupsStore,
-                                        hardwareStore: hardwareStore,
                                         selectFromVersion: this.selectFromVersion,
                                         selectedFromVersion: this.selectedFromVersion,
                                         selectVersion: this.selectVersion,
@@ -565,10 +570,7 @@ class Wizard extends Component {
 }
 
 Wizard.propTypes = {
-    campaignsStore: PropTypes.object.isRequired,
-    packagesStore: PropTypes.object.isRequired,
-    groupsStore: PropTypes.object.isRequired,
-    hardwareStore: PropTypes.object
+    stores: PropTypes.object,
 }
 
 export default Wizard;

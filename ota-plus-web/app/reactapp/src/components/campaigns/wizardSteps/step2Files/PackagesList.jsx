@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable, observe } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
 import { VelocityTransitionGroup } from 'velocity-react';
 import PackagesListItem from './PackagesListItem';
@@ -8,6 +8,7 @@ import { Loader } from '../../../../partials';
 
 const headerHeight = 28;
 
+@inject("stores")
 @observer
 class PackagesList extends Component {
     @observable fakeHeaderLetter = null;
@@ -16,10 +17,11 @@ class PackagesList extends Component {
 
     constructor(props) {
         super(props);
+        const { packagesStore } = props.stores;
         this.generatePositions = this.generatePositions.bind(this);
         this.listScroll = this.listScroll.bind(this);
         this.togglePackage = this.togglePackage.bind(this);
-        this.packagesChangeHandler = observe(props.packagesStore, (change) => {
+        this.packagesChangeHandler = observe(packagesStore, (change) => {
             if(change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
                   setTimeout(() => {
@@ -51,13 +53,14 @@ class PackagesList extends Component {
         return positions;
     }
     listScroll() {
+        const { packagesStore } = this.props.stores;
         if(this.refs.list) {
             let scrollTop = this.refs.list.scrollTop;
             let newFakeHeaderLetter = this.fakeHeaderLetter;
             const positions = this.generatePositions();
             _.each(positions, (position, index) => {
                 if(scrollTop >= position) {
-                    newFakeHeaderLetter = Object.keys(this.props.packagesStore.preparedPackages)[index];
+                    newFakeHeaderLetter = Object.keys(packagesStore.preparedPackages)[index];
                     return true;
                 } else if(scrollTop >= position - headerHeight) {
                     scrollTop -= scrollTop - (position - headerHeight);
@@ -73,7 +76,8 @@ class PackagesList extends Component {
         this.expandedPackageName = (this.expandedPackageName !== packageName ? packageName : null);
     }
     render() {
-        const { chosenPackagesList, setWizardData, packagesStore } = this.props;
+        const { chosenPackagesList, setWizardData } = this.props;
+        const { packagesStore } = this.props.stores;
         return (
             <div className={"ios-list" + (packagesStore.packagesFetchAsync.isFetching ? " fetching" : "")} ref="list">
                 {packagesStore.packagesCount ? 
@@ -122,7 +126,7 @@ class PackagesList extends Component {
 
 PackagesList.propTypes = {
     setWizardData: PropTypes.func.isRequired,
-    packagesStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
 }
 
 export default PackagesList;

@@ -1,9 +1,10 @@
 import React, {Component, PropTypes} from 'react';
-import {observer} from 'mobx-react';
+import {observer, inject} from 'mobx-react';
 import {WizardGroupsList} from './step4Files';
 import {Loader, Form, FormInput} from '../../../partials';
 import _ from 'underscore';
 
+@inject("stores")
 @observer
 class WizardStep4 extends Component {
     constructor(props) {
@@ -12,13 +13,15 @@ class WizardStep4 extends Component {
     }
 
     componentWillMount() {
-        this.props.groupsStore.fetchWizardGroups();
+        const { groupsStore } = this.props.stores;
+        groupsStore.fetchWizardGroups();
     }
 
     setWizardData(groupId) {
+        const { groupsStore } = this.props.stores;
         let stepWizardData = this.props.wizardData[3];
         const foundGroup = _.find(stepWizardData.groups, item => item.id === groupId);
-        const groupToAdd = _.findWhere(this.props.groupsStore.wizardGroups, {id: groupId});
+        const groupToAdd = _.findWhere(groupsStore.wizardGroups, {id: groupId});
         if (foundGroup)
             stepWizardData.groups.splice(stepWizardData.groups.indexOf(foundGroup), 1);
         else
@@ -31,7 +34,8 @@ class WizardStep4 extends Component {
     }
 
     render() {
-        const {wizardData, groupsStore} = this.props;
+        const { wizardData } = this.props;
+        const { groupsStore } = this.props.stores;
         const chosenGroups = wizardData[3].groups;
         return (
             groupsStore.groupsWizardFetchAsync.isFetching ?
@@ -50,7 +54,6 @@ class WizardStep4 extends Component {
                     <WizardGroupsList
                         chosenGroups={chosenGroups}
                         setWizardData={this.setWizardData.bind(this)}
-                        groupsStore={groupsStore}
                     />
                 </span>
         );
@@ -59,7 +62,7 @@ class WizardStep4 extends Component {
 
 WizardStep4.propTypes = {
     wizardData: PropTypes.object.isRequired,
-    groupsStore: PropTypes.object.isRequired
+    stores: PropTypes.object
 }
 
 export default WizardStep4;

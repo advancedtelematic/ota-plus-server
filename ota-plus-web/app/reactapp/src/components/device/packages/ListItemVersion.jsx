@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import moment from 'moment';
 import _ from 'underscore';
 
+@inject("stores")
 @observer
 class ListItemVersion extends Component {
     constructor(props) {
@@ -15,7 +16,7 @@ class ListItemVersion extends Component {
         showPackageDetails(version);
     }
     isPackageBlacklisted(version) {
-        const { packagesStore } = this.props;
+        const { packagesStore } = this.props.stores;
         let isPackageBlacklisted = _.find(packagesStore.blacklist, (dev) => {
             return (dev.packageId.name === version.id.name) && (dev.packageId.version === version.id.version);
         });
@@ -23,11 +24,11 @@ class ListItemVersion extends Component {
     }
     render() {
         const { 
-            packagesStore, 
             version, 
             queuedPackage, 
-            installedPackage, 
+            installedPackage
         } = this.props;
+        const { packagesStore } = this.props.stores;
         let blacklistedPackage = this.isPackageBlacklisted(version);
         let isSelected = version.filepath === packagesStore.expandedPackage.filepath;
         return (
@@ -62,7 +63,7 @@ class ListItemVersion extends Component {
 }
 
 ListItemVersion.propTypes = {
-    packagesStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     version: PropTypes.object.isRequired,
     queuedPackage: PropTypes.string,
     installedPackage: PropTypes.string,

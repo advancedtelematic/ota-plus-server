@@ -1,17 +1,17 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observable, isObservableArray } from 'mobx';
 import _ from 'underscore';
 import DeviceHardwareReportedList from './ReportedList';
 import { DeviceHardwarePackagesInstalledList } from './packages';
 import Popover from 'material-ui/Popover';
 import { Switch, Loader } from '../../../partials';
-import { PropertiesOnDeviceList } from '../properties';
 import { Form } from 'formsy-react';
 import { SubHeader, SearchBar } from '../../../partials';
 
 const noHardwareReported = "This device hasn’t reported any information about its hardware or system components yet.";
 
+@inject("stores")
 @observer
 class Overlay extends Component {
     @observable hardwareInfoShown = true;
@@ -24,9 +24,11 @@ class Overlay extends Component {
         this.changePackagesFilter = this.changePackagesFilter.bind(this);
     }
     componentWillMount() {
-        this.props.hardwareStore.fetchHardware(this.props.device.uuid);
-        this.props.packagesStore.fetchOndevicePackages(this.props.device.uuid);
-        this.props.packagesStore.fetchBlacklist();
+        const { device } = this.props;
+        const { hardwareStore, packagesStore } = this.props.stores;
+        hardwareStore.fetchHardware(device.uuid);
+        packagesStore.fetchOndevicePackages(device.uuid);
+        packagesStore.fetchBlacklist();
     }
     showPackagesList(e) { 
         if(e) e.preventDefault();
@@ -39,13 +41,17 @@ class Overlay extends Component {
         this.changeHardwareFilter('');
     }
     changeHardwareFilter(filter) {
-        this.props.hardwareStore._filterHardware(filter);
+        const { hardwareStore } = this.props.stores;
+        hardwareStore._filterHardware(filter);
     }
     changePackagesFilter(filter) {
-        this.props.packagesStore.fetchOndevicePackages(this.props.device.uuid, filter);
+        const { device } = this.props;
+        const { packagesStore } = this.props.stores;
+        packagesStore.fetchOndevicePackages(device.uuid, filter);
     }
     render() {
-        const { hardwareStore, hideHardwareOverlay, shown, packagesStore, device, showPackageBlacklistModal, onFileDrop, hardwareOverlayAnchor } = this.props;
+        const { hideHardwareOverlay, shown, device, showPackageBlacklistModal, onFileDrop, hardwareOverlayAnchor } = this.props;
+        const { hardwareStore, packagesStore } = this.props.stores;
         let content = (
             hardwareStore.hardwareFetchAsync.isFetching ?
                 <div className="wrapper-center">
@@ -98,7 +104,6 @@ class Overlay extends Component {
                     :
                         <div className="packages-details">
                             <DeviceHardwarePackagesInstalledList
-                                packagesStore={packagesStore}
                                 device={device}
                                 showPackageBlacklistModal={showPackageBlacklistModal}
                                 onFileDrop={onFileDrop}

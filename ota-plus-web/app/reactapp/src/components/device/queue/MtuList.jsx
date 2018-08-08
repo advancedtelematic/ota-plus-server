@@ -1,16 +1,18 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
 import { Loader } from '../../../partials';
 import MtuListItem from './MtuListItem';
 
+@inject("stores")
 @observer    
 class MtuQueueList extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        const { devicesStore, cancelMtuUpdate, alphaPlusEnabled, showSequencer } = this.props;
+        const { cancelMtuUpdate, showSequencer } = this.props;
+        const { devicesStore } = this.props.stores;
         const emptyQueue = (
             <div className="queue-modal__list">
                 <div className="wrapper-center">
@@ -39,7 +41,6 @@ class MtuQueueList extends Component {
                                             status={update.status}
                                             length={target.image.fileinfo.length}
                                             cancelMtuUpdate={cancelMtuUpdate}
-                                            alphaPlusEnabled={alphaPlusEnabled}
                                             showSequencer={showSequencer}
                                             key={hardwareId}
                                         />
@@ -55,7 +56,7 @@ class MtuQueueList extends Component {
     }
 }
 MtuQueueList.propTypes = {
-    devicesStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     cancelMtuUpdate: PropTypes.func.isRequired,
 }
 export default MtuQueueList;

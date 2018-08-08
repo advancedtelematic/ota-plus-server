@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { 
     DeviceHardwareOverlay, 
@@ -18,6 +18,7 @@ const primaryEcusTitle = "Primary Ecu";
 const secondaryEcusTitle = "Secondary Ecus";
 const noEcus = "None reported";
 
+@inject("stores")
 @observer
 class HardwarePanel extends Component {
     @observable secondaryDescriptionShown = false;
@@ -93,7 +94,7 @@ class HardwarePanel extends Component {
         this.hideHardwareOverlay();
     }
     hidePackageBlacklistModal(e) {
-        const { packagesStore } = this.props;
+        const { packagesStore } = this.props.stores;
         if(e) e.preventDefault();
         this.packageBlacklistModalShown = false;
         this.packageBlacklistAction = {};
@@ -101,13 +102,14 @@ class HardwarePanel extends Component {
     }
     render() {
         const { 
-            devicesStore, 
-            hardwareStore, 
-            packagesStore, 
             selectEcu, 
-            onFileDrop, 
+            onFileDrop 
         } = this.props;
-        const device = devicesStore.device;
+        const { 
+            devicesStore, 
+            hardwareStore
+        } = this.props.stores;
+        const { device } = devicesStore;
         const isPrimaryEcuActive = hardwareStore.activeEcu.hardwareId === devicesStore._getPrimaryHardwareId();
         const primaryEcus = (
             <span>
@@ -116,8 +118,6 @@ class HardwarePanel extends Component {
                 </div>
                 <DevicePrimaryEcu
                     active={isPrimaryEcuActive}
-                    hardwareStore={hardwareStore}
-                    devicesStore={devicesStore}
                     showHardwareOverlay={this.showHardwareOverlay}
                     selectEcu={selectEcu}
                     popoverShown={this.popoverShownFor === devicesStore._getPrimarySerial()}
@@ -148,7 +148,6 @@ class HardwarePanel extends Component {
                         return (
                             <DeviceSecondaryEcu
                                 active={hardwareStore.activeEcu.serial === item.id}
-                                hardwareStore={hardwareStore}
                                 device={device}
                                 ecu={item}
                                 selectEcu={selectEcu}
@@ -184,10 +183,8 @@ class HardwarePanel extends Component {
                     </div>
                     {this.hardwareOverlayShown ?
                         <DeviceHardwareOverlay
-                            hardwareStore={hardwareStore}
                             hideHardwareOverlay={this.hideHardwareOverlay}
                             shown={this.hardwareOverlayShown}
-                            packagesStore={packagesStore}
                             device={device}
                             showPackageBlacklistModal={this.showPackageBlacklistModal}
                             onFileDrop={onFileDrop}
@@ -213,7 +210,6 @@ class HardwarePanel extends Component {
                     shown={this.packageBlacklistModalShown}
                     hide={this.hidePackageBlacklistModal}
                     blacklistAction={this.packageBlacklistAction}
-                    packagesStore={packagesStore}
                 />
             </div>
         );
@@ -221,9 +217,7 @@ class HardwarePanel extends Component {
 }
 
 HardwarePanel.propTypes = {
-    devicesStore: PropTypes.object.isRequired,
-    hardwareStore: PropTypes.object.isRequired,
-    packagesStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     selectEcu: PropTypes.func.isRequired,
     onFileDrop: PropTypes.func.isRequired,
 }

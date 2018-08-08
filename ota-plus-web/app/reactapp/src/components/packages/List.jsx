@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable, observe } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
 import { VelocityTransitionGroup } from 'velocity-react';
 import Dropzone from 'react-dropzone';
@@ -12,6 +12,7 @@ import withAnimatedScroll from '../../partials/hoc/withAnimatedScroll';
 
 const headerHeight = 28;
 
+@inject("stores")
 @observer
 class List extends Component {
     @observable firstShownIndex = 0;
@@ -26,6 +27,7 @@ class List extends Component {
 
     constructor(props) {
         super(props);
+        const { packagesStore } = props.stores;
         this.generateHeadersPositions = this.generateHeadersPositions.bind(this);
         this.generateItemsPositions = this.generateItemsPositions.bind(this);
         this.listScroll = this.listScroll.bind(this);
@@ -37,7 +39,7 @@ class List extends Component {
         this.showEditModal = this.showEditModal.bind(this);
         this.showDeleteModal = this.showDeleteModal.bind(this);
         this.hideDeleteModal = this.hideDeleteModal.bind(this);
-        this.packagesChangeHandler = observe(props.packagesStore, (change) => {
+        this.packagesChangeHandler = observe(packagesStore, (change) => {
             if(change.name === 'preparedPackages' && !_.isMatch(change.oldValue, change.object[change.name])) {
                 const that = this;
                   setTimeout(() => {
@@ -85,6 +87,7 @@ class List extends Component {
         return positions;
     }
     listScroll() {
+        const { packagesStore } = this.props.stores;
         if(this.refs.list) {
             const headersPositions = this.generateHeadersPositions();
             const itemsPositions = this.generateItemsPositions();
@@ -95,7 +98,7 @@ class List extends Component {
             let lastShownIndex = null;
             _.each(headersPositions, (position, index) => {
                 if(scrollTop >= position) {
-                    newFakeHeaderLetter = Object.keys(this.props.packagesStore.preparedPackages)[index];
+                    newFakeHeaderLetter = Object.keys(packagesStore.preparedPackages)[index];
                     return true;
                 } else if(scrollTop >= position - headerHeight) {
                     scrollTop -= scrollTop - (position - headerHeight);
@@ -134,8 +137,9 @@ class List extends Component {
     }
     togglePackage(packageName, e) {
         const { expandedPackageName, setExpandedPackageName} = this.props;
+        const { packagesStore } = this.props.stores;
         if(e) e.preventDefault();
-        this.props.packagesStore._handleCompatibles();
+        packagesStore._handleCompatibles();
         setExpandedPackageName(expandedPackageName !== packageName ? packageName : null);
     }
     startIntervalListScroll() {
@@ -162,7 +166,8 @@ class List extends Component {
         this.deleteModal = false;
     }
     render() {
-        const { packagesStore, onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, alphaPlusEnabled, showDeleteConfirmation, expandedPackageName, showEditComment } = this.props;        
+        const { onFileDrop, highlightedPackage, showDependenciesModal, showDependenciesManager, showDeleteConfirmation, expandedPackageName, showEditComment } = this.props;        
+        const { packagesStore } = this.props.stores;
         return (
             <div className="ios-list" ref="list">
                 <Dropzone 
@@ -240,10 +245,8 @@ class List extends Component {
                                                                         <ListItemVersion
                                                                             pack={pack}
                                                                             version={version}
-                                                                            packagesStore={packagesStore}
                                                                             showDependenciesModal={showDependenciesModal}
                                                                             showDependenciesManager={showDependenciesManager}
-                                                                            alphaPlusEnabled={alphaPlusEnabled}
                                                                             showDeleteConfirmation={showDeleteConfirmation}
                                                                             showEditComment={showEditComment}
                                                                             key={i}
@@ -293,7 +296,7 @@ class List extends Component {
 }
 
 List.propTypes = {
-    packagesStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     onFileDrop: PropTypes.func.isRequired,
     highlightedPackage: PropTypes.string
 }

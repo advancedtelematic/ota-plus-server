@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { FlatButton, Avatar } from 'material-ui';
 import serialize from 'form-serialize';
 import { Loader, AsyncResponse, Form, FormInput } from '../../partials';
 import { resetAsync } from '../../utils/Common';
 import { AsyncStatusCallbackHandler } from '../../utils';
 
+@inject("stores")
 @observer
 class EditProfile extends Component {
     @observable renameDisabled = true;
@@ -16,6 +17,7 @@ class EditProfile extends Component {
 
     constructor(props) {
         super(props);
+        const { userStore } = props.stores;
         this.changePassword = this.changePassword.bind(this);
         this.enableRename = this.enableRename.bind(this);
         this.cancelRename = this.cancelRename.bind(this);
@@ -23,10 +25,10 @@ class EditProfile extends Component {
         this.focusTextInput = this.focusTextInput.bind(this);
         this.userTypesName = this.userTypesName.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
-        this.renameHandler = new AsyncStatusCallbackHandler(props.userStore, 'userUpdateAsync', this.handleResponse.bind(this));
+        this.renameHandler = new AsyncStatusCallbackHandler(userStore, 'userUpdateAsync', this.handleResponse.bind(this));
     }
     componentWillReceiveProps(nextProps) {
-        const { userStore } = nextProps;
+        const { userStore } = nextProps.stores;
         if(userStore.user.fullName) {
             this.renameDisabled = true;
             this.oldName = userStore.user.fullName;
@@ -35,14 +37,15 @@ class EditProfile extends Component {
         }
     }
     componentWillUnmount() {
-        const { userStore } = this.props;
+        const { userStore } = this.props.stores;
         resetAsync(userStore.userUpdateAsync);
         resetAsync(userStore.userChangePasswordAsync);
         this.renameHandler();
     }
     changePassword(e) {
         if(e) e.preventDefault();
-        this.props.userStore.changePassword();
+        const { userStore } = this.props.stores;
+        userStore.changePassword();
     }
     enableRename(e) {
         if (this.renameDisabled) {
@@ -68,10 +71,10 @@ class EditProfile extends Component {
         }
     }
     rename() {
-        const { userStore } = this.props;
+        const { userStore } = this.props.stores;
         this.clickableArea.classList.remove('hide');
         let data = {name: this.newName};
-        this.props.userStore.updateUser(data);
+        userStore.updateUser(data);
     }
     handleResponse() {
         this.renameDisabled = true;
@@ -87,7 +90,7 @@ class EditProfile extends Component {
         }
     }
     render() {
-        const { userStore } = this.props;
+        const { userStore } = this.props.stores;
         return (
             <div className="profile-container" id="edit-profile">
                 {!userStore.user.fullName && userStore.userFetchAsync.isFetching ? 
@@ -155,7 +158,7 @@ class EditProfile extends Component {
                                         ref={(input) => {this.renameInput = input}}
                                         disabled
                                         onKeyPress={this.keyPressed}
-                                        value={this.newName} onChange={this.userTypesName}
+                                        value={this.newName ? this.newName : userStore.user.fullName} onChange={this.userTypesName}
                                     />
 
                                     <div className="rename-box__actions rename-box__actions--big">
@@ -191,7 +194,7 @@ class EditProfile extends Component {
 }
 
 EditProfile.propTypes = {
-    userStore: PropTypes.object
+    stores: PropTypes.object
 };
 
 export default EditProfile;

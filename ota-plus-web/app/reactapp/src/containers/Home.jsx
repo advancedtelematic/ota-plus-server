@@ -60,7 +60,7 @@ class Home extends Component {
         this.deviceSubmenuShown = false;
     }
     render() {
-        const { devicesStore, hardwareStore, packagesStore, campaignsStore, addNewWizard  } = this.props;
+        const { addNewWizard  } = this.props;
         return (
             <div className="home">
                 <div className="home__box home__box--left">
@@ -197,9 +197,7 @@ class Home extends Component {
                             </div>
                         </div>
                         <div className="home__body home__body--right">
-                            <LastDevices 
-                                devicesStore={devicesStore}
-                            />
+                            <LastDevices />
                         </div>
                     </div>
                     <div className="home__list home__list--packages">
@@ -238,7 +236,6 @@ class Home extends Component {
                         </div>
                         <div className="home__body home__body--right">
                             <LastPackages 
-                                packagesStore={packagesStore}
                                 showPackagesCreateModal={this.showPackagesCreateModal}
                             />
                         </div>
@@ -279,7 +276,6 @@ class Home extends Component {
                         </div>
                         <div className="home__body home__body--right">
                             <ActiveCampaigns 
-                                campaignsStore={campaignsStore}
                                 addNewWizard={addNewWizard}
                             />
                         </div>
@@ -290,9 +286,6 @@ class Home extends Component {
                     <PackagesCreateModal 
                         shown={this.packagesCreateModalShown}
                         hide={this.hidePackagesCreateModal}
-                        packagesStore={packagesStore}
-                        hardwareStore={hardwareStore}
-                        devicesStore={devicesStore}
                     />
                 :
                     null
@@ -301,17 +294,6 @@ class Home extends Component {
             </div>
         );
     }
-}
-
-Home.propTypes = {
-    devicesStore: PropTypes.object.isRequired,
-    hardwareStore: PropTypes.object.isRequired,
-    packagesStore: PropTypes.object.isRequired,
-    campaignsStore: PropTypes.object.isRequired
-}
-
-Home.contextTypes = {
-    router: React.PropTypes.object.isRequired
 }
 
 export default Home;

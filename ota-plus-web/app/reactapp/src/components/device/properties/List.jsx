@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observe, observable } from 'mobx';
 import { FlatButton } from 'material-ui';
 import { Sequencer } from '../../../partials';
@@ -12,15 +12,17 @@ const notInstalled = "Not Installed";
 const blacklisted = "Blacklisted";
 const queued = "Queued";
 
+@inject("stores")
 @observer
 class List extends Component {
 	constructor(props) {
 		super(props);
 	}
 	isPackageQueued(version) {
+		const { devicesStore, hardwareStore } = this.props.stores;
 		let isPackageQueued = false;
-		let serial = this.props.hardwareStore.activeEcu.serial;
-		_.each(this.props.devicesStore.multiTargetUpdates, (update, i) => {
+		let serial = hardwareStore.activeEcu.serial;
+		_.each(devicesStore.multiTargetUpdates, (update, i) => {
 			if(!_.isEmpty(update.targets[serial])) {
 				if(version.filepath === update.targets[serial].image.filepath) {
 					isPackageQueued = true;
@@ -30,14 +32,14 @@ class List extends Component {
 		return isPackageQueued;
 	}
 	isPackageInstalled(version) {
-		const { devicesStore, hardwareStore } = this.props;
+		const { devicesStore, hardwareStore } = this.props.stores;
 		let installed = false;
-	    if(hardwareStore.activeEcu.type === 'primary' && this.props.devicesStore._getPrimaryFilepath() === version.filepath) {
+	    if(hardwareStore.activeEcu.type === 'primary' && devicesStore._getPrimaryFilepath() === version.filepath) {
 		    installed = true;
 	    }
 	    if(hardwareStore.activeEcu.type === 'secondary') {
 	    	let serial = hardwareStore.activeEcu.serial;
-	        if(_.includes(this.props.devicesStore._getSecondaryFilepathsBySerial(serial), version.filepath)) {
+	        if(_.includes(devicesStore._getSecondaryFilepathsBySerial(serial), version.filepath)) {
 		        installed = true;
 	        }
 	    }
@@ -48,17 +50,16 @@ class List extends Component {
 	}
     render() {
     	const { 
-    		packagesStore, 
-    		devicesStore, 
-    		installTufPackage, 
+    		installTufPackage
     	} = this.props;
+    	const { packagesStore, devicesStore } = this.props.stores;
 
     	let isPackageBlacklisted = false;
     	let isPackageQueued = false;
     	let isPackageInstalled = false;
     	let unmanaged = false;
 
-    	const expandedPackage = packagesStore.expandedPackage;
+    	const { expandedPackage } = packagesStore;
     	if(!expandedPackage.unmanaged) {
 	    	isPackageQueued = this.isPackageQueued(expandedPackage);
 	    	isPackageInstalled = this.isPackageInstalled(expandedPackage);
@@ -257,8 +258,7 @@ class List extends Component {
 }
 
 List.propTypes = {
-    packagesStore: PropTypes.object.isRequired,
-    devicesStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     installTufPackage: PropTypes.func.isRequired,
 }
 

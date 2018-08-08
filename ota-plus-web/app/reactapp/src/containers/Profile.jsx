@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Loader, AsyncResponse } from '../partials';
 import { Form } from 'formsy-react';
 import { FormsyText } from 'formsy-material-ui/lib';
 import { FlatButton, Avatar } from 'material-ui';
 import serialize from 'form-serialize';
 
+@inject("stores")
 @observer
 class Profile extends Component {
     @observable submitButtonDisabled = true;
@@ -23,14 +24,16 @@ class Profile extends Component {
         this.submitButtonDisabled = true;
     }
     submitForm() {
+        const { userStore } = this.props.stores;
         let data = serialize(document.querySelector('#user-update-form'), { hash: true })
-        this.props.userStore.updateUser(data);
+        userStore.updateUser(data);
     }
     changePassword() {
-        this.props.userStore.changePassword();
+        const { userStore } = this.props.stores;
+        userStore.changePassword();
     }
     render() {
-        const { userStore } = this.props;
+        const { userStore } = this.props.stores;
         return (
             <span>
                 <div className="panel panel-grey">
@@ -107,7 +110,7 @@ class Profile extends Component {
 }
 
 Profile.propTypes = {
-    userStore: PropTypes.object.isRequired
+    stores: PropTypes.object
 }
 
 export default Profile;

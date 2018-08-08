@@ -1,11 +1,12 @@
 import React, {Component, PropTypes} from 'react';
-import {observer} from 'mobx-react';
+import {observer, inject} from 'mobx-react';
 import {observable, extendObservable} from 'mobx';
 import _ from 'underscore';
 import {SelectField, MenuItem} from 'material-ui';
 import {Loader, Form, FormSelect, FormInput} from '../../../partials';
 import {FlatButton} from 'material-ui';
 
+@inject("stores")
 @observer
 class WizardStep5 extends Component {
     @observable blocks = [];
@@ -20,7 +21,7 @@ class WizardStep5 extends Component {
     }
 
     componentWillMount() {
-        const {wizardData, packagesStore, markStepAsNotFinished} = this.props;
+        const {wizardData, markStepAsNotFinished} = this.props;
         markStepAsNotFinished();
         let chosenVersions = wizardData[2].versions;
         _.each(chosenVersions, (values, packName) => {
@@ -33,7 +34,8 @@ class WizardStep5 extends Component {
     }
 
     checkVersion(data) {
-        const {packagesStore, wizardData} = this.props;
+        const {wizardData} = this.props;
+        const { packagesStore } = this.props.stores;
         let chosenVersions = wizardData[2].versions;
         let objWithRelations = JSON.parse(localStorage.getItem(data.filepath));
         if (objWithRelations) {
@@ -100,7 +102,7 @@ class WizardStep5 extends Component {
     }
 
     getPackVersions(packName) {
-        const {packagesStore} = this.props;
+        const {packagesStore} = this.props.stores;
         let versions = [];
         _.each(packagesStore.preparedPackages, (packs, letter) => {
             _.each(packs, (pack, i) => {

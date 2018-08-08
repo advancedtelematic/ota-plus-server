@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable, extendObservable, observe } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Loader } from '../partials';
 import { 
     DeviceHardwarePanel,
@@ -12,6 +12,7 @@ import {
 } from '../components/packages';
 import _ from 'underscore';
 
+@inject("stores")
 @observer
 class Device extends Component {
     @observable packageCreateModalShown = false;
@@ -43,7 +44,7 @@ class Device extends Component {
             e.preventDefault();
             e.stopPropagation();
         }
-        const { packagesStore, hardwareStore } = this.props;
+        const { packagesStore, hardwareStore } = this.props.stores;
         let activeEcuSerial = hardwareStore.activeEcu.serial;
         if(isAutoInstallEnabled)
             packagesStore.disablePackageAutoInstall(
@@ -61,7 +62,7 @@ class Device extends Component {
     
     showPackageDetails(pack, e) {
         if(e) e.preventDefault();
-        const { packagesStore } = this.props;
+        const { packagesStore } = this.props.stores;
         let isPackageUnmanaged = pack === 'unmanaged';
         if(isPackageUnmanaged) {
             packagesStore.expandedPackage = {
@@ -73,16 +74,13 @@ class Device extends Component {
     }
     render() {
         const { 
-            devicesStore, 
-            packagesStore, 
-            hardwareStore,
-            campaignsStore,
             selectEcu,
             packagesReady,
             disableExpand,
             installTufPackage
         } = this.props;
-        const device = devicesStore.device;
+        const { devicesStore } = this.props.stores;
+        const { device } = devicesStore;
         return (
             <span>
                 {devicesStore.devicesOneFetchAsync.isFetching ?
@@ -93,16 +91,10 @@ class Device extends Component {
                     device.lastSeen ?
                         <span>
                             <DeviceHardwarePanel 
-                                devicesStore={devicesStore}
-                                hardwareStore={hardwareStore}
-                                packagesStore={packagesStore}
                                 selectEcu={selectEcu}
                                 onFileDrop={this.onFileDrop}
                             />
                             <DeviceSoftwarePanel
-                                devicesStore={devicesStore}
-                                packagesStore={packagesStore}
-                                hardwareStore={hardwareStore}
                                 toggleTufPackageAutoUpdate={this.toggleTufPackageAutoUpdate}
                                 onFileDrop={this.onFileDrop}
                                 showPackageDetails={this.showPackageDetails}
@@ -110,10 +102,6 @@ class Device extends Component {
                                 disableExpand={disableExpand}
                             />
                             <DevicePropertiesPanel
-                                packagesStore={packagesStore}
-                                devicesStore={devicesStore}
-                                campaignsStore={campaignsStore}
-                                hardwareStore={hardwareStore}
                                 installTufPackage={installTufPackage}
                                 packagesReady={packagesReady}
                             />
@@ -129,9 +117,6 @@ class Device extends Component {
                     <PackagesCreateModal 
                         shown={this.packageCreateModalShown}
                         hide={this.hidePackageCreateModal}
-                        packagesStore={packagesStore}
-                        hardwareStore={hardwareStore}
-                        devicesStore={devicesStore}
                         fileDropped={this.fileDropped}
                     />
                 :
@@ -143,9 +128,7 @@ class Device extends Component {
 }
 
 Device.propTypes = {
-    devicesStore: PropTypes.object.isRequired,
-    packagesStore: PropTypes.object.isRequired,
-    hardwareStore: PropTypes.object.isRequired,
+    stores: PropTypes.object,
     selectEcu: PropTypes.func.isRequired,
 }
 

@@ -12,12 +12,7 @@ class SettingsDropdown extends Component {
     constructor(props) {
         super(props);
     }
-    handleClickOutside(e) {
-        if($('#menu-login .dropdown').hasClass('open'))
-            document.getElementById('profile-dropdown').click();
-    }
     render() {
-        const { userStore, alphaPlusEnabled, uiCredentialsDownload } = this.props;
         return (
             <Dropdown id="profile-dropdown" rootCloseEvent="mousedown">
                 <LinkWrapper
@@ -43,10 +38,7 @@ class SettingsDropdown extends Component {
                     </div>
                 </LinkWrapper>
                 <UserDropdown 
-                    userStore={userStore}
                     bsRole="menu"
-                    alphaPlusEnabled={alphaPlusEnabled}
-                    uiCredentialsDownload={uiCredentialsDownload}
                     settings={true}
                 />
             </Dropdown>
@@ -55,7 +47,13 @@ class SettingsDropdown extends Component {
 }
 
 SettingsDropdown.propTypes = {
-    userStore: PropTypes.object.isRequired
 }
 
-export default onClickOutside(SettingsDropdown);
+export default onClickOutside(SettingsDropdown, {
+    handleClickOutside: (e) => {
+        return () => {
+            if($('#menu-login .dropdown').hasClass('open'))
+                document.getElementById('profile-dropdown').click();
+        }
+    }
+});

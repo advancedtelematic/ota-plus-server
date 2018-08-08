@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { translate } from 'react-i18next';
 import { DropTarget } from 'react-dnd';
-import CreateModal from './CreateModal';
+import RenameModal from './RenameModal';
 import { Dropdown } from '../../partials';
 
 const groupTarget = {
@@ -21,27 +21,28 @@ function collect(connect, monitor) {
     };
 }
 
+@inject('stores')
 @observer
 class ListItem extends Component {
-    @observable createModalShown = false;
+    @observable renameModalShown = false;
     @observable showEdit = false;
 
     constructor(props) {
         super(props);
-        this.showCreateModal = this.showCreateModal.bind(this);
-        this.hideCreateModal = this.hideCreateModal.bind(this);
+        this.showRenameModal = this.showRenameModal.bind(this);
+        this.hideRenameModal = this.hideRenameModal.bind(this);
         this.showDropdown = this.showDropdown.bind(this);
         this.hideDropdown = this.hideDropdown.bind(this);
     }
 
-    showCreateModal(e) {
+    showRenameModal(e) {
         if(e) e.stopPropagation();
-        this.createModalShown = true;
+        this.renameModalShown = true;
     }
 
-    hideCreateModal(e) {
+    hideRenameModal(e) {
         if(e) e.preventDefault();
-        this.createModalShown = false;
+        this.renameModalShown = false;
     }
 
     showDropdown() {
@@ -53,8 +54,8 @@ class ListItem extends Component {
     }
 
     render() {
-        const { t, group, isSelected, selectGroup, groupsStore } = this.props;
-        const { isOver, canDrop, connectDropTarget } = this.props;
+        const { t, group, isSelected, selectGroup, isOver, canDrop, connectDropTarget } = this.props;
+        const { groupsStore } = this.props.stores;
         return (
             connectDropTarget(
                 <div
@@ -86,7 +87,7 @@ class ListItem extends Component {
                                        onClick={(e) => {
                                            e.preventDefault();
                                            selectGroup({type: 'real', groupName: group.groupName, id: group.id});
-                                           this.showCreateModal();
+                                           this.showRenameModal();
                                        }}>
                                         <img src="/assets/img/icons/edit_icon.svg" alt="Icon" />
                                         Edit name
@@ -98,10 +99,10 @@ class ListItem extends Component {
                             {t('common.deviceWithCount', {count: group.devices.total})}
                         </div>
                     </div>
-                    {this.createModalShown ?
-                        <CreateModal
-                            shown={this.createModalShown}
-                            hide={this.hideCreateModal}
+                    {this.renameModalShown ?
+                        <RenameModal
+                            shown={this.renameModalShown}
+                            hide={this.hideRenameModal}
                             groupsStore={groupsStore}
                             selectGroup={selectGroup}
                             action="rename"

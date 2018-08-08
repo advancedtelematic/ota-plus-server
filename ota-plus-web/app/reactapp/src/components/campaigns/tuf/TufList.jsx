@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import moment from 'moment';
 import _ from 'underscore';
@@ -10,6 +10,7 @@ import { VelocityTransitionGroup } from 'velocity-react';
 
 const headerHeight = 40;
 
+@inject("stores")
 @observer
 class TufList extends Component {
     constructor(props) {
@@ -34,8 +35,9 @@ class TufList extends Component {
         }, 1000);
     }
     highlightCampaign(id) {
+        const { campaignsStore } = this.props.stores;
         if(this.refs.list && id) {
-            const name = _.filter(this.props.campaignsStore.campaigns, (obj) => {
+            const name = _.filter(campaignsStore.campaigns, (obj) => {
                 return obj.id === id;
             });
             this.props.toggleCampaign(name[0].name);
@@ -43,7 +45,8 @@ class TufList extends Component {
         }
     }
     render() {
-        const { campaignsStore, groupsStore, highlightedCampaign, showCancelCampaignModal, showDependenciesModal, expandedCampaignName, toggleCampaign } = this.props;
+        const { highlightedCampaign, showCancelCampaignModal, showDependenciesModal, expandedCampaignName, toggleCampaign } = this.props;
+        const { campaignsStore } = this.props.stores;
         return (
             <div className="campaigns__wrapper" ref="list">
                 <div className="campaigns__section-header section-header">
@@ -71,8 +74,6 @@ class TufList extends Component {
                                     >
                                         {expandedCampaignName === campaign.name ?
                                             <CampaignsTufStatistics 
-                                                campaignsStore={campaignsStore}
-                                                groupsStore={groupsStore}
                                                 campaignId={campaign.id}
                                                 showCancelCampaignModal={showCancelCampaignModal}
                                                 showDependenciesModal={showDependenciesModal}
@@ -121,8 +122,6 @@ class TufList extends Component {
                                     >
                                     {expandedCampaignName === campaign.name?
                                         <CampaignsTufStatistics
-                                            campaignsStore={campaignsStore}
-                                            groupsStore={groupsStore}
                                             showCancelCampaignModal={showCancelCampaignModal}
                                             showDependenciesModal={showDependenciesModal}
                                             campaignId={campaign.id}
@@ -165,8 +164,6 @@ class TufList extends Component {
                                     >
                                     {expandedCampaignName === campaign.name ?
                                         <CampaignsTufStatistics
-                                            campaignsStore={campaignsStore}
-                                            groupsStore={groupsStore}
                                             showCancelCampaignModal={showCancelCampaignModal}
                                             showDependenciesModal={showDependenciesModal}
                                             campaignId={campaign.id}
@@ -208,8 +205,6 @@ class TufList extends Component {
                                     >
                                     {expandedCampaignName === campaign.name ?
                                         <CampaignsTufStatistics
-                                            campaignsStore={campaignsStore}
-                                            groupsStore={groupsStore}
                                             showCancelCampaignModal={showCancelCampaignModal}
                                             showDependenciesModal={showDependenciesModal}
                                             campaignId={campaign.id}

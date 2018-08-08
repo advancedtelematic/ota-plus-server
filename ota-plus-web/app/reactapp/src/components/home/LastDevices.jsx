@@ -1,18 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Loader } from '../../partials';
 import _ from 'underscore';
 import LastDevicesItem from './LastDevicesItem';
 import NoItems from './NoItems';
 
+@inject("stores")
 @observer
 class LastDevices extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        const { devicesStore } = this.props;
+        const { devicesStore } = this.props.stores;
         const { lastDevices } = devicesStore;
         return (
             <span style={{height: '100%'}}>
@@ -44,7 +45,7 @@ class LastDevices extends Component {
 }
 
 LastDevices.propTypes = {
-    devicesStore: PropTypes.object
+    stores: PropTypes.object
 }
 
 export default LastDevices;

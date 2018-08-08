@@ -1,18 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import _ from 'underscore';
 import ListItem from './ListItem';
 import NoKeys from './NoKeys';
 import { Loader } from '../../../partials';
 
+@inject("stores")
 @observer
 class List extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        const { provisioningStore, showTooltip } = this.props;
+        const { showTooltip } = this.props;
+        const { provisioningStore } = this.props.stores;
         return (
             provisioningStore.preparedProvisioningKeys.length ?
                 <span>
@@ -34,7 +36,6 @@ class List extends Component {
                         {_.map(provisioningStore.preparedProvisioningKeys, (provisioningKey, index) => {
                             return (
                                 <ListItem
-                                    provisioningStore={provisioningStore}
                                     provisioningKey={provisioningKey}
                                     key={index}
                                 />
@@ -56,7 +57,7 @@ class List extends Component {
 }
 
 List.propTypes = {
-    provisioningStore: PropTypes.object.isRequired
+    stores: PropTypes.object
 }
 
 export default List;

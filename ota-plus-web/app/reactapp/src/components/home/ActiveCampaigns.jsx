@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Loader } from '../../partials';
 import _ from 'underscore';
 import ActiveCampaignItem from './ActiveCampaignItem';
 import NoItems from './NoItems';
 
+@inject("stores")
 @observer
 class ActiveCampaigns extends Component {
     constructor(props) {
@@ -17,7 +18,8 @@ class ActiveCampaigns extends Component {
         addNewWizard();
     }
     render() {
-        const { campaignsStore, addNewWizard } = this.props;
+        const { addNewWizard } = this.props;
+        const { campaignsStore } = this.props.stores;
         return (
             <span style={{height: '100%'}}>
                 {campaignsStore.campaignsFetchAsync.isFetching ?
@@ -46,7 +48,7 @@ class ActiveCampaigns extends Component {
 }
 
 ActiveCampaigns.propTypes = {
-    campaignsStore: PropTypes.object
+    stores: PropTypes.object
 }
 
 export default ActiveCampaigns;

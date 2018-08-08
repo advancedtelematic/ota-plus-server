@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Modal, Form, FormTextarea } from '../../partials';
 import serialize from 'form-serialize';
 
+@inject("stores")
 @observer
 class EditCommentModal extends Component {
     @observable submitButtonDisabled = false;
@@ -12,7 +13,8 @@ class EditCommentModal extends Component {
         super(props);
     }
     submitForm(e) {
-        const { filepath, hide, packagesStore } =  this.props;
+        const { filepath, hide } =  this.props;
+        const { packagesStore } = this.props.stores;
         if(e) e.preventDefault();
         const data = serialize(document.querySelector('#comment-edit-form'), {hash: true});
         packagesStore.updateComment(filepath, data.comment);

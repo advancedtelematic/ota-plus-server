@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import Draggable from 'react-draggable';
 import { Circle } from 'react-progressbar.js';
 import { translate } from 'react-i18next';
@@ -12,6 +12,7 @@ import {
 import { ConvertTime, ConvertBytes } from '../utils';
 import Modal from './Modal';
 
+@inject('stores')
 @observer
 class UploadBox extends Component {
     @observable cancelUploadModalShown = false;
@@ -35,7 +36,8 @@ class UploadBox extends Component {
     }
     removeFromList(index, e) {
         if(e) e.preventDefault();
-        this.props.packagesStore.packagesUploading.splice(index, 1);
+        const { packagesStore } = this.props.stores;
+        packagesStore.packagesUploading.splice(index, 1);
     }
     showCancelUploadModal(index, e) {
         if(e) e.preventDefault();
@@ -58,19 +60,21 @@ class UploadBox extends Component {
     }
     close(e) {
         if(e) e.preventDefault();
+        const { packagesStore } = this.props.stores;
         let uploadFinished = true;
-        _.each(this.props.packagesStore.packagesUploading, (upload) => {
+        _.each(packagesStore.packagesUploading, (upload) => {
             if(upload.status === null)
                 uploadFinished = false;
         });
         if(uploadFinished) {
-            this.props.packagesStore.packagesUploading = [];
+            packagesStore.packagesUploading = [];
         } else {
             this.showCancelAllUploadsModal(true, null);
         }
     }
     render() {
-        const { t, packagesStore, minimized, toggleUploadBoxMode } = this.props;
+        const { t, minimized, toggleUploadBoxMode } = this.props;
+        const { packagesStore } = this.props.stores;
         const barOptions = {
             strokeWidth: 18,
             easing: 'easeInOut',
@@ -222,7 +226,7 @@ class UploadBox extends Component {
 }
 
 UploadBox.propTypes = {
-    packagesStore: PropTypes.object
+    stores: PropTypes.object
 }
 
 export default translate()(UploadBox);
