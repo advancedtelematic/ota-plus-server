@@ -6,13 +6,14 @@ import {
     DevicesPage,
     DevicePage,
     PackagesPage,
+    UpdatePage,
     CampaignsPage,
     ImpactAnalysisPage,
     ProfilePage,
     NoMatchPage,
     FireworksPage,
     SoftwareRepository,
-    TermsAndConditions
+    TermsAndConditions,
 } from './pages';
 import {
     ProfileEditProfile,
@@ -32,6 +33,7 @@ const Routes = () => {
                 <Route path="/devices" component={DevicesPage}/>
                 <Route path="/device/:id" component={DevicePage}/>
                 <Route path="/packages(/:packageName)" component={PackagesPage}/>
+                <Route path="/update(/:updateName)" component={UpdatePage}/>
                 <Route path="/campaigns(/:campaignName)" component={CampaignsPage}/>
                 <Route path="/impact-analysis" component={ImpactAnalysisPage}/>
                 <Route path="/software-repository" component={SoftwareRepository}/>

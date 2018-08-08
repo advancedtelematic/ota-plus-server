@@ -570,6 +570,7 @@ export default class PackagesStore {
                 groupedPackages[obj.id.name] = new Object();
                 groupedPackages[obj.id.name].versions = [];
                 groupedPackages[obj.id.name].packageName = obj.id.name;
+                groupedPackages[obj.id.name].name = obj.id.name;
             }
             groupedPackages[obj.id.name].versions.push(obj);
         }, this);
