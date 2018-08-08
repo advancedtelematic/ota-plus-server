@@ -18,12 +18,15 @@ import _ from 'underscore';
 export default class GroupsStore {
 
     @observable groupsFetchAsync = {};
+    @observable groupsLoadMoreFetchAsync = {};
+    @observable groupsCreateFetchAsync = {};
     @observable groupsWizardFetchAsync = {};
     @observable groupsWizardLoadMoreFetchAsync = {};
     @observable groupsCreateAsync = {};
     @observable groupsRenameAsync = {};
     @observable groupsAddDeviceAsync = {};
     @observable groupsRemoveDeviceAsync = {};
+    @observable automaticGroups = [];
     @observable groups = [];
     @observable wizardGroups = [];
     @observable filteredGroups = [];
@@ -35,19 +38,22 @@ export default class GroupsStore {
         groupName: 'all'
     };
 
-    @observable groupsCurrentPage = 0;
-    @observable groupsTotalCount = null;
     @observable groupsLimit = 10;
 
     @observable activeFleet = null;
     @observable shouldLoadMore = true;
 
+    @observable groupsOffset = 0;
+    @observable hasMoreGroups = false;
+
     @observable groupsWizardOffset = 0;
-    @observable hasMoreGroups = 0;
     @observable groupsWizardLimit = 10;
+    @observable hasMoreWizardGroups = false;
 
     constructor() {
         resetAsync(this.groupsFetchAsync);
+        resetAsync(this.groupsLoadMoreFetchAsync);
+        resetAsync(this.groupsCreateFetchAsync);
         resetAsync(this.groupsWizardFetchAsync);
         resetAsync(this.groupsWizardLoadMoreFetchAsync
             );
@@ -71,9 +77,46 @@ export default class GroupsStore {
         this._prepareGroups(this.filteredGroups);
     }
 
-    fetchGroups() {
-        resetAsync(this.groupsFetchAsync, true);
-        return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsLimit + '&offset=' + this.groupsCurrentPage * this.groupsLimit)
+    fetchGroups(async = 'groupsFetchAsync') {
+        resetAsync(this[async], true);
+
+        this.groupsOffset = 0;
+
+        return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsLimit + '&offset=' + this.groupsOffset)
+            .then(function (response) {
+                let groups = response.data.values;
+                if(groups.length) {
+                    let after = _.after(groups.length, () => {
+                        this.groups = groups;
+                        this.automaticGroups = groups.slice(1, 3);
+                        this._prepareGroups(this.groups);
+                        this._prepareGroupsWithFleets();
+                        this[async] = handleAsyncSuccess(response);
+                    }, this);
+                    _.each(groups, (group, index) => {
+                        axios.get(API_GROUPS_DEVICES_FETCH + '/' + group.id + '/devices')
+                            .then(function(resp) {
+                                group.devices = resp.data;
+                                after();
+                            })
+                            .catch(function() {
+                                after();
+                            });
+                    });
+                } else {
+                    this.groups = groups;
+                    this[async] = handleAsyncSuccess(response);
+                }
+                this.hasMoreGroups = this.groupsOffset < response.data.total;
+            }.bind(this))
+            .catch(function (error) {
+                this[async] = handleAsyncError(error);
+            }.bind(this));
+    }
+
+    loadMoreGroups() {
+        resetAsync(this.groupsLoadMoreFetchAsync, true);
+        return axios.get(API_GROUPS_FETCH + '?limit=' + this.groupsLimit + '&offset=' + (this.groupsOffset + this.groupsLimit))
             .then(function (response) {
                 let groups = response.data.values;
                 if(groups.length) {
@@ -81,7 +124,7 @@ export default class GroupsStore {
                         this.groups = _.uniq(this.groups.concat(groups), group => group.id);
                         this._prepareGroups(this.groups);
                         this._prepareGroupsWithFleets();
-                        this.groupsFetchAsync = handleAsyncSuccess(response);
+                        this.groupsLoadMoreFetchAsync = handleAsyncSuccess(response);
                     }, this);
                     _.each(groups, (group, index) => {
                         axios.get(API_GROUPS_DEVICES_FETCH + '/' + group.id + '/devices')
@@ -95,13 +138,13 @@ export default class GroupsStore {
                     });
                 } else {
                     this.groups = _.uniq(this.groups.concat(groups), group => group.id);
-                    this.groupsFetchAsync = handleAsyncSuccess(response);
+                    this.groupsLoadMoreFetchAsync = handleAsyncSuccess(response);
                 }
-                this.groupsCurrentPage++;
-                this.groupsTotalCount = response.data.total;
+                this.groupsOffset = response.data.offset;
+                this.hasMoreGroups = this.groupsOffset < response.data.total;
             }.bind(this))
             .catch(function (error) {
-                this.groupsFetchAsync = handleAsyncError(error);
+                this.groupsLoadMoreFetchAsync = handleAsyncError(error);
             }.bind(this));
     }
 
@@ -133,7 +176,7 @@ export default class GroupsStore {
                     this.wizardGroups = groups;
                     this.groupsWizardFetchAsync = handleAsyncSuccess(response);
                 }
-                this.hasMoreGroups = this.groupsWizardOffset < response.data.total;
+                this.hasMoreWizardGroups = this.groupsWizardOffset < response.data.total;
             }.bind(this))
             .catch(function (error) {
                 this.groupsWizardFetchAsync = handleAsyncError(error);
@@ -166,7 +209,7 @@ export default class GroupsStore {
                     this.groupsWizardLoadMoreFetchAsync = handleAsyncSuccess(response);
                 }
                 this.groupsWizardOffset = response.data.offset;
-                this.hasMoreGroups = this.groupsWizardOffset < response.data.total;
+                this.hasMoreWizardGroups = this.groupsWizardOffset < response.data.total;
             }.bind(this))
             .catch(function (error) {
                 this.groupsWizardLoadMoreFetchAsync = handleAsyncError(error);
@@ -178,8 +221,7 @@ export default class GroupsStore {
         return axios.post(API_GROUPS_CREATE + '?groupName=' + name)
             .then(function (response) {
                 this.latestCreatedGroupId = response.data;
-                this.groupsCurrentPage = 0;
-                this.fetchGroups();
+                this.fetchGroups('groupsCreateFetchAsync');
                 this.groupsCreateAsync = handleAsyncSuccess(response);
             }.bind(this))
             .catch(function (error) {
@@ -256,12 +298,15 @@ export default class GroupsStore {
 
     _reset() {
         resetAsync(this.groupsFetchAsync);
+        resetAsync(this.groupsLoadMoreFetchAsync);
+        resetAsync(this.groupsCreateFetchAsync);
         resetAsync(this.groupsWizardFetchAsync);
         resetAsync(this.groupsWizardLoadMoreFetchAsync);
         resetAsync(this.groupsCreateAsync);
         resetAsync(this.groupsRenameAsync);
         resetAsync(this.groupsAddDeviceAsync);
         resetAsync(this.groupsRemoveDeviceAsync);
+        this.automaticGroups = [];
         this.groups = [];
         this.wizardGroups = [];
         this.filteredGroups = [];
@@ -269,11 +314,11 @@ export default class GroupsStore {
         this.preparedWizardGroups = {};
         this.latestCreatedGroupId = null;
         
-        this.groupsCurrentPage = 0;
-        this.groupsTotalCount = 0;
+        this.groupsOffset = 0;
+        this.hasMoreGroups = false;
 
         this.groupsWizardOffset = 0;
-        this.hasMoreGroups = false;
+        this.hasMoreWizardGroups = false;
 
         this.shouldLoadMore = true;
     }

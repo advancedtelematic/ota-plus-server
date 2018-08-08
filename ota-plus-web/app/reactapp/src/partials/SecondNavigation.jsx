@@ -21,8 +21,9 @@ class SecondNavigation extends Component {
     	}
     }
     render() {
-        const { location, toggleSWRepo, switchToSWRepo, toggleFleet, activeFleet } = this.props;
-        const { devicesStore } = this.props.stores;
+        const { location, toggleSWRepo, switchToSWRepo, toggleFleet } = this.props;
+        const { devicesStore, groupsStore } = this.props.stores;
+        const { activeFleet } = groupsStore;
         let block = null;
         if(location === 'page-packages') {
         	block = (

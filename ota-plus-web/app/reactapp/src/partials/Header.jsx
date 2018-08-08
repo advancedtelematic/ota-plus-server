@@ -1,11 +1,11 @@
 import React, { PropTypes, defaultProps } from 'react';
 
-const Header = ({ title, subtitle, backButtonShown, backButtonAction, children, device }) => {
+const Header = ({ title, subtitle, backButtonShown, children, device }) => {
     return (
         <div className="page-header">
             <div className="page-header__left">
                 {backButtonShown ? 
-                    <a href="#" id="back-button" className="page-header__back" onClick={backButtonAction}>
+                    <a href="#" id="back-button" className="page-header__back" onClick={() => { window.history.go(-1) }}>
                         <i className="fa fa-angle-left"></i>
                     </a>
                 : null}
@@ -36,7 +36,6 @@ Header.propTypes = {
     ]),
     subtitle: PropTypes.any,
     backButtonShown: PropTypes.bool,
-    backButtonAction: PropTypes.func,
     children: PropTypes.object,
 }
 
