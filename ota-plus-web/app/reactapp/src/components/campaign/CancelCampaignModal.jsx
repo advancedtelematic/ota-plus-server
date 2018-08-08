@@ -24,8 +24,7 @@ class CancelCampaignModal extends Component {
     }
     handleResponse() {
         const { campaignsStore } = this.props.stores;
-        const { campaign } = campaignsStore;
-        campaignsStore.fetchCampaign(campaign.id);
+        campaignsStore.fetchCampaigns('campaignsSafeFetchAsync');
         this.props.hide();
     }
     render() {
