@@ -12,18 +12,9 @@ import { Loader } from '../../partials';
 @inject("stores")
 @observer
 class DefaultList extends Component {
-    @observable staticShown = true;
-
-    constructor(props) {
-        super(props);
-        this.toggleStaticGroups = this.toggleStaticGroups.bind(this);
-    }
-    toggleStaticGroups() {
-        this.staticShown = !this.staticShown;
-    }
     render() {
         const { selectGroup, onDeviceDrop } = this.props;
-        const { devicesStore, groupsStore } = this.props.stores;
+        const { groupsStore } = this.props.stores;
         return (
             <span>
                 <VelocityTransitionGroup 
@@ -36,45 +27,41 @@ class DefaultList extends Component {
                     }}
                     component="span"
                 >
-                    {this.staticShown ?
-                        <div className="groups-panel__default-list">
-                            {groupsStore.groupsFetchAsync.isFetching ?
-                                <div className="wrapper-center">
-                                    <Loader />
-                                </div>
-                            :
-                                <InfiniteScroll
-                                    className="wrapper-infinite-scroll"
-                                    hasMore={groupsStore.shouldLoadMore && groupsStore.hasMoreGroups}
-                                    isLoading={groupsStore.groupsFetchAsync.isFetching}
-                                    useWindow={false}
-                                    loadMore={() => {
-                                        groupsStore.loadMoreGroups()
-                                    }}>
-                                        {!_.isEmpty(groupsStore.preparedGroups) ?
-                                            _.map(groupsStore.preparedGroups, (groups) => {
-                                                return _.map(groups, (group, index) => {
-                                                    const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.groupName === group.groupName);
-                                                    return (
-                                                        <ListItem 
-                                                            group={group}
-                                                            selectGroup={selectGroup}
-                                                            isSelected={isSelected}
-                                                            onDeviceDrop={onDeviceDrop}
-                                                            key={group.groupName}
-                                                        />
-                                                    );
-                                                });
-                                            })
-                                        :
-                                            null
-                                        }
-                                </InfiniteScroll>
-                            }
-                        </div>
-                    :
-                        null
-                    }
+                    <div className="groups-panel__default-list">
+                        {groupsStore.groupsFetchAsync.isFetching ?
+                            <div className="wrapper-center">
+                                <Loader />
+                            </div>
+                        :
+                            <InfiniteScroll
+                                className="wrapper-infinite-scroll"
+                                hasMore={groupsStore.shouldLoadMore && groupsStore.hasMoreGroups}
+                                isLoading={groupsStore.groupsFetchAsync.isFetching}
+                                useWindow={false}
+                                loadMore={() => {
+                                    groupsStore.loadMoreGroups()
+                                }}>
+                                    {!_.isEmpty(groupsStore.preparedGroups) ?
+                                        _.map(groupsStore.preparedGroups, (groups) => {
+                                            return _.map(groups, (group, index) => {
+                                                const isSelected = (groupsStore.selectedGroup.type === 'real' && groupsStore.selectedGroup.groupName === group.groupName);
+                                                return (
+                                                    <ListItem 
+                                                        group={group}
+                                                        selectGroup={selectGroup}
+                                                        isSelected={isSelected}
+                                                        onDeviceDrop={onDeviceDrop}
+                                                        key={group.groupName}
+                                                    />
+                                                );
+                                            });
+                                        })
+                                    :
+                                        null
+                                    }
+                            </InfiniteScroll>
+                        }
+                    </div>
                 </VelocityTransitionGroup>
             </span>
         );

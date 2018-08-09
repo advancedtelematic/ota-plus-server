@@ -86,7 +86,7 @@ export default class ContentPanel extends Component {
         const { devicesStore, featuresStore, groupsStore } = this.props.stores;
         const { alphaPlusEnabled } = featuresStore;
         const { selectedGroup } = groupsStore;
-        const { isAutomatic } = selectedGroup;
+        const { isSmart } = selectedGroup;
         return (
             <div className="devices-panel">
                 <ContentPanelHeader 
@@ -94,12 +94,12 @@ export default class ContentPanel extends Component {
                     changeFilter={changeFilter}
                     addNewWizard={addNewWizard}
                 />
-                {isAutomatic ?
+                {isSmart ?
                     <ContentPanelSubheader />
                 :
                     null
                 }
-                <div className={"devices-panel__wrapper " + (isAutomatic ? "devices-panel__wrapper--automatic" : "")}>
+                <div className={"devices-panel__wrapper " + (isSmart ? "devices-panel__wrapper--smart" : "")}>
                     <div className={"devices-panel__list" + (alphaPlusEnabled ? " devices-panel__list--alpha" : "")}>
                         <InfiniteScroll
                             className="wrapper-infinite-scroll"
